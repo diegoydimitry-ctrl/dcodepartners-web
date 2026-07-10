@@ -1,9 +1,14 @@
-<svg viewBox="0 0 420 100" xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(0,2)">
-    <rect width="96" height="96" rx="24" fill="#F7F4EF"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" fill="#2E2015" d="M28 24 L28 72 L44 72 C64 72 72 60 72 48 C72 36 64 24 44 24 Z M43 60 L63 60 L53 35 Z"/>
-    <path fill="#CBAE85" d="M43 60 L63 60 L53 35 Z"/>
+<svg viewBox="0 0 460 120" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path d="M14 96 L40 78 L58 84 L82 52 L106 22" stroke="#F7F4EF" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M58 84 L46 104" stroke="#F7F4EF" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="14" cy="96" r="4" fill="#F7F4EF"/>
+    <circle cx="40" cy="78" r="4" fill="#F7F4EF"/>
+    <circle cx="58" cy="84" r="4" fill="#F7F4EF"/>
+    <circle cx="82" cy="52" r="5" fill="#F7F4EF"/>
+    <circle cx="46" cy="104" r="3" fill="#F7F4EF"/>
+    <circle cx="106" cy="22" r="7" fill="#CBAE85"/>
   </g>
-  <text x="118" y="52" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="34" fill="#F7F4EF" letter-spacing="0.5">D—CODE</text>
-  <text x="119" y="74" font-family="'Courier New', monospace" font-weight="600" font-size="13" fill="#CBAE85" letter-spacing="5">PARTNERS</text>
+  <text x="132" y="66" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="34" fill="#F7F4EF" letter-spacing="0.5">D—CODE</text>
+  <text x="133" y="88" font-family="'Courier New', monospace" font-weight="600" font-size="13" fill="#CBAE85" letter-spacing="5">PARTNERS</text>
 </svg>
