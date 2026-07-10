@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D-Code Partners — Growth Partners & Automatización con IA</title>
+<meta name="description" content="D-Code Partners: alianzas de crecimiento y automatización con Inteligencia Artificial. Un mes de servicio gratuito, sin coste ni compromiso, hasta demostrar resultados reales.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='24' fill='%2345301F'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' fill='%23F7F4EF' d='M28 24 L28 72 L44 72 C64 72 72 60 72 48 C72 36 64 24 44 24 Z M43 60 L63 60 L53 35 Z'/%3E%3Cpath fill='%23A9825A' d='M43 60 L63 60 L53 35 Z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ TOKENS ============ */
+  :root{
+    --paper:      #F7F4EF;
+    --paper-2:    #EFE8DC;
+    --ink:        #211D19;
+    --stone:      #6C665D;
+    --stone-soft: #948C80;
+    --line:       #DCD3C3;
+    --espresso:   #45301F;
+    --espresso-2: #2E2015;
+    --espresso-3: #221609;
+    --latte:      #A9825A;
+    --latte-light:#CBAE85;
+
+    --serif: "Fraunces", Georgia, serif;
+    --sans:  "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:  "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+    --container: 1180px;
+    --pad: clamp(24px, 5vw, 64px);
+    --section-pad: clamp(72px, 10vw, 140px);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; margin:0; padding:0; }
+  h1,h2,h3,p{ margin:0; }
+
+  .container{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:0 var(--pad);
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--latte);
+    font-weight:500;
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px;
+    height:1px;
+    background:var(--latte);
+    display:inline-block;
+  }
+
+  h2.h-title{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(1.9rem, 2.6vw + 1rem, 3rem);
+    line-height:1.15;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    margin-top:18px;
+  }
+
+  .lead{
+    font-size:clamp(1rem, 0.4vw + 0.95rem, 1.15rem);
+    color:var(--stone);
+    max-width:620px;
+    margin-top:20px;
+  }
+
+  .section{
+    padding:var(--section-pad) 0;
+  }
+  .section-head{
+    max-width:680px;
+    margin-bottom:56px;
+  }
+  .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:0.92rem;
+    padding:15px 28px;
+    border-radius:8px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:var(--espresso);
+    color:var(--paper);
+  }
+  .btn-primary:hover{ background:var(--espresso-2); transform:translateY(-1px); }
+  .btn-ghost{
+    background:transparent;
+    color:var(--espresso);
+    border-color:var(--line);
+  }
+  .btn-ghost:hover{ border-color:var(--espresso); }
+  .btn-invert{
+    background:var(--paper);
+    color:var(--espresso-2);
+  }
+  .btn-invert:hover{ background:var(--latte-light); }
+
+  /* ============ HEADER ============ */
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(247,244,239,0.86);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, box-shadow .3s ease;
+  }
+  header.scrolled{
+    border-bottom-color:var(--line);
+    box-shadow:0 8px 24px -20px rgba(33,29,25,0.35);
+  }
+  .nav-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:82px;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:var(--ink);
+  }
+  .logo-mark{ width:38px; height:38px; flex-shrink:0; }
+  .logo-word{
+    font-family:var(--serif);
+    font-size:1.35rem;
+    letter-spacing:0.01em;
+    display:flex;
+    flex-direction:column;
+    line-height:1;
+  }
+  .logo-word strong{ font-weight:500; }
+  .logo-sub{
+    font-family:var(--mono);
+    font-size:0.55rem;
+    letter-spacing:0.28em;
+    color:var(--latte);
+    margin-top:5px;
+  }
+  nav.main-nav ul{
+    display:flex;
+    align-items:center;
+    gap:38px;
+  }
+  nav.main-nav a{
+    font-size:0.92rem;
+    font-weight:500;
+    color:var(--ink);
+    position:relative;
+    padding:6px 0;
+  }
+  nav.main-nav a::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:0;
+    width:0%; height:1px;
+    background:var(--espresso);
+    transition:width .25s ease;
+  }
+  nav.main-nav a:hover::after{ width:100%; }
+
+  .nav-right{ display:flex; align-items:center; gap:28px; }
+
+  .burger{
+    display:none;
+    width:38px; height:38px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:none;
+    cursor:pointer;
+    position:relative;
+  }
+  .burger span, .burger span::before, .burger span::after{
+    content:"";
+    position:absolute;
+    left:9px; right:9px;
+    height:1px;
+    background:var(--ink);
+    transition:transform .25s ease, opacity .25s ease, top .25s ease;
+  }
+  .burger span{ top:18px; }
+  .burger span::before{ top:-6px; }
+  .burger span::after{ top:6px; }
+  .burger.open span{ background:transparent; }
+  .burger.open span::before{ top:0; transform:rotate(45deg); }
+  .burger.open span::after{ top:0; transform:rotate(-45deg); }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    padding-top:clamp(60px, 9vw, 120px);
+    padding-bottom:clamp(60px, 9vw, 120px);
+    overflow:hidden;
+  }
+  .hero-grid{
+    position:relative;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:40px;
+    align-items:center;
+    z-index:2;
+  }
+  .hero-copy{ max-width:600px; }
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(2.4rem, 3.4vw + 1rem, 4.1rem);
+    line-height:1.08;
+    letter-spacing:-0.015em;
+    color:var(--ink);
+    margin-top:22px;
+  }
+  .hero .lead{ max-width:520px; }
+  .hero-ctas{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-top:38px;
+    flex-wrap:wrap;
+  }
+  .trust-line{
+    margin-top:30px;
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--stone-soft);
+  }
+
+  .hero-graphic{ position:relative; height:100%; min-height:340px; }
+  .hero-graphic svg{ width:100%; height:auto; }
+  .status-chip{
+    position:absolute;
+    top:8%;
+    right:6%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    padding:8px 14px;
+    border-radius:100px;
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    color:var(--espresso);
+    box-shadow:0 12px 30px -18px rgba(33,29,25,0.4);
+  }
+  .status-dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--latte);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.45; transform:scale(0.8); }
+  }
+
+  .growth-path{
+    stroke:var(--espresso);
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-dasharray:640;
+    stroke-dashoffset:640;
+    animation:draw 1.8s 0.3s ease forwards;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .growth-path{ animation:none; stroke-dashoffset:0; }
+    .status-dot{ animation:none; }
+  }
+  .growth-dot{ fill:var(--latte); }
+  .growth-label{
+    font-family:var(--mono);
+    font-size:9px;
+    fill:var(--stone-soft);
+    letter-spacing:0.05em;
+  }
+
+  /* ============ REVEAL ============ */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* ============ METODO ============ */
+  .metodo{ background:var(--paper-2); }
+  .metodo-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:64px;
+    align-items:start;
+  }
+  .offer-statement{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(1.5rem, 1.6vw + 1rem, 2.1rem);
+    line-height:1.3;
+    color:var(--espresso);
+    margin:30px 0;
+    max-width:520px;
+  }
+  .metodo-copy p{ color:var(--stone); max-width:520px; margin-bottom:18px; }
+  .metodo-copy .closing{
+    font-family:var(--mono);
+    font-size:0.85rem;
+    color:var(--ink);
+    margin-top:28px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    max-width:520px;
+  }
+
+  .term-sheet{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:36px;
+    box-shadow:0 30px 60px -40px rgba(33,29,25,0.35);
+  }
+  .term-sheet-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:6px;
+  }
+  .term-sheet-head .label{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    color:var(--stone);
+  }
+  .badge{
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    color:var(--espresso);
+    background:rgba(169,130,90,0.16);
+    padding:6px 12px;
+    border-radius:100px;
+  }
+  .ts-row{
+    display:flex;
+    gap:18px;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .ts-row:last-of-type{ border-bottom:none; }
+  .ts-num{
+    font-family:var(--mono);
+    font-size:0.78rem;
+    color:var(--latte);
+    padding-top:2px;
+  }
+  .ts-when{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--stone-soft);
+    text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .ts-what{ font-size:0.95rem; color:var(--ink); }
+  .ts-foot{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-family:var(--mono);
+    font-size:0.72rem;
+    color:var(--stone-soft);
+  }
+  .metodo-cta{ margin-top:40px; }
+
+  /* ============ SERVICIOS ============ */
+  .servicios-cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    margin-bottom:64px;
+  }
+  .service-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:40px;
+  }
+  .service-card .mini-spark{ margin-bottom:26px; }
+  .service-card h3{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:1.4rem;
+    color:var(--ink);
+    margin-bottom:14px;
+  }
+  .service-card p{ color:var(--stone); font-size:0.96rem; }
+
+  .spec-sheet{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line);
+  }
+  .spec-item{
+    padding:32px 28px 0;
+    border-right:1px solid var(--line);
+  }
+  .spec-item:last-child{ border-right:none; }
+  .spec-label{
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--latte);
+  }
+  .spec-value{
+    font-family:var(--serif);
+    font-size:1.7rem;
+    color:var(--ink);
+    margin:10px 0 12px;
+  }
+  .spec-caption{ font-size:0.9rem; color:var(--stone); max-width:280px; }
+
+  /* ============ CONOCENOS ============ */
+  .conocenos-intro{ max-width:760px; margin:0 auto; text-align:center; }
+  .conocenos-intro p{ color:var(--stone); margin-top:18px; font-size:1rem; }
+
+  .pull-quote{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(1.4rem, 1.8vw + 1rem, 2.1rem);
+    line-height:1.4;
+    color:var(--espresso);
+    text-align:center;
+    max-width:780px;
+    margin:56px auto;
+    position:relative;
+  }
+  .quote-mark{
+    display:block;
+    font-family:var(--serif);
+    font-size:2.6rem;
+    color:var(--latte);
+    margin-bottom:6px;
+    font-style:normal;
+  }
+
+  .founders{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    margin-top:64px;
+  }
+  .founder-card{
+    text-align:center;
+    padding:44px 32px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--paper);
+  }
+  .monogram{
+    width:74px; height:74px;
+    border-radius:50%;
+    background:var(--espresso);
+    color:var(--paper);
+    font-family:var(--mono);
+    font-size:1.1rem;
+    letter-spacing:0.04em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 22px;
+  }
+  .founder-card h3{
+    font-family:var(--serif);
+    font-size:1.3rem;
+    font-weight:500;
+    color:var(--ink);
+  }
+  .founder-role{
+    font-family:var(--mono);
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--latte);
+    margin:8px 0 18px;
+  }
+  .founder-card p{ color:var(--stone); font-size:0.92rem; max-width:320px; margin:0 auto; }
+
+  .conocenos-closing{
+    text-align:center;
+    max-width:560px;
+    margin:64px auto 0;
+    font-family:var(--mono);
+    font-size:0.85rem;
+    color:var(--stone);
+    padding-top:32px;
+    border-top:1px solid var(--line);
+  }
+
+  /* ============ CONTACTO ============ */
+  .contacto{
+    background:var(--espresso-2);
+    color:var(--paper);
+  }
+  .contacto .eyebrow{ color:var(--latte-light); }
+  .contacto .eyebrow::before{ background:var(--latte-light); }
+  .contacto h2.h-title{ color:var(--paper); }
+  .contacto .lead{ color:rgba(247,244,239,0.68); }
+
+  .contacto-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:60px;
+    margin-top:56px;
+    align-items:start;
+  }
+
+  .field{ margin-bottom:22px; }
+  .field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:rgba(247,244,239,0.55);
+    margin-bottom:10px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid rgba(247,244,239,0.28);
+    color:var(--paper);
+    font-family:var(--sans);
+    font-size:1rem;
+    padding:10px 2px;
+    outline:none;
+    transition:border-color .25s ease;
+  }
+  .field input::placeholder, .field textarea::placeholder{ color:rgba(247,244,239,0.32); }
+  .field input:focus, .field textarea:focus{ border-color:var(--latte-light); }
+  .field textarea{ resize:vertical; min-height:90px; font-family:var(--sans); }
+
+  .form-note{
+    font-family:var(--mono);
+    font-size:0.74rem;
+    color:rgba(247,244,239,0.45);
+    margin-top:18px;
+  }
+
+  .contact-card{
+    background:rgba(247,244,239,0.05);
+    border:1px solid rgba(247,244,239,0.16);
+    border-radius:16px;
+    padding:36px;
+  }
+  .contact-row{
+    padding:18px 0;
+    border-bottom:1px solid rgba(247,244,239,0.14);
+  }
+  .contact-row:last-child{ border-bottom:none; }
+  .contact-row .label{
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--latte-light);
+    margin-bottom:8px;
+  }
+  .contact-row .value{ font-size:1.02rem; }
+  .contact-row a:hover{ color:var(--latte-light); }
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--espresso-3);
+    color:rgba(247,244,239,0.55);
+    padding:44px 0;
+  }
+  .footer-grid{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:20px;
+  }
+  .footer-logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--serif);
+    color:var(--paper);
+    font-size:1.05rem;
+  }
+  .logo-mark-light{ width:32px; height:32px; flex-shrink:0; }
+  footer nav ul{ display:flex; gap:26px; flex-wrap:wrap; }
+  footer nav a{ font-size:0.85rem; }
+  footer nav a:hover{ color:var(--paper); }
+  .footer-bottom{
+    margin-top:30px;
+    padding-top:24px;
+    border-top:1px solid rgba(247,244,239,0.1);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:0.72rem;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-graphic{ min-height:220px; order:2; opacity:0.9; }
+    .metodo-grid{ grid-template-columns:1fr; }
+    .servicios-cards{ grid-template-columns:1fr; }
+    .spec-sheet{ grid-template-columns:1fr; }
+    .spec-item{ border-right:none; border-bottom:1px solid var(--line); padding-bottom:28px; margin-bottom:4px; }
+    .founders{ grid-template-columns:1fr; }
+    .contacto-grid{ grid-template-columns:1fr; }
+  }
+
+  @media (max-width: 760px){
+    nav.main-nav{
+      position:fixed;
+      inset:82px 0 0 0;
+      background:var(--paper);
+      transform:translateY(-8px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease, transform .25s ease;
+      padding:36px var(--pad);
+    }
+    nav.main-nav.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+    nav.main-nav ul{ flex-direction:column; align-items:flex-start; gap:26px; }
+    nav.main-nav a{ font-size:1.1rem; }
+    .nav-right .btn-ghost-desktop{ display:none; }
+    .burger{ display:block; }
+  }
+
+  @media (min-width: 761px){
+    .burger{ display:none; }
+  }
+
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="container nav-wrap">
+    <a href="#inicio" class="logo">
+      <svg class="logo-mark" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="96" height="96" rx="24" fill="#45301F"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" fill="#F7F4EF" d="M28 24 L28 72 L44 72 C64 72 72 60 72 48 C72 36 64 24 44 24 Z M43 60 L63 60 L53 35 Z"/>
+        <path fill="#A9825A" d="M43 60 L63 60 L53 35 Z"/>
+      </svg>
+      <span class="logo-word"><strong>D—CODE</strong><span class="logo-sub">PARTNERS</span></span>
+    </a>
+
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#metodo">El Método D-Code</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#conocenos">Conócenos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-right">
+      <a href="#contacto" class="btn btn-primary">Reservar Llamada</a>
+      <button class="burger" id="burger" aria-label="Abrir menú"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="inicio">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Growth Partners · Automatización con IA</span>
+        <h1>Redefinimos el futuro de las empresas con Inteligencia Artificial.</h1>
+        <p class="lead">No vendemos software: construimos alianzas de crecimiento. Sistemas de automatización que trabajan por tu negocio 24 horas al día, los 7 días de la semana.</p>
+
+        <div class="hero-ctas">
+          <a href="#conocenos" class="btn btn-primary">Descubre Nuestra Historia</a>
+          <a href="#metodo" class="btn btn-ghost">Ver el Método D-Code</a>
+        </div>
+
+        <p class="trust-line">CONFIDENCIALIDAD ABSOLUTA · RESULTADOS MEDIBLES · CERO RIESGO INICIAL</p>
+      </div>
+
+      <div class="hero-graphic">
+        <div class="status-chip"><span class="status-dot"></span> SISTEMAS ACTIVOS · 24/7</div>
+        <svg viewBox="0 0 420 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path class="growth-path" d="M10 260 C 90 265, 120 230, 160 210 C 210 185, 220 140, 270 110 C 320 80, 330 60, 405 30"/>
+          <circle class="growth-dot" cx="10" cy="260" r="4"/>
+          <circle class="growth-dot" cx="160" cy="210" r="4"/>
+          <circle class="growth-dot" cx="270" cy="110" r="4"/>
+          <circle class="growth-dot" cx="405" cy="30" r="5"/>
+          <text class="growth-label" x="0" y="284">Antes</text>
+          <text class="growth-label" x="150" y="234">Automatización</text>
+          <text class="growth-label" x="340" y="20">Resultado</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MÉTODO D-CODE ============ -->
+  <section class="section metodo" id="metodo">
+    <div class="container">
+      <div class="metodo-grid">
+
+        <div class="metodo-copy reveal">
+          <span class="eyebrow">El Método D-Code</span>
+          <h2 class="h-title">Una alianza que empieza por los hechos, no por las promesas.</h2>
+          <p style="margin-top:22px;">El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés.</p>
+
+          <p class="offer-statement">"Un mes completo de servicio, sin coste alguno."</p>
+
+          <p>Implementamos tus sistemas de automatización y medimos su impacto real en ingresos y eficiencia. Solo cuando los resultados están sobre la mesa, nos sentamos a hablar de cifras.</p>
+
+          <p class="closing">Sin beneficio demostrado, no hay factura. Así de simple.</p>
+
+          <div class="metodo-cta">
+            <a href="#contacto" class="btn btn-primary">Reclamar mi Mes de Prueba</a>
+          </div>
+        </div>
+
+        <div class="term-sheet reveal">
+          <div class="term-sheet-head">
+            <span class="label">ACUERDO D-CODE</span>
+            <span class="badge">RIESGO 0%</span>
+          </div>
+
+          <div class="ts-row">
+            <span class="ts-num">01</span>
+            <div>
+              <div class="ts-when">Día 1</div>
+              <div class="ts-what">Diagnóstico y diseño del sistema a medida.</div>
+            </div>
+          </div>
+          <div class="ts-row">
+            <span class="ts-num">02</span>
+            <div>
+              <div class="ts-when">Semanas 1–4</div>
+              <div class="ts-what">Implementación en tu operativa real.</div>
+            </div>
+          </div>
+          <div class="ts-row">
+            <span class="ts-num">03</span>
+            <div>
+              <div class="ts-when">Día 30</div>
+              <div class="ts-what">Revisión de resultados: horas, ingresos, eficiencia.</div>
+            </div>
+          </div>
+          <div class="ts-row">
+            <span class="ts-num">04</span>
+            <div>
+              <div class="ts-when">A partir de aquí</div>
+              <div class="ts-what">Acordamos el valor del servicio, sobre resultados ya obtenidos.</div>
+            </div>
+          </div>
+
+          <div class="ts-foot">Sin permanencia. Sin letra pequeña.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICIOS ============ -->
+  <section class="section" id="servicios">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Nuestros Servicios</span>
+        <h2 class="h-title">Dos disciplinas. Una obsesión: hacer crecer tu negocio.</h2>
+      </div>
+
+      <div class="servicios-cards">
+        <div class="service-card reveal">
+          <svg class="mini-spark" width="64" height="28" viewBox="0 0 64 28" fill="none">
+            <path d="M2 24 C 16 24, 20 16, 28 14 C 38 12, 42 4, 62 4" stroke="#A9825A" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+          <h3>Growth Partner</h3>
+          <p>Nos incorporamos como una extensión de tu equipo directivo. Analizamos tu operativa, detectamos dónde se pierde tiempo y dinero, y diseñamos la estrategia para revertirlo.</p>
+        </div>
+        <div class="service-card reveal">
+          <svg class="mini-spark" width="64" height="28" viewBox="0 0 64 28" fill="none">
+            <path d="M2 24 C 16 24, 20 16, 28 14 C 38 12, 42 4, 62 4" stroke="#A9825A" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+          <h3>Automatización con Inteligencia Artificial</h3>
+          <p>Diseñamos sistemas que gestionan tareas, atienden clientes y ejecutan procesos operativos sin intervención humana constante. Tu negocio sigue funcionando mientras duermes.</p>
+        </div>
+      </div>
+
+      <div class="spec-sheet reveal">
+        <div class="spec-item">
+          <span class="spec-label">Disponibilidad</span>
+          <div class="spec-value">24/7</div>
+          <p class="spec-caption">Los sistemas no descansan. Tu negocio, tampoco tiene por qué hacerlo.</p>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Privacidad</span>
+          <div class="spec-value">Absoluta</div>
+          <p class="spec-caption">Tus datos y los de tus clientes, bajo protocolos estrictos de confidencialidad.</p>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Ejecución</span>
+          <div class="spec-value">Profesional</div>
+          <p class="spec-caption">Cada sistema, probado, documentado y supervisado. Sin improvisación.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONÓCENOS ============ -->
+  <section class="section metodo" id="conocenos">
+    <div class="container">
+      <div class="conocenos-intro reveal">
+        <span class="eyebrow">La mente detrás de D-Code Partners</span>
+        <h2 class="h-title">Dos fundadores. Un mismo código.</h2>
+        <p>Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid como dos jóvenes empresarios decididos a cambiar la forma en que las empresas crecen. El nombre no es casualidad: dos socios cuyo nombre empieza por D, unidos por el código y la convicción de que la mayoría de las empresas siguen operando en manual dentro de un mundo que ya es automático.</p>
+        <p>Como nativos digitales, no venimos a aprender la tecnología: hemos crecido con ella. Nos hemos formado de forma intensiva en Inteligencia Artificial aplicada a negocio, y trabajamos en la frontera de lo que la tecnología permite hoy.</p>
+      </div>
+
+      <div class="pull-quote reveal">
+        <span class="quote-mark">"</span>
+        Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado.
+      </div>
+
+      <div class="founders">
+        <div class="founder-card reveal">
+          <div class="monogram">D.S.</div>
+          <h3>Diego Siñeriz</h3>
+          <div class="founder-role">Co-Founder &amp; CEO</div>
+          <p>Lidera la visión estratégica y las alianzas de D-Code Partners. Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible.</p>
+        </div>
+        <div class="founder-card reveal">
+          <div class="monogram">D.S.</div>
+          <h3>Dimitry Sosenko</h3>
+          <div class="founder-role">Co-Founder &amp; CEO</div>
+          <p>Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente.</p>
+        </div>
+      </div>
+
+      <p class="conocenos-closing">Un compromiso inquebrantable con cada empresa que confía en nosotros. Esa es la base de D-Code Partners.</p>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO ============ -->
+  <section class="section contacto" id="contacto">
+    <div class="container">
+      <span class="eyebrow">Agenda tu llamada</span>
+      <h2 class="h-title">Reclama tu mes de prueba gratuito.</h2>
+      <p class="lead">Cuéntanos en qué punto está tu negocio. En una llamada de 30 minutos te decimos qué podemos automatizar y qué resultado puedes esperar del primer mes, sin coste ni compromiso.</p>
+
+      <div class="contacto-grid">
+        <form id="contact-form" class="reveal">
+          <div class="field">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="field">
+            <label for="empresa">Empresa</label>
+            <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="tu@empresa.com" required>
+          </div>
+          <div class="field">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000">
+          </div>
+          <div class="field">
+            <label for="mensaje">Cuéntanos sobre tu negocio</label>
+            <textarea id="mensaje" name="mensaje" placeholder="¿Qué procesos te gustaría automatizar?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-invert" style="width:100%;">Solicitar mi Mes Gratuito</button>
+          <p class="form-note" id="form-note">Sin coste. Sin compromiso. Respondemos en menos de 24h.</p>
+        </form>
+
+        <div class="contact-card reveal">
+          <div class="contact-row">
+            <div class="label">Email</div>
+            <div class="value"><a href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a></div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Teléfono — Diego</div>
+            <div class="value"><a href="tel:+34680223439">680 22 34 39</a></div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Teléfono — Dimitry</div>
+            <div class="value"><a href="tel:+34614547570">614 54 75 70</a></div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Ubicación</div>
+            <div class="value">Madrid, España</div>
+          </div>
+          <div class="contact-row">
+            <div class="label">Disponibilidad</div>
+            <div class="value">Respondemos en menos de 24h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <span class="footer-logo">
+        <svg class="logo-mark-light" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="96" height="96" rx="24" fill="#F7F4EF"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" fill="#2E2015" d="M28 24 L28 72 L44 72 C64 72 72 60 72 48 C72 36 64 24 44 24 Z M43 60 L63 60 L53 35 Z"/>
+          <path fill="#CBAE85" d="M43 60 L63 60 L53 35 Z"/>
+        </svg>
+        D—Code Partners
+      </span>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#metodo">El Método D-Code</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#conocenos">Conócenos</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 D-Code Partners. Todos los derechos reservados.</span>
+      <span>Confidencialidad y profesionalismo, en cada sistema.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header shadow on scroll
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 12);
+  });
+
+  // Mobile nav toggle
+  const burger = document.getElementById('burger');
+  const mainNav = document.getElementById('main-nav');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mainNav.classList.toggle('open');
+  });
+  mainNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mainNav.classList.remove('open');
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+
+  // Contact form (front-end only demo)
+  const form = document.getElementById('contact-form');
+  const note = document.getElementById('form-note');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    note.textContent = 'Gracias. Hemos recibido tu solicitud y te contactaremos en menos de 24h.';
+    form.querySelector('button').textContent = 'Solicitud enviada ✓';
+    form.querySelector('button').disabled = true;
+  });
+</script>
+
+</body>
+</html>

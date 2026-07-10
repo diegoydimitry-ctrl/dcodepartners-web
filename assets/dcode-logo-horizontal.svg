@@ -1,0 +1,9 @@
+<svg viewBox="0 0 420 100" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0,2)">
+    <rect width="96" height="96" rx="24" fill="#45301F"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" fill="#F7F4EF" d="M28 24 L28 72 L44 72 C64 72 72 60 72 48 C72 36 64 24 44 24 Z M43 60 L63 60 L53 35 Z"/>
+    <path fill="#A9825A" d="M43 60 L63 60 L53 35 Z"/>
+  </g>
+  <text x="118" y="52" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="34" fill="#2E2015" letter-spacing="0.5">D—CODE</text>
+  <text x="119" y="74" font-family="'Courier New', monospace" font-weight="600" font-size="13" fill="#A9825A" letter-spacing="5">PARTNERS</text>
+</svg>
