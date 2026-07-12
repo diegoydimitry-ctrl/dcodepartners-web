@@ -3,7 +3,6 @@ const { Resend } = require("resend");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
-
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -17,7 +16,6 @@ module.exports = async function handler(req, res) {
       subject: `Nueva solicitud de ${nombre}`,
       html: `
         <h2>Nueva solicitud desde la web</h2>
-
         <p><strong>Nombre:</strong> ${nombre}</p>
         <p><strong>Empresa:</strong> ${empresa}</p>
         <p><strong>Email:</strong> ${email}</p>
