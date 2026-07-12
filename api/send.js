@@ -29,18 +29,40 @@ await resend.emails.send({
   to: email,
   subject: "Hemos recibido tu solicitud",
   html: `
-    <h2>¡Gracias por contactar con D-Code Partners!</h2>
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:auto;">
+      
+      <h2 style="color:#2b2b2b;">¡Gracias por contactar con D-Code Partners!</h2>
 
-    <p>Hola ${nombre},</p>
+      <p>Hola <strong>${nombre}</strong>,</p>
 
-    <p>Hemos recibido correctamente tu solicitud.</p>
+      <p>
+        Hemos recibido correctamente tu solicitud y queremos agradecerte la confianza depositada en nosotros.
+      </p>
 
-    <p>En menos de 24 horas uno de nuestros especialistas se pondrá en contacto contigo.</p>
+      <p>
+        Nuestro equipo revisará la información que nos has enviado y preparará la mejor forma de ayudarte a automatizar y optimizar tu negocio.
+      </p>
 
-    <br>
+      <p>
+        En un plazo inferior a <strong>24 horas laborables</strong> nos pondremos en contacto contigo para conocer mejor tus necesidades y resolver cualquier duda.
+      </p>
 
-    <p>Un saludo,</p>
-    <strong>D-Code Partners</strong>
+      <p>
+        Mientras tanto, si necesitas ampliar información o quieres añadir algún detalle a tu solicitud, puedes responder directamente a este correo.
+      </p>
+
+      <hr style="margin:30px 0;">
+
+      <p>
+        Un saludo,
+      </p>
+
+      <p>
+        <strong>Equipo de D-Code Partners</strong><br>
+        Automatización e Inteligencia Artificial para Empresas
+      </p>
+
+    </div>
   `
 });
     return res.status(200).json({ success: true });
