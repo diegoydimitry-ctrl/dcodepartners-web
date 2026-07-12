@@ -24,7 +24,25 @@ module.exports = async function handler(req, res) {
         <p>${mensaje}</p>
       `,
     });
+await resend.emails.send({
+  from: "D-Code Partners <contact@dcodepartners.com>",
+  to: email,
+  subject: "Hemos recibido tu solicitud",
+  html: `
+    <h2>¡Gracias por contactar con D-Code Partners!</h2>
 
+    <p>Hola ${nombre},</p>
+
+    <p>Hemos recibido correctamente tu solicitud.</p>
+
+    <p>En menos de 24 horas uno de nuestros especialistas se pondrá en contacto contigo.</p>
+
+    <br>
+
+    <p>Un saludo,</p>
+    <strong>D-Code Partners</strong>
+  `
+});
     return res.status(200).json({ success: true });
 
   } catch (error) {
