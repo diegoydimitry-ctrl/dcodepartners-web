@@ -1030,12 +1030,46 @@
   // Contact form (front-end only demo)
   const form = document.getElementById('contact-form');
   const note = document.getElementById('form-note');
-  form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    note.textContent = 'Gracias. Hemos recibido tu solicitud y te contactaremos en menos de 24h.';
-    form.querySelector('button').textContent = 'Solicitud enviada ✓';
-    form.querySelector('button').disabled = true;
-  });
+
+    const button = form.querySelector('button');
+
+    button.disabled = true;
+    button.textContent = 'Enviando...';
+
+    const datos = {
+        nombre: document.getElementById('nombre').value,
+        empresa: document.getElementById('empresa').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        mensaje: document.getElementById('mensaje').value
+    };
+
+    try {
+        const respuesta = await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (respuesta.ok) {
+            note.textContent = 'Gracias. Hemos recibido tu solicitud y te contactaremos en menos de 24h.';
+            button.textContent = 'Solicitud enviada ✓';
+        } else {
+            note.textContent = 'Ha ocurrido un error al enviar la solicitud.';
+            button.disabled = false;
+            button.textContent = 'Solicitar mi Mes Gratuito';
+        }
+
+    } catch (err) {
+        note.textContent = 'No se pudo conectar con el servidor.';
+        button.disabled = false;
+        button.textContent = 'Solicitar mi Mes Gratuito';
+    }
+});
 </script>
 
 </body>
