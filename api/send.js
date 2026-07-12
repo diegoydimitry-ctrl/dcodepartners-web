@@ -1,8 +1,9 @@
-import { Resend } from "resend";
+const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -12,9 +13,7 @@ export default async function handler(req, res) {
 
     await resend.emails.send({
       from: "D-Code Partners <contact@dcodepartners.com>",
-      to: ["dcodedepartment@gmail.com"
-           "diegoydimitry@gmail.com"
-          ],
+      to: ["dcodedepartment@gmail.com"],
       subject: `Nueva solicitud de ${nombre}`,
       html: `
         <h2>Nueva solicitud desde la web</h2>
@@ -32,6 +31,9 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
-}
+};
