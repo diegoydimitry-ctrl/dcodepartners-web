@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const { nombre, empresa, email, telefono, mensaje } = req.body;
 
     await resend.emails.send({
-      from: "D-Code Partners <onboarding@resend.dev>",
+      from: "D-Code Partners <contact@dcodepartners.com>",
       to: ["dcodedepartment@gmail.com"],
       subject: `Nueva solicitud de ${nombre}`,
       html: `
