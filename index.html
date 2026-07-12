@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>D-Code Partners — Growth Partners & Automatización con IA</title>
@@ -1055,15 +1055,27 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(datos)
         });
 
-        if (respuesta.ok) {
-            note.textContent = 'Gracias. Hemos recibido tu solicitud y te contactaremos en menos de 24h.';
-            button.textContent = 'Solicitud enviada ✓';
-        } else {
-            note.textContent = 'Ha ocurrido un error al enviar la solicitud.';
-            button.disabled = false;
-            button.textContent = 'Solicitar mi Mes Gratuito';
-        }
+       if (respuesta.ok) {
+    note.textContent = 'Gracias. Hemos recibido tu solicitud y te contactaremos en menos de 24h.';
+    button.textContent = 'Solicitud enviada ✓';
 
+    document.getElementById('nombre').value = '';
+    document.getElementById('empresa').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('telefono').value = '';
+    document.getElementById('mensaje').value = '';
+
+    setTimeout(() => {
+        button.disabled = false;
+        button.textContent = 'Solicitar mi Mes Gratuito';
+        note.textContent = '';
+    }, 4000);
+
+} else {
+    note.textContent = 'Ha ocurrido un error al enviar la solicitud.';
+    button.disabled = false;
+    button.textContent = 'Solicitar mi Mes Gratuito';
+}
     } catch (err) {
         note.textContent = 'No se pudo conectar con el servidor.';
         button.disabled = false;
