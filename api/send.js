@@ -8,8 +8,35 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { nombre, empresa, email, telefono, mensaje } = req.body;
+const {
+  nombre,
+  empresa,
+  email,
+  telefono,
+  mensaje,
+  turnstileToken
+} = req.body;
+const verify = await fetch(
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+      secret: process.env.TURNSTILE_SECRET_KEY,
+      response: turnstileToken
+    })
+  }
+);
 
+const verification = await verify.json();
+
+if (!verification.success) {
+  return res.status(400).json({
+    error: "Verificación anti-spam fallida."
+  });
+}
     await resend.emails.send({
       from: "D-Code Partners <contact@dcodepartners.com>",
       to: ["dcodedepartment@gmail.com"],
