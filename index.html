@@ -1035,27 +1035,32 @@
     revealEls.forEach(el => el.classList.add('is-visible'));
   }
 
-  // Contact form (front-end only demo)
-  const form = document.getElementById('contact-form');
-  const note = document.getElementById('form-note');
+ // Contact form
+const form = document.getElementById('contact-form');
+const note = document.getElementById('form-note');
+
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const button = form.querySelector('button');
 
+    if (!turnstile.getResponse()) {
+        note.textContent = 'Completa la verificación anti-spam.';
+        return;
+    }
+
     button.disabled = true;
     button.textContent = 'Enviando...';
 
- const token = document.querySelector('[name="cf-turnstile-response"]').value;
+    const datos = {
+        nombre: document.getElementById('nombre').value,
+        empresa: document.getElementById('empresa').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        mensaje: document.getElementById('mensaje').value,
+        turnstileToken: turnstile.getResponse()
+    };
 
-const datos = {
-    nombre: document.getElementById('nombre').value,
-    empresa: document.getElementById('empresa').value,
-    email: document.getElementById('email').value,
-    telefono: document.getElementById('telefono').value,
-    mensaje: document.getElementById('mensaje').value,
-    turnstileToken: turnstile.getResponse()
-};
     try {
         const respuesta = await fetch('/api/send', {
             method: 'POST',
@@ -1065,36 +1070,26 @@ const datos = {
             body: JSON.stringify(datos)
         });
 
-if (!turnstile.getResponse()) {
-    note.textContent = "Completa la verificación anti-spam.";
-    button.disabled = false;
-    button.textContent = "Solicitar mi Mes Gratuito";
-    return;
-}
+        if (respuesta.ok) {
+            note.textContent = '¡Solicitud enviada correctamente!';
 
-    document.getElementById('nombre').value = '';
-    document.getElementById('empresa').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('telefono').value = '';
-    document.getElementById('mensaje').value = '';
+            form.reset();
+            turnstile.reset();
 
-    setTimeout(() => {
-        turnstile.reset();
-        button.disabled = false;
-        button.textContent = 'Solicitar mi Mes Gratuito';
-        note.textContent = '';
-    }, 4000);
+            setTimeout(() => {
+                note.textContent = '';
+            }, 4000);
 
-} else {
-    note.textContent = 'Ha ocurrido un error al enviar la solicitud.';
-    button.disabled = false;
-    button.textContent = 'Solicitar mi Mes Gratuito';
-}
+        } else {
+            note.textContent = 'Ha ocurrido un error al enviar la solicitud.';
+        }
+
     } catch (err) {
         note.textContent = 'No se pudo conectar con el servidor.';
-        button.disabled = false;
-        button.textContent = 'Solicitar mi Mes Gratuito';
     }
+
+    button.disabled = false;
+    button.textContent = 'Solicitar mi Mes Gratuito';
 });
 </script>
 
