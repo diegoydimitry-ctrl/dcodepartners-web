@@ -1052,7 +1052,7 @@ const datos = {
     email: document.getElementById('email').value,
     telefono: document.getElementById('telefono').value,
     mensaje: document.getElementById('mensaje').value,
-    turnstileToken: token
+    turnstileToken: turnstile.getResponse()
 };
     try {
         const respuesta = await fetch('/api/send', {
@@ -1063,9 +1063,12 @@ const datos = {
             body: JSON.stringify(datos)
         });
 
-if (respuesta.ok) {
-    note.textContent = 'Gracias. Hemos recibido tu solicitud y te contactaremos en menos de 24h.';
-    button.textContent = 'Solicitud enviada ✓';
+if (!turnstile.getResponse()) {
+    note.textContent = "Completa la verificación anti-spam.";
+    button.disabled = false;
+    button.textContent = "Solicitar mi Mes Gratuito";
+    return;
+}
 
     document.getElementById('nombre').value = '';
     document.getElementById('empresa').value = '';
@@ -1074,6 +1077,7 @@ if (respuesta.ok) {
     document.getElementById('mensaje').value = '';
 
     setTimeout(() => {
+        turnstile.reset();
         button.disabled = false;
         button.textContent = 'Solicitar mi Mes Gratuito';
         note.textContent = '';
