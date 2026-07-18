@@ -4,12 +4,12 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Política de Privacidad — D-Code Partners</title>
-<meta name="description" content="Cómo D-Code Partners recopila, utiliza y protege los datos personales conforme al RGPD.">
+<title>Contacto — Reserva tu llamada gratuita con D-Code Partners</title>
+<meta name="description" content="Reserva una llamada de 30 minutos, sin coste ni compromiso. Te decimos qué podemos automatizar en tu negocio y qué resultado puedes esperar del primer mes.">
 <meta name="author" content="D-Code Partners">
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://dcodepartners.com/privacidad">
+<link rel="canonical" href="https://dcodepartners.com/contacto">
 
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -21,16 +21,16 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
 <meta property="og:locale" content="es_ES">
-<meta property="og:title" content="Política de Privacidad — D-Code Partners">
-<meta property="og:description" content="Cómo D-Code Partners recopila, utiliza y protege los datos personales conforme al RGPD.">
-<meta property="og:url" content="https://dcodepartners.com/privacidad">
+<meta property="og:title" content="Contacto — Reserva tu llamada gratuita con D-Code Partners">
+<meta property="og:description" content="Reserva una llamada de 30 minutos, sin coste ni compromiso. Te decimos qué podemos automatizar en tu negocio y qué resultado puedes esperar del primer mes.">
+<meta property="og:url" content="https://dcodepartners.com/contacto">
 <meta property="og:image" content="https://dcodepartners.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Política de Privacidad — D-Code Partners">
+<meta name="twitter:title" content="Contacto — Reserva tu llamada gratuita con D-Code Partners">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
 <link rel="stylesheet" href="/assets/css/styles.css">
-
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <!-- Start cookieyes banner -->
 <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/4d2e8fd4065176703ddc3e2999debec6/script.js"></script>
 <!-- End cookieyes banner -->
@@ -101,7 +101,7 @@
   <div class="container">
     <nav class="breadcrumbs" aria-label="Ruta de navegación">
       <ol>
-        <li><a href="/">Inicio</a></li><li class="sep">/</li><li aria-current="page">Política de Privacidad</li>
+        <li><a href="/">Inicio</a></li><li class="sep">/</li><li aria-current="page">Contacto</li>
       </ol>
     </nav>
   </div>
@@ -109,44 +109,101 @@
 
   <section class="page-hero">
     <div class="container">
-      <span class="eyebrow">Legal</span>
-      <h1 class="h-title">Política de Privacidad</h1>
+      <span class="eyebrow">Agenda tu llamada</span>
+      <h1 class="h-title">Reclama tu mes de prueba gratuito.</h1>
+      <p class="lead">Cuéntanos en qué punto está tu negocio. En una llamada de 30 minutos te decimos qué podemos automatizar y qué resultado puedes esperar del primer mes, sin coste ni compromiso.</p>
     </div>
   </section>
+
   <section class="section-sm">
     <div class="container">
-      <div class="prose reveal">
-        <p>En D-Code Partners respetamos la privacidad de nuestros usuarios y protegemos los datos personales conforme al Reglamento General de Protección de Datos (RGPD) y la legislación española vigente.</p>
+      <div class="contacto-grid">
+        <div class="window reveal">
+          <div class="window-bar">
+            <span class="window-dots"><span></span><span></span><span></span></span>
+            <span class="window-title">nueva_solicitud.form</span>
+          </div>
+          <div class="window-body">
+            <form id="contact-form">
+              <div class="field">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+              </div>
+              <div class="field">
+                <label for="empresa">Empresa</label>
+                <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" required>
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="tu@empresa.com" required>
+              </div>
+              <div class="field">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000">
+              </div>
+              <div class="field">
+                <label for="mensaje">Cuéntanos sobre tu negocio</label>
+                <textarea id="mensaje" name="mensaje" placeholder="¿Qué procesos te gustaría automatizar?"></textarea>
+              </div>
 
-        <h2>1. Responsable del tratamiento</h2>
-        <p>Responsables: Diego Siñeriz y Dimitry Sosenko.</p>
-        <p>Email de contacto: <strong>dcodedepartment@gmail.com</strong></p>
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark"></div>
 
-        <h2>2. Datos que recopilamos</h2>
-        <p>Cuando completas nuestro formulario podemos recopilar:</p>
-        <ul>
-          <li>Nombre</li>
-          <li>Empresa</li>
-          <li>Email</li>
-          <li>Teléfono</li>
-          <li>Mensaje enviado</li>
-        </ul>
+              <button type="submit" class="btn btn-invert btn-block" style="margin-top:20px;">
+                Solicitar mi Mes Gratuito
+              </button>
+              <p class="form-note" id="form-note">Sin coste. Sin compromiso. Respondemos en menos de 24h.</p>
+            </form>
+          </div>
+        </div>
 
-        <h2>3. Finalidad</h2>
-        <p>Los datos únicamente se utilizan para responder solicitudes de información, contactar con potenciales clientes y ofrecer nuestros servicios.</p>
-
-        <h2>4. Conservación</h2>
-        <p>Los datos se conservarán únicamente durante el tiempo necesario para atender la solicitud o mientras exista una relación comercial.</p>
-
-        <h2>5. Derechos</h2>
-        <p>Puedes solicitar el acceso, rectificación o eliminación de tus datos escribiendo a:</p>
-        <p><strong>dcodedepartment@gmail.com</strong></p>
-
-        <h2>6. Seguridad</h2>
-        <p>Aplicamos medidas técnicas y organizativas para proteger la información frente a accesos no autorizados.</p>
+        <div class="window contact-card reveal">
+          <div class="window-bar">
+            <span class="window-dots"><span></span><span></span><span></span></span>
+            <span class="window-title">contacto_directo.json</span>
+          </div>
+          <div class="window-body">
+            <div class="contact-row">
+              <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+              <div>
+                <div class="label">Email</div>
+                <div class="value"><a href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a></div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg></span>
+              <div>
+                <div class="label">Teléfono — Diego</div>
+                <div class="value"><a href="tel:+34680223439">680 22 34 39</a></div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.68 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0122 16.92z"/></svg></span>
+              <div>
+                <div class="label">Teléfono — Dimitry</div>
+                <div class="value"><a href="tel:+34614547570">614 54 75 70</a></div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <div>
+                <div class="label">Ubicación</div>
+                <div class="value">Madrid, España</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+              <div>
+                <div class="label">Disponibilidad</div>
+                <div class="value">Respondemos en menos de 24h</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div style="text-align:center; margin-top:48px;">
-        <a href="/" class="btn btn-ghost">← Volver a la web</a>
+
+      <div style="text-align:center; margin-top:56px;">
+        <span class="eyebrow" style="justify-content:center;">¿Tienes dudas antes de escribirnos?</span>
+        <p style="margin-top:12px;"><a href="/faq" class="btn btn-ghost btn-sm">Ver preguntas frecuentes</a></p>
       </div>
     </div>
   </section>
