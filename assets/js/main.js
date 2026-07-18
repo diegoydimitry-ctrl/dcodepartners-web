@@ -100,7 +100,7 @@
 
   /* ---------- Interactive window tilt + spotlight ---------- */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
-    document.querySelectorAll('.window').forEach(function (win) {
+    document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
       win.addEventListener('mousemove', function (e) {
         var rect = win.getBoundingClientRect();
         var px = (e.clientX - rect.left) / rect.width;
@@ -329,5 +329,100 @@
       button.disabled = false;
       button.textContent = 'Solicitar mi Mes Gratuito';
     });
+  }
+
+  /* ---------- Chat widget (design preview — no live backend) ----------
+     Guided, scripted demo only. Free-text input always resolves to an
+     honest "this is a preview" message instead of pretending to be an
+     AI that isn't actually connected to anything. */
+  var chatWidget = document.getElementById('chat-widget');
+  if (chatWidget) {
+    var chatBubble = document.getElementById('chat-bubble');
+    var chatWindowEl = chatWidget.querySelector('.chat-window');
+    var chatMessages = document.getElementById('chat-messages');
+    var chatQuick = document.getElementById('chat-quick-replies');
+    var chatForm = document.getElementById('chat-form');
+    var chatInput = document.getElementById('chat-input');
+
+    chatBubble.addEventListener('click', function () {
+      var isOpen = chatWidget.classList.toggle('open');
+      chatBubble.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      chatWindowEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      if (isOpen && chatInput) chatInput.focus();
+    });
+
+    var addMessage = function (content, who, isHtml) {
+      var div = document.createElement('div');
+      div.className = 'chat-msg ' + who;
+      if (isHtml) { div.innerHTML = content; } else { div.textContent = content; }
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return div;
+    };
+
+    var showTyping = function (cb, delay) {
+      var t = document.createElement('div');
+      t.className = 'chat-typing';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      chatMessages.appendChild(t);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      setTimeout(function () {
+        t.remove();
+        cb();
+      }, delay || 900);
+    };
+
+    var REPLIES = {
+      automatizacion: {
+        user: 'Automatización de tareas',
+        bot: 'Solemos empezar por gestión documental, reporting o seguimiento comercial: procesos con reglas claras que hoy hace una persona a mano.',
+        cta: { text: 'Ver Automatización IA', href: '/servicios/automatizacion-ia' }
+      },
+      atencion: {
+        user: 'Atención al cliente 24/7',
+        bot: 'Podemos montarte un agente que responda al instante en tu web o WhatsApp, y que avise a tu equipo cuando de verdad haga falta una persona.',
+        cta: { text: 'Ver Agentes de IA', href: '/servicios/agentes-ia' }
+      },
+      humano: {
+        user: 'Quiero hablar con una persona',
+        bot: 'Por supuesto. Diego y Dimitry responden en menos de 24h — resérvate una llamada de 30 minutos, sin coste ni compromiso.',
+        cta: { text: 'Reservar llamada gratuita', href: '/contacto' }
+      }
+    };
+
+    var handleReply = function (key) {
+      var r = REPLIES[key];
+      if (!r) return;
+      addMessage(r.user, 'user');
+      if (chatQuick) chatQuick.style.display = 'none';
+      showTyping(function () {
+        var html = r.bot + (r.cta ? ' <a class="btn btn-sm btn-primary chat-cta" href="' + r.cta.href + '">' + r.cta.text + '</a>' : '');
+        addMessage(html, 'bot', true);
+      });
+    };
+
+    if (chatQuick) {
+      chatQuick.querySelectorAll('button').forEach(function (btn) {
+        btn.addEventListener('click', function () { handleReply(btn.dataset.reply); });
+      });
+    }
+
+    if (chatForm) {
+      chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var val = chatInput.value.trim();
+        if (!val) return;
+        addMessage(val, 'user');
+        chatInput.value = '';
+        if (chatQuick) chatQuick.style.display = 'none';
+        showTyping(function () {
+          addMessage(
+            'Esto es una vista previa del diseño — todavía no está conectado a un asistente real. Cuéntanoslo directamente y te respondemos en menos de 24h: <a class="btn btn-sm btn-primary chat-cta" href="/contacto">Reservar llamada gratuita</a>',
+            'bot',
+            true
+          );
+        }, 700);
+      });
+    }
   }
 })();

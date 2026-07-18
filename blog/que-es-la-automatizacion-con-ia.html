@@ -290,6 +290,35 @@
   </div>
 </footer>
 
+<div class="chat-widget" id="chat-widget">
+  <div class="window chat-window" role="dialog" aria-label="Asistente D-Code Partners" aria-hidden="true">
+    <div class="window-bar">
+      <span class="window-dots"><span></span><span></span><span></span></span>
+      <span class="window-title">asistente_dcode.chat</span>
+      <span class="chat-preview-badge">Vista previa</span>
+    </div>
+    <div class="chat-disclaimer">Maqueta de diseño: aún no está conectado a un asistente de IA real. Para hablar con nosotros de verdad, usa el formulario.</div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-msg bot">Hola, soy el asistente de D-Code Partners. ¿Qué te gustaría automatizar en tu negocio?</div>
+    </div>
+    <div class="chat-quick-replies" id="chat-quick-replies">
+      <button type="button" data-reply="automatizacion">Automatización de tareas</button>
+      <button type="button" data-reply="atencion">Atención al cliente 24/7</button>
+      <button type="button" data-reply="humano">Hablar con una persona</button>
+    </div>
+    <form class="chat-input-row" id="chat-form">
+      <label for="chat-input" class="sr-only">Escribe tu mensaje</label>
+      <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." autocomplete="off">
+      <button type="submit" aria-label="Enviar mensaje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button>
+    </form>
+  </div>
+  <button class="chat-bubble" id="chat-bubble" aria-expanded="false" aria-controls="chat-widget" aria-label="Abrir asistente D-Code Partners">
+    <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    <span class="cb-dot"></span>
+  </button>
+</div>
+
 <script src="/assets/js/main.js" defer></script>
 
 </body>
