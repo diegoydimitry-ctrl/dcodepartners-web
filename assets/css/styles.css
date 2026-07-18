@@ -764,6 +764,7 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 .accordion-item.open .accordion-heading .chevron{ transform:rotate(90deg); color:var(--cyan); }
 .accordion-title{ font-size:0.98rem; color:var(--ink); font-weight:500; }
 .accordion-panel{
+  display:block;
   font-size:0.9rem;
   color:var(--stone);
   max-height:0;
