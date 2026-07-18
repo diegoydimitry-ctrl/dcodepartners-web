@@ -6,24 +6,40 @@
 
 <title>Aviso Legal | D-Code Partners</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 
+:root{
+    --bg:#06080d;
+    --ink:#eef2fb;
+    --stone:#a7b0c4;
+    --border:#1e2536;
+    --cyan:#43e0ff;
+    --violet:#9b6bff;
+}
+
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#111;
-color:#eee;
-max-width:900px;
-margin:50px auto;
-padding:30px;
-line-height:1.7;
+font-family:"Inter",Arial,Helvetica,sans-serif;
+background:var(--bg);
+color:var(--stone);
+max-width:820px;
+margin:60px auto;
+padding:0 30px 60px;
+line-height:1.75;
 }
 
 h1,h2{
-color:white;
+font-family:"Space Grotesk",Arial,sans-serif;
+color:var(--ink);
 }
 
+h1{ font-size:2.1rem; margin-bottom:24px; }
+h2{ font-size:1.25rem; margin-top:38px; margin-bottom:10px; }
+
 a{
-color:#A9825A;
+color:var(--cyan);
 text-decoration:none;
 }
 
@@ -35,10 +51,13 @@ text-decoration:underline;
 display:inline-block;
 margin-top:40px;
 padding:12px 22px;
-background:#A9825A;
-color:white;
+background:linear-gradient(120deg, var(--cyan), var(--violet));
+color:#04060a;
+font-weight:600;
 border-radius:8px;
 }
+
+.volver:hover{ text-decoration:none; opacity:.9; }
 
 </style>
 

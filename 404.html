@@ -8,12 +8,17 @@
 
 <meta name="robots" content="noindex,follow">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
 :root{
-    --bg:#F7F4EF;
-    --text:#211D19;
-    --brown:#45301F;
-    --gold:#A9825A;
+    --bg:#06080d;
+    --text:#eef2fb;
+    --stone:#a7b0c4;
+    --cyan:#43e0ff;
+    --violet:#9b6bff;
 }
 
 *{
@@ -25,13 +30,17 @@
 body{
     background:var(--bg);
     color:var(--text);
-    font-family:Georgia,serif;
+    font-family:"Inter",Georgia,serif;
     display:flex;
     justify-content:center;
     align-items:center;
     min-height:100vh;
     text-align:center;
     padding:40px;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size:64px 64px;
 }
 
 .container{
@@ -39,37 +48,45 @@ body{
 }
 
 .logo{
+    font-family:"Space Grotesk",sans-serif;
     font-size:15px;
     letter-spacing:4px;
     text-transform:uppercase;
-    color:var(--gold);
+    color:var(--cyan);
     margin-bottom:35px;
 }
 
 h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;
     font-size:110px;
-    color:var(--brown);
     line-height:1;
     margin-bottom:20px;
+    background:linear-gradient(120deg, var(--cyan), var(--violet));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
 }
 
 h2{
+    font-family:"Space Grotesk",sans-serif;
     font-size:44px;
     margin-bottom:20px;
-    color:var(--brown);
+    color:var(--text);
 }
 
 p{
     font-size:22px;
     line-height:1.7;
-    color:#666;
+    color:var(--stone);
     margin-bottom:45px;
 }
 
 a{
     display:inline-block;
-    background:var(--brown);
-    color:white;
+    background:linear-gradient(120deg, var(--cyan), var(--violet));
+    color:#04060a;
+    font-weight:600;
     text-decoration:none;
     padding:18px 42px;
     border-radius:10px;
@@ -78,8 +95,8 @@ a{
 }
 
 a:hover{
-    background:#2E2015;
     transform:translateY(-2px);
+    box-shadow:0 20px 50px -20px rgba(91,140,255,.6);
 }
 
 @media(max-width:768px){
