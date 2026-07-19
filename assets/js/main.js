@@ -143,6 +143,69 @@
     });
   });
 
+  /* ---------- FAQ search filter ---------- */
+  var faqSearchInput = document.getElementById('faq-search-input');
+  if (faqSearchInput) {
+    var faqSearchWrap = faqSearchInput.closest('.faq-search');
+    var faqClear = document.getElementById('faq-search-clear');
+    var faqCategories = Array.prototype.slice.call(document.querySelectorAll('.faq-category'));
+    var faqEmpty = document.getElementById('faq-empty');
+
+    var setItemOpen = function (item, open) {
+      item.classList.toggle('open', open);
+      var trigger = item.querySelector('.accordion-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+
+    var runFaqFilter = function () {
+      var q = faqSearchInput.value.trim().toLowerCase();
+      if (faqSearchWrap) faqSearchWrap.classList.toggle('has-value', q.length > 0);
+      var anyVisible = false;
+
+      faqCategories.forEach(function (cat) {
+        var items = cat.querySelectorAll('.accordion-item');
+        var catHasMatch = false;
+        items.forEach(function (item, i) {
+          var match = q === '' || item.textContent.toLowerCase().indexOf(q) !== -1;
+          item.style.display = match ? '' : 'none';
+          if (match) {
+            catHasMatch = true;
+            anyVisible = true;
+            setItemOpen(item, q !== '');
+          }
+        });
+        if (q === '') {
+          items.forEach(function (item, i) { setItemOpen(item, i === 0); });
+        }
+        cat.style.display = catHasMatch ? '' : 'none';
+      });
+
+      if (faqEmpty) faqEmpty.classList.toggle('show', !anyVisible);
+    };
+
+    faqSearchInput.addEventListener('input', runFaqFilter);
+    if (faqClear) {
+      faqClear.addEventListener('click', function () {
+        faqSearchInput.value = '';
+        runFaqFilter();
+        faqSearchInput.focus();
+      });
+    }
+  }
+
+  /* ---------- FAQ deep link (/faq#slug opens + scrolls to that question) ---------- */
+  if (window.location.hash && document.querySelector('.faq-list')) {
+    var faqTarget = document.getElementById(window.location.hash.slice(1));
+    if (faqTarget && faqTarget.classList.contains('accordion-item')) {
+      faqTarget.classList.add('open');
+      var faqTrigger = faqTarget.querySelector('.accordion-trigger');
+      if (faqTrigger) faqTrigger.setAttribute('aria-expanded', 'true');
+      setTimeout(function () {
+        faqTarget.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+      }, 300);
+    }
+  }
+
   /* ---------- Animated counters ---------- */
   var counters = document.querySelectorAll('.counter');
   if (counters.length) {
