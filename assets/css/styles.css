@@ -701,6 +701,13 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 }
 
 /* ============ MÉTODO / ACCORDION ============ */
+.metodo{ background:var(--bg-soft); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+.metodo-grid{
+  display:grid;
+  grid-template-columns:1.05fr 0.95fr;
+  gap:64px;
+  align-items:start;
+}
 .offer-statement{
   font-family:var(--serif);
   font-weight:600;
@@ -1223,6 +1230,7 @@ footer{
 @media (max-width: 1024px){
   .hero-grid{ grid-template-columns:1fr; }
   .hero-graphic{ order:2; }
+  .metodo-grid{ grid-template-columns:1fr; }
   .servicios-cards{ grid-template-columns:1fr; }
   .servicios-cards.cols-3{ grid-template-columns:1fr 1fr; }
   .founders{ grid-template-columns:1fr; }
