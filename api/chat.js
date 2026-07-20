@@ -9,15 +9,20 @@
  * endpoint empieza a generar respuestas con RAG sin cambiar el contrato de
  * la API ni el frontend.
  */
-const { loadIndex, search, detectBuyingIntent } = require('../lib/retrieval');
+const { loadIndex, search, detectBuyingIntent, detectContactIntent } = require('../lib/retrieval');
 const { getProvider } = require('../lib/providers');
 const { detectSmalltalk } = require('../lib/smalltalk');
+const { handleConsultativeFlow, isAwaitingConsultativeAnswer } = require('../lib/consultative');
+const { matchProblemStatement } = require('../lib/solutions');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
 const MIN_RELEVANT_SCORE = 1.1;
 const TOP_K = 8;
-const MAX_RESULTS_IN_ANSWER = 2;
+// Una sola respuesta enfocada por defecto — no un batiburrillo de 2-3
+// fragmentos a modo de resultados de buscador. "Máximo 4-5 líneas, ampliar
+// solo si lo piden": mejor un fragmento corto y claro que varios.
+const MAX_RESULTS_IN_ANSWER = 1;
 // Un fragmento secundario solo se añade si está realmente a la altura del
 // mejor resultado (no solo por encima del umbral mínimo). Evita mezclar en
 // la misma respuesta contenido claramente relevante con coincidencias
@@ -26,12 +31,17 @@ const MAX_RESULTS_IN_ANSWER = 2;
 const SECONDARY_RESULT_RATIO = 0.92;
 // Cada fragmento se recorta a 1-2 frases: una respuesta de chat no debe
 // leerse como un párrafo copiado de la web.
-const SNIPPET_MAX_CHARS = 220;
+const SNIPPET_MAX_CHARS = 200;
 const SNIPPET_MIN_CHARS = 60;
 
 const FALLBACK_MESSAGE =
-  'No dispongo de información suficiente para responder con precisión a esa pregunta. ' +
-  'Si lo deseas, puedes contactar directamente con nuestro equipo y estaremos encantados de ayudarte.';
+  'No tengo confirmación de ese dato concreto, pero puedo explicarte cómo solemos hacerlo o ' +
+  'ponerte en contacto con el equipo para que te lo confirmen ellos.';
+
+// Se anteponen de vez en cuando (nunca siempre, para no sonar a plantilla)
+// a una respuesta basada en contenido real, para que suene a alguien
+// pensando la respuesta y no a una base de datos escupiendo un resultado.
+const NATURAL_LEAD_INS = ['', '', '', 'Buena pregunta. ', 'Claro. ', 'Te lo explico. '];
 
 const CONTACT_CTA =
   '\n\n¿Quieres que lo hablemos directamente? Puedes [reservar una llamada gratuita](/contacto) y lo vemos juntos.';
@@ -73,12 +83,14 @@ function sanitizeHistory(raw) {
 /**
  * Filtra los resultados brutos del scorer a los que de verdad merece la pena
  * mostrar: el mejor resultado (si supera el umbral mínimo) más, como mucho,
- * dos secundarios que estén realmente cerca de su puntuación. Cuando hay
- * intención de contacto/compra, además garantiza que el contenido real de
- * la página de contacto aparezca, aunque el ranking léxico no la sitúe
- * arriba para esa formulación concreta de la pregunta.
+ * dos secundarios que estén realmente cerca de su puntuación. Cuando el
+ * usuario pide específicamente contactar (no solo muestra interés
+ * comercial genérico como "¿cuánto cuesta?", que tiene su propia buena
+ * respuesta), además garantiza que el contenido real de la página de
+ * contacto aparezca, aunque el ranking léxico no la sitúe arriba para esa
+ * formulación concreta de la pregunta.
  */
-function selectResults(rawResults, intent, index) {
+function selectResults(rawResults, contactIntent, index) {
   const candidates = rawResults.filter((r) => r.score >= MIN_RELEVANT_SCORE);
   // Fragmentos muy cortos (kickers/eyebrows sueltos, p. ej. "Agenda tu
   // llamada") rara vez son una respuesta completa por sí solos, aunque el
@@ -103,7 +115,7 @@ function selectResults(rawResults, intent, index) {
 
   relevant = relevant.slice(0, MAX_RESULTS_IN_ANSWER);
 
-  if (intent && !relevant.some((r) => r.pageUrl === '/contacto')) {
+  if (contactIntent && !relevant.some((r) => r.pageUrl === '/contacto')) {
     const contactCandidates = search('contacto teléfono email llamada disponibilidad', index, 4)
       .concat(rawResults.filter((r) => r.pageUrl === '/contacto'));
     const contactChunk =
@@ -146,8 +158,9 @@ function trimToSentences(text, maxChars, minChars) {
 
 function buildExtractiveAnswer(results) {
   const snippets = results.map((r) => trimToSentences(r.text, SNIPPET_MAX_CHARS, SNIPPET_MIN_CHARS));
-  if (snippets.length === 1) return snippets[0];
-  return snippets.map((s) => `- ${s}`).join('\n');
+  const leadIn = NATURAL_LEAD_INS[Math.floor(Math.random() * NATURAL_LEAD_INS.length)];
+  if (snippets.length === 1) return leadIn + snippets[0];
+  return leadIn + snippets.map((s) => `- ${s}`).join('\n');
 }
 
 /**
@@ -156,23 +169,32 @@ function buildExtractiveAnswer(results) {
  */
 function sourceHint(results) {
   const top = results[0];
-  if (!top) return '';
+  // pageUrl es null para el conocimiento técnico general (lib/general-knowledge.js):
+  // no hay una página real de D-Code que enlazar.
+  if (!top || !top.pageUrl) return '';
   return `\n\nMás detalles en [${top.pageTitle.split('—')[0].trim()}](${top.pageUrl}).`;
 }
 
 function buildSystemPrompt(context, intent) {
-  return `Eres el asistente de IA oficial de D-Code Partners, una consultora que diseña e implementa sistemas de automatización e inteligencia artificial para empresas.
+  return `Eres el asistente de IA de D-Code Partners, una consultora que diseña e implementa sistemas de automatización e inteligencia artificial para empresas. Hablas como lo haría un consultor senior de la empresa en una llamada real: cercano, directo y útil — nunca como un buscador que copia párrafos ni como un vendedor.
 
-Hablas como un consultor senior de la empresa en una conversación real, nunca como un buscador que copia párrafos. Reglas de estilo, sin excepción:
-- Máximo 3-5 frases cortas por respuesta (o una lista breve si el contenido es naturalmente una lista).
-- Nunca copies el contexto literalmente: resúmelo con tus propias palabras, en tono natural y cercano.
-- Ten en cuenta el hilo de la conversación: si el usuario pregunta algo relacionado con su mensaje anterior, respóndele como una continuación natural, no como una pregunta aislada.
-- Usa Markdown ligero (negrita, listas) solo cuando aporte claridad, nunca bloques largos.
+## Estilo
+- Máximo 4-5 líneas por respuesta, en frases cortas. Si hace falta una lista, que sea breve. Solo te extiendes si el usuario te pide explícitamente más detalle.
+- Nada de tono de marketing ni de folleto. Habla como una persona: "Entiendo", "Buena pregunta", "Eso tiene sentido", "Déjame explicarlo" — con naturalidad, no en cada mensaje.
+- Markdown ligero (negrita, listas) solo si aporta claridad. Nunca bloques largos.
+- Mantén el hilo de la conversación: usa lo que el usuario ya ha contado antes en vez de tratar cada mensaje como si empezara de cero.
 
-Responde ÚNICAMENTE con información contenida en el siguiente contexto, extraído del sitio web real de D-Code Partners. Si el contexto no contiene la respuesta a lo que se pregunta, dilo con honestidad en una frase y no inventes nada.
+## Qué sabes
+- Sobre D-Code Partners (servicios, método, garantías, precios, proceso): responde ÚNICAMENTE con lo que dice el contexto de abajo, extraído del sitio real. Si el contexto no cubre lo que preguntan, dilo con honestidad en una frase — algo como "no tengo confirmación de ese dato concreto, pero puedo explicarte cómo solemos hacerlo o ponerte en contacto con el equipo" — y nunca inventes cifras, plazos ni promesas.
+- Sobre tecnología en general (IA, agentes, automatización, ChatGPT, Claude, Gemini, Copilot, n8n, Make, Zapier, CRM, ERP, WhatsApp Business, RAG, MCP, LLMs, APIs, etc.): puedes usar tu conocimiento general con normalidad, como haría un consultor experto del sector. Combínalo con lo de D-Code cuando tenga sentido.
 
-Contexto relevante:
-${context}
+## Cómo conducir la conversación
+- Si el usuario describe un problema concreto ("pierdo tiempo con WhatsApp", "se me acumulan los leads"), propón primero una solución realista y luego haz una pregunta de seguimiento — no le devuelvas un folleto.
+- Si muestra intención de contratar o automatizar algo pero sin detalle (p. ej. "quiero automatizar mi empresa"), no le vendas nada todavía: pregúntale primero a qué se dedica su empresa y qué proceso quiere automatizar, como haría un consultor antes de proponer nada.
+- El objetivo no es solo responder preguntas: es entender qué necesita la persona y, cuando tenga sentido, invitarla de forma natural (nunca forzada) a reservar una llamada gratuita en /contacto. Aporta valor primero.
+
+Contexto relevante extraído del sitio de D-Code Partners:
+${context || '(sin fragmentos relevantes para este mensaje — usa tu conocimiento general si aplica, y sé honesto si la pregunta es específicamente sobre D-Code y no tienes el dato)'}
 ${
   intent
     ? '\nEl usuario muestra interés en contratar o agendar una llamada: invita a reservar una llamada gratuita en /contacto de forma natural y no agresiva.'
@@ -204,15 +226,40 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'El mensaje es obligatorio.' });
     }
     const history = sanitizeHistory(req.body && req.body.history);
+    const provider = getProvider();
 
-    const smalltalkReply = detectSmalltalk(message);
-    if (smalltalkReply) {
-      return res.status(200).json({ success: true, reply: smalltalkReply, mode: 'smalltalk', intent: false });
+    // Sin proveedor LLM configurado: capa de reglas (saludos, flujo
+    // consultivo, soluciones ante problemas descritos) antes de caer a
+    // recuperación pura. En cuanto hay un proveedor configurado, es el
+    // propio modelo quien se encarga de todo esto —mejor, y con contexto
+    // real— guiado por el system prompt: las reglas se saltan para no
+    // interponerse en su razonamiento.
+    if (!provider) {
+      const smalltalkReply = detectSmalltalk(message);
+      if (smalltalkReply) {
+        return res.status(200).json({ success: true, reply: smalltalkReply, mode: 'smalltalk', intent: false });
+      }
+
+      // Si ya estamos a mitad de una pregunta de diagnóstico, esa
+      // continuación manda siempre. Si no, un problema descrito con detalle
+      // ("pierdo tiempo con WhatsApp") tiene prioridad sobre arrancar el
+      // flujo genérico desde cero, porque ya podemos responder algo
+      // concreto y útil.
+      const midFlow = isAwaitingConsultativeAnswer(history);
+      const solutionReply = midFlow ? null : matchProblemStatement(message);
+      const consultativeReply = solutionReply ? null : handleConsultativeFlow(message, history);
+      if (consultativeReply) {
+        return res.status(200).json({ success: true, reply: consultativeReply, mode: 'consultative', intent: false });
+      }
+      if (solutionReply) {
+        return res.status(200).json({ success: true, reply: solutionReply, mode: 'solution', intent: false });
+      }
     }
 
     const index = loadIndex();
     const intent = detectBuyingIntent(message);
-    let results = selectResults(search(message, index, TOP_K), intent, index);
+    const contactIntent = detectContactIntent(message);
+    let results = selectResults(search(message, index, TOP_K), contactIntent, index);
 
     // Pregunta de seguimiento corta ("¿y el precio?", "cuéntame más") que por
     // sí sola no tiene términos suficientes para encontrar nada: se reintenta
@@ -222,11 +269,9 @@ module.exports = async function handler(req, res) {
       const lastUserMessage = [...history].reverse().find((m) => m.role === 'user');
       if (lastUserMessage) {
         const combinedQuery = `${lastUserMessage.content} ${message}`;
-        results = selectResults(search(combinedQuery, index, TOP_K), intent, index);
+        results = selectResults(search(combinedQuery, index, TOP_K), contactIntent, index);
       }
     }
-
-    const provider = getProvider();
 
     if (!results.length && !provider) {
       return res.status(200).json({ success: true, reply: FALLBACK_MESSAGE, mode: 'retrieval', intent });
