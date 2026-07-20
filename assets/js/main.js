@@ -394,10 +394,11 @@
     });
   }
 
-  /* ---------- Chat widget (design preview — no live backend) ----------
-     Guided, scripted demo only. Free-text input always resolves to an
-     honest "this is a preview" message instead of pretending to be an
-     AI that isn't actually connected to anything. */
+  /* ---------- Asistente de IA de D-Code Partners ----------
+     Llama a /api/chat (recuperación sobre el contenido real del sitio, con
+     upgrade automático a generación LLM si el backend tiene un proveedor
+     configurado). Sin respuestas escritas a mano en el cliente: los botones
+     rápidos y el texto libre pasan por el mismo pipeline. */
   var chatWidget = document.getElementById('chat-widget');
   if (chatWidget) {
     var chatBubble = document.getElementById('chat-bubble');
@@ -406,6 +407,13 @@
     var chatQuick = document.getElementById('chat-quick-replies');
     var chatForm = document.getElementById('chat-form');
     var chatInput = document.getElementById('chat-input');
+    var chatSubmitBtn = chatForm ? chatForm.querySelector('button[type="submit"]') : null;
+
+    var CHAT_ENDPOINT = '/api/chat';
+    var HISTORY_KEY = 'dcodeChatHistory';
+    var MAX_STORED_TURNS = 20;
+    var MAX_MESSAGE_LENGTH = 600;
+    var isSending = false;
 
     chatBubble.addEventListener('click', function () {
       var isOpen = chatWidget.classList.toggle('open');
@@ -414,77 +422,173 @@
       if (isOpen && chatInput) chatInput.focus();
     });
 
-    var addMessage = function (content, who, isHtml) {
-      var div = document.createElement('div');
-      div.className = 'chat-msg ' + who;
-      if (isHtml) { div.innerHTML = content; } else { div.textContent = content; }
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      return div;
+    /* ---- Markdown ligero y seguro: escapa todo el HTML primero, y solo
+       luego reconoce **negrita**, [enlaces](/ruta) y listas "- item". Así
+       una respuesta jamás puede inyectar HTML/JS, venga de donde venga. */
+    var escapeHtml = function (str) {
+      return String(str).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
     };
 
-    var showTyping = function (cb, delay) {
-      var t = document.createElement('div');
-      t.className = 'chat-typing';
-      t.innerHTML = '<span></span><span></span><span></span>';
-      chatMessages.appendChild(t);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      setTimeout(function () {
-        t.remove();
-        cb();
-      }, delay || 900);
+    var renderInline = function (text) {
+      text = text.replace(/\[([^\]]+)\]\((\/[^)\s]*|https?:\/\/[^)\s]+)\)/g, function (m, label, href) {
+        var isExternal = /^https?:\/\//.test(href);
+        var attrs = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return '<a href="' + href + '"' + attrs + '>' + label + '</a>';
+      });
+      text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      return text;
     };
 
-    var REPLIES = {
-      automatizacion: {
-        user: 'Automatización de tareas',
-        bot: 'Solemos empezar por gestión documental, reporting o seguimiento comercial: procesos con reglas claras que hoy hace una persona a mano.',
-        cta: { text: 'Ver Automatización IA', href: '/servicios/automatizacion-ia' }
-      },
-      atencion: {
-        user: 'Atención al cliente 24/7',
-        bot: 'Podemos montarte un agente que responda al instante en tu web o WhatsApp, y que avise a tu equipo cuando de verdad haga falta una persona.',
-        cta: { text: 'Ver Agentes de IA', href: '/servicios/agentes-ia' }
-      },
-      humano: {
-        user: 'Quiero hablar con una persona',
-        bot: 'Por supuesto. Diego y Dimitry responden en menos de 24h — resérvate una llamada de 30 minutos, sin coste ni compromiso.',
-        cta: { text: 'Reservar llamada gratuita', href: '/contacto' }
+    var renderMarkdown = function (raw) {
+      var lines = escapeHtml(raw).split('\n');
+      var html = '';
+      var listBuffer = [];
+
+      var flushList = function () {
+        if (!listBuffer.length) return;
+        html += '<ul>' + listBuffer.map(function (item) {
+          return '<li>' + renderInline(item) + '</li>';
+        }).join('') + '</ul>';
+        listBuffer = [];
+      };
+
+      lines.forEach(function (line) {
+        var trimmed = line.trim();
+        if (!trimmed) { flushList(); return; }
+        var bulletMatch = trimmed.match(/^-\s+(.*)$/);
+        if (bulletMatch) { listBuffer.push(bulletMatch[1]); return; }
+        flushList();
+        var noteMatch = trimmed.match(/^\*(.+)\*$/);
+        if (noteMatch) {
+          html += '<p class="chat-msg-note">' + renderInline(noteMatch[1]) + '</p>';
+          return;
+        }
+        html += '<p>' + renderInline(trimmed) + '</p>';
+      });
+      flushList();
+      return html;
+    };
+
+    /* ---- Memoria de conversación durante la sesión (sobrevive a la
+       navegación entre páginas, no a cerrar la pestaña). */
+    var loadHistory = function () {
+      try {
+        var raw = sessionStorage.getItem(HISTORY_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    };
+    var saveHistory = function (history) {
+      try {
+        sessionStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-MAX_STORED_TURNS)));
+      } catch (e) {
+        /* Almacenamiento no disponible (modo privado, cuota llena...): la
+           conversación sigue funcionando, simplemente no persiste. */
       }
     };
 
-    var handleReply = function (key) {
-      var r = REPLIES[key];
-      if (!r) return;
-      addMessage(r.user, 'user');
-      if (chatQuick) chatQuick.style.display = 'none';
-      showTyping(function () {
-        var html = r.bot + (r.cta ? ' <a class="btn btn-sm btn-primary chat-cta" href="' + r.cta.href + '">' + r.cta.text + '</a>' : '');
-        addMessage(html, 'bot', true);
+    var scrollToBottom = function () {
+      chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    };
+
+    var addMessage = function (text, who, silent) {
+      var div = document.createElement('div');
+      div.className = 'chat-msg ' + who;
+      div.innerHTML = who === 'bot' ? renderMarkdown(text) : escapeHtml(text);
+      chatMessages.appendChild(div);
+      if (!silent) scrollToBottom();
+      return div;
+    };
+
+    var showTyping = function () {
+      var t = document.createElement('div');
+      t.className = 'chat-typing';
+      t.id = 'chat-typing-indicator';
+      t.innerHTML = '<span></span><span></span><span></span>';
+      chatMessages.appendChild(t);
+      scrollToBottom();
+    };
+    var hideTyping = function () {
+      var t = document.getElementById('chat-typing-indicator');
+      if (t) t.remove();
+    };
+
+    var setSending = function (sending) {
+      isSending = sending;
+      if (chatInput) chatInput.disabled = sending;
+      if (chatSubmitBtn) chatSubmitBtn.disabled = sending;
+    };
+
+    var history = loadHistory();
+    if (history.length) {
+      // El mensaje de bienvenida ya está en el HTML: se conserva y el
+      // historial guardado se añade a continuación, no lo sustituye.
+      history.forEach(function (turn) {
+        addMessage(turn.content, turn.role === 'user' ? 'user' : 'bot', true);
       });
+      if (chatQuick) chatQuick.style.display = 'none';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    var sendMessage = function (rawText) {
+      var text = (rawText || '').trim().slice(0, MAX_MESSAGE_LENGTH);
+      if (!text || isSending) return;
+
+      addMessage(text, 'user');
+      if (chatQuick) chatQuick.style.display = 'none';
+      history.push({ role: 'user', content: text });
+      saveHistory(history);
+
+      setSending(true);
+      showTyping();
+
+      fetch(CHAT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: history.slice(0, -1) })
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          hideTyping();
+          var reply = (result.ok && result.data && result.data.success && result.data.reply)
+            ? result.data.reply
+            : 'Ha ocurrido un problema al procesar tu mensaje. Inténtalo de nuevo en unos segundos o contáctanos directamente.';
+          addMessage(reply, 'bot');
+          history.push({ role: 'assistant', content: reply });
+          saveHistory(history);
+        })
+        .catch(function () {
+          hideTyping();
+          var reply = 'No se ha podido conectar con el asistente. Comprueba tu conexión e inténtalo de nuevo.';
+          addMessage(reply, 'bot');
+          history.push({ role: 'assistant', content: reply });
+          saveHistory(history);
+        })
+        .then(function () {
+          setSending(false);
+          if (chatInput) chatInput.focus();
+        });
     };
 
     if (chatQuick) {
       chatQuick.querySelectorAll('button').forEach(function (btn) {
-        btn.addEventListener('click', function () { handleReply(btn.dataset.reply); });
+        btn.addEventListener('click', function () { sendMessage(btn.textContent); });
       });
     }
 
     if (chatForm) {
       chatForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        var val = chatInput.value.trim();
-        if (!val) return;
-        addMessage(val, 'user');
+        var val = chatInput.value;
         chatInput.value = '';
-        if (chatQuick) chatQuick.style.display = 'none';
-        showTyping(function () {
-          addMessage(
-            'Esto es una vista previa del diseño — todavía no está conectado a un asistente real. Cuéntanoslo directamente y te respondemos en menos de 24h: <a class="btn btn-sm btn-primary chat-cta" href="/contacto">Reservar llamada gratuita</a>',
-            'bot',
-            true
-          );
-        }, 700);
+        sendMessage(val);
       });
     }
   }

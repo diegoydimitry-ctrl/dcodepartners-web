@@ -1,0 +1,959 @@
+{
+  "generatedAt": "2026-07-20T11:55:33.742Z",
+  "pageCount": 17,
+  "chunkCount": 170,
+  "pages": [
+    {
+      "url": "/aviso-legal",
+      "title": "Aviso Legal — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/aviso-legal#c0",
+          "heading": "",
+          "text": "Legal"
+        },
+        {
+          "id": "/aviso-legal#c1",
+          "heading": "Titular del sitio web",
+          "text": "Este sitio web pertenece a D-Code Partners. Responsables: Diego Siñeriz Dimitry Sosenko Email de contacto: dcodedepartment@gmail.com"
+        },
+        {
+          "id": "/aviso-legal#c2",
+          "heading": "Objeto",
+          "text": "La finalidad de este sitio web es informar sobre los servicios de automatización e inteligencia artificial ofrecidos por D-Code Partners."
+        },
+        {
+          "id": "/aviso-legal#c3",
+          "heading": "Propiedad intelectual",
+          "text": "Todos los contenidos, diseños, logotipos, textos e imágenes pertenecen a D-Code Partners, salvo que se indique lo contrario."
+        },
+        {
+          "id": "/aviso-legal#c4",
+          "heading": "Responsabilidad",
+          "text": "D-Code Partners no se hace responsable del uso indebido que terceros puedan realizar del contenido publicado en este sitio."
+        },
+        {
+          "id": "/aviso-legal#c5",
+          "heading": "Legislación aplicable",
+          "text": "Este sitio web se rige por la legislación española. ← Volver a la web"
+        }
+      ]
+    },
+    {
+      "url": "/blog/automatizacion-vs-agentes-ia",
+      "title": "Automatización vs. Agentes de IA — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c0",
+          "heading": "",
+          "text": "Estrategia"
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c1",
+          "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
+          "text": "D-Code Partners · 24 de junio de 2026 · 7 min de lectura Son dos de los términos que más se repiten quien busca digitalizar su negocio con Inteligencia Artificial — y también dos de los que más se confunden. Elegir el enfoque equivocado no es solo ineficiente: puede hacer que un proyecto no dé los resultados esperados aunque la tecnología en sí funcione perfectamente."
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c2",
+          "heading": "Automatización: procesos con reglas, sin conversación",
+          "text": "La automatización con IA se centra en procesos internos: tareas que ya sabes exactamente cómo deben ejecutarse, y que simplemente quieres dejar de hacer a mano. Piensa en gestión documental, generación de informes, actualización de bases de datos o seguimiento de tareas administrativas. Su característica principal: no hay una conversación de por medio. El sistema recibe una entrada (un documento, un dato, un evento) y produce una salida, siguiendo un flujo definido de antemano."
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c3",
+          "heading": "Agentes de IA: conversación con criterio",
+          "text": "Un agente de IA, en cambio, mantiene una interacción — normalmente con una persona — y necesita responder de forma flexible a lo que esa persona diga, dentro de unos límites definidos. Es el caso típico de la atención al cliente, la cualificación comercial o el soporte de primer nivel. Aquí la exigencia es distinta: el agente tiene que entender lenguaje natural variado, mantener el contexto de la conversación y saber cuándo debe ceder el turno a una persona en vez de intentar resolverlo todo él solo."
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c4",
+          "heading": "La pregunta que de verdad importa",
+          "text": "La forma más práctica de decidir no es técnica, sino de negocio: ¿el problema que quieres resolver implica una conversación con otra persona, o es una tarea interna con reglas más o menos fijas? Si el cuello de botella es \"nadie responde a tiempo a los clientes\", probablemente necesitas un agente de IA. Si el cuello de botella es \"alguien pierde horas cada semana haciendo lo mismo a mano\", probablemente necesitas automatización de procesos. Si ambas cosas te suenan familiares, no estás solo: es habitual necesitar las dos, y que además compartan datos entre sí a través de integraciones."
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c5",
+          "heading": "Por qué casi nunca es \"una u otra\"",
+          "text": "En la práctica, los proyectos más efectivos combinan ambas piezas. Un agente de IA que atiende a un cliente potencial es mucho más útil si, además, registra automáticamente esa conversación en tu CRM — que es exactamente donde entra la automatización (y las integraciones entre herramientas). Por eso el punto de partida no debería ser \"quiero un chatbot\" o \"quiero automatizar X\", sino un diagnóstico de qué proceso, en conjunto, tiene más impacto para tu negocio concreto. ¿Quieres saber qué de todo esto aplica a tu negocio? Reservar mi Llamada Gratuita Sigue leyendo"
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c6",
+          "heading": "Más artículos del blog",
+          "text": "Fundamentos"
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c7",
+          "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
+          "text": "Una introducción clara a qué cambia realmente cuando automatizas procesos con Inteligencia Artificial, sin promesas vacías ni jerga innecesaria. 10 de junio de 2026 Práctico"
+        },
+        {
+          "id": "/blog/automatizacion-vs-agentes-ia#c8",
+          "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
+          "text": "Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana, sin necesidad de un gran proyecto de IA. 8 de julio de 2026"
+        }
+      ]
+    },
+    {
+      "url": "/blog/",
+      "title": "Blog — Automatización e IA para empresas | D-Code Partners",
+      "chunks": [
+        {
+          "id": "/blog/#c0",
+          "heading": "",
+          "text": "Blog"
+        },
+        {
+          "id": "/blog/#c1",
+          "heading": "Ideas sobre automatización e IA para empresas.",
+          "text": "Artículos prácticos, sin humo, sobre cómo aplicar automatización e Inteligencia Artificial a negocios reales. Fundamentos"
+        },
+        {
+          "id": "/blog/#c2",
+          "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
+          "text": "Una introducción clara a qué cambia realmente cuando automatizas procesos con Inteligencia Artificial, sin promesas vacías ni jerga innecesaria. 10 de junio de 2026 · 6 min de lectura Estrategia"
+        },
+        {
+          "id": "/blog/#c3",
+          "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
+          "text": "No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir cuál necesita tu negocio primero. 24 de junio de 2026 · 7 min de lectura Práctico"
+        },
+        {
+          "id": "/blog/#c4",
+          "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
+          "text": "Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana, sin necesidad de un gran proyecto de IA. 8 de julio de 2026 · 5 min de lectura ¿Prefieres hablarlo directamente?"
+        },
+        {
+          "id": "/blog/#c5",
+          "heading": "Cuéntanos tu caso en una llamada de 30 minutos.",
+          "text": "Reservar mi Llamada Gratuita"
+        }
+      ]
+    },
+    {
+      "url": "/blog/procesos-que-puedes-automatizar-ya",
+      "title": "5 procesos que ya podrías automatizar — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c0",
+          "heading": "",
+          "text": "Práctico"
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c1",
+          "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
+          "text": "D-Code Partners · 8 de julio de 2026 · 5 min de lectura No hace falta un proyecto enorme para empezar a automatizar. La mayoría de empresas tienen dos o tres procesos \"silenciosos\" que consumen horas cada semana sin que nadie se pare a cuestionarlos, simplemente porque siempre se han hecho así. Aquí van cinco de los más habituales."
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c2",
+          "heading": "1. Clasificación y archivo de documentos",
+          "text": "Facturas, contratos, formularios recibidos por email o subidos a una carpeta compartida. Si alguien en tu equipo dedica tiempo a abrirlos, decidir de qué se trata y moverlos al sitio correcto, es un candidato claro: un sistema puede leer el contenido, clasificarlo y archivarlo directamente."
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c3",
+          "heading": "2. Respuestas a preguntas repetidas de clientes",
+          "text": "Horarios, precios, disponibilidad, estado de un pedido. Si tu equipo de atención al cliente responde constantemente las mismas cinco o diez preguntas, ese tiempo se puede liberar casi por completo con un agente que las resuelva al instante, dejando las consultas complejas para las personas."
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c4",
+          "heading": "3. Recopilación de datos para informes periódicos",
+          "text": "El informe semanal o mensual que alguien arma copiando números de varias fuentes distintas en una hoja de cálculo. Si los datos ya existen en algún sistema, ese proceso casi siempre se puede automatizar de punta a punta, incluyendo el envío del informe final."
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c5",
+          "heading": "4. Seguimiento de leads y presupuestos pendientes",
+          "text": "Ese cliente potencial al que \"había que escribirle\" y se quedó en el olvido. Los recordatorios y seguimientos comerciales son de los procesos con mejor relación entre esfuerzo de automatización e impacto en ingresos, precisamente porque el coste de no hacerlos es directamente una venta perdida."
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c6",
+          "heading": "5. Onboarding de nuevos clientes o empleados",
+          "text": "La secuencia de bienvenida, los documentos que hay que recopilar, las cuentas que hay que activar. Es un proceso que se repite con cada persona nueva, con pasos casi idénticos cada vez — justo el tipo de tarea que menos debería depender de que alguien se acuerde de hacerla manualmente."
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c7",
+          "heading": "Cómo dar el siguiente paso",
+          "text": "Si te has reconocido en dos o más de estos puntos, no hace falta que decidas tú solo por dónde empezar. Un diagnóstico externo suele detectar procesos adicionales que, vistos desde dentro, ya ni se perciben como \"un problema\" — simplemente es \"como se ha hecho siempre\". ¿Quieres saber qué de todo esto aplica a tu negocio? Reservar mi Llamada Gratuita Sigue leyendo"
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c8",
+          "heading": "Más artículos del blog",
+          "text": "Fundamentos"
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c9",
+          "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
+          "text": "Una introducción clara a qué cambia realmente cuando automatizas procesos con Inteligencia Artificial, sin promesas vacías ni jerga innecesaria. 10 de junio de 2026 Estrategia"
+        },
+        {
+          "id": "/blog/procesos-que-puedes-automatizar-ya#c10",
+          "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
+          "text": "No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir cuál necesita tu negocio primero. 24 de junio de 2026"
+        }
+      ]
+    },
+    {
+      "url": "/blog/que-es-la-automatizacion-con-ia",
+      "title": "Qué es la automatización con IA — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c0",
+          "heading": "",
+          "text": "Fundamentos"
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c1",
+          "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
+          "text": "D-Code Partners · 10 de junio de 2026 · 6 min de lectura \"Automatización\" es una de esas palabras que se han usado tanto que han perdido parte de su significado. Antes de hablar de si tu empresa la necesita, merece la pena aclarar qué es exactamente — y qué no es."
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c2",
+          "heading": "Automatización con IA, en una frase",
+          "text": "Es diseñar un sistema que ejecuta un proceso concreto de tu negocio sin que una persona tenga que hacerlo manualmente cada vez, y que además puede tomar pequeñas decisiones dentro de ese proceso gracias a modelos de Inteligencia Artificial: clasificar un documento, redactar una respuesta, decidir a quién avisar. La diferencia con la automatización \"clásica\" (la de hojas de cálculo con macros o reglas fijas de tipo \"si pasa X, haz Y\") es que la IA permite manejar variabilidad: texto libre, imágenes, conversaciones. Cosas que antes requerían obligatoriamente a una persona."
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c3",
+          "heading": "Qué cambia realmente en el día a día",
+          "text": "No se trata de sustituir a tu equipo. Se trata de quitarle de encima las partes del trabajo que son repetitivas, tienen reglas claras y no requieren su criterio en cada caso individual. Algunos ejemplos habituales: Un documento que llega por email se clasifica y se archiva solo, en vez de que alguien lo abra, lo lea y lo mueva a la carpeta correcta. Un informe semanal se genera automáticamente a partir de los datos ya existentes, en vez de que alguien los recopile a mano un viernes por la tarde. Una consulta repetida de un cliente se responde al instante, en vez de esperar a que alguien del equipo tenga un hueco. En ningún caso el objetivo es que \"la IA decida todo\". El criterio humano se reserva para lo que de verdad lo necesita; el resto, se ejecuta solo."
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c4",
+          "heading": "¿Por qué ahora y no antes?",
+          "text": "Durante años, automatizar procesos con lenguaje natural o documentos no estructurados era caro y poco fiable — requería equipos de ingeniería a medida. Los modelos de IA actuales han bajado esa barrera de entrada de forma notable: hoy es viable para una pyme, no solo para una gran corporación con presupuesto de innovación. Eso no significa que cualquier automatización sea buena idea. Significa que merece la pena revisar, proceso por proceso, cuáles tienen sentido para tu negocio concreto — y cuáles no."
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c5",
+          "heading": "Cómo saber si tu empresa la necesita",
+          "text": "Una pregunta simple ayuda bastante: ¿hay alguna tarea que tu equipo repite cada día o cada semana, con reglas relativamente claras, que consume tiempo sin aportar valor añadido en sí misma? Si la respuesta es sí, probablemente haya margen de automatización. Lo que no tiene sentido es automatizar por automatizar. Por eso cualquier proyecto serio empieza por un diagnóstico, no por instalar herramientas. ¿Quieres saber qué de todo esto aplica a tu negocio? Reservar mi Llamada Gratuita Sigue leyendo"
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c6",
+          "heading": "Más artículos del blog",
+          "text": "Estrategia"
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c7",
+          "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
+          "text": "No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir cuál necesita tu negocio primero. 24 de junio de 2026 Práctico"
+        },
+        {
+          "id": "/blog/que-es-la-automatizacion-con-ia#c8",
+          "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
+          "text": "Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana, sin necesidad de un gran proyecto de IA. 8 de julio de 2026"
+        }
+      ]
+    },
+    {
+      "url": "/conocenos",
+      "title": "Conócenos: quiénes somos en D-Code Partners",
+      "chunks": [
+        {
+          "id": "/conocenos#c0",
+          "heading": "",
+          "text": "La mente detrás de D-Code Partners"
+        },
+        {
+          "id": "/conocenos#c1",
+          "heading": "Dos fundadores. Un mismo código.",
+          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid como dos jóvenes empresarios decididos a cambiar la forma en que las empresas crecen. Nuestra historia"
+        },
+        {
+          "id": "/conocenos#c2",
+          "heading": "Por qué existe D-Code Partners",
+          "text": "El nombre no es casualidad: dos socios cuyo nombre empieza por D, unidos por el código y la convicción de que la mayoría de las empresas siguen operando en manual dentro de un mundo que ya es automático. Como nativos digitales, no venimos a aprender la tecnología: hemos crecido con ella. Nos hemos formado de forma intensiva en Inteligencia Artificial aplicada a negocio, y trabajamos en la frontera de lo que la tecnología permite hoy. Somos conscientes de que ser una empresa joven genera preguntas legítimas. Por eso construimos todo nuestro modelo de trabajo — el mes de prueba gratuito, la ausencia de permanencia — alrededor de una idea simple: que la confianza se gane demostrando, no prometiendo. \" Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado. D.S."
+        },
+        {
+          "id": "/conocenos#c3",
+          "heading": "Diego Siñeriz",
+          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible: cómo traducir tecnología en resultados concretos para cada cliente. D.S."
+        },
+        {
+          "id": "/conocenos#c4",
+          "heading": "Dimitry Sosenko",
+          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente: cómo se construye un sistema que funciona de verdad en producción. Un compromiso inquebrantable con cada empresa que confía en nosotros. Esa es la base de D-Code Partners. Cómo pensamos"
+        },
+        {
+          "id": "/conocenos#c5",
+          "heading": "Resultados antes que promesas",
+          "text": "Preferimos que hables tú, con datos en la mano, antes que nosotros con adjetivos."
+        },
+        {
+          "id": "/conocenos#c6",
+          "heading": "Confidencialidad como norma",
+          "text": "Tu información y la de tus clientes se tratan con el mismo cuidado que exigiríamos para las nuestras."
+        },
+        {
+          "id": "/conocenos#c7",
+          "heading": "Simplicidad técnica",
+          "text": "Si un sistema es demasiado complejo para explicártelo en cinco minutos, probablemente lo estemos complicando de más. Siguiente paso"
+        },
+        {
+          "id": "/conocenos#c8",
+          "heading": "Hablemos de tu operativa.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/contacto",
+      "title": "Contacto — Reserva tu llamada gratuita con D-Code Partners",
+      "chunks": [
+        {
+          "id": "/contacto#c0",
+          "heading": "",
+          "text": "Agenda tu llamada"
+        },
+        {
+          "id": "/contacto#c1",
+          "heading": "Reclama tu mes de prueba gratuito.",
+          "text": "Cuéntanos en qué punto está tu negocio. En una llamada de 30 minutos te decimos qué podemos automatizar y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Sin coste. Sin compromiso. Respondemos en menos de 24h. Email: dcodedepartment@gmail.com. Teléfono — Diego: 680 22 34 39. Teléfono — Dimitry: 614 54 75 70. Ubicación: Madrid, España. Disponibilidad: Respondemos en menos de 24h. ¿Tienes dudas antes de escribirnos? Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/cookies",
+      "title": "Política de Cookies — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/cookies#c0",
+          "heading": "",
+          "text": "Legal"
+        },
+        {
+          "id": "/cookies#c1",
+          "heading": "Política de Cookies",
+          "text": "Este sitio web utiliza cookies únicamente para garantizar el correcto funcionamiento de la página y mejorar la experiencia del usuario."
+        },
+        {
+          "id": "/cookies#c2",
+          "heading": "1. ¿Qué son las cookies?",
+          "text": "Las cookies son pequeños archivos que se almacenan en el navegador del usuario cuando visita una página web."
+        },
+        {
+          "id": "/cookies#c3",
+          "heading": "2. Cookies utilizadas",
+          "text": "Actualmente D-Code Partners únicamente utiliza cookies técnicas necesarias para el funcionamiento del sitio y servicios de terceros indispensables como: Cloudflare Turnstile (protección anti-spam del formulario). Google Analytics (si el usuario acepta las cookies analíticas)."
+        },
+        {
+          "id": "/cookies#c4",
+          "heading": "3. Gestión de cookies",
+          "text": "El usuario puede configurar su navegador para bloquear o eliminar las cookies en cualquier momento."
+        },
+        {
+          "id": "/cookies#c5",
+          "heading": "4. Más información",
+          "text": "Si tienes cualquier duda sobre nuestra política de cookies puedes escribirnos a: dcodedepartment@gmail.com ← Volver a la web"
+        }
+      ]
+    },
+    {
+      "url": "/faq",
+      "title": "Preguntas frecuentes — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/faq#c0",
+          "heading": "",
+          "text": "Preguntas frecuentes"
+        },
+        {
+          "id": "/faq#c1",
+          "heading": "Todo lo que sueles preguntarnos antes de empezar.",
+          "text": "Si no encuentras la respuesta que buscas, escríbenos directamente — respondemos en menos de 24h."
+        },
+        {
+          "id": "/faq#c2",
+          "heading": "¿Qué hace exactamente D-Code Partners?",
+          "text": "Diseñamos e implementamos sistemas de automatización e inteligencia artificial a medida para pequeñas y medianas empresas: desde procesos internos repetitivos hasta agentes que atienden a tus clientes. Todo dentro de un modelo de trabajo que puedes conocer en el Método D-Code."
+        },
+        {
+          "id": "/faq#c3",
+          "heading": "¿Qué os diferencia de una agencia tradicional?",
+          "text": "No cobramos hasta demostrar resultados reales durante el primer mes. La mayoría de agencias venden un proyecto cerrado por adelantado; nosotros preferimos que los resultados hablen antes que las promesas. Puedes ver el detalle en Garantías y Proceso."
+        },
+        {
+          "id": "/faq#c4",
+          "heading": "¿Con qué tipo de empresas trabajáis?",
+          "text": "Con pequeñas y medianas empresas que tengan procesos manuales y repetitivos, o que reciban un volumen de consultas de clientes que hoy les cuesta atender a tiempo. En la primera llamada evaluamos si tu caso encaja."
+        },
+        {
+          "id": "/faq#c5",
+          "heading": "¿Qué procesos podéis automatizar?",
+          "text": "Gestión documental, reporting, seguimiento comercial, facturación, onboarding de clientes y, en general, cualquier tarea repetitiva con reglas claras. Tienes ejemplos concretos en Automatización IA."
+        },
+        {
+          "id": "/faq#c6",
+          "heading": "¿Necesito conocimientos técnicos para trabajar con vosotros?",
+          "text": "No. Nos encargamos de todo el diseño e implementación técnica. Tú solo necesitas contarnos cómo funciona tu negocio hoy."
+        },
+        {
+          "id": "/faq#c7",
+          "heading": "¿Necesito cambiar mi software actual?",
+          "text": "Normalmente no. Diseñamos los sistemas para que se integren con las herramientas que ya usas — CRM, hojas de cálculo, ERP o web — en vez de sustituirlas. Puedes ver ejemplos en Integraciones."
+        },
+        {
+          "id": "/faq#c8",
+          "heading": "¿Qué herramientas utilizáis?",
+          "text": "Elegimos la tecnología más adecuada para cada caso concreto: puede ser una plataforma de automatización, una integración directa por API o un desarrollo a medida. No forzamos el mismo stack para todos los clientes."
+        },
+        {
+          "id": "/faq#c9",
+          "heading": "¿Qué diferencia hay entre un agente de IA y un chatbot tradicional?",
+          "text": "Un chatbot tradicional sigue un guion fijo de respuestas predefinidas. Un agente de IA entiende lenguaje natural, mantiene el contexto de la conversación y sabe cuándo derivarla a una persona. Lo explicamos con más detalle en Agentes de IA."
+        },
+        {
+          "id": "/faq#c10",
+          "heading": "¿Podéis integrar la IA con mi CRM o ERP?",
+          "text": "Sí. Es una de las combinaciones más habituales: un agente o proceso automatizado que registra cada interacción directamente en tu CRM o ERP, sin copiar nada a mano. Más información en Integraciones."
+        },
+        {
+          "id": "/faq#c11",
+          "heading": "¿Cómo es el proceso desde la primera reunión?",
+          "text": "Empezamos con un diagnóstico de tu operativa, diseñamos el sistema, lo implementamos durante 30 días de prueba y revisamos juntos los resultados antes de hablar de precio. El detalle completo está en el Método D-Code."
+        },
+        {
+          "id": "/faq#c12",
+          "heading": "¿Cuánto tarda en implementarse un sistema de automatización?",
+          "text": "El diagnóstico se hace en los primeros días. La implementación ocurre durante las cuatro semanas del mes de prueba, de forma progresiva y supervisada."
+        },
+        {
+          "id": "/faq#c13",
+          "heading": "¿Cómo medís los resultados?",
+          "text": "Con datos concretos: horas ahorradas, procesos automatizados y tiempos de respuesta, comparados con tu situación antes de empezar. Te los presentamos el día 30, antes de acordar ningún precio."
+        },
+        {
+          "id": "/faq#c14",
+          "heading": "¿Qué pasa si el proyecto no consigue resultados?",
+          "text": "No pagas nada. Si el sistema no demuestra un beneficio real y medible durante el mes de prueba, no facturamos ese periodo."
+        },
+        {
+          "id": "/faq#c15",
+          "heading": "¿Cuánto cuesta el servicio después del mes gratuito?",
+          "text": "Depende del sistema implementado y del impacto medido. Lo acordamos juntos al final del mes de prueba, con los resultados reales ya sobre la mesa — no antes."
+        },
+        {
+          "id": "/faq#c16",
+          "heading": "¿Puedo cancelar en cualquier momento?",
+          "text": "Sí. No hay permanencia mínima ni penalización por cancelar, ni durante el mes de prueba ni después."
+        },
+        {
+          "id": "/faq#c17",
+          "heading": "¿Quién es el propietario de las automatizaciones?",
+          "text": "Tú. Los sistemas que implementamos en tu operativa son tuyos; nuestro papel es diseñarlos, construirlos y dejarlos funcionando correctamente."
+        },
+        {
+          "id": "/faq#c18",
+          "heading": "¿Qué ocurre después de entregar el proyecto?",
+          "text": "Seguimos disponibles para ajustes y mantenimiento del sistema. Nuestro modelo está pensado como una relación continua, no como una entrega puntual que se olvida al día siguiente."
+        },
+        {
+          "id": "/faq#c19",
+          "heading": "¿Mis datos y los de mis clientes están seguros?",
+          "text": "Sí. Accedemos solo a lo estrictamente necesario para el proceso concreto que automatizamos, bajo confidencialidad absoluta. Puedes consultar el detalle en nuestra Política de Privacidad."
+        },
+        {
+          "id": "/faq#c20",
+          "heading": "¿Firmáis acuerdo de confidencialidad (NDA)?",
+          "text": "Sí, si tu empresa lo requiere. Es habitual en proyectos que implican acceso a datos sensibles de clientes o procesos internos."
+        },
+        {
+          "id": "/faq#c21",
+          "heading": "Seguridad y Confidencialidad",
+          "text": "No hemos encontrado ninguna pregunta que coincida. Prueba con otra palabra o escríbenos directamente. ¿No has encontrado tu respuesta?"
+        },
+        {
+          "id": "/faq#c22",
+          "heading": "Hablemos directamente.",
+          "text": "Resérvate 30 minutos sin coste, o escríbenos y te respondemos en menos de 24h. Reservar mi Llamada Gratuita Escribir un email"
+        }
+      ]
+    },
+    {
+      "url": "/garantias",
+      "title": "Garantías y Proceso: riesgo 0% — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/garantias#c0",
+          "heading": "",
+          "text": "Garantías y Proceso"
+        },
+        {
+          "id": "/garantias#c1",
+          "heading": "Somos una empresa joven. Por eso no cobramos hasta demostrarlo.",
+          "text": "Todavía no tenemos veinte años de trayectoria ni un archivo de casos de cliente que enseñarte — y preferimos decírtelo claramente antes que inflarlo. Lo que sí tenemos es un modelo diseñado para que asumamos nosotros el riesgo, no tú."
+        },
+        {
+          "id": "/garantias#c2",
+          "heading": "Riesgo 0% el primer mes",
+          "text": "Implementamos y medimos resultados reales durante 30 días antes de hablar de precio. Si no hay beneficio demostrado, no hay factura."
+        },
+        {
+          "id": "/garantias#c3",
+          "heading": "Sin permanencia",
+          "text": "Ni durante el mes de prueba ni después. Puedes cancelar cuando quieras, sin penalización ni letra pequeña."
+        },
+        {
+          "id": "/garantias#c4",
+          "heading": "Confidencialidad absoluta",
+          "text": "Accedemos solo a lo estrictamente necesario para cada proceso, bajo acuerdo de confidencialidad si tu empresa lo requiere. Cómo trabajamos"
+        },
+        {
+          "id": "/garantias#c5",
+          "heading": "Diagnóstico",
+          "text": "Analizamos tu operativa y diseñamos el sistema a medida. Sin coste ni compromiso en esta fase. 02"
+        },
+        {
+          "id": "/garantias#c6",
+          "heading": "Implementación (30 días)",
+          "text": "Desplegamos el sistema en tu operativa real y lo supervisamos de cerca durante todo el mes de prueba. 03"
+        },
+        {
+          "id": "/garantias#c7",
+          "heading": "Revisión de resultados",
+          "text": "Te mostramos datos concretos del impacto: horas ahorradas, procesos automatizados, tiempos de respuesta. 04"
+        },
+        {
+          "id": "/garantias#c8",
+          "heading": "Acuerdo sobre resultados",
+          "text": "Solo entonces acordamos el valor del servicio — con el beneficio ya demostrado, no proyectado. Ver el detalle completo del Método Casos de éxito"
+        },
+        {
+          "id": "/garantias#c9",
+          "heading": "Tu empresa podría ser el primer caso documentado",
+          "text": "En cuanto completamos un mes de prueba con resultados medibles, lo documentamos y lo publicamos aquí (con tu permiso). Si te unes ahora, tienes la ventaja de un servicio recién estrenado con toda nuestra atención puesta en que funcione. Reservar mi Llamada Gratuita Siguiente paso"
+        },
+        {
+          "id": "/garantias#c10",
+          "heading": "Hablemos de tu operativa.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/",
+      "title": "D-Code Partners — Automatización con IA para empresas",
+      "chunks": [
+        {
+          "id": "/#c0",
+          "heading": "",
+          "text": "Growth Partners · Automatización con IA"
+        },
+        {
+          "id": "/#c1",
+          "heading": "Redefinimos el futuro de las empresas con Inteligencia Artificial.",
+          "text": "No vendemos software: construimos alianzas de crecimiento. Sistemas de automatización que trabajan por tu negocio 24 horas al día, los 7 días de la semana. Reservar mi Llamada Gratuita Ver el Método D-Code CONFIDENCIALIDAD ABSOLUTA · RESULTADOS MEDIBLES · CERO RIESGO INICIAL Protegido con Cloudflare Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis Nuestros Servicios"
+        },
+        {
+          "id": "/#c2",
+          "heading": "Tres formas de automatizar tu negocio con IA.",
+          "text": "Cada empresa necesita un punto de partida distinto. Estas son las tres disciplinas en las que trabajamos."
+        },
+        {
+          "id": "/#c3",
+          "heading": "Automatización IA",
+          "text": "Procesos operativos que se ejecutan solos: gestión documental, seguimiento de clientes, reporting y tareas repetitivas fuera de tu lista. Ver el servicio"
+        },
+        {
+          "id": "/#c4",
+          "heading": "Agentes de IA",
+          "text": "Atención al cliente y ventas que responden al instante, en cualquier canal, sin perder ni un lead por falta de tiempo. Ver el servicio"
+        },
+        {
+          "id": "/#c5",
+          "heading": "Integraciones",
+          "text": "Conectamos tu CRM, tu ERP, tu web y tus herramientas de siempre para que la información fluya sin copiar y pegar. Ver el servicio Riesgo inicial 0 € No pagas nada hasta demostrar resultados. Prueba gratuita 30 días Un mes completo de servicio real, sin compromiso. Disponibilidad 24 /7 Los sistemas no descansan. Tu negocio, tampoco. Tiempo de respuesta &lt; 24 h Cada consulta, atendida en menos de un día laborable. El Método D-Code"
+        },
+        {
+          "id": "/#c6",
+          "heading": "Día 1 — Diagnóstico y diseño del sistema a medida.",
+          "text": "Auditamos tu operativa y detectamos los procesos con mayor impacto potencial."
+        },
+        {
+          "id": "/#c7",
+          "heading": "Semanas 1–4 — Implementación en tu operativa real.",
+          "text": "Desplegamos los sistemas en producción, supervisados en todo momento."
+        },
+        {
+          "id": "/#c8",
+          "heading": "Día 30 — Revisión de resultados: horas, ingresos, eficiencia.",
+          "text": "Te presentamos datos concretos: qué ha mejorado y cuánto."
+        },
+        {
+          "id": "/#c9",
+          "heading": "A partir de aquí — Acordamos el valor del servicio, sobre resultados ya obtenidos.",
+          "text": "Sin sorpresas: hablamos de cifras cuando ya sabes lo que vas a ganar."
+        },
+        {
+          "id": "/#c10",
+          "heading": "Una alianza que empieza por los hechos, no por las promesas.",
+          "text": "El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés. \"Un mes completo de servicio, sin coste alguno.\" Implementamos tus sistemas de automatización y medimos su impacto real en ingresos y eficiencia. Solo cuando los resultados están sobre la mesa, nos sentamos a hablar de cifras. Sin beneficio demostrado, no hay factura. Así de simple. Ver el Método completo Garantías y Proceso Acuerdo D-Code RIESGO 0% Sin permanencia. Sin letra pequeña. La mente detrás de D-Code Partners"
+        },
+        {
+          "id": "/#c11",
+          "heading": "Dos fundadores. Un mismo código.",
+          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid como dos jóvenes empresarios decididos a cambiar la forma en que las empresas crecen. Nativos digitales, formados de forma intensiva en Inteligencia Artificial aplicada a negocio. \" Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado. D.S."
+        },
+        {
+          "id": "/#c12",
+          "heading": "Diego Siñeriz",
+          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. D.S."
+        },
+        {
+          "id": "/#c13",
+          "heading": "Dimitry Sosenko",
+          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los sistemas de automatización. Conoce toda nuestra historia Recursos"
+        },
+        {
+          "id": "/#c14",
+          "heading": "Ideas sobre automatización e IA para empresas.",
+          "text": "Fundamentos"
+        },
+        {
+          "id": "/#c15",
+          "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
+          "text": "Una introducción clara a qué cambia realmente cuando automatizas procesos con IA. 6 min de lectura Estrategia"
+        },
+        {
+          "id": "/#c16",
+          "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
+          "text": "No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir. 7 min de lectura Práctico"
+        },
+        {
+          "id": "/#c17",
+          "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
+          "text": "Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana. 5 min de lectura Ver todos los artículos Agenda tu llamada"
+        },
+        {
+          "id": "/#c18",
+          "heading": "Reclama tu mes de prueba gratuito.",
+          "text": "Cuéntanos en qué punto está tu negocio. En una llamada de 30 minutos te decimos qué podemos automatizar y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/metodo",
+      "title": "El Método D-Code: un mes de prueba gratuito antes de facturar",
+      "chunks": [
+        {
+          "id": "/metodo#c0",
+          "heading": "",
+          "text": "El Método D-Code"
+        },
+        {
+          "id": "/metodo#c1",
+          "heading": "Empezamos por los hechos, no por las promesas.",
+          "text": "El mercado está lleno de consultoras que venden humo antes de demostrar nada. Nosotros trabajamos al revés: implementamos primero, medimos el impacto real, y solo entonces hablamos de precio. RIESGO 0% Sin permanencia Sin letra pequeña Las cuatro fases"
+        },
+        {
+          "id": "/metodo#c2",
+          "heading": "Diagnóstico y diseño del sistema a medida",
+          "text": "Analizamos tu operativa real: qué procesos consumen más horas, dónde se pierden leads y qué tareas repetitivas están frenando al equipo. De ahí sale un diseño de automatización específico para tu negocio, no una plantilla genérica. 02"
+        },
+        {
+          "id": "/metodo#c3",
+          "heading": "Implementación en tu operativa real (semanas 1-4)",
+          "text": "Desplegamos los sistemas directamente en tu día a día, no en un entorno de pruebas aislado. Los supervisamos de cerca durante todo el mes para ajustar lo que haga falta sobre la marcha. 03"
+        },
+        {
+          "id": "/metodo#c4",
+          "heading": "Revisión de resultados (día 30)",
+          "text": "Nos sentamos contigo con datos concretos: horas ahorradas, tiempos de respuesta, procesos automatizados. Sin estimaciones ni proyecciones — resultados que ya han ocurrido. 04"
+        },
+        {
+          "id": "/metodo#c5",
+          "heading": "Acordamos el valor del servicio",
+          "text": "Solo entonces hablamos de cifras, con el impacto real ya demostrado. Si los resultados no están ahí, no hay factura. Si decides seguir, lo haces sabiendo exactamente lo que ganas. Por qué trabajamos así"
+        },
+        {
+          "id": "/metodo#c6",
+          "heading": "¿Qué pasa si no hay resultados en 30 días?",
+          "text": "Simplemente no facturamos. No hay penalización ni compromiso posterior por tu parte."
+        },
+        {
+          "id": "/metodo#c7",
+          "heading": "¿Puedo cancelar en cualquier momento?",
+          "text": "Sí. No hay permanencia mínima ni penalización por cancelar, ni durante el mes de prueba ni después."
+        },
+        {
+          "id": "/metodo#c8",
+          "heading": "¿Necesito aportar acceso a mis sistemas?",
+          "text": "Solo el acceso mínimo necesario para el proceso concreto que automatizamos, bajo confidencialidad absoluta."
+        },
+        {
+          "id": "/metodo#c9",
+          "heading": "La confianza se demuestra, no se declara.",
+          "text": "Somos una empresa joven. En vez de compensarlo con promesas grandilocuentes o casos inflados, preferimos que sea la propia implementación la que hable por nosotros durante el primer mes. Es un modelo que nos obliga a nosotros, no a ti: si el sistema no funciona, no cobramos. Eso alinea nuestros incentivos con los tuyos desde el primer día. Sin beneficio demostrado, no hay factura. Así de simple. Reclamar mi Mes de Prueba Ver todas las preguntas Siguiente paso"
+        },
+        {
+          "id": "/metodo#c10",
+          "heading": "Empecemos por el diagnóstico.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y por dónde empezaríamos. Reservar mi Llamada Gratuita Ver garantías y proceso"
+        }
+      ]
+    },
+    {
+      "url": "/privacidad",
+      "title": "Política de Privacidad — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/privacidad#c0",
+          "heading": "",
+          "text": "Legal"
+        },
+        {
+          "id": "/privacidad#c1",
+          "heading": "Política de Privacidad",
+          "text": "En D-Code Partners respetamos la privacidad de nuestros usuarios y protegemos los datos personales conforme al Reglamento General de Protección de Datos (RGPD) y la legislación española vigente."
+        },
+        {
+          "id": "/privacidad#c2",
+          "heading": "1. Responsable del tratamiento",
+          "text": "Responsables: Diego Siñeriz y Dimitry Sosenko. Email de contacto: dcodedepartment@gmail.com"
+        },
+        {
+          "id": "/privacidad#c3",
+          "heading": "2. Datos que recopilamos",
+          "text": "Cuando completas nuestro formulario podemos recopilar: Nombre Empresa Email Teléfono Mensaje enviado"
+        },
+        {
+          "id": "/privacidad#c4",
+          "heading": "3. Finalidad",
+          "text": "Los datos únicamente se utilizan para responder solicitudes de información, contactar con potenciales clientes y ofrecer nuestros servicios."
+        },
+        {
+          "id": "/privacidad#c5",
+          "heading": "4. Conservación",
+          "text": "Los datos se conservarán únicamente durante el tiempo necesario para atender la solicitud o mientras exista una relación comercial."
+        },
+        {
+          "id": "/privacidad#c6",
+          "heading": "5. Derechos",
+          "text": "Puedes solicitar el acceso, rectificación o eliminación de tus datos escribiendo a: dcodedepartment@gmail.com"
+        },
+        {
+          "id": "/privacidad#c7",
+          "heading": "6. Seguridad",
+          "text": "Aplicamos medidas técnicas y organizativas para proteger la información frente a accesos no autorizados. ← Volver a la web"
+        }
+      ]
+    },
+    {
+      "url": "/servicios",
+      "title": "Servicios de automatización con IA — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/servicios#c0",
+          "heading": "",
+          "text": "Servicios"
+        },
+        {
+          "id": "/servicios#c1",
+          "heading": "Automatización, agentes e integraciones, bajo un mismo método.",
+          "text": "No vendemos herramientas sueltas. Diseñamos el sistema que tu negocio necesita a partir de tres disciplinas que se combinan según el caso."
+        },
+        {
+          "id": "/servicios#c2",
+          "heading": "Automatización IA",
+          "text": "Procesos operativos que se ejecutan solos: gestión documental, seguimiento de clientes, reporting y tareas repetitivas fuera de tu lista. Gestión documental Reporting Onboarding Ver el servicio"
+        },
+        {
+          "id": "/servicios#c3",
+          "heading": "Agentes de IA",
+          "text": "Atención al cliente y ventas que responden al instante, en cualquier canal, sin perder ni un lead por falta de tiempo. Chat web WhatsApp Email Ver el servicio"
+        },
+        {
+          "id": "/servicios#c4",
+          "heading": "Integraciones",
+          "text": "Conectamos tu CRM, tu ERP, tu web y tus herramientas de siempre para que la información fluya sin copiar y pegar. CRM / ERP Hojas de cálculo APIs Ver el servicio ¿No sabes por dónde empezar?"
+        },
+        {
+          "id": "/servicios#c5",
+          "heading": "En la primera llamada te decimos qué automatizar primero.",
+          "text": "No hace falta que elijas un servicio de antemano. Analizamos tu operativa y te proponemos la combinación que tiene más impacto para tu caso, dentro del Método D-Code. Ver el Método D-Code Siguiente paso"
+        },
+        {
+          "id": "/servicios#c6",
+          "heading": "Hablemos de tu operativa.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/servicios/agentes-ia",
+      "title": "Agentes de IA para atención al cliente y ventas — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/servicios/agentes-ia#c0",
+          "heading": "",
+          "text": "Servicios · Agentes de IA"
+        },
+        {
+          "id": "/servicios/agentes-ia#c1",
+          "heading": "Atención al cliente y ventas que no hacen esperar a nadie.",
+          "text": "Diseñamos agentes conversacionales que responden en tu web, WhatsApp o email con el tono y la información de tu negocio, y que saben cuándo pasar la conversación a una persona. Qué resuelven"
+        },
+        {
+          "id": "/servicios/agentes-ia#c2",
+          "heading": "Primer contacto inmediato",
+          "text": "Responde preguntas frecuentes, horarios, precios y disponibilidad en segundos, a cualquier hora del día."
+        },
+        {
+          "id": "/servicios/agentes-ia#c3",
+          "heading": "Cualificación de leads",
+          "text": "Recoge la información clave de cada contacto y la deja lista en tu CRM antes de que hables tú con esa persona."
+        },
+        {
+          "id": "/servicios/agentes-ia#c4",
+          "heading": "Soporte de primer nivel",
+          "text": "Resuelve las consultas más habituales de tus clientes actuales sin que tengan que esperar a que alguien esté libre."
+        },
+        {
+          "id": "/servicios/agentes-ia#c5",
+          "heading": "Escalado a tu equipo",
+          "text": "Cuando la conversación necesita criterio humano, el agente la transfiere con todo el contexto ya recopilado."
+        },
+        {
+          "id": "/servicios/agentes-ia#c6",
+          "heading": "Reactivación y seguimiento",
+          "text": "Mensajes de seguimiento automáticos para citas, presupuestos pendientes o carritos abandonados."
+        },
+        {
+          "id": "/servicios/agentes-ia#c7",
+          "heading": "Tono y datos de tu marca",
+          "text": "El agente responde solo con la información que le facilitas, con el tono de tu empresa y sin inventar respuestas. Cómo lo hacemos"
+        },
+        {
+          "id": "/servicios/agentes-ia#c8",
+          "heading": "Un agente entrenado con tu información, no con generalidades.",
+          "text": "Partimos de tus preguntas frecuentes, tu catálogo y tu forma de comunicar. El agente se conecta al canal que prefieras — chat web, WhatsApp Business o email — y queda supervisado durante el mes de prueba para ajustar su comportamiento con casos reales. Es una pieza que combina especialmente bien con Integraciones, para que cada conversación quede registrada directamente en tu CRM. Ver el Método D-Code completo"
+        },
+        {
+          "id": "/servicios/agentes-ia#c9",
+          "heading": "¿Es para tu empresa?",
+          "text": "Encaja bien si recibes consultas repetidas de clientes o potenciales clientes y hoy dependes de que alguien esté disponible para responder. Si tu prioridad es reducir trabajo administrativo interno más que atención externa, el servicio de Automatización IA probablemente sea el mejor punto de partida. Siguiente paso"
+        },
+        {
+          "id": "/servicios/agentes-ia#c10",
+          "heading": "Hablemos de tu operativa.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/servicios/automatizacion-ia",
+      "title": "Automatización con IA para empresas — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/servicios/automatizacion-ia#c0",
+          "heading": "",
+          "text": "Servicios · Automatización IA"
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c1",
+          "heading": "Procesos que se ejecutan solos, 24 horas al día.",
+          "text": "Diseñamos sistemas que se encargan de las tareas operativas repetitivas de tu negocio: las que consumen horas de tu equipo pero no requieren su criterio en cada paso. Qué automatizamos"
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c2",
+          "heading": "Gestión documental",
+          "text": "Clasificación, extracción de datos y archivado de facturas, contratos o formularios sin intervención manual."
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c3",
+          "heading": "Reporting y seguimiento",
+          "text": "Informes periódicos generados y enviados automáticamente a partir de tus datos, sin recopilarlos a mano cada semana."
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c4",
+          "heading": "Onboarding de clientes",
+          "text": "Secuencias automáticas de bienvenida, recopilación de datos y activación de cuenta desde el primer contacto."
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c5",
+          "heading": "Seguimiento comercial",
+          "text": "Recordatorios, actualizaciones de estado y avisos automáticos para que ningún cliente potencial se quede sin respuesta."
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c6",
+          "heading": "Facturación y cobros",
+          "text": "Generación de facturas, avisos de pago y conciliación básica sin revisar cada movimiento a mano."
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c7",
+          "heading": "Tareas periódicas",
+          "text": "Cualquier proceso que hoy repite alguien de tu equipo cada día, semana o mes, con reglas claras y repetibles. Cómo lo hacemos"
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c8",
+          "heading": "Automatización sobre tu operativa real, no sobre una maqueta.",
+          "text": "Empezamos identificando los procesos con más impacto potencial durante el diagnóstico inicial. Después diseñamos el flujo, lo conectamos con tus herramientas actuales y lo desplegamos directamente en tu operativa, dentro del mes de prueba gratuito. No dependes de que alguien \"se acuerde\" de ejecutar el proceso: el sistema lo hace por defecto, y solo interviene una persona cuando de verdad aporta criterio. Ver el Método D-Code completo"
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c9",
+          "heading": "¿Es para tu empresa?",
+          "text": "Este servicio encaja especialmente si tu equipo dedica horas cada semana a tareas administrativas repetitivas, con reglas claras y poco margen de criterio subjetivo. Si tu caso es distinto — por ejemplo, necesitas responder consultas de clientes en tiempo real — el servicio de Agentes de IA probablemente encaje mejor. Siguiente paso"
+        },
+        {
+          "id": "/servicios/automatizacion-ia#c10",
+          "heading": "Hablemos de tu operativa.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    },
+    {
+      "url": "/servicios/integraciones",
+      "title": "Integraciones entre CRM, ERP y herramientas — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/servicios/integraciones#c0",
+          "heading": "",
+          "text": "Servicios · Integraciones"
+        },
+        {
+          "id": "/servicios/integraciones#c1",
+          "heading": "Tus herramientas, conectadas entre sí de verdad.",
+          "text": "Unimos tu CRM, tu ERP, tu web y las hojas de cálculo que ya usas para que la información viaje sola, sin exportar, copiar ni pegar nada a mano. Qué conectamos"
+        },
+        {
+          "id": "/servicios/integraciones#c2",
+          "heading": "CRM y captación de leads",
+          "text": "Cada formulario, chat o llamada entra directamente en tu CRM, sin volcarlo a mano al final del día."
+        },
+        {
+          "id": "/servicios/integraciones#c3",
+          "heading": "Hojas de cálculo y BI",
+          "text": "Tus paneles de control se actualizan solos a partir de los datos reales, no de una exportación manual semanal."
+        },
+        {
+          "id": "/servicios/integraciones#c4",
+          "heading": "ERP y facturación",
+          "text": "Pedidos, presupuestos y facturas sincronizados entre tu web, tu ERP y tu herramienta de facturación."
+        },
+        {
+          "id": "/servicios/integraciones#c5",
+          "heading": "Comunicación interna",
+          "text": "Avisos automáticos en Slack, email o WhatsApp cuando ocurre algo que tu equipo necesita saber."
+        },
+        {
+          "id": "/servicios/integraciones#c6",
+          "heading": "APIs y herramientas propias",
+          "text": "Si tu empresa usa software a medida, lo conectamos igualmente a través de su API cuando está disponible."
+        },
+        {
+          "id": "/servicios/integraciones#c7",
+          "heading": "Con seguridad de por medio",
+          "text": "Cada integración usa permisos mínimos y credenciales propias, nunca acceso genérico a todo tu sistema. Cómo lo hacemos"
+        },
+        {
+          "id": "/servicios/integraciones#c8",
+          "heading": "El pegamento que hace que el resto del sistema funcione.",
+          "text": "La mayoría de sistemas de automatización o agentes de IA solo dan todo su potencial cuando están conectados a las herramientas que ya usas. Por eso las integraciones casi nunca van solas: acompañan a los otros dos servicios para que la información fluya de principio a fin. Durante el diagnóstico revisamos qué herramientas usas hoy y qué conexiones tienen más impacto antes de tocar nada. Ver el Método D-Code completo"
+        },
+        {
+          "id": "/servicios/integraciones#c9",
+          "heading": "¿Es para tu empresa?",
+          "text": "Si ya usas varias herramientas digitales pero pasas información de una a otra a mano, este servicio suele ser el de mayor impacto inmediato. Si aún no tienes herramientas digitales establecidas, puede que primero convenga hablar de Automatización IA para definir el proceso antes de conectarlo. Siguiente paso"
+        },
+        {
+          "id": "/servicios/integraciones#c10",
+          "heading": "Hablemos de tu operativa.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+        }
+      ]
+    }
+  ]
+}
