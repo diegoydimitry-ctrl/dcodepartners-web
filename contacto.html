@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Contacto — Reserva tu llamada gratuita con D-Code Partners</title>
 <meta name="description" content="Reserva una llamada de 30 minutos, sin coste ni compromiso. Te decimos qué podemos automatizar en tu negocio y qué resultado puedes esperar del primer mes.">
 <meta name="author" content="D-Code Partners">
@@ -54,7 +54,7 @@
 <header id="site-header">
   <div class="container nav-wrap">
     <a href="/" class="logo">
-      <img src="/assets/logo/dcode-icon.png" alt="D-Code Partners" width="34" height="29">
+      <img src="/assets/logo/dcode-icon-sm.png" alt="D-Code Partners" width="34" height="29">
       <span class="logo-word">D-Code<span class="logo-sub">PARTNERS</span></span>
     </a>
 
@@ -127,23 +127,23 @@
             <form id="contact-form">
               <div class="field">
                 <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" required>
               </div>
               <div class="field">
                 <label for="empresa">Empresa</label>
-                <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" required>
+                <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization" required>
               </div>
               <div class="field">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="tu@empresa.com" required>
+                <input type="email" id="email" name="email" placeholder="tu@empresa.com" autocomplete="email" inputmode="email" required>
               </div>
               <div class="field">
                 <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000">
+                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
               </div>
               <div class="field">
                 <label for="mensaje">Cuéntanos sobre tu negocio</label>
-                <textarea id="mensaje" name="mensaje" placeholder="¿Qué procesos te gustaría automatizar?"></textarea>
+                <textarea id="mensaje" name="mensaje" placeholder="¿Qué procesos te gustaría automatizar?" autocomplete="off"></textarea>
               </div>
 
               <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark"></div>
@@ -216,13 +216,13 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="/" class="footer-logo">
-          <img src="/assets/logo/dcode-icon.png" alt="D-Code Partners" width="30" height="26">
+          <img src="/assets/logo/dcode-icon-sm.png" alt="D-Code Partners" width="30" height="26">
           <span>D-Code Partners</span>
         </a>
         <p>Growth Partners y automatización con Inteligencia Artificial para empresas. Madrid, España.</p>
       </div>
       <div class="footer-col">
-        <h4>Servicios</h4>
+        <h2>Servicios</h2>
         <ul>
           <li><a href="/servicios/automatizacion-ia">Automatización IA</a></li>
           <li><a href="/servicios/agentes-ia">Agentes de IA</a></li>
@@ -231,7 +231,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Empresa</h4>
+        <h2>Empresa</h2>
         <ul>
           <li><a href="/metodo">Método D-Code</a></li>
           <li><a href="/garantias">Garantías y Proceso</a></li>
@@ -240,14 +240,14 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Recursos</h4>
+        <h2>Recursos</h2>
         <ul>
           <li><a href="/faq">Preguntas frecuentes</a></li>
           <li><a href="/contacto">Contacto</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Legal</h4>
+        <h2>Legal</h2>
         <ul>
           <li><a href="/privacidad">Política de Privacidad</a></li>
           <li><a href="/aviso-legal">Aviso Legal</a></li>
