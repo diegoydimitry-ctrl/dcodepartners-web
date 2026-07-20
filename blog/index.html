@@ -29,7 +29,7 @@
 <meta name="twitter:title" content="Blog — Automatización e IA para empresas | D-Code Partners">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="/assets/css/styles.css?v=202607201310">
 
 <!-- Start cookieyes banner -->
 <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/4d2e8fd4065176703ddc3e2999debec6/script.js"></script>
@@ -223,13 +223,16 @@
       <div class="chat-msg bot">Hola. Soy el asistente IA de D-Code Partners. Puedo ayudarte a entender cómo automatizamos procesos, cómo funcionan nuestros agentes de IA, resolver dudas sobre nuestros servicios o ayudarte a descubrir cómo podemos optimizar tu empresa. ¿Sobre qué te gustaría hablar?</div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">
-      <button type="button">¿Qué hace D-Code Partners?</button>
-      <button type="button">¿Qué es el Método D-Code?</button>
-      <button type="button">¿Cómo funcionan los agentes IA?</button>
-      <button type="button">¿Qué procesos podéis automatizar?</button>
-      <button type="button">¿Cómo empezamos?</button>
-      <button type="button">¿Cuánto tarda un proyecto?</button>
-      <button type="button">¿Cómo puedo contactar?</button>
+      <button type="button" class="chat-quick-question">¿Qué hace D-Code Partners?</button>
+      <button type="button" class="chat-quick-question">¿Cómo funcionan los agentes IA?</button>
+      <button type="button" class="chat-quick-question">¿Qué procesos podéis automatizar?</button>
+      <button type="button" class="chat-quick-question">¿Cómo empezamos?</button>
+      <button type="button" class="chat-quick-question">¿Cómo puedo contactar?</button>
+      <div class="chat-quick-more" id="chat-quick-more" hidden>
+        <button type="button" class="chat-quick-question">¿Qué es el Método D-Code?</button>
+        <button type="button" class="chat-quick-question">¿Cuánto tarda un proyecto?</button>
+      </div>
+      <button type="button" class="chat-quick-toggle" id="chat-quick-toggle" aria-expanded="false" aria-controls="chat-quick-more">Ver más</button>
     </div>
     <form class="chat-input-row" id="chat-form">
       <label for="chat-input" class="sr-only">Escribe tu mensaje</label>
@@ -244,7 +247,7 @@
   </button>
 </div>
 
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/main.js?v=202607201310" defer></script>
 
 </body>
 </html>

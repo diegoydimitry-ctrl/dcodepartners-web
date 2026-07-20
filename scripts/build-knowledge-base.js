@@ -19,7 +19,9 @@ const OUT_PATH = path.join(ROOT, 'assets/data/knowledge-base.json');
 const EXCLUDED_FILES = new Set(['404.html']);
 const EXCLUDED_DIRS = new Set(['node_modules', '.git', 'api', 'scripts', 'assets']);
 
-const EXCLUDED_CLASSES = new Set(['window-bar', 'breadcrumbs', 'faq-search', 'chat-widget', 'side-index']);
+// 'eyebrow': kickers cortos sobre un título (p. ej. "Servicios · Agentes de
+// IA", "Agenda tu llamada") — etiquetado visual, no contenido informativo.
+const EXCLUDED_CLASSES = new Set(['window-bar', 'breadcrumbs', 'faq-search', 'chat-widget', 'side-index', 'eyebrow']);
 const HEADING_TAGS = new Set(['H1', 'H2', 'H3', 'H4', 'H5', 'H6']);
 const TEXT_TAGS = new Set(['P', 'LI', 'BLOCKQUOTE', 'TD', 'TH']);
 // Controles de formulario y botones: chrome de UI, no contenido informativo
@@ -66,6 +68,10 @@ function walkMain(main, push) {
   const flush = () => {
     if (current.parts.length) push({ heading: current.heading, text: current.parts.join(' ') });
   };
+  // Los .contact-row (email, teléfono, ubicación...) se agrupan en su propio
+  // chunk en vez de mezclarse con el párrafo de introducción que los rodea:
+  // son datos de contacto, no prosa, y conviene poder recuperarlos solos.
+  const contactParts = [];
 
   const visit = (node) => {
     for (const child of node.childNodes) {
@@ -92,8 +98,8 @@ function walkMain(main, push) {
         const valueEl = child.querySelector('.value');
         const l = labelEl ? cleanText(labelEl.text) : '';
         const v = valueEl ? cleanText(valueEl.text) : '';
-        if (l && v) current.parts.push(`${l}: ${v}.`);
-        continue; // no recursar: ya combinado como "Etiqueta: valor."
+        if (l && v) contactParts.push(`${l}: ${v}.`);
+        continue; // no recursar: se agrupa aparte, ver contactParts arriba
       }
 
       if (hasClass(child, 'counter')) {
@@ -122,6 +128,7 @@ function walkMain(main, push) {
 
   visit(main);
   flush();
+  if (contactParts.length) push({ heading: 'Contacto directo', text: contactParts.join(' ') });
 }
 
 function findHtmlFiles(dir, base = dir, out = []) {

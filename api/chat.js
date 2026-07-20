@@ -11,18 +11,23 @@
  */
 const { loadIndex, search, detectBuyingIntent } = require('../lib/retrieval');
 const { getProvider } = require('../lib/providers');
+const { detectSmalltalk } = require('../lib/smalltalk');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
-const MIN_RELEVANT_SCORE = 1.4;
+const MIN_RELEVANT_SCORE = 1.1;
 const TOP_K = 8;
-const MAX_RESULTS_IN_ANSWER = 3;
+const MAX_RESULTS_IN_ANSWER = 2;
 // Un fragmento secundario solo se añade si está realmente a la altura del
 // mejor resultado (no solo por encima del umbral mínimo). Evita mezclar en
 // la misma respuesta contenido claramente relevante con coincidencias
 // débiles de otras páginas — respuestas más limpias, más de "consultor
 // senior" y menos de "lista de resultados de buscador".
 const SECONDARY_RESULT_RATIO = 0.92;
+// Cada fragmento se recorta a 1-2 frases: una respuesta de chat no debe
+// leerse como un párrafo copiado de la web.
+const SNIPPET_MAX_CHARS = 220;
+const SNIPPET_MIN_CHARS = 60;
 
 const FALLBACK_MESSAGE =
   'No dispongo de información suficiente para responder con precisión a esa pregunta. ' +
@@ -110,28 +115,61 @@ function selectResults(rawResults, intent, index) {
   return relevant;
 }
 
-function buildExtractiveAnswer(results) {
-  if (results.length === 1) return results[0].text;
-  return results.map((r) => `- ${r.text}`).join('\n');
+/**
+ * Recorta un fragmento a su primera(s) frase(s), no al párrafo entero: una
+ * respuesta de chat útil dice lo esencial en un par de líneas, no copia el
+ * bloque completo de la web de la que salió.
+ */
+function trimToSentences(text, maxChars, minChars) {
+  // Se busca cada límite de frase real (.!? seguido de espacio o fin de
+  // texto, vía lookahead) con exec() en bucle en vez de String.match(/g),
+  // que en un texto como "Email: alguien@dominio.com. Teléfono: ..." puede
+  // saltarse por completo el primer tramo cuando un punto interno (el de
+  // ".com") no cierra frase — match(/g) descarta silenciosamente cualquier
+  // intento de coincidencia fallido en vez de conservarlo.
+  const boundary = /[.!?]+(?=\s|$)/g;
+  let out = '';
+  let lastEnd = 0;
+  let match;
+  while ((match = boundary.exec(text)) !== null) {
+    const end = match.index + match[0].length;
+    const sentence = text.slice(lastEnd, end);
+    if (out.length >= minChars && out.length + sentence.length > maxChars) break;
+    out += sentence;
+    lastEnd = end;
+    if (out.length >= maxChars) break;
+  }
+  out = out.trim();
+  if (!out) return text.slice(0, maxChars).trim();
+  return out;
 }
 
-function sourcesFootnote(results) {
-  const seen = new Set();
-  const links = [];
-  for (const r of results) {
-    if (seen.has(r.pageUrl)) continue;
-    seen.add(r.pageUrl);
-    links.push(`[${r.pageTitle}](${r.pageUrl})`);
-  }
-  return links.length ? `\n\n*Más detalles: ${links.join(' · ')}*` : '';
+function buildExtractiveAnswer(results) {
+  const snippets = results.map((r) => trimToSentences(r.text, SNIPPET_MAX_CHARS, SNIPPET_MIN_CHARS));
+  if (snippets.length === 1) return snippets[0];
+  return snippets.map((s) => `- ${s}`).join('\n');
+}
+
+/**
+ * Un único enlace natural a la página de origen, solo cuando de verdad
+ * añade algo — nada de una lista de enlaces al estilo resultados de buscador.
+ */
+function sourceHint(results) {
+  const top = results[0];
+  if (!top) return '';
+  return `\n\nMás detalles en [${top.pageTitle.split('—')[0].trim()}](${top.pageUrl}).`;
 }
 
 function buildSystemPrompt(context, intent) {
   return `Eres el asistente de IA oficial de D-Code Partners, una consultora que diseña e implementa sistemas de automatización e inteligencia artificial para empresas.
 
-Tu tono: profesional, cercano, claro y tecnológico, como un consultor senior de la empresa — nunca como un chatbot genérico. Respuestas breves y bien estructuradas en Markdown (listas o negritas cuando ayuden a la claridad), nunca bloques de texto enormes.
+Hablas como un consultor senior de la empresa en una conversación real, nunca como un buscador que copia párrafos. Reglas de estilo, sin excepción:
+- Máximo 3-5 frases cortas por respuesta (o una lista breve si el contenido es naturalmente una lista).
+- Nunca copies el contexto literalmente: resúmelo con tus propias palabras, en tono natural y cercano.
+- Ten en cuenta el hilo de la conversación: si el usuario pregunta algo relacionado con su mensaje anterior, respóndele como una continuación natural, no como una pregunta aislada.
+- Usa Markdown ligero (negrita, listas) solo cuando aporte claridad, nunca bloques largos.
 
-Responde ÚNICAMENTE con información contenida en el siguiente contexto, extraído del sitio web real de D-Code Partners. Si el contexto no contiene la respuesta, dilo con honestidad y no inventes nada: sugiere contactar con el equipo.
+Responde ÚNICAMENTE con información contenida en el siguiente contexto, extraído del sitio web real de D-Code Partners. Si el contexto no contiene la respuesta a lo que se pregunta, dilo con honestidad en una frase y no inventes nada.
 
 Contexto relevante:
 ${context}
@@ -167,9 +205,27 @@ module.exports = async function handler(req, res) {
     }
     const history = sanitizeHistory(req.body && req.body.history);
 
+    const smalltalkReply = detectSmalltalk(message);
+    if (smalltalkReply) {
+      return res.status(200).json({ success: true, reply: smalltalkReply, mode: 'smalltalk', intent: false });
+    }
+
     const index = loadIndex();
     const intent = detectBuyingIntent(message);
-    const results = selectResults(search(message, index, TOP_K), intent, index);
+    let results = selectResults(search(message, index, TOP_K), intent, index);
+
+    // Pregunta de seguimiento corta ("¿y el precio?", "cuéntame más") que por
+    // sí sola no tiene términos suficientes para encontrar nada: se reintenta
+    // combinándola con el último mensaje del usuario, para heredar el tema de
+    // la conversación en vez de rendirse directamente.
+    if (!results.length) {
+      const lastUserMessage = [...history].reverse().find((m) => m.role === 'user');
+      if (lastUserMessage) {
+        const combinedQuery = `${lastUserMessage.content} ${message}`;
+        results = selectResults(search(combinedQuery, index, TOP_K), intent, index);
+      }
+    }
+
     const provider = getProvider();
 
     if (!results.length && !provider) {
@@ -192,8 +248,10 @@ module.exports = async function handler(req, res) {
     }
 
     // Modo recuperación pura: la respuesta se compone solo con contenido
-    // real ya publicado en el sitio, sin inventar nada.
-    let reply = buildExtractiveAnswer(results) + sourcesFootnote(results);
+    // real ya publicado en el sitio, sin inventar nada, recortado a lo
+    // esencial para que se lea como una respuesta y no como una cita.
+    let reply = buildExtractiveAnswer(results);
+    if (!intent) reply += sourceHint(results);
     if (intent) reply += CONTACT_CTA;
 
     return res.status(200).json({ success: true, reply, mode: 'retrieval', intent });

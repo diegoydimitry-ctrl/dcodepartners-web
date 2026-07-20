@@ -578,8 +578,19 @@
     };
 
     if (chatQuick) {
-      chatQuick.querySelectorAll('button').forEach(function (btn) {
+      chatQuick.querySelectorAll('.chat-quick-question').forEach(function (btn) {
         btn.addEventListener('click', function () { sendMessage(btn.textContent); });
+      });
+    }
+
+    var chatQuickToggle = document.getElementById('chat-quick-toggle');
+    var chatQuickMore = document.getElementById('chat-quick-more');
+    if (chatQuickToggle && chatQuickMore) {
+      chatQuickToggle.addEventListener('click', function () {
+        var expand = chatQuickMore.hidden;
+        chatQuickMore.hidden = !expand;
+        chatQuickToggle.textContent = expand ? 'Ver menos' : 'Ver más';
+        chatQuickToggle.setAttribute('aria-expanded', expand ? 'true' : 'false');
       });
     }
 
