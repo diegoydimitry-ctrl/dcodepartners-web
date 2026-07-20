@@ -1441,13 +1441,6 @@ footer{
   transition:background .2s ease, border-color .2s ease;
 }
 .chat-quick-replies button:hover{ background:rgba(67,224,255,.16); border-color:var(--cyan); }
-.chat-quick-more{ display:contents; }
-.chat-quick-toggle{
-  background:none;
-  border:1px dashed rgba(255,255,255,.18);
-  color:var(--stone-soft);
-}
-.chat-quick-toggle:hover{ color:var(--cyan); border-color:rgba(67,224,255,.35); background:rgba(67,224,255,.06); }
 
 .chat-input-row{
   display:flex;
