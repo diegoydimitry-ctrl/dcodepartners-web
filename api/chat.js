@@ -1,13 +1,14 @@
 /**
  * Endpoint del asistente de IA de D-Code Partners.
  *
- * Modo por defecto (sin ANTHROPIC_API_KEY en las variables de entorno):
+ * Modo por defecto (sin ninguna clave de proveedor configurada):
  * recuperación pura sobre la base de conocimiento generada a partir del
  * propio sitio (ver scripts/build-knowledge-base.js). Sin LLM, sin coste,
  * sin posibilidad de alucinar porque solo se devuelve contenido real ya
- * publicado. En cuanto se configura una clave de proveedor, este mismo
- * endpoint empieza a generar respuestas con RAG sin cambiar el contrato de
- * la API ni el frontend.
+ * publicado. En cuanto se configura GEMINI_API_KEY (proveedor principal
+ * actual) o ANTHROPIC_API_KEY en Vercel, este mismo endpoint empieza a
+ * generar respuestas con RAG sin cambiar el contrato de la API ni el
+ * frontend — ver lib/providers.js para el registro de proveedores.
  */
 const { loadIndex, search, detectBuyingIntent, detectContactIntent } = require('../lib/retrieval');
 const { getProvider } = require('../lib/providers');
