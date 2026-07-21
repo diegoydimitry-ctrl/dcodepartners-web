@@ -229,18 +229,20 @@ module.exports = async function handler(req, res) {
     const history = sanitizeHistory(req.body && req.body.history);
     const provider = getProvider();
 
-    // Sin proveedor LLM configurado: capa de reglas (saludos, flujo
-    // consultivo, soluciones ante problemas descritos) antes de caer a
-    // recuperación pura. En cuanto hay un proveedor configurado, es el
-    // propio modelo quien se encarga de todo esto —mejor, y con contexto
-    // real— guiado por el system prompt: las reglas se saltan para no
-    // interponerse en su razonamiento.
-    if (!provider) {
-      const smalltalkReply = detectSmalltalk(message);
-      if (smalltalkReply) {
-        return res.status(200).json({ success: true, reply: smalltalkReply, mode: 'smalltalk', intent: false });
-      }
+    // Los saludos/despedidas/preguntas personales se resuelven siempre por
+    // reglas, tenga o no proveedor LLM: son gramática de conversación, no
+    // necesitan razonamiento, y así "Hola" nunca depende de que una API
+    // externa esté disponible en ese momento.
+    const smalltalkReply = detectSmalltalk(message);
+    if (smalltalkReply) {
+      return res.status(200).json({ success: true, reply: smalltalkReply, mode: 'smalltalk', intent: false });
+    }
 
+    // El resto de la capa de reglas (flujo consultivo, soluciones ante
+    // problemas descritos) solo actúa sin proveedor configurado: con un
+    // LLM real disponible, es el propio modelo quien se encarga de esto
+    // —mejor, y con contexto real— guiado por el system prompt.
+    if (!provider) {
       // Si ya estamos a mitad de una pregunta de diagnóstico, esa
       // continuación manda siempre. Si no, un problema descrito con detalle
       // ("pierdo tiempo con WhatsApp") tiene prioridad sobre arrancar el
@@ -274,23 +276,30 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    if (!results.length && !provider) {
-      return res.status(200).json({ success: true, reply: FALLBACK_MESSAGE, mode: 'retrieval', intent });
+    if (provider) {
+      try {
+        const context = results
+          .map(
+            (r, i) =>
+              `[${i + 1}] (${r.pageTitle} — ${r.pageUrl})\n${r.heading ? r.heading + '\n' : ''}${r.text}`
+          )
+          .join('\n\n');
+
+        const reply = await provider.generate(buildSystemPrompt(context, intent), [
+          ...history,
+          { role: 'user', content: message },
+        ]);
+        return res.status(200).json({ success: true, reply, mode: 'generated', intent });
+      } catch (providerError) {
+        // Si el LLM falla (clave inválida, cuota agotada, corte puntual del
+        // proveedor...) no se rompe la conversación: se cae al modo
+        // recuperación de siempre en vez de devolver un error al usuario.
+        console.error('Error del proveedor LLM, usando recuperación como respaldo:', providerError);
+      }
     }
 
-    if (provider) {
-      const context = results
-        .map(
-          (r, i) =>
-            `[${i + 1}] (${r.pageTitle} — ${r.pageUrl})\n${r.heading ? r.heading + '\n' : ''}${r.text}`
-        )
-        .join('\n\n');
-
-      const reply = await provider.generate(buildSystemPrompt(context, intent), [
-        ...history,
-        { role: 'user', content: message },
-      ]);
-      return res.status(200).json({ success: true, reply, mode: 'generated', intent });
+    if (!results.length) {
+      return res.status(200).json({ success: true, reply: FALLBACK_MESSAGE, mode: 'retrieval', intent });
     }
 
     // Modo recuperación pura: la respuesta se compone solo con contenido
