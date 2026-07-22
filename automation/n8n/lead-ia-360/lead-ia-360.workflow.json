@@ -1,0 +1,454 @@
+{
+  "name": "Lead IA 360",
+  "nodes": [
+    {
+      "id": "n8n-lead-ia-360-1",
+      "name": "Webhook - Recepción de Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-ia-360",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-2",
+      "name": "Normalizar y Validar Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Normaliza el payload del formulario a un esquema estándar, valida los\n// campos obligatorios y construye el prompt para el análisis de Gemini.\n// Los nombres de campo aceptados cubren variantes ES/EN para que esta\n// plantilla funcione con distintos formularios sin tocar el código.\n\nconst body = $json.body ?? $json;\n\nconst pick = (...keys) => {\n  for (const key of keys) {\n    const value = body[key];\n    if (typeof value === 'string' && value.trim()) return value.trim();\n  }\n  return '';\n};\n\nconst lead = {\n  nombre: pick('nombre', 'name', 'fullName', 'full_name'),\n  empresa: pick('empresa', 'company', 'organizacion'),\n  email: pick('email', 'correo', 'mail'),\n  telefono: pick('telefono', 'phone', 'tel', 'movil'),\n  mensaje: pick('mensaje', 'message', 'comentarios', 'comments'),\n  servicioInteres: pick('servicio_interes', 'service', 'servicio', 'interest'),\n  origen: pick('origen', 'source', 'utm_source') || 'formulario_web',\n};\n\nconst errors = [];\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nif (!lead.nombre) errors.push('El campo \"nombre\" es obligatorio.');\nif (!lead.email || !emailRegex.test(lead.email)) errors.push('El campo \"email\" no es válido.');\nif (!lead.mensaje || lead.mensaje.length < 10) errors.push('El campo \"mensaje\" debe tener al menos 10 caracteres.');\n\n// Secreto compartido opcional: si se configura WEBHOOK_SECRET en las\n// variables de entorno del workflow, el formulario debe enviarlo en la\n// cabecera x-webhook-secret. Deja WEBHOOK_SECRET vacío para desactivarlo.\nconst webhookSecret = $env.WEBHOOK_SECRET;\nif (webhookSecret) {\n  const receivedSecret = $json.headers?.['x-webhook-secret'];\n  if (receivedSecret !== webhookSecret) errors.push('Token de autenticación inválido.');\n}\n\nif (errors.length > 0) {\n  return [{ json: { valid: false, statusCode: 400, errors } }];\n}\n\nlead.leadId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;\nlead.receivedAt = new Date().toISOString();\n\n// Catálogo de servicios configurable por cliente (una línea por servicio).\n// Así el mismo workflow se reutiliza para cualquier cliente sin tocar el\n// prompt: solo cambia la variable de entorno SERVICES_CATALOG.\nconst servicesCatalog = $env.SERVICES_CATALOG\n  || 'Automatización de procesos con IA, chatbots y asistentes virtuales, integración de sistemas (CRM/ERP), agentes de IA a medida';\n\nconst geminiPrompt = `Eres un analista comercial senior especializado en cualificación de leads B2B para empresas de servicios profesionales y tecnología. Analiza el siguiente lead recién recibido desde un formulario web y devuelve una evaluación objetiva y accionable.\n\nCriterios a evaluar:\n- Calidad y completitud de la información proporcionada (datos de contacto válidos, contexto claro, detalle del mensaje).\n- Señales de intención de compra explícitas o implícitas en el mensaje (urgencia expresada, presupuesto, plazos, dolor de negocio concreto).\n- Encaje del lead con el catálogo de servicios de la empresa: ${servicesCatalog}.\n- Nivel de urgencia percibido (¿necesita una solución ya, a corto plazo, o está explorando opciones?).\n\nDatos del lead:\n- Nombre: ${lead.nombre}\n- Empresa: ${lead.empresa || 'No especificada'}\n- Email: ${lead.email}\n- Teléfono: ${lead.telefono || 'No especificado'}\n- Servicio de interés indicado: ${lead.servicioInteres || 'No especificado'}\n- Mensaje del lead: \"${lead.mensaje}\"\n- Origen del formulario: ${lead.origen}\n- Fecha de recepción: ${lead.receivedAt}\n\nCriterios de puntuación:\n- score_ia (0-100): 0-30 lead frío/poco cualificado, 31-60 lead tibio con potencial, 61-100 lead caliente con alta intención de compra.\n- prioridad: \"Alta\" si score_ia >= 75 o hay urgencia explícita; \"Media\" si score_ia está entre 45 y 74; \"Baja\" si score_ia < 45.\n- probabilidad_compra (0-100): probabilidad estimada de conversión a cliente en los próximos 30 días.\n- urgencia: \"Alta\", \"Media\" o \"Baja\" según el lenguaje y contexto del mensaje.\n- servicio_recomendado: el servicio del catálogo que mejor resuelve la necesidad expresada.\n- resumen_comercial: 2-3 frases con el diagnóstico del lead para el equipo comercial, sin repetir literalmente su mensaje.\n- siguiente_accion: acción concreta y específica que debe tomar el equipo comercial en las próximas 24-48h (nunca genérica como \"contactar al cliente\").\n\nSé objetivo, básate solo en la información proporcionada y no inventes datos que no estén presentes.`;\n\nreturn [{ json: { valid: true, lead, geminiPrompt } }];\n"
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-3",
+      "name": "¿Lead Válido?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-lead-valido",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-4",
+      "name": "Responder Error de Validación",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        460
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: false, errors: $json.errors } }}",
+        "options": {
+          "responseCode": 400
+        }
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-5",
+      "name": "Airtable - Crear Lead",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        180
+      ],
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "REPLACE_WITH_AIRTABLE_BASE_ID",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead ID": "={{ $json.lead.leadId }}",
+            "Nombre": "={{ $json.lead.nombre }}",
+            "Empresa": "={{ $json.lead.empresa }}",
+            "Email": "={{ $json.lead.email }}",
+            "Teléfono": "={{ $json.lead.telefono }}",
+            "Servicio de Interés": "={{ $json.lead.servicioInteres }}",
+            "Mensaje": "={{ $json.lead.mensaje }}",
+            "Origen": "={{ $json.lead.origen }}",
+            "Fecha de Recepción": "={{ $json.lead.receivedAt }}",
+            "Estado": "Análisis IA en curso"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Airtable - Lead IA 360"
+        }
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-6",
+      "name": "Gemini - Analizar Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        180
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/{{ $env.GEMINI_MODEL || 'gemini-2.5-flash' }}:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  contents: [\n    { parts: [ { text: $('Normalizar y Validar Lead').item.json.geminiPrompt } ] }\n  ],\n  generationConfig: {\n    temperature: 0.3,\n    responseMimeType: \"application/json\",\n    responseSchema: {\"type\":\"OBJECT\",\"properties\":{\"score_ia\":{\"type\":\"INTEGER\"},\"prioridad\":{\"type\":\"STRING\",\"enum\":[\"Alta\",\"Media\",\"Baja\"]},\"probabilidad_compra\":{\"type\":\"INTEGER\"},\"urgencia\":{\"type\":\"STRING\",\"enum\":[\"Alta\",\"Media\",\"Baja\"]},\"servicio_recomendado\":{\"type\":\"STRING\"},\"resumen_comercial\":{\"type\":\"STRING\"},\"siguiente_accion\":{\"type\":\"STRING\"}},\"required\":[\"score_ia\",\"prioridad\",\"probabilidad_compra\",\"urgencia\",\"servicio_recomendado\",\"resumen_comercial\",\"siguiente_accion\"]}\n  }\n} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Gemini API Key (Header Auth: x-goog-api-key)"
+        }
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-7",
+      "name": "Interpretar Análisis IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        180
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Extrae y valida el análisis estructurado devuelto por Gemini. Si la\n// llamada falló o el JSON viene incompleto, aplica valores de reserva para\n// que el lead nunca se quede sin score ni seguimiento comercial.\n\nconst httpResponse = $json;\nconst lead = $('Normalizar y Validar Lead').item.json.lead;\nconst airtableRecordId = $('Airtable - Crear Lead').item.json.id;\n\nconst FALLBACK = {\n  score_ia: 50,\n  prioridad: 'Media',\n  probabilidad_compra: 50,\n  urgencia: 'Media',\n  servicio_recomendado: lead.servicioInteres || 'Por determinar',\n  resumen_comercial: 'No se pudo generar el análisis automático de este lead. Requiere revisión manual del equipo comercial.',\n  siguiente_accion: 'Revisar el lead manualmente y contactar en menos de 24h.',\n};\n\nfunction parseAnalysis() {\n  if (httpResponse.error) return null;\n  const text = httpResponse.candidates?.[0]?.content?.parts?.[0]?.text;\n  if (!text) return null;\n  try {\n    return JSON.parse(text);\n  } catch {\n    return null;\n  }\n}\n\nconst parsed = parseAnalysis();\nconst aiError = !parsed;\nconst analysis = parsed || FALLBACK;\n\nconst clamp = (value, fallback) => {\n  const n = Number(value);\n  return Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : fallback;\n};\nconst validLevel = (value, fallback) => (['Alta', 'Media', 'Baja'].includes(value) ? value : fallback);\n\nreturn [{\n  json: {\n    airtableRecordId,\n    lead,\n    scoreIA: clamp(analysis.score_ia, FALLBACK.score_ia),\n    prioridad: validLevel(analysis.prioridad, FALLBACK.prioridad),\n    probabilidadCompra: clamp(analysis.probabilidad_compra, FALLBACK.probabilidad_compra),\n    urgencia: validLevel(analysis.urgencia, FALLBACK.urgencia),\n    servicioRecomendado: analysis.servicio_recomendado || FALLBACK.servicio_recomendado,\n    resumenComercial: analysis.resumen_comercial || FALLBACK.resumen_comercial,\n    siguienteAccion: analysis.siguiente_accion || FALLBACK.siguiente_accion,\n    aiError,\n  },\n}];\n"
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-8",
+      "name": "Airtable - Actualizar Análisis IA",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1320,
+        180
+      ],
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "REPLACE_WITH_AIRTABLE_BASE_ID",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "value": {
+            "id": "={{ $json.airtableRecordId }}",
+            "Score IA": "={{ $json.scoreIA }}",
+            "Prioridad": "={{ $json.prioridad }}",
+            "Probabilidad de Compra": "={{ $json.probabilidadCompra }}",
+            "Urgencia": "={{ $json.urgencia }}",
+            "Servicio Recomendado": "={{ $json.servicioRecomendado }}",
+            "Resumen Comercial IA": "={{ $json.resumenComercial }}",
+            "Siguiente Acción": "={{ $json.siguienteAccion }}",
+            "Error de Análisis IA": "={{ $json.aiError }}",
+            "Estado": "Analizado"
+          },
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Airtable - Lead IA 360"
+        }
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-9",
+      "name": "Responder Éxito al Formulario",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1540,
+        40
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, leadId: $json.lead.leadId, scoreIA: $json.scoreIA, prioridad: $json.prioridad } }}",
+        "options": {
+          "responseCode": 200
+        }
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-10",
+      "name": "Gmail - Email de Confirmación al Cliente",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        180
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Normalizar y Validar Lead').item.json.lead.email }}",
+        "subject": "=Hemos recibido tu solicitud, {{ $('Normalizar y Validar Lead').item.json.lead.nombre }}",
+        "emailType": "html",
+        "message": "<div style=\"font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:auto;\">\n  <h2 style=\"color:#2b2b2b;\">¡Gracias por contactar con {{ $env.COMPANY_NAME || 'nuestro equipo' }}!</h2>\n  <p>Hola <strong>{{ $('Normalizar y Validar Lead').item.json.lead.nombre }}</strong>,</p>\n  <p>Hemos recibido correctamente tu solicitud y ya la estamos revisando.</p>\n  <p>En un plazo inferior a <strong>24 horas laborables</strong> {{ $env.SENDER_NAME || 'nuestro equipo' }} se pondrá en contacto contigo para conocer mejor tus necesidades y resolver cualquier duda.</p>\n  <p>Si necesitas ampliar información mientras tanto, puedes responder directamente a este correo.</p>\n  <hr style=\"margin:30px 0;\">\n  <p>Un saludo,<br><strong>{{ $env.COMPANY_NAME || 'El equipo' }}</strong></p>\n</div>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Gmail - Lead IA 360"
+        }
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-11",
+      "name": "¿Prioridad Alta?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        340
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-prioridad-alta",
+              "leftValue": "={{ $json.prioridad }}",
+              "rightValue": "Alta",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "n8n-lead-ia-360-12",
+      "name": "Gmail - Alerta Interna Lead Prioritario",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1760,
+        340
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $env.SALES_TEAM_EMAIL }}",
+        "subject": "=[URGENTE] Nuevo lead prioridad alta - {{ $('Normalizar y Validar Lead').item.json.lead.nombre }}",
+        "emailType": "html",
+        "message": "<div style=\"font-family:Arial,sans-serif;line-height:1.6;color:#333;\">\n  <h2>Nuevo lead de prioridad alta</h2>\n  <p><strong>Nombre:</strong> {{ $('Normalizar y Validar Lead').item.json.lead.nombre }}</p>\n  <p><strong>Empresa:</strong> {{ $('Normalizar y Validar Lead').item.json.lead.empresa }}</p>\n  <p><strong>Email:</strong> {{ $('Normalizar y Validar Lead').item.json.lead.email }}</p>\n  <p><strong>Teléfono:</strong> {{ $('Normalizar y Validar Lead').item.json.lead.telefono }}</p>\n  <p><strong>Score IA:</strong> {{ $json.scoreIA }}/100 · <strong>Probabilidad de compra:</strong> {{ $json.probabilidadCompra }}%</p>\n  <p><strong>Servicio recomendado:</strong> {{ $json.servicioRecomendado }}</p>\n  <p><strong>Resumen comercial IA:</strong> {{ $json.resumenComercial }}</p>\n  <p><strong>Siguiente acción recomendada:</strong> {{ $json.siguienteAccion }}</p>\n  <hr>\n  <p>Registro en Airtable: {{ $json.airtableRecordId }}</p>\n</div>",
+        "options": {}
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "Gmail - Lead IA 360"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook - Recepción de Lead": {
+      "main": [
+        [
+          {
+            "node": "Normalizar y Validar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar y Validar Lead": {
+      "main": [
+        [
+          {
+            "node": "¿Lead Válido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Lead Válido?": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Crear Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder Error de Validación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Crear Lead": {
+      "main": [
+        [
+          {
+            "node": "Gemini - Analizar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini - Analizar Lead": {
+      "main": [
+        [
+          {
+            "node": "Interpretar Análisis IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interpretar Análisis IA": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Actualizar Análisis IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Actualizar Análisis IA": {
+      "main": [
+        [
+          {
+            "node": "Responder Éxito al Formulario",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail - Email de Confirmación al Cliente",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "¿Prioridad Alta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Prioridad Alta?": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Alerta Interna Lead Prioritario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "meta": {
+    "templateName": "Lead IA 360 - D-Code Partners",
+    "description": "Cualificación automática de leads con IA (Gemini) sobre n8n + Airtable + Gmail."
+  }
+}
