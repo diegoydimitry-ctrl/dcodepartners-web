@@ -10,21 +10,33 @@ ningún nodo**.
 
 ```
 Webhook (POST /lead-ia-360)
-  → Normalizar y Validar Lead            [Code]
-  → ¿Lead Válido?                        [If]
-      ✗ → Responder Error de Validación  [Respond to Webhook · 400]
-      ✓ → Airtable - Crear Lead          [Airtable · create]
-        → Gemini - Analizar Lead         [HTTP Request · Gemini API, JSON estructurado]
-        → Interpretar Análisis IA        [Code · parseo + fallback]
-        → Airtable - Actualizar Análisis IA [Airtable · update]
-            → Responder Éxito al Formulario          [Respond to Webhook · 200]
-            → Gmail - Email de Confirmación al Cliente [Gmail]
-            → ¿Prioridad Alta?                        [If]
+  → Normalizar y Validar Lead                    [Code]
+  → ¿Lead Válido?                                [If]
+      ✗ → Responder Error de Validación          [Respond to Webhook · 400/500]
+      ✓ → Airtable - Crear o Actualizar Lead     [Airtable · upsert por Email]
+        → Gemini - Analizar Lead                 [HTTP Request · Gemini API, JSON estructurado]
+        → Interpretar Análisis IA                [Code · parseo + fallback + logs]
+            → ¿Registro CRM Disponible?           [If]
+                ✓ → Airtable - Actualizar Análisis IA [Airtable · update]
+            → Responder Éxito al Formulario                [Respond to Webhook · 200]
+            → Gmail - Email de Confirmación al Cliente     [Gmail]
+            → ¿Prioridad Alta?                             [If]
                 ✓ → Gmail - Alerta Interna Lead Prioritario [Gmail]
 ```
 
-12 nodos. Decisiones de diseño relevantes:
+13 nodos funcionales + 4 sticky notes de arquitectura (documentación visual
+por etapa en el propio canvas). Todos los nodos llevan `notes` con su
+función; el código de los nodos `Code` lleva comentarios explicando el
+porqué. Decisiones de diseño relevantes:
 
+- **Deduplicación por email sin lógica custom**: `Airtable - Crear o
+  Actualizar Lead` usa la operación nativa `upsert` con `matchingColumns:
+  ["Email"]` — crea el lead si no existe, actualiza sus datos de contacto si
+  ya existía. Cero nodos de búsqueda/comparación manual, cero condición de
+  carrera entre "buscar" y "crear".
+- **Lead ID determinista** (`hashEmail`) en vez de aleatorio: el mismo
+  email siempre produce el mismo Lead ID, coherente con el upsert y
+  trazable entre reenvíos del mismo lead.
 - **Un único nodo de validación** hace normalización de campos (ES/EN),
   validación y construcción del prompt de Gemini — evita nodos Set/Function
   intermedios.
@@ -33,15 +45,24 @@ Webhook (POST /lead-ia-360)
   parseable, sin prompts frágiles de "responde solo en JSON".
 - **Modelo `gemini-2.5-flash`** por defecto (configurable): coste mínimo
   para un caso de uso de clasificación/resumen, no requiere el modelo `pro`.
-- **La respuesta al formulario se envía antes de los correos**: el
-  webhook no espera a que Gmail entregue el email, así el frontend recibe
-  respuesta rápida y el envío de correos no bloquea la latencia percibida.
-- **Fallback si Gemini falla**: `Interpretar Análisis IA` nunca deja un lead
-  sin score — si la llamada falla o el JSON viene incompleto, asigna
-  Prioridad "Media" / Score 50 y marca `Error de Análisis IA` para revisión
-  manual, en vez de romper el workflow.
-- **Reintentos automáticos** en el nodo de Gemini (3 intentos, 2s de
-  espera) para absorber errores transitorios de red/cuota.
+- **Manejo completo de errores, sin puntos únicos de fallo**: los 4 nodos
+  externos (Airtable ×2, Gemini, Gmail ×2) tienen `retryOnFail` +
+  `onError: continueRegularOutput` — un fallo transitorio no rompe la
+  ejecución. `Interpretar Análisis IA` detecta fallos de Gemini (`aiError`)
+  y del upsert de Airtable (`crmError`) y aplica valores de reserva
+  (Score 50 / Prioridad Media) para que ningún lead se quede sin
+  seguimiento. `¿Registro CRM Disponible?` evita un segundo intento de
+  escritura contra un registro que nunca se creó.
+- **4 ramas en paralelo tras el análisis**: respuesta al formulario,
+  actualización de Airtable, email al cliente y alerta interna no se
+  bloquean entre sí — el webhook responde en cuanto hay score, sin esperar
+  a Gmail ni al guardado final en el CRM.
+- **Logs estructurados** (`console.log`/`console.error` en JSON) en los
+  puntos clave: lead recibido, lead inválido, error de normalización,
+  error de análisis IA, error de CRM y resumen final por lead
+  (`evento`, `leadId`, timestamps) — visibles en n8n → Executions → cada
+  nodo `Code`, y reenviables a un colector de logs externo si se conecta
+  uno a la instancia de n8n.
 
 ## Requisitos previos
 
@@ -52,18 +73,22 @@ Webhook (POST /lead-ia-360)
 
 ## Esquema de la tabla Airtable `Leads`
 
+`Email` es la columna de coincidencia del upsert: debe existir y tener un
+único registro por dirección de email (marca el campo como único en
+Airtable si quieres reforzarlo a nivel de base).
+
 | Campo                    | Tipo                                   |
 |---------------------------|-----------------------------------------|
 | Lead ID                   | Single line text                        |
 | Nombre                    | Single line text                        |
 | Empresa                   | Single line text                        |
-| Email                      | Email                                    |
+| Email                      | Email (recomendado: valor único)         |
 | Teléfono                  | Phone number                            |
 | Servicio de Interés        | Single line text                        |
 | Mensaje                    | Long text                               |
 | Origen                    | Single line text                        |
-| Fecha de Recepción         | Date (con hora)                         |
-| Estado                    | Single select: Nuevo, Análisis IA en curso, Analizado, Contactado, Ganado, Perdido |
+| Última Actualización        | Date (con hora)                         |
+| Estado                    | Single select: Análisis IA en curso, Analizado, Contactado, Ganado, Perdido |
 | Score IA                  | Number (entero)                         |
 | Prioridad                 | Single select: Alta, Media, Baja        |
 | Probabilidad de Compra     | Number (entero, %)                      |
@@ -75,24 +100,27 @@ Webhook (POST /lead-ia-360)
 
 ## Variables de entorno (n8n Cloud → Settings → Environments)
 
-| Variable            | Obligatoria | Descripción                                                              |
-|---------------------|:-----------:|---------------------------------------------------------------------------|
-| `GEMINI_MODEL`       | No          | Modelo de Gemini a usar. Por defecto `gemini-2.5-flash`.                  |
-| `SERVICES_CATALOG`   | Recomendada | Lista de servicios del cliente, en texto libre. Se inyecta en el prompt.  |
-| `COMPANY_NAME`       | Recomendada | Nombre de la empresa, usado en el email al cliente.                       |
-| `SENDER_NAME`        | No          | Cómo se autodenomina el remitente en el email ("nuestro equipo", "Diego"…). |
-| `SALES_TEAM_EMAIL`   | Sí          | Bandeja del equipo comercial para la alerta de leads prioritarios.        |
-| `WEBHOOK_SECRET`     | No          | Si se define, el formulario debe enviar la cabecera `x-webhook-secret` con este valor. Déjala vacía para desactivar la comprobación. |
+| Variable              | Obligatoria | Descripción                                                              |
+|-----------------------|:-----------:|---------------------------------------------------------------------------|
+| `AIRTABLE_BASE_ID`     | Sí          | ID de la base de Airtable del cliente (`appXXXXXXXXXXXXXX`).             |
+| `AIRTABLE_TABLE_NAME`  | No          | Nombre de la tabla de leads. Por defecto `Leads`.                        |
+| `GEMINI_MODEL`         | No          | Modelo de Gemini a usar. Por defecto `gemini-2.5-flash`.                  |
+| `SERVICES_CATALOG`     | Recomendada | Lista de servicios del cliente, en texto libre. Se inyecta en el prompt.  |
+| `COMPANY_NAME`         | Recomendada | Nombre de la empresa, usado en el email al cliente.                       |
+| `SENDER_NAME`          | No          | Cómo se autodenomina el remitente en el email ("nuestro equipo", "Diego"…). |
+| `SALES_TEAM_EMAIL`     | Sí          | Bandeja del equipo comercial para la alerta de leads prioritarios.        |
+| `WEBHOOK_SECRET`       | No          | Si se define, el formulario debe enviar la cabecera `x-webhook-secret` con este valor. Déjala vacía para desactivar la comprobación. |
 
 ## Credenciales a configurar tras importar
 
-El export no incluye secretos. Al importar el JSON, n8n marcará estos 3
+El export no incluye secretos. Al importar el JSON, n8n marcará estos
 nodos como "credencial no configurada" — hay que enlazarlos manualmente:
 
-1. **Airtable - Crear Lead** / **Airtable - Actualizar Análisis IA**
-   → credencial `Airtable Token API` (Personal Access Token con acceso a la
-   base). Además hay que abrir cada nodo y seleccionar la Base/Tabla reales
-   desde el desplegable (el JSON trae un ID de base de ejemplo).
+1. **Airtable - Crear o Actualizar Lead** / **Airtable - Actualizar Análisis
+   IA** → credencial `Airtable Token API` (Personal Access Token con acceso
+   de lectura/escritura a la base). Base y tabla ya se resuelven vía
+   `AIRTABLE_BASE_ID` / `AIRTABLE_TABLE_NAME`, no hace falta reseleccionarlas
+   en el desplegable.
 2. **Gemini - Analizar Lead**
    → credencial genérica `Header Auth`, con:
    - Name: `x-goog-api-key`
@@ -105,9 +133,9 @@ nodos como "credencial no configurada" — hay que enlazarlos manualmente:
 
 1. Importar `lead-ia-360.workflow.json` en n8n (Workflows → Import from
    File).
-2. Enlazar las 3 credenciales (paso anterior) y confirmar Base/Tabla de
-   Airtable en ambos nodos Airtable.
-3. Configurar las variables de entorno.
+2. Enlazar las 3 credenciales (Airtable, Header Auth de Gemini, Gmail —
+   ver sección anterior).
+3. Configurar las variables de entorno, incluyendo `AIRTABLE_BASE_ID`.
 4. Activar el workflow (`Active: ON`). n8n mostrará la URL del webhook de
    producción — apuntar el formulario web a esa URL.
 5. Probar con una petición real:
@@ -125,12 +153,16 @@ curl -X POST "https://<tu-instancia>.app.n8n.cloud/webhook/lead-ia-360" \
   }'
 ```
 
-6. Verificar: registro creado y actualizado en Airtable, email recibido en
-   la cuenta de prueba, y (si el lead califica como Alta prioridad) alerta
-   interna en `SALES_TEAM_EMAIL`.
-7. Revisar en n8n → Executions que no haya ejecuciones marcadas con
-   `aiError: true` de forma recurrente (indicaría un problema de cuota o de
-   configuración de la API key de Gemini).
+6. Verificar: registro creado en Airtable, email recibido en la cuenta de
+   prueba, y (si el lead califica como Alta prioridad) alerta interna en
+   `SALES_TEAM_EMAIL`.
+7. Repetir la misma petición (mismo `email`): debe **actualizar** el mismo
+   registro de Airtable en vez de crear uno nuevo — así se valida la
+   deduplicación por email.
+8. Revisar en n8n → Executions los logs de los nodos `Code` (salida
+   `console.log`/`console.error` en JSON) y confirmar que no haya
+   ejecuciones recurrentes con `aiError: true` o `crmError: true` (indicaría
+   un problema de cuota/credenciales de Gemini o de permisos de Airtable).
 
 ## Replicar para un cliente nuevo
 
