@@ -216,15 +216,20 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ success: true, reply, mode: 'generated' });
     } catch (providerError) {
       const { category, reply } = classifyError(providerError);
+      const reason = String((providerError && providerError.message) || providerError).slice(0, 300);
       console.error(
         `[chat] Error del proveedor ${provider.name} (categoría: ${category}) tras ${Date.now() - requestStart}ms:`,
         providerError
       );
       return res.status(200).json({
+        // El motivo técnico se añade también al propio texto de la respuesta
+        // (no solo al campo providerErrorReason) para poder diagnosticar un
+        // fallo real viendo el chat en el móvil, sin depender de las
+        // herramientas de desarrollador del navegador ni del panel de Vercel.
         success: true,
-        reply,
+        reply: `${reply}\n\n_Detalle técnico (${category}): ${reason}_`,
         mode: 'error',
-        providerErrorReason: String((providerError && providerError.message) || providerError).slice(0, 300),
+        providerErrorReason: reason,
       });
     }
   } catch (error) {
