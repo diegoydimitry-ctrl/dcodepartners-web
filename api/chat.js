@@ -278,6 +278,7 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    let providerErrorReason = null;
     if (provider) {
       try {
         const context = results
@@ -296,12 +297,18 @@ module.exports = async function handler(req, res) {
         // Si el LLM falla (clave inválida, cuota agotada, corte puntual del
         // proveedor...) no se rompe la conversación: se cae al modo
         // recuperación de siempre en vez de devolver un error al usuario.
+        // El motivo se incluye en la respuesta JSON (no en el texto que ve
+        // el usuario) para poder diagnosticarlo desde el Network tab del
+        // navegador sin necesidad de acceder a los logs de Vercel.
         console.error('Error del proveedor LLM, usando recuperación como respaldo:', providerError);
+        providerErrorReason = String(providerError && providerError.message || providerError).slice(0, 300);
       }
     }
 
     if (!results.length) {
-      return res.status(200).json({ success: true, reply: FALLBACK_MESSAGE, mode: 'retrieval', intent });
+      return res
+        .status(200)
+        .json({ success: true, reply: FALLBACK_MESSAGE, mode: 'retrieval', intent, providerErrorReason });
     }
 
     // Modo recuperación pura: la respuesta se compone solo con contenido
@@ -311,7 +318,7 @@ module.exports = async function handler(req, res) {
     if (!intent) reply += sourceHint(results);
     if (intent) reply += CONTACT_CTA;
 
-    return res.status(200).json({ success: true, reply, mode: 'retrieval', intent });
+    return res.status(200).json({ success: true, reply, mode: 'retrieval', intent, providerErrorReason });
   } catch (error) {
     console.error('Error en /api/chat:', error);
     return res
