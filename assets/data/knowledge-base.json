@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T12:59:41.766Z",
+  "generatedAt": "2026-07-22T09:36:06.260Z",
   "pageCount": 17,
-  "chunkCount": 154,
+  "chunkCount": 155,
   "pages": [
     {
       "url": "/aviso-legal",
@@ -352,71 +352,76 @@
         },
         {
           "id": "/faq#c8",
+          "heading": "¿También creáis o mejoráis páginas web?",
+          "text": "Sí. Si tu empresa no tiene página web o la actual no está a la altura, la diseñamos o la mejoramos nosotros mismos, pensada desde el principio para conectarse con el resto de tu sistema — CRM, automatizaciones y agentes de IA incluidos. La gestión de redes sociales y otros canales la abordamos del mismo modo: mediante automatización con IA, no como creación de contenido manual."
+        },
+        {
+          "id": "/faq#c9",
           "heading": "¿Qué diferencia hay entre un agente de IA y un chatbot tradicional?",
           "text": "Un chatbot tradicional sigue un guion fijo de respuestas predefinidas. Un agente de IA entiende lenguaje natural, mantiene el contexto de la conversación y sabe cuándo derivarla a una persona. Lo explicamos con más detalle en Agentes de IA."
         },
         {
-          "id": "/faq#c9",
+          "id": "/faq#c10",
           "heading": "¿Podéis integrar la IA con mi CRM o ERP?",
           "text": "Sí. Es una de las combinaciones más habituales: un agente o proceso automatizado que registra cada interacción directamente en tu CRM o ERP, sin copiar nada a mano. Más información en Integraciones."
         },
         {
-          "id": "/faq#c10",
+          "id": "/faq#c11",
           "heading": "¿Cómo es el proceso desde la primera reunión?",
           "text": "Empezamos con un diagnóstico de tu operativa, diseñamos el sistema, lo implementamos durante 30 días de prueba y revisamos juntos los resultados antes de hablar de precio. El detalle completo está en el Método D-Code."
         },
         {
-          "id": "/faq#c11",
+          "id": "/faq#c12",
           "heading": "¿Cuánto tarda en implementarse un sistema de automatización?",
           "text": "El diagnóstico se hace en los primeros días. La implementación ocurre durante las cuatro semanas del mes de prueba, de forma progresiva y supervisada."
         },
         {
-          "id": "/faq#c12",
+          "id": "/faq#c13",
           "heading": "¿Cómo medís los resultados?",
           "text": "Con datos concretos: horas ahorradas, procesos automatizados y tiempos de respuesta, comparados con tu situación antes de empezar. Te los presentamos el día 30, antes de acordar ningún precio."
         },
         {
-          "id": "/faq#c13",
+          "id": "/faq#c14",
           "heading": "¿Qué pasa si el proyecto no consigue resultados?",
           "text": "No pagas nada. Si el sistema no demuestra un beneficio real y medible durante el mes de prueba, no facturamos ese periodo."
         },
         {
-          "id": "/faq#c14",
+          "id": "/faq#c15",
           "heading": "¿Cuánto cuesta el servicio después del mes gratuito?",
           "text": "Depende del sistema implementado y del impacto medido. Lo acordamos juntos al final del mes de prueba, con los resultados reales ya sobre la mesa — no antes."
         },
         {
-          "id": "/faq#c15",
+          "id": "/faq#c16",
           "heading": "¿Puedo cancelar en cualquier momento?",
           "text": "Sí. No hay permanencia mínima ni penalización por cancelar, ni durante el mes de prueba ni después."
         },
         {
-          "id": "/faq#c16",
+          "id": "/faq#c17",
           "heading": "¿Quién es el propietario de las automatizaciones?",
           "text": "Tú. Los sistemas que implementamos en tu operativa son tuyos; nuestro papel es diseñarlos, construirlos y dejarlos funcionando correctamente."
         },
         {
-          "id": "/faq#c17",
+          "id": "/faq#c18",
           "heading": "¿Qué ocurre después de entregar el proyecto?",
           "text": "Seguimos disponibles para ajustes y mantenimiento del sistema. Nuestro modelo está pensado como una relación continua, no como una entrega puntual que se olvida al día siguiente."
         },
         {
-          "id": "/faq#c18",
+          "id": "/faq#c19",
           "heading": "¿Mis datos y los de mis clientes están seguros?",
           "text": "Sí. Accedemos solo a lo estrictamente necesario para el proceso concreto que automatizamos, bajo confidencialidad absoluta. Puedes consultar el detalle en nuestra Política de Privacidad."
         },
         {
-          "id": "/faq#c19",
+          "id": "/faq#c20",
           "heading": "¿Firmáis acuerdo de confidencialidad (NDA)?",
           "text": "Sí, si tu empresa lo requiere. Es habitual en proyectos que implican acceso a datos sensibles de clientes o procesos internos."
         },
         {
-          "id": "/faq#c20",
+          "id": "/faq#c21",
           "heading": "Seguridad y Confidencialidad",
           "text": "No hemos encontrado ninguna pregunta que coincida. Prueba con otra palabra o escríbenos directamente."
         },
         {
-          "id": "/faq#c21",
+          "id": "/faq#c22",
           "heading": "Hablemos directamente.",
           "text": "Resérvate 30 minutos sin coste, o escríbenos y te respondemos en menos de 24h. Reservar mi Llamada Gratuita Escribir un email"
         }
