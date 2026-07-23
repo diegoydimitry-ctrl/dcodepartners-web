@@ -6,6 +6,17 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
+> **v4 — verificado contra n8n Cloud real.** El body de la petición a
+> Gemini (prompt + `responseSchema`) ya no se construye como expresión
+> `{{ {...} }}` inline en el nodo HTTP Request: ese patrón, con un objeto
+> anidado tan grande, produce `[invalid syntax]` en el editor de n8n (el
+> parser de expresiones, basado en `jsep`, no soporta de forma fiable
+> objetos JS de ese tamaño). Ahora el body completo se construye y
+> serializa con `JSON.stringify()` dentro del Code node "Normalizar y
+> Validar Lead" (`geminiRequestBody`), y el nodo HTTP solo referencia ese
+> string ya válido — además maneja correctamente comillas y saltos de
+> línea que pudiera traer el mensaje del lead.
+>
 > **v3 — post-auditoría.** Se sustituyó `$env` por `$vars` en todas las
 > referencias de configuración: `$env` lee variables de entorno del proceso
 > del sistema operativo, algo que en n8n Cloud (multi-tenant) no es
@@ -17,6 +28,12 @@ ningún nodo**.
 > flags `attemptToConvertTypes`/`convertFieldsToString` en los nodos
 > Airtable, y se eliminó una cabecera `Content-Type` redundante en la
 > llamada a Gemini.
+>
+> **Si al abrir el workflow ves avisos (▲) en los nodos Airtable o
+> Gmail**, no son un bug del JSON: significa que las Variables de n8n de
+> la sección siguiente aún no existen en tu cuenta (se confirma viendo que
+> cualquier campo con `$vars.X` resuelve a "undefined" en la vista previa
+> del nodo). Créalas y el aviso desaparece solo, sin tocar nada más.
 
 ## Arquitectura
 

@@ -2,7 +2,7 @@
   "name": "Lead IA 360",
   "nodes": [
     {
-      "id": "696c69d2-d1da-4378-91e0-e1e8f6eaf6e3",
+      "id": "a0c6f123-ee84-43db-8d7b-bfb50e4f0943",
       "name": "Nota - Etapa 1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "id": "980fdcb8-9823-4e5e-8238-7a0fe86a44fa",
+      "id": "0c486a55-83f0-4fce-a99a-0eee0e962cb1",
       "name": "Nota - Etapa 2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "e149262a-9736-4068-ae70-5b503bceea0b",
+      "id": "3e292dbb-51b4-4873-99a3-8670c7fe7722",
       "name": "Nota - Etapa 3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -47,7 +47,7 @@
       }
     },
     {
-      "id": "cbc74edc-6081-4853-b79a-1f05d1932757",
+      "id": "d841f787-6d9a-4c38-8bee-24a194a96565",
       "name": "Nota - Etapa 4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "c1ae4a25-c38e-402e-a7b6-3c71b9d152fa",
+      "id": "d56e51c3-058e-438c-976f-8ce4442acfb6",
       "name": "Webhook - Recepción de Lead",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -71,7 +71,7 @@
         380
       ],
       "notes": "Punto de entrada único (POST). responseMode=responseNode: el código de estado y el cuerpo de la respuesta los controla el nodo Respond to Webhook correspondiente, nunca la respuesta automática de n8n.",
-      "webhookId": "0d60ccb6-414e-4616-9dda-4f51cea6e14b",
+      "webhookId": "ce28958b-a7c1-4526-a536-519d46f795fa",
       "parameters": {
         "httpMethod": "POST",
         "path": "lead-ia-360",
@@ -80,7 +80,7 @@
       }
     },
     {
-      "id": "69b164a0-64a2-4e1d-bd89-689967d88949",
+      "id": "0797ece6-00d8-4304-9684-7935791b1ca6",
       "name": "Normalizar y Validar Lead",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -91,11 +91,11 @@
       "notes": "Normaliza campos ES/EN, valida datos obligatorios, genera Lead ID determinista (hash del email) y construye el prompt de Gemini. Emite logs de recepción y de error de validación.",
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// ============================================================================\n// Normaliza el payload del formulario (acepta variantes ES/EN de nombre de\n// campo), valida los datos obligatorios, genera un Lead ID determinista\n// (hash del email -> estable entre reenvíos del mismo lead) y construye el\n// prompt de análisis para Gemini. Registra logs estructurados de cada\n// intento, válido o inválido, para trazabilidad.\n// ============================================================================\ntry {\n  const body = $json.body ?? $json;\n\n  const pick = (...keys) => {\n    for (const key of keys) {\n      const value = body[key];\n      if (typeof value === 'string' && value.trim()) return value.trim();\n    }\n    return '';\n  };\n\n  const lead = {\n    nombre: pick('nombre', 'name', 'fullName', 'full_name'),\n    empresa: pick('empresa', 'company', 'organizacion'),\n    email: pick('email', 'correo', 'mail').toLowerCase(),\n    telefono: pick('telefono', 'phone', 'tel', 'movil'),\n    mensaje: pick('mensaje', 'message', 'comentarios', 'comments'),\n    servicioInteres: pick('servicio_interes', 'service', 'servicio', 'interest'),\n    origen: pick('origen', 'source', 'utm_source') || 'formulario_web',\n  };\n\n  const errors = [];\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n  if (!lead.nombre) errors.push('El campo \"nombre\" es obligatorio.');\n  if (!lead.email || !emailRegex.test(lead.email)) errors.push('El campo \"email\" no es válido.');\n  if (!lead.mensaje || lead.mensaje.length < 10) errors.push('El campo \"mensaje\" debe tener al menos 10 caracteres.');\n\n  // Secreto compartido opcional: si se configura la variable de n8n\n  // WEBHOOK_SECRET (Settings -> Variables), el formulario debe enviar la\n  // cabecera x-webhook-secret con ese valor.\n  const webhookSecret = $vars.WEBHOOK_SECRET;\n  if (webhookSecret) {\n    const receivedSecret = $json.headers?.['x-webhook-secret'];\n    if (receivedSecret !== webhookSecret) errors.push('Token de autenticación inválido.');\n  }\n\n  if (errors.length > 0) {\n    console.warn(JSON.stringify({\n      evento: 'lead_invalido', errores: errors, email: lead.email || null,\n      timestamp: new Date().toISOString(),\n    }));\n    return [{ json: { valid: false, statusCode: 400, errors } }];\n  }\n\n  // Lead ID determinista a partir del email: la misma persona reenviando el\n  // formulario siempre produce el mismo Lead ID, coherente con el upsert\n  // por email en Airtable (elimina duplicados en origen).\n  const hashEmail = (str) => {\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;\n    return hash.toString(36);\n  };\n  lead.leadId = `lead_${hashEmail(lead.email)}`;\n  lead.receivedAt = new Date().toISOString();\n\n  // Catálogo de servicios configurable por cliente vía variable de n8n\n  // (Settings -> Variables), para poder reutilizar este mismo workflow al\n  // vender la plantilla a otros clientes sin tocar el prompt.\n  const servicesCatalog = $vars.SERVICES_CATALOG\n    || 'automatización de procesos con IA, agentes de IA a medida, chatbots y asistentes virtuales, integración de sistemas (CRM/ERP) y consultoría de transformación digital con IA';\n\n  const geminiPrompt = `Eres el analista comercial senior de D-Code Partners, una consultora especializada en automatización e inteligencia artificial para empresas. Analiza el siguiente lead recién recibido desde el formulario web y devuelve una evaluación objetiva y accionable para el equipo comercial.\n\nCriterios a evaluar:\n- Calidad y completitud de la información proporcionada (datos de contacto válidos, contexto claro, detalle real del mensaje).\n- Señales de intención de compra explícitas o implícitas (urgencia expresada, presupuesto, plazos, dolor de negocio concreto).\n- Encaje del lead con el catálogo de servicios: ${servicesCatalog}.\n- Nivel de urgencia percibido (¿necesita una solución ya, a corto plazo, o está explorando opciones?).\n\nDatos del lead:\n- Nombre: ${lead.nombre}\n- Empresa: ${lead.empresa || 'No especificada'}\n- Email: ${lead.email}\n- Teléfono: ${lead.telefono || 'No especificado'}\n- Servicio de interés indicado: ${lead.servicioInteres || 'No especificado'}\n- Mensaje del lead: \"${lead.mensaje}\"\n- Origen del formulario: ${lead.origen}\n- Fecha de recepción: ${lead.receivedAt}\n\nCriterios de puntuación:\n- score_ia (0-100): 0-30 lead frío/poco cualificado, 31-60 lead tibio con potencial, 61-100 lead caliente con alta intención de compra.\n- prioridad: \"Alta\" si score_ia >= 75 o hay urgencia explícita; \"Media\" si score_ia está entre 45 y 74; \"Baja\" si score_ia < 45.\n- probabilidad_compra (0-100): probabilidad estimada de conversión a cliente en los próximos 30 días.\n- urgencia: \"Alta\", \"Media\" o \"Baja\" según el lenguaje y contexto del mensaje.\n- servicio_recomendado: el servicio del catálogo que mejor resuelve la necesidad expresada.\n- resumen_comercial: 2-3 frases con el diagnóstico del lead para el equipo comercial, sin repetir literalmente su mensaje.\n- siguiente_accion: acción concreta y específica que debe tomar el equipo comercial en las próximas 24-48h (nunca genérica como \"contactar al cliente\").\n\nSé objetivo, básate solo en la información proporcionada y no inventes datos que no estén presentes.`;\n\n  console.log(JSON.stringify({\n    evento: 'lead_recibido', leadId: lead.leadId, email: lead.email,\n    origen: lead.origen, timestamp: lead.receivedAt,\n  }));\n\n  return [{ json: { valid: true, lead, geminiPrompt } }];\n} catch (err) {\n  console.error(JSON.stringify({\n    evento: 'error_normalizacion', mensaje: err.message,\n    timestamp: new Date().toISOString(),\n  }));\n  return [{ json: { valid: false, statusCode: 500, errors: ['Error interno al procesar el lead.'] } }];\n}\n"
+        "jsCode": "// ============================================================================\n// Normaliza el payload del formulario (acepta variantes ES/EN de nombre de\n// campo), valida los datos obligatorios, genera un Lead ID determinista\n// (hash del email -> estable entre reenvíos del mismo lead) y construye el\n// prompt de análisis para Gemini. Registra logs estructurados de cada\n// intento, válido o inválido, para trazabilidad.\n// ============================================================================\ntry {\n  const body = $json.body ?? $json;\n\n  const pick = (...keys) => {\n    for (const key of keys) {\n      const value = body[key];\n      if (typeof value === 'string' && value.trim()) return value.trim();\n    }\n    return '';\n  };\n\n  const lead = {\n    nombre: pick('nombre', 'name', 'fullName', 'full_name'),\n    empresa: pick('empresa', 'company', 'organizacion'),\n    email: pick('email', 'correo', 'mail').toLowerCase(),\n    telefono: pick('telefono', 'phone', 'tel', 'movil'),\n    mensaje: pick('mensaje', 'message', 'comentarios', 'comments'),\n    servicioInteres: pick('servicio_interes', 'service', 'servicio', 'interest'),\n    origen: pick('origen', 'source', 'utm_source') || 'formulario_web',\n  };\n\n  const errors = [];\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n  if (!lead.nombre) errors.push('El campo \"nombre\" es obligatorio.');\n  if (!lead.email || !emailRegex.test(lead.email)) errors.push('El campo \"email\" no es válido.');\n  if (!lead.mensaje || lead.mensaje.length < 10) errors.push('El campo \"mensaje\" debe tener al menos 10 caracteres.');\n\n  // Secreto compartido opcional: si se configura la variable de n8n\n  // WEBHOOK_SECRET (Settings -> Variables), el formulario debe enviar la\n  // cabecera x-webhook-secret con ese valor.\n  const webhookSecret = $vars.WEBHOOK_SECRET;\n  if (webhookSecret) {\n    const receivedSecret = $json.headers?.['x-webhook-secret'];\n    if (receivedSecret !== webhookSecret) errors.push('Token de autenticación inválido.');\n  }\n\n  if (errors.length > 0) {\n    console.warn(JSON.stringify({\n      evento: 'lead_invalido', errores: errors, email: lead.email || null,\n      timestamp: new Date().toISOString(),\n    }));\n    return [{ json: { valid: false, statusCode: 400, errors } }];\n  }\n\n  // Lead ID determinista a partir del email: la misma persona reenviando el\n  // formulario siempre produce el mismo Lead ID, coherente con el upsert\n  // por email en Airtable (elimina duplicados en origen).\n  const hashEmail = (str) => {\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;\n    return hash.toString(36);\n  };\n  lead.leadId = `lead_${hashEmail(lead.email)}`;\n  lead.receivedAt = new Date().toISOString();\n\n  // Catálogo de servicios configurable por cliente vía variable de n8n\n  // (Settings -> Variables), para poder reutilizar este mismo workflow al\n  // vender la plantilla a otros clientes sin tocar el prompt.\n  const servicesCatalog = $vars.SERVICES_CATALOG\n    || 'automatización de procesos con IA, agentes de IA a medida, chatbots y asistentes virtuales, integración de sistemas (CRM/ERP) y consultoría de transformación digital con IA';\n\n  const geminiPrompt = `Eres el analista comercial senior de D-Code Partners, una consultora especializada en automatización e inteligencia artificial para empresas. Analiza el siguiente lead recién recibido desde el formulario web y devuelve una evaluación objetiva y accionable para el equipo comercial.\n\nCriterios a evaluar:\n- Calidad y completitud de la información proporcionada (datos de contacto válidos, contexto claro, detalle real del mensaje).\n- Señales de intención de compra explícitas o implícitas (urgencia expresada, presupuesto, plazos, dolor de negocio concreto).\n- Encaje del lead con el catálogo de servicios: ${servicesCatalog}.\n- Nivel de urgencia percibido (¿necesita una solución ya, a corto plazo, o está explorando opciones?).\n\nDatos del lead:\n- Nombre: ${lead.nombre}\n- Empresa: ${lead.empresa || 'No especificada'}\n- Email: ${lead.email}\n- Teléfono: ${lead.telefono || 'No especificado'}\n- Servicio de interés indicado: ${lead.servicioInteres || 'No especificado'}\n- Mensaje del lead: \"${lead.mensaje}\"\n- Origen del formulario: ${lead.origen}\n- Fecha de recepción: ${lead.receivedAt}\n\nCriterios de puntuación:\n- score_ia (0-100): 0-30 lead frío/poco cualificado, 31-60 lead tibio con potencial, 61-100 lead caliente con alta intención de compra.\n- prioridad: \"Alta\" si score_ia >= 75 o hay urgencia explícita; \"Media\" si score_ia está entre 45 y 74; \"Baja\" si score_ia < 45.\n- probabilidad_compra (0-100): probabilidad estimada de conversión a cliente en los próximos 30 días.\n- urgencia: \"Alta\", \"Media\" o \"Baja\" según el lenguaje y contexto del mensaje.\n- servicio_recomendado: el servicio del catálogo que mejor resuelve la necesidad expresada.\n- resumen_comercial: 2-3 frases con el diagnóstico del lead para el equipo comercial, sin repetir literalmente su mensaje.\n- siguiente_accion: acción concreta y específica que debe tomar el equipo comercial en las próximas 24-48h (nunca genérica como \"contactar al cliente\").\n\nSé objetivo, básate solo en la información proporcionada y no inventes datos que no estén presentes.`;\n\n  // El body completo de la petición a Gemini se construye y serializa aquí\n  // (JS real, sin límites del parser de expresiones) para que el nodo HTTP\n  // Request solo tenga que referenciar un string ya válido. Construir este\n  // mismo objeto directamente dentro de una expresión {{ }} del nodo HTTP\n  // falla en n8n con \"[invalid syntax]\": el motor de expresiones (basado en\n  // jsep) no soporta de forma fiable objetos anidados de este tamaño.\n  const geminiRequestBody = JSON.stringify({\n    contents: [{ parts: [{ text: geminiPrompt }] }],\n    generationConfig: {\n      temperature: 0.3,\n      responseMimeType: 'application/json',\n      responseSchema: {\n        type: 'OBJECT',\n        properties: {\n          score_ia: { type: 'INTEGER' },\n          prioridad: { type: 'STRING', enum: ['Alta', 'Media', 'Baja'] },\n          probabilidad_compra: { type: 'INTEGER' },\n          urgencia: { type: 'STRING', enum: ['Alta', 'Media', 'Baja'] },\n          servicio_recomendado: { type: 'STRING' },\n          resumen_comercial: { type: 'STRING' },\n          siguiente_accion: { type: 'STRING' },\n        },\n        required: [\n          'score_ia', 'prioridad', 'probabilidad_compra', 'urgencia',\n          'servicio_recomendado', 'resumen_comercial', 'siguiente_accion',\n        ],\n      },\n    },\n  });\n\n  console.log(JSON.stringify({\n    evento: 'lead_recibido', leadId: lead.leadId, email: lead.email,\n    origen: lead.origen, timestamp: lead.receivedAt,\n  }));\n\n  return [{ json: { valid: true, lead, geminiPrompt, geminiRequestBody } }];\n} catch (err) {\n  console.error(JSON.stringify({\n    evento: 'error_normalizacion', mensaje: err.message,\n    timestamp: new Date().toISOString(),\n  }));\n  return [{ json: { valid: false, statusCode: 500, errors: ['Error interno al procesar el lead.'] } }];\n}\n"
       }
     },
     {
-      "id": "766a5265-0863-4891-bc27-053916277e65",
+      "id": "37bab37e-3ece-47a2-bb96-b6a3e911997a",
       "name": "¿Lead Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -129,7 +129,7 @@
       }
     },
     {
-      "id": "35b6cfb0-2d34-45f8-ad86-c16a17f209c9",
+      "id": "0f237cdf-b7d6-4ed5-8930-afd9151f9bce",
       "name": "Responder Error de Validación",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -147,7 +147,7 @@
       }
     },
     {
-      "id": "67a5e3a6-7abb-47f2-ba13-5b75697d9ff2",
+      "id": "8507cb72-fee3-4e27-bf38-153248887321",
       "name": "Airtable - Crear o Actualizar Lead",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -203,7 +203,7 @@
       }
     },
     {
-      "id": "0fda0979-c49b-4dc6-96f6-d2ca25f07a7f",
+      "id": "fd8fa0e5-efbf-4a57-8786-b0ef2675bed5",
       "name": "Gemini - Analizar Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -211,7 +211,7 @@
         960,
         200
       ],
-      "notes": "Llamada a Gemini con salida JSON estructurada (responseSchema) — evita parseo frágil de texto libre. 3 reintentos automáticos ante error transitorio. Si falla definitivamente, continúa el flujo con error controlado en vez de romper el workflow.",
+      "notes": "Llamada a Gemini con salida JSON estructurada (responseSchema). El body ya viene serializado desde el nodo anterior (geminiRequestBody) — evita el bug de \"[invalid syntax]\" del parser de expresiones con objetos JS grandes. 3 reintentos automáticos ante error transitorio. Si falla definitivamente, continúa el flujo con error controlado en vez de romper el workflow.",
       "parameters": {
         "method": "POST",
         "url": "=https://generativelanguage.googleapis.com/v1beta/models/{{ $vars.GEMINI_MODEL || 'gemini-2.5-flash' }}:generateContent",
@@ -220,7 +220,7 @@
         "sendHeaders": false,
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ {\n  contents: [\n    { parts: [ { text: $('Normalizar y Validar Lead').item.json.geminiPrompt } ] }\n  ],\n  generationConfig: {\n    temperature: 0.3,\n    responseMimeType: \"application/json\",\n    responseSchema: {\"type\":\"OBJECT\",\"properties\":{\"score_ia\":{\"type\":\"INTEGER\"},\"prioridad\":{\"type\":\"STRING\",\"enum\":[\"Alta\",\"Media\",\"Baja\"]},\"probabilidad_compra\":{\"type\":\"INTEGER\"},\"urgencia\":{\"type\":\"STRING\",\"enum\":[\"Alta\",\"Media\",\"Baja\"]},\"servicio_recomendado\":{\"type\":\"STRING\"},\"resumen_comercial\":{\"type\":\"STRING\"},\"siguiente_accion\":{\"type\":\"STRING\"}},\"required\":[\"score_ia\",\"prioridad\",\"probabilidad_compra\",\"urgencia\",\"servicio_recomendado\",\"resumen_comercial\",\"siguiente_accion\"]}\n  }\n} }}",
+        "jsonBody": "={{ $('Normalizar y Validar Lead').item.json.geminiRequestBody }}",
         "options": {
           "timeout": 15000
         }
@@ -237,7 +237,7 @@
       }
     },
     {
-      "id": "b3cd0e03-ce02-46dc-a905-e8f7b9dfb1fa",
+      "id": "60a976c6-f1f6-4a7e-9847-bf46144a235a",
       "name": "Interpretar Análisis IA",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -252,7 +252,7 @@
       }
     },
     {
-      "id": "c9fac02d-1653-4047-a0c6-fe770f241aa3",
+      "id": "d28fd2eb-5872-4c54-942e-94fa699d829e",
       "name": "¿Registro CRM Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -286,7 +286,7 @@
       }
     },
     {
-      "id": "e6bac412-f95c-4573-bba9-f2b5a6b03b99",
+      "id": "cf0ae299-5e90-4d5e-ac1d-b2b01338baea",
       "name": "Airtable - Actualizar Análisis IA",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -342,7 +342,7 @@
       }
     },
     {
-      "id": "b391d577-d37c-4e57-968f-c21a482fc769",
+      "id": "5b8ca927-118f-4ac0-b027-d8768861e7bf",
       "name": "Responder Éxito al Formulario",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -360,7 +360,7 @@
       }
     },
     {
-      "id": "d1930c5f-5291-49e1-b48f-d87edbf7b577",
+      "id": "f810f5df-7229-4d34-bad6-66af7e96175c",
       "name": "Gmail - Email de Confirmación al Cliente",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
@@ -390,7 +390,7 @@
       }
     },
     {
-      "id": "b09a4105-5108-4ee8-a194-676e95902f85",
+      "id": "2c87af62-3093-4638-a4c9-0ba158719d94",
       "name": "¿Prioridad Alta?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -423,7 +423,7 @@
       }
     },
     {
-      "id": "9219f858-dafb-48bd-8473-62405fc394ad",
+      "id": "4ab5dfc6-1826-4d90-a5c7-f1efaec22507",
       "name": "Gmail - Alerta Interna Lead Prioritario",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
