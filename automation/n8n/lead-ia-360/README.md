@@ -3,8 +3,20 @@
 Cualificación automática de leads con IA. Stack: **n8n Cloud + Airtable + Gemini API + Gmail**.
 
 Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
-cambian credenciales + variables de entorno + base de Airtable — **no se toca
+cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
+
+> **v3 — post-auditoría.** Se sustituyó `$env` por `$vars` en todas las
+> referencias de configuración: `$env` lee variables de entorno del proceso
+> del sistema operativo, algo que en n8n Cloud (multi-tenant) no es
+> configurable por el cliente y que además está bloqueado por defecto
+> dentro de nodos `Code`. `$vars` es la feature "Variables" de n8n
+> (Settings/Overview → Variables), pensada exactamente para este caso de
+> uso y accesible sin flags de infraestructura. También se añadieron:
+> `webhookId` explícito en el nodo Webhook, IDs de nodo como UUID v4,
+> flags `attemptToConvertTypes`/`convertFieldsToString` en los nodos
+> Airtable, y se eliminó una cabecera `Content-Type` redundante en la
+> llamada a Gemini.
 
 ## Arquitectura
 
@@ -98,7 +110,10 @@ Airtable si quieres reforzarlo a nivel de base).
 | Siguiente Acción           | Long text                               |
 | Error de Análisis IA        | Checkbox                                |
 
-## Variables de entorno (n8n Cloud → Settings → Environments)
+## Variables de n8n (Overview / Settings → Variables)
+
+Se leen con `$vars.NOMBRE` — **no** con `$env` (ver nota de la v3 arriba).
+Crear cada una como Variable de n8n, con estos nombres exactos:
 
 | Variable              | Obligatoria | Descripción                                                              |
 |-----------------------|:-----------:|---------------------------------------------------------------------------|
@@ -110,6 +125,11 @@ Airtable si quieres reforzarlo a nivel de base).
 | `SENDER_NAME`          | No          | Cómo se autodenomina el remitente en el email ("nuestro equipo", "Diego"…). |
 | `SALES_TEAM_EMAIL`     | Sí          | Bandeja del equipo comercial para la alerta de leads prioritarios.        |
 | `WEBHOOK_SECRET`       | No          | Si se define, el formulario debe enviar la cabecera `x-webhook-secret` con este valor. Déjala vacía para desactivar la comprobación. |
+
+> Si tu plan de n8n Cloud no incluye la feature "Variables", como
+> alternativa se puede fijar estos valores como literales directamente en
+> cada nodo (perdiendo la reutilización entre clientes) — avisa si es el
+> caso y se adapta el JSON.
 
 ## Credenciales a configurar tras importar
 
@@ -135,7 +155,7 @@ nodos como "credencial no configurada" — hay que enlazarlos manualmente:
    File).
 2. Enlazar las 3 credenciales (Airtable, Header Auth de Gemini, Gmail —
    ver sección anterior).
-3. Configurar las variables de entorno, incluyendo `AIRTABLE_BASE_ID`.
+3. Configurar las Variables de n8n, incluyendo `AIRTABLE_BASE_ID`.
 4. Activar el workflow (`Active: ON`). n8n mostrará la URL del webhook de
    producción — apuntar el formulario web a esa URL.
 5. Probar con una petición real:
@@ -173,6 +193,6 @@ cliente:
    cliente.
 2. Crear su base de Airtable con el mismo esquema de tabla `Leads`.
 3. Enlazar sus credenciales propias (Airtable, Gemini, Gmail).
-4. Ajustar las variables de entorno (`SERVICES_CATALOG`, `COMPANY_NAME`,
+4. Ajustar las Variables de n8n (`SERVICES_CATALOG`, `COMPANY_NAME`,
    `SALES_TEAM_EMAIL`, etc.) a los datos del cliente.
 5. Activar y apuntar su formulario al nuevo webhook.
