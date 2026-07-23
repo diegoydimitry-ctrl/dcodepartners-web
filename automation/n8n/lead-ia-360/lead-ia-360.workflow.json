@@ -2,7 +2,7 @@
   "name": "Lead IA 360",
   "nodes": [
     {
-      "id": "a0c6f123-ee84-43db-8d7b-bfb50e4f0943",
+      "id": "c6c188c0-2442-40eb-9100-5b7442b0420c",
       "name": "Nota - Etapa 1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "id": "0c486a55-83f0-4fce-a99a-0eee0e962cb1",
+      "id": "2cd29416-c304-454a-8983-5a62f300a502",
       "name": "Nota - Etapa 2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -26,18 +26,18 @@
         20
       ],
       "parameters": {
-        "width": 220,
+        "width": 700,
         "height": 140,
-        "content": "## Etapa 2 · CRM\nDeduplicación por email vía upsert nativo de Airtable."
+        "content": "## Etapa 2 · Anti-spam y CRM\nVerificación del token de Cloudflare Turnstile contra la API de Cloudflare, y deduplicación por email vía upsert nativo de Airtable."
       }
     },
     {
-      "id": "3e292dbb-51b4-4873-99a3-8670c7fe7722",
+      "id": "618459fa-31ea-4489-ba73-45f1d7153919",
       "name": "Nota - Etapa 3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        960,
+        1440,
         20
       ],
       "parameters": {
@@ -47,12 +47,12 @@
       }
     },
     {
-      "id": "d841f787-6d9a-4c38-8bee-24a194a96565",
+      "id": "f4c176fb-7d92-4445-8d6a-b80af4f66ca8",
       "name": "Nota - Etapa 4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1440,
+        1920,
         -120
       ],
       "parameters": {
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "d56e51c3-058e-438c-976f-8ce4442acfb6",
+      "id": "c51c4a62-7ef7-4b4d-bcae-1778b975bfbb",
       "name": "Webhook - Recepción de Lead",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -70,17 +70,19 @@
         0,
         380
       ],
-      "notes": "Punto de entrada único (POST). responseMode=responseNode: el código de estado y el cuerpo de la respuesta los controla el nodo Respond to Webhook correspondiente, nunca la respuesta automática de n8n.",
-      "webhookId": "ce28958b-a7c1-4526-a536-519d46f795fa",
+      "notes": "Punto de entrada único (POST). responseMode=responseNode: el código de estado y el cuerpo de la respuesta los controla el nodo Respond to Webhook correspondiente, nunca la respuesta automática de n8n. allowedOrigins restringe el CORS a los dominios reales del formulario (el navegador llama a este webhook directamente).",
+      "webhookId": "44455071-b600-4c59-89ea-d63d49a4bfe5",
       "parameters": {
         "httpMethod": "POST",
         "path": "lead-ia-360",
         "responseMode": "responseNode",
-        "options": {}
+        "options": {
+          "allowedOrigins": "https://dcodepartners.com, https://www.dcodepartners.com"
+        }
       }
     },
     {
-      "id": "0797ece6-00d8-4304-9684-7935791b1ca6",
+      "id": "257a8bff-db26-4bf8-b45a-ecca94f6b102",
       "name": "Normalizar y Validar Lead",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -91,11 +93,11 @@
       "notes": "Normaliza campos ES/EN, valida datos obligatorios, genera Lead ID determinista (hash del email) y construye el prompt de Gemini. Emite logs de recepción y de error de validación.",
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// ============================================================================\n// Normaliza el payload del formulario (acepta variantes ES/EN de nombre de\n// campo), valida los datos obligatorios, genera un Lead ID determinista\n// (hash del email -> estable entre reenvíos del mismo lead) y construye el\n// prompt de análisis para Gemini. Registra logs estructurados de cada\n// intento, válido o inválido, para trazabilidad.\n// ============================================================================\ntry {\n  const body = $json.body ?? $json;\n\n  const pick = (...keys) => {\n    for (const key of keys) {\n      const value = body[key];\n      if (typeof value === 'string' && value.trim()) return value.trim();\n    }\n    return '';\n  };\n\n  const lead = {\n    nombre: pick('nombre', 'name', 'fullName', 'full_name'),\n    empresa: pick('empresa', 'company', 'organizacion'),\n    email: pick('email', 'correo', 'mail').toLowerCase(),\n    telefono: pick('telefono', 'phone', 'tel', 'movil'),\n    mensaje: pick('mensaje', 'message', 'comentarios', 'comments'),\n    servicioInteres: pick('servicio_interes', 'service', 'servicio', 'interest'),\n    origen: pick('origen', 'source', 'utm_source') || 'formulario_web',\n  };\n\n  const errors = [];\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n  if (!lead.nombre) errors.push('El campo \"nombre\" es obligatorio.');\n  if (!lead.email || !emailRegex.test(lead.email)) errors.push('El campo \"email\" no es válido.');\n  if (!lead.mensaje || lead.mensaje.length < 10) errors.push('El campo \"mensaje\" debe tener al menos 10 caracteres.');\n\n  // Secreto compartido opcional: si se configura la variable de n8n\n  // WEBHOOK_SECRET (Settings -> Variables), el formulario debe enviar la\n  // cabecera x-webhook-secret con ese valor.\n  const webhookSecret = $vars.WEBHOOK_SECRET;\n  if (webhookSecret) {\n    const receivedSecret = $json.headers?.['x-webhook-secret'];\n    if (receivedSecret !== webhookSecret) errors.push('Token de autenticación inválido.');\n  }\n\n  if (errors.length > 0) {\n    console.warn(JSON.stringify({\n      evento: 'lead_invalido', errores: errors, email: lead.email || null,\n      timestamp: new Date().toISOString(),\n    }));\n    return [{ json: { valid: false, statusCode: 400, errors } }];\n  }\n\n  // Lead ID determinista a partir del email: la misma persona reenviando el\n  // formulario siempre produce el mismo Lead ID, coherente con el upsert\n  // por email en Airtable (elimina duplicados en origen).\n  const hashEmail = (str) => {\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;\n    return hash.toString(36);\n  };\n  lead.leadId = `lead_${hashEmail(lead.email)}`;\n  lead.receivedAt = new Date().toISOString();\n\n  // Catálogo de servicios configurable por cliente vía variable de n8n\n  // (Settings -> Variables), para poder reutilizar este mismo workflow al\n  // vender la plantilla a otros clientes sin tocar el prompt.\n  const servicesCatalog = $vars.SERVICES_CATALOG\n    || 'automatización de procesos con IA, agentes de IA a medida, chatbots y asistentes virtuales, integración de sistemas (CRM/ERP) y consultoría de transformación digital con IA';\n\n  const geminiPrompt = `Eres el analista comercial senior de D-Code Partners, una consultora especializada en automatización e inteligencia artificial para empresas. Analiza el siguiente lead recién recibido desde el formulario web y devuelve una evaluación objetiva y accionable para el equipo comercial.\n\nCriterios a evaluar:\n- Calidad y completitud de la información proporcionada (datos de contacto válidos, contexto claro, detalle real del mensaje).\n- Señales de intención de compra explícitas o implícitas (urgencia expresada, presupuesto, plazos, dolor de negocio concreto).\n- Encaje del lead con el catálogo de servicios: ${servicesCatalog}.\n- Nivel de urgencia percibido (¿necesita una solución ya, a corto plazo, o está explorando opciones?).\n\nDatos del lead:\n- Nombre: ${lead.nombre}\n- Empresa: ${lead.empresa || 'No especificada'}\n- Email: ${lead.email}\n- Teléfono: ${lead.telefono || 'No especificado'}\n- Servicio de interés indicado: ${lead.servicioInteres || 'No especificado'}\n- Mensaje del lead: \"${lead.mensaje}\"\n- Origen del formulario: ${lead.origen}\n- Fecha de recepción: ${lead.receivedAt}\n\nCriterios de puntuación:\n- score_ia (0-100): 0-30 lead frío/poco cualificado, 31-60 lead tibio con potencial, 61-100 lead caliente con alta intención de compra.\n- prioridad: \"Alta\" si score_ia >= 75 o hay urgencia explícita; \"Media\" si score_ia está entre 45 y 74; \"Baja\" si score_ia < 45.\n- probabilidad_compra (0-100): probabilidad estimada de conversión a cliente en los próximos 30 días.\n- urgencia: \"Alta\", \"Media\" o \"Baja\" según el lenguaje y contexto del mensaje.\n- servicio_recomendado: el servicio del catálogo que mejor resuelve la necesidad expresada.\n- resumen_comercial: 2-3 frases con el diagnóstico del lead para el equipo comercial, sin repetir literalmente su mensaje.\n- siguiente_accion: acción concreta y específica que debe tomar el equipo comercial en las próximas 24-48h (nunca genérica como \"contactar al cliente\").\n\nSé objetivo, básate solo en la información proporcionada y no inventes datos que no estén presentes.`;\n\n  // El body completo de la petición a Gemini se construye y serializa aquí\n  // (JS real, sin límites del parser de expresiones) para que el nodo HTTP\n  // Request solo tenga que referenciar un string ya válido. Construir este\n  // mismo objeto directamente dentro de una expresión {{ }} del nodo HTTP\n  // falla en n8n con \"[invalid syntax]\": el motor de expresiones (basado en\n  // jsep) no soporta de forma fiable objetos anidados de este tamaño.\n  const geminiRequestBody = JSON.stringify({\n    contents: [{ parts: [{ text: geminiPrompt }] }],\n    generationConfig: {\n      temperature: 0.3,\n      responseMimeType: 'application/json',\n      responseSchema: {\n        type: 'OBJECT',\n        properties: {\n          score_ia: { type: 'INTEGER' },\n          prioridad: { type: 'STRING', enum: ['Alta', 'Media', 'Baja'] },\n          probabilidad_compra: { type: 'INTEGER' },\n          urgencia: { type: 'STRING', enum: ['Alta', 'Media', 'Baja'] },\n          servicio_recomendado: { type: 'STRING' },\n          resumen_comercial: { type: 'STRING' },\n          siguiente_accion: { type: 'STRING' },\n        },\n        required: [\n          'score_ia', 'prioridad', 'probabilidad_compra', 'urgencia',\n          'servicio_recomendado', 'resumen_comercial', 'siguiente_accion',\n        ],\n      },\n    },\n  });\n\n  console.log(JSON.stringify({\n    evento: 'lead_recibido', leadId: lead.leadId, email: lead.email,\n    origen: lead.origen, timestamp: lead.receivedAt,\n  }));\n\n  return [{ json: { valid: true, lead, geminiPrompt, geminiRequestBody } }];\n} catch (err) {\n  console.error(JSON.stringify({\n    evento: 'error_normalizacion', mensaje: err.message,\n    timestamp: new Date().toISOString(),\n  }));\n  return [{ json: { valid: false, statusCode: 500, errors: ['Error interno al procesar el lead.'] } }];\n}\n"
+        "jsCode": "// ============================================================================\n// Normaliza el payload del formulario (acepta variantes ES/EN de nombre de\n// campo), valida los datos obligatorios, genera un Lead ID determinista\n// (hash del email -> estable entre reenvíos del mismo lead) y construye el\n// prompt de análisis para Gemini. Registra logs estructurados de cada\n// intento, válido o inválido, para trazabilidad.\n// ============================================================================\ntry {\n  const body = $json.body ?? $json;\n\n  const pick = (...keys) => {\n    for (const key of keys) {\n      const value = body[key];\n      if (typeof value === 'string' && value.trim()) return value.trim();\n    }\n    return '';\n  };\n\n  const lead = {\n    nombre: pick('nombre', 'name', 'fullName', 'full_name'),\n    empresa: pick('empresa', 'company', 'organizacion'),\n    email: pick('email', 'correo', 'mail').toLowerCase(),\n    telefono: pick('telefono', 'phone', 'tel', 'movil'),\n    // El formulario público NO exige \"mensaje\" (campo opcional en el HTML),\n    // así que aquí también es opcional: se completa con un valor por\n    // defecto en vez de rechazar el envío.\n    mensaje: pick('mensaje', 'message', 'comentarios', 'comments') || 'Sin mensaje adicional.',\n    servicioInteres: pick('servicio_interes', 'service', 'servicio', 'interest'),\n    origen: pick('origen', 'source', 'utm_source') || 'formulario_web',\n  };\n  // Token de Cloudflare Turnstile: no forma parte de los datos del lead,\n  // se valida aparte contra la API de Cloudflare en el siguiente nodo.\n  const turnstileToken = pick('turnstileToken', 'turnstile_token', 'cf-turnstile-response');\n\n  const errors = [];\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\n  if (!lead.nombre) errors.push('El campo \"nombre\" es obligatorio.');\n  if (!lead.email || !emailRegex.test(lead.email)) errors.push('El campo \"email\" no es válido.');\n  if (!turnstileToken) errors.push('Verificación anti-spam requerida.');\n\n  // Secreto compartido opcional: si se configura la variable de n8n\n  // WEBHOOK_SECRET (Settings -> Variables), el formulario debe enviar la\n  // cabecera x-webhook-secret con ese valor.\n  const webhookSecret = $vars.WEBHOOK_SECRET;\n  if (webhookSecret) {\n    const receivedSecret = $json.headers?.['x-webhook-secret'];\n    if (receivedSecret !== webhookSecret) errors.push('Token de autenticación inválido.');\n  }\n\n  if (errors.length > 0) {\n    console.warn(JSON.stringify({\n      evento: 'lead_invalido', errores: errors, email: lead.email || null,\n      timestamp: new Date().toISOString(),\n    }));\n    return [{ json: { valid: false, statusCode: 400, errors } }];\n  }\n\n  // Lead ID determinista a partir del email: la misma persona reenviando el\n  // formulario siempre produce el mismo Lead ID, coherente con el upsert\n  // por email en Airtable (elimina duplicados en origen).\n  const hashEmail = (str) => {\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;\n    return hash.toString(36);\n  };\n  lead.leadId = `lead_${hashEmail(lead.email)}`;\n  lead.receivedAt = new Date().toISOString();\n\n  // Catálogo de servicios configurable por cliente vía variable de n8n\n  // (Settings -> Variables), para poder reutilizar este mismo workflow al\n  // vender la plantilla a otros clientes sin tocar el prompt.\n  const servicesCatalog = $vars.SERVICES_CATALOG\n    || 'automatización de procesos con IA, agentes de IA a medida, chatbots y asistentes virtuales, integración de sistemas (CRM/ERP) y consultoría de transformación digital con IA';\n\n  const geminiPrompt = `Eres el analista comercial senior de D-Code Partners, una consultora especializada en automatización e inteligencia artificial para empresas. Analiza el siguiente lead recién recibido desde el formulario web y devuelve una evaluación objetiva y accionable para el equipo comercial.\n\nCriterios a evaluar:\n- Calidad y completitud de la información proporcionada (datos de contacto válidos, contexto claro, detalle real del mensaje).\n- Señales de intención de compra explícitas o implícitas (urgencia expresada, presupuesto, plazos, dolor de negocio concreto).\n- Encaje del lead con el catálogo de servicios: ${servicesCatalog}.\n- Nivel de urgencia percibido (¿necesita una solución ya, a corto plazo, o está explorando opciones?).\n\nDatos del lead:\n- Nombre: ${lead.nombre}\n- Empresa: ${lead.empresa || 'No especificada'}\n- Email: ${lead.email}\n- Teléfono: ${lead.telefono || 'No especificado'}\n- Servicio de interés indicado: ${lead.servicioInteres || 'No especificado'}\n- Mensaje del lead: \"${lead.mensaje}\"\n- Origen del formulario: ${lead.origen}\n- Fecha de recepción: ${lead.receivedAt}\n\nCriterios de puntuación:\n- score_ia (0-100): 0-30 lead frío/poco cualificado, 31-60 lead tibio con potencial, 61-100 lead caliente con alta intención de compra.\n- prioridad: \"Alta\" si score_ia >= 75 o hay urgencia explícita; \"Media\" si score_ia está entre 45 y 74; \"Baja\" si score_ia < 45.\n- probabilidad_compra (0-100): probabilidad estimada de conversión a cliente en los próximos 30 días.\n- urgencia: \"Alta\", \"Media\" o \"Baja\" según el lenguaje y contexto del mensaje.\n- servicio_recomendado: el servicio del catálogo que mejor resuelve la necesidad expresada.\n- resumen_comercial: 2-3 frases con el diagnóstico del lead para el equipo comercial, sin repetir literalmente su mensaje.\n- siguiente_accion: acción concreta y específica que debe tomar el equipo comercial en las próximas 24-48h (nunca genérica como \"contactar al cliente\").\n\nSé objetivo, básate solo en la información proporcionada y no inventes datos que no estén presentes.`;\n\n  // El body completo de la petición a Gemini se construye y serializa aquí\n  // (JS real, sin límites del parser de expresiones) para que el nodo HTTP\n  // Request solo tenga que referenciar un string ya válido. Construir este\n  // mismo objeto directamente dentro de una expresión {{ }} del nodo HTTP\n  // falla en n8n con \"[invalid syntax]\": el motor de expresiones (basado en\n  // jsep) no soporta de forma fiable objetos anidados de este tamaño.\n  const geminiRequestBody = JSON.stringify({\n    contents: [{ parts: [{ text: geminiPrompt }] }],\n    generationConfig: {\n      temperature: 0.3,\n      responseMimeType: 'application/json',\n      responseSchema: {\n        type: 'OBJECT',\n        properties: {\n          score_ia: { type: 'INTEGER' },\n          prioridad: { type: 'STRING', enum: ['Alta', 'Media', 'Baja'] },\n          probabilidad_compra: { type: 'INTEGER' },\n          urgencia: { type: 'STRING', enum: ['Alta', 'Media', 'Baja'] },\n          servicio_recomendado: { type: 'STRING' },\n          resumen_comercial: { type: 'STRING' },\n          siguiente_accion: { type: 'STRING' },\n        },\n        required: [\n          'score_ia', 'prioridad', 'probabilidad_compra', 'urgencia',\n          'servicio_recomendado', 'resumen_comercial', 'siguiente_accion',\n        ],\n      },\n    },\n  });\n\n  console.log(JSON.stringify({\n    evento: 'lead_recibido', leadId: lead.leadId, email: lead.email,\n    origen: lead.origen, timestamp: lead.receivedAt,\n  }));\n\n  return [{ json: { valid: true, lead, geminiPrompt, geminiRequestBody, turnstileToken } }];\n} catch (err) {\n  console.error(JSON.stringify({\n    evento: 'error_normalizacion', mensaje: err.message,\n    timestamp: new Date().toISOString(),\n  }));\n  return [{ json: { valid: false, statusCode: 500, errors: ['Error interno al procesar el lead.'] } }];\n}\n"
       }
     },
     {
-      "id": "37bab37e-3ece-47a2-bb96-b6a3e911997a",
+      "id": "90859590-f1c7-4d4c-a2c5-5dab16894cc7",
       "name": "¿Lead Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -129,7 +131,7 @@
       }
     },
     {
-      "id": "0f237cdf-b7d6-4ed5-8930-afd9151f9bce",
+      "id": "80220acc-89bb-43d6-8a47-333094ee0ba1",
       "name": "Responder Error de Validación",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -137,22 +139,92 @@
         720,
         620
       ],
-      "notes": "Única salida de error del webhook: la petición nunca se queda sin respuesta. Código de estado tomado del propio payload de validación.",
+      "notes": "Salida de error del webhook: la petición nunca se queda sin respuesta. Reutilizada tanto por la validación de datos como por el rechazo de Turnstile (fallback de \"errors\" si el nodo previo no trae ese campo). Código de estado tomado del propio payload, 400 por defecto.",
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { success: false, errors: $json.errors } }}",
+        "responseBody": "={{ { success: false, errors: $json.errors || ['Verificación anti-spam fallida. Inténtalo de nuevo.'] } }}",
         "options": {
           "responseCode": "={{ $json.statusCode || 400 }}"
         }
       }
     },
     {
-      "id": "8507cb72-fee3-4e27-bf38-153248887321",
+      "id": "9af5ba8a-d8c9-46e1-b691-d65171855b23",
+      "name": "Verificar Turnstile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        200
+      ],
+      "notes": "Valida el token de Cloudflare Turnstile contra la API de Cloudflare (siteverify). Necesario porque, al llamar al webhook directamente desde el navegador, ya no existe backend intermedio que pueda guardar el secreto y hacer esta verificación por el cliente.",
+      "parameters": {
+        "method": "POST",
+        "url": "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "secret",
+              "value": "={{ $vars.TURNSTILE_SECRET_KEY }}"
+            },
+            {
+              "name": "response",
+              "value": "={{ $json.turnstileToken }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "40ec205c-12d8-4e40-9697-8eebeffb479c",
+      "name": "¿Turnstile Válido?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        200
+      ],
+      "notes": "Si Cloudflare no confirma el token (token inválido/caducado, o la propia verificación falló), se corta aquí — mismo comportamiento que tenía antes /api/send. Falla cerrado: un fallo de red hacia Cloudflare también bloquea el envío.",
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-turnstile-valido",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "56847359-b314-466b-8fab-0425489eabb5",
       "name": "Airtable - Crear o Actualizar Lead",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
       "position": [
-        720,
+        1200,
         200
       ],
       "notes": "Upsert nativo por Email: crea el lead si es nuevo, actualiza sus datos de contacto si ya existía. Deduplicación resuelta en origen, sin lógica custom de búsqueda. Reintenta 2 veces ante fallo transitorio y continúa el flujo si falla definitivamente (se registra como crmError más adelante).",
@@ -203,12 +275,12 @@
       }
     },
     {
-      "id": "fd8fa0e5-efbf-4a57-8786-b0ef2675bed5",
+      "id": "d8d4b53c-92a9-4d73-9922-4723c1247891",
       "name": "Gemini - Analizar Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        960,
+        1440,
         200
       ],
       "notes": "Llamada a Gemini con salida JSON estructurada (responseSchema). El body ya viene serializado desde el nodo anterior (geminiRequestBody) — evita el bug de \"[invalid syntax]\" del parser de expresiones con objetos JS grandes. 3 reintentos automáticos ante error transitorio. Si falla definitivamente, continúa el flujo con error controlado en vez de romper el workflow.",
@@ -237,12 +309,12 @@
       }
     },
     {
-      "id": "60a976c6-f1f6-4a7e-9847-bf46144a235a",
+      "id": "49f11b32-5ff6-4eb8-a604-0845f7fd9513",
       "name": "Interpretar Análisis IA",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1200,
+        1680,
         200
       ],
       "notes": "Parsea y valida el JSON de Gemini. Aplica valores de reserva si el análisis o el upsert en Airtable fallaron (aiError / crmError). Emite logs estructurados de auditoría por cada lead procesado.",
@@ -252,12 +324,12 @@
       }
     },
     {
-      "id": "d28fd2eb-5872-4c54-942e-94fa699d829e",
+      "id": "1c418464-4e49-4ca2-ac2e-54badaa23b3e",
       "name": "¿Registro CRM Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1440,
+        1920,
         60
       ],
       "notes": "Evita intentar actualizar Airtable si el upsert anterior ya falló (ya quedó registrado como crmError en el log de auditoría).",
@@ -286,12 +358,12 @@
       }
     },
     {
-      "id": "cf0ae299-5e90-4d5e-ac1d-b2b01338baea",
+      "id": "1edc4e9e-b9a3-4780-9046-27e2ac207cf8",
       "name": "Airtable - Actualizar Análisis IA",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
       "position": [
-        1680,
+        2160,
         60
       ],
       "notes": "Escribe el resultado del análisis de IA en el CRM (score, prioridad, resumen, siguiente acción). Reintenta ante fallo transitorio; si falla definitivamente no bloquea el resto del flujo.",
@@ -342,12 +414,12 @@
       }
     },
     {
-      "id": "5b8ca927-118f-4ac0-b027-d8768861e7bf",
+      "id": "c904f329-aa68-4a17-b871-8afd1ef1d3f4",
       "name": "Responder Éxito al Formulario",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
       "position": [
-        1440,
+        1920,
         220
       ],
       "notes": "Responde al cliente en cuanto hay score de IA, en paralelo a la actualización de Airtable y al envío de emails: la latencia percibida no depende de esos pasos.",
@@ -360,12 +432,12 @@
       }
     },
     {
-      "id": "f810f5df-7229-4d34-bad6-66af7e96175c",
+      "id": "be19dbeb-aaea-4f57-9ae4-653d610f3606",
       "name": "Gmail - Email de Confirmación al Cliente",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1440,
+        1920,
         380
       ],
       "notes": "Email personalizado de confirmación. Efecto secundario en paralelo: no bloquea la respuesta del webhook ni la actualización del CRM. Reintenta ante fallo transitorio de la API de Gmail.",
@@ -390,12 +462,12 @@
       }
     },
     {
-      "id": "2c87af62-3093-4638-a4c9-0ba158719d94",
+      "id": "e5ad1d1f-8e99-499e-8ba4-a03ac47ebaf9",
       "name": "¿Prioridad Alta?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1440,
+        1920,
         560
       ],
       "notes": "Filtra los leads que requieren atención comercial inmediata.",
@@ -423,12 +495,12 @@
       }
     },
     {
-      "id": "4ab5dfc6-1826-4d90-a5c7-f1efaec22507",
+      "id": "12f1ca53-0e58-4506-aff8-55bc602740e3",
       "name": "Gmail - Alerta Interna Lead Prioritario",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1680,
+        2160,
         560
       ],
       "notes": "Notifica al equipo comercial en tiempo real ante un lead caliente, con el resumen y la acción recomendada por la IA.",
@@ -477,6 +549,35 @@
       ]
     },
     "¿Lead Válido?": {
+      "main": [
+        [
+          {
+            "node": "Verificar Turnstile",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder Error de Validación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Turnstile": {
+      "main": [
+        [
+          {
+            "node": "¿Turnstile Válido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Turnstile Válido?": {
       "main": [
         [
           {

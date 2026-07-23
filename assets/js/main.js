@@ -338,10 +338,17 @@
     }
   }
 
-  /* ---------- Contact form (Turnstile + /api/send) ---------- */
+  /* ---------- Contact form (Turnstile + webhook n8n directo) ----------
+     Envío directo al webhook de producción del workflow "Lead IA 360" en
+     n8n — sin backend intermedio. n8n valida el lead, lo guarda en
+     Airtable, lo analiza con Gemini y envía los emails de confirmación y
+     alerta interna; aquí solo se interpreta la respuesta HTTP. */
   var form = document.getElementById('contact-form');
   var note = document.getElementById('form-note');
   if (form && note) {
+    var N8N_WEBHOOK_URL = 'https://diegoydimitry.app.n8n.cloud/webhook/lead-ia-360';
+    var FALLBACK_EMAIL = 'dcodedepartment@gmail.com';
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       var button = form.querySelector('button');
@@ -365,14 +372,17 @@
       };
 
       try {
-        var respuesta = await fetch('/api/send', {
+        var respuesta = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(datos)
         });
 
+        var cuerpo = null;
+        try { cuerpo = await respuesta.json(); } catch (parseErr) { cuerpo = null; }
+
         if (respuesta.ok) {
-          note.textContent = '¡Solicitud enviada correctamente!';
+          note.textContent = 'Solicitud enviada correctamente. Nos pondremos en contacto contigo muy pronto.';
           note.className = 'form-note ok';
           form.reset();
           turnstile.reset();
@@ -380,13 +390,25 @@
             note.textContent = '';
             note.className = 'form-note';
           }, 4000);
-        } else {
-          note.textContent = 'Ha ocurrido un error al enviar la solicitud.';
+        } else if (respuesta.status === 400) {
+          var detalle = cuerpo && Array.isArray(cuerpo.errors) && cuerpo.errors.length
+            ? cuerpo.errors[0]
+            : 'Revisa los datos del formulario e inténtalo de nuevo.';
+          note.textContent = detalle;
           note.className = 'form-note err';
+        } else if (respuesta.status === 404) {
+          note.textContent = 'El servicio no está disponible en este momento. Escríbenos a ' + FALLBACK_EMAIL + '.';
+          note.className = 'form-note err';
+          console.error('[contact-form] Webhook de n8n no encontrado (404). ¿Workflow activo?', N8N_WEBHOOK_URL);
+        } else {
+          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos.';
+          note.className = 'form-note err';
+          console.error('[contact-form] Error del webhook de n8n:', respuesta.status, cuerpo);
         }
       } catch (err) {
-        note.textContent = 'No se pudo conectar con el servidor.';
+        note.textContent = 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
         note.className = 'form-note err';
+        console.error('[contact-form] Fallo de red al llamar al webhook de n8n:', err);
       }
 
       button.disabled = false;

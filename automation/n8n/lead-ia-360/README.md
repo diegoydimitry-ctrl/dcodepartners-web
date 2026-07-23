@@ -6,6 +6,23 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
+> **v5 — el formulario de dcodepartners.com llama a este webhook
+> directamente desde el navegador** (`fetch()` en `assets/js/main.js`,
+> ya no existe `/api/send` ni ningún backend intermedio). Eso traslada dos
+> responsabilidades que antes cubría esa función serverless al propio
+> workflow:
+> 1. **Verificación de Cloudflare Turnstile** — nodos nuevos "Verificar
+>    Turnstile" (llama a `siteverify` de Cloudflare) y "¿Turnstile
+>    Válido?". Falla cerrado: token inválido, caducado, o un fallo de red
+>    hacia Cloudflare bloquean el envío igual que antes.
+> 2. **CORS** — el nodo Webhook restringe `options.allowedOrigins` a
+>    `https://dcodepartners.com` y `https://www.dcodepartners.com` (antes
+>    no hacía falta, la llamada era same-origin vía `/api/send`).
+>
+> También se relajó la validación de `mensaje` a opcional (con valor por
+> defecto "Sin mensaje adicional.") para que coincida con el HTML real del
+> formulario, donde ese campo nunca fue `required`.
+>
 > **v4 — verificado contra n8n Cloud real.** El body de la petición a
 > Gemini (prompt + `responseSchema`) ya no se construye como expresión
 > `{{ {...} }}` inline en el nodo HTTP Request: ese patrón, con un objeto
@@ -38,22 +55,25 @@ ningún nodo**.
 ## Arquitectura
 
 ```
-Webhook (POST /lead-ia-360)
+Webhook (POST /lead-ia-360, CORS restringido a dcodepartners.com)
   → Normalizar y Validar Lead                    [Code]
   → ¿Lead Válido?                                [If]
       ✗ → Responder Error de Validación          [Respond to Webhook · 400/500]
-      ✓ → Airtable - Crear o Actualizar Lead     [Airtable · upsert por Email]
-        → Gemini - Analizar Lead                 [HTTP Request · Gemini API, JSON estructurado]
-        → Interpretar Análisis IA                [Code · parseo + fallback + logs]
-            → ¿Registro CRM Disponible?           [If]
-                ✓ → Airtable - Actualizar Análisis IA [Airtable · update]
-            → Responder Éxito al Formulario                [Respond to Webhook · 200]
-            → Gmail - Email de Confirmación al Cliente     [Gmail]
-            → ¿Prioridad Alta?                             [If]
-                ✓ → Gmail - Alerta Interna Lead Prioritario [Gmail]
+      ✓ → Verificar Turnstile                    [HTTP Request · Cloudflare siteverify]
+        → ¿Turnstile Válido?                     [If]
+            ✗ → Responder Error de Validación (reuso)
+            ✓ → Airtable - Crear o Actualizar Lead [Airtable · upsert por Email]
+              → Gemini - Analizar Lead             [HTTP Request · Gemini API, JSON estructurado]
+              → Interpretar Análisis IA            [Code · parseo + fallback + logs]
+                  → ¿Registro CRM Disponible?           [If]
+                      ✓ → Airtable - Actualizar Análisis IA [Airtable · update]
+                  → Responder Éxito al Formulario                [Respond to Webhook · 200]
+                  → Gmail - Email de Confirmación al Cliente     [Gmail]
+                  → ¿Prioridad Alta?                             [If]
+                      ✓ → Gmail - Alerta Interna Lead Prioritario [Gmail]
 ```
 
-13 nodos funcionales + 4 sticky notes de arquitectura (documentación visual
+15 nodos funcionales + 4 sticky notes de arquitectura (documentación visual
 por etapa en el propio canvas). Todos los nodos llevan `notes` con su
 función; el código de los nodos `Code` lleva comentarios explicando el
 porqué. Decisiones de diseño relevantes:
@@ -141,6 +161,7 @@ Crear cada una como Variable de n8n, con estos nombres exactos:
 | `COMPANY_NAME`         | Recomendada | Nombre de la empresa, usado en el email al cliente.                       |
 | `SENDER_NAME`          | No          | Cómo se autodenomina el remitente en el email ("nuestro equipo", "Diego"…). |
 | `SALES_TEAM_EMAIL`     | Sí          | Bandeja del equipo comercial para la alerta de leads prioritarios.        |
+| `TURNSTILE_SECRET_KEY` | Sí          | Secret key de Cloudflare Turnstile (Cloudflare Dashboard → Turnstile → tu widget). Sin esto, `Verificar Turnstile` rechaza todos los leads. |
 | `WEBHOOK_SECRET`       | No          | Si se define, el formulario debe enviar la cabecera `x-webhook-secret` con este valor. Déjala vacía para desactivar la comprobación. |
 
 > Si tu plan de n8n Cloud no incluye la feature "Variables", como
@@ -166,40 +187,54 @@ nodos como "credencial no configurada" — hay que enlazarlos manualmente:
    Lead Prioritario**
    → credencial `Gmail OAuth2`.
 
+**Verificar Turnstile** no lleva credencial propia: el secret se lee de la
+Variable `TURNSTILE_SECRET_KEY` (ver arriba), no de un credential de n8n.
+
+## Integración con el formulario web (dcodepartners.com)
+
+El formulario de `/contacto` (`assets/js/main.js`) llama directamente a
+`https://diegoydimitry.app.n8n.cloud/webhook/lead-ia-360` — ya no existe
+`/api/send` ni ningún backend intermedio. Si cambias el path del webhook o
+lo despliegas en otra instancia, actualiza la constante `N8N_WEBHOOK_URL`
+en ese archivo.
+
 ## Puesta en producción
 
 1. Importar `lead-ia-360.workflow.json` en n8n (Workflows → Import from
    File).
 2. Enlazar las 3 credenciales (Airtable, Header Auth de Gemini, Gmail —
    ver sección anterior).
-3. Configurar las Variables de n8n, incluyendo `AIRTABLE_BASE_ID`.
-4. Activar el workflow (`Active: ON`). n8n mostrará la URL del webhook de
-   producción — apuntar el formulario web a esa URL.
-5. Probar con una petición real:
-
-```bash
-curl -X POST "https://<tu-instancia>.app.n8n.cloud/webhook/lead-ia-360" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "nombre": "Ana Torres",
-    "empresa": "Torres Consulting",
-    "email": "ana@torresconsulting.com",
-    "telefono": "+34 600 111 222",
-    "servicio_interes": "Automatización de procesos",
-    "mensaje": "Necesitamos automatizar la gestión de facturas cuanto antes, se nos acumulan cada mes."
-  }'
-```
-
+3. Configurar las Variables de n8n, incluyendo `AIRTABLE_BASE_ID` y
+   `TURNSTILE_SECRET_KEY`.
+4. Activar el workflow (`Active: ON`). El path de producción debe
+   coincidir con `N8N_WEBHOOK_URL` en `assets/js/main.js`
+   (`/webhook/lead-ia-360`).
+5. **Probar desde el formulario real** en `https://dcodepartners.com/contacto`
+   (no por curl): el token de Turnstile solo lo genera el widget en un
+   navegador real, así que una petición curl con un `turnstileToken`
+   inventado siempre será rechazada por el nodo "Verificar Turnstile" —
+   eso es el comportamiento correcto, no un fallo.
 6. Verificar: registro creado en Airtable, email recibido en la cuenta de
    prueba, y (si el lead califica como Alta prioridad) alerta interna en
    `SALES_TEAM_EMAIL`.
-7. Repetir la misma petición (mismo `email`): debe **actualizar** el mismo
+7. Reenviar el formulario con el mismo email: debe **actualizar** el mismo
    registro de Airtable en vez de crear uno nuevo — así se valida la
    deduplicación por email.
 8. Revisar en n8n → Executions los logs de los nodos `Code` (salida
    `console.log`/`console.error` en JSON) y confirmar que no haya
    ejecuciones recurrentes con `aiError: true` o `crmError: true` (indicaría
    un problema de cuota/credenciales de Gemini o de permisos de Airtable).
+9. Si el envío falla en el navegador con un error de red/CORS (visible en
+   la consola del navegador, no en el mensaje mostrado al usuario),
+   revisa `options.allowedOrigins` en el nodo Webhook — debe incluir el
+   origen exacto desde el que se sirve la web.
+
+### Probar la lógica sin un token real de Turnstile
+
+Para probar Airtable/Gemini/Gmail de forma aislada sin pasar por
+Cloudflare, en el editor de n8n abre el nodo "Verificar Turnstile" y usa
+"Execute step" con datos de prueba (mock data) que devuelvan
+`{ "success": true }` — así avanza el flujo sin necesitar un token real.
 
 ## Replicar para un cliente nuevo
 
@@ -211,5 +246,9 @@ cliente:
 2. Crear su base de Airtable con el mismo esquema de tabla `Leads`.
 3. Enlazar sus credenciales propias (Airtable, Gemini, Gmail).
 4. Ajustar las Variables de n8n (`SERVICES_CATALOG`, `COMPANY_NAME`,
-   `SALES_TEAM_EMAIL`, etc.) a los datos del cliente.
-5. Activar y apuntar su formulario al nuevo webhook.
+   `SALES_TEAM_EMAIL`, `TURNSTILE_SECRET_KEY` con el secret de **su**
+   widget de Cloudflare Turnstile, etc.) a los datos del cliente.
+5. Cambiar `options.allowedOrigins` en el nodo Webhook al dominio real del
+   sitio del cliente (si su formulario llama al webhook directamente desde
+   el navegador, como en dcodepartners.com).
+6. Activar y apuntar su formulario al nuevo webhook.
