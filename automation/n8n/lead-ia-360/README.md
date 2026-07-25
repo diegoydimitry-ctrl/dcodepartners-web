@@ -6,6 +6,16 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
+> **v6 — columnas de Airtable remapeadas al esquema real del cliente.**
+> La tabla `Leads` real (confirmada en n8n) no coincide con el esquema
+> genérico documentado más abajo en versiones anteriores de este archivo:
+> usa `Telefono` sin tilde, `Servicio interesado`, y no tiene columnas
+> `Lead ID`, `Prioridad`, `Probabilidad de Compra`, `Servicio
+> Recomendado` ni `Error de Análisis IA`. Los dos nodos Airtable se
+> remapearon en consecuencia (ver "Esquema real" más abajo) y se activó
+> `options.typecast: true` para que Airtable acepte valores nuevos en
+> columnas de tipo Select (`Estado`, `Urgencia`) sin rechazarlos.
+>
 > **v5 — el formulario de dcodepartners.com llama a este webhook
 > directamente desde el navegador** (`fetch()` en `assets/js/main.js`,
 > ya no existe `/api/send` ni ningún backend intermedio). Eso traslada dos
@@ -120,32 +130,44 @@ porqué. Decisiones de diseño relevantes:
 3. API key de Gemini (Google AI Studio).
 4. Cuenta de Gmail conectada vía OAuth2 en n8n.
 
-## Esquema de la tabla Airtable `Leads`
+## Esquema real de la tabla Airtable `Leads` (D-Code Partners)
 
+Esto es lo que el workflow **realmente** lee/escribe, confirmado contra la
+tabla ya existente en la cuenta — no un esquema genérico de referencia.
 `Email` es la columna de coincidencia del upsert: debe existir y tener un
 único registro por dirección de email (marca el campo como único en
 Airtable si quieres reforzarlo a nivel de base).
 
-| Campo                    | Tipo                                   |
-|---------------------------|-----------------------------------------|
-| Lead ID                   | Single line text                        |
-| Nombre                    | Single line text                        |
-| Empresa                   | Single line text                        |
-| Email                      | Email (recomendado: valor único)         |
-| Teléfono                  | Phone number                            |
-| Servicio de Interés        | Single line text                        |
-| Mensaje                    | Long text                               |
-| Origen                    | Single line text                        |
-| Última Actualización        | Date (con hora)                         |
-| Estado                    | Single select: Análisis IA en curso, Analizado, Contactado, Ganado, Perdido |
-| Score IA                  | Number (entero)                         |
-| Prioridad                 | Single select: Alta, Media, Baja        |
-| Probabilidad de Compra     | Number (entero, %)                      |
-| Urgencia                  | Single select: Alta, Media, Baja        |
-| Servicio Recomendado       | Single line text                        |
-| Resumen Comercial IA        | Long text                               |
-| Siguiente Acción           | Long text                               |
-| Error de Análisis IA        | Checkbox                                |
+| Campo                | Usado por                        | Origen del valor |
+|-----------------------|-----------------------------------|-------------------|
+| Email                  | Crear/Actualizar Lead (match)      | `lead.email` |
+| Nombre                 | Crear/Actualizar Lead              | `lead.nombre` |
+| Empresa                | Crear/Actualizar Lead              | `lead.empresa` |
+| Telefono               | Crear/Actualizar Lead              | `lead.telefono` |
+| Servicio interesado    | Crear/Actualizar Lead              | `lead.servicioInteres` |
+| Necesidad              | Crear/Actualizar Lead              | `lead.mensaje` (mensaje del formulario) |
+| Origen campaña         | Crear/Actualizar Lead              | `lead.origen` |
+| Estado (select)        | Ambos nodos Airtable               | `"Análisis IA en curso"` al crear, `"Analizado"` tras el análisis |
+| Score IA               | Actualizar Análisis IA             | `scoreIA` (0-100) |
+| Urgencia (select)      | Actualizar Análisis IA             | `urgencia` (Alta/Media/Baja) |
+| Resumen IA             | Actualizar Análisis IA             | `"Servicio recomendado: X — "` + `resumenComercial` |
+| Motivo score           | Actualizar Análisis IA             | `"Prioridad: X · Probabilidad de compra: Y%"` (ver nota abajo) |
+| Próximo paso           | Actualizar Análisis IA             | `siguienteAccion` |
+
+Campos que existen en tu tabla pero que el workflow **no** rellena (no hay
+dato de origen en el formulario): `Cargo`, `Web`, `Sector`, `Pais`,
+`Fuente`, `Presupuesto`, `Fecha seguimiento`, `Notas comerciales`,
+`Responsable`. Quedan en blanco para que el equipo comercial los complete
+a mano.
+
+> **Prioridad y Probabilidad de Compra no tienen columna propia** en tu
+> tabla actual — se incrustan como texto dentro de "Motivo score" para no
+> perder el dato. Si quieres verlos como columnas propias (recomendado,
+> ya que "Prioridad" era uno de los entregables originales del proyecto):
+> añade en Airtable un campo `Prioridad` (Single select: Alta, Media,
+> Baja) y opcionalmente `Probabilidad de Compra` (Number) — avísame en
+> cuanto los crees y actualizo el nodo "Airtable - Actualizar Análisis
+> IA" para escribir ahí directamente en vez de embeberlo en texto.
 
 ## Variables de n8n (Overview / Settings → Variables)
 

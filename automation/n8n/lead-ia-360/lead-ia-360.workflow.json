@@ -2,7 +2,7 @@
   "name": "Lead IA 360",
   "nodes": [
     {
-      "id": "c6c188c0-2442-40eb-9100-5b7442b0420c",
+      "id": "c28d025d-6c07-4b2f-9b79-fbe1389cbd39",
       "name": "Nota - Etapa 1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "id": "2cd29416-c304-454a-8983-5a62f300a502",
+      "id": "8cbe3aa9-bfac-4a15-8f03-8ca19adc5ffc",
       "name": "Nota - Etapa 2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "618459fa-31ea-4489-ba73-45f1d7153919",
+      "id": "c3008db8-09a1-4ccf-ae20-8b97f95e7e1b",
       "name": "Nota - Etapa 3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -47,7 +47,7 @@
       }
     },
     {
-      "id": "f4c176fb-7d92-4445-8d6a-b80af4f66ca8",
+      "id": "52191e76-dda3-490f-b940-3c74f74d3713",
       "name": "Nota - Etapa 4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "c51c4a62-7ef7-4b4d-bcae-1778b975bfbb",
+      "id": "7c0b5b45-ed4a-4f12-b9d2-cddc313a0a16",
       "name": "Webhook - Recepción de Lead",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -71,7 +71,7 @@
         380
       ],
       "notes": "Punto de entrada único (POST). responseMode=responseNode: el código de estado y el cuerpo de la respuesta los controla el nodo Respond to Webhook correspondiente, nunca la respuesta automática de n8n. allowedOrigins restringe el CORS a los dominios reales del formulario (el navegador llama a este webhook directamente).",
-      "webhookId": "44455071-b600-4c59-89ea-d63d49a4bfe5",
+      "webhookId": "6501499e-366b-4663-aba9-b092a91907c1",
       "parameters": {
         "httpMethod": "POST",
         "path": "lead-ia-360",
@@ -82,7 +82,7 @@
       }
     },
     {
-      "id": "257a8bff-db26-4bf8-b45a-ecca94f6b102",
+      "id": "019d23f1-d755-4fd2-8715-7024e6338251",
       "name": "Normalizar y Validar Lead",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -97,7 +97,7 @@
       }
     },
     {
-      "id": "90859590-f1c7-4d4c-a2c5-5dab16894cc7",
+      "id": "508d4bde-022c-439b-9330-03f3b1caeb3c",
       "name": "¿Lead Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "80220acc-89bb-43d6-8a47-333094ee0ba1",
+      "id": "ee2c3a3b-5360-4998-a3dd-fa8974f2c839",
       "name": "Responder Error de Validación",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -149,7 +149,7 @@
       }
     },
     {
-      "id": "9af5ba8a-d8c9-46e1-b691-d65171855b23",
+      "id": "61fbf084-b949-40e5-81a3-be1a43a238e2",
       "name": "Verificar Turnstile",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -185,7 +185,7 @@
       "onError": "continueRegularOutput"
     },
     {
-      "id": "40ec205c-12d8-4e40-9697-8eebeffb479c",
+      "id": "37611836-cecb-4718-b95d-a3e89960d143",
       "name": "¿Turnstile Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -219,7 +219,7 @@
       }
     },
     {
-      "id": "56847359-b314-466b-8fab-0425489eabb5",
+      "id": "ff6328bd-a5a1-4504-93c0-946e5de5f9e7",
       "name": "Airtable - Crear o Actualizar Lead",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -227,7 +227,7 @@
         1200,
         200
       ],
-      "notes": "Upsert nativo por Email: crea el lead si es nuevo, actualiza sus datos de contacto si ya existía. Deduplicación resuelta en origen, sin lógica custom de búsqueda. Reintenta 2 veces ante fallo transitorio y continúa el flujo si falla definitivamente (se registra como crmError más adelante).",
+      "notes": "Upsert nativo por Email: crea el lead si es nuevo, actualiza sus datos de contacto si ya existía. Deduplicación resuelta en origen, sin lógica custom de búsqueda. Reintenta 2 veces ante fallo transitorio y continúa el flujo si falla definitivamente (se registra como crmError más adelante). Columnas mapeadas al esquema real de la tabla \"Leads\" del cliente (no genérico).",
       "parameters": {
         "operation": "upsert",
         "base": {
@@ -246,22 +246,22 @@
             "Email"
           ],
           "value": {
-            "Lead ID": "={{ $json.lead.leadId }}",
             "Nombre": "={{ $json.lead.nombre }}",
             "Empresa": "={{ $json.lead.empresa }}",
             "Email": "={{ $json.lead.email }}",
-            "Teléfono": "={{ $json.lead.telefono }}",
-            "Servicio de Interés": "={{ $json.lead.servicioInteres }}",
-            "Mensaje": "={{ $json.lead.mensaje }}",
-            "Origen": "={{ $json.lead.origen }}",
-            "Última Actualización": "={{ $json.lead.receivedAt }}",
+            "Telefono": "={{ $json.lead.telefono }}",
+            "Servicio interesado": "={{ $json.lead.servicioInteres }}",
+            "Necesidad": "={{ $json.lead.mensaje }}",
+            "Origen campaña": "={{ $json.lead.origen }}",
             "Estado": "Análisis IA en curso"
           },
           "schema": [],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
-        "options": {}
+        "options": {
+          "typecast": true
+        }
       },
       "retryOnFail": true,
       "maxTries": 2,
@@ -275,7 +275,7 @@
       }
     },
     {
-      "id": "d8d4b53c-92a9-4d73-9922-4723c1247891",
+      "id": "c9f3ba8a-6874-4ed2-8734-e6b9ce997064",
       "name": "Gemini - Analizar Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -309,7 +309,7 @@
       }
     },
     {
-      "id": "49f11b32-5ff6-4eb8-a604-0845f7fd9513",
+      "id": "d98cfd49-171e-48f4-8c36-c4e001fe0843",
       "name": "Interpretar Análisis IA",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -324,7 +324,7 @@
       }
     },
     {
-      "id": "1c418464-4e49-4ca2-ac2e-54badaa23b3e",
+      "id": "a7d09c31-b386-4457-b58d-a2c41af71ace",
       "name": "¿Registro CRM Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -358,7 +358,7 @@
       }
     },
     {
-      "id": "1edc4e9e-b9a3-4780-9046-27e2ac207cf8",
+      "id": "448c6a5a-f9ff-4a1c-b6ec-2c781917c1df",
       "name": "Airtable - Actualizar Análisis IA",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -366,7 +366,7 @@
         2160,
         60
       ],
-      "notes": "Escribe el resultado del análisis de IA en el CRM (score, prioridad, resumen, siguiente acción). Reintenta ante fallo transitorio; si falla definitivamente no bloquea el resto del flujo.",
+      "notes": "Escribe el resultado del análisis de IA en el CRM. La tabla real del cliente no tiene columnas dedicadas para Prioridad ni Probabilidad de Compra: se incrustan como texto legible en \"Motivo score\" (ver recomendación en el README para añadir un campo \"Prioridad\" dedicado). Reintenta ante fallo transitorio; si falla definitivamente no bloquea el resto del flujo.",
       "parameters": {
         "operation": "update",
         "base": {
@@ -387,20 +387,19 @@
           "value": {
             "id": "={{ $json.airtableRecordId }}",
             "Score IA": "={{ $json.scoreIA }}",
-            "Prioridad": "={{ $json.prioridad }}",
-            "Probabilidad de Compra": "={{ $json.probabilidadCompra }}",
             "Urgencia": "={{ $json.urgencia }}",
-            "Servicio Recomendado": "={{ $json.servicioRecomendado }}",
-            "Resumen Comercial IA": "={{ $json.resumenComercial }}",
-            "Siguiente Acción": "={{ $json.siguienteAccion }}",
-            "Error de Análisis IA": "={{ $json.aiError }}",
+            "Resumen IA": "={{ 'Servicio recomendado: ' + $json.servicioRecomendado + ' — ' + $json.resumenComercial }}",
+            "Motivo score": "={{ 'Prioridad: ' + $json.prioridad + ' · Probabilidad de compra: ' + $json.probabilidadCompra + '%' }}",
+            "Próximo paso": "={{ $json.siguienteAccion }}",
             "Estado": "Analizado"
           },
           "schema": [],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
         },
-        "options": {}
+        "options": {
+          "typecast": true
+        }
       },
       "retryOnFail": true,
       "maxTries": 2,
@@ -414,7 +413,7 @@
       }
     },
     {
-      "id": "c904f329-aa68-4a17-b871-8afd1ef1d3f4",
+      "id": "4faa9c47-c937-499d-8050-aa32746cb89c",
       "name": "Responder Éxito al Formulario",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -432,7 +431,7 @@
       }
     },
     {
-      "id": "be19dbeb-aaea-4f57-9ae4-653d610f3606",
+      "id": "9788968a-6627-4b08-be87-29e52a168cfe",
       "name": "Gmail - Email de Confirmación al Cliente",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
@@ -462,7 +461,7 @@
       }
     },
     {
-      "id": "e5ad1d1f-8e99-499e-8ba4-a03ac47ebaf9",
+      "id": "547f7836-c8a8-49a1-979c-ec9dcd6b8169",
       "name": "¿Prioridad Alta?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -495,7 +494,7 @@
       }
     },
     {
-      "id": "12f1ca53-0e58-4506-aff8-55bc602740e3",
+      "id": "a9961ff5-3c84-465c-81b6-9cfada7ad51a",
       "name": "Gmail - Alerta Interna Lead Prioritario",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
