@@ -2,7 +2,7 @@
   "name": "Lead IA 360",
   "nodes": [
     {
-      "id": "614ecb54-79a2-4a2f-8fc5-de0cb9f423a3",
+      "id": "18214e0d-07d9-456a-8445-81af45db89c7",
       "name": "Nota - Etapa 1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "id": "6c54a9be-1290-47ef-9b24-55bb783550aa",
+      "id": "f448d5cc-4de9-48c6-81e5-069d0f7d8124",
       "name": "Nota - Etapa 2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "3760c861-e3d4-4320-aa3a-5efbc3fbaee9",
+      "id": "8b857a60-56e4-4cdb-95d7-5b8fad0498cc",
       "name": "Nota - Etapa 3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -47,7 +47,7 @@
       }
     },
     {
-      "id": "747958fb-4c2a-44ed-83ce-368bd0d7631a",
+      "id": "b4baaaf8-9155-43ec-bbfc-25ade43d6521",
       "name": "Nota - Etapa 4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "5d8c073f-bf76-4280-8013-ef17fb650b9c",
+      "id": "bd27319e-486c-44e1-8bc9-a01f79eb6593",
       "name": "Webhook - Recepción de Lead",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -71,7 +71,7 @@
         380
       ],
       "notes": "Punto de entrada único (POST). responseMode=responseNode: el código de estado y el cuerpo de la respuesta los controla el nodo Respond to Webhook correspondiente, nunca la respuesta automática de n8n. allowedOrigins restringe el CORS a los dominios reales del formulario (el navegador llama a este webhook directamente).",
-      "webhookId": "1b81efde-c024-4e4f-932d-ecf96cba2299",
+      "webhookId": "e2732fa1-d24c-4a17-9714-d23f7270df58",
       "parameters": {
         "httpMethod": "POST",
         "path": "lead-ia-360",
@@ -82,7 +82,7 @@
       }
     },
     {
-      "id": "e5845aab-c874-4be3-9844-e44c0701d1fd",
+      "id": "e26df4ff-491f-4c9d-a282-a7a117edc26c",
       "name": "Normalizar y Validar Lead",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -97,7 +97,7 @@
       }
     },
     {
-      "id": "df6551ec-b54c-4cb0-b2be-07e36dff0f76",
+      "id": "d2e8138b-43f5-4683-89ea-0884041d9f44",
       "name": "¿Lead Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "128c4fa6-07bb-4a01-8276-e7fcb76fb1a7",
+      "id": "1591949f-8328-4e14-a1e5-e77feda2b22b",
       "name": "Responder Error de Validación",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -149,7 +149,7 @@
       }
     },
     {
-      "id": "57e511d1-0be2-47b1-bae4-00704416e6cd",
+      "id": "0dcff92e-4950-4d88-84bb-ee597439d1eb",
       "name": "Verificar Turnstile",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -185,7 +185,7 @@
       "onError": "continueRegularOutput"
     },
     {
-      "id": "805e35c1-41a4-4120-8a90-45bb01e71e56",
+      "id": "449d6660-2267-4776-ab59-123a640ce8c0",
       "name": "¿Turnstile Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -219,7 +219,7 @@
       }
     },
     {
-      "id": "bf2d7a2a-b4a7-4f48-86ea-94490b4fa526",
+      "id": "5ad84f9e-02ee-400b-a755-8207a3cafebe",
       "name": "Airtable - Crear o Actualizar Lead",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -275,7 +275,7 @@
       }
     },
     {
-      "id": "3e6d1fc8-0eb5-4513-9915-62e3b5c0f466",
+      "id": "2cef8f6f-3ccc-4f61-a03b-052a3279a429",
       "name": "Gemini - Analizar Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -309,7 +309,7 @@
       }
     },
     {
-      "id": "ff38fd87-edca-44dd-9700-1295fdde7f9a",
+      "id": "72d9a263-1a46-4320-8b8b-bb9c0d123106",
       "name": "Interpretar Análisis IA",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -320,11 +320,11 @@
       "notes": "Parsea y valida el JSON de Gemini. Aplica valores de reserva si el análisis o el upsert en Airtable fallaron (aiError / crmError). Emite logs estructurados de auditoría por cada lead procesado.",
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// ============================================================================\n// Extrae y valida el análisis estructurado devuelto por Gemini. Si la\n// llamada a Gemini falló, devolvió un JSON incompleto, o el upsert previo\n// en Airtable falló, aplica valores de reserva y registra el incidente:\n// el lead nunca se queda sin score ni sin seguimiento comercial.\n// ============================================================================\nconst httpResponse = $json;\nconst lead = $('Normalizar y Validar Lead').item.json.lead;\nconst airtableNode = $('Airtable - Crear o Actualizar Lead').item.json;\nconst airtableRecordId = airtableNode?.id || null;\nconst crmError = !airtableRecordId;\n\nconst FALLBACK = {\n  score_ia: 50,\n  prioridad: 'Media',\n  probabilidad_compra: 50,\n  urgencia: 'Media',\n  servicio_recomendado: lead.servicioInteres || 'Por determinar',\n  resumen_comercial: 'No se pudo generar el análisis automático de este lead. Requiere revisión manual del equipo comercial.',\n  siguiente_accion: 'Revisar el lead manualmente y contactar en menos de 24h.',\n};\n\nfunction parseAnalysis() {\n  if (httpResponse.error) return null;\n  const text = httpResponse.candidates?.[0]?.content?.parts?.[0]?.text;\n  if (!text) return null;\n  try {\n    return JSON.parse(text);\n  } catch {\n    return null;\n  }\n}\n\nconst parsed = parseAnalysis();\nconst aiError = !parsed;\nconst analysis = parsed || FALLBACK;\n\nconst clamp = (value, fallback) => {\n  const n = Number(value);\n  return Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : fallback;\n};\nconst validLevel = (value, fallback) => (['Alta', 'Media', 'Baja'].includes(value) ? value : fallback);\n\nif (aiError) {\n  console.error(JSON.stringify({\n    evento: 'error_analisis_ia', leadId: lead.leadId,\n    motivo: httpResponse.error || 'respuesta_invalida_o_vacia',\n    timestamp: new Date().toISOString(),\n  }));\n}\nif (crmError) {\n  console.error(JSON.stringify({\n    evento: 'error_crm_upsert', leadId: lead.leadId,\n    motivo: airtableNode?.error || 'sin_id_de_registro',\n    timestamp: new Date().toISOString(),\n  }));\n}\n\nconst result = {\n  airtableRecordId,\n  crmError,\n  lead,\n  scoreIA: clamp(analysis.score_ia, FALLBACK.score_ia),\n  prioridad: validLevel(analysis.prioridad, FALLBACK.prioridad),\n  probabilidadCompra: clamp(analysis.probabilidad_compra, FALLBACK.probabilidad_compra),\n  urgencia: validLevel(analysis.urgencia, FALLBACK.urgencia),\n  servicioRecomendado: analysis.servicio_recomendado || FALLBACK.servicio_recomendado,\n  resumenComercial: analysis.resumen_comercial || FALLBACK.resumen_comercial,\n  siguienteAccion: analysis.siguiente_accion || FALLBACK.siguiente_accion,\n  aiError,\n};\n\nconsole.log(JSON.stringify({\n  evento: 'lead_analizado', leadId: lead.leadId, scoreIA: result.scoreIA,\n  prioridad: result.prioridad, aiError, crmError, timestamp: new Date().toISOString(),\n}));\n\nreturn [{ json: result }];\n"
+        "jsCode": "// ============================================================================\n// Extrae y valida el análisis estructurado devuelto por Gemini. Si la\n// llamada a Gemini falló, devolvió un JSON incompleto, o el upsert previo\n// en Airtable falló, aplica valores de reserva y registra el incidente:\n// el lead nunca se queda sin score ni sin seguimiento comercial.\n//\n// Todo el nodo va envuelto en try/catch: los 4 nodos que cuelgan de este\n// (Respond éxito, Airtable update, Gmail, IF prioridad) dependen de que\n// SIEMPRE devuelva el mismo shape. Sin este try/catch, cualquier fallo no\n// previsto aquí tumba toda la ejecución antes de llegar a un nodo Respond\n// to Webhook, y el navegador recibe un 500 genérico sin explicación.\n// ============================================================================\ntry {\n  const httpResponse = $json;\n  const leadNode = $('Normalizar y Validar Lead').item.json;\n  const lead = leadNode.lead || { leadId: 'desconocido', servicioInteres: '' };\n  const airtableNode = $('Airtable - Crear o Actualizar Lead').item.json;\n  const airtableRecordId = airtableNode?.id || null;\n  const crmError = !airtableRecordId;\n\n  const FALLBACK = {\n    score_ia: 50,\n    prioridad: 'Media',\n    probabilidad_compra: 50,\n    urgencia: 'Media',\n    servicio_recomendado: lead.servicioInteres || 'Por determinar',\n    resumen_comercial: 'No se pudo generar el análisis automático de este lead. Requiere revisión manual del equipo comercial.',\n    siguiente_accion: 'Revisar el lead manualmente y contactar en menos de 24h.',\n  };\n\n  function parseAnalysis() {\n    if (httpResponse.error) return null;\n    const text = httpResponse.candidates?.[0]?.content?.parts?.[0]?.text;\n    if (!text) return null;\n    try {\n      return JSON.parse(text);\n    } catch {\n      return null;\n    }\n  }\n\n  const parsed = parseAnalysis();\n  const aiError = !parsed;\n  const analysis = parsed || FALLBACK;\n\n  const clamp = (value, fallback) => {\n    const n = Number(value);\n    return Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : fallback;\n  };\n  const validLevel = (value, fallback) => (['Alta', 'Media', 'Baja'].includes(value) ? value : fallback);\n\n  if (aiError) {\n    console.error(JSON.stringify({\n      evento: 'error_analisis_ia', leadId: lead.leadId,\n      motivo: httpResponse.error || 'respuesta_invalida_o_vacia',\n      timestamp: new Date().toISOString(),\n    }));\n  }\n  if (crmError) {\n    console.error(JSON.stringify({\n      evento: 'error_crm_upsert', leadId: lead.leadId,\n      motivo: airtableNode?.error || 'sin_id_de_registro',\n      timestamp: new Date().toISOString(),\n    }));\n  }\n\n  const result = {\n    airtableRecordId,\n    crmError,\n    lead,\n    scoreIA: clamp(analysis.score_ia, FALLBACK.score_ia),\n    prioridad: validLevel(analysis.prioridad, FALLBACK.prioridad),\n    probabilidadCompra: clamp(analysis.probabilidad_compra, FALLBACK.probabilidad_compra),\n    urgencia: validLevel(analysis.urgencia, FALLBACK.urgencia),\n    servicioRecomendado: analysis.servicio_recomendado || FALLBACK.servicio_recomendado,\n    resumenComercial: analysis.resumen_comercial || FALLBACK.resumen_comercial,\n    siguienteAccion: analysis.siguiente_accion || FALLBACK.siguiente_accion,\n    aiError,\n  };\n\n  console.log(JSON.stringify({\n    evento: 'lead_analizado', leadId: lead.leadId, scoreIA: result.scoreIA,\n    prioridad: result.prioridad, aiError, crmError, timestamp: new Date().toISOString(),\n  }));\n\n  return [{ json: result }];\n} catch (err) {\n  // Red de seguridad final: pase lo que pase arriba, se devuelve un\n  // resultado con el mismo shape para que el webhook siga respondiendo\n  // 200 al formulario en vez de un 500 sin explicación.\n  console.error(JSON.stringify({\n    evento: 'error_critico_interpretacion', mensaje: err.message,\n    timestamp: new Date().toISOString(),\n  }));\n  let leadFallback = { leadId: 'desconocido', nombre: '', empresa: '', email: '', telefono: '', mensaje: '', servicioInteres: '', origen: '' };\n  try { leadFallback = $('Normalizar y Validar Lead').item.json.lead || leadFallback; } catch {}\n  return [{\n    json: {\n      airtableRecordId: null,\n      crmError: true,\n      lead: leadFallback,\n      scoreIA: 50,\n      prioridad: 'Media',\n      probabilidadCompra: 50,\n      urgencia: 'Media',\n      servicioRecomendado: 'Por determinar',\n      resumenComercial: 'Error interno al interpretar el análisis. Requiere revisión manual del equipo comercial.',\n      siguienteAccion: 'Revisar el lead manualmente y contactar en menos de 24h.',\n      aiError: true,\n    },\n  }];\n}\n"
       }
     },
     {
-      "id": "c12c721c-0886-4354-b46a-e181d34234f9",
+      "id": "dbc7cb52-a269-4d7c-af86-f7ede4d32a92",
       "name": "¿Registro CRM Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -358,7 +358,7 @@
       }
     },
     {
-      "id": "353b047b-5f0b-4ca9-a359-2532224e8135",
+      "id": "7f83a140-d2ac-45c5-b298-a4ff2c200dc2",
       "name": "Airtable - Actualizar Análisis IA",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -414,7 +414,7 @@
       }
     },
     {
-      "id": "4eda5872-d0c7-4da5-9576-0aadbc8d8081",
+      "id": "ac92b52b-e3e3-4e1d-9a03-68798b2bf6ad",
       "name": "Responder Éxito al Formulario",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -432,7 +432,7 @@
       }
     },
     {
-      "id": "8269bc22-1c11-47b7-be8b-0859a173ae23",
+      "id": "df97afcc-0af2-4d63-80e7-ba7f94c3d02e",
       "name": "Gmail - Email de Confirmación al Cliente",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
@@ -462,7 +462,7 @@
       }
     },
     {
-      "id": "e7cd7f15-a3a6-4808-b7f1-72f036cd64e8",
+      "id": "0f77a9b8-3228-4c33-9826-29a036100706",
       "name": "¿Prioridad Alta?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -495,7 +495,7 @@
       }
     },
     {
-      "id": "ee7307e8-599e-4e4b-926e-898cdf142fd9",
+      "id": "49ab0aa2-61df-4afa-bb42-70c41d815f8f",
       "name": "Gmail - Alerta Interna Lead Prioritario",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,

@@ -6,6 +6,17 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
+> **v8 — red de seguridad en "Interpretar Análisis IA".** Era el único
+> Code node del workflow sin `try/catch` propio: si algo dentro de él
+> lanzaba una excepción no prevista, tumbaba toda la ejecución antes de
+> llegar a cualquier nodo `Respond to Webhook`, y el formulario recibía un
+> 500 genérico sin explicación (exactamente el síntoma visto en el primer
+> intento real en producción: Turnstile pasaba, la petición llegaba, pero
+> `dcodepartners.com` mostraba "Ha ocurrido un error al enviar la
+> solicitud"). Ahora todo el nodo va envuelto en `try/catch` con un
+> fallback de emergencia del mismo shape que esperan los 4 nodos
+> posteriores (respuesta al formulario, Airtable, Gmail, alerta interna).
+>
 > **v7 — columna "Prioridad" dedicada.** El cliente añadió el campo
 > `Prioridad` (Single select: Alta/Media/Baja) a la tabla `Leads` real, así
 > que deja de incrustarse como texto en "Motivo score" y se escribe
