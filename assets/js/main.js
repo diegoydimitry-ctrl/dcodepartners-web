@@ -362,16 +362,16 @@
       button.disabled = true;
       button.textContent = 'Enviando...';
 
-      var datos = {
-        nombre: document.getElementById('nombre').value,
-        empresa: document.getElementById('empresa').value,
-        email: document.getElementById('email').value,
-        telefono: document.getElementById('telefono').value,
-        mensaje: document.getElementById('mensaje').value,
-        turnstileToken: turnstile.getResponse()
-      };
-
       try {
+        var datos = {
+          nombre: document.getElementById('nombre').value,
+          empresa: document.getElementById('empresa').value,
+          email: document.getElementById('email').value,
+          telefono: document.getElementById('telefono').value,
+          mensaje: document.getElementById('mensaje').value,
+          turnstileToken: turnstile.getResponse()
+        };
+
         var respuesta = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -408,11 +408,11 @@
       } catch (err) {
         note.textContent = 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
         note.className = 'form-note err';
-        console.error('[contact-form] Fallo de red al llamar al webhook de n8n:', err);
+        console.error('[contact-form] Fallo al enviar el formulario:', err);
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Solicitar mi Mes Gratuito';
       }
-
-      button.disabled = false;
-      button.textContent = 'Solicitar mi Mes Gratuito';
     });
   }
 
