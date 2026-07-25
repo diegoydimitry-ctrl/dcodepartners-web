@@ -2,7 +2,7 @@
   "name": "Lead IA 360",
   "nodes": [
     {
-      "id": "c28d025d-6c07-4b2f-9b79-fbe1389cbd39",
+      "id": "614ecb54-79a2-4a2f-8fc5-de0cb9f423a3",
       "name": "Nota - Etapa 1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "id": "8cbe3aa9-bfac-4a15-8f03-8ca19adc5ffc",
+      "id": "6c54a9be-1290-47ef-9b24-55bb783550aa",
       "name": "Nota - Etapa 2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "c3008db8-09a1-4ccf-ae20-8b97f95e7e1b",
+      "id": "3760c861-e3d4-4320-aa3a-5efbc3fbaee9",
       "name": "Nota - Etapa 3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -47,7 +47,7 @@
       }
     },
     {
-      "id": "52191e76-dda3-490f-b940-3c74f74d3713",
+      "id": "747958fb-4c2a-44ed-83ce-368bd0d7631a",
       "name": "Nota - Etapa 4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
       }
     },
     {
-      "id": "7c0b5b45-ed4a-4f12-b9d2-cddc313a0a16",
+      "id": "5d8c073f-bf76-4280-8013-ef17fb650b9c",
       "name": "Webhook - Recepción de Lead",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -71,7 +71,7 @@
         380
       ],
       "notes": "Punto de entrada único (POST). responseMode=responseNode: el código de estado y el cuerpo de la respuesta los controla el nodo Respond to Webhook correspondiente, nunca la respuesta automática de n8n. allowedOrigins restringe el CORS a los dominios reales del formulario (el navegador llama a este webhook directamente).",
-      "webhookId": "6501499e-366b-4663-aba9-b092a91907c1",
+      "webhookId": "1b81efde-c024-4e4f-932d-ecf96cba2299",
       "parameters": {
         "httpMethod": "POST",
         "path": "lead-ia-360",
@@ -82,7 +82,7 @@
       }
     },
     {
-      "id": "019d23f1-d755-4fd2-8715-7024e6338251",
+      "id": "e5845aab-c874-4be3-9844-e44c0701d1fd",
       "name": "Normalizar y Validar Lead",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -97,7 +97,7 @@
       }
     },
     {
-      "id": "508d4bde-022c-439b-9330-03f3b1caeb3c",
+      "id": "df6551ec-b54c-4cb0-b2be-07e36dff0f76",
       "name": "¿Lead Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "ee2c3a3b-5360-4998-a3dd-fa8974f2c839",
+      "id": "128c4fa6-07bb-4a01-8276-e7fcb76fb1a7",
       "name": "Responder Error de Validación",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -149,7 +149,7 @@
       }
     },
     {
-      "id": "61fbf084-b949-40e5-81a3-be1a43a238e2",
+      "id": "57e511d1-0be2-47b1-bae4-00704416e6cd",
       "name": "Verificar Turnstile",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -185,7 +185,7 @@
       "onError": "continueRegularOutput"
     },
     {
-      "id": "37611836-cecb-4718-b95d-a3e89960d143",
+      "id": "805e35c1-41a4-4120-8a90-45bb01e71e56",
       "name": "¿Turnstile Válido?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -219,7 +219,7 @@
       }
     },
     {
-      "id": "ff6328bd-a5a1-4504-93c0-946e5de5f9e7",
+      "id": "bf2d7a2a-b4a7-4f48-86ea-94490b4fa526",
       "name": "Airtable - Crear o Actualizar Lead",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -275,7 +275,7 @@
       }
     },
     {
-      "id": "c9f3ba8a-6874-4ed2-8734-e6b9ce997064",
+      "id": "3e6d1fc8-0eb5-4513-9915-62e3b5c0f466",
       "name": "Gemini - Analizar Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -309,7 +309,7 @@
       }
     },
     {
-      "id": "d98cfd49-171e-48f4-8c36-c4e001fe0843",
+      "id": "ff38fd87-edca-44dd-9700-1295fdde7f9a",
       "name": "Interpretar Análisis IA",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -324,7 +324,7 @@
       }
     },
     {
-      "id": "a7d09c31-b386-4457-b58d-a2c41af71ace",
+      "id": "c12c721c-0886-4354-b46a-e181d34234f9",
       "name": "¿Registro CRM Disponible?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -358,7 +358,7 @@
       }
     },
     {
-      "id": "448c6a5a-f9ff-4a1c-b6ec-2c781917c1df",
+      "id": "353b047b-5f0b-4ca9-a359-2532224e8135",
       "name": "Airtable - Actualizar Análisis IA",
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
@@ -366,7 +366,7 @@
         2160,
         60
       ],
-      "notes": "Escribe el resultado del análisis de IA en el CRM. La tabla real del cliente no tiene columnas dedicadas para Prioridad ni Probabilidad de Compra: se incrustan como texto legible en \"Motivo score\" (ver recomendación en el README para añadir un campo \"Prioridad\" dedicado). Reintenta ante fallo transitorio; si falla definitivamente no bloquea el resto del flujo.",
+      "notes": "Escribe el resultado del análisis de IA en el CRM, incluida la columna dedicada \"Prioridad\" (Single select: Alta/Media/Baja). La tabla real del cliente no tiene columna para Probabilidad de Compra: se incrusta como texto legible en \"Motivo score\". Reintenta ante fallo transitorio; si falla definitivamente no bloquea el resto del flujo.",
       "parameters": {
         "operation": "update",
         "base": {
@@ -387,9 +387,10 @@
           "value": {
             "id": "={{ $json.airtableRecordId }}",
             "Score IA": "={{ $json.scoreIA }}",
+            "Prioridad": "={{ $json.prioridad }}",
             "Urgencia": "={{ $json.urgencia }}",
             "Resumen IA": "={{ 'Servicio recomendado: ' + $json.servicioRecomendado + ' — ' + $json.resumenComercial }}",
-            "Motivo score": "={{ 'Prioridad: ' + $json.prioridad + ' · Probabilidad de compra: ' + $json.probabilidadCompra + '%' }}",
+            "Motivo score": "={{ 'Probabilidad de compra: ' + $json.probabilidadCompra + '%' }}",
             "Próximo paso": "={{ $json.siguienteAccion }}",
             "Estado": "Analizado"
           },
@@ -413,7 +414,7 @@
       }
     },
     {
-      "id": "4faa9c47-c937-499d-8050-aa32746cb89c",
+      "id": "4eda5872-d0c7-4da5-9576-0aadbc8d8081",
       "name": "Responder Éxito al Formulario",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
@@ -431,7 +432,7 @@
       }
     },
     {
-      "id": "9788968a-6627-4b08-be87-29e52a168cfe",
+      "id": "8269bc22-1c11-47b7-be8b-0859a173ae23",
       "name": "Gmail - Email de Confirmación al Cliente",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
@@ -461,7 +462,7 @@
       }
     },
     {
-      "id": "547f7836-c8a8-49a1-979c-ec9dcd6b8169",
+      "id": "e7cd7f15-a3a6-4808-b7f1-72f036cd64e8",
       "name": "¿Prioridad Alta?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -494,7 +495,7 @@
       }
     },
     {
-      "id": "a9961ff5-3c84-465c-81b6-9cfada7ad51a",
+      "id": "ee7307e8-599e-4e4b-926e-898cdf142fd9",
       "name": "Gmail - Alerta Interna Lead Prioritario",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,

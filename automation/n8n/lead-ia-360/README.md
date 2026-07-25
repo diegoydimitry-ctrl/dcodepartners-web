@@ -6,6 +6,12 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
+> **v7 — columna "Prioridad" dedicada.** El cliente añadió el campo
+> `Prioridad` (Single select: Alta/Media/Baja) a la tabla `Leads` real, así
+> que deja de incrustarse como texto en "Motivo score" y se escribe
+> directamente en su propia columna. "Motivo score" ahora solo lleva la
+> Probabilidad de Compra.
+>
 > **v6 — columnas de Airtable remapeadas al esquema real del cliente.**
 > La tabla `Leads` real (confirmada en n8n) no coincide con el esquema
 > genérico documentado más abajo en versiones anteriores de este archivo:
@@ -149,9 +155,10 @@ Airtable si quieres reforzarlo a nivel de base).
 | Origen campaña         | Crear/Actualizar Lead              | `lead.origen` |
 | Estado (select)        | Ambos nodos Airtable               | `"Análisis IA en curso"` al crear, `"Analizado"` tras el análisis |
 | Score IA               | Actualizar Análisis IA             | `scoreIA` (0-100) |
+| Prioridad (select)     | Actualizar Análisis IA             | `prioridad` (Alta/Media/Baja) |
 | Urgencia (select)      | Actualizar Análisis IA             | `urgencia` (Alta/Media/Baja) |
 | Resumen IA             | Actualizar Análisis IA             | `"Servicio recomendado: X — "` + `resumenComercial` |
-| Motivo score           | Actualizar Análisis IA             | `"Prioridad: X · Probabilidad de compra: Y%"` (ver nota abajo) |
+| Motivo score           | Actualizar Análisis IA             | `"Probabilidad de compra: Y%"` |
 | Próximo paso           | Actualizar Análisis IA             | `siguienteAccion` |
 
 Campos que existen en tu tabla pero que el workflow **no** rellena (no hay
@@ -160,14 +167,11 @@ dato de origen en el formulario): `Cargo`, `Web`, `Sector`, `Pais`,
 `Responsable`. Quedan en blanco para que el equipo comercial los complete
 a mano.
 
-> **Prioridad y Probabilidad de Compra no tienen columna propia** en tu
-> tabla actual — se incrustan como texto dentro de "Motivo score" para no
-> perder el dato. Si quieres verlos como columnas propias (recomendado,
-> ya que "Prioridad" era uno de los entregables originales del proyecto):
-> añade en Airtable un campo `Prioridad` (Single select: Alta, Media,
-> Baja) y opcionalmente `Probabilidad de Compra` (Number) — avísame en
-> cuanto los crees y actualizo el nodo "Airtable - Actualizar Análisis
-> IA" para escribir ahí directamente en vez de embeberlo en texto.
+> **Probabilidad de Compra no tiene columna propia** en tu tabla actual —
+> se incrusta como texto dentro de "Motivo score" para no perder el dato.
+> Si en algún momento añades un campo `Probabilidad de Compra` (Number),
+> avísame y lo separo en su propia columna igual que se hizo con
+> "Prioridad".
 
 ## Variables de n8n (Overview / Settings → Variables)
 
