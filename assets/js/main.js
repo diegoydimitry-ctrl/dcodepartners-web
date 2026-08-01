@@ -338,11 +338,15 @@
     }
   }
 
-  /* ---------- Contact form (Turnstile + webhook n8n directo) ----------
-     Envío directo al webhook de producción del workflow "Lead IA 360" en
-     n8n — sin backend intermedio. n8n valida el lead, lo guarda en
-     Airtable, lo analiza con Gemini y envía los emails de confirmación y
-     alerta interna; aquí solo se interpreta la respuesta HTTP. */
+  /* ---------- Contact form (Turnstile + envío principal + respaldo) ----------
+     Envío principal: directo al webhook de producción del workflow "Lead
+     IA 360" en n8n, que valida el lead, lo guarda en Airtable, lo analiza
+     con Gemini y envía los emails de confirmación y alerta interna.
+     Envío de respaldo: si el principal falla por cualquier motivo (fetch
+     rechazada, estado HTTP no exitoso), se reintenta automáticamente
+     contra /api/contact-fallback (función serverless propia del sitio,
+     solo envía los dos emails) para que una solicitud legítima nunca se
+     pierda por un fallo puntual del servicio principal. */
   var form = document.getElementById('contact-form');
   var note = document.getElementById('form-note');
 
@@ -365,7 +369,24 @@
 
   if (form && note) {
     var N8N_WEBHOOK_URL = 'https://diegoydimitry.app.n8n.cloud/webhook/lead-ia-360';
-    var FALLBACK_EMAIL = 'dcodedepartment@gmail.com';
+    var FALLBACK_ENDPOINT = '/api/contact-fallback';
+
+    // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
+    // (un fallo de red se traduce en ok:false en vez de una excepción), así
+    // el llamador no necesita un try/catch propio por cada intento.
+    var intentarEnvio = function (url, datos) {
+      return fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      }).then(function (respuesta) {
+        return respuesta.text().catch(function () { return ''; }).then(function (texto) {
+          return { ok: respuesta.ok, status: respuesta.status, texto: texto };
+        });
+      }).catch(function (err) {
+        return { ok: false, status: 0, texto: String(err && err.message || err) };
+      });
+    };
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -385,73 +406,56 @@
       button.disabled = true;
       button.textContent = 'Enviando...';
 
-      try {
-        var datos = {
-          nombre: document.getElementById('nombre').value,
-          empresa: document.getElementById('empresa').value,
-          email: document.getElementById('email').value,
-          telefono: document.getElementById('telefono').value,
-          mensaje: document.getElementById('mensaje').value,
-          turnstileToken: turnstile.getResponse()
-        };
+      var datos = {
+        nombre: document.getElementById('nombre').value,
+        empresa: document.getElementById('empresa').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        mensaje: document.getElementById('mensaje').value,
+        turnstileToken: turnstile.getResponse()
+      };
 
-        var respuesta = await fetch(N8N_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(datos)
-        });
+      var principal = await intentarEnvio(N8N_WEBHOOK_URL, datos);
 
-        // Se lee el cuerpo como texto una sola vez (un Response solo se
-        // puede leer una vez) y se intenta parsear como JSON después, para
-        // no perder el detalle real si n8n devuelve texto plano o una
-        // página de error HTML (p. ej. workflow inactivo).
-        var cuerpoTexto = await respuesta.text().catch(function () { return ''; });
-        var cuerpo = null;
-        try { cuerpo = cuerpoTexto ? JSON.parse(cuerpoTexto) : null; } catch (parseErr) { cuerpo = null; }
-
-        // Motivo técnico añadido al mensaje visible (no solo a la consola):
-        // mismo criterio que el asistente de IA — un fallo real debe poder
-        // diagnosticarse viendo la propia página, sin depender de
-        // herramientas de desarrollador ni de acceso a las Executions de n8n.
-        var detalleTecnico = ' (' + respuesta.status + (cuerpoTexto ? ': ' + cuerpoTexto.slice(0, 200) : '') + ')';
-
-        if (respuesta.ok) {
-          note.textContent = 'Solicitud enviada correctamente. Nos pondremos en contacto contigo muy pronto.';
-          note.className = 'form-note ok';
-          form.reset();
-          turnstile.reset();
-          setTimeout(function () {
-            note.textContent = '';
-            note.className = 'form-note';
-          }, 4000);
-        } else if (respuesta.status === 400) {
-          var detalle = cuerpo && Array.isArray(cuerpo.errors) && cuerpo.errors.length
-            ? cuerpo.errors[0]
-            : 'Revisa los datos del formulario e inténtalo de nuevo.';
-          note.textContent = detalle + detalleTecnico;
-          note.className = 'form-note err';
-          // Un 400 puede venir de "¿Turnstile Válido?" (token ya verificado
-          // y rechazado por Cloudflare, o caducado) — reintentar con el
-          // mismo token fallaría igual, así que se pide uno nuevo.
-          if (typeof turnstile !== 'undefined') turnstile.reset();
-        } else if (respuesta.status === 404) {
-          note.textContent = 'El servicio no está disponible en este momento. Escríbenos a ' + FALLBACK_EMAIL + '.' + detalleTecnico;
-          note.className = 'form-note err';
-          console.error('[contact-form] Webhook de n8n no encontrado (404). ¿Workflow activo?', N8N_WEBHOOK_URL);
-        } else {
-          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos.' + detalleTecnico;
-          note.className = 'form-note err';
-          console.error('[contact-form] Error del webhook de n8n:', respuesta.status, cuerpoTexto);
-          if (typeof turnstile !== 'undefined') turnstile.reset();
+      var resultado = principal;
+      if (!principal.ok) {
+        console.error('[contact-form] Fallo el envío principal, reintentando por respaldo:', principal.status, principal.texto);
+        var respaldo = await intentarEnvio(FALLBACK_ENDPOINT, datos);
+        if (respaldo.ok) resultado = respaldo;
+        else {
+          console.error('[contact-form] Fallo también el envío de respaldo:', respaldo.status, respaldo.texto);
+          // Se conservan ambos motivos técnicos en el mensaje visible —
+          // mismo criterio que el asistente de IA: un fallo real debe
+          // poder diagnosticarse viendo la propia página.
+          resultado = {
+            ok: false,
+            status: principal.status,
+            texto: 'principal ' + principal.status + ': ' + principal.texto.slice(0, 150) +
+              ' / respaldo ' + respaldo.status + ': ' + respaldo.texto.slice(0, 150)
+          };
         }
-      } catch (err) {
-        note.textContent = 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
-        note.className = 'form-note err';
-        console.error('[contact-form] Fallo al enviar el formulario:', err);
-      } finally {
-        button.disabled = false;
-        button.textContent = 'Solicitar mi Mes Gratuito';
       }
+
+      if (resultado.ok) {
+        note.textContent = 'Solicitud enviada correctamente. Nos pondremos en contacto contigo muy pronto.';
+        note.className = 'form-note ok';
+        form.reset();
+        turnstile.reset();
+        setTimeout(function () {
+          note.textContent = '';
+          note.className = 'form-note';
+        }, 4000);
+      } else {
+        note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
+        note.className = 'form-note err';
+        // Un token de Turnstile es de un solo uso: si el intento principal
+        // llegó a consumirlo (p. ej. rechazado ya verificado o caducado),
+        // reintentar con el mismo token fallaría igual — se pide uno nuevo.
+        turnstile.reset();
+      }
+
+      button.disabled = false;
+      button.textContent = 'Solicitar mi Mes Gratuito';
     });
   }
 
