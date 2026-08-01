@@ -345,6 +345,24 @@
      alerta interna; aquí solo se interpreta la respuesta HTTP. */
   var form = document.getElementById('contact-form');
   var note = document.getElementById('form-note');
+
+  // Referenciadas por nombre desde data-expired-callback / data-error-callback
+  // en el div .cf-turnstile de contacto.html — deben vivir en window porque
+  // el script de Turnstile las busca por nombre global, no como closures
+  // locales de este IIFE. Sin esto, un token caducado (~5 min) o un fallo de
+  // carga del propio widget producían el mismo "Completa la verificación
+  // anti-spam" sin explicar el motivo real.
+  window.dcodeTurnstileExpired = function () {
+    if (!note) return;
+    note.textContent = 'La verificación anti-spam ha caducado. Vuelve a marcarla antes de enviar.';
+    note.className = 'form-note err';
+  };
+  window.dcodeTurnstileError = function () {
+    if (!note) return;
+    note.textContent = 'No se pudo cargar la verificación anti-spam. Recarga la página e inténtalo de nuevo.';
+    note.className = 'form-note err';
+  };
+
   if (form && note) {
     var N8N_WEBHOOK_URL = 'https://diegoydimitry.app.n8n.cloud/webhook/lead-ia-360';
     var FALLBACK_EMAIL = 'dcodedepartment@gmail.com';
@@ -353,7 +371,12 @@
       e.preventDefault();
       var button = form.querySelector('button');
 
-      if (typeof turnstile === 'undefined' || !turnstile.getResponse()) {
+      if (typeof turnstile === 'undefined') {
+        note.textContent = 'No se pudo cargar la verificación anti-spam. Recarga la página e inténtalo de nuevo.';
+        note.className = 'form-note err';
+        return;
+      }
+      if (!turnstile.getResponse()) {
         note.textContent = 'Completa la verificación anti-spam.';
         note.className = 'form-note err';
         return;
@@ -396,6 +419,10 @@
             : 'Revisa los datos del formulario e inténtalo de nuevo.';
           note.textContent = detalle;
           note.className = 'form-note err';
+          // Un 400 puede venir de "¿Turnstile Válido?" (token ya verificado
+          // y rechazado por Cloudflare, o caducado) — reintentar con el
+          // mismo token fallaría igual, así que se pide uno nuevo.
+          if (typeof turnstile !== 'undefined') turnstile.reset();
         } else if (respuesta.status === 404) {
           note.textContent = 'El servicio no está disponible en este momento. Escríbenos a ' + FALLBACK_EMAIL + '.';
           note.className = 'form-note err';
@@ -404,6 +431,7 @@
           note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos.';
           note.className = 'form-note err';
           console.error('[contact-form] Error del webhook de n8n:', respuesta.status, cuerpo);
+          if (typeof turnstile !== 'undefined') turnstile.reset();
         }
       } catch (err) {
         note.textContent = 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
