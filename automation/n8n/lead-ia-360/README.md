@@ -6,6 +6,27 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
+> **v8 — corregido el 500 "Unused Respond to Webhook node found in the
+> workflow".** Fallo real confirmado en producción (visible ya en el propio
+> mensaje del formulario tras la v7 de `assets/js/main.js`, que expone el
+> cuerpo de la respuesta HTTP): el nodo `Interpretar Análisis IA` era el
+> único de los nodos "activos" del flujo sin `onError` ni try/catch propio.
+> Si `$('Normalizar y Validar Lead').item` o
+> `$('Airtable - Crear o Actualizar Lead').item` lanzaban una excepción —
+> algo que puede ocurrir cuando un nodo anterior falla y continúa vía
+> `continueRegularOutput`, dejando el seguimiento de "paired item" roto,
+> una limitación conocida de n8n — la ejecución se detenía por completo
+> ahí mismo, **antes** de llegar a ningún nodo `Respond to Webhook`. n8n
+> entonces responde ese 500 genérico en vez de propagar el error real.
+> Arreglado envolviendo todo el nodo en try/catch, con recuperación
+> defensiva del lead directamente desde el body crudo del Webhook si la
+> referencia al nodo `Normalizar y Validar Lead` falla, y añadiendo
+> `onError: continueRegularOutput` como red de seguridad adicional. Con
+> este cambio, cualquier fallo interno del nodo cae en los valores de
+> reserva (Score 50 / Prioridad Media) y la ejecución **siempre** llega a
+> `Responder Éxito al Formulario` — el formulario nunca vuelve a quedarse
+> sin respuesta por este motivo.
+>
 > **v7 — columna "Prioridad" dedicada.** El cliente añadió el campo
 > `Prioridad` (Single select: Alta/Media/Baja) a la tabla `Leads` real, así
 > que deja de incrustarse como texto en "Motivo score" y se escribe
