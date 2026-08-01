@@ -401,8 +401,19 @@
           body: JSON.stringify(datos)
         });
 
+        // Se lee el cuerpo como texto una sola vez (un Response solo se
+        // puede leer una vez) y se intenta parsear como JSON después, para
+        // no perder el detalle real si n8n devuelve texto plano o una
+        // página de error HTML (p. ej. workflow inactivo).
+        var cuerpoTexto = await respuesta.text().catch(function () { return ''; });
         var cuerpo = null;
-        try { cuerpo = await respuesta.json(); } catch (parseErr) { cuerpo = null; }
+        try { cuerpo = cuerpoTexto ? JSON.parse(cuerpoTexto) : null; } catch (parseErr) { cuerpo = null; }
+
+        // Motivo técnico añadido al mensaje visible (no solo a la consola):
+        // mismo criterio que el asistente de IA — un fallo real debe poder
+        // diagnosticarse viendo la propia página, sin depender de
+        // herramientas de desarrollador ni de acceso a las Executions de n8n.
+        var detalleTecnico = ' (' + respuesta.status + (cuerpoTexto ? ': ' + cuerpoTexto.slice(0, 200) : '') + ')';
 
         if (respuesta.ok) {
           note.textContent = 'Solicitud enviada correctamente. Nos pondremos en contacto contigo muy pronto.';
@@ -417,20 +428,20 @@
           var detalle = cuerpo && Array.isArray(cuerpo.errors) && cuerpo.errors.length
             ? cuerpo.errors[0]
             : 'Revisa los datos del formulario e inténtalo de nuevo.';
-          note.textContent = detalle;
+          note.textContent = detalle + detalleTecnico;
           note.className = 'form-note err';
           // Un 400 puede venir de "¿Turnstile Válido?" (token ya verificado
           // y rechazado por Cloudflare, o caducado) — reintentar con el
           // mismo token fallaría igual, así que se pide uno nuevo.
           if (typeof turnstile !== 'undefined') turnstile.reset();
         } else if (respuesta.status === 404) {
-          note.textContent = 'El servicio no está disponible en este momento. Escríbenos a ' + FALLBACK_EMAIL + '.';
+          note.textContent = 'El servicio no está disponible en este momento. Escríbenos a ' + FALLBACK_EMAIL + '.' + detalleTecnico;
           note.className = 'form-note err';
           console.error('[contact-form] Webhook de n8n no encontrado (404). ¿Workflow activo?', N8N_WEBHOOK_URL);
         } else {
-          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos.';
+          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos.' + detalleTecnico;
           note.className = 'form-note err';
-          console.error('[contact-form] Error del webhook de n8n:', respuesta.status, cuerpo);
+          console.error('[contact-form] Error del webhook de n8n:', respuesta.status, cuerpoTexto);
           if (typeof turnstile !== 'undefined') turnstile.reset();
         }
       } catch (err) {
