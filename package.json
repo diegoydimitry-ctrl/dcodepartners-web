@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "generate-kb": "node scripts/build-knowledge-base.js"
+  },
+  "dependencies": {
+    "resend": "^4.0.0"
   }
 }
