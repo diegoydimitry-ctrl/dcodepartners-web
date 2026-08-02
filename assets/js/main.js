@@ -377,11 +377,22 @@
     // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
     // (un fallo de red se traduce en ok:false en vez de una excepción), así
     // el llamador no necesita un try/catch propio por cada intento.
+    //
+    // Se envía como application/x-www-form-urlencoded (no JSON): es un
+    // "simple request" según la spec CORS, así que el navegador NO manda
+    // preflight OPTIONS. El preflight real contra el webhook de n8n devuelve
+    // 500 (bug de la infraestructura de n8n Cloud con responseMode
+    // "responseNode", confirmado repitiendo la petición desde el propio
+    // servidor de n8n) — evitarlo así es más fiable que depender de que n8n
+    // lo arregle. n8n y el endpoint de respaldo parsean form-urlencoded en
+    // un objeto igual que JSON, así que no hace falta cambiar nada más.
     var intentarEnvio = function (url, datos) {
+      var params = new URLSearchParams();
+      Object.keys(datos).forEach(function (key) { params.append(key, datos[key]); });
       return fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
       }).then(function (respuesta) {
         return respuesta.text().catch(function () { return ''; }).then(function (texto) {
           return { ok: respuesta.ok, status: respuesta.status, texto: texto };
