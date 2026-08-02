@@ -6,16 +6,40 @@ Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
 cambian credenciales + variables de n8n + base de Airtable — **no se toca
 ningún nodo**.
 
-> **v8 — red de seguridad en "Interpretar Análisis IA".** Era el único
-> Code node del workflow sin `try/catch` propio: si algo dentro de él
-> lanzaba una excepción no prevista, tumbaba toda la ejecución antes de
-> llegar a cualquier nodo `Respond to Webhook`, y el formulario recibía un
-> 500 genérico sin explicación (exactamente el síntoma visto en el primer
-> intento real en producción: Turnstile pasaba, la petición llegaba, pero
-> `dcodepartners.com` mostraba "Ha ocurrido un error al enviar la
-> solicitud"). Ahora todo el nodo va envuelto en `try/catch` con un
-> fallback de emergencia del mismo shape que esperan los 4 nodos
-> posteriores (respuesta al formulario, Airtable, Gmail, alerta interna).
+> **v9 — cuenta de n8n reconectada vía MCP; Gmail y Airtable corregidos
+> contra la instancia real.** Al conectar este workflow directamente por
+> API (conector oficial de n8n) aparecieron dos bugs más que el import/export
+> manual no mostraba: (1) el campo `message` de ambos nodos Gmail no tenía
+> el prefijo `=` requerido por n8n para interpretar expresiones `{{ }}` —
+> los emails se habrían enviado con los placeholders literales en vez de
+> los datos del lead; (2) el nodo `Airtable - Crear o Actualizar Lead`
+> había perdido su Base/Tabla/columnas (probablemente al navegar por las
+> columnas manualmente en el editor). Ambos corregidos directamente contra
+> la cuenta real. También se confirmó que la URL de producción del webhook
+> incluye el ID del webhook como parte del path, no solo `/lead-ia-360` —
+> `assets/js/main.js` apuntaba a un dominio de n8n distinto (una cuenta ya
+> abandonada) y por eso el workflow no había recibido ninguna ejecución.
+>
+> **v8 — corregido el 500 "Unused Respond to Webhook node found in the
+> workflow".** Fallo real confirmado en producción (visible ya en el propio
+> mensaje del formulario tras la v7 de `assets/js/main.js`, que expone el
+> cuerpo de la respuesta HTTP): el nodo `Interpretar Análisis IA` era el
+> único de los nodos "activos" del flujo sin `onError` ni try/catch propio.
+> Si `$('Normalizar y Validar Lead').item` o
+> `$('Airtable - Crear o Actualizar Lead').item` lanzaban una excepción —
+> algo que puede ocurrir cuando un nodo anterior falla y continúa vía
+> `continueRegularOutput`, dejando el seguimiento de "paired item" roto,
+> una limitación conocida de n8n — la ejecución se detenía por completo
+> ahí mismo, **antes** de llegar a ningún nodo `Respond to Webhook`. n8n
+> entonces responde ese 500 genérico en vez de propagar el error real.
+> Arreglado envolviendo todo el nodo en try/catch, con recuperación
+> defensiva del lead directamente desde el body crudo del Webhook si la
+> referencia al nodo `Normalizar y Validar Lead` falla, y añadiendo
+> `onError: continueRegularOutput` como red de seguridad adicional. Con
+> este cambio, cualquier fallo interno del nodo cae en los valores de
+> reserva (Score 50 / Prioridad Media) y la ejecución **siempre** llega a
+> `Responder Éxito al Formulario` — el formulario nunca vuelve a quedarse
+> sin respuesta por este motivo.
 >
 > **v7 — columna "Prioridad" dedicada.** El cliente añadió el campo
 > `Prioridad` (Single select: Alta/Media/Baja) a la tabla `Leads` real, así

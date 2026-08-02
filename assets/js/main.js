@@ -338,22 +338,69 @@
     }
   }
 
-  /* ---------- Contact form (Turnstile + webhook n8n directo) ----------
-     Envío directo al webhook de producción del workflow "Lead IA 360" en
-     n8n — sin backend intermedio. n8n valida el lead, lo guarda en
-     Airtable, lo analiza con Gemini y envía los emails de confirmación y
-     alerta interna; aquí solo se interpreta la respuesta HTTP. */
+  /* ---------- Contact form (Turnstile + envío principal + respaldo) ----------
+     Envío principal: directo al webhook de producción del workflow "Lead
+     IA 360" en n8n, que valida el lead, lo guarda en Airtable, lo analiza
+     con Gemini y envía los emails de confirmación y alerta interna.
+     Envío de respaldo: si el principal falla por cualquier motivo (fetch
+     rechazada, estado HTTP no exitoso), se reintenta automáticamente
+     contra /api/contact-fallback (función serverless propia del sitio,
+     solo envía los dos emails) para que una solicitud legítima nunca se
+     pierda por un fallo puntual del servicio principal. */
   var form = document.getElementById('contact-form');
   var note = document.getElementById('form-note');
+
+  // Referenciadas por nombre desde data-expired-callback / data-error-callback
+  // en el div .cf-turnstile de contacto.html — deben vivir en window porque
+  // el script de Turnstile las busca por nombre global, no como closures
+  // locales de este IIFE. Sin esto, un token caducado (~5 min) o un fallo de
+  // carga del propio widget producían el mismo "Completa la verificación
+  // anti-spam" sin explicar el motivo real.
+  window.dcodeTurnstileExpired = function () {
+    if (!note) return;
+    note.textContent = 'La verificación anti-spam ha caducado. Vuelve a marcarla antes de enviar.';
+    note.className = 'form-note err';
+  };
+  window.dcodeTurnstileError = function () {
+    if (!note) return;
+    note.textContent = 'No se pudo cargar la verificación anti-spam. Recarga la página e inténtalo de nuevo.';
+    note.className = 'form-note err';
+  };
+
   if (form && note) {
+    // URL real confirmada directamente contra la cuenta de n8n (vía MCP):
+    // incluye el ID del webhook, no solo el path — sin él, n8n no
+    // enruta la petición al workflow y esto nunca llegaba a ejecutarse.
     var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/e2732fa1-d24c-4a17-9714-d23f7270df58/lead-ia-360';
-    var FALLBACK_EMAIL = 'dcodedepartment@gmail.com';
+    var FALLBACK_ENDPOINT = '/api/contact-fallback';
+
+    // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
+    // (un fallo de red se traduce en ok:false en vez de una excepción), así
+    // el llamador no necesita un try/catch propio por cada intento.
+    var intentarEnvio = function (url, datos) {
+      return fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      }).then(function (respuesta) {
+        return respuesta.text().catch(function () { return ''; }).then(function (texto) {
+          return { ok: respuesta.ok, status: respuesta.status, texto: texto };
+        });
+      }).catch(function (err) {
+        return { ok: false, status: 0, texto: String(err && err.message || err) };
+      });
+    };
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       var button = form.querySelector('button');
 
-      if (typeof turnstile === 'undefined' || !turnstile.getResponse()) {
+      if (typeof turnstile === 'undefined') {
+        note.textContent = 'No se pudo cargar la verificación anti-spam. Recarga la página e inténtalo de nuevo.';
+        note.className = 'form-note err';
+        return;
+      }
+      if (!turnstile.getResponse()) {
         note.textContent = 'Completa la verificación anti-spam.';
         note.className = 'form-note err';
         return;
@@ -362,6 +409,10 @@
       button.disabled = true;
       button.textContent = 'Enviando...';
 
+      // Todo el cuerpo va en try/finally: si document.getElementById(...)
+      // devolviera null por cualquier motivo inesperado, o cualquier otra
+      // excepción no prevista ocurriera aquí dentro, el botón nunca debe
+      // quedarse bloqueado en "Enviando..." sin explicación.
       try {
         var datos = {
           nombre: document.getElementById('nombre').value,
@@ -372,16 +423,28 @@
           turnstileToken: turnstile.getResponse()
         };
 
-        var respuesta = await fetch(N8N_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(datos)
-        });
+        var principal = await intentarEnvio(N8N_WEBHOOK_URL, datos);
 
-        var cuerpo = null;
-        try { cuerpo = await respuesta.json(); } catch (parseErr) { cuerpo = null; }
+        var resultado = principal;
+        if (!principal.ok) {
+          console.error('[contact-form] Fallo el envío principal, reintentando por respaldo:', principal.status, principal.texto);
+          var respaldo = await intentarEnvio(FALLBACK_ENDPOINT, datos);
+          if (respaldo.ok) resultado = respaldo;
+          else {
+            console.error('[contact-form] Fallo también el envío de respaldo:', respaldo.status, respaldo.texto);
+            // Se conservan ambos motivos técnicos en el mensaje visible —
+            // mismo criterio que el asistente de IA: un fallo real debe
+            // poder diagnosticarse viendo la propia página.
+            resultado = {
+              ok: false,
+              status: principal.status,
+              texto: 'principal ' + principal.status + ': ' + principal.texto.slice(0, 150) +
+                ' / respaldo ' + respaldo.status + ': ' + respaldo.texto.slice(0, 150)
+            };
+          }
+        }
 
-        if (respuesta.ok) {
+        if (resultado.ok) {
           note.textContent = 'Solicitud enviada correctamente. Nos pondremos en contacto contigo muy pronto.';
           note.className = 'form-note ok';
           form.reset();
@@ -390,25 +453,18 @@
             note.textContent = '';
             note.className = 'form-note';
           }, 4000);
-        } else if (respuesta.status === 400) {
-          var detalle = cuerpo && Array.isArray(cuerpo.errors) && cuerpo.errors.length
-            ? cuerpo.errors[0]
-            : 'Revisa los datos del formulario e inténtalo de nuevo.';
-          note.textContent = detalle;
-          note.className = 'form-note err';
-        } else if (respuesta.status === 404) {
-          note.textContent = 'El servicio no está disponible en este momento. Escríbenos a ' + FALLBACK_EMAIL + '.';
-          note.className = 'form-note err';
-          console.error('[contact-form] Webhook de n8n no encontrado (404). ¿Workflow activo?', N8N_WEBHOOK_URL);
         } else {
-          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos.';
+          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
           note.className = 'form-note err';
-          console.error('[contact-form] Error del webhook de n8n:', respuesta.status, cuerpo);
+          // Un token de Turnstile es de un solo uso: si el intento principal
+          // llegó a consumirlo (p. ej. rechazado ya verificado o caducado),
+          // reintentar con el mismo token fallaría igual — se pide uno nuevo.
+          turnstile.reset();
         }
       } catch (err) {
-        note.textContent = 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
+        note.textContent = 'No se pudo procesar el formulario. Recarga la página e inténtalo de nuevo.';
         note.className = 'form-note err';
-        console.error('[contact-form] Fallo al enviar el formulario:', err);
+        console.error('[contact-form] Excepción inesperada al enviar el formulario:', err);
       } finally {
         button.disabled = false;
         button.textContent = 'Solicitar mi Mes Gratuito';
