@@ -17,6 +17,7 @@ scripts/
   build-knowledge-base.js  → Regenera knowledge-base.json a partir del HTML publicado
 automation/
   n8n/lead-ia-360/  → Workflow de n8n que procesa el formulario de contacto (ver su propio README)
+  n8n/linkedin-auto-post/  → Workflow de n8n que publica el calendario de contenido en LinkedIn (ver su propio README)
 ```
 
 ## Ver la web en local
