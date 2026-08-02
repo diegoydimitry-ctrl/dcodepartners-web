@@ -3,9 +3,34 @@
 Cualificación automática de leads con IA. Stack: **n8n Cloud + Airtable + Gemini API + Gmail**.
 
 Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
-cambian credenciales + variables de n8n + base de Airtable — **no se toca
-ningún nodo**.
+cambian credenciales + el nodo "Configuración" + base de Airtable — **no
+se toca ningún nodo de lógica**. Sin Variables de n8n ni `$env`: funciona
+igual en el plan Cloud Starter que en Pro.
 
+> **v10 — sin Variables de n8n (plan Cloud Starter, sin features de Pro).**
+> Las 8 referencias `$vars.X` se sustituyeron por la herramienta correcta
+> para cada caso, sin depender de ninguna feature de pago:
+> - **`TURNSTILE_SECRET_KEY`** (secreto real) → credencial n8n de tipo
+>   **Custom Auth**, adjunta al nodo `Verificar Turnstile`. Las credenciales
+>   son una feature base de n8n disponible en cualquier plan — el secreto
+>   nunca queda en texto plano en el JSON del workflow.
+> - **`AIRTABLE_BASE_ID` / `AIRTABLE_TABLE_NAME`** (config, no secreto) →
+>   el `resourceLocator` de Base/Tabla en ambos nodos Airtable pasa a modo
+>   **"From list"**: se eligen de un desplegable dentro de n8n tras
+>   importar, sin ninguna expresión.
+> - **`GEMINI_MODEL`, `SERVICES_CATALOG`, `COMPANY_NAME`, `SENDER_NAME`,
+>   `SALES_TEAM_EMAIL`** (config, no secreto) → nuevo nodo **"Configuración"**
+>   (Set/Edit Fields), justo después del Webhook. Un único lugar editable
+>   para adaptar el workflow a otro cliente, con un nodo Set estándar.
+> - **`WEBHOOK_SECRET`** (secreto, nunca activo) → eliminado: nunca llegó a
+>   configurarse y no aportaba protección real sin backend que lo
+>   verificara aparte de Turnstile.
+>
+> Como "Configuración" ya no es garantía de traer los datos del formulario
+> (solo aporta config), `Normalizar y Validar Lead` pasó a leer el body
+> directamente de `$('Webhook - Recepción de Lead')` en vez de su propio
+> `$json` — sigue funcionando sin importar qué nodo lo precede.
+>
 > **v9 — cuenta de n8n reconectada vía MCP; Gmail y Airtable corregidos
 > contra la instancia real.** Al conectar este workflow directamente por
 > API (conector oficial de n8n) aparecieron dos bugs más que el import/export
@@ -107,6 +132,7 @@ ningún nodo**.
 
 ```
 Webhook (POST /lead-ia-360, CORS restringido a dcodepartners.com)
+  → Configuración                                [Set · valores no sensibles del cliente]
   → Normalizar y Validar Lead                    [Code]
   → ¿Lead Válido?                                [If]
       ✗ → Responder Error de Validación          [Respond to Webhook · 400/500]
@@ -124,7 +150,7 @@ Webhook (POST /lead-ia-360, CORS restringido a dcodepartners.com)
                       ✓ → Gmail - Alerta Interna Lead Prioritario [Gmail]
 ```
 
-15 nodos funcionales + 4 sticky notes de arquitectura (documentación visual
+16 nodos funcionales + 4 sticky notes de arquitectura (documentación visual
 por etapa en el propio canvas). Todos los nodos llevan `notes` con su
 función; el código de los nodos `Code` lleva comentarios explicando el
 porqué. Decisiones de diseño relevantes:
@@ -208,27 +234,64 @@ a mano.
 > avísame y lo separo en su propia columna igual que se hizo con
 > "Prioridad".
 
-## Variables de n8n (Overview / Settings → Variables)
+## Configuración (sin Variables de n8n — compatible con el plan Starter)
 
-Se leen con `$vars.NOMBRE` — **no** con `$env` (ver nota de la v3 arriba).
-Crear cada una como Variable de n8n, con estos nombres exactos:
+Esta plantilla **no usa la feature "Variables"** de n8n (exclusiva de
+planes de pago superiores) ni `$env`. Toda la configuración vive en
+credenciales o en nodos, con estos 3 mecanismos:
 
-| Variable              | Obligatoria | Descripción                                                              |
-|-----------------------|:-----------:|---------------------------------------------------------------------------|
-| `AIRTABLE_BASE_ID`     | Sí          | ID de la base de Airtable del cliente (`appXXXXXXXXXXXXXX`).             |
-| `AIRTABLE_TABLE_NAME`  | No          | Nombre de la tabla de leads. Por defecto `Leads`.                        |
-| `GEMINI_MODEL`         | No          | Modelo de Gemini a usar. Por defecto `gemini-2.5-flash`.                  |
-| `SERVICES_CATALOG`     | Recomendada | Lista de servicios del cliente, en texto libre. Se inyecta en el prompt.  |
-| `COMPANY_NAME`         | Recomendada | Nombre de la empresa, usado en el email al cliente.                       |
-| `SENDER_NAME`          | No          | Cómo se autodenomina el remitente en el email ("nuestro equipo", "Diego"…). |
-| `SALES_TEAM_EMAIL`     | Sí          | Bandeja del equipo comercial para la alerta de leads prioritarios.        |
-| `TURNSTILE_SECRET_KEY` | Sí          | Secret key de Cloudflare Turnstile (Cloudflare Dashboard → Turnstile → tu widget). Sin esto, `Verificar Turnstile` rechaza todos los leads. |
-| `WEBHOOK_SECRET`       | No          | Si se define, el formulario debe enviar la cabecera `x-webhook-secret` con este valor. Déjala vacía para desactivar la comprobación. |
+### 1. Nodo "Configuración" (Set) — valores no sensibles
 
-> Si tu plan de n8n Cloud no incluye la feature "Variables", como
-> alternativa se puede fijar estos valores como literales directamente en
-> cada nodo (perdiendo la reutilización entre clientes) — avisa si es el
-> caso y se adapta el JSON.
+Justo después del Webhook. Ábrelo tras importar y edita los 5 campos
+directamente ahí — es el único sitio que hay que tocar para adaptar el
+workflow a otro cliente:
+
+| Campo                     | Valor por defecto | Descripción |
+|----------------------------|--------------------|--------------|
+| `config.geminiModel`        | `gemini-2.5-flash` | Modelo de Gemini a usar. |
+| `config.servicesCatalog`    | (catálogo de D-Code Partners) | Se inyecta en el prompt de análisis. |
+| `config.companyName`        | `D-Code Partners`  | Usado en el email al cliente. |
+| `config.senderName`         | `nuestro equipo`   | Cómo se autodenomina el remitente en el email. |
+| `config.salesTeamEmail`     | `dcodedepartment@gmail.com` | Bandeja del equipo comercial para la alerta de leads prioritarios. |
+
+### 2. Base y Tabla de Airtable — modo lista, sin expresiones
+
+En **ambos** nodos Airtable (`Airtable - Crear o Actualizar Lead` y
+`Airtable - Actualizar Análisis IA`), los campos **Base** y **Table**
+están en modo "From list": ábrelos y elige tu base/tabla del desplegable
+— n8n las resuelve por su Personal Access Token, sin necesitar el ID a
+mano ni escribir ninguna expresión.
+
+### 3. Secret de Cloudflare Turnstile — credencial Custom Auth
+
+El único valor realmente sensible (`TURNSTILE_SECRET_KEY`) vive en una
+**credencial de n8n**, no en una Variable ni en un nodo Set — así nunca
+queda en texto plano dentro del JSON del workflow (que, además, en este
+proyecto se versiona en un repositorio Git). Las credenciales son
+funcionalidad base de n8n, disponible en cualquier plan incluido Starter.
+
+Para crearla:
+1. n8n → Credentials → **Add Credential** → busca **"Custom Auth"**
+   (a veces aparece como "HTTP Custom Auth").
+2. En el campo JSON, pega:
+   ```json
+   {
+     "body": {
+       "secret": "TU_SECRET_KEY_DE_CLOUDFLARE_TURNSTILE"
+     }
+   }
+   ```
+3. Guárdala con un nombre reconocible, p. ej. `Turnstile Secret (Custom Auth)`.
+4. Ábrela y enlázala al nodo **Verificar Turnstile** (Credential → selecciona la que acabas de crear).
+
+> Si tras probarlo Cloudflare sigue devolviendo `missing-input-secret`
+> (revisa la ejecución en n8n → Executions → nodo "Verificar Turnstile"),
+> es que esta credencial no está inyectando el campo `body.secret` como se
+> espera. Alternativa igual de válida si prefieres no depender de Custom
+> Auth: pega el secret directamente como valor fijo del parámetro `secret`
+> en el nodo "Verificar Turnstile" (Body Parameters) — pierdes que quede
+> fuera del JSON versionado, pero sigue sin depender de ninguna feature de
+> pago. Dímelo si llegas a este punto y lo dejo así en el JSON.
 
 ## Credenciales a configurar tras importar
 
@@ -237,9 +300,8 @@ nodos como "credencial no configurada" — hay que enlazarlos manualmente:
 
 1. **Airtable - Crear o Actualizar Lead** / **Airtable - Actualizar Análisis
    IA** → credencial `Airtable Token API` (Personal Access Token con acceso
-   de lectura/escritura a la base). Base y tabla ya se resuelven vía
-   `AIRTABLE_BASE_ID` / `AIRTABLE_TABLE_NAME`, no hace falta reseleccionarlas
-   en el desplegable.
+   de lectura/escritura a la base). Después, en cada nodo, selecciona Base
+   y Tabla del desplegable (ver punto 2 de la sección anterior).
 2. **Gemini - Analizar Lead**
    → credencial genérica `Header Auth`, con:
    - Name: `x-goog-api-key`
@@ -247,48 +309,55 @@ nodos como "credencial no configurada" — hay que enlazarlos manualmente:
 3. **Gmail - Email de Confirmación al Cliente** / **Gmail - Alerta Interna
    Lead Prioritario**
    → credencial `Gmail OAuth2`.
-
-**Verificar Turnstile** no lleva credencial propia: el secret se lee de la
-Variable `TURNSTILE_SECRET_KEY` (ver arriba), no de un credential de n8n.
+4. **Verificar Turnstile**
+   → credencial `Custom Auth` con el secret de Turnstile (ver sección
+   anterior, punto 3).
 
 ## Integración con el formulario web (dcodepartners.com)
 
-El formulario de `/contacto` (`assets/js/main.js`) llama directamente a
-`https://diegoydimitry.app.n8n.cloud/webhook/lead-ia-360` — ya no existe
-`/api/send` ni ningún backend intermedio. Si cambias el path del webhook o
-lo despliegas en otra instancia, actualiza la constante `N8N_WEBHOOK_URL`
-en ese archivo.
+El formulario de `/contacto` (`assets/js/main.js`, constante
+`N8N_WEBHOOK_URL`) llama directamente a la Production URL real del nodo
+Webhook — incluye el ID único del webhook, no es solo
+`/webhook/lead-ia-360`. Si reactivas el workflow o lo mueves de cuenta/
+instancia, n8n genera una Production URL nueva: cópiala del nodo Webhook y
+actualiza `N8N_WEBHOOK_URL` en `assets/js/main.js`, o el envío nunca
+llegará a n8n aunque el resto esté bien configurado (síntoma: 0
+ejecuciones en n8n → Executions pase lo que pase). Ya no existe `/api/send`
+como envío principal; `api/contact-fallback.js` sigue existiendo como
+respaldo automático si el envío directo a n8n falla.
 
 ## Puesta en producción
 
 1. Importar `lead-ia-360.workflow.json` en n8n (Workflows → Import from
    File).
-2. Enlazar las 3 credenciales (Airtable, Header Auth de Gemini, Gmail —
-   ver sección anterior).
-3. Configurar las Variables de n8n, incluyendo `AIRTABLE_BASE_ID` y
-   `TURNSTILE_SECRET_KEY`.
-4. Activar el workflow (`Active: ON`). El path de producción debe
-   coincidir con `N8N_WEBHOOK_URL` en `assets/js/main.js`
-   (`/webhook/lead-ia-360`).
-5. **Probar desde el formulario real** en `https://dcodepartners.com/contacto`
+2. Enlazar las 4 credenciales (Airtable, Header Auth de Gemini, Gmail,
+   Custom Auth de Turnstile — ver sección "Credenciales" arriba).
+3. Seleccionar Base y Tabla del desplegable en ambos nodos Airtable.
+4. Abrir el nodo "Configuración" y revisar/editar los 5 valores (al menos
+   `salesTeamEmail`, si no quieres usar el que trae por defecto).
+5. Activar el workflow (`Active: ON`). Copia la **Production URL** que
+   muestra n8n para el nodo Webhook (incluye un ID único, no es solo
+   `/webhook/lead-ia-360`) y actualiza `N8N_WEBHOOK_URL` en
+   `assets/js/main.js` si no coincide exactamente.
+7. **Probar desde el formulario real** en `https://dcodepartners.com/contacto`
    (no por curl): el token de Turnstile solo lo genera el widget en un
    navegador real, así que una petición curl con un `turnstileToken`
    inventado siempre será rechazada por el nodo "Verificar Turnstile" —
    eso es el comportamiento correcto, no un fallo.
-6. Verificar: registro creado en Airtable, email recibido en la cuenta de
+8. Verificar: registro creado en Airtable, email recibido en la cuenta de
    prueba, y (si el lead califica como Alta prioridad) alerta interna en
-   `SALES_TEAM_EMAIL`.
-7. Reenviar el formulario con el mismo email: debe **actualizar** el mismo
+   `config.salesTeamEmail`.
+9. Reenviar el formulario con el mismo email: debe **actualizar** el mismo
    registro de Airtable en vez de crear uno nuevo — así se valida la
    deduplicación por email.
-8. Revisar en n8n → Executions los logs de los nodos `Code` (salida
-   `console.log`/`console.error` en JSON) y confirmar que no haya
-   ejecuciones recurrentes con `aiError: true` o `crmError: true` (indicaría
-   un problema de cuota/credenciales de Gemini o de permisos de Airtable).
-9. Si el envío falla en el navegador con un error de red/CORS (visible en
-   la consola del navegador, no en el mensaje mostrado al usuario),
-   revisa `options.allowedOrigins` en el nodo Webhook — debe incluir el
-   origen exacto desde el que se sirve la web.
+10. Revisar en n8n → Executions los logs de los nodos `Code` (salida
+    `console.log`/`console.error` en JSON) y confirmar que no haya
+    ejecuciones recurrentes con `aiError: true` o `crmError: true` (indicaría
+    un problema de cuota/credenciales de Gemini o de permisos de Airtable).
+11. Si el envío falla en el navegador con un error de red/CORS (visible en
+    la consola del navegador, no en el mensaje mostrado al usuario),
+    revisa `options.allowedOrigins` en el nodo Webhook — debe incluir el
+    origen exacto desde el que se sirve la web.
 
 ### Probar la lógica sin un token real de Turnstile
 
@@ -299,17 +368,23 @@ Cloudflare, en el editor de n8n abre el nodo "Verificar Turnstile" y usa
 
 ## Replicar para un cliente nuevo
 
-No se edita ningún nodo. Para vender/desplegar esta plantilla a otro
-cliente:
+No se edita ningún nodo de lógica — solo el de "Configuración", las
+credenciales y los desplegables de Airtable. Funciona igual en cualquier
+plan de n8n Cloud, incluido Starter. Para vender/desplegar esta plantilla
+a otro cliente:
 
 1. Duplicar el workflow (o importar el mismo JSON) en la instancia n8n del
    cliente.
 2. Crear su base de Airtable con el mismo esquema de tabla `Leads`.
-3. Enlazar sus credenciales propias (Airtable, Gemini, Gmail).
-4. Ajustar las Variables de n8n (`SERVICES_CATALOG`, `COMPANY_NAME`,
-   `SALES_TEAM_EMAIL`, `TURNSTILE_SECRET_KEY` con el secret de **su**
-   widget de Cloudflare Turnstile, etc.) a los datos del cliente.
-5. Cambiar `options.allowedOrigins` en el nodo Webhook al dominio real del
+3. Enlazar sus credenciales propias: Airtable, Gemini (Header Auth),
+   Gmail, y una credencial Custom Auth nueva con **su** secret de
+   Cloudflare Turnstile.
+4. Seleccionar su Base/Tabla en el desplegable de ambos nodos Airtable.
+5. Editar el nodo "Configuración" con los datos del cliente
+   (`servicesCatalog`, `companyName`, `senderName`, `salesTeamEmail`,
+   `geminiModel` si procede).
+6. Cambiar `options.allowedOrigins` en el nodo Webhook al dominio real del
    sitio del cliente (si su formulario llama al webhook directamente desde
    el navegador, como en dcodepartners.com).
-6. Activar y apuntar su formulario al nuevo webhook.
+7. Activar y apuntar su formulario a la Production URL real de su webhook
+   (incluye el ID único — cópiala del nodo Webhook, no la inventes).
