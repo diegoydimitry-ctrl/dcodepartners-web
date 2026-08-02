@@ -346,7 +346,7 @@
   var form = document.getElementById('contact-form');
   var note = document.getElementById('form-note');
   if (form && note) {
-    var N8N_WEBHOOK_URL = 'https://diegoydimitry.app.n8n.cloud/webhook/lead-ia-360';
+    var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/e2732fa1-d24c-4a17-9714-d23f7270df58/lead-ia-360';
     var FALLBACK_EMAIL = 'dcodedepartment@gmail.com';
 
     form.addEventListener('submit', async function (e) {
