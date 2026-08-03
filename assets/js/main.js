@@ -371,7 +371,11 @@
     // URL real confirmada directamente contra la cuenta de n8n (vía MCP):
     // incluye el ID del webhook, no solo el path — sin él, n8n no
     // enruta la petición al workflow y esto nunca llegaba a ejecutarse.
-    var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/ea5d0003-3c7b-485d-9c45-1cc10e6710fc/lead-ia-360';
+    // (El nodo Webhook se recreó con un nuevo ID/path "lead-ia-360-v2"
+    // porque el registro anterior devolvía 500 a nivel de infraestructura
+    // de n8n Cloud para cualquier petición real, verificado con pruebas
+    // aisladas desde el propio servidor de n8n.)
+    var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/1922ffc2-dc10-4873-b450-59bf5670887f/lead-ia-360-v2';
     var FALLBACK_ENDPOINT = '/api/contact-fallback';
 
     // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
