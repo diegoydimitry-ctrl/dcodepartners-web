@@ -368,10 +368,16 @@
   };
 
   if (form && note) {
-    // URL real confirmada directamente contra la cuenta de n8n (vía MCP):
-    // incluye el ID del webhook, no solo el path — sin él, n8n no
-    // enruta la petición al workflow y esto nunca llegaba a ejecutarse.
-    var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/ea5d0003-3c7b-485d-9c45-1cc10e6710fc/lead-ia-360';
+    // URL de producción del nodo Webhook "lead-ia-360-v2". Es solo el path
+    // configurado en el nodo (sin el webhookId): n8n solo antepone el
+    // webhookId a la ruta cuando el parámetro "path" está vacío o es
+    // dinámico; aquí es un string fijo, así que la ruta pública es
+    // exactamente /webhook/<path>. Verificado en vivo contra n8n: GET a esta
+    // URL devuelve "not registered for GET requests" (la ruta existe, solo
+    // acepta POST); GET a la misma URL con el webhookId insertado devuelve
+    // "webhook is not registered" (la ruta no existe). Una URL anterior con
+    // el webhookId de más nunca llegó a ejecutar el workflow.
+    var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
     var FALLBACK_ENDPOINT = '/api/contact-fallback';
 
     // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
