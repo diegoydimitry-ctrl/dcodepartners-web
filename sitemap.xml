@@ -32,6 +32,12 @@
   </url>
 
   <url>
+    <loc>https://dcodepartners.com/departamentos/clientes</loc>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
     <loc>https://dcodepartners.com/departamentos/produccion</loc>
     <priority>0.85</priority>
     <changefreq>monthly</changefreq>
