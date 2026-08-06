@@ -169,4 +169,19 @@
     <priority>0.3</priority>
   </url>
 
+  <url>
+    <loc>https://dcodepartners.com/seguridad</loc>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/acuerdo-encargado-tratamiento</loc>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/condiciones-contratacion</loc>
+    <priority>0.3</priority>
+  </url>
+
 </urlset>
