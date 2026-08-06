@@ -1,0 +1,192 @@
+{
+  "name": "LinkedIn Auto-Post D-Code",
+  "nodes": [
+    {
+      "id": "a1e6c9d2-1f34-4b3a-9c11-2f7e6a0b1c01",
+      "name": "Nota - Etapa 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        -180
+      ],
+      "parameters": {
+        "width": 620,
+        "height": 160,
+        "content": "## Etapa 1 · Calendario y selección del post del día\nDisparo diario. El Code node lleva embebido el calendario completo de 12 posts (3-28 ago 2026) y solo deja pasar el que corresponde a la fecha de hoy. Los días sin post programado, el workflow no publica nada."
+      }
+    },
+    {
+      "id": "b2f7d0e3-2045-4c4b-ad22-3a8f7b1c2d02",
+      "name": "Disparador Diario",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        40
+      ],
+      "notes": "08:30 hora de Madrid, todos los días. El Code node siguiente decide si hay algo que publicar hoy.",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 8,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c3084f15-3156-4d5c-be33-4b90c82d3e03",
+      "name": "Calendario de Contenido",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        40
+      ],
+      "notes": "Calendario de los 12 posts embebido en el propio código. Compara la fecha de hoy y construye el texto final del post (hook + cuerpo + CTA + hashtags) si toca publicar.",
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// ============================================================================\n// Calendario de contenido para LinkedIn de D-Code Partners (4 semanas,\n// 3-28 de agosto de 2026, 3 posts/semana: lunes, miércoles y viernes).\n// Cada entrada lleva una fecha de publicación fija; este nodo compara la\n// fecha de hoy contra el calendario y solo deja pasar el post que\n// corresponde a hoy (si lo hay). El calendario vive embebido aquí a\n// propósito: n8n Cloud no tiene acceso al repositorio del sitio, así que\n// el workflow tiene que ser autocontenido para poder importarse solo.\n//\n// Para extender el calendario más allá de estas 4 semanas, añade entradas\n// nuevas a CALENDARIO con fecha 'YYYY-MM-DD'. Para reprogramarlo empezando\n// en otra fecha, desplaza las fechas de todas las entradas manteniendo el\n// mismo orden (no reordenes el contenido: la secuencia de líneas temáticas\n// -Dolor / Fundamentos / Bastidores / Método / Caso de uso- está pensada\n// para alternarse tal y como está).\n// ============================================================================\n\nconst CALENDARIO = [\n  {\n    date: \"2026-08-03\",\n    pillar: \"Dolor\",\n    hook: \"Hay un proceso en tu empresa que \\\"siempre se ha hecho así\\\". Ese es justo el problema.\",\n    body: \"No hace falta un proyecto enorme para empezar a automatizar.\\n\\nLa mayoría de las pymes tienen dos o tres procesos \\\"silenciosos\\\" que consumen horas cada semana sin que nadie los cuestione — simplemente porque siempre se han hecho así.\\n\\nAlgunos de los más habituales:\\n→ Clasificar y archivar facturas o contratos a mano\\n→ Responder las mismas 5-10 preguntas de clientes, cada semana\\n→ Armar el informe del viernes copiando datos de varias fuentes\\n→ Escribirle \\\"otra vez\\\" a ese lead que se quedó sin respuesta\\n→ Repetir el mismo proceso de bienvenida con cada cliente nuevo\\n\\nSi te reconoces en dos o más, no hace falta que decidas tú solo por dónde empezar.\",\n    cta: \"¿Cuál de estos cinco te suena más a tu día a día? Coméntalo.\",\n    hashtags: \"#AutomatizaciónIA #Pymes #InteligenciaArtificial #Productividad\",\n  },\n  {\n    date: \"2026-08-05\",\n    pillar: \"Fundamentos\",\n    hook: \"\\\"Automatización\\\" y \\\"agente de IA\\\" no son lo mismo. Confundirlos cuesta dinero.\",\n    body: \"Son dos de los términos que más se repiten cuando una empresa quiere digitalizarse con IA — y también de los que más se confunden.\\n\\nLa automatización con IA resuelve procesos internos: tareas con reglas claras, sin conversación de por medio. Gestión documental, informes, seguimiento de tareas.\\n\\nUn agente de IA, en cambio, mantiene una conversación — normalmente con un cliente. Entiende lenguaje natural, mantiene el contexto y sabe cuándo pasarle el turno a una persona.\\n\\nLa pregunta que de verdad importa no es técnica, es de negocio:\\n¿Tu cuello de botella es \\\"nadie responde a tiempo a los clientes\\\"? → necesitas un agente.\\n¿Es \\\"alguien pierde horas haciendo lo mismo a mano\\\"? → necesitas automatización.\\n\\nSpoiler: casi ninguna empresa necesita solo una de las dos.\",\n    cta: \"¿Cuál de los dos problemas tienes tú ahora mismo?\",\n    hashtags: \"#AgentesIA #AutomatizaciónIA #TransformaciónDigital\",\n  },\n  {\n    date: \"2026-08-07\",\n    pillar: \"Bastidores\",\n    hook: \"Dos socios, un mismo nombre por inicial, y una convicción: las empresas siguen operando en manual dentro de un mundo que ya es automático.\",\n    body: \"Diego Siñeriz y Dimitry Sosenko fundamos D-Code Partners en Madrid con esa idea en la cabeza.\\n\\nSomos jóvenes. Eso genera preguntas legítimas — no tenemos veinte años de trayectoria ni un archivo de casos de cliente que enseñar todavía. Preferimos decirlo claro antes que inflarlo.\\n\\nLo que sí tenemos es un modelo construido para que la confianza se gane demostrando, no prometiendo: un mes de prueba gratuito, sin permanencia, sin factura si no hay resultados.\\n\\n\\\"Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado.\\\" — Diego\",\n    cta: \"Conoce cómo trabajamos → enlace al Método D-Code en el primer comentario.\",\n    hashtags: \"#Emprendimiento #Madrid #StartupsIA\",\n  },\n  {\n    date: \"2026-08-10\",\n    pillar: \"Método\",\n    hook: \"No cobramos hasta demostrarlo. Así de simple.\",\n    body: \"El mercado está lleno de consultoras que venden un proyecto cerrado por adelantado, con promesas grandes y resultados que llegan (o no) meses después.\\n\\nNosotros trabajamos al revés:\\n\\n01 → Diagnóstico gratuito de tu operativa\\n02 → Implementación real durante 30 días\\n03 → Revisión de resultados con datos: horas ahorradas, procesos automatizados, tiempos de respuesta\\n04 → Solo entonces, hablamos de precio\\n\\nSi no hay beneficio demostrado, no hay factura. Sin permanencia, ni durante la prueba ni después.\\n\\nEs un modelo que nos obliga a nosotros, no a ti.\",\n    cta: \"Reserva tu llamada gratuita de 30 minutos.\",\n    hashtags: \"#GarantíaDeResultados #AutomatizaciónIA #Pymes\",\n  },\n  {\n    date: \"2026-08-12\",\n    pillar: \"Caso de uso\",\n    hook: \"Cada lead que espera más de unas horas por respuesta es un lead que probablemente ya escribió a otro.\",\n    body: \"Un agente de IA bien entrenado con la información de tu negocio:\\n\\n→ Responde horarios, precios y disponibilidad al instante, a cualquier hora\\n→ Cualifica al lead y deja la información lista en tu CRM\\n→ Resuelve las consultas repetidas de tus clientes actuales\\n→ Sabe cuándo ceder la conversación a una persona, con todo el contexto ya recopilado\\n\\nNo es un chatbot con guion fijo. Entiende lenguaje natural y mantiene el hilo de la conversación.\\n\\nSe conecta a tu web, WhatsApp Business o email — el canal donde ya está tu cliente.\",\n    cta: \"¿Cuántas consultas repetidas responde hoy tu equipo a mano?\",\n    hashtags: \"#AgentesIA #AtenciónAlCliente #WhatsAppBusiness\",\n  },\n  {\n    date: \"2026-08-14\",\n    pillar: \"Dolor\",\n    hook: \"¿Cuántas veces copias el mismo dato de una herramienta a otra... cada semana?\",\n    body: \"CRM por un lado. Hoja de cálculo por otro. Facturación en una tercera pestaña.\\n\\nSi tu equipo pasa información de una herramienta a otra a mano, cada copia y pega es:\\n→ Tiempo que no vuelve\\n→ Una oportunidad de error humano\\n→ Un dato que llega tarde a donde de verdad hace falta\\n\\nConectar tu CRM, tu ERP, tu web y tus hojas de cálculo entre sí no es un lujo técnico — es la diferencia entre un sistema que funciona de punta a punta y tres islas que alguien tiene que unir manualmente todos los días.\\n\\nCon permisos mínimos y credenciales propias en cada conexión. Nunca acceso genérico a todo tu sistema.\",\n    cta: \"¿Qué herramientas usas hoy que no se hablan entre sí?\",\n    hashtags: \"#Integraciones #CRM #ERP #AutomatizaciónIA\",\n  },\n  {\n    date: \"2026-08-17\",\n    pillar: \"Caso de uso\",\n    hook: \"5 procesos que probablemente ya podrías automatizar — sin un proyecto enorme.\",\n    body: \"1. Clasificación y archivo de documentos — facturas, contratos, formularios.\\n2. Respuestas a preguntas repetidas de clientes — horarios, precios, estado de un pedido.\\n3. Recopilación de datos para informes periódicos — el informe del viernes, hecho solo.\\n4. Seguimiento de leads y presupuestos pendientes — para que ninguno se quede \\\"para escribirle luego\\\".\\n5. Onboarding de nuevos clientes o empleados — la misma secuencia, cada vez, sin que dependa de que alguien se acuerde.\\n\\nNinguno necesita un gran proyecto de IA para empezar. Necesitan que alguien se pare a mirarlos con criterio.\",\n    cta: \"Artículo completo en el blog → enlace en el primer comentario.\",\n    hashtags: \"#AutomatizaciónIA #Eficiencia #Pymes\",\n  },\n  {\n    date: \"2026-08-19\",\n    pillar: \"Fundamentos\",\n    hook: \"\\\"No tenemos a nadie técnico en el equipo.\\\" No hace falta.\",\n    body: \"Es la objeción que más escuchamos — y la entendemos.\\n\\nPero automatizar tu operativa no depende de que tu equipo sepa programar ni de que contrates a alguien nuevo:\\n\\n→ Nosotros diseñamos e implementamos todo el sistema\\n→ Tú solo necesitas contarnos cómo funciona tu negocio hoy\\n→ Normalmente no hace falta cambiar tu software actual — nos integramos con lo que ya usas\\n→ Los sistemas que implementamos son tuyos, no una caja negra que solo nosotros entendemos\\n\\nLa barrera técnica para automatizar ha bajado mucho en los últimos años. La pregunta ya no es \\\"¿puedo permitírmelo técnicamente?\\\" sino \\\"¿qué proceso tiene más impacto si lo dejo de hacer a mano?\\\".\",\n    cta: \"Cuéntanos tu caso en una llamada de 30 minutos, sin coste.\",\n    hashtags: \"#IAparaEmpresas #Pymes #AutomatizaciónIA\",\n  },\n  {\n    date: \"2026-08-21\",\n    pillar: \"Bastidores\",\n    hook: \"Todavía no tenemos un archivo de casos de cliente. Preferimos decirlo antes que inflarlo.\",\n    body: \"Somos una empresa joven. No tenemos veinte años de trayectoria — y no vamos a fingir que sí.\\n\\nLo que sí tenemos es un modelo pensado para que el riesgo lo asumamos nosotros:\\n→ Diagnóstico sin coste\\n→ 30 días de implementación real, medida con datos\\n→ Si no hay beneficio demostrado, no facturamos ese mes\\n→ Sin permanencia, nunca\\n\\nEn cuanto completemos el primer mes de prueba con resultados medibles, lo documentamos y lo publicamos (con permiso del cliente).\\n\\nSi te unes ahora, tu empresa podría ser ese primer caso — con toda nuestra atención puesta en que funcione.\",\n    cta: \"Sé de los primeros en probarlo. Reserva tu llamada gratuita.\",\n    hashtags: \"#Transparencia #StartupsIA #Madrid\",\n  },\n  {\n    date: \"2026-08-24\",\n    pillar: \"Caso de uso\",\n    hook: \"La bienvenida a un cliente nuevo se repite. Casi nunca debería depender de que alguien se acuerde de hacerla.\",\n    body: \"Onboarding de clientes (o empleados) es de los procesos con más margen de automatización, porque los pasos son casi idénticos cada vez:\\n\\n→ Secuencia de bienvenida automática\\n→ Recopilación de los documentos o datos necesarios\\n→ Activación de cuentas o accesos\\n→ Aviso a tu equipo cuando algo necesita revisión humana\\n\\nEl resultado no es \\\"menos trato personal\\\". Es que la parte mecánica ocurre sola, y tu equipo dedica su tiempo a la parte que sí requiere criterio: la primera conversación real con esa persona.\",\n    cta: \"¿Cómo es hoy el primer día de un cliente nuevo en tu empresa?\",\n    hashtags: \"#Onboarding #AutomatizaciónIA #ExperienciaCliente\",\n  },\n  {\n    date: \"2026-08-26\",\n    pillar: \"Dolor\",\n    hook: \"El informe que alguien arma cada viernes copiando números de tres pantallas distintas. Ese es candidato número uno.\",\n    body: \"Si los datos ya existen en algún sistema — tu CRM, tu ERP, una hoja de cálculo — casi siempre se puede automatizar de punta a punta. Incluyendo el envío del informe final.\\n\\nNo se trata de que \\\"la IA decida todo\\\". Se trata de quitarle a tu equipo la parte que no requiere su criterio, para que dedique ese tiempo a lo que sí lo requiere.\\n\\n¿Cuánto tiempo le dedica alguien de tu equipo, cada semana, a montar un informe con datos que ya existen en algún sitio?\",\n    cta: \"Hablemos de tu operativa — 30 minutos, sin coste.\",\n    hashtags: \"#Reporting #AutomatizaciónIA #DataDriven\",\n  },\n  {\n    date: \"2026-08-28\",\n    pillar: \"Método\",\n    hook: \"Riesgo 0€. Prueba 30 días. Sin permanencia. Así es como trabajamos.\",\n    body: \"Resumiendo el Método D-Code, por si te lo perdiste este mes:\\n\\n→ Diagnóstico de tu operativa, sin coste ni compromiso\\n→ Implementación real de los sistemas de automatización o agentes de IA que más sentido tienen para tu caso\\n→ 30 días de prueba, supervisados de cerca\\n→ Revisión de resultados con datos concretos: horas ahorradas, procesos automatizados, tiempos de respuesta\\n→ Solo entonces, hablamos de precio — y puedes cancelar cuando quieras, incluso después\\n\\nSi tu empresa tiene procesos manuales que \\\"siempre se han hecho así\\\", o clientes que esperan demasiado por una respuesta, una llamada de 30 minutos te dice qué podemos automatizar y qué puedes esperar del primer mes.\",\n    cta: \"Reservar mi Llamada Gratuita → enlace en el primer comentario.\",\n    hashtags: \"#AutomatizaciónIA #Pymes #TransformaciónDigital #MétodoDCode\",\n  },\n];\n\n// new Date().toISOString() devuelve la fecha en UTC. A las 08:30 hora de\n// Madrid (CET/CEST = UTC+1/+2) todavía es el mismo día en UTC, así que la\n// comparación es correcta para el horario de disparo de este workflow;\n// si cambias el Schedule Trigger a horas muy cercanas a medianoche,\n// revisa este punto.\nconst today = new Date().toISOString().slice(0, 10);\nconst post = CALENDARIO.find((p) => p.date === today);\n\nif (!post) {\n  console.log(JSON.stringify({ evento: 'sin_post_programado', fecha: today }));\n  return [{ json: { found: false, date: today } }];\n}\n\nconst fullText = [post.hook, post.body, post.cta, post.hashtags].join('\\n\\n');\n\nconsole.log(JSON.stringify({\n  evento: 'post_programado_encontrado', fecha: today, pillar: post.pillar,\n}));\n\nreturn [{ json: { found: true, date: today, pillar: post.pillar, hook: post.hook, fullText } }];\n"
+      }
+    },
+    {
+      "id": "d4195026-4267-4e6d-cf44-5ca1d93e4f04",
+      "name": "Nota - Etapa 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        -180
+      ],
+      "parameters": {
+        "width": 560,
+        "height": 160,
+        "content": "## Etapa 2 · Publicación\nSi hay post programado para hoy, se publica en LinkedIn como texto plano (sin imagen). Revisa el nodo LinkedIn tras importar: los campos de credencial y \"Publicar como\" hay que reseleccionarlos manualmente la primera vez (comportamiento normal de n8n al importar JSON)."
+      }
+    },
+    {
+      "id": "e52a6137-5378-4f7e-d055-6db2ea5f6005",
+      "name": "¿Hay Post Programado Hoy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        560,
+        40
+      ],
+      "notes": "Enruta según si el Code node encontró un post para la fecha de hoy.",
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-post-hoy",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "f63b7248-6489-4081-e166-7e0fb3607106",
+      "name": "Publicar en LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        860,
+        -60
+      ],
+      "notes": "Requiere credencial LinkedIn (OAuth2) creada en n8n y conectada a un perfil de LinkedIn con permiso w_member_social. Tras importar, abre el nodo y confirma \"Publicar como\" (Person) y la credencial antes de activar el workflow.",
+      "parameters": {
+        "resource": "post",
+        "operation": "create",
+        "postAs": "person",
+        "text": "={{ $json.fullText }}",
+        "shareMediaCategory": "NONE"
+      }
+    },
+    {
+      "id": "0774834a-759a-4192-f277-8f10c4718207",
+      "name": "Sin Publicación Hoy",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        860,
+        200
+      ],
+      "notes": "Rama de descanso: hoy no toca ningún post del calendario. No hace nada.",
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Disparador Diario": {
+      "main": [
+        [
+          {
+            "node": "Calendario de Contenido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendario de Contenido": {
+      "main": [
+        [
+          {
+            "node": "¿Hay Post Programado Hoy?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Hay Post Programado Hoy?": {
+      "main": [
+        [
+          {
+            "node": "Publicar en LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sin Publicación Hoy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Madrid",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "meta": {
+    "templateName": "LinkedIn Auto-Post D-Code - D-Code Partners",
+    "description": "Publica automáticamente en LinkedIn el calendario de contenido de 4 semanas (3-28 ago 2026), un post por fecha programada, sin duplicados."
+  }
+}
