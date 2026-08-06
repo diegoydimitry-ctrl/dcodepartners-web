@@ -14,6 +14,12 @@
   </url>
 
   <url>
+    <loc>https://dcodepartners.com/departamentos</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
     <loc>https://dcodepartners.com/metodo</loc>
     <priority>0.9</priority>
     <changefreq>monthly</changefreq>
