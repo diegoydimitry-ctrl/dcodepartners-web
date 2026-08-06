@@ -56,7 +56,6 @@
   --mono:  "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   --container: 1180px;
-  --container-wide: 1320px;
   --pad: clamp(20px, 5vw, 64px);
   --section-pad: clamp(64px, 9vw, 130px);
   --section-pad-sm: clamp(48px, 6vw, 88px);
@@ -125,13 +124,6 @@ h1,h2,h3,h4,p{ margin:0; }
   padding:0 var(--pad);
   position:relative;
 }
-.container-wide{
-  max-width:var(--container-wide);
-  margin:0 auto;
-  padding:0 var(--pad);
-  position:relative;
-}
-
 ::selection{ background:rgba(91,140,255,.35); color:#fff; }
 
 /* ============ ACCESSIBILITY ============ */
@@ -1273,8 +1265,6 @@ footer{
   .has-mega .mega-trigger{ width:100%; justify-content:space-between; }
   .mega-item{ padding:10px 0; }
   .mega-item.wide{ display:none; }
-
-  .nav-right .btn-block-mobile-hide{ display:none; }
 }
 
 @media (max-width: 760px){
@@ -1304,7 +1294,7 @@ footer{
 }
 
 @media (min-width: 1600px){
-  :root{ --container:1280px; --container-wide:1440px; }
+  :root{ --container:1280px; }
 }
 
 /* ============ CHAT WIDGET (asistente de IA) ============ */
