@@ -6,8 +6,12 @@ Sitio corporativo multipágina de **D-Code Partners**, Growth Partners & especia
 
 ```
 index.html, metodo.html, servicios.html, ...   → Páginas del sitio (una por URL)
+aviso-legal.html, privacidad.html, cookies.html,
+condiciones-contratacion.html, seguridad.html,
+acuerdo-encargado-tratamiento.html             → Páginas legales (ver nota más abajo)
 api/
-  chat.js    → Endpoint del asistente de IA (Gemini, ver lib/providers.js)
+  chat.js               → Endpoint del asistente de IA (Gemini/Anthropic, ver lib/providers.js)
+  contact-fallback.js   → Envío de respaldo del formulario de contacto vía Resend (ver nota más abajo)
 lib/
   providers.js  → Registro de proveedores LLM (Gemini/Anthropic) para el asistente
 assets/
@@ -16,8 +20,20 @@ assets/
 scripts/
   build-knowledge-base.js  → Regenera knowledge-base.json a partir del HTML publicado
 automation/
-  n8n/lead-ia-360/  → Workflow de n8n que procesa el formulario de contacto (ver su propio README)
+  n8n/lead-ia-360/  → Copia de referencia del workflow de n8n que procesa el formulario de contacto
+                       (ver su propio README). Es un snapshot exportado, no el workflow en vivo:
+                       el workflow real en n8n Cloud puede haber evolucionado desde la última
+                       exportación — no asumas que este JSON refleja el comportamiento actual.
 ```
+
+### Páginas legales
+
+`aviso-legal.html`, `privacidad.html` y `cookies.html` están enlazadas desde el footer de todo
+el sitio. `condiciones-contratacion.html`, `seguridad.html` y `acuerdo-encargado-tratamiento.html`
+son documentos añadidos posteriormente (contratación de servicios, seguridad de la información y
+encargo de tratamiento RGPD art. 28) — existen y están en el sitemap, pero **todavía no están
+enlazadas desde el menú ni el footer**, a la espera de decidir dónde encajarlas visualmente sin
+tocar la estructura compartida del sitio.
 
 ## Ver la web en local
 
@@ -40,9 +56,17 @@ Pages no puede ejecutar (solo sirve archivos estáticos). El despliegue se dispa
 automáticamente al hacer push a `main`, a través de la integración de Vercel con este
 repositorio de GitHub.
 
-Variable de entorno necesaria en Vercel:
+Variables de entorno usadas en Vercel:
 
 - `GEMINI_API_KEY3` (o `GEMINI_API_KEY`) — clave de Google AI Studio para el asistente de IA.
+  Proveedor principal; si falta, `lib/providers.js` intenta `ANTHROPIC_API_KEY` como alternativa.
+- `ANTHROPIC_API_KEY` (opcional) — clave de Anthropic, proveedor de respaldo del asistente de IA
+  si Gemini no está disponible o no tiene clave configurada. Ninguno de los dos es estrictamente
+  obligatorio por separado, pero **al menos uno de los dos debe estar configurado** para que el
+  asistente de IA funcione.
+- `RESEND_API_KEY` — clave de Resend, usada únicamente por `api/contact-fallback.js` como vía de
+  respaldo del formulario de contacto cuando el envío principal al webhook de n8n falla. Sin esta
+  clave, un fallo del webhook de n8n haría que la solicitud del formulario se pierda sin aviso.
 
 ## Notas
 
