@@ -2,7 +2,9 @@
 
 **Documento interno de estrategia comercial y pricing — no publicar en el sitio web.**
 
-Versión 1.0 · Elaborado como marco oficial de precios y monetización de D-Code Partners.
+Versión 1.1 · Elaborado como marco oficial de precios y monetización de D-Code Partners.
+
+**Changelog v1.1 (07/08/2026):** corregidas dos discrepancias detectadas al contrastar este catálogo contra el sistema real verificado nodo por nodo en n8n (Fase 2.5, 06/08/2026): (1) **WhatsApp IA se retira del catálogo vendible** — nunca se construyó, no hay credencial de WhatsApp Business API; queda marcado como "Próximamente" en Soporte. (2) **"Captación de Leads" se retira de Marketing** — esa automatización no existe como tal, es una página de Notion obsoleta; su función real la cubre **Radar Comercial IA**, que se añade al catálogo de Comercial junto con su compañera técnica **Detección de Respuestas**. El número total de servicios catalogados se mantiene en 32. Precios de los paquetes Comercial, Marketing y Atención al Cliente recalculados en consecuencia.
 Moneda: EUR. Precios sin IVA (operativa B2B). Todas las cifras son precios de referencia (rack rate) para la fuerza comercial; el descuento máximo autorizado sin escalar a dirección es del 10 % sobre implantación y 0 % sobre mensualidad (la mensualidad es margen recurrente, no se negocia a la baja salvo en volumen — ver §11).
 
 ---
@@ -86,6 +88,8 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Seguimiento Comercial IA | Media | 4 | 4 | 26–32 h | Medio | 4 | **Sí** |
 | CRM Inteligente | Muy alta | 5 | 5 | 100–140 h | Alto | 5 | **Sí — producto ancla** |
 | Recordatorio Comercial | Baja | 3 | 3 | 8–12 h | Bajo | 2 | **No** — solo con CRM/Seguimiento |
+| Radar Comercial IA | Media | 4 | 4 | 26–32 h | Medio | 4 | **Sí** |
+| Detección de Respuestas | Baja | 2 | 2 | 8–12 h | Bajo | 2 | **No** — solo con Seguimiento Comercial IA |
 
 ### Dirección
 
@@ -110,11 +114,12 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 
 | Servicio | Dificultad | Valor cliente | Impacto económico | Tiempo dev | Mantenimiento | Prioridad comercial | ¿Venta individual? |
 |---|---|---|---|---|---|---|---|
-| Captación de Leads | Media | 4 | 4 | 28–34 h | Medio | 4 | **Sí** |
 | Lead IA 360 | Muy alta | 5 | 5 | 95–130 h | Alto | 5 | **Sí — producto insignia** |
-| Contenido IA para Redes Sociales | Media | 4 | 3 | 26–32 h | Medio | 4 | **Sí** |
-| Newsletter IA | Media | 3 | 3 | 22–28 h | Medio | 3 | **Sí** |
+| Contenido IA para Redes Sociales | Media | 4 | 3 | 26–32 h | Medio | 4 | **Sí** — genera borrador, envío/publicación requiere aprobación humana |
+| Newsletter IA | Media | 3 | 3 | 22–28 h | Medio | 3 | **Sí** — genera borrador, envío requiere aprobación humana |
 | SEO IA | Alta | 4 | 4 | 40–52 h | Medio-Alto | 4 | **Sí** |
+
+*Nota: "Captación de Leads" se retira del catálogo (v1.1) — no existe como automatización real; su función la cubre Radar Comercial IA, catalogada en Comercial (ver más abajo), que es donde vive realmente en el sistema construido.*
 
 ### Producción
 
@@ -130,8 +135,9 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Servicio | Dificultad | Valor cliente | Impacto económico | Tiempo dev | Mantenimiento | Prioridad comercial | ¿Venta individual? |
 |---|---|---|---|---|---|---|---|
 | Chat IA Clientes | Alta | 5 | 4 | 46–58 h | Medio-Alto | 5 | **Sí** |
-| WhatsApp IA | Alta | 5 | 5 | 50–64 h | Medio-Alto | 5 | **Sí** |
 | Tickets IA | Media | 4 | 4 | 30–38 h | Medio | 4 | **Sí** |
+
+*Nota: **WhatsApp IA se retira del catálogo vendible (v1.1)** — nunca se construyó, no existe credencial de WhatsApp Business API en el sistema real. No cotizar ni prometer plazo hasta que esté técnicamente disponible; ver §12 para su tratamiento como línea de roadmap, no de catálogo.*
 
 ---
 
@@ -150,6 +156,8 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Seguimiento Comercial IA | B | 2.900 € |
 | CRM Inteligente | D | 9.500 € |
 | Recordatorio Comercial | A | 1.100 € |
+| Radar Comercial IA | B | 2.900 € |
+| Detección de Respuestas | A | 1.000 € |
 | KPIs Empresa | C | 4.800 € |
 | Dashboard Ejecutivo | C | 5.800 € |
 | Informe Diario | A | 1.300 € |
@@ -159,7 +167,6 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Control de Gastos | B | 2.700 € |
 | Cobros Automáticos | C | 5.200 € |
 | Recordatorios de Pago | A | 1.200 € |
-| Captación de Leads | B | 3.000 € |
 | Lead IA 360 | D | 8.500 € |
 | Contenido IA para Redes Sociales | B | 2.800 € |
 | Newsletter IA | B | 2.400 € |
@@ -169,7 +176,6 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Asignación Automática | B | 2.900 € |
 | Control de Entregas | B | 2.500 € |
 | Chat IA Clientes | C | 4.800 € |
-| WhatsApp IA | C | 5.200 € |
 | Tickets IA | B | 3.100 € |
 
 **Justificación del método:** cada precio se ancla a horas estimadas × tarifa interna mixta (85 €/h, que combina desarrollo senior de automatización, prompt/IA engineering y QA), con un multiplicador de valor que sube con: (a) impacto económico directo (Facturación IA, Cobros Automáticos, CRM Inteligente, WhatsApp IA cotizan por encima del punto medio de su banda por su ROI directo y medible en caja); (b) irreversibilidad/dependencia (CRM Inteligente y Lead IA 360 cotizan en el techo de su banda porque, una vez implantados, se convierten en el sistema operativo del cliente — sustituirlos tiene un coste de cambio altísimo, lo cual justifica un precio de entrada más alto: es una decisión de plataforma, no de herramienta); y (c) escasez de competencia cualificada (pocos proveedores en España combinan n8n/Make + IA generativa + integraciones financieras con el nivel de fiabilidad que exige Cobros Automáticos o Facturación IA).
@@ -191,6 +197,8 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Seguimiento Comercial IA | 220 € |
 | CRM Inteligente | 750 € |
 | Recordatorio Comercial | 80 € |
+| Radar Comercial IA | 220 € |
+| Detección de Respuestas | 70 € |
 | KPIs Empresa | 350 € |
 | Dashboard Ejecutivo | 420 € |
 | Informe Diario | 100 € |
@@ -200,7 +208,6 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Control de Gastos | 210 € |
 | Cobros Automáticos | 400 € |
 | Recordatorios de Pago | 90 € |
-| Captación de Leads | 230 € |
 | Lead IA 360 | 650 € |
 | Contenido IA para Redes Sociales | 220 € |
 | Newsletter IA | 190 € |
@@ -210,14 +217,13 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Asignación Automática | 230 € |
 | Control de Entregas | 200 € |
 | Chat IA Clientes | 380 € |
-| WhatsApp IA | 400 € |
 | Tickets IA | 240 € |
 
 **Qué cubre la mensualidad (los cuatro componentes que la justifican, siempre):**
 
 1. **Mantenimiento técnico** — APIs de terceros cambian (WhatsApp Business, bancos, ERPs, Google/Microsoft), y un workflow no mantenido se rompe en 3–9 meses. Esto no es negociable ni opcional: es la razón real de que estos sistemas no se vendan "a coste único" como haría un desarrollador freelance — ahí es donde compiten mal y donde D-Code compite bien.
 2. **Mejoras continuas** — pequeños ajustes de reglas de negocio, nuevos campos, nuevas condiciones, sin necesidad de re-cotizar cada cambio menor.
-3. **Soporte** — canal de incidencias con SLA (ver §8), crítico en servicios que tocan dinero (Facturación, Cobros) o cara al cliente final (Chat IA, WhatsApp IA).
+3. **Soporte** — canal de incidencias con SLA (ver §8), crítico en servicios que tocan dinero (Facturación, Cobros) o cara al cliente final (Chat IA Clientes, Tickets IA).
 4. **Monitorización** — alertas proactivas de fallos de ejecución, especialmente relevante en flujos con IA generativa, donde "funciona pero da una respuesta rara" es un modo de fallo tan real como "se ha caído".
 
 La mensualidad se calibra en ~7–9 % del precio de implantación al mes para las Bandas A–B (retorno de la implantación en 11–14 meses vía mensualidad, razonable para el cliente) y ~6–8 % para C–D (el ticket de implantación ya es alto, así que el ratio baja ligeramente, pero el importe absoluto crece por la complejidad real de mantener sistemas con más superficie de fallo).
@@ -226,7 +232,7 @@ La mensualidad se calibra en ~7–9 % del precio de implantación al mes para la
 
 ## 5. Servicios que nunca se venden solos
 
-Seis servicios están marcados explícitamente como **"No — solo en paquete"**:
+Siete servicios están marcados explícitamente como **"No — solo en paquete"**:
 
 | Servicio | Por qué no se vende solo |
 |---|---|
@@ -235,6 +241,7 @@ Seis servicios están marcados explícitamente como **"No — solo en paquete"**
 | Recordatorio Comercial | Sin un CRM Inteligente o Seguimiento Comercial IA detrás, un recordatorio no tiene datos de los que "recordar" nada relevante. Es un complemento funcional, no un sistema. |
 | Informe Diario / Informe Semanal | Un informe automatizado sin los KPIs/Dashboard que lo alimentan es un email bonito sin sustancia analítica. Venderlos sueltos infla el catálogo mercado de "informes" que cualquier freelancer replica en un día — mejor no competir ahí en absoluto. |
 | Recordatorios de Pago | Exactamente el mismo patrón que Recordatorio Comercial: sin Cobros Automáticos, no hay motor de gestión de impagos detrás, solo un envío de emails. |
+| Detección de Respuestas | Es el freno automático de Seguimiento Comercial IA (detiene la secuencia de contacto en cuanto el lead responde de verdad). Sin Seguimiento Comercial IA activo no hay secuencia que frenar — es su complemento técnico, no un sistema independiente. |
 
 **Principio general:** un servicio no se vende solo cuando (a) su valor depende estructuralmente de otro sistema para generar dato o contexto, o (b) su venta aislada lo convierte en un commodity fácilmente replicable por la competencia low-cost, dañando el posicionamiento de precio de toda la marca. Estos seis servicios son el "pegamento" de los paquetes, no productos de puerta de entrada.
 
@@ -246,14 +253,16 @@ Seis servicios están marcados explícitamente como **"No — solo en paquete"**
 |---|---|---|
 | 1 | **Lead IA 360** | Producto insignia ya construido y en producción (workflow real del sitio de D-Code). Cubre todo el funnel de captación con IA — es la demostración viva de la propia capacidad de la empresa: "usamos lo que vendemos". |
 | 2 | **CRM Inteligente** | El sistema de mayor dependencia y mayor LTV del catálogo. Una vez dentro, el cliente no se va — coste de cambio altísimo. Es la base de la mayoría de upsells posteriores. |
-| 3 | **WhatsApp IA** | Canal de mayor demanda en España/LATAM para PYME orientada a cliente final. Cierre rápido: el dolor ("no damos abasto con WhatsApp") es universal y fácil de vender en la primera llamada. |
-| 4 | **Chat IA Clientes** | Automatización visible y demostrable en la propia web del cliente en cuestión de días — genera "efecto wow" inmediato, ideal para testimoniales y casos de estudio. |
-| 5 | **Onboarding Cliente IA** | Reduce directamente el churn del cliente de D-Code — argumento de ROI limpio y fácil de cuantificar (coste de un cliente perdido en el primer mes vs. coste del sistema). |
-| 6 | **Dashboard Ejecutivo** | Vende directamente a quien firma el cheque (dirección/gerencia). Acceso directo al presupuesto y a la decisión, sin intermediarios de compras. |
-| 7 | **Cobros Automáticos** | ROI cuantificable en euros reales recuperados desde el primer mes — el argumento de venta se escribe solo ("recuperamos X € de impagados el mes pasado"). |
-| 8 | **Generador de Propuestas IA** | Equipo comercial del cliente lo adopta de inmediato porque le ahorra tiempo a él mismo — genera evangelistas internos dentro de la cuenta, acelera el resto de la venta departamental. |
-| 9 | **Facturación IA** | Necesidad recurrente y, en España, con presión regulatoria creciente (facturación electrónica/Veri*Factu) que empuja a la adopción — argumento de cumplimiento normativo además de eficiencia. |
-| 10 | **SEO IA** | Motor de venta recurrente por naturaleza (el contenido/posicionamiento se degrada si se deja de trabajar), abre la puerta a todo el Departamento Marketing IA. |
+| 3 | **Chat IA Clientes** | Automatización visible y demostrable en la propia web del cliente en cuestión de días — genera "efecto wow" inmediato, ideal para testimoniales y casos de estudio. |
+| 4 | **Onboarding Cliente IA** | Reduce directamente el churn del cliente de D-Code — argumento de ROI limpio y fácil de cuantificar (coste de un cliente perdido en el primer mes vs. coste del sistema). |
+| 5 | **Dashboard Ejecutivo** | Vende directamente a quien firma el cheque (dirección/gerencia). Acceso directo al presupuesto y a la decisión, sin intermediarios de compras. |
+| 6 | **Cobros Automáticos** | ROI cuantificable en euros reales recuperados desde el primer mes — el argumento de venta se escribe solo ("recuperamos X € de impagados el mes pasado"). |
+| 7 | **Generador de Propuestas IA** | Equipo comercial del cliente lo adopta de inmediato porque le ahorra tiempo a él mismo — genera evangelistas internos dentro de la cuenta, acelera el resto de la venta departamental. |
+| 8 | **Facturación IA** | Necesidad recurrente y, en España, con presión regulatoria creciente (facturación electrónica/Veri*Factu) que empuja a la adopción — argumento de cumplimiento normativo además de eficiencia. |
+| 9 | **SEO IA** | Motor de venta recurrente por naturaleza (el contenido/posicionamiento se degrada si se deja de trabajar), abre la puerta a todo el Departamento Marketing IA. |
+| 10 | **Radar Comercial IA** | Prospección activa diaria que alimenta directamente al CRM Inteligente — cierra el círculo completo del Departamento Comercial (encuentra → centraliza → propone → sigue) y es fácil de demostrar en la propia llamada de diagnóstico ("mirad, ya os hemos encontrado 3 prospectos calientes en vuestro sector"). |
+
+*Nota v1.1: WhatsApp IA queda fuera de este ranking — no forma parte del catálogo vendible (ver §2/§3/§4, Soporte). Se reincorporará aquí si se prioriza su construcción (credencial de WhatsApp Business API + desarrollo).*
 
 ---
 
@@ -271,11 +280,12 @@ No se venden features sueltas: se vende un **departamento sustituido o aumentado
 
 ### 7.1 Departamento Comercial IA
 
-*Incluye:* Generador de Propuestas IA + Seguimiento Comercial IA + CRM Inteligente + Recordatorio Comercial
-*Precio implantación:* **12.500 €** *(vs. 16.700 € → ahorro 4.200 €)*
-*Precio mensual:* **1.000 €** *(vs. 1.290 € → ahorro 290 €/mes)*
-*ROI esperado:* aumento típico de tasa de cierre por seguimiento sistemático (nada se olvida) + reducción del ciclo de venta al automatizar propuestas — en una PYME con ticket medio de 5.000–20.000 € por venta, un solo cierre adicional al trimestre paga el paquete completo.
+*Incluye:* Generador de Propuestas IA + Seguimiento Comercial IA + CRM Inteligente + Recordatorio Comercial + Radar Comercial IA + Detección de Respuestas
+*Precio implantación:* **15.400 €** *(vs. 20.600 € → ahorro 5.200 €)*
+*Precio mensual:* **1.220 €** *(vs. 1.580 € → ahorro 360 €/mes)*
+*ROI esperado:* aumento típico de tasa de cierre por seguimiento sistemático (nada se olvida) + reducción del ciclo de venta al automatizar propuestas + pipeline que se llena solo vía prospección diaria — en una PYME con ticket medio de 5.000–20.000 € por venta, un solo cierre adicional al trimestre paga el paquete completo.
 *Empresa ideal:* empresas con equipo comercial de 2–15 personas y ciclo de venta consultivo (B2B servicios, industria, distribución).
+*Nota v1.1:* precio recalculado al añadir Radar Comercial IA y Detección de Respuestas — antes ausentes del catálogo por error, son parte real y activa del sistema construido (ver §0 de este changelog).
 
 ### 7.2 Departamento Financiero IA
 
@@ -287,19 +297,21 @@ No se venden features sueltas: se vende un **departamento sustituido o aumentado
 
 ### 7.3 Departamento Marketing IA
 
-*Incluye:* Captación de Leads + Lead IA 360 + Contenido IA para Redes Sociales + Newsletter IA + SEO IA
-*Precio implantación:* **15.700 €** *(vs. 20.900 € → ahorro 5.200 €)*
-*Precio mensual:* **1.250 €** *(vs. 1.610 € → ahorro 360 €/mes)*
+*Incluye:* Lead IA 360 + Contenido IA para Redes Sociales + Newsletter IA + SEO IA
+*Precio implantación:* **13.500 €** *(vs. 17.900 € → ahorro 4.400 €)*
+*Precio mensual:* **1.070 €** *(vs. 1.380 € → ahorro 310 €/mes)*
 *ROI esperado:* sustituye o complementa la contratación de un equipo de marketing de 1–2 personas (coste totalmente cargado 45.000–70.000 €/año en España) manteniendo presencia constante en captación, contenido y SEO.
 *Empresa ideal:* empresas sin equipo de marketing interno o con equipo pequeño saturado, que buscan presencia digital constante sin escalar plantilla.
+*Nota v1.1:* "Captación de Leads" se retira del paquete — no es una automatización real (ver §2, Marketing). Contenido IA para Redes Sociales y Newsletter IA generan borrador y requieren aprobación humana antes de publicar/enviar; comunicarlo así al cliente en la venta, no como envío 100 % autónomo.
 
 ### 7.4 Departamento Atención al Cliente IA
 
-*Incluye:* Chat IA Clientes + WhatsApp IA + Tickets IA + Encuestas Automáticas + Bienvenida Cliente + Renovaciones + Onboarding Cliente IA
-*Precio implantación:* **17.900 €** *(vs. 23.900 € → ahorro 6.000 €)*
-*Precio mensual:* **1.400 €** *(vs. 1.790 € → ahorro 390 €/mes)*
+*Incluye:* Chat IA Clientes + Tickets IA + Encuestas Automáticas + Bienvenida Cliente + Renovaciones + Onboarding Cliente IA
+*Precio implantación:* **14.000 €** *(vs. 18.700 € → ahorro 4.700 €)*
+*Precio mensual:* **1.090 €** *(vs. 1.390 € → ahorro 300 €/mes)*
 *ROI esperado:* cobertura 24/7 sin ampliar plantilla de soporte, reducción de churn vía onboarding y renovaciones proactivas — combina el paquete de mayor volumen de interacción diaria con el de mayor efecto en retención de ingresos.
 *Empresa ideal:* empresas con base de clientes activa y recurrente (SaaS, suscripciones, servicios con renovación, e-commerce con volumen medio-alto de consultas).
+*Nota v1.1:* WhatsApp IA se retira del paquete — no está construido (falta credencial WhatsApp Business API). Se reincorporará y se recalculará el precio cuando esté técnicamente disponible.
 
 ### 7.5 Departamento Dirección IA
 
