@@ -5,15 +5,60 @@
 > IMPLEMENTACIÓN · CONFIGURACIÓN INCORRECTA · CREDENCIAL · DESPLIEGUE · DISEÑO ·
 > DEPENDENCIA · ERROR HUMANO · DATOS · INTEGRACIÓN · GOBERNANZA · DESCONOCIDO
 
-Última actualización: 2026-08-08.
+Última actualización: 2026-08-14 (auditoría AUD-20260814-001, con acceso en vivo).
 
 ## Incidencias activas
 
-Ninguna incidencia activa registrada todavía en este sistema documental — las
-observaciones de esta primera pasada están en `CAMBIOS-ABIERTOS.md` como cambios
-propuestos, no como incidencias confirmadas en vivo (requieren verificación con
-herramientas conectadas a n8n/Airtable/Gmail antes de clasificarse como incidencia
-real).
+### INC-20260814-001
+
+- Categoría: DESPLIEGUE / GOBERNANZA
+- Área: Comercial / n8n
+- Fecha de detección: 2026-08-14
+- Descripción: "CM/Detección de Respuestas - Seguimiento Comercial IA" falla en
+  casi el 100% de sus ejecuciones desde al menos el 8 de agosto (145 errores
+  históricos). Causa confirmada: el editor de n8n contiene un fix ya escrito para
+  el nodo "Filtrar Autorrespuestas y OOO" que nunca se publicó a producción.
+- Evidencia: [EVIDENCIA DIRECTA] traza de error completa vía `get_execution`
+  (n8n MCP); comparación código borrador vs. código activo del mismo workflow.
+- ¿Relacionada con incidencia existente?: sí — es una **recurrencia exacta** del
+  patrón sistémico documentado más abajo (fix hecho, no publicado).
+- Impacto: la secuencia automática de seguimiento sigue escribiendo a leads que ya
+  respondieron.
+- Estado: PENDIENTE DE AUTORIZACIÓN PARA PUBLICAR (ver CAMBIO-004 en
+  `CAMBIOS-ABIERTOS.md`).
+- Responsable: quien tenga acceso de publicación en n8n.
+
+### INC-20260814-002
+
+- Categoría: CREDENCIAL
+- Área: Comercial / n8n / Airtable
+- Fecha de detección: 2026-08-14
+- Descripción: "CM/Seguimiento Comercial IA" falla cada día a las 06:30 desde el 8
+  de agosto (7/7 días) con `401 Invalid authentication token` sobre la credencial
+  Airtable "Airtable Personal Access Token account" (`OrGjGOCyB2b3E2s5`).
+- Evidencia: [EVIDENCIA DIRECTA] traza de error vía `get_execution` (n8n MCP).
+- ¿Relacionada con incidencia existente?: no, es una causa distinta a INC-001
+  (credencial vs. código), aunque ambas incidencias rompen la misma función de
+  negocio (seguimiento comercial automático).
+- Impacto: los emails de seguimiento a 3/7/14 días no se han enviado en una semana.
+- Estado: PENDIENTE DE AUTORIZACIÓN PARA REGENERAR CREDENCIAL (ver CAMBIO-005).
+- Responsable: administrador de la cuenta Airtable/n8n.
+
+### INC-20260814-003
+
+- Categoría: GOBERNANZA / DATOS
+- Área: Comercial / Auditoría interna
+- Fecha de detección: 2026-08-14
+- Descripción: el propio "DIR/Executive Board - Auditor Interno" diagnosticó mal la
+  causa raíz de los errores del día, señalando a un workflow (`GZ3w0M3oLzZzgceB`)
+  que tiene 0 errores confirmados, en vez del que realmente concentra el 97% de los
+  errores del periodo (`ujkXnsEtzySHr00l`, ver INC-001).
+- Evidencia: [EVIDENCIA DIRECTA] `search_executions` filtrado por workflow y
+  estado, 2026-08-14.
+- ¿Relacionada con incidencia existente?: no.
+- Impacto: riesgo de que se actúe sobre el workflow equivocado si no se contrasta.
+- Estado: PENDIENTE (ver CAMBIO-006).
+- Responsable: equipo técnico (n8n).
 
 ## Incidencias históricas (extraídas del changelog del workflow Lead IA 360)
 
@@ -47,6 +92,13 @@ Esto es una observación basada en el propio changelog documentado por versiones
 anteriores del workflow (no inventada), pero la causalidad exacta ("por qué sigue
 pasando") es [INFERENCIA] — no se ha confirmado con Dirección si existe o no un
 proceso de verificación post-cambio.
+
+**Confirmación en vivo (2026-08-14, INC-20260814-001):** el patrón se ha repetido,
+esta vez verificado directamente contra la instancia real de n8n, no solo leído en
+un changelog: existe un fix ya escrito para "CM/Detección de Respuestas" que nunca
+se publicó, y ha estado fallando en producción durante al menos 6 días. Esto sube la
+confianza en la causalidad de [INFERENCIA] a [EVIDENCIA DIRECTA] — el patrón
+sistémico es real y sigue activo, no es solo una lectura del pasado.
 
 **Recomendación derivada** (propuesta, no ejecutada): antes de dar por buena
 cualquier edición manual futura en n8n (reconexión de credenciales, remapeo de

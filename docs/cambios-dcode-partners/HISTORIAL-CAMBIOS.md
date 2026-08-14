@@ -37,3 +37,29 @@ publicado) fue modificado.
 EVIDENCIA: Commit(s) en la rama `claude/dcode-partners-changes-governance-tvyk6k`.
 RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
 TICKET RELACIONADO: N/A (primera creación).
+
+---
+
+FECHA: 2026-08-14
+CAMBIO: Primera auditoría completa con acceso en vivo a n8n y Gmail
+(AUD-20260814-001, solicitada por Dirección como CAM-20260814-001). Actualización
+de `ESTADO-ACTUAL.md`, `CAMBIOS-ABIERTOS.md` (CAMBIO-001 y CAMBIO-003 revisados,
+CAMBIO-002 marcado obsoleto, CAMBIO-004 a CAMBIO-010 añadidos), `INCIDENCIAS.md`
+(INC-20260814-001/002/003), `ROADMAP.md` y `CONTEXTO-MAESTRO.md` (secciones 3, 4,
+5 y 7).
+MOTIVO: Dirección pidió una revisión global orientada a impacto comercial —
+"preparar a D-Code Partners para vender a pymes".
+ÁREA: Comercial / Automatizaciones / Gobernanza.
+ESTADO ANTERIOR: memoria documental basada solo en lectura del repositorio (2
+workflows conocidos, Radar Comercial y asistentes Director/Auditor marcados NO
+VERIFICADO).
+ESTADO NUEVO: confirmado en vivo que existen 38 workflows de n8n; identificados 3
+bloqueos P0 (captación de leads nunca ejecutada, seguimiento comercial roto en sus
+dos mitades) y contradicción entre el diagnóstico automático del propio Auditor
+Interno y la verificación directa. Ningún cambio de producción ejecutado — solo
+diagnóstico y documentación.
+EVIDENCIA: MCP n8n (`search_workflows`, `search_executions`, `get_execution`,
+`get_workflow_details`) y MCP Gmail (`search_threads`, `get_thread`), 2026-08-14.
+Commit(s) en la rama `claude/dcode-partners-changes-governance-tvyk6k`.
+RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
+TICKET RELACIONADO: CAM-20260814-001.

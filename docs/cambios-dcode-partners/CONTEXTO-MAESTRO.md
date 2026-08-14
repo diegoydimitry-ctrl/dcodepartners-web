@@ -5,7 +5,9 @@
 > Todo lo marcado [NO VERIFICADO] o [PENDIENTE DE DEFINIR] debe confirmarse con
 > Dirección o con herramientas antes de tratarse como hecho.
 
-Última actualización: 2026-08-08 (creación inicial de esta memoria documental).
+Última actualización: 2026-08-14 (auditoría AUD-20260814-001, primera con acceso en
+vivo a n8n y Gmail — ver `AUDITORIAS.md`). Varias secciones marcadas [NO VERIFICADO]
+en la versión del 2026-08-08 quedan confirmadas o corregidas más abajo.
 
 ## 1. Qué es D-Code Partners
 
@@ -35,51 +37,82 @@ Precios, planes, pilotos, condiciones comerciales reales: [PENDIENTE DE DEFINIR]
 pueden contener información relevante pero no han sido volcadas aquí; léelas
 directamente si se necesita ese detalle.)
 
-## 3. Sistemas principales (verificados en este repositorio)
+## 3. Sistemas principales
+
+[EVIDENCIA DIRECTA — n8n MCP, `search_workflows`, 2026-08-14] La cuenta n8n real
+(`diegoydimitry2.app.n8n.cloud`) tiene **38 workflows**, no solo los 2 documentados
+en `automation/n8n/` de este repositorio. Bloques identificados (prefijo del
+nombre):
+
+| Prefijo | Área | Ejemplos |
+|---|---|---|
+| `MK/` | Marketing | Lead IA 360, Contenido IA Redes Sociales, SEO IA |
+| `CM/` | Comercial | Detección de Respuestas, Seguimiento Comercial IA, Generador de Propuestas IA, CRM Inteligente, Recordatorio Comercial, Plantilla de Email |
+| `AAA/` | Prospección | Radar Comercial IA, AI Factory Orchestrator (inactivo) |
+| `DIR/` | Dirección / meta-negocio | Executive Board (Auditor Interno, Director Estratégico IA, Recolector Externo), Informe Diario/Semanal/Mensual, Dashboard Ejecutivo, KPIs Empresa |
+| `PRD/` | Producción/Proyectos | Gestión de Proyectos, Asignación Automática, Control de Entregas, Seguimiento de Tareas |
+| `CLS/` | Clientes | Onboarding, Bienvenida, Renovaciones, Encuestas |
+| `FNZ/` | Finanzas | Facturación IA (sin disparador aún), Cobros y Recordatorios, Control de Gastos |
+| `SP/` | Soporte | Tickets IA, Chat IA Clientes |
+| `ADM/` | Administración | Monitorización n8n, Gestión Documental, Copias de Seguridad |
+
+Sistemas base:
 
 | Sistema | Rol | Evidencia |
 |---|---|---|
 | Sitio web (HTML estático + Vercel) | Presencia comercial, formulario de contacto, asistente de IA embebido | `index.html`, resto de páginas, `vercel.json` |
-| n8n Cloud | Motor de automatización: cualificación de leads, publicación en LinkedIn | `automation/n8n/*/README.md` + `*.workflow.json` |
-| Airtable | Almacén de leads (tabla `Leads`) | `automation/n8n/lead-ia-360/README.md` (esquema real documentado) |
-| Gmail (OAuth2 vía n8n) | Envío de email de confirmación al lead + alerta interna al equipo comercial | ídem |
-| Gemini API | Análisis/scoring del lead (workflow) y asistente de chat del sitio (`api/chat.js`) | `automation/n8n/lead-ia-360/README.md`, `lib/providers.js` |
-| Anthropic API | Proveedor alternativo del asistente de chat del sitio | `lib/providers.js` |
+| n8n Cloud | Motor de automatización de toda la empresa (38 workflows) | MCP n8n, verificado en vivo 2026-08-14 |
+| Airtable | Almacén de Leads, Clientes y otras tablas de negocio | Esquema de `Leads` confirmado vía nodos n8n (base `app5JfVEjK4JiMXEm`, tabla `tblfQXOCLlEf9cJUa`). **El conector Airtable MCP de esta sesión no tiene bases visibles (0 bases)** — no se ha podido leer Airtable directamente, solo a través de n8n. |
+| Gmail (OAuth2 vía n8n) | Bandeja `dcodedepartment@gmail.com`: recibe respuestas de leads, envía informes internos, alertas de error | Verificado en vivo, MCP Gmail |
+| Gemini API | Análisis/scoring de leads y radar, generación de contenido y propuestas | Múltiples workflows |
+| Anthropic (Claude) | Genera el informe ejecutivo de "DIR/Executive Board - Director Estratégico IA" | Descripción del workflow, MCP n8n |
 | Cloudflare Turnstile | Anti-spam del formulario de contacto | `automation/n8n/lead-ia-360/README.md` |
-| LinkedIn (OAuth2 vía n8n) | Publicación automática de contenido | `automation/n8n/linkedin-auto-post/README.md` |
+| LinkedIn / Instagram / Facebook / X | Publicación de contenido (ahora vía "MK/Contenido IA Redes Sociales", no solo LinkedIn) | Email "[Contenido IA] Nuevo contenido pendiente de revisión", 2026-08-14 |
 
 Detalle de cada integración: ver `SISTEMAS-Y-INTEGRACIONES.md` y `ARQUITECTURA-DCP.md`.
 
-**No verificado en este repositorio** (puede existir fuera de él): Radar Comercial
-IA, clasificación/HOT/WARM de leads previa a Airtable, CRM de operaciones,
-automatización de propuestas comerciales, facturación/cobros. No hay evidencia en
-este repo de que existan — no se debe asumir ni que existen ni que no existen.
-
 ## 4. Arquitectura de asistentes/agentes
 
-[NO VERIFICADO desde este repositorio] La existencia de otros asistentes
-("Director D-Code Partners", "Auditor D-Code Partners", "Auditor n8n y Airtable")
-ha sido mencionada por Dirección en conversación, pero este repositorio no contiene
-evidencia de su configuración, alcance real ni estado. Si esos asistentes vivos en
-otra plataforma (p. ej. proyectos de claude.ai, Slack) definen responsabilidades
-que deban respetarse desde aquí, deben documentarse explícitamente en este archivo
-cuando Dirección las confirme.
+[EVIDENCIA DIRECTA — corrige la versión anterior, que lo marcaba NO VERIFICADO]
+Los asistentes "Director" y "Auditor" **sí existen**, pero no como chats separados
+sino como workflows de n8n dentro del bloque `DIR/Executive Board`:
 
-Este repositorio define un único rol propio: **"Cambios D-Code Partners"**, descrito
-en `CLAUDE.md` y en el resto de esta carpeta. Su responsabilidad: detectar,
-analizar, priorizar, proponer y coordinar cambios — no ejecutar por defecto.
+- **DIR/Executive Board - Auditor Interno**: revisa n8n/Airtable/Gmail/GitHub a
+  diario y calcula métricas del negocio.
+- **DIR/Executive Board - Director Estratégico IA**: lee esas señales, llama a
+  Claude (Anthropic) para redactar el informe ejecutivo, y lo envía por email
+  (asunto `[DCP][DASHBOARD] Executive Board`).
+- **DIR/Executive Board - Recolector Externo**: alimenta señales externas
+  (RSS/web) al Director Estratégico.
+
+Producen el email diario "[DCP][DASHBOARD] Executive Board" — verificado en vivo el
+2026-08-14. **Advertencia de fiabilidad**: en la auditoría de hoy se detectó que el
+Auditor Interno diagnosticó mal la causa raíz de los errores del día (ver
+`CAMBIOS-ABIERTOS.md`, CAMBIO-005) — sus conclusiones no deben tomarse como
+verificación independiente sin contrastar.
+
+No hay evidencia de un "Auditor n8n y Airtable" como entidad separada — puede ser
+otro nombre para el mismo Auditor Interno, o vivir fuera de n8n. [NO VERIFICADO].
+
+Este repositorio define además un rol propio: **"Cambios D-Code Partners"**,
+descrito en `CLAUDE.md`. Su responsabilidad: detectar, analizar, priorizar,
+proponer y coordinar — no ejecutar por defecto.
 
 ## 5. Terminología interna
 
-- **Lead**: registro creado en la tabla Airtable `Leads` a partir del formulario de
-  contacto del sitio, cualificado automáticamente por Gemini (score, prioridad,
-  urgencia). [EVIDENCIA DIRECTA]
-- **HOT / WARM / Radar Comercial**: terminología mencionada por Dirección en
-  conversación para un proceso de prospección previo al Lead. [NO VERIFICADO] — no
-  hay evidencia en este repositorio de que este paso exista o esté implementado.
+- **Lead**: registro en la tabla Airtable `Leads`, cualificado por Gemini (score,
+  prioridad, urgencia). [EVIDENCIA DIRECTA]
+- **HOT / WARM**: clasificación que asigna "AAA/Radar Comercial IA" a empresas
+  encontradas por sector en Google Places, auditadas automáticamente (diseño, UX,
+  digitalización). **Confirmado en producción** (verificado en vivo 2026-08-14: 0
+  errores en 8 ejecuciones diarias, genera HOT reales — ej. "Ichikani Madrid",
+  "Rosi La Loca" el 14/08). Corrige la versión anterior de este documento, que lo
+  marcaba [NO VERIFICADO].
+- **CRM Inteligente**: workflow que sincroniza semanalmente empresas HOT/WARM del
+  Radar hacia la tabla `Clientes` como prospectos. Existe pero solo se ha ejecutado
+  una vez en 12 días — ver CAMBIO-006.
 - Cualquier otro término de negocio (propuesta, seguimiento, cierre, ticket, etc.):
-  [PENDIENTE DE DEFINIR] mientras no se confirme su significado operativo exacto en
-  D-Code Partners.
+  [PENDIENTE DE DEFINIR] mientras no se confirme su significado operativo exacto.
 
 ## 6. Principios de gobierno para el rol "Cambios D-Code Partners"
 
@@ -109,9 +142,16 @@ Reglas duras:
 ## 7. Huecos de contexto conocidos (a rellenar por Dirección)
 
 - [PENDIENTE DE DEFINIR] Estructura de precios/planes reales.
-- [PENDIENTE DE DEFINIR] Si existe un Radar Comercial IA y en qué sistema vive.
-- [PENDIENTE DE DEFINIR] Si existen los asistentes "Director", "Auditor" y "Auditor
-  n8n y Airtable" fuera de este repositorio, y cuál es su alcance exacto.
-- [PENDIENTE DE DEFINIR] Proceso de facturación/cobro y sistema donde vive.
+- ~~Si existe un Radar Comercial IA~~ — RESUELTO 2026-08-14: existe y funciona
+  ("AAA/Radar Comercial IA", 0 errores).
+- ~~Si existen los asistentes Director/Auditor~~ — RESUELTO 2026-08-14: existen como
+  workflows n8n del bloque `DIR/Executive Board` (ver sección 4). Queda
+  [PENDIENTE DE DEFINIR] si "Auditor n8n y Airtable" es una entidad distinta.
+- [PENDIENTE DE DEFINIR] Proceso de facturación/cobro real — el workflow
+  `FNZ/Facturación IA` existe pero confirma él mismo que no tiene disparador de
+  negocio automático todavía (0 clientes activos hace que esto no sea urgente).
 - [PENDIENTE DE DEFINIR] Quién es responsable operativo de cada sistema (n8n,
   Airtable, Gmail, web) para poder rellenar "Responsable" en cambios/incidencias.
+- [NO VERIFICADO — CRÍTICO] Origen real de los 13 leads que muestra el informe
+  diario en Airtable, dado que el webhook de captación web nunca se ha ejecutado.
+  Ver CAMBIO-001 (actualizado) en `CAMBIOS-ABIERTOS.md`.
