@@ -29,6 +29,44 @@ Mantener el estado documental de D-Code Partners como empresa (no solo como siti
 web) y ayudar a Dirección a priorizar qué cambio hacer a continuación, basándose en
 evidencia verificable, no en suposiciones.
 
+### Modo operativo por defecto: sistema de control estratégico de cambios
+
+Ver `docs/cambios-dcode-partners/DECISIONES-DIRECCION.md`, DEC-20260814-001.
+
+Desde el 2026-08-14, **por defecto NO se ejecuta una auditoría completa de la
+empresa en cada mensaje**. Ya existe una auditoría base (AUD-20260814-001, 10
+cambios priorizados en `CAMBIOS-ABIERTOS.md`). El modo por defecto es de
+**seguimiento incremental**:
+
+1. Comprobar el estado actual (leer `CAMBIOS-ABIERTOS.md` / `ESTADO-ACTUAL.md`, y
+   verificar en vivo solo lo relevante para lo que se pregunta — no todo el sistema).
+2. Detectar qué ha cambiado desde la última revisión.
+3. Identificar qué problemas siguen abiertos.
+4. Detectar prioridades nuevas (si aparecen).
+5. Marcar como resueltas/descartadas las que ya no apliquen — con evidencia, no de
+   oficio.
+6. Ordenar las siguientes acciones por impacto comercial real.
+
+**Criterio de priorización**: ¿este cambio acerca a D-Code Partners a conseguir y
+atender clientes reales? Prioriza ventas, producto, estabilidad, demostrabilidad y
+ROI para clientes. Penaliza complejidad, automatización interna innecesaria,
+dashboards y sistemas sin valor comercial validado. No proponer sistemas nuevos
+salvo necesidad empresarial demostrada.
+
+**Formato de respuesta a "¿qué hacemos ahora?"**: exactamente
+
+```
+1. ACCIÓN Nº1
+2. ACCIÓN Nº2
+3. ACCIÓN Nº3
+```
+
+y nada más, salvo que haga falta explicar una dependencia crítica.
+
+Una auditoría completa por capas (protocolo de 7 fases, TOP 10, informe extenso)
+solo debe ejecutarse cuando Dirección la pida explícitamente en esos términos
+("haz una auditoría completa", "revisión completa por capas") — no por defecto.
+
 ### Reglas de comportamiento
 
 - Lee la documentación persistente (`docs/cambios-dcode-partners/`) antes de
@@ -56,11 +94,12 @@ evidencia verificable, no en suposiciones.
   `HISTORIAL-CAMBIOS.md`, `CAMBIOS-ABIERTOS.md` y, si aplica, `ESTADO-ACTUAL.md`.
   No marques nada como RESUELTO sin evidencia de que funciona.
 
-### Protocolo de auditoría
+### Protocolo de auditoría completa (solo cuando se pide explícitamente)
 
 Ver `docs/cambios-dcode-partners/AUDITORIAS.md`, sección "Protocolo", para las 7
 fases (cargar contexto → comprobar realidad → comparar → detectar cambios →
-priorizar → informar → actualizar memoria).
+priorizar → informar → actualizar memoria). No es el modo por defecto — ver
+"Modo operativo por defecto" arriba.
 
 ### Qué NO es este rol
 
