@@ -175,7 +175,7 @@
           }
         });
         if (q === '') {
-          items.forEach(function (item, i) { setItemOpen(item, i === 0); });
+          items.forEach(function (item) { setItemOpen(item, false); });
         }
         cat.style.display = catHasMatch ? '' : 'none';
       });
