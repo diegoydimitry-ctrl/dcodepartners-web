@@ -254,6 +254,8 @@ h2.h-title{
   max-width:680px;
   margin-bottom:56px;
 }
+/* Cuando un párrafo largo se divide en dos, que no queden pegados. */
+.section-head p + p{ margin-top:12px; }
 .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
 
 /* ============ BUTTONS ============ */
@@ -541,22 +543,15 @@ nav.main-nav a, nav.main-nav .nav-link-btn{
 }
 nav.main-nav a:hover, nav.main-nav .nav-link-btn:hover{ color:var(--ink); background:rgba(255,255,255,.04); }
 nav.main-nav a[aria-current="page"]{ color:var(--ink); }
-nav.main-nav a[aria-current="page"]::after{
-  content:"";
-  position:absolute;
-  left:14px; right:14px; bottom:4px;
-  height:2px;
-  border-radius:2px;
-  background:var(--grad-brand);
-}
 nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opacity:.7; }
-/* Indicador deslizante: una sola píldora de luz (creada por JS en
-   main.js, sin tocar el HTML de cada página) que se desliza y cambia de
-   ancho para seguir al elemento con el que se interactúa, y vuelve a la
-   página activa al salir del ratón — la cabecera se siente como una
-   interfaz que responde, no como una lista de enlaces. Se desactiva por
-   completo en móvil (JS no la crea por debajo de 901px), donde el nav
-   pasa a ser un panel vertical. */
+/* Indicador deslizante: UN ÚNICO elemento (creado por JS en main.js, sin
+   tocar el HTML de cada página) que se desliza y cambia de ancho para
+   seguir al elemento con el que se interactúa, y vuelve a la página
+   activa al salir del ratón. Es deliberadamente el único indicador que
+   existe — no hay un ::after fijo por enlace además de este, porque eso
+   es justo lo que producía dos líneas superpuestas sobre la página
+   activa. Se desactiva por completo en móvil (JS no la mueve por debajo
+   de 901px), donde el nav pasa a ser un panel vertical. */
 nav.main-nav > ul{ position:relative; }
 .nav-indicator{
   position:absolute;
@@ -832,6 +827,7 @@ nav.main-nav > ul{ position:relative; }
 }
 .page-hero .h-title{ margin-top:16px; }
 .page-hero .lead{ max-width:680px; }
+.page-hero .lead + .lead{ margin-top:12px; }
 .page-hero-meta{
   display:flex;
   flex-wrap:wrap;
@@ -1108,6 +1104,21 @@ nav.main-nav > ul{ position:relative; }
   }
 }
 .service-card p{ color:var(--stone); font-size:0.96rem; }
+/* Cada "Qué hace / Lo que resuelve / ..." se lee como un campo con su
+   propia etiqueta, no como texto corrido — mismo contenido, más fácil de
+   escanear de un vistazo. Sin tocar tarjetas que no usan este patrón
+   (el teaser de Home, por ejemplo, no tiene <strong> dentro del <p>). */
+.service-card p:has(> strong:first-child){ margin-top:16px; }
+.service-card p:has(> strong:first-child) strong{
+  display:block;
+  font-family:var(--mono);
+  font-size:0.66rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  font-weight:600;
+  margin-bottom:4px;
+}
 .service-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
 .service-card .card-link{
   display:inline-flex; align-items:center; gap:6px;
@@ -1610,7 +1621,6 @@ footer{
   nav.main-nav a, nav.main-nav .nav-link-btn{
     font-size:1.05rem; color:var(--ink); width:100%; padding:13px 4px;
   }
-  nav.main-nav a[aria-current="page"]::after{ display:none; }
   nav.main-nav a[aria-current="page"]{ color:var(--cyan); }
   .mega-menu{
     position:static; width:100%; opacity:1; visibility:visible; pointer-events:auto; transform:none;
