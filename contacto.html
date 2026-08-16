@@ -354,11 +354,10 @@
 <!--
   Integración documentada en DIR-20260816-010 (arquitectura de reserva).
 
-  CONFIGURACIÓN PENDIENTE ANTES DE PUBLICAR: sustituir DCODE_CAL_LINK por el
-  enlace real de Cal.com de D-Code Partners (formato "usuario/tipo-evento"),
-  una vez exista una cuenta de Cal.com conectada al calendario real del
-  equipo. Sin esa cuenta, el widget no puede mostrar disponibilidad real —
-  no se ha fabricado un calendario de ejemplo con horas falsas.
+  Cuenta real conectada: https://cal.com/dimitry-y-diego-y9tbqp/30min
+  ("Reunión de 30 min | D-CODE PARTNERS"), facilitada por Dirección el
+  16/08/2026. Antes de esto, el widget mostraba un aviso en vez de un
+  calendario de ejemplo con horas falsas.
 
   Integración con el sistema de leads existente: al confirmarse una reserva,
   se reenvían los mismos campos que ya acepta el webhook de producción de
@@ -376,7 +375,7 @@
 -->
 <script>
 (function () {
-  var DCODE_CAL_LINK = 'REEMPLAZAR-con-usuario-real/reunion-30min'; // TODO: cuenta Cal.com real de D-Code Partners
+  var DCODE_CAL_LINK = 'dimitry-y-diego-y9tbqp/30min'; // Cuenta real de D-Code Partners ("Reunión de 30 min | D-CODE PARTNERS")
   var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
   var TURNSTILE_SITEKEY = '0x4AAAAAAD0dueh5OBC9Zdkm';
 

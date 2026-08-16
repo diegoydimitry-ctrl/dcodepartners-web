@@ -75,8 +75,51 @@
     });
   });
 
+  /* ---------- Nav sliding indicator ----------
+     Creado por JS (no en el HTML de cada página) para no tener que tocar
+     la cabecera compartida en las 58 páginas del sitio: una sola píldora
+     que se desliza entre los elementos del menú al pasar el ratón, y
+     vuelve a la página activa al salir. Solo en desktop — el menú móvil
+     es un panel vertical donde esto no aplica. */
+  var navTopList = document.querySelector('nav.main-nav > ul');
+  if (navTopList) {
+    var navIndicator = document.createElement('span');
+    navIndicator.className = 'nav-indicator';
+    navIndicator.setAttribute('aria-hidden', 'true');
+    navTopList.appendChild(navIndicator);
+
+    var navTopLinks = Array.prototype.slice.call(
+      navTopList.querySelectorAll(':scope > li > a, :scope > li > .nav-link-btn')
+    );
+
+    var moveNavIndicator = function (el) {
+      if (!el || window.innerWidth <= 900) { navIndicator.style.opacity = '0'; return; }
+      var elRect = el.getBoundingClientRect();
+      var listRect = navTopList.getBoundingClientRect();
+      navIndicator.style.width = elRect.width + 'px';
+      navIndicator.style.transform = 'translateX(' + (elRect.left - listRect.left) + 'px)';
+      navIndicator.style.opacity = '1';
+    };
+
+    var navActiveLink = navTopList.querySelector(':scope > li > a[aria-current="page"]');
+    navTopLinks.forEach(function (a) {
+      a.addEventListener('mouseenter', function () { moveNavIndicator(a); });
+      a.addEventListener('focus', function () { moveNavIndicator(a); });
+    });
+    navTopList.addEventListener('mouseleave', function () { moveNavIndicator(navActiveLink); });
+
+    var navIndicatorResizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(navIndicatorResizeTimer);
+      navIndicatorResizeTimer = setTimeout(function () { moveNavIndicator(navActiveLink); }, 150);
+    });
+    // Posición inicial tras el primer layout (fuentes/webfonts pueden
+    // desplazar ligeramente el ancho real de cada enlace).
+    window.requestAnimationFrame(function () { moveNavIndicator(navActiveLink); });
+  }
+
   /* ---------- Scroll reveal ---------- */
-  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur');
   if (revealEls.length) {
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
@@ -91,6 +134,79 @@
     } else {
       revealEls.forEach(function (el) { el.classList.add('is-visible'); });
     }
+  }
+
+  /* ---------- Red de Departamentos (líneas de conexión entre tarjetas) ----------
+     Solo existe en /departamentos (hub): un trazo SVG entre cada tarjeta y la
+     siguiente, calculado a partir de la posición real (responsive), que se
+     "dibuja" cuando la tarjeta de llegada entra en pantalla. Se desactiva por
+     completo por debajo de 900px (la cuadrícula pasa a una columna). */
+  var deptGrid = document.querySelector('.servicios-cards[data-stagger]');
+  var deptSvg = deptGrid ? deptGrid.querySelector('.dept-connections') : null;
+  if (deptGrid && deptSvg) {
+    var deptCards = Array.prototype.slice.call(deptGrid.querySelectorAll(':scope > .service-card'));
+    var deptPaths = []; // { el, toCard }
+    var deptRevealed = []; // cards whose connection has already been drawn in (survives a resize rebuild)
+
+    var buildDeptConnections = function () {
+      if (window.innerWidth < 900 || !deptCards.length) { deptSvg.innerHTML = ''; deptPaths = []; return; }
+      var gridRect = deptGrid.getBoundingClientRect();
+      var svgNS = 'http://www.w3.org/2000/svg';
+      deptSvg.innerHTML =
+        '<defs><linearGradient id="dept-connection-grad" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0" stop-color="#43e0ff"/><stop offset="1" stop-color="#9b6bff"/>' +
+        '</linearGradient></defs>';
+      deptPaths = [];
+      var centers = deptCards.map(function (card) {
+        var r = card.getBoundingClientRect();
+        return { x: r.left - gridRect.left + r.width / 2, y: r.top - gridRect.top + r.height / 2 };
+      });
+      for (var i = 0; i < centers.length - 1; i++) {
+        var a = centers[i], b = centers[i + 1];
+        var midY = (a.y + b.y) / 2;
+        var d = 'M' + a.x + ',' + a.y + ' Q' + a.x + ',' + midY + ' ' + (a.x + b.x) / 2 + ',' + midY +
+          ' T' + b.x + ',' + b.y;
+        var path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', d);
+        deptSvg.appendChild(path);
+        var len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        deptPaths.push({ el: path, toCard: deptCards[i + 1] });
+      }
+      // Re-apply immediately for cards already revealed before this rebuild
+      // (e.g. a window resize after the user has scrolled past them) — a
+      // freshly built path always starts hidden otherwise.
+      deptPaths.forEach(function (p) {
+        if (deptRevealed.indexOf(p.toCard) !== -1) p.el.style.strokeDashoffset = '0';
+      });
+    };
+
+    var drawDeptConnectionsFor = function (card) {
+      if (deptRevealed.indexOf(card) === -1) deptRevealed.push(card);
+      deptPaths.forEach(function (p) {
+        if (p.toCard === card) p.el.style.strokeDashoffset = '0';
+      });
+    };
+
+    buildDeptConnections();
+    if ('IntersectionObserver' in window) {
+      var deptIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            drawDeptConnectionsFor(entry.target);
+            deptIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      deptCards.forEach(function (c) { deptIO.observe(c); });
+    }
+
+    var deptResizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(deptResizeTimer);
+      deptResizeTimer = setTimeout(buildDeptConnections, 200);
+    });
   }
 
   /* ---------- Side-index scroll-spy (home page only) ---------- */

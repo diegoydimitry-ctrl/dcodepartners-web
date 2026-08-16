@@ -67,7 +67,7 @@
 html{ scroll-behavior:smooth; }
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
-  *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; transition-delay:0ms !important; scroll-behavior:auto !important; }
 }
 
 /* ============ TRANSICIONES DE PÁGINA (nativas) ============
@@ -81,15 +81,42 @@ html{ scroll-behavior:smooth; }
 @view-transition{
   navigation:auto;
 }
-::view-transition-old(root){ animation:dcode-page-out .32s cubic-bezier(.2,.8,.2,1) both; }
-::view-transition-new(root){ animation:dcode-page-in .32s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes dcode-page-out{ from{ opacity:1; } to{ opacity:0; } }
-@keyframes dcode-page-in{ from{ opacity:0; } to{ opacity:1; } }
+::view-transition-group(*){ animation-duration:.5s; animation-timing-function:cubic-bezier(.16,1,.3,1); }
+::view-transition-old(root){ animation:dcode-page-out .5s cubic-bezier(.16,1,.3,1) both; }
+::view-transition-new(root){ animation:dcode-page-in .5s cubic-bezier(.16,1,.3,1) both; }
+@keyframes dcode-page-out{
+  from{ opacity:1; transform:scale(1) translateY(0); filter:blur(0px); }
+  to{ opacity:0; transform:scale(.97) translateY(-18px); filter:blur(6px); }
+}
+@keyframes dcode-page-in{
+  from{ opacity:0; transform:scale(1.025) translateY(20px); filter:blur(6px); }
+  to{ opacity:1; transform:scale(1) translateY(0); filter:blur(0px); }
+}
 @media (prefers-reduced-motion: reduce){
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*){ animation:none !important; }
 }
+
+/* ============ CONTINUIDAD DE ELEMENTOS ENTRE PÁGINAS ============
+   Al navegar del hub de Departamentos a la página de un Departamento
+   concreto, el mismo view-transition-name en la tarjeta de origen y en
+   la cabecera de destino hace que el propio navegador anime la tarjeta
+   pulsada hasta convertirla en la cabecera de la página siguiente — sin
+   JavaScript, nativo de @view-transition. Nunca coinciden dos elementos
+   con el mismo nombre en un mismo documento (la tarjeta vive solo en el
+   hub, la cabecera solo en su página), así que no hay riesgo de
+   colisión. Si el navegador no soporta la API o se navega desde
+   cualquier otra página, el elemento simplemente aparece con el fundido
+   raíz normal — no hay nada que pueda romperse. */
+#dept-comercial,#dept-hero-comercial{ view-transition-name:dept-panel-comercial; }
+#dept-marketing,#dept-hero-marketing{ view-transition-name:dept-panel-marketing; }
+#dept-clientes,#dept-hero-clientes{ view-transition-name:dept-panel-clientes; }
+#dept-produccion,#dept-hero-produccion{ view-transition-name:dept-panel-produccion; }
+#dept-finanzas,#dept-hero-finanzas{ view-transition-name:dept-panel-finanzas; }
+#dept-soporte,#dept-hero-soporte{ view-transition-name:dept-panel-soporte; }
+#dept-administracion,#dept-hero-administracion{ view-transition-name:dept-panel-administracion; }
+#dept-direccion,#dept-hero-direccion{ view-transition-name:dept-panel-direccion; }
 
 body{
   margin:0;
@@ -251,8 +278,22 @@ h2.h-title{
   background-size:160% 160%;
   color:#04060a;
   box-shadow:0 16px 40px -14px rgba(91,140,255,.55);
+  overflow:hidden;
 }
 .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 20px 50px -14px rgba(91,140,255,.75); background-position:100% 0; }
+/* Barrido de brillo: una franja de luz que cruza el botón al hover — un
+   solo transform, sin repintar nada más. Usa ::after porque ::before ya
+   está reservado para el truco de texto del CTA en móvil muy estrecho. */
+.btn-primary::after{
+  content:"";
+  position:absolute;
+  top:0; left:0;
+  width:40%; height:100%;
+  background:linear-gradient(115deg, transparent, rgba(255,255,255,.55), transparent);
+  transform:translateX(-220%) skewX(-18deg);
+  pointer-events:none;
+}
+.btn-primary:hover::after{ transform:translateX(320%) skewX(-18deg); transition:transform .65s ease; }
 .btn-ghost{
   background:rgba(255,255,255,.02);
   color:var(--ink);
@@ -399,20 +440,31 @@ h2.h-title{
 .reveal-left{ opacity:0; transform:translateY(18px) translateX(-28px); transition:opacity .7s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
 .reveal-right{ opacity:0; transform:translateY(18px) translateX(28px); transition:opacity .7s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
 .reveal-scale{ opacity:0; transform:translateY(14px) scale(.96); transition:opacity .7s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
-.reveal-left.is-visible,.reveal-right.is-visible,.reveal-scale.is-visible{ opacity:1; transform:translateY(0) translateX(0) scale(1); }
+/* .reveal-up: entra desde abajo con un ligero rebote/overshoot — para
+   momentos que deben notarse más que un fundido convencional (casos
+   internos, teaser de Departamentos en Home). */
+.reveal-up{ opacity:0; transform:translateY(46px) scale(.97); transition:opacity .6s ease, transform .8s cubic-bezier(.2,1.4,.3,1); }
+/* .reveal-blur: "emerge desde detrás" — arranca más pequeño, desenfocado
+   y transparente, como si estuviera detrás del plano del contenido, y se
+   asienta en su sitio. Reservado para paneles/visualizaciones puntuales,
+   no para texto largo (el blur de salida sería incómodo de leer). */
+.reveal-blur{ opacity:0; transform:translateY(10px) scale(.92); filter:blur(10px); transition:opacity .6s ease, transform .8s cubic-bezier(.16,1,.3,1), filter .7s ease; }
+.reveal-left.is-visible,.reveal-right.is-visible,.reveal-scale.is-visible,.reveal-up.is-visible{ opacity:1; transform:translateY(0) translateX(0) scale(1); }
+.reveal-blur.is-visible{ opacity:1; transform:translateY(0) scale(1); filter:blur(0px); }
 
-[data-stagger] > .reveal:nth-child(1),[data-stagger] > .reveal-left:nth-child(1),[data-stagger] > .reveal-right:nth-child(1),[data-stagger] > .reveal-scale:nth-child(1){ transition-delay:0ms; }
-[data-stagger] > .reveal:nth-child(2),[data-stagger] > .reveal-left:nth-child(2),[data-stagger] > .reveal-right:nth-child(2),[data-stagger] > .reveal-scale:nth-child(2){ transition-delay:70ms; }
-[data-stagger] > .reveal:nth-child(3),[data-stagger] > .reveal-left:nth-child(3),[data-stagger] > .reveal-right:nth-child(3),[data-stagger] > .reveal-scale:nth-child(3){ transition-delay:140ms; }
-[data-stagger] > .reveal:nth-child(4),[data-stagger] > .reveal-left:nth-child(4),[data-stagger] > .reveal-right:nth-child(4),[data-stagger] > .reveal-scale:nth-child(4){ transition-delay:210ms; }
-[data-stagger] > .reveal:nth-child(5),[data-stagger] > .reveal-left:nth-child(5),[data-stagger] > .reveal-right:nth-child(5),[data-stagger] > .reveal-scale:nth-child(5){ transition-delay:280ms; }
-[data-stagger] > .reveal:nth-child(6),[data-stagger] > .reveal-left:nth-child(6),[data-stagger] > .reveal-right:nth-child(6),[data-stagger] > .reveal-scale:nth-child(6){ transition-delay:350ms; }
-[data-stagger] > .reveal:nth-child(7),[data-stagger] > .reveal-left:nth-child(7),[data-stagger] > .reveal-right:nth-child(7),[data-stagger] > .reveal-scale:nth-child(7){ transition-delay:420ms; }
-[data-stagger] > .reveal:nth-child(8),[data-stagger] > .reveal-left:nth-child(8),[data-stagger] > .reveal-right:nth-child(8),[data-stagger] > .reveal-scale:nth-child(8){ transition-delay:490ms; }
+[data-stagger] > .reveal:nth-child(1),[data-stagger] > .reveal-left:nth-child(1),[data-stagger] > .reveal-right:nth-child(1),[data-stagger] > .reveal-scale:nth-child(1),[data-stagger] > .reveal-up:nth-child(1),[data-stagger] > .reveal-blur:nth-child(1){ transition-delay:0ms; }
+[data-stagger] > .reveal:nth-child(2),[data-stagger] > .reveal-left:nth-child(2),[data-stagger] > .reveal-right:nth-child(2),[data-stagger] > .reveal-scale:nth-child(2),[data-stagger] > .reveal-up:nth-child(2),[data-stagger] > .reveal-blur:nth-child(2){ transition-delay:70ms; }
+[data-stagger] > .reveal:nth-child(3),[data-stagger] > .reveal-left:nth-child(3),[data-stagger] > .reveal-right:nth-child(3),[data-stagger] > .reveal-scale:nth-child(3),[data-stagger] > .reveal-up:nth-child(3),[data-stagger] > .reveal-blur:nth-child(3){ transition-delay:140ms; }
+[data-stagger] > .reveal:nth-child(4),[data-stagger] > .reveal-left:nth-child(4),[data-stagger] > .reveal-right:nth-child(4),[data-stagger] > .reveal-scale:nth-child(4),[data-stagger] > .reveal-up:nth-child(4),[data-stagger] > .reveal-blur:nth-child(4){ transition-delay:210ms; }
+[data-stagger] > .reveal:nth-child(5),[data-stagger] > .reveal-left:nth-child(5),[data-stagger] > .reveal-right:nth-child(5),[data-stagger] > .reveal-scale:nth-child(5),[data-stagger] > .reveal-up:nth-child(5),[data-stagger] > .reveal-blur:nth-child(5){ transition-delay:280ms; }
+[data-stagger] > .reveal:nth-child(6),[data-stagger] > .reveal-left:nth-child(6),[data-stagger] > .reveal-right:nth-child(6),[data-stagger] > .reveal-scale:nth-child(6),[data-stagger] > .reveal-up:nth-child(6),[data-stagger] > .reveal-blur:nth-child(6){ transition-delay:350ms; }
+[data-stagger] > .reveal:nth-child(7),[data-stagger] > .reveal-left:nth-child(7),[data-stagger] > .reveal-right:nth-child(7),[data-stagger] > .reveal-scale:nth-child(7),[data-stagger] > .reveal-up:nth-child(7),[data-stagger] > .reveal-blur:nth-child(7){ transition-delay:420ms; }
+[data-stagger] > .reveal:nth-child(8),[data-stagger] > .reveal-left:nth-child(8),[data-stagger] > .reveal-right:nth-child(8),[data-stagger] > .reveal-scale:nth-child(8),[data-stagger] > .reveal-up:nth-child(8),[data-stagger] > .reveal-blur:nth-child(8){ transition-delay:490ms; }
 
 @media (max-width:720px){
   .reveal-left,.reveal-right{ transform:translateY(18px); }
   .reveal-left.is-visible,.reveal-right.is-visible{ transform:translateY(0); }
+  .reveal-blur{ transform:translateY(10px) scale(.96); filter:blur(6px); }
 }
 
 /* ============ HEADER / NAV ============ */
@@ -497,25 +549,30 @@ nav.main-nav a[aria-current="page"]::after{
   border-radius:2px;
   background:var(--grad-brand);
 }
-/* Indicador de hover: la misma línea de marca, pero apagada por defecto y
-   que crece desde el centro — refuerza que el elemento es interactivo sin
-   añadir un componente nuevo. No se pinta sobre la página activa, que ya
-   tiene su propio indicador fijo. */
-nav.main-nav a:not([aria-current="page"])::after,
-nav.main-nav .nav-link-btn:not([aria-current="page"])::after{
-  content:"";
+nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opacity:.7; }
+/* Indicador deslizante: una sola píldora de luz (creada por JS en
+   main.js, sin tocar el HTML de cada página) que se desliza y cambia de
+   ancho para seguir al elemento con el que se interactúa, y vuelve a la
+   página activa al salir del ratón — la cabecera se siente como una
+   interfaz que responde, no como una lista de enlaces. Se desactiva por
+   completo en móvil (JS no la crea por debajo de 901px), donde el nav
+   pasa a ser un panel vertical. */
+nav.main-nav > ul{ position:relative; }
+.nav-indicator{
   position:absolute;
-  left:14px; right:14px; bottom:4px;
+  bottom:2px;
   height:2px;
   border-radius:2px;
   background:var(--grad-brand);
-  opacity:.85;
-  transform:scaleX(0);
-  transition:transform .25s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 14px rgba(67,224,255,.55);
+  opacity:0;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), width .35s cubic-bezier(.2,.8,.2,1), opacity .2s ease;
+  pointer-events:none;
+  z-index:1;
 }
-nav.main-nav a:not([aria-current="page"]):hover::after,
-nav.main-nav .nav-link-btn:not([aria-current="page"]):hover::after{ transform:scaleX(1); }
-nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opacity:.7; }
+@media (prefers-reduced-motion: reduce){
+  .nav-indicator{ transition:opacity .2s ease; }
+}
 
 .mega-menu{
   display:grid;
@@ -884,6 +941,33 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   height:1px;
   background:linear-gradient(90deg, transparent, rgba(67,224,255,.4) 22%, rgba(155,107,255,.4) 78%, transparent);
 }
+/* Red de Departamentos: un trazo SVG por cada par de tarjetas
+   consecutivas, calculado en JS (main.js) porque depende del layout
+   real. Cada trazo se "dibuja" (stroke-dashoffset) cuando la tarjeta de
+   llegada entra en pantalla — la cuadrícula se percibe formándose como
+   una red a medida que se hace scroll, no como algo ya montado. Oculto
+   en pantallas estrechas, donde la cuadrícula pasa a una columna y las
+   líneas dejan de aportar información. */
+.dept-connections{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:visible;
+  z-index:0;
+}
+.dept-connections path{
+  fill:none;
+  stroke:url(#dept-connection-grad);
+  stroke-width:1.4;
+  stroke-linecap:round;
+  transition:stroke-dashoffset 1.1s cubic-bezier(.16,1,.3,1);
+}
+.service-card{ position:relative; z-index:1; }
+@media (max-width:900px){
+  .dept-connections{ display:none; }
+}
 .service-card h3{
   font-family:var(--serif);
   font-weight:600;
@@ -931,7 +1015,23 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   width:104px;
   flex-shrink:0;
   text-align:center;
+  opacity:0;
+  transform:scale(.8);
+  filter:blur(6px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.2,1.2,.3,1), filter .5s ease;
 }
+/* El panel entero ya llega con reveal-blur; en cuanto está visible, cada
+   nodo del pipeline "materializa" uno detrás de otro (no todos a la
+   vez), y cada conector se dibuja de izquierda a derecha justo después
+   de que su nodo de origen aparece — la sensación de que el sistema se
+   va construyendo mientras se mira, no de una imagen ya montada. */
+.pipeline-window.is-visible .pipeline-node{ opacity:1; transform:scale(1); filter:blur(0px); }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(1){ transition-delay:.15s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(3){ transition-delay:.55s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(5){ transition-delay:.95s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(7){ transition-delay:1.35s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(9){ transition-delay:1.75s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(11){ transition-delay:2.15s; }
 .pipeline-dot{
   width:44px; height:44px;
   border-radius:12px;
@@ -961,7 +1061,16 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   background:linear-gradient(90deg, rgba(91,140,255,.5), rgba(155,107,255,.5));
   border-radius:2px;
   overflow:visible;
+  transform:scaleX(0);
+  transform-origin:left center;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);
 }
+.pipeline-window.is-visible .pipeline-connector{ transform:scaleX(1); }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(2){ transition-delay:.35s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(4){ transition-delay:.75s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(6){ transition-delay:1.15s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(8){ transition-delay:1.55s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(10){ transition-delay:1.95s; }
 .pipeline-connector::after{
   content:"";
   position:absolute;
@@ -988,7 +1097,8 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 @media (max-width:640px){
   .pipeline{ flex-direction:column; align-items:flex-start; gap:2px; }
   .pipeline-node{ flex-direction:row; width:auto; text-align:left; gap:14px; }
-  .pipeline-connector{ width:2px; min-width:2px; height:26px; margin:2px 0 2px 21px; flex:none; background:linear-gradient(180deg, rgba(91,140,255,.5), rgba(155,107,255,.5)); }
+  .pipeline-connector{ width:2px; min-width:2px; height:26px; margin:2px 0 2px 21px; flex:none; background:linear-gradient(180deg, rgba(91,140,255,.5), rgba(155,107,255,.5)); transform:scaleY(0); transform-origin:top center; }
+  .pipeline-window.is-visible .pipeline-connector{ transform:scaleY(1); }
   .pipeline-connector::after{ width:6px; height:14px; top:0; left:50%; margin-top:0; margin-left:-3px; animation-name:pipeline-flow-vert; }
   @keyframes pipeline-flow-vert{
     0%{ transform:translateY(-6px); opacity:0; }
