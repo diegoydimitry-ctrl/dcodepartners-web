@@ -330,6 +330,9 @@ h2.h-title{
   border-radius:100px;
   display:inline-block;
 }
+.badge-amber{ color:var(--amber); background:rgba(255,180,84,0.12); border-color:rgba(255,180,84,0.3); }
+.badge-violet{ color:var(--violet); background:rgba(155,107,255,0.12); border-color:rgba(155,107,255,0.3); }
+.badge-stone{ color:var(--stone); background:rgba(255,255,255,0.04); border-color:var(--border); }
 .tag{
   font-family:var(--mono);
   font-size:0.65rem;
@@ -1061,6 +1064,48 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 .guarantee-card h3{ font-family:var(--serif); font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:10px; }
 .guarantee-card p{ color:var(--stone); font-size:0.9rem; }
 
+.cases-internal{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  margin-top:40px;
+}
+.case-card .window-body{ padding:30px 32px; }
+.case-tag{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.06em;
+  color:var(--cyan);
+  text-transform:uppercase;
+}
+.case-card h3{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.3rem;
+  color:var(--ink);
+  margin:10px 0 20px;
+}
+.case-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px 28px;
+}
+.case-field.wide{ grid-column:1 / -1; }
+.case-field-label{
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  display:block;
+  margin-bottom:6px;
+}
+.case-field p{ color:var(--stone); font-size:0.92rem; margin:0; }
+.case-field.learned{ background:rgba(67,224,255,.05); border:1px solid rgba(67,224,255,.18); border-radius:10px; padding:16px 18px; }
+.case-field.learned .case-field-label{ color:var(--cyan); }
+.case-field.learned p{ color:var(--ink); }
+.case-card{ scroll-margin-top:100px; }
+
 .future-cases{
   border:1px dashed var(--border);
   border-radius:16px;
@@ -1285,6 +1330,8 @@ footer{
      of forcing horizontal overflow on narrow screens. */
   .btn{ white-space:normal; text-align:center; }
   .future-cases{ padding:28px 20px; }
+  .case-fields{ grid-template-columns:1fr; }
+  .case-card .window-body{ padding:24px 20px; }
   .footer-top{ grid-template-columns:1fr; }
   .footer-bottom{ flex-direction:column; }
   .spec-sheet{ grid-template-columns:1fr; }
