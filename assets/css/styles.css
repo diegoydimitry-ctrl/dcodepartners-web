@@ -86,18 +86,25 @@ html{ scroll-behavior:auto; }
    navegador no la soporta, este bloque simplemente no hace nada y la
    navegación es la normal. Cero coste de mantenimiento, cero riesgo de
    romper el `back/forward` o los enlaces directos. */
+/* Duración deliberadamente corta (180ms, no los 500ms de la versión
+   anterior): mientras una view transition está activa, Chromium retiene
+   el scroll del documento para no corromper la instantánea congelada —
+   eso es lo que se sentía como que la rueda no respondía justo después de
+   cambiar de página. Con la transición mucho más corta, esa ventana deja
+   de ser perceptible, sin renunciar del todo a la sensación de
+   continuidad entre páginas. */
 @view-transition{
   navigation:auto;
 }
-::view-transition-group(*){ animation-duration:.5s; animation-timing-function:cubic-bezier(.16,1,.3,1); }
-::view-transition-old(root){ animation:dcode-page-out .5s cubic-bezier(.16,1,.3,1) both; }
-::view-transition-new(root){ animation:dcode-page-in .5s cubic-bezier(.16,1,.3,1) both; }
+::view-transition-group(*){ animation-duration:.18s; animation-timing-function:cubic-bezier(.2,.8,.2,1); }
+::view-transition-old(root){ animation:dcode-page-out .18s cubic-bezier(.2,.8,.2,1) both; }
+::view-transition-new(root){ animation:dcode-page-in .18s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes dcode-page-out{
   from{ opacity:1; transform:scale(1) translateY(0); filter:blur(0px); }
-  to{ opacity:0; transform:scale(.97) translateY(-18px); filter:blur(6px); }
+  to{ opacity:0; transform:scale(.985) translateY(-8px); filter:blur(2px); }
 }
 @keyframes dcode-page-in{
-  from{ opacity:0; transform:scale(1.025) translateY(20px); filter:blur(6px); }
+  from{ opacity:0; transform:scale(1.012) translateY(8px); filter:blur(2px); }
   to{ opacity:1; transform:scale(1) translateY(0); filter:blur(0px); }
 }
 @media (prefers-reduced-motion: reduce){
@@ -1479,29 +1486,49 @@ nav.main-nav > ul{ position:relative; }
   align-items:start;
 }
 
-/* Panel de reserva: sin la barra de "ventana" (puntos + título) que usa el
-   resto del sitio — un calendario ya es una interfaz completa por sí
-   mismo, y envolverlo en otro marco de "terminal" encima era la caja
-   dentro de la caja dentro de la caja de la que habló Dirección. Un panel
-   simple, con el mismo lenguaje de bordes/radios/fondo que el resto de la
-   web, es más honesto con lo que es: un widget, no una ventana más. */
+/* Panel de reserva: un único contenedor, sin la barra de "ventana"
+   (puntos + título) que usa el resto del sitio — un calendario ya es una
+   interfaz completa por sí mismo, y envolverlo en otro marco de terminal
+   encima era la caja dentro de la caja dentro de la caja de la que habló
+   Dirección. Fondo con gradiente azul/cian muy sutil (no gris/negro
+   plano) y un borde con el mismo tinte, para que el módulo se sienta
+   parte del lenguaje D-Code en vez de un recorte insertado encima.
+   Límite real de personalización: el interior del iframe de Cal.com en
+   tema oscuro usa su propia paleta neutra — la única variable de color
+   oficialmente soportada por su embed es "cal-brand" (ya en cian, ver el
+   script de más abajo). No se ha intentado forzar más colores dentro del
+   iframe con hacks; el azul adicional vive en este contenedor, no dentro
+   del calendario en sí. */
 .booking-panel{
   position:relative;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px;
-  min-height:820px;
-  box-shadow:0 40px 80px -40px rgba(0,0,0,.7);
+  background:
+    radial-gradient(120% 140% at 15% 0%, rgba(91,140,255,.10), transparent 55%),
+    radial-gradient(100% 120% at 100% 100%, rgba(67,224,255,.06), transparent 60%),
+    var(--panel);
+  border:1px solid rgba(91,140,255,.22);
+  border-radius:14px;
+  padding:10px;
+  min-height:700px;
+  box-shadow:0 0 50px -18px rgba(67,224,255,.16);
+  transition:min-height .3s ease;
 }
-.booking-widget-inline{ width:100%; min-height:100%; opacity:0; transition:opacity .4s ease; }
-.booking-widget-inline.cal-ready{ opacity:1; }
+.booking-panel:has(.booking-widget-inline.cal-ready){ min-height:0; }
+.booking-widget-inline{
+  width:100%;
+  min-height:680px;
+  opacity:0;
+  transition:opacity .4s ease, min-height .3s ease;
+  border-radius:9px;
+  overflow:hidden;
+}
+.booking-widget-inline.cal-ready{ opacity:1; min-height:0; }
+.booking-widget-inline iframe{ border-radius:9px; border:none; display:block; }
 /* Skeleton: ocupa el espacio desde el primer frame (sin layout shift) y
    se funde con el calendario real en cuanto Cal.com avisa que ya cargó
    ("linkReady"), en vez de dejar una caja vacía mientras tanto. */
 .booking-skeleton{
   position:absolute;
-  inset:22px;
+  inset:10px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -1520,23 +1547,24 @@ nav.main-nav > ul{ position:relative; }
 .booking-skeleton-cell{
   aspect-ratio:1;
   border-radius:6px;
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border-soft);
+  background:rgba(91,140,255,.05);
+  border:1px solid rgba(91,140,255,.16);
   animation:booking-skeleton-pulse 1.8s ease-in-out infinite;
 }
 .booking-skeleton-cell:nth-child(3n){ animation-delay:.15s; }
 .booking-skeleton-cell:nth-child(5n){ animation-delay:.3s; }
 @keyframes booking-skeleton-pulse{
   0%,100%{ opacity:.5; }
-  50%{ opacity:1; background:rgba(67,224,255,.1); border-color:rgba(67,224,255,.25); }
+  50%{ opacity:1; background:rgba(67,224,255,.12); border-color:rgba(67,224,255,.3); }
 }
 .booking-skeleton-label{ font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em; }
 @media (prefers-reduced-motion: reduce){
   .booking-skeleton-cell{ animation:none; }
 }
 @media (max-width:640px){
-  .booking-panel{ min-height:620px; padding:14px; }
-  .booking-skeleton{ inset:14px; }
+  .booking-panel{ min-height:560px; padding:6px; }
+  .booking-widget-inline{ min-height:540px; }
+  .booking-skeleton{ inset:6px; }
 }
 .booking-fallback-divider{
   display:flex; align-items:center; gap:16px;

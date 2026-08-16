@@ -8,6 +8,19 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- Trabajo diferido para no competir con el primer input ----------
+     Justo al llegar a una página, este script hace bastante trabajo síncrono
+     de golpe (menú, indicador de nav, reveal, canvas del hero, líneas de
+     Departamentos...). Lo esencial para que la página se vea y sea navegable
+     va primero, sin diferir. Lo puramente decorativo y algo más caro de
+     calcular (el canvas del hero, las líneas de Departamentos) se pospone un
+     instante con requestIdleCallback — así no compite con el primer gesto de
+     scroll del usuario justo después de cargar. */
+  var runWhenIdle = function (fn) {
+    if ('requestIdleCallback' in window) requestIdleCallback(fn, { timeout: 400 });
+    else setTimeout(fn, 1);
+  };
+
   /* ---------- Header shadow on scroll ---------- */
   var header = document.getElementById('site-header');
   if (header) {
@@ -205,7 +218,7 @@
       });
     };
 
-    buildDeptConnections();
+    runWhenIdle(buildDeptConnections);
     if ('IntersectionObserver' in window) {
       var deptIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -242,22 +255,28 @@
     trackedSections.forEach(function (s) { sectionIO.observe(s); });
   }
 
-  /* ---------- Interactive window tilt + spotlight ---------- */
+  /* ---------- Interactive window tilt + spotlight ----------
+     Solo importa al pasar el ratón por encima, nunca en el primer frame —
+     diferido para no sumarse al trabajo síncrono justo al cargar la
+     página, que es precisamente lo que compite con el primer gesto de
+     scroll del usuario tras un cambio de página. */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
-    document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
-      win.addEventListener('mousemove', function (e) {
-        var rect = win.getBoundingClientRect();
-        var px = (e.clientX - rect.left) / rect.width;
-        var py = (e.clientY - rect.top) / rect.height;
-        var maxTilt = 3.5;
-        win.style.setProperty('--rx', ((px - 0.5) * maxTilt * 2) + 'deg');
-        win.style.setProperty('--ry', (-(py - 0.5) * maxTilt * 2) + 'deg');
-        win.style.setProperty('--mx', (px * 100) + '%');
-        win.style.setProperty('--my', (py * 100) + '%');
-      });
-      win.addEventListener('mouseleave', function () {
-        win.style.setProperty('--rx', '0deg');
-        win.style.setProperty('--ry', '0deg');
+    runWhenIdle(function () {
+      document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
+        win.addEventListener('mousemove', function (e) {
+          var rect = win.getBoundingClientRect();
+          var px = (e.clientX - rect.left) / rect.width;
+          var py = (e.clientY - rect.top) / rect.height;
+          var maxTilt = 3.5;
+          win.style.setProperty('--rx', ((px - 0.5) * maxTilt * 2) + 'deg');
+          win.style.setProperty('--ry', (-(py - 0.5) * maxTilt * 2) + 'deg');
+          win.style.setProperty('--mx', (px * 100) + '%');
+          win.style.setProperty('--my', (py * 100) + '%');
+        });
+        win.addEventListener('mouseleave', function () {
+          win.style.setProperty('--rx', '0deg');
+          win.style.setProperty('--ry', '0deg');
+        });
       });
     });
   }
@@ -411,6 +430,7 @@
     };
 
     var step = function () {
+      if (!width) { if (running && !prefersReducedMotion) requestAnimationFrame(step); return; } // resize() diferido todavía no ha corrido
       ctx.clearRect(0, 0, width, height);
       var maxDist = Math.min(width, height) * 0.34;
 
@@ -458,13 +478,15 @@
       });
     };
 
-    resize();
-    initNodes();
-    if (prefersReducedMotion) {
-      drawStatic();
-    } else {
-      requestAnimationFrame(step);
-    }
+    runWhenIdle(function () {
+      resize();
+      initNodes();
+      if (prefersReducedMotion) {
+        drawStatic();
+      } else {
+        requestAnimationFrame(step);
+      }
+    });
 
     window.addEventListener('resize', function () {
       resize();
