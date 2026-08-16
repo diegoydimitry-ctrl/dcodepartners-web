@@ -148,7 +148,7 @@
   }
 
   /* ---------- Scroll reveal ---------- */
-  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur');
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur, .reveal-narrow, .reveal-converge');
   if (revealEls.length) {
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
@@ -746,6 +746,77 @@
         button.textContent = 'Solicitar mi Mes Gratuito';
       }
     });
+  }
+
+  /* ---------- Movilidad por Departamento: motor de scroll pasivo compartido ----------
+     Segunda capa de experiencia sobre los momentos-firma de cada
+     Departamento (DIR-016): cada uno tiene también su propia forma de
+     moverse con el scroll, no solo una animación de entrada. La
+     rueda/trackpad siguen siendo enteramente del usuario — este motor
+     NUNCA llama a preventDefault ni engancha el evento "wheel"; solo lee
+     la posición de scroll (listener pasivo) y publica un progreso 0..1
+     como la variable --motion-progress sobre cada [data-motion-journey]
+     visible. Todo el movimiento real es CSS puro (transform/opacity vía
+     calc() sobre esa variable, distinto por Departamento) definido en
+     styles.css bajo @media (min-width:761px) — en tablet/móvil esa capa
+     no se aplica y cada Departamento conserva su propia animación de
+     entrada (ver clases reveal-* asignadas en cada página). Con
+     prefers-reduced-motion, --motion-progress se fija en 1 una sola vez
+     (estado final asentado) y el motor no vuelve a tocar el DOM. */
+  var motionJourneys = Array.prototype.slice.call(document.querySelectorAll('[data-motion-journey]'));
+  if (motionJourneys.length) {
+    if (prefersReducedMotion) {
+      motionJourneys.forEach(function (el) { el.style.setProperty('--motion-progress', '1'); });
+    } else {
+      var activeJourneys = [];
+      var motionTicking = false;
+
+      var computeMotionProgress = function (el) {
+        var rect = el.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var total = rect.height - vh;
+        if (total <= 0) return 1;
+        var raw = (0 - rect.top) / total;
+        return Math.max(0, Math.min(1, raw));
+      };
+
+      var updateMotionJourneys = function () {
+        activeJourneys.forEach(function (el) {
+          el.style.setProperty('--motion-progress', computeMotionProgress(el).toFixed(4));
+        });
+        motionTicking = false;
+      };
+
+      var requestMotionUpdate = function () {
+        if (motionTicking) return;
+        motionTicking = true;
+        requestAnimationFrame(updateMotionJourneys);
+      };
+
+      if ('IntersectionObserver' in window) {
+        // Solo se recalculan en cada scroll los raíles que están cerca del
+        // viewport — con una única sección por página, el coste real es
+        // mínimo, pero el patrón queda listo para más sin degradar.
+        var motionIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            var idx = activeJourneys.indexOf(entry.target);
+            if (entry.isIntersecting) {
+              if (idx === -1) activeJourneys.push(entry.target);
+            } else if (idx !== -1) {
+              activeJourneys.splice(idx, 1);
+            }
+          });
+          requestMotionUpdate();
+        }, { threshold: [0, 0.01, 1], rootMargin: '25% 0px' });
+        motionJourneys.forEach(function (el) { motionIO.observe(el); });
+      } else {
+        activeJourneys = motionJourneys;
+      }
+
+      window.addEventListener('scroll', requestMotionUpdate, { passive: true });
+      window.addEventListener('resize', requestMotionUpdate, { passive: true });
+      requestMotionUpdate();
+    }
   }
 
   /* ---------- Asistente de IA de D-Code Partners ----------

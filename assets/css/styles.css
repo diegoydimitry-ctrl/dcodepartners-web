@@ -1493,21 +1493,79 @@ nav.main-nav > ul{ position:relative; }
    tocar el DOM de su iframe. El tema oscuro + cal-brand cian (config del
    script, al final de la página) son la personalización de color
    oficialmente soportada — el resto del modal es el propio de Cal.com. */
-.form-alt-action{
+/* Pie del formulario: consentimiento + anti-spam agrupados en un único
+   bloque compacto (antes tenían cada uno su propio margen suelto, lo que
+   sumado al botón de reserva daba sensación de demasiados elementos
+   compitiendo). El divisor es ahora una línea real, no solo la palabra
+   "o" pegada al botón — separa visualmente la acción principal (enviar)
+   de la alternativa (reservar) sin que ninguna de las dos parezca "otro
+   formulario". */
+.form-compliance{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin:4px 0 20px;
+}
+.consent-field{ display:flex; align-items:flex-start; gap:10px; }
+.consent-field input[type="checkbox"]{
+  margin-top:3px;
+  width:16px;
+  height:16px;
+  accent-color:var(--cyan);
+  flex-shrink:0;
+  cursor:pointer;
+}
+.consent-field label{
+  font-family:var(--sans);
+  font-size:0.85rem;
+  line-height:1.5;
+  color:var(--stone);
+  font-weight:400;
+  cursor:pointer;
+  margin:0;
+}
+.consent-field a{ color:var(--cyan); text-decoration:underline; }
+
+/* data-size="flexible" en el propio widget (contacto.html) hace que
+   Cal.com/Cloudflare Turnstile ocupe el ancho del contenedor en vez de su
+   caja fija de 300px — en móvil ya no se ve como una pieza ajena pegada
+   al formulario. La protección y el nivel de verificación no cambian: es
+   solo una opción de tamaño/layout oficial de Turnstile, no de seguridad. */
+.cf-turnstile{ width:100%; }
+.cf-turnstile iframe{ width:100% !important; }
+
+.form-divider{
   display:flex;
   align-items:center;
   gap:14px;
-  margin-top:18px;
+  margin:28px 0 22px;
 }
-.form-alt-divider{
+.form-divider::before,
+.form-divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:var(--border);
+}
+.form-divider span{
   font-family:var(--mono);
-  font-size:0.72rem;
-  letter-spacing:0.05em;
+  font-size:0.7rem;
+  letter-spacing:0.08em;
   text-transform:uppercase;
   color:var(--stone-soft);
   flex-shrink:0;
 }
-.form-alt-action .btn{ flex:1; }
+
+.booking-invite{ text-align:center; }
+.booking-invite-text{
+  font-size:0.88rem;
+  line-height:1.5;
+  color:var(--stone);
+  margin:0 0 14px;
+}
+.booking-invite-text strong{ color:var(--ink); font-weight:600; }
+.booking-invite-btn{ gap:9px; }
+.booking-invite-btn svg{ width:16px; height:16px; flex-shrink:0; }
 
 .field{ margin-bottom:20px; }
 .field label{
@@ -2133,3 +2191,127 @@ footer{
 .command-decision-label{ font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--cyan); }
 .command-decision-text{ color:var(--ink); font-size:1rem; margin-top:8px; }
 @media (prefers-reduced-motion: reduce){ .command-feed .command-dot,.command-arrow svg{ animation:none; } }
+
+/* ============ MOVILIDAD POR DEPARTAMENTO — motor compartido ============
+   Segunda capa de experiencia (DIR-017), por encima del momento-firma de
+   cada Departamento (DIR-016): mismo lenguaje D-Code, distinta forma de
+   moverse con el scroll en cada uno. --motion-progress la calcula
+   main.js con un listener de scroll PASIVO (nunca preventDefault, nunca
+   engancha "wheel") — el valor por defecto de aquí abajo es solo un
+   respaldo para el instante antes de que ese script corra o si estuviera
+   deshabilitado; el scroll del usuario nunca depende de JS.
+   El raíl (.motion-journey) solo da altura extra en pantallas grandes;
+   en tablet/móvil se desactiva por completo y cada Departamento conserva
+   su propia animación de entrada (reveal-* asignada en cada página) —
+   "no reproducir el desktop en móvil, adaptar". Con prefers-reduced-motion
+   tampoco se activa: la estructura y la información permanecen, solo
+   desaparece el movimiento. */
+:root{ --motion-progress:1; }
+
+.motion-viewport{ transition:none; }
+
+@media (min-width:761px) and (prefers-reduced-motion: no-preference){
+  .motion-journey{ position:relative; min-height:168vh; }
+  .motion-viewport{ position:sticky; top:96px; }
+}
+
+/* Comercial — enfoque radial: la propia esfera del radar es la que gira y
+   se asienta (arrastrando sus puntos consigo) — nunca la tarjeta ni su
+   texto, que se mantienen siempre horizontales y legibles. El resto de la
+   tarjeta solo hace un zoom mínimo. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="comercial"] .motion-viewport{
+    transform:scale(calc(0.96 + 0.04 * var(--motion-progress)));
+  }
+  .motion-journey[data-motion-journey="comercial"] .radar-scope{
+    transform:rotate(calc((1 - var(--motion-progress)) * -34deg));
+  }
+}
+
+/* Marketing — filtrado/estrechamiento: solo el embudo gráfico (sin texto
+   dentro) se comprime verticalmente al recorrerlo, nunca la lista de
+   fases — así el estrechamiento se ve sin que nada se vuelva difícil de
+   leer. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="marketing"] .motion-viewport{
+    opacity:calc(0.72 + 0.28 * var(--motion-progress));
+  }
+  .motion-journey[data-motion-journey="marketing"] .funnel-scope{
+    transform:
+      translateY(calc((1 - var(--motion-progress)) * -12px))
+      scaleY(calc(0.84 + 0.16 * var(--motion-progress)));
+    transform-origin:top center;
+  }
+}
+
+/* Clientes — capas radiales: los nodos emergen desde el centro hacia su
+   posición orbital final en vez de aparecer ya colocados. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="clientes"] .orbit-node{
+    opacity:calc(0.15 + 0.85 * var(--motion-progress));
+    transform:
+      rotate(var(--angle))
+      translate(calc(30px + 80px * var(--motion-progress)))
+      rotate(calc(-1 * var(--angle)))
+      translate(-50%,-50%)
+      scale(calc(0.7 + 0.3 * var(--motion-progress)));
+  }
+}
+
+/* Producción — desplazamiento lateral controlado: el tablero entra
+   deslizándose en horizontal, como si de verdad avanzara por sus fases. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="produccion"] .motion-viewport{
+    transform:translateX(calc((1 - var(--motion-progress)) * 34px));
+  }
+}
+
+/* Finanzas — asentado vertical mínimo: preciso, ordenado, sin juego —
+   nada de rotaciones ni escalados llamativos, solo un ligero acomodo. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="finanzas"] .motion-viewport{
+    transform:translateY(calc((1 - var(--motion-progress)) * 16px));
+  }
+}
+
+/* Soporte — llegada temporal: el ticket entra en escena como si acabara
+   de llegar al sistema, con su propio recorrido horizontal + fundido. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="soporte"] .ticket-card{
+    transform:translateX(calc((1 - var(--motion-progress)) * -40px));
+    opacity:calc(0.35 + 0.65 * var(--motion-progress));
+  }
+}
+
+/* Administración — expansión modular: la rejilla de módulos crece hasta
+   su tamaño real en vez de estar ya asentada. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="administracion"] .motion-viewport{
+    transform:scale(calc(0.94 + 0.06 * var(--motion-progress)));
+  }
+}
+
+/* Dirección — convergencia: las señales de los Departamentos bajan hacia
+   la decisión final, que se asienta al mismo ritmo — acercamiento
+   progresivo al centro de mando. */
+@media (min-width:761px){
+  .motion-journey[data-motion-journey="direccion"] .command-feed{
+    transform:translateY(calc((1 - var(--motion-progress)) * -16px));
+    opacity:calc(0.4 + 0.6 * var(--motion-progress));
+  }
+  .motion-journey[data-motion-journey="direccion"] .command-decision{
+    transform:scale(calc(0.95 + 0.05 * var(--motion-progress)));
+    opacity:calc(0.55 + 0.45 * var(--motion-progress));
+  }
+}
+
+/* Dos variantes de entrada nuevas para personalizar el primer impacto en
+   tablet/móvil (donde el raíl de scroll se desactiva), sumadas a las
+   reveal-* ya existentes en el sitio. */
+.reveal-narrow{ opacity:0; transform:translateY(10px) scaleY(.85); transform-origin:top center; transition:opacity .6s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+.reveal-narrow.is-visible{ opacity:1; transform:translateY(0) scaleY(1); }
+.reveal-converge{ opacity:0; transform:translateY(10px) scale(1.05); transition:opacity .6s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+.reveal-converge.is-visible{ opacity:1; transform:translateY(0) scale(1); }
+@media (prefers-reduced-motion: reduce){
+  .reveal-narrow,.reveal-converge{ transition:none; }
+}

@@ -175,26 +175,30 @@
                 <textarea id="mensaje" name="mensaje" placeholder="Which processes would you like to automate?" autocomplete="off"></textarea>
               </div>
 
-              <div class="consent-field" style="display:flex; align-items:flex-start; gap:10px; margin:4px 0 18px;">
-                <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required style="margin-top:3px; width:16px; height:16px; accent-color:var(--cyan); flex-shrink:0; cursor:pointer;">
-                <label for="acepta-privacidad" style="font-family:var(--sans); font-size:.85rem; line-height:1.5; color:var(--stone); font-weight:400; cursor:pointer; margin:0;">I have read and accept the <a href="/privacidad" style="color:var(--cyan); text-decoration:underline;">Privacy Policy</a>.</label>
+              <div class="form-compliance">
+                <div class="consent-field">
+                  <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
+                  <label for="acepta-privacidad">I have read and accept the <a href="/privacidad">Privacy Policy</a>.</label>
+                </div>
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
               </div>
 
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
-
-              <button type="submit" class="btn btn-invert btn-block" style="margin-top:20px;">
+              <button type="submit" class="btn btn-invert btn-block">
                 Claim My Free Month
               </button>
               <p class="form-note" id="form-note">No cost. No commitment. We respond within 24h.</p>
             </form>
 
-            <div class="form-alt-action">
-              <span class="form-alt-divider">or</span>
-              <button type="button" class="btn btn-primary btn-block" id="booking-cta-btn"
+            <div class="form-divider" role="separator" aria-label="or"><span>or</span></div>
+
+            <div class="booking-invite">
+              <p class="booking-invite-text"><strong>Prefer to talk directly?</strong> Book a 30-minute call.</p>
+              <button type="button" class="btn btn-ghost btn-block booking-invite-btn" id="booking-cta-btn"
                 data-cal-link="dimitry-y-diego-y9tbqp/30min"
                 data-cal-namespace="reunion-30min"
                 data-cal-config='{"layout":"month_view","theme":"dark"}'>
-                Book a call — check availability
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Check availability
               </button>
             </div>
           </div>
