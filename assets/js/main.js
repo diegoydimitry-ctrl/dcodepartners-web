@@ -76,7 +76,7 @@
   });
 
   /* ---------- Scroll reveal ---------- */
-  var revealEls = document.querySelectorAll('.reveal');
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
   if (revealEls.length) {
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
