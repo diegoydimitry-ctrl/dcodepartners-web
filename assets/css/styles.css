@@ -1486,95 +1486,28 @@ nav.main-nav > ul{ position:relative; }
   align-items:start;
 }
 
-/* Panel de reserva: un único contenedor, sin la barra de "ventana"
-   (puntos + título) que usa el resto del sitio — un calendario ya es una
-   interfaz completa por sí mismo, y envolverlo en otro marco de terminal
-   encima era la caja dentro de la caja dentro de la caja de la que habló
-   Dirección. Fondo con gradiente azul/cian muy sutil (no gris/negro
-   plano) y un borde con el mismo tinte, para que el módulo se sienta
-   parte del lenguaje D-Code en vez de un recorte insertado encima.
-   Límite real de personalización: el interior del iframe de Cal.com en
-   tema oscuro usa su propia paleta neutra — la única variable de color
-   oficialmente soportada por su embed es "cal-brand" (ya en cian, ver el
-   script de más abajo). No se ha intentado forzar más colores dentro del
-   iframe con hacks; el azul adicional vive en este contenedor, no dentro
-   del calendario en sí. */
-.booking-panel{
-  position:relative;
-  background:
-    radial-gradient(120% 140% at 15% 0%, rgba(91,140,255,.10), transparent 55%),
-    radial-gradient(100% 120% at 100% 100%, rgba(67,224,255,.06), transparent 60%),
-    var(--panel);
-  border:1px solid rgba(91,140,255,.22);
-  border-radius:14px;
-  padding:10px;
-  min-height:700px;
-  box-shadow:0 0 50px -18px rgba(67,224,255,.16);
-  transition:min-height .3s ease;
-}
-.booking-panel:has(.booking-widget-inline.cal-ready){ min-height:0; }
-.booking-widget-inline{
-  width:100%;
-  min-height:680px;
-  opacity:0;
-  transition:opacity .4s ease, min-height .3s ease;
-  border-radius:9px;
-  overflow:hidden;
-}
-.booking-widget-inline.cal-ready{ opacity:1; min-height:0; }
-.booking-widget-inline iframe{ border-radius:9px; border:none; display:block; }
-/* Skeleton: ocupa el espacio desde el primer frame (sin layout shift) y
-   se funde con el calendario real en cuanto Cal.com avisa que ya cargó
-   ("linkReady"), en vez de dejar una caja vacía mientras tanto. */
-.booking-skeleton{
-  position:absolute;
-  inset:10px;
+/* Reserva vía popup oficial de Cal.com: ya no hay un bloque inline en la
+   página — el botón de abajo lleva los atributos data-cal-* que el
+   propio embed.js de Cal.com detecta automáticamente para abrir su
+   ventana emergente (mecanismo oficial de "popup via element click"), sin
+   tocar el DOM de su iframe. El tema oscuro + cal-brand cian (config del
+   script, al final de la página) son la personalización de color
+   oficialmente soportada — el resto del modal es el propio de Cal.com. */
+.form-alt-action{
   display:flex;
-  flex-direction:column;
   align-items:center;
-  justify-content:center;
   gap:14px;
+  margin-top:18px;
+}
+.form-alt-divider{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
   color:var(--stone-soft);
-  transition:opacity .35s ease;
+  flex-shrink:0;
 }
-.booking-skeleton.hidden{ opacity:0; pointer-events:none; }
-.booking-skeleton-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-  width:min(340px, 80%);
-}
-.booking-skeleton-cell{
-  aspect-ratio:1;
-  border-radius:6px;
-  background:rgba(91,140,255,.05);
-  border:1px solid rgba(91,140,255,.16);
-  animation:booking-skeleton-pulse 1.8s ease-in-out infinite;
-}
-.booking-skeleton-cell:nth-child(3n){ animation-delay:.15s; }
-.booking-skeleton-cell:nth-child(5n){ animation-delay:.3s; }
-@keyframes booking-skeleton-pulse{
-  0%,100%{ opacity:.5; }
-  50%{ opacity:1; background:rgba(67,224,255,.12); border-color:rgba(67,224,255,.3); }
-}
-.booking-skeleton-label{ font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em; }
-@media (prefers-reduced-motion: reduce){
-  .booking-skeleton-cell{ animation:none; }
-}
-@media (max-width:640px){
-  .booking-panel{ min-height:560px; padding:6px; }
-  .booking-widget-inline{ min-height:540px; }
-  .booking-skeleton{ inset:6px; }
-}
-.booking-fallback-divider{
-  display:flex; align-items:center; gap:16px;
-  margin:56px 0 24px;
-  color:var(--stone-soft);
-  font-family:var(--mono); font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase;
-}
-.booking-fallback-divider::before, .booking-fallback-divider::after{
-  content:""; flex:1; height:1px; background:var(--border);
-}
+.form-alt-action .btn{ flex:1; }
 
 .field{ margin-bottom:20px; }
 .field label{
@@ -1990,3 +1923,213 @@ footer{
   }
   .lang-switch a{ padding:5px 8px; }
 }
+
+/* ==================================================================
+   SIGNATURE MOMENTS — una visualización propia por Departamento.
+   Comparten la misma identidad (fondo, tipografía, color, chrome de
+   .window, ritmo de reveal) pero cada una tiene su propia composición e
+   interacción — la diferencia está en la forma, no en un color distinto
+   sobre el mismo componente. Todas usan datos de demostración
+   explícitamente etiquetados como tal; ninguna simula resultados reales.
+   ================================================================== */
+
+/* ---------- Comercial IA: radar de oportunidades ---------- */
+.radar-window .window-body{ display:flex; gap:36px; flex-wrap:wrap; align-items:center; }
+.radar-scope{
+  position:relative;
+  width:220px; height:220px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:
+    repeating-radial-gradient(circle at center, rgba(91,140,255,.14) 0, rgba(91,140,255,.14) 1px, transparent 1px, transparent 22%),
+    radial-gradient(circle at center, rgba(91,140,255,.06), transparent 70%);
+  border:1px solid var(--border);
+}
+.radar-sweep{
+  position:absolute; inset:0;
+  border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(67,224,255,.4), transparent 28%);
+  animation:radar-spin 4.5s linear infinite;
+}
+@keyframes radar-spin{ to{ transform:rotate(360deg); } }
+.radar-blip{
+  position:absolute;
+  top:var(--y); left:var(--x);
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--stone-soft);
+  transform:translate(-50%,-50%);
+}
+.radar-blip.hot{
+  width:9px; height:9px;
+  background:var(--cyan);
+  box-shadow:0 0 0 4px rgba(67,224,255,.18);
+  cursor:pointer;
+  transition:box-shadow .25s ease, transform .25s ease;
+}
+.radar-blip.hot:hover,.radar-blip.hot.is-active{ box-shadow:0 0 0 7px rgba(67,224,255,.28); transform:translate(-50%,-50%) scale(1.25); }
+.radar-stages{ display:flex; flex-direction:column; gap:10px; min-width:200px; }
+.radar-stage{
+  display:flex; align-items:center; gap:12px;
+  background:none; border:1px solid var(--border); border-radius:10px;
+  padding:10px 14px; font-family:inherit; color:var(--stone); cursor:pointer;
+  transition:border-color .2s ease, background .2s ease;
+  text-align:left;
+}
+.radar-stage:hover,.radar-stage.is-active,.radar-stage:focus-visible{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); color:var(--ink); }
+.radar-stage-num{ font-family:var(--mono); font-size:0.7rem; color:var(--cyan); }
+.radar-note{ flex-basis:100%; color:var(--stone-soft); font-size:0.85rem; margin-top:6px; }
+@media (prefers-reduced-motion: reduce){ .radar-sweep{ animation:none; opacity:.3; } }
+@media (max-width:640px){ .radar-window .window-body{ flex-direction:column; align-items:stretch; } .radar-scope{ width:180px; height:180px; margin:0 auto; } }
+
+/* ---------- Marketing IA: embudo de captación ---------- */
+.funnel-window .window-body{ display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start; }
+.funnel-scope{ position:relative; width:200px; flex-shrink:0; display:flex; flex-direction:column; gap:3px; }
+.funnel-layer{
+  position:relative;
+  width:var(--w);
+  height:46px;
+  margin:0 auto;
+  background:linear-gradient(180deg, rgba(91,140,255,.16), rgba(67,224,255,.06));
+  clip-path:polygon(6% 0, 94% 0, 84% 100%, 16% 100%);
+  overflow:hidden;
+  border-top:1px solid rgba(91,140,255,.3);
+}
+.funnel-layer.is-active{ background:linear-gradient(180deg, rgba(67,224,255,.32), rgba(91,140,255,.12)); border-top-color:var(--cyan); }
+.funnel-particle{
+  position:absolute; top:-8%; left:50%;
+  width:5px; height:5px; border-radius:50%;
+  background:var(--cyan);
+  animation:funnel-fall 3s linear infinite;
+  animation-delay:var(--d);
+}
+@keyframes funnel-fall{ 0%{ transform:translate(-50%,-8px); opacity:0; } 15%{ opacity:1; } 85%{ opacity:1; } 100%{ transform:translate(-50%,54px); opacity:0; } }
+.funnel-stages{ display:flex; flex-direction:column; gap:14px; min-width:220px; }
+.funnel-stage{ display:block; width:100%; background:none; border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-family:inherit; text-align:left; cursor:pointer; transition:border-color .2s ease, background .2s ease; }
+.funnel-stage:hover,.funnel-stage.is-active,.funnel-stage:focus-visible{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); }
+.funnel-stage strong{ display:block; font-size:0.92rem; color:var(--ink); margin-bottom:2px; }
+.funnel-stage span{ font-size:0.82rem; color:var(--stone-soft); }
+@media (prefers-reduced-motion: reduce){ .funnel-particle{ animation:none; opacity:0; } }
+@media (max-width:640px){ .funnel-window .window-body{ flex-direction:column; align-items:center; } }
+
+/* ---------- Clientes IA: ficha/ecosistema del cliente ---------- */
+.orbit-window .window-body{ display:flex; flex-direction:column; align-items:center; gap:18px; }
+.orbit-scope{ position:relative; width:260px; height:260px; }
+.orbit-center{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:84px; height:84px; border-radius:50%;
+  background:var(--panel-2); border:1px solid rgba(67,224,255,.4);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.03em; color:var(--cyan);
+  box-shadow:0 0 0 6px rgba(67,224,255,.08);
+}
+.orbit-ring{ position:absolute; inset:0; }
+.orbit-node{
+  position:absolute; top:50%; left:50%;
+  width:64px; height:44px;
+  transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%);
+  background:var(--panel); border:1px solid var(--border); border-radius:9px;
+  font-family:var(--sans); font-size:0.72rem; color:var(--stone); cursor:pointer;
+  transition:border-color .2s ease, color .2s ease, background .2s ease;
+}
+.orbit-node:hover,.orbit-node:focus-visible,.orbit-node.is-active{ border-color:var(--cyan); color:var(--ink); background:rgba(67,224,255,.08); }
+.orbit-caption{ color:var(--stone-soft); font-size:0.85rem; min-height:1.4em; text-align:center; max-width:360px; }
+@media (max-width:640px){ .orbit-scope{ width:220px; height:220px; } .orbit-node{ transform:rotate(var(--angle)) translate(88px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); width:56px; font-size:0.66rem; } }
+
+/* ---------- Producción IA: tablero en marcha ---------- */
+.board-window .window-body{ padding-bottom:38px; }
+.board-scope{ position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.board-col{ background:rgba(255,255,255,.015); border:1px solid var(--border-soft); border-radius:10px; padding:12px; min-height:120px; }
+.board-col-label{ display:block; font-family:var(--mono); font-size:0.66rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--stone-soft); margin-bottom:10px; }
+.board-card{ background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:0.82rem; color:var(--stone); }
+.board-card.ghost{ border-style:dashed; opacity:.5; height:34px; }
+.board-moving-card{
+  position:absolute; top:34px; left:12px;
+  width:calc(33.33% - 28px);
+  background:var(--panel-2); border:1px solid rgba(67,224,255,.45); border-radius:8px;
+  padding:10px 12px; font-size:0.82rem; color:var(--ink);
+  box-shadow:0 10px 30px -12px rgba(67,224,255,.35);
+  animation:board-travel 7s cubic-bezier(.4,0,.2,1) infinite;
+}
+@keyframes board-travel{
+  0%,8%{ transform:translateX(0); }
+  38%,46%{ transform:translateX(calc(100% + 16px)); }
+  76%,100%{ transform:translateX(calc(200% + 32px)); }
+}
+@media (prefers-reduced-motion: reduce){ .board-moving-card{ animation:none; } }
+@media (max-width:640px){ .board-scope{ grid-template-columns:1fr; } .board-moving-card{ display:none; } }
+
+/* ---------- Finanzas IA: cadena financiera ---------- */
+.ledger-window .window-body{ max-width:460px; margin:0 auto; }
+.ledger-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:11px 0; border-bottom:1px solid var(--border-soft);
+  opacity:0; transform:translateY(8px);
+  transition:opacity .5s ease, transform .5s ease;
+  transition-delay:calc(var(--i) * 120ms);
+}
+.ledger-row.is-visible{ opacity:1; transform:translateY(0); }
+.ledger-label{ font-size:0.9rem; color:var(--stone); }
+.ledger-amount{ font-family:var(--mono); font-size:0.88rem; color:var(--ink); }
+.ledger-amount.pos{ color:var(--green); }
+.ledger-amount.neg{ color:var(--amber); }
+.ledger-total{ display:flex; justify-content:space-between; align-items:center; padding-top:16px; margin-top:6px; }
+.ledger-total > span:first-child{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--stone-soft); }
+.ledger-total-amount{ font-family:var(--serif); font-size:1.5rem; font-weight:600; color:var(--cyan); }
+.ledger-disclaimer{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:18px; }
+
+/* ---------- Soporte IA: ticket en vivo ---------- */
+.ticket-window .window-body{ max-width:420px; margin:0 auto; }
+.ticket-card{ background:var(--panel-2); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.ticket-card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.ticket-id{ font-family:var(--mono); font-size:0.72rem; color:var(--stone-soft); }
+.ticket-status{
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.04em; text-transform:uppercase;
+  padding:4px 10px; border-radius:100px;
+  background:rgba(255,255,255,.06); color:var(--stone); border:1px solid var(--border);
+  transition:background .3s ease, color .3s ease, border-color .3s ease;
+}
+.ticket-status.st-clasificado{ background:rgba(91,140,255,.12); color:var(--blue); border-color:rgba(91,140,255,.3); }
+.ticket-status.st-prioridad{ background:rgba(255,180,84,.12); color:var(--amber); border-color:rgba(255,180,84,.3); }
+.ticket-status.st-respondido{ background:rgba(67,224,255,.12); color:var(--cyan); border-color:rgba(67,224,255,.3); }
+.ticket-status.st-resuelto{ background:rgba(52,231,164,.12); color:var(--green); border-color:rgba(52,231,164,.3); }
+.ticket-subject{ color:var(--ink); font-size:0.95rem; margin-bottom:18px; }
+.ticket-rail{ display:flex; align-items:center; gap:6px; }
+.ticket-step{ flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s ease; }
+.ticket-step.active{ background:var(--cyan); }
+.ticket-demo-note{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:16px; }
+
+/* ---------- Administración IA: panel operativo ---------- */
+.opsgrid-window .window-body{ }
+.opsgrid-scope{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.opsgrid-tile{ border:1px solid var(--border); border-radius:10px; padding:16px; cursor:default; transition:border-color .2s ease, background .2s ease; }
+.opsgrid-tile:hover,.opsgrid-tile:focus-within{ border-color:rgba(67,224,255,.4); background:rgba(67,224,255,.04); }
+.opsgrid-tile-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.opsgrid-tile-label{ font-size:0.9rem; color:var(--ink); font-weight:500; }
+.opsgrid-dot{ width:8px; height:8px; border-radius:50%; background:var(--green); flex-shrink:0; }
+.opsgrid-tile-detail{
+  max-height:0; opacity:0; overflow:hidden; color:var(--stone-soft); font-size:0.82rem;
+  transition:max-height .35s ease, opacity .25s ease, margin-top .35s ease;
+}
+.opsgrid-tile:hover .opsgrid-tile-detail,.opsgrid-tile:focus-within .opsgrid-tile-detail{ max-height:80px; opacity:1; margin-top:6px; }
+@media (max-width:520px){ .opsgrid-scope{ grid-template-columns:1fr; } }
+
+/* ---------- Dirección IA: command center ---------- */
+.command-window .window-body{ display:flex; flex-direction:column; gap:22px; }
+.command-feeds{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.command-feed{
+  display:flex; align-items:center; gap:8px;
+  border:1px solid var(--border); border-radius:100px;
+  padding:7px 14px; font-family:var(--mono); font-size:0.72rem; color:var(--stone);
+}
+.command-feed .command-dot{ width:6px; height:6px; border-radius:50%; background:var(--cyan); animation:pulse 2.2s ease-in-out infinite; }
+.command-arrow{ display:flex; justify-content:center; color:var(--stone-soft); }
+.command-arrow svg{ width:18px; height:18px; animation:command-bounce 1.8s ease-in-out infinite; }
+@keyframes command-bounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
+.command-decision{
+  text-align:center; border:1px solid rgba(67,224,255,.4); border-radius:12px;
+  padding:20px 24px; background:rgba(67,224,255,.05);
+}
+.command-decision-label{ font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--cyan); }
+.command-decision-text{ color:var(--ink); font-size:1rem; margin-top:8px; }
+@media (prefers-reduced-motion: reduce){ .command-feed .command-dot,.command-arrow svg{ animation:none; } }

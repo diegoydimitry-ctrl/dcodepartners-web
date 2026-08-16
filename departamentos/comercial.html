@@ -182,35 +182,47 @@
     </div>
   </section>
 
-  <!-- ============ CÓMO FUNCIONA (VISUALIZACIÓN DE SISTEMA) ============ -->
+  <!-- ============ SIGNATURE MOMENT: RADAR DE OPORTUNIDADES ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Cómo funciona</span>
-        <h2 class="h-title">El recorrido de una oportunidad dentro de Comercial IA.</h2>
-        <p class="lead">Una representación simplificada del flujo del sistema — no son datos de un cliente real.</p>
+        <h2 class="h-title">Un radar que encuentra oportunidades, no una lista que hay que revisar.</h2>
+        <p class="lead">Representación simplificada del sistema — no son datos de un cliente real.</p>
       </div>
-      <div class="window pipeline-window reveal-blur">
+      <div class="window radar-window reveal-blur">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">pipeline_comercial.demo</span>
+          <span class="window-title">radar_comercial.demo</span>
           <span class="window-status"><span class="dot"></span>DEMO</span>
         </div>
-        <div class="window-body">
-          <div class="pipeline">
-            <div class="pipeline-node"><span class="pipeline-dot">01</span><span class="pipeline-label">Radar</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">02</span><span class="pipeline-label">Hot</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">03</span><span class="pipeline-label">Lead</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">04</span><span class="pipeline-label">Propuesta</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">05</span><span class="pipeline-label">Revisión</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">06</span><span class="pipeline-label">Oportunidad</span></div>
+        <div class="window-body radar-body" data-signature-crosshighlight>
+          <div class="radar-scope" aria-hidden="true">
+            <div class="radar-sweep"></div>
+            <span class="radar-blip" style="--x:22%; --y:28%;"></span>
+            <span class="radar-blip" style="--x:78%; --y:22%;"></span>
+            <span class="radar-blip" style="--x:85%; --y:68%;"></span>
+            <span class="radar-blip" style="--x:14%; --y:62%;"></span>
+            <span class="radar-blip" style="--x:48%; --y:12%;"></span>
+            <span class="radar-blip hot" data-stage="hot" style="--x:52%; --y:52%;" tabindex="-1"></span>
+            <span class="radar-blip hot" data-stage="lead" style="--x:32%; --y:78%;" tabindex="-1"></span>
+            <span class="radar-blip hot" data-stage="propuesta" style="--x:68%; --y:38%;" tabindex="-1"></span>
           </div>
-          <p class="pipeline-note">Cada oportunidad avanza por estas fases dentro de Comercial IA; el sistema avisa qué necesita atención en cada una, sin que nadie tenga que revisarlas a mano.</p>
+          <div class="radar-stages" role="list">
+            <button type="button" class="radar-stage" data-stage="hot" role="listitem">
+              <span class="radar-stage-num">01</span>
+              <span><strong>Hot</strong> — empresa detectada y puntuada por encima del umbral.</span>
+            </button>
+            <button type="button" class="radar-stage" data-stage="lead" role="listitem">
+              <span class="radar-stage-num">02</span>
+              <span><strong>Lead</strong> — pasa a pipeline activo, con seguimiento asignado.</span>
+            </button>
+            <button type="button" class="radar-stage" data-stage="propuesta" role="listitem">
+              <span class="radar-stage-num">03</span>
+              <span><strong>Propuesta</strong> — documento generado y verificado, listo para enviar.</span>
+            </button>
+          </div>
+          <p class="radar-note">El radar barre el sector cada día. Pasa el ratón — o el foco del teclado — sobre un punto destacado o una fase para ver cómo se corresponden.</p>
         </div>
       </div>
     </div>

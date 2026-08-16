@@ -146,27 +146,6 @@
 
   <section class="section-sm">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Reserva directa</span>
-        <h2 class="h-title">Elige día y hora — sin ida y vuelta de emails.</h2>
-      </div>
-      <div class="booking-panel reveal">
-        <div class="booking-skeleton" id="dcode-cal-skeleton" aria-hidden="true">
-          <div class="booking-skeleton-grid">
-            <div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div>
-            <div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div>
-          </div>
-          <span class="booking-skeleton-label">Cargando calendario…</span>
-        </div>
-        <div id="dcode-cal-inline" class="booking-widget-inline" role="region" aria-label="Calendario de reserva de reunión con D-Code Partners" aria-busy="true"></div>
-      </div>
-
-      <div class="booking-fallback-divider">o escríbenos directamente</div>
-    </div>
-  </section>
-
-  <section class="section-sm" style="padding-top:0;">
-    <div class="container">
       <div class="contacto-grid">
         <div class="window reveal">
           <div class="window-bar">
@@ -208,6 +187,16 @@
               </button>
               <p class="form-note" id="form-note">Sin coste. Sin compromiso. Respondemos en menos de 24h.</p>
             </form>
+
+            <div class="form-alt-action">
+              <span class="form-alt-divider">o</span>
+              <button type="button" class="btn btn-primary btn-block" id="booking-cta-btn"
+                data-cal-link="dimitry-y-diego-y9tbqp/30min"
+                data-cal-namespace="reunion-30min"
+                data-cal-config='{"layout":"month_view","theme":"dark"}'>
+                Reservar una llamada — ver disponibilidad
+              </button>
+            </div>
           </div>
         </div>
 
@@ -354,14 +343,21 @@
 
 <script src="/assets/js/main.js?v=202608041000" defer></script>
 
-<!-- ============ RESERVA DIRECTA (Cal.com) ============ -->
+<!-- ============ RESERVA (popup oficial de Cal.com) ============ -->
 <!--
-  Integración documentada en DIR-20260816-010 (arquitectura de reserva).
+  Integración documentada en DIR-20260816-010, rediseñada en DIR-016: antes
+  el calendario vivía embebido en línea dentro de la página (bloque enorme,
+  sensación de iframe pegado). Ahora se abre como ventana emergente oficial
+  de Cal.com: el botón #booking-cta-btn lleva los atributos data-cal-link /
+  data-cal-namespace / data-cal-config que el propio embed.js de Cal.com
+  detecta y conecta automáticamente al cargar (mecanismo documentado de
+  "popup via element click") — no hay lógica de click propia que abra el
+  popup, ni manipulación del DOM de su iframe. El formulario original de
+  /contacto sigue intacto y visible; el popup es una vía alternativa, no un
+  reemplazo.
 
-  Cuenta real conectada: https://cal.com/dimitry-y-diego-y9tbqp/30min
-  ("Reunión de 30 min | D-CODE PARTNERS"), facilitada por Dirección el
-  16/08/2026. Antes de esto, el widget mostraba un aviso en vez de un
-  calendario de ejemplo con horas falsas.
+  Cuenta real: https://cal.com/dimitry-y-diego-y9tbqp/30min ("Reunión de 30
+  min | D-CODE PARTNERS"), facilitada por Dirección.
 
   Integración con el sistema de leads existente: al confirmarse una reserva,
   se reenvían los mismos campos que ya acepta el webhook de producción de
@@ -379,24 +375,8 @@
 -->
 <script>
 (function () {
-  var DCODE_CAL_LINK = 'dimitry-y-diego-y9tbqp/30min'; // Cuenta real de D-Code Partners ("Reunión de 30 min | D-CODE PARTNERS")
   var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
   var TURNSTILE_SITEKEY = '0x4AAAAAAD0dueh5OBC9Zdkm';
-
-  if (DCODE_CAL_LINK.indexOf('REEMPLAZAR') === 0) {
-    var skeletonFallback = document.getElementById('dcode-cal-skeleton');
-    if (skeletonFallback) skeletonFallback.classList.add('hidden');
-    var el = document.getElementById('dcode-cal-inline');
-    if (el) {
-      el.innerHTML = '<div style="padding:48px 24px; text-align:center; color:var(--stone, #a7b0c4); font-family:var(--sans, sans-serif);">' +
-        'El calendario de reserva se activará en cuanto se conecte la cuenta real de Cal.com de D-Code Partners.' +
-        '<br><br><a href="#contact-form" class="btn btn-ghost" style="margin-top:8px;" onclick="document.getElementById(\'contact-form\').scrollIntoView({behavior:\'smooth\'});return false;">Usar el formulario de abajo</a>' +
-        '</div>';
-      el.classList.add('cal-ready');
-      el.removeAttribute('aria-busy');
-    }
-    return; // No cargar el embed de Cal.com sin un enlace real configurado.
-  }
 
   // ---- Carga del embed oficial de Cal.com ----
   (function (C, A, L) {
@@ -426,40 +406,17 @@
 
   Cal('init', 'reunion-30min', { origin: 'https://cal.com' });
 
-  // theme:'dark' va también en el config del propio 'inline' (no solo en la
-  // llamada 'ui' de más abajo): así el iframe nace ya en oscuro en vez de
-  // arrancar en el tema claro por defecto de Cal.com y cambiar después —
-  // ese arranque en claro era la caja blanca que se veía en desktop.
-  Cal.ns['reunion-30min']('inline', {
-    elementOrSelector: '#dcode-cal-inline',
-    calLink: DCODE_CAL_LINK,
-    config: { layout: 'month_view', theme: 'dark' },
-  });
-
-  // Tema oscuro D-Code: azul/cian como acento, sin alterar el resto del embed.
+  // Tema oscuro D-Code + cian como acento: la personalización de color
+  // oficialmente soportada por el popup de Cal.com. El resto del modal
+  // (blur del fondo, radio de esquina, duración de su propia animación de
+  // apertura) es implementación interna de Cal.com, no expuesta por su API
+  // pública — no se ha intentado sobreescribir con hacks.
   Cal.ns['reunion-30min']('ui', {
     theme: 'dark',
     cssVarsPerTheme: { dark: { 'cal-brand': '#43e0ff' } },
     hideEventTypeDetails: false,
     layout: 'month_view',
   });
-
-  // ---- Skeleton -> calendario real, sin salto de layout ----
-  // linkReady lo dispara el propio embed de Cal.com en cuanto el iframe
-  // terminó de cargar y pintar el contenido — a partir de ahí ya no hace
-  // falta el esqueleto, y el calendario real puede aparecer con un fundido
-  // en vez de golpear encima de golpe. Con un límite de tiempo de
-  // seguridad: si por lo que sea el evento no llega (red lenta, bloqueador
-  // de terceros...), el calendario se revela igualmente en vez de dejar el
-  // esqueleto para siempre.
-  var revealCal = function () {
-    var skeleton = document.getElementById('dcode-cal-skeleton');
-    var calEl = document.getElementById('dcode-cal-inline');
-    if (skeleton) skeleton.classList.add('hidden');
-    if (calEl) { calEl.classList.add('cal-ready'); calEl.removeAttribute('aria-busy'); }
-  };
-  Cal.ns['reunion-30min']('on', { action: 'linkReady', callback: revealCal });
-  setTimeout(revealCal, 6000);
 
   // ---- Reenvío al sistema de leads existente tras una reserva confirmada ----
   Cal.ns['reunion-30min']('on', {

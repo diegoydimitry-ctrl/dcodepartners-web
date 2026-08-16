@@ -189,35 +189,30 @@
     </div>
   </section>
 
-  <!-- ============ HOW IT WORKS (SYSTEM VISUALIZATION) ============ -->
+  <!-- ============ SIGNATURE MOMENT: FINANCIAL CHAIN ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">How it will work</span>
-        <h2 class="h-title">The planned design of the Finance AI flow.</h2>
+        <h2 class="h-title">A chain of numbers, not another card for Invoice/Payment/Expense/Profit.</h2>
         <p class="lead">This is the system's design, not a feature already live — expense tracking is already built; the rest is still in development.</p>
       </div>
-      <div class="window pipeline-window reveal-blur">
+      <div class="window ledger-window reveal-blur">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">pipeline_finance.design</span>
+          <span class="window-title">circuit_finance.design</span>
           <span class="window-status"><span class="dot"></span>DESIGN</span>
         </div>
         <div class="window-body">
-          <div class="pipeline">
-            <div class="pipeline-node"><span class="pipeline-dot">01</span><span class="pipeline-label">Budget</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">02</span><span class="pipeline-label">Invoice</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">03</span><span class="pipeline-label">Payment</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">04</span><span class="pipeline-label">Expenses</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">05</span><span class="pipeline-label">Profitability</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">06</span><span class="pipeline-label">Dashboard</span></div>
+          <div class="ledger-row" style="--i:0"><span class="ledger-label">Assigned budget</span><span class="ledger-amount">€2,400</span></div>
+          <div class="ledger-row" style="--i:1"><span class="ledger-label">Invoice issued</span><span class="ledger-amount">€1,850</span></div>
+          <div class="ledger-row" style="--i:2"><span class="ledger-label">Payment confirmed</span><span class="ledger-amount pos">+€1,850</span></div>
+          <div class="ledger-row" style="--i:3"><span class="ledger-label">Internal spend this month</span><span class="ledger-amount neg">−€420</span></div>
+          <div class="ledger-total">
+            <span>Estimated profitability</span>
+            <span class="ledger-total-amount">€<span class="counter" data-count="1430">0</span></span>
           </div>
-          <p class="pipeline-note">This is how the financial information is designed to flow once the circuit is complete. Today, some pieces already exist separately.</p>
+          <p class="ledger-disclaimer">Example figures to show how the circuit is meant to read once it's complete — not real financial data from any client.</p>
         </div>
       </div>
     </div>

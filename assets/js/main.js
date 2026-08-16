@@ -400,6 +400,99 @@
     }
   }
 
+  /* ---------- Signature moments de Departamentos ----------
+     Interacción compartida por varias de las visualizaciones propias de
+     cada Departamento (radar de Comercial, embudo de Marketing, órbita de
+     Clientes): un elemento con [data-signature-crosshighlight] agrupa
+     varios [data-stage] — al pasar el ratón o el foco por cualquiera de
+     ellos, todos los que comparten el mismo valor de data-stage se
+     marcan a la vez, mostrando la correspondencia entre el visual y la
+     fase concreta. Un único patrón, reutilizado, no una interacción
+     distinta por página. */
+  document.querySelectorAll('[data-signature-crosshighlight]').forEach(function (scope) {
+    var triggers = scope.querySelectorAll('[data-stage]');
+    triggers.forEach(function (el) {
+      var stage = el.getAttribute('data-stage');
+      var group = scope.querySelectorAll('[data-stage="' + stage + '"]');
+      var activate = function () { group.forEach(function (g) { g.classList.add('is-active'); }); };
+      var deactivate = function () { group.forEach(function (g) { g.classList.remove('is-active'); }); };
+      el.addEventListener('mouseenter', activate);
+      el.addEventListener('mouseleave', deactivate);
+      el.addEventListener('focus', activate);
+      el.addEventListener('blur', deactivate);
+    });
+  });
+
+  /* ---------- Clientes IA: órbita de la ficha de cliente ---------- */
+  var orbitScope = document.querySelector('.orbit-scope');
+  if (orbitScope) {
+    var orbitCaption = document.getElementById('orbit-caption');
+    var orbitDefaultCaption = orbitCaption ? orbitCaption.textContent : '';
+    orbitScope.querySelectorAll('.orbit-node').forEach(function (node) {
+      var show = function () {
+        orbitScope.querySelectorAll('.orbit-node').forEach(function (n) { n.classList.toggle('is-active', n === node); });
+        if (orbitCaption) orbitCaption.textContent = node.dataset.detail || node.dataset.label || orbitDefaultCaption;
+      };
+      var hide = function () {
+        node.classList.remove('is-active');
+        if (orbitCaption) orbitCaption.textContent = orbitDefaultCaption;
+      };
+      node.addEventListener('mouseenter', show);
+      node.addEventListener('mouseleave', hide);
+      node.addEventListener('focus', show);
+      node.addEventListener('blur', hide);
+    });
+  }
+
+  /* ---------- Soporte IA: ticket en vivo (ciclo de estados) ---------- */
+  var ticketStatusEl = document.getElementById('ticket-status');
+  if (ticketStatusEl) {
+    var ticketSteps = Array.prototype.slice.call(document.querySelectorAll('.ticket-step'));
+    var ticketIndex = 0;
+    var ticketTimer = null;
+    var ticketStates = ticketSteps.map(function (s) { return s.dataset.status; });
+    var ticketClasses = ['', 'st-clasificado', 'st-prioridad', 'st-respondido', 'st-resuelto'];
+    var renderTicketState = function (i) {
+      ticketSteps.forEach(function (s, idx) { s.classList.toggle('active', idx <= i); });
+      ticketStatusEl.textContent = ticketStates[i];
+      ticketStatusEl.className = 'ticket-status ' + (ticketClasses[i] || '');
+    };
+    renderTicketState(0);
+    var advanceTicket = function () {
+      ticketIndex = (ticketIndex + 1) % ticketStates.length;
+      renderTicketState(ticketIndex);
+    };
+    var startTicketCycle = function () {
+      if (ticketTimer || prefersReducedMotion) return;
+      ticketTimer = setInterval(advanceTicket, 1900);
+    };
+    var stopTicketCycle = function () {
+      clearInterval(ticketTimer);
+      ticketTimer = null;
+    };
+    if ('IntersectionObserver' in window) {
+      var ticketIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) { if (entry.isIntersecting) startTicketCycle(); else stopTicketCycle(); });
+      }, { threshold: 0.4 });
+      ticketIO.observe(ticketStatusEl.closest('.ticket-card') || ticketStatusEl);
+    } else if (!prefersReducedMotion) {
+      startTicketCycle();
+    }
+  }
+
+  /* ---------- Finanzas IA: cadena financiera (stagger + total animado) ---------- */
+  var ledgerRows = document.querySelectorAll('.ledger-row');
+  if (ledgerRows.length && 'IntersectionObserver' in window) {
+    var ledgerIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); ledgerIO.unobserve(entry.target); }
+      });
+    }, { threshold: 0.2 });
+    ledgerRows.forEach(function (r) { ledgerIO.observe(r); });
+  } else {
+    ledgerRows.forEach(function (r) { r.classList.add('is-visible'); });
+  }
+
   /* ---------- Hero neural-network canvas ---------- */
   var canvas = document.getElementById('hero-canvas');
   if (canvas) {

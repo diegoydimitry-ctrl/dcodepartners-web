@@ -182,35 +182,40 @@
     </div>
   </section>
 
-  <!-- ============ CÓMO FUNCIONA (VISUALIZACIÓN DE SISTEMA) ============ -->
+  <!-- ============ SIGNATURE MOMENT: TABLERO EN MARCHA ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Cómo funciona</span>
-        <h2 class="h-title">El recorrido de un proyecto dentro de Producción IA.</h2>
-        <p class="lead">Una representación simplificada del flujo del sistema — no son datos de un cliente real.</p>
+        <h2 class="h-title">Un proyecto que se organiza solo, no una lista que alguien tiene que mover.</h2>
+        <p class="lead">Representación simplificada del sistema — no son datos de un cliente real.</p>
       </div>
-      <div class="window pipeline-window reveal-blur">
+      <div class="window board-window reveal-blur">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">pipeline_produccion.demo</span>
+          <span class="window-title">tablero_produccion.demo</span>
           <span class="window-status"><span class="dot"></span>DEMO</span>
         </div>
         <div class="window-body">
-          <div class="pipeline">
-            <div class="pipeline-node"><span class="pipeline-dot">01</span><span class="pipeline-label">Cliente</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">02</span><span class="pipeline-label">Proyecto</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">03</span><span class="pipeline-label">Tareas</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">04</span><span class="pipeline-label">Responsables</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">05</span><span class="pipeline-label">Seguimiento</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">06</span><span class="pipeline-label">Entrega</span></div>
+          <div class="board-scope">
+            <div class="board-col">
+              <span class="board-col-label">Por hacer</span>
+              <div class="board-card">Preparar acceso al repositorio</div>
+              <div class="board-card ghost"></div>
+            </div>
+            <div class="board-col">
+              <span class="board-col-label">En marcha</span>
+              <div class="board-card">Revisión de diseño</div>
+              <div class="board-card ghost"></div>
+            </div>
+            <div class="board-col">
+              <span class="board-col-label">Entregado</span>
+              <div class="board-card">Configuración inicial</div>
+              <div class="board-card ghost"></div>
+            </div>
+            <div class="board-moving-card" aria-hidden="true">Migración de datos</div>
           </div>
-          <p class="pipeline-note">En cuanto se gana un cliente, el proyecto avanza por estas fases; los retrasos se detectan antes de que el cliente los note.</p>
+          <p class="pipeline-note">En cuanto se gana un cliente, el sistema crea el proyecto y reparte sus tareas según la carga real del equipo — el propio tablero se mueve solo. En pantallas pequeñas se muestra la foto fija de las tres columnas.</p>
         </div>
       </div>
     </div>

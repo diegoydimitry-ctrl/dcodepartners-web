@@ -188,33 +188,36 @@
     </div>
   </section>
 
-  <!-- ============ HOW IT WORKS (SYSTEM VISUALIZATION) ============ -->
+  <!-- ============ SIGNATURE MOMENT: LIVE TICKET ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">How it works</span>
-        <h2 class="h-title">How a ticket moves through Support AI.</h2>
-        <p class="lead">A simplified view of the already-active ticket classification flow — not data from a real client.</p>
+        <h2 class="h-title">One ticket, live, inside Support AI.</h2>
+        <p class="lead">This is how a support email actually moves forward — already live, not a future feature. The ticket below is an illustrative example.</p>
       </div>
-      <div class="window pipeline-window reveal-blur">
+      <div class="window ticket-window reveal-blur">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">pipeline_support.demo</span>
+          <span class="window-title">support_ai.live</span>
           <span class="window-status"><span class="dot"></span>DEMO</span>
         </div>
         <div class="window-body">
-          <div class="pipeline">
-            <div class="pipeline-node"><span class="pipeline-dot">01</span><span class="pipeline-label">Ticket</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">02</span><span class="pipeline-label">Classification</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">03</span><span class="pipeline-label">Prioritization</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">04</span><span class="pipeline-label">Response</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">05</span><span class="pipeline-label">Resolution</span></div>
+          <div class="ticket-card">
+            <div class="ticket-card-top">
+              <span class="ticket-id">TICKET #2291</span>
+              <span class="ticket-status" id="ticket-status" aria-live="polite">Received</span>
+            </div>
+            <p class="ticket-subject">"I can't access my July invoice, could you resend it?"</p>
+            <div class="ticket-rail" aria-hidden="true">
+              <span class="ticket-step active" data-status="Received"></span>
+              <span class="ticket-step" data-status="Classified"></span>
+              <span class="ticket-step" data-status="Priority: medium"></span>
+              <span class="ticket-step" data-status="Responded"></span>
+              <span class="ticket-step" data-status="Resolved"></span>
+            </div>
           </div>
-          <p class="pipeline-note">Every support email moves through these stages automatically; this part is already live, not a future feature.</p>
+          <p class="ticket-demo-note">Illustrative example of a ticket's automatic path — not a real client's data.</p>
         </div>
       </div>
     </div>

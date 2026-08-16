@@ -193,28 +193,31 @@
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Cómo funciona</span>
-        <h2 class="h-title">El recorrido de un ticket dentro de Soporte IA.</h2>
-        <p class="lead">Una representación simplificada del flujo de clasificación de tickets, ya operativo — no son datos de un cliente real.</p>
+        <h2 class="h-title">Un ticket, en vivo, dentro de Soporte IA.</h2>
+        <p class="lead">Así avanza automáticamente un email de soporte real — ya operativo, no una función futura. El ticket que ves abajo es un ejemplo ilustrativo.</p>
       </div>
-      <div class="window pipeline-window reveal-blur">
+      <div class="window ticket-window reveal-blur">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">pipeline_soporte.demo</span>
+          <span class="window-title">soporte_ia.live</span>
           <span class="window-status"><span class="dot"></span>DEMO</span>
         </div>
         <div class="window-body">
-          <div class="pipeline">
-            <div class="pipeline-node"><span class="pipeline-dot">01</span><span class="pipeline-label">Ticket</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">02</span><span class="pipeline-label">Clasificación</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">03</span><span class="pipeline-label">Priorización</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">04</span><span class="pipeline-label">Respuesta</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">05</span><span class="pipeline-label">Resolución</span></div>
+          <div class="ticket-card">
+            <div class="ticket-card-top">
+              <span class="ticket-id">TICKET #2291</span>
+              <span class="ticket-status" id="ticket-status" aria-live="polite">Recibido</span>
+            </div>
+            <p class="ticket-subject">«No puedo acceder a mi factura de julio, ¿podéis reenviármela?»</p>
+            <div class="ticket-rail" aria-hidden="true">
+              <span class="ticket-step active" data-status="Recibido"></span>
+              <span class="ticket-step" data-status="Clasificado"></span>
+              <span class="ticket-step" data-status="Prioridad media"></span>
+              <span class="ticket-step" data-status="Respondido"></span>
+              <span class="ticket-step" data-status="Resuelto"></span>
+            </div>
           </div>
-          <p class="pipeline-note">Cada email de soporte recorre estas fases automáticamente; esto ya es operativo, no una función futura.</p>
+          <p class="ticket-demo-note">Ejemplo ilustrativo del recorrido automático de un ticket — no corresponde a un cliente real.</p>
         </div>
       </div>
     </div>

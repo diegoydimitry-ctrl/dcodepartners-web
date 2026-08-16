@@ -182,35 +182,47 @@
     </div>
   </section>
 
-  <!-- ============ CÓMO FUNCIONA (VISUALIZACIÓN DE SISTEMA) ============ -->
+  <!-- ============ SIGNATURE MOMENT: OPPORTUNITY RADAR ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">How it works</span>
-        <h2 class="h-title">How an opportunity moves through Sales AI.</h2>
-        <p class="lead">A simplified view of the system's flow — not data from a real client.</p>
+        <h2 class="h-title">A radar that finds opportunities, not a list you have to review.</h2>
+        <p class="lead">A simplified view of the system — not data from a real client.</p>
       </div>
-      <div class="window pipeline-window reveal-blur">
+      <div class="window radar-window reveal-blur">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">pipeline_sales.demo</span>
+          <span class="window-title">radar_sales.demo</span>
           <span class="window-status"><span class="dot"></span>DEMO</span>
         </div>
-        <div class="window-body">
-          <div class="pipeline">
-            <div class="pipeline-node"><span class="pipeline-dot">01</span><span class="pipeline-label">Radar</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">02</span><span class="pipeline-label">Hot</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">03</span><span class="pipeline-label">Lead</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">04</span><span class="pipeline-label">Proposal</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">05</span><span class="pipeline-label">Review</span></div>
-            <div class="pipeline-connector" aria-hidden="true"></div>
-            <div class="pipeline-node"><span class="pipeline-dot">06</span><span class="pipeline-label">Opportunity</span></div>
+        <div class="window-body radar-body" data-signature-crosshighlight>
+          <div class="radar-scope" aria-hidden="true">
+            <div class="radar-sweep"></div>
+            <span class="radar-blip" style="--x:22%; --y:28%;"></span>
+            <span class="radar-blip" style="--x:78%; --y:22%;"></span>
+            <span class="radar-blip" style="--x:85%; --y:68%;"></span>
+            <span class="radar-blip" style="--x:14%; --y:62%;"></span>
+            <span class="radar-blip" style="--x:48%; --y:12%;"></span>
+            <span class="radar-blip hot" data-stage="hot" style="--x:52%; --y:52%;" tabindex="-1"></span>
+            <span class="radar-blip hot" data-stage="lead" style="--x:32%; --y:78%;" tabindex="-1"></span>
+            <span class="radar-blip hot" data-stage="propuesta" style="--x:68%; --y:38%;" tabindex="-1"></span>
           </div>
-          <p class="pipeline-note">Every opportunity moves through these stages inside Sales AI; the system flags what needs attention at each one, so nobody has to check manually.</p>
+          <div class="radar-stages" role="list">
+            <button type="button" class="radar-stage" data-stage="hot" role="listitem">
+              <span class="radar-stage-num">01</span>
+              <span><strong>Hot</strong> — a company detected and scored above the threshold.</span>
+            </button>
+            <button type="button" class="radar-stage" data-stage="lead" role="listitem">
+              <span class="radar-stage-num">02</span>
+              <span><strong>Lead</strong> — moves into the active pipeline, with follow-up assigned.</span>
+            </button>
+            <button type="button" class="radar-stage" data-stage="propuesta" role="listitem">
+              <span class="radar-stage-num">03</span>
+              <span><strong>Proposal</strong> — document generated and checked, ready to send.</span>
+            </button>
+          </div>
+          <p class="radar-note">The radar sweeps the sector every day. Hover — or move keyboard focus — over a highlighted point or a stage to see how they match up.</p>
         </div>
       </div>
     </div>
