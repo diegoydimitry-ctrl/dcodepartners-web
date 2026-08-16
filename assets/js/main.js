@@ -50,6 +50,18 @@
     });
   }
 
+  /* ---------- Language switcher (ES default, /en/ mirrors every ES path) ---------- */
+  document.querySelectorAll('.lang-switch').forEach(function (switcher) {
+    var path = window.location.pathname;
+    var isEn = path === '/en' || path.indexOf('/en/') === 0;
+    var esHref = isEn ? (path.replace(/^\/en/, '') || '/') : path;
+    var enHref = isEn ? path : ('/en' + (path === '/' ? '/' : path));
+    var esLink = switcher.querySelector('[data-lang="es"]');
+    var enLink = switcher.querySelector('[data-lang="en"]');
+    if (esLink) { esLink.href = esHref; esLink.setAttribute('aria-current', isEn ? 'false' : 'true'); }
+    if (enLink) { enLink.href = enHref; enLink.setAttribute('aria-current', isEn ? 'true' : 'false'); }
+  });
+
   /* ---------- Mega menu (desktop hover + keyboard, mobile tap-toggle) ---------- */
   document.querySelectorAll('.has-mega').forEach(function (item) {
     var trigger = item.querySelector('.mega-trigger');

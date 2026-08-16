@@ -505,6 +505,27 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 
 .nav-right{ display:flex; align-items:center; gap:14px; flex-shrink:0; }
 
+.lang-switch{
+  display:flex;
+  align-items:center;
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.04em;
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:3px;
+  gap:2px;
+  flex-shrink:0;
+}
+.lang-switch a{
+  padding:5px 10px;
+  border-radius:100px;
+  color:var(--stone-soft);
+  transition:color .2s ease, background .2s ease;
+}
+.lang-switch a:hover{ color:var(--ink); }
+.lang-switch a[aria-current="true"]{ color:var(--bg); background:var(--cyan); font-weight:600; }
+
 .burger{
   display:none;
   width:44px; height:44px;
@@ -1550,4 +1571,5 @@ footer{
     content:"Reservar";
     font-size:0.82rem;
   }
+  .lang-switch a{ padding:5px 8px; }
 }
