@@ -134,6 +134,27 @@
 
   <section class="section-sm">
     <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Reserva directa</span>
+        <h2 class="h-title">Elige día y hora — sin ida y vuelta de emails.</h2>
+      </div>
+      <div class="window booking-widget reveal">
+        <div class="window-bar">
+          <span class="window-dots"><span></span><span></span><span></span></span>
+          <span class="window-title">reserva_dcode.cal</span>
+          <span class="window-status"><span class="dot"></span>30 min</span>
+        </div>
+        <div class="window-body">
+          <div id="dcode-cal-inline" class="booking-widget-inline" role="region" aria-label="Calendario de reserva de reunión con D-Code Partners"></div>
+        </div>
+      </div>
+
+      <div class="booking-fallback-divider">o escríbenos directamente</div>
+    </div>
+  </section>
+
+  <section class="section-sm" style="padding-top:0;">
+    <div class="container">
       <div class="contacto-grid">
         <div class="window reveal">
           <div class="window-bar">
@@ -320,6 +341,145 @@
 </div>
 
 <script src="/assets/js/main.js?v=202608041000" defer></script>
+
+<!-- ============ RESERVA DIRECTA (Cal.com) ============ -->
+<!--
+  Integración documentada en DIR-20260816-010 (arquitectura de reserva).
+
+  CONFIGURACIÓN PENDIENTE ANTES DE PUBLICAR: sustituir DCODE_CAL_LINK por el
+  enlace real de Cal.com de D-Code Partners (formato "usuario/tipo-evento"),
+  una vez exista una cuenta de Cal.com conectada al calendario real del
+  equipo. Sin esa cuenta, el widget no puede mostrar disponibilidad real —
+  no se ha fabricado un calendario de ejemplo con horas falsas.
+
+  Integración con el sistema de leads existente: al confirmarse una reserva,
+  se reenvían los mismos campos que ya acepta el webhook de producción de
+  MK/Lead IA 360 (nombre, empresa, email, telefono, mensaje, origen,
+  turnstileToken) — verificado directamente contra el código real del nodo
+  "Normalizar y Validar Lead" en n8n, que descarta en silencio cualquier
+  campo que no esté en esa lista blanca. NO se ha añadido ningún campo
+  nuevo (fecha/hora/tipo de reunión) al payload: van incrustados dentro del
+  campo "mensaje", que sí es libre y ya se muestra al equipo comercial y se
+  analiza con Gemini. origen se marca "calendario_reservas" para poder
+  distinguir estos leads sin tocar el workflow. El campo turnstileToken es
+  obligatorio en el nodo actual, así que se renderiza un segundo widget de
+  Cloudflare Turnstile en modo invisible específico para esta llamada, en
+  vez de modificar la validación en n8n.
+-->
+<script>
+(function () {
+  var DCODE_CAL_LINK = 'REEMPLAZAR-con-usuario-real/reunion-30min'; // TODO: cuenta Cal.com real de D-Code Partners
+  var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
+  var TURNSTILE_SITEKEY = '0x4AAAAAAD0dueh5OBC9Zdkm';
+
+  if (DCODE_CAL_LINK.indexOf('REEMPLAZAR') === 0) {
+    var el = document.getElementById('dcode-cal-inline');
+    if (el) {
+      el.innerHTML = '<div style="padding:48px 24px; text-align:center; color:var(--stone, #a7b0c4); font-family:var(--sans, sans-serif);">' +
+        'El calendario de reserva se activará en cuanto se conecte la cuenta real de Cal.com de D-Code Partners.' +
+        '<br><br><a href="#contact-form" class="btn btn-ghost" style="margin-top:8px;" onclick="document.getElementById(\'contact-form\').scrollIntoView({behavior:\'smooth\'});return false;">Usar el formulario de abajo</a>' +
+        '</div>';
+    }
+    return; // No cargar el embed de Cal.com sin un enlace real configurado.
+  }
+
+  // ---- Carga del embed oficial de Cal.com ----
+  (function (C, A, L) {
+    let p = function (a, ar) { a.q.push(ar); };
+    let d = C.document;
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal; let ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {}; cal.q = cal.q || [];
+        d.head.appendChild(d.createElement('script')).src = A;
+        cal.loaded = true;
+      }
+      if (ar[0] === L) {
+        const api = function () { p(api, arguments); };
+        const namespace = ar[1];
+        api.q = api.q || [];
+        if (typeof namespace === 'string') {
+          cal.ns[namespace] = cal.ns[namespace] || api;
+          p(cal.ns[namespace], ar);
+          p(cal, ['initNamespace', namespace]);
+        } else p(cal, ar);
+        return;
+      }
+      p(cal, ar);
+    };
+  })(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+  Cal('init', 'reunion-30min', { origin: 'https://cal.com' });
+
+  Cal.ns['reunion-30min']('inline', {
+    elementOrSelector: '#dcode-cal-inline',
+    calLink: DCODE_CAL_LINK,
+    config: { layout: 'month_view' },
+  });
+
+  // Tema oscuro D-Code: azul/cian como acento, sin alterar el resto del embed.
+  Cal.ns['reunion-30min']('ui', {
+    theme: 'dark',
+    cssVarsPerTheme: { dark: { 'cal-brand': '#43e0ff' } },
+    hideEventTypeDetails: false,
+    layout: 'month_view',
+  });
+
+  // ---- Reenvío al sistema de leads existente tras una reserva confirmada ----
+  Cal.ns['reunion-30min']('on', {
+    action: 'bookingSuccessful',
+    callback: function (e) {
+      try {
+        var detail = (e && e.detail && e.detail.data) || {};
+        var attendee = (detail.attendees && detail.attendees[0]) || detail.booking && detail.booking.attendees && detail.booking.attendees[0] || {};
+        var nombre = attendee.name || '';
+        var email = attendee.email || '';
+        var startTime = detail.startTime || (detail.booking && detail.booking.startTime) || '';
+        var fechaTexto = startTime ? new Date(startTime).toLocaleString('es-ES', { dateStyle: 'full', timeStyle: 'short' }) : 'fecha no disponible';
+
+        if (!email) return; // Sin email no hay forma de registrar el lead — no se envía nada inventado.
+
+        renderInvisibleTurnstile(function (token) {
+          if (!token) return;
+          fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre: nombre || email,
+              empresa: '',
+              email: email,
+              telefono: '',
+              mensaje: 'Reunión reservada vía calendario online para el ' + fechaTexto + '.',
+              origen: 'calendario_reservas',
+              turnstileToken: token,
+            }),
+          }).catch(function () { /* silencioso: la reserva en Cal.com ya está confirmada de todas formas */ });
+        });
+      } catch (err) {
+        console.error('[reserva-calendario] No se pudo reenviar el lead al sistema existente:', err);
+      }
+    },
+  });
+
+  function renderInvisibleTurnstile(onToken) {
+    if (typeof turnstile === 'undefined') { onToken(null); return; }
+    var container = document.createElement('div');
+    container.style.display = 'none';
+    document.body.appendChild(container);
+    try {
+      var widgetId = turnstile.render(container, {
+        sitekey: TURNSTILE_SITEKEY,
+        size: 'invisible',
+        callback: function (token) { onToken(token); },
+        'error-callback': function () { onToken(null); },
+      });
+      turnstile.execute(container, { widgetId: widgetId });
+    } catch (err) {
+      onToken(null);
+    }
+  }
+})();
+</script>
 
 </body>
 </html>

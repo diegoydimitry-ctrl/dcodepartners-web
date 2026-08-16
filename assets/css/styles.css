@@ -1125,6 +1125,18 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   align-items:start;
 }
 
+.booking-widget .window-body{ padding:0; background:var(--panel); }
+.booking-widget-inline{ width:100%; min-height:640px; }
+.booking-fallback-divider{
+  display:flex; align-items:center; gap:16px;
+  margin:56px 0 24px;
+  color:var(--stone-soft);
+  font-family:var(--mono); font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase;
+}
+.booking-fallback-divider::before, .booking-fallback-divider::after{
+  content:""; flex:1; height:1px; background:var(--border);
+}
+
 .field{ margin-bottom:20px; }
 .field label{
   display:block;
