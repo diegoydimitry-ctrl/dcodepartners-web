@@ -20,6 +20,10 @@
 <link rel="manifest" href="/assets/site.webmanifest">
 <link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/spacegrotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Adelanta la conexión (DNS + TLS) a Cal.com antes de que su script la
+     necesite — el widget de reserva vive más abajo en esta misma página. -->
+<link rel="preconnect" href="https://app.cal.com">
+<link rel="preconnect" href="https://cal.com">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
@@ -146,15 +150,15 @@
         <span class="eyebrow">Book directly</span>
         <h2 class="h-title">Pick a day and time — no email back-and-forth.</h2>
       </div>
-      <div class="window booking-widget reveal">
-        <div class="window-bar">
-          <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">dcode_booking.cal</span>
-          <span class="window-status"><span class="dot"></span>30 min</span>
+      <div class="booking-panel reveal">
+        <div class="booking-skeleton" id="dcode-cal-skeleton" aria-hidden="true">
+          <div class="booking-skeleton-grid">
+            <div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div>
+            <div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div><div class="booking-skeleton-cell"></div>
+          </div>
+          <span class="booking-skeleton-label">Loading calendar…</span>
         </div>
-        <div class="window-body">
-          <div id="dcode-cal-inline" class="booking-widget-inline" role="region" aria-label="Meeting booking calendar with D-Code Partners"></div>
-        </div>
+        <div id="dcode-cal-inline" class="booking-widget-inline" role="region" aria-label="Meeting booking calendar with D-Code Partners" aria-busy="true"></div>
       </div>
 
       <div class="booking-fallback-divider">or reach out directly</div>
@@ -380,12 +384,16 @@
   var TURNSTILE_SITEKEY = '0x4AAAAAAD0dueh5OBC9Zdkm';
 
   if (DCODE_CAL_LINK.indexOf('REEMPLAZAR') === 0) {
+    var skeletonFallback = document.getElementById('dcode-cal-skeleton');
+    if (skeletonFallback) skeletonFallback.classList.add('hidden');
     var el = document.getElementById('dcode-cal-inline');
     if (el) {
       el.innerHTML = '<div style="padding:48px 24px; text-align:center; color:var(--stone, #a7b0c4); font-family:var(--sans, sans-serif);">' +
         'The booking calendar will go live as soon as D-Code Partners\' real Cal.com account is connected.' +
         '<br><br><a href="#contact-form" class="btn btn-ghost" style="margin-top:8px;" onclick="document.getElementById(\'contact-form\').scrollIntoView({behavior:\'smooth\'});return false;">Use the form below</a>' +
         '</div>';
+      el.classList.add('cal-ready');
+      el.removeAttribute('aria-busy');
     }
     return; // No cargar el embed de Cal.com sin un enlace real configurado.
   }
@@ -418,10 +426,14 @@
 
   Cal('init', 'reunion-30min', { origin: 'https://cal.com' });
 
+  // theme:'dark' va también en el config del propio 'inline' (no solo en la
+  // llamada 'ui' de más abajo): así el iframe nace ya en oscuro en vez de
+  // arrancar en el tema claro por defecto de Cal.com y cambiar después —
+  // ese arranque en claro era la caja blanca que se veía en desktop.
   Cal.ns['reunion-30min']('inline', {
     elementOrSelector: '#dcode-cal-inline',
     calLink: DCODE_CAL_LINK,
-    config: { layout: 'month_view' },
+    config: { layout: 'month_view', theme: 'dark' },
   });
 
   // Tema oscuro D-Code: azul/cian como acento, sin alterar el resto del embed.
@@ -431,6 +443,19 @@
     hideEventTypeDetails: false,
     layout: 'month_view',
   });
+
+  // ---- Skeleton -> calendario real, sin salto de layout ----
+  // linkReady lo dispara el propio embed de Cal.com en cuanto el iframe
+  // terminó de cargar y pintar el contenido. Con un límite de tiempo de
+  // seguridad: si el evento no llega, el calendario se revela igualmente.
+  var revealCal = function () {
+    var skeleton = document.getElementById('dcode-cal-skeleton');
+    var calEl = document.getElementById('dcode-cal-inline');
+    if (skeleton) skeleton.classList.add('hidden');
+    if (calEl) { calEl.classList.add('cal-ready'); calEl.removeAttribute('aria-busy'); }
+  };
+  Cal.ns['reunion-30min']('on', { action: 'linkReady', callback: revealCal });
+  setTimeout(revealCal, 6000);
 
   // ---- Reenvío al sistema de leads existente tras una reserva confirmada ----
   Cal.ns['reunion-30min']('on', {

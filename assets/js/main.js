@@ -18,6 +18,22 @@
     onScroll();
   }
 
+  /* ---------- Saltos a ancla suaves (skip-link, índice lateral de Home) ----------
+     scroll-behavior:smooth ya NO está en <html> (ver styles.css) porque
+     interfería con el scroll normal de rueda/trackpad. Los saltos a un
+     punto concreto de la página siguen siendo suaves, pero puntuales: se
+     resuelven aquí, en JS, sin tocar el comportamiento del scroll continuo. */
+  document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if (!target) return; // deja que el navegador haga su comportamiento por defecto
+      e.preventDefault();
+      target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+      if (history.pushState) history.pushState(null, '', '#' + id);
+    });
+  });
+
   /* ---------- Mobile nav toggle ---------- */
   var burger = document.getElementById('burger');
   var mainNav = document.getElementById('main-nav');

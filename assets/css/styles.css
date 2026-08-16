@@ -64,7 +64,15 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+/* scroll-behavior:smooth NO va aquí a propósito. Puesto en <html> de forma
+   global, en Chromium interfiere con el scroll nativo de rueda/trackpad:
+   cada nuevo tick de la rueda puede reiniciar la animación de scroll en
+   curso en vez de sumarse a ella, lo que se percibe como que la página se
+   detiene y necesita otro golpe de rueda para seguir — justo el bug
+   reportado. Los saltos a ancla (índice lateral de Home, "skip to content")
+   se resuelven en JS con scrollIntoView({behavior:'smooth'}), que sí es
+   intencional y puntual, sin tocar el scroll continuo del usuario. */
+html{ scroll-behavior:auto; }
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
   *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; transition-delay:0ms !important; scroll-behavior:auto !important; }
@@ -1119,6 +1127,43 @@ nav.main-nav > ul{ position:relative; }
   font-weight:600;
   margin-bottom:4px;
 }
+/* Primera vista de la tarjeta: nombre + qué hace + lo que resuelve + CTA.
+   "Empresa que suele contratarlo" y "Después suelen contratar" ya están
+   respondidos con más detalle en la propia página del Departamento (y el
+   segundo, además, en la sección "Cómo crecen los clientes" de este mismo
+   hub) — no se borran, solo dejan de competir en la primera lectura.
+   Revelado al hover/focus SOLO en dispositivos con puntero fino (mouse);
+   en touch, sin concepto de hover, se muestran directamente para no
+   esconder información sin una forma clara de recuperarla. */
+.card-extra-hint{ display:none; }
+@media (hover:hover) and (pointer:fine){
+  .service-card .card-extra{
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    margin-top:0 !important;
+    transition:max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s ease, margin-top .45s ease;
+  }
+  .service-card:hover .card-extra,
+  .service-card:focus-visible .card-extra,
+  .service-card:focus-within .card-extra{
+    max-height:260px;
+    opacity:1;
+    margin-top:16px !important;
+  }
+  .card-extra-hint{
+    display:block;
+    margin-top:14px;
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    color:var(--stone-soft);
+    transition:opacity .2s ease;
+  }
+  .service-card:hover .card-extra-hint,
+  .service-card:focus-visible .card-extra-hint,
+  .service-card:focus-within .card-extra-hint{ opacity:0; height:0; margin:0; overflow:hidden; }
+}
 .service-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
 .service-card .card-link{
   display:inline-flex; align-items:center; gap:6px;
@@ -1434,8 +1479,65 @@ nav.main-nav > ul{ position:relative; }
   align-items:start;
 }
 
-.booking-widget .window-body{ padding:0; background:var(--panel); }
-.booking-widget-inline{ width:100%; min-height:640px; }
+/* Panel de reserva: sin la barra de "ventana" (puntos + título) que usa el
+   resto del sitio — un calendario ya es una interfaz completa por sí
+   mismo, y envolverlo en otro marco de "terminal" encima era la caja
+   dentro de la caja dentro de la caja de la que habló Dirección. Un panel
+   simple, con el mismo lenguaje de bordes/radios/fondo que el resto de la
+   web, es más honesto con lo que es: un widget, no una ventana más. */
+.booking-panel{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+  min-height:820px;
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.7);
+}
+.booking-widget-inline{ width:100%; min-height:100%; opacity:0; transition:opacity .4s ease; }
+.booking-widget-inline.cal-ready{ opacity:1; }
+/* Skeleton: ocupa el espacio desde el primer frame (sin layout shift) y
+   se funde con el calendario real en cuanto Cal.com avisa que ya cargó
+   ("linkReady"), en vez de dejar una caja vacía mientras tanto. */
+.booking-skeleton{
+  position:absolute;
+  inset:22px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  color:var(--stone-soft);
+  transition:opacity .35s ease;
+}
+.booking-skeleton.hidden{ opacity:0; pointer-events:none; }
+.booking-skeleton-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  width:min(340px, 80%);
+}
+.booking-skeleton-cell{
+  aspect-ratio:1;
+  border-radius:6px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border-soft);
+  animation:booking-skeleton-pulse 1.8s ease-in-out infinite;
+}
+.booking-skeleton-cell:nth-child(3n){ animation-delay:.15s; }
+.booking-skeleton-cell:nth-child(5n){ animation-delay:.3s; }
+@keyframes booking-skeleton-pulse{
+  0%,100%{ opacity:.5; }
+  50%{ opacity:1; background:rgba(67,224,255,.1); border-color:rgba(67,224,255,.25); }
+}
+.booking-skeleton-label{ font-family:var(--mono); font-size:0.78rem; letter-spacing:0.04em; }
+@media (prefers-reduced-motion: reduce){
+  .booking-skeleton-cell{ animation:none; }
+}
+@media (max-width:640px){
+  .booking-panel{ min-height:620px; padding:14px; }
+  .booking-skeleton{ inset:14px; }
+}
 .booking-fallback-divider{
   display:flex; align-items:center; gap:16px;
   margin:56px 0 24px;
