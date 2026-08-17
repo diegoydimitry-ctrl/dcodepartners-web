@@ -612,14 +612,16 @@ nav.main-nav > ul{ position:relative; }
   .nav-indicator{ transition:opacity .2s ease; }
 }
 
+/* Mismo material que .window (DIR-022) pero sin su construcción de
+   ventana — es un desplegable de navegación, no una tarjeta. */
 .mega-menu{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:6px;
-  background:var(--panel);
-  border:1px solid var(--border);
+  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel) 100%);
+  border:1px solid var(--surface-border);
   border-radius:14px;
-  box-shadow:0 30px 70px -30px rgba(0,0,0,.8);
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.8), inset 0 1px 0 var(--surface-highlight);
   padding:14px;
   z-index:50;
 }
@@ -1581,7 +1583,7 @@ nav.main-nav > ul{ position:relative; }
   display:flex;
   flex-direction:column;
   gap:28px;
-  margin:12px 0 32px;
+  margin:30px 0 34px;
 }
 .consent-field{ display:flex; align-items:flex-start; gap:10px; }
 /* Verificación de seguridad como una pequeña sección propia (DIR-022) —
