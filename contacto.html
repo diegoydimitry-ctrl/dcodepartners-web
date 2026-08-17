@@ -180,7 +180,11 @@
                   <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
                   <label for="acepta-privacidad">He leído y acepto la <a href="/privacidad">Política de Privacidad</a>.</label>
                 </div>
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+
+                <div class="security-check">
+                  <span class="security-check-label">Verificación de seguridad</span>
+                  <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                </div>
               </div>
 
               <button type="submit" class="btn btn-invert btn-block">

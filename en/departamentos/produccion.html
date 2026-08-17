@@ -70,7 +70,7 @@
   gtag('config', 'G-ZL004F9EBH');
 </script>
 </head>
-<body>
+<body class="dept-page dept-produccion">
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
@@ -182,42 +182,52 @@
     </div>
   </section>
 
-  <!-- ============ SIGNATURE MOMENT: LIVE BOARD ============ -->
+  <!-- ============ SIGNATURE MOMENT: CHAOS → SYSTEM (DIR-021 pilot) ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">How it works</span>
-        <h2 class="h-title">A board that moves itself, not one that someone has to update by hand.</h2>
+        <h2 class="h-title">Chaos becomes a system. Not another list to check.</h2>
         <p class="lead">A simplified view of the system — not data from a real client.</p>
       </div>
       <div class="motion-journey" data-motion-journey="produccion">
-      <div class="window board-window reveal-right">
-        <div class="window-bar">
-          <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">board_delivery.demo</span>
-          <span class="window-status"><span class="dot"></span>DEMO</span>
+      <div class="chaos-order">
+        <div class="chaos-order-bar">
+          <span class="chaos-order-dot" aria-hidden="true"></span>
+          <span class="chaos-order-labels">
+            <span class="chaos-order-label chaos-order-label--before">Without Delivery AI</span>
+            <span class="chaos-order-label chaos-order-label--after">With Delivery AI</span>
+          </span>
         </div>
-        <div class="window-body">
-          <div class="board-scope">
-            <div class="board-col">
-              <span class="board-col-label">To do</span>
-              <div class="board-card">Set up repository access</div>
-              <div class="board-card ghost"></div>
-            </div>
-            <div class="board-col">
-              <span class="board-col-label">In progress</span>
-              <div class="board-card">Design review</div>
-              <div class="board-card ghost"></div>
-            </div>
-            <div class="board-col">
-              <span class="board-col-label">Delivered</span>
-              <div class="board-card">Initial setup</div>
-              <div class="board-card ghost"></div>
-            </div>
-            <div class="board-moving-card" aria-hidden="true">Data migration</div>
+        <div class="chaos-order-stage">
+          <div class="chaos-chips" aria-hidden="true">
+            <div class="chaos-chip" style="--x:6%; --y:8%; --r:-11deg; --tx:430px; --ty:90px;">Data migration</div>
+            <div class="chaos-chip" style="--x:56%; --y:2%; --r:8deg; --tx:-60px; --ty:100px;">Design review</div>
+            <div class="chaos-chip" style="--x:26%; --y:56%; --r:-7deg; --tx:340px; --ty:-40px;">Initial setup</div>
+            <div class="chaos-chip" style="--x:74%; --y:46%; --r:13deg; --tx:-170px; --ty:-10px;">Set up repository access</div>
+            <div class="chaos-chip" style="--x:8%; --y:72%; --r:6deg; --tx:50px; --ty:-150px;">Environment testing</div>
+            <div class="chaos-chip" style="--x:46%; --y:26%; --r:-9deg; --tx:-230px; --ty:-20px;">Technical documentation</div>
           </div>
-          <p class="pipeline-note">As soon as a client is won, the system creates the project and splits its tasks based on the team's real workload — the board itself moves on its own. On small screens, the three columns are shown as a fixed snapshot.</p>
+
+          <div class="order-board">
+            <div class="order-col">
+              <span class="order-col-label">To do</span>
+              <div class="order-card">Environment testing</div>
+              <div class="order-card">Technical documentation</div>
+            </div>
+            <div class="order-col">
+              <span class="order-col-label">In progress</span>
+              <div class="order-card">Design review</div>
+              <div class="order-card">Set up repository access</div>
+            </div>
+            <div class="order-col">
+              <span class="order-col-label">Delivered</span>
+              <div class="order-card">Initial setup</div>
+              <div class="order-card">Data migration</div>
+            </div>
+          </div>
         </div>
+        <p class="chaos-order-note">As soon as a client is won, the system sorts the tasks based on the team's real workload — with no one having to organize it by hand. On small screens, the board is shown already sorted.</p>
       </div>
       </div>
     </div>

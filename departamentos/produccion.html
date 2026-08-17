@@ -70,7 +70,7 @@
   gtag('config', 'G-ZL004F9EBH');
 </script>
 </head>
-<body>
+<body class="dept-page dept-produccion">
 
 <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
@@ -182,42 +182,52 @@
     </div>
   </section>
 
-  <!-- ============ SIGNATURE MOMENT: TABLERO EN MARCHA ============ -->
+  <!-- ============ SIGNATURE MOMENT: CAOS → SISTEMA (piloto DIR-021) ============ -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Cómo funciona</span>
-        <h2 class="h-title">Un proyecto que se organiza solo, no una lista que alguien tiene que mover.</h2>
+        <h2 class="h-title">El caos se convierte en sistema. No en otra lista que revisar.</h2>
         <p class="lead">Representación simplificada del sistema — no son datos de un cliente real.</p>
       </div>
       <div class="motion-journey" data-motion-journey="produccion">
-      <div class="window board-window reveal-right">
-        <div class="window-bar">
-          <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">tablero_produccion.demo</span>
-          <span class="window-status"><span class="dot"></span>DEMO</span>
+      <div class="chaos-order">
+        <div class="chaos-order-bar">
+          <span class="chaos-order-dot" aria-hidden="true"></span>
+          <span class="chaos-order-labels">
+            <span class="chaos-order-label chaos-order-label--before">Sin Producción IA</span>
+            <span class="chaos-order-label chaos-order-label--after">Con Producción IA</span>
+          </span>
         </div>
-        <div class="window-body">
-          <div class="board-scope">
-            <div class="board-col">
-              <span class="board-col-label">Por hacer</span>
-              <div class="board-card">Preparar acceso al repositorio</div>
-              <div class="board-card ghost"></div>
-            </div>
-            <div class="board-col">
-              <span class="board-col-label">En marcha</span>
-              <div class="board-card">Revisión de diseño</div>
-              <div class="board-card ghost"></div>
-            </div>
-            <div class="board-col">
-              <span class="board-col-label">Entregado</span>
-              <div class="board-card">Configuración inicial</div>
-              <div class="board-card ghost"></div>
-            </div>
-            <div class="board-moving-card" aria-hidden="true">Migración de datos</div>
+        <div class="chaos-order-stage">
+          <div class="chaos-chips" aria-hidden="true">
+            <div class="chaos-chip" style="--x:6%; --y:8%; --r:-11deg; --tx:430px; --ty:90px;">Migración de datos</div>
+            <div class="chaos-chip" style="--x:56%; --y:2%; --r:8deg; --tx:-60px; --ty:100px;">Revisión de diseño</div>
+            <div class="chaos-chip" style="--x:26%; --y:56%; --r:-7deg; --tx:340px; --ty:-40px;">Configuración inicial</div>
+            <div class="chaos-chip" style="--x:74%; --y:46%; --r:13deg; --tx:-170px; --ty:-10px;">Preparar acceso al repositorio</div>
+            <div class="chaos-chip" style="--x:8%; --y:72%; --r:6deg; --tx:50px; --ty:-150px;">Pruebas de entorno</div>
+            <div class="chaos-chip" style="--x:46%; --y:26%; --r:-9deg; --tx:-230px; --ty:-20px;">Documentación técnica</div>
           </div>
-          <p class="pipeline-note">En cuanto se gana un cliente, el sistema crea el proyecto y reparte sus tareas según la carga real del equipo — el propio tablero se mueve solo. En pantallas pequeñas se muestra la foto fija de las tres columnas.</p>
+
+          <div class="order-board">
+            <div class="order-col">
+              <span class="order-col-label">Por hacer</span>
+              <div class="order-card">Pruebas de entorno</div>
+              <div class="order-card">Documentación técnica</div>
+            </div>
+            <div class="order-col">
+              <span class="order-col-label">En marcha</span>
+              <div class="order-card">Revisión de diseño</div>
+              <div class="order-card">Preparar acceso al repositorio</div>
+            </div>
+            <div class="order-col">
+              <span class="order-col-label">Entregado</span>
+              <div class="order-card">Configuración inicial</div>
+              <div class="order-card">Migración de datos</div>
+            </div>
+          </div>
         </div>
+        <p class="chaos-order-note">En cuanto se gana un cliente, el sistema ordena las tareas según la carga real del equipo — sin que nadie tenga que organizarlo a mano. En pantallas pequeñas se muestra directamente el tablero ya ordenado.</p>
       </div>
       </div>
     </div>
