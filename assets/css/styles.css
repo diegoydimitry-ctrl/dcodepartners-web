@@ -1046,6 +1046,38 @@ nav.main-nav > ul{ position:relative; }
 .accordion-item.open .accordion-panel{ max-height:260px; opacity:1; margin-top:9px; padding-bottom:20px; }
 .metodo-cta{ margin-top:40px; }
 
+/* ============ DEPARTAMENTOS — VISUAL UNIFICADOR DEL HUB (DIR-034 Bloque 2) ============
+   Solo en departamentos.html / en/departamentos.html. Decorativo (aria-hidden,
+   sin texto ni iconos de Departamento individuales): 8 nodos idénticos
+   alrededor de un núcleo central, con los mismos tokens del acabado cromado.
+   Representa "8 Departamentos, un mismo sistema" antes de la cuadrícula real
+   de tarjetas — no sustituye ni toca ninguna de las 8 páginas individuales. */
+.dept-hub-visual{ padding-top:clamp(8px,2vw,20px); padding-bottom:clamp(8px,2vw,20px); }
+.dept-hub-diagram{ max-width:960px; margin:0 auto; }
+.dept-hub-diagram svg{ display:block; width:100%; height:auto; }
+.dept-hub-diagram .hub-orbit{ fill:none; stroke:url(#hubLineD); stroke-width:1; stroke-dasharray:3 7; opacity:.16; }
+.dept-hub-diagram .hub-spoke{ stroke:url(#hubLineD); stroke-width:1; opacity:.3; }
+.dept-hub-diagram .hub-node{ fill:url(#hubFillD); stroke:url(#hubRingD); stroke-width:1.4; }
+.dept-hub-diagram .hub-core{ fill:url(#hubFillD); stroke:url(#hubRingD); stroke-width:1.8; }
+.dept-hub-diagram .hub-core-dot{ fill:var(--cyan); filter:drop-shadow(0 0 6px var(--cyan)); animation:pulse 3.2s ease-in-out infinite; }
+.dept-hub-diagram .hub-node-dot{ animation:pulse 2.6s ease-in-out infinite; }
+.dept-hub-diagram .hub-node-dot.c-cyan{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.dept-hub-diagram .hub-node-dot.c-blue{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
+.dept-hub-diagram .hub-node-dot.c-violet{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
+.dept-hub-diagram stop.fill-a{ stop-color:var(--surface-top); }
+.dept-hub-diagram stop.fill-b{ stop-color:var(--panel-2); }
+.dept-hub-diagram stop.fill-c{ stop-color:var(--panel); }
+.dept-hub-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
+.dept-hub-diagram stop.ring-b{ stop-color:var(--surface-ring-mid); }
+.dept-hub-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
+.dept-hub-diagram stop.line-a{ stop-color:var(--cyan); }
+.dept-hub-diagram stop.line-b{ stop-color:var(--blue); }
+.dept-hub-diagram stop.line-c{ stop-color:var(--violet); }
+@media (prefers-reduced-motion: reduce){
+  .dept-hub-diagram .hub-core-dot,
+  .dept-hub-diagram .hub-node-dot{ animation:none; }
+}
+
 /* ============ SERVICIOS ============ */
 .servicios-cards{
   position:relative;
