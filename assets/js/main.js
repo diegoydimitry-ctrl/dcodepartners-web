@@ -423,30 +423,6 @@
     });
   });
 
-  /* ---------- Comercial IA: el barrido del radar "detecta" según se
-     recorre el raíl (DIR-018) ----------
-     A diferencia del resto de Departamentos, aquí el scroll no interpola
-     una propiedad CSS: dispara, en orden, cuáles de los tres blips "hot"
-     quedan marcados como detectados — el barrido gira de forma continua
-     (ver styles.css) y el JS solo decide, en cada paso discreto, cuál de
-     los tres ha sido "encontrado ya". Usa su propia clase is-detected
-     (mismo aspecto visual que is-active) para no pisarse con el
-     cross-highlight por hover/foco, que quita is-active en cuanto el
-     ratón sale de una fase — is-detected solo depende del scroll. */
-  var comercialJourney = document.querySelector('[data-motion-journey="comercial"]');
-  if (comercialJourney) {
-    var comercialOrder = ['hot', 'lead', 'propuesta'];
-    comercialJourney.addEventListener('dcode:motion', function (e) {
-      var step = e.detail.step;
-      comercialOrder.forEach(function (stage, idx) {
-        var found = idx <= step;
-        comercialJourney.querySelectorAll('[data-stage="' + stage + '"]').forEach(function (g) {
-          g.classList.toggle('is-detected', found);
-        });
-      });
-    });
-  }
-
   /* ---------- Clientes IA: órbita de la ficha de cliente ---------- */
   var orbitScope = document.querySelector('.orbit-scope');
   if (orbitScope) {
@@ -468,72 +444,52 @@
     });
   }
 
-  /* ---------- Soporte IA: el ticket como línea de tiempo (DIR-018) ----------
-     En vez de reproducirse solo, en pantallas grandes el scroll ES la
-     línea de tiempo del ticket: subir o bajar "rebobina" o "avanza" su
-     estado, en vez de mirar una animación. Esto sustituye por completo al
-     ciclo automático en ese caso — dos relojes a la vez (uno automático y
-     otro que el usuario controla) sería confuso. En tablet/móvil, donde
-     el raíl de scroll se desactiva (ver styles.css), se conserva el ciclo
-     automático de siempre, pausado fuera de pantalla y bajo
-     prefers-reduced-motion. */
+  /* ---------- Soporte IA: ticket en vivo (ciclo de estados) ----------
+     Recorrido automático, pausado en cuanto el ticket sale de pantalla y
+     reanudado al volver a entrar — así, cada vez que el usuario pasa por
+     esta sección, la vuelve a ver desde "Recibido". Nunca depende de la
+     posición de scroll: el usuario puede cruzar la sección a cualquier
+     velocidad, en cualquier dirección, sin que el ciclo se lo impida. */
   var ticketStatusEl = document.getElementById('ticket-status');
   if (ticketStatusEl) {
     var ticketSteps = Array.prototype.slice.call(document.querySelectorAll('.ticket-step'));
     var ticketStates = ticketSteps.map(function (s) { return s.dataset.status; });
     var ticketClasses = ['', 'st-clasificado', 'st-prioridad', 'st-respondido', 'st-resuelto'];
+    var ticketIndex = 0;
+    var ticketTimer = null;
     var renderTicketState = function (i) {
       ticketSteps.forEach(function (s, idx) { s.classList.toggle('active', idx <= i); });
       ticketStatusEl.textContent = ticketStates[i];
       ticketStatusEl.className = 'ticket-status ' + (ticketClasses[i] || '');
     };
-    renderTicketState(0);
-
-    var soporteJourney = ticketStatusEl.closest('[data-motion-journey="soporte"]');
-    var motionScrubActive = !!soporteJourney && !prefersReducedMotion &&
-      window.matchMedia('(min-width: 761px)').matches;
-
-    if (motionScrubActive) {
-      soporteJourney.addEventListener('dcode:motion', function (e) {
-        renderTicketState(e.detail.step);
-      });
-    } else {
-      var ticketIndex = 0;
-      var ticketTimer = null;
-      var advanceTicket = function () {
-        ticketIndex = (ticketIndex + 1) % ticketStates.length;
-        renderTicketState(ticketIndex);
-      };
-      var startTicketCycle = function () {
-        if (ticketTimer || prefersReducedMotion) return;
-        ticketTimer = setInterval(advanceTicket, 1900);
-      };
-      var stopTicketCycle = function () {
-        clearInterval(ticketTimer);
-        ticketTimer = null;
-      };
-      if ('IntersectionObserver' in window) {
-        var ticketIO = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) { if (entry.isIntersecting) startTicketCycle(); else stopTicketCycle(); });
-        }, { threshold: 0.4 });
-        ticketIO.observe(ticketStatusEl.closest('.ticket-card') || ticketStatusEl);
-      } else if (!prefersReducedMotion) {
-        startTicketCycle();
-      }
+    var resetTicketCycle = function () {
+      ticketIndex = 0;
+      renderTicketState(0);
+    };
+    resetTicketCycle();
+    var advanceTicket = function () {
+      ticketIndex = (ticketIndex + 1) % ticketStates.length;
+      renderTicketState(ticketIndex);
+    };
+    var startTicketCycle = function () {
+      if (ticketTimer || prefersReducedMotion) return;
+      ticketTimer = setInterval(advanceTicket, 1900);
+    };
+    var stopTicketCycle = function () {
+      clearInterval(ticketTimer);
+      ticketTimer = null;
+    };
+    if ('IntersectionObserver' in window) {
+      var ticketIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { resetTicketCycle(); startTicketCycle(); }
+          else stopTicketCycle();
+        });
+      }, { threshold: 0.4 });
+      ticketIO.observe(ticketStatusEl.closest('.ticket-card') || ticketStatusEl);
+    } else if (!prefersReducedMotion) {
+      startTicketCycle();
     }
-  }
-
-  /* ---------- Finanzas IA: cadena financiera (stagger + total animado) ---------- */
-  var ledgerRows = document.querySelectorAll('.ledger-row');
-  if (ledgerRows.length && 'IntersectionObserver' in window) {
-    var ledgerIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); ledgerIO.unobserve(entry.target); }
-      });
-    }, { threshold: 0.2 });
-    ledgerRows.forEach(function (r) { ledgerIO.observe(r); });
-  } else {
-    ledgerRows.forEach(function (r) { r.classList.add('is-visible'); });
   }
 
   /* ---------- Hero neural-network canvas ---------- */
@@ -791,116 +747,39 @@
     });
   }
 
-  /* ---------- Movilidad por Departamento: motor de scroll pasivo compartido ----------
-     Segunda capa de experiencia sobre los momentos-firma de cada
-     Departamento (DIR-016): cada uno tiene también su propia LÓGICA de
-     navegación (DIR-018) — no la misma mecánica con distintos números.
-     La rueda/trackpad siguen siendo enteramente del usuario — este motor
-     NUNCA llama a preventDefault ni engancha el evento "wheel"; solo lee
-     la posición de scroll (listener pasivo) y publica, por cada
-     [data-motion-journey] visible:
-       - --motion-progress: 0..1 continuo, para los Departamentos cuya
-         lógica es un movimiento continuo (Comercial, Clientes).
-       - --motion-step / [data-motion-step]: un índice entero 0..N-1
-         (si el elemento trae data-motion-steps="N"), para los
-         Departamentos cuya lógica es una secuencia de estados discretos
-         (Marketing, Producción, Finanzas, Soporte, Administración,
-         Dirección) — el resto vive en CSS puro vía selectores de
-         atributo, sin más JS que fijar ese número.
-       - un evento "dcode:motion" con {progress, step} en el detail, para
-         los pocos casos que necesitan reaccionar en JS (Comercial marca
-         qué blip ha "detectado" el barrido; Soporte usa el propio scroll
-         como línea de tiempo del ticket en vez de reproducirlo solo).
-     Con prefers-reduced-motion, todo se fija de una vez en el estado
-     final (progreso 1, último paso) y el motor no vuelve a tocar el DOM:
-     la estructura y la información permanecen, solo desaparece el
-     movimiento. */
+  /* ---------- Movilidad por Departamento: entrada repetible, nunca bloqueante (DIR-019) ----------
+     La versión anterior (DIR-017/018) medía cuánto se había recorrido un
+     raíl de scroll — incluso sin position:sticky, esa lógica ataba la
+     animación a LA POSICIÓN del scroll, y eso es exactamente lo que
+     Dirección pidió eliminar: ninguna animación puede depender de cuánto
+     ha avanzado el documento, porque entonces una ráfaga de rueda rápida
+     "adelanta" a la animación y se percibe como si la página se hubiera
+     parado a esperarla.
+     Aquí no se mide nada del scroll: cada [data-motion-journey] solo
+     sabe si está a la vista o no (IntersectionObserver, sin rootMargin
+     ni cálculo de progreso) y activa o desactiva la clase is-playing.
+     Toda la coreografía (qué aparece, cuándo, en qué orden) vive en CSS
+     puro como @keyframes con animation-delay — corre en su propio reloj
+     interno, nunca en el del scroll: el usuario puede cruzar la sección
+     en 100ms o en 10s, la animación no cambia el ritmo al que avanza la
+     página en ningún caso. Al salir de pantalla se quita is-playing, así
+     que al volver a entrar la coreografía se repite desde el principio.
+     Con prefers-reduced-motion, is-settled se aplica una sola vez y ya
+     no se vuelve a tocar el DOM: todo el contenido queda visible en su
+     posición final, sin ninguna animación. */
   var motionJourneys = Array.prototype.slice.call(document.querySelectorAll('[data-motion-journey]'));
   if (motionJourneys.length) {
-    var dispatchMotion = function (el, progress, step) {
-      el.dispatchEvent(new CustomEvent('dcode:motion', { detail: { progress: progress, step: step } }));
-    };
-
     if (prefersReducedMotion) {
-      motionJourneys.forEach(function (el) {
-        el.style.setProperty('--motion-progress', '1');
-        var steps = parseInt(el.dataset.motionSteps, 10);
-        var step = steps > 0 ? steps - 1 : 0;
-        if (steps > 0) {
-          el.style.setProperty('--motion-step', String(step));
-          el.dataset.motionStep = String(step);
-        }
-        dispatchMotion(el, 1, step);
-      });
-    } else {
-      var activeJourneys = [];
-      var motionTicking = false;
-
-      /* Dos formas de medir el progreso, según la lógica de cada
-         Departamento (DIR-018): los que se quedan fijos en pantalla
-         (data-motion-pin="true") miden cuánto se ha recorrido su propio
-         raíl alargado; los que no se fijan (Marketing, Finanzas) miden,
-         sin ningún alto extra, cuánto llevan transitando por el viewport
-         de forma completamente normal — de justo entrar por abajo (0) a
-         justo salir por arriba (1). */
-      var computeMotionProgress = function (el) {
-        var rect = el.getBoundingClientRect();
-        var vh = window.innerHeight;
-        if (el.dataset.motionPin === 'true') {
-          var total = rect.height - vh;
-          if (total <= 0) return 1;
-          return Math.max(0, Math.min(1, (0 - rect.top) / total));
-        }
-        var span = vh + rect.height;
-        if (span <= 0) return 1;
-        return Math.max(0, Math.min(1, (vh - rect.top) / span));
-      };
-
-      var updateMotionJourneys = function () {
-        activeJourneys.forEach(function (el) {
-          var progress = computeMotionProgress(el);
-          el.style.setProperty('--motion-progress', progress.toFixed(4));
-          var steps = parseInt(el.dataset.motionSteps, 10);
-          var step = 0;
-          if (steps > 0) {
-            step = Math.min(steps - 1, Math.floor(progress * steps));
-            el.style.setProperty('--motion-step', String(step));
-            if (el.dataset.motionStep !== String(step)) el.dataset.motionStep = String(step);
-          }
-          dispatchMotion(el, progress, step);
+      motionJourneys.forEach(function (el) { el.classList.add('is-settled'); });
+    } else if ('IntersectionObserver' in window) {
+      var motionIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle('is-playing', entry.isIntersecting);
         });
-        motionTicking = false;
-      };
-
-      var requestMotionUpdate = function () {
-        if (motionTicking) return;
-        motionTicking = true;
-        requestAnimationFrame(updateMotionJourneys);
-      };
-
-      if ('IntersectionObserver' in window) {
-        // Solo se recalculan en cada scroll los raíles que están cerca del
-        // viewport — con una única sección por página, el coste real es
-        // mínimo, pero el patrón queda listo para más sin degradar.
-        var motionIO = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            var idx = activeJourneys.indexOf(entry.target);
-            if (entry.isIntersecting) {
-              if (idx === -1) activeJourneys.push(entry.target);
-            } else if (idx !== -1) {
-              activeJourneys.splice(idx, 1);
-            }
-          });
-          requestMotionUpdate();
-        }, { threshold: [0, 0.01, 1], rootMargin: '25% 0px' });
-        motionJourneys.forEach(function (el) { motionIO.observe(el); });
-      } else {
-        activeJourneys = motionJourneys;
-      }
-
-      window.addEventListener('scroll', requestMotionUpdate, { passive: true });
-      window.addEventListener('resize', requestMotionUpdate, { passive: true });
-      requestMotionUpdate();
+      }, { threshold: 0.3 });
+      motionJourneys.forEach(function (el) { motionIO.observe(el); });
+    } else {
+      motionJourneys.forEach(function (el) { el.classList.add('is-settled'); });
     }
   }
 

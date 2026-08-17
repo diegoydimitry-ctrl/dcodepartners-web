@@ -2107,11 +2107,7 @@ footer{
 .ledger-row{
   display:flex; justify-content:space-between; align-items:center;
   padding:11px 0; border-bottom:1px solid var(--border-soft);
-  opacity:0; transform:translateY(8px);
-  transition:opacity .5s ease, transform .5s ease;
-  transition-delay:calc(var(--i) * 120ms);
 }
-.ledger-row.is-visible{ opacity:1; transform:translateY(0); }
 .ledger-label{ font-size:0.9rem; color:var(--stone); }
 .ledger-amount{ font-family:var(--mono); font-size:0.88rem; color:var(--ink); }
 .ledger-amount.pos{ color:var(--green); }
@@ -2177,216 +2173,252 @@ footer{
 .command-decision-text{ color:var(--ink); font-size:1rem; margin-top:8px; }
 @media (prefers-reduced-motion: reduce){ .command-feed .command-dot,.command-arrow svg{ animation:none; } }
 
-/* ============ MOVILIDAD POR DEPARTAMENTO — 8 lógicas distintas (DIR-018) ============
-   La versión anterior (DIR-017) usaba el mismo mecanismo ocho veces: un
-   raíl con un elemento fijo (position:sticky) donde el scroll siempre
-   interpolaba una única propiedad CSS. Aquí cada Departamento tiene una
-   lógica de navegación distinta de verdad:
-     - Comercial dispara detecciones discretas (el barrido gira, JS marca
-       qué blip ha sido "encontrado"), no interpola una posición.
-     - Marketing y Finanzas NO usan raíl fijo — el contenido revela sus
-       partes en cascada mientras pasa de forma normal por la pantalla,
-       una sensación más ligera que las que sí se quedan anclas.
-     - Clientes crece de forma continua desde el centro (incluye un
-       anillo que se dibuja solo).
-     - Producción avanza por 3 fases discretas: la columna activa se
-       enfoca y la tarjeta que se mueve salta de una a otra.
-     - Soporte convierte el propio scroll en la línea de tiempo del
-       ticket — subir o bajar cambia su estado directamente, sustituye
-       al ciclo automático solo en desktop.
-     - Administración enfoca un módulo a la vez, en exclusiva (los demás
-       se atenúan), no los revela todos a la vez.
-     - Dirección hace llegar las señales una a una; la decisión final
-       solo se resuelve en el último paso.
-   Todos comparten el mismo motor de scroll PASIVO en main.js (nunca
-   preventDefault, nunca engancha "wheel"): calcula --motion-progress
-   (0..1 continuo) y, si el elemento trae data-motion-steps, también
-   --motion-step / [data-motion-step] (un índice entero). Todo lo de
-   aquí abajo vive bajo @media (min-width:761px) and
-   (prefers-reduced-motion: no-preference) — en tablet/móvil y con
-   reduced motion, cada Departamento cae de vuelta a su propio
-   comportamiento base de DIR-016 (hover/foco, ciclo automático, revelado
-   simple), no a una versión rota a medio camino. */
-:root{ --motion-progress:1; --motion-step:0; }
+/* ============ MOVILIDAD POR DEPARTAMENTO — entrada repetible (DIR-019) ============
+   Ni raíl, ni position:sticky, ni ninguna propiedad CSS interpolada
+   sobre la posición del scroll: el usuario controla el scroll siempre,
+   a cualquier velocidad. Cada [data-motion-journey] solo sabe si está a
+   la vista (main.js, IntersectionObserver puro) y activa la clase
+   is-playing — toda la coreografía real es CSS con @keyframes y
+   animation-delay, con su propio reloj interno que no depende en
+   absoluto de cuánto ha avanzado el documento. Si el usuario cruza la
+   sección en un parpadeo, la animación simplemente no se llega a ver
+   entera — el scroll nunca la espera. Al salir de pantalla se quita
+   is-playing, así que la próxima vez que la sección entre en el
+   viewport la coreografía se repite desde el principio.
+   Con prefers-reduced-motion (o sin soporte de IntersectionObserver) se
+   aplica is-settled una sola vez: todo el contenido queda visible en su
+   posición final, sin animación. */
+@keyframes dcode-fade-in{ from{ opacity:0; } to{ opacity:1; } }
 
-.motion-viewport{ transition:none; }
+/* ---- Comercial — el radar descubre, no solo gira ----
+   El barrido sigue girando solo, de forma continua, igual que siempre
+   (ver .radar-sweep más arriba) — eso nunca cambia con el scroll. Lo
+   que aparece al entrar en pantalla es la propia detección: los ecos
+   débiles se asientan primero y, en su propio reloj, cada oportunidad
+   "hot" estalla con un pequeño destello — y la fase correspondiente
+   aparece a la derecha justo después, como si la interfaz acabara de
+   descubrirla. */
+.motion-journey[data-motion-journey="comercial"] .radar-scope > .radar-blip{ opacity:0; }
+.motion-journey[data-motion-journey="comercial"] .radar-stage{ opacity:0; transform:translateX(20px); }
 
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-pin="true"]{ position:relative; }
-  .motion-journey[data-motion-pin="true"] .motion-viewport{ position:sticky; top:96px; }
+@keyframes radar-cold-in{ from{ opacity:0; transform:translate(-50%,-50%) scale(.3); } to{ opacity:.85; transform:translate(-50%,-50%) scale(1); } }
+@keyframes radar-hot-detect{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.3); box-shadow:0 0 0 0 rgba(67,224,255,0); }
+  55%{ opacity:1; transform:translate(-50%,-50%) scale(1.45); box-shadow:0 0 0 10px rgba(67,224,255,.3); }
+  100%{ opacity:1; transform:translate(-50%,-50%) scale(1); box-shadow:0 0 0 4px rgba(67,224,255,.18); }
 }
+@keyframes radar-stage-in{ from{ opacity:0; transform:translateX(20px); } to{ opacity:1; transform:translateX(0); } }
 
-/* ---- Comercial — el barrido detecta, no se limita a asentarse ----
-   El scroll gira el barrido del radar de forma continua (reemplaza su
-   giro automático mientras el raíl está a la vista) y, en tres pasos
-   discretos, marca qué blip "hot" ha sido detectado — como un radar de
-   verdad: no interpola una transformación, dispara hallazgos en orden.
-   La tarjeta y su texto no se mueven en ningún momento. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="comercial"]{ min-height:190vh; }
-  .motion-journey[data-motion-journey="comercial"] .radar-sweep{
-    animation:none;
-    transform:rotate(calc(var(--motion-progress) * 320deg));
-  }
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:not(.hot){ animation:radar-cold-in .5s ease forwards; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(2){ animation-delay:.05s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(3){ animation-delay:.15s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(4){ animation-delay:.25s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(5){ animation-delay:.35s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(6){ animation-delay:.45s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot{ animation:radar-hot-detect .6s cubic-bezier(.2,1.4,.4,1) forwards; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot:nth-child(7){ animation-delay:.6s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot:nth-child(8){ animation-delay:1.1s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot:nth-child(9){ animation-delay:1.6s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage{ animation:radar-stage-in .45s ease forwards; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage:nth-child(1){ animation-delay:.75s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage:nth-child(2){ animation-delay:1.25s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage:nth-child(3){ animation-delay:1.75s; }
 }
-.radar-blip.hot.is-detected{ box-shadow:0 0 0 7px rgba(67,224,255,.28); transform:translate(-50%,-50%) scale(1.25); }
-.radar-stage.is-detected{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); color:var(--ink); }
+.motion-journey[data-motion-journey="comercial"].is-settled .radar-scope > .radar-blip,
+.motion-journey[data-motion-journey="comercial"].is-settled .radar-stage{ opacity:1; transform:none; }
 
-/* ---- Marketing — cascada de filtrado, sin ancla ----
-   No hay ningún elemento fijo: capas y fases se revelan de una en una a
-   medida que la sección pasa por la pantalla con el scroll normal — el
-   embudo "filtra" según avanzas, no según algo se queda quieto delante
-   de ti. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="marketing"] .funnel-layer,
-  .motion-journey[data-motion-journey="marketing"] .funnel-stage{
-    opacity:.28; filter:saturate(.35);
-    transition:opacity .35s ease, filter .35s ease;
-  }
-  .motion-journey[data-motion-journey="marketing"][data-motion-step="0"] .funnel-layer:nth-child(-n+1),
-  .motion-journey[data-motion-journey="marketing"][data-motion-step="0"] .funnel-stage:nth-child(-n+1),
-  .motion-journey[data-motion-journey="marketing"][data-motion-step="1"] .funnel-layer:nth-child(-n+2),
-  .motion-journey[data-motion-journey="marketing"][data-motion-step="1"] .funnel-stage:nth-child(-n+2),
-  .motion-journey[data-motion-journey="marketing"][data-motion-step="2"] .funnel-layer,
-  .motion-journey[data-motion-journey="marketing"][data-motion-step="2"] .funnel-stage{
-    opacity:1; filter:saturate(1);
-  }
+/* ---- Marketing — el ruido se convierte en oportunidad ----
+   Las tres capas del embudo se asientan de arriba abajo con un ligero
+   rebote — como si de verdad se fuera filtrando algo en cada una — y
+   las fases de la derecha aparecen justo después de su capa, deslizando
+   desde el lado opuesto a Comercial para que ninguna de las dos
+   páginas se sienta igual. */
+.motion-journey[data-motion-journey="marketing"] .funnel-layer{ opacity:0; transform-origin:top center; }
+.motion-journey[data-motion-journey="marketing"] .funnel-stage{ opacity:0; transform:translateX(-20px); }
+
+@keyframes funnel-layer-in{
+  0%{ opacity:0; transform:scaleY(.4) translateY(-8px); }
+  60%{ opacity:1; transform:scaleY(1.08) translateY(0); }
+  100%{ opacity:1; transform:scaleY(1) translateY(0); }
 }
+@keyframes funnel-stage-in{ from{ opacity:0; transform:translateX(-20px); } to{ opacity:1; transform:translateX(0); } }
 
-/* ---- Clientes — crecimiento continuo desde el centro ----
-   Único Departamento con una transformación continua real: los nodos
-   nacen en el centro y se expanden hacia su posición orbital a medida
-   que se recorre el raíl, y el propio anillo se dibuja alrededor al
-   mismo ritmo (no está ahí de golpe). */
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer{ animation:funnel-layer-in .5s ease forwards; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer:nth-child(1){ animation-delay:.05s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer:nth-child(2){ animation-delay:.4s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer:nth-child(3){ animation-delay:.75s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage{ animation:funnel-stage-in .45s ease forwards; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage:nth-child(1){ animation-delay:.2s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage:nth-child(2){ animation-delay:.55s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage:nth-child(3){ animation-delay:.9s; }
+}
+.motion-journey[data-motion-journey="marketing"].is-settled .funnel-layer,
+.motion-journey[data-motion-journey="marketing"].is-settled .funnel-stage{ opacity:1; transform:none; }
+
+/* ---- Clientes — todo nace alrededor de un cliente ----
+   El cliente aparece primero, el anillo se materializa alrededor y
+   cada nodo entra volando desde fuera del marco, por su propio radio,
+   en el orden del relato (Proyectos → Comunicaciones → Documentación →
+   Seguimiento) — no los cuatro a la vez. */
 .orbit-ring{
   border-radius:50%;
   background:conic-gradient(from -90deg, rgba(67,224,255,.5) 360deg, transparent 0);
   -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
   mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
 }
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="clientes"]{ min-height:180vh; }
-  .motion-journey[data-motion-journey="clientes"] .orbit-ring{
-    background:conic-gradient(from -90deg, rgba(67,224,255,.5) calc(360deg * var(--motion-progress)), transparent 0);
-  }
-  .motion-journey[data-motion-journey="clientes"] .orbit-node{
-    opacity:calc(0.1 + 0.9 * var(--motion-progress));
-    transform:
-      rotate(var(--angle))
-      translate(calc(18px + 92px * var(--motion-progress)))
-      rotate(calc(-1 * var(--angle)))
-      translate(-50%,-50%)
-      scale(calc(0.5 + 0.5 * var(--motion-progress)));
-  }
+.motion-journey[data-motion-journey="clientes"] .orbit-center{ opacity:0; }
+.motion-journey[data-motion-journey="clientes"] .orbit-ring{ opacity:0; }
+.motion-journey[data-motion-journey="clientes"] .orbit-node{ opacity:0; }
+
+@keyframes orbit-center-in{ from{ opacity:0; transform:translate(-50%,-50%) scale(.5); } to{ opacity:1; transform:translate(-50%,-50%) scale(1); } }
+@keyframes orbit-ring-in{ from{ opacity:0; transform:scale(.6) rotate(-70deg); } to{ opacity:1; transform:scale(1) rotate(0deg); } }
+@keyframes orbit-node-in{
+  0%{ opacity:0; transform:rotate(var(--angle)) translate(260px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%) scale(.5); }
+  70%{ opacity:1; transform:rotate(var(--angle)) translate(100px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%) scale(1.08); }
+  100%{ opacity:1; transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%) scale(1); }
 }
 
-/* ---- Producción — 3 fases discretas, no un deslizamiento continuo ----
-   La columna activa se enfoca (las otras se atenúan) y la tarjeta que
-   antes viajaba sola ahora salta exactamente a la columna que el scroll
-   ha seleccionado — el usuario elige la fase, no la mira pasar. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="produccion"]{ min-height:186vh; }
-  .motion-journey[data-motion-journey="produccion"] .board-moving-card{
-    animation:none;
-    transform:translateX(calc(var(--motion-step, 0) * (100% + 16px)));
-  }
-  .motion-journey[data-motion-journey="produccion"] .board-col{
-    opacity:.55; transform:scale(.97);
-    transition:opacity .3s ease, transform .3s ease;
-  }
-  .motion-journey[data-motion-journey="produccion"][data-motion-step="0"] .board-col:nth-child(1),
-  .motion-journey[data-motion-journey="produccion"][data-motion-step="1"] .board-col:nth-child(2),
-  .motion-journey[data-motion-journey="produccion"][data-motion-step="2"] .board-col:nth-child(3){
-    opacity:1; transform:scale(1.03);
-  }
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-center{ animation:orbit-center-in .45s cubic-bezier(.2,1.4,.4,1) forwards; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-ring{ animation:orbit-ring-in .6s ease forwards; animation-delay:.25s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node{ animation:orbit-node-in .55s cubic-bezier(.2,1.2,.3,1) forwards; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(3){ animation-delay:.55s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(4){ animation-delay:.85s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(5){ animation-delay:1.15s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(6){ animation-delay:1.45s; }
+}
+.motion-journey[data-motion-journey="clientes"].is-settled .orbit-center,
+.motion-journey[data-motion-journey="clientes"].is-settled .orbit-ring{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="clientes"].is-settled .orbit-node{ opacity:1; transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); }
+
+/* ---- Producción — el trabajo se mueve solo ----
+   Las tarjetas reales se asientan en sus columnas y, justo después, la
+   tarjeta viajera hace su recorrido completo por las tres columnas una
+   sola vez, en su propio reloj — nunca en bucle infinito, para que se
+   sienta como un suceso, no como decoración de fondo. El usuario puede
+   pasar por encima en cualquier momento sin que eso la interrumpa ni la
+   condicione. */
+.motion-journey[data-motion-journey="produccion"] .board-card:not(.ghost){ opacity:0; }
+.motion-journey[data-motion-journey="produccion"] .board-moving-card{ animation:none; opacity:0; }
+
+@keyframes board-card-in{ from{ opacity:0; transform:translateY(-10px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes board-travel-once{
+  0%{ transform:translateX(0); opacity:0; }
+  8%{ opacity:1; }
+  38%,46%{ transform:translateX(calc(100% + 16px)); opacity:1; }
+  76%,100%{ transform:translateX(calc(200% + 32px)); opacity:1; }
 }
 
-/* ---- Finanzas — secuencia exacta, sin ancla ni suavizado ----
-   Deliberadamente el más contenido de los ocho: sin raíl fijo, sin
-   easing — cada fila aparece de golpe en cuanto le toca, como un
-   apunte contable que se sella, no como algo que "flota" hasta su
-   sitio. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="finanzas"] .ledger-row{
-    transition:none; opacity:0; transform:none;
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="produccion"].is-playing .board-card:not(.ghost){ animation:board-card-in .4s ease forwards; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .board-col:nth-child(1) .board-card:not(.ghost){ animation-delay:.1s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .board-col:nth-child(2) .board-card:not(.ghost){ animation-delay:.3s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .board-col:nth-child(3) .board-card:not(.ghost){ animation-delay:.5s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .board-moving-card{
+    animation:board-travel-once 3.6s cubic-bezier(.4,0,.2,1) forwards;
+    animation-delay:.7s;
   }
-  .motion-journey[data-motion-journey="finanzas"] .ledger-total{
-    transition:none; opacity:0;
-  }
-  .motion-journey[data-motion-journey="finanzas"][data-motion-step="0"] .ledger-row:nth-child(-n+1),
-  .motion-journey[data-motion-journey="finanzas"][data-motion-step="1"] .ledger-row:nth-child(-n+2),
-  .motion-journey[data-motion-journey="finanzas"][data-motion-step="2"] .ledger-row:nth-child(-n+3),
-  .motion-journey[data-motion-journey="finanzas"][data-motion-step="3"] .ledger-row{
-    opacity:1;
-  }
-  .motion-journey[data-motion-journey="finanzas"][data-motion-step="3"] .ledger-total{
-    opacity:1;
-  }
+}
+.motion-journey[data-motion-journey="produccion"].is-settled .board-card:not(.ghost){ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="produccion"].is-settled .board-moving-card{ opacity:1; transform:translateX(calc(200% + 32px)); }
+
+/* ---- Finanzas — la cifra final, paso a paso ----
+   Elegante y preciso, no un videojuego: cada fila se asienta con un
+   desplazamiento mínimo y sin rebote, en el orden del propio circuito
+   (presupuesto → factura → cobro → gasto), y la rentabilidad final
+   aparece la última, como consecuencia de las anteriores. */
+.motion-journey[data-motion-journey="finanzas"] .ledger-row{
+  opacity:0; transform:translateY(10px);
+  transition:opacity .4s ease, transform .4s ease;
+  transition-delay:calc(var(--i) * 160ms);
+}
+.motion-journey[data-motion-journey="finanzas"].is-playing .ledger-row{ opacity:1; transform:translateY(0); }
+.motion-journey[data-motion-journey="finanzas"] .ledger-total{
+  opacity:0; transform:translateY(6px);
+  transition:opacity .45s ease, transform .45s ease;
+  transition-delay:.75s;
+}
+.motion-journey[data-motion-journey="finanzas"].is-playing .ledger-total{ opacity:1; transform:translateY(0); }
+.motion-journey[data-motion-journey="finanzas"].is-settled .ledger-row,
+.motion-journey[data-motion-journey="finanzas"].is-settled .ledger-total{ opacity:1; transform:none; }
+
+/* ---- Soporte — una incidencia atraviesa el sistema ----
+   El ticket entra desde un lateral y, justo después, su mensaje se
+   revela — el propio ciclo de estados (Recibido → Clasificado →
+   Prioridad → Respondido → Resuelto) lo controla el temporizador de
+   main.js, no el scroll: empieza al entrar en pantalla, se pausa al
+   salir y vuelve a "Recibido" la próxima vez que se entra. */
+.motion-journey[data-motion-journey="soporte"] .ticket-card{ opacity:0; }
+.motion-journey[data-motion-journey="soporte"] .ticket-subject{ opacity:0; }
+
+@keyframes ticket-arrive{
+  0%{ opacity:0; transform:translateX(-36px) scale(.96); }
+  60%{ opacity:1; transform:translateX(4px) scale(1.01); }
+  100%{ opacity:1; transform:translateX(0) scale(1); }
 }
 
-/* ---- Soporte — el scroll ES la línea de tiempo del ticket ----
-   Sin transformaciones: subir o bajar cambia directamente en qué estado
-   está el ticket (ver main.js) — el usuario controla el tiempo, no lo
-   observa pasar. Necesita el raíl más largo de los ocho para que los
-   cinco estados se puedan "leer" con comodidad al desplazarse. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="soporte"]{ min-height:240vh; }
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="soporte"].is-playing .ticket-card{ animation:ticket-arrive .5s cubic-bezier(.2,1.2,.3,1) forwards; }
+  .motion-journey[data-motion-journey="soporte"].is-playing .ticket-subject{ animation:dcode-fade-in .4s ease forwards; animation-delay:.4s; }
+}
+.motion-journey[data-motion-journey="soporte"].is-settled .ticket-card{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="soporte"].is-settled .ticket-subject{ opacity:1; }
+
+/* ---- Administración — el caos se convierte en sistema ----
+   Cada módulo entra desde una esquina distinta del propio panel
+   (arriba-izquierda, arriba-derecha, abajo-izquierda, abajo-derecha) y
+   encaja en su sitio con un pequeño ajuste final — como piezas que se
+   ordenan solas — y su indicador de estado se activa justo al aterrizar. */
+.motion-journey[data-motion-journey="administracion"] .opsgrid-tile{ opacity:0; }
+.motion-journey[data-motion-journey="administracion"] .opsgrid-dot{ transform:scale(0); }
+
+@keyframes ops-tile-in-tl{ 0%{ opacity:0; transform:translate(-30px,-24px) scale(.9); } 65%{ opacity:1; transform:translate(3px,2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-tile-in-tr{ 0%{ opacity:0; transform:translate(30px,-24px) scale(.9); } 65%{ opacity:1; transform:translate(-3px,2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-tile-in-bl{ 0%{ opacity:0; transform:translate(-30px,24px) scale(.9); } 65%{ opacity:1; transform:translate(3px,-2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-tile-in-br{ 0%{ opacity:0; transform:translate(30px,24px) scale(.9); } 65%{ opacity:1; transform:translate(-3px,-2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-dot-pop{ 0%{ transform:scale(0); } 60%{ transform:scale(1.6); } 100%{ transform:scale(1); } }
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(1){ animation:ops-tile-in-tl .5s ease forwards; animation-delay:.05s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(2){ animation:ops-tile-in-tr .5s ease forwards; animation-delay:.2s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(3){ animation:ops-tile-in-bl .5s ease forwards; animation-delay:.35s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(4){ animation:ops-tile-in-br .5s ease forwards; animation-delay:.5s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(1) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.4s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(2) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.55s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(3) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.7s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(4) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.85s; }
+}
+.motion-journey[data-motion-journey="administracion"].is-settled .opsgrid-tile{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="administracion"].is-settled .opsgrid-dot{ transform:scale(1); }
+
+/* ---- Dirección — de las señales a la claridad ----
+   Las cinco señales llegan una a una y, solo cuando ha llegado la
+   última, la decisión final "resuelve" con un pequeño destello — un
+   climax real, no un simple asentado, y la única secuencia de las ocho
+   con una meta explícita al final. */
+.motion-journey[data-motion-journey="direccion"] .command-feed{ opacity:0; }
+.motion-journey[data-motion-journey="direccion"] .command-decision{ opacity:0; }
+
+@keyframes cmd-feed-in{ from{ opacity:0; transform:translateY(-14px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes cmd-decision-in{
+  0%{ opacity:0; transform:scale(.9); }
+  70%{ opacity:1; transform:scale(1.03); box-shadow:0 0 0 8px rgba(67,224,255,.15); }
+  100%{ opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(67,224,255,0); }
 }
 
-/* ---- Administración — un módulo con el foco a la vez, en exclusiva ----
-   A diferencia de Marketing (que acumula), aquí solo el módulo
-   correspondiente al paso actual muestra su detalle — los demás se
-   cierran — como un foco que se desplaza de casilla en casilla. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="administracion"]{ min-height:210vh; }
-  .motion-journey[data-motion-journey="administracion"] .opsgrid-tile{
-    opacity:.5; transform:scale(.96);
-    transition:opacity .3s ease, transform .3s ease;
-  }
-  .motion-journey[data-motion-journey="administracion"] .opsgrid-tile-detail{
-    transition:max-height .3s ease, opacity .25s ease, margin-top .3s ease;
-  }
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="0"] .opsgrid-tile:nth-child(1),
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="1"] .opsgrid-tile:nth-child(2),
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="2"] .opsgrid-tile:nth-child(3),
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="3"] .opsgrid-tile:nth-child(4){
-    opacity:1; transform:scale(1.02);
-  }
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="0"] .opsgrid-tile:nth-child(1) .opsgrid-tile-detail,
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="1"] .opsgrid-tile:nth-child(2) .opsgrid-tile-detail,
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="2"] .opsgrid-tile:nth-child(3) .opsgrid-tile-detail,
-  .motion-journey[data-motion-journey="administracion"][data-motion-step="3"] .opsgrid-tile:nth-child(4) .opsgrid-tile-detail{
-    max-height:80px; opacity:1; margin-top:6px;
-  }
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed{ animation:cmd-feed-in .4s ease forwards; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(1){ animation-delay:.05s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(2){ animation-delay:.2s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(3){ animation-delay:.35s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(4){ animation-delay:.5s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(5){ animation-delay:.65s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-decision{ animation:cmd-decision-in .6s cubic-bezier(.2,1.2,.3,1) forwards; animation-delay:1s; }
 }
-
-/* ---- Dirección — llegada una a una, la decisión se resuelve al final ----
-   Las señales de los Departamentos entran de una en una (acumulativo,
-   como Marketing) pero aquí hay una meta clara: la decisión final
-   permanece apagada hasta que ha llegado la última señal — un
-   climax, no solo un asentado. */
-@media (min-width:761px) and (prefers-reduced-motion: no-preference){
-  .motion-journey[data-motion-journey="direccion"]{ min-height:210vh; }
-  .motion-journey[data-motion-journey="direccion"] .command-feed{
-    opacity:0; transform:translateY(-14px);
-    transition:opacity .3s ease, transform .3s ease;
-  }
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="0"] .command-feed:nth-child(-n+1),
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="1"] .command-feed:nth-child(-n+2),
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="2"] .command-feed:nth-child(-n+3),
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="3"] .command-feed:nth-child(-n+4),
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="4"] .command-feed,
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="5"] .command-feed{
-    opacity:1; transform:translateY(0);
-  }
-  .motion-journey[data-motion-journey="direccion"] .command-decision{
-    opacity:.25; transform:scale(.92);
-    transition:opacity .4s ease, transform .4s ease;
-  }
-  .motion-journey[data-motion-journey="direccion"][data-motion-step="5"] .command-decision{
-    opacity:1; transform:scale(1);
-  }
-}
+.motion-journey[data-motion-journey="direccion"].is-settled .command-feed,
+.motion-journey[data-motion-journey="direccion"].is-settled .command-decision{ opacity:1; transform:none; box-shadow:none; }
 
 /* Dos variantes de entrada nuevas para personalizar el primer impacto en
    tablet/móvil (donde el raíl de scroll se desactiva), sumadas a las
