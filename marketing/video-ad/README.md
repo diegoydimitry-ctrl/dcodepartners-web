@@ -50,6 +50,30 @@ segundo exacto, que es lo cómodo para ajustar una escena.
 | `audio.py` | Sintetiza música y efectos desde cero. Sin dependencias. |
 | `tools/clean-logo.py` | Recupera el logotipo sobre transparencia real. |
 | `assets/dcode-mark.png` | Logotipo limpio que usa el cierre. |
+| `montar-voz.py` | Coloca los clips de locución en su segundo y los mezcla con la música. |
+| `out/locucion/` | Texto de la narración, tiempos y subtítulos de los dos anuncios. |
+
+## Añadir la locución
+
+Los másteres salen con música y efectos, sin voz. Para montarla:
+
+1. Generar un clip por fragmento con el texto de `out/locucion/<anuncio>-texto.txt`
+   —uno por línea, en ese orden— y numerarlos `01`, `02`, `03`…
+2. Dejarlos en una carpeta y montar:
+
+```bash
+python3 montar-voz.py --anuncio 1 --voces voces/anuncio-1 --fmt 9x16
+python3 montar-voz.py --anuncio 2 --voces voces/anuncio-2 --fmt 16x9
+```
+
+Los tiempos se leen de las tablas de narración de los guiones, así que no hay
+que repetirlos en ningún sitio. El vídeo no se recodifica (`-c:v copy`) y la
+música ya viene atenuada bajo cada tramo de voz.
+
+Antes de montar comprueba que cada clip cabe en su hueco y avisa si alguno
+invadiría el siguiente, que es lo que pasa cuando la voz se genera demasiado
+lenta. Con `--forzar` se monta igualmente; con `--volumen` se ajusta la ganancia
+de la voz sobre la música (1,6 por defecto).
 
 ## Notas de implementación
 
