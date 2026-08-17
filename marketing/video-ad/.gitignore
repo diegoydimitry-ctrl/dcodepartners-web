@@ -1,0 +1,2 @@
+# Registros de render (se regeneran en cada ejecución)
+out/*.log
