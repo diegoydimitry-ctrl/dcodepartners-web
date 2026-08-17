@@ -92,22 +92,26 @@ function wrap(text, maxW){
 /* Rótulo del narrador. La pieza se ve sin sonido en el feed, así que cada
    frase del narrador va también como texto: el chiste tiene que llegar en
    silencio. */
-function caption(t, a, b, c, d, text, accent){
+function caption(t, a, b, c, d, text, accent, layout){
   const o = win(t, a, b, c, d);
   if (o <= 0) return;
+  /* En 16:9 el rótulo va a la derecha solo cuando el plano es el móvil, que
+     ocupa la izquierda. En los planos de escritorio la maqueta está centrada,
+     así que el rótulo baja para no pisarla. */
+  const side = !V && layout === 'side';
   const size = V ? 46 : 42;
   font('sg', 700, size, -0.3);
-  const maxW = V ? W * 0.86 : W * 0.34;
+  const maxW = V ? W * 0.86 : (side ? W * 0.34 : W * 0.62);
   const lines = wrap(text, maxW);
   const lh = size * 1.24;
-  const cx = V ? CX : W * 0.76;
-  const top = V ? H * 0.885 - (lines.length - 1) * lh : CY - (lines.length - 1) * lh / 2;
+  const cx = side ? W * 0.76 : CX;
+  const top = side ? CY - (lines.length - 1) * lh / 2
+                   : (V ? H * 0.885 : H * 0.905) - (lines.length - 1) * lh;
 
   g.save();
   g.globalAlpha = o;
   g.textAlign = 'center'; g.textBaseline = 'middle';
-  if (V){
-    const boxH = lines.length * lh + 46;
+  if (!side){
     const sc = g.createLinearGradient(0, top - lh, 0, H);
     sc.addColorStop(0, 'rgba(6,8,13,0)');
     sc.addColorStop(0.4, 'rgba(6,8,13,.85)');
@@ -326,7 +330,7 @@ function s1(t){
   // Nada más. Ese es el chiste: la conversación sigue igual.
   g.restore();
 
-  caption(t, 4.35, 4.8, 6.1, 6.45, 'Técnicamente, sigue siendo «ahora».');
+  caption(t, 4.35, 4.8, 6.1, 6.45, 'Técnicamente, sigue siendo «ahora».', null, 'side');
 }
 
 /* ═══════════ ESCENA 2 — La cascada de notificaciones (7,2 – 12,4) ═══════════ */
@@ -378,7 +382,7 @@ function s2(t){
   g.restore();
   g.restore();
 
-  caption(t, 3.35, 3.8, 4.75, 5.05, 'Dirigir una empresa. Y hacer de centralita.');
+  caption(t, 3.35, 3.8, 4.75, 5.05, 'Dirigir una empresa. Y hacer de centralita.', null, 'side');
 }
 
 /* ═══════════ ESCENA 3 — 47 pestañas (12,4 – 17,2) ═══════════ */
@@ -496,7 +500,7 @@ const notaLayout = (() => {
     const col = i % cols, row = Math.floor(i / cols);
     const rows = Math.ceil(NOTAS.length / cols);
     const x0 = V ? W * 0.17 : W * 0.24, x1 = V ? W * 0.83 : W * 0.76;
-    const y0 = V ? H * 0.24 : H * 0.28, y1 = V ? H * 0.62 : H * 0.72;
+    const y0 = V ? H * 0.24 : H * 0.26, y1 = V ? H * 0.62 : H * 0.66;
     return {
       text: n,
       x: lerp(x0, x1, cols === 1 ? .5 : col / (cols - 1)) + (rnd() - .5) * 26,
@@ -684,7 +688,7 @@ function s8(t){
     });
     g.restore();
 
-    caption(t, 4.5, 4.9, 5.35, 5.75, 'Once y dos. El mismo minuto.', C.cyan);
+    caption(t, 4.5, 4.9, 5.35, 5.75, 'Once y dos. El mismo minuto.', C.cyan, 'side');
   }
 
   /* Beat B: el flujo que hay detrás. */
