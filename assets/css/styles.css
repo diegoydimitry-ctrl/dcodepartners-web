@@ -33,9 +33,15 @@
   --bg-soft:   #090c14;
   --bg-elev:   #0c1019;
   --panel:     #0e1320;
-  --panel-2:   #121828;
+  --panel-2:   #141c30;
   --border:    #1e2536;
   --border-soft:#171d2c;
+
+  /* Acabado "cromado/metálico sutil" de los recuadros (DIR-022) */
+  --surface-top:      #161e34;
+  --surface-border:   rgba(168,182,216,.18);
+  --surface-highlight:rgba(255,255,255,.05);
+  --surface-bar-top:  #1c2440;
   --ink:       #eef2fb;
   --stone:     #a7b0c4;
   --stone-soft:#8089a0;
@@ -349,13 +355,17 @@ h2.h-title{
 .btn-block{ width:100%; }
 
 /* ============ WINDOW COMPONENT ============ */
+/* Acabado "cromado/metálico sutil" (DIR-022): superficie ligeramente más
+   clara que el fondo, con un leve degradado vertical y un highlight de
+   1px en el borde superior — sugiere una superficie física fina, sin
+   simular metal ni cristal. */
 .window{
-  background:var(--panel);
-  border:1px solid var(--border);
+  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel) 100%);
+  border:1px solid var(--surface-border);
   border-radius:16px;
   overflow:hidden;
   position:relative;
-  box-shadow:0 40px 80px -40px rgba(0,0,0,.7);
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
   transform:perspective(1000px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));
   transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
   will-change:transform;
@@ -371,22 +381,20 @@ h2.h-title{
   z-index:1;
 }
 .window:hover::before{ opacity:1; }
-.window:hover{ border-color:rgba(91,140,255,.4); box-shadow:0 50px 90px -35px rgba(0,0,0,.75), 0 0 0 1px rgba(91,140,255,.15); }
+.window:hover{ border-color:rgba(91,140,255,.4); box-shadow:0 50px 90px -35px rgba(0,0,0,.75), 0 0 0 1px rgba(91,140,255,.15), inset 0 1px 0 var(--surface-highlight); }
 .window-bar{
   display:flex;
   align-items:center;
   gap:10px;
   padding:13px 16px;
-  background:var(--panel-2);
-  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, var(--surface-bar-top) 0%, var(--panel-2) 100%);
+  border-bottom:1px solid var(--surface-border);
   position:relative;
   z-index:2;
 }
-.window-dots{ display:flex; gap:6px; flex-shrink:0; }
-.window-dots span{ width:10px; height:10px; border-radius:50%; display:block; }
-.window-dots span:nth-child(1){ background:#ff5f57; }
-.window-dots span:nth-child(2){ background:#febc2e; }
-.window-dots span:nth-child(3){ background:#28c840; }
+/* Los tres puntos de "ventana de macOS" se han retirado del sistema de
+   componentes por completo (DIR-022) — no se sustituyen por nada. */
+.window-dots{ display:none; }
 .window-title{
   font-family:var(--mono);
   font-size:0.72rem;
@@ -1572,16 +1580,20 @@ nav.main-nav > ul{ position:relative; }
 .form-compliance{
   display:flex;
   flex-direction:column;
-  gap:26px;
-  margin:10px 0 30px;
+  gap:28px;
+  margin:12px 0 32px;
 }
 .consent-field{ display:flex; align-items:flex-start; gap:10px; }
+/* Verificación de seguridad como una pequeña sección propia (DIR-022) —
+   una superficie diferenciada del formulario, no un divisor entre campos. */
 .security-check{
-  padding-top:22px;
-  border-top:1px solid var(--border-soft);
+  padding:18px 18px 20px;
+  border-radius:12px;
+  background:linear-gradient(180deg, var(--surface-bar-top) 0%, var(--panel-2) 100%);
+  border:1px solid var(--surface-border);
   display:flex;
   flex-direction:column;
-  gap:11px;
+  gap:12px;
 }
 .security-check-label{
   font-family:var(--mono);
