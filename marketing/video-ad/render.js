@@ -35,7 +35,10 @@ const FPS  = parseInt(flag('fps', '30'), 10);
 const DUR  = parseFloat(flag('dur', '40'));
 const DIR  = __dirname;
 const SEG  = flag('seg', null);                      // "i/N" → modo trabajador
-const OUT  = path.resolve(DIR, flag('out', `out/dcode-anuncio-${FMT}.mp4`));
+const SRC  = flag('src', 'ad.html');                 // animación a renderizar
+const SLUG = path.basename(SRC, '.html');
+const OUT  = path.resolve(DIR, flag('out',
+  SLUG === 'ad' ? `out/dcode-anuncio-${FMT}.mp4` : `out/dcode-${SLUG}-${FMT}.mp4`));
 const AUDIO = flag('no-audio') ? null
             : path.resolve(DIR, flag('audio', 'out/banda-sonora.wav'));
 
@@ -85,7 +88,7 @@ async function renderRange(from, to, outFile, label) {
     args: ['--force-color-profile=srgb', '--disable-lcd-text', '--hide-scrollbars']
   });
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
-  await page.goto('file://' + path.join(DIR, 'ad.html') + `?fmt=${FMT}&t=0`, { waitUntil: 'load' });
+  await page.goto('file://' + path.join(DIR, SRC) + `?fmt=${FMT}&t=0`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__ready === true, null, { timeout: 30000 });
 
   const canvas = page.locator('#stage');
@@ -136,7 +139,7 @@ function run(cmd, args) {
   const hasAudio = AUDIO && fs.existsSync(AUDIO);
   if (AUDIO && !hasAudio) console.warn(`aviso: no existe ${AUDIO}; se renderiza sin sonido.`);
 
-  console.log(`render ${FMT}  ${W}×${H}  ${FPS}fps  ${TOTAL} fotogramas  ${WORKERS} proceso(s)`);
+  console.log(`render ${SRC}  ${FMT}  ${W}×${H}  ${FPS}fps  ${TOTAL} fotogramas  ${WORKERS} proceso(s)`);
   const t0 = Date.now();
 
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'dcode-seg-'));
@@ -155,7 +158,7 @@ function run(cmd, args) {
         segs.push(out);
         return run(process.execPath, [
           __filename, '--fmt', FMT, '--fps', String(FPS), '--dur', String(DUR),
-          '--seg', `${i}/${WORKERS}`, '--out', out
+          '--src', SRC, '--seg', `${i}/${WORKERS}`, '--out', out
         ]);
       }));
       console.log(`  ${WORKERS} segmentos listos en ${((Date.now() - t0) / 1000).toFixed(0)}s`);
