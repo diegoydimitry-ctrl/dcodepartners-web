@@ -87,7 +87,7 @@ locutor «hace gracia», se cae.
 | 29,85 | 31,85 | Ahí, debajo, había una comida. | Un punto más suave. Casi con pena. |
 | 33,15 | 35,05 | Y aquí está el problema. | Cambio de registro. Aquí se acabó la broma. |
 | 35,35 | 37,25 | No es que tengas demasiado trabajo. | |
-| 37,55 | 40,00 | Es que estás haciendo demasiado trabajo que no deberías estar haciendo tú. | Sin prisa. Es la frase que sostiene la pieza. |
+| 37,55 | 40,00 | Es que estás haciendo demasiado trabajo que no deberías hacer tú. | Sin prisa. Es la frase que sostiene la pieza. |
 | 44,50 | 45,75 | Once y dos. El mismo minuto. | Sin subrayar. Que el espectador ate el cabo. |
 | 49,60 | 52,10 | Si para llevar tu empresa tienes que estar pendiente de absolutamente todo… | |
 | 52,60 | 54,20 | …igual no tienes una empresa. | Pausa de verdad antes de la última. |
@@ -116,12 +116,12 @@ Si se graba con locutor humano, la dirección es la misma: **que no actúe**.
 Copiar de aquí; llevan las tildes y los signos de apertura.
 
 ```
-Hola, buenas! ¿Tenéis hueco el jueves?
+¡Hola, buenas! ¿Tenéis hueco el jueves?
 Ahora mismo te respondo 👍
 SEIS HORAS DESPUÉS
 Llamada perdida · Javier
 4 mensajes nuevos · Grupo · Proveedores
-Correo · Factura 2024-118
+Correo · Factura F-118
 Recordatorio · Reunión en 10 min
 47   PESTAÑAS ABIERTAS
 FINAL.xlsx
@@ -131,8 +131,10 @@ FINAL_FINAL_AHORA_SÍ_DEFINITIVO.xlsx
 FINAL_FINAL_AHORA_SÍ_DEFINITIVO_BUENO.xlsx
 LLAMAR A JAVIER
 LLAMAR A JAVIER (EN SERIO)
+Llamada proveedor · Presupuesto Marta · Reunión de equipo
 COMER
 Llamada cliente
+Revisar facturas · Llamar a Javier
 Y aquí está el problema.
 No es que tengas demasiado trabajo.
 Es que estás haciendo demasiado trabajo que no deberías hacer tú.

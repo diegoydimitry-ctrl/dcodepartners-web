@@ -301,7 +301,7 @@ function s1(t){
 
   // Los mensajes se apoyan en la parte baja de la pantalla, como en cualquier
   // app de mensajería: así se lee como una captura real y no queda hueco.
-  const M1 = 'Hola, buenas! ¿Tenéis hueco el jueves?';
+  const M1 = '¡Hola, buenas! ¿Tenéis hueco el jueves?';
   const M2 = 'Ahora mismo te respondo 👍';
   const SEP_H = 66;
   const stack = bubbleH(box, M1) + bubbleH(box, M2) + SEP_H;
@@ -338,7 +338,7 @@ function s1(t){
 const NOTIS = [
   ['Llamada perdida',   'Javier',              C.red   ],
   ['4 mensajes nuevos', 'Grupo · Proveedores', C.green ],
-  ['Correo',            'Factura 2024-118',    C.blue  ],
+  ['Correo',            'Factura F-118',    C.blue  ],
   ['Recordatorio',      'Reunión en 10 min',   C.cyan  ],
   ['Llamada perdida',   'Número desconocido',  C.red   ],
   ['Mensaje',           'Marta · Cliente',     C.green ],
@@ -547,7 +547,7 @@ function s5(t){
 const EVENTOS = [
   ['09:00', 'Llamada proveedor',     C.blue,  0.00, 0.14],
   ['10:00', 'Presupuesto Marta',     C.cyan,  0.13, 0.30],
-  ['11:30', 'Reunión equipo',        C.violet,0.26, 0.44],
+  ['11:30', 'Reunión de equipo',        C.violet,0.26, 0.44],
   ['14:00', 'COMER',                 C.green, 0.44, 0.58],
   ['14:10', 'Llamada cliente',       C.red,   0.46, 0.66],
   ['16:00', 'Revisar facturas',      C.amber, 0.64, 0.80],
@@ -656,7 +656,7 @@ function s8(t){
     statusBar(box, '11:02');
     chatHeader(box, 'Marta · Cliente', 'respondiendo automáticamente', C.blue);
 
-    const A1 = 'Hola, buenas! ¿Tenéis hueco el jueves?';
+    const A1 = '¡Hola, buenas! ¿Tenéis hueco el jueves?';
     const A2 = '¡Hola, Marta! El jueves nos queda libre a las 11:30 y a las 16:00. ¿Cuál te viene mejor?';
     const A3 = 'A las 11:30 perfecto';
     const A4 = 'Confirmado ✓ Te acabo de enviar el recordatorio.';
