@@ -8,6 +8,19 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- Trabajo diferido para no competir con el primer input ----------
+     Justo al llegar a una página, este script hace bastante trabajo síncrono
+     de golpe (menú, indicador de nav, reveal, canvas del hero, líneas de
+     Departamentos...). Lo esencial para que la página se vea y sea navegable
+     va primero, sin diferir. Lo puramente decorativo y algo más caro de
+     calcular (el canvas del hero, las líneas de Departamentos) se pospone un
+     instante con requestIdleCallback — así no compite con el primer gesto de
+     scroll del usuario justo después de cargar. */
+  var runWhenIdle = function (fn) {
+    if ('requestIdleCallback' in window) requestIdleCallback(fn, { timeout: 400 });
+    else setTimeout(fn, 1);
+  };
+
   /* ---------- Header shadow on scroll ---------- */
   var header = document.getElementById('site-header');
   if (header) {
@@ -17,6 +30,22 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
+
+  /* ---------- Saltos a ancla suaves (skip-link, índice lateral de Home) ----------
+     scroll-behavior:smooth ya NO está en <html> (ver styles.css) porque
+     interfería con el scroll normal de rueda/trackpad. Los saltos a un
+     punto concreto de la página siguen siendo suaves, pero puntuales: se
+     resuelven aquí, en JS, sin tocar el comportamiento del scroll continuo. */
+  document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if (!target) return; // deja que el navegador haga su comportamiento por defecto
+      e.preventDefault();
+      target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+      if (history.pushState) history.pushState(null, '', '#' + id);
+    });
+  });
 
   /* ---------- Mobile nav toggle ---------- */
   var burger = document.getElementById('burger');
@@ -50,6 +79,18 @@
     });
   }
 
+  /* ---------- Language switcher (ES default, /en/ mirrors every ES path) ---------- */
+  document.querySelectorAll('.lang-switch').forEach(function (switcher) {
+    var path = window.location.pathname;
+    var isEn = path === '/en' || path.indexOf('/en/') === 0;
+    var esHref = isEn ? (path.replace(/^\/en/, '') || '/') : path;
+    var enHref = isEn ? path : ('/en' + (path === '/' ? '/' : path));
+    var esLink = switcher.querySelector('[data-lang="es"]');
+    var enLink = switcher.querySelector('[data-lang="en"]');
+    if (esLink) { esLink.href = esHref; esLink.setAttribute('aria-current', isEn ? 'false' : 'true'); }
+    if (enLink) { enLink.href = enHref; enLink.setAttribute('aria-current', isEn ? 'true' : 'false'); }
+  });
+
   /* ---------- Mega menu (desktop hover + keyboard, mobile tap-toggle) ---------- */
   document.querySelectorAll('.has-mega').forEach(function (item) {
     var trigger = item.querySelector('.mega-trigger');
@@ -63,8 +104,51 @@
     });
   });
 
+  /* ---------- Nav sliding indicator ----------
+     Creado por JS (no en el HTML de cada página) para no tener que tocar
+     la cabecera compartida en las 58 páginas del sitio: una sola píldora
+     que se desliza entre los elementos del menú al pasar el ratón, y
+     vuelve a la página activa al salir. Solo en desktop — el menú móvil
+     es un panel vertical donde esto no aplica. */
+  var navTopList = document.querySelector('nav.main-nav > ul');
+  if (navTopList) {
+    var navIndicator = document.createElement('span');
+    navIndicator.className = 'nav-indicator';
+    navIndicator.setAttribute('aria-hidden', 'true');
+    navTopList.appendChild(navIndicator);
+
+    var navTopLinks = Array.prototype.slice.call(
+      navTopList.querySelectorAll(':scope > li > a, :scope > li > .nav-link-btn')
+    );
+
+    var moveNavIndicator = function (el) {
+      if (!el || window.innerWidth <= 900) { navIndicator.style.opacity = '0'; return; }
+      var elRect = el.getBoundingClientRect();
+      var listRect = navTopList.getBoundingClientRect();
+      navIndicator.style.width = elRect.width + 'px';
+      navIndicator.style.transform = 'translateX(' + (elRect.left - listRect.left) + 'px)';
+      navIndicator.style.opacity = '1';
+    };
+
+    var navActiveLink = navTopList.querySelector(':scope > li > a[aria-current="page"]');
+    navTopLinks.forEach(function (a) {
+      a.addEventListener('mouseenter', function () { moveNavIndicator(a); });
+      a.addEventListener('focus', function () { moveNavIndicator(a); });
+    });
+    navTopList.addEventListener('mouseleave', function () { moveNavIndicator(navActiveLink); });
+
+    var navIndicatorResizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(navIndicatorResizeTimer);
+      navIndicatorResizeTimer = setTimeout(function () { moveNavIndicator(navActiveLink); }, 150);
+    });
+    // Posición inicial tras el primer layout (fuentes/webfonts pueden
+    // desplazar ligeramente el ancho real de cada enlace).
+    window.requestAnimationFrame(function () { moveNavIndicator(navActiveLink); });
+  }
+
   /* ---------- Scroll reveal ---------- */
-  var revealEls = document.querySelectorAll('.reveal');
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur, .reveal-narrow, .reveal-converge');
   if (revealEls.length) {
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
@@ -79,6 +163,79 @@
     } else {
       revealEls.forEach(function (el) { el.classList.add('is-visible'); });
     }
+  }
+
+  /* ---------- Red de Departamentos (líneas de conexión entre tarjetas) ----------
+     Solo existe en /departamentos (hub): un trazo SVG entre cada tarjeta y la
+     siguiente, calculado a partir de la posición real (responsive), que se
+     "dibuja" cuando la tarjeta de llegada entra en pantalla. Se desactiva por
+     completo por debajo de 900px (la cuadrícula pasa a una columna). */
+  var deptGrid = document.querySelector('.servicios-cards[data-stagger]');
+  var deptSvg = deptGrid ? deptGrid.querySelector('.dept-connections') : null;
+  if (deptGrid && deptSvg) {
+    var deptCards = Array.prototype.slice.call(deptGrid.querySelectorAll(':scope > .service-card'));
+    var deptPaths = []; // { el, toCard }
+    var deptRevealed = []; // cards whose connection has already been drawn in (survives a resize rebuild)
+
+    var buildDeptConnections = function () {
+      if (window.innerWidth < 900 || !deptCards.length) { deptSvg.innerHTML = ''; deptPaths = []; return; }
+      var gridRect = deptGrid.getBoundingClientRect();
+      var svgNS = 'http://www.w3.org/2000/svg';
+      deptSvg.innerHTML =
+        '<defs><linearGradient id="dept-connection-grad" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0" stop-color="#43e0ff"/><stop offset="1" stop-color="#9b6bff"/>' +
+        '</linearGradient></defs>';
+      deptPaths = [];
+      var centers = deptCards.map(function (card) {
+        var r = card.getBoundingClientRect();
+        return { x: r.left - gridRect.left + r.width / 2, y: r.top - gridRect.top + r.height / 2 };
+      });
+      for (var i = 0; i < centers.length - 1; i++) {
+        var a = centers[i], b = centers[i + 1];
+        var midY = (a.y + b.y) / 2;
+        var d = 'M' + a.x + ',' + a.y + ' Q' + a.x + ',' + midY + ' ' + (a.x + b.x) / 2 + ',' + midY +
+          ' T' + b.x + ',' + b.y;
+        var path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', d);
+        deptSvg.appendChild(path);
+        var len = path.getTotalLength();
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        deptPaths.push({ el: path, toCard: deptCards[i + 1] });
+      }
+      // Re-apply immediately for cards already revealed before this rebuild
+      // (e.g. a window resize after the user has scrolled past them) — a
+      // freshly built path always starts hidden otherwise.
+      deptPaths.forEach(function (p) {
+        if (deptRevealed.indexOf(p.toCard) !== -1) p.el.style.strokeDashoffset = '0';
+      });
+    };
+
+    var drawDeptConnectionsFor = function (card) {
+      if (deptRevealed.indexOf(card) === -1) deptRevealed.push(card);
+      deptPaths.forEach(function (p) {
+        if (p.toCard === card) p.el.style.strokeDashoffset = '0';
+      });
+    };
+
+    runWhenIdle(buildDeptConnections);
+    if ('IntersectionObserver' in window) {
+      var deptIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            drawDeptConnectionsFor(entry.target);
+            deptIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      deptCards.forEach(function (c) { deptIO.observe(c); });
+    }
+
+    var deptResizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(deptResizeTimer);
+      deptResizeTimer = setTimeout(buildDeptConnections, 200);
+    });
   }
 
   /* ---------- Side-index scroll-spy (home page only) ---------- */
@@ -98,22 +255,28 @@
     trackedSections.forEach(function (s) { sectionIO.observe(s); });
   }
 
-  /* ---------- Interactive window tilt + spotlight ---------- */
+  /* ---------- Interactive window tilt + spotlight ----------
+     Solo importa al pasar el ratón por encima, nunca en el primer frame —
+     diferido para no sumarse al trabajo síncrono justo al cargar la
+     página, que es precisamente lo que compite con el primer gesto de
+     scroll del usuario tras un cambio de página. */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
-    document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
-      win.addEventListener('mousemove', function (e) {
-        var rect = win.getBoundingClientRect();
-        var px = (e.clientX - rect.left) / rect.width;
-        var py = (e.clientY - rect.top) / rect.height;
-        var maxTilt = 3.5;
-        win.style.setProperty('--rx', ((px - 0.5) * maxTilt * 2) + 'deg');
-        win.style.setProperty('--ry', (-(py - 0.5) * maxTilt * 2) + 'deg');
-        win.style.setProperty('--mx', (px * 100) + '%');
-        win.style.setProperty('--my', (py * 100) + '%');
-      });
-      win.addEventListener('mouseleave', function () {
-        win.style.setProperty('--rx', '0deg');
-        win.style.setProperty('--ry', '0deg');
+    runWhenIdle(function () {
+      document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
+        win.addEventListener('mousemove', function (e) {
+          var rect = win.getBoundingClientRect();
+          var px = (e.clientX - rect.left) / rect.width;
+          var py = (e.clientY - rect.top) / rect.height;
+          var maxTilt = 3.5;
+          win.style.setProperty('--rx', ((px - 0.5) * maxTilt * 2) + 'deg');
+          win.style.setProperty('--ry', (-(py - 0.5) * maxTilt * 2) + 'deg');
+          win.style.setProperty('--mx', (px * 100) + '%');
+          win.style.setProperty('--my', (py * 100) + '%');
+        });
+        win.addEventListener('mouseleave', function () {
+          win.style.setProperty('--rx', '0deg');
+          win.style.setProperty('--ry', '0deg');
+        });
       });
     });
   }
@@ -175,7 +338,7 @@
           }
         });
         if (q === '') {
-          items.forEach(function (item, i) { setItemOpen(item, i === 0); });
+          items.forEach(function (item) { setItemOpen(item, false); });
         }
         cat.style.display = catHasMatch ? '' : 'none';
       });
@@ -237,6 +400,98 @@
     }
   }
 
+  /* ---------- Signature moments de Departamentos ----------
+     Interacción compartida por varias de las visualizaciones propias de
+     cada Departamento (radar de Comercial, embudo de Marketing, órbita de
+     Clientes): un elemento con [data-signature-crosshighlight] agrupa
+     varios [data-stage] — al pasar el ratón o el foco por cualquiera de
+     ellos, todos los que comparten el mismo valor de data-stage se
+     marcan a la vez, mostrando la correspondencia entre el visual y la
+     fase concreta. Un único patrón, reutilizado, no una interacción
+     distinta por página. */
+  document.querySelectorAll('[data-signature-crosshighlight]').forEach(function (scope) {
+    var triggers = scope.querySelectorAll('[data-stage]');
+    triggers.forEach(function (el) {
+      var stage = el.getAttribute('data-stage');
+      var group = scope.querySelectorAll('[data-stage="' + stage + '"]');
+      var activate = function () { group.forEach(function (g) { g.classList.add('is-active'); }); };
+      var deactivate = function () { group.forEach(function (g) { g.classList.remove('is-active'); }); };
+      el.addEventListener('mouseenter', activate);
+      el.addEventListener('mouseleave', deactivate);
+      el.addEventListener('focus', activate);
+      el.addEventListener('blur', deactivate);
+    });
+  });
+
+  /* ---------- Clientes IA: órbita de la ficha de cliente ---------- */
+  var orbitScope = document.querySelector('.orbit-scope');
+  if (orbitScope) {
+    var orbitCaption = document.getElementById('orbit-caption');
+    var orbitDefaultCaption = orbitCaption ? orbitCaption.textContent : '';
+    orbitScope.querySelectorAll('.orbit-node').forEach(function (node) {
+      var show = function () {
+        orbitScope.querySelectorAll('.orbit-node').forEach(function (n) { n.classList.toggle('is-active', n === node); });
+        if (orbitCaption) orbitCaption.textContent = node.dataset.detail || node.dataset.label || orbitDefaultCaption;
+      };
+      var hide = function () {
+        node.classList.remove('is-active');
+        if (orbitCaption) orbitCaption.textContent = orbitDefaultCaption;
+      };
+      node.addEventListener('mouseenter', show);
+      node.addEventListener('mouseleave', hide);
+      node.addEventListener('focus', show);
+      node.addEventListener('blur', hide);
+    });
+  }
+
+  /* ---------- Soporte IA: ticket en vivo (ciclo de estados) ----------
+     Recorrido automático, pausado en cuanto el ticket sale de pantalla y
+     reanudado al volver a entrar — así, cada vez que el usuario pasa por
+     esta sección, la vuelve a ver desde "Recibido". Nunca depende de la
+     posición de scroll: el usuario puede cruzar la sección a cualquier
+     velocidad, en cualquier dirección, sin que el ciclo se lo impida. */
+  var ticketStatusEl = document.getElementById('ticket-status');
+  if (ticketStatusEl) {
+    var ticketSteps = Array.prototype.slice.call(document.querySelectorAll('.ticket-step'));
+    var ticketStates = ticketSteps.map(function (s) { return s.dataset.status; });
+    var ticketClasses = ['', 'st-clasificado', 'st-prioridad', 'st-respondido', 'st-resuelto'];
+    var ticketIndex = 0;
+    var ticketTimer = null;
+    var renderTicketState = function (i) {
+      ticketSteps.forEach(function (s, idx) { s.classList.toggle('active', idx <= i); });
+      ticketStatusEl.textContent = ticketStates[i];
+      ticketStatusEl.className = 'ticket-status ' + (ticketClasses[i] || '');
+    };
+    var resetTicketCycle = function () {
+      ticketIndex = 0;
+      renderTicketState(0);
+    };
+    resetTicketCycle();
+    var advanceTicket = function () {
+      ticketIndex = (ticketIndex + 1) % ticketStates.length;
+      renderTicketState(ticketIndex);
+    };
+    var startTicketCycle = function () {
+      if (ticketTimer || prefersReducedMotion) return;
+      ticketTimer = setInterval(advanceTicket, 1900);
+    };
+    var stopTicketCycle = function () {
+      clearInterval(ticketTimer);
+      ticketTimer = null;
+    };
+    if ('IntersectionObserver' in window) {
+      var ticketIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { resetTicketCycle(); startTicketCycle(); }
+          else stopTicketCycle();
+        });
+      }, { threshold: 0.4 });
+      ticketIO.observe(ticketStatusEl.closest('.ticket-card') || ticketStatusEl);
+    } else if (!prefersReducedMotion) {
+      startTicketCycle();
+    }
+  }
+
   /* ---------- Hero neural-network canvas ---------- */
   var canvas = document.getElementById('hero-canvas');
   if (canvas) {
@@ -267,6 +522,7 @@
     };
 
     var step = function () {
+      if (!width) { if (running && !prefersReducedMotion) requestAnimationFrame(step); return; } // resize() diferido todavía no ha corrido
       ctx.clearRect(0, 0, width, height);
       var maxDist = Math.min(width, height) * 0.34;
 
@@ -314,13 +570,15 @@
       });
     };
 
-    resize();
-    initNodes();
-    if (prefersReducedMotion) {
-      drawStatic();
-    } else {
-      requestAnimationFrame(step);
-    }
+    runWhenIdle(function () {
+      resize();
+      initNodes();
+      if (prefersReducedMotion) {
+        drawStatic();
+      } else {
+        requestAnimationFrame(step);
+      }
+    });
 
     window.addEventListener('resize', function () {
       resize();
@@ -487,6 +745,42 @@
         button.textContent = 'Solicitar mi Mes Gratuito';
       }
     });
+  }
+
+  /* ---------- Movilidad por Departamento: entrada repetible, nunca bloqueante (DIR-019) ----------
+     La versión anterior (DIR-017/018) medía cuánto se había recorrido un
+     raíl de scroll — incluso sin position:sticky, esa lógica ataba la
+     animación a LA POSICIÓN del scroll, y eso es exactamente lo que
+     Dirección pidió eliminar: ninguna animación puede depender de cuánto
+     ha avanzado el documento, porque entonces una ráfaga de rueda rápida
+     "adelanta" a la animación y se percibe como si la página se hubiera
+     parado a esperarla.
+     Aquí no se mide nada del scroll: cada [data-motion-journey] solo
+     sabe si está a la vista o no (IntersectionObserver, sin rootMargin
+     ni cálculo de progreso) y activa o desactiva la clase is-playing.
+     Toda la coreografía (qué aparece, cuándo, en qué orden) vive en CSS
+     puro como @keyframes con animation-delay — corre en su propio reloj
+     interno, nunca en el del scroll: el usuario puede cruzar la sección
+     en 100ms o en 10s, la animación no cambia el ritmo al que avanza la
+     página en ningún caso. Al salir de pantalla se quita is-playing, así
+     que al volver a entrar la coreografía se repite desde el principio.
+     Con prefers-reduced-motion, is-settled se aplica una sola vez y ya
+     no se vuelve a tocar el DOM: todo el contenido queda visible en su
+     posición final, sin ninguna animación. */
+  var motionJourneys = Array.prototype.slice.call(document.querySelectorAll('[data-motion-journey]'));
+  if (motionJourneys.length) {
+    if (prefersReducedMotion) {
+      motionJourneys.forEach(function (el) { el.classList.add('is-settled'); });
+    } else if ('IntersectionObserver' in window) {
+      var motionIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle('is-playing', entry.isIntersecting);
+        });
+      }, { threshold: 0.3 });
+      motionJourneys.forEach(function (el) { motionIO.observe(el); });
+    } else {
+      motionJourneys.forEach(function (el) { el.classList.add('is-settled'); });
+    }
   }
 
   /* ---------- Asistente de IA de D-Code Partners ----------

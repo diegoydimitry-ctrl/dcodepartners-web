@@ -33,9 +33,15 @@
   --bg-soft:   #090c14;
   --bg-elev:   #0c1019;
   --panel:     #0e1320;
-  --panel-2:   #121828;
+  --panel-2:   #141c30;
   --border:    #1e2536;
   --border-soft:#171d2c;
+
+  /* Acabado "cromado/metálico sutil" de los recuadros (DIR-022) */
+  --surface-top:      #161e34;
+  --surface-border:   rgba(168,182,216,.18);
+  --surface-highlight:rgba(255,255,255,.05);
+  --surface-bar-top:  #1c2440;
   --ink:       #eef2fb;
   --stone:     #a7b0c4;
   --stone-soft:#8089a0;
@@ -64,11 +70,74 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+/* scroll-behavior:smooth NO va aquí a propósito. Puesto en <html> de forma
+   global, en Chromium interfiere con el scroll nativo de rueda/trackpad:
+   cada nuevo tick de la rueda puede reiniciar la animación de scroll en
+   curso en vez de sumarse a ella, lo que se percibe como que la página se
+   detiene y necesita otro golpe de rueda para seguir — justo el bug
+   reportado. Los saltos a ancla (índice lateral de Home, "skip to content")
+   se resuelven en JS con scrollIntoView({behavior:'smooth'}), que sí es
+   intencional y puntual, sin tocar el scroll continuo del usuario. */
+html{ scroll-behavior:auto; }
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
-  *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; transition-delay:0ms !important; scroll-behavior:auto !important; }
 }
+
+/* ============ TRANSICIONES DE PÁGINA (nativas) ============
+   @view-transition activa la transición de navegación cross-document del
+   propio navegador (Chrome/Edge 126+): al pulsar un enlace interno, la
+   página saliente y la entrante se funden en vez de cortar en seco.
+   No requiere JavaScript de enrutado ni interceptar clics — si el
+   navegador no la soporta, este bloque simplemente no hace nada y la
+   navegación es la normal. Cero coste de mantenimiento, cero riesgo de
+   romper el `back/forward` o los enlaces directos. */
+/* Duración deliberadamente corta (180ms, no los 500ms de la versión
+   anterior): mientras una view transition está activa, Chromium retiene
+   el scroll del documento para no corromper la instantánea congelada —
+   eso es lo que se sentía como que la rueda no respondía justo después de
+   cambiar de página. Con la transición mucho más corta, esa ventana deja
+   de ser perceptible, sin renunciar del todo a la sensación de
+   continuidad entre páginas. */
+@view-transition{
+  navigation:auto;
+}
+::view-transition-group(*){ animation-duration:.18s; animation-timing-function:cubic-bezier(.2,.8,.2,1); }
+::view-transition-old(root){ animation:dcode-page-out .18s cubic-bezier(.2,.8,.2,1) both; }
+::view-transition-new(root){ animation:dcode-page-in .18s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes dcode-page-out{
+  from{ opacity:1; transform:scale(1) translateY(0); filter:blur(0px); }
+  to{ opacity:0; transform:scale(.985) translateY(-8px); filter:blur(2px); }
+}
+@keyframes dcode-page-in{
+  from{ opacity:0; transform:scale(1.012) translateY(8px); filter:blur(2px); }
+  to{ opacity:1; transform:scale(1) translateY(0); filter:blur(0px); }
+}
+@media (prefers-reduced-motion: reduce){
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){ animation:none !important; }
+}
+
+/* ============ CONTINUIDAD DE ELEMENTOS ENTRE PÁGINAS ============
+   Al navegar del hub de Departamentos a la página de un Departamento
+   concreto, el mismo view-transition-name en la tarjeta de origen y en
+   la cabecera de destino hace que el propio navegador anime la tarjeta
+   pulsada hasta convertirla en la cabecera de la página siguiente — sin
+   JavaScript, nativo de @view-transition. Nunca coinciden dos elementos
+   con el mismo nombre en un mismo documento (la tarjeta vive solo en el
+   hub, la cabecera solo en su página), así que no hay riesgo de
+   colisión. Si el navegador no soporta la API o se navega desde
+   cualquier otra página, el elemento simplemente aparece con el fundido
+   raíz normal — no hay nada que pueda romperse. */
+#dept-comercial,#dept-hero-comercial{ view-transition-name:dept-panel-comercial; }
+#dept-marketing,#dept-hero-marketing{ view-transition-name:dept-panel-marketing; }
+#dept-clientes,#dept-hero-clientes{ view-transition-name:dept-panel-clientes; }
+#dept-produccion,#dept-hero-produccion{ view-transition-name:dept-panel-produccion; }
+#dept-finanzas,#dept-hero-finanzas{ view-transition-name:dept-panel-finanzas; }
+#dept-soporte,#dept-hero-soporte{ view-transition-name:dept-panel-soporte; }
+#dept-administracion,#dept-hero-administracion{ view-transition-name:dept-panel-administracion; }
+#dept-direccion,#dept-hero-direccion{ view-transition-name:dept-panel-direccion; }
 
 body{
   margin:0;
@@ -80,6 +149,26 @@ body{
   -webkit-font-smoothing:antialiased;
   position:relative;
 }
+
+/* Tinte de acento por Departamento — muy sutil, encima de la rejilla
+   global. No cambia la rejilla en sí, solo añade un matiz ligado al
+   color de ese Departamento. Solo tiene efecto en body.dept-page. */
+body.dept-page::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:radial-gradient(ellipse 75% 55% at 50% 0%, rgba(var(--dept-accent,67,224,255), .05), transparent 70%);
+  pointer-events:none;
+}
+.dept-comercial{ --dept-accent:67,224,255; }
+.dept-marketing{ --dept-accent:155,107,255; }
+.dept-clientes{ --dept-accent:91,140,255; }
+.dept-produccion{ --dept-accent:155,107,255; }
+.dept-finanzas{ --dept-accent:52,231,164; }
+.dept-soporte{ --dept-accent:91,140,255; }
+.dept-administracion{ --dept-accent:155,107,255; }
+.dept-direccion{ --dept-accent:67,224,255; }
 
 /* global ambient background */
 body::before{
@@ -206,6 +295,8 @@ h2.h-title{
   max-width:680px;
   margin-bottom:56px;
 }
+/* Cuando un párrafo largo se divide en dos, que no queden pegados. */
+.section-head p + p{ margin-top:12px; }
 .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
 
 /* ============ BUTTONS ============ */
@@ -230,8 +321,22 @@ h2.h-title{
   background-size:160% 160%;
   color:#04060a;
   box-shadow:0 16px 40px -14px rgba(91,140,255,.55);
+  overflow:hidden;
 }
 .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 20px 50px -14px rgba(91,140,255,.75); background-position:100% 0; }
+/* Barrido de brillo: una franja de luz que cruza el botón al hover — un
+   solo transform, sin repintar nada más. Usa ::after porque ::before ya
+   está reservado para el truco de texto del CTA en móvil muy estrecho. */
+.btn-primary::after{
+  content:"";
+  position:absolute;
+  top:0; left:0;
+  width:40%; height:100%;
+  background:linear-gradient(115deg, transparent, rgba(255,255,255,.55), transparent);
+  transform:translateX(-220%) skewX(-18deg);
+  pointer-events:none;
+}
+.btn-primary:hover::after{ transform:translateX(320%) skewX(-18deg); transition:transform .65s ease; }
 .btn-ghost{
   background:rgba(255,255,255,.02);
   color:var(--ink);
@@ -250,13 +355,17 @@ h2.h-title{
 .btn-block{ width:100%; }
 
 /* ============ WINDOW COMPONENT ============ */
+/* Acabado "cromado/metálico sutil" (DIR-022): superficie ligeramente más
+   clara que el fondo, con un leve degradado vertical y un highlight de
+   1px en el borde superior — sugiere una superficie física fina, sin
+   simular metal ni cristal. */
 .window{
-  background:var(--panel);
-  border:1px solid var(--border);
+  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel) 100%);
+  border:1px solid var(--surface-border);
   border-radius:16px;
   overflow:hidden;
   position:relative;
-  box-shadow:0 40px 80px -40px rgba(0,0,0,.7);
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
   transform:perspective(1000px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));
   transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
   will-change:transform;
@@ -272,22 +381,20 @@ h2.h-title{
   z-index:1;
 }
 .window:hover::before{ opacity:1; }
-.window:hover{ border-color:rgba(91,140,255,.4); box-shadow:0 50px 90px -35px rgba(0,0,0,.75), 0 0 0 1px rgba(91,140,255,.15); }
+.window:hover{ border-color:rgba(91,140,255,.4); box-shadow:0 50px 90px -35px rgba(0,0,0,.75), 0 0 0 1px rgba(91,140,255,.15), inset 0 1px 0 var(--surface-highlight); }
 .window-bar{
   display:flex;
   align-items:center;
   gap:10px;
   padding:13px 16px;
-  background:var(--panel-2);
-  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, var(--surface-bar-top) 0%, var(--panel-2) 100%);
+  border-bottom:1px solid var(--surface-border);
   position:relative;
   z-index:2;
 }
-.window-dots{ display:flex; gap:6px; flex-shrink:0; }
-.window-dots span{ width:10px; height:10px; border-radius:50%; display:block; }
-.window-dots span:nth-child(1){ background:#ff5f57; }
-.window-dots span:nth-child(2){ background:#febc2e; }
-.window-dots span:nth-child(3){ background:#28c840; }
+/* Los tres puntos de "ventana de macOS" se han retirado del sistema de
+   componentes por completo (DIR-022) — no se sustituyen por nada. */
+.window-dots{ display:none; }
 .window-title{
   font-family:var(--mono);
   font-size:0.72rem;
@@ -330,6 +437,9 @@ h2.h-title{
   border-radius:100px;
   display:inline-block;
 }
+.badge-amber{ color:var(--amber); background:rgba(255,180,84,0.12); border-color:rgba(255,180,84,0.3); }
+.badge-violet{ color:var(--violet); background:rgba(155,107,255,0.12); border-color:rgba(155,107,255,0.3); }
+.badge-stone{ color:var(--stone); background:rgba(255,255,255,0.04); border-color:var(--border); }
 .tag{
   font-family:var(--mono);
   font-size:0.65rem;
@@ -356,13 +466,51 @@ h2.h-title{
 .trust-badge svg{ width:13px; height:13px; flex-shrink:0; color:var(--cyan); }
 .trust-badges{ display:flex; flex-wrap:wrap; gap:10px; }
 
-/* ============ REVEAL ============ */
+/* ============ REVEAL ============
+   .reveal: entrada base (fade + subida). Variantes opcionales:
+   .reveal-left / .reveal-right: en desktop entran desde el lateral;
+   en móvil (<720px) se comportan igual que .reveal (fade + vertical),
+   tal y como pide el encargo para no generar movimiento lateral en
+   pantallas estrechas. .reveal-scale: entrada con ligera escala, para
+   elementos centrales (visor de sistema, hero card). Un contenedor con
+   [data-stagger] escalona la entrada de sus .reveal hijos directos vía
+   transition-delay — sensación de narrativa, no de "todo a la vez". */
 .reveal{
   opacity:0;
   transform:translateY(18px);
   transition:opacity .7s ease, transform .7s ease;
 }
 .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+.reveal-left{ opacity:0; transform:translateY(18px) translateX(-28px); transition:opacity .7s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+.reveal-right{ opacity:0; transform:translateY(18px) translateX(28px); transition:opacity .7s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+.reveal-scale{ opacity:0; transform:translateY(14px) scale(.96); transition:opacity .7s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+/* .reveal-up: entra desde abajo con un ligero rebote/overshoot — para
+   momentos que deben notarse más que un fundido convencional (casos
+   internos, teaser de Departamentos en Home). */
+.reveal-up{ opacity:0; transform:translateY(46px) scale(.97); transition:opacity .6s ease, transform .8s cubic-bezier(.2,1.4,.3,1); }
+/* .reveal-blur: "emerge desde detrás" — arranca más pequeño, desenfocado
+   y transparente, como si estuviera detrás del plano del contenido, y se
+   asienta en su sitio. Reservado para paneles/visualizaciones puntuales,
+   no para texto largo (el blur de salida sería incómodo de leer). */
+.reveal-blur{ opacity:0; transform:translateY(10px) scale(.92); filter:blur(10px); transition:opacity .6s ease, transform .8s cubic-bezier(.16,1,.3,1), filter .7s ease; }
+.reveal-left.is-visible,.reveal-right.is-visible,.reveal-scale.is-visible,.reveal-up.is-visible{ opacity:1; transform:translateY(0) translateX(0) scale(1); }
+.reveal-blur.is-visible{ opacity:1; transform:translateY(0) scale(1); filter:blur(0px); }
+
+[data-stagger] > .reveal:nth-child(1),[data-stagger] > .reveal-left:nth-child(1),[data-stagger] > .reveal-right:nth-child(1),[data-stagger] > .reveal-scale:nth-child(1),[data-stagger] > .reveal-up:nth-child(1),[data-stagger] > .reveal-blur:nth-child(1){ transition-delay:0ms; }
+[data-stagger] > .reveal:nth-child(2),[data-stagger] > .reveal-left:nth-child(2),[data-stagger] > .reveal-right:nth-child(2),[data-stagger] > .reveal-scale:nth-child(2),[data-stagger] > .reveal-up:nth-child(2),[data-stagger] > .reveal-blur:nth-child(2){ transition-delay:70ms; }
+[data-stagger] > .reveal:nth-child(3),[data-stagger] > .reveal-left:nth-child(3),[data-stagger] > .reveal-right:nth-child(3),[data-stagger] > .reveal-scale:nth-child(3),[data-stagger] > .reveal-up:nth-child(3),[data-stagger] > .reveal-blur:nth-child(3){ transition-delay:140ms; }
+[data-stagger] > .reveal:nth-child(4),[data-stagger] > .reveal-left:nth-child(4),[data-stagger] > .reveal-right:nth-child(4),[data-stagger] > .reveal-scale:nth-child(4),[data-stagger] > .reveal-up:nth-child(4),[data-stagger] > .reveal-blur:nth-child(4){ transition-delay:210ms; }
+[data-stagger] > .reveal:nth-child(5),[data-stagger] > .reveal-left:nth-child(5),[data-stagger] > .reveal-right:nth-child(5),[data-stagger] > .reveal-scale:nth-child(5),[data-stagger] > .reveal-up:nth-child(5),[data-stagger] > .reveal-blur:nth-child(5){ transition-delay:280ms; }
+[data-stagger] > .reveal:nth-child(6),[data-stagger] > .reveal-left:nth-child(6),[data-stagger] > .reveal-right:nth-child(6),[data-stagger] > .reveal-scale:nth-child(6),[data-stagger] > .reveal-up:nth-child(6),[data-stagger] > .reveal-blur:nth-child(6){ transition-delay:350ms; }
+[data-stagger] > .reveal:nth-child(7),[data-stagger] > .reveal-left:nth-child(7),[data-stagger] > .reveal-right:nth-child(7),[data-stagger] > .reveal-scale:nth-child(7),[data-stagger] > .reveal-up:nth-child(7),[data-stagger] > .reveal-blur:nth-child(7){ transition-delay:420ms; }
+[data-stagger] > .reveal:nth-child(8),[data-stagger] > .reveal-left:nth-child(8),[data-stagger] > .reveal-right:nth-child(8),[data-stagger] > .reveal-scale:nth-child(8),[data-stagger] > .reveal-up:nth-child(8),[data-stagger] > .reveal-blur:nth-child(8){ transition-delay:490ms; }
+
+@media (max-width:720px){
+  .reveal-left,.reveal-right{ transform:translateY(18px); }
+  .reveal-left.is-visible,.reveal-right.is-visible{ transform:translateY(0); }
+  .reveal-blur{ transform:translateY(10px) scale(.96); filter:blur(6px); }
+}
 
 /* ============ HEADER / NAV ============ */
 header{
@@ -438,24 +586,42 @@ nav.main-nav a, nav.main-nav .nav-link-btn{
 }
 nav.main-nav a:hover, nav.main-nav .nav-link-btn:hover{ color:var(--ink); background:rgba(255,255,255,.04); }
 nav.main-nav a[aria-current="page"]{ color:var(--ink); }
-nav.main-nav a[aria-current="page"]::after{
-  content:"";
+nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opacity:.7; }
+/* Indicador deslizante: UN ÚNICO elemento (creado por JS en main.js, sin
+   tocar el HTML de cada página) que se desliza y cambia de ancho para
+   seguir al elemento con el que se interactúa, y vuelve a la página
+   activa al salir del ratón. Es deliberadamente el único indicador que
+   existe — no hay un ::after fijo por enlace además de este, porque eso
+   es justo lo que producía dos líneas superpuestas sobre la página
+   activa. Se desactiva por completo en móvil (JS no la mueve por debajo
+   de 901px), donde el nav pasa a ser un panel vertical. */
+nav.main-nav > ul{ position:relative; }
+.nav-indicator{
   position:absolute;
-  left:14px; right:14px; bottom:4px;
+  bottom:2px;
   height:2px;
   border-radius:2px;
   background:var(--grad-brand);
+  box-shadow:0 0 14px rgba(67,224,255,.55);
+  opacity:0;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), width .35s cubic-bezier(.2,.8,.2,1), opacity .2s ease;
+  pointer-events:none;
+  z-index:1;
 }
-nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opacity:.7; }
+@media (prefers-reduced-motion: reduce){
+  .nav-indicator{ transition:opacity .2s ease; }
+}
 
+/* Mismo material que .window (DIR-022) pero sin su construcción de
+   ventana — es un desplegable de navegación, no una tarjeta. */
 .mega-menu{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:6px;
-  background:var(--panel);
-  border:1px solid var(--border);
+  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel) 100%);
+  border:1px solid var(--surface-border);
   border-radius:14px;
-  box-shadow:0 30px 70px -30px rgba(0,0,0,.8);
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.8), inset 0 1px 0 var(--surface-highlight);
   padding:14px;
   z-index:50;
 }
@@ -501,6 +667,27 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 .mega-item.wide{ grid-column:1 / -1; border-top:1px solid var(--border); border-radius:0; margin-top:4px; padding-top:16px; }
 
 .nav-right{ display:flex; align-items:center; gap:14px; flex-shrink:0; }
+
+.lang-switch{
+  display:flex;
+  align-items:center;
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.04em;
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:3px;
+  gap:2px;
+  flex-shrink:0;
+}
+.lang-switch a{
+  padding:5px 10px;
+  border-radius:100px;
+  color:var(--stone-soft);
+  transition:color .2s ease, background .2s ease;
+}
+.lang-switch a:hover{ color:var(--ink); }
+.lang-switch a[aria-current="true"]{ color:var(--bg); background:var(--cyan); font-weight:600; }
 
 .burger{
   display:none;
@@ -608,6 +795,26 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   padding-bottom:clamp(56px, 9vw, 110px);
   overflow:hidden;
 }
+/* Campo de luz propio del hero — firma de Home, distinta del glow-orb
+   ambiental que ya existe en el resto del sitio. Muy lento, muy sutil. */
+.hero::after{
+  content:"";
+  position:absolute;
+  top:46%;
+  left:64%;
+  width:920px;
+  height:920px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(67,224,255,.16), rgba(91,140,255,.09) 45%, transparent 72%);
+  z-index:0;
+  pointer-events:none;
+  animation:hero-field-drift 46s ease-in-out infinite alternate;
+}
+@keyframes hero-field-drift{
+  0%{ transform:translate(-50%,-50%) scale(1); opacity:.8; }
+  100%{ transform:translate(-45%,-55%) scale(1.14); opacity:1; }
+}
+@media (prefers-reduced-motion: reduce){ .hero::after{ animation:none; } }
 .hero-grid{
   position:relative;
   display:grid;
@@ -685,6 +892,7 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 }
 .page-hero .h-title{ margin-top:16px; }
 .page-hero .lead{ max-width:680px; }
+.page-hero .lead + .lead{ margin-top:12px; }
 .page-hero-meta{
   display:flex;
   flex-wrap:wrap;
@@ -693,7 +901,7 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 }
 
 /* ============ MÉTODO / ACCORDION ============ */
-.metodo{ background:var(--bg-soft); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+.metodo{ position:relative; background:var(--bg-soft); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
 .metodo-grid{
   display:grid;
   grid-template-columns:1.05fr 0.95fr;
@@ -778,12 +986,49 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 
 /* ============ SERVICIOS ============ */
 .servicios-cards{
+  position:relative;
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:28px;
   margin-bottom:64px;
 }
 .servicios-cards.cols-3{ grid-template-columns:repeat(3,1fr); }
+/* Línea de sistema: sugiere que las tarjetas son parte de un mismo
+   ecosistema conectado, sin simular cableado literal entre ellas. */
+.servicios-cards::before{
+  content:"";
+  position:absolute;
+  top:-26px; left:4%; right:4%;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(67,224,255,.4) 22%, rgba(155,107,255,.4) 78%, transparent);
+}
+/* Red de Departamentos: un trazo SVG por cada par de tarjetas
+   consecutivas, calculado en JS (main.js) porque depende del layout
+   real. Cada trazo se "dibuja" (stroke-dashoffset) cuando la tarjeta de
+   llegada entra en pantalla — la cuadrícula se percibe formándose como
+   una red a medida que se hace scroll, no como algo ya montado. Oculto
+   en pantallas estrechas, donde la cuadrícula pasa a una columna y las
+   líneas dejan de aportar información. */
+.dept-connections{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:visible;
+  z-index:0;
+}
+.dept-connections path{
+  fill:none;
+  stroke:url(#dept-connection-grad);
+  stroke-width:1.4;
+  stroke-linecap:round;
+  transition:stroke-dashoffset 1.1s cubic-bezier(.16,1,.3,1);
+}
+.service-card{ position:relative; z-index:1; }
+@media (max-width:900px){
+  .dept-connections{ display:none; }
+}
 .service-card h3{
   font-family:var(--serif);
   font-weight:600;
@@ -804,9 +1049,178 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   border:1px solid rgba(91,140,255,.3);
   color:var(--cyan);
   flex-shrink:0;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
 }
 .service-icon svg{ width:19px; height:19px; }
+.service-card:hover .service-icon{ transform:translateY(-2px) scale(1.06); box-shadow:0 0 0 5px rgba(67,224,255,.1); }
+
+/* ============ PIPELINE (visualización de sistema) ============
+   Representación simplificada del flujo de un Departamento, para las
+   páginas de Comercial/Producción/Finanzas/Soporte. Deliberadamente no
+   son datos de un cliente real — la etiqueta "DEMO" en la cabecera y el
+   texto de apoyo lo dejan explícito. Solo transform/opacity: barato en
+   cualquier dispositivo, desactivable por completo con reduced-motion. */
+.pipeline-window .window-body{ padding:34px 30px; overflow-x:auto; }
+.pipeline{
+  display:flex;
+  align-items:flex-start;
+  flex-wrap:nowrap;
+  min-width:min-content;
+  gap:0;
+}
+.pipeline-node{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:9px;
+  width:104px;
+  flex-shrink:0;
+  text-align:center;
+  opacity:0;
+  transform:scale(.8);
+  filter:blur(6px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.2,1.2,.3,1), filter .5s ease;
+}
+/* El panel entero ya llega con reveal-blur; en cuanto está visible, cada
+   nodo del pipeline "materializa" uno detrás de otro (no todos a la
+   vez), y cada conector se dibuja de izquierda a derecha justo después
+   de que su nodo de origen aparece — la sensación de que el sistema se
+   va construyendo mientras se mira, no de una imagen ya montada. */
+.pipeline-window.is-visible .pipeline-node{ opacity:1; transform:scale(1); filter:blur(0px); }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(1){ transition-delay:.15s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(3){ transition-delay:.55s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(5){ transition-delay:.95s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(7){ transition-delay:1.35s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(9){ transition-delay:1.75s; }
+.pipeline-window.is-visible .pipeline-node:nth-of-type(11){ transition-delay:2.15s; }
+.pipeline-dot{
+  width:44px; height:44px;
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--cyan);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
+}
+.pipeline-node:hover .pipeline-dot{ transform:translateY(-3px); border-color:rgba(67,224,255,.5); box-shadow:0 0 0 5px rgba(67,224,255,.08); }
+.pipeline-label{
+  font-family:var(--mono);
+  font-size:0.66rem;
+  letter-spacing:0.05em;
+  color:var(--stone);
+  text-transform:uppercase;
+  line-height:1.4;
+}
+.pipeline-connector{
+  flex:1 1 40px;
+  min-width:28px;
+  height:2px;
+  margin-top:22px;
+  position:relative;
+  background:linear-gradient(90deg, rgba(91,140,255,.5), rgba(155,107,255,.5));
+  border-radius:2px;
+  overflow:visible;
+  transform:scaleX(0);
+  transform-origin:left center;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);
+}
+.pipeline-window.is-visible .pipeline-connector{ transform:scaleX(1); }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(2){ transition-delay:.35s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(4){ transition-delay:.75s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(6){ transition-delay:1.15s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(8){ transition-delay:1.55s; }
+.pipeline-window.is-visible .pipeline-connector:nth-of-type(10){ transition-delay:1.95s; }
+.pipeline-connector::after{
+  content:"";
+  position:absolute;
+  top:50%; left:0;
+  width:14px; height:6px;
+  margin-top:-3px;
+  border-radius:3px;
+  background:var(--cyan);
+  filter:blur(.5px);
+  opacity:0;
+  animation:pipeline-flow 2.6s linear infinite;
+  will-change:transform,opacity;
+}
+@keyframes pipeline-flow{
+  0%{ transform:translateX(-6px); opacity:0; }
+  12%{ opacity:.9; }
+  85%{ opacity:.9; }
+  100%{ transform:translateX(calc(100% + 6px)); opacity:0; }
+}
+.pipeline-note{ margin-top:22px; font-size:0.82rem; color:var(--stone-soft); }
+@media (prefers-reduced-motion: reduce){
+  .pipeline-connector::after{ animation:none; opacity:.6; transform:translateX(50%); }
+}
+@media (max-width:640px){
+  .pipeline{ flex-direction:column; align-items:flex-start; gap:2px; }
+  .pipeline-node{ flex-direction:row; width:auto; text-align:left; gap:14px; }
+  .pipeline-connector{ width:2px; min-width:2px; height:26px; margin:2px 0 2px 21px; flex:none; background:linear-gradient(180deg, rgba(91,140,255,.5), rgba(155,107,255,.5)); transform:scaleY(0); transform-origin:top center; }
+  .pipeline-window.is-visible .pipeline-connector{ transform:scaleY(1); }
+  .pipeline-connector::after{ width:6px; height:14px; top:0; left:50%; margin-top:0; margin-left:-3px; animation-name:pipeline-flow-vert; }
+  @keyframes pipeline-flow-vert{
+    0%{ transform:translateY(-6px); opacity:0; }
+    12%{ opacity:.9; }
+    85%{ opacity:.9; }
+    100%{ transform:translateY(calc(100% + 6px)); opacity:0; }
+  }
+}
 .service-card p{ color:var(--stone); font-size:0.96rem; }
+/* Cada "Qué hace / Lo que resuelve / ..." se lee como un campo con su
+   propia etiqueta, no como texto corrido — mismo contenido, más fácil de
+   escanear de un vistazo. Sin tocar tarjetas que no usan este patrón
+   (el teaser de Home, por ejemplo, no tiene <strong> dentro del <p>). */
+.service-card p:has(> strong:first-child){ margin-top:16px; }
+.service-card p:has(> strong:first-child) strong{
+  display:block;
+  font-family:var(--mono);
+  font-size:0.66rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  font-weight:600;
+  margin-bottom:4px;
+}
+/* Primera vista de la tarjeta: nombre + qué hace + lo que resuelve + CTA.
+   "Empresa que suele contratarlo" y "Después suelen contratar" ya están
+   respondidos con más detalle en la propia página del Departamento (y el
+   segundo, además, en la sección "Cómo crecen los clientes" de este mismo
+   hub) — no se borran, solo dejan de competir en la primera lectura.
+   Revelado al hover/focus SOLO en dispositivos con puntero fino (mouse);
+   en touch, sin concepto de hover, se muestran directamente para no
+   esconder información sin una forma clara de recuperarla. */
+.card-extra-hint{ display:none; }
+@media (hover:hover) and (pointer:fine){
+  .service-card .card-extra{
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    margin-top:0 !important;
+    transition:max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s ease, margin-top .45s ease;
+  }
+  .service-card:hover .card-extra,
+  .service-card:focus-visible .card-extra,
+  .service-card:focus-within .card-extra{
+    max-height:260px;
+    opacity:1;
+    margin-top:16px !important;
+  }
+  .card-extra-hint{
+    display:block;
+    margin-top:14px;
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    color:var(--stone-soft);
+    transition:opacity .2s ease;
+  }
+  .service-card:hover .card-extra-hint,
+  .service-card:focus-visible .card-extra-hint,
+  .service-card:focus-within .card-extra-hint{ opacity:0; height:0; margin:0; overflow:hidden; }
+}
 .service-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
 .service-card .card-link{
   display:inline-flex; align-items:center; gap:6px;
@@ -875,6 +1289,18 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   margin-top:64px;
 }
 .founder-card .window-body{ text-align:center; padding:40px 32px; }
+.founder-photo-slot{
+  width:72px; height:72px;
+  margin:0 auto 22px;
+  position:relative;
+}
+.founder-photo-slot .monogram{ margin:0; }
+.founder-photo-slot img.founder-photo{
+  width:100%; height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+}
 .monogram{
   width:72px; height:72px;
   border-radius:50%;
@@ -1061,6 +1487,48 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 .guarantee-card h3{ font-family:var(--serif); font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:10px; }
 .guarantee-card p{ color:var(--stone); font-size:0.9rem; }
 
+.cases-internal{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  margin-top:40px;
+}
+.case-card .window-body{ padding:30px 32px; }
+.case-tag{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.06em;
+  color:var(--cyan);
+  text-transform:uppercase;
+}
+.case-card h3{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.3rem;
+  color:var(--ink);
+  margin:10px 0 20px;
+}
+.case-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px 28px;
+}
+.case-field.wide{ grid-column:1 / -1; }
+.case-field-label{
+  font-family:var(--mono);
+  font-size:0.65rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  display:block;
+  margin-bottom:6px;
+}
+.case-field p{ color:var(--stone); font-size:0.92rem; margin:0; }
+.case-field.learned{ background:rgba(67,224,255,.05); border:1px solid rgba(67,224,255,.18); border-radius:10px; padding:16px 18px; }
+.case-field.learned .case-field-label{ color:var(--cyan); }
+.case-field.learned p{ color:var(--ink); }
+.case-card{ scroll-margin-top:100px; }
+
 .future-cases{
   border:1px dashed var(--border);
   border-radius:16px;
@@ -1072,15 +1540,99 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 .future-cases p{ color:var(--stone); max-width:520px; margin:0 auto; }
 
 /* ============ CONTACT / FORM ============ */
+/* ============ CONTACTO — composición (DIR-018) ============
+   Antes el formulario, el aviso de privacidad, Turnstile, el botón de
+   envío, el divisor y el módulo de reserva vivían todos apilados dentro
+   de la MISMA tarjeta — de ahí la sensación de zona comprimida aunque
+   cada pieza individual ya estuviera limpia. El cambio no es de tamaños,
+   es de composición: el formulario ahora ocupa su propia tarjeta, solo
+   con lo suyo (campos + envío), y "Ver disponibilidad" pasa a ser una
+   tarjeta lateral propia — mismo lenguaje de ventana que ya usa la
+   tarjeta de contacto directo — en vez de un bloque más dentro del
+   formulario. La jerarquía ya no depende solo del color del botón: la
+   acción principal vive donde se espera un formulario; la alternativa
+   vive en su propio sitio, visible pero claramente aparte. */
 .contacto-grid{
   display:grid;
-  grid-template-columns:1.1fr 0.9fr;
+  grid-template-columns:1.05fr 0.95fr;
   gap:32px;
   margin-top:56px;
   align-items:start;
 }
+.contacto-side{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
 
-.field{ margin-bottom:20px; }
+.booking-card .window-body{ padding:30px; }
+.booking-card .eyebrow{ margin-bottom:12px; }
+.booking-invite-text{
+  font-size:0.92rem;
+  line-height:1.6;
+  color:var(--stone);
+  margin:0 0 20px;
+}
+.booking-invite-btn{ gap:9px; }
+.booking-invite-btn svg{ width:16px; height:16px; flex-shrink:0; }
+
+/* Consentimiento + anti-spam agrupados en un único bloque, con algo más
+   de aire que antes de que el envío ya no tenga que compartir tarjeta
+   con la reserva. */
+.form-compliance{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  margin:30px 0 34px;
+}
+.consent-field{ display:flex; align-items:flex-start; gap:10px; }
+/* Verificación de seguridad como una pequeña sección propia (DIR-022) —
+   una superficie diferenciada del formulario, no un divisor entre campos. */
+.security-check{
+  padding:18px 18px 20px;
+  border-radius:12px;
+  background:linear-gradient(180deg, var(--surface-bar-top) 0%, var(--panel-2) 100%);
+  border:1px solid var(--surface-border);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.security-check-label{
+  font-family:var(--mono);
+  font-size:0.66rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.consent-field input[type="checkbox"]{
+  margin-top:3px;
+  width:16px;
+  height:16px;
+  accent-color:var(--cyan);
+  flex-shrink:0;
+  cursor:pointer;
+}
+.consent-field label{
+  font-family:var(--sans);
+  font-size:0.85rem;
+  line-height:1.5;
+  color:var(--stone);
+  font-weight:400;
+  cursor:pointer;
+  margin:0;
+}
+.consent-field a{ color:var(--cyan); text-decoration:underline; }
+
+/* data-size="flexible" en el propio widget (contacto.html) hace que
+   Cloudflare Turnstile ocupe el ancho del contenedor en vez de su caja
+   fija de 300px — en móvil ya no se ve como una pieza ajena pegada al
+   formulario. La protección y el nivel de verificación no cambian: es
+   solo una opción de tamaño/layout oficial de Turnstile, no de
+   seguridad. */
+.cf-turnstile{ width:100%; }
+.cf-turnstile iframe{ width:100% !important; }
+
+.field{ margin-bottom:24px; }
 .field label{
   display:block;
   font-family:var(--mono);
@@ -1150,6 +1702,7 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
 .contact-row a:hover{ color:var(--cyan); }
 
 .cta-band{
+  position:relative;
   border-top:1px solid var(--border-soft);
   border-bottom:1px solid var(--border-soft);
   background:var(--bg-elev);
@@ -1157,6 +1710,21 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
   padding:var(--section-pad-sm) 0;
 }
 .cta-band h2{ max-width:680px; margin:0 auto; }
+
+/* Motivo estructural en las costuras entre secciones — un trazo muy
+   tenue centrado sobre el borde ya existente, no un elemento nuevo. */
+.metodo::before,
+.cta-band::before{
+  content:"";
+  position:absolute;
+  top:-1px;
+  left:50%;
+  transform:translateX(-50%);
+  width:140px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(67,224,255,.5), rgba(155,107,255,.5), transparent);
+  pointer-events:none;
+}
 .cta-band .lead{ max-width:560px; margin-left:auto; margin-right:auto; }
 .cta-band .hero-ctas{ justify-content:center; margin-top:32px; }
 
@@ -1255,7 +1823,6 @@ footer{
   nav.main-nav a, nav.main-nav .nav-link-btn{
     font-size:1.05rem; color:var(--ink); width:100%; padding:13px 4px;
   }
-  nav.main-nav a[aria-current="page"]::after{ display:none; }
   nav.main-nav a[aria-current="page"]{ color:var(--cyan); }
   .mega-menu{
     position:static; width:100%; opacity:1; visibility:visible; pointer-events:auto; transform:none;
@@ -1285,6 +1852,8 @@ footer{
      of forcing horizontal overflow on narrow screens. */
   .btn{ white-space:normal; text-align:center; }
   .future-cases{ padding:28px 20px; }
+  .case-fields{ grid-template-columns:1fr; }
+  .case-card .window-body{ padding:24px 20px; }
   .footer-top{ grid-template-columns:1fr; }
   .footer-bottom{ flex-direction:column; }
   .spec-sheet{ grid-template-columns:1fr; }
@@ -1491,4 +2060,540 @@ footer{
     content:"Reservar";
     font-size:0.82rem;
   }
+  .lang-switch a{ padding:5px 8px; }
+}
+
+/* ==================================================================
+   SIGNATURE MOMENTS — una visualización propia por Departamento.
+   Comparten la misma identidad (fondo, tipografía, color, chrome de
+   .window, ritmo de reveal) pero cada una tiene su propia composición e
+   interacción — la diferencia está en la forma, no en un color distinto
+   sobre el mismo componente. Todas usan datos de demostración
+   explícitamente etiquetados como tal; ninguna simula resultados reales.
+   ================================================================== */
+
+/* ---------- Comercial IA: radar de oportunidades ---------- */
+.radar-window .window-body{ display:flex; gap:36px; flex-wrap:wrap; align-items:center; }
+.radar-scope{
+  position:relative;
+  width:220px; height:220px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:
+    repeating-radial-gradient(circle at center, rgba(91,140,255,.14) 0, rgba(91,140,255,.14) 1px, transparent 1px, transparent 22%),
+    radial-gradient(circle at center, rgba(91,140,255,.06), transparent 70%);
+  border:1px solid var(--border);
+}
+.radar-sweep{
+  position:absolute; inset:0;
+  border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(67,224,255,.4), transparent 28%);
+  animation:radar-spin 4.5s linear infinite;
+}
+@keyframes radar-spin{ to{ transform:rotate(360deg); } }
+.radar-blip{
+  position:absolute;
+  top:var(--y); left:var(--x);
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--stone-soft);
+  transform:translate(-50%,-50%);
+}
+.radar-blip.hot{
+  width:9px; height:9px;
+  background:var(--cyan);
+  box-shadow:0 0 0 4px rgba(67,224,255,.18);
+  cursor:pointer;
+  transition:box-shadow .25s ease, transform .25s ease;
+}
+.radar-blip.hot:hover,.radar-blip.hot.is-active{ box-shadow:0 0 0 7px rgba(67,224,255,.28); transform:translate(-50%,-50%) scale(1.25); }
+.radar-stages{ display:flex; flex-direction:column; gap:10px; min-width:200px; }
+.radar-stage{
+  display:flex; align-items:center; gap:12px;
+  background:none; border:1px solid var(--border); border-radius:10px;
+  padding:10px 14px; font-family:inherit; color:var(--stone); cursor:pointer;
+  transition:border-color .2s ease, background .2s ease;
+  text-align:left;
+}
+.radar-stage:hover,.radar-stage.is-active,.radar-stage:focus-visible{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); color:var(--ink); }
+.radar-stage-num{ font-family:var(--mono); font-size:0.7rem; color:var(--cyan); }
+.radar-note{ flex-basis:100%; color:var(--stone-soft); font-size:0.85rem; margin-top:6px; }
+@media (prefers-reduced-motion: reduce){ .radar-sweep{ animation:none; opacity:.3; } }
+@media (max-width:640px){ .radar-window .window-body{ flex-direction:column; align-items:stretch; } .radar-scope{ width:180px; height:180px; margin:0 auto; } }
+
+/* ---------- Marketing IA: embudo de captación ---------- */
+.funnel-window .window-body{ display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start; }
+.funnel-scope{ position:relative; width:200px; flex-shrink:0; display:flex; flex-direction:column; gap:3px; }
+.funnel-layer{
+  position:relative;
+  width:var(--w);
+  height:46px;
+  margin:0 auto;
+  background:linear-gradient(180deg, rgba(91,140,255,.16), rgba(67,224,255,.06));
+  clip-path:polygon(6% 0, 94% 0, 84% 100%, 16% 100%);
+  overflow:hidden;
+  border-top:1px solid rgba(91,140,255,.3);
+}
+.funnel-layer.is-active{ background:linear-gradient(180deg, rgba(67,224,255,.32), rgba(91,140,255,.12)); border-top-color:var(--cyan); }
+.funnel-particle{
+  position:absolute; top:-8%; left:50%;
+  width:5px; height:5px; border-radius:50%;
+  background:var(--cyan);
+  animation:funnel-fall 3s linear infinite;
+  animation-delay:var(--d);
+}
+@keyframes funnel-fall{ 0%{ transform:translate(-50%,-8px); opacity:0; } 15%{ opacity:1; } 85%{ opacity:1; } 100%{ transform:translate(-50%,54px); opacity:0; } }
+.funnel-stages{ display:flex; flex-direction:column; gap:14px; min-width:220px; }
+.funnel-stage{ display:block; width:100%; background:none; border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-family:inherit; text-align:left; cursor:pointer; transition:border-color .2s ease, background .2s ease; }
+.funnel-stage:hover,.funnel-stage.is-active,.funnel-stage:focus-visible{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); }
+.funnel-stage strong{ display:block; font-size:0.92rem; color:var(--ink); margin-bottom:2px; }
+.funnel-stage span{ font-size:0.82rem; color:var(--stone-soft); }
+@media (prefers-reduced-motion: reduce){ .funnel-particle{ animation:none; opacity:0; } }
+@media (max-width:640px){ .funnel-window .window-body{ flex-direction:column; align-items:center; } }
+
+/* ---------- Clientes IA: ficha/ecosistema del cliente ---------- */
+.orbit-window .window-body{ display:flex; flex-direction:column; align-items:center; gap:18px; }
+.orbit-scope{ position:relative; width:260px; height:260px; }
+.orbit-center{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:84px; height:84px; border-radius:50%;
+  background:var(--panel-2); border:1px solid rgba(67,224,255,.4);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.03em; color:var(--cyan);
+  box-shadow:0 0 0 6px rgba(67,224,255,.08);
+}
+.orbit-ring{ position:absolute; inset:0; }
+.orbit-node{
+  position:absolute; top:50%; left:50%;
+  width:64px; height:44px;
+  transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%);
+  background:var(--panel); border:1px solid var(--border); border-radius:9px;
+  font-family:var(--sans); font-size:0.72rem; color:var(--stone); cursor:pointer;
+  transition:border-color .2s ease, color .2s ease, background .2s ease;
+}
+.orbit-node:hover,.orbit-node:focus-visible,.orbit-node.is-active{ border-color:var(--cyan); color:var(--ink); background:rgba(67,224,255,.08); }
+.orbit-caption{ color:var(--stone-soft); font-size:0.85rem; min-height:1.4em; text-align:center; max-width:360px; }
+@media (max-width:640px){ .orbit-scope{ width:220px; height:220px; } .orbit-node{ transform:rotate(var(--angle)) translate(88px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); width:56px; font-size:0.66rem; } }
+
+/* ---------- Producción IA: piloto — el caos se convierte en sistema ----------
+   Contenedor deliberadamente distinto al resto de Departamentos: sin chrome
+   de ventana, sin traffic-lights, sin nombre de archivo. Es un panel que
+   empieza disperso (tareas sueltas, sin orden) y se organiza solo en el
+   propio tablero — la transformación ES el mensaje, no una animación
+   añadida a una maqueta ya ordenada. */
+.chaos-order{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:26px 26px 24px;
+}
+.chaos-order-bar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:24px;
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.04em;
+}
+.chaos-order-dot{
+  width:7px; height:7px; border-radius:50%;
+  background:var(--stone-soft);
+  flex-shrink:0;
+  transition:background .3s ease;
+}
+.chaos-order-labels{ position:relative; display:inline-grid; }
+.chaos-order-label{ grid-area:1/1; color:var(--stone-soft); opacity:1; white-space:nowrap; }
+.chaos-order-label--after{ opacity:0; color:var(--green); }
+.chaos-order-stage{ position:relative; }
+.chaos-chip{
+  position:absolute;
+  left:var(--x); top:var(--y);
+  transform:translate(0,0) rotate(var(--r));
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px;
+  font-size:0.78rem;
+  color:var(--stone);
+  white-space:nowrap;
+  box-shadow:0 10px 24px -12px rgba(0,0,0,.55);
+  z-index:2;
+}
+.order-board{ position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; opacity:0; }
+.order-col{ background:rgba(255,255,255,.015); border:1px solid var(--border-soft); border-radius:10px; padding:12px; min-height:110px; }
+.order-col-label{ display:block; font-family:var(--mono); font-size:0.66rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--stone-soft); margin-bottom:10px; }
+.order-card{ background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:0.82rem; color:var(--stone); margin-bottom:8px; opacity:0; }
+.order-card:last-child{ margin-bottom:0; }
+.chaos-order-note{ margin-top:18px; font-size:0.85rem; color:var(--stone-soft); }
+@media (max-width:640px){
+  .chaos-chip{ display:none; }
+  .order-board{ grid-template-columns:1fr; }
+}
+
+/* ---------- Finanzas IA: cadena financiera ---------- */
+.ledger-window .window-body{ max-width:460px; margin:0 auto; }
+.ledger-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:11px 0; border-bottom:1px solid var(--border-soft);
+}
+.ledger-label{ font-size:0.9rem; color:var(--stone); }
+.ledger-amount{ font-family:var(--mono); font-size:0.88rem; color:var(--ink); }
+.ledger-amount.pos{ color:var(--green); }
+.ledger-amount.neg{ color:var(--amber); }
+.ledger-total{ display:flex; justify-content:space-between; align-items:center; padding-top:16px; margin-top:6px; }
+.ledger-total > span:first-child{ font-family:var(--mono); font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--stone-soft); }
+.ledger-total-amount{ font-family:var(--serif); font-size:1.5rem; font-weight:600; color:var(--cyan); }
+.ledger-disclaimer{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:18px; }
+
+/* ---------- Soporte IA: ticket en vivo ---------- */
+.ticket-window .window-body{ max-width:420px; margin:0 auto; }
+.ticket-card{ background:var(--panel-2); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.ticket-card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.ticket-id{ font-family:var(--mono); font-size:0.72rem; color:var(--stone-soft); }
+.ticket-status{
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.04em; text-transform:uppercase;
+  padding:4px 10px; border-radius:100px;
+  background:rgba(255,255,255,.06); color:var(--stone); border:1px solid var(--border);
+  transition:background .3s ease, color .3s ease, border-color .3s ease;
+}
+.ticket-status.st-clasificado{ background:rgba(91,140,255,.12); color:var(--blue); border-color:rgba(91,140,255,.3); }
+.ticket-status.st-prioridad{ background:rgba(255,180,84,.12); color:var(--amber); border-color:rgba(255,180,84,.3); }
+.ticket-status.st-respondido{ background:rgba(67,224,255,.12); color:var(--cyan); border-color:rgba(67,224,255,.3); }
+.ticket-status.st-resuelto{ background:rgba(52,231,164,.12); color:var(--green); border-color:rgba(52,231,164,.3); }
+.ticket-subject{ color:var(--ink); font-size:0.95rem; margin-bottom:18px; }
+.ticket-rail{ display:flex; align-items:center; gap:6px; }
+.ticket-step{ flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s ease; }
+.ticket-step.active{ background:var(--cyan); }
+.ticket-demo-note{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:16px; }
+
+/* ---------- Administración IA: panel operativo ---------- */
+.opsgrid-window .window-body{ }
+.opsgrid-scope{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.opsgrid-tile{ border:1px solid var(--border); border-radius:10px; padding:16px; cursor:default; transition:border-color .2s ease, background .2s ease; }
+.opsgrid-tile:hover,.opsgrid-tile:focus-within{ border-color:rgba(67,224,255,.4); background:rgba(67,224,255,.04); }
+.opsgrid-tile-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.opsgrid-tile-label{ font-size:0.9rem; color:var(--ink); font-weight:500; }
+.opsgrid-dot{ width:8px; height:8px; border-radius:50%; background:var(--green); flex-shrink:0; }
+.opsgrid-tile-detail{
+  max-height:0; opacity:0; overflow:hidden; color:var(--stone-soft); font-size:0.82rem;
+  transition:max-height .35s ease, opacity .25s ease, margin-top .35s ease;
+}
+.opsgrid-tile:hover .opsgrid-tile-detail,.opsgrid-tile:focus-within .opsgrid-tile-detail{ max-height:80px; opacity:1; margin-top:6px; }
+@media (max-width:520px){ .opsgrid-scope{ grid-template-columns:1fr; } }
+
+/* ---------- Dirección IA: command center ---------- */
+.command-window .window-body{ display:flex; flex-direction:column; gap:22px; }
+.command-feeds{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.command-feed{
+  display:flex; align-items:center; gap:8px;
+  border:1px solid var(--border); border-radius:100px;
+  padding:7px 14px; font-family:var(--mono); font-size:0.72rem; color:var(--stone);
+}
+.command-feed .command-dot{ width:6px; height:6px; border-radius:50%; background:var(--cyan); animation:pulse 2.2s ease-in-out infinite; }
+.command-arrow{ display:flex; justify-content:center; color:var(--stone-soft); }
+.command-arrow svg{ width:18px; height:18px; animation:command-bounce 1.8s ease-in-out infinite; }
+@keyframes command-bounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
+.command-decision{
+  text-align:center; border:1px solid rgba(67,224,255,.4); border-radius:12px;
+  padding:20px 24px; background:rgba(67,224,255,.05);
+}
+.command-decision-label{ font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--cyan); }
+.command-decision-text{ color:var(--ink); font-size:1rem; margin-top:8px; }
+@media (prefers-reduced-motion: reduce){ .command-feed .command-dot,.command-arrow svg{ animation:none; } }
+
+/* ============ MOVILIDAD POR DEPARTAMENTO — entrada repetible (DIR-019) ============
+   Ni raíl, ni position:sticky, ni ninguna propiedad CSS interpolada
+   sobre la posición del scroll: el usuario controla el scroll siempre,
+   a cualquier velocidad. Cada [data-motion-journey] solo sabe si está a
+   la vista (main.js, IntersectionObserver puro) y activa la clase
+   is-playing — toda la coreografía real es CSS con @keyframes y
+   animation-delay, con su propio reloj interno que no depende en
+   absoluto de cuánto ha avanzado el documento. Si el usuario cruza la
+   sección en un parpadeo, la animación simplemente no se llega a ver
+   entera — el scroll nunca la espera. Al salir de pantalla se quita
+   is-playing, así que la próxima vez que la sección entre en el
+   viewport la coreografía se repite desde el principio.
+   Con prefers-reduced-motion (o sin soporte de IntersectionObserver) se
+   aplica is-settled una sola vez: todo el contenido queda visible en su
+   posición final, sin animación. */
+@keyframes dcode-fade-in{ from{ opacity:0; } to{ opacity:1; } }
+
+/* ---- Comercial — el radar descubre, no solo gira ----
+   El barrido sigue girando solo, de forma continua, igual que siempre
+   (ver .radar-sweep más arriba) — eso nunca cambia con el scroll. Lo
+   que aparece al entrar en pantalla es la propia detección: los ecos
+   débiles se asientan primero y, en su propio reloj, cada oportunidad
+   "hot" estalla con un pequeño destello — y la fase correspondiente
+   aparece a la derecha justo después, como si la interfaz acabara de
+   descubrirla. */
+.motion-journey[data-motion-journey="comercial"] .radar-scope > .radar-blip{ opacity:0; }
+.motion-journey[data-motion-journey="comercial"] .radar-stage{ opacity:0; transform:translateX(20px); }
+
+@keyframes radar-cold-in{ from{ opacity:0; transform:translate(-50%,-50%) scale(.3); } to{ opacity:.85; transform:translate(-50%,-50%) scale(1); } }
+@keyframes radar-hot-detect{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.3); box-shadow:0 0 0 0 rgba(67,224,255,0); }
+  55%{ opacity:1; transform:translate(-50%,-50%) scale(1.45); box-shadow:0 0 0 10px rgba(67,224,255,.3); }
+  100%{ opacity:1; transform:translate(-50%,-50%) scale(1); box-shadow:0 0 0 4px rgba(67,224,255,.18); }
+}
+@keyframes radar-stage-in{ from{ opacity:0; transform:translateX(20px); } to{ opacity:1; transform:translateX(0); } }
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:not(.hot){ animation:radar-cold-in .5s ease forwards; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(2){ animation-delay:.05s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(3){ animation-delay:.15s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(4){ animation-delay:.25s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(5){ animation-delay:.35s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip:nth-child(6){ animation-delay:.45s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot{ animation:radar-hot-detect .6s cubic-bezier(.2,1.4,.4,1) forwards; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot:nth-child(7){ animation-delay:.6s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot:nth-child(8){ animation-delay:1.1s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-scope > .radar-blip.hot:nth-child(9){ animation-delay:1.6s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage{ animation:radar-stage-in .45s ease forwards; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage:nth-child(1){ animation-delay:.75s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage:nth-child(2){ animation-delay:1.25s; }
+  .motion-journey[data-motion-journey="comercial"].is-playing .radar-stage:nth-child(3){ animation-delay:1.75s; }
+}
+.motion-journey[data-motion-journey="comercial"].is-settled .radar-scope > .radar-blip,
+.motion-journey[data-motion-journey="comercial"].is-settled .radar-stage{ opacity:1; transform:none; }
+
+/* ---- Marketing — el ruido se convierte en oportunidad ----
+   Las tres capas del embudo se asientan de arriba abajo con un ligero
+   rebote — como si de verdad se fuera filtrando algo en cada una — y
+   las fases de la derecha aparecen justo después de su capa, deslizando
+   desde el lado opuesto a Comercial para que ninguna de las dos
+   páginas se sienta igual. */
+.motion-journey[data-motion-journey="marketing"] .funnel-layer{ opacity:0; transform-origin:top center; }
+.motion-journey[data-motion-journey="marketing"] .funnel-stage{ opacity:0; transform:translateX(-20px); }
+
+@keyframes funnel-layer-in{
+  0%{ opacity:0; transform:scaleY(.4) translateY(-8px); }
+  60%{ opacity:1; transform:scaleY(1.08) translateY(0); }
+  100%{ opacity:1; transform:scaleY(1) translateY(0); }
+}
+@keyframes funnel-stage-in{ from{ opacity:0; transform:translateX(-20px); } to{ opacity:1; transform:translateX(0); } }
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer{ animation:funnel-layer-in .5s ease forwards; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer:nth-child(1){ animation-delay:.05s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer:nth-child(2){ animation-delay:.4s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-layer:nth-child(3){ animation-delay:.75s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage{ animation:funnel-stage-in .45s ease forwards; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage:nth-child(1){ animation-delay:.2s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage:nth-child(2){ animation-delay:.55s; }
+  .motion-journey[data-motion-journey="marketing"].is-playing .funnel-stage:nth-child(3){ animation-delay:.9s; }
+}
+.motion-journey[data-motion-journey="marketing"].is-settled .funnel-layer,
+.motion-journey[data-motion-journey="marketing"].is-settled .funnel-stage{ opacity:1; transform:none; }
+
+/* ---- Clientes — todo nace alrededor de un cliente ----
+   El cliente aparece primero, el anillo se materializa alrededor y
+   cada nodo entra volando desde fuera del marco, por su propio radio,
+   en el orden del relato (Proyectos → Comunicaciones → Documentación →
+   Seguimiento) — no los cuatro a la vez. */
+.orbit-ring{
+  border-radius:50%;
+  background:conic-gradient(from -90deg, rgba(67,224,255,.5) 360deg, transparent 0);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+}
+.motion-journey[data-motion-journey="clientes"] .orbit-center{ opacity:0; }
+.motion-journey[data-motion-journey="clientes"] .orbit-ring{ opacity:0; }
+.motion-journey[data-motion-journey="clientes"] .orbit-node{ opacity:0; }
+
+@keyframes orbit-center-in{ from{ opacity:0; transform:translate(-50%,-50%) scale(.5); } to{ opacity:1; transform:translate(-50%,-50%) scale(1); } }
+@keyframes orbit-ring-in{ from{ opacity:0; transform:scale(.6) rotate(-70deg); } to{ opacity:1; transform:scale(1) rotate(0deg); } }
+@keyframes orbit-node-in{
+  0%{ opacity:0; transform:rotate(var(--angle)) translate(260px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%) scale(.5); }
+  70%{ opacity:1; transform:rotate(var(--angle)) translate(100px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%) scale(1.08); }
+  100%{ opacity:1; transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%) scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-center{ animation:orbit-center-in .45s cubic-bezier(.2,1.4,.4,1) forwards; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-ring{ animation:orbit-ring-in .6s ease forwards; animation-delay:.25s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node{ animation:orbit-node-in .55s cubic-bezier(.2,1.2,.3,1) forwards; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(3){ animation-delay:.55s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(4){ animation-delay:.85s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(5){ animation-delay:1.15s; }
+  .motion-journey[data-motion-journey="clientes"].is-playing .orbit-node:nth-child(6){ animation-delay:1.45s; }
+}
+.motion-journey[data-motion-journey="clientes"].is-settled .orbit-center,
+.motion-journey[data-motion-journey="clientes"].is-settled .orbit-ring{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="clientes"].is-settled .orbit-node{ opacity:1; transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); }
+
+/* ---- Producción (piloto DIR-021) — el caos se convierte en sistema ----
+   No es una tarjeta que viaja dentro de un tablero ya dibujado: al entrar,
+   6 tareas sueltas y desordenadas flotan sobre el panel; se reorganizan y
+   se disuelven una a una mientras, debajo, el tablero real se construye
+   solo, columna por columna. La etiqueta y el indicador cambian de estado
+   al final, como consecuencia de la transformación, no como decoración.
+   Un solo recorrido de ~2.5s por entrada, nunca en bucle. */
+@keyframes chaos-chip-out{
+  0%{ transform:translate(0,0) rotate(var(--r)) scale(1); opacity:1; }
+  12%{ transform:translate(2px,-2px) rotate(calc(var(--r) + 2deg)) scale(1); opacity:1; }
+  26%{ transform:translate(-2px,1px) rotate(calc(var(--r) - 1deg)) scale(1); opacity:1; }
+  42%{ transform:translate(0,0) rotate(var(--r)) scale(1); opacity:1; }
+  100%{ transform:translate(var(--tx), var(--ty)) rotate(0deg) scale(.5); opacity:0; }
+}
+@keyframes order-board-in{ from{ opacity:0; transform:scale(.96) translateY(6px); } to{ opacity:1; transform:scale(1) translateY(0); } }
+@keyframes order-card-land{ 0%{ opacity:0; transform:translateY(-8px) scale(.92); } 60%{ opacity:1; } 100%{ opacity:1; transform:translateY(0) scale(1); } }
+@keyframes co-label-out{ to{ opacity:0; } }
+@keyframes co-label-in{ to{ opacity:1; } }
+@keyframes co-dot-live{ to{ background:var(--green); box-shadow:0 0 0 4px rgba(52,231,164,.18); } }
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip{
+    animation:chaos-chip-out 2.2s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip:nth-child(1){ animation-delay:0s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip:nth-child(2){ animation-delay:.08s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip:nth-child(3){ animation-delay:.16s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip:nth-child(4){ animation-delay:.24s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip:nth-child(5){ animation-delay:.32s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-chip:nth-child(6){ animation-delay:.4s; }
+
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-board{ animation:order-board-in .6s ease forwards; animation-delay:.9s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-card{ animation:order-card-land .45s ease forwards; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-col:nth-child(1) .order-card:nth-child(2){ animation-delay:1.1s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-col:nth-child(1) .order-card:nth-child(3){ animation-delay:1.25s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-col:nth-child(2) .order-card:nth-child(2){ animation-delay:1.2s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-col:nth-child(2) .order-card:nth-child(3){ animation-delay:1.35s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-col:nth-child(3) .order-card:nth-child(2){ animation-delay:1.3s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-col:nth-child(3) .order-card:nth-child(3){ animation-delay:1.45s; }
+
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-order-label--before{ animation:co-label-out .4s ease forwards; animation-delay:1.6s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-order-label--after{ animation:co-label-in .4s ease forwards; animation-delay:1.7s; }
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-order-dot{ animation:co-dot-live .4s ease forwards; animation-delay:1.7s; }
+}
+
+.motion-journey[data-motion-journey="produccion"].is-settled .chaos-chip{ display:none; }
+.motion-journey[data-motion-journey="produccion"].is-settled .order-board{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="produccion"].is-settled .order-card{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="produccion"].is-settled .chaos-order-label--before{ opacity:0; }
+.motion-journey[data-motion-journey="produccion"].is-settled .chaos-order-label--after{ opacity:1; }
+.motion-journey[data-motion-journey="produccion"].is-settled .chaos-order-dot{ background:var(--green); }
+
+/* En pantallas pequeñas no hay transformación: se muestra el tablero ya
+   ordenado directamente, sin caos previo ni espera a que la animación
+   arranque — evita una caja vacía entre el chip oculto y el tablero
+   apareciendo con retraso. */
+@media (max-width:640px){
+  .motion-journey[data-motion-journey="produccion"] .order-board,
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-board{ opacity:1; animation:none; transform:none; }
+  .motion-journey[data-motion-journey="produccion"] .order-card,
+  .motion-journey[data-motion-journey="produccion"].is-playing .order-card{ opacity:1; animation:none; transform:none; }
+  .motion-journey[data-motion-journey="produccion"] .chaos-order-label--before,
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-order-label--before{ opacity:0; animation:none; }
+  .motion-journey[data-motion-journey="produccion"] .chaos-order-label--after,
+  .motion-journey[data-motion-journey="produccion"].is-playing .chaos-order-label--after{ opacity:1; animation:none; }
+  .motion-journey[data-motion-journey="produccion"] .chaos-order-dot{ background:var(--green); animation:none; }
+}
+
+/* ---- Finanzas — la cifra final, paso a paso ----
+   Elegante y preciso, no un videojuego: cada fila se asienta con un
+   desplazamiento mínimo y sin rebote, en el orden del propio circuito
+   (presupuesto → factura → cobro → gasto), y la rentabilidad final
+   aparece la última, como consecuencia de las anteriores. */
+.motion-journey[data-motion-journey="finanzas"] .ledger-row{
+  opacity:0; transform:translateY(10px);
+  transition:opacity .4s ease, transform .4s ease;
+  transition-delay:calc(var(--i) * 160ms);
+}
+.motion-journey[data-motion-journey="finanzas"].is-playing .ledger-row{ opacity:1; transform:translateY(0); }
+.motion-journey[data-motion-journey="finanzas"] .ledger-total{
+  opacity:0; transform:translateY(6px);
+  transition:opacity .45s ease, transform .45s ease;
+  transition-delay:.75s;
+}
+.motion-journey[data-motion-journey="finanzas"].is-playing .ledger-total{ opacity:1; transform:translateY(0); }
+.motion-journey[data-motion-journey="finanzas"].is-settled .ledger-row,
+.motion-journey[data-motion-journey="finanzas"].is-settled .ledger-total{ opacity:1; transform:none; }
+
+/* ---- Soporte — una incidencia atraviesa el sistema ----
+   El ticket entra desde un lateral y, justo después, su mensaje se
+   revela — el propio ciclo de estados (Recibido → Clasificado →
+   Prioridad → Respondido → Resuelto) lo controla el temporizador de
+   main.js, no el scroll: empieza al entrar en pantalla, se pausa al
+   salir y vuelve a "Recibido" la próxima vez que se entra. */
+.motion-journey[data-motion-journey="soporte"] .ticket-card{ opacity:0; }
+.motion-journey[data-motion-journey="soporte"] .ticket-subject{ opacity:0; }
+
+@keyframes ticket-arrive{
+  0%{ opacity:0; transform:translateX(-36px) scale(.96); }
+  60%{ opacity:1; transform:translateX(4px) scale(1.01); }
+  100%{ opacity:1; transform:translateX(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="soporte"].is-playing .ticket-card{ animation:ticket-arrive .5s cubic-bezier(.2,1.2,.3,1) forwards; }
+  .motion-journey[data-motion-journey="soporte"].is-playing .ticket-subject{ animation:dcode-fade-in .4s ease forwards; animation-delay:.4s; }
+}
+.motion-journey[data-motion-journey="soporte"].is-settled .ticket-card{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="soporte"].is-settled .ticket-subject{ opacity:1; }
+
+/* ---- Administración — el caos se convierte en sistema ----
+   Cada módulo entra desde una esquina distinta del propio panel
+   (arriba-izquierda, arriba-derecha, abajo-izquierda, abajo-derecha) y
+   encaja en su sitio con un pequeño ajuste final — como piezas que se
+   ordenan solas — y su indicador de estado se activa justo al aterrizar. */
+.motion-journey[data-motion-journey="administracion"] .opsgrid-tile{ opacity:0; }
+.motion-journey[data-motion-journey="administracion"] .opsgrid-dot{ transform:scale(0); }
+
+@keyframes ops-tile-in-tl{ 0%{ opacity:0; transform:translate(-30px,-24px) scale(.9); } 65%{ opacity:1; transform:translate(3px,2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-tile-in-tr{ 0%{ opacity:0; transform:translate(30px,-24px) scale(.9); } 65%{ opacity:1; transform:translate(-3px,2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-tile-in-bl{ 0%{ opacity:0; transform:translate(-30px,24px) scale(.9); } 65%{ opacity:1; transform:translate(3px,-2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-tile-in-br{ 0%{ opacity:0; transform:translate(30px,24px) scale(.9); } 65%{ opacity:1; transform:translate(-3px,-2px) scale(1.02); } 100%{ opacity:1; transform:translate(0,0) scale(1); } }
+@keyframes ops-dot-pop{ 0%{ transform:scale(0); } 60%{ transform:scale(1.6); } 100%{ transform:scale(1); } }
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(1){ animation:ops-tile-in-tl .5s ease forwards; animation-delay:.05s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(2){ animation:ops-tile-in-tr .5s ease forwards; animation-delay:.2s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(3){ animation:ops-tile-in-bl .5s ease forwards; animation-delay:.35s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(4){ animation:ops-tile-in-br .5s ease forwards; animation-delay:.5s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(1) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.4s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(2) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.55s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(3) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.7s; }
+  .motion-journey[data-motion-journey="administracion"].is-playing .opsgrid-tile:nth-child(4) .opsgrid-dot{ animation:ops-dot-pop .35s ease forwards; animation-delay:.85s; }
+}
+.motion-journey[data-motion-journey="administracion"].is-settled .opsgrid-tile{ opacity:1; transform:none; }
+.motion-journey[data-motion-journey="administracion"].is-settled .opsgrid-dot{ transform:scale(1); }
+
+/* ---- Dirección — de las señales a la claridad ----
+   Las cinco señales llegan una a una y, solo cuando ha llegado la
+   última, la decisión final "resuelve" con un pequeño destello — un
+   climax real, no un simple asentado, y la única secuencia de las ocho
+   con una meta explícita al final. */
+.motion-journey[data-motion-journey="direccion"] .command-feed{ opacity:0; }
+.motion-journey[data-motion-journey="direccion"] .command-decision{ opacity:0; }
+
+@keyframes cmd-feed-in{ from{ opacity:0; transform:translateY(-14px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes cmd-decision-in{
+  0%{ opacity:0; transform:scale(.9); }
+  70%{ opacity:1; transform:scale(1.03); box-shadow:0 0 0 8px rgba(67,224,255,.15); }
+  100%{ opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(67,224,255,0); }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed{ animation:cmd-feed-in .4s ease forwards; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(1){ animation-delay:.05s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(2){ animation-delay:.2s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(3){ animation-delay:.35s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(4){ animation-delay:.5s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-feed:nth-child(5){ animation-delay:.65s; }
+  .motion-journey[data-motion-journey="direccion"].is-playing .command-decision{ animation:cmd-decision-in .6s cubic-bezier(.2,1.2,.3,1) forwards; animation-delay:1s; }
+}
+.motion-journey[data-motion-journey="direccion"].is-settled .command-feed,
+.motion-journey[data-motion-journey="direccion"].is-settled .command-decision{ opacity:1; transform:none; box-shadow:none; }
+
+/* Dos variantes de entrada nuevas para personalizar el primer impacto en
+   tablet/móvil (donde el raíl de scroll se desactiva), sumadas a las
+   reveal-* ya existentes en el sitio. */
+.reveal-narrow{ opacity:0; transform:translateY(10px) scaleY(.85); transform-origin:top center; transition:opacity .6s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+.reveal-narrow.is-visible{ opacity:1; transform:translateY(0) scaleY(1); }
+.reveal-converge{ opacity:0; transform:translateY(10px) scale(1.05); transition:opacity .6s ease, transform .7s cubic-bezier(.16,.8,.24,1); }
+.reveal-converge.is-visible{ opacity:1; transform:translateY(0) scale(1); }
+@media (prefers-reduced-motion: reduce){
+  .reveal-narrow,.reveal-converge{ transition:none; }
 }

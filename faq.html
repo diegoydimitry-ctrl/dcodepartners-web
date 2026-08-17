@@ -10,6 +10,9 @@
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://dcodepartners.com/faq">
+<link rel="alternate" hreflang="es" href="https://dcodepartners.com/faq">
+<link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/faq">
+<link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/faq">
 
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -21,6 +24,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
 <meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Preguntas frecuentes — D-Code Partners">
 <meta property="og:description" content="Resolvemos las dudas más habituales sobre automatización, IA, precios, seguridad y cómo trabajamos en D-Code Partners.">
 <meta property="og:url" content="https://dcodepartners.com/faq">
@@ -242,7 +246,7 @@
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas IA</strong><span>Cobros más rápidos y gastos bajo control, cada día.</span></span>
+              <span><strong>Finanzas IA</strong><span>Próximamente — el control de gasto ya es real.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
@@ -266,6 +270,10 @@
     </nav>
 
     <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <a href="#" data-lang="es">ES</a>
+        <a href="#" data-lang="en">EN</a>
+      </div>
       <a href="/contacto" class="btn btn-primary btn-sm">Solicitar una reunión</a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
@@ -312,8 +320,8 @@
           <h2>General</h2>
         </div>
         <div class="accordion-list" data-accordion>
-        <div class="accordion-item open" id="que-hace-dcode-partners">
-          <button class="accordion-trigger" aria-expanded="true">
+        <div class="accordion-item" id="que-hace-dcode-partners">
+          <button class="accordion-trigger" aria-expanded="false">
             <span class="faq-plus" aria-hidden="true"></span>
             <span style="flex:1;">
               <span class="accordion-title">¿Qué hace exactamente D-Code Partners?</span>
@@ -347,8 +355,8 @@
           <h2>Automatización</h2>
         </div>
         <div class="accordion-list" data-accordion>
-        <div class="accordion-item open" id="que-procesos-automatizais">
-          <button class="accordion-trigger" aria-expanded="true">
+        <div class="accordion-item" id="que-procesos-automatizais">
+          <button class="accordion-trigger" aria-expanded="false">
             <span class="faq-plus" aria-hidden="true"></span>
             <span style="flex:1;">
               <span class="accordion-title">¿Qué procesos podéis automatizar?</span>
@@ -400,8 +408,8 @@
           <h2>Inteligencia Artificial</h2>
         </div>
         <div class="accordion-list" data-accordion>
-        <div class="accordion-item open" id="agente-ia-vs-chatbot">
-          <button class="accordion-trigger" aria-expanded="true">
+        <div class="accordion-item" id="agente-ia-vs-chatbot">
+          <button class="accordion-trigger" aria-expanded="false">
             <span class="faq-plus" aria-hidden="true"></span>
             <span style="flex:1;">
               <span class="accordion-title">¿Qué diferencia hay entre un agente de IA y un chatbot tradicional?</span>
@@ -426,8 +434,8 @@
           <h2>Proyecto y Precio</h2>
         </div>
         <div class="accordion-list" data-accordion>
-        <div class="accordion-item open" id="proceso-primera-reunion">
-          <button class="accordion-trigger" aria-expanded="true">
+        <div class="accordion-item" id="proceso-primera-reunion">
+          <button class="accordion-trigger" aria-expanded="false">
             <span class="faq-plus" aria-hidden="true"></span>
             <span style="flex:1;">
               <span class="accordion-title">¿Cómo es el proceso desde la primera reunión?</span>
@@ -506,8 +514,8 @@
           <h2>Seguridad y Confidencialidad</h2>
         </div>
         <div class="accordion-list" data-accordion>
-        <div class="accordion-item open" id="datos-seguros">
-          <button class="accordion-trigger" aria-expanded="true">
+        <div class="accordion-item" id="datos-seguros">
+          <button class="accordion-trigger" aria-expanded="false">
             <span class="faq-plus" aria-hidden="true"></span>
             <span style="flex:1;">
               <span class="accordion-title">¿Mis datos y los de mis clientes están seguros?</span>
@@ -611,7 +619,7 @@
       <span class="window-dots"><span></span><span></span><span></span></span>
       <span class="window-title">asistente_dcode.chat</span>
     </div>
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
       <div class="chat-msg bot">Hola. Soy el asistente IA de D-Code Partners. Puedo ayudarte a entender cómo automatizamos procesos, cómo funcionan nuestros agentes de IA, resolver dudas sobre nuestros servicios o ayudarte a descubrir cómo podemos optimizar tu empresa. ¿Sobre qué te gustaría hablar?</div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">

@@ -5,11 +5,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Agentes de IA para atención al cliente y ventas — D-Code Partners</title>
-<meta name="description" content="Agentes conversacionales que atienden clientes y cualifican leads en chat web, WhatsApp y email, con el tono y los datos de tu negocio.">
+<meta name="description" content="Agentes conversacionales que atienden clientes y cualifican leads en chat web y email, con el tono y los datos de tu negocio.">
 <meta name="author" content="D-Code Partners">
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://dcodepartners.com/servicios/agentes-ia">
+<link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-ia">
+<link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-ia">
+<link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-ia">
 
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -21,8 +24,9 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
 <meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Agentes de IA para atención al cliente y ventas — D-Code Partners">
-<meta property="og:description" content="Agentes conversacionales que atienden clientes y cualifican leads en chat web, WhatsApp y email, con el tono y los datos de tu negocio.">
+<meta property="og:description" content="Agentes conversacionales que atienden clientes y cualifican leads en chat web y email, con el tono y los datos de tu negocio.">
 <meta property="og:url" content="https://dcodepartners.com/servicios/agentes-ia">
 <meta property="og:image" content="https://dcodepartners.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -83,7 +87,7 @@
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas IA</strong><span>Cobros más rápidos y gastos bajo control, cada día.</span></span>
+              <span><strong>Finanzas IA</strong><span>Próximamente — el control de gasto ya es real.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
@@ -107,6 +111,10 @@
     </nav>
 
     <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <a href="#" data-lang="es">ES</a>
+        <a href="#" data-lang="en">EN</a>
+      </div>
       <a href="/contacto" class="btn btn-primary btn-sm">Solicitar una reunión</a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
@@ -128,7 +136,7 @@
     <div class="container">
       <span class="eyebrow">Servicios · Agentes de IA</span>
       <h1 class="h-title">Atención al cliente y ventas que no hacen esperar a nadie.</h1>
-      <p class="lead">Diseñamos agentes conversacionales que responden en tu web, WhatsApp o email con el tono y la información de tu negocio, y que saben cuándo pasar la conversación a una persona.</p>
+      <p class="lead">Diseñamos agentes conversacionales que responden en el chat de tu web y por email con el tono y la información de tu negocio, y que saben cuándo pasar la conversación a una persona.</p>
     </div>
   </section>
 
@@ -191,7 +199,7 @@
         <div class="metodo-copy reveal">
           <span class="eyebrow">Cómo lo hacemos</span>
           <h2 class="h-title">Un agente entrenado con tu información, no con generalidades.</h2>
-          <p style="margin-top:22px;">Partimos de tus preguntas frecuentes, tu catálogo y tu forma de comunicar. El agente se conecta al canal que prefieras — chat web, WhatsApp Business o email — y queda supervisado durante el mes de prueba para ajustar su comportamiento con casos reales.</p>
+          <p style="margin-top:22px;">Partimos de tus preguntas frecuentes, tu catálogo y tu forma de comunicar. Hoy desplegamos el agente en chat web y email; otros canales se evalúan caso a caso, no los vendemos como disponibles de serie. Queda supervisado durante el mes de prueba para ajustar su comportamiento con casos reales.</p>
           <p>Es una pieza que combina especialmente bien con <a href="/servicios/integraciones" style="color:var(--cyan);">Integraciones</a>, para que cada conversación quede registrada directamente en tu CRM.</p>
           <div class="metodo-cta">
             <a href="/metodo" class="btn btn-ghost">Ver el Método D-Code completo</a>
@@ -288,7 +296,7 @@
       <span class="window-dots"><span></span><span></span><span></span></span>
       <span class="window-title">asistente_dcode.chat</span>
     </div>
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
       <div class="chat-msg bot">Hola. Soy el asistente IA de D-Code Partners. Puedo ayudarte a entender cómo automatizamos procesos, cómo funcionan nuestros agentes de IA, resolver dudas sobre nuestros servicios o ayudarte a descubrir cómo podemos optimizar tu empresa. ¿Sobre qué te gustaría hablar?</div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">

@@ -10,6 +10,9 @@
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://dcodepartners.com/contacto">
+<link rel="alternate" hreflang="es" href="https://dcodepartners.com/contacto">
+<link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/contacto">
+<link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/contacto">
 
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -17,10 +20,15 @@
 <link rel="manifest" href="/assets/site.webmanifest">
 <link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/spacegrotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Adelanta la conexión (DNS + TLS) a Cal.com antes de que su script la
+     necesite — el widget de reserva vive más abajo en esta misma página. -->
+<link rel="preconnect" href="https://app.cal.com">
+<link rel="preconnect" href="https://cal.com">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
 <meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Contacto — Solicitar una reunión con D-Code Partners">
 <meta property="og:description" content="Solicita una reunión de 30 minutos, sin coste ni compromiso. Te decimos qué Departamento Inteligente te conviene primero y qué resultado puedes esperar del primer mes.">
 <meta property="og:url" content="https://dcodepartners.com/contacto">
@@ -83,7 +91,7 @@
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas IA</strong><span>Cobros más rápidos y gastos bajo control, cada día.</span></span>
+              <span><strong>Finanzas IA</strong><span>Próximamente — el control de gasto ya es real.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
@@ -107,6 +115,10 @@
     </nav>
 
     <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <a href="#" data-lang="es">ES</a>
+        <a href="#" data-lang="en">EN</a>
+      </div>
       <a href="/contacto" class="btn btn-primary btn-sm">Solicitar una reunión</a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
@@ -163,20 +175,44 @@
                 <textarea id="mensaje" name="mensaje" placeholder="¿Qué procesos te gustaría automatizar?" autocomplete="off"></textarea>
               </div>
 
-              <div class="consent-field" style="display:flex; align-items:flex-start; gap:10px; margin:4px 0 18px;">
-                <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required style="margin-top:3px; width:16px; height:16px; accent-color:var(--cyan); flex-shrink:0; cursor:pointer;">
-                <label for="acepta-privacidad" style="font-family:var(--sans); font-size:.85rem; line-height:1.5; color:var(--stone); font-weight:400; cursor:pointer; margin:0;">He leído y acepto la <a href="/privacidad" style="color:var(--cyan); text-decoration:underline;">Política de Privacidad</a>.</label>
+              <div class="form-compliance">
+                <div class="consent-field">
+                  <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
+                  <label for="acepta-privacidad">He leído y acepto la <a href="/privacidad">Política de Privacidad</a>.</label>
+                </div>
+
+                <div class="security-check">
+                  <span class="security-check-label">Verificación de seguridad</span>
+                  <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                </div>
               </div>
 
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
-
-              <button type="submit" class="btn btn-invert btn-block" style="margin-top:20px;">
+              <button type="submit" class="btn btn-invert btn-block">
                 Solicitar mi Mes Gratuito
               </button>
               <p class="form-note" id="form-note">Sin coste. Sin compromiso. Respondemos en menos de 24h.</p>
             </form>
           </div>
         </div>
+
+        <div class="contacto-side">
+          <div class="window booking-card reveal">
+            <div class="window-bar">
+              <span class="window-dots"><span></span><span></span><span></span></span>
+              <span class="window-title">reservar.cal</span>
+            </div>
+            <div class="window-body">
+              <span class="eyebrow">¿Prefieres hablar directamente?</span>
+              <p class="booking-invite-text">Reserva una llamada de 30 min y salta directamente a una conversación — sin pasar por el formulario.</p>
+              <button type="button" class="btn btn-ghost btn-block booking-invite-btn" id="booking-cta-btn"
+                data-cal-link="dimitry-y-diego-y9tbqp/30min"
+                data-cal-namespace="reunion-30min"
+                data-cal-config='{"layout":"month_view","theme":"dark"}'>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Ver disponibilidad
+              </button>
+            </div>
+          </div>
 
         <div class="window contact-card reveal">
           <div class="window-bar">
@@ -220,6 +256,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
 
@@ -298,7 +335,7 @@
       <span class="window-dots"><span></span><span></span><span></span></span>
       <span class="window-title">asistente_dcode.chat</span>
     </div>
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
       <div class="chat-msg bot">Hola. Soy el asistente IA de D-Code Partners. Puedo ayudarte a entender cómo automatizamos procesos, cómo funcionan nuestros agentes de IA, resolver dudas sobre nuestros servicios o ayudarte a descubrir cómo podemos optimizar tu empresa. ¿Sobre qué te gustaría hablar?</div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">
@@ -320,6 +357,137 @@
 </div>
 
 <script src="/assets/js/main.js?v=202608041000" defer></script>
+
+<!-- ============ RESERVA (popup oficial de Cal.com) ============ -->
+<!--
+  Integración documentada en DIR-20260816-010, rediseñada en DIR-016: antes
+  el calendario vivía embebido en línea dentro de la página (bloque enorme,
+  sensación de iframe pegado). Ahora se abre como ventana emergente oficial
+  de Cal.com: el botón #booking-cta-btn lleva los atributos data-cal-link /
+  data-cal-namespace / data-cal-config que el propio embed.js de Cal.com
+  detecta y conecta automáticamente al cargar (mecanismo documentado de
+  "popup via element click") — no hay lógica de click propia que abra el
+  popup, ni manipulación del DOM de su iframe. El formulario original de
+  /contacto sigue intacto y visible; el popup es una vía alternativa, no un
+  reemplazo.
+
+  Cuenta real: https://cal.com/dimitry-y-diego-y9tbqp/30min ("Reunión de 30
+  min | D-CODE PARTNERS"), facilitada por Dirección.
+
+  Integración con el sistema de leads existente: al confirmarse una reserva,
+  se reenvían los mismos campos que ya acepta el webhook de producción de
+  MK/Lead IA 360 (nombre, empresa, email, telefono, mensaje, origen,
+  turnstileToken) — verificado directamente contra el código real del nodo
+  "Normalizar y Validar Lead" en n8n, que descarta en silencio cualquier
+  campo que no esté en esa lista blanca. NO se ha añadido ningún campo
+  nuevo (fecha/hora/tipo de reunión) al payload: van incrustados dentro del
+  campo "mensaje", que sí es libre y ya se muestra al equipo comercial y se
+  analiza con Gemini. origen se marca "calendario_reservas" para poder
+  distinguir estos leads sin tocar el workflow. El campo turnstileToken es
+  obligatorio en el nodo actual, así que se renderiza un segundo widget de
+  Cloudflare Turnstile en modo invisible específico para esta llamada, en
+  vez de modificar la validación en n8n.
+-->
+<script>
+(function () {
+  var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
+  var TURNSTILE_SITEKEY = '0x4AAAAAAD0dueh5OBC9Zdkm';
+
+  // ---- Carga del embed oficial de Cal.com ----
+  (function (C, A, L) {
+    let p = function (a, ar) { a.q.push(ar); };
+    let d = C.document;
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal; let ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {}; cal.q = cal.q || [];
+        d.head.appendChild(d.createElement('script')).src = A;
+        cal.loaded = true;
+      }
+      if (ar[0] === L) {
+        const api = function () { p(api, arguments); };
+        const namespace = ar[1];
+        api.q = api.q || [];
+        if (typeof namespace === 'string') {
+          cal.ns[namespace] = cal.ns[namespace] || api;
+          p(cal.ns[namespace], ar);
+          p(cal, ['initNamespace', namespace]);
+        } else p(cal, ar);
+        return;
+      }
+      p(cal, ar);
+    };
+  })(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+  Cal('init', 'reunion-30min', { origin: 'https://cal.com' });
+
+  // Tema oscuro D-Code + cian como acento: la personalización de color
+  // oficialmente soportada por el popup de Cal.com. El resto del modal
+  // (blur del fondo, radio de esquina, duración de su propia animación de
+  // apertura) es implementación interna de Cal.com, no expuesta por su API
+  // pública — no se ha intentado sobreescribir con hacks.
+  Cal.ns['reunion-30min']('ui', {
+    theme: 'dark',
+    cssVarsPerTheme: { dark: { 'cal-brand': '#43e0ff' } },
+    hideEventTypeDetails: false,
+    layout: 'month_view',
+  });
+
+  // ---- Reenvío al sistema de leads existente tras una reserva confirmada ----
+  Cal.ns['reunion-30min']('on', {
+    action: 'bookingSuccessful',
+    callback: function (e) {
+      try {
+        var detail = (e && e.detail && e.detail.data) || {};
+        var attendee = (detail.attendees && detail.attendees[0]) || detail.booking && detail.booking.attendees && detail.booking.attendees[0] || {};
+        var nombre = attendee.name || '';
+        var email = attendee.email || '';
+        var startTime = detail.startTime || (detail.booking && detail.booking.startTime) || '';
+        var fechaTexto = startTime ? new Date(startTime).toLocaleString('es-ES', { dateStyle: 'full', timeStyle: 'short' }) : 'fecha no disponible';
+
+        if (!email) return; // Sin email no hay forma de registrar el lead — no se envía nada inventado.
+
+        renderInvisibleTurnstile(function (token) {
+          if (!token) return;
+          fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nombre: nombre || email,
+              empresa: '',
+              email: email,
+              telefono: '',
+              mensaje: 'Reunión reservada vía calendario online para el ' + fechaTexto + '.',
+              origen: 'calendario_reservas',
+              turnstileToken: token,
+            }),
+          }).catch(function () { /* silencioso: la reserva en Cal.com ya está confirmada de todas formas */ });
+        });
+      } catch (err) {
+        console.error('[reserva-calendario] No se pudo reenviar el lead al sistema existente:', err);
+      }
+    },
+  });
+
+  function renderInvisibleTurnstile(onToken) {
+    if (typeof turnstile === 'undefined') { onToken(null); return; }
+    var container = document.createElement('div');
+    container.style.display = 'none';
+    document.body.appendChild(container);
+    try {
+      var widgetId = turnstile.render(container, {
+        sitekey: TURNSTILE_SITEKEY,
+        size: 'invisible',
+        callback: function (token) { onToken(token); },
+        'error-callback': function () { onToken(null); },
+      });
+      turnstile.execute(container, { widgetId: widgetId });
+    } catch (err) {
+      onToken(null);
+    }
+  }
+})();
+</script>
 
 </body>
 </html>

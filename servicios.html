@@ -10,6 +10,9 @@
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://dcodepartners.com/servicios">
+<link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios">
+<link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios">
+<link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios">
 
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -21,6 +24,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
 <meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Servicios de automatización con IA — D-Code Partners">
 <meta property="og:description" content="Automatización de procesos, agentes de IA y integraciones a medida. Tres disciplinas combinadas según lo que tu negocio necesite, dentro del Método D-Code.">
 <meta property="og:url" content="https://dcodepartners.com/servicios">
@@ -83,7 +87,7 @@
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas IA</strong><span>Cobros más rápidos y gastos bajo control, cada día.</span></span>
+              <span><strong>Finanzas IA</strong><span>Próximamente — el control de gasto ya es real.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
@@ -107,6 +111,10 @@
     </nav>
 
     <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <a href="#" data-lang="es">ES</a>
+        <a href="#" data-lang="en">EN</a>
+      </div>
       <a href="/contacto" class="btn btn-primary btn-sm">Solicitar una reunión</a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
@@ -149,7 +157,7 @@
           <div class="window-body">
             <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span>Agentes de IA</h3>
             <p>Atención al cliente y ventas que responden al instante, en cualquier canal, sin perder ni un lead por falta de tiempo.</p>
-            <div class="service-tags"><span class="tag">Chat web</span><span class="tag">WhatsApp</span><span class="tag">Email</span></div>
+            <div class="service-tags"><span class="tag">Chat web</span><span class="tag">Email</span></div>
             <span class="card-link">Ver el servicio <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
         </a>
@@ -258,7 +266,7 @@
       <span class="window-dots"><span></span><span></span><span></span></span>
       <span class="window-title">asistente_dcode.chat</span>
     </div>
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
       <div class="chat-msg bot">Hola. Soy el asistente IA de D-Code Partners. Puedo ayudarte a entender cómo automatizamos procesos, cómo funcionan nuestros agentes de IA, resolver dudas sobre nuestros servicios o ayudarte a descubrir cómo podemos optimizar tu empresa. ¿Sobre qué te gustaría hablar?</div>
     </div>
     <div class="chat-quick-replies" id="chat-quick-replies">
