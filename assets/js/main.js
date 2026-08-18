@@ -238,6 +238,126 @@
     });
   }
 
+  /* ---------- Método — trayectoria de fases anclada al contenido real (DIR-048) ----------
+     Antes la cinta SVG vivía en un viewBox de alto fijo (0 0 200 560) al
+     lado de una columna de texto cuya altura depende del contenido real
+     (párrafos de longitud variable) — coincidían por casualidad a un
+     ancho de viewport, y se desalineaban en cualquier otro (justo lo que
+     Dirección reportó: la trayectoria no empieza ni termina exactamente
+     donde empiezan/terminan los bloques 01 y 04). Aquí se mide la
+     posición Y real de cada "01"/"02"/"03"/"04" (centro de
+     .timeline-num) y se reconstruye la curva para que arranque
+     exactamente en el centro del primero y termine exactamente en el
+     centro del último — sin el "rabillo" que antes sobresalía por
+     encima/debajo de la timeline. También reposiciona las 4 estaciones
+     y sincroniza el retraso de su micro-respuesta con el punto exacto
+     del recorrido en el que el símbolo viajero las cruza. */
+  var fasesTimeline = document.querySelector('.fases-layout .timeline');
+  var fasesDiagram = document.querySelector('.fases-diagram');
+  if (fasesTimeline && fasesDiagram) {
+    var fasesSvg = fasesDiagram.querySelector('svg');
+    var fasesNums = Array.prototype.slice.call(fasesTimeline.querySelectorAll(':scope > .timeline-item > .timeline-num'));
+    var fasesRibbonGlow = fasesDiagram.querySelector('.fases-ribbon-glow');
+    var fasesRibbon = fasesDiagram.querySelector('.fases-ribbon');
+    var fasesCarrier = fasesDiagram.querySelector('.fases-carrier');
+    var fasesStations = [1, 2, 3, 4].map(function (n) {
+      return fasesDiagram.querySelector('.fases-station-' + n);
+    });
+    var fasesStaticD = 'M145,70 C145,115 75,165 75,210 C75,255 145,305 145,350 C145,395 75,445 75,490';
+    var fasesStaticStations = [[145, 70], [75, 210], [145, 350], [75, 490]];
+
+    // Curva suave de P0 a P1: los puntos de control comparten X con su
+    // propio extremo (misma técnica que el trazo original) y se separan
+    // un 32% de la altura del tramo — funciona igual de bien con tramos
+    // cortos o largos, a diferencia de un desplazamiento fijo en unidades.
+    var smoothSegment = function (x0, y0, x1, y1) {
+      var off = (y1 - y0) * 0.32;
+      return 'C' + x0 + ',' + Math.round(y0 + off) + ' ' + x1 + ',' + Math.round(y1 - off) + ' ' + x1 + ',' + y1;
+    };
+
+    var alignFasesRibbon = function () {
+      if (fasesNums.length < 4 || !fasesSvg || !fasesRibbon) return;
+      if (getComputedStyle(fasesDiagram).display === 'none') return; // oculto en mobile (≤560px)
+      if (window.innerWidth <= 1024) {
+        // Entre 561-1024px el diagrama ya no vive AL LADO de la timeline
+        // (.fases-layout pasa a una columna, el SVG queda debajo, compacto
+        // a 220px) — alinear su alto al de la timeline completa lo dejaría
+        // absurdamente alargado y estrecho. Se vuelve al tratamiento
+        // decorativo original (viewBox fijo) limpiando cualquier medida
+        // que hubiera quedado de un ancho de escritorio anterior.
+        fasesDiagram.style.height = '';
+        fasesSvg.setAttribute('viewBox', '0 0 200 560');
+        fasesRibbonGlow.setAttribute('d', fasesStaticD);
+        fasesRibbon.setAttribute('d', fasesStaticD);
+        if (fasesCarrier) fasesCarrier.style.offsetPath = 'path("' + fasesStaticD + '")';
+        fasesStations.forEach(function (group, i) {
+          if (!group) return;
+          group.style.animationDelay = '';
+          group.querySelectorAll('circle').forEach(function (c) {
+            c.setAttribute('cx', fasesStaticStations[i][0]);
+            c.setAttribute('cy', fasesStaticStations[i][1]);
+          });
+        });
+        return;
+      }
+
+      var timelineRect = fasesTimeline.getBoundingClientRect();
+      var height = Math.round(timelineRect.height);
+      if (height < 80) return; // layout aún no estable (p. ej. fuentes sin cargar)
+
+      var ys = fasesNums.map(function (el) {
+        var r = el.getBoundingClientRect();
+        return Math.round((r.top + r.height / 2) - timelineRect.top);
+      });
+      var xR = 145, xL = 75; // mismas dos columnas en zigzag del trazo original
+      var xs = [xR, xL, xR, xL];
+
+      fasesDiagram.style.height = height + 'px';
+      fasesSvg.setAttribute('viewBox', '0 0 200 ' + height);
+
+      var d = 'M' + xs[0] + ',' + ys[0] +
+        ' ' + smoothSegment(xs[0], ys[0], xs[1], ys[1]) +
+        ' ' + smoothSegment(xs[1], ys[1], xs[2], ys[2]) +
+        ' ' + smoothSegment(xs[2], ys[2], xs[3], ys[3]);
+      fasesRibbonGlow.setAttribute('d', d);
+      fasesRibbon.setAttribute('d', d);
+      if (fasesCarrier) fasesCarrier.style.offsetPath = 'path("' + d + '")';
+
+      fasesStations.forEach(function (group, i) {
+        if (!group) return;
+        group.querySelectorAll('circle').forEach(function (c) {
+          c.setAttribute('cx', xs[i]);
+          c.setAttribute('cy', ys[i]);
+        });
+      });
+
+      // Retraso de la micro-respuesta de cada estación: aproxima la
+      // longitud del trazo como la suma de las distancias en línea recta
+      // entre estaciones consecutivas (suficiente para una curva suave
+      // como esta) y sitúa cada estación en la fracción del recorrido
+      // total de 8s en la que el símbolo viajero pasa por ella.
+      var segLens = [0];
+      for (var i = 1; i < 4; i++) {
+        segLens.push(segLens[i - 1] + Math.hypot(xs[i] - xs[i - 1], ys[i] - ys[i - 1]));
+      }
+      var total = segLens[3] || 1;
+      var duration = 8;
+      fasesStations.forEach(function (group, i) {
+        if (!group) return;
+        var delay = (segLens[i] / total) * duration;
+        group.style.animationDelay = '-' + delay.toFixed(2) + 's';
+      });
+    };
+
+    runWhenIdle(alignFasesRibbon);
+    window.addEventListener('load', alignFasesRibbon);
+    var fasesResizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(fasesResizeTimer);
+      fasesResizeTimer = setTimeout(alignFasesRibbon, 200);
+    });
+  }
+
   /* ---------- Side-index scroll-spy (home page only) ---------- */
   var indexLinks = document.querySelectorAll('.side-index a');
   var trackedSections = document.querySelectorAll('main section[id]');
@@ -262,7 +382,11 @@
      scroll del usuario tras un cambio de página. */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
     runWhenIdle(function () {
-      document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
+      // .hero-atmosphere (DIR-048) no es un .window — es la atmósfera de
+      // fondo del Hero, sin tarjeta ni tilt propio — pero sus capas internas
+      // sí necesitan las mismas --mx/--my para el paralaje del cursor, así
+      // que se suma al mismo selector en vez de duplicar la lógica de abajo.
+      document.querySelectorAll('.window:not(.chat-window), .hero-atmosphere').forEach(function (win) {
         win.addEventListener('mousemove', function (e) {
           var rect = win.getBoundingClientRect();
           var px = (e.clientX - rect.left) / rect.width;
@@ -423,7 +547,7 @@
     });
   });
 
-  /* ---------- Clientes IA: órbita de la ficha de cliente ---------- */
+  /* ---------- Clientes: órbita de la ficha de cliente ---------- */
   var orbitScope = document.querySelector('.orbit-scope');
   if (orbitScope) {
     var orbitCaption = document.getElementById('orbit-caption');
@@ -444,7 +568,7 @@
     });
   }
 
-  /* ---------- Soporte IA: ticket en vivo (ciclo de estados) ----------
+  /* ---------- Soporte: ticket en vivo (ciclo de estados) ----------
      Recorrido automático, pausado en cuanto el ticket sale de pantalla y
      reanudado al volver a entrar — así, cada vez que el usuario pasa por
      esta sección, la vuelve a ver desde "Recibido". Nunca depende de la
@@ -492,108 +616,120 @@
     }
   }
 
-  /* ---------- Hero neural-network canvas ---------- */
-  var canvas = document.getElementById('hero-canvas');
-  if (canvas) {
-    var ctx = canvas.getContext('2d');
-    var width, height, dpr, nodes = [], running = true;
+  /* ---------- Contacto — formulario progresivo (DIR-048) ----------
+     Controla qué paso de #contact-form está visible. Deliberadamente
+     NO toca el contrato de datos: los campos reales (mismo id/name/
+     required de siempre) nunca se destruyen ni se recrean, solo se
+     muestran/ocultan — así que el bloque de envío real, justo debajo
+     en este mismo archivo, sigue leyendo exactamente los mismos
+     elementos sin ningún cambio en su lógica. Se registra ANTES que
+     ese bloque a propósito: su listener de submit necesita poder
+     interceptar (con stopImmediatePropagation) un envío prematuro —
+     Enter en el paso 1, por ejemplo — antes de que el listener de
+     envío real llegue a ejecutarse; los listeners sobre el mismo
+     elemento se disparan en el orden en que se registran. */
+  var stepForm = document.getElementById('contact-form');
+  var formSuccess = document.getElementById('form-success');
+  if (stepForm && formSuccess) {
+    var stepEls = Array.prototype.slice.call(stepForm.querySelectorAll(':scope > .form-step'));
+    var totalSteps = stepEls.length;
+    var progressDots = Array.prototype.slice.call(stepForm.querySelectorAll('.form-progress-dot'));
+    var progressBar = stepForm.querySelector('.form-progress');
+    var stepCounter = document.getElementById('form-step-current');
+    var backBtn = document.getElementById('form-back-btn');
+    var nextBtn = document.getElementById('form-next-btn');
+    var submitBtn = document.getElementById('form-submit-btn');
+    var formSuccessBookBtn = document.getElementById('form-success-book-btn');
+    var currentStep = 1;
 
-    var resize = function () {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var rect = canvas.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    var initNodes = function () {
-      var count = window.innerWidth < 640 ? 14 : 22;
-      nodes = Array.from({ length: count }, function () {
-        return {
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
-          r: 1.6 + Math.random() * 1.6
-        };
-      });
-    };
-
-    var step = function () {
-      if (!width) { if (running && !prefersReducedMotion) requestAnimationFrame(step); return; } // resize() diferido todavía no ha corrido
-      ctx.clearRect(0, 0, width, height);
-      var maxDist = Math.min(width, height) * 0.34;
-
-      nodes.forEach(function (n) {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > width) n.vx *= -1;
-        if (n.y < 0 || n.y > height) n.vy *= -1;
-      });
-
-      for (var i = 0; i < nodes.length; i++) {
-        for (var j = i + 1; j < nodes.length; j++) {
-          var a = nodes[i], b = nodes[j];
-          var dx = a.x - b.x, dy = a.y - b.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
-            var alpha = (1 - dist / maxDist) * 0.35;
-            ctx.strokeStyle = 'rgba(91,140,255,' + alpha + ')';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
+    var validateStep = function (n) {
+      var stepEl = stepEls[n - 1];
+      if (!stepEl) return true;
+      var fields = stepEl.querySelectorAll('input[required], textarea[required]');
+      for (var i = 0; i < fields.length; i++) {
+        if (!fields[i].checkValidity()) {
+          fields[i].reportValidity();
+          fields[i].focus();
+          return false;
         }
       }
-
-      nodes.forEach(function (n) {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(67,224,255,0.85)';
-        ctx.fill();
-      });
-
-      if (running && !prefersReducedMotion) requestAnimationFrame(step);
+      return true;
     };
 
-    var drawStatic = function () {
-      ctx.clearRect(0, 0, width, height);
-      nodes.forEach(function (n) {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(67,224,255,0.85)';
-        ctx.fill();
+    var showStep = function (n, focusFirst) {
+      currentStep = n;
+      stepEls.forEach(function (el, i) { el.classList.toggle('is-active', i === n - 1); });
+      progressDots.forEach(function (dot, i) {
+        dot.classList.toggle('is-active', i === n - 1);
+        dot.classList.toggle('is-done', i < n - 1);
       });
+      if (stepCounter) stepCounter.textContent = n;
+      if (progressBar) progressBar.setAttribute('aria-valuenow', n);
+      if (backBtn) backBtn.style.display = n > 1 ? 'inline-flex' : 'none';
+      if (nextBtn) nextBtn.style.display = n < totalSteps ? 'inline-flex' : 'none';
+      if (submitBtn) submitBtn.style.display = n === totalSteps ? 'inline-flex' : 'none';
+      if (focusFirst) {
+        var firstField = stepEls[n - 1] && stepEls[n - 1].querySelector('input, textarea');
+        if (firstField) firstField.focus();
+      }
     };
 
-    runWhenIdle(function () {
-      resize();
-      initNodes();
-      if (prefersReducedMotion) {
-        drawStatic();
-      } else {
-        requestAnimationFrame(step);
+    var goNext = function () {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) showStep(currentStep + 1, true);
+    };
+    var goBack = function () {
+      if (currentStep > 1) showStep(currentStep - 1, true);
+    };
+
+    if (backBtn) backBtn.addEventListener('click', goBack);
+    if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+    // Enter en un <input> de un paso intermedio avanza, en vez de no
+    // hacer nada o disparar un envío a medio rellenar. Dentro de un
+    // <textarea> (paso 3) se deja pasar sin interceptar — ahí Enter es
+    // un salto de línea normal, no una acción de navegación.
+    stepForm.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      if ((e.target.tagName || '').toLowerCase() === 'textarea') return;
+      if (currentStep < totalSteps) { e.preventDefault(); goNext(); }
+    });
+
+    // Red de seguridad: si algo dispara un submit sin pasar por el
+    // paso final (Enter, autocompletado agresivo del navegador...),
+    // se convierte en un simple "Continuar" y NUNCA llega al listener
+    // de envío real de más abajo.
+    stepForm.addEventListener('submit', function (e) {
+      if (currentStep !== totalSteps) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        goNext();
+        return;
+      }
+      if (!validateStep(totalSteps)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
       }
     });
 
-    window.addEventListener('resize', function () {
-      resize();
-      initNodes();
-    });
+    // Expuesta para que el bloque de envío real llame a esto en su
+    // propia rama de éxito, sin que ese bloque necesite saber nada del
+    // wizard de pasos — solo "hubo éxito, muéstralo bien".
+    var showFormSuccess = function () {
+      stepForm.setAttribute('hidden', '');
+      formSuccess.removeAttribute('hidden');
+      formSuccess.setAttribute('tabindex', '-1');
+      formSuccess.focus();
+    };
 
-    if ('IntersectionObserver' in window) {
-      var canvasIO = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          running = entry.isIntersecting;
-          if (running && !prefersReducedMotion) requestAnimationFrame(step);
-        });
-      }, { threshold: 0.05 });
-      canvasIO.observe(canvas);
+    if (formSuccessBookBtn) {
+      formSuccessBookBtn.addEventListener('click', function () {
+        var bookingBtn = document.getElementById('booking-cta-btn');
+        if (bookingBtn) bookingBtn.click();
+      });
     }
+
+    showStep(1, false);
   }
 
   /* ---------- Contact form (Turnstile + envío principal + respaldo) ----------
@@ -728,6 +864,10 @@
             note.textContent = '';
             note.className = 'form-note';
           }, 4000);
+          // Panel de confirmación del wizard de pasos (DIR-048) — definido
+          // más arriba en este archivo; se comprueba por si esta página no
+          // tuviera el wizard por algún motivo, para no romper el envío.
+          if (typeof showFormSuccess === 'function') showFormSuccess();
         } else {
           note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
           note.className = 'form-note err';

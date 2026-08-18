@@ -75,35 +75,35 @@
           <div class="mega-menu" role="menu">
             <a class="mega-item" href="/en/departamentos/comercial" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
-              <span><strong>Sales AI</strong><span>Never lose a sale to poor follow-up again.</span></span>
+              <span><strong>Sales</strong><span>Never lose a sale to poor follow-up again.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/marketing" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
-              <span><strong>Marketing AI</strong><span>Leads that arrive already qualified, not raw.</span></span>
+              <span><strong>Marketing</strong><span>Leads that arrive already qualified, not raw.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/clientes" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
-              <span><strong>Customer AI</strong><span>Every client cared for, without depending on any one person.</span></span>
+              <span><strong>Customer</strong><span>Every client cared for, without depending on any one person.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/produccion" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-              <span><strong>Delivery AI</strong><span>Projects that launch themselves and hit their deadlines.</span></span>
+              <span><strong>Delivery</strong><span>Projects that launch themselves and hit their deadlines.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finance AI</strong><span>Coming soon — expense control is already real.</span></span>
+              <span><strong>Finance</strong><span>Coming soon — expense control is already real.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
-              <span><strong>Support AI</strong><span>Fast responses, even after hours.</span></span>
+              <span><strong>Support</strong><span>Fast responses, even after hours.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/administracion" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
-              <span><strong>Operations AI</strong><span>Your company, protected and organized, effortlessly.</span></span>
+              <span><strong>Operations</strong><span>Your company, protected and organized, effortlessly.</span></span>
             </a>
             <a class="mega-item" href="/en/departamentos/direccion" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-              <span><strong>Leadership AI</strong><span>One clear decision every morning, backed by real data.</span></span>
+              <span><strong>Leadership</strong><span>One clear decision every morning, backed by real data.</span></span>
             </a>
             <a class="mega-item wide" href="/en/departamentos" role="menuitem">View all Departments →</a>
           </div>
@@ -153,45 +153,85 @@
             <span class="window-title">new_request.form</span>
           </div>
           <div class="window-body">
-            <form id="contact-form">
-              <div class="field">
-                <label for="nombre">Full name</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Your name" autocomplete="name" required>
+            <form id="contact-form" novalidate>
+              <div class="form-progress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Request progress">
+                <span class="form-progress-dot is-active" data-dot="1"></span>
+                <span class="form-progress-dot" data-dot="2"></span>
+                <span class="form-progress-dot" data-dot="3"></span>
+                <span class="form-progress-dot" data-dot="4"></span>
               </div>
-              <div class="field">
-                <label for="empresa">Company</label>
-                <input type="text" id="empresa" name="empresa" placeholder="Your company's name" autocomplete="organization" required>
-              </div>
-              <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" inputmode="email" required>
-              </div>
-              <div class="field">
-                <label for="telefono">Phone</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
-              </div>
-              <div class="field">
-                <label for="mensaje">Tell us about your business</label>
-                <textarea id="mensaje" name="mensaje" placeholder="Which processes would you like to automate?" autocomplete="off"></textarea>
-              </div>
+              <p class="form-step-count">Step <span id="form-step-current">1</span> of 4</p>
 
-              <div class="form-compliance">
-                <div class="consent-field">
-                  <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
-                  <label for="acepta-privacidad">I have read and accept the <a href="/privacidad">Privacy Policy</a>.</label>
+              <div class="form-step is-active" data-step="1">
+                <span class="form-step-eyebrow">Let's start with the basics</span>
+                <div class="field">
+                  <label for="nombre">Full name</label>
+                  <input type="text" id="nombre" name="nombre" placeholder="Your name" autocomplete="name" required>
                 </div>
-
-                <div class="security-check">
-                  <span class="security-check-label">Security check</span>
-                  <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                <div class="field">
+                  <label for="empresa">Company</label>
+                  <input type="text" id="empresa" name="empresa" placeholder="Your company's name" autocomplete="organization" required>
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-invert btn-block">
-                Claim My Free Month
-              </button>
+              <div class="form-step" data-step="2">
+                <span class="form-step-eyebrow">How can we reach you?</span>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" inputmode="email" required>
+                </div>
+                <div class="field">
+                  <label for="telefono">Phone <span class="field-optional">(optional)</span></label>
+                  <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
+                </div>
+              </div>
+
+              <div class="form-step" data-step="3">
+                <span class="form-step-eyebrow">Tell us about your business</span>
+                <div class="field">
+                  <label for="mensaje">Which processes would you like to automate? <span class="field-optional">(optional)</span></label>
+                  <textarea id="mensaje" name="mensaje" placeholder="Give us a quick idea of what you'd like help with..." autocomplete="off"></textarea>
+                </div>
+              </div>
+
+              <div class="form-step" data-step="4">
+                <span class="form-step-eyebrow">Last step</span>
+                <div class="form-compliance">
+                  <div class="consent-field">
+                    <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
+                    <label for="acepta-privacidad">I have read and accept the <a href="/privacidad">Privacy Policy</a>.</label>
+                  </div>
+
+                  <div class="security-check">
+                    <span class="security-check-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg></span>
+                    <span class="security-check-copy">
+                      <span class="security-check-label">Security check</span>
+                      <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               <p class="form-note" id="form-note">No cost. No commitment. We respond within 24h.</p>
+
+              <div class="form-nav">
+                <button type="button" class="btn btn-ghost form-nav-back" id="form-back-btn">Back</button>
+                <button type="button" class="btn btn-primary form-nav-next" id="form-next-btn">Continue</button>
+                <button type="submit" class="btn btn-invert form-nav-submit" id="form-submit-btn">
+                  Claim My Free Month
+                </button>
+              </div>
             </form>
+
+            <div class="form-success" id="form-success" hidden>
+              <span class="form-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <h3>Request sent successfully</h3>
+              <p>We've received your request. Our team will review it and get back to you within 24h to tell you which Smart Department is the best place to start.</p>
+              <button type="button" class="btn btn-ghost form-success-book" id="form-success-book-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                I'd rather pick a time now
+              </button>
+            </div>
           </div>
         </div>
 
@@ -283,14 +323,14 @@
       <div class="footer-col">
         <h2>Departments</h2>
         <ul>
-          <li><a href="/en/departamentos/marketing">Marketing AI</a></li>
-          <li><a href="/en/departamentos/comercial">Sales AI</a></li>
-          <li><a href="/en/departamentos/clientes">Customer AI</a></li>
-          <li><a href="/en/departamentos/produccion">Delivery AI</a></li>
-          <li><a href="/en/departamentos/finanzas">Finance AI</a></li>
-          <li><a href="/en/departamentos/soporte">Support AI</a></li>
-          <li><a href="/en/departamentos/administracion">Operations AI</a></li>
-          <li><a href="/en/departamentos/direccion">Leadership AI</a></li>
+          <li><a href="/en/departamentos/marketing">Marketing</a></li>
+          <li><a href="/en/departamentos/comercial">Sales</a></li>
+          <li><a href="/en/departamentos/clientes">Customer</a></li>
+          <li><a href="/en/departamentos/produccion">Delivery</a></li>
+          <li><a href="/en/departamentos/finanzas">Finance</a></li>
+          <li><a href="/en/departamentos/soporte">Support</a></li>
+          <li><a href="/en/departamentos/administracion">Operations</a></li>
+          <li><a href="/en/departamentos/direccion">Leadership</a></li>
         </ul>
       </div>
       <div class="footer-col">
