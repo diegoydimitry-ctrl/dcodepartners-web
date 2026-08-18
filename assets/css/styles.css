@@ -2507,7 +2507,7 @@ footer{
    explícitamente etiquetados como tal; ninguna simula resultados reales.
    ================================================================== */
 
-/* ---------- Comercial IA: radar de oportunidades ---------- */
+/* ---------- Comercial: radar de oportunidades ---------- */
 .radar-window .window-body{ display:flex; gap:36px; flex-wrap:wrap; align-items:center; }
 .radar-scope{
   position:relative;
@@ -2556,7 +2556,7 @@ footer{
 @media (prefers-reduced-motion: reduce){ .radar-sweep{ animation:none; opacity:.3; } }
 @media (max-width:640px){ .radar-window .window-body{ flex-direction:column; align-items:stretch; } .radar-scope{ width:180px; height:180px; margin:0 auto; } }
 
-/* ---------- Marketing IA: embudo de captación ---------- */
+/* ---------- Marketing: embudo de captación ---------- */
 .funnel-window .window-body{ display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start; }
 .funnel-scope{ position:relative; width:200px; flex-shrink:0; display:flex; flex-direction:column; gap:3px; }
 .funnel-layer{
@@ -2586,7 +2586,7 @@ footer{
 @media (prefers-reduced-motion: reduce){ .funnel-particle{ animation:none; opacity:0; } }
 @media (max-width:640px){ .funnel-window .window-body{ flex-direction:column; align-items:center; } }
 
-/* ---------- Clientes IA: ficha/ecosistema del cliente ---------- */
+/* ---------- Clientes: ficha/ecosistema del cliente ---------- */
 .orbit-window .window-body{ display:flex; flex-direction:column; align-items:center; gap:18px; }
 .orbit-scope{ position:relative; width:260px; height:260px; }
 .orbit-center{
@@ -2610,7 +2610,7 @@ footer{
 .orbit-caption{ color:var(--stone-soft); font-size:0.85rem; min-height:1.4em; text-align:center; max-width:360px; }
 @media (max-width:640px){ .orbit-scope{ width:220px; height:220px; } .orbit-node{ transform:rotate(var(--angle)) translate(88px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); width:56px; font-size:0.66rem; } }
 
-/* ---------- Producción IA: piloto — el caos se convierte en sistema ----------
+/* ---------- Producción: piloto — el caos se convierte en sistema ----------
    Contenedor deliberadamente distinto al resto de Departamentos: sin chrome
    de ventana, sin traffic-lights, sin nombre de archivo. Es un panel que
    empieza disperso (tareas sueltas, sin orden) y se organiza solo en el
@@ -2667,7 +2667,7 @@ footer{
   .order-board{ grid-template-columns:1fr; }
 }
 
-/* ---------- Finanzas IA: cadena financiera ---------- */
+/* ---------- Finanzas: cadena financiera ---------- */
 .ledger-window .window-body{ max-width:460px; margin:0 auto; }
 .ledger-row{
   display:flex; justify-content:space-between; align-items:center;
@@ -2682,7 +2682,7 @@ footer{
 .ledger-total-amount{ font-family:var(--serif); font-size:1.5rem; font-weight:600; color:var(--cyan); }
 .ledger-disclaimer{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:18px; }
 
-/* ---------- Soporte IA: ticket en vivo ---------- */
+/* ---------- Soporte: ticket en vivo ---------- */
 .ticket-window .window-body{ max-width:420px; margin:0 auto; }
 .ticket-card{ background:var(--panel-2); border:1px solid var(--border); border-radius:12px; padding:20px; }
 .ticket-card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
@@ -2703,7 +2703,7 @@ footer{
 .ticket-step.active{ background:var(--cyan); }
 .ticket-demo-note{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:16px; }
 
-/* ---------- Administración IA: panel operativo ---------- */
+/* ---------- Administración: panel operativo ---------- */
 .opsgrid-window .window-body{ }
 .opsgrid-scope{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
 .opsgrid-tile{ border:1px solid var(--border); border-radius:10px; padding:16px; cursor:default; transition:border-color .2s ease, background .2s ease; }
@@ -2718,7 +2718,7 @@ footer{
 .opsgrid-tile:hover .opsgrid-tile-detail,.opsgrid-tile:focus-within .opsgrid-tile-detail{ max-height:80px; opacity:1; margin-top:6px; }
 @media (max-width:520px){ .opsgrid-scope{ grid-template-columns:1fr; } }
 
-/* ---------- Dirección IA: command center ---------- */
+/* ---------- Dirección: command center ---------- */
 .command-window .window-body{ display:flex; flex-direction:column; gap:22px; }
 .command-feeds{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
 .command-feed{

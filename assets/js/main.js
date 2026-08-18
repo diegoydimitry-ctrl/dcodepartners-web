@@ -423,7 +423,7 @@
     });
   });
 
-  /* ---------- Clientes IA: órbita de la ficha de cliente ---------- */
+  /* ---------- Clientes: órbita de la ficha de cliente ---------- */
   var orbitScope = document.querySelector('.orbit-scope');
   if (orbitScope) {
     var orbitCaption = document.getElementById('orbit-caption');
@@ -444,7 +444,7 @@
     });
   }
 
-  /* ---------- Soporte IA: ticket en vivo (ciclo de estados) ----------
+  /* ---------- Soporte: ticket en vivo (ciclo de estados) ----------
      Recorrido automático, pausado en cuanto el ticket sale de pantalla y
      reanudado al volver a entrar — así, cada vez que el usuario pasa por
      esta sección, la vuelve a ver desde "Recibido". Nunca depende de la
