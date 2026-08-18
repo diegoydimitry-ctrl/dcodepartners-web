@@ -75,35 +75,35 @@
           <div class="mega-menu" role="menu">
             <a class="mega-item" href="/departamentos/comercial" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
-              <span><strong>Comercial IA</strong><span>Que ninguna venta se pierda por falta de seguimiento.</span></span>
+              <span><strong>Comercial</strong><span>Que ninguna venta se pierda por falta de seguimiento.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/marketing" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
-              <span><strong>Marketing IA</strong><span>Leads que llegan ya clasificados, no en bruto.</span></span>
+              <span><strong>Marketing</strong><span>Leads que llegan ya clasificados, no en bruto.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/clientes" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
-              <span><strong>Clientes IA</strong><span>Que cada cliente se sienta cuidado, sin depender de nadie.</span></span>
+              <span><strong>Clientes</strong><span>Que cada cliente se sienta cuidado, sin depender de nadie.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/produccion" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-              <span><strong>Producción IA</strong><span>Proyectos que se ponen en marcha solos y cumplen sus plazos.</span></span>
+              <span><strong>Producción</strong><span>Proyectos que se ponen en marcha solos y cumplen sus plazos.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas IA</strong><span>Próximamente — el control de gasto ya es real.</span></span>
+              <span><strong>Finanzas</strong><span>Próximamente — el control de gasto ya es real.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
-              <span><strong>Soporte IA</strong><span>Respuesta rápida, incluso fuera de horario.</span></span>
+              <span><strong>Soporte</strong><span>Respuesta rápida, incluso fuera de horario.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/administracion" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
-              <span><strong>Administración IA</strong><span>Tu empresa, protegida y ordenada, sin esfuerzo.</span></span>
+              <span><strong>Administración</strong><span>Tu empresa, protegida y ordenada, sin esfuerzo.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/direccion" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-              <span><strong>Dirección IA</strong><span>Una decisión clara cada mañana, con datos reales.</span></span>
+              <span><strong>Dirección</strong><span>Una decisión clara cada mañana, con datos reales.</span></span>
             </a>
             <a class="mega-item wide" href="/departamentos" role="menuitem">Ver todos los Departamentos →</a>
           </div>
@@ -147,61 +147,112 @@
   <section class="section-sm">
     <div class="container">
       <div class="contacto-grid">
-        <div class="window reveal">
+        <!-- DIR-049 (Bloque 1): composición editorial — el formulario y la
+             reserva directa viven apilados en la misma columna izquierda
+             (uno lleva al otro, "si no quieres rellenar el formulario, salta
+             directamente a reservar"), la tarjeta de contacto directo pasa a
+             su propia columna derecha, arrancando a la misma altura. -->
+        <div class="contacto-main">
+        <div class="window form-card reveal">
           <div class="window-bar">
             <span class="window-dots"><span></span><span></span><span></span></span>
             <span class="window-title">nueva_solicitud.form</span>
           </div>
           <div class="window-body">
-            <form id="contact-form">
-              <div class="field">
-                <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" required>
+            <form id="contact-form" novalidate>
+              <div class="form-progress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Progreso de la solicitud">
+                <span class="form-progress-dot is-active" data-dot="1"></span>
+                <span class="form-progress-dot" data-dot="2"></span>
+                <span class="form-progress-dot" data-dot="3"></span>
+                <span class="form-progress-dot" data-dot="4"></span>
               </div>
-              <div class="field">
-                <label for="empresa">Empresa</label>
-                <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization" required>
-              </div>
-              <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="tu@empresa.com" autocomplete="email" inputmode="email" required>
-              </div>
-              <div class="field">
-                <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
-              </div>
-              <div class="field">
-                <label for="mensaje">Cuéntanos sobre tu negocio</label>
-                <textarea id="mensaje" name="mensaje" placeholder="¿Qué procesos te gustaría automatizar?" autocomplete="off"></textarea>
-              </div>
+              <p class="form-step-count">Paso <span id="form-step-current">1</span> de 4</p>
 
-              <div class="form-compliance">
-                <div class="consent-field">
-                  <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
-                  <label for="acepta-privacidad">He leído y acepto la <a href="/privacidad">Política de Privacidad</a>.</label>
+              <div class="form-step is-active" data-step="1">
+                <span class="form-step-eyebrow">Empecemos por lo básico</span>
+                <div class="field">
+                  <label for="nombre">Nombre completo</label>
+                  <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" required>
                 </div>
-
-                <div class="security-check">
-                  <span class="security-check-label">Verificación de seguridad</span>
-                  <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                <div class="field">
+                  <label for="empresa">Empresa</label>
+                  <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa" autocomplete="organization" required>
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-invert btn-block">
-                Solicitar mi Mes Gratuito
-              </button>
-              <p class="form-note" id="form-note">Sin coste. Sin compromiso. Respondemos en menos de 24h.</p>
+              <div class="form-step" data-step="2">
+                <span class="form-step-eyebrow">¿Cómo te contactamos?</span>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="tu@empresa.com" autocomplete="email" inputmode="email" required>
+                </div>
+                <div class="field">
+                  <label for="telefono">Teléfono <span class="field-optional">(opcional)</span></label>
+                  <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
+                </div>
+              </div>
+
+              <div class="form-step" data-step="3">
+                <span class="form-step-eyebrow">Cuéntanos sobre tu negocio</span>
+                <div class="field">
+                  <label for="mensaje">¿Qué procesos te gustaría automatizar? <span class="field-optional">(opcional)</span></label>
+                  <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos brevemente en qué te gustaría que te ayudásemos..." autocomplete="off"></textarea>
+                </div>
+              </div>
+
+              <div class="form-step" data-step="4">
+                <span class="form-step-eyebrow">Último paso</span>
+                <div class="form-compliance">
+                  <div class="consent-field">
+                    <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
+                    <label for="acepta-privacidad">He leído y acepto la <a href="/privacidad">Política de Privacidad</a>.</label>
+                  </div>
+
+                  <div class="security-check">
+                    <span class="security-check-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg></span>
+                    <span class="security-check-copy">
+                      <span class="security-check-label">Verificación de seguridad</span>
+                      <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                    </span>
+                  </div>
+                </div>
+                <!-- DIR-049 (Bloque 7): el aviso de Turnstile puede dispararse en
+                     cuanto el script de Cloudflare falla al cargar/verificar, sin
+                     que el usuario haya llegado siquiera a este paso — vivía fuera
+                     de los .form-step y por eso el error aparecía sobre el paso 1.
+                     Ahora vive dentro del paso 4, donde el aviso tiene contexto. -->
+                <p class="form-note" id="form-note">Sin coste. Sin compromiso. Respondemos en menos de 24h.</p>
+              </div>
+
+              <div class="form-nav">
+                <button type="button" class="btn btn-ghost form-nav-back" id="form-back-btn">Atrás</button>
+                <button type="button" class="btn btn-primary form-nav-next" id="form-next-btn">Continuar</button>
+                <button type="submit" class="btn btn-invert form-nav-submit" id="form-submit-btn">
+                  Solicitar mi Mes Gratuito
+                </button>
+              </div>
             </form>
+
+            <div class="form-success" id="form-success" hidden>
+              <span class="form-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <h3>Solicitud enviada correctamente</h3>
+              <p>Hemos recibido tu solicitud. Nuestro equipo la revisará y te escribirá en menos de 24h para contarte qué Departamento Inteligente te conviene empezar primero.</p>
+              <button type="button" class="btn btn-ghost form-success-book" id="form-success-book-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Prefiero elegir un horario ahora
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="contacto-side">
-          <div class="window booking-card reveal">
-            <div class="window-bar">
-              <span class="window-dots"><span></span><span></span><span></span></span>
-              <span class="window-title">reservar.cal</span>
-            </div>
-            <div class="window-body">
+        <div class="window booking-card reveal">
+          <div class="window-bar">
+            <span class="window-dots"><span></span><span></span><span></span></span>
+            <span class="window-title">reservar.cal</span>
+          </div>
+          <div class="window-body booking-card-body">
+            <span class="booking-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+            <div class="booking-card-copy">
               <span class="eyebrow">¿Prefieres hablar directamente?</span>
               <p class="booking-invite-text">Reserva una llamada de 30 min y salta directamente a una conversación — sin pasar por el formulario.</p>
               <button type="button" class="btn btn-ghost btn-block booking-invite-btn" id="booking-cta-btn"
@@ -213,7 +264,10 @@
               </button>
             </div>
           </div>
+        </div>
+        </div>
 
+        <div class="contacto-side">
         <div class="window contact-card reveal">
           <div class="window-bar">
             <span class="window-dots"><span></span><span></span><span></span></span>
@@ -283,14 +337,14 @@
       <div class="footer-col">
         <h2>Departamentos</h2>
         <ul>
-          <li><a href="/departamentos/marketing">Marketing IA</a></li>
-          <li><a href="/departamentos/comercial">Comercial IA</a></li>
-          <li><a href="/departamentos/clientes">Clientes IA</a></li>
-          <li><a href="/departamentos/produccion">Producción IA</a></li>
-          <li><a href="/departamentos/finanzas">Finanzas IA</a></li>
-          <li><a href="/departamentos/soporte">Soporte IA</a></li>
-          <li><a href="/departamentos/administracion">Administración IA</a></li>
-          <li><a href="/departamentos/direccion">Dirección IA</a></li>
+          <li><a href="/departamentos/marketing">Marketing</a></li>
+          <li><a href="/departamentos/comercial">Comercial</a></li>
+          <li><a href="/departamentos/clientes">Clientes</a></li>
+          <li><a href="/departamentos/produccion">Producción</a></li>
+          <li><a href="/departamentos/finanzas">Finanzas</a></li>
+          <li><a href="/departamentos/soporte">Soporte</a></li>
+          <li><a href="/departamentos/administracion">Administración</a></li>
+          <li><a href="/departamentos/direccion">Dirección</a></li>
         </ul>
       </div>
       <div class="footer-col">
