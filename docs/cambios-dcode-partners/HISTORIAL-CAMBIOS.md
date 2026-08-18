@@ -63,3 +63,48 @@ EVIDENCIA: MCP n8n (`search_workflows`, `search_executions`, `get_execution`,
 Commit(s) en la rama `claude/dcode-partners-changes-governance-tvyk6k`.
 RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
 TICKET RELACIONADO: CAM-20260814-001.
+
+---
+
+FECHA: 2026-08-18
+CAMBIO: Construcción completa de "D-Code Content Factory" V1 (Video Engine con
+Remotion + identidad de marca, Content Engine en n8n, GitHub Actions como motor
+de render sin coste, QA Engine de 3 niveles, 3 vídeos de prueba reales).
+MOTIVO: Autorización explícita de Dirección (DCP-CONTENT-FACTORY-001) para
+construir de cero, con autonomía completa salvo credenciales/costes externos.
+ÁREA: Producto / Contenido / Automatizaciones.
+ESTADO ANTERIOR: no existía ninguna fábrica de contenido automatizada.
+ESTADO NUEVO: sistema completo de creación de contenido audiovisual hasta el
+límite de lo construible sin publicador real ni credenciales externas. Ningún
+workflow activado, ninguna publicación real.
+EVIDENCIA: Commit `d8ed49e` en `claude/dcode-partners-changes-governance-tvyk6k`.
+Informe `DCP-CONTENT-FACTORY-FINAL` (PDF enviado a Dirección).
+RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
+TICKET RELACIONADO: DCP-CONTENT-FACTORY-001.
+
+---
+
+FECHA: 2026-08-18
+CAMBIO: Evolución a "D-Code Daily Content Engine" V2 — Audio Engine (7 familias
+musicales + SFX generados por código, TTS opcional vía espeak-ng), Post Engine
+independiente (LinkedIn + Instagram), Memory Engine semántico + Diversity Gate
+(embeddings, similitud coseno, decisión de formato incl. NO_PUBLICAR), Research
+Engine ampliado (3 fuentes RSS + autoanálisis real de la web de D-Code +
+autoanálisis de contenido propio). V1 no se rehizo, solo se extendió.
+MOTIVO: Autorización explícita de Dirección (DCP-CONTENT-FACTORY-002).
+ÁREA: Producto / Contenido / Automatizaciones.
+ESTADO ANTERIOR: ver entrada anterior (V1) — vídeo mudo por defecto, sin Post
+Engine, memoria editorial limitada a 30 días y a tema/hook/formato, investigación
+basada en 1 sola fuente RSS.
+ESTADO NUEVO: audio con criterio (incl. silencio intencionado como opción válida),
+Post Engine con 6 piezas de prueba validadas contra schema, 2 workflows n8n nuevos
++ 2 actualizados (todos inactivos), 5 vídeos de prueba con Audio QA automático
+PASA. Limitaciones honestas documentadas (no se puede verificar "se escucha bien"
+por escucha real; embeddings semánticos no probados con llamada real desde esta
+sesión) — ver informe.
+EVIDENCIA: Commit `ea74453` en `claude/dcode-partners-changes-governance-tvyk6k`.
+Workflows n8n: `Sip8U9IyPpQ8j6NA`, `H5b13tf9PIrlK4fQ`, `ARLDFrmHWdpQsNTb`,
+`t96QwFyZj1Tw6ubc` (todos inactivos). Informe `DCP-CONTENT-FACTORY-V2` (PDF
+enviado a Dirección).
+RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
+TICKET RELACIONADO: DCP-CONTENT-FACTORY-002.
