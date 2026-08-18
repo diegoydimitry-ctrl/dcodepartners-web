@@ -1800,92 +1800,165 @@ nav.main-nav > ul{ position:relative; }
 .timeline-body h3{ font-family:var(--serif); font-size:1.15rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
 .timeline-body p{ color:var(--stone); font-size:0.94rem; max-width:520px; }
 
-/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045/046/048) ============
-   Visual de apoyo puramente decorativo (aria-hidden), solo en metodo.html.
-   Una trayectoria continua que serpentea a través de cuatro fases —
-   "un proceso que evoluciona", no una barra de progreso ni cuatro
-   piezas repetidas — sin texto incrustado: la numeración y el
-   contenido real siguen viviendo en la timeline de siempre. DIR-048:
-   la posición de las 4 estaciones y los extremos de la curva ya no son
-   coordenadas fijas — main.js mide dónde caen realmente los badges
-   "01"–"04" de la timeline y reconstruye el trazado para que empiece y
-   termine exactamente ahí (ver alignFasesRibbon en main.js). Los
-   valores d="..." y cx/cy de aquí son solo el estado inicial antes de
-   que ese script corra (o el resultado si JS estuviera desactivado). */
-.fases-layout{
+/* ============ MÉTODO — CONSOLA DE PROGRESO (DIR-049) ============
+   Sustituye por completo la timeline vertical con cinta+carrier
+   (DIR-033/045/046/048): ya no es "una línea bonita" ni una barra de
+   progreso con una bola viajera. Es un panel horizontal tipo
+   state-machine — 4 nodos-módulo unidos por 3 segmentos que se
+   "cargan" de luz (stroke-dasharray/dashoffset escalonado), no un
+   punto discreto recorriendo un trazado. Debajo, una rejilla de 4
+   tarjetas con el contenido editorial exacto. Nodo↔tarjeta se
+   sincronizan en ambas direcciones vía :has() sobre el ancestro común
+   .fases-layout (misma técnica que radios↔nodo en Departamentos). */
+.fases-layout{ margin-top:8px; }
+.fases-console{ width:100%; }
+.fases-console svg{ display:block; width:100%; height:auto; overflow:visible; }
+.fases-seg-glow{ fill:none; stroke:var(--blue); stroke-width:10; stroke-linecap:round; opacity:.08; filter:blur(6px); }
+.fases-seg{
+  fill:none;
+  stroke:var(--border);
+  stroke-width:2;
+  stroke-linecap:round;
+}
+.fases-seg-1{ stroke:url(#fasesSegA); stroke-dasharray:6 10; stroke-dashoffset:0; animation:fases-seg-charge 3.6s linear infinite; }
+.fases-seg-2{ stroke:url(#fasesSegB); stroke-dasharray:6 10; stroke-dashoffset:0; animation:fases-seg-charge 3.6s linear infinite; animation-delay:1.2s; }
+.fases-seg-3{ stroke:url(#fasesSegC); stroke-dasharray:6 10; stroke-dashoffset:0; animation:fases-seg-charge 3.6s linear infinite; animation-delay:2.4s; }
+@keyframes fases-seg-charge{ to{ stroke-dashoffset:-32; } }
+.fases-node{ cursor:pointer; }
+.fases-node-num{
+  font-family:var(--mono);
+  font-size:15px;
+  fill:var(--stone);
+  transition:fill .2s ease;
+}
+.fases-node-halo{
+  fill:none;
+  stroke:rgb(var(--mod-r) var(--mod-g) var(--mod-b));
+  stroke-width:1.2;
+  opacity:.22;
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:opacity .25s ease, transform .3s cubic-bezier(.16,1,.3,1);
+}
+.fases-node-plate{
+  fill:rgba(10,14,26,.6);
+  stroke:rgb(var(--mod-r) var(--mod-g) var(--mod-b));
+  stroke-width:1.4;
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:transform .3s cubic-bezier(.16,1,.3,1), filter .25s ease;
+  filter:drop-shadow(0 0 0 rgba(0,0,0,0));
+}
+.fases-node-icon{
+  fill:none;
+  stroke:rgb(var(--mod-r) var(--mod-g) var(--mod-b));
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.fases-node:hover .fases-node-plate,
+.fases-node:focus-visible .fases-node-plate,
+.fases-layout:has(.fases-card-1:hover) .fases-node-1 .fases-node-plate,
+.fases-layout:has(.fases-card-2:hover) .fases-node-2 .fases-node-plate,
+.fases-layout:has(.fases-card-3:hover) .fases-node-3 .fases-node-plate,
+.fases-layout:has(.fases-card-4:hover) .fases-node-4 .fases-node-plate,
+.fases-layout:has(.fases-card-1:focus-visible) .fases-node-1 .fases-node-plate,
+.fases-layout:has(.fases-card-2:focus-visible) .fases-node-2 .fases-node-plate,
+.fases-layout:has(.fases-card-3:focus-visible) .fases-node-3 .fases-node-plate,
+.fases-layout:has(.fases-card-4:focus-visible) .fases-node-4 .fases-node-plate{
+  transform:scale(1.14);
+  filter:drop-shadow(0 0 10px rgb(var(--mod-r) var(--mod-g) var(--mod-b) / .55));
+}
+.fases-node:hover .fases-node-halo,
+.fases-node:focus-visible .fases-node-halo,
+.fases-layout:has(.fases-card-1:hover) .fases-node-1 .fases-node-halo,
+.fases-layout:has(.fases-card-2:hover) .fases-node-2 .fases-node-halo,
+.fases-layout:has(.fases-card-3:hover) .fases-node-3 .fases-node-halo,
+.fases-layout:has(.fases-card-4:hover) .fases-node-4 .fases-node-halo,
+.fases-layout:has(.fases-card-1:focus-visible) .fases-node-1 .fases-node-halo,
+.fases-layout:has(.fases-card-2:focus-visible) .fases-node-2 .fases-node-halo,
+.fases-layout:has(.fases-card-3:focus-visible) .fases-node-3 .fases-node-halo,
+.fases-layout:has(.fases-card-4:focus-visible) .fases-node-4 .fases-node-halo{
+  opacity:.5;
+  transform:scale(1.35);
+}
+.fases-node:hover .fases-node-icon,
+.fases-node:focus-visible .fases-node-icon,
+.fases-layout:has(.fases-card-1:hover) .fases-node-1 .fases-node-icon,
+.fases-layout:has(.fases-card-2:hover) .fases-node-2 .fases-node-icon,
+.fases-layout:has(.fases-card-3:hover) .fases-node-3 .fases-node-icon,
+.fases-layout:has(.fases-card-4:hover) .fases-node-4 .fases-node-icon,
+.fases-layout:has(.fases-card-1:focus-visible) .fases-node-1 .fases-node-icon,
+.fases-layout:has(.fases-card-2:focus-visible) .fases-node-2 .fases-node-icon,
+.fases-layout:has(.fases-card-3:focus-visible) .fases-node-3 .fases-node-icon,
+.fases-layout:has(.fases-card-4:focus-visible) .fases-node-4 .fases-node-icon{
+  transform:scale(1.14);
+}
+.fases-node:hover .fases-node-num,
+.fases-node:focus-visible .fases-node-num,
+.fases-layout:has(.fases-card-1:hover) .fases-node-1 .fases-node-num,
+.fases-layout:has(.fases-card-2:hover) .fases-node-2 .fases-node-num,
+.fases-layout:has(.fases-card-3:hover) .fases-node-3 .fases-node-num,
+.fases-layout:has(.fases-card-4:hover) .fases-node-4 .fases-node-num,
+.fases-layout:has(.fases-card-1:focus-visible) .fases-node-1 .fases-node-num,
+.fases-layout:has(.fases-card-2:focus-visible) .fases-node-2 .fases-node-num,
+.fases-layout:has(.fases-card-3:focus-visible) .fases-node-3 .fases-node-num,
+.fases-layout:has(.fases-card-4:focus-visible) .fases-node-4 .fases-node-num{
+  fill:rgb(var(--mod-r) var(--mod-g) var(--mod-b));
+}
+.fases-grid{
   display:grid;
-  grid-template-columns:1fr 200px;
-  gap:40px;
-  align-items:start;
+  grid-template-columns:repeat(4, 1fr);
+  gap:20px;
+  margin-top:28px;
 }
-.fases-diagram{ padding-top:8px; height:560px; }
-.fases-diagram svg{ display:block; width:100%; height:100%; overflow:visible; }
-/* Trayectoria continua (DIR-046): sustituye la columna vertical por
-   una única cinta que serpentea a través de las cuatro fases —
-   "un proceso que avanza", no una barra de progreso ni cuatro
-   estaciones repetidas. Progresión cian→azul→violeta a lo largo del
-   propio trazo (mismo degradado ya usado en DIR-045). Un pequeño
-   módulo de sistema (no una esfera, no un punto genérico — DIR-048)
-   recorre la trayectoria de forma continua y muy lenta.*/
-.fases-diagram .fases-ribbon-glow{ fill:none; stroke:var(--blue); stroke-width:9; stroke-linecap:round; opacity:.1; filter:blur(5px); }
-.fases-diagram .fases-ribbon{ fill:none; stroke:url(#fasesLineM); stroke-width:2; stroke-linecap:round; opacity:.7; animation:fases-line-pulse 7s ease-in-out infinite; }
-/* El "carrier" — pequeño chip romboidal con núcleo propio, lenguaje
-   visual coherente con las estaciones (mismo doble círculo halo+marca)
-   pero con forma facetada en vez de esférica. offset-rotate:auto le da
-   una inclinación orgánica siguiendo la curva; main.js sustituye el
-   offset-path por el trazado real medido, este es solo el arranque. */
-.fases-diagram .fases-carrier{
-  offset-path:path("M145,70 C145,115 75,165 75,210 C75,255 145,305 145,350 C145,395 75,445 75,490");
-  offset-rotate:auto;
-  animation:fases-signal-travel 8s linear infinite;
+.fases-card{
+  padding:22px 20px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  transition:border-color .25s ease, transform .25s ease, background .25s ease;
+  outline:none;
 }
-.fases-diagram .fases-carrier-plate{
-  fill:rgba(10,14,26,.55);
-  stroke:var(--cyan);
-  stroke-width:1.3;
-  filter:drop-shadow(0 0 6px var(--cyan));
+.fases-card-num{
+  display:block;
+  font-family:var(--mono);
+  font-size:0.85rem;
+  color:var(--cyan);
+  margin-bottom:10px;
 }
-.fases-diagram .fases-carrier-core{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-.fases-diagram .fases-station-halo{ opacity:.16; transform-box:fill-box; transform-origin:center; }
-.fases-diagram .fases-station-marker{ opacity:.95; transform-box:fill-box; transform-origin:center; }
-.fases-diagram .fases-station{ animation:fases-station-pulse 8s ease-in-out infinite; }
-.fases-diagram .fases-station-1 .fases-station-halo{ fill:var(--cyan); }
-.fases-diagram .fases-station-1 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-.fases-diagram .fases-station-2 .fases-station-halo{ fill:var(--cyan); }
-.fases-diagram .fases-station-2 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-.fases-diagram .fases-station-3 .fases-station-halo{ fill:var(--blue); }
-.fases-diagram .fases-station-3 .fases-station-marker{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
-.fases-diagram .fases-station-4 .fases-station-halo{ fill:var(--violet); }
-.fases-diagram .fases-station-4 .fases-station-marker{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
-.fases-diagram stop.line-a{ stop-color:var(--cyan); }
-.fases-diagram stop.line-b{ stop-color:var(--blue); }
-.fases-diagram stop.line-c{ stop-color:var(--violet); }
-@keyframes fases-line-pulse{ 0%,100%{ opacity:.5; } 50%{ opacity:.82; } }
-@keyframes fases-signal-travel{
-  0%{ offset-distance:0%; opacity:0; }
-  6%{ opacity:1; }
-  94%{ opacity:1; }
-  100%{ offset-distance:100%; opacity:0; }
+.fases-card h3{ font-family:var(--serif); font-size:1.02rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
+.fases-card p{ color:var(--stone); font-size:0.88rem; }
+.fases-card:hover,
+.fases-card:focus-visible{
+  border-color:rgba(67,224,255,.4);
+  background:rgba(67,224,255,.04);
+  transform:translateY(-2px);
 }
-/* Micro-respuesta al paso del carrier por cada estación: un breve
-   realce de escala + brillo, sincronizado vía animation-delay (fijado
-   por main.js según el punto real del recorrido en el que cae cada
-   estación) — nunca un parpadeo genérico y desacompasado. */
-@keyframes fases-station-pulse{
-  0%, 88%, 100%{ transform:scale(1); filter:brightness(1); }
-  93%{ transform:scale(1.4); filter:brightness(1.6); }
+.fases-layout:has(.fases-node-1:hover) .fases-card-1,
+.fases-layout:has(.fases-node-1:focus-visible) .fases-card-1,
+.fases-layout:has(.fases-node-2:hover) .fases-card-2,
+.fases-layout:has(.fases-node-2:focus-visible) .fases-card-2,
+.fases-layout:has(.fases-node-3:hover) .fases-card-3,
+.fases-layout:has(.fases-node-3:focus-visible) .fases-card-3,
+.fases-layout:has(.fases-node-4:hover) .fases-card-4,
+.fases-layout:has(.fases-node-4:focus-visible) .fases-card-4{
+  border-color:rgba(67,224,255,.4);
+  background:rgba(67,224,255,.04);
+  transform:translateY(-2px);
 }
 @media (prefers-reduced-motion: reduce){
-  .fases-diagram .fases-ribbon{ animation:none; opacity:.65; }
-  .fases-diagram .fases-carrier{ animation:none; opacity:0; }
-  .fases-diagram .fases-station{ animation:none; }
+  .fases-seg-1, .fases-seg-2, .fases-seg-3{ animation:none; stroke-dasharray:none; opacity:.55; }
 }
 @media (max-width:1024px){
-  .fases-layout{ grid-template-columns:1fr; }
-  .fases-diagram{ max-width:220px; margin:32px auto 0; }
+  .fases-grid{ grid-template-columns:1fr 1fr; }
 }
 @media (max-width:560px){
-  .fases-diagram{ display:none; }
+  .fases-grid{ grid-template-columns:1fr; }
+  .fases-node-num{ font-size:17px; }
 }
 
 /* ============ FAQ ============ */

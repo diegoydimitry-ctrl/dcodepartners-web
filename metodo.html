@@ -157,6 +157,15 @@
     </div>
   </section>
 
+  <!-- ============ MÉTODO — CONSOLA DE PROGRESO (DIR-049) ============
+       Sustituye por completo el timeline vertical: ya no es una línea con
+       cuatro puntos, es un panel de estado — cuatro módulos conectados por
+       canales de energía que se cargan de forma continua, cada uno con su
+       propio glifo (no un punto/esfera genérico) que representa lo que pasa
+       en esa fase. Los módulos y las tarjetas de texto de abajo están
+       vinculados: pasar el cursor o enfocar cualquiera de los dos realza
+       el otro (:has(), sin JS). El contenido editorial de las 4 fases no
+       cambia una palabra. -->
   <section class="section-sm">
     <div class="container">
       <div class="section-head reveal">
@@ -164,72 +173,78 @@
         <h2 class="h-title">De la primera llamada a los resultados sobre la mesa.</h2>
       </div>
 
-      <div class="fases-layout">
-        <div class="timeline reveal">
-          <div class="timeline-item">
-            <div class="timeline-num">01</div>
-            <div class="timeline-body">
-              <h3>Diagnóstico y diseño del sistema a medida</h3>
-              <p>Analizamos tu operativa real: qué procesos consumen más horas, dónde se pierden leads y qué tareas repetitivas están frenando al equipo. De ahí sale un diseño de automatización específico para tu negocio, no una plantilla genérica.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-num">02</div>
-            <div class="timeline-body">
-              <h3>Implementación en tu operativa real (semanas 1-4)</h3>
-              <p>Desplegamos los sistemas directamente en tu día a día, no en un entorno de pruebas aislado. Los supervisamos de cerca durante todo el mes para ajustar lo que haga falta sobre la marcha.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-num">03</div>
-            <div class="timeline-body">
-              <h3>Revisión de resultados (día 30)</h3>
-              <p>Nos sentamos contigo con datos concretos: horas ahorradas, tiempos de respuesta, procesos automatizados. Sin estimaciones ni proyecciones — resultados que ya han ocurrido.</p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-num">04</div>
-            <div class="timeline-body">
-              <h3>Acordamos el valor del servicio</h3>
-              <p>Solo entonces hablamos de cifras, con el impacto real ya demostrado. Si los resultados no están ahí, no hay factura. Si decides seguir, lo haces sabiendo exactamente lo que ganas.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="fases-diagram" aria-hidden="true">
-          <svg viewBox="0 0 200 560" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
+      <div class="fases-layout reveal">
+        <div class="fases-console" aria-hidden="true">
+          <svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
             <defs>
-              <linearGradient id="fasesLineM" x1="0" y1="0" x2="0" y2="1">
-                <stop class="line-a" offset="0%"/>
-                <stop class="line-b" offset="55%"/>
-                <stop class="line-c" offset="100%"/>
+              <linearGradient id="fasesSegA" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#43e0ff"/>
+                <stop offset="100%" stop-color="#5b8cff"/>
+              </linearGradient>
+              <linearGradient id="fasesSegB" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#5b8cff"/>
+                <stop offset="100%" stop-color="#5b8cff"/>
+              </linearGradient>
+              <linearGradient id="fasesSegC" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#5b8cff"/>
+                <stop offset="100%" stop-color="#9b6bff"/>
               </linearGradient>
             </defs>
+            <path class="fases-seg-glow" d="M100,110 C195,110 275,70 370,70"/>
+            <path class="fases-seg fases-seg-1" d="M100,110 C195,110 275,70 370,70"/>
+            <path class="fases-seg-glow" d="M370,70 C468,70 552,140 650,140"/>
+            <path class="fases-seg fases-seg-2" d="M370,70 C468,70 552,140 650,140"/>
+            <path class="fases-seg-glow" d="M650,140 C738,140 812,90 900,90"/>
+            <path class="fases-seg fases-seg-3" d="M650,140 C738,140 812,90 900,90"/>
 
-            <path class="fases-ribbon-glow" d="M145,70 C145,115 75,165 75,210 C75,255 145,305 145,350 C145,395 75,445 75,490"/>
-            <path class="fases-ribbon" d="M145,70 C145,115 75,165 75,210 C75,255 145,305 145,350 C145,395 75,445 75,490"/>
-            <g class="fases-carrier">
-              <rect class="fases-carrier-plate" x="-5" y="-5" width="10" height="10" rx="2" transform="rotate(45)"/>
-              <rect class="fases-carrier-core" x="-2" y="-2" width="4" height="4" rx="1" transform="rotate(45)"/>
+            <g class="fases-node fases-node-1" style="--mod-r:67;--mod-g:224;--mod-b:255;" transform="translate(100,110)">
+              <text class="fases-node-num" x="0" y="-38" text-anchor="middle">01</text>
+              <circle class="fases-node-halo" r="30"/>
+              <rect class="fases-node-plate" x="-22" y="-22" width="44" height="44" rx="13"/>
+              <g class="fases-node-icon" transform="translate(-11,-11) scale(0.917)"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></g>
             </g>
-
-            <g class="fases-station fases-station-1">
-              <circle class="fases-station-halo" cx="145" cy="70" r="13"/>
-              <circle class="fases-station-marker" cx="145" cy="70" r="4"/>
+            <g class="fases-node fases-node-2" style="--mod-r:91;--mod-g:140;--mod-b:255;" transform="translate(370,70)">
+              <text class="fases-node-num" x="0" y="-38" text-anchor="middle">02</text>
+              <circle class="fases-node-halo" r="30"/>
+              <rect class="fases-node-plate" x="-22" y="-22" width="44" height="44" rx="13"/>
+              <g class="fases-node-icon" transform="translate(-11,-11) scale(0.917)"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></g>
             </g>
-            <g class="fases-station fases-station-2">
-              <circle class="fases-station-halo" cx="75" cy="210" r="13"/>
-              <circle class="fases-station-marker" cx="75" cy="210" r="4"/>
+            <g class="fases-node fases-node-3" style="--mod-r:91;--mod-g:140;--mod-b:255;" transform="translate(650,140)">
+              <text class="fases-node-num" x="0" y="-38" text-anchor="middle">03</text>
+              <circle class="fases-node-halo" r="30"/>
+              <rect class="fases-node-plate" x="-22" y="-22" width="44" height="44" rx="13"/>
+              <g class="fases-node-icon" transform="translate(-11,-11) scale(0.917)"><path d="M18 20V10M12 20V4M6 20v-6"/></g>
             </g>
-            <g class="fases-station fases-station-3">
-              <circle class="fases-station-halo" cx="145" cy="350" r="13"/>
-              <circle class="fases-station-marker" cx="145" cy="350" r="4"/>
-            </g>
-            <g class="fases-station fases-station-4">
-              <circle class="fases-station-halo" cx="75" cy="490" r="13"/>
-              <circle class="fases-station-marker" cx="75" cy="490" r="4"/>
+            <g class="fases-node fases-node-4" style="--mod-r:155;--mod-g:107;--mod-b:255;" transform="translate(900,90)">
+              <text class="fases-node-num" x="0" y="-38" text-anchor="middle">04</text>
+              <circle class="fases-node-halo" r="30"/>
+              <rect class="fases-node-plate" x="-22" y="-22" width="44" height="44" rx="13"/>
+              <g class="fases-node-icon" transform="translate(-11,-11) scale(0.917)"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></g>
             </g>
           </svg>
+        </div>
+
+        <div class="fases-grid">
+          <div class="fases-card fases-card-1" tabindex="0">
+            <span class="fases-card-num">01</span>
+            <h3>Diagnóstico y diseño del sistema a medida</h3>
+            <p>Analizamos tu operativa real: qué procesos consumen más horas, dónde se pierden leads y qué tareas repetitivas están frenando al equipo. De ahí sale un diseño de automatización específico para tu negocio, no una plantilla genérica.</p>
+          </div>
+          <div class="fases-card fases-card-2" tabindex="0">
+            <span class="fases-card-num">02</span>
+            <h3>Implementación en tu operativa real (semanas 1-4)</h3>
+            <p>Desplegamos los sistemas directamente en tu día a día, no en un entorno de pruebas aislado. Los supervisamos de cerca durante todo el mes para ajustar lo que haga falta sobre la marcha.</p>
+          </div>
+          <div class="fases-card fases-card-3" tabindex="0">
+            <span class="fases-card-num">03</span>
+            <h3>Revisión de resultados (día 30)</h3>
+            <p>Nos sentamos contigo con datos concretos: horas ahorradas, tiempos de respuesta, procesos automatizados. Sin estimaciones ni proyecciones — resultados que ya han ocurrido.</p>
+          </div>
+          <div class="fases-card fases-card-4" tabindex="0">
+            <span class="fases-card-num">04</span>
+            <h3>Acordamos el valor del servicio</h3>
+            <p>Solo entonces hablamos de cifras, con el impacto real ya demostrado. Si los resultados no están ahí, no hay factura. Si decides seguir, lo haces sabiendo exactamente lo que ganas.</p>
+          </div>
         </div>
       </div>
     </div>
