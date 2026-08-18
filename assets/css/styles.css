@@ -1443,6 +1443,47 @@ nav.main-nav > ul{ position:relative; }
 .timeline-body h3{ font-family:var(--serif); font-size:1.15rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
 .timeline-body p{ color:var(--stone); font-size:0.94rem; max-width:520px; }
 
+/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033 Bloque 1) ============
+   Visual de apoyo puramente decorativo (aria-hidden), solo en metodo.html.
+   Cuatro rombos construidos con los mismos tokens del acabado cromado
+   (--surface-*) para leerse como parte del mismo sistema, sin texto
+   incrustado: la numeración y el contenido real siguen viviendo en la
+   timeline de siempre. */
+.fases-layout{
+  display:grid;
+  grid-template-columns:1fr 200px;
+  gap:40px;
+  align-items:start;
+}
+.fases-diagram{ padding-top:8px; }
+.fases-diagram svg{ display:block; width:100%; height:auto; }
+.fases-diagram .fases-spine{ stroke:url(#fasesLineM); stroke-width:1; opacity:.4; }
+.fases-diagram .fases-diamond{ fill:url(#fasesFillM); stroke:url(#fasesRingM); stroke-width:1.4; }
+.fases-diagram .fases-node-dot{ animation:pulse 2.4s ease-in-out infinite; }
+.fases-diagram .fases-node-1 .fases-node-dot{ fill:var(--cyan); filter:drop-shadow(0 0 5px var(--cyan)); }
+.fases-diagram .fases-node-2 .fases-node-dot{ fill:var(--cyan); filter:drop-shadow(0 0 5px var(--cyan)); animation-delay:.5s; }
+.fases-diagram .fases-node-3 .fases-node-dot{ fill:var(--blue); filter:drop-shadow(0 0 5px var(--blue)); animation-delay:1s; }
+.fases-diagram .fases-node-4 .fases-node-dot{ fill:var(--violet); filter:drop-shadow(0 0 5px var(--violet)); animation-delay:1.5s; }
+.fases-diagram stop.fill-a{ stop-color:var(--surface-top); }
+.fases-diagram stop.fill-b{ stop-color:var(--panel-2); }
+.fases-diagram stop.fill-c{ stop-color:var(--panel); }
+.fases-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
+.fases-diagram stop.ring-b{ stop-color:var(--surface-ring-mid); }
+.fases-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
+.fases-diagram stop.line-a{ stop-color:var(--cyan); }
+.fases-diagram stop.line-b{ stop-color:var(--blue); }
+.fases-diagram stop.line-c{ stop-color:var(--violet); }
+@media (prefers-reduced-motion: reduce){
+  .fases-diagram .fases-node-dot{ animation:none; }
+}
+@media (max-width:1024px){
+  .fases-layout{ grid-template-columns:1fr; }
+  .fases-diagram{ max-width:220px; margin:32px auto 0; }
+}
+@media (max-width:560px){
+  .fases-diagram{ display:none; }
+}
+
 /* ============ FAQ ============ */
 .faq-wrap{ max-width:820px; margin:0 auto; }
 .faq-list{ max-width:820px; margin:0 auto; }
