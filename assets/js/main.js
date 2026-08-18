@@ -263,10 +263,13 @@
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
     runWhenIdle(function () {
       // .hero-atmosphere (DIR-048) no es un .window — es la atmósfera de
-      // fondo del Hero, sin tarjeta ni tilt propio — pero sus capas internas
-      // sí necesitan las mismas --mx/--my para el paralaje del cursor, así
-      // que se suma al mismo selector en vez de duplicar la lógica de abajo.
-      document.querySelectorAll('.window:not(.chat-window), .hero-atmosphere').forEach(function (win) {
+      // fondo del Hero, sin tarjeta ni tilt propio, así que ya no comparte
+      // este bucle (DIR-050: su paralaje ahora es un muelle con física
+      // propia, ver más abajo). Este bucle solo mueve --rx/--ry/--mx/--my
+      // 1:1 con el cursor para el tilt+spotlight de las tarjetas .window
+      // reales — un efecto sutil de por sí, sin el problema que sí tenía
+      // el Hero (desplazamientos grandes que debían sentirse "físicos").
+      document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
         win.addEventListener('mousemove', function (e) {
           var rect = win.getBoundingClientRect();
           var px = (e.clientX - rect.left) / rect.width;
@@ -280,17 +283,117 @@
         win.addEventListener('mouseleave', function () {
           win.style.setProperty('--rx', '0deg');
           win.style.setProperty('--ry', '0deg');
-          // DIR-049: --mx/--my nunca se reseteaban aquí — un .window normal
-          // no se nota (solo alimentan un spotlight sutil), pero en
-          // .hero-atmosphere alimentan el desplazamiento real de las capas
-          // de paralaje, así que al salir el cursor los módulos se quedaban
-          // desplazados en vez de volver al centro. Con esto vuelven a su
-          // posición de reposo — el retorno suave lo da la transición CSS
-          // de cada capa, no este salto de valor.
           win.style.setProperty('--mx', '50%');
           win.style.setProperty('--my', '50%');
         });
       });
+    });
+  }
+
+  /* ---------- Home Hero — paralaje con muelle amortiguado (DIR-050) ----------
+     DIR-049 acotó el desplazamiento (clamp() en CSS, sigue igual) y
+     corrigió que --mx/--my no volvieran a 50% al salir el cursor. Pero
+     Dirección observó que el movimiento seguía sintiéndose demasiado
+     rápido/agresivo: antes --mx/--my se escribían 1:1 con la posición
+     bruta del cursor en cada mousemove, y toda la sensación de "suavidad"
+     dependía de que la transición CSS de .hero-atm-layer se reiniciara
+     constantemente — con el cursor en movimiento continuo eso da un
+     seguimiento casi instantáneo, y solo se notaba una desaceleración
+     limpia en el momento de soltar el cursor.
+     Aquí --mx/--my dejan de ser la posición bruta del cursor: son el
+     resultado de un muelle amortiguado (spring) que se recalcula en
+     cada frame de animación, seguido tanto para alcanzar al cursor como
+     para volver al centro al salir. Un muelle bien amortiguado da los
+     tres rasgos que pedía la Dirección a la vez: arranca en reposo
+     (aceleración progresiva — la velocidad parte de cero y crece), nunca
+     sobrepasa el objetivo con el damping elegido (sin rebote/overshoot)
+     y decelera de forma continua al acercarse (desaceleración
+     progresiva) — nada de saltos ni de "snap back". */
+  var heroAtmosphere = document.querySelector('.hero-atmosphere');
+  if (heroAtmosphere && !prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+    runWhenIdle(function () {
+      var restX = 50, restY = 50; // % — posición de reposo (centro)
+      var targetX = restX, targetY = restY;
+      var curX = restX, curY = restY;
+      var velX = 0, velY = 0;
+      // Valores elegidos por simulación numérica (no a ojo): con
+      // stiffness=0.10/damping=0.72 el muelle llegaba a sobrepasar el
+      // objetivo casi un 12% antes de asentarse — exactamente el
+      // "rebote" que la Dirección pidió eliminar. Este par (0.037/0.71)
+      // se comporta como críticamente amortiguado: la velocidad sube de
+      // forma progresiva hasta un pico hacia el 15% del recorrido y baja
+      // de forma igualmente progresiva hasta el objetivo sin sobrepasarlo
+      // (overshoot < 0.01% del recorrido total, imperceptible) en ~550ms.
+      var stiffness = 0.037; // "tirón" hacia el objetivo por frame
+      var damping = 0.71;    // fricción — el par elegido no oscila
+      var settleEps = 0.03; // umbral para considerar el muelle "asentado"
+      var rafId = null;
+
+      var applyFrame = function () {
+        heroAtmosphere.style.setProperty('--mx', curX + '%');
+        heroAtmosphere.style.setProperty('--my', curY + '%');
+      };
+
+      // A propósito NO se escala por delta-time real entre frames: los
+      // valores de stiffness/damping de arriba están verificados (por
+      // simulación numérica) contra un paso fijo por frame. Si se
+      // reescala por dt variable, la fuerza y la fricción dejan de
+      // aplicarse en la misma proporción entre sí frame a frame —eso fue
+      // justamente lo que reintrodujo un pequeño rebote real (medible
+      // en QA) pese a que la simulación en abstracto no lo mostraba: el
+      // jitter normal de requestAnimationFrame bastaba para desajustar
+      // fuerza y fricción entre sí. Un paso fijo por frame reproduce
+      // exactamente la simulación verificada, a costa de que la duración
+      // real en pantallas de refresco muy distinto a 60Hz varíe un poco
+      // — aceptable en un efecto decorativo, y preferible a reabrir la
+      // puerta al rebote.
+      var tick = function () {
+        var fx = (targetX - curX) * stiffness;
+        var fy = (targetY - curY) * stiffness;
+        velX = (velX + fx) * damping;
+        velY = (velY + fy) * damping;
+        curX += velX;
+        curY += velY;
+
+        applyFrame();
+
+        var settled = Math.abs(targetX - curX) < settleEps && Math.abs(targetY - curY) < settleEps &&
+          Math.abs(velX) < settleEps && Math.abs(velY) < settleEps;
+
+        if (settled) {
+          curX = targetX;
+          curY = targetY;
+          velX = 0;
+          velY = 0;
+          applyFrame();
+          rafId = null;
+        } else {
+          rafId = requestAnimationFrame(tick);
+        }
+      };
+
+      var ensureLoop = function () {
+        if (rafId === null) {
+          rafId = requestAnimationFrame(tick);
+        }
+      };
+
+      heroAtmosphere.addEventListener('mousemove', function (e) {
+        var rect = heroAtmosphere.getBoundingClientRect();
+        var px = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        var py = Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height));
+        targetX = px * 100;
+        targetY = py * 100;
+        ensureLoop();
+      });
+
+      heroAtmosphere.addEventListener('mouseleave', function () {
+        targetX = restX;
+        targetY = restY;
+        ensureLoop();
+      });
+
+      applyFrame();
     });
   }
 

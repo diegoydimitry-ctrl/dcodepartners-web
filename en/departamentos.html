@@ -185,33 +185,44 @@
     </div>
   </section>
 
-  <!-- ============ DEPARTMENTS — LIVING BUSINESS ECOSYSTEM (DIR-047) ============
+  <!-- ============ DEPARTMENTS — LIVING BUSINESS ECOSYSTEM (DIR-047, hierarchy DIR-050) ============
        Fully replaces the "Your company + 8 boxes + bus" tree (DIR-040/
        043/045) with a radial architecture: a central core ("Your company")
        and the 8 real stations — real icon + real name, each linking to its
-       page — laid out at fixed positions around it, each with its own
-       energy channel to the core. They don't orbit — that metaphor was
-       already tried and rejected for Home (DIR-046) — the motion lives in
-       the detail: a very slow pulse in the core, a glint that travels each
-       channel very slowly, a subtle staggered echo per station. On hover
-       or keyboard focus the station lifts, its channel lights up and its
-       real description appears (copy already published in the mega-menu,
-       not new copy). The whole layout is fluid in % + aspect-ratio inside
-       a container-query context — it scales down on mobile without hiding
-       or recomposing, there is no separate "compact version". -->
+       page — each with its own energy channel to the core. They don't
+       orbit — that metaphor was already tried and rejected for Home
+       (DIR-046) — the motion lives in the detail: a very slow pulse in
+       the core, a glint that travels each channel very slowly, a subtle
+       staggered echo per station. On hover or keyboard focus the station
+       lifts, its channel lights up and its real description appears
+       (copy already published in the mega-menu, not new copy).
+       DIR-050: no longer a perfect circle at 45°. Each station now has
+       its own angle AND radius reflecting a real hierarchy — CORE
+       CAPABILITIES (Sales, Leadership: without these there's no business
+       to sustain) sit closer to the core with a larger plate; OPERATING
+       CAPABILITIES (Marketing, Delivery, Customer: the day-to-day engine
+       — attract, fulfill, retain) at mid distance; SUPPORT CAPABILITIES
+       (Finance, Support, Operations: sustain without steering) further
+       out with a more discreet plate. All 8 angles still cover the full
+       circle (15°/70°/110°/165°/205°/250°/295°/335° from the top,
+       clockwise) so reading stays immediate despite the asymmetry — each
+       .dept-node--N is still the same station as before, only its
+       coordinates and new tier class (central/operativa/soporte) change.
+       The whole layout stays fluid in % + aspect-ratio inside a
+       container-query context. -->
   <section class="section-sm dept-ecosystem">
     <div class="container">
       <div class="dept-ecosystem-field">
 
         <svg class="dept-ecosystem-rays" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-          <line class="dept-ray dept-ray-1" x1="50" y1="50" x2="50.00" y2="14.00"/>
-          <line class="dept-ray dept-ray-2" x1="50" y1="50" x2="75.46" y2="24.54"/>
-          <line class="dept-ray dept-ray-3" x1="50" y1="50" x2="86.00" y2="50.00"/>
-          <line class="dept-ray dept-ray-4" x1="50" y1="50" x2="75.46" y2="75.46"/>
-          <line class="dept-ray dept-ray-5" x1="50" y1="50" x2="50.00" y2="86.00"/>
-          <line class="dept-ray dept-ray-6" x1="50" y1="50" x2="24.54" y2="75.46"/>
-          <line class="dept-ray dept-ray-7" x1="50" y1="50" x2="14.00" y2="50.00"/>
-          <line class="dept-ray dept-ray-8" x1="50" y1="50" x2="24.54" y2="24.54"/>
+          <line class="dept-ray dept-ray-1" x1="50" y1="50" x2="50.00" y2="22.32"/>
+          <line class="dept-ray dept-ray-2" x1="50" y1="50" x2="79.52" y2="27.69"/>
+          <line class="dept-ray dept-ray-3" x1="50" y1="50" x2="43.30" y2="86.39"/>
+          <line class="dept-ray dept-ray-4" x1="50" y1="50" x2="13.38" y2="46.62"/>
+          <line class="dept-ray dept-ray-5" x1="50" y1="50" x2="93.81" y2="54.07"/>
+          <line class="dept-ray dept-ray-6" x1="50" y1="50" x2="14.94" y2="76.59"/>
+          <line class="dept-ray dept-ray-7" x1="50" y1="50" x2="20.39" y2="17.45"/>
+          <line class="dept-ray dept-ray-8" x1="50" y1="50" x2="69.16" y2="71.17"/>
         </svg>
 
         <div class="dept-ecosystem-core">
@@ -222,49 +233,65 @@
           <span class="dept-ecosystem-core-label">Your company</span>
         </div>
 
-        <a class="dept-node dept-node--1" href="/en/departamentos/comercial" style="--node-x:50.00%;--node-y:14.00%;--mod-r:67;--mod-g:224;--mod-b:255;">
+        <!-- CORE CAPABILITY — the revenue engine -->
+        <a class="dept-node dept-node--1 dept-node--central" href="/en/departamentos/comercial" style="--node-x:50.00%;--node-y:22.32%;--mod-r:67;--mod-g:224;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">SLS</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span></span>
           <span class="dept-node-name">Sales</span>
           <span class="dept-node-tagline">Never lose a sale to poor follow-up again.</span>
         </a>
 
-        <a class="dept-node dept-node--2" href="/en/departamentos/marketing" style="--node-x:75.46%;--node-y:24.54%;--mod-r:155;--mod-g:107;--mod-b:255;">
+        <!-- OPERATING CAPABILITY — attracts demand -->
+        <a class="dept-node dept-node--2 dept-node--operativa" href="/en/departamentos/marketing" style="--node-x:79.52%;--node-y:27.69%;--mod-r:155;--mod-g:107;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">MKT</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span></span>
           <span class="dept-node-name">Marketing</span>
           <span class="dept-node-tagline">Leads that arrive already qualified, not raw.</span>
         </a>
 
-        <a class="dept-node dept-node--3" href="/en/departamentos/clientes" style="--node-x:86.00%;--node-y:50.00%;--mod-r:91;--mod-g:140;--mod-b:255;">
+        <!-- OPERATING CAPABILITY — retains -->
+        <a class="dept-node dept-node--3 dept-node--operativa" href="/en/departamentos/clientes" style="--node-x:43.30%;--node-y:86.39%;--mod-r:91;--mod-g:140;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">CST</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span></span>
           <span class="dept-node-name">Customer</span>
           <span class="dept-node-tagline">Every client cared for, without depending on any one person.</span>
         </a>
 
-        <a class="dept-node dept-node--4" href="/en/departamentos/produccion" style="--node-x:75.46%;--node-y:75.46%;--mod-r:155;--mod-g:107;--mod-b:255;">
+        <!-- OPERATING CAPABILITY — delivers -->
+        <a class="dept-node dept-node--4 dept-node--operativa" href="/en/departamentos/produccion" style="--node-x:13.38%;--node-y:46.62%;--mod-r:155;--mod-g:107;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">DLV</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span></span>
           <span class="dept-node-name">Delivery</span>
           <span class="dept-node-tagline">Projects that launch themselves and hit their deadlines.</span>
         </a>
 
-        <a class="dept-node dept-node--5" href="/en/departamentos/finanzas" style="--node-x:50.00%;--node-y:86.00%;--mod-r:52;--mod-g:231;--mod-b:164;">
+        <!-- SUPPORT CAPABILITY -->
+        <a class="dept-node dept-node--5 dept-node--soporte" href="/en/departamentos/finanzas" style="--node-x:93.81%;--node-y:54.07%;--mod-r:52;--mod-g:231;--mod-b:164;">
+          <span class="dept-node-tag" aria-hidden="true">FIN</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span></span>
           <span class="dept-node-name">Finance</span>
           <span class="dept-node-tagline">Coming soon — expense control is already real.</span>
         </a>
 
-        <a class="dept-node dept-node--6" href="/en/departamentos/soporte" style="--node-x:24.54%;--node-y:75.46%;--mod-r:91;--mod-g:140;--mod-b:255;">
+        <!-- SUPPORT CAPABILITY -->
+        <a class="dept-node dept-node--6 dept-node--soporte" href="/en/departamentos/soporte" style="--node-x:14.94%;--node-y:76.59%;--mod-r:91;--mod-g:140;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">SUP</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span></span>
           <span class="dept-node-name">Support</span>
           <span class="dept-node-tagline">Fast responses, even after hours.</span>
         </a>
 
-        <a class="dept-node dept-node--7" href="/en/departamentos/administracion" style="--node-x:14.00%;--node-y:50.00%;--mod-r:155;--mod-g:107;--mod-b:255;">
+        <!-- SUPPORT CAPABILITY -->
+        <a class="dept-node dept-node--7 dept-node--soporte" href="/en/departamentos/administracion" style="--node-x:20.39%;--node-y:17.45%;--mod-r:155;--mod-g:107;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">OPS</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span></span>
           <span class="dept-node-name">Operations</span>
           <span class="dept-node-tagline">Your company, protected and organized, effortlessly.</span>
         </a>
 
-        <a class="dept-node dept-node--8" href="/en/departamentos/direccion" style="--node-x:24.54%;--node-y:24.54%;--mod-r:67;--mod-g:224;--mod-b:255;">
+        <!-- CORE CAPABILITY — steers the system -->
+        <a class="dept-node dept-node--8 dept-node--central" href="/en/departamentos/direccion" style="--node-x:69.16%;--node-y:71.17%;--mod-r:67;--mod-g:224;--mod-b:255;">
+          <span class="dept-node-tag" aria-hidden="true">LDR</span>
           <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span></span>
           <span class="dept-node-name">Leadership</span>
           <span class="dept-node-tagline">One clear decision every morning, backed by real data.</span>

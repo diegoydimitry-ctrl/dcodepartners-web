@@ -966,17 +966,23 @@ nav.main-nav > ul{ position:relative; }
 @media (max-width:1024px){
   .hero-atmosphere{ grid-row:2; opacity:.4; mask-image:none; -webkit-mask-image:none; }
 }
-/* Paralaje acotado (DIR-049 2B/2C): "REST POSITION + BOUNDED PARALLAX +
-   SMOOTH RETURN". Antes el desplazamiento era un % del propio ancho de
-   .hero-atmosphere (que ahora cubre las dos columnas del grid) — en una
-   sección ancha eso podía acercar los módulos a la franja de métricas o
-   al borde inferior cuando el cursor se iba a ciertas zonas. clamp()
-   fija un tope en px que nunca se supera, sea cual sea el ancho real de
-   la sección. El regreso a la posición neutra ya no es un salto: main.js
-   resetea --mx/--my a 50% en mouseleave (antes solo reseteaba --rx/--ry)
-   y esta transición más larga y con desaceleración lo hace sentir un
-   "asentamiento" físico, no un tirón. */
-.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; transition:transform .5s cubic-bezier(.16,1,.3,1); will-change:transform; }
+/* Paralaje acotado (DIR-049 2B/2C) + física de muelle (DIR-050 1/1A):
+   "REST POSITION + BOUNDED PARALLAX + SMOOTH RETURN". clamp() fija un
+   tope en px que nunca se supera, sea cual sea el ancho real de la
+   sección (no cambia en DIR-050). Lo que sí cambia es CÓMO llega ahí:
+   antes --mx/--my se escribían 1:1 con el cursor y toda la suavidad
+   dependía de que esta capa reiniciara una transición CSS de duración
+   fija en cada mousemove — con el cursor en movimiento continuo eso
+   reinicia la transición decenas de veces por segundo, lo que en la
+   práctica da un seguimiento casi instantáneo y solo se nota "suave"
+   al soltar el cursor. Ahora --mx/--my ya NO son la posición bruta del
+   cursor: main.js las alimenta con un muelle amortiguado que recalcula
+   la posición en cada frame (arranque en reposo, nunca sobrepasa el
+   objetivo, decelera de forma orgánica) — por eso esta capa ya no
+   necesita (ni debe tener) su propia transition: sumarla encima del
+   muelle solo introduciría un segundo suavizado compitiendo con el
+   primero, y eso es precisamente lo que se sentía "agresivo". */
+.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; will-change:transform; }
 .hero-atm-layer svg{ width:100%; height:100%; display:block; overflow:visible; }
 
 .hero-atm-back{ transform:translate(clamp(-8px, calc((var(--mx,50%) - 50%) * .04), 8px), clamp(-6px, calc((var(--my,50%) - 50%) * .04), 6px)); filter:blur(1px); }
@@ -1035,7 +1041,6 @@ nav.main-nav > ul{ position:relative; }
 }
 .atm-chip-label--flip{ transform:translate(calc(-100% - 14px), -6px); }
 @media (prefers-reduced-motion: reduce){
-  .hero-atm-layer{ transition:none; }
   .hero-atm-mid .signal-a, .hero-atm-mid .signal-b{ animation:none; }
   .hero-atm-front .atm-chip-status{ animation:none; opacity:.75; }
 }
@@ -1276,10 +1281,22 @@ nav.main-nav > ul{ position:relative; }
   color:var(--ink); position:relative; z-index:2; text-align:center; line-height:1.15;
 }
 
-/* Las 8 estaciones — posiciones fijas en % (calculadas a 45° sobre un
-   radio del 36%, sin JS), cada una con su icono y nombre reales del
-   propio hub. Un eco de "actividad" muy sutil y escalonado (no un
-   parpadeo genérico) sugiere que el sistema sigue vivo sin moverse. */
+/* Las 8 estaciones (DIR-050): posiciones asimétricas fijas en % (sin
+   JS) — ya no un círculo perfecto a 45°, sino una jerarquía espacial
+   real: los departamentos más estructurales (CAPACIDADES CENTRALES —
+   Comercial, Dirección) viven más cerca del núcleo; las capacidades
+   operativas (Marketing, Producción, Clientes) a media distancia; las
+   de soporte (Finanzas, Soporte, Administración) más alejadas. Radio Y
+   ángulo de cada una son irregulares a propósito (ver comentario en
+   departamentos.html junto a cada nodo) para que la red se sienta viva
+   y con ritmo, no un patrón geométrico repetido — sin dejar de ser
+   legible: los ángulos siguen cubriendo las 8 direcciones del campo.
+   El lenguaje visual del componente (placa compacta, borde fino de
+   color propio, halo controlado, identificador mono) se toma prestado
+   de los nodos de la Consola de Progreso de Método — mismo sistema de
+   diseño, sin copiar su estructura SVG literal. Un eco de "actividad"
+   muy sutil y escalonado (no un parpadeo genérico) sugiere que el
+   sistema sigue vivo sin moverse. */
 .dept-node{
   position:absolute;
   left:var(--node-x); top:var(--node-y);
@@ -1298,31 +1315,44 @@ nav.main-nav > ul{ position:relative; }
 .dept-node--8{ animation-delay:-4.9s; }
 @keyframes dept-node-echo{ 0%,88%,100%{ filter:brightness(1); } 94%{ filter:brightness(1.16); } }
 
+/* Identificador de sistema (DIR-050) — mono, 3 letras, sobre la placa,
+   mismo rol que el "01/02/03/04" de los nodos de Método: refuerza la
+   sensación de "componente de sistema" sin tocar el nombre real
+   (que sigue debajo, sin cambios) ni la accesibilidad (aria-hidden;
+   el nombre accesible del enlace lo da .dept-node-name). */
+.dept-node-tag{
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.05em;
+  color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
+  transition:color .25s ease;
+}
+
+/* Placa compacta con borde fino de color propio + halo controlado —
+   mismo lenguaje que .fases-node-plate/.fases-node-halo de Método
+   (metodo.html), adaptado de SVG a HTML: esquinas redondeadas (no
+   círculo), fondo oscuro translúcido, borde de 1 color en vez del
+   anillo metálico degradado anterior, glow que solo aparece al
+   interactuar en vez de vivir siempre a media potencia. */
 .dept-node-badge{
   position:relative;
   width:clamp(50px,13cqi,68px); height:clamp(50px,13cqi,68px);
-  border-radius:50%;
+  border-radius:clamp(14px,4cqi,19px);
   display:flex; align-items:center; justify-content:center;
-  background:
-    radial-gradient(120% 90% at 30% 20%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.18), transparent 65%),
-    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
-  box-shadow:0 14px 30px -18px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight), inset 0 -10px 16px -14px rgba(0,0,0,.5);
-  transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
+  background:rgba(10,14,26,.62);
+  border:1.4px solid rgba(var(--mod-r),var(--mod-g),var(--mod-b),.5);
+  box-shadow:0 14px 30px -18px rgba(0,0,0,.7);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .25s ease;
 }
-.dept-node-badge::after{
+.dept-node-badge::before{
   content:"";
-  position:absolute; inset:0; border-radius:inherit;
-  padding:1px;
-  background:linear-gradient(180deg,
-    rgba(var(--mod-r),var(--mod-g),var(--mod-b),.75) 0%,
-    var(--surface-ring-mid) 50%,
-    rgba(var(--mod-r),var(--mod-g),var(--mod-b),.22) 100%);
-  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;
-          mask-composite:exclude;
+  position:absolute; inset:-32%;
+  border-radius:50%;
+  background:radial-gradient(closest-side, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.24), transparent 72%);
+  opacity:.22;
+  transition:opacity .25s ease, transform .3s cubic-bezier(.16,1,.3,1);
   pointer-events:none;
-  opacity:.55;
-  transition:opacity .3s ease;
+  z-index:-1;
 }
 .dept-node-icon{
   width:52%; height:52%;
@@ -1337,6 +1367,13 @@ nav.main-nav > ul{ position:relative; }
   color:var(--ink); text-align:center; line-height:1.15;
   max-width:clamp(64px,20cqi,110px);
 }
+
+/* Jerarquía visual por nivel (DIR-050 3D): el tamaño de la placa
+   refuerza la distancia al núcleo — capacidades centrales más grandes,
+   de soporte más discretas — sin tocar el tamaño del icono relativo
+   (52% en los tres casos) ni el nombre. */
+.dept-node--central .dept-node-badge{ width:clamp(58px,15.5cqi,78px); height:clamp(58px,15.5cqi,78px); }
+.dept-node--soporte .dept-node-badge{ width:clamp(42px,11cqi,56px); height:clamp(42px,11cqi,56px); }
 
 /* La descripción real (copy ya publicado en el mega-menú) aparece como
    una pastilla flotante al pasar el cursor o enfocar. Cada estación
@@ -1355,31 +1392,42 @@ nav.main-nav > ul{ position:relative; }
   transition:opacity .22s ease, transform .22s ease;
   z-index:5;
 }
+/* DIR-050: anclaje recalculado por cuadrante para las nuevas
+   posiciones asimétricas — abajo si el nodo vive en la mitad superior
+   del campo (y<50%), arriba si vive en la inferior; anclado a la
+   derecha si el nodo está en la mitad derecha (x>50%), a la izquierda
+   si está en la izquierda — así la pastilla siempre se abre hacia el
+   centro del campo, nunca hacia el borde más cercano. */
 .dept-node--1 .dept-node-tagline{ top:calc(100% + 10px); left:50%; transform:translate(-50%,4px); }
 .dept-node--1:hover .dept-node-tagline, .dept-node--1:focus-visible .dept-node-tagline{ transform:translate(-50%,0); }
 .dept-node--2 .dept-node-tagline{ top:calc(100% + 10px); right:-8px; transform:translateY(4px); }
 .dept-node--2:hover .dept-node-tagline, .dept-node--2:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--3 .dept-node-tagline{ top:calc(100% + 10px); right:-8px; transform:translateY(4px); }
+.dept-node--3 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
 .dept-node--3:hover .dept-node-tagline, .dept-node--3:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--4 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
+.dept-node--4 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
 .dept-node--4:hover .dept-node-tagline, .dept-node--4:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--5 .dept-node-tagline{ bottom:calc(100% + 10px); left:50%; transform:translate(-50%,-4px); }
-.dept-node--5:hover .dept-node-tagline, .dept-node--5:focus-visible .dept-node-tagline{ transform:translate(-50%,0); }
+.dept-node--5 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
+.dept-node--5:hover .dept-node-tagline, .dept-node--5:focus-visible .dept-node-tagline{ transform:translateY(0); }
 .dept-node--6 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
 .dept-node--6:hover .dept-node-tagline, .dept-node--6:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--7 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
+.dept-node--7 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
 .dept-node--7:hover .dept-node-tagline, .dept-node--7:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--8 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
+.dept-node--8 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
 .dept-node--8:hover .dept-node-tagline, .dept-node--8:focus-visible .dept-node-tagline{ transform:translateY(0); }
 
 .dept-node:hover, .dept-node:focus-visible{ z-index:6; }
 .dept-node:hover .dept-node-badge, .dept-node:focus-visible .dept-node-badge{
   transform:translateY(-4px) scale(1.06);
-  box-shadow:0 22px 44px -20px rgba(0,0,0,.8), 0 0 0 1px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.18);
+  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.9);
+  box-shadow:0 22px 44px -20px rgba(0,0,0,.8), 0 0 12px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
 }
-.dept-node:hover .dept-node-badge::after, .dept-node:focus-visible .dept-node-badge::after{ opacity:1; }
+.dept-node:hover .dept-node-badge::before, .dept-node:focus-visible .dept-node-badge::before{
+  opacity:.5;
+  transform:scale(1.18);
+}
+.dept-node:hover .dept-node-tag, .dept-node:focus-visible .dept-node-tag{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); }
 .dept-node:hover .dept-node-tagline, .dept-node:focus-visible .dept-node-tagline{ opacity:1; }
-.dept-node:focus-visible{ outline:2px solid var(--cyan); outline-offset:4px; border-radius:50%; }
+.dept-node:focus-visible{ outline:2px solid var(--cyan); outline-offset:4px; border-radius:14px; }
 
 /* El canal hacia el núcleo se ilumina con el acento real del
    departamento cuando su estación recibe foco o cursor — "esto
@@ -2143,6 +2191,50 @@ nav.main-nav > ul{ position:relative; }
 .contacto-side{
   display:flex;
   flex-direction:column;
+}
+
+/* Jerarquía visual del formulario (DIR-050 4): sigue siendo el mismo
+   .window de siempre — mismo tamaño, misma composición — pero se lee
+   inequívocamente como el protagonista mediante contraste de
+   superficie (borde y sheen de la barra con el acento cian, en vez del
+   neutro de las demás ventanas), profundidad (un halo propio que
+   sobresale del borde, sutil en reposo) y foco (se intensifica al
+   entrar en cualquier campo — :focus-within — momento en el que las
+   tarjetas vecinas bajan ligeramente de intensidad sin oscurecerse
+   del todo, para que la página siga sintiéndose equilibrada). */
+.form-card{
+  border-color:rgba(67,224,255,.22);
+  box-shadow:
+    0 40px 80px -40px rgba(0,0,0,.75),
+    0 0 0 1px rgba(67,224,255,.1),
+    0 0 60px -22px rgba(67,224,255,.22),
+    inset 0 1px 0 var(--surface-highlight),
+    inset 0 -1px 0 rgba(91,140,255,.16);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
+}
+.form-card::after{ opacity:.95; }
+.form-card .window-bar{ border-bottom-color:rgba(67,224,255,.32); }
+.form-card .window-bar::after{ background:linear-gradient(90deg, transparent, rgba(67,224,255,.85), transparent); }
+.form-card:focus-within{
+  border-color:rgba(67,224,255,.55);
+  box-shadow:
+    0 46px 92px -38px rgba(0,0,0,.8),
+    0 0 0 1px rgba(67,224,255,.28),
+    0 0 84px -16px rgba(67,224,255,.32),
+    inset 0 1px 0 var(--surface-highlight),
+    inset 0 -1px 0 rgba(91,140,255,.2);
+}
+.form-card:focus-within::after{ opacity:1; }
+.contacto-main .booking-card, .contacto-side .contact-card{
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease, opacity .3s ease, filter .3s ease;
+}
+.contacto-grid:has(.form-card:focus-within) .contacto-main .booking-card,
+.contacto-grid:has(.form-card:focus-within) .contacto-side .contact-card{
+  opacity:.88;
+  filter:saturate(.92);
+}
+@media (prefers-reduced-motion:reduce){
+  .form-card, .contacto-main .booking-card, .contacto-side .contact-card{ transition:none; }
 }
 
 /* La reserva ya no es una tarjeta de peso equivalente al formulario —
