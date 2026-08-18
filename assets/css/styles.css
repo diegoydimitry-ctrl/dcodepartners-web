@@ -857,6 +857,32 @@ nav.main-nav > ul{ position:relative; }
   padding-bottom:clamp(56px, 9vw, 110px);
   overflow:hidden;
 }
+/* Imagen D-Code de fondo (DIR-044): infraestructura/ciudad de circuitos,
+   ancla a la derecha — la composición del propio asset ya deja el
+   tercio izquierdo casi negro, y el degradado aquí lo refuerza para
+   garantizar contraste del H1/CTA en cualquier ancho de contenedor.
+   Vive detrás de .hero-grid (z-index:2) y de .hero::after (el campo de
+   luz existente, que se mantiene sin cambios). Muy atenuada en mobile,
+   donde la sección pasa a una columna y el recorte por aspect-ratio ya
+   no favorece la composición. */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background-image:
+    linear-gradient(90deg, var(--bg) 0%, var(--bg) 30%, rgba(6,9,20,.75) 48%, rgba(6,9,20,.25) 66%, transparent 82%),
+    linear-gradient(0deg, var(--bg) 0%, transparent 22%, transparent 78%, var(--bg) 100%),
+    url('/assets/img/home-hero-bg.webp');
+  background-position:0 0, 0 0, 92% center;
+  background-size:100% 100%, 100% 100%, cover;
+  background-repeat:no-repeat, no-repeat, no-repeat;
+  opacity:.7;
+  pointer-events:none;
+}
+@media (max-width:900px){
+  .hero::before{ opacity:.16; }
+}
 /* Campo de luz propio del hero — firma de Home, distinta del glow-orb
    ambiental que ya existe en el resto del sitio. Muy lento, muy sutil. */
 .hero::after{
@@ -919,8 +945,42 @@ nav.main-nav > ul{ position:relative; }
 .hero .trust-badges{ margin-top:16px; }
 
 .hero-graphic{ position:relative; }
-.hero-canvas-wrap{ padding:0; }
-.hero-canvas-wrap canvas{ width:100%; height:260px; display:block; }
+
+/* ============ HERO — NÚCLEO OPERATIVO (DIR-045) ============
+   Sustituye el canvas de red de nodos (JS, aleatorio) por un diagrama
+   SVG estático propio de D-Code: un núcleo hexagonal (nunca un rombo —
+   ya es el lenguaje de Método) con dos anillos concéntricos, un eje
+   vertical que lo atraviesa, y dos racimos de barras de actividad a
+   los lados unidos al núcleo por finos conductores — "hay un sistema
+   funcionando aquí", no "mira cuántos nodos tiene la IA". Única
+   animación: un pulso de opacidad muy lento en el anillo exterior;
+   las barras son estáticas. Mismos tokens cromados que el resto del
+   sitio (fill/ring por degradado, misma técnica de Método/Servicios). */
+.hero-core-wrap{ padding:0; }
+.hero-core-diagram svg{ display:block; width:100%; height:260px; }
+.hero-core-diagram .core-spine{ stroke:url(#heroSpineLine); stroke-width:1; opacity:.5; }
+.hero-core-diagram .core-ring{ fill:none; stroke:url(#heroCoreRing); stroke-width:1; }
+.hero-core-diagram .core-ring-inner{ opacity:.24; }
+.hero-core-diagram .core-ring-outer{ opacity:.16; animation:core-ring-pulse 5.5s ease-in-out infinite; }
+.hero-core-diagram .core-hex{ fill:url(#heroCoreFill); stroke:url(#heroCoreRing); stroke-width:1.4; }
+.hero-core-diagram .core-hex-line{ stroke:var(--surface-sheen); stroke-width:1; opacity:.3; }
+.hero-core-diagram .core-conduit-l{ stroke:url(#heroConduitL); stroke-width:1; opacity:.55; }
+.hero-core-diagram .core-conduit-r{ stroke:url(#heroConduitR); stroke-width:1; opacity:.55; }
+.hero-core-diagram .core-bar{ fill:url(#heroBarFill); }
+.hero-core-diagram .core-accent{ fill:var(--violet); filter:drop-shadow(0 0 5px var(--violet)); }
+.hero-core-diagram stop.fill-a{ stop-color:var(--surface-top); }
+.hero-core-diagram stop.fill-b{ stop-color:var(--panel-2); }
+.hero-core-diagram stop.fill-c{ stop-color:var(--panel); }
+.hero-core-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
+.hero-core-diagram stop.ring-b{ stop-color:var(--cyan); }
+.hero-core-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
+.hero-core-diagram stop.bar-a{ stop-color:var(--cyan); }
+.hero-core-diagram stop.bar-b{ stop-color:var(--blue); }
+.hero-core-diagram stop.spine-a{ stop-color:var(--cyan); stop-opacity:.7; }
+.hero-core-diagram stop.spine-b{ stop-color:var(--blue); stop-opacity:.15; }
+@keyframes core-ring-pulse{ 0%,100%{ opacity:.16; } 50%{ opacity:.34; } }
+@media (prefers-reduced-motion: reduce){ .hero-core-diagram .core-ring-outer{ animation:none; opacity:.24; } }
+
 .hero-metrics{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -1046,84 +1106,168 @@ nav.main-nav > ul{ position:relative; }
 .accordion-item.open .accordion-panel{ max-height:260px; opacity:1; margin-top:9px; padding-bottom:20px; }
 .metodo-cta{ margin-top:40px; }
 
-/* ============ DEPARTAMENTOS — VISUAL UNIFICADOR DEL HUB (DIR-034/035) ============
-   Solo en departamentos.html / en/departamentos.html. Decorativo (aria-hidden,
-   sin texto ni iconos de Departamento individuales). Lectura: núcleo del
-   sistema → bus de distribución → 8 módulos — arquitectura, no órbita.
-   Dos variantes en el DOM (misma info, distinto layout), alternadas por CSS:
-   ".dept-hub-diagram-wide" para desktop/tablet (fila de 8) y
-   ".dept-hub-diagram-compact" para mobile (2 filas de 4). No sustituye ni
-   toca ninguna de las 8 páginas individuales. */
-.dept-hub-visual{
-  padding-top:clamp(6px,1.4vw,16px);
-  padding-bottom:clamp(6px,1.4vw,16px);
-  margin-top:clamp(-56px,-5vw,-22px);
-  margin-bottom:clamp(-56px,-5vw,-22px);
+/* ============ DEPARTAMENTOS — MÓDULOS VISUALES (DIR-040) ============
+   Solo en departamentos.html / en/departamentos.html. Sustituye el
+   diagrama SVG abstracto (núcleo+bus+puntos, DIR-034/035) por un árbol
+   real de HTML: "Tu empresa" arriba, 8 módulos reales (icono + nombre en
+   HTML, no en SVG) organizados en 4 columnas × 2 filas (desktop/tablet) o
+   2 columnas (mobile), conectados por SVGs de líneas simples y
+   deterministas (coordenadas en %, nunca dependientes del alto real de
+   las tarjetas — evita el riesgo de desalineación que tuvo la versión
+   anterior). No sustituye ni toca ninguna de las 8 páginas individuales;
+   los módulos enlazan a esas mismas páginas reales. */
+.dept-modules-visual{
+  padding-top:clamp(8px,1.5vw,16px);
+  padding-bottom:clamp(8px,1.5vw,16px);
+  margin-top:clamp(-40px,-4vw,-16px);
+  margin-bottom:clamp(-40px,-4vw,-16px);
   position:relative;
   z-index:1;
-  overflow:hidden;
 }
-.dept-hub-diagram{ max-width:1040px; margin:0 auto; position:relative; }
-.dept-hub-diagram::before{
+.dept-modules-tree{ display:flex; flex-direction:column; align-items:center; max-width:1040px; margin:0 auto; }
+
+.dept-company{
+  display:inline-flex; align-items:center; gap:12px;
+  padding:14px 26px;
+  background:
+    radial-gradient(140% 100% at 50% -30%, rgba(214,226,255,.10), transparent 62%),
+    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
+  border:1px solid var(--surface-border);
+  border-radius:14px;
+  box-shadow:0 20px 50px -25px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight), inset 0 -10px 18px -16px rgba(0,0,0,.5);
+  position:relative;
+}
+/* Mismo lenguaje material que los 8 módulos de abajo (anillo con
+   degradado, técnica de .window::after), pero con los tokens neutros
+   del sistema en vez del acento de un departamento — "Tu empresa" no
+   pertenece a uno solo, es el mismo sistema visto desde arriba. */
+.dept-company::after{
   content:"";
-  position:absolute;
-  inset:-14% -8%;
-  background:radial-gradient(ellipse at center, rgba(9,12,20,.6) 0%, rgba(9,12,20,.32) 55%, transparent 78%);
-  z-index:-1;
+  position:absolute; inset:0; border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(180deg, var(--surface-ring-top) 0%, var(--surface-ring-mid) 45%, var(--surface-ring-bottom) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
   pointer-events:none;
+  opacity:.65;
 }
-.dept-hub-diagram svg{ width:100%; height:auto; }
-.dept-hub-diagram-compact{ display:none; }
-@media (max-width:640px){
-  .dept-hub-diagram-wide{ display:none; }
-  .dept-hub-diagram-compact{ display:block; }
+.dept-company-icon{
+  width:34px; height:34px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(91,140,255,.14); border:1px solid rgba(91,140,255,.32);
+  color:var(--cyan); flex-shrink:0;
+  position:relative; z-index:2;
+}
+.dept-company-icon svg{ width:18px; height:18px; }
+.dept-company-label{ font-family:var(--serif); font-weight:600; font-size:1.02rem; color:var(--ink); position:relative; z-index:2; }
+
+/* Conectores como infraestructura, no como diagrama técnico (DIR-045):
+   trazo redondeado + degradado direccional (tenue junto a "Tu empresa",
+   más presente al llegar al módulo) + un halo de emisión muy suave en
+   el punto de origen — la lectura debe ser "esto alimenta el sistema",
+   no "esto es un esquema". */
+.dept-connector{ width:100%; height:32px; overflow:visible; }
+.dept-connector line{ stroke:rgba(91,140,255,.55); stroke-width:1.6; stroke-linecap:round; filter:drop-shadow(0 0 2.5px rgba(91,140,255,.35)); }
+.dept-connector-origin{ fill:var(--cyan); opacity:.16; filter:blur(5px); }
+.dept-connector-trunk-compact{ display:none; }
+@media (max-width:900px){
+  .dept-connector-trunk-wide{ display:none; }
+  .dept-connector-trunk-compact{ display:block; }
+  .dept-connector-straight-wide{ display:none; }
 }
 
-/* Núcleo del sistema: dos capas (profundidad) + halo + línea interna + sheen superior */
-.dept-hub-diagram .hub-glow{ opacity:.9; }
-.dept-hub-diagram .hub-core{ fill:url(#hubFillD); stroke:url(#hubRingD); stroke-width:1.8; }
-.dept-hub-diagram .hub-core-inset{ fill:rgba(255,255,255,.03); stroke:var(--surface-border); stroke-width:1; }
-.dept-hub-diagram .hub-core-line{ stroke:url(#hubLineD); stroke-width:1; opacity:.28; }
-.dept-hub-diagram .hub-core-sheen{ stroke:var(--surface-sheen); stroke-width:1; opacity:.5; }
-.dept-hub-diagram .hub-core-dot{ fill:var(--cyan); filter:drop-shadow(0 0 6px var(--cyan)); animation:pulse 3.2s ease-in-out infinite; }
-.dept-hub-diagram-compact .hub-core{ fill:url(#hubFillDC); stroke:url(#hubRingDC); stroke-width:1.6; }
-.dept-hub-diagram-compact .hub-core-line{ stroke:url(#hubLineDC); }
+.dept-modules-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; width:100%; }
+@media (max-width:900px){
+  .dept-modules-row{ grid-template-columns:repeat(2,1fr); }
+}
 
-/* Bus / troncal — estructura, no radios finos */
-.dept-hub-diagram .hub-trunk,
-.dept-hub-diagram .hub-bus{ stroke:url(#hubLineD); stroke-width:2; stroke-linecap:round; opacity:.55; }
-.dept-hub-diagram .hub-drop{ stroke:url(#hubLineD); stroke-width:1.5; stroke-linecap:round; opacity:.4; }
-.dept-hub-diagram-compact .hub-trunk,
-.dept-hub-diagram-compact .hub-bus{ stroke:url(#hubLineDC); }
-.dept-hub-diagram-compact .hub-drop{ stroke:url(#hubLineDC); }
-
-/* 8 módulos — paneles compactos, no rombos diminutos */
-.dept-hub-diagram .hub-node{ fill:url(#hubFillD); stroke:url(#hubRingD); stroke-width:1.4; }
-.dept-hub-diagram .hub-node-sheen{ stroke:var(--surface-sheen); stroke-width:1.2; opacity:.45; }
-.dept-hub-diagram-compact .hub-node{ fill:url(#hubFillDC); stroke:url(#hubRingDC); stroke-width:1.3; }
-
-/* Puntos de flujo — sensación de información circulando, no de órbita */
-.dept-hub-diagram .hub-flow{ animation:pulse 2.4s ease-in-out infinite; }
-.dept-hub-diagram .hub-flow.c-cyan{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-.dept-hub-diagram .hub-flow.c-blue{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
-.dept-hub-diagram .hub-flow.c-violet{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
-
-.dept-hub-diagram stop.fill-a{ stop-color:var(--surface-top); }
-.dept-hub-diagram stop.fill-b{ stop-color:var(--panel-2); }
-.dept-hub-diagram stop.fill-c{ stop-color:var(--panel); }
-.dept-hub-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
-.dept-hub-diagram stop.ring-b{ stop-color:var(--surface-ring-mid); }
-.dept-hub-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
-.dept-hub-diagram stop.line-a{ stop-color:var(--cyan); }
-.dept-hub-diagram stop.line-b{ stop-color:var(--blue); }
-.dept-hub-diagram stop.line-c{ stop-color:var(--violet); }
-.dept-hub-diagram stop.glow-a{ stop-color:var(--cyan); stop-opacity:.16; }
-.dept-hub-diagram stop.glow-b{ stop-color:var(--blue); stop-opacity:.07; }
-.dept-hub-diagram stop.glow-c{ stop-color:var(--blue); stop-opacity:0; }
-
-@media (prefers-reduced-motion: reduce){
-  .dept-hub-diagram .hub-core-dot,
-  .dept-hub-diagram .hub-flow{ animation:none; }
+.dept-module{
+  display:flex; flex-direction:column; align-items:flex-start; gap:10px;
+  padding:16px 16px 18px;
+  background-image:
+    linear-gradient(90deg, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.5), rgba(var(--mod-r),var(--mod-g),var(--mod-b),.04)),
+    radial-gradient(130% 90% at 18% 12%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.15), transparent 62%),
+    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
+  background-repeat:no-repeat, no-repeat, no-repeat;
+  background-size:26px 2px, 100% 100%, 100% 100%;
+  background-position:16px calc(100% - 11px), 0 0, 0 0;
+  border:1px solid var(--surface-border);
+  border-radius:12px;
+  box-shadow:0 16px 36px -22px rgba(0,0,0,.65), inset 0 1px 0 var(--surface-highlight), inset 0 -14px 22px -20px rgba(0,0,0,.5);
+  text-decoration:none;
+  position:relative;
+  min-height:112px;
+  justify-content:center;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s ease, box-shadow .25s ease;
+}
+/* Iluminación interior: el mismo punto de luz "entra" por arriba (donde
+   el conector toca el módulo, en sintonía con .dept-module::after) y se
+   difumina hacia la esquina del icono — como si el material estuviera
+   iluminado desde dentro, no pintado de color. */
+.dept-module::before{
+  content:"";
+  position:absolute; inset:0; border-radius:inherit;
+  background:
+    radial-gradient(60px 26px at 50% 0%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.32), transparent 75%),
+    radial-gradient(140% 90% at 18% 12%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.14), transparent 62%);
+  opacity:.75;
+  transition:opacity .3s ease;
+  pointer-events:none;
+  z-index:1;
+}
+/* Anillo con degradado (misma técnica que .window::after — mask +
+   mask-composite:exclude, un `border` normal no admite degradados):
+   luminoso con el acento del departamento arriba/abajo, neutro
+   (--surface-ring-mid) en el centro, para que siga siendo el mismo
+   metal D-Code y no una tarjeta de color. Incluye un punto más brillante
+   arriba, centrado, justo donde el conector SVG llega al módulo — para
+   que la línea parezca entrar en la pieza, no terminar detrás de ella. */
+.dept-module::after{
+  content:"";
+  position:absolute; inset:0; border-radius:inherit;
+  padding:1px;
+  background:
+    radial-gradient(54px 20px at 50% 0%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),1) 0%, transparent 78%),
+    linear-gradient(180deg,
+      rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8) 0%,
+      var(--surface-ring-mid) 45%,
+      rgba(var(--mod-r),var(--mod-g),var(--mod-b),.24) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
+  pointer-events:none;
+  z-index:3;
+  opacity:.5;
+  transition:opacity .3s ease;
+}
+.dept-module:hover, .dept-module:focus-visible{
+  transform:translateY(-3px);
+  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
+  box-shadow:0 22px 44px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.14), inset 0 1px 0 var(--surface-highlight), inset 0 -14px 22px -20px rgba(0,0,0,.5);
+}
+.dept-module:hover::before, .dept-module:focus-visible::before{ opacity:1; }
+.dept-module:hover::after, .dept-module:focus-visible::after{ opacity:.85; }
+.dept-module:focus-visible{ outline:2px solid var(--cyan); outline-offset:3px; }
+.dept-module-icon{
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.12);
+  border:1px solid rgba(var(--mod-r),var(--mod-g),var(--mod-b),.32);
+  color:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
+  position:relative; z-index:2;
+  transition:border-color .3s ease;
+}
+.dept-module:hover .dept-module-icon, .dept-module:focus-visible .dept-module-icon{
+  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.55);
+}
+.dept-module-icon svg{ width:18px; height:18px; }
+.dept-module-name{ font-family:var(--serif); font-weight:600; font-size:0.92rem; color:var(--ink); position:relative; z-index:2; }
+.dept-module-accent{
+  position:absolute; top:14px; right:14px; z-index:2;
+  width:6px; height:6px; border-radius:50%;
+  background:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
+  box-shadow:0 0 6px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.6);
 }
 
 /* ============ SERVICIOS ============ */
@@ -1523,12 +1667,13 @@ nav.main-nav > ul{ position:relative; }
 .timeline-body h3{ font-family:var(--serif); font-size:1.15rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
 .timeline-body p{ color:var(--stone); font-size:0.94rem; max-width:520px; }
 
-/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033 Bloque 1) ============
+/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045) ============
    Visual de apoyo puramente decorativo (aria-hidden), solo en metodo.html.
-   Cuatro rombos construidos con los mismos tokens del acabado cromado
-   (--surface-*) para leerse como parte del mismo sistema, sin texto
-   incrustado: la numeración y el contenido real siguen viviendo en la
-   timeline de siempre. */
+   Una columna de energía vertical con cuatro estaciones — proceso
+   continuo, no cuatro piezas repetidas — construida con los mismos
+   tokens del acabado cromado (--surface-*), sin texto incrustado: la
+   numeración y el contenido real siguen viviendo en la timeline de
+   siempre. */
 .fases-layout{
   display:grid;
   grid-template-columns:1fr 200px;
@@ -1537,13 +1682,26 @@ nav.main-nav > ul{ position:relative; }
 }
 .fases-diagram{ padding-top:8px; }
 .fases-diagram svg{ display:block; width:100%; height:auto; }
-.fases-diagram .fases-spine{ stroke:url(#fasesLineM); stroke-width:1; opacity:.4; }
-.fases-diagram .fases-diamond{ fill:url(#fasesFillM); stroke:url(#fasesRingM); stroke-width:1.4; }
-.fases-diagram .fases-node-dot{ animation:pulse 2.4s ease-in-out infinite; }
-.fases-diagram .fases-node-1 .fases-node-dot{ fill:var(--cyan); filter:drop-shadow(0 0 5px var(--cyan)); }
-.fases-diagram .fases-node-2 .fases-node-dot{ fill:var(--cyan); filter:drop-shadow(0 0 5px var(--cyan)); animation-delay:.5s; }
-.fases-diagram .fases-node-3 .fases-node-dot{ fill:var(--blue); filter:drop-shadow(0 0 5px var(--blue)); animation-delay:1s; }
-.fases-diagram .fases-node-4 .fases-node-dot{ fill:var(--violet); filter:drop-shadow(0 0 5px var(--violet)); animation-delay:1.5s; }
+/* Columna de energía vertical (DIR-045): sustituye a los cuatro rombos
+   por una única estructura continua — un conducto cromado con una
+   línea de energía en su interior y cuatro "estaciones" horizontales
+   que marcan cada fase, con una progresión de color cian→azul→violeta
+   a medida que se avanza (misma lectura de las 4 fases que antes daban
+   los rombos, pero como proceso continuo, no como cuatro piezas
+   repetidas). Sin puntos de flujo animados: la única animación es un
+   pulso de opacidad muy lento en la propia línea de energía. */
+.fases-diagram .fases-column{ fill:url(#fasesFillM); stroke:url(#fasesRingM); stroke-width:1.4; }
+.fases-diagram .fases-column-line{ stroke:url(#fasesLineM); stroke-width:1.6; opacity:.6; animation:fases-line-pulse 6s ease-in-out infinite; }
+.fases-diagram .fases-station-tick{ stroke:url(#fasesRingM); stroke-width:1; opacity:.35; }
+.fases-diagram .fases-station-marker{ opacity:.9; }
+.fases-diagram .fases-station-1 .fases-station-band{ fill:var(--cyan); opacity:.16; }
+.fases-diagram .fases-station-1 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.fases-diagram .fases-station-2 .fases-station-band{ fill:var(--cyan); opacity:.16; }
+.fases-diagram .fases-station-2 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.fases-diagram .fases-station-3 .fases-station-band{ fill:var(--blue); opacity:.18; }
+.fases-diagram .fases-station-3 .fases-station-marker{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
+.fases-diagram .fases-station-4 .fases-station-band{ fill:var(--violet); opacity:.2; }
+.fases-diagram .fases-station-4 .fases-station-marker{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
 .fases-diagram stop.fill-a{ stop-color:var(--surface-top); }
 .fases-diagram stop.fill-b{ stop-color:var(--panel-2); }
 .fases-diagram stop.fill-c{ stop-color:var(--panel); }
@@ -1553,8 +1711,9 @@ nav.main-nav > ul{ position:relative; }
 .fases-diagram stop.line-a{ stop-color:var(--cyan); }
 .fases-diagram stop.line-b{ stop-color:var(--blue); }
 .fases-diagram stop.line-c{ stop-color:var(--violet); }
+@keyframes fases-line-pulse{ 0%,100%{ opacity:.4; } 50%{ opacity:.75; } }
 @media (prefers-reduced-motion: reduce){
-  .fases-diagram .fases-node-dot{ animation:none; }
+  .fases-diagram .fases-column-line{ animation:none; opacity:.55; }
 }
 @media (max-width:1024px){
   .fases-layout{ grid-template-columns:1fr; }
