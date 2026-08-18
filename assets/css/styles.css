@@ -1202,7 +1202,14 @@ nav.main-nav > ul{ position:relative; }
    acabado cromado que Método/Departamentos. Banda compacta (max-width
    640px), no un bloque grande — el texto de la página sigue siendo el
    elemento principal. */
-.servicios-visual{ padding-top:clamp(16px,3vw,32px); padding-bottom:clamp(16px,3vw,32px); }
+.servicios-visual{
+  padding-top:clamp(8px,1.5vw,16px);
+  padding-bottom:clamp(8px,1.5vw,16px);
+  margin-top:clamp(-56px,-5vw,-24px);
+  margin-bottom:clamp(-56px,-5vw,-24px);
+  position:relative;
+  z-index:1;
+}
 .servicios-visual-diagram{ max-width:640px; margin:0 auto; }
 .servicios-visual-diagram svg{ display:block; width:100%; height:auto; }
 .servicios-visual-diagram .loop-ring{ fill:none; stroke:url(#loopLine); stroke-width:2; opacity:.55; }
