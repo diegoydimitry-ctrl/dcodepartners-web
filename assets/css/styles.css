@@ -945,8 +945,42 @@ nav.main-nav > ul{ position:relative; }
 .hero .trust-badges{ margin-top:16px; }
 
 .hero-graphic{ position:relative; }
-.hero-canvas-wrap{ padding:0; }
-.hero-canvas-wrap canvas{ width:100%; height:260px; display:block; }
+
+/* ============ HERO — NÚCLEO OPERATIVO (DIR-045) ============
+   Sustituye el canvas de red de nodos (JS, aleatorio) por un diagrama
+   SVG estático propio de D-Code: un núcleo hexagonal (nunca un rombo —
+   ya es el lenguaje de Método) con dos anillos concéntricos, un eje
+   vertical que lo atraviesa, y dos racimos de barras de actividad a
+   los lados unidos al núcleo por finos conductores — "hay un sistema
+   funcionando aquí", no "mira cuántos nodos tiene la IA". Única
+   animación: un pulso de opacidad muy lento en el anillo exterior;
+   las barras son estáticas. Mismos tokens cromados que el resto del
+   sitio (fill/ring por degradado, misma técnica de Método/Servicios). */
+.hero-core-wrap{ padding:0; }
+.hero-core-diagram svg{ display:block; width:100%; height:260px; }
+.hero-core-diagram .core-spine{ stroke:url(#heroSpineLine); stroke-width:1; opacity:.5; }
+.hero-core-diagram .core-ring{ fill:none; stroke:url(#heroCoreRing); stroke-width:1; }
+.hero-core-diagram .core-ring-inner{ opacity:.24; }
+.hero-core-diagram .core-ring-outer{ opacity:.16; animation:core-ring-pulse 5.5s ease-in-out infinite; }
+.hero-core-diagram .core-hex{ fill:url(#heroCoreFill); stroke:url(#heroCoreRing); stroke-width:1.4; }
+.hero-core-diagram .core-hex-line{ stroke:var(--surface-sheen); stroke-width:1; opacity:.3; }
+.hero-core-diagram .core-conduit-l{ stroke:url(#heroConduitL); stroke-width:1; opacity:.55; }
+.hero-core-diagram .core-conduit-r{ stroke:url(#heroConduitR); stroke-width:1; opacity:.55; }
+.hero-core-diagram .core-bar{ fill:url(#heroBarFill); }
+.hero-core-diagram .core-accent{ fill:var(--violet); filter:drop-shadow(0 0 5px var(--violet)); }
+.hero-core-diagram stop.fill-a{ stop-color:var(--surface-top); }
+.hero-core-diagram stop.fill-b{ stop-color:var(--panel-2); }
+.hero-core-diagram stop.fill-c{ stop-color:var(--panel); }
+.hero-core-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
+.hero-core-diagram stop.ring-b{ stop-color:var(--cyan); }
+.hero-core-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
+.hero-core-diagram stop.bar-a{ stop-color:var(--cyan); }
+.hero-core-diagram stop.bar-b{ stop-color:var(--blue); }
+.hero-core-diagram stop.spine-a{ stop-color:var(--cyan); stop-opacity:.7; }
+.hero-core-diagram stop.spine-b{ stop-color:var(--blue); stop-opacity:.15; }
+@keyframes core-ring-pulse{ 0%,100%{ opacity:.16; } 50%{ opacity:.34; } }
+@media (prefers-reduced-motion: reduce){ .hero-core-diagram .core-ring-outer{ animation:none; opacity:.24; } }
+
 .hero-metrics{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -1128,8 +1162,14 @@ nav.main-nav > ul{ position:relative; }
 .dept-company-icon svg{ width:18px; height:18px; }
 .dept-company-label{ font-family:var(--serif); font-weight:600; font-size:1.02rem; color:var(--ink); position:relative; z-index:2; }
 
+/* Conectores como infraestructura, no como diagrama técnico (DIR-045):
+   trazo redondeado + degradado direccional (tenue junto a "Tu empresa",
+   más presente al llegar al módulo) + un halo de emisión muy suave en
+   el punto de origen — la lectura debe ser "esto alimenta el sistema",
+   no "esto es un esquema". */
 .dept-connector{ width:100%; height:32px; overflow:visible; }
-.dept-connector line{ stroke:rgba(91,140,255,.45); stroke-width:1.4; }
+.dept-connector line{ stroke:rgba(91,140,255,.55); stroke-width:1.6; stroke-linecap:round; filter:drop-shadow(0 0 2.5px rgba(91,140,255,.35)); }
+.dept-connector-origin{ fill:var(--cyan); opacity:.16; filter:blur(5px); }
 .dept-connector-trunk-compact{ display:none; }
 @media (max-width:900px){
   .dept-connector-trunk-wide{ display:none; }
@@ -1627,12 +1667,13 @@ nav.main-nav > ul{ position:relative; }
 .timeline-body h3{ font-family:var(--serif); font-size:1.15rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
 .timeline-body p{ color:var(--stone); font-size:0.94rem; max-width:520px; }
 
-/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033 Bloque 1) ============
+/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045) ============
    Visual de apoyo puramente decorativo (aria-hidden), solo en metodo.html.
-   Cuatro rombos construidos con los mismos tokens del acabado cromado
-   (--surface-*) para leerse como parte del mismo sistema, sin texto
-   incrustado: la numeración y el contenido real siguen viviendo en la
-   timeline de siempre. */
+   Una columna de energía vertical con cuatro estaciones — proceso
+   continuo, no cuatro piezas repetidas — construida con los mismos
+   tokens del acabado cromado (--surface-*), sin texto incrustado: la
+   numeración y el contenido real siguen viviendo en la timeline de
+   siempre. */
 .fases-layout{
   display:grid;
   grid-template-columns:1fr 200px;
@@ -1641,13 +1682,26 @@ nav.main-nav > ul{ position:relative; }
 }
 .fases-diagram{ padding-top:8px; }
 .fases-diagram svg{ display:block; width:100%; height:auto; }
-.fases-diagram .fases-spine{ stroke:url(#fasesLineM); stroke-width:1; opacity:.4; }
-.fases-diagram .fases-diamond{ fill:url(#fasesFillM); stroke:url(#fasesRingM); stroke-width:1.4; }
-.fases-diagram .fases-node-dot{ animation:pulse 2.4s ease-in-out infinite; }
-.fases-diagram .fases-node-1 .fases-node-dot{ fill:var(--cyan); filter:drop-shadow(0 0 5px var(--cyan)); }
-.fases-diagram .fases-node-2 .fases-node-dot{ fill:var(--cyan); filter:drop-shadow(0 0 5px var(--cyan)); animation-delay:.5s; }
-.fases-diagram .fases-node-3 .fases-node-dot{ fill:var(--blue); filter:drop-shadow(0 0 5px var(--blue)); animation-delay:1s; }
-.fases-diagram .fases-node-4 .fases-node-dot{ fill:var(--violet); filter:drop-shadow(0 0 5px var(--violet)); animation-delay:1.5s; }
+/* Columna de energía vertical (DIR-045): sustituye a los cuatro rombos
+   por una única estructura continua — un conducto cromado con una
+   línea de energía en su interior y cuatro "estaciones" horizontales
+   que marcan cada fase, con una progresión de color cian→azul→violeta
+   a medida que se avanza (misma lectura de las 4 fases que antes daban
+   los rombos, pero como proceso continuo, no como cuatro piezas
+   repetidas). Sin puntos de flujo animados: la única animación es un
+   pulso de opacidad muy lento en la propia línea de energía. */
+.fases-diagram .fases-column{ fill:url(#fasesFillM); stroke:url(#fasesRingM); stroke-width:1.4; }
+.fases-diagram .fases-column-line{ stroke:url(#fasesLineM); stroke-width:1.6; opacity:.6; animation:fases-line-pulse 6s ease-in-out infinite; }
+.fases-diagram .fases-station-tick{ stroke:url(#fasesRingM); stroke-width:1; opacity:.35; }
+.fases-diagram .fases-station-marker{ opacity:.9; }
+.fases-diagram .fases-station-1 .fases-station-band{ fill:var(--cyan); opacity:.16; }
+.fases-diagram .fases-station-1 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.fases-diagram .fases-station-2 .fases-station-band{ fill:var(--cyan); opacity:.16; }
+.fases-diagram .fases-station-2 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.fases-diagram .fases-station-3 .fases-station-band{ fill:var(--blue); opacity:.18; }
+.fases-diagram .fases-station-3 .fases-station-marker{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
+.fases-diagram .fases-station-4 .fases-station-band{ fill:var(--violet); opacity:.2; }
+.fases-diagram .fases-station-4 .fases-station-marker{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
 .fases-diagram stop.fill-a{ stop-color:var(--surface-top); }
 .fases-diagram stop.fill-b{ stop-color:var(--panel-2); }
 .fases-diagram stop.fill-c{ stop-color:var(--panel); }
@@ -1657,8 +1711,9 @@ nav.main-nav > ul{ position:relative; }
 .fases-diagram stop.line-a{ stop-color:var(--cyan); }
 .fases-diagram stop.line-b{ stop-color:var(--blue); }
 .fases-diagram stop.line-c{ stop-color:var(--violet); }
+@keyframes fases-line-pulse{ 0%,100%{ opacity:.4; } 50%{ opacity:.75; } }
 @media (prefers-reduced-motion: reduce){
-  .fases-diagram .fases-node-dot{ animation:none; }
+  .fases-diagram .fases-column-line{ animation:none; opacity:.55; }
 }
 @media (max-width:1024px){
   .fases-layout{ grid-template-columns:1fr; }
