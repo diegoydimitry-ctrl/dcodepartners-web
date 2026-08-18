@@ -946,57 +946,71 @@ nav.main-nav > ul{ position:relative; }
 
 .hero-graphic{ position:relative; }
 
-/* ============ HERO — ECOSISTEMA VIVO (DIR-045, evolucionado DIR-046) ============
-   Un núcleo hexagonal fijo (nunca un rombo — ya es el lenguaje de
-   Método) con dos anillos concéntricos, alrededor del cual orbitan
-   cuatro capacidades reales de D-Code (iconos reutilizados de los
-   propios módulos de Departamentos — cero iconos/nombres inventados)
-   en una trayectoria elíptica, muy lenta (34s por vuelta) y elegante.
-   Cada satélite se contra-rota sobre sí mismo para permanecer en pie
-   mientras orbita. "Muchas capacidades coordinadas alrededor del
-   mismo sistema" — sistema central + componentes + movimiento
-   continuo, no una ilustración técnica estática. Hover (solo ratón,
-   decorativo) detiene la órbita y realza el satélite bajo el cursor;
-   el panel funciona igual de bien sin interacción. */
-.hero-core-wrap{ padding:0; }
-.hero-core-diagram svg{ display:block; width:100%; height:260px; overflow:visible; }
-.hero-core-diagram .core-ring{ fill:none; stroke:url(#heroCoreRing); stroke-width:1; }
-.hero-core-diagram .core-ring-inner{ opacity:.24; }
-.hero-core-diagram .core-ring-outer{ opacity:.16; animation:core-ring-pulse 5.5s ease-in-out infinite; }
-.hero-core-diagram .core-hex{ fill:url(#heroCoreFill); stroke:url(#heroCoreRing); stroke-width:1.4; }
-.hero-core-diagram .core-hex-line{ stroke:var(--surface-sheen); stroke-width:1; opacity:.3; }
+/* ============ HERO — CRISTAL DE PROFUNDIDAD (DIR-047) ============
+   Sustituye por completo el concepto de núcleo+satélites (DIR-045/046):
+   ya no hay un "centro" del que algo irradia. En su lugar, tres planos
+   de cristal apilados — arquitectura de fondo, señal en movimiento,
+   módulos en primer plano — que se desplazan a distinta velocidad al
+   mover el ratón sobre el panel (paralaje real), reutilizando las
+   mismas variables --mx/--my/--rx/--ry que .window ya calcula en
+   assets/js/main.js (tilt + spotlight) para CADA .window del sitio:
+   no hace falta JS nuevo. El resultado se percibe como "estás mirando
+   dentro de un sistema con profundidad real", no un dibujo plano.
+   Sin texto, sin cifras, sin logos — los 4 módulos reutilizan los
+   iconos reales de Departamentos. */
+.hero-core-wrap{ padding:0; perspective:900px; }
+.hero-core-diagram{ position:relative; width:100%; height:260px; overflow:hidden; }
+.hero-console-layer{ position:absolute; inset:0; width:100%; height:100%; transition:transform .12s linear; will-change:transform; }
+
+.hero-console-back{ transform:translate(calc((var(--mx,50%) - 50%) * .05), calc((var(--my,50%) - 50%) * .05)); }
+.hero-console-back svg{ width:100%; height:100%; display:block; }
+.hero-console-back line{ stroke:var(--surface-sheen); stroke-width:1; opacity:.1; }
+
+.hero-console-mid{ transform:translate(calc((var(--mx,50%) - 50%) * .12), calc((var(--my,50%) - 50%) * .12)); }
+.hero-console-mid svg{ width:100%; height:100%; display:block; overflow:visible; }
+.hero-console-mid .signal-line{ fill:none; stroke-width:1.6; stroke-linecap:round; opacity:.55; }
+.hero-console-mid .signal-a{ stroke:var(--cyan); stroke-dasharray:6 10; animation:hero-signal-flow 5s linear infinite; }
+.hero-console-mid .signal-b{ stroke:var(--blue); stroke-dasharray:5 12; animation:hero-signal-flow 6.5s linear infinite reverse; opacity:.4; }
+@keyframes hero-signal-flow{ to{ stroke-dashoffset:-160; } }
+
+.hero-console-front{ transform:translate(calc((var(--mx,50%) - 50%) * .22), calc((var(--my,50%) - 50%) * .22)); }
+.hero-console-front svg{ width:100%; height:100%; display:block; overflow:visible; }
+.hero-console-front .console-spine{ fill:none; stroke:url(#heroSpine); stroke-width:1.4; opacity:.6; }
+.hero-console-front .console-module{ cursor:default; }
+.hero-console-front .console-chip{
+  fill:url(#heroCoreFill);
+  stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
+  stroke-width:1.2;
+  filter:drop-shadow(0 0 4px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.3));
+  transition:filter .25s ease, stroke .25s ease;
+}
+.hero-console-front .console-icon{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); fill:none; stroke:currentColor; stroke-width:2; }
+.hero-console-front .console-status{
+  fill:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
+  animation:hero-status-blink 3.6s ease-in-out infinite;
+}
+.hero-console-front .console-module:nth-child(2) .console-status{ animation-delay:.7s; }
+.hero-console-front .console-module:nth-child(3) .console-status{ animation-delay:1.6s; }
+.hero-console-front .console-module:nth-child(4) .console-status{ animation-delay:2.3s; }
+@keyframes hero-status-blink{ 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
+.hero-console-front .console-module:hover .console-chip, .hero-console-front .console-module:focus-visible .console-chip{
+  filter:drop-shadow(0 0 8px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.6));
+  stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
+}
 .hero-core-diagram stop.fill-a{ stop-color:var(--surface-top); }
 .hero-core-diagram stop.fill-b{ stop-color:var(--panel-2); }
 .hero-core-diagram stop.fill-c{ stop-color:var(--panel); }
-.hero-core-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
-.hero-core-diagram stop.ring-b{ stop-color:var(--cyan); }
-.hero-core-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
-@keyframes core-ring-pulse{ 0%,100%{ opacity:.16; } 50%{ opacity:.34; } }
-
-.hero-orbit-carrier{
-  transform-box:view-box; transform-origin:320px 130px;
-  rotate:0deg; scale:1 .62;
-  animation:hero-orbit-spin 34s linear infinite;
+.hero-core-diagram stop.spine-a{ stop-color:var(--cyan); stop-opacity:.05; }
+.hero-core-diagram stop.spine-b{ stop-color:var(--blue); stop-opacity:.6; }
+.hero-core-diagram stop.spine-c{ stop-color:var(--violet); stop-opacity:.05; }
+@media (prefers-reduced-motion: reduce){
+  .hero-console-layer{ transition:none; }
+  .hero-console-mid .signal-a, .hero-console-mid .signal-b{ animation:none; }
+  .hero-console-front .console-status{ animation:none; opacity:.75; }
 }
-.hero-orbit-icon-wrap{
-  transform-box:fill-box; transform-origin:center;
-  rotate:0deg;
-  animation:hero-orbit-counter 34s linear infinite;
-  transition:scale .25s ease;
+@media (hover:none){
+  .hero-console-back, .hero-console-mid, .hero-console-front{ transform:none; }
 }
-.hero-orbit-carrier:hover, .hero-orbit-carrier:hover .hero-orbit-icon-wrap{ animation-play-state:paused; }
-.hero-orbit-carrier:hover .hero-orbit-icon-wrap{ scale:1.16; }
-.orbit-chip{
-  fill:url(#heroCoreFill);
-  stroke:rgba(var(--orb-r),var(--orb-g),var(--orb-b),.45);
-  stroke-width:1.2;
-  filter:drop-shadow(0 0 4px rgba(var(--orb-r),var(--orb-g),var(--orb-b),.35));
-  transition:filter .25s ease;
-}
-.hero-orbit-carrier:hover .orbit-chip{ filter:drop-shadow(0 0 8px rgba(var(--orb-r),var(--orb-g),var(--orb-b),.65)); }
-.orbit-icon-svg{ color:rgb(var(--orb-r),var(--orb-g),var(--orb-b)); fill:none; stroke:currentColor; stroke-width:2; }
-@keyframes hero-orbit-spin{ from{ rotate:0deg; scale:1 .62; } to{ rotate:360deg; scale:1 .62; } }
-@keyframes hero-orbit-counter{ from{ rotate:0deg; } to{ rotate:-360deg; } }
 
 .hero-metrics{
   display:grid;
