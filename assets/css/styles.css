@@ -1069,19 +1069,38 @@ nav.main-nav > ul{ position:relative; }
 .dept-company{
   display:inline-flex; align-items:center; gap:12px;
   padding:14px 26px;
-  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
+  background:
+    radial-gradient(140% 100% at 50% -30%, rgba(214,226,255,.10), transparent 62%),
+    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
   border:1px solid var(--surface-border);
   border-radius:14px;
-  box-shadow:0 20px 50px -25px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
+  box-shadow:0 20px 50px -25px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight), inset 0 -10px 18px -16px rgba(0,0,0,.5);
+  position:relative;
+}
+/* Mismo lenguaje material que los 8 módulos de abajo (anillo con
+   degradado, técnica de .window::after), pero con los tokens neutros
+   del sistema en vez del acento de un departamento — "Tu empresa" no
+   pertenece a uno solo, es el mismo sistema visto desde arriba. */
+.dept-company::after{
+  content:"";
+  position:absolute; inset:0; border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(180deg, var(--surface-ring-top) 0%, var(--surface-ring-mid) 45%, var(--surface-ring-bottom) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
+  pointer-events:none;
+  opacity:.65;
 }
 .dept-company-icon{
   width:34px; height:34px; border-radius:9px;
   display:flex; align-items:center; justify-content:center;
   background:rgba(91,140,255,.14); border:1px solid rgba(91,140,255,.32);
   color:var(--cyan); flex-shrink:0;
+  position:relative; z-index:2;
 }
 .dept-company-icon svg{ width:18px; height:18px; }
-.dept-company-label{ font-family:var(--serif); font-weight:600; font-size:1.02rem; color:var(--ink); }
+.dept-company-label{ font-family:var(--serif); font-weight:600; font-size:1.02rem; color:var(--ink); position:relative; z-index:2; }
 
 .dept-connector{ width:100%; height:32px; overflow:visible; }
 .dept-connector line{ stroke:rgba(91,140,255,.45); stroke-width:1.4; }
@@ -1100,21 +1119,69 @@ nav.main-nav > ul{ position:relative; }
 .dept-module{
   display:flex; flex-direction:column; align-items:flex-start; gap:10px;
   padding:16px 16px 18px;
-  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
+  background-image:
+    linear-gradient(90deg, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.5), rgba(var(--mod-r),var(--mod-g),var(--mod-b),.04)),
+    radial-gradient(130% 90% at 18% 12%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.15), transparent 62%),
+    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
+  background-repeat:no-repeat, no-repeat, no-repeat;
+  background-size:26px 2px, 100% 100%, 100% 100%;
+  background-position:16px calc(100% - 11px), 0 0, 0 0;
   border:1px solid var(--surface-border);
   border-radius:12px;
-  box-shadow:0 16px 36px -22px rgba(0,0,0,.65), inset 0 1px 0 var(--surface-highlight);
+  box-shadow:0 16px 36px -22px rgba(0,0,0,.65), inset 0 1px 0 var(--surface-highlight), inset 0 -14px 22px -20px rgba(0,0,0,.5);
   text-decoration:none;
   position:relative;
   min-height:112px;
   justify-content:center;
   transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s ease, box-shadow .25s ease;
 }
-.dept-module:hover{
-  transform:translateY(-3px);
-  border-color:rgba(91,140,255,.4);
-  box-shadow:0 22px 44px -20px rgba(0,0,0,.75), inset 0 1px 0 var(--surface-highlight);
+/* Iluminación interior: el mismo punto de luz "entra" por arriba (donde
+   el conector toca el módulo, en sintonía con .dept-module::after) y se
+   difumina hacia la esquina del icono — como si el material estuviera
+   iluminado desde dentro, no pintado de color. */
+.dept-module::before{
+  content:"";
+  position:absolute; inset:0; border-radius:inherit;
+  background:
+    radial-gradient(60px 26px at 50% 0%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.32), transparent 75%),
+    radial-gradient(140% 90% at 18% 12%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.14), transparent 62%);
+  opacity:.75;
+  transition:opacity .3s ease;
+  pointer-events:none;
+  z-index:1;
 }
+/* Anillo con degradado (misma técnica que .window::after — mask +
+   mask-composite:exclude, un `border` normal no admite degradados):
+   luminoso con el acento del departamento arriba/abajo, neutro
+   (--surface-ring-mid) en el centro, para que siga siendo el mismo
+   metal D-Code y no una tarjeta de color. Incluye un punto más brillante
+   arriba, centrado, justo donde el conector SVG llega al módulo — para
+   que la línea parezca entrar en la pieza, no terminar detrás de ella. */
+.dept-module::after{
+  content:"";
+  position:absolute; inset:0; border-radius:inherit;
+  padding:1px;
+  background:
+    radial-gradient(54px 20px at 50% 0%, rgba(var(--mod-r),var(--mod-g),var(--mod-b),1) 0%, transparent 78%),
+    linear-gradient(180deg,
+      rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8) 0%,
+      var(--surface-ring-mid) 45%,
+      rgba(var(--mod-r),var(--mod-g),var(--mod-b),.24) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
+  pointer-events:none;
+  z-index:3;
+  opacity:.5;
+  transition:opacity .3s ease;
+}
+.dept-module:hover, .dept-module:focus-visible{
+  transform:translateY(-3px);
+  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
+  box-shadow:0 22px 44px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.14), inset 0 1px 0 var(--surface-highlight), inset 0 -14px 22px -20px rgba(0,0,0,.5);
+}
+.dept-module:hover::before, .dept-module:focus-visible::before{ opacity:1; }
+.dept-module:hover::after, .dept-module:focus-visible::after{ opacity:.85; }
 .dept-module:focus-visible{ outline:2px solid var(--cyan); outline-offset:3px; }
 .dept-module-icon{
   width:36px; height:36px; border-radius:10px;
@@ -1122,11 +1189,16 @@ nav.main-nav > ul{ position:relative; }
   background:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.12);
   border:1px solid rgba(var(--mod-r),var(--mod-g),var(--mod-b),.32);
   color:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
+  position:relative; z-index:2;
+  transition:border-color .3s ease;
+}
+.dept-module:hover .dept-module-icon, .dept-module:focus-visible .dept-module-icon{
+  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.55);
 }
 .dept-module-icon svg{ width:18px; height:18px; }
-.dept-module-name{ font-family:var(--serif); font-weight:600; font-size:0.92rem; color:var(--ink); }
+.dept-module-name{ font-family:var(--serif); font-weight:600; font-size:0.92rem; color:var(--ink); position:relative; z-index:2; }
 .dept-module-accent{
-  position:absolute; top:14px; right:14px;
+  position:absolute; top:14px; right:14px; z-index:2;
   width:6px; height:6px; border-radius:50%;
   background:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
   box-shadow:0 0 6px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.6);
