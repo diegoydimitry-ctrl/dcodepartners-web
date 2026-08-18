@@ -400,6 +400,15 @@
         win.addEventListener('mouseleave', function () {
           win.style.setProperty('--rx', '0deg');
           win.style.setProperty('--ry', '0deg');
+          // DIR-049: --mx/--my nunca se reseteaban aquí — un .window normal
+          // no se nota (solo alimentan un spotlight sutil), pero en
+          // .hero-atmosphere alimentan el desplazamiento real de las capas
+          // de paralaje, así que al salir el cursor los módulos se quedaban
+          // desplazados en vez de volver al centro. Con esto vuelven a su
+          // posición de reposo — el retorno suave lo da la transición CSS
+          // de cada capa, no este salto de valor.
+          win.style.setProperty('--mx', '50%');
+          win.style.setProperty('--my', '50%');
         });
       });
     });
