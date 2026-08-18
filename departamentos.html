@@ -185,155 +185,92 @@
     </div>
   </section>
 
-  <!-- ============ VISUAL UNIFICADOR DEL HUB (DIR-035) ============
-       Arquitectura de sistema: núcleo → bus de distribución → 8 módulos.
-       Dos variantes: fila de 8 (desktop/tablet) y 2×4 (mobile), alternadas
-       por CSS — ver ".dept-hub-diagram-wide/-compact" en styles.css. -->
-  <section class="section-sm dept-hub-visual">
+  <!-- ============ MÓDULOS DE DEPARTAMENTOS (DIR-040) ============
+       Sustituye el diagrama SVG abstracto (núcleo+bus+puntos) por un árbol
+       real: "Tu empresa" en la cima, 8 módulos reales — icono real +
+       nombre real en HTML, cada uno enlazado a su página — organizados en
+       4×2 (desktop/tablet) o 2 columnas (mobile), conectados por líneas
+       SVG simples y deterministas (posiciones en %, no dependen del alto
+       real de las tarjetas). Iconografía reutilizada del propio mega-menú
+       — cero imágenes ni iconos nuevos. -->
+  <section class="section-sm dept-modules-visual">
     <div class="container">
-      <div class="dept-hub-diagram" aria-hidden="true">
+      <div class="dept-modules-tree">
 
-        <svg class="dept-hub-diagram-wide" viewBox="0 0 1160 300" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <defs>
-            <linearGradient id="hubFillD" x1="0" y1="0" x2="0" y2="1">
-              <stop class="fill-a" offset="0%"/><stop class="fill-b" offset="45%"/><stop class="fill-c" offset="100%"/>
-            </linearGradient>
-            <linearGradient id="hubRingD" x1="0" y1="0" x2="0" y2="1">
-              <stop class="ring-a" offset="0%"/><stop class="ring-b" offset="45%"/><stop class="ring-c" offset="100%"/>
-            </linearGradient>
-            <linearGradient id="hubLineD" gradientUnits="userSpaceOnUse" x1="100" y1="0" x2="1060" y2="0">
-              <stop class="line-a" offset="0%"/><stop class="line-b" offset="55%"/><stop class="line-c" offset="100%"/>
-            </linearGradient>
-            <radialGradient id="hubGlowD" cx="50%" cy="50%" r="50%">
-              <stop class="glow-a" offset="0%"/><stop class="glow-b" offset="55%"/><stop class="glow-c" offset="100%"/>
-            </radialGradient>
-          </defs>
+        <div class="dept-company">
+          <span class="dept-company-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 21v-4h6v4"/><path d="M8 7h1M8 11h1M15 7h1M15 11h1"/></svg>
+          </span>
+          <span class="dept-company-label">Tu empresa</span>
+        </div>
 
-          <ellipse class="hub-glow" cx="580" cy="58" rx="190" ry="100" fill="url(#hubGlowD)"/>
-
-          <line class="hub-trunk" x1="580" y1="96" x2="580" y2="140"/>
-          <line class="hub-bus" x1="140" y1="140" x2="1020" y2="140"/>
-          <line class="hub-drop" x1="140" y1="140" x2="140" y2="180"/>
-          <line class="hub-drop" x1="265.7" y1="140" x2="265.7" y2="180"/>
-          <line class="hub-drop" x1="391.4" y1="140" x2="391.4" y2="180"/>
-          <line class="hub-drop" x1="517.1" y1="140" x2="517.1" y2="180"/>
-          <line class="hub-drop" x1="642.9" y1="140" x2="642.9" y2="180"/>
-          <line class="hub-drop" x1="768.6" y1="140" x2="768.6" y2="180"/>
-          <line class="hub-drop" x1="894.3" y1="140" x2="894.3" y2="180"/>
-          <line class="hub-drop" x1="1020" y1="140" x2="1020" y2="180"/>
-          <circle class="hub-flow c-cyan" cx="350" cy="140" r="2.5" style="animation-delay:.2s"/>
-          <circle class="hub-flow c-blue" cx="810" cy="140" r="2.5" style="animation-delay:.9s"/>
-
-          <rect class="hub-node" x="100" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="110" y1="184" x2="170" y2="184"/>
-          <circle class="hub-flow c-cyan" cx="140" cy="160" r="3" style="animation-delay:0s"/>
-
-          <rect class="hub-node" x="225.7" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="235.7" y1="184" x2="295.7" y2="184"/>
-          <circle class="hub-flow c-cyan" cx="265.7" cy="160" r="3" style="animation-delay:.15s"/>
-
-          <rect class="hub-node" x="351.4" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="361.4" y1="184" x2="421.4" y2="184"/>
-          <circle class="hub-flow c-blue" cx="391.4" cy="160" r="3" style="animation-delay:.3s"/>
-
-          <rect class="hub-node" x="477.1" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="487.1" y1="184" x2="547.1" y2="184"/>
-          <circle class="hub-flow c-blue" cx="517.1" cy="160" r="3" style="animation-delay:.45s"/>
-
-          <rect class="hub-node" x="602.9" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="612.9" y1="184" x2="672.9" y2="184"/>
-          <circle class="hub-flow c-blue" cx="642.9" cy="160" r="3" style="animation-delay:.6s"/>
-
-          <rect class="hub-node" x="728.6" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="738.6" y1="184" x2="798.6" y2="184"/>
-          <circle class="hub-flow c-blue" cx="768.6" cy="160" r="3" style="animation-delay:.75s"/>
-
-          <rect class="hub-node" x="854.3" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="864.3" y1="184" x2="924.3" y2="184"/>
-          <circle class="hub-flow c-blue" cx="894.3" cy="160" r="3" style="animation-delay:.9s"/>
-
-          <rect class="hub-node" x="980" y="180" width="80" height="64" rx="10"/>
-          <line class="hub-node-sheen" x1="990" y1="184" x2="1050" y2="184"/>
-          <circle class="hub-flow c-violet" cx="1020" cy="160" r="3" style="animation-delay:1.05s"/>
-
-          <rect class="hub-core" x="475" y="20" width="210" height="76" rx="16"/>
-          <rect class="hub-core-inset" x="491" y="34" width="178" height="48" rx="10"/>
-          <line class="hub-core-line" x1="507" y1="58" x2="653" y2="58"/>
-          <line class="hub-core-sheen" x1="488" y1="25" x2="672" y2="25"/>
-          <circle class="hub-core-dot" cx="580" cy="58" r="5"/>
+        <svg class="dept-connector dept-connector-trunk-wide" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <line x1="50" y1="0" x2="50" y2="16"/>
+          <line x1="12.5" y1="16" x2="87.5" y2="16"/>
+          <line x1="12.5" y1="16" x2="12.5" y2="32"/>
+          <line x1="37.5" y1="16" x2="37.5" y2="32"/>
+          <line x1="62.5" y1="16" x2="62.5" y2="32"/>
+          <line x1="87.5" y1="16" x2="87.5" y2="32"/>
+        </svg>
+        <svg class="dept-connector dept-connector-trunk-compact" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <line x1="50" y1="0" x2="50" y2="16"/>
+          <line x1="25" y1="16" x2="75" y2="16"/>
+          <line x1="25" y1="16" x2="25" y2="32"/>
+          <line x1="75" y1="16" x2="75" y2="32"/>
         </svg>
 
-        <svg class="dept-hub-diagram-compact" viewBox="0 0 360 250" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <defs>
-            <linearGradient id="hubFillDC" x1="0" y1="0" x2="0" y2="1">
-              <stop class="fill-a" offset="0%"/><stop class="fill-b" offset="45%"/><stop class="fill-c" offset="100%"/>
-            </linearGradient>
-            <linearGradient id="hubRingDC" x1="0" y1="0" x2="0" y2="1">
-              <stop class="ring-a" offset="0%"/><stop class="ring-b" offset="45%"/><stop class="ring-c" offset="100%"/>
-            </linearGradient>
-            <linearGradient id="hubLineDC" gradientUnits="userSpaceOnUse" x1="63" y1="0" x2="297" y2="0">
-              <stop class="line-a" offset="0%"/><stop class="line-b" offset="55%"/><stop class="line-c" offset="100%"/>
-            </linearGradient>
-            <radialGradient id="hubGlowDC" cx="50%" cy="50%" r="50%">
-              <stop class="glow-a" offset="0%"/><stop class="glow-b" offset="55%"/><stop class="glow-c" offset="100%"/>
-            </radialGradient>
-          </defs>
+        <div class="dept-modules-row">
+          <a class="dept-module" href="/departamentos/comercial" style="--mod-r:67;--mod-g:224;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
+            <span class="dept-module-name">Comercial IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+          <a class="dept-module" href="/departamentos/marketing" style="--mod-r:155;--mod-g:107;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
+            <span class="dept-module-name">Marketing IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+          <a class="dept-module" href="/departamentos/clientes" style="--mod-r:91;--mod-g:140;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
+            <span class="dept-module-name">Clientes IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+          <a class="dept-module" href="/departamentos/produccion" style="--mod-r:155;--mod-g:107;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+            <span class="dept-module-name">Producción IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+        </div>
 
-          <ellipse class="hub-glow" cx="180" cy="43" rx="110" ry="55" fill="url(#hubGlowDC)"/>
-
-          <line class="hub-trunk" x1="180" y1="70" x2="180" y2="90"/>
-          <line class="hub-bus" x1="63" y1="90" x2="297" y2="90"/>
-          <line class="hub-trunk" x1="180" y1="90" x2="180" y2="166"/>
-          <line class="hub-bus" x1="63" y1="166" x2="297" y2="166"/>
-
-          <line class="hub-drop" x1="63" y1="90" x2="63" y2="108"/>
-          <line class="hub-drop" x1="141" y1="90" x2="141" y2="108"/>
-          <line class="hub-drop" x1="219" y1="90" x2="219" y2="108"/>
-          <line class="hub-drop" x1="297" y1="90" x2="297" y2="108"/>
-
-          <rect class="hub-node" x="32" y="108" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="39" y1="112" x2="87" y2="112"/>
-          <circle class="hub-flow c-cyan" cx="63" cy="99" r="2.6" style="animation-delay:0s"/>
-
-          <rect class="hub-node" x="110" y="108" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="117" y1="112" x2="165" y2="112"/>
-          <circle class="hub-flow c-cyan" cx="141" cy="99" r="2.6" style="animation-delay:.15s"/>
-
-          <rect class="hub-node" x="188" y="108" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="195" y1="112" x2="243" y2="112"/>
-          <circle class="hub-flow c-blue" cx="219" cy="99" r="2.6" style="animation-delay:.3s"/>
-
-          <rect class="hub-node" x="266" y="108" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="273" y1="112" x2="321" y2="112"/>
-          <circle class="hub-flow c-blue" cx="297" cy="99" r="2.6" style="animation-delay:.45s"/>
-
-          <line class="hub-drop" x1="63" y1="166" x2="63" y2="184"/>
-          <line class="hub-drop" x1="141" y1="166" x2="141" y2="184"/>
-          <line class="hub-drop" x1="219" y1="166" x2="219" y2="184"/>
-          <line class="hub-drop" x1="297" y1="166" x2="297" y2="184"/>
-
-          <rect class="hub-node" x="32" y="184" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="39" y1="188" x2="87" y2="188"/>
-          <circle class="hub-flow c-blue" cx="63" cy="175" r="2.6" style="animation-delay:.5s"/>
-
-          <rect class="hub-node" x="110" y="184" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="117" y1="188" x2="165" y2="188"/>
-          <circle class="hub-flow c-blue" cx="141" cy="175" r="2.6" style="animation-delay:.65s"/>
-
-          <rect class="hub-node" x="188" y="184" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="195" y1="188" x2="243" y2="188"/>
-          <circle class="hub-flow c-blue" cx="219" cy="175" r="2.6" style="animation-delay:.8s"/>
-
-          <rect class="hub-node" x="266" y="184" width="62" height="46" rx="8"/>
-          <line class="hub-node-sheen" x1="273" y1="188" x2="321" y2="188"/>
-          <circle class="hub-flow c-violet" cx="297" cy="175" r="2.6" style="animation-delay:.95s"/>
-
-          <rect class="hub-core" x="110" y="16" width="140" height="54" rx="12"/>
-          <rect class="hub-core-inset" x="122" y="25" width="116" height="36" rx="8"/>
-          <line class="hub-core-line" x1="134" y1="43" x2="226" y2="43"/>
-          <line class="hub-core-sheen" x1="118" y1="20" x2="242" y2="20"/>
-          <circle class="hub-core-dot" cx="180" cy="43" r="4"/>
+        <svg class="dept-connector dept-connector-straight-wide" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <line x1="12.5" y1="0" x2="12.5" y2="32"/>
+          <line x1="37.5" y1="0" x2="37.5" y2="32"/>
+          <line x1="62.5" y1="0" x2="62.5" y2="32"/>
+          <line x1="87.5" y1="0" x2="87.5" y2="32"/>
         </svg>
+
+        <div class="dept-modules-row">
+          <a class="dept-module" href="/departamentos/finanzas" style="--mod-r:52;--mod-g:231;--mod-b:164;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
+            <span class="dept-module-name">Finanzas IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+          <a class="dept-module" href="/departamentos/soporte" style="--mod-r:91;--mod-g:140;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
+            <span class="dept-module-name">Soporte IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+          <a class="dept-module" href="/departamentos/administracion" style="--mod-r:155;--mod-g:107;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
+            <span class="dept-module-name">Administración IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+          <a class="dept-module" href="/departamentos/direccion" style="--mod-r:67;--mod-g:224;--mod-b:255;">
+            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+            <span class="dept-module-name">Dirección IA</span>
+            <span class="dept-module-accent" aria-hidden="true"></span>
+          </a>
+        </div>
 
       </div>
     </div>
