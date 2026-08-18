@@ -85,7 +85,6 @@ export const video1_educational: Storyboard = {
   audio: {
     familia: "educational",
     bedVolume: 0.32,
-    voice: null,
   },
 };
 
@@ -171,7 +170,6 @@ export const video2_painpoint_linkedin: Storyboard = {
   audio: {
     familia: "problem",
     bedVolume: 0.3,
-    voice: null,
   },
 };
 
@@ -300,19 +298,15 @@ export const video3_opinion: Storyboard = {
       "Antes de publicar cualquier pieza nos hacemos 3 preguntas: ¿se puede verificar?, ¿el ejemplo está marcado como ejemplo?, ¿inventa un resultado? Si falla una, no sale. Así tratamos el contenido — y así construimos los sistemas.",
     hashtags: ["#IAResponsable", "#BrandSafety"],
   },
-  // AUDIO — familia B (voz + música): cama "opinion" (sonido contenido, deja
-  // espacio) a volumen bajo + locución TTS (espeak-ng, calidad robótica
-  // reconocida — ver scripts/generate-tts.sh) leyendo el hook y el cierre
-  // conceptual. Se elige voz aquí porque la pieza ES un argumento hablado
-  // ("regla de diseño"), no porque toque por turno.
+  // AUDIO — cama "opinion" (sonido contenido, deja espacio a la lectura del
+  // texto en pantalla) a volumen normal. Sin voz/TTS (DCP-CONTENT-FACTORY-003
+  // retiró la voz del pipeline automático — ver storyboard.ts): el hook y el
+  // cierre conceptual llevan la carga argumental solo con tipografía cinética
+  // + ritmo de escenas, sin depender de una locución robótica que no alcanza
+  // la calidad de marca.
   audio: {
     familia: "opinion",
-    bedVolume: 0.16,
-    voice: {
-      texto:
-        "La mayoria del contenido de inteligencia artificial sobre negocios es mentira. No es una promesa vacia. Es una regla de diseno.",
-      archivo: "audio/voice/test-opinion-003.wav",
-    },
+    bedVolume: 0.32,
   },
 };
 
@@ -384,7 +378,6 @@ export const video4_minimalist: Storyboard = {
   audio: {
     familia: null,
     bedVolume: 0,
-    voice: null,
   },
 };
 

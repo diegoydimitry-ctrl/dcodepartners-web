@@ -12,5 +12,5 @@
     "allowJs": true,
     "lib": ["DOM", "ES2018"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "tests/**/*"]
 }

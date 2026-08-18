@@ -71,14 +71,12 @@ export const StoryboardSchema = z.object({
     // nunca un valor por defecto sin decidir.
     familia: AudioFamilySchema.nullable(),
     bedVolume: z.number().min(0).max(1).default(0.35),
-    voice: z
-      .object({
-        texto: z.string(),
-        // Ruta al wav generado por scripts/generate-tts.sh para ESTE vídeo
-        // en concreto (la voz es específica del guion, no un asset fijo).
-        archivo: z.string(),
-      })
-      .nullable(),
+    // Sin voz/TTS en el pipeline automático (DCP-CONTENT-FACTORY-003,
+    // prioridad 1): espeak-ng no alcanza calidad de marca y no hay
+    // presupuesto autorizado para una API de voz de pago. El diseño de
+    // audio se apoya en música + SFX + silencio intencionado únicamente.
+    // Si en el futuro se autoriza una voz de calidad, esto se reintroduce
+    // como un campo nuevo, no reviviendo esta implementación con espeak-ng.
   }),
 });
 

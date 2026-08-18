@@ -12,8 +12,9 @@ import type { Storyboard } from "../schema/storyboard";
  * Motor genérico: recorre storyboard.scenes y monta cada una en su Sequence,
  * con un único fondo continuo (evita el efecto "diapositivas" plantilla-Canva).
  * Añade el Audio Engine: cama musical de fondo (por familia, o silencio
- * intencionado si audio.familia es null), SFX sincronizados al inicio de
- * cada escena que lleve soundCue, y voz opcional generada para este guion.
+ * intencionado si audio.familia es null) y SFX sincronizados al inicio de
+ * cada escena que lleve soundCue. Sin voz/TTS (ver storyboard.ts, sección
+ * audio) — DCP-CONTENT-FACTORY-003 la retiró del pipeline automático.
  */
 export const BrandVideo: React.FC<{ storyboard: Storyboard }> = ({
   storyboard,
@@ -36,10 +37,6 @@ export const BrandVideo: React.FC<{ storyboard: Storyboard }> = ({
           src={staticFile(`audio/beds/${audio.familia}.mp3`)}
           volume={audio.bedVolume ?? 0.35}
         />
-      )}
-
-      {audio?.voice && (
-        <Audio src={staticFile(audio.voice.archivo)} volume={1} />
       )}
 
       {sceneRanges.map((scene, i) => (
