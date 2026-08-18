@@ -193,6 +193,46 @@
     </div>
   </section>
 
+  <!-- ============ BIDIRECTIONAL DIALOGUE VISUAL (DIR-038-EXEC-01 — Services/AI Agents) ============
+       Decorative (aria-hidden), no text: two clearly distinct panels
+       (query / reply, the latter with its own inner layer) joined by an
+       open line, with two points travelling it in opposite, simultaneous
+       directions — an exchange, not a cycle. Same chrome tokens as
+       Method/Departments/Automation AI, without reusing that page's
+       closed ring. -->
+  <section class="section-sm servicios-visual">
+    <div class="container">
+      <div class="servicios-visual-diagram dialog-diagram" aria-hidden="true">
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
+          <defs>
+            <linearGradient id="dialogFill" x1="0" y1="0" x2="0" y2="1">
+              <stop class="fill-a" offset="0%"/><stop class="fill-b" offset="45%"/><stop class="fill-c" offset="100%"/>
+            </linearGradient>
+            <linearGradient id="dialogRing" x1="0" y1="0" x2="0" y2="1">
+              <stop class="ring-a" offset="0%"/><stop class="ring-b" offset="45%"/><stop class="ring-c" offset="100%"/>
+            </linearGradient>
+            <linearGradient id="dialogLine" gradientUnits="userSpaceOnUse" x1="238" y1="0" x2="445" y2="0">
+              <stop class="line-a" offset="0%"/><stop class="line-b" offset="60%"/><stop class="line-c" offset="100%"/>
+            </linearGradient>
+          </defs>
+
+          <line class="dialog-line" x1="238" y1="100" x2="445" y2="100"/>
+
+          <circle class="dialog-flow c-cyan flow-right" cx="238" cy="100" r="3.5"/>
+          <circle class="dialog-flow c-blue flow-left" cx="445" cy="100" r="3.5"/>
+
+          <rect class="dialog-node dialog-node-query" x="162" y="73" width="76" height="54" rx="10"/>
+          <line class="dialog-node-sheen" x1="172" y1="78" x2="228" y2="78"/>
+
+          <rect class="dialog-node dialog-node-reply" x="445" y="63" width="110" height="74" rx="14"/>
+          <rect class="dialog-node-inset" x="461" y="78" width="78" height="44" rx="8"/>
+          <line class="dialog-node-accent" x1="470" y1="100" x2="530" y2="100"/>
+          <line class="dialog-node-sheen" x1="457" y1="68" x2="543" y2="68"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
   <section class="section-sm metodo">
     <div class="container">
       <div class="metodo-grid">
