@@ -1790,38 +1790,55 @@ nav.main-nav > ul{ position:relative; }
 .timeline-body h3{ font-family:var(--serif); font-size:1.15rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
 .timeline-body p{ color:var(--stone); font-size:0.94rem; max-width:520px; }
 
-/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045/046) ============
+/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045/046/048) ============
    Visual de apoyo puramente decorativo (aria-hidden), solo en metodo.html.
    Una trayectoria continua que serpentea a través de cuatro fases —
    "un proceso que evoluciona", no una barra de progreso ni cuatro
    piezas repetidas — sin texto incrustado: la numeración y el
-   contenido real siguen viviendo en la timeline de siempre. */
+   contenido real siguen viviendo en la timeline de siempre. DIR-048:
+   la posición de las 4 estaciones y los extremos de la curva ya no son
+   coordenadas fijas — main.js mide dónde caen realmente los badges
+   "01"–"04" de la timeline y reconstruye el trazado para que empiece y
+   termine exactamente ahí (ver alignFasesRibbon en main.js). Los
+   valores d="..." y cx/cy de aquí son solo el estado inicial antes de
+   que ese script corra (o el resultado si JS estuviera desactivado). */
 .fases-layout{
   display:grid;
   grid-template-columns:1fr 200px;
   gap:40px;
   align-items:start;
 }
-.fases-diagram{ padding-top:8px; }
-.fases-diagram svg{ display:block; width:100%; height:auto; overflow:visible; }
+.fases-diagram{ padding-top:8px; height:560px; }
+.fases-diagram svg{ display:block; width:100%; height:100%; overflow:visible; }
 /* Trayectoria continua (DIR-046): sustituye la columna vertical por
    una única cinta que serpentea a través de las cuatro fases —
    "un proceso que avanza", no una barra de progreso ni cuatro
    estaciones repetidas. Progresión cian→azul→violeta a lo largo del
-   propio trazo (mismo degradado ya usado en DIR-045). Una señal
-   luminosa recorre la trayectoria de forma continua y muy lenta
-   (offset-path/offset-distance) — sin puntos de flujo repetidos,
-   solo una señal, discreta y elegante. */
+   propio trazo (mismo degradado ya usado en DIR-045). Un pequeño
+   módulo de sistema (no una esfera, no un punto genérico — DIR-048)
+   recorre la trayectoria de forma continua y muy lenta.*/
 .fases-diagram .fases-ribbon-glow{ fill:none; stroke:var(--blue); stroke-width:9; stroke-linecap:round; opacity:.1; filter:blur(5px); }
 .fases-diagram .fases-ribbon{ fill:none; stroke:url(#fasesLineM); stroke-width:2; stroke-linecap:round; opacity:.7; animation:fases-line-pulse 7s ease-in-out infinite; }
-.fases-diagram .fases-signal{
-  fill:var(--cyan); filter:drop-shadow(0 0 6px var(--cyan));
-  offset-path:path("M110,20 C110,45 145,45 145,70 C145,110 75,170 75,210 C75,250 145,310 145,350 C145,390 75,450 75,490 C75,515 110,515 110,540");
-  offset-rotate:0deg;
-  animation:fases-signal-travel 9s linear infinite;
+/* El "carrier" — pequeño chip romboidal con núcleo propio, lenguaje
+   visual coherente con las estaciones (mismo doble círculo halo+marca)
+   pero con forma facetada en vez de esférica. offset-rotate:auto le da
+   una inclinación orgánica siguiendo la curva; main.js sustituye el
+   offset-path por el trazado real medido, este es solo el arranque. */
+.fases-diagram .fases-carrier{
+  offset-path:path("M145,70 C145,115 75,165 75,210 C75,255 145,305 145,350 C145,395 75,445 75,490");
+  offset-rotate:auto;
+  animation:fases-signal-travel 8s linear infinite;
 }
-.fases-diagram .fases-station-halo{ opacity:.16; }
-.fases-diagram .fases-station-marker{ opacity:.95; }
+.fases-diagram .fases-carrier-plate{
+  fill:rgba(10,14,26,.55);
+  stroke:var(--cyan);
+  stroke-width:1.3;
+  filter:drop-shadow(0 0 6px var(--cyan));
+}
+.fases-diagram .fases-carrier-core{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.fases-diagram .fases-station-halo{ opacity:.16; transform-box:fill-box; transform-origin:center; }
+.fases-diagram .fases-station-marker{ opacity:.95; transform-box:fill-box; transform-origin:center; }
+.fases-diagram .fases-station{ animation:fases-station-pulse 8s ease-in-out infinite; }
 .fases-diagram .fases-station-1 .fases-station-halo{ fill:var(--cyan); }
 .fases-diagram .fases-station-1 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
 .fases-diagram .fases-station-2 .fases-station-halo{ fill:var(--cyan); }
@@ -1840,9 +1857,18 @@ nav.main-nav > ul{ position:relative; }
   94%{ opacity:1; }
   100%{ offset-distance:100%; opacity:0; }
 }
+/* Micro-respuesta al paso del carrier por cada estación: un breve
+   realce de escala + brillo, sincronizado vía animation-delay (fijado
+   por main.js según el punto real del recorrido en el que cae cada
+   estación) — nunca un parpadeo genérico y desacompasado. */
+@keyframes fases-station-pulse{
+  0%, 88%, 100%{ transform:scale(1); filter:brightness(1); }
+  93%{ transform:scale(1.4); filter:brightness(1.6); }
+}
 @media (prefers-reduced-motion: reduce){
   .fases-diagram .fases-ribbon{ animation:none; opacity:.65; }
-  .fases-diagram .fases-signal{ animation:none; opacity:0; }
+  .fases-diagram .fases-carrier{ animation:none; opacity:0; }
+  .fases-diagram .fases-station{ animation:none; }
 }
 @media (max-width:1024px){
   .fases-layout{ grid-template-columns:1fr; }
