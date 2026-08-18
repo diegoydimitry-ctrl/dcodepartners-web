@@ -1,0 +1,8 @@
+node_modules/
+out/
+.remotion/
+
+# Este subproyecto SÍ versiona su lockfile aunque el .gitignore raíz del
+# repositorio ignore package-lock.json globalmente: el pipeline de CI usa
+# `npm ci`, que requiere un lockfile exacto para renders reproducibles.
+!package-lock.json

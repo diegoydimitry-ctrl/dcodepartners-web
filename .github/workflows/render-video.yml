@@ -1,0 +1,102 @@
+name: D-Code Content Factory — Render Video
+
+# Motor de render del Video Engine (Remotion). Recibe un storyboard JSON
+# (generado por el workflow de n8n "CF/Concept -> Script -> Storyboard ->
+# Render") y produce un vídeo .mp4 de marca, sin depender de ninguna API de
+# generación de vídeo de pago. No publica nada en redes sociales — solo
+# renderiza y sube el resultado como Release de este repositorio.
+#
+# Disparo normal (producción): repository_dispatch, event_type "render-video",
+# con client_payload = { videoId, storyboard }. n8n lo dispara vía la API de
+# GitHub (POST /repos/:owner/:repo/dispatches) usando un Personal Access Token
+# con permiso "repo" o, en repos de una organización con fine-grained tokens,
+# "Contents: write" + "Actions: write" — esa credencial la debe crear
+# Dirección y añadirla en n8n como "GitHub PAT - Content Factory"
+# (ver workflow CF/Concept -> Script -> Storyboard -> Render).
+#
+# Disparo manual (pruebas): workflow_dispatch, pegando el storyboard JSON
+# completo en el input "storyboard_json".
+on:
+  repository_dispatch:
+    types: [render-video]
+  workflow_dispatch:
+    inputs:
+      video_id:
+        description: "videoId (para nombrar el archivo de salida)"
+        required: true
+        default: "manual-test"
+      storyboard_json:
+        description: "Storyboard completo en JSON (ver src/schema/storyboard.ts)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: automation/content-factory/video-engine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: automation/content-factory/video-engine/package-lock.json
+
+      - name: Instalar Chromium para Remotion
+        run: npx --yes @remotion/cli browser ensure
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Preparar props.json
+        env:
+          VIDEO_ID: ${{ github.event.client_payload.videoId || inputs.video_id }}
+          STORYBOARD_JSON: ${{ toJson(github.event.client_payload.storyboard) }}
+          STORYBOARD_JSON_MANUAL: ${{ inputs.storyboard_json }}
+        run: |
+          set -euo pipefail
+          echo "videoId=$VIDEO_ID" >> "$GITHUB_ENV"
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "$STORYBOARD_JSON" > /tmp/storyboard.json
+          else
+            echo "$STORYBOARD_JSON_MANUAL" > /tmp/storyboard.json
+          fi
+          node -e "
+            const fs = require('fs');
+            const storyboard = JSON.parse(fs.readFileSync('/tmp/storyboard.json', 'utf8'));
+            fs.writeFileSync('/tmp/props.json', JSON.stringify({ storyboard }));
+          "
+
+      - name: Render vídeo
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          npx remotion render src/index.ts dynamic "out/${videoId}.mp4" --props=/tmp/props.json --codec=h264
+
+      - name: Publicar como Release (URL pública del vídeo)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd automation/content-factory/video-engine
+          gh release create "content-factory-${videoId}" \
+            "out/${videoId}.mp4" \
+            --repo "${{ github.repository }}" \
+            --title "D-Code Content Factory — ${videoId}" \
+            --notes "Render automático del Video Engine. No publicado en redes todavía — ver CF_Videos en n8n para el estado real." \
+            --latest=false
+
+      - name: Resumen
+        run: |
+          echo "### Vídeo renderizado" >> "$GITHUB_STEP_SUMMARY"
+          echo "- videoId: \`${videoId}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Release: content-factory-${videoId}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Importante:** si este repositorio es privado, la URL del asset de la Release NO es públicamente descargable sin autenticación — Instagram (Graph API) exige una URL de vídeo accesible sin login. En ese caso hay que copiar el asset a un storage realmente público (Vercel Blob, Cloudflare R2, S3 con bucket público) antes de intentar publicar. LinkedIn no tiene esta restricción del mismo modo (sube el binario directamente), pero requiere su propia integración de publicación, no incluida todavía."
