@@ -274,7 +274,17 @@ h1,h2,h3,h4,p{ margin:0; }
   display:inline-block;
 }
 
-h2.h-title{
+/* DIR-052 4: el selector vivía como "h2.h-title" — solo aplicaba cuando
+   .h-title estaba sobre un <h2> literal. La mayoría de page-hero del
+   sitio (Contacto, Método, Departamentos, Servicios, legales, 404...)
+   usan .h-title sobre un <h1> real (es el título principal de esas
+   páginas), así que ese <h1> nunca recibía esta regla: caía al h1 por
+   defecto del navegador (Inter/sans, ~32px, line-height ~1.6, sin el
+   letter-spacing de marca) en vez de la tipografía fluida prevista.
+   Generalizado a .h-title sin exigir la etiqueta, para que se aplique
+   igual sobre h1 o h2 — mismo diseño previsto desde el principio, ahora
+   sí llega a las ~54 páginas que lo usaban sobre un <h1>. */
+.h-title{
   font-family:var(--serif);
   font-weight:600;
   font-size:clamp(1.9rem, 2.6vw + 1rem, 3rem);
@@ -636,7 +646,7 @@ nav.main-nav .chev{ width:11px; height:11px; transition:transform .2s ease; opac
    existe — no hay un ::after fijo por enlace además de este, porque eso
    es justo lo que producía dos líneas superpuestas sobre la página
    activa. Se desactiva por completo en móvil (JS no la mueve por debajo
-   de 901px), donde el nav pasa a ser un panel vertical. */
+   de 941px), donde el nav pasa a ser un panel vertical. */
 nav.main-nav > ul{ position:relative; }
 .nav-indicator{
   position:absolute;
@@ -690,8 +700,16 @@ nav.main-nav > ul{ position:relative; }
 
 /* Hover/focus reveal only applies where a real hover-capable pointer exists
    (desktop). Below that, the mega menu is an inline tap-toggle panel driven
-   by JS (.mega-open) — see the max-width:900px block. */
-@media (min-width:901px){
+   by JS (.mega-open) — see the max-width:940px block.
+   DIR-052: el corte vivía en 900/901px. Auditoría real de dispositivo (no
+   solo los 5 breakpoints de DIR-051) encontró que entre 901 y ~925px el
+   nav de escritorio completo (logo + 6 enlaces + CTA "Solicitar una
+   reunión") no cabe en español — overflow horizontal real de hasta 23px,
+   justo en el punto exacto donde el menú móvil se desactiva. Subido a
+   940px con margen de sobra para que el panel móvil (que sí tiene
+   espacio de sobra) siga cubriendo esa franja en vez de forzar el nav
+   de escritorio a apretarse. */
+@media (min-width:941px){
   .has-mega:hover .chev, .has-mega:focus-within .chev{ transform:rotate(180deg); }
   .mega-menu{
     position:absolute;
@@ -2008,7 +2026,7 @@ nav.main-nav > ul{ position:relative; }
   .fases-grid{ grid-template-columns:1fr 1fr; }
 }
 @media (max-width:560px){
-  .fases-grid{ grid-template-columns:1fr; }
+  .fases-grid{ grid-template-columns:minmax(0,1fr); }
   .fases-node-num{ font-size:17px; }
 }
 
@@ -2196,45 +2214,63 @@ nav.main-nav > ul{ position:relative; }
   flex-direction:column;
 }
 
-/* Jerarquía visual del formulario (DIR-050 4): sigue siendo el mismo
-   .window de siempre — mismo tamaño, misma composición — pero se lee
-   inequívocamente como el protagonista mediante contraste de
-   superficie (borde y sheen de la barra con el acento cian, en vez del
-   neutro de las demás ventanas), profundidad (un halo propio que
-   sobresale del borde, sutil en reposo) y foco (se intensifica al
-   entrar en cualquier campo — :focus-within — momento en el que las
-   tarjetas vecinas bajan ligeramente de intensidad sin oscurecerse
-   del todo, para que la página siga sintiéndose equilibrada). */
+/* Jerarquía visual del formulario (DIR-050 4, reforzada en DIR-052 8/9/10):
+   sigue siendo el mismo .window de siempre — mismo tamaño, misma
+   composición, mismo contrato — pero ahora se lee como protagonista ya
+   en REPOSO, no solo al enfocar un campo. DIR-052 detectó que el
+   contraste de DIR-050 (borde .22 / halo -22px .22) era demasiado
+   sutil: en la práctica el formulario seguía leyéndose "una tarjeta
+   más" hasta que el visitante ya había entrado en un campo — es decir,
+   la jerarquía solo aparecía DESPUÉS de que el usuario ya hubiera
+   decidido interactuar, cuando el objetivo es que se identifique ANTES.
+   Aquí el halo, el borde y el brillo de la barra suben de intensidad en
+   reposo (siguen intensificándose más al enfocar, para que quede
+   recorrido), y las dos tarjetas vecinas (reserva directa + contacto
+   directo) bajan un peldaño de profundidad/luz de forma permanente —
+   no solo cuando hay foco — para que la subordinación se perciba de un
+   vistazo. Todo mediante luz/contraste/profundidad ya existentes en el
+   sistema (cian de marca), sin bordes gruesos, sin neón, sin banner. */
 .form-card{
-  border-color:rgba(67,224,255,.22);
+  border-color:rgba(67,224,255,.36);
   box-shadow:
-    0 40px 80px -40px rgba(0,0,0,.75),
-    0 0 0 1px rgba(67,224,255,.1),
-    0 0 60px -22px rgba(67,224,255,.22),
+    0 44px 88px -38px rgba(0,0,0,.78),
+    0 0 0 1px rgba(67,224,255,.16),
+    0 0 90px -30px rgba(67,224,255,.4),
     inset 0 1px 0 var(--surface-highlight),
     inset 0 -1px 0 rgba(91,140,255,.16);
   transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
 }
-.form-card::after{ opacity:.95; }
-.form-card .window-bar{ border-bottom-color:rgba(67,224,255,.32); }
-.form-card .window-bar::after{ background:linear-gradient(90deg, transparent, rgba(67,224,255,.85), transparent); }
+.form-card::after{ opacity:1; }
+.form-card .window-bar{ border-bottom-color:rgba(67,224,255,.4); }
+.form-card .window-bar::after{ background:linear-gradient(90deg, transparent, rgba(67,224,255,.95), transparent); }
 .form-card:focus-within{
-  border-color:rgba(67,224,255,.55);
+  border-color:rgba(67,224,255,.6);
   box-shadow:
-    0 46px 92px -38px rgba(0,0,0,.8),
-    0 0 0 1px rgba(67,224,255,.28),
-    0 0 84px -16px rgba(67,224,255,.32),
+    0 50px 100px -36px rgba(0,0,0,.82),
+    0 0 0 1px rgba(67,224,255,.32),
+    0 0 110px -18px rgba(67,224,255,.46),
     inset 0 1px 0 var(--surface-highlight),
     inset 0 -1px 0 rgba(91,140,255,.2);
 }
 .form-card:focus-within::after{ opacity:1; }
+/* Las dos tarjetas vecinas bajan un peldaño de profundidad/luz de forma
+   PERMANENTE (no solo al enfocar): sombra más plana, aro de borde más
+   apagado — siguen siendo el mismo componente .window, solo con menos
+   protagonismo lumínico en reposo, para que el formulario destaque sin
+   que ellas parezcan "rotas" o deshabilitadas. */
 .contacto-main .booking-card, .contacto-side .contact-card{
+  box-shadow:
+    0 28px 56px -34px rgba(0,0,0,.6),
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.05),
+    inset 0 -1px 0 rgba(91,140,255,.09);
   transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease, opacity .3s ease, filter .3s ease;
 }
+.contacto-main .booking-card::after, .contacto-side .contact-card::after{ opacity:.55; }
 .contacto-grid:has(.form-card:focus-within) .contacto-main .booking-card,
 .contacto-grid:has(.form-card:focus-within) .contacto-side .contact-card{
-  opacity:.88;
-  filter:saturate(.92);
+  opacity:.84;
+  filter:saturate(.9);
 }
 @media (prefers-reduced-motion:reduce){
   .form-card, .contacto-main .booking-card, .contacto-side .contact-card{ transition:none; }
@@ -2275,8 +2311,13 @@ nav.main-nav > ul{ position:relative; }
    (Enter en el paso 1, por ejemplo) sin tocar ni una línea de la
    lógica de envío/reintento/Turnstile que ya funciona en producción. */
 .form-progress{ display:flex; gap:8px; margin-bottom:10px; }
-.form-progress-dot{ flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s ease; }
+.form-progress-dot{ flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s ease, box-shadow .3s ease; }
 .form-progress-dot.is-active, .form-progress-dot.is-done{ background:var(--cyan); }
+/* DIR-052 9: el paso activo lleva un brillo propio — un detalle de "luz
+   de consola" que refuerza que el formulario es el punto donde empieza
+   la interacción, sin añadir ningún elemento nuevo al DOM. */
+.form-progress-dot.is-active{ box-shadow:0 0 10px rgba(67,224,255,.75); }
+@media (prefers-reduced-motion:reduce){ .form-progress-dot{ transition:background .3s ease; } }
 .form-step-count{
   font-family:var(--mono);
   font-size:0.68rem;
@@ -2543,20 +2584,27 @@ footer{
 }
 
 @media (max-width: 1024px){
-  .hero-grid{ grid-template-columns:1fr; }
+  .hero-grid{ grid-template-columns:minmax(0,1fr); }
   .hero-graphic{ order:2; }
-  .metodo-grid{ grid-template-columns:1fr; }
-  .servicios-cards{ grid-template-columns:1fr; }
+  .metodo-grid{ grid-template-columns:minmax(0,1fr); }
+  .servicios-cards{ grid-template-columns:minmax(0,1fr); }
   .servicios-cards.cols-3{ grid-template-columns:1fr 1fr; }
-  .founders{ grid-template-columns:1fr; }
-  .contacto-grid{ grid-template-columns:1fr; }
+  .founders{ grid-template-columns:minmax(0,1fr); }
+  /* DIR-052 5/12: "1fr" a secas hereda un mínimo implícito de min-content
+     — la pista real del bug: a 320px la fila de contacto directo
+     ("dcodedepartment@gmail.com" sin espacio donde partir) empujaba la
+     única columna de la rejilla a 330px, 10px más ancha que el propio
+     viewport, con scroll horizontal real. minmax(0,1fr) es visualmente
+     idéntico en cualquier ancho con espacio de sobra — solo cambia
+     cuando, como aquí, el contenido forzaría overflow. */
+  .contacto-grid{ grid-template-columns:minmax(0,1fr); }
   .blog-grid{ grid-template-columns:1fr 1fr; }
-  .guarantee-grid{ grid-template-columns:1fr; }
+  .guarantee-grid{ grid-template-columns:minmax(0,1fr); }
   .footer-top{ grid-template-columns:1fr 1fr 1fr; }
   .window{ transform:none !important; }
 }
 
-@media (max-width: 900px){
+@media (max-width: 940px){
   .burger{ display:block; }
 
   nav.main-nav{
@@ -2592,7 +2640,7 @@ footer{
   nav.main-nav a[aria-current="page"]{ color:var(--cyan); }
   .mega-menu{
     position:static; width:100%; opacity:1; visibility:visible; pointer-events:auto; transform:none;
-    display:none; grid-template-columns:1fr; box-shadow:none; border:none; background:none; padding:4px 0 4px 14px;
+    display:none; grid-template-columns:minmax(0,1fr); box-shadow:none; border:none; background:none; padding:4px 0 4px 14px;
   }
   .mega-menu::after{ display:none; }
   .has-mega.mega-open .mega-menu{ display:grid; }
@@ -2607,7 +2655,7 @@ footer{
   .spec-item:nth-child(n){ border-right:1px solid var(--border); }
   .spec-item:nth-child(2n){ border-right:none; }
   .spec-item{ border-bottom:1px solid var(--border); }
-  .blog-grid{ grid-template-columns:1fr; }
+  .blog-grid{ grid-template-columns:minmax(0,1fr); }
   .footer-top{ grid-template-columns:1fr 1fr; }
 }
 
@@ -2619,11 +2667,11 @@ footer{
      of forcing horizontal overflow on narrow screens. */
   .btn{ white-space:normal; text-align:center; }
   .future-cases{ padding:28px 20px; }
-  .case-fields{ grid-template-columns:1fr; }
+  .case-fields{ grid-template-columns:minmax(0,1fr); }
   .case-card .window-body{ padding:24px 20px; }
-  .footer-top{ grid-template-columns:1fr; }
+  .footer-top{ grid-template-columns:minmax(0,1fr); }
   .footer-bottom{ flex-direction:column; }
-  .spec-sheet{ grid-template-columns:1fr; }
+  .spec-sheet{ grid-template-columns:minmax(0,1fr); }
   .spec-item{ border-right:none !important; }
   .timeline-item{ grid-template-columns:40px 1fr; gap:16px; }
   .timeline-num{ width:38px; height:38px; font-size:0.72rem; }
@@ -2811,20 +2859,25 @@ footer{
   .chat-window{ width:calc(100vw - 32px); height:min(70vh, 520px); }
 }
 
-/* DIR-051: el umbral real al que "logo + CTA completo + burger" deja de
-   caber en una fila resultó ser bastante más ancho de lo que este
-   comentario asumía — se midió (no se supuso) un desbordamiento
-   horizontal real de ~75px (ES) / ~42px (EN) en el ancho de iPhone
-   estándar de 390px, un dispositivo real muy común, que quedaba fuera
-   del antiguo corte de 359px. El bug llevaba arrastrándose sin
-   diagnosticar desde hace varias entregas (se atribuía por error a
-   .glow-orb.o3 — un position:fixed que, confirmado aquí mediante
-   aislamiento elemento a elemento, NUNCA contribuye al scrollWidth del
-   documento; el elemento real más ancho resultó ser .nav-right). Subir
-   el corte a 400px cubre 390px con margen sin afectar a los anchos de
-   tablet/desktop donde el texto completo del CTA sigue cabiendo de
-   sobra. */
-@media (max-width: 400px){
+/* DIR-051 corrigió el umbral de 359px a 400px asumiendo que cubría el
+   "ancho de iPhone común". DIR-052 auditó una matriz real de anchos de
+   móvil (no solo 390px) y encontró que 400px seguía siendo insuficiente
+   en dos frentes reales:
+   1) Por ARRIBA: iPhone 16 Pro (402px), Pixel/Android estándar (412px)
+      y iPhone Pro Max (430px) — todos anchos de dispositivo reales muy
+      comunes — quedaban FUERA del corte de 400px, así que el CTA volvía
+      a mostrarse completo ("Solicitar una reunión") y desbordaba de
+      nuevo (hasta 63px medidos en iPhone 16 Pro). Subido a 480px, con
+      margen de sobra sobre el ancho de teléfono más ancho de la matriz
+      (430px).
+   2) Por ABAJO: incluso con el CTA ya acortado a "Reservar", por debajo
+      de ~360px (iPhone SE de 1ª/2ª gen, 320-355px) el conjunto logo +
+      selector de idioma + CTA + burger seguía sin caber (hasta 37px de
+      desbordamiento medidos a 320px) — el acortamiento del CTA no
+      alcanzaba para esos anchos. Se añade un segundo escalón de
+      compactación (≤360px) que aprieta aún más el selector de idioma y
+      el botón, sin tocar composición ni funcionalidad. */
+@media (max-width: 480px){
   :root{ --pad:16px; }
   .nav-wrap{ gap:8px; }
   .nav-right{ gap:8px; }
@@ -2838,6 +2891,14 @@ footer{
     font-size:0.82rem;
   }
   .lang-switch a{ padding:5px 8px; }
+}
+@media (max-width: 360px){
+  :root{ --pad:12px; }
+  .nav-right{ gap:4px; }
+  .logo-word{ font-size:0.92rem; }
+  .logo img{ width:28px; }
+  .nav-right .btn-primary{ padding:9px 9px; }
+  .lang-switch a{ padding:5px 5px; font-size:0.78rem; }
 }
 
 /* ==================================================================
@@ -3006,7 +3067,7 @@ footer{
 .chaos-order-note{ margin-top:18px; font-size:0.85rem; color:var(--stone-soft); }
 @media (max-width:640px){
   .chaos-chip{ display:none; }
-  .order-board{ grid-template-columns:1fr; }
+  .order-board{ grid-template-columns:minmax(0,1fr); }
 }
 
 /* ---------- Finanzas: cadena financiera ---------- */
@@ -3058,7 +3119,7 @@ footer{
   transition:max-height .35s ease, opacity .25s ease, margin-top .35s ease;
 }
 .opsgrid-tile:hover .opsgrid-tile-detail,.opsgrid-tile:focus-within .opsgrid-tile-detail{ max-height:80px; opacity:1; margin-top:6px; }
-@media (max-width:520px){ .opsgrid-scope{ grid-template-columns:1fr; } }
+@media (max-width:520px){ .opsgrid-scope{ grid-template-columns:minmax(0,1fr); } }
 
 /* ---------- Dirección: command center ---------- */
 .command-window .window-body{ display:flex; flex-direction:column; gap:22px; }

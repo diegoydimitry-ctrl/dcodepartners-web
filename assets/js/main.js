@@ -97,7 +97,7 @@
     if (!trigger) return;
     trigger.setAttribute('aria-expanded', 'false');
     trigger.addEventListener('click', function (e) {
-      if (window.innerWidth > 900) return; // desktop uses hover/focus via CSS
+      if (window.innerWidth > 940) return; // desktop uses hover/focus via CSS — umbral alineado con el CSS (DIR-052)
       e.preventDefault();
       var isOpen = item.classList.toggle('mega-open');
       trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -122,7 +122,7 @@
     );
 
     var moveNavIndicator = function (el) {
-      if (!el || window.innerWidth <= 900) { navIndicator.style.opacity = '0'; return; }
+      if (!el || window.innerWidth <= 940) { navIndicator.style.opacity = '0'; return; }
       var elRect = el.getBoundingClientRect();
       var listRect = navTopList.getBoundingClientRect();
       navIndicator.style.width = elRect.width + 'px';
