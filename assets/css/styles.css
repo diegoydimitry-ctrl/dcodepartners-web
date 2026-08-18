@@ -946,40 +946,57 @@ nav.main-nav > ul{ position:relative; }
 
 .hero-graphic{ position:relative; }
 
-/* ============ HERO — NÚCLEO OPERATIVO (DIR-045) ============
-   Sustituye el canvas de red de nodos (JS, aleatorio) por un diagrama
-   SVG estático propio de D-Code: un núcleo hexagonal (nunca un rombo —
-   ya es el lenguaje de Método) con dos anillos concéntricos, un eje
-   vertical que lo atraviesa, y dos racimos de barras de actividad a
-   los lados unidos al núcleo por finos conductores — "hay un sistema
-   funcionando aquí", no "mira cuántos nodos tiene la IA". Única
-   animación: un pulso de opacidad muy lento en el anillo exterior;
-   las barras son estáticas. Mismos tokens cromados que el resto del
-   sitio (fill/ring por degradado, misma técnica de Método/Servicios). */
+/* ============ HERO — ECOSISTEMA VIVO (DIR-045, evolucionado DIR-046) ============
+   Un núcleo hexagonal fijo (nunca un rombo — ya es el lenguaje de
+   Método) con dos anillos concéntricos, alrededor del cual orbitan
+   cuatro capacidades reales de D-Code (iconos reutilizados de los
+   propios módulos de Departamentos — cero iconos/nombres inventados)
+   en una trayectoria elíptica, muy lenta (34s por vuelta) y elegante.
+   Cada satélite se contra-rota sobre sí mismo para permanecer en pie
+   mientras orbita. "Muchas capacidades coordinadas alrededor del
+   mismo sistema" — sistema central + componentes + movimiento
+   continuo, no una ilustración técnica estática. Hover (solo ratón,
+   decorativo) detiene la órbita y realza el satélite bajo el cursor;
+   el panel funciona igual de bien sin interacción. */
 .hero-core-wrap{ padding:0; }
-.hero-core-diagram svg{ display:block; width:100%; height:260px; }
-.hero-core-diagram .core-spine{ stroke:url(#heroSpineLine); stroke-width:1; opacity:.5; }
+.hero-core-diagram svg{ display:block; width:100%; height:260px; overflow:visible; }
 .hero-core-diagram .core-ring{ fill:none; stroke:url(#heroCoreRing); stroke-width:1; }
 .hero-core-diagram .core-ring-inner{ opacity:.24; }
 .hero-core-diagram .core-ring-outer{ opacity:.16; animation:core-ring-pulse 5.5s ease-in-out infinite; }
 .hero-core-diagram .core-hex{ fill:url(#heroCoreFill); stroke:url(#heroCoreRing); stroke-width:1.4; }
 .hero-core-diagram .core-hex-line{ stroke:var(--surface-sheen); stroke-width:1; opacity:.3; }
-.hero-core-diagram .core-conduit-l{ stroke:url(#heroConduitL); stroke-width:1; opacity:.55; }
-.hero-core-diagram .core-conduit-r{ stroke:url(#heroConduitR); stroke-width:1; opacity:.55; }
-.hero-core-diagram .core-bar{ fill:url(#heroBarFill); }
-.hero-core-diagram .core-accent{ fill:var(--violet); filter:drop-shadow(0 0 5px var(--violet)); }
 .hero-core-diagram stop.fill-a{ stop-color:var(--surface-top); }
 .hero-core-diagram stop.fill-b{ stop-color:var(--panel-2); }
 .hero-core-diagram stop.fill-c{ stop-color:var(--panel); }
 .hero-core-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
 .hero-core-diagram stop.ring-b{ stop-color:var(--cyan); }
 .hero-core-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
-.hero-core-diagram stop.bar-a{ stop-color:var(--cyan); }
-.hero-core-diagram stop.bar-b{ stop-color:var(--blue); }
-.hero-core-diagram stop.spine-a{ stop-color:var(--cyan); stop-opacity:.7; }
-.hero-core-diagram stop.spine-b{ stop-color:var(--blue); stop-opacity:.15; }
 @keyframes core-ring-pulse{ 0%,100%{ opacity:.16; } 50%{ opacity:.34; } }
-@media (prefers-reduced-motion: reduce){ .hero-core-diagram .core-ring-outer{ animation:none; opacity:.24; } }
+
+.hero-orbit-carrier{
+  transform-box:view-box; transform-origin:320px 130px;
+  rotate:0deg; scale:1 .62;
+  animation:hero-orbit-spin 34s linear infinite;
+}
+.hero-orbit-icon-wrap{
+  transform-box:fill-box; transform-origin:center;
+  rotate:0deg;
+  animation:hero-orbit-counter 34s linear infinite;
+  transition:scale .25s ease;
+}
+.hero-orbit-carrier:hover, .hero-orbit-carrier:hover .hero-orbit-icon-wrap{ animation-play-state:paused; }
+.hero-orbit-carrier:hover .hero-orbit-icon-wrap{ scale:1.16; }
+.orbit-chip{
+  fill:url(#heroCoreFill);
+  stroke:rgba(var(--orb-r),var(--orb-g),var(--orb-b),.45);
+  stroke-width:1.2;
+  filter:drop-shadow(0 0 4px rgba(var(--orb-r),var(--orb-g),var(--orb-b),.35));
+  transition:filter .25s ease;
+}
+.hero-orbit-carrier:hover .orbit-chip{ filter:drop-shadow(0 0 8px rgba(var(--orb-r),var(--orb-g),var(--orb-b),.65)); }
+.orbit-icon-svg{ color:rgb(var(--orb-r),var(--orb-g),var(--orb-b)); fill:none; stroke:currentColor; stroke-width:2; }
+@keyframes hero-orbit-spin{ from{ rotate:0deg; scale:1 .62; } to{ rotate:360deg; scale:1 .62; } }
+@keyframes hero-orbit-counter{ from{ rotate:0deg; } to{ rotate:-360deg; } }
 
 .hero-metrics{
   display:grid;
@@ -1667,13 +1684,12 @@ nav.main-nav > ul{ position:relative; }
 .timeline-body h3{ font-family:var(--serif); font-size:1.15rem; font-weight:600; color:var(--ink); margin-bottom:8px; }
 .timeline-body p{ color:var(--stone); font-size:0.94rem; max-width:520px; }
 
-/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045) ============
+/* ============ MÉTODO — DIAGRAMA DE FASES (DIR-033, evolucionado DIR-045/046) ============
    Visual de apoyo puramente decorativo (aria-hidden), solo en metodo.html.
-   Una columna de energía vertical con cuatro estaciones — proceso
-   continuo, no cuatro piezas repetidas — construida con los mismos
-   tokens del acabado cromado (--surface-*), sin texto incrustado: la
-   numeración y el contenido real siguen viviendo en la timeline de
-   siempre. */
+   Una trayectoria continua que serpentea a través de cuatro fases —
+   "un proceso que evoluciona", no una barra de progreso ni cuatro
+   piezas repetidas — sin texto incrustado: la numeración y el
+   contenido real siguen viviendo en la timeline de siempre. */
 .fases-layout{
   display:grid;
   grid-template-columns:1fr 200px;
@@ -1681,39 +1697,46 @@ nav.main-nav > ul{ position:relative; }
   align-items:start;
 }
 .fases-diagram{ padding-top:8px; }
-.fases-diagram svg{ display:block; width:100%; height:auto; }
-/* Columna de energía vertical (DIR-045): sustituye a los cuatro rombos
-   por una única estructura continua — un conducto cromado con una
-   línea de energía en su interior y cuatro "estaciones" horizontales
-   que marcan cada fase, con una progresión de color cian→azul→violeta
-   a medida que se avanza (misma lectura de las 4 fases que antes daban
-   los rombos, pero como proceso continuo, no como cuatro piezas
-   repetidas). Sin puntos de flujo animados: la única animación es un
-   pulso de opacidad muy lento en la propia línea de energía. */
-.fases-diagram .fases-column{ fill:url(#fasesFillM); stroke:url(#fasesRingM); stroke-width:1.4; }
-.fases-diagram .fases-column-line{ stroke:url(#fasesLineM); stroke-width:1.6; opacity:.6; animation:fases-line-pulse 6s ease-in-out infinite; }
-.fases-diagram .fases-station-tick{ stroke:url(#fasesRingM); stroke-width:1; opacity:.35; }
-.fases-diagram .fases-station-marker{ opacity:.9; }
-.fases-diagram .fases-station-1 .fases-station-band{ fill:var(--cyan); opacity:.16; }
+.fases-diagram svg{ display:block; width:100%; height:auto; overflow:visible; }
+/* Trayectoria continua (DIR-046): sustituye la columna vertical por
+   una única cinta que serpentea a través de las cuatro fases —
+   "un proceso que avanza", no una barra de progreso ni cuatro
+   estaciones repetidas. Progresión cian→azul→violeta a lo largo del
+   propio trazo (mismo degradado ya usado en DIR-045). Una señal
+   luminosa recorre la trayectoria de forma continua y muy lenta
+   (offset-path/offset-distance) — sin puntos de flujo repetidos,
+   solo una señal, discreta y elegante. */
+.fases-diagram .fases-ribbon-glow{ fill:none; stroke:var(--blue); stroke-width:9; stroke-linecap:round; opacity:.1; filter:blur(5px); }
+.fases-diagram .fases-ribbon{ fill:none; stroke:url(#fasesLineM); stroke-width:2; stroke-linecap:round; opacity:.7; animation:fases-line-pulse 7s ease-in-out infinite; }
+.fases-diagram .fases-signal{
+  fill:var(--cyan); filter:drop-shadow(0 0 6px var(--cyan));
+  offset-path:path("M110,20 C110,45 145,45 145,70 C145,110 75,170 75,210 C75,250 145,310 145,350 C145,390 75,450 75,490 C75,515 110,515 110,540");
+  offset-rotate:0deg;
+  animation:fases-signal-travel 9s linear infinite;
+}
+.fases-diagram .fases-station-halo{ opacity:.16; }
+.fases-diagram .fases-station-marker{ opacity:.95; }
+.fases-diagram .fases-station-1 .fases-station-halo{ fill:var(--cyan); }
 .fases-diagram .fases-station-1 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-.fases-diagram .fases-station-2 .fases-station-band{ fill:var(--cyan); opacity:.16; }
+.fases-diagram .fases-station-2 .fases-station-halo{ fill:var(--cyan); }
 .fases-diagram .fases-station-2 .fases-station-marker{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
-.fases-diagram .fases-station-3 .fases-station-band{ fill:var(--blue); opacity:.18; }
+.fases-diagram .fases-station-3 .fases-station-halo{ fill:var(--blue); }
 .fases-diagram .fases-station-3 .fases-station-marker{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
-.fases-diagram .fases-station-4 .fases-station-band{ fill:var(--violet); opacity:.2; }
+.fases-diagram .fases-station-4 .fases-station-halo{ fill:var(--violet); }
 .fases-diagram .fases-station-4 .fases-station-marker{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
-.fases-diagram stop.fill-a{ stop-color:var(--surface-top); }
-.fases-diagram stop.fill-b{ stop-color:var(--panel-2); }
-.fases-diagram stop.fill-c{ stop-color:var(--panel); }
-.fases-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
-.fases-diagram stop.ring-b{ stop-color:var(--surface-ring-mid); }
-.fases-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
 .fases-diagram stop.line-a{ stop-color:var(--cyan); }
 .fases-diagram stop.line-b{ stop-color:var(--blue); }
 .fases-diagram stop.line-c{ stop-color:var(--violet); }
-@keyframes fases-line-pulse{ 0%,100%{ opacity:.4; } 50%{ opacity:.75; } }
+@keyframes fases-line-pulse{ 0%,100%{ opacity:.5; } 50%{ opacity:.82; } }
+@keyframes fases-signal-travel{
+  0%{ offset-distance:0%; opacity:0; }
+  6%{ opacity:1; }
+  94%{ opacity:1; }
+  100%{ offset-distance:100%; opacity:0; }
+}
 @media (prefers-reduced-motion: reduce){
-  .fases-diagram .fases-column-line{ animation:none; opacity:.55; }
+  .fases-diagram .fases-ribbon{ animation:none; opacity:.65; }
+  .fases-diagram .fases-signal{ animation:none; opacity:0; }
 }
 @media (max-width:1024px){
   .fases-layout{ grid-template-columns:1fr; }
