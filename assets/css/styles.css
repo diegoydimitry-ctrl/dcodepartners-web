@@ -966,35 +966,38 @@ nav.main-nav > ul{ position:relative; }
 @media (max-width:1024px){
   .hero-atmosphere{ grid-row:2; opacity:.4; mask-image:none; -webkit-mask-image:none; }
 }
-/* Paralaje acotado (DIR-049 2B/2C) + física de muelle (DIR-050 1/1A):
-   "REST POSITION + BOUNDED PARALLAX + SMOOTH RETURN". clamp() fija un
-   tope en px que nunca se supera, sea cual sea el ancho real de la
-   sección (no cambia en DIR-050). Lo que sí cambia es CÓMO llega ahí:
-   antes --mx/--my se escribían 1:1 con el cursor y toda la suavidad
-   dependía de que esta capa reiniciara una transición CSS de duración
-   fija en cada mousemove — con el cursor en movimiento continuo eso
-   reinicia la transición decenas de veces por segundo, lo que en la
-   práctica da un seguimiento casi instantáneo y solo se nota "suave"
-   al soltar el cursor. Ahora --mx/--my ya NO son la posición bruta del
-   cursor: main.js las alimenta con un muelle amortiguado que recalcula
-   la posición en cada frame (arranque en reposo, nunca sobrepasa el
-   objetivo, decelera de forma orgánica) — por eso esta capa ya no
-   necesita (ni debe tener) su propia transition: sumarla encima del
-   muelle solo introduciría un segundo suavizado compitiendo con el
-   primero, y eso es precisamente lo que se sentía "agresivo". */
+/* Paralaje acotado (DIR-049 2B/2C) + física de muelle (DIR-050 1/1A) +
+   amplitud "vidrio flotando" (DIR-051 1A): "REST POSITION + BOUNDED
+   PARALLAX + SMOOTH RETURN". clamp() sigue fijando un tope en px que
+   nunca se supera. DIR-051 pidió explícitamente reducir la amplitud —
+   con los topes/sensibilidad anteriores (±28px al 16% del ancho
+   propio) el desplazamiento saturaba a solo ~1/3 del recorrido del
+   cursor dentro del área interactiva: pasado ese punto, el resto del
+   movimiento del ratón no producía NINGÚN cambio visual adicional (ya
+   estaba en el tope), lo que se leía como "objeto pegado al cursor"
+   en vez de una respuesta de profundidad progresiva. Aquí los topes
+   bajan a un tercio aprox. (front 28→10px, mid 16→6px, back 8→3px) Y
+   el multiplicador baja en la misma proporción, de forma que el tope
+   ahora se alcanza cerca del borde real del área interactiva, no
+   apenas empezar a moverse — el recorrido completo del cursor se
+   traduce en un desplazamiento gradual y sutil, coherente con "vidrio
+   flotando" en vez de "seguir al cursor". El muelle (main.js) sigue
+   igual: sigue siendo el mismo el que da la aceleración/deceleración
+   orgánica: con una amplitud tan pequeña, su velocidad efectiva en
+   px ya baja proporcionalmente sin tocar sus constantes de tiempo. */
 .hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; will-change:transform; }
 .hero-atm-layer svg{ width:100%; height:100%; display:block; overflow:visible; }
 
-.hero-atm-back{ transform:translate(clamp(-8px, calc((var(--mx,50%) - 50%) * .04), 8px), clamp(-6px, calc((var(--my,50%) - 50%) * .04), 6px)); filter:blur(1px); }
+.hero-atm-back{ transform:translate(clamp(-3px, calc((var(--mx,50%) - 50%) * .006), 3px), clamp(-2.5px, calc((var(--my,50%) - 50%) * .006), 2.5px)); filter:blur(1px); }
 .hero-atm-back line{ stroke:var(--surface-sheen); stroke-width:.6; opacity:.09; }
 
-.hero-atm-mid{ transform:translate(clamp(-16px, calc((var(--mx,50%) - 50%) * .09), 16px), clamp(-12px, calc((var(--my,50%) - 50%) * .09), 12px)); }
+.hero-atm-mid{ transform:translate(clamp(-6px, calc((var(--mx,50%) - 50%) * .011), 6px), clamp(-5px, calc((var(--my,50%) - 50%) * .011), 5px)); }
 .hero-atm-mid .signal-line{ fill:none; stroke-width:1.4; stroke-linecap:round; opacity:.4; }
 .hero-atm-mid .signal-a{ stroke:var(--cyan); stroke-dasharray:6 11; animation:hero-signal-flow 6s linear infinite; }
 .hero-atm-mid .signal-b{ stroke:var(--blue); stroke-dasharray:5 13; animation:hero-signal-flow 7.5s linear infinite reverse; opacity:.3; }
 @keyframes hero-signal-flow{ to{ stroke-dashoffset:-170; } }
 
-.hero-atm-front{ transform:translate(clamp(-28px, calc((var(--mx,50%) - 50%) * .16), 28px), clamp(-20px, calc((var(--my,50%) - 50%) * .16), 20px)); pointer-events:auto; }
+.hero-atm-front{ transform:translate(clamp(-10px, calc((var(--mx,50%) - 50%) * .019), 10px), clamp(-8px, calc((var(--my,50%) - 50%) * .019), 8px)); pointer-events:auto; }
 .hero-atm-front .atm-spine{ fill:none; stroke:url(#heroAtmSpine); stroke-width:1.5; opacity:.65; }
 .hero-atm-front .atm-chip{ cursor:default; }
 .hero-atm-front .atm-chip-plate{
@@ -2112,7 +2115,7 @@ nav.main-nav > ul{ position:relative; }
 }
 .guarantee-card .window-body{ text-align:left; }
 .guarantee-card .service-icon{ margin-bottom:18px; }
-.guarantee-card h3{ font-family:var(--serif); font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:10px; }
+.guarantee-card h2{ font-family:var(--serif); font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:10px; }
 .guarantee-card p{ color:var(--stone); font-size:0.9rem; }
 
 .cases-internal{
@@ -2310,7 +2313,7 @@ nav.main-nav > ul{ position:relative; }
   color:var(--green);
 }
 .form-success-icon svg{ width:24px; height:24px; }
-.form-success h3{ font-family:var(--serif); font-size:1.3rem; font-weight:700; color:var(--ink); margin-bottom:12px; }
+.form-success h2{ font-family:var(--serif); font-size:1.3rem; font-weight:700; color:var(--ink); margin-bottom:12px; }
 .form-success p{ color:var(--stone); font-size:0.95rem; line-height:1.6; max-width:400px; margin:0 auto 26px; }
 .form-success-book{ display:inline-flex; align-items:center; gap:9px; }
 .form-success-book svg{ width:16px; height:16px; flex-shrink:0; }
@@ -2808,10 +2811,20 @@ footer{
   .chat-window{ width:calc(100vw - 32px); height:min(70vh, 520px); }
 }
 
-/* Very small phones (iPhone SE 1st-gen, small Android, ~320-359px):
-   logo + full CTA text + burger no longer fit on one row. Shorten the
-   CTA instead of shrinking it into illegibility. */
-@media (max-width: 359px){
+/* DIR-051: el umbral real al que "logo + CTA completo + burger" deja de
+   caber en una fila resultó ser bastante más ancho de lo que este
+   comentario asumía — se midió (no se supuso) un desbordamiento
+   horizontal real de ~75px (ES) / ~42px (EN) en el ancho de iPhone
+   estándar de 390px, un dispositivo real muy común, que quedaba fuera
+   del antiguo corte de 359px. El bug llevaba arrastrándose sin
+   diagnosticar desde hace varias entregas (se atribuía por error a
+   .glow-orb.o3 — un position:fixed que, confirmado aquí mediante
+   aislamiento elemento a elemento, NUNCA contribuye al scrollWidth del
+   documento; el elemento real más ancho resultó ser .nav-right). Subir
+   el corte a 400px cubre 390px con margen sin afectar a los anchos de
+   tablet/desktop donde el texto completo del CTA sigue cabiendo de
+   sobra. */
+@media (max-width: 400px){
   :root{ --pad:16px; }
   .nav-wrap{ gap:8px; }
   .nav-right{ gap:8px; }
