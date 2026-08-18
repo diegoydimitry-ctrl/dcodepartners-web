@@ -616,6 +616,122 @@
     }
   }
 
+  /* ---------- Contacto — formulario progresivo (DIR-048) ----------
+     Controla qué paso de #contact-form está visible. Deliberadamente
+     NO toca el contrato de datos: los campos reales (mismo id/name/
+     required de siempre) nunca se destruyen ni se recrean, solo se
+     muestran/ocultan — así que el bloque de envío real, justo debajo
+     en este mismo archivo, sigue leyendo exactamente los mismos
+     elementos sin ningún cambio en su lógica. Se registra ANTES que
+     ese bloque a propósito: su listener de submit necesita poder
+     interceptar (con stopImmediatePropagation) un envío prematuro —
+     Enter en el paso 1, por ejemplo — antes de que el listener de
+     envío real llegue a ejecutarse; los listeners sobre el mismo
+     elemento se disparan en el orden en que se registran. */
+  var stepForm = document.getElementById('contact-form');
+  var formSuccess = document.getElementById('form-success');
+  if (stepForm && formSuccess) {
+    var stepEls = Array.prototype.slice.call(stepForm.querySelectorAll(':scope > .form-step'));
+    var totalSteps = stepEls.length;
+    var progressDots = Array.prototype.slice.call(stepForm.querySelectorAll('.form-progress-dot'));
+    var progressBar = stepForm.querySelector('.form-progress');
+    var stepCounter = document.getElementById('form-step-current');
+    var backBtn = document.getElementById('form-back-btn');
+    var nextBtn = document.getElementById('form-next-btn');
+    var submitBtn = document.getElementById('form-submit-btn');
+    var formSuccessBookBtn = document.getElementById('form-success-book-btn');
+    var currentStep = 1;
+
+    var validateStep = function (n) {
+      var stepEl = stepEls[n - 1];
+      if (!stepEl) return true;
+      var fields = stepEl.querySelectorAll('input[required], textarea[required]');
+      for (var i = 0; i < fields.length; i++) {
+        if (!fields[i].checkValidity()) {
+          fields[i].reportValidity();
+          fields[i].focus();
+          return false;
+        }
+      }
+      return true;
+    };
+
+    var showStep = function (n, focusFirst) {
+      currentStep = n;
+      stepEls.forEach(function (el, i) { el.classList.toggle('is-active', i === n - 1); });
+      progressDots.forEach(function (dot, i) {
+        dot.classList.toggle('is-active', i === n - 1);
+        dot.classList.toggle('is-done', i < n - 1);
+      });
+      if (stepCounter) stepCounter.textContent = n;
+      if (progressBar) progressBar.setAttribute('aria-valuenow', n);
+      if (backBtn) backBtn.style.display = n > 1 ? 'inline-flex' : 'none';
+      if (nextBtn) nextBtn.style.display = n < totalSteps ? 'inline-flex' : 'none';
+      if (submitBtn) submitBtn.style.display = n === totalSteps ? 'inline-flex' : 'none';
+      if (focusFirst) {
+        var firstField = stepEls[n - 1] && stepEls[n - 1].querySelector('input, textarea');
+        if (firstField) firstField.focus();
+      }
+    };
+
+    var goNext = function () {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) showStep(currentStep + 1, true);
+    };
+    var goBack = function () {
+      if (currentStep > 1) showStep(currentStep - 1, true);
+    };
+
+    if (backBtn) backBtn.addEventListener('click', goBack);
+    if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+    // Enter en un <input> de un paso intermedio avanza, en vez de no
+    // hacer nada o disparar un envío a medio rellenar. Dentro de un
+    // <textarea> (paso 3) se deja pasar sin interceptar — ahí Enter es
+    // un salto de línea normal, no una acción de navegación.
+    stepForm.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      if ((e.target.tagName || '').toLowerCase() === 'textarea') return;
+      if (currentStep < totalSteps) { e.preventDefault(); goNext(); }
+    });
+
+    // Red de seguridad: si algo dispara un submit sin pasar por el
+    // paso final (Enter, autocompletado agresivo del navegador...),
+    // se convierte en un simple "Continuar" y NUNCA llega al listener
+    // de envío real de más abajo.
+    stepForm.addEventListener('submit', function (e) {
+      if (currentStep !== totalSteps) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        goNext();
+        return;
+      }
+      if (!validateStep(totalSteps)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    });
+
+    // Expuesta para que el bloque de envío real llame a esto en su
+    // propia rama de éxito, sin que ese bloque necesite saber nada del
+    // wizard de pasos — solo "hubo éxito, muéstralo bien".
+    var showFormSuccess = function () {
+      stepForm.setAttribute('hidden', '');
+      formSuccess.removeAttribute('hidden');
+      formSuccess.setAttribute('tabindex', '-1');
+      formSuccess.focus();
+    };
+
+    if (formSuccessBookBtn) {
+      formSuccessBookBtn.addEventListener('click', function () {
+        var bookingBtn = document.getElementById('booking-cta-btn');
+        if (bookingBtn) bookingBtn.click();
+      });
+    }
+
+    showStep(1, false);
+  }
+
   /* ---------- Contact form (Turnstile + envío principal + respaldo) ----------
      Envío principal: directo al webhook de producción del workflow "Lead
      IA 360" en n8n, que valida el lead, lo guarda en Airtable, lo analiza
@@ -748,6 +864,10 @@
             note.textContent = '';
             note.className = 'form-note';
           }, 4000);
+          // Panel de confirmación del wizard de pasos (DIR-048) — definido
+          // más arriba en este archivo; se comprueba por si esta página no
+          // tuviera el wizard por algún motivo, para no romper el envío.
+          if (typeof showFormSuccess === 'function') showFormSuccess();
         } else {
           note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
           note.className = 'form-note err';

@@ -2073,6 +2073,62 @@ nav.main-nav > ul{ position:relative; }
 .booking-invite-btn{ gap:9px; }
 .booking-invite-btn svg{ width:16px; height:16px; flex-shrink:0; }
 
+/* ============ CONTACTO — formulario progresivo (DIR-048) ============
+   El formulario pasa de una lista de 5 campos apilados a un flujo de
+   4 pasos cortos (uno o dos campos cada uno) — el contrato de datos no
+   cambia en absoluto: los <input>/<textarea> reales conservan
+   exactamente el mismo id/name/required que ya lee el envío de
+   assets/js/main.js, solo cambia qué .form-step está visible en cada
+   momento (nunca se destruyen ni se recrean, así que el valor de un
+   paso anterior nunca se pierde al ir hacia atrás). El controlador de
+   pasos vive en una sección propia de main.js, insertada ANTES del
+   bloque de envío existente para poder interceptar un submit prematuro
+   (Enter en el paso 1, por ejemplo) sin tocar ni una línea de la
+   lógica de envío/reintento/Turnstile que ya funciona en producción. */
+.form-progress{ display:flex; gap:8px; margin-bottom:10px; }
+.form-progress-dot{ flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s ease; }
+.form-progress-dot.is-active, .form-progress-dot.is-done{ background:var(--cyan); }
+.form-step-count{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  margin-bottom:26px;
+}
+.form-step{ display:none; }
+.form-step.is-active{ display:block; animation:form-step-in .35s cubic-bezier(.2,.8,.2,1); }
+@keyframes form-step-in{ from{ opacity:0; transform:translateX(10px); } to{ opacity:1; transform:translateX(0); } }
+@media (prefers-reduced-motion: reduce){ .form-step.is-active{ animation:none; } }
+.form-step-eyebrow{
+  display:block;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.05rem;
+  color:var(--ink);
+  margin-bottom:20px;
+}
+.field-optional{ color:var(--stone-soft); font-weight:400; text-transform:none; letter-spacing:0; }
+
+.form-nav{ display:flex; gap:12px; margin-top:22px; }
+.form-nav-back{ display:none; flex:0 0 auto; padding-left:22px; padding-right:22px; }
+.form-nav-next, .form-nav-submit{ flex:1; }
+.form-nav-submit{ display:none; }
+
+.form-success{ text-align:center; padding:24px 8px 4px; }
+.form-success-icon{
+  width:52px; height:52px; margin:0 auto 20px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(52,231,164,.14); border:1px solid rgba(52,231,164,.4);
+  color:var(--green);
+}
+.form-success-icon svg{ width:24px; height:24px; }
+.form-success h3{ font-family:var(--serif); font-size:1.3rem; font-weight:700; color:var(--ink); margin-bottom:12px; }
+.form-success p{ color:var(--stone); font-size:0.95rem; line-height:1.6; max-width:400px; margin:0 auto 26px; }
+.form-success-book{ display:inline-flex; align-items:center; gap:9px; }
+.form-success-book svg{ width:16px; height:16px; flex-shrink:0; }
+
 /* Consentimiento + anti-spam agrupados en un único bloque, con algo más
    de aire que antes de que el envío ya no tenga que compartir tarjeta
    con la reserva. */
@@ -2080,20 +2136,32 @@ nav.main-nav > ul{ position:relative; }
   display:flex;
   flex-direction:column;
   gap:28px;
-  margin:30px 0 34px;
+  margin:0 0 8px;
 }
 .consent-field{ display:flex; align-items:flex-start; gap:10px; }
-/* Verificación de seguridad como una pequeña sección propia (DIR-022) —
-   una superficie diferenciada del formulario, no un divisor entre campos. */
+/* Verificación de seguridad como una pequeña sección propia (DIR-022,
+   con icono propio desde DIR-048 para que se lea como una pieza del
+   sistema y no como un simple recuadro de anti-spam) — una superficie
+   diferenciada del formulario, no un divisor entre campos. */
 .security-check{
-  padding:18px 18px 20px;
+  padding:16px 18px;
   border-radius:12px;
   background:linear-gradient(180deg, var(--surface-bar-top) 0%, var(--panel-2) 100%);
   border:1px solid var(--surface-border);
   display:flex;
-  flex-direction:column;
-  gap:12px;
+  flex-direction:row;
+  align-items:flex-start;
+  gap:14px;
 }
+.security-check-icon{
+  width:32px; height:32px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(67,224,255,.12); border:1px solid rgba(67,224,255,.3);
+  color:var(--cyan);
+  flex-shrink:0;
+}
+.security-check-icon svg{ width:16px; height:16px; }
+.security-check-copy{ flex:1; min-width:0; display:flex; flex-direction:column; gap:10px; }
 .security-check-label{
   font-family:var(--mono);
   font-size:0.66rem;

@@ -153,45 +153,85 @@
             <span class="window-title">new_request.form</span>
           </div>
           <div class="window-body">
-            <form id="contact-form">
-              <div class="field">
-                <label for="nombre">Full name</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Your name" autocomplete="name" required>
+            <form id="contact-form" novalidate>
+              <div class="form-progress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Request progress">
+                <span class="form-progress-dot is-active" data-dot="1"></span>
+                <span class="form-progress-dot" data-dot="2"></span>
+                <span class="form-progress-dot" data-dot="3"></span>
+                <span class="form-progress-dot" data-dot="4"></span>
               </div>
-              <div class="field">
-                <label for="empresa">Company</label>
-                <input type="text" id="empresa" name="empresa" placeholder="Your company's name" autocomplete="organization" required>
-              </div>
-              <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" inputmode="email" required>
-              </div>
-              <div class="field">
-                <label for="telefono">Phone</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
-              </div>
-              <div class="field">
-                <label for="mensaje">Tell us about your business</label>
-                <textarea id="mensaje" name="mensaje" placeholder="Which processes would you like to automate?" autocomplete="off"></textarea>
-              </div>
+              <p class="form-step-count">Step <span id="form-step-current">1</span> of 4</p>
 
-              <div class="form-compliance">
-                <div class="consent-field">
-                  <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
-                  <label for="acepta-privacidad">I have read and accept the <a href="/privacidad">Privacy Policy</a>.</label>
+              <div class="form-step is-active" data-step="1">
+                <span class="form-step-eyebrow">Let's start with the basics</span>
+                <div class="field">
+                  <label for="nombre">Full name</label>
+                  <input type="text" id="nombre" name="nombre" placeholder="Your name" autocomplete="name" required>
                 </div>
-
-                <div class="security-check">
-                  <span class="security-check-label">Security check</span>
-                  <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                <div class="field">
+                  <label for="empresa">Company</label>
+                  <input type="text" id="empresa" name="empresa" placeholder="Your company's name" autocomplete="organization" required>
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-invert btn-block">
-                Claim My Free Month
-              </button>
+              <div class="form-step" data-step="2">
+                <span class="form-step-eyebrow">How can we reach you?</span>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" inputmode="email" required>
+                </div>
+                <div class="field">
+                  <label for="telefono">Phone <span class="field-optional">(optional)</span></label>
+                  <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" inputmode="tel">
+                </div>
+              </div>
+
+              <div class="form-step" data-step="3">
+                <span class="form-step-eyebrow">Tell us about your business</span>
+                <div class="field">
+                  <label for="mensaje">Which processes would you like to automate? <span class="field-optional">(optional)</span></label>
+                  <textarea id="mensaje" name="mensaje" placeholder="Give us a quick idea of what you'd like help with..." autocomplete="off"></textarea>
+                </div>
+              </div>
+
+              <div class="form-step" data-step="4">
+                <span class="form-step-eyebrow">Last step</span>
+                <div class="form-compliance">
+                  <div class="consent-field">
+                    <input type="checkbox" id="acepta-privacidad" name="aceptaPrivacidad" required>
+                    <label for="acepta-privacidad">I have read and accept the <a href="/privacidad">Privacy Policy</a>.</label>
+                  </div>
+
+                  <div class="security-check">
+                    <span class="security-check-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg></span>
+                    <span class="security-check-copy">
+                      <span class="security-check-label">Security check</span>
+                      <div class="cf-turnstile" data-sitekey="0x4AAAAAAD0dueh5OBC9Zdkm" data-theme="dark" data-size="flexible" data-expired-callback="dcodeTurnstileExpired" data-error-callback="dcodeTurnstileError"></div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               <p class="form-note" id="form-note">No cost. No commitment. We respond within 24h.</p>
+
+              <div class="form-nav">
+                <button type="button" class="btn btn-ghost form-nav-back" id="form-back-btn">Back</button>
+                <button type="button" class="btn btn-primary form-nav-next" id="form-next-btn">Continue</button>
+                <button type="submit" class="btn btn-invert form-nav-submit" id="form-submit-btn">
+                  Claim My Free Month
+                </button>
+              </div>
             </form>
+
+            <div class="form-success" id="form-success" hidden>
+              <span class="form-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <h3>Request sent successfully</h3>
+              <p>We've received your request. Our team will review it and get back to you within 24h to tell you which Smart Department is the best place to start.</p>
+              <button type="button" class="btn btn-ghost form-success-book" id="form-success-book-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                I'd rather pick a time now
+              </button>
+            </div>
           </div>
         </div>
 
