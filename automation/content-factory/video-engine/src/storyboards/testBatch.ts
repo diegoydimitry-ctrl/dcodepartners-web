@@ -31,6 +31,7 @@ export const video1_educational: Storyboard = {
     {
       type: "uiList",
       durationInFrames: 90,
+      soundCue: "blip",
       props: {
         items: [
           { title: "Llega un email de factura", subtitle: "→ Guardar en Finanzas", badgeColor: colors.accentBlue },
@@ -47,6 +48,7 @@ export const video1_educational: Storyboard = {
     {
       type: "network",
       durationInFrames: 90,
+      soundCue: "whoosh",
       props: { nodes: ["EMAIL", "CRM", "CALENDARIO", "DOCUMENTOS"] },
     },
     {
@@ -76,6 +78,14 @@ export const video1_educational: Storyboard = {
     body:
       "Automatizar es aplicar una regla fija. Un agente de IA decide qué hacer cuando la regla todavía no existe. Confundir los dos términos es la razón por la que muchos proyectos de \"IA\" en empresas fracasan antes de empezar.",
     hashtags: ["#AutomatizacionIA", "#AgentesIA", "#PYME"],
+  },
+  // AUDIO — familia A (música + efectos): cama "educational" (ritmo limpio,
+  // sin percusión dura) + blip/whoosh sincronizados a los reveals de UI y
+  // diagrama. Sin voz — el texto en pantalla ya lleva la carga informativa.
+  audio: {
+    familia: "educational",
+    bedVolume: 0.32,
+    voice: null,
   },
 };
 
@@ -114,6 +124,7 @@ export const video2_painpoint_linkedin: Storyboard = {
     {
       type: "title",
       durationInFrames: 90,
+      soundCue: "impact",
       props: {
         lines: ["El problema no es el archivo.", "Es que nadie sabe cuál es la verdad."],
         emphasisIndex: 1,
@@ -123,6 +134,7 @@ export const video2_painpoint_linkedin: Storyboard = {
     {
       type: "network",
       durationInFrames: 75,
+      soundCue: "whoosh",
       props: { nodes: ["EXCEL", "EMAIL", "WHATSAPP", "DRIVE"] },
     },
     {
@@ -151,6 +163,15 @@ export const video2_painpoint_linkedin: Storyboard = {
     body:
       "Cuando un mismo dato vive en Excel, en el correo y en un chat de WhatsApp a la vez, ya no es un problema de orden — es un problema de que nadie puede confiar en el número que tiene delante. Antes de automatizar nada, hay que decidir cuál es la fuente de verdad.",
     hashtags: ["#GestionDatos", "#PYME", "#Operaciones"],
+  },
+  // AUDIO — familia A (música + efectos), cama "problem" (tensión sutil) +
+  // impact en el reveal del problema real + whoosh en el diagrama de
+  // sistemas dispersos. Distinta familia sonora que el vídeo educativo
+  // — nunca la misma música para conceptos distintos.
+  audio: {
+    familia: "problem",
+    bedVolume: 0.3,
+    voice: null,
   },
 };
 
@@ -182,6 +203,7 @@ export const video2_painpoint_reel: Storyboard = {
     {
       type: "title",
       durationInFrames: 75,
+      soundCue: "impact",
       props: {
         lines: ["El problema no es el archivo.", "Es que nadie sabe cuál manda."],
         emphasisIndex: 1,
@@ -243,6 +265,7 @@ export const video3_opinion: Storyboard = {
     {
       type: "title",
       durationInFrames: 75,
+      soundCue: "riser",
       props: { lines: ["No es una promesa vacía.", "Es una regla de diseño."], size: 48 },
     },
     {
@@ -264,6 +287,7 @@ export const video3_opinion: Storyboard = {
     {
       type: "endcard",
       durationInFrames: 90,
+      soundCue: "soft-close",
       props: {
         valueProp: "Preferimos un vídeo honesto a diez vídeos que prometen de más.",
         cta: "Así construimos, dentro y fuera.",
@@ -276,6 +300,92 @@ export const video3_opinion: Storyboard = {
       "Antes de publicar cualquier pieza nos hacemos 3 preguntas: ¿se puede verificar?, ¿el ejemplo está marcado como ejemplo?, ¿inventa un resultado? Si falla una, no sale. Así tratamos el contenido — y así construimos los sistemas.",
     hashtags: ["#IAResponsable", "#BrandSafety"],
   },
+  // AUDIO — familia B (voz + música): cama "opinion" (sonido contenido, deja
+  // espacio) a volumen bajo + locución TTS (espeak-ng, calidad robótica
+  // reconocida — ver scripts/generate-tts.sh) leyendo el hook y el cierre
+  // conceptual. Se elige voz aquí porque la pieza ES un argumento hablado
+  // ("regla de diseño"), no porque toque por turno.
+  audio: {
+    familia: "opinion",
+    bedVolume: 0.16,
+    voice: {
+      texto:
+        "La mayoria del contenido de inteligencia artificial sobre negocios es mentira. No es una promesa vacia. Es una regla de diseno.",
+      archivo: "audio/voice/test-opinion-003.wav",
+    },
+  },
+};
+
+// ─────────────────────────────────────────────────────────────
+// VIDEO 4 — CONTRASTE / MINIMALISTA — audio familia C (efectos + silencios)
+// ─────────────────────────────────────────────────────────────
+export const video4_minimalist: Storyboard = {
+  videoId: "test-minimal-004",
+  scriptId: "script-minimal-004",
+  title: "40 pestañas para responder a un cliente",
+  pilar: "Contrastes antes/después",
+  tipo: "EDUCATIONAL",
+  formato: "reel",
+  fps: 30,
+  scenes: [
+    {
+      type: "title",
+      durationInFrames: 75,
+      props: {
+        lines: ["Antes:", "revisar 12 pestañas", "para responder a un cliente."],
+        emphasisIndex: 1,
+      },
+    },
+    {
+      type: "caption",
+      durationInFrames: 60,
+      soundCue: "whoosh",
+      props: { text: "Ahora: una sola pantalla." },
+    },
+    {
+      type: "uiList",
+      durationInFrames: 90,
+      soundCue: "blip",
+      props: {
+        items: [
+          { title: "Historial del cliente", checked: true },
+          { title: "Última factura", checked: true },
+          { title: "Estado del proyecto", checked: true },
+        ],
+      },
+    },
+    {
+      type: "title",
+      durationInFrames: 90,
+      props: {
+        lines: ["La diferencia no es la tecnología.", "Es dejar de repetir el mismo clic 40 veces."],
+        size: 44,
+      },
+    },
+    {
+      type: "endcard",
+      durationInFrames: 90,
+      soundCue: "soft-close",
+      props: {
+        valueProp: "Menos pestañas. La misma respuesta, en un sitio.",
+        cta: "¿Cuántas pestañas abres tú para responder a un cliente?",
+      },
+    },
+  ],
+  caption: {
+    headline: "¿Cuántas pestañas abres para responder a un cliente?",
+    body:
+      "El coste real no es la falta de tecnología — es repetir el mismo clic decenas de veces al día. Centralizar la información del cliente en una pantalla es, muchas veces, la mejora con más ROI y menos complejidad.",
+    hashtags: ["#Productividad", "#PYME"],
+  },
+  // AUDIO — familia C (minimalista: efectos + silencios intencionados). Sin
+  // cama musical — el contraste "antes ruidoso / ahora simple" se refuerza
+  // dejando la mitad del vídeo en silencio real, no de relleno.
+  audio: {
+    familia: null,
+    bedVolume: 0,
+    voice: null,
+  },
 };
 
 export const testBatch = [
@@ -283,4 +393,5 @@ export const testBatch = [
   video2_painpoint_linkedin,
   video2_painpoint_reel,
   video3_opinion,
+  video4_minimalist,
 ];

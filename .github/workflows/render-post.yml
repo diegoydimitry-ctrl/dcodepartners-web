@@ -1,0 +1,105 @@
+name: D-Code Content Factory — Render Post (Still)
+
+# Motor de render de piezas estáticas del Post Engine (Remotion Still):
+# tarjetas de carrusel para Instagram, o la tarjeta de apoyo de un post de
+# LinkedIn/Instagram. No publica nada en redes — solo renderiza cada slide
+# como imagen y la sube como asset de una Release de este repositorio.
+#
+# Disparo normal (producción): repository_dispatch, event_type "render-post",
+# con client_payload = { postId, slides: [{ compositionId, kicker, headline,
+# body, footerCta, tone }] } — un slide por tarjeta (1 para caption/post
+# conceptual, varios para carrusel). Lo dispara el workflow de n8n
+# "CF/Producción de Posts" vía la API de GitHub, con la misma credencial
+# "GitHub PAT - Content Factory" que usa el render de vídeo.
+#
+# Disparo manual (pruebas): workflow_dispatch, pegando slides en JSON.
+on:
+  repository_dispatch:
+    types: [render-post]
+  workflow_dispatch:
+    inputs:
+      post_id:
+        description: "postId (para nombrar los archivos de salida)"
+        required: true
+        default: "manual-test"
+      slides_json:
+        description: 'Array de slides en JSON, ver src/schema/post.ts (CardSlideSchema) + compositionId'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: automation/content-factory/video-engine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: automation/content-factory/video-engine/package-lock.json
+
+      - name: Instalar Chromium para Remotion
+        run: npx --yes @remotion/cli browser ensure
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Preparar slides.json
+        env:
+          POST_ID: ${{ github.event.client_payload.postId || inputs.post_id }}
+          SLIDES_JSON: ${{ toJson(github.event.client_payload.slides) }}
+          SLIDES_JSON_MANUAL: ${{ inputs.slides_json }}
+        run: |
+          set -euo pipefail
+          echo "postId=$POST_ID" >> "$GITHUB_ENV"
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "$SLIDES_JSON" > /tmp/slides.json
+          else
+            echo "$SLIDES_JSON_MANUAL" > /tmp/slides.json
+          fi
+
+      - name: Render cada slide (Remotion Still)
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          node -e "
+            const fs = require('fs');
+            const slides = JSON.parse(fs.readFileSync('/tmp/slides.json', 'utf8'));
+            fs.writeFileSync('/tmp/slides-list.json', JSON.stringify(slides.map((s) => s.compositionId)));
+            slides.forEach((s, i) => {
+              fs.writeFileSync('/tmp/slide-' + i + '.json', JSON.stringify(s));
+            });
+            fs.writeFileSync('/tmp/slide-count.txt', String(slides.length));
+          "
+          COUNT=$(cat /tmp/slide-count.txt)
+          for i in $(seq 0 $((COUNT - 1))); do
+            COMPOSITION_ID=$(node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/slide-$i.json','utf8')).compositionId)")
+            npx remotion still src/index.ts "$COMPOSITION_ID" "out/${postId}-slide-$((i + 1)).png"
+          done
+
+      - name: Publicar como Release (URLs públicas de las imágenes)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd automation/content-factory/video-engine
+          gh release create "content-factory-post-${postId}" \
+            out/${postId}-slide-*.png \
+            --repo "${{ github.repository }}" \
+            --title "D-Code Content Factory — post ${postId}" \
+            --notes "Render automático del Post Engine. No publicado en redes todavía — ver CF_Posts en n8n para el estado real." \
+            --latest=false
+
+      - name: Resumen
+        run: |
+          echo "### Post renderizado" >> "$GITHUB_STEP_SUMMARY"
+          echo "- postId: \`${postId}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Release: content-factory-post-${postId}" >> "$GITHUB_STEP_SUMMARY"

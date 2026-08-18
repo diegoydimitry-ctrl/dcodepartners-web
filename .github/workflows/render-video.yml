@@ -55,6 +55,9 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Instalar espeak-ng (voz, solo si el storyboard la pide)
+        run: sudo apt-get update && sudo apt-get install -y espeak-ng
+
       - name: Preparar props.json
         env:
           VIDEO_ID: ${{ github.event.client_payload.videoId || inputs.video_id }}
@@ -73,6 +76,28 @@ jobs:
             const storyboard = JSON.parse(fs.readFileSync('/tmp/storyboard.json', 'utf8'));
             fs.writeFileSync('/tmp/props.json', JSON.stringify({ storyboard }));
           "
+
+      - name: Generar voz (TTS) si el storyboard la pide
+        run: |
+          set -euo pipefail
+          node -e "
+            const fs = require('fs');
+            const { storyboard } = JSON.parse(fs.readFileSync('/tmp/props.json', 'utf8'));
+            const voice = storyboard.audio && storyboard.audio.voice;
+            if (voice && voice.texto && voice.archivo) {
+              fs.writeFileSync('/tmp/voice.txt', voice.texto);
+              fs.writeFileSync('/tmp/voice-out.txt', voice.archivo);
+              console.log('voz solicitada -> ' + voice.archivo);
+            } else {
+              console.log('sin voz en este storyboard');
+            }
+          "
+          if [ -f /tmp/voice.txt ]; then
+            OUT_REL="$(cat /tmp/voice-out.txt)"
+            mkdir -p "public/$(dirname "$OUT_REL")"
+            espeak-ng -v es -s 145 -p 40 -f /tmp/voice.txt -w "public/$OUT_REL"
+            echo "Voz generada en public/$OUT_REL"
+          fi
 
       - name: Render vídeo
         run: |
@@ -97,6 +122,9 @@ jobs:
         run: |
           echo "### Vídeo renderizado" >> "$GITHUB_STEP_SUMMARY"
           echo "- videoId: \`${videoId}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f /tmp/voice.txt ]; then
+            echo "- Voz: generada con espeak-ng (TTS libre, calidad robótica, no premium — ver QA_CHECKLIST.md)" >> "$GITHUB_STEP_SUMMARY"
+          fi
           echo "- Release: content-factory-${videoId}" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "**Importante:** si este repositorio es privado, la URL del asset de la Release NO es públicamente descargable sin autenticación — Instagram (Graph API) exige una URL de vídeo accesible sin login. En ese caso hay que copiar el asset a un storage realmente público (Vercel Blob, Cloudflare R2, S3 con bucket público) antes de intentar publicar. LinkedIn no tiene esta restricción del mismo modo (sube el binario directamente), pero requiere su propia integración de publicación, no incluida todavía."

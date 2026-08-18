@@ -2,6 +2,12 @@ node_modules/
 out/
 .remotion/
 
+# Voz TTS: se genera en cada render (ver .github/workflows/render-video.yml,
+# paso "Generar voz"), no un asset fijo de marca -- no se versiona igual que
+# las camas musicales y los SFX (public/audio/beds/, public/audio/sfx/), que
+# sí son fijos y los necesita el render.
+public/audio/voice/
+
 # Este subproyecto SÍ versiona su lockfile aunque el .gitignore raíz del
 # repositorio ignore package-lock.json globalmente: el pipeline de CI usa
 # `npm ci`, que requiere un lockfile exacto para renders reproducibles.

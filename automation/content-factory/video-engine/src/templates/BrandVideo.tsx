@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Sequence } from "remotion";
+import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
 import { BackgroundGlow } from "../components/BackgroundGlow";
 import { KineticTitle, Caption } from "../components/KineticTitle";
 import { UICardList } from "../components/UICardList";
@@ -11,6 +11,9 @@ import type { Storyboard } from "../schema/storyboard";
 /**
  * Motor genérico: recorre storyboard.scenes y monta cada una en su Sequence,
  * con un único fondo continuo (evita el efecto "diapositivas" plantilla-Canva).
+ * Añade el Audio Engine: cama musical de fondo (por familia, o silencio
+ * intencionado si audio.familia es null), SFX sincronizados al inicio de
+ * cada escena que lleve soundCue, y voz opcional generada para este guion.
  */
 export const BrandVideo: React.FC<{ storyboard: Storyboard }> = ({
   storyboard,
@@ -22,9 +25,23 @@ export const BrandVideo: React.FC<{ storyboard: Storyboard }> = ({
     return { ...scene, from };
   });
 
+  const audio = storyboard.audio;
+
   return (
     <AbsoluteFill>
       <BackgroundGlow pulse />
+
+      {audio?.familia && (
+        <Audio
+          src={staticFile(`audio/beds/${audio.familia}.mp3`)}
+          volume={audio.bedVolume ?? 0.35}
+        />
+      )}
+
+      {audio?.voice && (
+        <Audio src={staticFile(audio.voice.archivo)} volume={1} />
+      )}
+
       {sceneRanges.map((scene, i) => (
         <Sequence
           key={i}
@@ -32,6 +49,12 @@ export const BrandVideo: React.FC<{ storyboard: Storyboard }> = ({
           durationInFrames={scene.durationInFrames}
           layout="none"
         >
+          {scene.soundCue && (
+            <Audio
+              src={staticFile(`audio/sfx/${scene.soundCue}.wav`)}
+              volume={0.7}
+            />
+          )}
           {scene.type === "title" && (
             <KineticTitle
               lines={scene.props.lines}
