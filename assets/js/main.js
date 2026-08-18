@@ -262,7 +262,11 @@
      scroll del usuario tras un cambio de página. */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
     runWhenIdle(function () {
-      document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
+      // .hero-atmosphere (DIR-048) no es un .window — es la atmósfera de
+      // fondo del Hero, sin tarjeta ni tilt propio — pero sus capas internas
+      // sí necesitan las mismas --mx/--my para el paralaje del cursor, así
+      // que se suma al mismo selector en vez de duplicar la lógica de abajo.
+      document.querySelectorAll('.window:not(.chat-window), .hero-atmosphere').forEach(function (win) {
         win.addEventListener('mousemove', function (e) {
           var rect = win.getBoundingClientRect();
           var px = (e.clientX - rect.left) / rect.width;

@@ -857,32 +857,6 @@ nav.main-nav > ul{ position:relative; }
   padding-bottom:clamp(56px, 9vw, 110px);
   overflow:hidden;
 }
-/* Imagen D-Code de fondo (DIR-044): infraestructura/ciudad de circuitos,
-   ancla a la derecha — la composición del propio asset ya deja el
-   tercio izquierdo casi negro, y el degradado aquí lo refuerza para
-   garantizar contraste del H1/CTA en cualquier ancho de contenedor.
-   Vive detrás de .hero-grid (z-index:2) y de .hero::after (el campo de
-   luz existente, que se mantiene sin cambios). Muy atenuada en mobile,
-   donde la sección pasa a una columna y el recorte por aspect-ratio ya
-   no favorece la composición. */
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:0;
-  background-image:
-    linear-gradient(90deg, var(--bg) 0%, var(--bg) 30%, rgba(6,9,20,.75) 48%, rgba(6,9,20,.25) 66%, transparent 82%),
-    linear-gradient(0deg, var(--bg) 0%, transparent 22%, transparent 78%, var(--bg) 100%),
-    url('/assets/img/home-hero-bg.webp');
-  background-position:0 0, 0 0, 92% center;
-  background-size:100% 100%, 100% 100%, cover;
-  background-repeat:no-repeat, no-repeat, no-repeat;
-  opacity:.7;
-  pointer-events:none;
-}
-@media (max-width:900px){
-  .hero::before{ opacity:.16; }
-}
 /* Campo de luz propio del hero — firma de Home, distinta del glow-orb
    ambiental que ya existe en el resto del sitio. Muy lento, muy sutil. */
 .hero::after{
@@ -944,84 +918,147 @@ nav.main-nav > ul{ position:relative; }
 }
 .hero .trust-badges{ margin-top:16px; }
 
-.hero-graphic{ position:relative; }
+/* pointer-events:none: .hero-graphic es una caja vacía (min-height, sin
+   fondo) salvo por la franja de métricas — sin esto, su propio hitbox
+   transparente tapaba el hover real de los chips de .hero-atmosphere que
+   caen dentro de esa columna (son hermanos, no hay bubbling entre ellos). */
+.hero-graphic{ position:relative; min-height:340px; display:flex; align-items:flex-end; pointer-events:none; }
+.hero-metrics-float{ pointer-events:auto; }
+@media (max-width:1024px){
+  .hero-graphic{ min-height:240px; }
+}
 
-/* ============ HERO — CRISTAL DE PROFUNDIDAD (DIR-047) ============
-   Sustituye por completo el concepto de núcleo+satélites (DIR-045/046):
-   ya no hay un "centro" del que algo irradia. En su lugar, tres planos
-   de cristal apilados — arquitectura de fondo, señal en movimiento,
-   módulos en primer plano — que se desplazan a distinta velocidad al
-   mover el ratón sobre el panel (paralaje real), reutilizando las
-   mismas variables --mx/--my/--rx/--ry que .window ya calcula en
-   assets/js/main.js (tilt + spotlight) para CADA .window del sitio:
-   no hace falta JS nuevo. El resultado se percibe como "estás mirando
-   dentro de un sistema con profundidad real", no un dibujo plano.
-   Sin texto, sin cifras, sin logos — los 4 módulos reutilizan los
-   iconos reales de Departamentos. */
-.hero-core-wrap{ padding:0; perspective:900px; }
-.hero-core-diagram{ position:relative; width:100%; height:260px; overflow:hidden; }
-.hero-console-layer{ position:absolute; inset:0; width:100%; height:100%; transition:transform .12s linear; will-change:transform; }
+/* ============ HERO — ATMÓSFERA DE PROFUNDIDAD (DIR-048) ============
+   Evoluciona el "Cristal de Profundidad" (DIR-047): ya no es un panel
+   dentro de una tarjeta-ventana en la columna derecha, es la propia
+   atmósfera de fondo de TODA la sección — sustituye por completo a la
+   fotografía de ciudad/circuitos (DIR-044), que se retira sin
+   reemplazo fotográfico. .hero-atmosphere vive DETRÁS de .hero-grid
+   (mismo z-index:0 que tenía antes la foto) y se extiende en sangre
+   completa en desktop/tablet (bleed a la izquierda, ver más abajo),
+   apagándose hacia la columna de texto vía mask-image — la misma
+   lógica de "negative space" que ya usaba la foto, generada en vez de
+   fotográfica. Reutiliza --mx/--my (main.js suma .hero-atmosphere al
+   mismo selector que ya usa .window para el tilt+spotlight sitewide) —
+   cero JS nuevo para el paralaje; solo se desplazan las capas
+   internas, la atmósfera en sí nunca gira ni se inclina como una
+   tarjeta. Los 4 módulos representan las herramientas reales del stack
+   de D-Code — n8n, Airtable, Notion, Google Workspace, confirmadas en
+   seguridad.html/condiciones-contratacion.html — con iconografía propia
+   de D-Code (no los logotipos oficiales) y su nombre real en texto. */
+.hero-atmosphere{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:visible;
+  grid-column:1/-1;
+  grid-row:1;
+  mask-image:linear-gradient(90deg, transparent 0%, transparent 14%, rgba(0,0,0,.5) 32%, black 42%, black 100%);
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, transparent 14%, rgba(0,0,0,.5) 32%, black 42%, black 100%);
+}
+/* .hero-atmosphere es ahora un item de rejilla más dentro de .hero-grid
+   (no un hijo absoluto de toda .hero) — en desktop ocupa las dos columnas
+   (grid-column:1/-1), que es exactamente el ancho que antes cubría la
+   fotografía. En mobile/tablet (abajo, .hero-grid pasa a una columna) se
+   reasigna a la MISMA fila que .hero-graphic para que nunca se superponga
+   con el texto ni los CTA — antes vivía fuera de la rejilla y por eso
+   "inset:0" la estiraba a la altura de toda la sección apilada. */
+@media (max-width:1024px){
+  .hero-atmosphere{ grid-row:2; opacity:.4; mask-image:none; -webkit-mask-image:none; }
+}
+.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; transition:transform .12s linear; will-change:transform; }
+.hero-atm-layer svg{ width:100%; height:100%; display:block; overflow:visible; }
 
-.hero-console-back{ transform:translate(calc((var(--mx,50%) - 50%) * .05), calc((var(--my,50%) - 50%) * .05)); }
-.hero-console-back svg{ width:100%; height:100%; display:block; }
-.hero-console-back line{ stroke:var(--surface-sheen); stroke-width:1; opacity:.1; }
+.hero-atm-back{ transform:translate(calc((var(--mx,50%) - 50%) * .04), calc((var(--my,50%) - 50%) * .04)); filter:blur(1px); }
+.hero-atm-back line{ stroke:var(--surface-sheen); stroke-width:.6; opacity:.09; }
 
-.hero-console-mid{ transform:translate(calc((var(--mx,50%) - 50%) * .12), calc((var(--my,50%) - 50%) * .12)); }
-.hero-console-mid svg{ width:100%; height:100%; display:block; overflow:visible; }
-.hero-console-mid .signal-line{ fill:none; stroke-width:1.6; stroke-linecap:round; opacity:.55; }
-.hero-console-mid .signal-a{ stroke:var(--cyan); stroke-dasharray:6 10; animation:hero-signal-flow 5s linear infinite; }
-.hero-console-mid .signal-b{ stroke:var(--blue); stroke-dasharray:5 12; animation:hero-signal-flow 6.5s linear infinite reverse; opacity:.4; }
-@keyframes hero-signal-flow{ to{ stroke-dashoffset:-160; } }
+.hero-atm-mid{ transform:translate(calc((var(--mx,50%) - 50%) * .09), calc((var(--my,50%) - 50%) * .09)); }
+.hero-atm-mid .signal-line{ fill:none; stroke-width:1.4; stroke-linecap:round; opacity:.4; }
+.hero-atm-mid .signal-a{ stroke:var(--cyan); stroke-dasharray:6 11; animation:hero-signal-flow 6s linear infinite; }
+.hero-atm-mid .signal-b{ stroke:var(--blue); stroke-dasharray:5 13; animation:hero-signal-flow 7.5s linear infinite reverse; opacity:.3; }
+@keyframes hero-signal-flow{ to{ stroke-dashoffset:-170; } }
 
-.hero-console-front{ transform:translate(calc((var(--mx,50%) - 50%) * .22), calc((var(--my,50%) - 50%) * .22)); }
-.hero-console-front svg{ width:100%; height:100%; display:block; overflow:visible; }
-.hero-console-front .console-spine{ fill:none; stroke:url(#heroSpine); stroke-width:1.4; opacity:.6; }
-.hero-console-front .console-module{ cursor:default; }
-.hero-console-front .console-chip{
-  fill:url(#heroCoreFill);
+.hero-atm-front{ transform:translate(calc((var(--mx,50%) - 50%) * .16), calc((var(--my,50%) - 50%) * .16)); pointer-events:auto; }
+.hero-atm-front .atm-spine{ fill:none; stroke:url(#heroAtmSpine); stroke-width:1.5; opacity:.65; }
+.hero-atm-front .atm-chip{ cursor:default; }
+.hero-atm-front .atm-chip-plate{
+  fill:url(#heroAtmFill);
   stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
   stroke-width:1.2;
   filter:drop-shadow(0 0 4px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.3));
   transition:filter .25s ease, stroke .25s ease;
 }
-.hero-console-front .console-icon{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); fill:none; stroke:currentColor; stroke-width:2; }
-.hero-console-front .console-status{
+.hero-atm-front .atm-chip-icon{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); fill:none; stroke:currentColor; stroke-width:2; }
+.hero-atm-front .atm-chip-status{
   fill:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
   animation:hero-status-blink 3.6s ease-in-out infinite;
 }
-.hero-console-front .console-module:nth-child(2) .console-status{ animation-delay:.7s; }
-.hero-console-front .console-module:nth-child(3) .console-status{ animation-delay:1.6s; }
-.hero-console-front .console-module:nth-child(4) .console-status{ animation-delay:2.3s; }
+.hero-atm-front .atm-chip:nth-of-type(2) .atm-chip-status{ animation-delay:.7s; }
+.hero-atm-front .atm-chip:nth-of-type(3) .atm-chip-status{ animation-delay:1.6s; }
+.hero-atm-front .atm-chip:nth-of-type(4) .atm-chip-status{ animation-delay:2.3s; }
 @keyframes hero-status-blink{ 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
-.hero-console-front .console-module:hover .console-chip, .hero-console-front .console-module:focus-visible .console-chip{
+.hero-atm-front .atm-chip:hover .atm-chip-plate, .hero-atm-front .atm-chip:focus-visible .atm-chip-plate{
   filter:drop-shadow(0 0 8px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.6));
   stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
 }
-.hero-core-diagram stop.fill-a{ stop-color:var(--surface-top); }
-.hero-core-diagram stop.fill-b{ stop-color:var(--panel-2); }
-.hero-core-diagram stop.fill-c{ stop-color:var(--panel); }
-.hero-core-diagram stop.spine-a{ stop-color:var(--cyan); stop-opacity:.05; }
-.hero-core-diagram stop.spine-b{ stop-color:var(--blue); stop-opacity:.6; }
-.hero-core-diagram stop.spine-c{ stop-color:var(--violet); stop-opacity:.05; }
+.hero-atm-front stop.fill-a{ stop-color:var(--surface-top); }
+.hero-atm-front stop.fill-b{ stop-color:var(--panel-2); }
+.hero-atm-front stop.fill-c{ stop-color:var(--panel); }
+.hero-atm-front stop.spine-a{ stop-color:var(--cyan); stop-opacity:.05; }
+.hero-atm-front stop.spine-b{ stop-color:var(--blue); stop-opacity:.6; }
+.hero-atm-front stop.spine-c{ stop-color:var(--violet); stop-opacity:.05; }
+
+/* Nombre real de cada herramienta — texto HTML (no SVG) sobre el propio
+   SVG, en las mismas coordenadas % que cada chip, para que el rótulo
+   tenga la tipografía y el anti-aliasing reales del sitio en vez de
+   depender del renderizado de <text> en SVG. */
+.atm-chip-label{
+  position:absolute;
+  transform:translate(14px,-6px);
+  font-family:var(--mono);
+  font-size:.62rem;
+  letter-spacing:.03em;
+  color:var(--stone-soft);
+  white-space:nowrap;
+  opacity:.85;
+  pointer-events:none;
+}
+.atm-chip-label--flip{ transform:translate(calc(-100% - 14px), -6px); }
 @media (prefers-reduced-motion: reduce){
-  .hero-console-layer{ transition:none; }
-  .hero-console-mid .signal-a, .hero-console-mid .signal-b{ animation:none; }
-  .hero-console-front .console-status{ animation:none; opacity:.75; }
+  .hero-atm-layer{ transition:none; }
+  .hero-atm-mid .signal-a, .hero-atm-mid .signal-b{ animation:none; }
+  .hero-atm-front .atm-chip-status{ animation:none; opacity:.75; }
 }
 @media (hover:none){
-  .hero-console-back, .hero-console-mid, .hero-console-front{ transform:none; }
+  .hero-atm-back, .hero-atm-mid, .hero-atm-front{ transform:none; }
+}
+@media (max-width:560px){
+  .atm-chip-label{ display:none; }
 }
 
-.hero-metrics{
+/* Franja flotante de métricas (DIR-048): ya no vive dentro de una
+   tarjeta-ventana — es un HUD ligero de vidrio que flota sobre la
+   atmósfera, sin bar/título/estado, para no reintroducir la sensación
+   de "dashboard dentro de tarjeta" que Dirección pidió eliminar. */
+.hero-metrics-float{
+  position:relative;
+  z-index:2;
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--border);
+  gap:1px;
+  width:100%;
+  background:var(--surface-border);
+  border:1px solid var(--surface-border);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
 }
 .hero-metric{
-  padding:16px 18px;
-  border-right:1px solid var(--border);
+  padding:14px 16px;
+  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
 }
-.hero-metric:last-child{ border-right:none; }
 .hero-metric .hm-val{
   font-family:var(--serif);
   font-weight:700;
