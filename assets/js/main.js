@@ -262,7 +262,11 @@
      scroll del usuario tras un cambio de página. */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
     runWhenIdle(function () {
-      document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
+      // .hero-atmosphere (DIR-048) no es un .window — es la atmósfera de
+      // fondo del Hero, sin tarjeta ni tilt propio — pero sus capas internas
+      // sí necesitan las mismas --mx/--my para el paralaje del cursor, así
+      // que se suma al mismo selector en vez de duplicar la lógica de abajo.
+      document.querySelectorAll('.window:not(.chat-window), .hero-atmosphere').forEach(function (win) {
         win.addEventListener('mousemove', function (e) {
           var rect = win.getBoundingClientRect();
           var px = (e.clientX - rect.left) / rect.width;
@@ -276,6 +280,15 @@
         win.addEventListener('mouseleave', function () {
           win.style.setProperty('--rx', '0deg');
           win.style.setProperty('--ry', '0deg');
+          // DIR-049: --mx/--my nunca se reseteaban aquí — un .window normal
+          // no se nota (solo alimentan un spotlight sutil), pero en
+          // .hero-atmosphere alimentan el desplazamiento real de las capas
+          // de paralaje, así que al salir el cursor los módulos se quedaban
+          // desplazados en vez de volver al centro. Con esto vuelven a su
+          // posición de reposo — el retorno suave lo da la transición CSS
+          // de cada capa, no este salto de valor.
+          win.style.setProperty('--mx', '50%');
+          win.style.setProperty('--my', '50%');
         });
       });
     });
@@ -423,7 +436,7 @@
     });
   });
 
-  /* ---------- Clientes IA: órbita de la ficha de cliente ---------- */
+  /* ---------- Clientes: órbita de la ficha de cliente ---------- */
   var orbitScope = document.querySelector('.orbit-scope');
   if (orbitScope) {
     var orbitCaption = document.getElementById('orbit-caption');
@@ -444,7 +457,7 @@
     });
   }
 
-  /* ---------- Soporte IA: ticket en vivo (ciclo de estados) ----------
+  /* ---------- Soporte: ticket en vivo (ciclo de estados) ----------
      Recorrido automático, pausado en cuanto el ticket sale de pantalla y
      reanudado al volver a entrar — así, cada vez que el usuario pasa por
      esta sección, la vuelve a ver desde "Recibido". Nunca depende de la
@@ -492,108 +505,120 @@
     }
   }
 
-  /* ---------- Hero neural-network canvas ---------- */
-  var canvas = document.getElementById('hero-canvas');
-  if (canvas) {
-    var ctx = canvas.getContext('2d');
-    var width, height, dpr, nodes = [], running = true;
+  /* ---------- Contacto — formulario progresivo (DIR-048) ----------
+     Controla qué paso de #contact-form está visible. Deliberadamente
+     NO toca el contrato de datos: los campos reales (mismo id/name/
+     required de siempre) nunca se destruyen ni se recrean, solo se
+     muestran/ocultan — así que el bloque de envío real, justo debajo
+     en este mismo archivo, sigue leyendo exactamente los mismos
+     elementos sin ningún cambio en su lógica. Se registra ANTES que
+     ese bloque a propósito: su listener de submit necesita poder
+     interceptar (con stopImmediatePropagation) un envío prematuro —
+     Enter en el paso 1, por ejemplo — antes de que el listener de
+     envío real llegue a ejecutarse; los listeners sobre el mismo
+     elemento se disparan en el orden en que se registran. */
+  var stepForm = document.getElementById('contact-form');
+  var formSuccess = document.getElementById('form-success');
+  if (stepForm && formSuccess) {
+    var stepEls = Array.prototype.slice.call(stepForm.querySelectorAll(':scope > .form-step'));
+    var totalSteps = stepEls.length;
+    var progressDots = Array.prototype.slice.call(stepForm.querySelectorAll('.form-progress-dot'));
+    var progressBar = stepForm.querySelector('.form-progress');
+    var stepCounter = document.getElementById('form-step-current');
+    var backBtn = document.getElementById('form-back-btn');
+    var nextBtn = document.getElementById('form-next-btn');
+    var submitBtn = document.getElementById('form-submit-btn');
+    var formSuccessBookBtn = document.getElementById('form-success-book-btn');
+    var currentStep = 1;
 
-    var resize = function () {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var rect = canvas.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
-    var initNodes = function () {
-      var count = window.innerWidth < 640 ? 14 : 22;
-      nodes = Array.from({ length: count }, function () {
-        return {
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
-          r: 1.6 + Math.random() * 1.6
-        };
-      });
-    };
-
-    var step = function () {
-      if (!width) { if (running && !prefersReducedMotion) requestAnimationFrame(step); return; } // resize() diferido todavía no ha corrido
-      ctx.clearRect(0, 0, width, height);
-      var maxDist = Math.min(width, height) * 0.34;
-
-      nodes.forEach(function (n) {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > width) n.vx *= -1;
-        if (n.y < 0 || n.y > height) n.vy *= -1;
-      });
-
-      for (var i = 0; i < nodes.length; i++) {
-        for (var j = i + 1; j < nodes.length; j++) {
-          var a = nodes[i], b = nodes[j];
-          var dx = a.x - b.x, dy = a.y - b.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
-            var alpha = (1 - dist / maxDist) * 0.35;
-            ctx.strokeStyle = 'rgba(91,140,255,' + alpha + ')';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
+    var validateStep = function (n) {
+      var stepEl = stepEls[n - 1];
+      if (!stepEl) return true;
+      var fields = stepEl.querySelectorAll('input[required], textarea[required]');
+      for (var i = 0; i < fields.length; i++) {
+        if (!fields[i].checkValidity()) {
+          fields[i].reportValidity();
+          fields[i].focus();
+          return false;
         }
       }
-
-      nodes.forEach(function (n) {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(67,224,255,0.85)';
-        ctx.fill();
-      });
-
-      if (running && !prefersReducedMotion) requestAnimationFrame(step);
+      return true;
     };
 
-    var drawStatic = function () {
-      ctx.clearRect(0, 0, width, height);
-      nodes.forEach(function (n) {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(67,224,255,0.85)';
-        ctx.fill();
+    var showStep = function (n, focusFirst) {
+      currentStep = n;
+      stepEls.forEach(function (el, i) { el.classList.toggle('is-active', i === n - 1); });
+      progressDots.forEach(function (dot, i) {
+        dot.classList.toggle('is-active', i === n - 1);
+        dot.classList.toggle('is-done', i < n - 1);
       });
+      if (stepCounter) stepCounter.textContent = n;
+      if (progressBar) progressBar.setAttribute('aria-valuenow', n);
+      if (backBtn) backBtn.style.display = n > 1 ? 'inline-flex' : 'none';
+      if (nextBtn) nextBtn.style.display = n < totalSteps ? 'inline-flex' : 'none';
+      if (submitBtn) submitBtn.style.display = n === totalSteps ? 'inline-flex' : 'none';
+      if (focusFirst) {
+        var firstField = stepEls[n - 1] && stepEls[n - 1].querySelector('input, textarea');
+        if (firstField) firstField.focus();
+      }
     };
 
-    runWhenIdle(function () {
-      resize();
-      initNodes();
-      if (prefersReducedMotion) {
-        drawStatic();
-      } else {
-        requestAnimationFrame(step);
+    var goNext = function () {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) showStep(currentStep + 1, true);
+    };
+    var goBack = function () {
+      if (currentStep > 1) showStep(currentStep - 1, true);
+    };
+
+    if (backBtn) backBtn.addEventListener('click', goBack);
+    if (nextBtn) nextBtn.addEventListener('click', goNext);
+
+    // Enter en un <input> de un paso intermedio avanza, en vez de no
+    // hacer nada o disparar un envío a medio rellenar. Dentro de un
+    // <textarea> (paso 3) se deja pasar sin interceptar — ahí Enter es
+    // un salto de línea normal, no una acción de navegación.
+    stepForm.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      if ((e.target.tagName || '').toLowerCase() === 'textarea') return;
+      if (currentStep < totalSteps) { e.preventDefault(); goNext(); }
+    });
+
+    // Red de seguridad: si algo dispara un submit sin pasar por el
+    // paso final (Enter, autocompletado agresivo del navegador...),
+    // se convierte en un simple "Continuar" y NUNCA llega al listener
+    // de envío real de más abajo.
+    stepForm.addEventListener('submit', function (e) {
+      if (currentStep !== totalSteps) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        goNext();
+        return;
+      }
+      if (!validateStep(totalSteps)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
       }
     });
 
-    window.addEventListener('resize', function () {
-      resize();
-      initNodes();
-    });
+    // Expuesta para que el bloque de envío real llame a esto en su
+    // propia rama de éxito, sin que ese bloque necesite saber nada del
+    // wizard de pasos — solo "hubo éxito, muéstralo bien".
+    var showFormSuccess = function () {
+      stepForm.setAttribute('hidden', '');
+      formSuccess.removeAttribute('hidden');
+      formSuccess.setAttribute('tabindex', '-1');
+      formSuccess.focus();
+    };
 
-    if ('IntersectionObserver' in window) {
-      var canvasIO = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          running = entry.isIntersecting;
-          if (running && !prefersReducedMotion) requestAnimationFrame(step);
-        });
-      }, { threshold: 0.05 });
-      canvasIO.observe(canvas);
+    if (formSuccessBookBtn) {
+      formSuccessBookBtn.addEventListener('click', function () {
+        var bookingBtn = document.getElementById('booking-cta-btn');
+        if (bookingBtn) bookingBtn.click();
+      });
     }
+
+    showStep(1, false);
   }
 
   /* ---------- Contact form (Turnstile + envío principal + respaldo) ----------
@@ -728,6 +753,10 @@
             note.textContent = '';
             note.className = 'form-note';
           }, 4000);
+          // Panel de confirmación del wizard de pasos (DIR-048) — definido
+          // más arriba en este archivo; se comprueba por si esta página no
+          // tuviera el wizard por algún motivo, para no romper el envío.
+          if (typeof showFormSuccess === 'function') showFormSuccess();
         } else {
           note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
           note.className = 'form-note err';
