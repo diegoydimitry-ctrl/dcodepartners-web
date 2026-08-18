@@ -1278,6 +1278,35 @@ nav.main-nav > ul{ position:relative; }
   .converge-diagram .converge-core-dot{ animation:none; opacity:1; }
 }
 
+/* ============ SERVICIOS — PANEL D-CODE: AUTOMATIZACIÓN IA (DIR-042) ============
+   Evoluciona el bucle cerrado (DIR-038) integrándolo dentro de un panel
+   D-Code real, no un diagrama suelto: mismo acabado .window que el resto
+   del sitio (barra + estado + cuerpo), con renglones de proceso antes del
+   bucle. Los renglones son explícitamente ilustrativos — la etiqueta
+   "DEMO" en la barra lo deja explícito, igual que en .pipeline-window —
+   nunca deben confundirse con métricas de cliente real. Exclusivo de
+   automatizacion-ia.html: no afecta a .servicios-visual-diagram en
+   agentes-ia.html ni integraciones.html. */
+.servicios-panel-section{
+  padding-top:clamp(20px,3vw,36px);
+  padding-bottom:clamp(20px,3vw,36px);
+}
+.servicios-panel{ max-width:620px; margin:0 auto; }
+.servicios-panel-body{ padding:22px 26px 22px; }
+.servicios-panel-rows{ display:flex; flex-direction:column; gap:11px; }
+.servicios-panel-row{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.servicios-panel-row-label{ font-family:var(--mono); font-size:0.78rem; color:var(--stone); letter-spacing:.01em; }
+.servicios-panel-divider{
+  height:1px; margin:20px 0 6px;
+  background:linear-gradient(90deg, transparent, var(--surface-sheen), transparent);
+  opacity:.5;
+}
+.servicios-panel .servicios-visual-diagram{ max-width:100%; margin:0; padding-top:4px; }
+@media (max-width:560px){
+  .servicios-panel-body{ padding:18px 18px 16px; }
+  .servicios-panel-row-label{ font-size:0.72rem; }
+}
+
 /* ============ PIPELINE (visualización de sistema) ============
    Representación simplificada del flujo de un Departamento, para las
    páginas de Comercial/Producción/Finanzas/Soporte. Deliberadamente no
