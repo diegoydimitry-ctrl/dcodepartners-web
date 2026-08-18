@@ -231,31 +231,49 @@
 
   <url>
     <loc>https://dcodepartners.com/privacidad</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/privacidad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/privacidad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/privacidad"/>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://dcodepartners.com/aviso-legal</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/aviso-legal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/aviso-legal"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/aviso-legal"/>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://dcodepartners.com/cookies</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cookies"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cookies"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cookies"/>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://dcodepartners.com/seguridad</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/seguridad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/seguridad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/seguridad"/>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://dcodepartners.com/acuerdo-encargado-tratamiento</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/acuerdo-encargado-tratamiento"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://dcodepartners.com/condiciones-contratacion</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/condiciones-contratacion"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/condiciones-contratacion"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/condiciones-contratacion"/>
     <priority>0.3</priority>
   </url>
 
@@ -508,6 +526,54 @@
     <priority>0.6</priority>
     <changefreq>yearly</changefreq>
     <lastmod>2026-08-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/privacidad</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/privacidad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/privacidad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/privacidad"/>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/aviso-legal</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/aviso-legal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/aviso-legal"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/aviso-legal"/>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/cookies</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cookies"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cookies"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cookies"/>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/seguridad</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/seguridad"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/seguridad"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/seguridad"/>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/acuerdo-encargado-tratamiento</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/acuerdo-encargado-tratamiento"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/condiciones-contratacion</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/condiciones-contratacion"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/condiciones-contratacion"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/condiciones-contratacion"/>
+    <priority>0.3</priority>
   </url>
 
 </urlset>
