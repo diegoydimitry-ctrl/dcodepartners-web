@@ -942,8 +942,40 @@ nav.main-nav > ul{ position:relative; }
    caen dentro de esa columna (son hermanos, no hay bubbling entre ellos). */
 .hero-graphic{ position:relative; min-height:340px; display:flex; align-items:flex-end; pointer-events:none; }
 .hero-metrics-float{ pointer-events:auto; }
+/* DIR-053: causa real del problema reportado desde iPad ("cuadrados
+   desplazados", "pierde la relación visual que tiene en desktop"). Los 4
+   chips (n8n/Airtable/Notion/Google Workspace) y sus etiquetas viven en
+   un lienzo SVG con viewBox="0 0 1000 600" (relación 5:3) y
+   preserveAspectRatio="none" — se estiran de forma no uniforme para
+   llenar exactamente la caja de .hero-atmosphere, y las etiquetas HTML
+   usan left/top en % de esa MISMA caja, así que nodo y etiqueta siempre
+   se mueven juntos (no hay desalineación entre ellos). El problema real
+   es la FORMA de esa caja: en desktop, .hero-atmosphere ocupa la fila 1
+   de la rejilla junto al texto (alto ≈ el propio texto, ancho ≈ toda la
+   rejilla) y su relación de aspecto ronda 1.3–1.5:1, cercana al diseño.
+   En tablet/móvil (rejilla a una columna) .hero-atmosphere pasa a
+   compartir fila con .hero-graphic, y hasta ahora .hero-graphic tenía
+   una altura FIJA de 240px sin importar el ancho — en iPad portrait
+   (768–1024px de ancho) eso da una caja de hasta 922×240, relación
+   3.13–3.84:1, más del doble de "ancha y plana" que el diseño original.
+   Con preserveAspectRatio="none" eso aplana el eje Y mucho más que el
+   X: los chips (medidos en navegador real) pasan de 30–51px en desktop
+   a apenas 20–27px en iPad portrait, apretados en una banda vertical de
+   solo ~78px — la "pérdida de relación visual" que describe Dirección.
+   Solución: en vez de una altura fija, .hero-graphic lleva un
+   aspect-ratio que mantiene la caja mucho más cercana a la proporción
+   de diseño en cualquier ancho de esta franja (320–1024px), con un
+   suelo y un techo para que ni se aplaste en móviles muy estrechos ni
+   crezca en exceso en el iPad más ancho. Nodo/etiqueta se recolocan
+   juntos automáticamente (siguen siendo % de la misma caja) — no han
+   hecho falta más cambios ni en el HTML ni en las coordenadas del SVG. */
 @media (max-width:1024px){
-  .hero-graphic{ min-height:240px; }
+  /* width:100% explícito: sin él, en anchos donde max-height recorta el
+     alto derivado del aspect-ratio (~800px de ancho en adelante), Chrome
+     recalculaba también el ancho a partir de ese alto ya recortado
+     (alto x 2 = ancho), y la franja de métricas dejaba de llenar el
+     ancho completo de la columna — efecto colateral no buscado. */
+  .hero-graphic{ width:100%; aspect-ratio:2/1; min-height:220px; max-height:400px; }
 }
 
 /* ============ HERO — ATMÓSFERA DE PROFUNDIDAD (DIR-048) ============
