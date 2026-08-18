@@ -185,94 +185,91 @@
     </div>
   </section>
 
-  <!-- ============ MÓDULOS DE DEPARTAMENTOS (DIR-040) ============
-       Sustituye el diagrama SVG abstracto (núcleo+bus+puntos) por un árbol
-       real: "Tu empresa" en la cima, 8 módulos reales — icono real +
-       nombre real en HTML, cada uno enlazado a su página — organizados en
-       4×2 (desktop/tablet) o 2 columnas (mobile), conectados por líneas
-       SVG simples y deterministas (posiciones en %, no dependen del alto
-       real de las tarjetas). Iconografía reutilizada del propio mega-menú
-       — cero imágenes ni iconos nuevos. -->
-  <section class="section-sm dept-modules-visual">
+  <!-- ============ DEPARTAMENTOS — ECOSISTEMA EMPRESARIAL VIVO (DIR-047) ============
+       Sustituye por completo el árbol "Tu empresa + 8 recuadros + bus"
+       (DIR-040/043/045) por una arquitectura radial: un núcleo central
+       ("Tu empresa") y las 8 estaciones reales — icono real + nombre real,
+       cada una enlazada a su página — dispuestas de forma fija alrededor,
+       cada una con su propio canal de energía hacia el núcleo. No orbitan
+       — esa metáfora ya se probó y se descartó en Home (DIR-046) — el
+       movimiento vive en el detalle: un pulso muy lento en el núcleo, un
+       destello que recorre cada canal muy despacio, un eco sutil y
+       escalonado por estación. Al pasar el cursor o enfocar con teclado la
+       estación se eleva, su canal se ilumina y aparece su descripción real
+       (texto ya publicado en el mega-menú, no es copy nuevo). Todo el
+       layout es fluido en % + aspect-ratio dentro de un contenedor con
+       container queries — se reduce de tamaño en mobile sin ocultarse ni
+       recomponerse, no existe una "versión compacta" aparte. -->
+  <section class="section-sm dept-ecosystem">
     <div class="container">
-      <div class="dept-modules-tree">
+      <div class="dept-ecosystem-field">
 
-        <div class="dept-company">
-          <span class="dept-company-icon" aria-hidden="true">
+        <svg class="dept-ecosystem-rays" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <line class="dept-ray dept-ray-1" x1="50" y1="50" x2="50.00" y2="14.00"/>
+          <line class="dept-ray dept-ray-2" x1="50" y1="50" x2="75.46" y2="24.54"/>
+          <line class="dept-ray dept-ray-3" x1="50" y1="50" x2="86.00" y2="50.00"/>
+          <line class="dept-ray dept-ray-4" x1="50" y1="50" x2="75.46" y2="75.46"/>
+          <line class="dept-ray dept-ray-5" x1="50" y1="50" x2="50.00" y2="86.00"/>
+          <line class="dept-ray dept-ray-6" x1="50" y1="50" x2="24.54" y2="75.46"/>
+          <line class="dept-ray dept-ray-7" x1="50" y1="50" x2="14.00" y2="50.00"/>
+          <line class="dept-ray dept-ray-8" x1="50" y1="50" x2="24.54" y2="24.54"/>
+        </svg>
+
+        <div class="dept-ecosystem-core">
+          <span class="dept-ecosystem-core-glow" aria-hidden="true"></span>
+          <span class="dept-ecosystem-core-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 21v-4h6v4"/><path d="M8 7h1M8 11h1M15 7h1M15 11h1"/></svg>
           </span>
-          <span class="dept-company-label">Tu empresa</span>
+          <span class="dept-ecosystem-core-label">Tu empresa</span>
         </div>
 
-        <svg class="dept-connector dept-connector-trunk-wide" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <circle class="dept-connector-origin" cx="50" cy="1" r="9"/>
-          <line x1="50" y1="0" x2="50" y2="16"/>
-          <line x1="12.5" y1="16" x2="87.5" y2="16"/>
-          <line x1="12.5" y1="16" x2="12.5" y2="32"/>
-          <line x1="37.5" y1="16" x2="37.5" y2="32"/>
-          <line x1="62.5" y1="16" x2="62.5" y2="32"/>
-          <line x1="87.5" y1="16" x2="87.5" y2="32"/>
-        </svg>
-        <svg class="dept-connector dept-connector-trunk-compact" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <circle class="dept-connector-origin" cx="50" cy="1" r="9"/>
-          <line x1="50" y1="0" x2="50" y2="16"/>
-          <line x1="25" y1="16" x2="75" y2="16"/>
-          <line x1="25" y1="16" x2="25" y2="32"/>
-          <line x1="75" y1="16" x2="75" y2="32"/>
-        </svg>
+        <a class="dept-node dept-node--1" href="/departamentos/comercial" style="--node-x:50.00%;--node-y:14.00%;--mod-r:67;--mod-g:224;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span></span>
+          <span class="dept-node-name">Comercial IA</span>
+          <span class="dept-node-tagline">Que ninguna venta se pierda por falta de seguimiento.</span>
+        </a>
 
-        <div class="dept-modules-row">
-          <a class="dept-module" href="/departamentos/comercial" style="--mod-r:67;--mod-g:224;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
-            <span class="dept-module-name">Comercial IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-          <a class="dept-module" href="/departamentos/marketing" style="--mod-r:155;--mod-g:107;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
-            <span class="dept-module-name">Marketing IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-          <a class="dept-module" href="/departamentos/clientes" style="--mod-r:91;--mod-g:140;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
-            <span class="dept-module-name">Clientes IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-          <a class="dept-module" href="/departamentos/produccion" style="--mod-r:155;--mod-g:107;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-            <span class="dept-module-name">Producción IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-        </div>
+        <a class="dept-node dept-node--2" href="/departamentos/marketing" style="--node-x:75.46%;--node-y:24.54%;--mod-r:155;--mod-g:107;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span></span>
+          <span class="dept-node-name">Marketing IA</span>
+          <span class="dept-node-tagline">Leads que llegan ya clasificados, no en bruto.</span>
+        </a>
 
-        <svg class="dept-connector dept-connector-straight-wide" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <line x1="12.5" y1="0" x2="12.5" y2="32"/>
-          <line x1="37.5" y1="0" x2="37.5" y2="32"/>
-          <line x1="62.5" y1="0" x2="62.5" y2="32"/>
-          <line x1="87.5" y1="0" x2="87.5" y2="32"/>
-        </svg>
+        <a class="dept-node dept-node--3" href="/departamentos/clientes" style="--node-x:86.00%;--node-y:50.00%;--mod-r:91;--mod-g:140;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span></span>
+          <span class="dept-node-name">Clientes IA</span>
+          <span class="dept-node-tagline">Que cada cliente se sienta cuidado, sin depender de nadie.</span>
+        </a>
 
-        <div class="dept-modules-row">
-          <a class="dept-module" href="/departamentos/finanzas" style="--mod-r:52;--mod-g:231;--mod-b:164;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-            <span class="dept-module-name">Finanzas IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-          <a class="dept-module" href="/departamentos/soporte" style="--mod-r:91;--mod-g:140;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
-            <span class="dept-module-name">Soporte IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-          <a class="dept-module" href="/departamentos/administracion" style="--mod-r:155;--mod-g:107;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
-            <span class="dept-module-name">Administración IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-          <a class="dept-module" href="/departamentos/direccion" style="--mod-r:67;--mod-g:224;--mod-b:255;">
-            <span class="dept-module-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-            <span class="dept-module-name">Dirección IA</span>
-            <span class="dept-module-accent" aria-hidden="true"></span>
-          </a>
-        </div>
+        <a class="dept-node dept-node--4" href="/departamentos/produccion" style="--node-x:75.46%;--node-y:75.46%;--mod-r:155;--mod-g:107;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span></span>
+          <span class="dept-node-name">Producción IA</span>
+          <span class="dept-node-tagline">Proyectos que se ponen en marcha solos y cumplen sus plazos.</span>
+        </a>
+
+        <a class="dept-node dept-node--5" href="/departamentos/finanzas" style="--node-x:50.00%;--node-y:86.00%;--mod-r:52;--mod-g:231;--mod-b:164;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span></span>
+          <span class="dept-node-name">Finanzas IA</span>
+          <span class="dept-node-tagline">Próximamente — el control de gasto ya es real.</span>
+        </a>
+
+        <a class="dept-node dept-node--6" href="/departamentos/soporte" style="--node-x:24.54%;--node-y:75.46%;--mod-r:91;--mod-g:140;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span></span>
+          <span class="dept-node-name">Soporte IA</span>
+          <span class="dept-node-tagline">Respuesta rápida, incluso fuera de horario.</span>
+        </a>
+
+        <a class="dept-node dept-node--7" href="/departamentos/administracion" style="--node-x:14.00%;--node-y:50.00%;--mod-r:155;--mod-g:107;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span></span>
+          <span class="dept-node-name">Administración IA</span>
+          <span class="dept-node-tagline">Tu empresa, protegida y ordenada, sin esfuerzo.</span>
+        </a>
+
+        <a class="dept-node dept-node--8" href="/departamentos/direccion" style="--node-x:24.54%;--node-y:24.54%;--mod-r:67;--mod-g:224;--mod-b:255;">
+          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span></span>
+          <span class="dept-node-name">Dirección IA</span>
+          <span class="dept-node-tagline">Una decisión clara cada mañana, con datos reales.</span>
+        </a>
 
       </div>
     </div>
