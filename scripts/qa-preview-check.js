@@ -81,13 +81,27 @@ async function checkPage(browser, path, width, baseOrigin) {
       failedRequests.push(`[terceros, no bloqueante] ${entry}`);
     }
   });
+  // Ruido de terceros conocido, no accionable por el propio sitio: sin una
+  // cuenta de Google real autenticada en el navegador que ejecuta el QA
+  // (CI, este script en local, etc.), el script de Google Identity
+  // Services/FedCM que carga algún tercero embebido (Tag Manager,
+  // Cookieyes) siempre falla con estos dos mensajes -- en el CI real
+  // (PR #70, ejecución 32261177030) aparecio en las 496 comprobaciones
+  // sin ninguna excepcion, exactamente el mismo texto, independientemente
+  // de la pagina o el ancho -- huella de ruido de entorno, no de un bug
+  // del sitio.
+  const THIRD_PARTY_NOISE = [
+    /Failed to load resource/,
+    /Provider's accounts list is empty/,
+    /\[GSI_LOGGER\]/,
+  ];
   page.on('console', (msg) => {
     // "Failed to load resource" ya se captura (y se filtra por origen)
     // vía requestfailed arriba, y ese mensaje de consola no trae la URL
     // para poder aplicarle el mismo filtro de origen — lo excluimos aquí
     // para no duplicar ni generar falsos positivos por scripts de
     // terceros bloqueados (Cookieyes, Google Tag Manager, etc.).
-    if (msg.type() === 'error' && !/Failed to load resource/.test(msg.text())) {
+    if (msg.type() === 'error' && !THIRD_PARTY_NOISE.some((re) => re.test(msg.text()))) {
       consoleErrors.push(msg.text());
     }
   });
