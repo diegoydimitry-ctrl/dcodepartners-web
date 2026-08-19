@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T20:27:11.360Z",
+  "generatedAt": "2026-08-19T21:32:17.167Z",
   "pageCount": 62,
-  "chunkCount": 728,
+  "chunkCount": 700,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -2788,146 +2788,76 @@
       "chunks": [
         {
           "id": "/en/#c0",
-          "heading": "",
-          "text": "n8n Airtable Notion Google Workspace"
+          "heading": "An Operating System for your company, not just another automation.",
+          "text": "Most small and mid-sized businesses lose sales and hours to processes that only work if someone remembers to do them — every D-Code Smart Department does it for you, every day. Book My Free Call See how it works No lock-in contract GDPR compliant Response &lt; 24h dcode_system Live Sales Connected Marketing Connected Delivery Connected Support Connected +4 more Departments · 1 system 24/7 Operational €0 Upfront risk 30 days Free trial"
         },
         {
           "id": "/en/#c1",
-          "heading": "An Operating System for your company, not just another automation.",
-          "text": "Most small and mid-sized businesses lose sales, hours and money to processes that only work if someone remembers to do them. Every D-Code Smart Department does that work every day, on its own, coordinated with the rest of your company. Book My Free Call See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H No lock-in contract GDPR compliant Response &lt; 24h 24/7 Operational €0 Upfront risk 30 days Free trial"
+          "heading": "Not chatbots. One system with 8 modules.",
+          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data. Upfront risk 0 € You pay nothing until we prove results. Free trial 30 days A full month of real service, no commitment. Availability 24 /7 Your company never stops. Neither do the Departments working for it. Response time &lt; 24 h Every inquiry answered within one business day."
         },
         {
           "id": "/en/#c2",
-          "heading": "Your company doesn't need more standalone tools. It needs a system.",
-          "text": "Most companies pile up apps that don't talk to each other: a CRM here, a spreadsheet there, reminders living in someone's head. A Business Operating System works differently: every Smart Department shares the same information with the rest. What happens in Sales is already known by Delivery — without anyone having to tell anyone."
-        },
-        {
-          "id": "/en/#c3",
-          "heading": "Not chatbots. Systems that run your operations.",
-          "text": "A Smart Department doesn't just answer questions and wait for the next one: it does the work — detects, decides, alerts, acts — every day, coordinated with the rest of your company."
-        },
-        {
-          "id": "/en/#c4",
-          "heading": "Sales",
-          "text": "Never lose a sale to poor follow-up again. Learn more"
-        },
-        {
-          "id": "/en/#c5",
-          "heading": "Marketing",
-          "text": "Leads that arrive already qualified, not raw. Learn more"
-        },
-        {
-          "id": "/en/#c6",
-          "heading": "Customer",
-          "text": "Every client cared for, without depending on any one person. Learn more"
-        },
-        {
-          "id": "/en/#c7",
-          "heading": "Delivery",
-          "text": "Projects that launch themselves and hit their deadlines. Learn more"
-        },
-        {
-          "id": "/en/#c8",
-          "heading": "Finance",
-          "text": "Coming soon — expense control is already real. Learn more"
-        },
-        {
-          "id": "/en/#c9",
-          "heading": "Support",
-          "text": "Fast responses, even after hours. Learn more"
-        },
-        {
-          "id": "/en/#c10",
-          "heading": "Operations",
-          "text": "Your company, protected and organized, effortlessly. Learn more"
-        },
-        {
-          "id": "/en/#c11",
-          "heading": "Leadership",
-          "text": "One clear decision every morning, backed by real data. Learn more Upfront risk 0 € You pay nothing until we prove results. Free trial 30 days A full month of real service, no commitment. Availability 24 /7 Your company never stops. Neither do the Departments working for it. Response time &lt; 24 h Every inquiry answered within one business day."
-        },
-        {
-          "id": "/en/#c12",
           "heading": "Day 1 — Diagnosis and design of your custom Department.",
           "text": "We audit your operations and pinpoint the processes with the greatest potential impact."
         },
         {
-          "id": "/en/#c13",
+          "id": "/en/#c3",
           "heading": "Weeks 1–4 — Implementation in your real operations.",
           "text": "We deploy each Department into production, supervised at every step."
         },
         {
-          "id": "/en/#c14",
+          "id": "/en/#c4",
           "heading": "Day 30 — Results review: hours, revenue, efficiency.",
           "text": "We show you concrete data: what improved, and by how much."
         },
         {
-          "id": "/en/#c15",
+          "id": "/en/#c5",
           "heading": "From here on — We agree on the value of the service, based on results already achieved.",
           "text": "No surprises: we talk numbers once you already know what you're gaining."
         },
         {
-          "id": "/en/#c16",
+          "id": "/en/#c6",
           "heading": "A partnership that starts with facts, not promises.",
           "text": "The market is full of consultancies that promise before they prove. We work the other way around. \"One full month of service, at no cost at all.\" We deploy your Smart Departments and measure their real impact on revenue and efficiency. Only once the results are on the table do we sit down to talk numbers. No proven benefit, no invoice. As simple as that. See the full Method Guarantees & Process 0% RISK No lock-in. No fine print."
         },
         {
-          "id": "/en/#c17",
+          "id": "/en/#c7",
           "heading": "0 public clients today. 3 real systems inside D-Code.",
           "text": "We don't invent client case studies. While we build our first ones, this is how we use our own systems — including one that didn't go as planned. Sales"
         },
         {
-          "id": "/en/#c18",
+          "id": "/en/#c8",
           "heading": "From detected company to proposal sent, without anyone having to remember to do it",
           "text": "Every Monday, the system converts the highest-scoring companies into leads and triggers an AI-generated proposal — reviewed by a person before it goes out. Delivery"
         },
         {
-          "id": "/en/#c19",
+          "id": "/en/#c9",
           "heading": "Distributing the team's workload without anyone having to decide it every hour",
           "text": "When a project closes, the system creates it on its own, distributes tasks every hour based on each person's real workload, and flags what's about to come due every day. Internal discipline"
         },
         {
-          "id": "/en/#c20",
+          "id": "/en/#c10",
           "heading": "When our hypothesis about a failure didn't match what the data actually said",
           "text": "Instead of acting on a hunch, we audited the real executions one by one — the actual cause was in two workflows different from the ones flagged. See all 3 full cases"
         },
         {
-          "id": "/en/#c21",
-          "heading": "Ideas on automation and AI for businesses.",
-          "text": "Fundamentals"
-        },
-        {
-          "id": "/en/#c22",
-          "heading": "What AI automation is, and why your company needs it now",
-          "text": "A clear introduction to what really changes when you automate processes with AI. 6 min read Strategy"
-        },
-        {
-          "id": "/en/#c23",
-          "heading": "Automation vs. AI Agents: what sets them apart and when to use each",
-          "text": "They're not the same thing, and choosing wrong costs time and money. Here's how to decide. 7 min read Practical"
-        },
-        {
-          "id": "/en/#c24",
-          "heading": "5 processes in your company you could probably automate right now",
-          "text": "Concrete, realistic examples to spot where you're losing hours every week. 5 min read View all articles"
-        },
-        {
-          "id": "/en/#c25",
+          "id": "/en/#c11",
           "heading": "Two founders. One shared code.",
           "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. \" Our youth isn't a lack of experience. It's the absence of the bad habits of a stagnant market. D.S."
         },
         {
-          "id": "/en/#c26",
+          "id": "/en/#c12",
           "heading": "Diego Siñeriz",
           "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. D.S."
         },
         {
-          "id": "/en/#c27",
+          "id": "/en/#c13",
           "heading": "Dimitry Sosenko",
           "text": "Co-Founder &amp; CEO Leads the architecture behind the Smart Departments. Read our full story"
         },
         {
-          "id": "/en/#c28",
+          "id": "/en/#c14",
           "heading": "Book a 30-minute meeting.",
           "text": "We'll tell you which Smart Departments would have the most impact on your business, and what to expect from month one — no cost, no commitment. Book My Free Call See FAQ"
         }
@@ -3493,146 +3423,76 @@
       "chunks": [
         {
           "id": "/#c0",
-          "heading": "",
-          "text": "n8n Airtable Notion Google Workspace"
+          "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
+          "text": "La mayoría de pymes pierde ventas y horas en procesos que solo funcionan si alguien se acuerda de hacerlos — cada Departamento Inteligente de D-Code los hace por ti, todos los días. Reservar mi Llamada Gratuita Ver cómo funciona Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h sistema_dcode En vivo Comercial Conectado Marketing Conectado Producción Conectado Soporte Conectado +4 Departamentos más · 1 sistema 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
         },
         {
           "id": "/#c1",
-          "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
-          "text": "La mayoría de pymes pierde ventas, horas y dinero por procesos que solo funcionan si alguien se acuerda de hacerlos. Cada Departamento Inteligente de D-Code hace ese trabajo todos los días, solo, coordinado con el resto de tu empresa. Reservar mi Llamada Gratuita Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
+          "heading": "No son chatbots. Son un mismo sistema con 8 módulos.",
+          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales. Riesgo inicial 0 € No pagas nada hasta demostrar resultados. Prueba gratuita 30 días Un mes completo de servicio real, sin compromiso. Disponibilidad 24 /7 Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella. Tiempo de respuesta &lt; 24 h Cada consulta, atendida en menos de un día laborable."
         },
         {
           "id": "/#c2",
-          "heading": "Tu empresa no necesita más herramientas sueltas. Necesita un sistema.",
-          "text": "La mayoría de empresas acumula aplicaciones que no se hablan entre sí: un CRM aquí, una hoja de cálculo allí, recordatorios en la cabeza de alguien. Un Sistema Operativo Empresarial funciona distinto: cada Departamento Inteligente comparte la misma información con los demás. Lo que pasa en Comercial ya lo sabe Producción — sin que nadie tenga que avisar a nadie."
-        },
-        {
-          "id": "/#c3",
-          "heading": "No son chatbots. Son sistemas que llevan tu operativa.",
-          "text": "Un Departamento Inteligente no contesta preguntas y espera la siguiente: ejecuta el trabajo — detecta, decide, avisa, actúa — todos los días, coordinado con el resto de tu empresa."
-        },
-        {
-          "id": "/#c4",
-          "heading": "Comercial",
-          "text": "Que ninguna venta se pierda por falta de seguimiento. Saber más"
-        },
-        {
-          "id": "/#c5",
-          "heading": "Marketing",
-          "text": "Leads que llegan ya clasificados, no en bruto. Saber más"
-        },
-        {
-          "id": "/#c6",
-          "heading": "Clientes",
-          "text": "Que cada cliente se sienta cuidado, sin depender de nadie. Saber más"
-        },
-        {
-          "id": "/#c7",
-          "heading": "Producción",
-          "text": "Proyectos que se ponen en marcha solos y cumplen sus plazos. Saber más"
-        },
-        {
-          "id": "/#c8",
-          "heading": "Finanzas",
-          "text": "Próximamente — el control de gasto ya es real. Saber más"
-        },
-        {
-          "id": "/#c9",
-          "heading": "Soporte",
-          "text": "Respuesta rápida, incluso fuera de horario. Saber más"
-        },
-        {
-          "id": "/#c10",
-          "heading": "Administración",
-          "text": "Tu empresa, protegida y ordenada, sin esfuerzo. Saber más"
-        },
-        {
-          "id": "/#c11",
-          "heading": "Dirección",
-          "text": "Una decisión clara cada mañana, con datos reales. Saber más Riesgo inicial 0 € No pagas nada hasta demostrar resultados. Prueba gratuita 30 días Un mes completo de servicio real, sin compromiso. Disponibilidad 24 /7 Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella. Tiempo de respuesta &lt; 24 h Cada consulta, atendida en menos de un día laborable."
-        },
-        {
-          "id": "/#c12",
           "heading": "Día 1 — Diagnóstico y diseño del Departamento a medida.",
           "text": "Auditamos tu operativa y detectamos los procesos con mayor impacto potencial."
         },
         {
-          "id": "/#c13",
+          "id": "/#c3",
           "heading": "Semanas 1–4 — Implementación en tu operativa real.",
           "text": "Desplegamos cada Departamento en producción, supervisado en todo momento."
         },
         {
-          "id": "/#c14",
+          "id": "/#c4",
           "heading": "Día 30 — Revisión de resultados: horas, ingresos, eficiencia.",
           "text": "Te presentamos datos concretos: qué ha mejorado y cuánto."
         },
         {
-          "id": "/#c15",
+          "id": "/#c5",
           "heading": "A partir de aquí — Acordamos el valor del servicio, sobre resultados ya obtenidos.",
           "text": "Sin sorpresas: hablamos de cifras cuando ya sabes lo que vas a ganar."
         },
         {
-          "id": "/#c16",
+          "id": "/#c6",
           "heading": "Una alianza que empieza por los hechos, no por las promesas.",
           "text": "El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés. \"Un mes completo de servicio, sin coste alguno.\" Implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia. Solo cuando los resultados están sobre la mesa, nos sentamos a hablar de cifras. Sin beneficio demostrado, no hay factura. Así de simple. Ver el Método completo Garantías y Proceso RIESGO 0% Sin permanencia. Sin letra pequeña."
         },
         {
-          "id": "/#c17",
+          "id": "/#c7",
           "heading": "0 clientes públicos hoy. 3 sistemas reales dentro de D-Code.",
           "text": "No inventamos casos de cliente. Mientras construimos los primeros, así es como usamos nuestros propios sistemas — incluido uno que no salió como esperábamos. Comercial"
         },
         {
-          "id": "/#c18",
+          "id": "/#c8",
           "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse",
           "text": "Cada lunes, el sistema convierte las empresas mejor puntuadas en leads y dispara una propuesta con IA — revisada por una persona antes de salir. Producción"
         },
         {
-          "id": "/#c19",
+          "id": "/#c9",
           "heading": "Reparto de tareas sin que nadie tenga que decidirlo cada hora",
           "text": "Al cerrar un proyecto, el sistema lo crea solo, reparte tareas cada hora según la carga real de cada persona y avisa cada día de lo que está por vencer. Disciplina interna"
         },
         {
-          "id": "/#c20",
+          "id": "/#c10",
           "heading": "Cuando la hipótesis sobre un fallo no coincidía con los datos",
           "text": "En vez de actuar sobre una sospecha, auditamos las ejecuciones reales una por una — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos"
         },
         {
-          "id": "/#c21",
-          "heading": "Ideas sobre automatización e IA para empresas.",
-          "text": "Fundamentos"
-        },
-        {
-          "id": "/#c22",
-          "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
-          "text": "Una introducción clara a qué cambia realmente cuando automatizas procesos con IA. 6 min de lectura Estrategia"
-        },
-        {
-          "id": "/#c23",
-          "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
-          "text": "No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir. 7 min de lectura Práctico"
-        },
-        {
-          "id": "/#c24",
-          "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
-          "text": "Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana. 5 min de lectura Ver todos los artículos"
-        },
-        {
-          "id": "/#c25",
+          "id": "/#c11",
           "heading": "Dos fundadores. Un mismo código.",
           "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. \" Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado. D.S."
         },
         {
-          "id": "/#c26",
+          "id": "/#c12",
           "heading": "Diego Siñeriz",
           "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. D.S."
         },
         {
-          "id": "/#c27",
+          "id": "/#c13",
           "heading": "Dimitry Sosenko",
           "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los Departamentos Inteligentes. Conoce toda nuestra historia"
         },
         {
-          "id": "/#c28",
+          "id": "/#c14",
           "heading": "Reserva una reunión de 30 minutos.",
           "text": "Te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y qué puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }

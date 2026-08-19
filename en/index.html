@@ -37,7 +37,7 @@
 <meta name="twitter:description" content="Every area of your company, running its own Smart Department. One month of free service, no cost, no commitment.">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css?v=f59720448f">
+<link rel="stylesheet" href="/assets/css/styles.css?v=7b299319bb">
 
 <script type="application/ld+json">
 {
@@ -142,11 +142,9 @@
 
 <nav class="side-index" id="side-index" aria-label="Section index">
   <a href="#inicio" data-target="inicio"><span class="si-label">Home</span><span class="si-dot"></span></a>
-  <a href="#concepto" data-target="concepto"><span class="si-label">Concept</span><span class="si-dot"></span></a>
   <a href="#departamentos" data-target="departamentos"><span class="si-label">Departments</span><span class="si-dot"></span></a>
   <a href="#metodo" data-target="metodo"><span class="si-label">Method</span><span class="si-dot"></span></a>
   <a href="#resultados" data-target="resultados"><span class="si-label">Results</span><span class="si-dot"></span></a>
-  <a href="#blog" data-target="blog"><span class="si-label">Blog</span><span class="si-dot"></span></a>
   <a href="#conocenos" data-target="conocenos"><span class="si-label">About Us</span><span class="si-dot"></span></a>
   <a href="#contacto" data-target="contacto"><span class="si-label">Contact</span><span class="si-dot"></span></a>
 </nav>
@@ -154,91 +152,25 @@
 <main id="main-content">
 
   <!-- ============ HERO ============
-       DIR-048: see the parallel Spanish comment in index.html — the city
-       background image is fully removed and replaced by the "Cristal de
-       Profundidad" itself growing into a full-bleed background atmosphere
-       (.hero-atmosphere), masked to fade out on the left (text side) and
-       resolve on the right. Same --mx/--my reuse, zero new JS beyond one
-       selector addition. The 4 modules are D-Code's real stack (n8n /
-       Airtable / Notion / Google Workspace, confirmed in seguridad.html
-       and condiciones-contratacion.html), shown as D-Code's own iconography
-       with the real product name in text rather than official trademarks —
-       see the scope note in the delivery. -->
+       DIR-WEB-MASTER-004: see the parallel Spanish comment in index.html —
+       the parallax SVG atmosphere (root cause of the real iPad rendering
+       bugs from DIR-053/054/055) is removed entirely and replaced with a
+       different idea: a panel showing Departments connecting to one
+       system as the page loads (.hero-console), built from plain rows
+       instead of viewport-dependent SVG geometry. -->
   <section class="hero" id="inicio">
     <div class="container hero-grid">
-    <div class="hero-atmosphere" aria-hidden="true">
-      <div class="hero-atm-layer hero-atm-back">
-        <svg viewBox="0 0 1000 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <line x1="-150" y1="600" x2="150" y2="0"/>
-          <line x1="0" y1="600" x2="300" y2="0"/>
-          <line x1="150" y1="600" x2="450" y2="0"/>
-          <line x1="300" y1="600" x2="600" y2="0"/>
-          <line x1="450" y1="600" x2="750" y2="0"/>
-          <line x1="600" y1="600" x2="900" y2="0"/>
-          <line x1="750" y1="600" x2="1050" y2="0"/>
-          <line x1="900" y1="600" x2="1200" y2="0"/>
-        </svg>
-      </div>
-
-      <div class="hero-atm-layer hero-atm-mid">
-        <svg viewBox="0 0 1000 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <path class="signal-line signal-a" fill="none" d="M0,230 C90,200 140,200 230,230 C320,260 370,260 460,230 C550,200 600,200 690,230 C780,260 830,260 920,230 C960,215 985,222 1000,228"/>
-          <path class="signal-line signal-b" fill="none" d="M0,410 C90,440 140,440 230,410 C320,380 370,380 460,410 C550,440 600,440 690,410 C780,380 830,380 920,410 C960,425 985,418 1000,412"/>
-        </svg>
-      </div>
-
-      <div class="hero-atm-layer hero-atm-front">
-        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <defs>
-            <linearGradient id="heroAtmFill" x1="0" y1="0" x2="0" y2="1">
-              <stop class="fill-a" offset="0%"/><stop class="fill-b" offset="45%"/><stop class="fill-c" offset="100%"/>
-            </linearGradient>
-            <linearGradient id="heroAtmSpine" gradientUnits="userSpaceOnUse" x1="560" y1="330" x2="880" y2="140">
-              <stop class="spine-a" offset="0%"/><stop class="spine-b" offset="50%"/><stop class="spine-c" offset="100%"/>
-            </linearGradient>
-          </defs>
-
-          <path class="atm-spine" fill="none" stroke="#43e0ff" d="M560,330 C605,308 625,290 680,270 C725,253 750,235 800,220 C825,213 850,180 880,140"/>
-
-          <g class="atm-chip" style="--mod-r:67;--mod-g:224;--mod-b:255;" transform="translate(560,330) scale(0.85)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(67,224,255)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(67,224,255)" transform="translate(-9,-9) scale(0.75)"><circle cx="4" cy="19" r="3"/><circle cx="20" cy="19" r="3"/><circle cx="12" cy="5" r="3"/><path d="M12 8v5M7 17l3-3M17 17l-3-3"/></g>
-            <circle class="atm-chip-status" fill="rgb(67,224,255)" cx="12" cy="-12" r="2.4"/>
-          </g>
-          <g class="atm-chip" style="--mod-r:91;--mod-g:140;--mod-b:255;" transform="translate(680,270) scale(0.95)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(91,140,255)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(91,140,255)" transform="translate(-9,-9) scale(0.75)"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20M9 10v10"/></g>
-            <circle class="atm-chip-status" fill="rgb(91,140,255)" cx="12" cy="-12" r="2.4"/>
-          </g>
-          <g class="atm-chip" style="--mod-r:155;--mod-g:107;--mod-b:255;" transform="translate(800,220) scale(1.05)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(155,107,255)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(155,107,255)" transform="translate(-9,-9) scale(0.75)"><rect x="3" y="2" width="18" height="20" rx="2"/><path d="M7.5 8h9M7.5 12h9M7.5 16h5"/></g>
-            <circle class="atm-chip-status" fill="rgb(155,107,255)" cx="12" cy="-12" r="2.4"/>
-          </g>
-          <g class="atm-chip" style="--mod-r:52;--mod-g:231;--mod-b:164;" transform="translate(880,140) scale(1.15)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(52,231,164)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(52,231,164)" transform="translate(-9,-9) scale(0.75)"><circle cx="5" cy="5" r="1.8"/><circle cx="12" cy="5" r="1.8"/><circle cx="19" cy="5" r="1.8"/><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/><circle cx="5" cy="19" r="1.8"/><circle cx="12" cy="19" r="1.8"/><circle cx="19" cy="19" r="1.8"/></g>
-            <circle class="atm-chip-status" fill="rgb(52,231,164)" cx="12" cy="-12" r="2.4"/>
-          </g>
-        </svg>
-        <span class="atm-chip-label" style="position:absolute; left:56%; top:55%;">n8n</span>
-        <span class="atm-chip-label" style="position:absolute; left:68%; top:45%;">Airtable</span>
-        <span class="atm-chip-label" style="position:absolute; left:80%; top:36.7%;">Notion</span>
-        <span class="atm-chip-label atm-chip-label--flip" style="position:absolute; left:88%; top:23.3%;">Google Workspace</span>
-      </div>
-    </div>
 
       <div class="hero-copy">
         <span class="eyebrow">Business Operating System for SMBs</span>
         <h1>An <span class="accent">Operating System</span> for your company, not just another automation.</h1>
-        <p class="lead">Most small and mid-sized businesses lose sales, hours and money to processes that only work if someone remembers to do them. Every D-Code Smart Department does that work every day, on its own, coordinated with the rest of your company.</p>
+        <p class="lead">Most small and mid-sized businesses lose sales and hours to processes that only work if someone remembers to do them — every D-Code Smart Department does it for you, every day.</p>
 
         <div class="hero-ctas">
           <a href="/en/contacto" class="btn btn-primary">Book My Free Call</a>
           <a href="/en/como-funciona" class="btn btn-ghost">See how it works</a>
         </div>
 
-        <p class="trust-line">ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H</p>
         <div class="trust-badges">
           <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg>No lock-in contract</span>
           <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>GDPR compliant</span>
@@ -247,6 +179,19 @@
       </div>
 
       <div class="hero-graphic">
+        <div class="hero-console reveal-scale">
+          <div class="hero-console-head">
+            <span>dcode_system</span>
+            <span class="window-status"><span class="dot"></span>Live</span>
+          </div>
+          <div class="boot-list" data-stagger>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Sales</span><span class="boot-state">Connected</span></div>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Marketing</span><span class="boot-state">Connected</span></div>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Delivery</span><span class="boot-state">Connected</span></div>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Support</span><span class="boot-state">Connected</span></div>
+          </div>
+          <div class="hero-console-foot">+4 more Departments · 1 system</div>
+        </div>
         <div class="hero-metrics-float" data-stagger>
           <div class="hero-metric reveal-up"><div class="hm-val">24/7</div><div class="hm-label">Operational</div></div>
           <div class="hero-metric reveal-up"><div class="hm-val">€0</div><div class="hm-label">Upfront risk</div></div>
@@ -256,116 +201,85 @@
     </div>
   </section>
 
-  <!-- ============ THE CONCEPT ============ -->
-  <section class="section" id="concepto">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">The concept</span>
-        <h2 class="h-title">Your company doesn't need more standalone tools. It needs a system.</h2>
-        <p class="lead">Most companies pile up apps that don't talk to each other: a CRM here, a spreadsheet there, reminders living in someone's head.</p>
-        <p class="lead">A Business Operating System works differently: every Smart Department shares the same information with the rest. What happens in Sales is already known by Delivery — without anyone having to tell anyone.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ DEPARTMENTS (teaser) ============ -->
+  <!-- ============ DEPARTMENTS (teaser) — ONE SINGLE SYSTEM (DIR-WEB-MASTER-004) ============
+       Replaces "The Concept" (separate text section, same idea told
+       better by looking at the panel) and the grid of 8 loose cards with
+       ONE .dept-system panel holding 8 connected rows -- see the
+       .dept-system comment in styles.css for the full reasoning. -->
   <section class="section" id="departamentos">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Smart Departments</span>
-        <h2 class="h-title">Not chatbots. Systems that run your operations.</h2>
-        <p class="lead">A Smart Department doesn't just answer questions and wait for the next one: it does the work — detects, decides, alerts, acts — every day, coordinated with the rest of your company.</p>
+        <h2 class="h-title">Not chatbots. One system with 8 modules.</h2>
+        <p class="lead">Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool.</p>
       </div>
 
-      <div class="servicios-cards cols-3" data-stagger>
-        <a class="window service-card reveal-blur" id="dept-comercial" href="/en/departamentos/comercial">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">sales-ai.dept</span>
+      <div class="window dept-system reveal">
+        <div class="window-bar">
+          <span class="window-dots"><span></span><span></span><span></span></span>
+          <span class="window-title">dcode_departments.system</span>
+          <span class="window-status"><span class="dot"></span>8 modules active</span>
+        </div>
+        <div class="window-body">
+          <div class="dept-rows">
+            <a class="dept-row" href="/en/departamentos/comercial">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
+              <span class="dept-row-name">Sales</span>
+              <span class="dept-row-desc">Never lose a sale to poor follow-up again.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/marketing">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
+              <span class="dept-row-name">Marketing</span>
+              <span class="dept-row-desc">Leads that arrive already qualified, not raw.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/clientes">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
+              <span class="dept-row-name">Customer</span>
+              <span class="dept-row-desc">Every client cared for, without depending on any one person.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/produccion">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+              <span class="dept-row-name">Delivery</span>
+              <span class="dept-row-desc">Projects that launch themselves and hit their deadlines.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/finanzas">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
+              <span class="dept-row-name">Finance</span>
+              <span class="dept-row-desc">Coming soon — expense control is already real.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/soporte">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
+              <span class="dept-row-name">Support</span>
+              <span class="dept-row-desc">Fast responses, even after hours.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/administracion">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
+              <span class="dept-row-name">Operations</span>
+              <span class="dept-row-desc">Your company, protected and organized, effortlessly.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/en/departamentos/direccion">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+              <span class="dept-row-name">Leadership</span>
+              <span class="dept-row-desc">One clear decision every morning, backed by real data.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
           </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>Sales</h3>
-            <p>Never lose a sale to poor follow-up again.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-up" id="dept-marketing" href="/en/departamentos/marketing">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">marketing-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>Marketing</h3>
-            <p>Leads that arrive already qualified, not raw.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal" id="dept-clientes" href="/en/departamentos/clientes">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">customer-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>Customer</h3>
-            <p>Every client cared for, without depending on any one person.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-blur" id="dept-produccion" href="/en/departamentos/produccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">delivery-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Delivery</h3>
-            <p>Projects that launch themselves and hit their deadlines.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-up" id="dept-finanzas" href="/en/departamentos/finanzas">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">finance-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>Finance</h3>
-            <p>Coming soon — expense control is already real.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal" id="dept-soporte" href="/en/departamentos/soporte">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">support-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>Support</h3>
-            <p>Fast responses, even after hours.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-blur" id="dept-administracion" href="/en/departamentos/administracion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">operations-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>Operations</h3>
-            <p>Your company, protected and organized, effortlessly.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-up" id="dept-direccion" href="/en/departamentos/direccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">leadership-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>Leadership</h3>
-            <p>One clear decision every morning, backed by real data.</p>
-            <span class="card-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
+        </div>
       </div>
 
       <div class="window stats-window reveal">
@@ -528,63 +442,10 @@
     </div>
   </section>
 
-  <!-- ============ BLOG (teaser) ============ -->
-  <section class="section" id="blog">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Resources</span>
-        <h2 class="h-title">Ideas on automation and AI for businesses.</h2>
-      </div>
-
-      <div class="blog-grid">
-        <a class="window blog-card reveal" href="/en/blog/que-es-la-automatizacion-con-ia">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">art-01.md</span>
-          </div>
-          <div class="window-body">
-            <span class="tag blog-cat">Fundamentals</span>
-            <h3>What AI automation is, and why your company needs it now</h3>
-            <p>A clear introduction to what really changes when you automate processes with AI.</p>
-            <div class="blog-meta"><span>6 min read</span></div>
-          </div>
-        </a>
-        <a class="window blog-card reveal" href="/en/blog/automatizacion-vs-agentes-ia">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">art-02.md</span>
-          </div>
-          <div class="window-body">
-            <span class="tag blog-cat">Strategy</span>
-            <h3>Automation vs. AI Agents: what sets them apart and when to use each</h3>
-            <p>They're not the same thing, and choosing wrong costs time and money. Here's how to decide.</p>
-            <div class="blog-meta"><span>7 min read</span></div>
-          </div>
-        </a>
-        <a class="window blog-card reveal" href="/en/blog/procesos-que-puedes-automatizar-ya">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">art-03.md</span>
-          </div>
-          <div class="window-body">
-            <span class="tag blog-cat">Practical</span>
-            <h3>5 processes in your company you could probably automate right now</h3>
-            <p>Concrete, realistic examples to spot where you're losing hours every week.</p>
-            <div class="blog-meta"><span>5 min read</span></div>
-          </div>
-        </a>
-      </div>
-
-      <div style="text-align:center; margin-top:48px;">
-        <a href="/en/blog" class="btn btn-ghost">View all articles</a>
-      </div>
-    </div>
-  </section>
-
   <!-- ============ ABOUT US (teaser) ============
-       DIR-WEB-20260819-MASTER-003: reordered to be the last stop before the
-       final CTA -- "trust" right before "contact" closes better than ending
-       on the Blog (tangential content) right before asking for the meeting. -->
+       DIR-WEB-20260819-MASTER-004: Blog removed entirely from Home (not just
+       reordered) -- it doesn't convert, explain, build trust or differentiate,
+       so per the "does this section earn its place" test it's cut, not moved. -->
   <section class="section metodo" id="conocenos">
     <div class="container">
       <div class="conocenos-intro reveal">
@@ -732,7 +593,7 @@
   </button>
 </div>
 
-<script src="/assets/js/main.js?v=adaceffb92" defer></script>
+<script src="/assets/js/main.js?v=3651968fcc" defer></script>
 
 </body>
 </html>

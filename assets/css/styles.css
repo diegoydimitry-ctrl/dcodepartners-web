@@ -937,244 +937,12 @@ nav.main-nav > ul{ position:relative; }
 }
 .hero .trust-badges{ margin-top:16px; }
 
-/* pointer-events:none: .hero-graphic es una caja vacía (min-height, sin
-   fondo) salvo por la franja de métricas — sin esto, su propio hitbox
-   transparente tapaba el hover real de los chips de .hero-atmosphere que
-   caen dentro de esa columna (son hermanos, no hay bubbling entre ellos). */
-.hero-graphic{ position:relative; min-height:340px; display:flex; align-items:flex-end; pointer-events:none; }
-.hero-metrics-float{ pointer-events:auto; }
-/* DIR-053: causa real del problema reportado desde iPad ("cuadrados
-   desplazados", "pierde la relación visual que tiene en desktop"). Los 4
-   chips (n8n/Airtable/Notion/Google Workspace) y sus etiquetas viven en
-   un lienzo SVG con viewBox="0 0 1000 600" (relación 5:3) y
-   preserveAspectRatio="none" — se estiran de forma no uniforme para
-   llenar exactamente la caja de .hero-atmosphere, y las etiquetas HTML
-   usan left/top en % de esa MISMA caja, así que nodo y etiqueta siempre
-   se mueven juntos (no hay desalineación entre ellos). El problema real
-   es la FORMA de esa caja: en desktop, .hero-atmosphere ocupa la fila 1
-   de la rejilla junto al texto (alto ≈ el propio texto, ancho ≈ toda la
-   rejilla) y su relación de aspecto ronda 1.3–1.5:1, cercana al diseño.
-   En tablet/móvil (rejilla a una columna) .hero-atmosphere pasa a
-   compartir fila con .hero-graphic, y hasta ahora .hero-graphic tenía
-   una altura FIJA de 240px sin importar el ancho — en iPad portrait
-   (768–1024px de ancho) eso da una caja de hasta 922×240, relación
-   3.13–3.84:1, más del doble de "ancha y plana" que el diseño original.
-   Con preserveAspectRatio="none" eso aplana el eje Y mucho más que el
-   X: los chips (medidos en navegador real) pasan de 30–51px en desktop
-   a apenas 20–27px en iPad portrait, apretados en una banda vertical de
-   solo ~78px — la "pérdida de relación visual" que describe Dirección.
-   Solución: en vez de una altura fija, .hero-graphic lleva un
-   aspect-ratio que mantiene la caja mucho más cercana a la proporción
-   de diseño en cualquier ancho de esta franja (320–1024px), con un
-   suelo y un techo para que ni se aplaste en móviles muy estrechos ni
-   crezca en exceso en el iPad más ancho. Nodo/etiqueta se recolocan
-   juntos automáticamente (siguen siendo % de la misma caja) — no han
-   hecho falta más cambios ni en el HTML ni en las coordenadas del SVG. */
-@media (max-width:1024px){
-  /* width:100% explícito: sin él, en anchos donde max-height recorta el
-     alto derivado del aspect-ratio (~800px de ancho en adelante), Chrome
-     recalculaba también el ancho a partir de ese alto ya recortado
-     (alto x 2 = ancho), y la franja de métricas dejaba de llenar el
-     ancho completo de la columna — efecto colateral no buscado. */
-  .hero-graphic{ width:100%; aspect-ratio:2/1; min-height:220px; max-height:400px; }
-}
-
-/* ============ HERO — ATMÓSFERA DE PROFUNDIDAD (DIR-048) ============
-   Evoluciona el "Cristal de Profundidad" (DIR-047): ya no es un panel
-   dentro de una tarjeta-ventana en la columna derecha, es la propia
-   atmósfera de fondo de TODA la sección — sustituye por completo a la
-   fotografía de ciudad/circuitos (DIR-044), que se retira sin
-   reemplazo fotográfico. .hero-atmosphere vive DETRÁS de .hero-grid
-   (mismo z-index:0 que tenía antes la foto) y se extiende en sangre
-   completa en desktop/tablet (bleed a la izquierda, ver más abajo),
-   apagándose hacia la columna de texto vía mask-image — la misma
-   lógica de "negative space" que ya usaba la foto, generada en vez de
-   fotográfica. Reutiliza --mx/--my (main.js suma .hero-atmosphere al
-   mismo selector que ya usa .window para el tilt+spotlight sitewide) —
-   cero JS nuevo para el paralaje; solo se desplazan las capas
-   internas, la atmósfera en sí nunca gira ni se inclina como una
-   tarjeta. Los 4 módulos representan las herramientas reales del stack
-   de D-Code — n8n, Airtable, Notion, Google Workspace, confirmadas en
-   seguridad.html/condiciones-contratacion.html — con iconografía propia
-   de D-Code (no los logotipos oficiales) y su nombre real en texto. */
-.hero-atmosphere{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  overflow:visible;
-  grid-column:1/-1;
-  grid-row:1;
-  mask-image:linear-gradient(90deg, transparent 0%, transparent 14%, rgba(0,0,0,.5) 32%, black 42%, black 100%);
-  -webkit-mask-image:linear-gradient(90deg, transparent 0%, transparent 14%, rgba(0,0,0,.5) 32%, black 42%, black 100%);
-}
-/* .hero-atmosphere es ahora un item de rejilla más dentro de .hero-grid
-   (no un hijo absoluto de toda .hero) — en desktop ocupa las dos columnas
-   (grid-column:1/-1), que es exactamente el ancho que antes cubría la
-   fotografía. En mobile/tablet (abajo, .hero-grid pasa a una columna) se
-   reasigna a la MISMA fila que .hero-graphic para que nunca se superponga
-   con el texto ni los CTA — antes vivía fuera de la rejilla y por eso
-   "inset:0" la estiraba a la altura de toda la sección apilada. */
-@media (max-width:1024px){
-  .hero-atmosphere{ grid-row:2; opacity:.4; mask-image:none; -webkit-mask-image:none; }
-}
-
-/* DIR-055-v2: en tablet portrait (iPad vertical) el clúster de chips
-   se veía pequeño y desplazado dentro de una caja mucho más grande que
-   él, con grandes zonas vacías — captura real de Production confirmó
-   el problema. Causa raíz: DIR-054 fija xMidYMid meet en el SVG
-   frontal, lo que garantiza que nada se deforme — pero SIEMPRE escala
-   el viewBox COMPLETO (1000x600), y el clúster real de chips solo
-   ocupa una franja de ese lienzo (aprox. x:560-880, y:140-330 de
-   1000x600) — el resto es lienzo vacío salvo las curvas ambientales de
-   fondo. En desktop eso no se nota: .hero-atmosphere ocupa las dos
-   columnas de la rejilla con máscara de degradado, así que el vacío es
-   parte del efecto "atmósfera de fondo" a propósito. En tablet
-   portrait .hero-atmosphere pasa a compartir una única fila compacta
-   con .hero-graphic (mask-image:none, arriba) — ya no hay ni el ancho
-   de dos columnas ni la máscara que justificaban ese vacío, así que la
-   MISMA composición se lee como "versión desktop encogida" en vez de
-   una adaptación real, exactamente lo reportado.
-   Solución (solo en este rango — mobile por debajo de 561px, donde ya
-   se ocultan las etiquetas, y desktop/tablet landscape por encima de
-   1024px, quedan sin tocar):
-   1) .hero-graphic pasa de aspect-ratio:2/1 a 5/3 (la proporción real
-      del viewBox) y max-height baja de 400 a 340 — reduce el margen de
-      letterboxing que xMidYMid meet añade cuando la caja es más ancha
-      que el contenido, sin reintroducir ningún riesgo de distorsión
-      (meet SIEMPRE conserva la proporción real, solo cambia cuánto
-      margen deja alrededor).
-   2) .hero-atmosphere recorta (overflow:hidden) y amplía su contenido
-      con un transform:scale() + transform-origin centrado en el
-      clúster real de chips — un "zoom" uniforme (mismo factor en X e
-      Y, así que ningún cuadrado ni círculo cambia de forma) que hace
-      que el clúster ocupe una fracción mucho mayor de la caja en vez
-      de flotar diminuto en una esquina.
-   El factor 1.15 y el origen 74%/40% se calibraron empíricamente
-   (barrido automatizado de más de 700 combinaciones origen×escala
-   contra iPad Pro 11", iPad Pro 12.9", iPad mini y iPad Air en
-   portrait) para ser el máximo zoom que NO recorta ninguno de los 4
-   chips ni sus 4 etiquetas en ningún ancho de este rango — no es una
-   aproximación visual, es el resultado de medir getBoundingClientRect()
-   real de cada chip/etiqueta contra los límites de la caja en cada
-   combinación probada.
-   Como es un transform CSS aplicado a .hero-atmosphere (el contenedor
-   PADRE de las 3 capas .hero-atm-layer), compone automáticamente con
-   el propio transform de paralaje de cada capa (o con transform:none
-   en touch, ver @media(hover:none) más abajo) sin pisarlo — y el
-   sistema de etiquetas de DIR-054 (getBoundingClientRect() en tiempo
-   real) sigue funcionando sin ningún cambio de JS: ya lee la posición
-   real en pantalla DESPUÉS de este zoom. */
-@media (min-width:561px) and (max-width:1024px){
-  .hero-graphic{ aspect-ratio:5/3; max-height:340px; }
-  .hero-atmosphere{
-    overflow:hidden;
-    transform:scale(1.15);
-    transform-origin:74% 40%;
-  }
-}
-/* Paralaje acotado (DIR-049 2B/2C) + física de muelle (DIR-050 1/1A) +
-   amplitud "vidrio flotando" (DIR-051 1A): "REST POSITION + BOUNDED
-   PARALLAX + SMOOTH RETURN". clamp() sigue fijando un tope en px que
-   nunca se supera. DIR-051 pidió explícitamente reducir la amplitud —
-   con los topes/sensibilidad anteriores (±28px al 16% del ancho
-   propio) el desplazamiento saturaba a solo ~1/3 del recorrido del
-   cursor dentro del área interactiva: pasado ese punto, el resto del
-   movimiento del ratón no producía NINGÚN cambio visual adicional (ya
-   estaba en el tope), lo que se leía como "objeto pegado al cursor"
-   en vez de una respuesta de profundidad progresiva. Aquí los topes
-   bajan a un tercio aprox. (front 28→10px, mid 16→6px, back 8→3px) Y
-   el multiplicador baja en la misma proporción, de forma que el tope
-   ahora se alcanza cerca del borde real del área interactiva, no
-   apenas empezar a moverse — el recorrido completo del cursor se
-   traduce en un desplazamiento gradual y sutil, coherente con "vidrio
-   flotando" en vez de "seguir al cursor". El muelle (main.js) sigue
-   igual: sigue siendo el mismo el que da la aceleración/deceleración
-   orgánica: con una amplitud tan pequeña, su velocidad efectiva en
-   px ya baja proporcionalmente sin tocar sus constantes de tiempo. */
-/* DIR-055: will-change:transform quitado a propósito. Capturas reales
-   desde un iPad confirmaron un fallo real (curvas/spine rellenos de
-   negro sólido y etiquetas sin position:absolute) que no se pudo
-   reproducir en Chromium — no hay forma de confirmar la causa exacta
-   sin Safari/iPadOS real, pero will-change fuerza a Safari a promover
-   este SVG a su propia capa de composición GPU, una condición asociada
-   a bugs de renderizado de SVG en WebKit. Es solo un hint de
-   rendimiento para una animación de paralaje muy ligera — quitarlo no
-   tiene coste funcional y elimina un desencadenante plausible. Como
-   defensa adicional, fill/stroke de las curvas, el spine y los chips
-   ahora también se fijan como atributos SVG directos en el HTML (ver
-   index.html/en/index.html) — no dependen de que el CSS externo llegue
-   a aplicarse a tiempo; el CSS los sigue sobrescribiendo con normalidad
-   cuando carga bien (los atributos de presentación son lo primero que
-   cualquier regla CSS externa gana en la cascada). */
-.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; }
-.hero-atm-layer svg{ width:100%; height:100%; display:block; overflow:visible; }
-
-.hero-atm-back{ transform:translate(clamp(-3px, calc((var(--mx,50%) - 50%) * .006), 3px), clamp(-2.5px, calc((var(--my,50%) - 50%) * .006), 2.5px)); filter:blur(1px); }
-.hero-atm-back line{ stroke:var(--surface-sheen); stroke-width:.6; opacity:.09; }
-
-.hero-atm-mid{ transform:translate(clamp(-6px, calc((var(--mx,50%) - 50%) * .011), 6px), clamp(-5px, calc((var(--my,50%) - 50%) * .011), 5px)); }
-.hero-atm-mid .signal-line{ fill:none; stroke-width:1.4; stroke-linecap:round; opacity:.4; }
-.hero-atm-mid .signal-a{ stroke:var(--cyan); stroke-dasharray:6 11; animation:hero-signal-flow 6s linear infinite; }
-.hero-atm-mid .signal-b{ stroke:var(--blue); stroke-dasharray:5 13; animation:hero-signal-flow 7.5s linear infinite reverse; opacity:.3; }
-@keyframes hero-signal-flow{ to{ stroke-dashoffset:-170; } }
-
-.hero-atm-front{ transform:translate(clamp(-10px, calc((var(--mx,50%) - 50%) * .019), 10px), clamp(-8px, calc((var(--my,50%) - 50%) * .019), 8px)); pointer-events:auto; }
-.hero-atm-front .atm-spine{ fill:none; stroke:url(#heroAtmSpine); stroke-width:1.5; opacity:.65; }
-.hero-atm-front .atm-chip{ cursor:default; }
-.hero-atm-front .atm-chip-plate{
-  fill:url(#heroAtmFill);
-  stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
-  stroke-width:1.2;
-  filter:drop-shadow(0 0 4px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.3));
-  transition:filter .25s ease, stroke .25s ease;
-}
-.hero-atm-front .atm-chip-icon{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); fill:none; stroke:currentColor; stroke-width:2; }
-.hero-atm-front .atm-chip-status{
-  fill:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
-  animation:hero-status-blink 3.6s ease-in-out infinite;
-}
-.hero-atm-front .atm-chip:nth-of-type(2) .atm-chip-status{ animation-delay:.7s; }
-.hero-atm-front .atm-chip:nth-of-type(3) .atm-chip-status{ animation-delay:1.6s; }
-.hero-atm-front .atm-chip:nth-of-type(4) .atm-chip-status{ animation-delay:2.3s; }
-@keyframes hero-status-blink{ 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
-.hero-atm-front .atm-chip:hover .atm-chip-plate, .hero-atm-front .atm-chip:focus-visible .atm-chip-plate{
-  filter:drop-shadow(0 0 8px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.6));
-  stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
-}
-.hero-atm-front stop.fill-a{ stop-color:var(--surface-top); }
-.hero-atm-front stop.fill-b{ stop-color:var(--panel-2); }
-.hero-atm-front stop.fill-c{ stop-color:var(--panel); }
-.hero-atm-front stop.spine-a{ stop-color:var(--cyan); stop-opacity:.05; }
-.hero-atm-front stop.spine-b{ stop-color:var(--blue); stop-opacity:.6; }
-.hero-atm-front stop.spine-c{ stop-color:var(--violet); stop-opacity:.05; }
-
-/* Nombre real de cada herramienta — texto HTML (no SVG) sobre el propio
-   SVG, en las mismas coordenadas % que cada chip, para que el rótulo
-   tenga la tipografía y el anti-aliasing reales del sitio en vez de
-   depender del renderizado de <text> en SVG. */
-.atm-chip-label{
-  position:absolute;
-  transform:translate(14px,-6px);
-  font-family:var(--mono);
-  font-size:.62rem;
-  letter-spacing:.03em;
-  color:var(--stone-soft);
-  white-space:nowrap;
-  opacity:.85;
-  pointer-events:none;
-}
-.atm-chip-label--flip{ transform:translate(calc(-100% - 14px), -6px); }
-@media (prefers-reduced-motion: reduce){
-  .hero-atm-mid .signal-a, .hero-atm-mid .signal-b{ animation:none; }
-  .hero-atm-front .atm-chip-status{ animation:none; opacity:.75; }
-}
-@media (hover:none){
-  .hero-atm-back, .hero-atm-mid, .hero-atm-front{ transform:none; }
-}
-@media (max-width:560px){
-  .atm-chip-label{ display:none; }
-}
-
+/* DIR-WEB-MASTER-004: .hero-graphic pasa de "caja vacía + 1 franja al
+   fondo" (cuando la atmósfera SVG vivía como hermano absoluto) a una
+   columna real que apila .hero-console y .hero-metrics-float -- ambos
+   son flujo normal, sin posicionamiento absoluto dependiente de
+   viewport. */
+.hero-graphic{ position:relative; display:flex; flex-direction:column; gap:14px; }
 /* Franja flotante de métricas (DIR-048): ya no vive dentro de una
    tarjeta-ventana — es un HUD ligero de vidrio que flota sobre la
    atmósfera, sin bar/título/estado, para no reintroducir la sensación
@@ -1212,6 +980,85 @@ nav.main-nav > ul{ position:relative; }
   color:var(--stone-soft);
   margin-top:3px;
 }
+
+/* ============ HERO CONSOLE (DIR-WEB-MASTER-004) ============
+   Sustituye la atmósfera de nodos/parallax SVG (n8n/Airtable/Notion/
+   Google Workspace) por una idea distinta y propia de D-Code: un panel
+   que muestra Departamentos conectándose a un mismo sistema, uno a uno,
+   al cargar. Mismo tratamiento visual ya aprobado para .hero-metrics-float
+   (panel traslúcido con blur, sin barra de título ni chrome de ventana —
+   evita a propósito la sensación "dashboard dentro de una tarjeta" que
+   ya se descartó explícitamente para esa franja). Solo transform/opacity
+   vía el sistema .reveal-*/[data-stagger] ya existente: cero SVG, cero
+   posicionamiento absoluto dependiente de viewport — el motivo real por
+   el que el sistema anterior se rompía en iPad. */
+.hero-console{
+  position:relative;
+  z-index:2;
+  width:100%;
+  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
+  border:1px solid var(--surface-border);
+  border-radius:14px;
+  padding:20px 22px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  margin-bottom:14px;
+}
+.hero-console-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.hero-console-head span:first-child{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.boot-list{ display:flex; flex-direction:column; gap:1px; }
+.boot-row{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:8px 2px;
+}
+.boot-dot{
+  width:7px; height:7px;
+  border-radius:50%;
+  background:var(--green);
+  flex-shrink:0;
+  animation:pulse 2.2s ease-in-out infinite;
+}
+.boot-row:nth-child(2) .boot-dot{ animation-delay:.4s; }
+.boot-row:nth-child(3) .boot-dot{ animation-delay:.8s; }
+.boot-row:nth-child(4) .boot-dot{ animation-delay:1.2s; }
+.boot-name{
+  font-family:var(--mono);
+  font-size:0.84rem;
+  color:var(--ink);
+  flex:1;
+}
+.boot-state{
+  font-family:var(--mono);
+  font-size:0.66rem;
+  letter-spacing:0.03em;
+  color:var(--stone-soft);
+}
+.hero-console-foot{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--stone-soft);
+  text-align:center;
+}
+@media (prefers-reduced-motion: reduce){ .boot-dot{ animation:none; } }
 
 /* ============ PAGE HERO (interior pages) ============ */
 .page-hero{
@@ -1819,6 +1666,78 @@ nav.main-nav > ul{ position:relative; }
 }
 .service-card .card-link svg{ width:14px; height:14px; transition:transform .2s ease; }
 .service-card:hover .card-link svg{ transform:translateX(3px); }
+
+/* ============ DEPARTAMENTOS COMO UN ÚNICO SISTEMA (DIR-WEB-MASTER-004) ============
+   Sustituye la grid de 8 tarjetas .service-card sueltas del teaser de
+   Home por UN solo panel .window que contiene las 8 filas conectadas
+   por divisores — deja de leerse como "8 productos" y pasa a leerse
+   como un único sistema con 8 módulos activos. Cada fila lleva su
+   propio punto de estado con el mismo pulso que ya usa
+   metricas_dcode.dashboard ("en vivo"), reforzando la idea sin SVG ni
+   posicionamiento absoluto: solo flexbox y bordes, cero riesgo nuevo de
+   breakpoint. */
+.dept-system .window-body{ padding:0; }
+.dept-system .window-status{ margin-left:auto; }
+.dept-rows{ display:flex; flex-direction:column; }
+.dept-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:18px 28px;
+  border-bottom:1px solid var(--border);
+  text-decoration:none;
+  transition:background .2s ease;
+}
+.dept-row:last-child{ border-bottom:none; }
+.dept-row:hover, .dept-row:focus-visible{ background:rgba(91,140,255,.06); }
+.dept-row-dot{
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--green);
+  flex-shrink:0;
+  animation:pulse 2.2s ease-in-out infinite;
+}
+.dept-row:nth-child(2) .dept-row-dot{ animation-delay:.2s; }
+.dept-row:nth-child(3) .dept-row-dot{ animation-delay:.4s; }
+.dept-row:nth-child(4) .dept-row-dot{ animation-delay:.6s; }
+.dept-row:nth-child(5) .dept-row-dot{ animation-delay:.8s; }
+.dept-row:nth-child(6) .dept-row-dot{ animation-delay:1s; }
+.dept-row:nth-child(7) .dept-row-dot{ animation-delay:1.2s; }
+.dept-row:nth-child(8) .dept-row-dot{ animation-delay:1.4s; }
+.dept-row-icon{
+  width:34px; height:34px;
+  border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(91,140,255,.12);
+  border:1px solid rgba(91,140,255,.3);
+  color:var(--cyan);
+  flex-shrink:0;
+}
+.dept-row-icon svg{ width:17px; height:17px; }
+.dept-row-name{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.05rem;
+  color:var(--ink);
+  width:150px;
+  flex-shrink:0;
+}
+.dept-row-desc{ color:var(--stone); font-size:0.9rem; flex:1; }
+.dept-row-arrow{
+  color:var(--cyan);
+  flex-shrink:0;
+  opacity:0;
+  transition:opacity .2s ease, transform .2s ease;
+}
+.dept-row-arrow svg{ width:16px; height:16px; display:block; }
+.dept-row:hover .dept-row-arrow, .dept-row:focus-visible .dept-row-arrow{ opacity:1; transform:translateX(3px); }
+@media (max-width:720px){
+  .dept-row{ flex-wrap:wrap; padding:16px 20px; }
+  .dept-row-name{ width:auto; }
+  .dept-row-desc{ width:100%; padding-left:50px; }
+  .dept-row-arrow{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){ .dept-row-dot{ animation:none; } }
 
 .stats-window .window-body{ padding:0; }
 .spec-sheet{
