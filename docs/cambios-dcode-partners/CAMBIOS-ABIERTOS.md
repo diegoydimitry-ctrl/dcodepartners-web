@@ -402,6 +402,122 @@ Estado de verificación:
 ## CAMBIO-011
 
 - ID: CAMBIO-011
+- Estado: RESUELTO (parcial) — la autorización se concedió (DIR-CF-20260819-001)
+  y la primera ejecución supervisada real ya se realizó con evidencia
+  end-to-end; ver CAMBIO-012 para el único bloqueo que quedó abierto (permisos
+  del PAT de GitHub).
+- Área: Producto / Contenido / Automatizaciones (D-Code Content Factory)
+- Prioridad: P1 (bloqueaba el avance real del proyecto activo y prioritario
+  RRSS/Content Factory, fijado por Dirección el 19/08/2026)
+- Impacto: sin esta autorización, el sistema no podía avanzar más allá de tests
+  locales — nunca se había ejecutado contra la cuenta real de n8n.
+- Urgencia: Media-Alta (bloqueaba el siguiente paso natural, no había presión de
+  fecha impuesta).
+- Dependencias: ninguna técnica — las credenciales `Gemini - DCode Content
+  Factory` y `GitHub - DCode Content Factory` ya existían en n8n.
+- Problema: los 4 workflows `CF/*` (Investigación, Memory/Diversity Gate, Video
+  Engine, Post Engine) estaban completos, con 32 pruebas automáticas en verde
+  (DCP-CONTENT-FACTORY-003) pero **nunca se habían ejecutado en vivo**. No había
+  confirmación real de que las credenciales estuvieran correctamente vinculadas
+  a cada nodo HTTP, de que el PAT de GitHub tuviera permisos suficientes sobre
+  este repositorio, ni de la forma exacta de las respuestas de Gemini.
+- Causa: decisión deliberada de la sesión anterior de NO activar workflows ni
+  enviar el email real de investigación sin autorización explícita — no un
+  bloqueo técnico.
+- Evidencia: [EVIDENCIA DIRECTA] `automation/content-factory/CONTINUATION-STATE.md`
+  sección I (commit `4159fa2`); `get_workflow_details` y `list_credentials` (n8n
+  MCP), 2026-08-19 — los 4 workflows seguían `active: false`, ambas credenciales
+  existían pero no estaban verificadas como funcionales end-to-end.
+- **Actualización 2026-08-19 (DIR-CF-20260819-001)**: Dirección autorizó y se
+  ejecutó la primera prueba supervisada real. Resultado: `CF/Memory + Diversity
+  Gate` y `CF/Concept → Script → Storyboard → Render` ejecutados manualmente
+  (sin activar schedules) con una idea de prueba; Gemini respondió con datos
+  reales (embedding real de 3072 dims, guion/storyboard real generado); las
+  filas resultantes quedaron escritas de verdad en `CF_Ideas`, `CF_Scripts`,
+  `CF_Videos` y `CF_EditorialMemory`. Se encontraron y corrigieron 6 bugs reales
+  que ningún test local había detectado (ver informe completo
+  DIR-CF-20260819-001-INFORME y `HISTORIAL-CAMBIOS.md` 2026-08-19). El único
+  paso que no se completó fue el render real en GitHub Actions, bloqueado por
+  permisos insuficientes del PAT — ver CAMBIO-012 (nuevo).
+- Solución propuesta: [COMPLETADA] ejecución manual (sin activar el schedule)
+  del Gate + un workflow de producción con una idea de prueba; filas revisadas
+  en `CF_Videos`/`CF_EditorialMemory`. Pendiente como siguiente paso natural:
+  CAMBIO-012, y solo después considerar el workflow de investigación completo
+  (que sí envía un email real a Dirección) — requiere nueva autorización
+  explícita, no incluida en DIR-CF-20260819-001.
+- Riesgo: bajo y acotado — ninguna publicación real fue posible (no hay
+  publicador ni credenciales sociales), no se envió ningún email real, no se
+  publicó nada en LinkedIn/Instagram.
+- Acción requerida: ninguna — resuelto. Ver CAMBIO-012 para el siguiente paso.
+- Responsable: Dirección (autorización) + sesión de Claude Code (ejecución
+  supervisada).
+- Bloqueado por: nada — ya no bloqueado.
+- Fecha de detección: 2026-08-18 (documentado en `CONTINUATION-STATE.md`).
+- Última revisión: 2026-08-19.
+- Estado de verificación: [EVIDENCIA DIRECTA] ejecuciones reales 1677/1680,
+  filas reales en n8n Data Tables, ver informe DIR-CF-20260819-001-INFORME.
+
+Segunda decisión relacionada, menor prioridad (no bloqueante): si un
+`DUPLICADO_PROBABLE` detectado DESPUÉS de producir una pieza debe bloquear o
+regenerar automáticamente esa pieza, o seguir solo registrándose como señal (su
+comportamiento actual). Ver `CONTINUATION-STATE.md` I.2. Sigue sin decidir.
+
+---
+
+## CAMBIO-012
+
+- ID: CAMBIO-012
+- Estado: BLOQUEADO
+- Área: Producto / Contenido / Automatizaciones (D-Code Content Factory) /
+  Credenciales
+- Prioridad: P1 (es el único paso que falta para completar el render real de
+  vídeo end-to-end)
+- Impacto: sin esto, el pipeline de vídeo llega hasta `CF_Videos.estado =
+  PRODUCING` pero nunca dispara el render real en GitHub Actions — el vídeo
+  nunca se genera.
+- Urgencia: Media-Alta (bloquea la segunda prueba supervisada y cualquier
+  producción real de vídeo).
+- Dependencias: CAMBIO-011 (ya resuelto, es lo que reveló este bloqueo).
+- Problema: al disparar `repository_dispatch` contra
+  `diegoydimitry-ctrl/dcodepartners-web` con la credencial `GitHub - DCode
+  Content Factory`, GitHub respondió `403 Resource not accessible by personal
+  access token`. El PAT autentica correctamente (no es un 401) pero no tiene
+  permisos suficientes para disparar `repository_dispatch` sobre este
+  repositorio.
+- Causa: [EVIDENCIA DIRECTA] el PAT probablemente es un fine-grained token sin
+  el permiso "Contents: Read and write" (o "Actions: Read and write") sobre
+  `dcodepartners-web`, o un classic token sin scope `repo` completo.
+  [NO VERIFICADO] el scope/tipo exacto del PAT actual, ya que esta sesión no
+  tiene acceso a la configuración del token en GitHub (solo a su uso desde n8n).
+- Evidencia: [EVIDENCIA DIRECTA] ejecución 1680 de `CF/Concept → Script →
+  Storyboard → Render` (nodo "Disparar Render (GitHub Actions)"), respuesta
+  real de la API de GitHub: `{"message":"Resource not accessible by personal
+  access token","status":"403"}`.
+- Solución propuesta: Dirección (o quien administre el PAT) debe regenerar el
+  token con permisos de "Contents: Read and write" (fine-grained) o scope
+  `repo` completo (classic) sobre `dcodepartners-web`, y actualizar la
+  credencial `GitHub - DCode Content Factory` en n8n. Esta sesión NO ha tocado
+  la credencial, por la restricción explícita de DIR-CF-20260819-001 de no
+  modificar credenciales salvo estricta necesidad — regenerar un PAT requiere
+  acceso a la cuenta de GitHub que otorgó el token, fuera del alcance técnico
+  de esta sesión.
+- Riesgo: ninguno de actuar — es una operación estándar de credenciales sin
+  efecto en producción hasta que se pruebe.
+- Acción requerida: Dirección regenera/ajusta el PAT y lo actualiza en n8n;
+  después, una nueva ejecución de prueba (dentro de una futura autorización)
+  confirma que el render real se dispara y se genera el vídeo.
+- Responsable: Dirección / administrador de la cuenta GitHub.
+- Bloqueado por: acceso a la cuenta de GitHub que emitió el PAT.
+- Fecha de detección: 2026-08-19 (DIR-CF-20260819-001, ejecución 1680).
+- Última revisión: 2026-08-19.
+- Estado de verificación: [EVIDENCIA DIRECTA] sobre el 403 real; [NO VERIFICADO]
+  el scope exacto del token actual.
+
+---
+
+## CAMBIO-013
+
+- ID: CAMBIO-013
 - Estado: RESUELTO (verificado en producción, dos veces)
 - Área: Finanzas / Automatizaciones / n8n
 - Prioridad: P0
@@ -427,8 +543,7 @@ Estado de verificación:
   resuelve el cliente); nuevo nodo IF `¿Bloqueado Modo Prueba?` enruta a
   notificación interna (`dcodedepartment@gmail.com`) en vez de al cliente real.
   Cambio puramente aditivo, ninguna funcionalidad ni conexión existente eliminada.
-- Riesgo residual: ninguno identificado — ver "Riesgos restantes" en el informe
-  entregado a Dirección el 2026-08-19.
+- Riesgo residual: ninguno identificado.
 - Acción requerida: ninguna — ejecutado y verificado.
 - Responsable: Sesión de Claude Code, con autorización explícita de Dirección en
   el mismo turno (2026-08-19).
