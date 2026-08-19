@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-19T15:03:29.323Z",
+  "generatedAt": "2026-08-19T15:41:25.400Z",
   "pageCount": 62,
   "chunkCount": 728,
   "pages": [
@@ -326,17 +326,17 @@
         {
           "id": "/casos-exito#c1",
           "heading": "Así aplicamos nuestros propios sistemas dentro de D-Code.",
-          "text": "Comercial"
+          "text": "Caso real — D-Code Comercial"
         },
         {
           "id": "/casos-exito#c2",
           "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse de hacerlo",
-          "text": "Problema Detectar oportunidades comerciales por sector y convertirlas en propuestas dependía de que alguien revisara un listado a mano cada semana, con el riesgo de que se quedara sin hacer. Antes El radar de oportunidades existía, pero pasar de \"empresa interesante\" a \"propuesta enviada\" era un paso manual, sin fecha fija. Automatización Cada lunes, el sistema convierte automáticamente las empresas mejor puntuadas en leads y dispara la generación de una propuesta con IA — que pasa por revisión humana antes de salir. Qué aprendimos Automatizar la detección y la propuesta no cierra la venta sola: crea la oportunidad de conversación. Sigue haciendo falta que una persona la convierta en una llamada real. Producción"
+          "text": "Problema Detectar oportunidades comerciales por sector y convertirlas en propuestas dependía de que alguien revisara un listado a mano cada semana, con el riesgo de que se quedara sin hacer. Antes El radar de oportunidades existía, pero pasar de \"empresa interesante\" a \"propuesta enviada\" era un paso manual, sin fecha fija. Automatización Cada lunes, el sistema convierte automáticamente las empresas mejor puntuadas en leads y dispara la generación de una propuesta con IA — que pasa por revisión humana antes de salir. Qué aprendimos Automatizar la detección y la propuesta no cierra la venta sola: crea la oportunidad de conversación. Sigue haciendo falta que una persona la convierta en una llamada real. Caso real — D-Code Producción"
         },
         {
           "id": "/casos-exito#c3",
           "heading": "Repartir el trabajo del equipo sin que nadie tenga que decidirlo cada hora",
-          "text": "Problema Cuando cerrábamos un proyecto, crear la ficha, repartir tareas y vigilar plazos dependía de que alguien se acordara de hacerlo entre el resto del trabajo del día. Antes La creación de proyectos y el reparto de tareas eran pasos manuales, sujetos a la carga de trabajo de quien tuviera que hacerlos ese día. Automatización Al cerrar un proyecto, el sistema lo crea solo; cada hora reparte las tareas pendientes según la carga real de cada persona; cada día avisa de lo que está a punto de vencer. Qué aprendimos Es el sistema que más usamos internamente hoy, precisamente porque automatiza reparto y plazos — el tipo de decisión pequeña y repetitiva que consume más tiempo del que parece. Disciplina interna, no automatización"
+          "text": "Problema Cuando cerrábamos un proyecto, crear la ficha, repartir tareas y vigilar plazos dependía de que alguien se acordara de hacerlo entre el resto del trabajo del día. Antes La creación de proyectos y el reparto de tareas eran pasos manuales, sujetos a la carga de trabajo de quien tuviera que hacerlos ese día. Automatización Al cerrar un proyecto, el sistema lo crea solo; cada hora reparte las tareas pendientes según la carga real de cada persona; cada día avisa de lo que está a punto de vencer. Qué aprendimos Es el sistema que más usamos internamente hoy, precisamente porque automatiza reparto y plazos — el tipo de decisión pequeña y repetitiva que consume más tiempo del que parece. Caso real — D-Code Disciplina interna, no automatización"
         },
         {
           "id": "/casos-exito#c4",
@@ -1627,17 +1627,17 @@
         {
           "id": "/en/casos-exito#c1",
           "heading": "How we put our own systems to work inside D-Code.",
-          "text": "Sales"
+          "text": "Real case — D-Code Sales"
         },
         {
           "id": "/en/casos-exito#c2",
           "heading": "From detected company to proposal sent, without anyone having to remember to do it",
-          "text": "Problem Spotting sales opportunities by sector and turning them into proposals depended on someone manually reviewing a list every week — with the risk that it simply wouldn't get done. Before The opportunity radar existed, but moving from \"interesting company\" to \"proposal sent\" was a manual step with no fixed deadline. Automation Every Monday, the system automatically converts the highest-scoring companies into leads and triggers an AI-generated proposal — which goes through human review before it goes out. What We Learned Automating detection and the proposal doesn't close the sale by itself — it creates the opportunity for a conversation. It still takes a person to turn that into an actual call. Delivery"
+          "text": "Problem Spotting sales opportunities by sector and turning them into proposals depended on someone manually reviewing a list every week — with the risk that it simply wouldn't get done. Before The opportunity radar existed, but moving from \"interesting company\" to \"proposal sent\" was a manual step with no fixed deadline. Automation Every Monday, the system automatically converts the highest-scoring companies into leads and triggers an AI-generated proposal — which goes through human review before it goes out. What We Learned Automating detection and the proposal doesn't close the sale by itself — it creates the opportunity for a conversation. It still takes a person to turn that into an actual call. Real case — D-Code Delivery"
         },
         {
           "id": "/en/casos-exito#c3",
           "heading": "Distributing the team's workload without anyone having to decide it every hour",
-          "text": "Problem Whenever we closed a deal, creating the project file, assigning tasks, and tracking deadlines depended on someone remembering to do it amid the rest of the day's work. Before Creating projects and assigning tasks were manual steps, at the mercy of the workload of whoever had to handle them that day. Automation When a project closes, the system creates it on its own; every hour it distributes pending tasks based on each person's actual workload; every day it flags what's about to come due. What We Learned It's the system we use most internally today, precisely because it automates task distribution and deadlines — the kind of small, repetitive decision that eats up more time than it looks like. Internal discipline, not automation"
+          "text": "Problem Whenever we closed a deal, creating the project file, assigning tasks, and tracking deadlines depended on someone remembering to do it amid the rest of the day's work. Before Creating projects and assigning tasks were manual steps, at the mercy of the workload of whoever had to handle them that day. Automation When a project closes, the system creates it on its own; every hour it distributes pending tasks based on each person's actual workload; every day it flags what's about to come due. What We Learned It's the system we use most internally today, precisely because it automates task distribution and deadlines — the kind of small, repetitive decision that eats up more time than it looks like. Real case — D-Code Internal discipline, not automation"
         },
         {
           "id": "/en/casos-exito#c4",
@@ -2794,7 +2794,7 @@
         {
           "id": "/en/#c1",
           "heading": "An Operating System for your company, not just another automation.",
-          "text": "Most small and mid-sized businesses lose sales, hours and money to processes that only work if someone remembers to do them. Every D-Code Smart Department does that work every day, on its own, coordinated with the rest of your company. Book a Meeting See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H No lock-in contract GDPR compliant Response &lt; 24h 24/7 Operational €0 Upfront risk 30 days Free trial"
+          "text": "Most small and mid-sized businesses lose sales, hours and money to processes that only work if someone remembers to do them. Every D-Code Smart Department does that work every day, on its own, coordinated with the rest of your company. Book My Free Call See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H No lock-in contract GDPR compliant Response &lt; 24h 24/7 Operational €0 Upfront risk 30 days Free trial"
         },
         {
           "id": "/en/#c2",
@@ -3499,7 +3499,7 @@
         {
           "id": "/#c1",
           "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
-          "text": "La mayoría de pymes pierde ventas, horas y dinero por procesos que solo funcionan si alguien se acuerda de hacerlos. Cada Departamento Inteligente de D-Code hace ese trabajo todos los días, solo, coordinado con el resto de tu empresa. Solicitar una reunión Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
+          "text": "La mayoría de pymes pierde ventas, horas y dinero por procesos que solo funcionan si alguien se acuerda de hacerlos. Cada Departamento Inteligente de D-Code hace ese trabajo todos los días, solo, coordinado con el resto de tu empresa. Reservar mi Llamada Gratuita Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
         },
         {
           "id": "/#c2",

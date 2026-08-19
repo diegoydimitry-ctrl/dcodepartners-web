@@ -2246,6 +2246,7 @@ nav.main-nav > ul{ position:relative; }
   margin-top:40px;
 }
 .case-card .window-body{ padding:30px 32px; }
+.case-badges{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px; }
 .case-tag{
   font-family:var(--mono);
   font-size:0.68rem;
