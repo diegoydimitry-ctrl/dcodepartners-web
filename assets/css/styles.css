@@ -812,7 +812,8 @@ nav.main-nav > ul{ position:relative; }
   padding:0;
 }
 .breadcrumbs li{ list-style:none; }
-.breadcrumbs a{ color:var(--stone-soft); transition:color .2s ease; }
+/* Objetivo táctil >=24px (WCAG 2.2 SC 2.5.8), igual que en .footer-col a */
+.breadcrumbs a{ display:inline-block; padding:5px 0; color:var(--stone-soft); transition:color .2s ease; }
 .breadcrumbs a:hover{ color:var(--cyan); }
 .breadcrumbs li[aria-current="page"]{ color:var(--stone); }
 .breadcrumbs .sep{ opacity:.5; }
@@ -2664,8 +2665,11 @@ footer{
 .footer-col h2{
   font-family:var(--mono); font-size:0.68rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--stone); margin-bottom:16px;
 }
-.footer-col ul{ display:flex; flex-direction:column; gap:11px; }
-.footer-col a{ font-size:0.86rem; color:var(--stone-soft); transition:color .2s ease; }
+.footer-col ul{ display:flex; flex-direction:column; gap:2px; }
+/* Objetivo táctil >=24px (WCAG 2.2 SC 2.5.8): el link ya no depende solo de
+   su line-height (16px reales) -- el padding vertical amplia el area de
+   toque sin apenas cambiar el ritmo visual (gap 11px -> 2px + padding). */
+.footer-col a{ display:inline-block; padding:5px 0; font-size:0.86rem; color:var(--stone-soft); transition:color .2s ease; }
 .footer-col a:hover{ color:var(--ink); }
 .footer-bottom{
   padding:24px 0 40px;
