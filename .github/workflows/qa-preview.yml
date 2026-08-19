@@ -1,0 +1,102 @@
+name: QA Preview vs Production
+
+# DIR-054-v2 (Fase 5): cierra el ciclo PREVIEW OK -> QA automático ->
+# PRODUCTION -> SMOKE TEST PRODUCTION -> OK que pidió Dirección.
+#
+# El entorno donde se generó este workflow no tiene acceso saliente a
+# Internet (egress bloqueado a nivel de proxy), así que no pudo
+# ejecutarse contra la Preview real ni contra dcodepartners.com desde
+# ahí, y por lo tanto tampoco pudo disparar un run real de este
+# workflow para confirmar en vivo que el job "qa-preview" resuelve
+# correctamente la URL de Preview de Vercel. Un runner de GitHub
+# Actions SÍ tiene acceso normal a Internet, así que aquí es donde
+# este guardrail se ejecuta de verdad — pero la resolución de la URL
+# de Preview (paso "Esperar y resolver...") debe verificarse en el
+# primer PR real: revisa el log de ese paso y, si "environment_url"
+# no trae la URL esperada, ajusta el jq de ese paso según lo que
+# devuelva realmente `gh api repos/OWNER/REPO/deployments` en este
+# repo (la API de Deployments de GitHub es pública y estable, pero su
+# forma exacta no se pudo confirmar en vivo desde este entorno). El
+# job "smoke-test" (workflow_dispatch) es la vía de respaldo: se
+# puede lanzar a mano contra cualquier URL, incluida Production.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL a comprobar (smoke test manual, ej. contra Production tras un merge)'
+        required: true
+        default: 'https://dcodepartners.com'
+
+jobs:
+  qa-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Esperar y resolver la URL de Preview de Vercel para este commit
+        id: preview
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          SHA="${{ github.event.pull_request.head.sha }}"
+          echo "Buscando deployment de Vercel para $SHA..."
+          for i in $(seq 1 40); do
+            DEPLOY_ID=$(gh api "repos/${{ github.repository }}/deployments?sha=$SHA&environment=Preview" \
+              --jq '.[0].id' 2>/dev/null || echo "")
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              STATE=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].state' 2>/dev/null || echo "")
+              # environment_url es el campo pensado para la URL real del
+              # entorno desplegado (a diferencia de target_url, que en
+              # los commit status de Vercel apunta al dashboard de
+              # inspección, no al sitio en sí).
+              ENV_URL=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].environment_url' 2>/dev/null || echo "")
+              if [ "$STATE" = "success" ] && [ -n "$ENV_URL" ] && [ "$ENV_URL" != "null" ]; then
+                echo "preview_url=$ENV_URL" >> "$GITHUB_OUTPUT"
+                echo "Preview lista: $ENV_URL"
+                exit 0
+              fi
+            fi
+            echo "  intento $i/40: deployment todavía no listo, esperando 15s..."
+            sleep 15
+          done
+          echo "No se pudo resolver una Preview lista tras esperar. Revisa el deployment de Vercel manualmente en este PR." >&2
+          exit 1
+
+      - name: Ejecutar QA contra la Preview
+        run: node scripts/qa-preview-check.js "${{ steps.preview.outputs.preview_url }}"
+
+  smoke-test:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Ejecutar QA contra la URL indicada
+        run: node scripts/qa-preview-check.js "${{ inputs.url }}"
