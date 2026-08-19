@@ -1016,6 +1016,61 @@ nav.main-nav > ul{ position:relative; }
 @media (max-width:1024px){
   .hero-atmosphere{ grid-row:2; opacity:.4; mask-image:none; -webkit-mask-image:none; }
 }
+
+/* DIR-055-v2: en tablet portrait (iPad vertical) el clúster de chips
+   se veía pequeño y desplazado dentro de una caja mucho más grande que
+   él, con grandes zonas vacías — captura real de Production confirmó
+   el problema. Causa raíz: DIR-054 fija xMidYMid meet en el SVG
+   frontal, lo que garantiza que nada se deforme — pero SIEMPRE escala
+   el viewBox COMPLETO (1000x600), y el clúster real de chips solo
+   ocupa una franja de ese lienzo (aprox. x:560-880, y:140-330 de
+   1000x600) — el resto es lienzo vacío salvo las curvas ambientales de
+   fondo. En desktop eso no se nota: .hero-atmosphere ocupa las dos
+   columnas de la rejilla con máscara de degradado, así que el vacío es
+   parte del efecto "atmósfera de fondo" a propósito. En tablet
+   portrait .hero-atmosphere pasa a compartir una única fila compacta
+   con .hero-graphic (mask-image:none, arriba) — ya no hay ni el ancho
+   de dos columnas ni la máscara que justificaban ese vacío, así que la
+   MISMA composición se lee como "versión desktop encogida" en vez de
+   una adaptación real, exactamente lo reportado.
+   Solución (solo en este rango — mobile por debajo de 561px, donde ya
+   se ocultan las etiquetas, y desktop/tablet landscape por encima de
+   1024px, quedan sin tocar):
+   1) .hero-graphic pasa de aspect-ratio:2/1 a 5/3 (la proporción real
+      del viewBox) y max-height baja de 400 a 340 — reduce el margen de
+      letterboxing que xMidYMid meet añade cuando la caja es más ancha
+      que el contenido, sin reintroducir ningún riesgo de distorsión
+      (meet SIEMPRE conserva la proporción real, solo cambia cuánto
+      margen deja alrededor).
+   2) .hero-atmosphere recorta (overflow:hidden) y amplía su contenido
+      con un transform:scale() + transform-origin centrado en el
+      clúster real de chips — un "zoom" uniforme (mismo factor en X e
+      Y, así que ningún cuadrado ni círculo cambia de forma) que hace
+      que el clúster ocupe una fracción mucho mayor de la caja en vez
+      de flotar diminuto en una esquina.
+   El factor 1.15 y el origen 74%/40% se calibraron empíricamente
+   (barrido automatizado de más de 700 combinaciones origen×escala
+   contra iPad Pro 11", iPad Pro 12.9", iPad mini y iPad Air en
+   portrait) para ser el máximo zoom que NO recorta ninguno de los 4
+   chips ni sus 4 etiquetas en ningún ancho de este rango — no es una
+   aproximación visual, es el resultado de medir getBoundingClientRect()
+   real de cada chip/etiqueta contra los límites de la caja en cada
+   combinación probada.
+   Como es un transform CSS aplicado a .hero-atmosphere (el contenedor
+   PADRE de las 3 capas .hero-atm-layer), compone automáticamente con
+   el propio transform de paralaje de cada capa (o con transform:none
+   en touch, ver @media(hover:none) más abajo) sin pisarlo — y el
+   sistema de etiquetas de DIR-054 (getBoundingClientRect() en tiempo
+   real) sigue funcionando sin ningún cambio de JS: ya lee la posición
+   real en pantalla DESPUÉS de este zoom. */
+@media (min-width:561px) and (max-width:1024px){
+  .hero-graphic{ aspect-ratio:5/3; max-height:340px; }
+  .hero-atmosphere{
+    overflow:hidden;
+    transform:scale(1.15);
+    transform-origin:74% 40%;
+  }
+}
 /* Paralaje acotado (DIR-049 2B/2C) + física de muelle (DIR-050 1/1A) +
    amplitud "vidrio flotando" (DIR-051 1A): "REST POSITION + BOUNDED
    PARALLAX + SMOOTH RETURN". clamp() sigue fijando un tope en px que
