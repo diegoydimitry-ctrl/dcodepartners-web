@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-19T21:32:17.167Z",
+  "generatedAt": "2026-08-19T22:22:31.250Z",
   "pageCount": 62,
   "chunkCount": 700,
   "pages": [
@@ -550,7 +550,7 @@
         {
           "id": "/contacto#c0",
           "heading": "Reclama tu mes de prueba gratuito.",
-          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué Departamento Inteligente te conviene primero y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Sin coste. Sin compromiso. Respondemos en menos de 24h."
+          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué Departamento Inteligente te conviene primero y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos. Sin coste. Sin compromiso."
         },
         {
           "id": "/contacto#c1",
@@ -1851,7 +1851,7 @@
         {
           "id": "/en/contacto#c0",
           "heading": "Claim your free trial month.",
-          "text": "Tell us where your business stands today. In a 30-minute meeting, we'll tell you which Smart Department to start with and what result to expect from month one — no cost, no commitment. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check No cost. No commitment. We respond within 24h."
+          "text": "Tell us where your business stands today. In a 30-minute meeting, we'll tell you which Smart Department to start with and what result to expect from month one — no cost, no commitment. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check Once you submit it, we'll email you within 24h to schedule the 30-minute call. No cost. No commitment."
         },
         {
           "id": "/en/contacto#c1",
@@ -2748,7 +2748,7 @@
         {
           "id": "/en/garantias#c3",
           "heading": "Absolute confidentiality",
-          "text": "We access only what's strictly necessary for each process, under an NDA if your company requires one."
+          "text": "We access only what's strictly necessary for each process. If your company needs a signed NDA before we start, we'll sign one — just ask."
         },
         {
           "id": "/en/garantias#c4",
@@ -2789,7 +2789,7 @@
         {
           "id": "/en/#c0",
           "heading": "An Operating System for your company, not just another automation.",
-          "text": "Most small and mid-sized businesses lose sales and hours to processes that only work if someone remembers to do them — every D-Code Smart Department does it for you, every day. Book My Free Call See how it works No lock-in contract GDPR compliant Response &lt; 24h dcode_system Live Sales Connected Marketing Connected Delivery Connected Support Connected +4 more Departments · 1 system 24/7 Operational €0 Upfront risk 30 days Free trial"
+          "text": "Most small and mid-sized businesses lose sales and hours to processes that only work if someone remembers to do them — every D-Code Smart Department does it for you, every day. Book My Free Call See how it works No lock-in contract GDPR compliant Response &lt; 24h dcode_system Live Sales Connected Marketing Connected Delivery Connected Support Connected +4 more Departments · 1 system &gt; Sales → proposal sent to 3 companies 24/7 Operational €0 Upfront risk 30 days Free trial"
         },
         {
           "id": "/en/#c1",
@@ -2829,17 +2829,17 @@
         {
           "id": "/en/#c8",
           "heading": "From detected company to proposal sent, without anyone having to remember to do it",
-          "text": "Every Monday, the system converts the highest-scoring companies into leads and triggers an AI-generated proposal — reviewed by a person before it goes out. Delivery"
+          "text": "Before Going from \"interesting company\" to a sent proposal was manual, with no fixed date. Now Every Monday, the system turns the best opportunities into AI-drafted proposals, reviewed by a person. Delivery"
         },
         {
           "id": "/en/#c9",
           "heading": "Distributing the team's workload without anyone having to decide it every hour",
-          "text": "When a project closes, the system creates it on its own, distributes tasks every hour based on each person's real workload, and flags what's about to come due every day. Internal discipline"
+          "text": "Before Creating projects and assigning tasks depended on whoever's workload allowed it that day. Now The system creates the project on its own, distributes tasks hourly, and flags what's about to come due every day. Internal discipline"
         },
         {
           "id": "/en/#c10",
           "heading": "When our hypothesis about a failure didn't match what the data actually said",
-          "text": "Instead of acting on a hunch, we audited the real executions one by one — the actual cause was in two workflows different from the ones flagged. See all 3 full cases"
+          "text": "Before We were about to act on a hypothesis without checking it against the real executions. Now We audited execution by execution — the real cause was in two workflows different from the ones flagged. See all 3 full cases"
         },
         {
           "id": "/en/#c11",
@@ -3042,8 +3042,8 @@
       "chunks": [
         {
           "id": "/en/servicios#c0",
-          "heading": "Automation, agents, and integrations, under one method.",
-          "text": "We don't sell standalone tools. We design the system your business needs from three disciplines, combined according to your case."
+          "heading": "Not standalone products. The pieces inside every Department.",
+          "text": "A Smart Department isn't a standalone tool: it's automation, agents, and integrations combined around what your business needs. This page explains those three technical pieces — to see them already combined by business function, start with Departments."
         },
         {
           "id": "/en/servicios#c1",
@@ -3079,7 +3079,7 @@
         {
           "id": "/en/servicios/agentes-ia#c0",
           "heading": "Customer service and sales that make no one wait.",
-          "text": "We design conversational agents that respond in your website's chat and by email with your business's tone and information, and that know when to hand the conversation over to a person."
+          "text": "Not a standalone chatbot: it's the conversation piece inside your Support or Sales Department, coordinated with the rest of the system. It responds in your website's chat and by email with your business's tone and information, and knows when to hand the conversation over to a person."
         },
         {
           "id": "/en/servicios/agentes-ia#c1",
@@ -3135,7 +3135,7 @@
         {
           "id": "/en/servicios/automatizacion-ia#c0",
           "heading": "Processes that run themselves, 24 hours a day.",
-          "text": "We design systems that take on your business's repetitive operational tasks: the ones that eat up your team's hours but don't require their judgment at every step."
+          "text": "It's the engine that runs inside every Smart Department. We design systems that take on your business's repetitive operational tasks: the ones that eat up your team's hours but don't require their judgment at every step."
         },
         {
           "id": "/en/servicios/automatizacion-ia#c1",
@@ -3191,7 +3191,7 @@
         {
           "id": "/en/servicios/integraciones#c0",
           "heading": "Your tools, actually connected to each other.",
-          "text": "We link your CRM, your ERP, your website, and the spreadsheets you already use so information travels on its own, without exporting, copying, or pasting anything by hand."
+          "text": "It's what makes your Smart Departments share one data source instead of living in isolation. We link your CRM, your ERP, your website, and the spreadsheets you already use so information travels on its own, without exporting, copying, or pasting anything by hand."
         },
         {
           "id": "/en/servicios/integraciones#c1",
@@ -3383,7 +3383,7 @@
         {
           "id": "/garantias#c3",
           "heading": "Confidencialidad absoluta",
-          "text": "Accedemos solo a lo estrictamente necesario para cada proceso, bajo acuerdo de confidencialidad si tu empresa lo requiere."
+          "text": "Accedemos solo a lo estrictamente necesario para cada proceso. Si tu empresa necesita un acuerdo de confidencialidad firmado antes de empezar, lo firmamos — solo tienes que pedirlo."
         },
         {
           "id": "/garantias#c4",
@@ -3424,7 +3424,7 @@
         {
           "id": "/#c0",
           "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
-          "text": "La mayoría de pymes pierde ventas y horas en procesos que solo funcionan si alguien se acuerda de hacerlos — cada Departamento Inteligente de D-Code los hace por ti, todos los días. Reservar mi Llamada Gratuita Ver cómo funciona Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h sistema_dcode En vivo Comercial Conectado Marketing Conectado Producción Conectado Soporte Conectado +4 Departamentos más · 1 sistema 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
+          "text": "La mayoría de pymes pierde ventas y horas en procesos que solo funcionan si alguien se acuerda de hacerlos — cada Departamento Inteligente de D-Code los hace por ti, todos los días. Reservar mi Llamada Gratuita Ver cómo funciona Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h sistema_dcode En vivo Comercial Conectado Marketing Conectado Producción Conectado Soporte Conectado +4 Departamentos más · 1 sistema &gt; Comercial → propuesta enviada a 3 empresas 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
         },
         {
           "id": "/#c1",
@@ -3464,17 +3464,17 @@
         {
           "id": "/#c8",
           "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse",
-          "text": "Cada lunes, el sistema convierte las empresas mejor puntuadas en leads y dispara una propuesta con IA — revisada por una persona antes de salir. Producción"
+          "text": "Antes Pasar de \"empresa interesante\" a propuesta enviada era manual, sin fecha fija. Ahora Cada lunes, el sistema convierte las mejores oportunidades en propuestas con IA, revisadas por una persona. Producción"
         },
         {
           "id": "/#c9",
           "heading": "Reparto de tareas sin que nadie tenga que decidirlo cada hora",
-          "text": "Al cerrar un proyecto, el sistema lo crea solo, reparte tareas cada hora según la carga real de cada persona y avisa cada día de lo que está por vencer. Disciplina interna"
+          "text": "Antes Crear proyectos y repartir tareas dependía de la carga de trabajo de quien tuviera que hacerlo ese día. Ahora El sistema crea el proyecto solo, reparte tareas cada hora y avisa cada día de lo que está por vencer. Disciplina interna"
         },
         {
           "id": "/#c10",
           "heading": "Cuando la hipótesis sobre un fallo no coincidía con los datos",
-          "text": "En vez de actuar sobre una sospecha, auditamos las ejecuciones reales una por una — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos"
+          "text": "Antes Estuvimos a punto de actuar sobre una hipótesis sin contrastarla contra las ejecuciones reales. Ahora Auditamos ejecución por ejecución — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos"
         },
         {
           "id": "/#c11",
@@ -3677,8 +3677,8 @@
       "chunks": [
         {
           "id": "/servicios#c0",
-          "heading": "Automatización, agentes e integraciones, bajo un mismo método.",
-          "text": "No vendemos herramientas sueltas. Diseñamos el sistema que tu negocio necesita a partir de tres disciplinas que se combinan según el caso."
+          "heading": "No son productos aparte. Son las piezas dentro de cada Departamento.",
+          "text": "Un Departamento Inteligente no es una herramienta suelta: es automatización, agentes e integraciones combinados según lo que tu empresa necesite. Esta página explica esas tres piezas técnicas — para verlas ya combinadas por función de negocio, empieza por Departamentos."
         },
         {
           "id": "/servicios#c1",
@@ -3714,7 +3714,7 @@
         {
           "id": "/servicios/agentes-ia#c0",
           "heading": "Atención al cliente y ventas que no hacen esperar a nadie.",
-          "text": "Diseñamos agentes conversacionales que responden en el chat de tu web y por email con el tono y la información de tu negocio, y que saben cuándo pasar la conversación a una persona."
+          "text": "No es un chatbot aislado: es la pieza de conversación dentro de tu Departamento de Soporte o Comercial, coordinada con el resto del sistema. Responde en el chat de tu web y por email con el tono y la información de tu negocio, y sabe cuándo pasar la conversación a una persona."
         },
         {
           "id": "/servicios/agentes-ia#c1",
@@ -3770,7 +3770,7 @@
         {
           "id": "/servicios/automatizacion-ia#c0",
           "heading": "Procesos que se ejecutan solos, 24 horas al día.",
-          "text": "Diseñamos sistemas que se encargan de las tareas operativas repetitivas de tu negocio: las que consumen horas de tu equipo pero no requieren su criterio en cada paso."
+          "text": "Es el motor que hace correr cada Departamento Inteligente por dentro. Diseñamos sistemas que se encargan de las tareas operativas repetitivas de tu negocio: las que consumen horas de tu equipo pero no requieren su criterio en cada paso."
         },
         {
           "id": "/servicios/automatizacion-ia#c1",
@@ -3826,7 +3826,7 @@
         {
           "id": "/servicios/integraciones#c0",
           "heading": "Tus herramientas, conectadas entre sí de verdad.",
-          "text": "Unimos tu CRM, tu ERP, tu web y las hojas de cálculo que ya usas para que la información viaje sola, sin exportar, copiar ni pegar nada a mano."
+          "text": "Es lo que hace que tus Departamentos Inteligentes compartan un mismo dato en vez de vivir aislados. Unimos tu CRM, tu ERP, tu web y las hojas de cálculo que ya usas para que la información viaje sola, sin exportar, copiar ni pegar nada a mano."
         },
         {
           "id": "/servicios/integraciones#c1",

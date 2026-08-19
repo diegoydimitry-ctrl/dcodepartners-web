@@ -1058,6 +1058,25 @@ nav.main-nav > ul{ position:relative; }
   color:var(--stone-soft);
   text-align:center;
 }
+/* Línea de log que rota (main.js) -- el Hero deja de ser una lista estática
+   de "Conectado" y pasa a leerse como un sistema que sigue trabajando
+   mientras miras: no decora, hace visible la promesa del H1 ("cada
+   Departamento lo hace por ti, todos los días") con eventos concretos.
+   Texto por línea en data-log-cycle (JSON), en el idioma de cada página. */
+.hero-console-log{
+  margin-top:10px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--stone-soft);
+}
+.hero-console-log-prompt{ color:var(--cyan); flex-shrink:0; }
+.hero-console-log-line{ transition:opacity .3s ease; }
+.hero-console-log-line.is-swapping{ opacity:0; }
 @media (prefers-reduced-motion: reduce){ .boot-dot{ animation:none; } }
 
 /* ============ PAGE HERO (interior pages) ============ */
@@ -1678,7 +1697,40 @@ nav.main-nav > ul{ position:relative; }
    breakpoint. */
 .dept-system .window-body{ padding:0; }
 .dept-system .window-status{ margin-left:auto; }
-.dept-rows{ display:flex; flex-direction:column; }
+/* DIR-005: "organismo conectado", no 8 filas sueltas -- una columna fina
+   corre por detrás de los puntos de estado (::before) y un pulso la
+   recorre de arriba abajo cada 6s (::after), como si un dato viajara por
+   el sistema. Solo CSS, sin geometría dependiente de viewport (la causa
+   raíz de las roturas históricas del Hero): se oculta sin más en mobile,
+   donde las filas cambian de layout, y con prefers-reduced-motion. */
+.dept-rows{ display:flex; flex-direction:column; position:relative; }
+.dept-rows::before{
+  content:'';
+  position:absolute;
+  left:31px; top:0; bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom, transparent, rgba(91,140,255,.4) 8%, rgba(155,107,255,.4) 92%, transparent);
+  pointer-events:none;
+}
+.dept-rows::after{
+  content:'';
+  position:absolute;
+  left:28px; top:0;
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 8px 1px var(--cyan);
+  animation:dept-flow 6s linear infinite;
+  pointer-events:none;
+}
+@keyframes dept-flow{
+  0%{ top:0; opacity:0; }
+  8%{ opacity:1; }
+  92%{ opacity:1; }
+  100%{ top:100%; opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){ .dept-rows::after{ animation:none; display:none; } }
+@media (max-width:720px){ .dept-rows::before, .dept-rows::after{ display:none; } }
 .dept-row{
   display:flex;
   align-items:center;
@@ -1812,6 +1864,7 @@ nav.main-nav > ul{ position:relative; }
   display:block;
 }
 .monogram{
+  position:relative;
   width:72px; height:72px;
   border-radius:50%;
   background:var(--grad-brand);
@@ -1821,13 +1874,30 @@ nav.main-nav > ul{ position:relative; }
   align-items:center;
   justify-content:center;
 }
-/* Diego y Dimitry comparten iniciales (D.S.) -- el segundo founder-card usa
-   el degradado de marca en sentido inverso para que las dos fichas no se
-   lean como una duplicada por error a primera vista. Mismos 3 colores
-   corporativos, sin tocar la identidad. */
+/* Diego y Dimitry comparten iniciales (D.S.) -- el degradado invertido del
+   segundo founder-card (ver abajo) no bastaba: en auditoría, las dos fichas
+   seguían leyéndose como una duplicada por error a primera vista. La
+   diferenciación real ahora viene del icono de rol (.founder-role-badge),
+   que visualiza el enfoque que ya describe el copy de cada uno (estrategia
+   vs. arquitectura de sistemas) -- no es un dato inventado, es el mismo
+   texto existente hecho visible de un vistazo. */
 .founders .founder-card:nth-child(2) .monogram{
   background:linear-gradient(120deg, var(--violet), var(--blue) 55%, var(--cyan));
 }
+.founder-role-badge{
+  position:absolute;
+  bottom:-4px; right:-4px;
+  width:28px; height:28px;
+  border-radius:50%;
+  background:var(--bg);
+  border:2px solid var(--panel);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--cyan);
+}
+.founders .founder-card:nth-child(2) .founder-role-badge{ color:var(--violet); }
+.founder-role-badge svg{ width:14px; height:14px; }
 .monogram span{
   width:100%; height:100%;
   border-radius:50%;
@@ -2124,6 +2194,19 @@ nav.main-nav > ul{ position:relative; }
 .blog-card .blog-cat{ margin-bottom:14px; }
 .blog-card h3{ font-family:var(--serif); font-size:1.12rem; font-weight:600; color:var(--ink); line-height:1.35; margin-bottom:10px; }
 .blog-card p{ color:var(--stone); font-size:0.9rem; flex:1; }
+/* DIR-005 §8: los 3 casos del teaser de Resultados en Home pasan de un
+   párrafo suelto a un antes→ahora compacto -- mismos hechos que ya
+   publica casos-exito.html, sin inventar nada, solo hechos visible sin
+   entrar en la página completa. */
+.case-mini{ display:flex; flex-direction:column; gap:10px; flex:1; }
+.case-mini-row{ display:flex; gap:10px; align-items:baseline; }
+.case-mini-label{
+  flex-shrink:0; width:46px;
+  font-family:var(--mono); font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.case-mini-row:last-child .case-mini-label{ color:var(--cyan); }
+.case-mini-row p{ margin:0; font-size:0.85rem; color:var(--stone); flex:1; }
 .blog-meta{
   display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);
   font-family:var(--mono); font-size:0.68rem; color:var(--stone-soft); letter-spacing:0.03em;

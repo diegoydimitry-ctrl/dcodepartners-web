@@ -165,6 +165,29 @@
     }
   }
 
+  /* ---------- Hero console: línea de log rotativa ----------
+     El panel del Hero deja de ser una lista estática de "Conectado" y hace
+     visible, con eventos concretos, la promesa del H1 ("cada Departamento
+     lo hace por ti, todos los días"). Mensajes en data-log-cycle (JSON),
+     ya en el idioma de la página -- sin lógica de i18n aquí. Con
+     prefers-reduced-motion se queda en el primer mensaje, sin rotar. */
+  var heroLogLine = document.querySelector('.hero-console-log-line');
+  if (heroLogLine && !prefersReducedMotion) {
+    var logLines = [];
+    try { logLines = JSON.parse(heroLogLine.getAttribute('data-log-cycle') || '[]'); } catch (e) {}
+    if (logLines.length > 1) {
+      var logIdx = 0;
+      setInterval(function () {
+        logIdx = (logIdx + 1) % logLines.length;
+        heroLogLine.classList.add('is-swapping');
+        setTimeout(function () {
+          heroLogLine.textContent = logLines[logIdx];
+          heroLogLine.classList.remove('is-swapping');
+        }, 300);
+      }, 3800);
+    }
+  }
+
   /* ---------- Red de Departamentos (líneas de conexión entre tarjetas) ----------
      Solo existe en /departamentos (hub): un trazo SVG entre cada tarjeta y la
      siguiente, calculado a partir de la posición real (responsive), que se
