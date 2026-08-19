@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "generate-kb": "node scripts/build-knowledge-base.js"
+    "generate-kb": "node scripts/build-knowledge-base.js",
+    "update-asset-versions": "node scripts/update-asset-versions.js",
+    "qa:check": "node scripts/qa-preview-check.js"
   },
   "dependencies": {
     "resend": "^4.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
   }
 }
