@@ -401,6 +401,58 @@ Estado de verificación:
 
 ---
 
+## CAMBIO-011
+
+- ID: CAMBIO-011
+- Estado: PENDIENTE
+- Área: Producto / Contenido / Automatizaciones (D-Code Content Factory)
+- Prioridad: P1 (bloquea el avance real del proyecto activo y prioritario
+  RRSS/Content Factory, fijado por Dirección el 19/08/2026)
+- Impacto: sin esta autorización, el sistema no puede avanzar más allá de tests
+  locales — nunca se ha ejecutado contra la cuenta real de n8n.
+- Urgencia: Media-Alta (bloquea el siguiente paso natural, no hay presión de
+  fecha impuesta).
+- Dependencias: ninguna técnica — las credenciales `Gemini - DCode Content
+  Factory` y `GitHub - DCode Content Factory` ya existen en n8n.
+- Problema: los 4 workflows `CF/*` (Investigación, Memory/Diversity Gate, Video
+  Engine, Post Engine) están completos, con 32 pruebas automáticas en verde
+  (DCP-CONTENT-FACTORY-003) pero **nunca se han ejecutado en vivo**. No hay
+  confirmación real de que las credenciales estén correctamente vinculadas a
+  cada nodo HTTP, de que el PAT de GitHub tenga permisos suficientes sobre este
+  repositorio, ni de la forma exacta de las respuestas de Gemini.
+- Causa: decisión deliberada de la sesión anterior de NO activar workflows ni
+  enviar el email real de investigación sin autorización explícita — no un
+  bloqueo técnico.
+- Evidencia: [EVIDENCIA DIRECTA] `automation/content-factory/CONTINUATION-STATE.md`
+  sección I (commit `4159fa2`); `get_workflow_details` y `list_credentials` (n8n
+  MCP), 2026-08-19 — los 4 workflows siguen `active: false`, ambas credenciales
+  existen pero no verificadas como funcionales end-to-end.
+- Solución propuesta: con autorización de Dirección, ejecutar manualmente (sin
+  activar el schedule) el Gate + un workflow de producción con una idea de
+  prueba, revisar la fila resultante en `CF_Videos`/`CF_Posts`/
+  `CF_EditorialMemory`, y solo después considerar el workflow de investigación
+  completo (que sí envía un email real a Dirección).
+- Riesgo: bajo y acotado — ninguna publicación real es posible hoy (no hay
+  publicador ni credenciales sociales), el peor caso es una llamada de texto a
+  Gemini o un email de investigación real antes de lo esperado.
+- Acción requerida: autorización explícita de Dirección para una primera
+  ejecución real supervisada (no automática, no programada).
+- Responsable: Dirección (autorización) + sesión de Claude Code (ejecución
+  supervisada).
+- Bloqueado por: decisión de Dirección.
+- Fecha de detección: 2026-08-18 (documentado en `CONTINUATION-STATE.md`).
+- Última revisión: 2026-08-19.
+- Estado de verificación: [EVIDENCIA DIRECTA] sobre el estado inactivo de los 4
+  workflows y la existencia de las credenciales; [NO VERIFICADO] si están
+  correctamente vinculadas y funcionan de punta a punta.
+
+Segunda decisión relacionada, menor prioridad (no bloqueante): si un
+`DUPLICADO_PROBABLE` detectado DESPUÉS de producir una pieza debe bloquear o
+regenerar automáticamente esa pieza, o seguir solo registrándose como señal (su
+comportamiento actual). Ver `CONTINUATION-STATE.md` I.2.
+
+---
+
 Ver también `INCIDENCIAS.md` para el patrón sistémico de gobernanza de despliegue
 (ahora con una recurrencia confirmada en vivo: CAMBIO-004) y `AUDITORIAS.md` para el
 registro completo de la auditoría AUD-20260814-001.

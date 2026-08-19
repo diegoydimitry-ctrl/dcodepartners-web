@@ -108,3 +108,65 @@ Workflows n8n: `Sip8U9IyPpQ8j6NA`, `H5b13tf9PIrlK4fQ`, `ARLDFrmHWdpQsNTb`,
 enviado a Dirección).
 RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
 TICKET RELACIONADO: DCP-CONTENT-FACTORY-002.
+
+---
+
+FECHA: 2026-08-18
+CAMBIO: DCP-CONTENT-FACTORY-003 — eliminación de TTS del pipeline automático
+(voz sintética retirada, ver decisión de Dirección de no usar voz sintética como
+elemento principal) y Diversity Score compuesto real (5 dimensiones ponderadas:
+tema 0.45, estructura 0.20, audio 0.15, CTA 0.10, formato 0.10, con regla de
+"estructura clonada" y distinción explícita ADAPTACION_MULTIPLATAFORMA vs
+DUPLICADO_PROBABLE/REPETICION_PARCIAL/DIVERSO), integrado en los 3 workflows de
+producción n8n relevantes.
+MOTIVO: Orden de trabajo nocturna DCP-CONTENT-FACTORY-003 (15 prioridades,
+sección 10). Esta entrada se registra ahora (19/08/2026) de forma retroactiva:
+el trabajo se completó y se pusheó la noche del 18/08/2026, pero la sesión que lo
+hizo terminó su turno tras escribir `CONTINUATION-STATE.md` sin registrar esta
+entrada en el historial — corregido aquí, sin reabrir ni repetir el trabajo.
+ÁREA: Producto / Contenido / Automatizaciones.
+ESTADO ANTERIOR: ver entrada V2 — vídeo con audio opcional vía TTS
+(`espeak-ng`), Diversity Gate basado solo en similitud de tema.
+ESTADO NUEVO: pipeline automático 100% sin voz (música/SFX únicamente, decisión
+de audio por pieza incl. silencio intencionado como opción válida), Diversity
+Score compuesto de 5 dimensiones en los 3 workflows relevantes, 32 pruebas
+automáticas en verde (`npm test`) + `npm run typecheck` sin errores, 2 bugs
+reales corregidos (script `render` roto en `package.json`; nodo de posts que
+leía `$json` tras un HTTP node roto en la rama con slides). Los 4 workflows
+siguen `active: false` (verificado explícitamente, no solo asumido). Ninguna
+ejecución real contra la cuenta de n8n todavía.
+EVIDENCIA: Commit `f573e23` en `claude/dcode-partners-changes-governance-tvyk6k`.
+Checkpoint técnico completo en `automation/content-factory/CONTINUATION-STATE.md`
+(commit `4159fa2`). `npm test`: 32/32 tests, 10/10 suites, 0 fail.
+`node scripts/audio-qa.mjs out/*.mp4`: 5/5 PASA.
+RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
+TICKET RELACIONADO: DCP-CONTENT-FACTORY-003.
+
+---
+
+FECHA: 2026-08-19
+CAMBIO: DCP-CONTENT-FACTORY-004 — actualización de `automation/content-factory/
+README.md` para reflejar el estado real V2 + DCP-CONTENT-FACTORY-003 (seguía
+describiendo solo la V1 de 2 workflows) y corrección de un dato desactualizado:
+el README anterior decía que las credenciales de Gemini y GitHub PAT faltaban
+por crear; verificado con `list_credentials` de n8n que ambas YA EXISTEN
+(`Gemini - DCode Content Factory`, `GitHub - DCode Content Factory`) — lo que
+falta de verdad es una primera ejecución real supervisada que confirme que
+están correctamente vinculadas y funcionan de punta a punta.
+MOTIVO: Reasignación de Dirección del proyecto activo y prioritario a RRSS /
+Content Factory. Siguiendo el "próximo paso exacto" que la propia sesión
+anterior dejó documentado en `CONTINUATION-STATE.md` sección J antes de tocar
+nada en producción.
+ÁREA: Producto / Contenido / Automatizaciones / Documentación.
+ESTADO ANTERIOR: README desactualizado (solo V1), credenciales reportadas como
+pendientes de crear.
+ESTADO NUEVO: README refleja los 4 workflows reales (Research/Memory/Video/Post
+Engine) con sus IDs, el routing por `formatoDecidido`, y el estado real de
+credenciales/decisiones pendientes. Ningún workflow activado, ninguna
+credencial modificada, ninguna publicación real — solo documentación y
+verificación de solo lectura.
+EVIDENCIA: Commit `43c1c23` en `claude/dcode-partners-changes-governance-tvyk6k`.
+`list_credentials` (n8n MCP), `get_workflow_details` sobre los 4 workflows
+CF/*, 19/08/2026.
+RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
+TICKET RELACIONADO: DCP-CONTENT-FACTORY-004.
