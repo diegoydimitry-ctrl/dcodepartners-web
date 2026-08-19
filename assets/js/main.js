@@ -397,6 +397,66 @@
     });
   }
 
+  /* ---------- Etiquetas del Hero anclada a su nodo real (DIR-054) ----------
+     Hasta ahora .atm-chip-label se posicionaba con left/top en % fijo,
+     asumiendo que el SVG frontal se estiraba sin conservar proporción
+     (preserveAspectRatio="none") para llenar exactamente la misma caja
+     que el contenedor — así el % siempre coincidía con el nodo, a costa
+     de que los chips (círculos/cuadrados) se deformaran en cualquier
+     caja que no fuera exactamente 5:3 (el bug real reportado desde
+     iPad: cuadrados aplastados, dejaban de parecer cuadrados). DIR-054
+     quita "none" del SVG frontal — los chips ya NUNCA se deforman,
+     conservan su geometría real en cualquier ancho — pero eso significa
+     que el contenido puede quedar centrado con márgenes (letterboxing)
+     cuando la caja no es exactamente 5:3, y un % fijo ya no coincidiría
+     con el nodo real.
+     En vez de recalcular a mano esos porcentajes por breakpoint (el
+     mismo tipo de aproximación que ya falló en DIR-053), cada etiqueta
+     se ancla a la posición en pantalla que el propio navegador ya
+     calculó para su chip (getBoundingClientRect) — funciona igual sea
+     cual sea el escalado o el letterboxing, sin depender de las
+     coordenadas del viewBox ni de la forma de la caja, y sin necesidad
+     de volver a tocar este código si el diseño del Hero cambia. */
+  (function () {
+    var atmFront = document.querySelector('.hero-atm-front');
+    if (!atmFront) return;
+    var atmChips = atmFront.querySelectorAll('.atm-chip');
+    var atmLabels = atmFront.querySelectorAll('.atm-chip-label');
+    if (!atmChips.length || !atmLabels.length) return;
+
+    var positionAtmLabels = function () {
+      var containerRect = atmFront.getBoundingClientRect();
+      if (!containerRect.width || !containerRect.height) return;
+      atmChips.forEach(function (chip, i) {
+        var label = atmLabels[i];
+        if (!label) return;
+        var r = chip.getBoundingClientRect();
+        var cx = r.left + r.width / 2 - containerRect.left;
+        var cy = r.top + r.height / 2 - containerRect.top;
+        label.style.left = cx + 'px';
+        label.style.top = cy + 'px';
+      });
+    };
+
+    positionAtmLabels();
+    requestAnimationFrame(positionAtmLabels);
+    // Un swap de fuente variable tardío puede cambiar el alto de
+    // .hero-copy (y por tanto la caja de la atmósfera) después del
+    // primer cálculo — se recalcula una vez más cuando las fuentes
+    // reales ya están listas.
+    if (window.document.fonts && window.document.fonts.ready) {
+      window.document.fonts.ready.then(positionAtmLabels).catch(function () {});
+    }
+    var atmLabelResizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(atmLabelResizeTimer);
+      atmLabelResizeTimer = setTimeout(positionAtmLabels, 150);
+    });
+    window.addEventListener('orientationchange', function () {
+      setTimeout(positionAtmLabels, 250);
+    });
+  })();
+
   /* ---------- Generic accordion (Método, FAQ, Garantías) ---------- */
   document.querySelectorAll('[data-accordion]').forEach(function (list) {
     var singleOpen = list.dataset.accordion !== 'multi';
