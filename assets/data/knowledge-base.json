@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T13:57:33.246Z",
+  "generatedAt": "2026-08-19T15:03:29.323Z",
   "pageCount": 62,
-  "chunkCount": 720,
+  "chunkCount": 728,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -351,7 +351,7 @@
         {
           "id": "/casos-exito#c6",
           "heading": "¿Empezamos a construir tu caso de éxito?",
-          "text": "Cuéntanos en qué punto está tu negocio y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Solicitar una reunión Ver todos los Departamentos"
+          "text": "Cuéntanos en qué punto está tu negocio y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Empezar mi caso de éxito Ver todos los Departamentos"
         }
       ]
     },
@@ -422,7 +422,7 @@
         {
           "id": "/como-funciona#c12",
           "heading": "Descubre qué Departamento necesita tu empresa primero.",
-          "text": "En una reunión de 30 minutos te decimos por dónde empezaríamos y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Solicitar una reunión Ver los Departamentos Inteligentes"
+          "text": "En una reunión de 30 minutos te decimos por dónde empezaríamos y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Ver qué Departamento necesito Ver los Departamentos Inteligentes"
         }
       ]
     },
@@ -677,7 +677,7 @@
         {
           "id": "/departamentos#c14",
           "heading": "¿Ya sabes por dónde empezar?",
-          "text": "Cuéntanos qué Departamento te interesa y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Solicitar una reunión Ver cómo funciona el Sistema Operativo"
+          "text": "Cuéntanos qué Departamento te interesa y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Descubrir mi Departamento Ver cómo funciona el Sistema Operativo"
         }
       ]
     },
@@ -1652,7 +1652,7 @@
         {
           "id": "/en/casos-exito#c6",
           "heading": "Ready to start building your success story?",
-          "text": "Tell us where your business stands, and in a 30-minute meeting we'll tell you what results you can expect from month one — no cost, no commitment. Book a Meeting View all Departments"
+          "text": "Tell us where your business stands, and in a 30-minute meeting we'll tell you what results you can expect from month one — no cost, no commitment. Start My Success Story View all Departments"
         }
       ]
     },
@@ -1723,7 +1723,7 @@
         {
           "id": "/en/como-funciona#c12",
           "heading": "Find out which Department your company needs first.",
-          "text": "In a 30-minute meeting, we'll tell you where we'd start and what results you can expect in month one — no cost, no commitment. Book a Meeting View the Smart Departments"
+          "text": "In a 30-minute meeting, we'll tell you where we'd start and what results you can expect in month one — no cost, no commitment. See Which Department I Need View the Smart Departments"
         }
       ]
     },
@@ -1978,7 +1978,7 @@
         {
           "id": "/en/departamentos#c14",
           "heading": "Already know where to start?",
-          "text": "Tell us which Department interests you, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Book a Meeting See how the Operating System works"
+          "text": "Tell us which Department interests you, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Find My Department See how the Operating System works"
         }
       ]
     },
@@ -2794,7 +2794,7 @@
         {
           "id": "/en/#c1",
           "heading": "An Operating System for your company, not just another automation.",
-          "text": "Every area of your business —sales, marketing, delivery, finance— can run on its own Smart Department: coordinated with the rest, working every day, without depending on someone remembering to do it. Book a Meeting See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H No lock-in contract GDPR compliant Response &lt; 24h 24/7 Operational €0 Upfront risk 30 days Free trial"
+          "text": "Most small and mid-sized businesses lose sales, hours and money to processes that only work if someone remembers to do them. Every D-Code Smart Department does that work every day, on its own, coordinated with the rest of your company. Book a Meeting See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H No lock-in contract GDPR compliant Response &lt; 24h 24/7 Operational €0 Upfront risk 30 days Free trial"
         },
         {
           "id": "/en/#c2",
@@ -2803,8 +2803,8 @@
         },
         {
           "id": "/en/#c3",
-          "heading": "How we transform your company.",
-          "text": "Every area of your business can run on its own Smart Department."
+          "heading": "Not chatbots. Systems that run your operations.",
+          "text": "A Smart Department doesn't just answer questions and wait for the next one: it does the work — detects, decides, alerts, acts — every day, coordinated with the rest of your company."
         },
         {
           "id": "/en/#c4",
@@ -2873,41 +2873,61 @@
         },
         {
           "id": "/en/#c17",
+          "heading": "0 public clients today. 3 real systems inside D-Code.",
+          "text": "We don't invent client case studies. While we build our first ones, this is how we use our own systems — including one that didn't go as planned. Sales"
+        },
+        {
+          "id": "/en/#c18",
+          "heading": "From detected company to proposal sent, without anyone having to remember to do it",
+          "text": "Every Monday, the system converts the highest-scoring companies into leads and triggers an AI-generated proposal — reviewed by a person before it goes out. Delivery"
+        },
+        {
+          "id": "/en/#c19",
+          "heading": "Distributing the team's workload without anyone having to decide it every hour",
+          "text": "When a project closes, the system creates it on its own, distributes tasks every hour based on each person's real workload, and flags what's about to come due every day. Internal discipline"
+        },
+        {
+          "id": "/en/#c20",
+          "heading": "When our hypothesis about a failure didn't match what the data actually said",
+          "text": "Instead of acting on a hunch, we audited the real executions one by one — the actual cause was in two workflows different from the ones flagged. See all 3 full cases"
+        },
+        {
+          "id": "/en/#c21",
           "heading": "Two founders. One shared code.",
           "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. \" Our youth isn't a lack of experience. It's the absence of the bad habits of a stagnant market. D.S."
         },
         {
-          "id": "/en/#c18",
+          "id": "/en/#c22",
           "heading": "Diego Siñeriz",
           "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. D.S."
         },
         {
-          "id": "/en/#c19",
+          "id": "/en/#c23",
           "heading": "Dimitry Sosenko",
           "text": "Co-Founder &amp; CEO Leads the architecture behind the Smart Departments. Read our full story"
         },
         {
-          "id": "/en/#c20",
+          "id": "/en/#c24",
           "heading": "Ideas on automation and AI for businesses.",
           "text": "Fundamentals"
         },
         {
-          "id": "/en/#c21",
+          "id": "/en/#c25",
           "heading": "What AI automation is, and why your company needs it now",
           "text": "A clear introduction to what really changes when you automate processes with AI. 6 min read Strategy"
         },
         {
-          "id": "/en/#c22",
+          "id": "/en/#c26",
           "heading": "Automation vs. AI Agents: what sets them apart and when to use each",
           "text": "They're not the same thing, and choosing wrong costs time and money. Here's how to decide. 7 min read Practical"
         },
         {
-          "id": "/en/#c23",
+          "id": "/en/#c27",
           "heading": "5 processes in your company you could probably automate right now",
           "text": "Concrete, realistic examples to spot where you're losing hours every week. 5 min read View all articles"
         },
         {
-          "id": "/en/#c24",
+          "id": "/en/#c28",
           "heading": "Book a 30-minute meeting.",
           "text": "We'll tell you which Smart Departments would have the most impact on your business, and what to expect from month one — no cost, no commitment. Book a Meeting See FAQ"
         }
@@ -3479,7 +3499,7 @@
         {
           "id": "/#c1",
           "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
-          "text": "Cada área de tu negocio —comercial, marketing, producción, finanzas— puede funcionar con su propio Departamento Inteligente: coordinado con los demás, trabajando todos los días, sin que dependa de que alguien se acuerde de hacerlo. Solicitar una reunión Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
+          "text": "La mayoría de pymes pierde ventas, horas y dinero por procesos que solo funcionan si alguien se acuerda de hacerlos. Cada Departamento Inteligente de D-Code hace ese trabajo todos los días, solo, coordinado con el resto de tu empresa. Solicitar una reunión Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
         },
         {
           "id": "/#c2",
@@ -3488,8 +3508,8 @@
         },
         {
           "id": "/#c3",
-          "heading": "Cómo transformamos tu empresa.",
-          "text": "Cada área de tu empresa puede funcionar con su propio Departamento Inteligente."
+          "heading": "No son chatbots. Son sistemas que llevan tu operativa.",
+          "text": "Un Departamento Inteligente no contesta preguntas y espera la siguiente: ejecuta el trabajo — detecta, decide, avisa, actúa — todos los días, coordinado con el resto de tu empresa."
         },
         {
           "id": "/#c4",
@@ -3558,41 +3578,61 @@
         },
         {
           "id": "/#c17",
+          "heading": "0 clientes públicos hoy. 3 sistemas reales dentro de D-Code.",
+          "text": "No inventamos casos de cliente. Mientras construimos los primeros, así es como usamos nuestros propios sistemas — incluido uno que no salió como esperábamos. Comercial"
+        },
+        {
+          "id": "/#c18",
+          "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse",
+          "text": "Cada lunes, el sistema convierte las empresas mejor puntuadas en leads y dispara una propuesta con IA — revisada por una persona antes de salir. Producción"
+        },
+        {
+          "id": "/#c19",
+          "heading": "Reparto de tareas sin que nadie tenga que decidirlo cada hora",
+          "text": "Al cerrar un proyecto, el sistema lo crea solo, reparte tareas cada hora según la carga real de cada persona y avisa cada día de lo que está por vencer. Disciplina interna"
+        },
+        {
+          "id": "/#c20",
+          "heading": "Cuando la hipótesis sobre un fallo no coincidía con los datos",
+          "text": "En vez de actuar sobre una sospecha, auditamos las ejecuciones reales una por una — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos"
+        },
+        {
+          "id": "/#c21",
           "heading": "Dos fundadores. Un mismo código.",
           "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. \" Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado. D.S."
         },
         {
-          "id": "/#c18",
+          "id": "/#c22",
           "heading": "Diego Siñeriz",
           "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. D.S."
         },
         {
-          "id": "/#c19",
+          "id": "/#c23",
           "heading": "Dimitry Sosenko",
           "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los Departamentos Inteligentes. Conoce toda nuestra historia"
         },
         {
-          "id": "/#c20",
+          "id": "/#c24",
           "heading": "Ideas sobre automatización e IA para empresas.",
           "text": "Fundamentos"
         },
         {
-          "id": "/#c21",
+          "id": "/#c25",
           "heading": "Qué es la automatización con IA y por qué tu empresa la necesita ya",
           "text": "Una introducción clara a qué cambia realmente cuando automatizas procesos con IA. 6 min de lectura Estrategia"
         },
         {
-          "id": "/#c22",
+          "id": "/#c26",
           "heading": "Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una",
           "text": "No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir. 7 min de lectura Práctico"
         },
         {
-          "id": "/#c23",
+          "id": "/#c27",
           "heading": "5 procesos de tu empresa que probablemente ya podrías automatizar",
           "text": "Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana. 5 min de lectura Ver todos los artículos"
         },
         {
-          "id": "/#c24",
+          "id": "/#c28",
           "heading": "Reserva una reunión de 30 minutos.",
           "text": "Te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y qué puedes esperar del primer mes, sin coste ni compromiso. Solicitar una reunión Ver preguntas frecuentes"
         }
