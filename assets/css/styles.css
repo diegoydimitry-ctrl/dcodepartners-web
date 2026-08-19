@@ -1035,7 +1035,22 @@ nav.main-nav > ul{ position:relative; }
    igual: sigue siendo el mismo el que da la aceleración/deceleración
    orgánica: con una amplitud tan pequeña, su velocidad efectiva en
    px ya baja proporcionalmente sin tocar sus constantes de tiempo. */
-.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; will-change:transform; }
+/* DIR-055: will-change:transform quitado a propósito. Capturas reales
+   desde un iPad confirmaron un fallo real (curvas/spine rellenos de
+   negro sólido y etiquetas sin position:absolute) que no se pudo
+   reproducir en Chromium — no hay forma de confirmar la causa exacta
+   sin Safari/iPadOS real, pero will-change fuerza a Safari a promover
+   este SVG a su propia capa de composición GPU, una condición asociada
+   a bugs de renderizado de SVG en WebKit. Es solo un hint de
+   rendimiento para una animación de paralaje muy ligera — quitarlo no
+   tiene coste funcional y elimina un desencadenante plausible. Como
+   defensa adicional, fill/stroke de las curvas, el spine y los chips
+   ahora también se fijan como atributos SVG directos en el HTML (ver
+   index.html/en/index.html) — no dependen de que el CSS externo llegue
+   a aplicarse a tiempo; el CSS los sigue sobrescribiendo con normalidad
+   cuando carga bien (los atributos de presentación son lo primero que
+   cualquier regla CSS externa gana en la cascada). */
+.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; }
 .hero-atm-layer svg{ width:100%; height:100%; display:block; overflow:visible; }
 
 .hero-atm-back{ transform:translate(clamp(-3px, calc((var(--mx,50%) - 50%) * .006), 3px), clamp(-2.5px, calc((var(--my,50%) - 50%) * .006), 2.5px)); filter:blur(1px); }
