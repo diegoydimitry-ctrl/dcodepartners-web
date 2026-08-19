@@ -1902,6 +1902,13 @@ nav.main-nav > ul{ position:relative; }
   align-items:center;
   justify-content:center;
 }
+/* Diego y Dimitry comparten iniciales (D.S.) -- el segundo founder-card usa
+   el degradado de marca en sentido inverso para que las dos fichas no se
+   lean como una duplicada por error a primera vista. Mismos 3 colores
+   corporativos, sin tocar la identidad. */
+.founders .founder-card:nth-child(2) .monogram{
+  background:linear-gradient(120deg, var(--violet), var(--blue) 55%, var(--cyan));
+}
 .monogram span{
   width:100%; height:100%;
   border-radius:50%;
