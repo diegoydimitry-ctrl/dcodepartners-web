@@ -108,3 +108,48 @@ Workflows n8n: `Sip8U9IyPpQ8j6NA`, `H5b13tf9PIrlK4fQ`, `ARLDFrmHWdpQsNTb`,
 enviado a Dirección).
 RESPONSABLE: Sesión de Claude Code, a petición de Dirección.
 TICKET RELACIONADO: DCP-CONTENT-FACTORY-002.
+
+---
+
+FECHA: 2026-08-19
+CAMBIO: Cambio de producción en n8n — añadido el guardrail "Modo=Prueba" al
+workflow "FNZ/Cobros y Recordatorios de Pago" (`bHFIS358z1VDabVm`), replicando el
+patrón ya existente y verificado en su workflow hermano "FNZ/Cobros - Seguimiento"
+(`LGmMF8hsxhPf1CiC`). El nodo "Calcular Recordatorios" ahora calcula `modoPrueba`
+por factura (bloqueado por defecto si no puede resolverse el cliente); un nuevo
+nodo IF "¿Bloqueado Modo Prueba?" enruta los clientes en Modo=Prueba a una
+notificación interna (`dcodedepartment@gmail.com`) en vez de al email real del
+cliente. Cambio puramente aditivo: ninguna conexión ni nodo existente fue
+eliminado, solo se insertó el nuevo IF en medio del enlace
+`¿Debe Recordar?→Preparar Notificacion Cobro`.
+MOTIVO: Auditoría FASE 1 (mandato DIR-DCP-20260819-MASTER-001) detectó que este
+workflow, a diferencia de su hermano, enviaba recordatorios de cobro a clientes
+reales sin comprobar el campo `Modo` del cliente en Airtable — el mismo patrón de
+riesgo que causó el envío de una factura real a un contacto externo real durante
+una prueba, el 2026-08-06 [EVIDENCIA INDIRECTA — hallazgo de la auditoría FASE 1,
+no re-verificado contra la fuente primaria en este turno]. Autorizado
+explícitamente por Dirección en el mismo turno ("CONFIRMACIÓN DE DIRECCIÓN",
+2026-08-19).
+ÁREA: Finanzas / Automatizaciones / n8n.
+ESTADO ANTERIOR: workflow activo en producción (ejecución diaria 09:30) sin
+ninguna comprobación de `Modo` antes de enviar el recordatorio de cobro al email
+real del cliente.
+ESTADO NUEVO: guardrail activo en producción, verificado dos veces. La versión
+activa (`activeVersionId`) coincide con la versión que contiene el guardrail.
+EVIDENCIA: [EVIDENCIA DIRECTA] `update_workflow` (n8n MCP, 11 operaciones
+aplicadas) + `publish_workflow` (activeVersionId `aba923f3-7fe4-4fa8-b75e-
+f2a7f1ba0763`) + dos ejecuciones de prueba controladas con `test_workflow`/
+`get_execution` sobre datos simulados (sin credenciales reales de cliente): (1)
+ejecución 1707, cliente en Modo=Prueba → ruta bloqueada ejecutada (notificación
+interna simulada), ruta de email al cliente NUNCA ejecutada (no aparece en
+`runData`); (2) ejecución 1709, cliente fuera de Modo=Prueba → ruta normal
+ejecutada (Preparar Notificacion Cobro → Aplicar Plantilla de Email → Enviar
+Recordatorio de Pago, con el nodo Gmail final simulado vía pin data, sin envío
+real), ruta bloqueada NUNCA ejecutada. Verificación 2: `get_workflow_details`
+posterior a publicar confirma `versionId == activeVersionId`, todos los nodos y
+conexiones originales intactos, `active: true` preservado, única credencial
+auto-asignada la ya existente "Gmail account" (OAuth2) en el nuevo nodo
+"Notificar Recordatorio Bloqueado" — ninguna credencial nueva ni modificada.
+RESPONSABLE: Sesión de Claude Code, con autorización explícita de Dirección en
+este turno.
+TICKET RELACIONADO: DIR-DCP-20260819-MASTER-001 (Fase 1, bloque Mejorar) / CAMBIO-011.

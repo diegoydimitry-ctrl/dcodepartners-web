@@ -399,6 +399,47 @@ Estado de verificación:
 - Estado de verificación: [EVIDENCIA DIRECTA] sobre su estado inactivo;
   [NO VERIFICADO] su propósito real.
 
+## CAMBIO-011
+
+- ID: CAMBIO-011
+- Estado: RESUELTO (verificado en producción, dos veces)
+- Área: Finanzas / Automatizaciones / n8n
+- Prioridad: P0
+- Impacto: sin este guardrail, cualquier ejecución del workflow contra un cliente
+  marcado Modo=Prueba en Airtable enviaba un recordatorio de cobro real al email
+  real de ese contacto.
+- Urgencia: Crítica — mismo patrón de riesgo que causó un incidente real.
+- Dependencias: ninguna.
+- Problema: "FNZ/Cobros y Recordatorios de Pago" (`bHFIS358z1VDabVm`) enviaba
+  recordatorios de cobro a clientes reales sin comprobar el campo `Modo` del
+  cliente en Airtable, a diferencia de su workflow hermano "FNZ/Cobros -
+  Seguimiento" (`LGmMF8hsxhPf1CiC`), que sí tenía el guardrail desde su creación.
+- Causa: guardrail no implementado en este workflow cuando se construyó
+  (`bHFIS358z1VDabVm` es anterior a la introducción del patrón Modo=Prueba en el
+  workflow hermano).
+- Evidencia: [EVIDENCIA DIRECTA] comparación de `get_workflow_details` de ambos
+  workflows (2026-08-19); [EVIDENCIA INDIRECTA] motivado además por el incidente
+  real del 2026-08-06 (factura real enviada a un contacto externo real durante una
+  prueba), hallazgo de la auditoría FASE 1 no re-verificado contra su fuente
+  primaria en este turno.
+- Solución aplicada: réplica exacta del patrón ya probado del workflow hermano —
+  `Calcular Recordatorios` calcula `modoPrueba` (bloqueado por defecto si no se
+  resuelve el cliente); nuevo nodo IF `¿Bloqueado Modo Prueba?` enruta a
+  notificación interna (`dcodedepartment@gmail.com`) en vez de al cliente real.
+  Cambio puramente aditivo, ninguna funcionalidad ni conexión existente eliminada.
+- Riesgo residual: ninguno identificado — ver "Riesgos restantes" en el informe
+  entregado a Dirección el 2026-08-19.
+- Acción requerida: ninguna — ejecutado y verificado.
+- Responsable: Sesión de Claude Code, con autorización explícita de Dirección en
+  el mismo turno (2026-08-19).
+- Bloqueado por: nada (ya no aplica).
+- Fecha de detección: 2026-08-19 (auditoría FASE 1, DIR-DCP-20260819-MASTER-001).
+- Última revisión: 2026-08-19.
+- Estado de verificación: [EVIDENCIA DIRECTA] `update_workflow` + `publish_workflow`
+  + dos ejecuciones de prueba controladas (`test_workflow`/`get_execution`,
+  ejecuciones 1707 y 1709) + `get_workflow_details` post-publicación confirmando
+  `versionId == activeVersionId` y conexiones originales intactas.
+
 ---
 
 Ver también `INCIDENCIAS.md` para el patrón sistémico de gobernanza de despliegue
