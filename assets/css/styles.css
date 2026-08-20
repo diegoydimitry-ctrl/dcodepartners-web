@@ -1360,13 +1360,16 @@ nav.main-nav > ul{ position:relative; }
 }
 
 /* ---- Visualización propia por Departamento (CÓMO FUNCIONA) ----
-   Tres tipos de mini-componente, reutilizados según lo que cada
-   Departamento gestiona realmente (flujo por etapas / lista de estado /
-   panel de métricas) -- no la misma ilustración con el icono cambiado:
-   cada instancia lleva sus propias etapas, filas o indicadores, tomados
-   de lo que ese Departamento hace de verdad. Vive dentro de cada
-   .dept-console-pane, así que cambia solo con el toggle ya existente en
-   main.js -- cero JS nuevo. */
+   DIR-WEB ajuste final: 8 componentes realmente distintos en estructura,
+   uno por Departamento -- no una plantilla común con datos cambiados.
+   Cada uno representa de forma intuitiva la operación real de ese
+   Departamento (pipeline / embudo / ciclo / kanban / flujo / cola de
+   tickets / checklist / KPIs), con el mismo lenguaje visual del sitio
+   (paleta cian/azul/violeta, --mono para etiquetas, bordes finos, sin
+   3D ni efectos "demo de IA"). Cifras y nombres son ilustrativos --
+   proporciones y etiquetas genéricas, nunca datos de cliente inventados;
+   de ahí el disclaimer .dcp-visual-note en las ocho. Vive dentro de cada
+   .dept-console-pane, cambia con el toggle ya existente en main.js. */
 .dcp-visual{
   margin-top:20px;
   padding:18px;
@@ -1382,62 +1385,96 @@ nav.main-nav > ul{ position:relative; }
   color:var(--stone-soft);
 }
 
-/* Tipo FLOW -- Comercial, Marketing, Producción: procesos por etapas */
-.dvp-stages{
-  display:flex;
-  justify-content:space-between;
-  font-family:var(--mono);
-  font-size:.6rem;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  color:var(--stone-soft);
-  margin-bottom:10px;
-}
-.dvp-stages span.is-current{ color:var(--cyan); }
-.dvp-track{
-  height:6px;
-  border-radius:4px;
-  background:var(--border);
-  overflow:hidden;
-  position:relative;
-}
-.dvp-track::after{
-  content:"";
-  position:absolute; inset:0;
-  width:var(--dvp-fill,60%);
-  background:var(--grad-brand);
-  border-radius:4px;
+/* Comercial -- pipeline de ventas: columnas que se estrechan por etapa */
+.dcv-pipeline{ display:flex; gap:8px; align-items:flex-end; height:92px; }
+.dcv-pipe-col{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:6px; }
+.dcv-pipe-bar{ width:100%; max-width:34px; border-radius:4px 4px 0 0; background:var(--grad-brand); opacity:.85; }
+.dcv-pipe-col--won .dcv-pipe-bar{ background:var(--green); opacity:1; }
+.dcv-pipe-label{ font-family:var(--mono); font-size:.56rem; letter-spacing:.02em; text-transform:uppercase; color:var(--stone-soft); text-align:center; line-height:1.25; }
+
+/* Marketing -- embudo de captación: bandas trapezoidales que se estrechan */
+.dcv-funnel{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+.dcv-funnel-stage{
+  width:var(--fw,100%);
+  padding:8px 18px;
+  font-size:.74rem;
+  color:var(--ink);
+  text-align:center;
+  background:linear-gradient(90deg, rgba(67,224,255,.16), rgba(155,107,255,.16));
+  border:1px solid var(--surface-border);
+  clip-path:polygon(6% 0, 94% 0, 100% 100%, 0% 100%);
 }
 
-/* Tipo LIST -- Clientes, Soporte, Administración: estado por elemento */
-.dvl-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 0;
-  border-bottom:1px solid var(--border);
-  font-size:.82rem;
-  color:var(--stone);
+/* Clientes -- ciclo de vida: anillo de progreso + hitos */
+.dcv-cycle{ display:flex; align-items:center; gap:16px; }
+.dcv-cycle-ring{
+  width:60px; height:60px; border-radius:50%; flex-shrink:0; position:relative;
+  background:conic-gradient(var(--cyan) 0% var(--cv-pct,50%), var(--border) var(--cv-pct,50%) 100%);
+  display:flex; align-items:center; justify-content:center;
 }
-.dvl-row:last-child{ border-bottom:none; }
-.dvl-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-.dvl-dot.done{ background:var(--green); }
-.dvl-dot.active{ background:var(--cyan); box-shadow:0 0 6px 1px rgba(67,224,255,.5); }
-.dvl-dot.pending{ background:var(--stone-soft); }
+.dcv-cycle-ring::before{ content:""; position:absolute; inset:7px; border-radius:50%; background:var(--panel); }
+.dcv-cycle-pct{ position:relative; font-family:var(--mono); font-size:.68rem; color:var(--ink); }
+.dcv-cycle-steps{ display:flex; flex-direction:column; gap:6px; font-size:.78rem; color:var(--stone); margin:0; padding:0; }
+.dcv-cycle-steps li{ list-style:none; padding-left:14px; position:relative; }
+.dcv-cycle-steps li::before{ content:""; position:absolute; left:0; top:.45em; width:6px; height:6px; border-radius:50%; background:var(--stone-soft); }
+.dcv-cycle-steps li.is-done::before{ background:var(--green); }
+.dcv-cycle-steps li.is-current{ color:var(--ink); }
+.dcv-cycle-steps li.is-current::before{ background:var(--cyan); box-shadow:0 0 6px 1px rgba(67,224,255,.5); }
 
-/* Tipo METRIC -- Finanzas, Dirección: panel de indicadores */
-.dvm-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.dvm-tile{ padding:12px; border:1px solid var(--surface-border); border-radius:8px; background:rgba(255,255,255,.02); }
-.dvm-label{
-  font-family:var(--mono);
-  font-size:.58rem;
-  letter-spacing:.05em;
-  text-transform:uppercase;
-  color:var(--stone-soft);
-}
-.dvm-indicator{ margin-top:9px; height:4px; border-radius:2px; background:var(--border); overflow:hidden; }
-.dvm-indicator span{ display:block; height:100%; background:var(--grad-brand); }
-.dvm-value{ margin-top:7px; font-family:var(--serif); font-weight:600; font-size:.86rem; color:var(--ink); }
+/* Producción -- kanban de proyectos: columnas con tarjetas esqueleto */
+.dcv-kanban{ display:flex; gap:10px; }
+.dcv-kanban-col{ flex:1; min-width:0; }
+.dcv-kanban-head{ display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.03em; text-transform:uppercase; color:var(--stone-soft); margin-bottom:8px; }
+.dcv-kanban-col--active .dcv-kanban-head{ color:var(--cyan); }
+.dcv-kanban-card{ padding:8px; margin-bottom:6px; border:1px solid var(--surface-border); border-radius:6px; background:rgba(255,255,255,.02); }
+.dcv-kanban-col--active .dcv-kanban-card{ border-color:rgba(67,224,255,.35); }
+.dcv-card-bar{ display:block; height:5px; border-radius:3px; background:var(--border); }
+.dcv-card-bar + .dcv-card-bar{ margin-top:5px; }
+.dcv-card-bar--sm{ background:var(--border-soft); }
+.dcv-kanban-col--active .dcv-card-bar{ background:rgba(67,224,255,.3); }
+
+/* Finanzas -- flujo económico: cobros vs. gastos */
+.dcv-flow{ display:flex; flex-direction:column; gap:10px; }
+.dcv-flow-row{ display:flex; align-items:center; gap:10px; }
+.dcv-flow-label{ width:56px; flex-shrink:0; font-family:var(--mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.02em; color:var(--stone-soft); }
+.dcv-flow-track{ flex:1; height:7px; border-radius:4px; background:var(--border); overflow:hidden; }
+.dcv-flow-track span{ display:block; height:100%; border-radius:4px; }
+.dcv-flow-row--in .dcv-flow-track span{ background:var(--green); }
+.dcv-flow-row--out .dcv-flow-track span{ background:var(--amber); }
+.dcv-flow-note{ margin:2px 0 0; font-size:.78rem; color:var(--stone); }
+.dcv-flow-note b{ color:var(--ink); font-weight:600; }
+
+/* Soporte -- cola de tickets: filas con prioridad y SLA */
+.dcv-tickets{ display:flex; flex-direction:column; gap:6px; }
+.dcv-ticket{ display:flex; align-items:center; gap:10px; padding:7px 10px; border-left:3px solid var(--stone-soft); border-radius:4px; background:rgba(255,255,255,.02); font-size:.78rem; }
+.dcv-ticket--high{ border-left-color:var(--red); }
+.dcv-ticket--mid{ border-left-color:var(--amber); }
+.dcv-ticket--done{ border-left-color:var(--green); opacity:.72; }
+.dcv-ticket-id{ font-family:var(--mono); color:var(--stone-soft); font-size:.68rem; flex-shrink:0; }
+.dcv-ticket-desc{ flex:1; color:var(--stone); }
+.dcv-ticket-sla{ font-family:var(--mono); font-size:.66rem; color:var(--cyan); flex-shrink:0; }
+.dcv-ticket--done .dcv-ticket-sla{ color:var(--green); }
+
+/* Administración -- gestión documental: checklist de tareas */
+.dcv-checklist{ display:flex; flex-direction:column; gap:10px; margin:0; }
+.dcv-check{ display:flex; align-items:center; gap:10px; font-size:.82rem; color:var(--stone); }
+.dcv-check-box{ width:15px; height:15px; border-radius:4px; border:1.5px solid var(--surface-border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.6rem; line-height:1; color:var(--bg); }
+.dcv-check--done .dcv-check-box{ background:var(--green); border-color:var(--green); }
+.dcv-check--pending .dcv-check-box{ background:transparent; }
+
+/* Dirección -- KPIs, tendencias y alertas: mini-tendencias por indicador */
+.dcv-kpis{ display:flex; flex-direction:column; gap:10px; }
+.dcv-kpi{ display:flex; align-items:center; gap:10px; }
+.dcv-kpi-label{ width:98px; flex-shrink:0; font-family:var(--mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.02em; color:var(--stone-soft); }
+.dcv-kpi-spark{ flex:1; height:20px; }
+.dcv-kpi-spark polyline{ fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.dcv-kpi-trend--up .dcv-kpi-spark polyline{ stroke:var(--green); }
+.dcv-kpi-trend--down .dcv-kpi-spark polyline{ stroke:var(--red); }
+.dcv-kpi-arrow{ font-size:.78rem; flex-shrink:0; width:14px; text-align:center; }
+.dcv-kpi-trend--up .dcv-kpi-arrow{ color:var(--green); }
+.dcv-kpi-trend--down .dcv-kpi-arrow{ color:var(--red); }
+.dcv-kpi-note{ margin:2px 0 0; font-size:.78rem; color:var(--stone); }
+.dcv-kpi-note b{ color:var(--ink); font-weight:600; }
 
 /* Móvil no es el desktop encogido: la lista maestra pasa a una rejilla
    compacta 4×2 de selectores puramente icónicos (icono + tag de 3
@@ -1470,6 +1507,12 @@ nav.main-nav > ul{ position:relative; }
   .dci-dot{ margin-top:0; }
   .dept-console-detail{ padding:26px 20px; }
   .dcp-problem{ font-size:1.1rem; }
+  .dcv-pipeline{ gap:5px; height:76px; }
+  .dcv-pipe-label{ font-size:.5rem; }
+  .dcv-funnel-stage{ padding:7px 10px; font-size:.68rem; }
+  .dcv-kanban{ gap:6px; }
+  .dcv-kanban-card{ padding:6px; }
+  .dcv-kpi-label{ width:78px; font-size:.54rem; }
 }
 
 /* ============ SERVICIOS ============ */

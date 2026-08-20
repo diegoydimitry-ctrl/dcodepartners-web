@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-20T11:46:18.037Z",
+  "generatedAt": "2026-08-20T12:36:07.275Z",
   "pageCount": 62,
   "chunkCount": 708,
   "pages": [
@@ -647,17 +647,17 @@
         {
           "id": "/departamentos#c3",
           "heading": "Comercial",
-          "text": "COM Qué haceProspecta y prioriza empresas automáticamente, centraliza tu pipeline con IA y redacta propuestas verificadas en minutos. Detectada En seguimiento Propuesta enviada Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Deja de captar clientes al azar."
+          "text": "COM Qué haceProspecta y prioriza empresas automáticamente, centraliza tu pipeline con IA y redacta propuestas verificadas en minutos. Detectada En seguimiento Propuesta enviada Ganada Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Deja de captar clientes al azar."
         },
         {
           "id": "/departamentos#c4",
           "heading": "Marketing",
-          "text": "MKT Qué haceCapta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables. Visita Lead capturado Clasificado Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Comercial. Que ningún cliente se sienta abandonado tras la venta."
+          "text": "MKT Qué haceCapta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables. Visitas a la web Leads capturados Leads clasificados Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Comercial. Que ningún cliente se sienta abandonado tras la venta."
         },
         {
           "id": "/departamentos#c5",
           "heading": "Clientes",
-          "text": "CLI SIN VALIDAR Qué haceDetecta cuándo se cierra una venta, da de alta al cliente y gestiona bienvenida, onboarding, renovaciones y satisfacción. Bienvenida enviada Onboarding en curso Renovación en 12 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Soporte o Producción. Que ningún proyecto se quede sin dueño ni sin plazo."
+          "text": "CLI SIN VALIDAR Qué haceDetecta cuándo se cierra una venta, da de alta al cliente y gestiona bienvenida, onboarding, renovaciones y satisfacción. 45% Bienvenida enviada Onboarding en curso Renovación en 12 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Soporte o Producción. Que ningún proyecto se quede sin dueño ni sin plazo."
         },
         {
           "id": "/departamentos#c6",
@@ -667,22 +667,22 @@
         {
           "id": "/departamentos#c7",
           "heading": "Finanzas",
-          "text": "FIN PRÓXIMAMENTE Qué haceDiseñado para generar y enviar facturas, escalar recordatorios de cobro y vigilar el gasto interno cada día — el control de gasto ya es real. Facturas emitidas Cobros pendientes Gasto interno Próximo vencimiento 5 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Dirección. Que ningún ticket se pierda ni se demore."
+          "text": "FIN PRÓXIMAMENTE Qué haceDiseñado para generar y enviar facturas, escalar recordatorios de cobro y vigilar el gasto interno cada día — el control de gasto ya es real. Cobros Gastos Próximo vencimiento: 5 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Dirección. Que ningún ticket se pierda ni se demore."
         },
         {
           "id": "/departamentos#c8",
           "heading": "Soporte",
-          "text": "SPT CHAT EN REVISIÓN Qué haceConvierte cada email de soporte en un ticket priorizado con SLA, con respuesta incluso fuera de horario. Ticket #204 — prioridad alta Ticket #205 — prioridad media Resuelto en 4 min Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Que un descuido no cueste una crisis."
+          "text": "SPT CHAT EN REVISIÓN Qué haceConvierte cada email de soporte en un ticket priorizado con SLA, con respuesta incluso fuera de horario. #204 Prioridad alta Nuevo #205 Prioridad media En curso #203 Resuelto 4 min Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Que un descuido no cueste una crisis."
         },
         {
           "id": "/departamentos#c9",
           "heading": "Administración",
-          "text": "ADM Qué haceVigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales. Backup semanal completado 8 Departamentos monitorizados 0 incidencias hoy Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Cualquiera — es transversal. Decide con datos, no a ciegas."
+          "text": "ADM Qué haceVigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Cualquiera — es transversal. Decide con datos, no a ciegas."
         },
         {
           "id": "/departamentos#c10",
           "heading": "Dirección",
-          "text": "DIR Qué haceCentraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día. Ingresos del mes Tareas abiertas Alertas activas Decisión sugerida Hoy Representación del sistema — no son datos de un cliente real. Ver Departamento Punto de llegada: da más valor cuantos más Departamentos ya estén activos."
+          "text": "DIR Qué haceCentraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día. Ingresos del mes ↑ Alertas activas ↓ Decisión sugerida: Hoy Representación del sistema — no son datos de un cliente real. Ver Departamento Punto de llegada: da más valor cuantos más Departamentos ya estén activos."
         },
         {
           "id": "/departamentos#c11",
@@ -1978,17 +1978,17 @@
         {
           "id": "/en/departamentos#c3",
           "heading": "Sales",
-          "text": "SLS What it doesAutomatically prospects and prioritizes companies, centralizes your pipeline with AI, and drafts verified proposals in minutes. Detected Following up Proposal sent A representation of the system — not a real client's data. See Department Pairs well with: Customer. Stop chasing leads at random."
+          "text": "SLS What it doesAutomatically prospects and prioritizes companies, centralizes your pipeline with AI, and drafts verified proposals in minutes. Detected Following up Proposal sent Won A representation of the system — not a real client's data. See Department Pairs well with: Customer. Stop chasing leads at random."
         },
         {
           "id": "/en/departamentos#c4",
           "heading": "Marketing",
-          "text": "MKT What it doesCaptures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations. Visit Lead captured Qualified A representation of the system — not a real client's data. See Department Pairs well with: Sales. Never let a customer feel abandoned after the sale."
+          "text": "MKT What it doesCaptures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations. Website visits Leads captured Leads qualified A representation of the system — not a real client's data. See Department Pairs well with: Sales. Never let a customer feel abandoned after the sale."
         },
         {
           "id": "/en/departamentos#c5",
           "heading": "Customer",
-          "text": "CST NOT VALIDATED What it doesDetects when a sale closes, sets up the new client, and manages welcome, onboarding, renewals, and satisfaction. Welcome message sent Onboarding in progress Renewal due in 12 days A representation of the system — not a real client's data. See Department Pairs well with: Support or Delivery. Never let a project go without an owner or a deadline."
+          "text": "CST NOT VALIDATED What it doesDetects when a sale closes, sets up the new client, and manages welcome, onboarding, renewals, and satisfaction. 45% Welcome message sent Onboarding in progress Renewal due in 12 days A representation of the system — not a real client's data. See Department Pairs well with: Support or Delivery. Never let a project go without an owner or a deadline."
         },
         {
           "id": "/en/departamentos#c6",
@@ -1998,22 +1998,22 @@
         {
           "id": "/en/departamentos#c7",
           "heading": "Finance",
-          "text": "FIN COMING SOON What it doesDesigned to generate and send invoices, escalate payment reminders, and monitor internal spend every day — expense control is already real. Invoices issued Pending payments Internal spend Next due date 5 days A representation of the system — not a real client's data. See Department Pairs well with: Leadership. Never let a ticket get lost or delayed."
+          "text": "FIN COMING SOON What it doesDesigned to generate and send invoices, escalate payment reminders, and monitor internal spend every day — expense control is already real. Payments Expenses Next due date: 5 days A representation of the system — not a real client's data. See Department Pairs well with: Leadership. Never let a ticket get lost or delayed."
         },
         {
           "id": "/en/departamentos#c8",
           "heading": "Support",
-          "text": "SUP CHAT UNDER REVIEW What it doesTurns every support email into a prioritized ticket with an SLA, with response even after hours. Ticket #204 — high priority Ticket #205 — medium priority Resolved in 4 min A representation of the system — not a real client's data. See Department Pairs well with: Customer. Don't let one oversight become a crisis."
+          "text": "SUP CHAT UNDER REVIEW What it doesTurns every support email into a prioritized ticket with an SLA, with response even after hours. #204 High priority New #205 Medium priority In progress #203 Resolved 4 min A representation of the system — not a real client's data. See Department Pairs well with: Customer. Don't let one oversight become a crisis."
         },
         {
           "id": "/en/departamentos#c9",
           "heading": "Operations",
-          "text": "OPS What it doesMonitors that the rest of your Departments keep running, protects your documents, and runs weekly backups. Weekly backup completed 8 Departments monitored 0 incidents today A representation of the system — not a real client's data. See Department Pairs well with: Any of them — it's cross-cutting. Decide with data, not guesswork."
+          "text": "OPS What it doesMonitors that the rest of your Departments keep running, protects your documents, and runs weekly backups. A representation of the system — not a real client's data. See Department Pairs well with: Any of them — it's cross-cutting. Decide with data, not guesswork."
         },
         {
           "id": "/en/departamentos#c10",
           "heading": "Leadership",
-          "text": "LDR What it doesCentralizes your KPIs, generates periodic reports, and proposes one executive decision every day. Revenue this month Open tasks Active alerts Suggested decision Today A representation of the system — not a real client's data. See Department Natural endpoint: gives more value the more Departments are already active."
+          "text": "LDR What it doesCentralizes your KPIs, generates periodic reports, and proposes one executive decision every day. Revenue this month ↑ Active alerts ↓ Suggested decision: Today A representation of the system — not a real client's data. See Department Natural endpoint: gives more value the more Departments are already active."
         },
         {
           "id": "/en/departamentos#c11",

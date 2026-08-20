@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="Departamentos Inteligentes — D-Code Partners">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css?v=449cc004b1">
+<link rel="stylesheet" href="/assets/css/styles.css?v=2e875d037b">
 
 <script type="application/ld+json">
 {
@@ -284,8 +284,12 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Prospecta y prioriza empresas automáticamente, centraliza tu pipeline con IA y redacta propuestas verificadas en minutos.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvp-stages"><span>Detectada</span><span>En seguimiento</span><span class="is-current">Propuesta enviada</span></div>
-                  <div class="dvp-track" style="--dvp-fill:66%;"></div>
+                  <div class="dcv-pipeline">
+                    <div class="dcv-pipe-col"><div class="dcv-pipe-bar" style="height:88%;"></div><span class="dcv-pipe-label">Detectada</span></div>
+                    <div class="dcv-pipe-col"><div class="dcv-pipe-bar" style="height:60%;"></div><span class="dcv-pipe-label">En seguimiento</span></div>
+                    <div class="dcv-pipe-col"><div class="dcv-pipe-bar" style="height:38%;"></div><span class="dcv-pipe-label">Propuesta enviada</span></div>
+                    <div class="dcv-pipe-col dcv-pipe-col--won"><div class="dcv-pipe-bar" style="height:18%;"></div><span class="dcv-pipe-label">Ganada</span></div>
+                  </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
                 <a class="dcp-link" href="/departamentos/comercial">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -299,8 +303,11 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Capta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvp-stages"><span>Visita</span><span>Lead capturado</span><span class="is-current">Clasificado</span></div>
-                  <div class="dvp-track" style="--dvp-fill:50%;"></div>
+                  <div class="dcv-funnel">
+                    <div class="dcv-funnel-stage" style="--fw:100%;">Visitas a la web</div>
+                    <div class="dcv-funnel-stage" style="--fw:66%;">Leads capturados</div>
+                    <div class="dcv-funnel-stage" style="--fw:36%;">Leads clasificados</div>
+                  </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
                 <a class="dcp-link" href="/departamentos/marketing">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -314,9 +321,14 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Detecta cuándo se cierra una venta, da de alta al cliente y gestiona bienvenida, onboarding, renovaciones y satisfacción.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvl-row"><span class="dvl-dot done"></span>Bienvenida enviada</div>
-                  <div class="dvl-row"><span class="dvl-dot active"></span>Onboarding en curso</div>
-                  <div class="dvl-row"><span class="dvl-dot pending"></span>Renovación en 12 días</div>
+                  <div class="dcv-cycle">
+                    <div class="dcv-cycle-ring" style="--cv-pct:45%;"><span class="dcv-cycle-pct">45%</span></div>
+                    <ul class="dcv-cycle-steps">
+                      <li class="is-done">Bienvenida enviada</li>
+                      <li class="is-current">Onboarding en curso</li>
+                      <li>Renovación en 12 días</li>
+                    </ul>
+                  </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
                 <a class="dcp-link" href="/departamentos/clientes">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -330,8 +342,21 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Crea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo y vigila plazos de entrega.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvp-stages"><span>Por hacer</span><span class="is-current">En curso</span><span>Entregado</span></div>
-                  <div class="dvp-track" style="--dvp-fill:40%;"></div>
+                  <div class="dcv-kanban">
+                    <div class="dcv-kanban-col">
+                      <span class="dcv-kanban-head">Por hacer</span>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:80%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:50%;"></span></div>
+                    </div>
+                    <div class="dcv-kanban-col dcv-kanban-col--active">
+                      <span class="dcv-kanban-head">En curso</span>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:70%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:40%;"></span></div>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:90%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:55%;"></span></div>
+                    </div>
+                    <div class="dcv-kanban-col">
+                      <span class="dcv-kanban-head">Entregado</span>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:60%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:35%;"></span></div>
+                    </div>
+                  </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
                 <a class="dcp-link" href="/departamentos/produccion">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -345,11 +370,10 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Diseñado para generar y enviar facturas, escalar recordatorios de cobro y vigilar el gasto interno cada día — el control de gasto ya es real.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvm-grid">
-                    <div class="dvm-tile"><span class="dvm-label">Facturas emitidas</span><div class="dvm-indicator"><span style="width:70%;"></span></div></div>
-                    <div class="dvm-tile"><span class="dvm-label">Cobros pendientes</span><div class="dvm-indicator"><span style="width:35%;"></span></div></div>
-                    <div class="dvm-tile"><span class="dvm-label">Gasto interno</span><div class="dvm-indicator"><span style="width:55%;"></span></div></div>
-                    <div class="dvm-tile"><span class="dvm-label">Próximo vencimiento</span><div class="dvm-value">5 días</div></div>
+                  <div class="dcv-flow">
+                    <div class="dcv-flow-row dcv-flow-row--in"><span class="dcv-flow-label">Cobros</span><div class="dcv-flow-track"><span style="width:72%;"></span></div></div>
+                    <div class="dcv-flow-row dcv-flow-row--out"><span class="dcv-flow-label">Gastos</span><div class="dcv-flow-track"><span style="width:42%;"></span></div></div>
+                    <p class="dcv-flow-note">Próximo vencimiento: <b>5 días</b></p>
                   </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
@@ -364,9 +388,11 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Convierte cada email de soporte en un ticket priorizado con SLA, con respuesta incluso fuera de horario.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvl-row"><span class="dvl-dot active"></span>Ticket #204 — prioridad alta</div>
-                  <div class="dvl-row"><span class="dvl-dot pending"></span>Ticket #205 — prioridad media</div>
-                  <div class="dvl-row"><span class="dvl-dot done"></span>Resuelto en 4 min</div>
+                  <div class="dcv-tickets">
+                    <div class="dcv-ticket dcv-ticket--high"><span class="dcv-ticket-id">#204</span><span class="dcv-ticket-desc">Prioridad alta</span><span class="dcv-ticket-sla">Nuevo</span></div>
+                    <div class="dcv-ticket dcv-ticket--mid"><span class="dcv-ticket-id">#205</span><span class="dcv-ticket-desc">Prioridad media</span><span class="dcv-ticket-sla">En curso</span></div>
+                    <div class="dcv-ticket dcv-ticket--done"><span class="dcv-ticket-id">#203</span><span class="dcv-ticket-desc">Resuelto</span><span class="dcv-ticket-sla">4 min</span></div>
+                  </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
                 <a class="dcp-link" href="/departamentos/soporte">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -380,9 +406,11 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Vigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvl-row"><span class="dvl-dot done"></span>Backup semanal completado</div>
-                  <div class="dvl-row"><span class="dvl-dot active"></span>8 Departamentos monitorizados</div>
-                  <div class="dvl-row"><span class="dvl-dot done"></span>0 incidencias hoy</div>
+                  <div class="dcv-checklist">
+                    <label class="dcv-check dcv-check--done"><span class="dcv-check-box">✓</span>Backup semanal completado</label>
+                    <label class="dcv-check dcv-check--done"><span class="dcv-check-box">✓</span>8 Departamentos monitorizados</label>
+                    <label class="dcv-check dcv-check--pending"><span class="dcv-check-box"></span>Revisión de accesos pendiente</label>
+                  </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
                 <a class="dcp-link" href="/departamentos/administracion">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -396,11 +424,18 @@
                 </div>
                 <p class="dcp-does"><strong>Qué hace</strong>Centraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día.</p>
                 <div class="dcp-visual" aria-hidden="true">
-                  <div class="dvm-grid">
-                    <div class="dvm-tile"><span class="dvm-label">Ingresos del mes</span><div class="dvm-indicator"><span style="width:60%;"></span></div></div>
-                    <div class="dvm-tile"><span class="dvm-label">Tareas abiertas</span><div class="dvm-indicator"><span style="width:30%;"></span></div></div>
-                    <div class="dvm-tile"><span class="dvm-label">Alertas activas</span><div class="dvm-indicator"><span style="width:15%;"></span></div></div>
-                    <div class="dvm-tile"><span class="dvm-label">Decisión sugerida</span><div class="dvm-value">Hoy</div></div>
+                  <div class="dcv-kpis">
+                    <div class="dcv-kpi dcv-kpi-trend--up">
+                      <span class="dcv-kpi-label">Ingresos del mes</span>
+                      <svg class="dcv-kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline points="0,16 10,14 20,15 30,10 40,11 50,5 60,6"/></svg>
+                      <span class="dcv-kpi-arrow">↑</span>
+                    </div>
+                    <div class="dcv-kpi dcv-kpi-trend--down">
+                      <span class="dcv-kpi-label">Alertas activas</span>
+                      <svg class="dcv-kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline points="0,4 10,6 20,5 30,10 40,12 50,15 60,16"/></svg>
+                      <span class="dcv-kpi-arrow">↓</span>
+                    </div>
+                    <p class="dcv-kpi-note">Decisión sugerida: <b>Hoy</b></p>
                   </div>
                   <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
                 </div>
