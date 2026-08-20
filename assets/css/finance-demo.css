@@ -61,6 +61,42 @@
   text-overflow:ellipsis;
   white-space:nowrap;
 }
+.fdemo-topbar-search{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  max-width:320px;
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid var(--surface-border);
+  background:rgba(255,255,255,.03);
+  color:var(--stone-soft);
+  font-family:var(--sans);
+  font-size:.82rem;
+}
+.fdemo-topbar-search svg{ width:15px; height:15px; flex-shrink:0; opacity:.7; }
+.fdemo-topbar-account{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-shrink:0;
+  padding-left:14px;
+  border-left:1px solid var(--border);
+}
+.fdemo-topbar-account-meta{ text-align:right; line-height:1.25; }
+.fdemo-topbar-account-name{ font-size:.78rem; color:var(--ink); font-weight:600; }
+.fdemo-topbar-account-role{ font-family:var(--mono); font-size:.62rem; color:var(--stone-soft); letter-spacing:.04em; }
+.fdemo-topbar-avatar{
+  width:28px; height:28px;
+  border-radius:50%;
+  background:var(--grad-brand);
+  color:#04070f;
+  font-weight:700;
+  font-size:.78rem;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
 .fdemo-topbar-spacer{ flex:1; }
 .fdemo-topbar-cta{
   flex-shrink:0;
@@ -215,6 +251,74 @@
 .fdemo-kpi-delta.up{ color:var(--green); }
 .fdemo-kpi-delta.down{ color:var(--red); }
 .fdemo-kpi-caption{ margin-top:6px; font-size:.76rem; color:var(--stone); }
+
+/* ---------- Insight (frase del mes) ---------- */
+.fdemo-insight{
+  border-left:3px solid var(--cyan);
+  background:linear-gradient(90deg, rgba(67,224,255,.08) 0%, transparent 60%), linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
+  border-radius:0 14px 14px 0;
+  border-top:1px solid var(--surface-border);
+  border-right:1px solid var(--surface-border);
+  border-bottom:1px solid var(--surface-border);
+  padding:20px 22px;
+}
+.fdemo-insight-headline{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.05rem;
+  color:var(--ink);
+  margin:0;
+  line-height:1.4;
+}
+.fdemo-insight-bullets{ margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
+.fdemo-insight-bullets li{
+  display:flex; gap:8px; align-items:flex-start;
+  font-size:.82rem; color:var(--stone); line-height:1.5;
+}
+.fdemo-insight-bullets li::before{
+  content:''; width:5px; height:5px; border-radius:50%;
+  background:var(--stone-soft); flex-shrink:0; margin-top:7px;
+}
+
+/* ---------- Fila de dos paneles (Qué hay que hacer + Antigüedad) ---------- */
+.fdemo-panel-row{ display:grid; grid-template-columns:1.4fr 1fr; gap:16px; }
+.fdemo-panel-row .fdemo-panel{ margin-top:0; }
+
+/* ---------- Qué hay que hacer ---------- */
+.fdemo-todo-item{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+  padding:13px 4px; border-bottom:1px solid var(--border);
+}
+.fdemo-todo-item:last-child{ border-bottom:none; }
+.fdemo-todo-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.fdemo-todo-dot.high{ background:var(--red); }
+.fdemo-todo-dot.medium{ background:var(--amber); }
+.fdemo-todo-dot.low{ background:var(--cyan); }
+.fdemo-todo-main{ display:flex; gap:10px; min-width:0; }
+.fdemo-todo-label{ font-size:.86rem; color:var(--ink); font-weight:500; }
+.fdemo-todo-note{ font-size:.76rem; color:var(--stone-soft); margin-top:2px; }
+.fdemo-todo-amount{ font-family:var(--serif); font-weight:700; font-size:.94rem; color:var(--ink); white-space:nowrap; text-align:right; flex-shrink:0; }
+.fdemo-todo-amount span{ display:block; font-family:var(--mono); font-weight:400; font-size:.68rem; color:var(--stone-soft); margin-top:2px; }
+.fdemo-todo-empty{ color:var(--stone-soft); font-size:.86rem; padding:8px 4px; }
+
+/* ---------- Antigüedad de la deuda ---------- */
+.fdemo-aging-total{ font-family:var(--serif); font-weight:700; font-size:1.7rem; color:var(--ink); margin:0 0 4px; }
+.fdemo-aging-sub{ font-size:.8rem; color:var(--stone-soft); margin:0 0 16px; }
+.fdemo-aging-bar{ display:flex; height:10px; border-radius:5px; overflow:hidden; background:var(--border); margin-bottom:14px; }
+.fdemo-aging-bar span{ height:100%; }
+.fdemo-aging-bar span.current{ background:var(--green); }
+.fdemo-aging-bar span.d1-30{ background:var(--amber); }
+.fdemo-aging-bar span.d31-60{ background:#ff8f5c; }
+.fdemo-aging-bar span.d60plus{ background:var(--red); }
+.fdemo-aging-legend{ display:flex; flex-direction:column; gap:8px; }
+.fdemo-aging-row{ display:flex; align-items:center; justify-content:space-between; font-size:.8rem; }
+.fdemo-aging-row-label{ display:flex; align-items:center; gap:8px; color:var(--stone); }
+.fdemo-aging-row-label i{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+.fdemo-aging-row-label i.current{ background:var(--green); }
+.fdemo-aging-row-label i.d1-30{ background:var(--amber); }
+.fdemo-aging-row-label i.d31-60{ background:#ff8f5c; }
+.fdemo-aging-row-label i.d60plus{ background:var(--red); }
+.fdemo-aging-row-amount{ font-family:var(--mono); color:var(--ink); }
 
 /* ---------- Rows list (facturas, gastos, presupuestos...) ---------- */
 .fdemo-rows{ display:flex; flex-direction:column; }
@@ -433,9 +537,48 @@
 .fdemo-gate-list li{ display:flex; gap:9px; align-items:flex-start; font-size:.84rem; color:var(--stone); }
 .fdemo-gate-list svg{ width:15px; height:15px; color:var(--cyan); flex-shrink:0; margin-top:2px; }
 
+/* ============================================================
+   Ventana de producto estática — usada en Home y en Finanzas
+   para incrustar una vista real del dashboard (mismas clases que
+   la app interactiva) dentro de una tarjeta "recortada", al estilo
+   de una ventana de sistema operativo real, sin interacción.
+   ============================================================ */
+.fdemo-home-grid{ display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:48px; align-items:center; }
+@media (max-width:900px){ .fdemo-home-grid{ grid-template-columns:minmax(0,1fr); gap:28px; } }
+
+.fdemo-showcase-wrap{ position:relative; }
+.fdemo-showcase{
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--surface-border);
+  background:var(--bg);
+  box-shadow:0 50px 120px -40px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02);
+  max-height:600px;
+}
+.fdemo-showcase::after{
+  content:'';
+  position:absolute; left:0; right:0; bottom:0; height:130px;
+  background:linear-gradient(180deg, transparent 0%, var(--bg) 94%);
+  pointer-events:none;
+}
+.fdemo-showcase .fdemo{ min-height:auto; pointer-events:none; user-select:none; }
+.fdemo-showcase .fdemo-shell{ min-height:560px; }
+.fdemo-showcase .fdemo-topbar{ position:static; }
+.fdemo-showcase .fdemo-main{ padding-bottom:120px; }
+/* La ventana vive dentro de una columna más estrecha que el viewport,
+   así que no puede depender de los media queries (son relativos al
+   viewport, no al contenedor) -- se fuerza aquí una topbar siempre
+   compacta, sin buscador ni nombre de cuenta, para que nunca desborde. */
+.fdemo-showcase .fdemo-topbar-search,
+.fdemo-showcase .fdemo-topbar-account-meta{ display:none; }
+.fdemo-showcase .fdemo-topbar-account{ padding-left:10px; }
+
 /* ---------- Responsive ---------- */
 @media (max-width:1080px){
   .fdemo-kpi-grid{ grid-template-columns:repeat(2,1fr); }
+  .fdemo-panel-row{ grid-template-columns:1fr; }
+  .fdemo-topbar-search{ display:none; }
 }
 
 @media (max-width:860px){
@@ -443,6 +586,8 @@
   .fdemo-main{ padding:20px 16px 90px; }
   .fdemo-topbar{ padding:0 12px; gap:8px; }
   .fdemo-topbar-company{ display:none; }
+  .fdemo-topbar-account-meta{ display:none; }
+  .fdemo-topbar-account{ padding-left:8px; }
   .fdemo-topbar-exit span{ display:none; }
   .fdemo-topbar-exit{ gap:0; }
   .fdemo-topbar-badge{ padding:4px 7px; }
@@ -475,6 +620,22 @@
   .fdemo-main{ padding:16px 12px 90px; }
   .fdemo-panel{ padding:16px; }
   .fdemo-view-title{ font-size:1.25rem; }
+  .fdemo-todo-item{ flex-wrap:wrap; }
+  .fdemo-todo-amount{ text-align:left; }
+}
+
+/* ---------- Ventana de producto — ajustes responsive ---------- */
+@media (max-width:860px){
+  .fdemo-showcase{ max-height:460px; }
+  .fdemo-showcase .fdemo-shell{ min-height:420px; }
+  .fdemo-showcase .fdemo-main{ padding:20px 16px 100px; }
+}
+@media (max-width:560px){
+  .fdemo-showcase{ max-height:380px; border-radius:12px; }
+  .fdemo-showcase .fdemo-shell{ min-height:340px; }
+  .fdemo-showcase .fdemo-kpi-grid{ grid-template-columns:1fr 1fr; gap:10px; }
+  .fdemo-showcase .fdemo-panel{ padding:14px; }
+  .fdemo-showcase .fdemo-insight-headline{ font-size:.92rem; }
 }
 
 @media (prefers-reduced-motion:reduce){

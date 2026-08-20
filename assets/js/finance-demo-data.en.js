@@ -248,24 +248,94 @@
     },
 
     dashboard: function () {
+      var self = this;
       var series = this.monthlySeries(6);
       var thisMonth = series[series.length - 1];
       var lastMonth = series[series.length - 2];
       var pending = this.pendingCollections();
       var pendingTotal = pending.reduce(function (s, i) { return s + i.total; }, 0);
+      var overdueList = pending.filter(function (i) { return i.status === 'Overdue'; });
+      var overdueTotal = overdueList.reduce(function (s, i) { return s + i.total; }, 0);
       var expensesThisMonth = EXPENSES.filter(function (e) { return isSameMonth(e.date, DEMO_TODAY); })
         .reduce(function (s, e) { return s + e.amount; }, 0);
       var projects = this.projects().filter(function (p) { return p.status === 'In progress'; });
       var upcoming = this.upcomingDue(7);
-      var overdue = this.invoices().filter(function (i) { return i.status === 'Overdue'; });
+      var overdue = overdueList;
+      var allProjects = this.projects();
+      var draftInvoices = this.invoices().filter(function (i) { return i.status === 'Draft'; });
+      var sentQuotes = this.quotes().filter(function (q) { return q.status === 'Sent'; });
+      var billedTotalAllTime = this.invoices().filter(function (i) { return i.status !== 'Draft'; }).reduce(function (s, i) { return s + i.total; }, 0);
+      var collectedTotalAllTime = this.payments().reduce(function (s, p) { return s + p.amount; }, 0);
+      var expensesTotalAllTime = EXPENSES.reduce(function (s, e) { return s + e.amount; }, 0);
+
+      // --- Top debtor (largest amount owed by a single client) ---
+      var byClient = {};
+      pending.forEach(function (i) {
+        byClient[i.clientId] = (byClient[i.clientId] || 0) + i.total;
+      });
+      var topDebtorId = Object.keys(byClient).sort(function (a, b) { return byClient[b] - byClient[a]; })[0];
+      var topDebtor = topDebtorId ? { client: clientById(topDebtorId), total: byClient[topDebtorId] } : null;
+
+      // --- Lowest-margin project (among those billing) ---
+      var billingProjects = allProjects.filter(function (p) { return p.revenue > 0; });
+      var lowestMarginProject = billingProjects.length
+        ? billingProjects.reduce(function (a, b) { return b.marginPct < a.marginPct ? b : a; })
+        : null;
+
+      // --- Insight: a single plain-language sentence ---
+      var diff = thisMonth.collected - thisMonth.spent;
+      var insightText = 'This month you’ve collected ' + fmtEUR(thisMonth.collected) + ' and spent ' + fmtEUR(thisMonth.spent) + ': you’re ' + fmtEUR(Math.abs(diff)) + ' ' + (diff >= 0 ? 'ahead' : 'behind') + '.';
+      var insightBullets = [];
+      if (pendingTotal > 0) {
+        var b1 = 'You’re owed ' + fmtEUR(pendingTotal) + ', of which ' + fmtEUR(overdueTotal) + ' is already overdue';
+        if (topDebtor) b1 += '; ' + topDebtor.client.name + ' owes ' + fmtEUR(topDebtor.total) + '.';
+        else b1 += '.';
+        insightBullets.push(b1);
+      }
+      if (lowestMarginProject) {
+        insightBullets.push('The project with the lowest margin is "' + lowestMarginProject.name + '", at ' + lowestMarginProject.marginPct + '% profitability.');
+      }
+
+      // --- What needs attention ---
+      var todos = [];
+      if (overdueList.length) {
+        todos.push({ id: 'overdue', label: 'Overdue invoices not yet collected', count: overdueList.length, amount: overdueTotal, note: 'Follow up on payment or agree on a plan.', view: 'cobros', severity: 'high' });
+      }
+      if (draftInvoices.length) {
+        var draftTotal = draftInvoices.reduce(function (s, i) { return s + i.total; }, 0);
+        todos.push({ id: 'drafts', label: 'Draft invoices not yet issued', count: draftInvoices.length, amount: draftTotal, note: 'Until issued, they don’t create a right to collect.', view: 'facturas', severity: 'medium' });
+      }
+      if (sentQuotes.length) {
+        var sentTotal = sentQuotes.reduce(function (s, q) { return s + q.amount; }, 0);
+        todos.push({ id: 'quotes', label: 'Sent quotes awaiting a reply', count: sentQuotes.length, amount: sentTotal, note: 'Follow up before the client forgets them.', view: 'presupuestos', severity: 'low' });
+      }
+
+      // --- Debt aging ---
+      var aging = { current: 0, d1_30: 0, d31_60: 0, d60plus: 0 };
+      pending.forEach(function (i) {
+        if (i.status !== 'Overdue') { aging.current += i.total; return; }
+        if (i.overdueDays <= 30) aging.d1_30 += i.total;
+        else if (i.overdueDays <= 60) aging.d31_60 += i.total;
+        else aging.d60plus += i.total;
+      });
+
       return {
         billedThisMonth: thisMonth.billed, billedLastMonth: lastMonth.billed,
         collectedThisMonth: thisMonth.collected,
         pendingTotal: pendingTotal, pendingCount: pending.length,
+        overdueTotal: overdueTotal,
         expensesThisMonth: expensesThisMonth, expenseBudget: EXPENSE_MONTHLY_BUDGET,
         upcoming: upcoming, overdue: overdue,
         activeProjects: projects,
-        series: series
+        activeProjectsCount: projects.length,
+        series: series,
+        billedTotalAllTime: billedTotalAllTime,
+        collectedTotalAllTime: collectedTotalAllTime,
+        expensesTotalAllTime: expensesTotalAllTime,
+        marginTotalAllTime: billedTotalAllTime - expensesTotalAllTime,
+        insight: { text: insightText, bullets: insightBullets },
+        todos: todos,
+        aging: aging
       };
     },
 

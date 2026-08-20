@@ -55,6 +55,12 @@
     { id: 'pregunta', label: 'Pregunta a Finanzas' }
   ];
 
+  var NAV_GROUPS = [
+    { label: 'Día a día', items: ['dashboard', 'facturas', 'cobros', 'gastos'] },
+    { label: 'Negocio', items: ['presupuestos', 'clientes', 'proveedores', 'proyectos'] },
+    { label: 'Inteligencia', items: ['analisis', 'pregunta'] }
+  ];
+
   var state = { invoiceFilter: 'all', quoteFilter: 'all', ask: [] };
 
   // ---------------------------------------------------------------
@@ -77,7 +83,14 @@
   function navItemHtml(v) {
     return '<a href="#' + v.id + '" class="fdemo-nav-item" data-nav="' + v.id + '">' + ICONS[v.id] + '<span>' + v.label + '</span></a>';
   }
-  if (sidebarNav) sidebarNav.innerHTML = VIEWS.map(navItemHtml).join('');
+  function viewById(id) { return VIEWS.filter(function (v) { return v.id === id; })[0]; }
+  function groupedNavHtml() {
+    return NAV_GROUPS.map(function (g) {
+      return '<div class="fdemo-nav-group"><span class="fdemo-nav-group-label">' + g.label + '</span>' +
+        g.items.map(function (id) { return navItemHtml(viewById(id)); }).join('') + '</div>';
+    }).join('');
+  }
+  if (sidebarNav) sidebarNav.innerHTML = groupedNavHtml();
   if (tabbarNav) tabbarNav.innerHTML = VIEWS.map(navItemHtml).join('');
 
   function setActiveNav(viewId) {
@@ -180,21 +193,66 @@
         '<div class="fdemo-row-amount">' + p.marginPct + '% margen</div></div>';
     }).join('') || '<div class="fdemo-empty"><p>No hay proyectos activos ahora mismo.</p></div>';
 
-    return '' +
-      '<div class="fdemo-view-head"><span class="fdemo-view-eyebrow">D-Code Finance · Demo</span>' +
-      '<h1 class="fdemo-view-title">Buenas, ' + esc(FS.company.name) + '.</h1>' +
-      '<p class="fdemo-view-sub">Así se ve tu negocio hoy: lo que has facturado, lo que te deben y en qué se está yendo el gasto.</p></div>' +
+    var insightHtml = '<div class="fdemo-insight"><p class="fdemo-insight-headline">' + esc(d.insight.text) + '</p>' +
+      (d.insight.bullets.length ? '<ul class="fdemo-insight-bullets">' + d.insight.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' : '') +
+      '</div>';
 
+    var todoHtml = d.todos.length
+      ? d.todos.map(function (t) {
+        return '<div class="fdemo-todo-item" data-action="goto" data-id="' + t.view + '" role="button" tabindex="0" style="cursor:pointer;">' +
+          '<div class="fdemo-todo-main"><span class="fdemo-todo-dot ' + t.severity + '"></span>' +
+          '<div><div class="fdemo-todo-label">' + esc(t.label) + '</div><div class="fdemo-todo-note">' + esc(t.note) + '</div></div></div>' +
+          '<div class="fdemo-todo-amount">' + EUR(t.amount) + '<span>' + t.count + '</span></div></div>';
+      }).join('')
+      : '<div class="fdemo-todo-empty">Nada pendiente de atención ahora mismo.</div>';
+
+    var agingTotal = d.aging.current + d.aging.d1_30 + d.aging.d31_60 + d.aging.d60plus;
+    function agingPct(v) { return agingTotal > 0 ? Math.round((v / agingTotal) * 100) : 0; }
+    var agingHtml = '<p class="fdemo-aging-total">' + EUR(agingTotal) + '</p>' +
+      '<p class="fdemo-aging-sub">pendiente de cobro, por antigüedad</p>' +
+      '<div class="fdemo-aging-bar">' +
+      '<span class="current" style="width:' + agingPct(d.aging.current) + '%"></span>' +
+      '<span class="d1-30" style="width:' + agingPct(d.aging.d1_30) + '%"></span>' +
+      '<span class="d31-60" style="width:' + agingPct(d.aging.d31_60) + '%"></span>' +
+      '<span class="d60plus" style="width:' + agingPct(d.aging.d60plus) + '%"></span>' +
+      '</div>' +
+      '<div class="fdemo-aging-legend">' +
+      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="current"></i>Al corriente</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.current) + '</span></div>' +
+      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="d1-30"></i>1–30 días</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.d1_30) + '</span></div>' +
+      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="d31-60"></i>31–60 días</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.d31_60) + '</span></div>' +
+      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="d60plus"></i>60+ días</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.d60plus) + '</span></div>' +
+      '</div>';
+
+    return '' +
+      '<div class="fdemo-view-head"><span class="fdemo-view-eyebrow">Situación</span>' +
+      '<h1 class="fdemo-view-title">Panel financiero</h1></div>' +
+
+      insightHtml +
+
+      '<div class="fdemo-view-head" style="margin:26px 0 14px;"><span class="fdemo-view-eyebrow">El dinero</span>' +
+      '<h2 class="fdemo-panel-title" style="font-size:1.05rem;">Qué ha entrado, qué te deben y qué se ha pasado de fecha</h2></div>' +
+      '<div class="fdemo-kpi-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:14px;">' +
+      kpi('Cobrado', EUR(d.collectedTotalAllTime), 'dinero que ya ha entrado · todo el histórico', '') +
+      kpi('Pendiente de cobro', EUR(d.pendingTotal), 'emitido y todavía sin cobrar', '') +
+      kpi('Vencido', EUR(d.overdueTotal), 'pasado de fecha · reclámalo', d.overdueTotal > 0 ? 'down' : 'up') +
+      '</div>' +
       '<div class="fdemo-kpi-grid">' +
-      kpi('Facturado este mes', EUR(d.billedThisMonth), delta >= 0 ? ('▲ ' + delta + '% vs. mes anterior') : ('▼ ' + Math.abs(delta) + '% vs. mes anterior'), delta >= 0 ? 'up' : 'down') +
-      kpi('Cobrado este mes', EUR(d.collectedThisMonth), '', '') +
-      kpi('Pendiente de cobro', EUR(d.pendingTotal), d.pendingCount + ' factura' + (d.pendingCount === 1 ? '' : 's'), '') +
-      kpi('Gasto del mes', EUR(d.expensesThisMonth), (overBudget ? '▲ ' : '') + 'presupuesto ' + EUR(d.expenseBudget), overBudget ? 'down' : 'up') +
+      kpi('Facturado', EUR(d.billedTotalAllTime), 'todo el histórico', '') +
+      kpi('Gastos', EUR(d.expensesTotalAllTime), 'todo el histórico', '') +
+      kpi('Margen sobre facturado', EUR(d.marginTotalAllTime), 'sin descontar ' + EUR(d.pendingTotal) + ' sin cobrar', '') +
+      kpi('Este mes: facturado', EUR(d.billedThisMonth), delta >= 0 ? ('▲ ' + delta + '% vs. mes anterior') : ('▼ ' + Math.abs(delta) + '% vs. mes anterior'), delta >= 0 ? 'up' : 'down') +
       '</div>' +
 
       '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Cobrado vs. gastado — últimos 6 meses</h2></div>' +
       barChart(d.series) +
       '<div class="fdemo-chart-legend"><span><i style="background:var(--cyan)"></i>Cobrado</span><span><i style="background:var(--amber)"></i>Gastado</span></div></div>' +
+
+      '<div class="fdemo-view-head" style="margin:26px 0 14px;"><span class="fdemo-view-eyebrow">Qué hay que hacer</span>' +
+      '<h2 class="fdemo-panel-title" style="font-size:1.05rem;">Lo que está esperando a alguien, por orden de urgencia</h2></div>' +
+      '<div class="fdemo-panel-row">' +
+      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Requiere tu atención</h2></div>' + todoHtml + '</div>' +
+      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Antigüedad de la deuda</h2></div>' + agingHtml + '</div>' +
+      '</div>' +
 
       '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Vencimientos y facturas vencidas</h2></div>' +
       '<div class="fdemo-rows">' + upcomingHtml + '</div></div>' +
