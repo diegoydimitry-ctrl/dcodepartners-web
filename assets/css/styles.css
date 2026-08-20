@@ -1212,7 +1212,7 @@ nav.main-nav > ul{ position:relative; }
 .dept-console-panel .window-body{ padding:0; }
 .dept-console-body{
   display:grid;
-  grid-template-columns:260px 1fr;
+  grid-template-columns:300px 1fr;
 }
 .dept-console-list{
   display:flex;
@@ -1221,7 +1221,7 @@ nav.main-nav > ul{ position:relative; }
 }
 .dept-console-item{
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   gap:12px;
   width:100%;
   padding:14px 20px;
@@ -1252,6 +1252,7 @@ nav.main-nav > ul{ position:relative; }
   color:var(--stone-soft);
   width:26px;
   flex-shrink:0;
+  margin-top:7px;
   transition:color .2s ease;
 }
 .dept-console-item.is-active .dci-tag{ color:var(--cyan); }
@@ -1267,11 +1268,18 @@ nav.main-nav > ul{ position:relative; }
 }
 .dci-icon svg{ width:14px; height:14px; }
 .dept-console-item.is-active .dci-icon{ color:var(--cyan); border-color:rgba(67,224,255,.5); }
+/* DIR-WEB-20260820-003: la lista maestra deja de abrir con nombres de
+   departamento ("Comercial", "Marketing"...) -- Dirección pidió
+   explícitamente que la primera capa entre por el PROBLEMA que resuelve
+   cada Departamento, no por su nombre. El nombre real pasa a ser la
+   segunda capa, dentro del panel de detalle (.dcp-dept-head). */
 .dci-name{
   flex:1;
+  padding-top:2px;
   font-family:var(--serif);
   font-weight:600;
-  font-size:.92rem;
+  font-size:.86rem;
+  line-height:1.32;
   color:var(--stone);
   transition:color .2s ease;
 }
@@ -1281,6 +1289,7 @@ nav.main-nav > ul{ position:relative; }
   border-radius:50%;
   background:var(--border);
   flex-shrink:0;
+  margin-top:9px;
   transition:background .2s ease, box-shadow .2s ease;
 }
 .dept-console-item.is-active .dci-dot{ background:var(--green); box-shadow:0 0 6px 1px var(--green); }
@@ -1288,31 +1297,55 @@ nav.main-nav > ul{ position:relative; }
 .dept-console-detail{ position:relative; padding:36px 40px; min-height:280px; }
 .dept-console-pane{ animation:dcp-in .35s ease; }
 @keyframes dcp-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
-.dcp-tag{
-  font-family:var(--mono);
-  font-size:.68rem;
-  letter-spacing:.08em;
-  color:var(--cyan);
+/* PROBLEMA → DEPARTAMENTO → QUÉ HACE → CÓMO FUNCIONA (visual) → CTA --
+   el orden exacto que pidió Dirección, ahora dentro del propio panel de
+   detalle en vez de repartido entre el panel y una grid aparte. */
+.dcp-problem{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.3rem;
+  line-height:1.32;
+  color:var(--ink);
+  margin-bottom:18px;
+  max-width:480px;
 }
+.dcp-dept-head{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
 .dcp-icon{
-  width:48px; height:48px;
-  border-radius:12px;
+  width:40px; height:40px;
+  border-radius:10px;
   display:flex; align-items:center; justify-content:center;
   background:rgba(91,140,255,.12);
   border:1px solid rgba(91,140,255,.3);
   color:var(--cyan);
-  margin:14px 0 18px;
+  flex-shrink:0;
 }
-.dcp-icon svg{ width:24px; height:24px; }
-.dcp-name{ font-family:var(--serif); font-weight:600; font-size:1.4rem; color:var(--ink); margin-bottom:10px; }
-.dcp-tagline{ color:var(--stone); font-size:1rem; max-width:480px; }
-.dcp-connects{ margin-top:18px; font-size:.88rem; color:var(--stone-soft); }
+.dcp-icon svg{ width:20px; height:20px; }
+.dcp-dept-meta{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.dcp-name{ font-family:var(--serif); font-weight:600; font-size:1rem; color:var(--ink); }
+.dcp-tag{
+  font-family:var(--mono);
+  font-size:.64rem;
+  letter-spacing:.06em;
+  color:var(--stone-soft);
+}
+.dcp-does{ color:var(--stone); font-size:.92rem; max-width:480px; }
+.dcp-does strong{
+  display:block;
+  font-family:var(--mono);
+  font-size:.62rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  font-weight:600;
+  margin-bottom:6px;
+}
+.dcp-connects{ margin-top:16px; font-size:.82rem; color:var(--stone-soft); }
 .dcp-connects strong{ color:var(--stone); }
 .dcp-link{
   display:inline-flex;
   align-items:center;
   gap:6px;
-  margin-top:24px;
+  margin-top:22px;
   padding:4px 0;
   font-size:.9rem;
   font-weight:600;
@@ -1326,10 +1359,92 @@ nav.main-nav > ul{ position:relative; }
   .dept-console-pane{ animation:none; }
 }
 
+/* ---- Visualización propia por Departamento (CÓMO FUNCIONA) ----
+   Tres tipos de mini-componente, reutilizados según lo que cada
+   Departamento gestiona realmente (flujo por etapas / lista de estado /
+   panel de métricas) -- no la misma ilustración con el icono cambiado:
+   cada instancia lleva sus propias etapas, filas o indicadores, tomados
+   de lo que ese Departamento hace de verdad. Vive dentro de cada
+   .dept-console-pane, así que cambia solo con el toggle ya existente en
+   main.js -- cero JS nuevo. */
+.dcp-visual{
+  margin-top:20px;
+  padding:18px;
+  border:1px solid var(--surface-border);
+  border-radius:12px;
+  background:rgba(10,14,26,.45);
+  max-width:480px;
+}
+.dcp-visual-note{
+  margin-top:12px;
+  font-family:var(--mono);
+  font-size:.62rem;
+  color:var(--stone-soft);
+}
+
+/* Tipo FLOW -- Comercial, Marketing, Producción: procesos por etapas */
+.dvp-stages{
+  display:flex;
+  justify-content:space-between;
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  margin-bottom:10px;
+}
+.dvp-stages span.is-current{ color:var(--cyan); }
+.dvp-track{
+  height:6px;
+  border-radius:4px;
+  background:var(--border);
+  overflow:hidden;
+  position:relative;
+}
+.dvp-track::after{
+  content:"";
+  position:absolute; inset:0;
+  width:var(--dvp-fill,60%);
+  background:var(--grad-brand);
+  border-radius:4px;
+}
+
+/* Tipo LIST -- Clientes, Soporte, Administración: estado por elemento */
+.dvl-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:.82rem;
+  color:var(--stone);
+}
+.dvl-row:last-child{ border-bottom:none; }
+.dvl-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.dvl-dot.done{ background:var(--green); }
+.dvl-dot.active{ background:var(--cyan); box-shadow:0 0 6px 1px rgba(67,224,255,.5); }
+.dvl-dot.pending{ background:var(--stone-soft); }
+
+/* Tipo METRIC -- Finanzas, Dirección: panel de indicadores */
+.dvm-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.dvm-tile{ padding:12px; border:1px solid var(--surface-border); border-radius:8px; background:rgba(255,255,255,.02); }
+.dvm-label{
+  font-family:var(--mono);
+  font-size:.58rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.dvm-indicator{ margin-top:9px; height:4px; border-radius:2px; background:var(--border); overflow:hidden; }
+.dvm-indicator span{ display:block; height:100%; background:var(--grad-brand); }
+.dvm-value{ margin-top:7px; font-family:var(--serif); font-weight:600; font-size:.86rem; color:var(--ink); }
+
 /* Móvil no es el desktop encogido: la lista maestra pasa a una rejilla
-   compacta 4×2 de selectores (patrón de un panel de ajustes real en
-   móvil) y el detalle aparece debajo -- main.js hace scroll suave hasta
-   él al elegir, en vez de vivir fijo al lado como en escritorio. */
+   compacta 4×2 de selectores puramente icónicos (icono + tag de 3
+   letras, sin la frase-problema completa -- no cabe en una celda de
+   ~85px) y el detalle aparece debajo, con la frase-problema como primer
+   elemento visible -- main.js hace scroll suave hasta él al elegir, en
+   vez de vivir fijo al lado como en escritorio. */
 @media (max-width:760px){
   .dept-console-body{ grid-template-columns:1fr; }
   .dept-console-list{
@@ -1340,6 +1455,7 @@ nav.main-nav > ul{ position:relative; }
   }
   .dept-console-item{
     flex-direction:column;
+    align-items:center;
     gap:6px;
     padding:16px 6px;
     border-bottom:1px solid var(--border);
@@ -1349,8 +1465,11 @@ nav.main-nav > ul{ position:relative; }
   .dept-console-item:nth-child(4n){ border-right:none; }
   .dept-console-item:nth-last-child(-n+4){ border-bottom:none; }
   .dept-console-item.is-active::before{ left:0; right:0; top:0; bottom:auto; width:auto; height:3px; }
-  .dci-name{ font-size:.68rem; }
+  .dci-tag{ margin-top:0; }
+  .dci-name{ display:none; }
+  .dci-dot{ margin-top:0; }
   .dept-console-detail{ padding:26px 20px; }
+  .dcp-problem{ font-size:1.1rem; }
 }
 
 /* ============ SERVICIOS ============ */
@@ -1709,55 +1828,6 @@ nav.main-nav > ul{ position:relative; }
   .dept-row-arrow{ display:none; }
 }
 @media (prefers-reduced-motion: reduce){ .dept-row-dot{ animation:none; } }
-
-.stats-window .window-body{ padding:0; }
-
-/* ============ PRUEBA / HUD DE MÉTRICAS (DIR-WEB-20260820-002) ============
-   Antes vivía como .stats-window, un segundo .window idéntico en chrome al
-   panel de Departamentos justo encima -- sin límite de sección entre ambos,
-   se percibían como un único bloque acumulado. Ahora es una franja de
-   vidrio sin barra de título (mismo tratamiento ya aprobado en
-   .hero-metrics-float), dentro de su propia <section> con padding e
-   introducción propios -- deja de ser "más del mismo panel" y pasa a ser
-   una pieza con función propia: la prueba de que no hay riesgo. */
-.dept-proof{ position:relative; }
-.dept-proof-head{ max-width:560px; margin-bottom:28px; }
-.dept-proof-head .lead{ margin-top:8px; }
-.metrics-hud{
-  position:relative;
-  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
-  border:1px solid var(--surface-border);
-  border-radius:14px;
-  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  overflow:hidden;
-}
-.spec-sheet{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-}
-.spec-item{
-  padding:32px 28px;
-  border-right:1px solid var(--border);
-  text-align:left;
-}
-.spec-item:last-child{ border-right:none; }
-.spec-label{
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  color:var(--cyan);
-}
-.spec-value{
-  font-family:var(--serif);
-  font-weight:700;
-  font-size:2.1rem;
-  color:var(--ink);
-  margin:10px 0 8px;
-}
-.spec-caption{ font-size:0.86rem; color:var(--stone); }
 
 /* ============ CONOCENOS / FOUNDERS ============ */
 .conocenos-intro{ max-width:760px; margin:0 auto; text-align:center; }
@@ -2575,8 +2645,7 @@ nav.main-nav > ul{ position:relative; }
 /* Motivo estructural en las costuras entre secciones — un trazo muy
    tenue centrado sobre el borde ya existente, no un elemento nuevo. */
 .metodo::before,
-.cta-band::before,
-.dept-proof::before{
+.cta-band::before{
   content:"";
   position:absolute;
   top:-1px;
@@ -2709,10 +2778,6 @@ footer{
 
 @media (max-width: 760px){
   .logo-word{ font-size:1.05rem; }
-  .spec-sheet{ grid-template-columns:1fr 1fr; }
-  .spec-item:nth-child(n){ border-right:1px solid var(--border); }
-  .spec-item:nth-child(2n){ border-right:none; }
-  .spec-item{ border-bottom:1px solid var(--border); }
   .blog-grid{ grid-template-columns:minmax(0,1fr); }
   .footer-top{ grid-template-columns:1fr 1fr; }
 }
@@ -2729,8 +2794,6 @@ footer{
   .case-card .window-body{ padding:24px 20px; }
   .footer-top{ grid-template-columns:minmax(0,1fr); }
   .footer-bottom{ flex-direction:column; }
-  .spec-sheet{ grid-template-columns:minmax(0,1fr); }
-  .spec-item{ border-right:none !important; }
   .timeline-item{ grid-template-columns:40px 1fr; gap:16px; }
   .timeline-num{ width:38px; height:38px; font-size:0.72rem; }
 }

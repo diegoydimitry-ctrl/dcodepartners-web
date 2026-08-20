@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T10:42:51.964Z",
+  "generatedAt": "2026-08-20T11:46:18.037Z",
   "pageCount": 62,
-  "chunkCount": 728,
+  "chunkCount": 708,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -60,7 +60,7 @@
         {
           "id": "/acuerdo-encargado-tratamiento#c10",
           "heading": "10. Auditoría",
-          "text": "D-Code Partners pondrá a disposición del cliente la información razonablemente necesaria para demostrar el cumplimiento de estas condiciones. Dada su naturaleza de equipo reducido, cualquier auditoría o inspección presencial se coordinará y limitará a lo estrictamente necesario, previo acuerdo entre las partes sobre alcance, coste y plazos."
+          "text": "D-Code Partners pondrá a disposición del cliente la información razonablemente necesaria para demostrar el cumplimiento de estas condiciones. Por razones operativas, cualquier auditoría o inspección presencial se coordinará y limitará a lo estrictamente necesario, previo acuerdo entre las partes sobre alcance, coste y plazos."
         },
         {
           "id": "/acuerdo-encargado-tratamiento#c11",
@@ -345,8 +345,8 @@
         },
         {
           "id": "/casos-exito#c5",
-          "heading": "Si empiezas ahora, tu empresa puede ser uno de nuestros primeros casos reales.",
-          "text": "Cada Departamento Inteligente empieza con un mes de prueba, sin coste ni compromiso. Los resultados de ese primer mes son exactamente el tipo de dato concreto que queremos poder enseñar aquí — con tu permiso, cuando estén sobre la mesa."
+          "heading": "Cada Departamento Inteligente se mide desde el primer mes, con datos reales sobre la mesa.",
+          "text": "Cada Departamento Inteligente empieza con un mes de prueba, sin coste ni compromiso, para que el resultado se vea en datos concretos, no en promesas."
         },
         {
           "id": "/casos-exito#c6",
@@ -642,110 +642,70 @@
         {
           "id": "/departamentos#c2",
           "heading": "Un Departamento, ocho módulos, un mismo sistema.",
-          "text": "Elige un Departamento para ver qué hace y con qué otros encaja — no son piezas sueltas, son procesos de un mismo sistema operativo. COM"
+          "text": "Elige un Departamento para ver qué hace y con qué otros encaja — no son piezas sueltas, son procesos de un mismo sistema operativo. No pierdas ventas por falta de seguimiento."
         },
         {
           "id": "/departamentos#c3",
           "heading": "Comercial",
-          "text": "Que ninguna venta se pierda por falta de seguimiento. Combina bien con: Clientes. Ver Departamento MKT"
+          "text": "COM Qué haceProspecta y prioriza empresas automáticamente, centraliza tu pipeline con IA y redacta propuestas verificadas en minutos. Detectada En seguimiento Propuesta enviada Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Deja de captar clientes al azar."
         },
         {
           "id": "/departamentos#c4",
           "heading": "Marketing",
-          "text": "Leads que llegan ya clasificados, no en bruto. Combina bien con: Comercial. Ver Departamento CLI"
+          "text": "MKT Qué haceCapta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables. Visita Lead capturado Clasificado Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Comercial. Que ningún cliente se sienta abandonado tras la venta."
         },
         {
           "id": "/departamentos#c5",
           "heading": "Clientes",
-          "text": "Que cada cliente se sienta cuidado, sin depender de nadie. Combina bien con: Soporte o Producción. Ver Departamento PRD"
+          "text": "CLI SIN VALIDAR Qué haceDetecta cuándo se cierra una venta, da de alta al cliente y gestiona bienvenida, onboarding, renovaciones y satisfacción. Bienvenida enviada Onboarding en curso Renovación en 12 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Soporte o Producción. Que ningún proyecto se quede sin dueño ni sin plazo."
         },
         {
           "id": "/departamentos#c6",
           "heading": "Producción",
-          "text": "Proyectos que se ponen en marcha solos y cumplen sus plazos. Combina bien con: Finanzas. Ver Departamento FIN"
+          "text": "PRD Qué haceCrea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo y vigila plazos de entrega. Por hacer En curso Entregado Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Finanzas. Controla tu dinero sin perseguir facturas."
         },
         {
           "id": "/departamentos#c7",
           "heading": "Finanzas",
-          "text": "Próximamente — el control de gasto ya es real. Combina bien con: Dirección. Ver Departamento SPT"
+          "text": "FIN PRÓXIMAMENTE Qué haceDiseñado para generar y enviar facturas, escalar recordatorios de cobro y vigilar el gasto interno cada día — el control de gasto ya es real. Facturas emitidas Cobros pendientes Gasto interno Próximo vencimiento 5 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Dirección. Que ningún ticket se pierda ni se demore."
         },
         {
           "id": "/departamentos#c8",
           "heading": "Soporte",
-          "text": "Respuesta rápida, incluso fuera de horario. Combina bien con: Clientes. Ver Departamento ADM"
+          "text": "SPT CHAT EN REVISIÓN Qué haceConvierte cada email de soporte en un ticket priorizado con SLA, con respuesta incluso fuera de horario. Ticket #204 — prioridad alta Ticket #205 — prioridad media Resuelto en 4 min Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Que un descuido no cueste una crisis."
         },
         {
           "id": "/departamentos#c9",
           "heading": "Administración",
-          "text": "Tu empresa, protegida y ordenada, sin esfuerzo. Combina bien con: Cualquiera — es transversal. Ver Departamento DIR"
+          "text": "ADM Qué haceVigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales. Backup semanal completado 8 Departamentos monitorizados 0 incidencias hoy Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Cualquiera — es transversal. Decide con datos, no a ciegas."
         },
         {
           "id": "/departamentos#c10",
           "heading": "Dirección",
-          "text": "Una decisión clara cada mañana, con datos reales. Punto de llegada: da más valor cuantos más Departamentos ya estén activos. Ver Departamento"
+          "text": "DIR Qué haceCentraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día. Ingresos del mes Tareas abiertas Alertas activas Decisión sugerida Hoy Representación del sistema — no son datos de un cliente real. Ver Departamento Punto de llegada: da más valor cuantos más Departamentos ya estén activos."
         },
         {
           "id": "/departamentos#c11",
-          "heading": "Comercial",
-          "text": "Qué hace: Prospecta y prioriza empresas automáticamente, centraliza tu pipeline con IA, redacta propuestas verificadas en minutos y avisa cada mañana de lo que toca. Lo que resuelve: Ninguna oportunidad se pierde por falta de seguimiento. Las propuestas se generan en minutos. El pipeline deja de vivir en la cabeza de una sola persona. Perfil de empresa: Equipos comerciales de 1 a 8 personas sin proceso escrito, o que lo llevan en un Excel. Combina bien con: Clientes. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c12",
-          "heading": "Marketing",
-          "text": "Qué hace: Capta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables. Lo que resuelve: Los leads llegan ya clasificados. El comercial sabe a quién llamar primero. La web se convierte en una fuente constante de oportunidades, no en una tarjeta de visita. Perfil de empresa: Depende hoy del boca a boca o de referidos y quiere un canal de captación propio. Combina bien con: Comercial. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c13",
-          "heading": "Clientes SIN VALIDAR",
-          "text": "Qué hace: Detecta cuándo se cierra una venta, da de alta al cliente, gestiona su bienvenida y onboarding, vigila renovaciones y mide satisfacción. Construido y activo, todavía sin un cliente real que lo haya usado. Lo que resuelve: Todo cliente nuevo recibiría la misma bienvenida. Las renovaciones dejarían de perderse. La satisfacción se mediría de forma continua. Perfil de empresa: Negocios con contrato recurrente o servicio continuado. Combina bien con: Soporte o Producción. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c14",
-          "heading": "Producción",
-          "text": "Qué hace: Crea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo, y vigila avance y fechas de entrega. Lo que resuelve: Cada proyecto ganado se pone en marcha solo. Los retrasos se detectan antes de que el cliente los note. El equipo deja de saturarse. Perfil de empresa: Empresas de servicios o proyectos con equipo de producción propio. Combina bien con: Finanzas. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c15",
-          "heading": "Finanzas PRÓXIMAMENTE",
-          "text": "Qué hace: Diseñado para generar y enviar facturas, escalar recordatorios de cobro, y vigilar el gasto interno cada día. El control de gastos ya está construido; el resto, en desarrollo. Lo que resolverá: Facturas en minutos. Cobro más rápido. Impagos prolongados detectados y escalados solos. Perfil de empresa: Cualquier empresa — cuando esté publicado, el objetivo es el retorno más rápido y fácil de demostrar en euros. Combina bien con: Dirección. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c16",
-          "heading": "Soporte CHAT EN REVISIÓN",
-          "text": "Qué hace: Convierte cada email de soporte en un ticket priorizado con SLA — esto ya es operativo. Un chat 24h que usa datos de tus proyectos está en revisión de seguridad antes de ampliarse. Lo que resuelve: Ningún ticket se pierde ni se prioriza mal. Respuesta incluso fuera de horario. El equipo deja de sentirse desbordado. Perfil de empresa: Empresas con volumen de consultas de clientes ya activos. Combina bien con: Clientes. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c17",
-          "heading": "Administración",
-          "text": "Qué hace: Vigila que el resto de Departamentos sigan funcionando, protege la organización de tus documentos y hace copias de seguridad semanales. Lo que resuelve: Los fallos se detectan en horas, no en semanas. La documentación nunca se pierde. Siempre hay una copia de seguridad reciente. Perfil de empresa: Empresas que gestionan muchos documentos, o que ya sufrieron una pérdida de información. Combina bien con: Cualquiera — es transversal, funciona bien con cualquier combinación. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c18",
-          "heading": "Dirección",
-          "text": "Qué hace: Centraliza tus indicadores, genera informes periódicos y cruza señales externas e internas para proponer una decisión ejecutiva cada día. Lo que resuelve: Cada mañana hay una prioridad clara. Las decisiones se basan en datos actualizados. Los riesgos se detectan antes de convertirse en un problema. Perfil de empresa: Cualquier empresa; da más valor cuantos más Departamentos tenga ya activos. Combina bien con: — es el punto de llegada natural, no de partida. + Empresa objetivo y siguiente paso Ver Departamento"
-        },
-        {
-          "id": "/departamentos#c19",
           "heading": "Se empieza por Marketing o Comercial",
           "text": "Captar más, o vender más sin perseguir a nadie. 02"
         },
         {
-          "id": "/departamentos#c20",
+          "id": "/departamentos#c12",
           "heading": "Se añade Clientes — y Producción si hay proyectos",
           "text": "En cuanto hay ventas que gestionar, entra en juego el ciclo de vida del cliente. 03"
         },
         {
-          "id": "/departamentos#c21",
+          "id": "/departamentos#c13",
           "heading": "Finanzas y Soporte completan el ciclo",
           "text": "Cobrar más rápido y atender sin saturarse, con clientes y proyectos ya en marcha. 04"
         },
         {
-          "id": "/departamentos#c22",
+          "id": "/departamentos#c14",
           "heading": "Dirección se convierte en el paso natural",
           "text": "Con 2 o 3 Departamentos ya activos, todo lo que producen los demás queda en un solo sitio. Administración puede sumarse en cualquier momento del camino."
         },
         {
-          "id": "/departamentos#c23",
+          "id": "/departamentos#c15",
           "heading": "¿Ya sabes por dónde empezar?",
           "text": "Cuéntanos qué Departamento te interesa y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Descubrir mi Departamento Ver cómo funciona el Sistema Operativo"
         }
@@ -839,7 +799,7 @@
         {
           "id": "/departamentos/clientes#c1",
           "heading": "Por qué lo marcamos como \"sin validar\"",
-          "text": "Clientes ya está construido y activo técnicamente: bienvenida, onboarding, renovaciones y encuestas se ejecutan solos. Lo que todavía no tenemos es un cliente real que haya pasado por este circuito — D-Code Partners tiene 0 clientes activos hoy. Preferimos decirlo con esa precisión antes que presentarlo como \"probado\"."
+          "text": "Clientes ya está construido y activo técnicamente: bienvenida, onboarding, renovaciones y encuestas se ejecutan solos. Lo que todavía no tenemos es un cliente real que haya completado este circuito. Preferimos decirlo con esa precisión antes que presentarlo como \"probado\"."
         },
         {
           "id": "/departamentos/clientes#c2",
@@ -1127,7 +1087,7 @@
         {
           "id": "/departamentos/finanzas#c12",
           "heading": "Está pensado para ser el Departamento con el retorno más fácil de demostrar en euros.",
-          "text": "Todavía no tenemos un cliente con el que haberlo medido. Cuando esté publicado, el objetivo es que sea el Departamento con el retorno más rápido y más fácil de argumentar, porque se mediría directamente en cobros que llegan antes y gasto que deja de sorprender al cierre de mes."
+          "text": "Todavía no hemos podido medirlo con un caso real de Finanzas. Cuando esté publicado, el objetivo es que sea el Departamento con el retorno más rápido y más fácil de argumentar, porque se mediría directamente en cobros que llegan antes y gasto que deja de sorprender al cierre de mes."
         },
         {
           "id": "/departamentos/finanzas#c13",
@@ -1431,7 +1391,7 @@
         {
           "id": "/en/acuerdo-encargado-tratamiento#c10",
           "heading": "10. Audit",
-          "text": "D-Code Partners will make available to the client the information reasonably necessary to demonstrate compliance with these terms. Given its nature as a small team, any on-site audit or inspection will be coordinated and limited to what is strictly necessary, subject to prior agreement between the parties on scope, cost, and timing."
+          "text": "D-Code Partners will make available to the client the information reasonably necessary to demonstrate compliance with these terms. For operational reasons, any on-site audit or inspection will be coordinated and limited to what is strictly necessary, subject to prior agreement between the parties on scope, cost, and timing."
         },
         {
           "id": "/en/acuerdo-encargado-tratamiento#c11",
@@ -1716,8 +1676,8 @@
         },
         {
           "id": "/en/casos-exito#c5",
-          "heading": "Start now, and your company could become one of our first real case studies.",
-          "text": "Every Smart Department starts with a one-month trial, no cost, no commitment. The results from that first month are exactly the kind of concrete data we want to be able to show here — with your permission, once they're on the table."
+          "heading": "Every Smart Department is measured from month one, with real data on the table.",
+          "text": "Every Smart Department starts with a one-month trial, no cost, no commitment, so the result shows up in concrete data, not promises."
         },
         {
           "id": "/en/casos-exito#c6",
@@ -2013,110 +1973,70 @@
         {
           "id": "/en/departamentos#c2",
           "heading": "One Department, eight modules, one system.",
-          "text": "Pick a Department to see what it does and which others it pairs with — these aren't standalone pieces, they're processes in one operating system. SLS"
+          "text": "Pick a Department to see what it does and which others it pairs with — these aren't standalone pieces, they're processes in one operating system. Never lose a sale to poor follow-up."
         },
         {
           "id": "/en/departamentos#c3",
           "heading": "Sales",
-          "text": "Never lose a sale to poor follow-up again. Pairs well with: Customer. See Department MKT"
+          "text": "SLS What it doesAutomatically prospects and prioritizes companies, centralizes your pipeline with AI, and drafts verified proposals in minutes. Detected Following up Proposal sent A representation of the system — not a real client's data. See Department Pairs well with: Customer. Stop chasing leads at random."
         },
         {
           "id": "/en/departamentos#c4",
           "heading": "Marketing",
-          "text": "Leads that arrive already qualified, not raw. Pairs well with: Sales. See Department CST"
+          "text": "MKT What it doesCaptures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations. Visit Lead captured Qualified A representation of the system — not a real client's data. See Department Pairs well with: Sales. Never let a customer feel abandoned after the sale."
         },
         {
           "id": "/en/departamentos#c5",
           "heading": "Customer",
-          "text": "Every client cared for, without depending on any one person. Pairs well with: Support or Delivery. See Department DLV"
+          "text": "CST NOT VALIDATED What it doesDetects when a sale closes, sets up the new client, and manages welcome, onboarding, renewals, and satisfaction. Welcome message sent Onboarding in progress Renewal due in 12 days A representation of the system — not a real client's data. See Department Pairs well with: Support or Delivery. Never let a project go without an owner or a deadline."
         },
         {
           "id": "/en/departamentos#c6",
           "heading": "Delivery",
-          "text": "Projects that launch themselves and hit their deadlines. Pairs well with: Finance. See Department FIN"
+          "text": "DLV What it doesCreates the project as soon as a client is won, assigns tasks based on real team load, and tracks delivery dates. To do In progress Delivered A representation of the system — not a real client's data. See Department Pairs well with: Finance. Control your money without chasing invoices."
         },
         {
           "id": "/en/departamentos#c7",
           "heading": "Finance",
-          "text": "Coming soon — expense control is already real. Pairs well with: Leadership. See Department SUP"
+          "text": "FIN COMING SOON What it doesDesigned to generate and send invoices, escalate payment reminders, and monitor internal spend every day — expense control is already real. Invoices issued Pending payments Internal spend Next due date 5 days A representation of the system — not a real client's data. See Department Pairs well with: Leadership. Never let a ticket get lost or delayed."
         },
         {
           "id": "/en/departamentos#c8",
           "heading": "Support",
-          "text": "Fast responses, even after hours. Pairs well with: Customer. See Department OPS"
+          "text": "SUP CHAT UNDER REVIEW What it doesTurns every support email into a prioritized ticket with an SLA, with response even after hours. Ticket #204 — high priority Ticket #205 — medium priority Resolved in 4 min A representation of the system — not a real client's data. See Department Pairs well with: Customer. Don't let one oversight become a crisis."
         },
         {
           "id": "/en/departamentos#c9",
           "heading": "Operations",
-          "text": "Your company, protected and organized, effortlessly. Pairs well with: Any of them — it's cross-cutting. See Department LDR"
+          "text": "OPS What it doesMonitors that the rest of your Departments keep running, protects your documents, and runs weekly backups. Weekly backup completed 8 Departments monitored 0 incidents today A representation of the system — not a real client's data. See Department Pairs well with: Any of them — it's cross-cutting. Decide with data, not guesswork."
         },
         {
           "id": "/en/departamentos#c10",
           "heading": "Leadership",
-          "text": "One clear decision every morning, backed by real data. Natural endpoint: gives more value the more Departments are already active. See Department"
+          "text": "LDR What it doesCentralizes your KPIs, generates periodic reports, and proposes one executive decision every day. Revenue this month Open tasks Active alerts Suggested decision Today A representation of the system — not a real client's data. See Department Natural endpoint: gives more value the more Departments are already active."
         },
         {
           "id": "/en/departamentos#c11",
-          "heading": "Sales",
-          "text": "What it does: Automatically prospects and prioritizes companies, centralizes your pipeline with AI, drafts verified proposals in minutes, and tells you every morning what's next. What it solves: No opportunity is lost to poor follow-up. Proposals are generated in minutes. The pipeline stops living in one person's head. Company profile: Sales teams of 1 to 8 people with no written process, or running it off a spreadsheet. Pairs well with: Customer. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c12",
-          "heading": "Marketing",
-          "text": "What it does: Captures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations. What it solves: Leads arrive already classified. Sales knows who to call first. Your website becomes a steady source of opportunities, not just a business card. Company profile: Currently relies on word of mouth or referrals and wants its own acquisition channel. Pairs well with: Sales. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c13",
-          "heading": "Customer NOT VALIDATED",
-          "text": "What it does: Detects when a sale closes, sets up the new client, manages welcome and onboarding, tracks renewals, and measures satisfaction. Built and active, but no real client has used it yet. What it solves: Every new client would get the same welcome. Renewals would stop slipping through the cracks. Satisfaction would be measured continuously. Company profile: Businesses with recurring contracts or ongoing service. Pairs well with: Support or Delivery. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c14",
-          "heading": "Delivery",
-          "text": "What it does: Creates the project as soon as a client is won, assigns tasks based on the team's real workload, and tracks progress and delivery dates. What it solves: Every project won launches itself. Delays are caught before the client notices. The team stops getting overloaded. Company profile: Service or project-based companies with their own delivery team. Pairs well with: Finance. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c15",
-          "heading": "Finance COMING SOON",
-          "text": "What it does: Designed to generate and send invoices, escalate payment reminders, and monitor internal spend every day. Expense control is already built; the rest is in development. What it will solve: Invoices in minutes. Faster collections. Overdue payments detected and escalated automatically. Company profile: Any company — once released, the goal is the fastest, easiest return to demonstrate in euros. Pairs well with: Leadership. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c16",
-          "heading": "Support CHAT UNDER REVIEW",
-          "text": "What it does: Turns every support email into a prioritized ticket with an SLA — this part is already live in production. A 24h chat that draws on your project data is undergoing a security review before it's expanded. What it solves: No ticket gets lost or wrongly prioritized. Responses even after hours. The team stops feeling overwhelmed. Company profile: Companies with a volume of inquiries from already-active clients. Pairs well with: Customer. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c17",
-          "heading": "Operations",
-          "text": "What it does: Monitors that the rest of your Departments keep running, keeps your documents organized and protected, and runs weekly backups. What it solves: Failures are caught in hours, not weeks. Documentation never gets lost. There's always a recent backup. Company profile: Companies that manage a lot of documents, or that have already suffered a data loss. Pairs well with: Any of them — it's cross-cutting, and works well with any combination. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c18",
-          "heading": "Leadership",
-          "text": "What it does: Centralizes your KPIs, generates periodic reports, and cross-references external and internal signals to propose one executive decision every day. What it solves: Every morning there's a clear priority. Decisions are based on up-to-date data. Risks are caught before they become a problem. Company profile: Any company; it delivers more value the more Departments you already have active. Pairs well with: — it's the natural endpoint, not the starting point. + Target company and what's next View Department"
-        },
-        {
-          "id": "/en/departamentos#c19",
           "heading": "It starts with Marketing or Sales",
           "text": "Capture more leads, or sell more without chasing anyone. 02"
         },
         {
-          "id": "/en/departamentos#c20",
+          "id": "/en/departamentos#c12",
           "heading": "Customer gets added — and Delivery if there are projects",
           "text": "As soon as there are sales to manage, the client lifecycle comes into play. 03"
         },
         {
-          "id": "/en/departamentos#c21",
+          "id": "/en/departamentos#c13",
           "heading": "Finance and Support complete the cycle",
           "text": "Getting paid faster and providing support without getting overwhelmed, with clients and projects already underway. 04"
         },
         {
-          "id": "/en/departamentos#c22",
+          "id": "/en/departamentos#c14",
           "heading": "Leadership becomes the natural next step",
           "text": "With 2 or 3 Departments already active, everything the rest produce lands in one place. Operations can join in at any point along the way."
         },
         {
-          "id": "/en/departamentos#c23",
+          "id": "/en/departamentos#c15",
           "heading": "Already know where to start?",
           "text": "Tell us which Department interests you, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Find My Department See how the Operating System works"
         }
@@ -2210,7 +2130,7 @@
         {
           "id": "/en/departamentos/clientes#c1",
           "heading": "Why we flag it as \"not yet validated\"",
-          "text": "Customer is already built and technically active: welcome messages, onboarding, renewals, and surveys all run on their own. What we don't have yet is a real client who has gone through this workflow — D-Code Partners has 0 active clients today. We'd rather say that with precision than present it as \"proven.\""
+          "text": "Customer is already built and technically active: welcome messages, onboarding, renewals, and surveys all run on their own. What we don't have yet is a real client who has completed this workflow. We'd rather say that with precision than present it as \"proven.\""
         },
         {
           "id": "/en/departamentos/clientes#c2",
@@ -2498,7 +2418,7 @@
         {
           "id": "/en/departamentos/finanzas#c12",
           "heading": "It's designed to be the Department with the easiest return to prove, in euros.",
-          "text": "We don't yet have a client we've measured this with. Once published, the goal is for it to be the Department with the fastest, easiest-to-argue return, because it would be measured directly in payments that arrive sooner and spend that stops surprising you at month-end."
+          "text": "We haven't yet had the chance to measure it against a real Finance use case. Once published, the goal is for it to be the Department with the fastest, easiest-to-argue return, because it would be measured directly in payments that arrive sooner and spend that stops surprising you at month-end."
         },
         {
           "id": "/en/departamentos/finanzas#c13",
@@ -2872,8 +2792,8 @@
       "chunks": [
         {
           "id": "/en/garantias#c0",
-          "heading": "We're a young company. That's why we don't charge until we prove it.",
-          "text": "We don't have twenty years of track record yet, nor a shelf of client case studies to show you — and we'd rather tell you that plainly than inflate it. What we do have is a model built so that we take on the risk, not you."
+          "heading": "Our risk, not yours. That's why we don't charge until we prove results.",
+          "text": "We'd rather let the result speak than the promise. That's why the model is built so we take on the risk, not you."
         },
         {
           "id": "/en/garantias#c1",
@@ -2934,7 +2854,7 @@
         {
           "id": "/en/#c1",
           "heading": "Not chatbots. One system with 8 modules.",
-          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data. Four commitments that don't depend on how many Departments you activate. Upfront risk 0 € You pay nothing until we prove results. Free trial 30 days A full month of real service, no commitment. Availability 24 /7 Your company never stops. Neither do the Departments working for it. Response time &lt; 24 h Every inquiry answered within one business day."
+          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data."
         },
         {
           "id": "/en/#c2",
@@ -2959,7 +2879,7 @@
         {
           "id": "/en/#c6",
           "heading": "A partnership that starts with facts, not promises.",
-          "text": "The market is full of consultancies that promise before they prove. We work the other way around. \"One full month of service, at no cost at all.\" We deploy your Smart Departments and measure their real impact on revenue and efficiency. Only once the results are on the table do we sit down to talk numbers. No proven benefit, no invoice. As simple as that. See the full Method Guarantees & Process 0% RISK No lock-in. No fine print."
+          "text": "The market is full of consultancies that promise before they prove. We work the other way around: we deploy your Smart Departments and measure their real impact on revenue and efficiency before we talk numbers. \"One full month of service, at no cost at all.\" See the full Method Guarantees & Process 0% RISK No lock-in. No fine print."
         },
         {
           "id": "/en/#c7",
@@ -2984,20 +2904,10 @@
         {
           "id": "/en/#c11",
           "heading": "Two founders. One shared code.",
-          "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. D.S."
+          "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. Diego leads strategy and partnerships; Dimitry, the architecture behind the Smart Departments. Read our full story"
         },
         {
           "id": "/en/#c12",
-          "heading": "Diego Siñeriz",
-          "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. D.S."
-        },
-        {
-          "id": "/en/#c13",
-          "heading": "Dimitry Sosenko",
-          "text": "Co-Founder &amp; CEO Leads the architecture behind the Smart Departments. Read our full story"
-        },
-        {
-          "id": "/en/#c14",
           "heading": "Book a 30-minute meeting.",
           "text": "We'll tell you which Smart Departments would have the most impact on your business, and what to expect from month one — no cost, no commitment. Book My Free Call See FAQ"
         }
@@ -3050,7 +2960,7 @@
         {
           "id": "/en/metodo#c8",
           "heading": "Trust is proven, not declared.",
-          "text": "We're a young company. Rather than make up for that with grand promises or inflated case studies, we'd rather let the implementation itself speak for us during that first month. It's a model that puts the obligation on us, not you: if the system doesn't work, we don't get paid. That aligns our incentives with yours from day one. No proven benefit, no invoice. As simple as that. Claim My Trial Month See all questions"
+          "text": "Rather than lean on grand promises or inflated case studies, we'd rather let the implementation itself speak for us during that first month. It's a model that puts the obligation on us, not you: if the system doesn't work, we don't get paid. That aligns our incentives with yours from day one. No proven benefit, no invoice. As simple as that. Claim My Trial Month See all questions"
         },
         {
           "id": "/en/metodo#c9",
@@ -3167,7 +3077,7 @@
         {
           "id": "/en/seguridad#c8",
           "heading": "8. What we currently do NOT have",
-          "text": "In the interest of transparency: as of the date of this policy, D-Code Partners is a small team and does not hold ISO 27001 certification or an Information Security Management System formally audited by a third party. The measures described in this document are those actually in place today; as D-Code Partners grows, this policy will be reviewed and expanded accordingly."
+          "text": "In the interest of transparency: D-Code Partners does not currently hold ISO 27001 certification or an Information Security Management System formally audited by a third party. The measures described in this document are those actually in place today; this policy will be reviewed and expanded as security requirements evolve."
         },
         {
           "id": "/en/seguridad#c9",
@@ -3507,8 +3417,8 @@
       "chunks": [
         {
           "id": "/garantias#c0",
-          "heading": "Somos una empresa joven. Por eso no cobramos hasta demostrarlo.",
-          "text": "Todavía no tenemos veinte años de trayectoria ni un archivo de casos de cliente que enseñarte — y preferimos decírtelo claramente antes que inflarlo. Lo que sí tenemos es un modelo diseñado para que asumamos nosotros el riesgo, no tú."
+          "heading": "Nuestro riesgo, no el tuyo. Por eso no cobramos hasta demostrar resultados.",
+          "text": "Preferimos que sea el resultado el que hable, no la promesa. Por eso el modelo está diseñado para que seamos nosotros quienes asumamos el riesgo, no tú."
         },
         {
           "id": "/garantias#c1",
@@ -3569,7 +3479,7 @@
         {
           "id": "/#c1",
           "heading": "No son chatbots. Son un mismo sistema con 8 módulos.",
-          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales. Cuatro compromisos que no dependen de cuántos Departamentos actives. Riesgo inicial 0 € No pagas nada hasta demostrar resultados. Prueba gratuita 30 días Un mes completo de servicio real, sin compromiso. Disponibilidad 24 /7 Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella. Tiempo de respuesta &lt; 24 h Cada consulta, atendida en menos de un día laborable."
+          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales."
         },
         {
           "id": "/#c2",
@@ -3594,7 +3504,7 @@
         {
           "id": "/#c6",
           "heading": "Una alianza que empieza por los hechos, no por las promesas.",
-          "text": "El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés. \"Un mes completo de servicio, sin coste alguno.\" Implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia. Solo cuando los resultados están sobre la mesa, nos sentamos a hablar de cifras. Sin beneficio demostrado, no hay factura. Así de simple. Ver el Método completo Garantías y Proceso RIESGO 0% Sin permanencia. Sin letra pequeña."
+          "text": "El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés: implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia antes de hablar de cifras. \"Un mes completo de servicio, sin coste alguno.\" Ver el Método completo Garantías y Proceso RIESGO 0% Sin permanencia. Sin letra pequeña."
         },
         {
           "id": "/#c7",
@@ -3619,20 +3529,10 @@
         {
           "id": "/#c11",
           "heading": "Dos fundadores. Un mismo código.",
-          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. D.S."
+          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. Diego lidera la estrategia y las alianzas; Dimitry, la arquitectura de los Departamentos Inteligentes. Conoce toda nuestra historia"
         },
         {
           "id": "/#c12",
-          "heading": "Diego Siñeriz",
-          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. D.S."
-        },
-        {
-          "id": "/#c13",
-          "heading": "Dimitry Sosenko",
-          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los Departamentos Inteligentes. Conoce toda nuestra historia"
-        },
-        {
-          "id": "/#c14",
           "heading": "Reserva una reunión de 30 minutos.",
           "text": "Te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y qué puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
@@ -3685,7 +3585,7 @@
         {
           "id": "/metodo#c8",
           "heading": "La confianza se demuestra, no se declara.",
-          "text": "Somos una empresa joven. En vez de compensarlo con promesas grandilocuentes o casos inflados, preferimos que sea la propia implementación la que hable por nosotros durante el primer mes. Es un modelo que nos obliga a nosotros, no a ti: si el sistema no funciona, no cobramos. Eso alinea nuestros incentivos con los tuyos desde el primer día. Sin beneficio demostrado, no hay factura. Así de simple. Reclamar mi Mes de Prueba Ver todas las preguntas"
+          "text": "Preferimos no compensar nada con promesas grandilocuentes: dejamos que sea la propia implementación la que hable por nosotros durante el primer mes. Es un modelo que nos obliga a nosotros, no a ti: si el sistema no funciona, no cobramos. Eso alinea nuestros incentivos con los tuyos desde el primer día. Sin beneficio demostrado, no hay factura. Así de simple. Reclamar mi Mes de Prueba Ver todas las preguntas"
         },
         {
           "id": "/metodo#c9",
@@ -3802,7 +3702,7 @@
         {
           "id": "/seguridad#c8",
           "heading": "8. Lo que actualmente NO tenemos",
-          "text": "Por transparencia: D-Code Partners es, a la fecha de esta política, un equipo reducido y no dispone de una certificación ISO 27001 ni de un Sistema de Gestión de Seguridad de la Información formalmente auditado por un tercero. Las medidas descritas en este documento son las que se aplican realmente hoy; a medida que D-Code Partners crezca, esta política se revisará y ampliará en consecuencia."
+          "text": "Por transparencia: D-Code Partners no dispone, a la fecha de esta política, de una certificación ISO 27001 ni de un Sistema de Gestión de Seguridad de la Información formalmente auditado por un tercero. Las medidas descritas en este documento son las que se aplican realmente hoy; esta política se revisará y ampliará a medida que evolucionen los requisitos de seguridad."
         },
         {
           "id": "/seguridad#c9",

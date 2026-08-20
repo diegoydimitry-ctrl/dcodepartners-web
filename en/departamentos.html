@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="Smart Departments — D-Code Partners">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css?v=c7018e6105">
+<link rel="stylesheet" href="/assets/css/styles.css?v=449cc004b1">
 
 <script type="application/ld+json">
 {
@@ -193,7 +193,7 @@
        mono tags), genuinely interactive (the detail pane only changes on
        user choice, never on a timer), and with its own mobile layout
        (compact 4×2 selector grid instead of a shrunk desktop version). -->
-  <section class="section-sm dept-console">
+  <section class="section-sm dept-console" id="departamentos">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">The whole system</span>
@@ -214,267 +214,189 @@
               <button class="dept-console-item is-active" type="button" role="tab" aria-selected="true" aria-controls="dcp-comercial" data-dept="comercial">
                 <span class="dci-tag">SLS</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
-                <span class="dci-name">Sales</span>
+                <span class="dci-name">Never lose a sale to poor follow-up</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-marketing" data-dept="marketing">
                 <span class="dci-tag">MKT</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
-                <span class="dci-name">Marketing</span>
+                <span class="dci-name">Stop chasing leads at random</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-clientes" data-dept="clientes">
                 <span class="dci-tag">CST</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
-                <span class="dci-name">Customer</span>
+                <span class="dci-name">Never let a customer feel abandoned</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-produccion" data-dept="produccion">
                 <span class="dci-tag">DLV</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-                <span class="dci-name">Delivery</span>
+                <span class="dci-name">Never let a project go without an owner</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-finanzas" data-dept="finanzas">
                 <span class="dci-tag">FIN</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-                <span class="dci-name">Finance</span>
+                <span class="dci-name">Control your money without chasing invoices</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-soporte" data-dept="soporte">
                 <span class="dci-tag">SUP</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
-                <span class="dci-name">Support</span>
+                <span class="dci-name">Never let a ticket get lost or delayed</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-administracion" data-dept="administracion">
                 <span class="dci-tag">OPS</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
-                <span class="dci-name">Operations</span>
+                <span class="dci-name">Don't let one oversight become a crisis</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
               <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-direccion" data-dept="direccion">
                 <span class="dci-tag">LDR</span>
                 <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-                <span class="dci-name">Leadership</span>
+                <span class="dci-name">Decide with data, not guesswork</span>
                 <span class="dci-dot" aria-hidden="true"></span>
               </button>
             </div>
 
             <div class="dept-console-detail">
               <div class="dept-console-pane is-active" id="dcp-comercial" data-dept="comercial" role="tabpanel">
-                <span class="dcp-tag">SLS</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
-                <h3 class="dcp-name">Sales</h3>
-                <p class="dcp-tagline">Never lose a sale to poor follow-up again.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Customer.</p>
+                <p class="dcp-problem">Never lose a sale to poor follow-up.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Sales</h3><span class="dcp-tag">SLS</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Automatically prospects and prioritizes companies, centralizes your pipeline with AI, and drafts verified proposals in minutes.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvp-stages"><span>Detected</span><span>Following up</span><span class="is-current">Proposal sent</span></div>
+                  <div class="dvp-track" style="--dvp-fill:66%;"></div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/comercial">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Customer.</p>
               </div>
               <div class="dept-console-pane" id="dcp-marketing" data-dept="marketing" role="tabpanel" hidden>
-                <span class="dcp-tag">MKT</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
-                <h3 class="dcp-name">Marketing</h3>
-                <p class="dcp-tagline">Leads that arrive already qualified, not raw.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Sales.</p>
+                <p class="dcp-problem">Stop chasing leads at random.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Marketing</h3><span class="dcp-tag">MKT</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Captures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvp-stages"><span>Visit</span><span>Lead captured</span><span class="is-current">Qualified</span></div>
+                  <div class="dvp-track" style="--dvp-fill:50%;"></div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/marketing">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Sales.</p>
               </div>
               <div class="dept-console-pane" id="dcp-clientes" data-dept="clientes" role="tabpanel" hidden>
-                <span class="dcp-tag">CST</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
-                <h3 class="dcp-name">Customer</h3>
-                <p class="dcp-tagline">Every client cared for, without depending on any one person.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Support or Delivery.</p>
+                <p class="dcp-problem">Never let a customer feel abandoned after the sale.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Customer</h3><span class="dcp-tag">CST</span><span class="badge badge-amber">NOT VALIDATED</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Detects when a sale closes, sets up the new client, and manages welcome, onboarding, renewals, and satisfaction.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvl-row"><span class="dvl-dot done"></span>Welcome message sent</div>
+                  <div class="dvl-row"><span class="dvl-dot active"></span>Onboarding in progress</div>
+                  <div class="dvl-row"><span class="dvl-dot pending"></span>Renewal due in 12 days</div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/clientes">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Support or Delivery.</p>
               </div>
               <div class="dept-console-pane" id="dcp-produccion" data-dept="produccion" role="tabpanel" hidden>
-                <span class="dcp-tag">DLV</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-                <h3 class="dcp-name">Delivery</h3>
-                <p class="dcp-tagline">Projects that launch themselves and hit their deadlines.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Finance.</p>
+                <p class="dcp-problem">Never let a project go without an owner or a deadline.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Delivery</h3><span class="dcp-tag">DLV</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Creates the project as soon as a client is won, assigns tasks based on real team load, and tracks delivery dates.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvp-stages"><span>To do</span><span class="is-current">In progress</span><span>Delivered</span></div>
+                  <div class="dvp-track" style="--dvp-fill:40%;"></div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/produccion">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Finance.</p>
               </div>
               <div class="dept-console-pane" id="dcp-finanzas" data-dept="finanzas" role="tabpanel" hidden>
-                <span class="dcp-tag">FIN</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-                <h3 class="dcp-name">Finance</h3>
-                <p class="dcp-tagline">Coming soon — expense control is already real.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Leadership.</p>
+                <p class="dcp-problem">Control your money without chasing invoices.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Finance</h3><span class="dcp-tag">FIN</span><span class="badge badge-violet">COMING SOON</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Designed to generate and send invoices, escalate payment reminders, and monitor internal spend every day — expense control is already real.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvm-grid">
+                    <div class="dvm-tile"><span class="dvm-label">Invoices issued</span><div class="dvm-indicator"><span style="width:70%;"></span></div></div>
+                    <div class="dvm-tile"><span class="dvm-label">Pending payments</span><div class="dvm-indicator"><span style="width:35%;"></span></div></div>
+                    <div class="dvm-tile"><span class="dvm-label">Internal spend</span><div class="dvm-indicator"><span style="width:55%;"></span></div></div>
+                    <div class="dvm-tile"><span class="dvm-label">Next due date</span><div class="dvm-value">5 days</div></div>
+                  </div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/finanzas">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Leadership.</p>
               </div>
               <div class="dept-console-pane" id="dcp-soporte" data-dept="soporte" role="tabpanel" hidden>
-                <span class="dcp-tag">SUP</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
-                <h3 class="dcp-name">Support</h3>
-                <p class="dcp-tagline">Fast responses, even after hours.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Customer.</p>
+                <p class="dcp-problem">Never let a ticket get lost or delayed.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Support</h3><span class="dcp-tag">SUP</span><span class="badge badge-amber">CHAT UNDER REVIEW</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Turns every support email into a prioritized ticket with an SLA, with response even after hours.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvl-row"><span class="dvl-dot active"></span>Ticket #204 — high priority</div>
+                  <div class="dvl-row"><span class="dvl-dot pending"></span>Ticket #205 — medium priority</div>
+                  <div class="dvl-row"><span class="dvl-dot done"></span>Resolved in 4 min</div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/soporte">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Customer.</p>
               </div>
               <div class="dept-console-pane" id="dcp-administracion" data-dept="administracion" role="tabpanel" hidden>
-                <span class="dcp-tag">OPS</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
-                <h3 class="dcp-name">Operations</h3>
-                <p class="dcp-tagline">Your company, protected and organized, effortlessly.</p>
-                <p class="dcp-connects"><strong>Pairs well with:</strong> Any of them — it's cross-cutting.</p>
+                <p class="dcp-problem">Don't let one oversight become a crisis.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Operations</h3><span class="dcp-tag">OPS</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Monitors that the rest of your Departments keep running, protects your documents, and runs weekly backups.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvl-row"><span class="dvl-dot done"></span>Weekly backup completed</div>
+                  <div class="dvl-row"><span class="dvl-dot active"></span>8 Departments monitored</div>
+                  <div class="dvl-row"><span class="dvl-dot done"></span>0 incidents today</div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/administracion">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Pairs well with:</strong> Any of them — it's cross-cutting.</p>
               </div>
               <div class="dept-console-pane" id="dcp-direccion" data-dept="direccion" role="tabpanel" hidden>
-                <span class="dcp-tag">LDR</span>
-                <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-                <h3 class="dcp-name">Leadership</h3>
-                <p class="dcp-tagline">One clear decision every morning, backed by real data.</p>
-                <p class="dcp-connects"><strong>Natural endpoint:</strong> gives more value the more Departments are already active.</p>
+                <p class="dcp-problem">Decide with data, not guesswork.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Leadership</h3><span class="dcp-tag">LDR</span></div>
+                </div>
+                <p class="dcp-does"><strong>What it does</strong>Centralizes your KPIs, generates periodic reports, and proposes one executive decision every day.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dvm-grid">
+                    <div class="dvm-tile"><span class="dvm-label">Revenue this month</span><div class="dvm-indicator"><span style="width:60%;"></span></div></div>
+                    <div class="dvm-tile"><span class="dvm-label">Open tasks</span><div class="dvm-indicator"><span style="width:30%;"></span></div></div>
+                    <div class="dvm-tile"><span class="dvm-label">Active alerts</span><div class="dvm-indicator"><span style="width:15%;"></span></div></div>
+                    <div class="dvm-tile"><span class="dvm-label">Suggested decision</span><div class="dvm-value">Today</div></div>
+                  </div>
+                  <p class="dcp-visual-note">A representation of the system — not a real client's data.</p>
+                </div>
                 <a class="dcp-link" href="/en/departamentos/direccion">See Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Natural endpoint:</strong> gives more value the more Departments are already active.</p>
               </div>
             </div>
 
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ DEPARTMENTS GRID ============ -->
-  <section class="section-sm" id="departamentos">
-    <div class="container">
-      <div class="servicios-cards" data-stagger>
-        <svg class="dept-connections" aria-hidden="true" focusable="false"></svg>
-        <a class="window service-card reveal-left" id="dept-comercial" href="/en/departamentos/comercial">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">sales-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>Sales</h3>
-            <p><strong>What it does:</strong> Automatically prospects and prioritizes companies, centralizes your pipeline with AI, drafts verified proposals in minutes, and tells you every morning what's next.</p>
-            <p><strong>What it solves:</strong> No opportunity is lost to poor follow-up. Proposals are generated in minutes. The pipeline stops living in one person's head.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Sales teams of 1 to 8 people with no written process, or running it off a spreadsheet.</p>
-            <p><strong>Pairs well with:</strong> Customer.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-marketing" href="/en/departamentos/marketing">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">marketing-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>Marketing</h3>
-            <p><strong>What it does:</strong> Captures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations.</p>
-            <p><strong>What it solves:</strong> Leads arrive already classified. Sales knows who to call first. Your website becomes a steady source of opportunities, not just a business card.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Currently relies on word of mouth or referrals and wants its own acquisition channel.</p>
-            <p><strong>Pairs well with:</strong> Sales.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-left" id="dept-clientes" href="/en/departamentos/clientes">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">customer-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>Customer <span class="badge badge-amber" style="margin-left:8px;">NOT VALIDATED</span></h3>
-            <p><strong>What it does:</strong> Detects when a sale closes, sets up the new client, manages welcome and onboarding, tracks renewals, and measures satisfaction. Built and active, but no real client has used it yet.</p>
-            <p><strong>What it solves:</strong> Every new client would get the same welcome. Renewals would stop slipping through the cracks. Satisfaction would be measured continuously.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Businesses with recurring contracts or ongoing service.</p>
-            <p><strong>Pairs well with:</strong> Support or Delivery.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-produccion" href="/en/departamentos/produccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">delivery-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Delivery</h3>
-            <p><strong>What it does:</strong> Creates the project as soon as a client is won, assigns tasks based on the team's real workload, and tracks progress and delivery dates.</p>
-            <p><strong>What it solves:</strong> Every project won launches itself. Delays are caught before the client notices. The team stops getting overloaded.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Service or project-based companies with their own delivery team.</p>
-            <p><strong>Pairs well with:</strong> Finance.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-left" id="dept-finanzas" href="/en/departamentos/finanzas">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">finance-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>Finance <span class="badge badge-violet" style="margin-left:8px;">COMING SOON</span></h3>
-            <p><strong>What it does:</strong> Designed to generate and send invoices, escalate payment reminders, and monitor internal spend every day. Expense control is already built; the rest is in development.</p>
-            <p><strong>What it will solve:</strong> Invoices in minutes. Faster collections. Overdue payments detected and escalated automatically.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Any company — once released, the goal is the fastest, easiest return to demonstrate in euros.</p>
-            <p><strong>Pairs well with:</strong> Leadership.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-soporte" href="/en/departamentos/soporte">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">support-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>Support <span class="badge badge-amber" style="margin-left:8px;">CHAT UNDER REVIEW</span></h3>
-            <p><strong>What it does:</strong> Turns every support email into a prioritized ticket with an SLA — this part is already live in production. A 24h chat that draws on your project data is undergoing a security review before it's expanded.</p>
-            <p><strong>What it solves:</strong> No ticket gets lost or wrongly prioritized. Responses even after hours. The team stops feeling overwhelmed.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Companies with a volume of inquiries from already-active clients.</p>
-            <p><strong>Pairs well with:</strong> Customer.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-left" id="dept-administracion" href="/en/departamentos/administracion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">operations-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>Operations</h3>
-            <p><strong>What it does:</strong> Monitors that the rest of your Departments keep running, keeps your documents organized and protected, and runs weekly backups.</p>
-            <p><strong>What it solves:</strong> Failures are caught in hours, not weeks. Documentation never gets lost. There's always a recent backup.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Companies that manage a lot of documents, or that have already suffered a data loss.</p>
-            <p><strong>Pairs well with:</strong> Any of them — it's cross-cutting, and works well with any combination.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-direccion" href="/en/departamentos/direccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">leadership-ai.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>Leadership</h3>
-            <p><strong>What it does:</strong> Centralizes your KPIs, generates periodic reports, and cross-references external and internal signals to propose one executive decision every day.</p>
-            <p><strong>What it solves:</strong> Every morning there's a clear priority. Decisions are based on up-to-date data. Risks are caught before they become a problem.</p>
-            <div class="card-extra">
-            <p><strong>Company profile:</strong> Any company; it delivers more value the more Departments you already have active.</p>
-            <p><strong>Pairs well with:</strong> — it's the natural endpoint, not the starting point.</p>
-            </div>
-            <span class="card-extra-hint">+ Target company and what's next</span>
-            <span class="card-link">View Department <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
       </div>
     </div>
   </section>
