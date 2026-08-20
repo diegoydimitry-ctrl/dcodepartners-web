@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T17:03:23.151Z",
+  "generatedAt": "2026-08-20T18:17:11.993Z",
   "pageCount": 64,
-  "chunkCount": 742,
+  "chunkCount": 738,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -1037,75 +1037,70 @@
         {
           "id": "/departamentos/finanzas#c2",
           "heading": "Controla el dinero sin perseguir facturas.",
-          "text": "El sistema financiero conectado a tus operaciones: facturas, cobros, gastos y presupuestos en una misma vista, con un asistente que responde con datos reales. Explorar D-Code Finance Salir de la demo DEMO Estudio Nortia · datos ficticios Buscar facturas, clientes, gastos&hellip; Cuenta de demostración SUPERADMIN D Día a día Dashboard Facturas Cobros Gastos Negocio Presupuestos Clientes Situación"
+          "text": "El sistema financiero conectado a tus operaciones: facturas, cobros, gastos y presupuestos en una misma vista, con un asistente que responde con datos reales. Explorar D-Code Finance"
         },
         {
           "id": "/departamentos/finanzas#c3",
-          "heading": "Panel financiero",
-          "text": "Este mes has cobrado 480 € y gastado 115 €: vas 365 € por encima. Te deben 1750 €, de los que 350 € ya han vencido; 620 € los debe Bufete Larra & Asociados. El proyecto con menor margen es “Rediseño de marca”, con un 88% de rentabilidad. Cobrado 15.590&nbsp;€ dinero que ya ha entrado Pendiente de cobro 1750&nbsp;€ emitido y sin cobrar Vencido 350&nbsp;€ pasado de fecha"
-        },
-        {
-          "id": "/departamentos/finanzas#c4",
           "heading": "Finanzas está diseñado para cubrir las dos mitades de tu cuadro económico: lo que cobras y lo que gastas.",
           "text": "El diseño genera el documento de cada factura y vigila su estado hasta que se cobra, escalando automáticamente los avisos si no hay respuesta. En paralelo, vigila el gasto interno cada día, no solo cuando cierra el mes. Algunas de estas piezas ya están construidas; el circuito completo, todavía no."
         },
         {
-          "id": "/departamentos/finanzas#c5",
+          "id": "/departamentos/finanzas#c4",
           "heading": "El diseño previsto del circuito de Finanzas.",
           "text": "Esto es el diseño del sistema, no una función ya activa — el control de gastos ya está construido; el resto, todavía en desarrollo. Presupuesto asignado 2.400 € Factura emitida 1.850 € Cobro confirmado +1.850 € Gasto interno del mes −420 € Rentabilidad estimada 1430 € Cifras de ejemplo para mostrar cómo está pensado que se lea el circuito una vez esté completo — no son datos financieros reales ni de ningún cliente."
         },
         {
-          "id": "/departamentos/finanzas#c6",
+          "id": "/departamentos/finanzas#c5",
           "heading": "Dejarás de descubrir los impagos tarde y el gasto al cierre del mes.",
           "text": "Las facturas se generan a mano, factura a factura. Los impagos se descubren tarde, o no se descubren. Los recordatorios de cobro dependen de que alguien se acuerde. El gasto interno solo se conoce al cierre del mes. Las facturas se generarán y se enviarán en minutos. El cobro se acelerará con recordatorios que escalan solos. Los impagos prolongados se detectarán y alertarán sin que se olviden. El gasto se controlará día a día, con alertas de presupuesto."
         },
         {
-          "id": "/departamentos/finanzas#c7",
+          "id": "/departamentos/finanzas#c6",
           "heading": "Facturas generadas en minutos",
           "text": "Diseñado para generarse y enviarse en minutos, no en días."
         },
         {
-          "id": "/departamentos/finanzas#c8",
+          "id": "/departamentos/finanzas#c7",
           "heading": "El cobro se acelera",
           "text": "Recordatorios automáticos que escalarán solos hasta que se pague la factura."
         },
         {
-          "id": "/departamentos/finanzas#c9",
+          "id": "/departamentos/finanzas#c8",
           "heading": "Los impagos prolongados no se olvidan",
           "text": "Diseñado para detectarse y escalarse solos, sin depender de que alguien lo recuerde."
         },
         {
-          "id": "/departamentos/finanzas#c10",
+          "id": "/departamentos/finanzas#c9",
           "heading": "El gasto interno se controla a diario",
           "text": "El control de gastos ya está construido y activo internamente; vigila día a día, no al cierre de mes."
         },
         {
-          "id": "/departamentos/finanzas#c11",
+          "id": "/departamentos/finanzas#c10",
           "heading": "El proyecto o el cliente ya existe",
           "text": "Producción y Clientes ponen en marcha el proyecto y dan de alta al cliente — esta parte ya es real. 02"
         },
         {
-          "id": "/departamentos/finanzas#c12",
+          "id": "/departamentos/finanzas#c11",
           "heading": "Finanzas generará y enviará la factura",
           "text": "El generador de facturas ya existe, pero todavía no tiene un disparador automático de negocio — hoy requiere intervención manual. 03"
         },
         {
-          "id": "/departamentos/finanzas#c13",
+          "id": "/departamentos/finanzas#c12",
           "heading": "El cobro se vigilará hasta que se complete",
           "text": "Los recordatorios escalarán automáticamente si no hay respuesta, sin que nadie tenga que estar pendiente."
         },
         {
-          "id": "/departamentos/finanzas#c14",
+          "id": "/departamentos/finanzas#c13",
           "heading": "Está pensado para ser el Departamento con el retorno más fácil de demostrar en euros.",
           "text": "Todavía no hemos podido medirlo con un caso real de Finanzas. Cuando esté publicado, el objetivo es que sea el Departamento con el retorno más rápido y más fácil de argumentar, porque se mediría directamente en cobros que llegan antes y gasto que deja de sorprender al cierre de mes."
         },
         {
-          "id": "/departamentos/finanzas#c15",
+          "id": "/departamentos/finanzas#c14",
           "heading": "Todavía no está listo para arrancar solo — sí para hablarlo.",
           "text": "Si te interesa Finanzas, cuéntanoslo en la primera reunión: te decimos con exactitud qué parte está ya construida, qué falta, y en qué plazo estimamos poder ofrecerlo como Departamento completo."
         },
         {
-          "id": "/departamentos/finanzas#c16",
+          "id": "/departamentos/finanzas#c15",
           "heading": "¿Hablamos de cuándo estará listo Finanzas?",
           "text": "Cuéntanos cómo facturas y cobras hoy y te decimos, en una reunión de 30 minutos, en qué punto está realmente Finanzas y qué otros Departamentos ya operativos pueden ayudarte mientras tanto — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
@@ -2378,75 +2373,70 @@
         {
           "id": "/en/departamentos/finanzas#c2",
           "heading": "Control the money without chasing invoices.",
-          "text": "The financial system connected to your operations: invoices, collections, expenses and quotes in a single view, with an assistant that answers with real data. Explore D-Code Finance Exit demo DEMO Nortia Studio · fictional data Search invoices, clients, expenses&hellip; Demo account SUPERADMIN D Day to day Dashboard Invoices Collections Expenses Business Quotes Clients Status"
+          "text": "The financial system connected to your operations: invoices, collections, expenses and quotes in a single view, with an assistant that answers with real data. Explore D-Code Finance"
         },
         {
           "id": "/en/departamentos/finanzas#c3",
-          "heading": "Financial overview",
-          "text": "This month you’ve collected €480 and spent €115: you’re €365 ahead. You’re owed €1,750, of which €350 is already overdue; Larra & Associates Law Firm owes €620. The project with the lowest margin is “Brand redesign”, at 88% profitability. Collected &euro;15,590 money already in Pending collection &euro;1,750 issued and uncollected Overdue &euro;350 past due"
-        },
-        {
-          "id": "/en/departamentos/finanzas#c4",
           "heading": "Finance is designed to cover both halves of your financial picture: what you collect and what you spend.",
           "text": "The design generates each invoice document and tracks its status until it's paid, automatically escalating reminders if there's no response. In parallel, it watches internal spend every day, not just when the month closes. Some of these pieces are already built; the complete circuit is not yet."
         },
         {
-          "id": "/en/departamentos/finanzas#c5",
+          "id": "/en/departamentos/finanzas#c4",
           "heading": "The planned design of the Finance circuit.",
           "text": "This is the system's design, not a feature already live — expense tracking is already built; the rest is still in development. Assigned budget €2,400 Invoice issued €1,850 Payment confirmed +€1,850 Internal spend this month −€420 Estimated profitability € 1430 Example figures to show how the circuit is meant to read once it's complete — not real financial data from any client."
         },
         {
-          "id": "/en/departamentos/finanzas#c6",
+          "id": "/en/departamentos/finanzas#c5",
           "heading": "You'll stop discovering unpaid invoices late, and spend at month-end.",
           "text": "Invoices are generated by hand, one at a time. Unpaid invoices are discovered late, or never. Collection reminders depend on someone remembering. Internal spend is only known at month-end. Invoices will be generated and sent in minutes. Collections will speed up with reminders that escalate on their own. Prolonged unpaid invoices will be detected and flagged without being forgotten. Spend will be tracked day by day, with budget alerts."
         },
         {
-          "id": "/en/departamentos/finanzas#c7",
+          "id": "/en/departamentos/finanzas#c6",
           "heading": "Invoices generated in minutes",
           "text": "Designed to be generated and sent in minutes, not days."
         },
         {
-          "id": "/en/departamentos/finanzas#c8",
+          "id": "/en/departamentos/finanzas#c7",
           "heading": "Collections speed up",
           "text": "Automatic reminders that will escalate on their own until the invoice is paid."
         },
         {
-          "id": "/en/departamentos/finanzas#c9",
+          "id": "/en/departamentos/finanzas#c8",
           "heading": "Prolonged unpaid invoices are never forgotten",
           "text": "Designed to be detected and escalated on their own, without depending on someone remembering."
         },
         {
-          "id": "/en/departamentos/finanzas#c10",
+          "id": "/en/departamentos/finanzas#c9",
           "heading": "Internal spend is tracked daily",
           "text": "Expense tracking is already built and active internally; it watches day by day, not at month-end."
         },
         {
-          "id": "/en/departamentos/finanzas#c11",
+          "id": "/en/departamentos/finanzas#c10",
           "heading": "The project or client already exists",
           "text": "Delivery and Customer launch the project and set up the client — this part is already real. 02"
         },
         {
-          "id": "/en/departamentos/finanzas#c12",
+          "id": "/en/departamentos/finanzas#c11",
           "heading": "Finance will generate and send the invoice",
           "text": "The invoice generator already exists, but it doesn't yet have an automatic business trigger — today it still requires manual intervention. 03"
         },
         {
-          "id": "/en/departamentos/finanzas#c13",
+          "id": "/en/departamentos/finanzas#c12",
           "heading": "Collection will be tracked until it's complete",
           "text": "Reminders will escalate automatically if there's no response, without anyone having to keep watch."
         },
         {
-          "id": "/en/departamentos/finanzas#c14",
+          "id": "/en/departamentos/finanzas#c13",
           "heading": "It's designed to be the Department with the easiest return to prove, in euros.",
           "text": "We haven't yet had the chance to measure it against a real Finance use case. Once published, the goal is for it to be the Department with the fastest, easiest-to-argue return, because it would be measured directly in payments that arrive sooner and spend that stops surprising you at month-end."
         },
         {
-          "id": "/en/departamentos/finanzas#c15",
+          "id": "/en/departamentos/finanzas#c14",
           "heading": "Not yet ready to launch on its own — but ready to talk about.",
           "text": "If Finance interests you, tell us in the first meeting: we'll tell you exactly which part is already built, what's missing, and the timeline we estimate for offering it as a complete Department."
         },
         {
-          "id": "/en/departamentos/finanzas#c16",
+          "id": "/en/departamentos/finanzas#c15",
           "heading": "Let's talk about when Finance will be ready?",
           "text": "Tell us how you invoice and collect payments today, and in a 30-minute meeting we'll tell you exactly where Finance really stands, and which other, already operational Departments can help you in the meantime — no cost, no commitment. Book My Free Call View all Departments"
         }
@@ -2874,70 +2864,65 @@
         {
           "id": "/en/#c1",
           "heading": "Finance, inside the system.",
-          "text": "D-Code Partners doesn't just automate your company: it's building its own financial system, connected to the rest of your Departments. Invoices, collections, expenses and quotes, in a single view. Explore D-Code Finance Exit demo DEMO Nortia Studio · fictional data Search invoices, clients, expenses&hellip; Demo account SUPERADMIN D Day to day Dashboard Invoices Collections Expenses Business Quotes Clients Status"
+          "text": "D-Code Partners doesn't just automate your company: it's building its own financial system, connected to the rest of your Departments. Invoices, collections, expenses and quotes, in a single view. Explore D-Code Finance"
         },
         {
           "id": "/en/#c2",
-          "heading": "Financial overview",
-          "text": "This month you’ve collected €480 and spent €115: you’re €365 ahead. You’re owed €1,750, of which €350 is already overdue; Larra & Associates Law Firm owes €620. The project with the lowest margin is “Brand redesign”, at 88% profitability. Collected &euro;15,590 money already in Pending collection &euro;1,750 issued and uncollected Overdue &euro;350 past due"
-        },
-        {
-          "id": "/en/#c3",
           "heading": "Not chatbots. One system with 8 modules.",
           "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data."
         },
         {
-          "id": "/en/#c4",
+          "id": "/en/#c3",
           "heading": "Day 1 — Diagnosis and design of your custom Department.",
           "text": "We audit your operations and pinpoint the processes with the greatest potential impact."
         },
         {
-          "id": "/en/#c5",
+          "id": "/en/#c4",
           "heading": "Weeks 1–4 — Implementation in your real operations.",
           "text": "We deploy each Department into production, supervised at every step."
         },
         {
-          "id": "/en/#c6",
+          "id": "/en/#c5",
           "heading": "Day 30 — Results review: hours, revenue, efficiency.",
           "text": "We show you concrete data: what improved, and by how much."
         },
         {
-          "id": "/en/#c7",
+          "id": "/en/#c6",
           "heading": "From here on — We agree on the value of the service, based on results already achieved.",
           "text": "No surprises: we talk numbers once you already know what you're gaining."
         },
         {
-          "id": "/en/#c8",
+          "id": "/en/#c7",
           "heading": "A partnership that starts with facts, not promises.",
           "text": "The market is full of consultancies that promise before they prove. We work the other way around: we deploy your Smart Departments and measure their real impact on revenue and efficiency before we talk numbers. \"One full month of service, at no cost at all.\" See the full Method Guarantees & Process 0% RISK No lock-in. No fine print."
         },
         {
-          "id": "/en/#c9",
+          "id": "/en/#c8",
           "heading": "Before we ask you to trust us, we ran it inside our own company.",
           "text": "We don't invent client case studies. This is how we use our own systems to run D-Code — including one that didn't go as planned. Sales"
         },
         {
-          "id": "/en/#c10",
+          "id": "/en/#c9",
           "heading": "From detected company to proposal sent, without anyone having to remember to do it",
           "text": "Before Going from \"interesting company\" to a sent proposal was manual, with no fixed date. Now Every Monday, the system turns the best opportunities into AI-drafted proposals, reviewed by a person. Delivery"
         },
         {
-          "id": "/en/#c11",
+          "id": "/en/#c10",
           "heading": "Distributing the team's workload without anyone having to decide it every hour",
           "text": "Before Creating projects and assigning tasks depended on whoever's workload allowed it that day. Now The system creates the project on its own, distributes tasks hourly, and flags what's about to come due every day. Internal discipline"
         },
         {
-          "id": "/en/#c12",
+          "id": "/en/#c11",
           "heading": "When our hypothesis about a failure didn't match what the data actually said",
           "text": "Before We were about to act on a hypothesis without checking it against the real executions. Now We audited execution by execution — the real cause was in two workflows different from the ones flagged. See all 3 full cases"
         },
         {
-          "id": "/en/#c13",
+          "id": "/en/#c12",
           "heading": "Two founders. One shared code.",
           "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. Diego leads strategy and partnerships; Dimitry, the architecture behind the Smart Departments. Read our full story"
         },
         {
-          "id": "/en/#c14",
+          "id": "/en/#c13",
           "heading": "Book a 30-minute meeting.",
           "text": "We'll tell you which Smart Departments would have the most impact on your business, and what to expect from month one — no cost, no commitment. Book My Free Call See FAQ"
         }
@@ -3342,32 +3327,32 @@
         {
           "id": "/en/sistema-financiero#c3",
           "heading": "One system for what you're owed, what you spend, and what you need to decide.",
-          "text": "D-Code Finance brings together ten modules that today usually live scattered across a spreadsheet, an invoicing tool, and one person's memory."
+          "text": "D-Code Finance brings together in one system what today usually lives scattered across a spreadsheet, an invoicing tool, and one person's memory."
         },
         {
           "id": "/en/sistema-financiero#c4",
+          "heading": "Dashboard",
+          "text": "Invoiced, collected, pending, overdue and a 30-day forecast, with alerts generated automatically."
+        },
+        {
+          "id": "/en/sistema-financiero#c5",
           "heading": "Invoicing and quotes",
           "text": "From accepted quote to sent invoice, with numbering, line items and taxes calculated automatically."
         },
         {
-          "id": "/en/sistema-financiero#c5",
+          "id": "/en/sistema-financiero#c6",
           "heading": "Collections and due dates",
           "text": "What's owed to you, who's late, and what's about to fall due — always visible."
         },
         {
-          "id": "/en/sistema-financiero#c6",
-          "heading": "Expenses and suppliers",
-          "text": "Categorized and compared against your monthly budget, not discovered at close."
-        },
-        {
           "id": "/en/sistema-financiero#c7",
-          "heading": "Projects and profitability",
-          "text": "Every project shows what it generated against what it cost, without doing the math by hand."
+          "heading": "Expenses",
+          "text": "Categorized and with a review status, not discovered at month close."
         },
         {
           "id": "/en/sistema-financiero#c8",
-          "heading": "Dashboard and analysis",
-          "text": "The business's evolution, month by month, without opening a spreadsheet."
+          "heading": "Clients and projects",
+          "text": "Every client and every project with its invoice history and profitability, without doing the math by hand."
         },
         {
           "id": "/en/sistema-financiero#c9",
@@ -3377,7 +3362,7 @@
         {
           "id": "/en/sistema-financiero#c10",
           "heading": "We won't just tell you. We'll let you in.",
-          "text": "The demo uses a fictional company — a design studio with its own clients, suppliers and projects — so you can navigate, open invoices, filter and ask Finance questions the way a real client would. Dashboard, Invoices, Collections, Expenses, Quotes, Clients, Suppliers, Projects, Analysis and Ask Finance — ten interactive views, all with fictional data. Enter the demo"
+          "text": "The demo uses the same D-Code Finance interface, with a fictional company — its own clients, suppliers and projects — so you can navigate, open invoices, filter and ask Finance questions the way a real client would. Dashboard, Invoices, Quotes, Clients, Collections, Expenses, Projects, Ask Finance and Settings — the same navigation as the real product, all with fictional data. Enter the demo"
         },
         {
           "id": "/en/sistema-financiero#c11",
@@ -3580,70 +3565,65 @@
         {
           "id": "/#c1",
           "heading": "Finanzas, dentro del sistema.",
-          "text": "D-Code Partners no solo automatiza tu empresa: está construyendo su propio sistema financiero, conectado con el resto de tus Departamentos. Facturas, cobros, gastos y presupuestos, en una misma vista. Explorar D-Code Finance Salir de la demo DEMO Estudio Nortia · datos ficticios Buscar facturas, clientes, gastos&hellip; Cuenta de demostración SUPERADMIN D Día a día Dashboard Facturas Cobros Gastos Negocio Presupuestos Clientes Situación"
+          "text": "D-Code Partners no solo automatiza tu empresa: está construyendo su propio sistema financiero, conectado con el resto de tus Departamentos. Facturas, cobros, gastos y presupuestos, en una misma vista. Explorar D-Code Finance"
         },
         {
           "id": "/#c2",
-          "heading": "Panel financiero",
-          "text": "Este mes has cobrado 480 € y gastado 115 €: vas 365 € por encima. Te deben 1750 €, de los que 350 € ya han vencido; 620 € los debe Bufete Larra & Asociados. El proyecto con menor margen es “Rediseño de marca”, con un 88% de rentabilidad. Cobrado 15.590&nbsp;€ dinero que ya ha entrado Pendiente de cobro 1750&nbsp;€ emitido y sin cobrar Vencido 350&nbsp;€ pasado de fecha"
-        },
-        {
-          "id": "/#c3",
           "heading": "No son chatbots. Son un mismo sistema con 8 módulos.",
           "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales."
         },
         {
-          "id": "/#c4",
+          "id": "/#c3",
           "heading": "Día 1 — Diagnóstico y diseño del Departamento a medida.",
           "text": "Auditamos tu operativa y detectamos los procesos con mayor impacto potencial."
         },
         {
-          "id": "/#c5",
+          "id": "/#c4",
           "heading": "Semanas 1–4 — Implementación en tu operativa real.",
           "text": "Desplegamos cada Departamento en producción, supervisado en todo momento."
         },
         {
-          "id": "/#c6",
+          "id": "/#c5",
           "heading": "Día 30 — Revisión de resultados: horas, ingresos, eficiencia.",
           "text": "Te presentamos datos concretos: qué ha mejorado y cuánto."
         },
         {
-          "id": "/#c7",
+          "id": "/#c6",
           "heading": "A partir de aquí — Acordamos el valor del servicio, sobre resultados ya obtenidos.",
           "text": "Sin sorpresas: hablamos de cifras cuando ya sabes lo que vas a ganar."
         },
         {
-          "id": "/#c8",
+          "id": "/#c7",
           "heading": "Una alianza que empieza por los hechos, no por las promesas.",
           "text": "El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés: implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia antes de hablar de cifras. \"Un mes completo de servicio, sin coste alguno.\" Ver el Método completo Garantías y Proceso RIESGO 0% Sin permanencia. Sin letra pequeña."
         },
         {
-          "id": "/#c9",
+          "id": "/#c8",
           "heading": "Antes de pedirte que confíes, lo probamos en nuestra propia empresa.",
           "text": "No inventamos casos de cliente. Así es como usamos nuestros propios sistemas para dirigir D-Code — incluido uno que no salió como esperábamos. Comercial"
         },
         {
-          "id": "/#c10",
+          "id": "/#c9",
           "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse",
           "text": "Antes Pasar de \"empresa interesante\" a propuesta enviada era manual, sin fecha fija. Ahora Cada lunes, el sistema convierte las mejores oportunidades en propuestas con IA, revisadas por una persona. Producción"
         },
         {
-          "id": "/#c11",
+          "id": "/#c10",
           "heading": "Reparto de tareas sin que nadie tenga que decidirlo cada hora",
           "text": "Antes Crear proyectos y repartir tareas dependía de la carga de trabajo de quien tuviera que hacerlo ese día. Ahora El sistema crea el proyecto solo, reparte tareas cada hora y avisa cada día de lo que está por vencer. Disciplina interna"
         },
         {
-          "id": "/#c12",
+          "id": "/#c11",
           "heading": "Cuando la hipótesis sobre un fallo no coincidía con los datos",
           "text": "Antes Estuvimos a punto de actuar sobre una hipótesis sin contrastarla contra las ejecuciones reales. Ahora Auditamos ejecución por ejecución — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos"
         },
         {
-          "id": "/#c13",
+          "id": "/#c12",
           "heading": "Dos fundadores. Un mismo código.",
           "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. Diego lidera la estrategia y las alianzas; Dimitry, la arquitectura de los Departamentos Inteligentes. Conoce toda nuestra historia"
         },
         {
-          "id": "/#c14",
+          "id": "/#c13",
           "heading": "Reserva una reunión de 30 minutos.",
           "text": "Te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y qué puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
@@ -4048,32 +4028,32 @@
         {
           "id": "/sistema-financiero#c3",
           "heading": "Un solo sistema para lo que cobras, lo que gastas y lo que necesitas decidir.",
-          "text": "D-Code Finance reúne diez módulos que hoy suelen vivir repartidos entre un Excel, un gestor de facturas y la memoria de una persona."
+          "text": "D-Code Finance reúne en un solo sistema lo que hoy suele vivir repartido entre un Excel, un gestor de facturas y la memoria de una persona."
         },
         {
           "id": "/sistema-financiero#c4",
+          "heading": "Dashboard",
+          "text": "Facturado, cobrado, pendiente, vencido y previsión a 30 días, con alertas generadas automáticamente."
+        },
+        {
+          "id": "/sistema-financiero#c5",
           "heading": "Facturación y presupuestos",
           "text": "De presupuesto aceptado a factura enviada, con numeración, líneas e impuestos calculados solos."
         },
         {
-          "id": "/sistema-financiero#c5",
+          "id": "/sistema-financiero#c6",
           "heading": "Cobros y vencimientos",
           "text": "Qué te deben, quién va tarde y qué está a punto de vencer, siempre visible."
         },
         {
-          "id": "/sistema-financiero#c6",
-          "heading": "Gastos y proveedores",
-          "text": "Categorizados y comparados con tu presupuesto mensual, no descubiertos al cierre."
-        },
-        {
           "id": "/sistema-financiero#c7",
-          "heading": "Proyectos y rentabilidad",
-          "text": "Cada proyecto muestra lo que ha generado frente a lo que ha costado, sin calcularlo a mano."
+          "heading": "Gastos",
+          "text": "Categorizados y con estado de revisión, no descubiertos al cierre de mes."
         },
         {
           "id": "/sistema-financiero#c8",
-          "heading": "Dashboard y análisis",
-          "text": "La evolución del negocio, mes a mes, sin abrir una hoja de cálculo."
+          "heading": "Clientes y proyectos",
+          "text": "Cada cliente y cada proyecto con su historial de facturas y su rentabilidad, sin calcularlo a mano."
         },
         {
           "id": "/sistema-financiero#c9",
@@ -4083,7 +4063,7 @@
         {
           "id": "/sistema-financiero#c10",
           "heading": "No te lo contamos. Te dejamos entrar.",
-          "text": "La demo usa una empresa ficticia — un estudio de diseño con sus propios clientes, proveedores y proyectos — para que puedas navegar, abrir facturas, filtrar y preguntarle a Finanzas como lo haría un cliente real. Dashboard, Facturas, Cobros, Gastos, Presupuestos, Clientes, Proveedores, Proyectos, Análisis y Pregunta a Finanzas — diez vistas interactivas, todas con datos ficticios. Entrar en la demo"
+          "text": "La demo usa la misma interfaz de D-Code Finance, con una empresa ficticia — sus propios clientes, proveedores y proyectos — para que puedas navegar, abrir facturas, filtrar y preguntarle a Finanzas como lo haría un cliente real. Dashboard, Facturas, Presupuestos, Clientes, Cobros, Gastos, Proyectos, Pregunta a Finanzas y Configuración — la misma navegación del producto real, todo con datos ficticios. Entrar en la demo"
         },
         {
           "id": "/sistema-financiero#c11",

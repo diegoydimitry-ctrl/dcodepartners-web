@@ -1,615 +1,563 @@
 /*
- * D-Code Finance — demo app shell (router + render). English mirror.
- *
- * Single-page app, hash-routed (#dashboard, #invoices...), reading ALL
- * its content through FinanceStore (finance-demo-data.en.js). No build
- * step, no framework: DOM generated with template strings and a single
- * delegated listener per view, following the same vanilla-JS pattern
- * already used across the rest of the site in main.js. Zero network
- * calls, zero data writes: everything the visitor "does" (filter, open
- * a detail, ask a question) is a read-only operation on the mock,
- * never a real mutation.
+ * D-Code Finance — public demo, render engine + router (English mirror).
+ * See finance-demo.js for the full rationale: every view mirrors the
+ * real product's pages 1:1; only the data layer is mock and isolated.
  */
 (function () {
   'use strict';
 
   var FS = window.FinanceStore;
   var EUR = window.FinanceFmt.eur;
+  var FDATE = window.FinanceFmt.fecha;
+  var FDATETIME = window.FinanceFmt.fechaHora;
+  if (!FS) return;
 
-  var root = document.getElementById('fdemo-main-content');
-  var sidebarNav = document.getElementById('fdemo-sidebar-nav');
-  var tabbarNav = document.getElementById('fdemo-tabbar-nav');
-  var drawerEl = document.getElementById('fdemo-drawer');
-  var drawerOverlay = document.getElementById('fdemo-drawer-overlay');
-  var titleEl = document.getElementById('fdemo-view-title-tag');
-
-  if (!root) return;
-
-  var ICONS = {
-    dashboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>',
-    facturas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h10a1 1 0 011 1v16l-3-2-2 2-2-2-2 2-3-2V4a1 1 0 011-1z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
-    cobros: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>',
-    gastos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M18 13l-6 6-6-6"/></svg>',
-    presupuestos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8 11h8M8 15h5"/></svg>',
-    clientes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>',
-    proveedores: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="13" height="10" rx="1"/><path d="M15 11h3l3 3v4h-6"/><circle cx="6.5" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg>',
-    proyectos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
-    analisis: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>',
-    pregunta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>'
-  };
-
-  var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-  var CLOSE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
-
-  var VIEWS = [
+  var NAV_ITEMS = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'facturas', label: 'Invoices' },
-    { id: 'cobros', label: 'Collections' },
-    { id: 'gastos', label: 'Expenses' },
     { id: 'presupuestos', label: 'Quotes' },
     { id: 'clientes', label: 'Clients' },
-    { id: 'proveedores', label: 'Suppliers' },
+    { id: 'cobros', label: 'Collections' },
+    { id: 'gastos', label: 'Expenses' },
     { id: 'proyectos', label: 'Projects' },
-    { id: 'analisis', label: 'Analysis' },
-    { id: 'pregunta', label: 'Ask Finance' }
+    { id: 'ia', label: 'Ask Finance' },
+    { id: 'configuracion', label: 'Settings' }
   ];
 
-  var NAV_GROUPS = [
-    { label: 'Day to day', items: ['dashboard', 'facturas', 'cobros', 'gastos'] },
-    { label: 'Business', items: ['presupuestos', 'clientes', 'proveedores', 'proyectos'] },
-    { label: 'Intelligence', items: ['analisis', 'pregunta'] }
-  ];
+  var MENU_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/></svg>';
 
-  var state = { invoiceFilter: 'all', quoteFilter: 'all', ask: [] };
-
-  // ---------------------------------------------------------------
-  // Format utilities
-  // ---------------------------------------------------------------
-  function fmtDate(s) {
-    if (!s) return '—';
-    var d = new Date(s + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
-  }
-  function badgeClass(status) {
-    var map = { Paid: 'st-pagada', Pending: 'st-pendiente', Overdue: 'st-vencida', Draft: 'st-borrador', Accepted: 'st-aceptado', Sent: 'st-enviado', Rejected: 'st-rechazado' };
-    return map[status] || 'st-borrador';
-  }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function dash(v) { return (v === null || v === undefined || v === '') ? '—' : v; }
 
-  // ---------------------------------------------------------------
-  // Navigation (desktop sidebar + mobile tabbar)
-  // ---------------------------------------------------------------
-  function navItemHtml(v) {
-    return '<a href="#' + v.id + '" class="fdemo-nav-item" data-nav="' + v.id + '">' + ICONS[v.id] + '<span>' + v.label + '</span></a>';
+  function estadoVisual(valor) {
+    var v = (valor || '').toLowerCase();
+    function any(list) { return list.some(function (s) { return v.indexOf(s) !== -1; }); }
+    if (any(['paid', 'collected', 'accepted', 'approved', 'active', 'delivered'])) return 'success';
+    if (any(['overdue', 'rejected', 'cancelled', 'blocked'])) return 'danger';
+    if (any(['follow-up', 'follow up', 'review', 'partial'])) return 'warning';
+    if (any(['sent', 'in progress', 'production'])) return 'info';
+    if (any(['draft', 'trial', 'prospect'])) return 'draft';
+    if (any(['pending'])) return 'pending';
+    return 'neutral';
   }
-  function viewById(id) { return VIEWS.filter(function (v) { return v.id === id; })[0]; }
-  function groupedNavHtml() {
-    return NAV_GROUPS.map(function (g) {
-      return '<div class="fdemo-nav-group"><span class="fdemo-nav-group-label">' + g.label + '</span>' +
-        g.items.map(function (id) { return navItemHtml(viewById(id)); }).join('') + '</div>';
-    }).join('');
-  }
-  if (sidebarNav) sidebarNav.innerHTML = groupedNavHtml();
-  if (tabbarNav) tabbarNav.innerHTML = VIEWS.map(navItemHtml).join('');
-
-  function setActiveNav(viewId) {
-    document.querySelectorAll('.fdemo-nav-item').forEach(function (el) {
-      el.classList.toggle('is-active', el.getAttribute('data-nav') === viewId);
-    });
+  function pill(label) {
+    if (label === null || label === undefined || label === '') return '<span style="font-size:.72rem;color:var(--dc-text-faint);">—</span>';
+    var st = estadoVisual(label);
+    return '<span class="fdemo-pill st-' + st + '"><span class="dot"></span>' + esc(label) + '</span>';
   }
 
-  // ---------------------------------------------------------------
-  // Router
-  // ---------------------------------------------------------------
-  function currentView() {
-    var h = (location.hash || '#dashboard').replace('#', '');
-    return VIEWS.some(function (v) { return v.id === h; }) ? h : 'dashboard';
-  }
+  function initInstance(root) {
+    var mode = root.getAttribute('data-mode') || 'embedded';
+    var exitHref = root.getAttribute('data-exit-href') || '/en/sistema-financiero';
+    var exitLabel = root.getAttribute('data-exit-label') || 'Exit demo';
+    var useHash = mode === 'fullpage';
 
-  function render() {
-    var viewId = currentView();
-    setActiveNav(viewId);
-    var view = VIEWS.filter(function (v) { return v.id === viewId; })[0];
-    if (titleEl) titleEl.textContent = view.label + ' · D-Code Finance (demo)';
-    var renderer = RENDERERS[viewId];
-    root.innerHTML = renderer ? renderer() : '';
-    root.scrollTop = 0;
-    closeDrawer();
-  }
-  window.addEventListener('hashchange', render);
+    root.classList.add('fdemo-app', useHash ? 'is-fullpage' : 'is-embedded');
+    root.innerHTML =
+      '<div class="fdemo-sidebar-overlay" data-role="overlay"></div>' +
+      '<nav class="fdemo-sidebar" data-role="sidebar"></nav>' +
+      '<div style="flex:1; min-width:0; display:flex; flex-direction:column;">' +
+      '<div class="fdemo-topbar">' +
+      '<button class="fdemo-topbar-menu-btn" type="button" data-role="menu-btn" aria-label="Open menu">' + MENU_ICON + '</button>' +
+      '<div class="fdemo-topbar-right">' +
+      '<div class="fdemo-topbar-user"><div class="fdemo-topbar-name">Demo Account</div><div class="fdemo-topbar-role">Administrator</div></div>' +
+      '<div class="fdemo-topbar-avatar">D</div>' +
+      '<a class="fdemo-topbar-exit" href="' + exitHref + '">' + esc(exitLabel) + '</a>' +
+      '</div></div>' +
+      '<div class="fdemo-main" data-role="main"><div class="fdemo-page" data-role="content"></div></div>' +
+      '</div>';
 
-  // ---------------------------------------------------------------
-  // Charts — SVG generated in JS, no external libraries
-  // ---------------------------------------------------------------
-  function barChart(series) {
-    var w = 560, h = 170, pad = 24, gap = 14;
-    var n = series.length;
-    var barW = (w - pad * 2 - gap * (n - 1)) / n;
-    var maxVal = Math.max.apply(null, series.map(function (m) { return Math.max(m.collected, m.spent); }).concat([1]));
-    var bars = series.map(function (m, i) {
-      var x = pad + i * (barW + gap);
-      var hCollected = (m.collected / maxVal) * (h - 40);
-      var hSpent = (m.spent / maxVal) * (h - 40);
-      var subW = (barW - 4) / 2;
-      return '<rect class="bar" x="' + x + '" y="' + (h - 24 - hCollected) + '" width="' + subW + '" height="' + hCollected + '" rx="2"/>' +
-        '<rect class="bar neg" x="' + (x + subW + 4) + '" y="' + (h - 24 - hSpent) + '" width="' + subW + '" height="' + hSpent + '" rx="2"/>' +
-        '<text x="' + (x + barW / 2) + '" y="' + (h - 6) + '" text-anchor="middle">' + esc(m.label) + '</text>';
-    }).join('');
-    return '<svg class="fdemo-chart-bars" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="xMidYMid meet">' +
-      '<defs><linearGradient id="fdemo-bar-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="100%" stop-color="var(--blue)"/></linearGradient></defs>' +
-      bars + '</svg>';
-  }
+    var sidebarEl = root.querySelector('[data-role="sidebar"]');
+    var overlayEl = root.querySelector('[data-role="overlay"]');
+    var mainEl = root.querySelector('[data-role="main"]');
+    var contentEl = root.querySelector('[data-role="content"]');
+    var menuBtn = root.querySelector('[data-role="menu-btn"]');
 
-  function lineChart(series) {
-    var w = 560, h = 170, pad = 24;
-    var n = series.length;
-    var stepX = (w - pad * 2) / (n - 1 || 1);
-    var maxVal = Math.max.apply(null, series.map(function (m) { return Math.max(m.collected, m.spent); }).concat([1]));
-    function pts(key) {
-      return series.map(function (m, i) {
-        var x = pad + i * stepX;
-        var y = (h - 30) - (m[key] / maxVal) * (h - 50);
-        return x + ',' + y;
-      }).join(' ');
+    var state = { route: 'dashboard', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [] } };
+
+    sidebarEl.innerHTML =
+      '<div class="fdemo-brand">' +
+      '<span class="fdemo-brand-mark">D</span>' +
+      '<div><div class="fdemo-brand-name">D-Code Finance</div>' +
+      '<div class="fdemo-brand-sub">D-Code Partners <span class="fdemo-brand-demo">DEMO</span></div></div>' +
+      '</div>' +
+      NAV_ITEMS.map(function (v) {
+        return '<a href="#" class="fdemo-nav-item" data-role="nav" data-view="' + v.id + '"><span class="fdemo-nav-dot"></span>' + esc(v.label) + '</a>';
+      }).join('');
+
+    function setActiveNav(viewId) {
+      sidebarEl.querySelectorAll('[data-role="nav"]').forEach(function (el) {
+        el.classList.toggle('is-active', el.getAttribute('data-view') === viewId);
+      });
     }
-    function dots(key, cls) {
-      return series.map(function (m, i) {
-        var x = pad + i * stepX;
-        var y = (h - 30) - (m[key] / maxVal) * (h - 50);
-        return '<circle class="' + cls + '" cx="' + x + '" cy="' + y + '" r="3"/>';
-      }).join('');
+    function closeMobileMenu() { sidebarEl.classList.remove('is-open'); overlayEl.classList.remove('is-open'); }
+
+    function parseRoute() {
+      if (!useHash) return { view: state.route, id: state.id };
+      var h = (location.hash || '#dashboard').replace('#', '');
+      var parts = h.split('/');
+      var view = NAV_ITEMS.some(function (v) { return v.id === parts[0]; }) ? parts[0] : 'dashboard';
+      return { view: view, id: parts[1] || null };
     }
-    var labels = series.map(function (m, i) {
-      var x = pad + i * stepX;
-      return '<text x="' + x + '" y="' + (h - 6) + '" text-anchor="middle">' + esc(m.label) + '</text>';
-    }).join('');
-    return '<svg class="fdemo-chart-line" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="xMidYMid meet">' +
-      '<polyline class="line-collected" points="' + pts('collected') + '"/>' +
-      '<polyline class="line-spent" points="' + pts('spent') + '"/>' +
-      dots('collected', 'line-collected') + dots('spent', 'line-spent') + labels + '</svg>';
-  }
-
-  // ---------------------------------------------------------------
-  // Per-view renderers
-  // ---------------------------------------------------------------
-  var RENDERERS = {};
-
-  RENDERERS.dashboard = function () {
-    var d = FS.dashboard();
-    var delta = d.billedLastMonth > 0 ? Math.round(((d.billedThisMonth - d.billedLastMonth) / d.billedLastMonth) * 100) : 0;
-    var overBudget = d.expensesThisMonth > d.expenseBudget;
-
-    var upcomingHtml = d.upcoming.concat(d.overdue).length === 0
-      ? '<div class="fdemo-empty"><p>No upcoming due dates or overdue invoices.</p></div>'
-      : d.overdue.concat(d.upcoming).map(function (inv) {
-        var note = inv.status === 'Overdue' ? ('Overdue by ' + inv.overdueDays + ' day' + (inv.overdueDays === 1 ? '' : 's')) : ('Due in ' + inv.dueInDays + ' day' + (inv.dueInDays === 1 ? '' : 's'));
-        return rowHtml({ id: inv.id, title: inv.client.name, sub: note, amount: inv.total, date: fmtDate(inv.dueDate), status: inv.status, action: 'open-invoice', target: inv.id });
-      }).join('');
-
-    var projectsHtml = d.activeProjects.map(function (p) {
-      return '<div class="fdemo-row" data-action="open-project" data-id="' + p.id + '" role="button" tabindex="0" style="grid-template-columns:1fr auto;">' +
-        '<div class="fdemo-row-main"><div class="fdemo-row-title">' + esc(p.name) + '</div><div class="fdemo-row-sub">' + esc(p.client.name) + '</div></div>' +
-        '<div class="fdemo-row-amount">' + p.marginPct + '% margin</div></div>';
-    }).join('') || '<div class="fdemo-empty"><p>No active projects right now.</p></div>';
-
-    var insightHtml = '<div class="fdemo-insight"><p class="fdemo-insight-headline">' + esc(d.insight.text) + '</p>' +
-      (d.insight.bullets.length ? '<ul class="fdemo-insight-bullets">' + d.insight.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' : '') +
-      '</div>';
-
-    var todoHtml = d.todos.length
-      ? d.todos.map(function (t) {
-        return '<div class="fdemo-todo-item" data-action="goto" data-id="' + t.view + '" role="button" tabindex="0" style="cursor:pointer;">' +
-          '<div class="fdemo-todo-main"><span class="fdemo-todo-dot ' + t.severity + '"></span>' +
-          '<div><div class="fdemo-todo-label">' + esc(t.label) + '</div><div class="fdemo-todo-note">' + esc(t.note) + '</div></div></div>' +
-          '<div class="fdemo-todo-amount">' + EUR(t.amount) + '<span>' + t.count + '</span></div></div>';
-      }).join('')
-      : '<div class="fdemo-todo-empty">Nothing needs attention right now.</div>';
-
-    var agingTotal = d.aging.current + d.aging.d1_30 + d.aging.d31_60 + d.aging.d60plus;
-    function agingPct(v) { return agingTotal > 0 ? Math.round((v / agingTotal) * 100) : 0; }
-    var agingHtml = '<p class="fdemo-aging-total">' + EUR(agingTotal) + '</p>' +
-      '<p class="fdemo-aging-sub">pending collection, by age</p>' +
-      '<div class="fdemo-aging-bar">' +
-      '<span class="current" style="width:' + agingPct(d.aging.current) + '%"></span>' +
-      '<span class="d1-30" style="width:' + agingPct(d.aging.d1_30) + '%"></span>' +
-      '<span class="d31-60" style="width:' + agingPct(d.aging.d31_60) + '%"></span>' +
-      '<span class="d60plus" style="width:' + agingPct(d.aging.d60plus) + '%"></span>' +
-      '</div>' +
-      '<div class="fdemo-aging-legend">' +
-      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="current"></i>Current</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.current) + '</span></div>' +
-      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="d1-30"></i>1–30 days</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.d1_30) + '</span></div>' +
-      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="d31-60"></i>31–60 days</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.d31_60) + '</span></div>' +
-      '<div class="fdemo-aging-row"><span class="fdemo-aging-row-label"><i class="d60plus"></i>60+ days</span><span class="fdemo-aging-row-amount">' + EUR(d.aging.d60plus) + '</span></div>' +
-      '</div>';
-
-    return '' +
-      '<div class="fdemo-view-head"><span class="fdemo-view-eyebrow">Status</span>' +
-      '<h1 class="fdemo-view-title">Financial overview</h1></div>' +
-
-      insightHtml +
-
-      '<div class="fdemo-view-head" style="margin:26px 0 14px;"><span class="fdemo-view-eyebrow">The money</span>' +
-      '<h2 class="fdemo-panel-title" style="font-size:1.05rem;">What came in, what you’re owed, and what’s overdue</h2></div>' +
-      '<div class="fdemo-kpi-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:14px;">' +
-      kpi('Collected', EUR(d.collectedTotalAllTime), 'money already in · full history', '') +
-      kpi('Pending collection', EUR(d.pendingTotal), 'issued and not yet collected', '') +
-      kpi('Overdue', EUR(d.overdueTotal), 'past due · follow up on it', d.overdueTotal > 0 ? 'down' : 'up') +
-      '</div>' +
-      '<div class="fdemo-kpi-grid">' +
-      kpi('Billed', EUR(d.billedTotalAllTime), 'full history', '') +
-      kpi('Expenses', EUR(d.expensesTotalAllTime), 'full history', '') +
-      kpi('Margin on billed', EUR(d.marginTotalAllTime), 'not deducting ' + EUR(d.pendingTotal) + ' still uncollected', '') +
-      kpi('This month: billed', EUR(d.billedThisMonth), delta >= 0 ? ('▲ ' + delta + '% vs. last month') : ('▼ ' + Math.abs(delta) + '% vs. last month'), delta >= 0 ? 'up' : 'down') +
-      '</div>' +
-
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Collected vs. spent — last 6 months</h2></div>' +
-      barChart(d.series) +
-      '<div class="fdemo-chart-legend"><span><i style="background:var(--cyan)"></i>Collected</span><span><i style="background:var(--amber)"></i>Spent</span></div></div>' +
-
-      '<div class="fdemo-view-head" style="margin:26px 0 14px;"><span class="fdemo-view-eyebrow">What needs attention</span>' +
-      '<h2 class="fdemo-panel-title" style="font-size:1.05rem;">What’s waiting on someone, in order of urgency</h2></div>' +
-      '<div class="fdemo-panel-row">' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Needs your attention</h2></div>' + todoHtml + '</div>' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Debt aging</h2></div>' + agingHtml + '</div>' +
-      '</div>' +
-
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Due dates and overdue invoices</h2></div>' +
-      '<div class="fdemo-rows">' + upcomingHtml + '</div></div>' +
-
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Active projects</h2></div>' +
-      '<div class="fdemo-rows">' + projectsHtml + '</div></div>' +
-
-      '<div class="fdemo-panel" data-action="goto" data-id="pregunta" role="button" tabindex="0" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:16px;">' +
-      '<div><h2 class="fdemo-panel-title" style="margin-bottom:4px;">How is my company doing this month?</h2><p style="margin:0; color:var(--stone); font-size:.86rem;">Ask Finance — answers computed on this same data.</p></div>' +
-      '<span style="color:var(--cyan); flex-shrink:0;">' + ARROW + '</span></div>';
-  };
-
-  function kpi(label, value, caption, trend) {
-    return '<div class="fdemo-kpi"><span class="fdemo-kpi-label">' + esc(label) + '</span>' +
-      '<div class="fdemo-kpi-value">' + esc(value) + '</div>' +
-      (caption ? '<div class="fdemo-kpi-caption' + (trend ? ' fdemo-kpi-delta ' + trend : '') + '">' + esc(caption) + '</div>' : '') +
-      '</div>';
-  }
-
-  function rowHtml(o) {
-    return '<div class="fdemo-row" data-action="' + o.action + '" data-id="' + o.target + '" role="button" tabindex="0">' +
-      '<div class="fdemo-row-main"><div class="fdemo-row-title">' + esc(o.title) + '</div><div class="fdemo-row-sub">' + esc(o.sub) + '</div></div>' +
-      '<div class="fdemo-row-id">' + esc(o.id) + '</div>' +
-      '<div class="fdemo-row-amount">' + EUR(o.amount) + '</div>' +
-      '<div class="fdemo-row-date">' + esc(o.date) + '</div>' +
-      '<span class="fdemo-badge ' + badgeClass(o.status) + '">' + esc(o.status) + '</span>' +
-      '</div>';
-  }
-
-  RENDERERS.facturas = function () {
-    var all = FS.invoices().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
-    var filters = ['all', 'Paid', 'Pending', 'Overdue', 'Draft'];
-    var labels = { all: 'All', Paid: 'Paid', Pending: 'Pending', Overdue: 'Overdue', Draft: 'Draft' };
-    var list = state.invoiceFilter === 'all' ? all : all.filter(function (i) { return i.status === state.invoiceFilter; });
-    var rows = list.map(function (inv) {
-      return rowHtml({ id: inv.id, title: inv.client.name, sub: inv.lines[0].desc, amount: inv.total, date: fmtDate(inv.date), status: inv.status, action: 'open-invoice', target: inv.id });
-    }).join('') || '<div class="fdemo-empty"><p>No invoices match this filter.</p></div>';
-
-    return viewHead('Invoices', 'The billing document for every sale: numbering, status and due date at a glance.') +
-      '<div class="fdemo-panel"><div class="fdemo-tabs">' + filters.map(function (f) {
-        return '<button class="fdemo-tab' + (state.invoiceFilter === f ? ' is-active' : '') + '" data-action="filter-invoices" data-id="' + f + '">' + labels[f] + '</button>';
-      }).join('') + '</div><div class="fdemo-rows" style="margin-top:16px;">' + rows + '</div></div>';
-  };
-
-  RENDERERS.cobros = function () {
-    var pending = FS.pendingCollections();
-    var payments = FS.payments();
-    var pendingTotal = pending.reduce(function (s, i) { return s + i.total; }, 0);
-    var overdueTotal = pending.filter(function (i) { return i.status === 'Overdue'; }).reduce(function (s, i) { return s + i.total; }, 0);
-
-    var pendingRows = pending.map(function (inv) {
-      var note = inv.status === 'Overdue' ? ('Overdue by ' + inv.overdueDays + ' d.') : ('Due ' + fmtDate(inv.dueDate));
-      return rowHtml({ id: inv.id, title: inv.client.name, sub: note, amount: inv.total, date: fmtDate(inv.dueDate), status: inv.status, action: 'open-invoice', target: inv.id });
-    }).join('') || '<div class="fdemo-empty"><p>No pending collections.</p></div>';
-
-    var paymentRows = payments.slice(0, 10).map(function (p) {
-      return rowHtml({ id: p.invoice.id, title: p.client.name, sub: 'Collected', amount: p.amount, date: fmtDate(p.date), status: 'Paid', action: 'open-invoice', target: p.invoice.id });
-    }).join('');
-
-    return viewHead('Collections', 'What’s owed to you, what you’ve already collected, and what’s about to fall due.') +
-      '<div class="fdemo-kpi-grid" style="grid-template-columns:repeat(3,1fr);">' +
-      kpi('Pending collection', EUR(pendingTotal), pending.length + ' invoices', '') +
-      kpi('Overdue', EUR(overdueTotal), overdueTotal > 0 ? 'needs follow-up' : 'all clear', overdueTotal > 0 ? 'down' : 'up') +
-      kpi('Collected this month', EUR(FS.dashboard().collectedThisMonth), '', '') +
-      '</div>' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Upcoming collections</h2></div><div class="fdemo-rows">' + pendingRows + '</div></div>' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Collection history</h2></div><div class="fdemo-rows">' + paymentRows + '</div></div>';
-  };
-
-  RENDERERS.gastos = function () {
-    var expenses = FS.expenses();
-    var byCat = FS.expensesByCategory();
-    var maxCat = Math.max.apply(null, byCat.map(function (c) { return c.total; }).concat([1]));
-    var d = FS.dashboard();
-    var overBudget = d.expensesThisMonth > d.expenseBudget;
-
-    var catRows = byCat.map(function (c) {
-      return '<div class="fdemo-cat-row"><span class="fdemo-cat-label">' + esc(c.category) + '</span>' +
-        '<div class="fdemo-cat-track"><span style="width:' + Math.round((c.total / maxCat) * 100) + '%;"></span></div>' +
-        '<span class="fdemo-cat-amount">' + EUR(c.total) + '</span></div>';
-    }).join('');
-
-    var rows = expenses.map(function (e) {
-      return rowHtml({ id: e.id, title: e.concept, sub: e.category + (e.supplier ? ' · ' + e.supplier.name : ''), amount: e.amount, date: fmtDate(e.date), status: e.category === 'Freelance' ? 'Pending' : 'Paid', action: 'open-expense', target: e.id });
-    }).join('');
-
-    return viewHead('Expenses', 'What goes out of the account, categorized, with an alert if you go over the monthly budget.') +
-      '<div class="fdemo-kpi-grid" style="grid-template-columns:repeat(2,1fr);">' +
-      kpi('Spend this month', EUR(d.expensesThisMonth), (overBudget ? '▲ over the' : '✓ within') + ' budget (' + EUR(d.expenseBudget) + ')', overBudget ? 'down' : 'up') +
-      kpi('Accumulated spend (6 months)', EUR(byCat.reduce(function (s, c) { return s + c.total; }, 0)), byCat.length + ' categories', '') +
-      '</div>' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Distribution by category</h2></div>' + catRows + '</div>' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Recent movements</h2></div><div class="fdemo-rows">' + rows + '</div></div>';
-  };
-
-  RENDERERS.presupuestos = function () {
-    var all = FS.quotes().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
-    var filters = ['all', 'Accepted', 'Sent', 'Rejected', 'Draft'];
-    var labels = { all: 'All', Accepted: 'Accepted', Sent: 'Sent', Rejected: 'Rejected', Draft: 'Draft' };
-    var list = state.quoteFilter === 'all' ? all : all.filter(function (q) { return q.status === state.quoteFilter; });
-    var rows = list.map(function (q) {
-      return rowHtml({ id: q.id, title: q.client.name, sub: q.title, amount: q.amount, date: fmtDate(q.date), status: q.status, action: 'open-quote', target: q.id });
-    }).join('') || '<div class="fdemo-empty"><p>No quotes match this filter.</p></div>';
-
-    return viewHead('Quotes', 'The offer before billing. Once accepted, it becomes an invoice.') +
-      '<div class="fdemo-panel"><div class="fdemo-tabs">' + filters.map(function (f) {
-        return '<button class="fdemo-tab' + (state.quoteFilter === f ? ' is-active' : '') + '" data-action="filter-quotes" data-id="' + f + '">' + labels[f] + '</button>';
-      }).join('') + '</div><div class="fdemo-rows" style="margin-top:16px;">' + rows + '</div></div>';
-  };
-
-  RENDERERS.clientes = function () {
-    var clients = FS.clients();
-    var rows = clients.map(function (c) {
-      return rowHtml({ id: c.invoiceCount + ' inv.', title: c.name, sub: c.sector, amount: c.billedTotal, date: '', status: c.pendingTotal > 0 ? 'Pending' : 'Paid', action: 'open-client', target: c.id });
-    }).join('');
-
-    return viewHead('Clients', 'Who you bill: history and collection status by client.') +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">' + clients.length + ' active clients</h2></div><div class="fdemo-rows">' + rows + '</div></div>';
-  };
-
-  RENDERERS.proveedores = function () {
-    var suppliers = FS.suppliers();
-    var rows = suppliers.map(function (s) {
-      return rowHtml({ id: s.expenseCount + ' expenses', title: s.name, sub: s.category, amount: s.total, date: '', status: 'Paid', action: 'open-supplier', target: s.id });
-    }).join('');
-
-    return viewHead('Suppliers', 'Who you pay: accumulated spend by supplier.') +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">' + suppliers.length + ' suppliers</h2></div><div class="fdemo-rows">' + rows + '</div></div>';
-  };
-
-  RENDERERS.proyectos = function () {
-    var projects = FS.projects();
-    var rows = projects.map(function (p) {
-      return '<div class="fdemo-row" data-action="open-project" data-id="' + p.id + '" role="button" tabindex="0">' +
-        '<div class="fdemo-row-main"><div class="fdemo-row-title">' + esc(p.name) + '</div><div class="fdemo-row-sub">' + esc(p.client.name) + '</div></div>' +
-        '<div class="fdemo-row-id">' + esc(p.status) + '</div>' +
-        '<div class="fdemo-row-amount">' + EUR(p.revenue) + '</div>' +
-        '<div class="fdemo-row-date">margin ' + p.marginPct + '%</div>' +
-        '<span class="fdemo-badge ' + (p.status === 'Completed' ? 'st-pagada' : 'st-pendiente') + '">' + esc(p.status) + '</span></div>';
-    }).join('');
-
-    return viewHead('Projects', 'The work tied to billing: revenue, expenses and margin per project.') +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">' + projects.length + ' projects</h2></div><div class="fdemo-rows">' + rows + '</div></div>';
-  };
-
-  RENDERERS.analisis = function () {
-    var series = FS.monthlySeries(6);
-    var projects = FS.projects().slice().sort(function (a, b) { return b.marginPct - a.marginPct; });
-    var maxMargin = Math.max.apply(null, projects.map(function (p) { return p.marginPct; }).concat([1]));
-
-    var projectBars = projects.map(function (p) {
-      return '<div class="fdemo-cat-row"><span class="fdemo-cat-label">' + esc(p.name) + '</span>' +
-        '<div class="fdemo-cat-track"><span style="width:' + Math.round((p.marginPct / maxMargin) * 100) + '%;"></span></div>' +
-        '<span class="fdemo-cat-amount">' + p.marginPct + '%</span></div>';
-    }).join('');
-
-    return viewHead('Analysis', 'The evolution of the business, without opening a spreadsheet.') +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Monthly trend — collected vs. spent</h2></div>' +
-      lineChart(series) +
-      '<div class="fdemo-chart-legend"><span><i style="background:var(--cyan)"></i>Collected</span><span><i style="background:var(--amber)"></i>Spent</span></div></div>' +
-      '<div class="fdemo-panel"><div class="fdemo-panel-head"><h2 class="fdemo-panel-title">Profitability by project</h2></div>' + projectBars + '</div>';
-  };
-
-  RENDERERS.pregunta = function () {
-    var suggestions = FS.askQuestions();
-    var thread = state.ask.map(function (msg) {
-      if (msg.role === 'user') {
-        return '<div class="fdemo-ask-msg user"><div class="fdemo-ask-bubble">' + esc(msg.text) + '</div></div>';
-      }
-      var refs = (msg.refs || []).map(function (r) {
-        return '<button class="fdemo-ask-ref" data-action="open-' + r.type + '" data-id="' + r.id + '">' + esc(r.id) + '</button>';
-      }).join('');
-      return '<div class="fdemo-ask-msg bot"><div class="fdemo-ask-bubble">' + esc(msg.text) + (refs ? '<div class="fdemo-ask-refs">' + refs + '</div>' : '') + '</div></div>';
-    }).join('');
-
-    return viewHead('Ask Finance', 'Ask in plain language. Every answer is computed on the spot from this demo’s data — never invented text.') +
-      '<div class="fdemo-panel">' +
-      '<div class="fdemo-ask-suggestions">' + suggestions.map(function (s, i) {
-        return '<button class="fdemo-ask-chip" data-action="ask" data-id="' + i + '">' + esc(s.q) + '</button>';
-      }).join('') + '</div>' +
-      '<div class="fdemo-ask-thread" id="fdemo-ask-thread">' + (thread || '<p class="fdemo-ask-empty-hint">Pick a question above to see how the assistant would answer.</p>') + '</div>' +
-      '</div>';
-  };
-
-  function viewHead(title, sub) {
-    return '<div class="fdemo-view-head"><span class="fdemo-view-eyebrow">D-Code Finance · Demo</span>' +
-      '<h1 class="fdemo-view-title">' + esc(title) + '</h1>' +
-      '<p class="fdemo-view-sub">' + esc(sub) + '</p>' +
-      '<span class="fdemo-demo-note"><span class="dot"></span>Demo environment · Fictional data</span></div>';
-  }
-
-  // ---------------------------------------------------------------
-  // Detail drawer
-  // ---------------------------------------------------------------
-  function openDrawer(html) {
-    drawerEl.innerHTML = '<button class="fdemo-drawer-close" data-action="close-drawer" aria-label="Close">' + CLOSE_ICON + '</button>' + html;
-    drawerEl.classList.add('is-open');
-    drawerOverlay.classList.add('is-open');
-    drawerEl.setAttribute('aria-hidden', 'false');
-  }
-  function closeDrawer() {
-    drawerEl.classList.remove('is-open');
-    drawerOverlay.classList.remove('is-open');
-    drawerEl.setAttribute('aria-hidden', 'true');
-  }
-
-  function invoiceDrawer(id) {
-    var inv = FS.invoice(id);
-    if (!inv) return;
-    var lines = inv.lines.map(function (l) {
-      return '<div class="fdemo-kv"><span>' + esc(l.desc) + ' × ' + l.qty + '</span><span>' + EUR(l.qty * l.price) + '</span></div>';
-    }).join('');
-    openDrawer(
-      '<span class="fdemo-drawer-eyebrow">Invoice</span>' +
-      '<h3 class="fdemo-drawer-title">' + esc(inv.id) + '</h3>' +
-      '<div class="fdemo-drawer-meta"><span class="fdemo-badge ' + badgeClass(inv.status) + '">' + esc(inv.status) + '</span></div>' +
-      '<div class="fdemo-drawer-section"><h4>Line items</h4>' + lines + '<div class="fdemo-kv" style="border-top:1px solid var(--border); margin-top:6px; padding-top:10px; font-weight:700;"><span>Total</span><span>' + EUR(inv.total) + '</span></div></div>' +
-      '<div class="fdemo-drawer-section"><h4>Dates</h4>' +
-      '<div class="fdemo-kv"><span>Issued</span><span>' + fmtDate(inv.date) + '</span></div>' +
-      '<div class="fdemo-kv"><span>Due date</span><span>' + fmtDate(inv.dueDate) + '</span></div>' +
-      (inv.paidDate ? '<div class="fdemo-kv"><span>Collected</span><span>' + fmtDate(inv.paidDate) + '</span></div>' : '') + '</div>' +
-      '<div class="fdemo-drawer-section"><h4>Client</h4><button class="fdemo-drawer-link" data-action="open-client" data-id="' + inv.client.id + '">' + esc(inv.client.name) + ARROW + '</button></div>' +
-      (inv.project ? '<div class="fdemo-drawer-section"><h4>Project</h4><button class="fdemo-drawer-link" data-action="open-project" data-id="' + inv.project.id + '">' + esc(inv.project.name) + ARROW + '</button></div>' : '')
-    );
-  }
-
-  function expenseDrawer(id) {
-    var e = FS.expenses().filter(function (x) { return x.id === id; })[0];
-    if (!e) return;
-    openDrawer(
-      '<span class="fdemo-drawer-eyebrow">Expense</span>' +
-      '<h3 class="fdemo-drawer-title">' + esc(e.concept) + '</h3>' +
-      '<div class="fdemo-drawer-meta"><span class="fdemo-badge st-pendiente">' + esc(e.category) + '</span></div>' +
-      '<div class="fdemo-drawer-section"><h4>Detail</h4>' +
-      '<div class="fdemo-kv"><span>Amount</span><span>' + EUR(e.amount) + '</span></div>' +
-      '<div class="fdemo-kv"><span>Date</span><span>' + fmtDate(e.date) + '</span></div>' +
-      (e.supplier ? '<div class="fdemo-kv"><span>Supplier</span><span>' + esc(e.supplier.name) + '</span></div>' : '') + '</div>' +
-      (e.project ? '<div class="fdemo-drawer-section"><h4>Project</h4><button class="fdemo-drawer-link" data-action="open-project" data-id="' + e.project.id + '">' + esc(e.project.name) + ARROW + '</button></div>' : '')
-    );
-  }
-
-  function quoteDrawer(id) {
-    var q = FS.quote(id);
-    if (!q) return;
-    openDrawer(
-      '<span class="fdemo-drawer-eyebrow">Quote</span>' +
-      '<h3 class="fdemo-drawer-title">' + esc(q.title) + '</h3>' +
-      '<div class="fdemo-drawer-meta"><span class="fdemo-badge ' + badgeClass(q.status) + '">' + esc(q.status) + '</span></div>' +
-      '<div class="fdemo-drawer-section"><h4>Detail</h4>' +
-      '<div class="fdemo-kv"><span>Amount</span><span>' + EUR(q.amount) + '</span></div>' +
-      '<div class="fdemo-kv"><span>Date</span><span>' + fmtDate(q.date) + '</span></div></div>' +
-      '<div class="fdemo-drawer-section"><h4>Client</h4><button class="fdemo-drawer-link" data-action="open-client" data-id="' + q.client.id + '">' + esc(q.client.name) + ARROW + '</button></div>' +
-      (q.project ? '<div class="fdemo-drawer-section"><h4>Resulting project</h4><button class="fdemo-drawer-link" data-action="open-project" data-id="' + q.project.id + '">' + esc(q.project.name) + ARROW + '</button></div>' : '')
-    );
-  }
-
-  function clientDrawer(id) {
-    var c = FS.clients().filter(function (x) { return x.id === id; })[0];
-    if (!c) return;
-    var invs = FS.invoicesByClient(id).sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
-    var rows = invs.map(function (i) {
-      return '<div class="fdemo-kv"><span>' + esc(i.id) + ' — ' + fmtDate(i.date) + '</span><span>' + EUR(i.total) + '</span></div>';
-    }).join('');
-    openDrawer(
-      '<span class="fdemo-drawer-eyebrow">Client</span>' +
-      '<h3 class="fdemo-drawer-title">' + esc(c.name) + '</h3>' +
-      '<div class="fdemo-drawer-meta"><span class="fdemo-badge st-pagada">' + esc(c.sector) + '</span></div>' +
-      '<div class="fdemo-drawer-section"><h4>Contact</h4>' +
-      '<div class="fdemo-kv"><span>Email</span><span>' + esc(c.email) + '</span></div>' +
-      '<div class="fdemo-kv"><span>Client since</span><span>' + fmtDate(c.since) + '</span></div></div>' +
-      '<div class="fdemo-drawer-section"><h4>Total billing</h4>' +
-      '<div class="fdemo-kv"><span>Billed</span><span>' + EUR(c.billedTotal) + '</span></div>' +
-      '<div class="fdemo-kv"><span>Pending</span><span>' + EUR(c.pendingTotal) + '</span></div></div>' +
-      '<div class="fdemo-drawer-section"><h4>Invoices (' + invs.length + ')</h4>' + rows + '</div>'
-    );
-  }
-
-  function supplierDrawer(id) {
-    var s = FS.suppliers().filter(function (x) { return x.id === id; })[0];
-    if (!s) return;
-    var exps = FS.expenses().filter(function (e) { return e.supplierId === id; });
-    var rows = exps.map(function (e) {
-      return '<div class="fdemo-kv"><span>' + esc(e.concept) + ' — ' + fmtDate(e.date) + '</span><span>' + EUR(e.amount) + '</span></div>';
-    }).join('');
-    openDrawer(
-      '<span class="fdemo-drawer-eyebrow">Supplier</span>' +
-      '<h3 class="fdemo-drawer-title">' + esc(s.name) + '</h3>' +
-      '<div class="fdemo-drawer-meta"><span class="fdemo-badge st-pendiente">' + esc(s.category) + '</span></div>' +
-      '<div class="fdemo-drawer-section"><h4>Accumulated spend</h4><div class="fdemo-kv"><span>Total</span><span>' + EUR(s.total) + '</span></div></div>' +
-      '<div class="fdemo-drawer-section"><h4>Expenses (' + exps.length + ')</h4>' + rows + '</div>'
-    );
-  }
-
-  function projectDrawer(id) {
-    var p = FS.project(id);
-    if (!p) return;
-    var invs = FS.invoicesByProject(id);
-    var rows = invs.map(function (i) {
-      return '<div class="fdemo-kv"><span>' + esc(i.id) + ' — ' + fmtDate(i.date) + '</span><span>' + EUR(i.total) + '</span></div>';
-    }).join('');
-    openDrawer(
-      '<span class="fdemo-drawer-eyebrow">Project</span>' +
-      '<h3 class="fdemo-drawer-title">' + esc(p.name) + '</h3>' +
-      '<div class="fdemo-drawer-meta"><span class="fdemo-badge ' + (p.status === 'Completed' ? 'st-pagada' : 'st-pendiente') + '">' + esc(p.status) + '</span></div>' +
-      '<div class="fdemo-drawer-section"><h4>Client</h4><button class="fdemo-drawer-link" data-action="open-client" data-id="' + p.client.id + '">' + esc(p.client.name) + ARROW + '</button></div>' +
-      '<div class="fdemo-drawer-section"><h4>Profitability</h4>' +
-      '<div class="fdemo-kv"><span>Revenue</span><span>' + EUR(p.revenue) + '</span></div>' +
-      '<div class="fdemo-kv"><span>Cost</span><span>' + EUR(p.cost) + '</span></div>' +
-      '<div class="fdemo-kv" style="border-top:1px solid var(--border); padding-top:8px; font-weight:700;"><span>Margin</span><span>' + EUR(p.margin) + ' (' + p.marginPct + '%)</span></div></div>' +
-      '<div class="fdemo-drawer-section"><h4>Linked invoices (' + invs.length + ')</h4>' + (rows || '<p style="color:var(--stone-soft); font-size:.84rem;">None yet.</p>') + '</div>'
-    );
-  }
-
-  // ---------------------------------------------------------------
-  // Event delegation
-  // ---------------------------------------------------------------
-  function handleAction(el) {
-    var action = el.getAttribute('data-action');
-    var id = el.getAttribute('data-id');
-    switch (action) {
-      case 'open-invoice': invoiceDrawer(id); break;
-      case 'open-expense': expenseDrawer(id); break;
-      case 'open-quote': quoteDrawer(id); break;
-      case 'open-client': clientDrawer(id); break;
-      case 'open-supplier': supplierDrawer(id); break;
-      case 'open-project': projectDrawer(id); break;
-      case 'close-drawer': closeDrawer(); break;
-      case 'goto': location.hash = '#' + id; break;
-      case 'filter-invoices': state.invoiceFilter = id; render(); break;
-      case 'filter-quotes': state.quoteFilter = id; render(); break;
-      case 'ask': {
-        var q = FS.askQuestions()[Number(id)];
-        if (!q) return;
-        var answer = q.a();
-        state.ask.push({ role: 'user', text: q.q });
-        state.ask.push({ role: 'bot', text: answer.text, refs: answer.refs });
+    function navigate(view, id) {
+      if (useHash) {
+        location.hash = '#' + view + (id ? '/' + id : '');
+      } else {
+        state.route = view; state.id = id || null;
         render();
-        location.hash = '#pregunta';
-        setTimeout(function () {
-          var thread = document.getElementById('fdemo-ask-thread');
-          if (thread) thread.scrollTop = thread.scrollHeight;
-        }, 30);
-        break;
       }
+      closeMobileMenu();
     }
+
+    function render() {
+      var r = parseRoute();
+      setActiveNav(r.view);
+      var renderer = RENDERERS[r.view] || RENDERERS.dashboard;
+      contentEl.innerHTML = renderer(r.id);
+      mainEl.scrollTop = 0;
+    }
+
+    if (useHash) window.addEventListener('hashchange', render);
+
+    var RENDERERS = {};
+
+    function pageHead(title, sub) {
+      return '<div><h1 class="fdemo-page-title">' + esc(title) + '</h1>' + (sub ? '<p class="fdemo-page-sub">' + esc(sub) + '</p>' : '') + '</div>';
+    }
+    function crumb(parentLabel, parentView, currentLabel) {
+      return '<div class="fdemo-crumb"><a data-action="nav" data-view="' + parentView + '">' + esc(parentLabel) + '</a><span>/</span><span class="current">' + esc(currentLabel) + '</span></div>';
+    }
+    function card(headHtml, bodyHtml) { return '<div class="fdemo-card">' + (headHtml || '') + bodyHtml + '</div>'; }
+    function cardHead(title, subtitle) {
+      return '<div class="fdemo-card-head"><div><h2 class="fdemo-card-title">' + esc(title) + '</h2>' + (subtitle ? '<p class="fdemo-card-subtitle">' + esc(subtitle) + '</p>' : '') + '</div></div>';
+    }
+    function empty(detail) {
+      return '<div class="fdemo-empty"><div class="fdemo-empty-icon"></div><p class="fdemo-empty-title">Not enough data</p>' + (detail ? '<p class="fdemo-empty-detail">' + esc(detail) + '</p>' : '') + '</div>';
+    }
+    function kpi(label, value, hint, accent) {
+      return '<div class="fdemo-kpi accent-' + (accent || 'blue') + '"><div class="fdemo-kpi-row"><span class="fdemo-kpi-label">' + esc(label) + '</span></div>' +
+        '<div class="fdemo-kpi-value">' + esc(value) + '</div>' + (hint ? '<div class="fdemo-kpi-hint">' + esc(hint) + '</div>' : '') + '</div>';
+    }
+    function field(label, valueHtml) {
+      return '<div><p class="fdemo-field-label">' + esc(label) + '</p><p class="fdemo-field-value">' + valueHtml + '</p></div>';
+    }
+    function linkTo(view, id, label) {
+      return '<a class="fdemo-link" href="#" data-action="nav" data-view="' + view + '" data-id="' + id + '">' + esc(label) + '</a>';
+    }
+
+    // ---------- Dashboard ----------
+    RENDERERS.dashboard = function () {
+      var snap = FS.getDashboardSnapshot();
+      var facturas = FS.listFacturas();
+      var gastos = FS.listGastos();
+
+      var actividad = facturas.slice(0, 5).map(function (f) {
+        return { tipo: 'Invoice', id: f.id, texto: f.numero + ' · ' + (f.clienteNombre || 'Client') + ' · ' + EUR(f.importe), fecha: f.fechaEmision, estado: f.estado, view: 'facturas' };
+      }).concat(gastos.slice(0, 5).map(function (g) {
+        return { tipo: 'Expense', id: g.id, texto: g.proveedor + ' · ' + EUR(g.importe), fecha: g.fecha, estado: g.estadoRevision || 'Recorded', view: 'gastos' };
+      })).sort(function (a, b) { return (b.fecha || '').localeCompare(a.fecha || ''); }).slice(0, 8);
+
+      if (!snap) return pageHead('Dashboard', 'No snapshot available') + card(null, '<div class="fdemo-card-body">' + empty('No snapshot has been computed yet.') + '</div>');
+
+      var kpis = [
+        kpi('Billed', EUR(snap.totalFacturado), '', 'blue'),
+        kpi('Collected', EUR(snap.totalCobrado), '', 'cyan'),
+        kpi('Pending collection', EUR(snap.totalPendiente), '', 'violet'),
+        kpi('Overdue', EUR(snap.totalVencido), '', snap.totalVencido > 0 ? 'danger' : 'blue'),
+        kpi('Expenses', EUR(snap.totalGastos), '', 'warning'),
+        kpi('Active projects', String(snap.proyectosActivos), '', 'cyan'),
+        kpi('30-day forecast', EUR(snap.prevision30Dias), '', 'violet'),
+        kpi('Estimated profitability', EUR(snap.totalFacturado - snap.totalGastos), 'Billed − Expenses', 'blue')
+      ].join('');
+
+      var alertasHtml = !snap.alertas.length ? '<p style="font-size:.86rem;color:var(--dc-text-muted);padding:16px;margin:0;">No active alerts.</p>' :
+        '<div class="fdemo-alert-list">' + snap.alertas.map(function (a) { return '<div class="fdemo-alert"><span class="dot"></span>' + esc(a) + '</div>'; }).join('') + '</div>';
+
+      var actividadHtml = !actividad.length ? empty() :
+        actividad.map(function (a) {
+          return '<a class="fdemo-activity-row" href="#" data-action="nav" data-view="' + a.view + '" data-id="' + a.id + '">' +
+            '<div class="fdemo-activity-main"><div class="fdemo-activity-text">' + esc(a.texto) + '</div>' +
+            '<div class="fdemo-activity-meta">' + esc(a.tipo) + ' · ' + (a.fecha ? FDATETIME(a.fecha) : 'No date') + '</div></div>' +
+            pill(a.estado) + '</a>';
+        }).join('');
+
+      return pageHead('Dashboard', 'Last computed: ' + FDATETIME(snap.fechaCalculo)) +
+        '<div class="fdemo-kpi-grid">' + kpis + '</div>' +
+        '<div style="display:grid; grid-template-columns:1fr 2fr; gap:16px;" class="fdemo-dash-row">' +
+        card(cardHead('Alerts', 'Generated by the KPI calculation'), alertasHtml) +
+        card(cardHead('Recent activity', 'Latest invoices and expenses recorded'), actividadHtml) +
+        '</div>';
+    };
+
+    // ---------- Invoices ----------
+    RENDERERS.facturas = function (id) {
+      if (id) return facturaDetalle(id);
+      var all = FS.listFacturas();
+      var estados = Array.from(new Set(all.map(function (f) { return f.estado; }))).sort();
+      var q = state.facturaFiltro.q.toLowerCase();
+      var estFiltro = state.facturaFiltro.estado;
+      var filtradas = all.filter(function (f) {
+        var texto = (f.numero + ' ' + (f.clienteNombre || '') + ' ' + (f.proyecto || '')).toLowerCase();
+        return (!q || texto.indexOf(q) !== -1) && (!estFiltro || f.estado === estFiltro);
+      });
+
+      var rows = filtradas.map(function (f) {
+        return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td>' +
+          '<td class="is-muted">' + esc(dash(f.clienteNombre)) + '</td>' +
+          '<td class="is-muted">' + esc(dash(f.proyecto)) + '</td>' +
+          '<td class="is-muted">' + FDATE(f.fechaEmision) + '</td>' +
+          '<td class="is-muted">' + FDATE(f.fechaVencimiento) + '</td>' +
+          '<td class="is-right">' + EUR(f.importe) + '</td>' +
+          '<td>' + pill(f.estado) + '</td>' +
+          '<td>' + pill(f.estadoCobro) + '</td></tr>';
+      }).join('');
+
+      var tableHtml = !filtradas.length ? empty(all.length === 0 ? 'No invoices recorded yet.' : 'No results for these filters.') :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr>' +
+        '<th>Invoice #</th><th>Client</th><th>Project</th><th>Issued</th><th>Due</th><th class="is-right">Amount</th><th>Status</th><th>Collection</th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+
+      return pageHead('Invoices', all.length + ' invoice(s) in total') +
+        '<form class="fdemo-filter-row" data-role="factura-filter">' +
+        '<input class="fdemo-input" type="text" name="q" placeholder="Search by number, client or project…" value="' + esc(state.facturaFiltro.q) + '">' +
+        '<select class="fdemo-select" name="estado">' + ['<option value="">All statuses</option>'].concat(estados.map(function (e) { return '<option value="' + esc(e) + '"' + (e === estFiltro ? ' selected' : '') + '>' + esc(e) + '</option>'; })).join('') + '</select>' +
+        '<button type="submit" class="fdemo-btn variant-secondary">Filter</button>' +
+        '</form>' +
+        card(null, tableHtml);
+    };
+
+    function facturaDetalle(id) {
+      var f = FS.getFactura(id);
+      if (!f) return empty('Invoice not found in the demo.');
+      var cliente = f.clienteIds && f.clienteIds[0] ? FS.getCliente(f.clienteIds[0]) : null;
+
+      var origenHtml = '';
+      if (f.presupuestoOrigenId || f.proyectoOrigenId) {
+        var links = [];
+        if (f.presupuestoOrigenId) links.push('<div>' + linkTo('presupuestos', f.presupuestoOrigenId, 'View source quote') + '</div>');
+        if (f.proyectoOrigenId) links.push('<div>' + linkTo('proyectos', f.proyectoOrigenId, 'View source project') + '</div>');
+        origenHtml = card(cardHead('Origin', 'Traceability to the quote or project that generated this invoice'), '<div class="fdemo-card-body" style="display:flex; flex-direction:column; gap:8px;">' + links.join('') + '</div>');
+      }
+      var clienteHtml = cliente ? card(cardHead('Client'), '<div class="fdemo-field-grid">' +
+        field('Company', linkTo('clientes', cliente.id, cliente.empresa)) + field('Tax ID', esc(dash(cliente.nif))) + field('Email', esc(dash(cliente.email))) + '</div>') : '';
+      var obsHtml = f.observaciones ? card(cardHead('Notes'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted);">' + esc(f.observaciones) + '</p>') : '';
+
+      return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
+        crumb('Invoices', 'facturas', f.numero) +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h1 class="fdemo-page-title">Invoice ' + esc(f.numero) + '</h1><p class="fdemo-page-sub">' + esc(dash(f.clienteNombre)) + '</p></div>' +
+        '<div style="display:flex; gap:8px;">' + pill(f.estado) + (f.estadoCobro ? pill(f.estadoCobro) : '') + '</div></div>' +
+        card(cardHead('Invoice details'), '<div class="fdemo-field-grid">' +
+          field('Amount', EUR(f.importe)) + field('Collected', EUR(f.importeCobrado)) + field('Pending', EUR(f.importe - (f.importeCobrado || 0))) +
+          field('Issue date', FDATE(f.fechaEmision)) + field('Due date', FDATE(f.fechaVencimiento)) + field('Payment date', FDATE(f.fechaPago)) +
+          field('Payment method', esc(dash(f.metodoPago))) + field('Project', esc(dash(f.proyecto))) + field('Reminders sent', String(f.recordatoriosEnviados || 0)) +
+          '</div>') +
+        origenHtml + clienteHtml + obsHtml +
+        '</div>';
+    }
+
+    // ---------- Quotes ----------
+    RENDERERS.presupuestos = function (id) {
+      if (id) return presupuestoDetalle(id);
+      var all = FS.listPresupuestos();
+      var rows = all.map(function (p) {
+        return '<tr><td>' + linkTo('presupuestos', p.id, p.empresa) + '</td>' +
+          '<td class="is-muted">' + FDATE(p.fechaGeneracion) + '</td>' +
+          '<td class="is-right">' + EUR(p.importe) + '</td>' +
+          '<td>' + pill(p.estado) + '</td>' +
+          '<td class="is-muted">' + (p.aceptadaPorCliente ? 'Accepted ' + FDATE(p.fechaAceptacion) : 'Not accepted') + '</td>' +
+          '<td>' + (p.facturaGeneradaId ? linkTo('facturas', p.facturaGeneradaId, 'View invoice') : '<span style="font-size:.72rem;color:var(--dc-text-faint);">Not invoiced</span>') + '</td></tr>';
+      }).join('');
+      var tableHtml = !all.length ? empty('No quotes generated yet.') :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Company</th><th>Generated</th><th class="is-right">Amount</th><th>Status</th><th>Acceptance</th><th>Invoice</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+      return pageHead('Quotes', all.length + ' quote(s) in total') + card(null, tableHtml);
+    };
+
+    function presupuestoDetalle(id) {
+      var p = FS.getPresupuesto(id);
+      if (!p) return empty('Quote not found in the demo.');
+      var facturacionBody;
+      if (p.facturaGeneradaId) facturacionBody = linkTo('facturas', p.facturaGeneradaId, 'View generated invoice');
+      else if (p.aceptadaPorCliente) facturacionBody = '<p style="margin:0; font-size:.86rem; color:var(--dc-text-muted);">Accepted — the invoice is generated automatically by the real workflow once a quote is accepted.</p>';
+      else facturacionBody = '<p style="margin:0; font-size:.86rem; color:var(--dc-text-faint);">Awaiting client acceptance.</p>';
+
+      return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
+        crumb('Quotes', 'presupuestos', p.empresa) +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(p.empresa) + '</h1>' + pill(p.estado) + '</div>' +
+        card(cardHead('Quote details'), '<div class="fdemo-field-grid">' +
+          field('Amount', EUR(p.importe)) + field('Generated on', FDATE(p.fechaGeneracion)) +
+          field('Accepted by client', p.aceptadaPorCliente ? 'Yes, ' + FDATE(p.fechaAceptacion) : 'No') + '</div>') +
+        (p.resumenEjecutivo ? card(cardHead('Executive summary'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted);">' + esc(p.resumenEjecutivo) + '</p>') : '') +
+        (p.serviciosPropuestos ? card(cardHead('Proposed services'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted); white-space:pre-line;">' + esc(p.serviciosPropuestos) + '</p>') : '') +
+        card(cardHead('Invoicing', 'This action is carried out by the real workflow — the interface never duplicates that logic'), '<div class="fdemo-card-body">' + facturacionBody + '</div>') +
+        '</div>';
+    }
+
+    // ---------- Clients ----------
+    RENDERERS.clientes = function (id) {
+      if (id) return clienteDetalle(id);
+      var all = FS.listClientes();
+      var q = state.clienteFiltro.q.toLowerCase();
+      var filtrados = all.filter(function (c) {
+        var texto = (c.empresa + ' ' + (c.sector || '') + ' ' + (c.email || '')).toLowerCase();
+        return !q || texto.indexOf(q) !== -1;
+      });
+      var rows = filtrados.map(function (c) {
+        return '<tr><td>' + linkTo('clientes', c.id, c.empresa) + '</td>' +
+          '<td class="is-muted">' + esc(dash(c.sector)) + '</td>' +
+          '<td>' + pill(c.estado) + '</td>' +
+          '<td class="is-right">' + (c.cuotaMensual !== null ? EUR(c.cuotaMensual) : '—') + '</td>' +
+          '<td class="is-right">' + c.facturaIds.length + '</td></tr>';
+      }).join('');
+      var tableHtml = !filtrados.length ? empty(all.length === 0 ? 'No clients recorded yet.' : 'No results.') :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Company</th><th>Sector</th><th>Status</th><th class="is-right">Monthly fee</th><th class="is-right">Invoices</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+
+      return pageHead('Clients', all.length + ' client(s) in total') +
+        '<form class="fdemo-filter-row" data-role="cliente-filter">' +
+        '<input class="fdemo-input" style="max-width:420px;" type="text" name="q" placeholder="Search by company, sector or email…" value="' + esc(state.clienteFiltro.q) + '">' +
+        '<button type="submit" class="fdemo-btn variant-secondary">Search</button></form>' +
+        card(null, tableHtml);
+    };
+
+    function clienteDetalle(id) {
+      var c = FS.getCliente(id);
+      if (!c) return empty('Client not found in the demo.');
+      var facturasCliente = FS.listFacturas().filter(function (f) { return f.clienteIds.indexOf(id) !== -1; });
+      var proyectosCliente = FS.listProyectos().filter(function (p) { return p.empresa === c.empresa; });
+
+      var facturasHtml = !facturasCliente.length ? empty() :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>#</th><th>Status</th><th class="is-right">Amount</th></tr></thead><tbody>' +
+        facturasCliente.map(function (f) { return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td><td>' + pill(f.estado) + '</td><td class="is-right">' + EUR(f.importe) + '</td></tr>'; }).join('') +
+        '</tbody></table></div>';
+      var proyectosHtml = !proyectosCliente.length ? empty() :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Name</th><th>Status</th><th class="is-right">Profitability</th></tr></thead><tbody>' +
+        proyectosCliente.map(function (p) { return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '</td><td>' + pill(p.estado) + '</td><td class="is-right">' + EUR(p.rentabilidad) + '</td></tr>'; }).join('') +
+        '</tbody></table></div>';
+
+      return '<div class="fdemo-page" style="gap:20px; max-width:900px;">' +
+        crumb('Clients', 'clientes', c.empresa) +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(c.empresa) + '</h1>' + pill(c.estado) + '</div>' +
+        card(cardHead('Tax and contact information'), '<div class="fdemo-field-grid">' +
+          field('Tax ID', esc(dash(c.nif))) + field('Registered address', esc(dash(c.direccionFiscal))) + field('Sector', esc(dash(c.sector))) +
+          field('Email', esc(dash(c.email))) + field('Phone', esc(dash(c.telefono))) + field('Website', c.web ? '<a class="fdemo-link" href="' + esc(c.web) + '" target="_blank" rel="noopener noreferrer">' + esc(c.web) + '</a>' : '—') +
+          field('Monthly fee', c.cuotaMensual !== null ? EUR(c.cuotaMensual) : 'No recurring fee') + field('Active billing', c.facturacionActiva ? 'Yes' : 'No') +
+          '</div>') +
+        card(cardHead('Invoices', facturasCliente.length + ' invoice(s)'), facturasHtml) +
+        card(cardHead('Projects', proyectosCliente.length + ' project(s)'), proyectosHtml) +
+        '</div>';
+    }
+
+    // ---------- Collections ----------
+    RENDERERS.cobros = function () {
+      var cobros = FS.listCobros();
+      var grupos = {
+        vencidos: cobros.filter(function (c) { return c.estadoCobro === 'Overdue'; }),
+        seguimiento: cobros.filter(function (c) { return c.estadoCobro === 'Following up'; }),
+        pendientes: cobros.filter(function (c) { return c.estadoCobro === 'Pending' || c.estadoCobro === 'Partial'; }),
+        cobrados: cobros.filter(function (c) { return c.estadoCobro === 'Collected'; })
+      };
+      var totalPendiente = grupos.vencidos.concat(grupos.seguimiento, grupos.pendientes).reduce(function (s, c) { return s + c.pendiente; }, 0);
+
+      function grupoCard(titulo, lista) {
+        var body = !lista.length ? empty() :
+          '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Invoice</th><th>Client</th><th>Due</th><th class="is-right">Amount</th><th class="is-right">Collected</th><th class="is-right">Pending</th></tr></thead><tbody>' +
+          lista.map(function (c) {
+            return '<tr><td>' + linkTo('facturas', c.facturaId, c.numeroFactura) + '</td><td class="is-muted">' + esc(dash(c.clienteNombre)) + '</td><td class="is-muted">' + FDATE(c.fechaVencimiento) + '</td>' +
+              '<td class="is-right">' + EUR(c.importe) + '</td><td class="is-right">' + EUR(c.importeCobrado) + '</td><td class="is-right">' + EUR(c.pendiente) + '</td></tr>';
+          }).join('') + '</tbody></table></div>';
+        return card(cardHead(titulo, lista.length + ' invoice(s)'), body);
+      }
+
+      return pageHead('Collections', 'Collection tracking for issued invoices') +
+        '<div class="fdemo-kpi-grid">' +
+        kpi('Total pending', EUR(totalPendiente), '', 'blue') +
+        kpi('Overdue', String(grupos.vencidos.length), '', 'danger') +
+        kpi('Following up', String(grupos.seguimiento.length), '', 'warning') +
+        kpi('Collected', String(grupos.cobrados.length), '', 'cyan') +
+        '</div>' +
+        grupoCard('Overdue', grupos.vencidos) + grupoCard('Following up', grupos.seguimiento) +
+        grupoCard('Pending / partial', grupos.pendientes) + grupoCard('Collected', grupos.cobrados);
+    };
+
+    // ---------- Expenses ----------
+    RENDERERS.gastos = function (id) {
+      if (id) return gastoDetalle(id);
+      var all = FS.listGastos();
+      var total = all.reduce(function (s, g) { return s + g.importe; }, 0);
+      var rows = all.map(function (g) {
+        return '<tr><td>' + linkTo('gastos', g.id, g.proveedor) + '</td><td class="is-muted">' + esc(dash(g.concepto)) + '</td><td class="is-muted">' + esc(dash(g.categoria)) + '</td>' +
+          '<td class="is-muted">' + FDATE(g.fecha) + '</td><td class="is-right">' + EUR(g.importe) + '</td><td>' + pill(g.estadoRevision) + '</td></tr>';
+      }).join('');
+      var tableHtml = !all.length ? empty('No expenses recorded yet.') :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Supplier</th><th>Concept</th><th>Category</th><th>Date</th><th class="is-right">Amount</th><th>Review</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+      return pageHead('Expenses', all.length + ' expense(s) · Total ' + EUR(total)) + card(null, tableHtml);
+    };
+
+    function gastoDetalle(id) {
+      var g = FS.getGasto(id);
+      if (!g) return empty('Expense not found in the demo.');
+      return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
+        crumb('Expenses', 'gastos', g.proveedor) +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(g.proveedor) + '</h1>' + pill(g.estadoRevision) + '</div>' +
+        card(cardHead('Expense details'), '<div class="fdemo-field-grid">' +
+          field('Amount', EUR(g.importe)) + field('VAT', g.iva !== null ? EUR(g.iva) : '—') + field('Date', FDATE(g.fecha)) +
+          field('Category', esc(dash(g.categoria))) + field('Project', g.proyectoRecordId ? linkTo('proyectos', g.proyectoRecordId, 'View project') : 'No project linked') +
+          '</div>') +
+        (g.concepto ? card(cardHead('Concept'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted);">' + esc(g.concepto) + '</p>') : '') +
+        (g.notasRevision ? card(cardHead('Review notes'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted);">' + esc(g.notasRevision) + '</p>') : '') +
+        '</div>';
+    }
+
+    // ---------- Projects ----------
+    RENDERERS.proyectos = function (id) {
+      if (id) return proyectoDetalle(id);
+      var all = FS.listProyectos();
+      var rows = all.map(function (p) {
+        return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '</td><td class="is-muted">' + esc(dash(p.empresa)) + '</td><td>' + pill(p.estado) + '</td>' +
+          '<td class="is-muted">' + FDATE(p.fechaInicio) + '</td><td class="is-right">' + EUR(p.totalFacturado) + '</td><td class="is-right">' + EUR(p.totalGastos) + '</td><td class="is-right">' + EUR(p.rentabilidad) + '</td></tr>';
+      }).join('');
+      var tableHtml = !all.length ? empty('No projects recorded yet.') :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Project</th><th>Client</th><th>Status</th><th>Start</th><th class="is-right">Billed</th><th class="is-right">Expenses</th><th class="is-right">Profitability</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+      return pageHead('Projects', all.length + ' project(s) in total') + card(null, tableHtml);
+    };
+
+    function proyectoDetalle(id) {
+      var p = FS.getProyecto(id);
+      if (!p) return empty('Project not found in the demo.');
+      var facturasProyecto = FS.listFacturas().filter(function (f) { return f.proyectoOrigenId === id; });
+      var gastosProyecto = FS.listGastos().filter(function (g) { return g.proyectoRecordId === id; });
+
+      function statCard(label, value) {
+        return '<div class="fdemo-stat-card"><p class="fdemo-stat-label">' + esc(label) + '</p><p class="fdemo-stat-value">' + value + '</p></div>';
+      }
+      var facturasHtml = !facturasProyecto.length ? empty() :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>#</th><th>Status</th><th class="is-right">Amount</th></tr></thead><tbody>' +
+        facturasProyecto.map(function (f) { return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td><td>' + pill(f.estado) + '</td><td class="is-right">' + EUR(f.importe) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+      var gastosHtml = !gastosProyecto.length ? empty() :
+        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Supplier</th><th>Category</th><th class="is-right">Amount</th></tr></thead><tbody>' +
+        gastosProyecto.map(function (g) { return '<tr><td>' + linkTo('gastos', g.id, g.proveedor) + '</td><td class="is-muted">' + esc(dash(g.categoria)) + '</td><td class="is-right">' + EUR(g.importe) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+
+      return '<div class="fdemo-page" style="gap:20px; max-width:900px;">' +
+        crumb('Projects', 'proyectos', p.nombre) +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h1 class="fdemo-page-title">' + esc(p.nombre) + '</h1><p class="fdemo-page-sub">' + esc(dash(p.empresa)) + '</p></div>' + pill(p.estado) + '</div>' +
+        '<div class="fdemo-stat-row">' + statCard('Billed', EUR(p.totalFacturado)) + statCard('Collected', EUR(p.totalCobrado)) + statCard('Expenses', EUR(p.totalGastos)) + statCard('Profitability', EUR(p.rentabilidad)) + '</div>' +
+        card(cardHead('Detail'), '<div class="fdemo-field-grid">' +
+          field('Start date', FDATE(p.fechaInicio)) + field('Expected delivery', FDATE(p.fechaEntregaPrevista)) + field('Actual delivery', FDATE(p.fechaEntregaReal)) + field('Owner', esc(dash(p.responsable))) +
+          '</div>' + (p.serviciosContratados ? '<div style="border-top:1px solid var(--dc-border); padding:20px;"><p class="fdemo-field-label">Contracted services</p><p class="fdemo-field-value" style="white-space:pre-line;">' + esc(p.serviciosContratados) + '</p></div>' : '')) +
+        card(cardHead('Project invoices', facturasProyecto.length + ' invoice(s)'), facturasHtml) +
+        card(cardHead('Project expenses', gastosProyecto.length + ' expense(s)'), gastosHtml) +
+        '</div>';
+    }
+
+    // ---------- Ask Finance ----------
+    RENDERERS.ia = function () {
+      var sugerencias = FS.askQuestions();
+      var threadHtml;
+      if (!state.ia.mensajes.length) {
+        threadHtml = '<div class="fdemo-ia-empty"><p>Try one of these questions:</p><div class="fdemo-ia-chips">' +
+          sugerencias.map(function (s, i) { return '<button type="button" class="fdemo-ia-chip" data-action="ask" data-idx="' + i + '">' + esc(s.q) + '</button>'; }).join('') +
+          '</div></div>';
+      } else {
+        threadHtml = '<div class="fdemo-ia-msgs">' + state.ia.mensajes.map(function (m) {
+          if (m.autor === 'usuario') return '<div class="fdemo-ia-msg from-user"><div class="fdemo-ia-bubble">' + esc(m.texto) + '</div></div>';
+          var refs = (m.refs || []).map(function (r) { return '<button type="button" class="fdemo-ia-ref" data-action="nav" data-view="' + r.type + '" data-id="' + r.id + '">' + esc(r.label) + '</button>'; }).join('');
+          return '<div class="fdemo-ia-msg from-ia"><div class="fdemo-ia-bubble">' + esc(m.texto) + (refs ? '<div class="fdemo-ia-refs">' + refs + '</div>' : '') + '</div></div>';
+        }).join('') + '</div>';
+      }
+
+      return pageHead('Ask Finance', 'Answers only with data from the demo (billing, collections, expenses and projects). Not a substitute for tax advice.') +
+        '<div class="fdemo-card fdemo-ia-card">' +
+        '<div class="fdemo-ia-thread" data-role="ia-thread">' + threadHtml + '</div>' +
+        '<form class="fdemo-ia-form" data-role="ia-form">' +
+        '<input class="fdemo-input" type="text" name="pregunta" placeholder="Type your financial question…" autocomplete="off">' +
+        '<button type="submit" class="fdemo-btn variant-primary">Send</button>' +
+        '</form></div>';
+    };
+
+    function askIndex(idx) {
+      var q = FS.askQuestions()[idx];
+      if (!q) return;
+      var a = q.a();
+      state.ia.mensajes.push({ autor: 'usuario', texto: q.q });
+      state.ia.mensajes.push({ autor: 'ia', texto: a.text, refs: a.refs });
+      render();
+      var thread = root.querySelector('[data-role="ia-thread"]');
+      if (thread) thread.scrollTop = thread.scrollHeight;
+    }
+
+    // ---------- Settings ----------
+    RENDERERS.configuracion = function () {
+      var ROLES = ['Administrator', 'Leadership', 'Finance', 'Operations', 'Read only'];
+      var MATRIZ = {
+        Administrator: ['view_dashboard', 'view_invoices', 'edit_invoices', 'view_quotes', 'invoice_from_quote', 'view_clients', 'edit_clients', 'view_collections', 'view_expenses', 'review_expenses', 'view_projects', 'use_finance_ai', 'view_settings', 'edit_settings'],
+        Leadership: ['view_dashboard', 'view_invoices', 'edit_invoices', 'view_quotes', 'invoice_from_quote', 'view_clients', 'edit_clients', 'view_collections', 'view_expenses', 'review_expenses', 'view_projects', 'use_finance_ai', 'view_settings'],
+        Finance: ['view_dashboard', 'view_invoices', 'edit_invoices', 'view_quotes', 'invoice_from_quote', 'view_clients', 'view_collections', 'view_expenses', 'review_expenses', 'view_projects', 'use_finance_ai'],
+        Operations: ['view_dashboard', 'view_invoices', 'view_quotes', 'view_clients', 'view_projects', 'view_expenses'],
+        'Read only': ['view_dashboard', 'view_invoices', 'view_quotes', 'view_clients', 'view_collections', 'view_expenses', 'view_projects']
+      };
+      var rolesHtml = ROLES.map(function (r) {
+        return '<div class="fdemo-role-row"><p class="fdemo-role-name">' + esc(r) + '</p><div class="fdemo-role-perms">' +
+          MATRIZ[r].map(function (p) { return '<span class="fdemo-role-perm">' + esc(p) + '</span>'; }).join('') + '</div></div>';
+      }).join('');
+
+      return pageHead('Settings', 'Settings available in this public demo.') +
+        card(cardHead('Current session'), '<div class="fdemo-field-grid">' +
+          field('User', 'Demo Account') + field('Company', 'Demo environment · D-Code Finance') + field('Role', pill('Administrator')) + '</div>') +
+        card(cardHead('Data source', 'Controlled by the DATA_SOURCE environment variable in the real product'), '<div class="fdemo-card-body">' + pill('Sample data (mock)') + '</div>') +
+        card(cardHead('Roles and permissions', 'Same permission matrix as the real product'), rolesHtml) +
+        card(cardHead('About this demo'), '<ul class="fdemo-pending-list">' +
+          '<li>The data is fictional and is never saved or sent to any real system.</li>' +
+          '<li>"Ask Finance" computes its answers right here, on this dataset — it never calls an external service.</li>' +
+          '<li>The real system connects to D-Code Partners\' Airtable/n8n; this public demo is fully isolated from that infrastructure.</li>' +
+          '</ul>');
+    };
+
+    root.addEventListener('click', function (e) {
+      var navEl = e.target.closest('[data-action="nav"]');
+      if (navEl) { e.preventDefault(); navigate(navEl.getAttribute('data-view'), navEl.getAttribute('data-id')); return; }
+      var askEl = e.target.closest('[data-action="ask"]');
+      if (askEl) { e.preventDefault(); askIndex(Number(askEl.getAttribute('data-idx'))); return; }
+      var navItem = e.target.closest('[data-role="nav"]');
+      if (navItem) { e.preventDefault(); navigate(navItem.getAttribute('data-view'), null); return; }
+      if (e.target === overlayEl) closeMobileMenu();
+    });
+    menuBtn.addEventListener('click', function () {
+      sidebarEl.classList.add('is-open');
+      overlayEl.classList.add('is-open');
+    });
+
+    root.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (form.matches('[data-role="factura-filter"]')) {
+        e.preventDefault();
+        state.facturaFiltro.q = form.q.value;
+        state.facturaFiltro.estado = form.estado.value;
+        render();
+      } else if (form.matches('[data-role="cliente-filter"]')) {
+        e.preventDefault();
+        state.clienteFiltro.q = form.q.value;
+        render();
+      } else if (form.matches('[data-role="ia-form"]')) {
+        e.preventDefault();
+        var input = form.pregunta;
+        var texto = input.value.trim();
+        if (!texto) return;
+        state.ia.mensajes.push({ autor: 'usuario', texto: texto });
+        state.ia.mensajes.push({ autor: 'ia', texto: 'This demo answers the three suggested questions, computed over the fictional dataset. Try one of the suggestions above.', refs: [] });
+        input.value = '';
+        render();
+        var thread = root.querySelector('[data-role="ia-thread"]');
+        if (thread) thread.scrollTop = thread.scrollHeight;
+      }
+    });
+
+    render();
   }
 
-  document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-action]');
-    if (el) { e.preventDefault(); handleAction(el); return; }
-    if (e.target === drawerOverlay) closeDrawer();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeDrawer();
-    if (e.key === 'Enter' && document.activeElement && document.activeElement.hasAttribute('data-action')) {
-      handleAction(document.activeElement);
-    }
-  });
+  function init() {
+    document.querySelectorAll('[data-fdemo-mount]').forEach(initInstance);
+  }
 
-  render();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+
 })();
