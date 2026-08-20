@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title id="fdemo-view-title-tag">Dashboard · D-Code Finance (demo)</title>
+<meta name="description" content="Demo interactiva de D-Code Finance: dashboard, facturas, cobros, gastos, presupuestos y análisis, con datos ficticios de una empresa de ejemplo.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://dcodepartners.com/sistema-financiero/app">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/spacegrotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="/assets/css/styles.css?v=2e875d037b">
+<link rel="stylesheet" href="/assets/css/finance-demo.css?v=1">
+
+</head>
+<body>
+
+<div class="fdemo">
+
+  <header class="fdemo-topbar">
+    <a href="/sistema-financiero" class="fdemo-topbar-exit">
+      <img src="/assets/logo/dcode-icon-sm.png" alt="D-Code Partners">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span>Salir de la demo</span>
+    </a>
+    <span class="fdemo-topbar-badge">DEMO</span>
+    <span class="fdemo-topbar-company">Estudio Nortia · datos ficticios</span>
+    <div class="fdemo-topbar-spacer"></div>
+    <a href="/contacto" class="btn btn-primary fdemo-topbar-cta">Solicitar una reunión</a>
+  </header>
+
+  <div class="fdemo-shell">
+    <nav class="fdemo-sidebar" id="fdemo-sidebar-nav" aria-label="Navegación D-Code Finance"></nav>
+
+    <main class="fdemo-main">
+      <div id="fdemo-main-content"></div>
+    </main>
+  </div>
+
+  <nav class="fdemo-tabbar" id="fdemo-tabbar-nav" aria-label="Navegación D-Code Finance (móvil)"></nav>
+</div>
+
+<div class="fdemo-drawer-overlay" id="fdemo-drawer-overlay"></div>
+<aside class="fdemo-drawer" id="fdemo-drawer" aria-hidden="true" aria-label="Detalle"></aside>
+
+<script src="/assets/js/finance-demo-data.js?v=1"></script>
+<script src="/assets/js/finance-demo.js?v=1"></script>
+
+</body>
+</html>
