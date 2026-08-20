@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T18:17:11.993Z",
-  "pageCount": 64,
-  "chunkCount": 738,
+  "generatedAt": "2026-08-20T19:31:25.301Z",
+  "pageCount": 66,
+  "chunkCount": 750,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -315,8 +315,44 @@
       ]
     },
     {
+      "url": "/cambios-en-proceso",
+      "title": "Cambios en proceso — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/cambios-en-proceso#c0",
+          "heading": "No solo hablamos de IA. Esto es lo que estamos construyendo ahora mismo.",
+          "text": "D-Code Partners no es un sistema terminado — es un sistema que evoluciona cada semana. Aquí verás en qué estamos trabajando de verdad: qué está construido, qué está en validación y qué sigue en desarrollo. Sin fechas inventadas ni estados maquillados."
+        },
+        {
+          "id": "/cambios-en-proceso#c1",
+          "heading": "D-Code OS",
+          "text": "Qué estamos construyendo — La aplicación operativa que centraliza clientes, Departamentos contratados, proyectos, incidencias y actividad en un único lugar, con aislamiento real de datos por empresa. Estado actual — Construido y verificado: autenticación real, separación de datos por cliente, fichas de empresa, gestión de proyectos, tareas, incidencias y documentación. Pendiente: conectarlo en vivo con el resto de nuestros sistemas y prepararlo para el primer cliente. Qué buscamos — Que cada cliente tenga un panel único desde el que ver y usar los Departamentos Inteligentes que ha contratado, en vez de depender de herramientas sueltas. Por qué importa — Es la pieza que conecta todo lo demás: sin D-Code OS, cada Departamento es una automatización aislada; con él, es un sistema operativo real para la empresa del cliente."
+        },
+        {
+          "id": "/cambios-en-proceso#c2",
+          "heading": "Evolución de D-Code Finance",
+          "text": "Qué estamos mejorando — El circuito completo de Finanzas: facturación automática desde presupuestos aceptados, cobros con recordatorios que escalan solos, control de gasto diario, dashboard financiero y un asistente que responde preguntas sobre los datos reales. Estado actual — Construido y funcionando internamente, con las cuentas de D-Code Partners. Antes de ofrecerlo como Departamento comercial, lo estamos validando con nuestra propia primera factura real. Qué buscamos — Confirmar que el circuito completo funciona de punta a punta con dinero real antes de ponerlo delante de un cliente. Por qué importa — Es el Departamento con el retorno más fácil de demostrar en euros: cobros que llegan antes, gasto que no sorprende al cierre de mes."
+        },
+        {
+          "id": "/cambios-en-proceso#c3",
+          "heading": "Comercial IA — núcleo confirmado en producción",
+          "text": "Qué mejoramos — El disparo automático de propuestas comerciales en cuanto entra un Lead nuevo desde una empresa clasificada como oportunidad prioritaria. Estado actual — Confirmado activo en producción tras una auditoría técnica: la versión publicada coincide con la que realmente se ejecuta. Deja de ser un punto débil del sistema. Qué buscamos — Seguir ampliando el núcleo comercial con el seguimiento automático a leads que no responden, todavía en validación. Por qué importa — Es la prueba de que no basta con construir una automatización: hay que auditarla contra lo que corre de verdad antes de venderla."
+        },
+        {
+          "id": "/cambios-en-proceso#c4",
+          "heading": "Guardarraíl de comunicación externa",
+          "text": "Qué construimos — Una capa de seguridad central por la que pasa cualquier automatización que vaya a enviar una comunicación a alguien fuera de D-Code: si falta autorización explícita, el envío se bloquea por defecto. Estado actual — Activo y ya en uso por los sistemas comerciales y financieros que envían comunicaciones automáticas. Qué buscamos — Que ningún sistema pueda escribirle a un cliente real por error mientras seguimos construyendo y probando. Por qué importa — Es la razón por la que podemos seguir desarrollando rápido sin arriesgar la confianza de un cliente real. Esta página se actualiza a medida que avanzan estos proyectos — sin inventar plazos ni marcar como terminado lo que sigue en marcha."
+        },
+        {
+          "id": "/cambios-en-proceso#c5",
+          "heading": "¿Quieres saber qué Departamentos están listos hoy?",
+          "text": "Una llamada de 30 minutos basta para saber qué parte de D-Code Partners ya puede ayudarte y qué está todavía en camino, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+        }
+      ]
+    },
+    {
       "url": "/casos-exito",
-      "title": "Prueba real — D-Code Partners",
+      "title": "Casos internos — D-Code Partners",
       "chunks": [
         {
           "id": "/casos-exito#c0",
@@ -667,7 +703,7 @@
         {
           "id": "/departamentos#c7",
           "heading": "Finanzas",
-          "text": "FIN PRÓXIMAMENTE Qué haceDiseñado para generar y enviar facturas, escalar recordatorios de cobro y vigilar el gasto interno cada día — el control de gasto ya es real. Cobros Gastos Próximo vencimiento: 5 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Dirección. Que ningún ticket se pierda ni se demore."
+          "text": "FIN EN VALIDACIÓN Qué haceYa genera facturas desde presupuestos aceptados, escala recordatorios de cobro y calcula el dashboard financiero cada día — construido y funcionando internamente; validando con la primera factura real antes de entrar al catálogo comercial. Cobros Gastos Próximo vencimiento: 5 días Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Dirección. Que ningún ticket se pierda ni se demore."
         },
         {
           "id": "/departamentos#c8",
@@ -1027,47 +1063,47 @@
         {
           "id": "/departamentos/finanzas#c0",
           "heading": "El Departamento diseñado para que cobres antes y controles el gasto cada día, no al cierre de mes.",
-          "text": "Finanzas genera y envía tus facturas en minutos, escala los recordatorios de cobro hasta que se pagan, y vigila el gasto interno día a día — impulsado por D-Code Finance, el sistema financiero que D-Code Partners está desplegando dentro de la empresa. D-CODE FINANCE Despliegue progresivo Demo interactiva disponible"
+          "text": "Finanzas genera facturas desde presupuestos aceptados, escala los recordatorios de cobro hasta que se pagan, y vigila el gasto interno día a día — impulsado por D-Code Finance, el sistema financiero que D-Code Partners ya usa para gestionar sus propias cuentas. D-CODE FINANCE EN VALIDACIÓN Demo interactiva disponible"
         },
         {
           "id": "/departamentos/finanzas#c1",
           "heading": "Cómo se despliega D-Code Finance",
-          "text": "D-Code Finance se implanta por piezas dentro de cada empresa — facturación, control de gasto, recordatorios de cobro — y se conecta de forma progresiva a los procesos que ya existen, en lugar de sustituirlos de golpe. La demo que puedes explorar a continuación muestra el diseño completo del sistema, tal y como está pensado para funcionar una vez desplegado."
+          "text": "D-Code Finance ya factura, cobra, controla el gasto y calcula el dashboard financiero dentro de D-Code Partners — es el sistema con el que gestionamos nuestras propias cuentas. Antes de entrar al catálogo comercial y ofrecerlo a un cliente, lo estamos validando con nuestra propia primera factura real. La demo que puedes explorar a continuación es la misma interfaz, con una empresa y datos ficticios."
         },
         {
           "id": "/departamentos/finanzas#c2",
           "heading": "Controla el dinero sin perseguir facturas.",
-          "text": "El sistema financiero conectado a tus operaciones: facturas, cobros, gastos y presupuestos en una misma vista, con un asistente que responde con datos reales. Explorar D-Code Finance"
+          "text": "El sistema financiero conectado a tus operaciones: facturas, cobros, gastos y presupuestos en una misma vista, con un asistente que responde con datos reales. Explorar D-Code Finance Esto es una demo interactiva de D-Code Finance, con una empresa y datos ficticios, pensada para enseñarte de lo que el sistema es capaz. La versión real se adapta a la estructura de cada empresa y puede incluir más funcionalidades, configuraciones e integraciones."
         },
         {
           "id": "/departamentos/finanzas#c3",
           "heading": "Finanzas está diseñado para cubrir las dos mitades de tu cuadro económico: lo que cobras y lo que gastas.",
-          "text": "El diseño genera el documento de cada factura y vigila su estado hasta que se cobra, escalando automáticamente los avisos si no hay respuesta. En paralelo, vigila el gasto interno cada día, no solo cuando cierra el mes. Algunas de estas piezas ya están construidas; el circuito completo, todavía no."
+          "text": "El sistema genera cada factura y vigila su estado hasta que se cobra, escalando automáticamente los avisos si no hay respuesta. En paralelo, vigila el gasto interno cada día, no solo cuando cierra el mes, y calcula un dashboard financiero completo. Facturación, cobros, gastos y dashboard ya están construidos y funcionando; lo que falta es validarlo con la primera factura real de un cliente."
         },
         {
           "id": "/departamentos/finanzas#c4",
-          "heading": "El diseño previsto del circuito de Finanzas.",
-          "text": "Esto es el diseño del sistema, no una función ya activa — el control de gastos ya está construido; el resto, todavía en desarrollo. Presupuesto asignado 2.400 € Factura emitida 1.850 € Cobro confirmado +1.850 € Gasto interno del mes −420 € Rentabilidad estimada 1430 € Cifras de ejemplo para mostrar cómo está pensado que se lea el circuito una vez esté completo — no son datos financieros reales ni de ningún cliente."
+          "heading": "El circuito de Finanzas, ya en marcha internamente.",
+          "text": "Facturación, cobros, gastos y dashboard funcionan hoy sobre las cuentas de D-Code Partners — el circuito completo, no solo el control de gastos. Las cifras de abajo son de ejemplo, no datos reales de ningún cliente. Presupuesto asignado 2.400 € Factura emitida 1.850 € Cobro confirmado +1.850 € Gasto interno del mes −420 € Rentabilidad estimada 1430 € Cifras de ejemplo para mostrar cómo está pensado que se lea el circuito una vez esté completo — no son datos financieros reales ni de ningún cliente."
         },
         {
           "id": "/departamentos/finanzas#c5",
           "heading": "Dejarás de descubrir los impagos tarde y el gasto al cierre del mes.",
-          "text": "Las facturas se generan a mano, factura a factura. Los impagos se descubren tarde, o no se descubren. Los recordatorios de cobro dependen de que alguien se acuerde. El gasto interno solo se conoce al cierre del mes. Las facturas se generarán y se enviarán en minutos. El cobro se acelerará con recordatorios que escalan solos. Los impagos prolongados se detectarán y alertarán sin que se olviden. El gasto se controlará día a día, con alertas de presupuesto."
+          "text": "Las facturas se generan a mano, factura a factura. Los impagos se descubren tarde, o no se descubren. Los recordatorios de cobro dependen de que alguien se acuerde. El gasto interno solo se conoce al cierre del mes. Las facturas se generan solas desde presupuestos aceptados. El cobro se acelera con recordatorios que escalan solos. Los impagos prolongados se detectan y alertan sin que se olviden. El gasto se controla día a día, con alertas de presupuesto."
         },
         {
           "id": "/departamentos/finanzas#c6",
           "heading": "Facturas generadas en minutos",
-          "text": "Diseñado para generarse y enviarse en minutos, no en días."
+          "text": "Se generan y se envían solas en minutos, no en días."
         },
         {
           "id": "/departamentos/finanzas#c7",
           "heading": "El cobro se acelera",
-          "text": "Recordatorios automáticos que escalarán solos hasta que se pague la factura."
+          "text": "Recordatorios automáticos que escalan solos hasta que se paga la factura."
         },
         {
           "id": "/departamentos/finanzas#c8",
           "heading": "Los impagos prolongados no se olvidan",
-          "text": "Diseñado para detectarse y escalarse solos, sin depender de que alguien lo recuerde."
+          "text": "Se detectan y se escalan solos, sin depender de que alguien lo recuerde."
         },
         {
           "id": "/departamentos/finanzas#c9",
@@ -1081,8 +1117,8 @@
         },
         {
           "id": "/departamentos/finanzas#c11",
-          "heading": "Finanzas generará y enviará la factura",
-          "text": "El generador de facturas ya existe, pero todavía no tiene un disparador automático de negocio — hoy requiere intervención manual. 03"
+          "heading": "Finanzas genera y factura automáticamente",
+          "text": "En cuanto un presupuesto se acepta o un proyecto se entrega, Finanzas genera la factura sola, sin que nadie tenga que pedirlo. 03"
         },
         {
           "id": "/departamentos/finanzas#c12",
@@ -1651,8 +1687,44 @@
       ]
     },
     {
+      "url": "/en/cambios-en-proceso",
+      "title": "Changes in Progress — D-Code Partners",
+      "chunks": [
+        {
+          "id": "/en/cambios-en-proceso#c0",
+          "heading": "We don't just talk about AI. Here's what we're building right now.",
+          "text": "D-Code Partners isn't a finished system — it's one that evolves every week. Here you'll see what we're actually working on: what's built, what's under validation, and what's still in development. No invented dates, no dressed-up status."
+        },
+        {
+          "id": "/en/cambios-en-proceso#c1",
+          "heading": "D-Code OS",
+          "text": "What we're building — The operating app that centralizes clients, contracted Departments, projects, incidents and activity in one place, with real per-company data isolation. Current status — Built and verified: real authentication, per-client data separation, company profiles, project, task, incident and document management. Pending: connecting it live to the rest of our systems and preparing it for the first client. What we're aiming for — A single dashboard where each client can see and use the Smart Departments they've contracted, instead of relying on separate tools. Why it matters — It's the piece that connects everything else: without D-Code OS, each Department is an isolated automation; with it, it's a real operating system for the client's business."
+        },
+        {
+          "id": "/en/cambios-en-proceso#c2",
+          "heading": "D-Code Finance evolution",
+          "text": "What we're improving — The complete Finance circuit: automatic invoicing from accepted quotes, collections with reminders that escalate on their own, daily spend tracking, a financial dashboard, and an assistant that answers questions over real data. Current status — Built and running internally, on D-Code Partners' own accounts. Before offering it as a commercial Department, we're validating it with our own first real invoice. What we're aiming for — Confirming the complete circuit works end-to-end with real money before putting it in front of a client. Why it matters — It's the Department with the easiest return to prove in euros: collections that arrive sooner, spend that stops surprising us at month-end."
+        },
+        {
+          "id": "/en/cambios-en-proceso#c3",
+          "heading": "Sales AI — core confirmed in production",
+          "text": "What we improved — The automatic trigger that drafts a commercial proposal the moment a new Lead comes in from a company flagged as a priority opportunity. Current status — Confirmed active in production after a technical audit: the published version matches what's actually running. No longer a weak point in the system. What we're aiming for — Extending the sales core with automatic follow-up for leads who don't respond, still under validation. Why it matters — Proof that building an automation isn't enough — it has to be audited against what's actually running before it's sold."
+        },
+        {
+          "id": "/en/cambios-en-proceso#c4",
+          "heading": "External communication guardrail",
+          "text": "What we built — A central safety layer that every automation sending an external communication must pass through: without explicit authorization, the send is blocked by default. Current status — Active and already used by the sales and finance systems that send automatic communications. What we're aiming for — Making sure no system can ever message a real client by mistake while we keep building and testing. Why it matters — It's the reason we can keep developing fast without risking a real client's trust. This page updates as these projects move forward — without inventing timelines or marking as finished what's still in motion."
+        },
+        {
+          "id": "/en/cambios-en-proceso#c5",
+          "heading": "Want to know which Departments are ready today?",
+          "text": "A 30-minute call is enough to find out which part of D-Code Partners can already help you and what's still on the way — no cost, no commitment. Book My Free Call View all Departments"
+        }
+      ]
+    },
+    {
       "url": "/en/casos-exito",
-      "title": "Real Proof — D-Code Partners",
+      "title": "Internal Cases — D-Code Partners",
       "chunks": [
         {
           "id": "/en/casos-exito#c0",
@@ -2003,7 +2075,7 @@
         {
           "id": "/en/departamentos#c7",
           "heading": "Finance",
-          "text": "FIN COMING SOON What it doesDesigned to generate and send invoices, escalate payment reminders, and monitor internal spend every day — expense control is already real. Payments Expenses Next due date: 5 days A representation of the system — not a real client's data. See Department Pairs well with: Leadership. Never let a ticket get lost or delayed."
+          "text": "FIN UNDER VALIDATION What it doesAlready generates invoices from accepted quotes, escalates payment reminders, and calculates the financial dashboard every day — built and running internally; validating with the first real invoice before entering the commercial catalog. Payments Expenses Next due date: 5 days A representation of the system — not a real client's data. See Department Pairs well with: Leadership. Never let a ticket get lost or delayed."
         },
         {
           "id": "/en/departamentos#c8",
@@ -2363,47 +2435,47 @@
         {
           "id": "/en/departamentos/finanzas#c0",
           "heading": "The Department designed to help you get paid sooner and track spend every day, not just at month-end.",
-          "text": "Finance generates and sends your invoices in minutes, escalates collection reminders until they're paid, and watches internal spend day by day — powered by D-Code Finance, the financial system D-Code Partners is deploying inside the company. D-CODE FINANCE Rolling out progressively Interactive demo available"
+          "text": "Finance generates invoices from accepted quotes, escalates collection reminders until they're paid, and watches internal spend day by day — powered by D-Code Finance, the financial system D-Code Partners already uses to run its own accounts. D-CODE FINANCE UNDER VALIDATION Interactive demo available"
         },
         {
           "id": "/en/departamentos/finanzas#c1",
           "heading": "How D-Code Finance rolls out",
-          "text": "D-Code Finance is deployed piece by piece inside each company — invoicing, spend tracking, collection reminders — and connects progressively to the processes already in place, rather than replacing them overnight. The demo you can explore below shows the system's complete design, exactly as it's meant to work once deployed."
+          "text": "D-Code Finance already invoices, collects, tracks spend and calculates the financial dashboard inside D-Code Partners — it's the system we use to run our own accounts. Before entering the commercial catalog and offering it to a client, we're validating it with our own first real invoice. The demo you can explore below is the same interface, with a fictional company and data."
         },
         {
           "id": "/en/departamentos/finanzas#c2",
           "heading": "Control the money without chasing invoices.",
-          "text": "The financial system connected to your operations: invoices, collections, expenses and quotes in a single view, with an assistant that answers with real data. Explore D-Code Finance"
+          "text": "The financial system connected to your operations: invoices, collections, expenses and quotes in a single view, with an assistant that answers with real data. Explore D-Code Finance This is an interactive demo of D-Code Finance, with a fictional company and data, built to show you what the system can do. The real product adapts to each company's structure and can include more features, configurations and integrations."
         },
         {
           "id": "/en/departamentos/finanzas#c3",
           "heading": "Finance is designed to cover both halves of your financial picture: what you collect and what you spend.",
-          "text": "The design generates each invoice document and tracks its status until it's paid, automatically escalating reminders if there's no response. In parallel, it watches internal spend every day, not just when the month closes. Some of these pieces are already built; the complete circuit is not yet."
+          "text": "The system generates each invoice and tracks its status until it's paid, automatically escalating reminders if there's no response. In parallel, it watches internal spend every day, not just when the month closes, and calculates a complete financial dashboard. Invoicing, collections, expenses and dashboard are already built and running; what's left is validating it with a client's first real invoice."
         },
         {
           "id": "/en/departamentos/finanzas#c4",
-          "heading": "The planned design of the Finance circuit.",
-          "text": "This is the system's design, not a feature already live — expense tracking is already built; the rest is still in development. Assigned budget €2,400 Invoice issued €1,850 Payment confirmed +€1,850 Internal spend this month −€420 Estimated profitability € 1430 Example figures to show how the circuit is meant to read once it's complete — not real financial data from any client."
+          "heading": "The Finance circuit, already running internally.",
+          "text": "Invoicing, collections, expenses and dashboard run today on D-Code Partners' own accounts — the complete circuit, not just expense tracking. The figures below are examples, not real data from any client. Assigned budget €2,400 Invoice issued €1,850 Payment confirmed +€1,850 Internal spend this month −€420 Estimated profitability € 1430 Example figures to show how the circuit is meant to read once it's complete — not real financial data from any client."
         },
         {
           "id": "/en/departamentos/finanzas#c5",
           "heading": "You'll stop discovering unpaid invoices late, and spend at month-end.",
-          "text": "Invoices are generated by hand, one at a time. Unpaid invoices are discovered late, or never. Collection reminders depend on someone remembering. Internal spend is only known at month-end. Invoices will be generated and sent in minutes. Collections will speed up with reminders that escalate on their own. Prolonged unpaid invoices will be detected and flagged without being forgotten. Spend will be tracked day by day, with budget alerts."
+          "text": "Invoices are generated by hand, one at a time. Unpaid invoices are discovered late, or never. Collection reminders depend on someone remembering. Internal spend is only known at month-end. Invoices are generated on their own from accepted quotes. Collections speed up with reminders that escalate on their own. Prolonged unpaid invoices are detected and flagged without being forgotten. Spend is tracked day by day, with budget alerts."
         },
         {
           "id": "/en/departamentos/finanzas#c6",
           "heading": "Invoices generated in minutes",
-          "text": "Designed to be generated and sent in minutes, not days."
+          "text": "Generated and sent on their own in minutes, not days."
         },
         {
           "id": "/en/departamentos/finanzas#c7",
           "heading": "Collections speed up",
-          "text": "Automatic reminders that will escalate on their own until the invoice is paid."
+          "text": "Automatic reminders that escalate on their own until the invoice is paid."
         },
         {
           "id": "/en/departamentos/finanzas#c8",
           "heading": "Prolonged unpaid invoices are never forgotten",
-          "text": "Designed to be detected and escalated on their own, without depending on someone remembering."
+          "text": "Detected and escalated on their own, without depending on someone remembering."
         },
         {
           "id": "/en/departamentos/finanzas#c9",
@@ -2417,8 +2489,8 @@
         },
         {
           "id": "/en/departamentos/finanzas#c11",
-          "heading": "Finance will generate and send the invoice",
-          "text": "The invoice generator already exists, but it doesn't yet have an automatic business trigger — today it still requires manual intervention. 03"
+          "heading": "Finance generates and sends the invoice automatically",
+          "text": "The moment a quote is accepted or a project is delivered, Finance generates the invoice on its own, without anyone having to ask. 03"
         },
         {
           "id": "/en/departamentos/finanzas#c12",
@@ -2843,7 +2915,7 @@
         {
           "id": "/en/garantias#c8",
           "heading": "Tested inside our own company first — 3 real cases.",
-          "text": "All the detail lives on a single page so we don't duplicate it here. See Real Proof"
+          "text": "All the detail lives on a single page so we don't duplicate it here. See Internal Cases"
         },
         {
           "id": "/en/garantias#c9",
@@ -2864,12 +2936,12 @@
         {
           "id": "/en/#c1",
           "heading": "Finance, inside the system.",
-          "text": "D-Code Partners doesn't just automate your company: it's building its own financial system, connected to the rest of your Departments. Invoices, collections, expenses and quotes, in a single view. Explore D-Code Finance"
+          "text": "D-Code Partners doesn't just automate your company: it's building its own financial system, connected to the rest of your Departments. Invoices, collections, expenses and quotes, in a single view. Explore D-Code Finance What you see below is an interactive demo of D-Code Finance, with a fictional company and data, built to show you what the system can do. The real product adapts to each company's structure and can include more features, configurations and integrations."
         },
         {
           "id": "/en/#c2",
           "heading": "Not chatbots. One system with 8 modules.",
-          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data."
+          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Invoice, collect and track spend without chasing anyone. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data."
         },
         {
           "id": "/en/#c3",
@@ -3544,7 +3616,7 @@
         {
           "id": "/garantias#c8",
           "heading": "Probado primero en nuestra propia empresa — 3 casos reales.",
-          "text": "Todo el detalle vive en una sola página para no duplicarlo aquí. Ver Prueba real"
+          "text": "Todo el detalle vive en una sola página para no duplicarlo aquí. Ver Casos internos"
         },
         {
           "id": "/garantias#c9",
@@ -3565,12 +3637,12 @@
         {
           "id": "/#c1",
           "heading": "Finanzas, dentro del sistema.",
-          "text": "D-Code Partners no solo automatiza tu empresa: está construyendo su propio sistema financiero, conectado con el resto de tus Departamentos. Facturas, cobros, gastos y presupuestos, en una misma vista. Explorar D-Code Finance"
+          "text": "D-Code Partners no solo automatiza tu empresa: está construyendo su propio sistema financiero, conectado con el resto de tus Departamentos. Facturas, cobros, gastos y presupuestos, en una misma vista. Explorar D-Code Finance Lo que ves debajo es una demo interactiva de D-Code Finance, con una empresa y datos ficticios, pensada para enseñarte de lo que el sistema es capaz. La versión real se adapta a la estructura de cada empresa y puede incluir más funcionalidades, configuraciones e integraciones."
         },
         {
           "id": "/#c2",
           "heading": "No son chatbots. Son un mismo sistema con 8 módulos.",
-          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales."
+          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Factura, cobra y controla el gasto sin perseguir a nadie. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales."
         },
         {
           "id": "/#c3",

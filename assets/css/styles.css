@@ -2355,6 +2355,23 @@ nav.main-nav > ul{ position:relative; }
 .future-cases h3{ font-family:var(--serif); font-size:1.3rem; color:var(--ink); font-weight:600; margin-bottom:12px; }
 .future-cases p{ color:var(--stone); max-width:520px; margin:0 auto; }
 
+/* Nota "esto es una demo" -- separa visualmente el CTA de la vista interactiva
+   que sigue, sin sonar a disclaimer legal. Ver DIR-WEB-20260820-006. */
+.demo-disclaimer{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  max-width:720px;
+  margin:36px 0 32px;
+  padding:16px 18px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(67,224,255,.04);
+}
+.demo-disclaimer svg{ width:20px; height:20px; flex-shrink:0; margin-top:1px; color:var(--cyan); }
+.demo-disclaimer p{ margin:0; font-size:.86rem; line-height:1.6; color:var(--stone); }
+@media (max-width:640px){ .demo-disclaimer{ margin:28px 0 24px; padding:14px 16px; } }
+
 /* ============ CONTACT / FORM ============ */
 /* ============ CONTACTO — composición editorial (DIR-018, evolucionada DIR-049) ============
    DIR-049: ya no son "formulario + reserva" a un mismo nivel en la
