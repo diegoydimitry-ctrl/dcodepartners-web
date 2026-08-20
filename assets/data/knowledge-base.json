@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T09:51:42.382Z",
+  "generatedAt": "2026-08-20T10:42:51.964Z",
   "pageCount": 62,
-  "chunkCount": 700,
+  "chunkCount": 728,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -316,12 +316,12 @@
     },
     {
       "url": "/casos-exito",
-      "title": "Casos de Éxito — D-Code Partners",
+      "title": "Prueba real — D-Code Partners",
       "chunks": [
         {
           "id": "/casos-exito#c0",
-          "heading": "Todavía no tenemos casos de cliente. Sí tenemos los nuestros.",
-          "text": "D-Code Partners tiene 0 clientes activos hoy — lo decimos sin rodeos. Lo que sí tenemos son los sistemas que usamos para dirigir nuestra propia empresa: 3 casos internos reales, incluido uno que no salió como esperábamos."
+          "heading": "Antes de pedirte que confíes, lo probamos en nuestra propia empresa.",
+          "text": "Cada Departamento Inteligente que ofrecemos dirige primero una parte real de D-Code Partners. Estos son 3 casos reales — con lo que funcionó y con lo que no salió como esperábamos."
         },
         {
           "id": "/casos-exito#c1",
@@ -503,41 +503,66 @@
       "chunks": [
         {
           "id": "/conocenos#c0",
-          "heading": "Dos fundadores. Un mismo código.",
-          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid como dos jóvenes empresarios decididos a cambiar la forma en que las empresas crecen."
+          "heading": "La empresa detrás del Sistema Operativo Empresarial.",
+          "text": "Esto es lo que creemos, cómo trabajamos, y quién está detrás — en ese orden."
         },
         {
           "id": "/conocenos#c1",
-          "heading": "Por qué existe D-Code Partners",
-          "text": "El nombre no es casualidad: dos socios cuyo nombre empieza por D, unidos por el código y la convicción de que la mayoría de las empresas siguen operando en manual dentro de un mundo que ya es automático. Como nativos digitales, no venimos a aprender la tecnología: hemos crecido con ella. Nos hemos formado de forma intensiva en Inteligencia Artificial aplicada a negocio, y trabajamos en la frontera de lo que la tecnología permite hoy. Somos conscientes de que ser una empresa joven genera preguntas legítimas. Por eso construimos todo nuestro modelo de trabajo — el mes de prueba gratuito, la ausencia de permanencia — alrededor de una idea simple: que la confianza se gane demostrando, no prometiendo. \" Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado. D.S."
+          "heading": "La mayoría de las empresas siguen operando en manual, dentro de un mundo que ya es automático.",
+          "text": "Cada herramienta suelta —un CRM aquí, una automatización allá— resuelve una tarea y deja el resto igual: alguien tiene que seguir acordándose de conectar los puntos. Nosotros no construimos herramientas sueltas. Construimos Departamentos Inteligentes: procesos completos que se ejecutan solos y se coordinan entre sí, como partes de un mismo sistema operativo empresarial. Por eso nuestro modelo de trabajo empieza por demostrarlo, no por prometerlo: un mes de servicio real, sin coste ni permanencia, antes de hablar de cifras."
         },
         {
           "id": "/conocenos#c2",
-          "heading": "Diego Siñeriz",
-          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible: cómo traducir tecnología en resultados concretos para cada cliente. D.S."
-        },
-        {
-          "id": "/conocenos#c3",
-          "heading": "Dimitry Sosenko",
-          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente: cómo se construye un sistema que funciona de verdad en producción. Un compromiso inquebrantable con cada empresa que confía en nosotros. Esa es la base de D-Code Partners."
-        },
-        {
-          "id": "/conocenos#c4",
           "heading": "Resultados antes que promesas",
           "text": "Preferimos que hables tú, con datos en la mano, antes que nosotros con adjetivos."
         },
         {
-          "id": "/conocenos#c5",
+          "id": "/conocenos#c3",
           "heading": "Confidencialidad como norma",
           "text": "Tu información y la de tus clientes se tratan con el mismo cuidado que exigiríamos para las nuestras."
         },
         {
-          "id": "/conocenos#c6",
+          "id": "/conocenos#c4",
           "heading": "Simplicidad técnica",
           "text": "Si un sistema es demasiado complejo para explicártelo en cinco minutos, probablemente lo estemos complicando de más."
         },
         {
+          "id": "/conocenos#c5",
+          "heading": "Diagnóstico, implementación, medición — en ese orden.",
+          "text": "El mismo Acuerdo D-Code que aplicamos a cada empresa, resumido. 01"
+        },
+        {
+          "id": "/conocenos#c6",
+          "heading": "Diagnóstico",
+          "text": "Auditamos tu operativa y detectamos los procesos con mayor impacto potencial. 02"
+        },
+        {
           "id": "/conocenos#c7",
+          "heading": "Implementación",
+          "text": "Desplegamos cada Departamento en tu operativa real, supervisado en todo momento. 03"
+        },
+        {
+          "id": "/conocenos#c8",
+          "heading": "Medición",
+          "text": "Revisamos resultados con datos concretos —horas, ingresos, eficiencia— antes de hablar de cifras. Ver el Método completo Seguridad de la información"
+        },
+        {
+          "id": "/conocenos#c9",
+          "heading": "Dos fundadores, cada uno al frente de una mitad del sistema.",
+          "text": "D.S."
+        },
+        {
+          "id": "/conocenos#c10",
+          "heading": "Diego Siñeriz",
+          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible: cómo traducir tecnología en resultados concretos para cada cliente. D.S."
+        },
+        {
+          "id": "/conocenos#c11",
+          "heading": "Dimitry Sosenko",
+          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente: cómo se construye un sistema que funciona de verdad en producción. Cada Departamento que ves en este sitio pasa primero por nuestra propia empresa. Así lo probamos."
+        },
+        {
+          "id": "/conocenos#c12",
           "heading": "Hablemos de tu operativa.",
           "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
@@ -612,70 +637,115 @@
         {
           "id": "/departamentos#c1",
           "heading": "No hace falta contratarlos todos a la vez.",
-          "text": "Puedes empezar por el Departamento que más te duela hoy — Comercial, Soporte, Finanzas, el que sea. Cada uno funciona por sí solo desde el primer día, y todos comparten la misma información en cuanto los activas juntos. Tu empresa COM Comercial Que ninguna venta se pierda por falta de seguimiento. MKT Marketing Leads que llegan ya clasificados, no en bruto. CLI Clientes Que cada cliente se sienta cuidado, sin depender de nadie. PRD Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. FIN Finanzas Próximamente — el control de gasto ya es real. SPT Soporte Respuesta rápida, incluso fuera de horario. ADM Administración Tu empresa, protegida y ordenada, sin esfuerzo. DIR Dirección Una decisión clara cada mañana, con datos reales."
+          "text": "Puedes empezar por el Departamento que más te duela hoy — Comercial, Soporte, Finanzas, el que sea. Cada uno funciona por sí solo desde el primer día, y todos comparten la misma información en cuanto los activas juntos."
         },
         {
           "id": "/departamentos#c2",
+          "heading": "Un Departamento, ocho módulos, un mismo sistema.",
+          "text": "Elige un Departamento para ver qué hace y con qué otros encaja — no son piezas sueltas, son procesos de un mismo sistema operativo. COM"
+        },
+        {
+          "id": "/departamentos#c3",
+          "heading": "Comercial",
+          "text": "Que ninguna venta se pierda por falta de seguimiento. Combina bien con: Clientes. Ver Departamento MKT"
+        },
+        {
+          "id": "/departamentos#c4",
+          "heading": "Marketing",
+          "text": "Leads que llegan ya clasificados, no en bruto. Combina bien con: Comercial. Ver Departamento CLI"
+        },
+        {
+          "id": "/departamentos#c5",
+          "heading": "Clientes",
+          "text": "Que cada cliente se sienta cuidado, sin depender de nadie. Combina bien con: Soporte o Producción. Ver Departamento PRD"
+        },
+        {
+          "id": "/departamentos#c6",
+          "heading": "Producción",
+          "text": "Proyectos que se ponen en marcha solos y cumplen sus plazos. Combina bien con: Finanzas. Ver Departamento FIN"
+        },
+        {
+          "id": "/departamentos#c7",
+          "heading": "Finanzas",
+          "text": "Próximamente — el control de gasto ya es real. Combina bien con: Dirección. Ver Departamento SPT"
+        },
+        {
+          "id": "/departamentos#c8",
+          "heading": "Soporte",
+          "text": "Respuesta rápida, incluso fuera de horario. Combina bien con: Clientes. Ver Departamento ADM"
+        },
+        {
+          "id": "/departamentos#c9",
+          "heading": "Administración",
+          "text": "Tu empresa, protegida y ordenada, sin esfuerzo. Combina bien con: Cualquiera — es transversal. Ver Departamento DIR"
+        },
+        {
+          "id": "/departamentos#c10",
+          "heading": "Dirección",
+          "text": "Una decisión clara cada mañana, con datos reales. Punto de llegada: da más valor cuantos más Departamentos ya estén activos. Ver Departamento"
+        },
+        {
+          "id": "/departamentos#c11",
           "heading": "Comercial",
           "text": "Qué hace: Prospecta y prioriza empresas automáticamente, centraliza tu pipeline con IA, redacta propuestas verificadas en minutos y avisa cada mañana de lo que toca. Lo que resuelve: Ninguna oportunidad se pierde por falta de seguimiento. Las propuestas se generan en minutos. El pipeline deja de vivir en la cabeza de una sola persona. Perfil de empresa: Equipos comerciales de 1 a 8 personas sin proceso escrito, o que lo llevan en un Excel. Combina bien con: Clientes. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c3",
+          "id": "/departamentos#c12",
           "heading": "Marketing",
           "text": "Qué hace: Capta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables. Lo que resuelve: Los leads llegan ya clasificados. El comercial sabe a quién llamar primero. La web se convierte en una fuente constante de oportunidades, no en una tarjeta de visita. Perfil de empresa: Depende hoy del boca a boca o de referidos y quiere un canal de captación propio. Combina bien con: Comercial. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c4",
+          "id": "/departamentos#c13",
           "heading": "Clientes SIN VALIDAR",
           "text": "Qué hace: Detecta cuándo se cierra una venta, da de alta al cliente, gestiona su bienvenida y onboarding, vigila renovaciones y mide satisfacción. Construido y activo, todavía sin un cliente real que lo haya usado. Lo que resuelve: Todo cliente nuevo recibiría la misma bienvenida. Las renovaciones dejarían de perderse. La satisfacción se mediría de forma continua. Perfil de empresa: Negocios con contrato recurrente o servicio continuado. Combina bien con: Soporte o Producción. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c5",
+          "id": "/departamentos#c14",
           "heading": "Producción",
           "text": "Qué hace: Crea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo, y vigila avance y fechas de entrega. Lo que resuelve: Cada proyecto ganado se pone en marcha solo. Los retrasos se detectan antes de que el cliente los note. El equipo deja de saturarse. Perfil de empresa: Empresas de servicios o proyectos con equipo de producción propio. Combina bien con: Finanzas. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c6",
+          "id": "/departamentos#c15",
           "heading": "Finanzas PRÓXIMAMENTE",
           "text": "Qué hace: Diseñado para generar y enviar facturas, escalar recordatorios de cobro, y vigilar el gasto interno cada día. El control de gastos ya está construido; el resto, en desarrollo. Lo que resolverá: Facturas en minutos. Cobro más rápido. Impagos prolongados detectados y escalados solos. Perfil de empresa: Cualquier empresa — cuando esté publicado, el objetivo es el retorno más rápido y fácil de demostrar en euros. Combina bien con: Dirección. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c7",
+          "id": "/departamentos#c16",
           "heading": "Soporte CHAT EN REVISIÓN",
           "text": "Qué hace: Convierte cada email de soporte en un ticket priorizado con SLA — esto ya es operativo. Un chat 24h que usa datos de tus proyectos está en revisión de seguridad antes de ampliarse. Lo que resuelve: Ningún ticket se pierde ni se prioriza mal. Respuesta incluso fuera de horario. El equipo deja de sentirse desbordado. Perfil de empresa: Empresas con volumen de consultas de clientes ya activos. Combina bien con: Clientes. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c8",
+          "id": "/departamentos#c17",
           "heading": "Administración",
           "text": "Qué hace: Vigila que el resto de Departamentos sigan funcionando, protege la organización de tus documentos y hace copias de seguridad semanales. Lo que resuelve: Los fallos se detectan en horas, no en semanas. La documentación nunca se pierde. Siempre hay una copia de seguridad reciente. Perfil de empresa: Empresas que gestionan muchos documentos, o que ya sufrieron una pérdida de información. Combina bien con: Cualquiera — es transversal, funciona bien con cualquier combinación. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c9",
+          "id": "/departamentos#c18",
           "heading": "Dirección",
           "text": "Qué hace: Centraliza tus indicadores, genera informes periódicos y cruza señales externas e internas para proponer una decisión ejecutiva cada día. Lo que resuelve: Cada mañana hay una prioridad clara. Las decisiones se basan en datos actualizados. Los riesgos se detectan antes de convertirse en un problema. Perfil de empresa: Cualquier empresa; da más valor cuantos más Departamentos tenga ya activos. Combina bien con: — es el punto de llegada natural, no de partida. + Empresa objetivo y siguiente paso Ver Departamento"
         },
         {
-          "id": "/departamentos#c10",
+          "id": "/departamentos#c19",
           "heading": "Se empieza por Marketing o Comercial",
           "text": "Captar más, o vender más sin perseguir a nadie. 02"
         },
         {
-          "id": "/departamentos#c11",
+          "id": "/departamentos#c20",
           "heading": "Se añade Clientes — y Producción si hay proyectos",
           "text": "En cuanto hay ventas que gestionar, entra en juego el ciclo de vida del cliente. 03"
         },
         {
-          "id": "/departamentos#c12",
+          "id": "/departamentos#c21",
           "heading": "Finanzas y Soporte completan el ciclo",
           "text": "Cobrar más rápido y atender sin saturarse, con clientes y proyectos ya en marcha. 04"
         },
         {
-          "id": "/departamentos#c13",
+          "id": "/departamentos#c22",
           "heading": "Dirección se convierte en el paso natural",
           "text": "Con 2 o 3 Departamentos ya activos, todo lo que producen los demás queda en un solo sitio. Administración puede sumarse en cualquier momento del camino."
         },
         {
-          "id": "/departamentos#c14",
+          "id": "/departamentos#c23",
           "heading": "¿Ya sabes por dónde empezar?",
           "text": "Cuéntanos qué Departamento te interesa y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Descubrir mi Departamento Ver cómo funciona el Sistema Operativo"
         }
@@ -1617,12 +1687,12 @@
     },
     {
       "url": "/en/casos-exito",
-      "title": "Success Stories — D-Code Partners",
+      "title": "Real Proof — D-Code Partners",
       "chunks": [
         {
           "id": "/en/casos-exito#c0",
-          "heading": "We don't have client case studies yet. We do have our own.",
-          "text": "D-Code Partners has 0 active clients today — we're saying it plainly. What we do have are the systems we use to run our own company: 3 real internal case studies, including one that didn't go the way we expected."
+          "heading": "Before we ask you to trust us, we ran it inside our own company.",
+          "text": "Every Smart Department we offer runs a real part of D-Code Partners first. These are 3 real cases — what worked, and what didn't go the way we expected."
         },
         {
           "id": "/en/casos-exito#c1",
@@ -1804,41 +1874,66 @@
       "chunks": [
         {
           "id": "/en/conocenos#c0",
-          "heading": "Two founders. One shared code.",
-          "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid as two young entrepreneurs determined to change the way companies grow."
+          "heading": "The company behind the Business Operating System.",
+          "text": "Here's what we believe, how we work, and who's behind it — in that order."
         },
         {
           "id": "/en/conocenos#c1",
-          "heading": "Why D-Code Partners exists",
-          "text": "The name is no accident: two partners whose names both start with D, united by code and by the conviction that most companies are still operating manually in a world that has already gone automatic. As digital natives, we didn't come to learn the technology — we grew up with it. We've trained intensively in AI applied to business, and we work at the frontier of what technology makes possible today. We know that being a young company raises legitimate questions. That's why we built our entire way of working — the free trial month, no lock-in — around one simple idea: trust is earned by proving, not by promising. \" Our youth isn't a lack of experience. It's the absence of the bad habits of a stagnant market. D.S."
+          "heading": "Most companies are still operating manually, in a world that has already gone automatic.",
+          "text": "Every standalone tool — a CRM here, an automation there — solves one task and leaves the rest unchanged: someone still has to remember to connect the dots. We don't build standalone tools. We build Smart Departments: complete processes that run themselves and coordinate with each other, as parts of one business operating system. That's why our way of working starts by proving it, not promising it: a full month of real service, no cost, no lock-in, before we talk numbers."
         },
         {
           "id": "/en/conocenos#c2",
-          "heading": "Diego Siñeriz",
-          "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. Specialized in AI applied to business and measurable growth: how to translate technology into concrete results for every client. D.S."
-        },
-        {
-          "id": "/en/conocenos#c3",
-          "heading": "Dimitry Sosenko",
-          "text": "Co-Founder &amp; CEO Leads the architecture behind our automation systems. Specialized in AI applied to operational processes and customer care: how to build a system that actually works in production. An unwavering commitment to every company that puts its trust in us. That's the foundation of D-Code Partners."
-        },
-        {
-          "id": "/en/conocenos#c4",
           "heading": "Results before promises",
           "text": "We'd rather let you speak, backed by data, than speak for ourselves in adjectives."
         },
         {
-          "id": "/en/conocenos#c5",
+          "id": "/en/conocenos#c3",
           "heading": "Confidentiality as standard",
           "text": "Your information and your clients' data are handled with the same care we'd demand for our own."
         },
         {
-          "id": "/en/conocenos#c6",
+          "id": "/en/conocenos#c4",
           "heading": "Technical simplicity",
           "text": "If a system is too complex to explain in five minutes, we're probably overcomplicating it."
         },
         {
+          "id": "/en/conocenos#c5",
+          "heading": "Diagnosis, implementation, measurement — in that order.",
+          "text": "The same D-Code Agreement we apply to every company, summarized. 01"
+        },
+        {
+          "id": "/en/conocenos#c6",
+          "heading": "Diagnosis",
+          "text": "We audit your operations and identify the processes with the highest potential impact. 02"
+        },
+        {
           "id": "/en/conocenos#c7",
+          "heading": "Implementation",
+          "text": "We deploy each Department in your real operations, supervised at every step. 03"
+        },
+        {
+          "id": "/en/conocenos#c8",
+          "heading": "Measurement",
+          "text": "We review results with concrete data — hours, revenue, efficiency — before we talk numbers. See the full Method Information security"
+        },
+        {
+          "id": "/en/conocenos#c9",
+          "heading": "Two founders, each leading one half of the system.",
+          "text": "D.S."
+        },
+        {
+          "id": "/en/conocenos#c10",
+          "heading": "Diego Siñeriz",
+          "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. Specialized in AI applied to business and measurable growth: how to translate technology into concrete results for every client. D.S."
+        },
+        {
+          "id": "/en/conocenos#c11",
+          "heading": "Dimitry Sosenko",
+          "text": "Co-Founder &amp; CEO Leads the architecture behind our automation systems. Specialized in AI applied to operational processes and customer care: how to build a system that actually works in production. Every Department you see on this site runs inside our own company first. Here's how we test it."
+        },
+        {
+          "id": "/en/conocenos#c12",
           "heading": "Let's talk about your operations.",
           "text": "A 30-minute call is enough to know whether we can help you and what results to expect from month one — no cost, no commitment. Book My Free Call See FAQ"
         }
@@ -1913,70 +2008,115 @@
         {
           "id": "/en/departamentos#c1",
           "heading": "You don't need to bring them all on at once.",
-          "text": "You can start with whichever Department hurts the most today — Sales, Support, Finance, whichever it is. Each one works on its own from day one, and they all share the same information as soon as you activate them together. Your company SLS Sales Never lose a sale to poor follow-up again. MKT Marketing Leads that arrive already qualified, not raw. CST Customer Every client cared for, without depending on any one person. DLV Delivery Projects that launch themselves and hit their deadlines. FIN Finance Coming soon — expense control is already real. SUP Support Fast responses, even after hours. OPS Operations Your company, protected and organized, effortlessly. LDR Leadership One clear decision every morning, backed by real data."
+          "text": "You can start with whichever Department hurts the most today — Sales, Support, Finance, whichever it is. Each one works on its own from day one, and they all share the same information as soon as you activate them together."
         },
         {
           "id": "/en/departamentos#c2",
+          "heading": "One Department, eight modules, one system.",
+          "text": "Pick a Department to see what it does and which others it pairs with — these aren't standalone pieces, they're processes in one operating system. SLS"
+        },
+        {
+          "id": "/en/departamentos#c3",
+          "heading": "Sales",
+          "text": "Never lose a sale to poor follow-up again. Pairs well with: Customer. See Department MKT"
+        },
+        {
+          "id": "/en/departamentos#c4",
+          "heading": "Marketing",
+          "text": "Leads that arrive already qualified, not raw. Pairs well with: Sales. See Department CST"
+        },
+        {
+          "id": "/en/departamentos#c5",
+          "heading": "Customer",
+          "text": "Every client cared for, without depending on any one person. Pairs well with: Support or Delivery. See Department DLV"
+        },
+        {
+          "id": "/en/departamentos#c6",
+          "heading": "Delivery",
+          "text": "Projects that launch themselves and hit their deadlines. Pairs well with: Finance. See Department FIN"
+        },
+        {
+          "id": "/en/departamentos#c7",
+          "heading": "Finance",
+          "text": "Coming soon — expense control is already real. Pairs well with: Leadership. See Department SUP"
+        },
+        {
+          "id": "/en/departamentos#c8",
+          "heading": "Support",
+          "text": "Fast responses, even after hours. Pairs well with: Customer. See Department OPS"
+        },
+        {
+          "id": "/en/departamentos#c9",
+          "heading": "Operations",
+          "text": "Your company, protected and organized, effortlessly. Pairs well with: Any of them — it's cross-cutting. See Department LDR"
+        },
+        {
+          "id": "/en/departamentos#c10",
+          "heading": "Leadership",
+          "text": "One clear decision every morning, backed by real data. Natural endpoint: gives more value the more Departments are already active. See Department"
+        },
+        {
+          "id": "/en/departamentos#c11",
           "heading": "Sales",
           "text": "What it does: Automatically prospects and prioritizes companies, centralizes your pipeline with AI, drafts verified proposals in minutes, and tells you every morning what's next. What it solves: No opportunity is lost to poor follow-up. Proposals are generated in minutes. The pipeline stops living in one person's head. Company profile: Sales teams of 1 to 8 people with no written process, or running it off a spreadsheet. Pairs well with: Customer. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c3",
+          "id": "/en/departamentos#c12",
           "heading": "Marketing",
           "text": "What it does: Captures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations. What it solves: Leads arrive already classified. Sales knows who to call first. Your website becomes a steady source of opportunities, not just a business card. Company profile: Currently relies on word of mouth or referrals and wants its own acquisition channel. Pairs well with: Sales. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c4",
+          "id": "/en/departamentos#c13",
           "heading": "Customer NOT VALIDATED",
           "text": "What it does: Detects when a sale closes, sets up the new client, manages welcome and onboarding, tracks renewals, and measures satisfaction. Built and active, but no real client has used it yet. What it solves: Every new client would get the same welcome. Renewals would stop slipping through the cracks. Satisfaction would be measured continuously. Company profile: Businesses with recurring contracts or ongoing service. Pairs well with: Support or Delivery. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c5",
+          "id": "/en/departamentos#c14",
           "heading": "Delivery",
           "text": "What it does: Creates the project as soon as a client is won, assigns tasks based on the team's real workload, and tracks progress and delivery dates. What it solves: Every project won launches itself. Delays are caught before the client notices. The team stops getting overloaded. Company profile: Service or project-based companies with their own delivery team. Pairs well with: Finance. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c6",
+          "id": "/en/departamentos#c15",
           "heading": "Finance COMING SOON",
           "text": "What it does: Designed to generate and send invoices, escalate payment reminders, and monitor internal spend every day. Expense control is already built; the rest is in development. What it will solve: Invoices in minutes. Faster collections. Overdue payments detected and escalated automatically. Company profile: Any company — once released, the goal is the fastest, easiest return to demonstrate in euros. Pairs well with: Leadership. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c7",
+          "id": "/en/departamentos#c16",
           "heading": "Support CHAT UNDER REVIEW",
           "text": "What it does: Turns every support email into a prioritized ticket with an SLA — this part is already live in production. A 24h chat that draws on your project data is undergoing a security review before it's expanded. What it solves: No ticket gets lost or wrongly prioritized. Responses even after hours. The team stops feeling overwhelmed. Company profile: Companies with a volume of inquiries from already-active clients. Pairs well with: Customer. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c8",
+          "id": "/en/departamentos#c17",
           "heading": "Operations",
           "text": "What it does: Monitors that the rest of your Departments keep running, keeps your documents organized and protected, and runs weekly backups. What it solves: Failures are caught in hours, not weeks. Documentation never gets lost. There's always a recent backup. Company profile: Companies that manage a lot of documents, or that have already suffered a data loss. Pairs well with: Any of them — it's cross-cutting, and works well with any combination. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c9",
+          "id": "/en/departamentos#c18",
           "heading": "Leadership",
           "text": "What it does: Centralizes your KPIs, generates periodic reports, and cross-references external and internal signals to propose one executive decision every day. What it solves: Every morning there's a clear priority. Decisions are based on up-to-date data. Risks are caught before they become a problem. Company profile: Any company; it delivers more value the more Departments you already have active. Pairs well with: — it's the natural endpoint, not the starting point. + Target company and what's next View Department"
         },
         {
-          "id": "/en/departamentos#c10",
+          "id": "/en/departamentos#c19",
           "heading": "It starts with Marketing or Sales",
           "text": "Capture more leads, or sell more without chasing anyone. 02"
         },
         {
-          "id": "/en/departamentos#c11",
+          "id": "/en/departamentos#c20",
           "heading": "Customer gets added — and Delivery if there are projects",
           "text": "As soon as there are sales to manage, the client lifecycle comes into play. 03"
         },
         {
-          "id": "/en/departamentos#c12",
+          "id": "/en/departamentos#c21",
           "heading": "Finance and Support complete the cycle",
           "text": "Getting paid faster and providing support without getting overwhelmed, with clients and projects already underway. 04"
         },
         {
-          "id": "/en/departamentos#c13",
+          "id": "/en/departamentos#c22",
           "heading": "Leadership becomes the natural next step",
           "text": "With 2 or 3 Departments already active, everything the rest produce lands in one place. Operations can join in at any point along the way."
         },
         {
-          "id": "/en/departamentos#c14",
+          "id": "/en/departamentos#c23",
           "heading": "Already know where to start?",
           "text": "Tell us which Department interests you, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Find My Department See how the Operating System works"
         }
@@ -2772,8 +2912,8 @@
         },
         {
           "id": "/en/garantias#c8",
-          "heading": "0 active clients today — and 3 real internal cases in the meantime.",
-          "text": "All the detail lives on a single page so we don't duplicate it here. See Success Stories"
+          "heading": "Tested inside our own company first — 3 real cases.",
+          "text": "All the detail lives on a single page so we don't duplicate it here. See Real Proof"
         },
         {
           "id": "/en/garantias#c9",
@@ -2794,7 +2934,7 @@
         {
           "id": "/en/#c1",
           "heading": "Not chatbots. One system with 8 modules.",
-          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data. Upfront risk 0 € You pay nothing until we prove results. Free trial 30 days A full month of real service, no commitment. Availability 24 /7 Your company never stops. Neither do the Departments working for it. Response time &lt; 24 h Every inquiry answered within one business day."
+          "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Coming soon — expense control is already real. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data. Four commitments that don't depend on how many Departments you activate. Upfront risk 0 € You pay nothing until we prove results. Free trial 30 days A full month of real service, no commitment. Availability 24 /7 Your company never stops. Neither do the Departments working for it. Response time &lt; 24 h Every inquiry answered within one business day."
         },
         {
           "id": "/en/#c2",
@@ -2823,8 +2963,8 @@
         },
         {
           "id": "/en/#c7",
-          "heading": "0 public clients today. 3 real systems inside D-Code.",
-          "text": "We don't invent client case studies. While we build our first ones, this is how we use our own systems — including one that didn't go as planned. Sales"
+          "heading": "Before we ask you to trust us, we ran it inside our own company.",
+          "text": "We don't invent client case studies. This is how we use our own systems to run D-Code — including one that didn't go as planned. Sales"
         },
         {
           "id": "/en/#c8",
@@ -2844,7 +2984,7 @@
         {
           "id": "/en/#c11",
           "heading": "Two founders. One shared code.",
-          "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. \" Our youth isn't a lack of experience. It's the absence of the bad habits of a stagnant market. D.S."
+          "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. D.S."
         },
         {
           "id": "/en/#c12",
@@ -3407,8 +3547,8 @@
         },
         {
           "id": "/garantias#c8",
-          "heading": "0 clientes activos hoy — y 3 casos internos reales mientras tanto.",
-          "text": "Todo el detalle vive en una sola página para no duplicarlo aquí. Ver Casos de Éxito"
+          "heading": "Probado primero en nuestra propia empresa — 3 casos reales.",
+          "text": "Todo el detalle vive en una sola página para no duplicarlo aquí. Ver Prueba real"
         },
         {
           "id": "/garantias#c9",
@@ -3429,7 +3569,7 @@
         {
           "id": "/#c1",
           "heading": "No son chatbots. Son un mismo sistema con 8 módulos.",
-          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales. Riesgo inicial 0 € No pagas nada hasta demostrar resultados. Prueba gratuita 30 días Un mes completo de servicio real, sin compromiso. Disponibilidad 24 /7 Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella. Tiempo de respuesta &lt; 24 h Cada consulta, atendida en menos de un día laborable."
+          "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Próximamente — el control de gasto ya es real. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales. Cuatro compromisos que no dependen de cuántos Departamentos actives. Riesgo inicial 0 € No pagas nada hasta demostrar resultados. Prueba gratuita 30 días Un mes completo de servicio real, sin compromiso. Disponibilidad 24 /7 Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella. Tiempo de respuesta &lt; 24 h Cada consulta, atendida en menos de un día laborable."
         },
         {
           "id": "/#c2",
@@ -3458,8 +3598,8 @@
         },
         {
           "id": "/#c7",
-          "heading": "0 clientes públicos hoy. 3 sistemas reales dentro de D-Code.",
-          "text": "No inventamos casos de cliente. Mientras construimos los primeros, así es como usamos nuestros propios sistemas — incluido uno que no salió como esperábamos. Comercial"
+          "heading": "Antes de pedirte que confíes, lo probamos en nuestra propia empresa.",
+          "text": "No inventamos casos de cliente. Así es como usamos nuestros propios sistemas para dirigir D-Code — incluido uno que no salió como esperábamos. Comercial"
         },
         {
           "id": "/#c8",
@@ -3479,7 +3619,7 @@
         {
           "id": "/#c11",
           "heading": "Dos fundadores. Un mismo código.",
-          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. \" Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado. D.S."
+          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. D.S."
         },
         {
           "id": "/#c12",

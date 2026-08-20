@@ -56,7 +56,7 @@ const PAGES = [
 
 const WIDTHS = [320, 375, 390, 768, 834, 1024, 1440, 1920];
 
-const SQUARE_SELECTORS = ['.atm-chip-plate', '.fases-node-plate', '.dept-node-badge'];
+const SQUARE_SELECTORS = ['.atm-chip-plate', '.fases-node-plate'];
 const MIN_FONT_PX = 6;
 const MAX_FONT_PX = 220; // por encima de esto, casi seguro un bug (ej. rem/px mal aplicado)
 

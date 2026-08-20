@@ -1199,266 +1199,158 @@ nav.main-nav > ul{ position:relative; }
 .accordion-item.open .accordion-panel{ max-height:260px; opacity:1; margin-top:9px; padding-bottom:20px; }
 .metodo-cta{ margin-top:40px; }
 
-/* ============ DEPARTAMENTOS — ECOSISTEMA EMPRESARIAL VIVO (DIR-047) ============
-   Sustituye por completo el árbol "Tu empresa + 8 recuadros + bus"
-   (DIR-040/043/045) — no es un restyle de las cajas, es una metáfora
-   distinta: una arquitectura radial estable. El núcleo ("Tu empresa") y
-   las 8 estaciones (departamentos reales) no orbitan — esa idea ya se
-   probó y se descartó en Home (DIR-046) — permanecen fijas, como piezas
-   de un mismo sistema visto desde arriba. El movimiento es todo detalle,
-   nunca desplazamiento: un pulso muy lento en el núcleo, un destello que
-   recorre cada canal muy despacio, un eco muy sutil y escalonado en cada
-   estación. Todo el layout usa % + aspect-ratio dentro de un contenedor
-   con container queries (cqi), así la misma composición se reduce de
-   tamaño en mobile sin ocultarse ni recomponerse — nunca hay una
-   "versión compacta" distinta, a diferencia del patrón usado en Método. */
-.dept-ecosystem{
-  padding-top:clamp(20px,4vw,44px);
-  padding-bottom:clamp(20px,4vw,44px);
+/* ============ DEPARTAMENTOS — PANEL DE CONTROL (DIR-WEB-20260820-002) ============
+   Sustituye el "Tu empresa + 8 nodos flotantes en radios" (DIR-047/050):
+   Dirección lo revisó repetidas veces y concluyó que se sentía artificial,
+   como una ilustración conceptual pegada a la página. La sustitución no es
+   otro diagrama -- es dejar de fingir un diagrama y construir lo que la
+   sección realmente es: un panel de control real, lista maestra + detalle,
+   con el mismo lenguaje visual que el resto del sitio (.window, mono tags,
+   iconos ya usados en el mega-menú). Cambia solo por acción del visitante
+   (main.js), nunca por temporizador -- coherente con la lección DIR-006
+   sobre vida ambiental en bucle. */
+.dept-console-panel .window-body{ padding:0; }
+.dept-console-body{
+  display:grid;
+  grid-template-columns:260px 1fr;
 }
-.dept-ecosystem-field{
+.dept-console-list{
+  display:flex;
+  flex-direction:column;
+  border-right:1px solid var(--border);
+}
+.dept-console-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:14px 20px;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  text-align:left;
+  font:inherit;
+  color:inherit;
   position:relative;
-  width:min(100%,620px);
-  aspect-ratio:1/1;
-  margin:0 auto;
-  container-type:inline-size;
+  transition:background .2s ease;
 }
-
-.dept-ecosystem-rays{ position:absolute; inset:0; width:100%; height:100%; z-index:1; overflow:visible; }
-.dept-ray{
-  stroke:rgba(91,140,255,.4);
-  stroke-width:.55;
-  stroke-linecap:round;
-  stroke-dasharray:3 2.4;
-  animation:dept-ray-flow 17s linear infinite;
-  opacity:.5;
-  transition:opacity .35s ease, stroke .35s ease;
-}
-.dept-ray-2{ animation-delay:-2.2s; }
-.dept-ray-3{ animation-delay:-4.4s; }
-.dept-ray-4{ animation-delay:-6.6s; }
-.dept-ray-5{ animation-delay:-8.8s; }
-.dept-ray-6{ animation-delay:-11s; }
-.dept-ray-7{ animation-delay:-13.2s; }
-.dept-ray-8{ animation-delay:-15.4s; }
-@keyframes dept-ray-flow{ to{ stroke-dashoffset:-54; } }
-
-/* El núcleo — mismo lenguaje material que las estaciones (anillo con
-   degradado vía mask-composite:exclude) pero en tokens neutros: "Tu
-   empresa" no pertenece a un departamento, es el sistema visto desde
-   el centro. Respira muy despacio; nunca gira ni se desplaza. */
-.dept-ecosystem-core{
-  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  z-index:3;
-  width:clamp(84px,24cqi,124px); height:clamp(84px,24cqi,124px);
-  border-radius:50%;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-  background:
-    radial-gradient(140% 100% at 50% -20%, rgba(214,226,255,.12), transparent 60%),
-    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
-  box-shadow:0 24px 60px -26px rgba(0,0,0,.75), inset 0 1px 0 var(--surface-highlight), inset 0 -12px 20px -18px rgba(0,0,0,.55);
-}
-.dept-ecosystem-core::after{
+.dept-console-item:last-child{ border-bottom:none; }
+.dept-console-item:hover, .dept-console-item:focus-visible{ background:rgba(91,140,255,.06); }
+.dept-console-item:focus-visible{ outline:2px solid var(--cyan); outline-offset:-2px; }
+.dept-console-item.is-active{ background:rgba(91,140,255,.09); }
+.dept-console-item.is-active::before{
   content:"";
-  position:absolute; inset:0; border-radius:inherit;
-  padding:1px;
-  background:linear-gradient(180deg, var(--surface-ring-top) 0%, var(--surface-ring-mid) 45%, var(--surface-ring-bottom) 100%);
-  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;
-          mask-composite:exclude;
-  pointer-events:none;
-  opacity:.7;
+  position:absolute; left:0; top:0; bottom:0;
+  width:3px;
+  background:var(--grad-brand);
 }
-.dept-ecosystem-core-glow{
-  position:absolute; inset:-30%;
-  border-radius:50%;
-  background:radial-gradient(closest-side, rgba(91,140,255,.22), transparent 72%);
-  animation:dept-core-breathe 7s ease-in-out infinite;
-  pointer-events:none;
-  z-index:-1;
-}
-@keyframes dept-core-breathe{ 0%,100%{ opacity:.5; transform:scale(.94); } 50%{ opacity:1; transform:scale(1.06); } }
-.dept-ecosystem-core-icon{
-  width:30px; height:30px; border-radius:9px;
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(91,140,255,.14); border:1px solid rgba(91,140,255,.32);
-  color:var(--cyan);
-  position:relative; z-index:2;
-}
-.dept-ecosystem-core-icon svg{ width:17px; height:17px; }
-.dept-ecosystem-core-label{
-  font-family:var(--serif); font-weight:600; font-size:clamp(.66rem,2.1cqi,.82rem);
-  color:var(--ink); position:relative; z-index:2; text-align:center; line-height:1.15;
-}
-
-/* Las 8 estaciones (DIR-050): posiciones asimétricas fijas en % (sin
-   JS) — ya no un círculo perfecto a 45°, sino una jerarquía espacial
-   real: los departamentos más estructurales (CAPACIDADES CENTRALES —
-   Comercial, Dirección) viven más cerca del núcleo; las capacidades
-   operativas (Marketing, Producción, Clientes) a media distancia; las
-   de soporte (Finanzas, Soporte, Administración) más alejadas. Radio Y
-   ángulo de cada una son irregulares a propósito (ver comentario en
-   departamentos.html junto a cada nodo) para que la red se sienta viva
-   y con ritmo, no un patrón geométrico repetido — sin dejar de ser
-   legible: los ángulos siguen cubriendo las 8 direcciones del campo.
-   El lenguaje visual del componente (placa compacta, borde fino de
-   color propio, halo controlado, identificador mono) se toma prestado
-   de los nodos de la Consola de Progreso de Método — mismo sistema de
-   diseño, sin copiar su estructura SVG literal. Un eco de "actividad"
-   muy sutil y escalonado (no un parpadeo genérico) sugiere que el
-   sistema sigue vivo sin moverse. */
-.dept-node{
-  position:absolute;
-  left:var(--node-x); top:var(--node-y);
-  transform:translate(-50%,-50%);
-  z-index:2;
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-  text-decoration:none;
-  animation:dept-node-echo 5.5s ease-in-out infinite;
-}
-.dept-node--2{ animation-delay:-.7s; }
-.dept-node--3{ animation-delay:-1.4s; }
-.dept-node--4{ animation-delay:-2.1s; }
-.dept-node--5{ animation-delay:-2.8s; }
-.dept-node--6{ animation-delay:-3.5s; }
-.dept-node--7{ animation-delay:-4.2s; }
-.dept-node--8{ animation-delay:-4.9s; }
-@keyframes dept-node-echo{ 0%,88%,100%{ filter:brightness(1); } 94%{ filter:brightness(1.16); } }
-
-/* Identificador de sistema (DIR-050) — mono, 3 letras, sobre la placa,
-   mismo rol que el "01/02/03/04" de los nodos de Método: refuerza la
-   sensación de "componente de sistema" sin tocar el nombre real
-   (que sigue debajo, sin cambios) ni la accesibilidad (aria-hidden;
-   el nombre accesible del enlace lo da .dept-node-name). */
-.dept-node-tag{
+.dci-tag{
   font-family:var(--mono);
   font-size:.6rem;
-  letter-spacing:.05em;
-  color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
-  transition:color .25s ease;
+  letter-spacing:.04em;
+  color:var(--stone-soft);
+  width:26px;
+  flex-shrink:0;
+  transition:color .2s ease;
 }
-
-/* Placa compacta con borde fino de color propio + halo controlado —
-   mismo lenguaje que .fases-node-plate/.fases-node-halo de Método
-   (metodo.html), adaptado de SVG a HTML: esquinas redondeadas (no
-   círculo), fondo oscuro translúcido, borde de 1 color en vez del
-   anillo metálico degradado anterior, glow que solo aparece al
-   interactuar en vez de vivir siempre a media potencia. */
-.dept-node-badge{
-  position:relative;
-  width:clamp(50px,13cqi,68px); height:clamp(50px,13cqi,68px);
-  border-radius:clamp(14px,4cqi,19px);
+.dept-console-item.is-active .dci-tag{ color:var(--cyan); }
+.dci-icon{
+  width:28px; height:28px;
+  border-radius:8px;
   display:flex; align-items:center; justify-content:center;
-  background:rgba(10,14,26,.62);
-  border:1.4px solid rgba(var(--mod-r),var(--mod-g),var(--mod-b),.5);
-  box-shadow:0 14px 30px -18px rgba(0,0,0,.7);
-  transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .25s ease;
+  background:rgba(91,140,255,.1);
+  border:1px solid rgba(91,140,255,.25);
+  color:var(--stone-soft);
+  flex-shrink:0;
+  transition:color .2s ease, border-color .2s ease;
 }
-.dept-node-badge::before{
-  content:"";
-  position:absolute; inset:-32%;
+.dci-icon svg{ width:14px; height:14px; }
+.dept-console-item.is-active .dci-icon{ color:var(--cyan); border-color:rgba(67,224,255,.5); }
+.dci-name{
+  flex:1;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:.92rem;
+  color:var(--stone);
+  transition:color .2s ease;
+}
+.dept-console-item.is-active .dci-name{ color:var(--ink); }
+.dci-dot{
+  width:6px; height:6px;
   border-radius:50%;
-  background:radial-gradient(closest-side, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.24), transparent 72%);
-  opacity:.22;
-  transition:opacity .25s ease, transform .3s cubic-bezier(.16,1,.3,1);
-  pointer-events:none;
-  z-index:-1;
+  background:var(--border);
+  flex-shrink:0;
+  transition:background .2s ease, box-shadow .2s ease;
 }
-.dept-node-icon{
-  width:52%; height:52%;
+.dept-console-item.is-active .dci-dot{ background:var(--green); box-shadow:0 0 6px 1px var(--green); }
+
+.dept-console-detail{ position:relative; padding:36px 40px; min-height:280px; }
+.dept-console-pane{ animation:dcp-in .35s ease; }
+@keyframes dcp-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.dcp-tag{
+  font-family:var(--mono);
+  font-size:.68rem;
+  letter-spacing:.08em;
+  color:var(--cyan);
+}
+.dcp-icon{
+  width:48px; height:48px;
+  border-radius:12px;
   display:flex; align-items:center; justify-content:center;
-  color:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
-  position:relative; z-index:2;
+  background:rgba(91,140,255,.12);
+  border:1px solid rgba(91,140,255,.3);
+  color:var(--cyan);
+  margin:14px 0 18px;
 }
-.dept-node-icon svg{ width:100%; height:100%; }
-.dept-node-name{
-  font-family:var(--serif); font-weight:600;
-  font-size:clamp(.6rem,1.8cqi,.76rem);
-  color:var(--ink); text-align:center; line-height:1.15;
-  max-width:clamp(64px,20cqi,110px);
+.dcp-icon svg{ width:24px; height:24px; }
+.dcp-name{ font-family:var(--serif); font-weight:600; font-size:1.4rem; color:var(--ink); margin-bottom:10px; }
+.dcp-tagline{ color:var(--stone); font-size:1rem; max-width:480px; }
+.dcp-connects{ margin-top:18px; font-size:.88rem; color:var(--stone-soft); }
+.dcp-connects strong{ color:var(--stone); }
+.dcp-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:24px;
+  padding:4px 0;
+  font-size:.9rem;
+  font-weight:600;
+  color:var(--cyan);
+  text-decoration:none;
 }
-
-/* Jerarquía visual por nivel (DIR-050 3D): el tamaño de la placa
-   refuerza la distancia al núcleo — capacidades centrales más grandes,
-   de soporte más discretas — sin tocar el tamaño del icono relativo
-   (52% en los tres casos) ni el nombre. */
-.dept-node--central .dept-node-badge{ width:clamp(58px,15.5cqi,78px); height:clamp(58px,15.5cqi,78px); }
-.dept-node--soporte .dept-node-badge{ width:clamp(42px,11cqi,56px); height:clamp(42px,11cqi,56px); }
-
-/* La descripción real (copy ya publicado en el mega-menú) aparece como
-   una pastilla flotante al pasar el cursor o enfocar. Cada estación
-   ancla su pastilla hacia el lado contrario al borde del campo más
-   cercano, para que nunca se recorte ni provoque scroll horizontal. */
-.dept-node-tagline{
-  position:absolute;
-  width:max-content; max-width:min(58cqi,220px);
-  padding:8px 12px;
-  font-size:.74rem; line-height:1.35; color:var(--muted);
-  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 100%);
-  border:1px solid var(--surface-border);
-  border-radius:10px;
-  box-shadow:0 16px 34px -18px rgba(0,0,0,.75);
-  opacity:0; pointer-events:none;
-  transition:opacity .22s ease, transform .22s ease;
-  z-index:5;
-}
-/* DIR-050: anclaje recalculado por cuadrante para las nuevas
-   posiciones asimétricas — abajo si el nodo vive en la mitad superior
-   del campo (y<50%), arriba si vive en la inferior; anclado a la
-   derecha si el nodo está en la mitad derecha (x>50%), a la izquierda
-   si está en la izquierda — así la pastilla siempre se abre hacia el
-   centro del campo, nunca hacia el borde más cercano. */
-.dept-node--1 .dept-node-tagline{ top:calc(100% + 10px); left:50%; transform:translate(-50%,4px); }
-.dept-node--1:hover .dept-node-tagline, .dept-node--1:focus-visible .dept-node-tagline{ transform:translate(-50%,0); }
-.dept-node--2 .dept-node-tagline{ top:calc(100% + 10px); right:-8px; transform:translateY(4px); }
-.dept-node--2:hover .dept-node-tagline, .dept-node--2:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--3 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
-.dept-node--3:hover .dept-node-tagline, .dept-node--3:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--4 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
-.dept-node--4:hover .dept-node-tagline, .dept-node--4:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--5 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
-.dept-node--5:hover .dept-node-tagline, .dept-node--5:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--6 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
-.dept-node--6:hover .dept-node-tagline, .dept-node--6:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--7 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
-.dept-node--7:hover .dept-node-tagline, .dept-node--7:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--8 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
-.dept-node--8:hover .dept-node-tagline, .dept-node--8:focus-visible .dept-node-tagline{ transform:translateY(0); }
-
-.dept-node:hover, .dept-node:focus-visible{ z-index:6; }
-.dept-node:hover .dept-node-badge, .dept-node:focus-visible .dept-node-badge{
-  transform:translateY(-4px) scale(1.06);
-  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.9);
-  box-shadow:0 22px 44px -20px rgba(0,0,0,.8), 0 0 12px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
-}
-.dept-node:hover .dept-node-badge::before, .dept-node:focus-visible .dept-node-badge::before{
-  opacity:.5;
-  transform:scale(1.18);
-}
-.dept-node:hover .dept-node-tag, .dept-node:focus-visible .dept-node-tag{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); }
-.dept-node:hover .dept-node-tagline, .dept-node:focus-visible .dept-node-tagline{ opacity:1; }
-.dept-node:focus-visible{ outline:2px solid var(--cyan); outline-offset:4px; border-radius:14px; }
-
-/* El canal hacia el núcleo se ilumina con el acento real del
-   departamento cuando su estación recibe foco o cursor — "esto
-   alimenta el sistema", igual que en el árbol anterior (DIR-045), pero
-   ahora cada estación tiene su propio canal en vez de compartir un bus. */
-.dept-ecosystem-field:has(.dept-node--1:hover) .dept-ray-1, .dept-ecosystem-field:has(.dept-node--1:focus-visible) .dept-ray-1{ opacity:1; stroke:rgb(67,224,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--2:hover) .dept-ray-2, .dept-ecosystem-field:has(.dept-node--2:focus-visible) .dept-ray-2{ opacity:1; stroke:rgb(155,107,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--3:hover) .dept-ray-3, .dept-ecosystem-field:has(.dept-node--3:focus-visible) .dept-ray-3{ opacity:1; stroke:rgb(91,140,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--4:hover) .dept-ray-4, .dept-ecosystem-field:has(.dept-node--4:focus-visible) .dept-ray-4{ opacity:1; stroke:rgb(155,107,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--5:hover) .dept-ray-5, .dept-ecosystem-field:has(.dept-node--5:focus-visible) .dept-ray-5{ opacity:1; stroke:rgb(52,231,164); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--6:hover) .dept-ray-6, .dept-ecosystem-field:has(.dept-node--6:focus-visible) .dept-ray-6{ opacity:1; stroke:rgb(91,140,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--7:hover) .dept-ray-7, .dept-ecosystem-field:has(.dept-node--7:focus-visible) .dept-ray-7{ opacity:1; stroke:rgb(155,107,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--8:hover) .dept-ray-8, .dept-ecosystem-field:has(.dept-node--8:focus-visible) .dept-ray-8{ opacity:1; stroke:rgb(67,224,255); animation-duration:3s; }
+.dcp-link svg{ width:14px; height:14px; transition:transform .2s ease; }
+.dcp-link:hover svg{ transform:translateX(3px); }
 
 @media (prefers-reduced-motion:reduce){
-  .dept-ray{ animation:none; }
-  .dept-ecosystem-core-glow{ animation:none; opacity:.65; }
-  .dept-node{ animation:none; }
+  .dept-console-pane{ animation:none; }
 }
-@media (hover:none){
-  .dept-node-tagline{ display:none; }
+
+/* Móvil no es el desktop encogido: la lista maestra pasa a una rejilla
+   compacta 4×2 de selectores (patrón de un panel de ajustes real en
+   móvil) y el detalle aparece debajo -- main.js hace scroll suave hasta
+   él al elegir, en vez de vivir fijo al lado como en escritorio. */
+@media (max-width:760px){
+  .dept-console-body{ grid-template-columns:1fr; }
+  .dept-console-list{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+  .dept-console-item{
+    flex-direction:column;
+    gap:6px;
+    padding:16px 6px;
+    border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border);
+    text-align:center;
+  }
+  .dept-console-item:nth-child(4n){ border-right:none; }
+  .dept-console-item:nth-last-child(-n+4){ border-bottom:none; }
+  .dept-console-item.is-active::before{ left:0; right:0; top:0; bottom:auto; width:auto; height:3px; }
+  .dci-name{ font-size:.68rem; }
+  .dept-console-detail{ padding:26px 20px; }
 }
 
 /* ============ SERVICIOS ============ */
@@ -1819,6 +1711,28 @@ nav.main-nav > ul{ position:relative; }
 @media (prefers-reduced-motion: reduce){ .dept-row-dot{ animation:none; } }
 
 .stats-window .window-body{ padding:0; }
+
+/* ============ PRUEBA / HUD DE MÉTRICAS (DIR-WEB-20260820-002) ============
+   Antes vivía como .stats-window, un segundo .window idéntico en chrome al
+   panel de Departamentos justo encima -- sin límite de sección entre ambos,
+   se percibían como un único bloque acumulado. Ahora es una franja de
+   vidrio sin barra de título (mismo tratamiento ya aprobado en
+   .hero-metrics-float), dentro de su propia <section> con padding e
+   introducción propios -- deja de ser "más del mismo panel" y pasa a ser
+   una pieza con función propia: la prueba de que no hay riesgo. */
+.dept-proof{ position:relative; }
+.dept-proof-head{ max-width:560px; margin-bottom:28px; }
+.dept-proof-head .lead{ margin-top:8px; }
+.metrics-hud{
+  position:relative;
+  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
+  border:1px solid var(--surface-border);
+  border-radius:14px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  overflow:hidden;
+}
 .spec-sheet{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -2661,7 +2575,8 @@ nav.main-nav > ul{ position:relative; }
 /* Motivo estructural en las costuras entre secciones — un trazo muy
    tenue centrado sobre el borde ya existente, no un elemento nuevo. */
 .metodo::before,
-.cta-band::before{
+.cta-band::before,
+.dept-proof::before{
   content:"";
   position:absolute;
   top:-1px;

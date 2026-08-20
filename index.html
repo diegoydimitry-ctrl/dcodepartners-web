@@ -37,7 +37,7 @@
 <meta name="twitter:description" content="Cada área de tu empresa, funcionando con su propio Departamento Inteligente. Un mes de servicio gratuito, sin coste ni compromiso.">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css?v=8d899427cd">
+<link rel="stylesheet" href="/assets/css/styles.css?v=c7018e6105">
 
 <script type="application/ld+json">
 {
@@ -123,7 +123,7 @@
             <a class="mega-item wide" href="/departamentos" role="menuitem">Ver todos los Departamentos →</a>
           </div>
         </li>
-        <li><a href="/casos-exito">Casos de Éxito</a></li>
+        <li><a href="/casos-exito">Prueba real</a></li>
         <li><a href="/conocenos">Conócenos</a></li>
       </ul>
     </nav>
@@ -298,34 +298,47 @@
         </div>
       </div>
 
-      <div class="window stats-window reveal">
-        <div class="window-bar">
-          <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">metricas_dcode.dashboard</span>
-          <span class="window-status"><span class="dot"></span>En vivo</span>
-        </div>
-        <div class="window-body">
-          <div class="spec-sheet">
-            <div class="spec-item">
-              <span class="spec-label">Riesgo inicial</span>
-              <div class="spec-value"><span class="counter" data-count="0">0</span>€</div>
-              <p class="spec-caption">No pagas nada hasta demostrar resultados.</p>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Prueba gratuita</span>
-              <div class="spec-value"><span class="counter" data-count="30">0</span> días</div>
-              <p class="spec-caption">Un mes completo de servicio real, sin compromiso.</p>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Disponibilidad</span>
-              <div class="spec-value"><span class="counter" data-count="24">0</span>/7</div>
-              <p class="spec-caption">Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella.</p>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Tiempo de respuesta</span>
-              <div class="spec-value">&lt;<span class="counter" data-count="24">0</span>h</div>
-              <p class="spec-caption">Cada consulta, atendida en menos de un día laborable.</p>
-            </div>
+    </div>
+  </section>
+
+  <!-- ============ PRUEBA (franja HUD) — DIR-WEB-20260820-002 ============
+       Antes: .stats-window vivía dentro del mismo <section> que .dept-system,
+       con el mismo chrome de ventana (window-bar con dots + título) -- dos
+       paneles idénticos en composición, uno debajo del otro, sin límite de
+       sección entre ambos: se percibían como un solo bloque acumulado.
+       Ahora es su propia <section> (respiración real de --section-pad-sm,
+       no solo margin) con la costura ya establecida en .metodo/.cta-band,
+       y su chrome pasa de "ventana con barra" a HUD de vidrio -- el mismo
+       tratamiento ya aprobado para .hero-metrics-float -- para que no lea
+       como una copia del panel de arriba. Tiene su propio propósito: no es
+       "más Departamentos", es la prueba de que probarlo no tiene riesgo. -->
+  <section class="section-sm dept-proof">
+    <div class="container">
+      <div class="dept-proof-head reveal">
+        <span class="eyebrow">Por qué puedes probarlo sin miedo</span>
+        <p class="lead">Cuatro compromisos que no dependen de cuántos Departamentos actives.</p>
+      </div>
+      <div class="metrics-hud" data-stagger>
+        <div class="spec-sheet">
+          <div class="spec-item reveal-up">
+            <span class="spec-label">Riesgo inicial</span>
+            <div class="spec-value"><span class="counter" data-count="0">0</span>€</div>
+            <p class="spec-caption">No pagas nada hasta demostrar resultados.</p>
+          </div>
+          <div class="spec-item reveal-up">
+            <span class="spec-label">Prueba gratuita</span>
+            <div class="spec-value"><span class="counter" data-count="30">0</span> días</div>
+            <p class="spec-caption">Un mes completo de servicio real, sin compromiso.</p>
+          </div>
+          <div class="spec-item reveal-up">
+            <span class="spec-label">Disponibilidad</span>
+            <div class="spec-value"><span class="counter" data-count="24">0</span>/7</div>
+            <p class="spec-caption">Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella.</p>
+          </div>
+          <div class="spec-item reveal-up">
+            <span class="spec-label">Tiempo de respuesta</span>
+            <div class="spec-value">&lt;<span class="counter" data-count="24">0</span>h</div>
+            <p class="spec-caption">Cada consulta, atendida en menos de un día laborable.</p>
           </div>
         </div>
       </div>
@@ -425,9 +438,9 @@
   <section class="section" id="resultados">
     <div class="container">
       <div class="section-head reveal">
-        <span class="eyebrow">Resultados reales</span>
-        <h2 class="h-title">0 clientes públicos hoy. 3 sistemas reales dentro de D-Code.</h2>
-        <p class="lead">No inventamos casos de cliente. Mientras construimos los primeros, así es como usamos nuestros propios sistemas — incluido uno que no salió como esperábamos.</p>
+        <span class="eyebrow">Prueba real, no promesas</span>
+        <h2 class="h-title">Antes de pedirte que confíes, lo probamos en nuestra propia empresa.</h2>
+        <p class="lead">No inventamos casos de cliente. Así es como usamos nuestros propios sistemas para dirigir D-Code — incluido uno que no salió como esperábamos.</p>
       </div>
 
       <div class="blog-grid" data-stagger>
@@ -485,11 +498,6 @@
         <span class="eyebrow">La mente detrás de D-Code Partners</span>
         <h2 class="h-title">Dos fundadores. Un mismo código.</h2>
         <p>Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo.</p>
-      </div>
-
-      <div class="pull-quote reveal">
-        <span class="quote-mark">"</span>
-        Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado.
       </div>
 
       <div class="founders">
@@ -568,7 +576,7 @@
         <ul>
           <li><a href="/metodo">Método D-Code</a></li>
           <li><a href="/garantias">Garantías y Proceso</a></li>
-          <li><a href="/casos-exito">Casos de Éxito</a></li>
+          <li><a href="/casos-exito">Prueba real</a></li>
           <li><a href="/conocenos">Conócenos</a></li>
           <li><a href="/blog">Blog</a></li>
         </ul>
@@ -626,7 +634,7 @@
   </button>
 </div>
 
-<script src="/assets/js/main.js?v=5e0eb2e480" defer></script>
+<script src="/assets/js/main.js?v=c81a8f05a6" defer></script>
 
 </body>
 </html>

@@ -212,6 +212,43 @@
     deptFlowIO.observe(deptRowsEl);
   }
 
+  /* ---------- Panel de control de Departamentos (DIR-WEB-20260820-002) ----------
+     Solo existe en /departamentos (hub): lista maestra de 8 botones +
+     panel de detalle. Cambia únicamente por acción del visitante (click o
+     teclado), nunca por temporizador. En móvil (<=760px, la misma
+     ruptura que usa el propio CSS del componente) el detalle vive debajo
+     de la rejilla en vez de al lado, así que además de alternar el panel
+     activo se lleva a la vista con scroll suave -- comportamiento propio
+     de móvil, no una versión reducida del de escritorio. */
+  var deptConsole = document.querySelector('[data-dept-console]');
+  if (deptConsole) {
+    var dcItems = Array.prototype.slice.call(deptConsole.querySelectorAll('.dept-console-item'));
+    var dcPanes = Array.prototype.slice.call(deptConsole.querySelectorAll('.dept-console-pane'));
+    var dcDetail = deptConsole.querySelector('.dept-console-detail');
+    dcItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        var dept = item.getAttribute('data-dept');
+        if (item.classList.contains('is-active')) {
+          if (window.innerWidth <= 760 && dcDetail) { dcDetail.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' }); }
+          return;
+        }
+        dcItems.forEach(function (i) {
+          var active = i === item;
+          i.classList.toggle('is-active', active);
+          i.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        dcPanes.forEach(function (pane) {
+          var active = pane.getAttribute('data-dept') === dept;
+          pane.classList.toggle('is-active', active);
+          pane.hidden = !active;
+        });
+        if (window.innerWidth <= 760 && dcDetail) {
+          dcDetail.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+        }
+      });
+    });
+  }
+
   /* ---------- Red de Departamentos (líneas de conexión entre tarjetas) ----------
      Solo existe en /departamentos (hub): un trazo SVG entre cada tarjeta y la
      siguiente, calculado a partir de la posición real (responsive), que se
