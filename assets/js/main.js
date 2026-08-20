@@ -165,20 +165,27 @@
     }
   }
 
-  /* ---------- Hero console: línea de log rotativa ----------
+  /* ---------- Hero console: línea de log ----------
      El panel del Hero deja de ser una lista estática de "Conectado" y hace
      visible, con eventos concretos, la promesa del H1 ("cada Departamento
      lo hace por ti, todos los días"). Mensajes en data-log-cycle (JSON),
-     ya en el idioma de la página -- sin lógica de i18n aquí. Con
-     prefers-reduced-motion se queda en el primer mensaje, sin rotar. */
+     ya en el idioma de la página -- sin lógica de i18n aquí.
+     DIR-006: recorre la lista UNA vez y se detiene en el último mensaje --
+     un log que rota para siempre es exactamente el cliché de "vida de
+     terminal ambiental" que la investigación de esta ronda señala como
+     genérico en 2026 ("infinite scrolling logs... reads as templated, not
+     alive"). Un evento que ocurre y se asienta se lee como un sistema que
+     hizo algo real, no como una animación decorativa en bucle.
+     Con prefers-reduced-motion se queda en el primer mensaje, sin rotar. */
   var heroLogLine = document.querySelector('.hero-console-log-line');
   if (heroLogLine && !prefersReducedMotion) {
     var logLines = [];
     try { logLines = JSON.parse(heroLogLine.getAttribute('data-log-cycle') || '[]'); } catch (e) {}
     if (logLines.length > 1) {
       var logIdx = 0;
-      setInterval(function () {
-        logIdx = (logIdx + 1) % logLines.length;
+      var logTimer = setInterval(function () {
+        logIdx += 1;
+        if (logIdx >= logLines.length) { clearInterval(logTimer); return; }
         heroLogLine.classList.add('is-swapping');
         setTimeout(function () {
           heroLogLine.textContent = logLines[logIdx];
@@ -186,6 +193,23 @@
         }, 300);
       }, 3800);
     }
+  }
+
+  /* ---------- Departamentos (Home): pulso del sistema conectado ----------
+     Arranca solo cuando la sección entra en pantalla (dos pasadas y se
+     detiene), no en bucle infinito desde la carga -- ver comentario junto
+     a .dept-flow en styles.css. */
+  var deptRowsEl = document.querySelector('.dept-rows');
+  if (deptRowsEl && !prefersReducedMotion && 'IntersectionObserver' in window) {
+    var deptFlowIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          deptRowsEl.classList.add('is-flowing');
+          deptFlowIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    deptFlowIO.observe(deptRowsEl);
   }
 
   /* ---------- Red de Departamentos (líneas de conexión entre tarjetas) ----------

@@ -1005,6 +1005,26 @@ nav.main-nav > ul{ position:relative; }
   -webkit-backdrop-filter:blur(14px);
   margin-bottom:14px;
 }
+/* DIR-006: hace visible, en un vistazo, la afirmación del H1 ("no una
+   automatización más") -- responde directamente a la pregunta de la
+   auditoría "¿qué hace D-Code que no pueda hacer una agencia normal?"
+   sin depender de que el visitante lea el párrafo de apoyo. */
+.hero-console-contrast{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+  font-family:var(--mono);
+  font-size:0.74rem;
+  flex-wrap:wrap;
+}
+.hcc-before{ color:var(--stone-soft); text-decoration:line-through; text-decoration-color:rgba(167,176,196,.4); }
+.hcc-arrow{ color:var(--stone-soft); }
+.hcc-after{
+  background:var(--grad-brand);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  font-weight:600;
+}
 .hero-console-head{
   display:flex;
   align-items:center;
@@ -1720,9 +1740,16 @@ nav.main-nav > ul{ position:relative; }
   border-radius:50%;
   background:var(--cyan);
   box-shadow:0 0 8px 1px var(--cyan);
-  animation:dept-flow 6s linear infinite;
+  opacity:0;
   pointer-events:none;
 }
+/* DIR-006: un pulso que corre para siempre es "vida ambiental de terminal
+   en bucle" -- el cliché genérico de 2026 que la investigación de esta
+   ronda señala explícitamente. Ahora solo corre cuando la sección entra
+   en pantalla (main.js añade .is-flowing una vez, vía IntersectionObserver)
+   y se detiene tras 2 pasadas: demuestra que el sistema "hizo algo",
+   no decora sin fin. */
+.dept-rows.is-flowing::after{ animation:dept-flow 6s linear 2; }
 @keyframes dept-flow{
   0%{ top:0; opacity:0; }
   8%{ opacity:1; }
