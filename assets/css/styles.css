@@ -1475,6 +1475,125 @@ nav.main-nav > ul{ position:relative; }
 .dcv-kpi-trend--down .dcv-kpi-arrow{ color:var(--red); }
 .dcv-kpi-note{ margin:2px 0 0; font-size:.78rem; color:var(--stone); }
 .dcv-kpi-note b{ color:var(--ink); font-weight:600; }
+.dcv-kpi-live-dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--cyan); margin-right:6px; vertical-align:1px; }
+
+/* ---------- Interacción y movimiento de las 8 visualizaciones ----------
+   DIR-WEB-VIZ-20260821: las ocho ya representaban de forma distinta la
+   operación de su Departamento, pero eran una foto fija -- nada se movía
+   y pasar el cursor no hacía nada. Esto añade, sobre la misma base:
+   (1) una entrada escalonada cuando el panel se abre (clase .dcv-live,
+   añadida por main.js al activar la pestaña -- nunca por scroll),
+   (2) un bucle de "esto sigue vivo" muy sutil mientras el panel está
+   abierto, y (3) una leyenda compartida (.dcv-caption) que cambia de
+   texto al pasar el cursor por cada etapa/columna/ticket, para que la
+   interacción explique algo, no solo decore. Todo respeta
+   prefers-reduced-motion: main.js no añade .dcv-live si el usuario lo
+   pide, así que sin esa clase todo permanece exactamente como ya estaba
+   (estático, en su posición final). */
+.dcp-visual [data-caption]{ cursor:pointer; }
+.dcv-caption{
+  margin-top:14px; padding-top:12px;
+  border-top:1px dashed var(--surface-border);
+  min-height:2.6em;
+  font-size:.78rem; line-height:1.4; color:var(--stone);
+}
+
+@keyframes dcv-grow-y{ from{ transform:scaleY(0); opacity:0; } to{ transform:scaleY(1); opacity:1; } }
+@keyframes dcv-grow-x{ from{ transform:scaleX(0); opacity:0; } to{ transform:scaleX(1); opacity:1; } }
+@keyframes dcv-fade-up{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes dcv-slide-in{ from{ opacity:0; transform:translateX(10px); } to{ opacity:1; transform:translateX(0); } }
+@keyframes dcv-pop{ from{ transform:scale(0); } to{ transform:scale(1); } }
+@keyframes dcv-pulse-glow{ 0%,100%{ filter:brightness(1); } 50%{ filter:brightness(1.35); } }
+@keyframes dcv-pulse-dot{ 0%,100%{ box-shadow:0 0 6px 1px rgba(67,224,255,.5); } 50%{ box-shadow:0 0 10px 3px rgba(67,224,255,.85); } }
+@keyframes dcv-pulse-ring{ 0%,100%{ box-shadow:0 0 0 0 rgba(245,166,35,0); } 50%{ box-shadow:0 0 0 4px rgba(245,166,35,.2); } }
+@keyframes dcv-badge-fade{ 0%,100%{ opacity:1; } 50%{ opacity:.4; } }
+@keyframes dcv-shimmer{ from{ background-position:200% 0; } to{ background-position:-20% 0; } }
+@keyframes dcv-draw-line{ to{ stroke-dashoffset:0; } }
+@keyframes dcv-travel-y{ 0%{ top:0; opacity:0; } 8%{ opacity:1; } 92%{ opacity:1; } 100%{ top:100%; opacity:0; } }
+@keyframes dcv-travel-x{ 0%{ left:0; opacity:0; } 8%{ opacity:1; } 92%{ opacity:1; } 100%{ left:calc(100% - 6px); opacity:0; } }
+
+/* Comercial -- las barras "crecen" al entrar, la etapa ganada respira */
+.dcv-pipe-bar{ transform-origin:bottom; }
+.dcv-live .dcv-pipe-bar{ animation:dcv-grow-y .5s cubic-bezier(.16,1,.3,1) backwards; }
+.dcv-live .dcv-pipe-col:nth-child(1) .dcv-pipe-bar{ animation-delay:.05s; }
+.dcv-live .dcv-pipe-col:nth-child(2) .dcv-pipe-bar{ animation-delay:.16s; }
+.dcv-live .dcv-pipe-col:nth-child(3) .dcv-pipe-bar{ animation-delay:.27s; }
+.dcv-live .dcv-pipe-col:nth-child(4) .dcv-pipe-bar{ animation-delay:.38s; }
+.dcv-live .dcv-pipe-col--won .dcv-pipe-bar{ animation:dcv-grow-y .5s cubic-bezier(.16,1,.3,1) .38s backwards, dcv-pulse-glow 2.4s ease-in-out .9s infinite; }
+.dcv-pipe-col:hover .dcv-pipe-bar{ filter:brightness(1.25); }
+
+/* Marketing -- el embudo se estrecha al entrar; un punto "cae" por el flujo */
+.dcv-funnel{ position:relative; }
+.dcv-funnel-stage{ transform-origin:center top; }
+.dcv-live .dcv-funnel-stage{ animation:dcv-grow-x .45s cubic-bezier(.16,1,.3,1) backwards; }
+.dcv-live .dcv-funnel-stage:nth-child(2){ animation-delay:.12s; }
+.dcv-live .dcv-funnel-stage:nth-child(3){ animation-delay:.24s; }
+.dcv-live .dcv-funnel-stage:nth-child(4){ animation-delay:.36s; }
+.dcv-funnel-dot{ position:absolute; left:50%; top:0; width:6px; height:6px; margin-left:-3px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px 1px rgba(67,224,255,.6); opacity:0; }
+.dcv-live .dcv-funnel-dot{ animation:dcv-travel-y 3s cubic-bezier(.4,0,.2,1) 1s infinite; }
+.dcv-funnel-stage:hover{ filter:brightness(1.15); }
+
+/* Clientes -- el anillo entra con un pequeño rebote; el paso activo late */
+.dcv-live .dcv-cycle-ring{ animation:dcv-pop .45s cubic-bezier(.34,1.56,.64,1) backwards; }
+.dcv-live .dcv-cycle-steps li{ animation:dcv-fade-up .4s ease backwards; }
+.dcv-live .dcv-cycle-steps li:nth-child(1){ animation-delay:.15s; }
+.dcv-live .dcv-cycle-steps li:nth-child(2){ animation-delay:.28s; }
+.dcv-live .dcv-cycle-steps li:nth-child(3){ animation-delay:.41s; }
+.dcv-live .dcv-cycle-steps li.is-current::before{ animation:dcv-pulse-dot 1.6s ease-in-out .6s infinite; }
+.dcv-cycle-steps li:hover{ color:var(--ink); }
+
+/* Producción -- las tarjetas entran escalonadas; un punto recorre las columnas */
+.dcv-kanban{ position:relative; }
+.dcv-live .dcv-kanban-card{ animation:dcv-fade-up .4s ease backwards; }
+.dcv-live .dcv-kanban-col:nth-child(2) .dcv-kanban-card{ animation-delay:.12s; }
+.dcv-live .dcv-kanban-col:nth-child(2) .dcv-kanban-card:nth-child(3){ animation-delay:.22s; }
+.dcv-live .dcv-kanban-col:nth-child(3) .dcv-kanban-card{ animation-delay:.32s; }
+.dcv-kanban-flow-dot{ position:absolute; top:-14px; left:0; width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px 1px rgba(67,224,255,.6); opacity:0; }
+.dcv-live .dcv-kanban-flow-dot{ animation:dcv-travel-x 3.2s cubic-bezier(.4,0,.2,1) .8s infinite; }
+.dcv-kanban-col:hover .dcv-kanban-card{ border-color:rgba(67,224,255,.4); }
+
+/* Finanzas -- las barras de cobro/gasto crecen y el cobro brilla con un barrido sutil */
+.dcv-flow-track span{ transform-origin:left; }
+.dcv-live .dcv-flow-track span{ animation:dcv-grow-x .55s cubic-bezier(.16,1,.3,1) backwards; }
+.dcv-live .dcv-flow-row--out .dcv-flow-track span{ animation-delay:.15s; }
+.dcv-live .dcv-flow-row--in .dcv-flow-track span{
+  background-image:linear-gradient(90deg, var(--green) 0%, var(--green) 72%, rgba(255,255,255,.4) 84%, var(--green) 96%);
+  background-size:220% 100%;
+  animation:dcv-grow-x .55s cubic-bezier(.16,1,.3,1) backwards, dcv-shimmer 2.8s linear 1s infinite;
+}
+.dcv-flow-live-dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--amber); margin-right:6px; vertical-align:1px; }
+.dcv-live .dcv-flow-live-dot{ animation:dcv-pulse-ring 2s ease-in-out infinite; }
+.dcv-flow-row:hover .dcv-flow-track span{ filter:brightness(1.2); }
+
+/* Soporte -- los tickets "llegan" en cascada; el de prioridad alta late */
+.dcv-live .dcv-ticket{ animation:dcv-slide-in .4s cubic-bezier(.16,1,.3,1) backwards; }
+.dcv-live .dcv-ticket:nth-child(1){ animation-delay:.05s; }
+.dcv-live .dcv-ticket:nth-child(2){ animation-delay:.18s; }
+.dcv-live .dcv-ticket:nth-child(3){ animation-delay:.31s; }
+.dcv-live .dcv-ticket--high .dcv-ticket-sla{ animation:dcv-badge-fade 1.5s ease-in-out .6s infinite; }
+.dcv-ticket:hover{ background:rgba(255,255,255,.04); }
+
+/* Administración -- los check se "marcan" al entrar; el pendiente late en ámbar */
+.dcv-live .dcv-check--done .dcv-check-box{ animation:dcv-pop .35s cubic-bezier(.34,1.56,.64,1) backwards; }
+.dcv-live .dcv-check:nth-child(1) .dcv-check-box{ animation-delay:.1s; }
+.dcv-live .dcv-check:nth-child(2) .dcv-check-box{ animation-delay:.26s; }
+.dcv-live .dcv-check--pending .dcv-check-box{ animation:dcv-pulse-ring 2s ease-in-out infinite; }
+.dcv-check:hover{ color:var(--ink); }
+
+/* Dirección -- cada línea se "dibuja" como si el gráfico se calculase al vivo */
+.dcv-kpi-spark polyline{ stroke-dasharray:100; stroke-dashoffset:100; }
+.dcv-live .dcv-kpi-spark polyline{ animation:dcv-draw-line 1s cubic-bezier(.16,1,.3,1) forwards; }
+.dcv-live .dcv-kpi:nth-child(2) .dcv-kpi-spark polyline{ animation-delay:.25s; }
+.dcv-live .dcv-kpi-arrow{ animation:dcv-fade-up .4s ease .9s backwards; }
+.dcv-live .dcv-kpi-live-dot{ animation:dcv-pulse-dot 1.6s ease-in-out infinite; }
+.dcv-kpi:hover{ background:rgba(255,255,255,.03); border-radius:6px; }
+
+@media (prefers-reduced-motion:reduce){
+  .dcv-pipe-bar, .dcv-funnel-stage, .dcv-cycle-ring, .dcv-cycle-steps li,
+  .dcv-kanban-card, .dcv-flow-track span, .dcv-ticket, .dcv-check-box,
+  .dcv-kpi-spark polyline, .dcv-kpi-arrow,
+  .dcv-funnel-dot, .dcv-kanban-flow-dot, .dcv-flow-live-dot, .dcv-kpi-live-dot{ animation:none !important; }
+}
 
 /* Móvil no es el desktop encogido: la lista maestra pasa a una rejilla
    compacta 4×2 de selectores puramente icónicos (icono + tag de 3

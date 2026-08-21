@@ -225,6 +225,22 @@
     var dcItems = Array.prototype.slice.call(deptConsole.querySelectorAll('.dept-console-item'));
     var dcPanes = Array.prototype.slice.call(deptConsole.querySelectorAll('.dept-console-pane'));
     var dcDetail = deptConsole.querySelector('.dept-console-detail');
+
+    /* DIR-WEB-VIZ-20260821: (re)dispara la entrada animada de la
+       visualización de un Departamento -- se llama al abrir su pestaña
+       (nunca por scroll, esto vive dentro de pestañas). Quitar y volver a
+       añadir la clase fuerza el reflow para que la animación se repita
+       cada vez que se vuelve a entrar en la misma pestaña. Con
+       prefers-reduced-motion no se añade nunca: el contenido se queda
+       exactamente como estaba (estático, en su posición final). */
+    function activateVisual(pane) {
+      var visual = pane && pane.querySelector('.dcp-visual');
+      if (!visual || prefersReducedMotion) return;
+      visual.classList.remove('dcv-live');
+      void visual.offsetWidth;
+      visual.classList.add('dcv-live');
+    }
+
     dcItems.forEach(function (item) {
       item.addEventListener('click', function () {
         var dept = item.getAttribute('data-dept');
@@ -237,15 +253,37 @@
           i.classList.toggle('is-active', active);
           i.setAttribute('aria-selected', active ? 'true' : 'false');
         });
+        var newPane = null;
         dcPanes.forEach(function (pane) {
           var active = pane.getAttribute('data-dept') === dept;
           pane.classList.toggle('is-active', active);
           pane.hidden = !active;
+          if (active) newPane = pane;
         });
+        activateVisual(newPane);
         if (window.innerWidth <= 760 && dcDetail) {
           dcDetail.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
         }
       });
+    });
+
+    // La pestaña activa por defecto (Comercial) también reproduce su
+    // entrada, no solo las que se abren con un clic.
+    activateVisual(deptConsole.querySelector('.dept-console-pane.is-active'));
+
+    // Leyenda compartida: al pasar el cursor (o tocar) cada etapa/columna/
+    // ticket, cambia el texto de .dcv-caption para explicar qué hace la IA
+    // ahí -- la interacción tiene un propósito, no es solo decorativa.
+    Array.prototype.slice.call(deptConsole.querySelectorAll('[data-caption]')).forEach(function (node) {
+      var visual = node.closest('.dcp-visual');
+      var captionEl = visual && visual.querySelector('.dcv-caption');
+      if (!captionEl) return;
+      var defaultText = captionEl.getAttribute('data-default') || captionEl.textContent;
+      function show() { captionEl.textContent = node.getAttribute('data-caption'); }
+      function hide() { captionEl.textContent = defaultText; }
+      node.addEventListener('mouseenter', show);
+      node.addEventListener('mouseleave', hide);
+      node.addEventListener('click', show);
     });
   }
 
