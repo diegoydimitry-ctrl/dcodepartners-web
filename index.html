@@ -37,7 +37,8 @@
 <meta name="twitter:description" content="Cada área de tu empresa, funcionando con su propio Departamento Inteligente. Un mes de servicio gratuito, sin coste ni compromiso.">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css?v=85a4b18291">
+<link rel="stylesheet" href="/assets/css/styles.css?v=06959a99f5">
+<link rel="stylesheet" href="/assets/css/finance-demo.css?v=2">
 
 <script type="application/ld+json">
 {
@@ -106,7 +107,7 @@
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas</strong><span>Próximamente — el control de gasto ya es real.</span></span>
+              <span><strong>Finanzas</strong><span>Factura, cobra y controla el gasto sin perseguir a nadie.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
@@ -123,9 +124,8 @@
             <a class="mega-item wide" href="/departamentos" role="menuitem">Ver todos los Departamentos →</a>
           </div>
         </li>
-        <li><a href="/casos-exito">Casos de Éxito</a></li>
+        <li><a href="/cambios-en-proceso">Cambios en proceso</a></li>
         <li><a href="/conocenos">Conócenos</a></li>
-        <li><a href="/blog">Blog</a></li>
       </ul>
     </nav>
 
@@ -142,269 +142,186 @@
 
 <nav class="side-index" id="side-index" aria-label="Índice de secciones">
   <a href="#inicio" data-target="inicio"><span class="si-label">Inicio</span><span class="si-dot"></span></a>
-  <a href="#concepto" data-target="concepto"><span class="si-label">Concepto</span><span class="si-dot"></span></a>
   <a href="#departamentos" data-target="departamentos"><span class="si-label">Departamentos</span><span class="si-dot"></span></a>
   <a href="#metodo" data-target="metodo"><span class="si-label">Método</span><span class="si-dot"></span></a>
+  <a href="#resultados" data-target="resultados"><span class="si-label">Resultados</span><span class="si-dot"></span></a>
   <a href="#conocenos" data-target="conocenos"><span class="si-label">Conócenos</span><span class="si-dot"></span></a>
-  <a href="#blog" data-target="blog"><span class="si-label">Blog</span><span class="si-dot"></span></a>
   <a href="#contacto" data-target="contacto"><span class="si-label">Contacto</span><span class="si-dot"></span></a>
 </nav>
 
 <main id="main-content">
 
   <!-- ============ HERO ============
-       DIR-048: la imagen de fondo (ciudad/circuitos, DIR-044) desaparece
-       por completo — no se sustituye por otra foto. En su lugar, el propio
-       "Cristal de Profundidad" (DIR-047) crece y ocupa ese rol: ya no es
-       una tarjeta-ventana dentro de la columna derecha, es una atmósfera
-       de fondo a sangre completa (.hero-atmosphere) que vive detrás de
-       TODA la sección, con el lado izquierdo (donde va el texto) apagado
-       por una máscara de degradado y el lado derecho resuelto y nítido —
-       la misma lógica de "negative space" que ya usaba la foto, pero
-       generada, no fotográfica. Sigue usando las mismas --mx/--my que
-       .window ya calcula (main.js suma .hero-atmosphere al mismo
-       selector) — cero JS nuevo para el paralaje. Los 4 módulos ya no son
-       iconos genéricos: son las 4 herramientas reales del stack de
-       D-Code (n8n / Airtable / Notion / Google Workspace, confirmadas en
-       seguridad.html y condiciones-contratacion.html) — iconografía
-       propia de D-Code que las representa con claridad y su nombre real
-       en texto, no los logotipos oficiales (ver nota de alcance en la
-       entrega). -->
+       DIR-WEB-MASTER-004: la atmósfera de nodos/parallax SVG (DIR-047/048,
+       origen real de las roturas en iPad de DIR-053/054/055) desaparece
+       por completo -- no se repara, se sustituye por una idea distinta:
+       un panel muestra los Departamentos conectándose a un mismo sistema
+       al cargar la página (.hero-console). Es la misma metáfora que ya
+       vive en el resto del sitio (window-status .dot "En vivo" de
+       metricas_dcode.dashboard) llevada al primer plano del Hero, con
+       filas simples en vez de geometría SVG dependiente de viewport --
+       elimina la causa raíz de la fragilidad anterior, no solo el
+       síntoma. Copy del hero-copy reducido a una idea por pantalla
+       (eyebrow + h1 + una frase + 1 CTA visible) según investigación de
+       carga cognitiva; se retira trust-line por ser una repetición casi
+       literal de trust-badges, no una idea nueva. -->
   <section class="hero" id="inicio">
     <div class="container hero-grid">
-    <div class="hero-atmosphere" aria-hidden="true">
-      <div class="hero-atm-layer hero-atm-back">
-        <svg viewBox="0 0 1000 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <line x1="-150" y1="600" x2="150" y2="0"/>
-          <line x1="0" y1="600" x2="300" y2="0"/>
-          <line x1="150" y1="600" x2="450" y2="0"/>
-          <line x1="300" y1="600" x2="600" y2="0"/>
-          <line x1="450" y1="600" x2="750" y2="0"/>
-          <line x1="600" y1="600" x2="900" y2="0"/>
-          <line x1="750" y1="600" x2="1050" y2="0"/>
-          <line x1="900" y1="600" x2="1200" y2="0"/>
-        </svg>
-      </div>
-
-      <div class="hero-atm-layer hero-atm-mid">
-        <svg viewBox="0 0 1000 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <path class="signal-line signal-a" fill="none" d="M0,230 C90,200 140,200 230,230 C320,260 370,260 460,230 C550,200 600,200 690,230 C780,260 830,260 920,230 C960,215 985,222 1000,228"/>
-          <path class="signal-line signal-b" fill="none" d="M0,410 C90,440 140,440 230,410 C320,380 370,380 460,410 C550,440 600,440 690,410 C780,380 830,380 920,410 C960,425 985,418 1000,412"/>
-        </svg>
-      </div>
-
-      <div class="hero-atm-layer hero-atm-front">
-        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
-          <defs>
-            <linearGradient id="heroAtmFill" x1="0" y1="0" x2="0" y2="1">
-              <stop class="fill-a" offset="0%"/><stop class="fill-b" offset="45%"/><stop class="fill-c" offset="100%"/>
-            </linearGradient>
-            <linearGradient id="heroAtmSpine" gradientUnits="userSpaceOnUse" x1="560" y1="330" x2="880" y2="140">
-              <stop class="spine-a" offset="0%"/><stop class="spine-b" offset="50%"/><stop class="spine-c" offset="100%"/>
-            </linearGradient>
-          </defs>
-
-          <path class="atm-spine" fill="none" stroke="#43e0ff" d="M560,330 C605,308 625,290 680,270 C725,253 750,235 800,220 C825,213 850,180 880,140"/>
-
-          <g class="atm-chip" style="--mod-r:67;--mod-g:224;--mod-b:255;" transform="translate(560,330) scale(0.85)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(67,224,255)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(67,224,255)" transform="translate(-9,-9) scale(0.75)"><circle cx="4" cy="19" r="3"/><circle cx="20" cy="19" r="3"/><circle cx="12" cy="5" r="3"/><path d="M12 8v5M7 17l3-3M17 17l-3-3"/></g>
-            <circle class="atm-chip-status" fill="rgb(67,224,255)" cx="12" cy="-12" r="2.4"/>
-          </g>
-          <g class="atm-chip" style="--mod-r:91;--mod-g:140;--mod-b:255;" transform="translate(680,270) scale(0.95)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(91,140,255)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(91,140,255)" transform="translate(-9,-9) scale(0.75)"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20M9 10v10"/></g>
-            <circle class="atm-chip-status" fill="rgb(91,140,255)" cx="12" cy="-12" r="2.4"/>
-          </g>
-          <g class="atm-chip" style="--mod-r:155;--mod-g:107;--mod-b:255;" transform="translate(800,220) scale(1.05)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(155,107,255)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(155,107,255)" transform="translate(-9,-9) scale(0.75)"><rect x="3" y="2" width="18" height="20" rx="2"/><path d="M7.5 8h9M7.5 12h9M7.5 16h5"/></g>
-            <circle class="atm-chip-status" fill="rgb(155,107,255)" cx="12" cy="-12" r="2.4"/>
-          </g>
-          <g class="atm-chip" style="--mod-r:52;--mod-g:231;--mod-b:164;" transform="translate(880,140) scale(1.15)">
-            <rect class="atm-chip-plate" fill="#141a2e" stroke="rgb(52,231,164)" x="-17" y="-17" width="34" height="34" rx="10"/>
-            <g class="atm-chip-icon" fill="none" stroke="rgb(52,231,164)" transform="translate(-9,-9) scale(0.75)"><circle cx="5" cy="5" r="1.8"/><circle cx="12" cy="5" r="1.8"/><circle cx="19" cy="5" r="1.8"/><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/><circle cx="5" cy="19" r="1.8"/><circle cx="12" cy="19" r="1.8"/><circle cx="19" cy="19" r="1.8"/></g>
-            <circle class="atm-chip-status" fill="rgb(52,231,164)" cx="12" cy="-12" r="2.4"/>
-          </g>
-        </svg>
-        <span class="atm-chip-label" style="position:absolute; left:56%; top:55%;">n8n</span>
-        <span class="atm-chip-label" style="position:absolute; left:68%; top:45%;">Airtable</span>
-        <span class="atm-chip-label" style="position:absolute; left:80%; top:36.7%;">Notion</span>
-        <span class="atm-chip-label atm-chip-label--flip" style="position:absolute; left:88%; top:23.3%;">Google Workspace</span>
-      </div>
-    </div>
 
       <div class="hero-copy">
-        <span class="eyebrow">Sistema Operativo Empresarial</span>
-        <h1>Un Sistema Operativo para tu empresa, no <span class="accent">una automatización más</span>.</h1>
-        <p class="lead">Cada área de tu negocio —comercial, marketing, producción, finanzas— puede funcionar con su propio Departamento Inteligente: coordinado con los demás, trabajando todos los días, sin que dependa de que alguien se acuerde de hacerlo.</p>
+        <span class="eyebrow">Sistema Operativo Empresarial para pymes</span>
+        <h1>Un <span class="accent">Sistema Operativo</span> para tu empresa, no una automatización más.</h1>
+        <p class="lead">La mayoría de pymes pierde ventas y horas en procesos que solo funcionan si alguien se acuerda de hacerlos — cada Departamento Inteligente de D-Code los hace por ti, todos los días.</p>
 
         <div class="hero-ctas">
-          <a href="/contacto" class="btn btn-primary">Solicitar una reunión</a>
+          <a href="/contacto" class="btn btn-primary">Reservar mi Llamada Gratuita</a>
           <a href="/como-funciona" class="btn btn-ghost">Ver cómo funciona</a>
         </div>
 
-        <p class="trust-line">CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H</p>
         <div class="trust-badges">
-          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg>Protegido con Cloudflare</span>
+          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg>Sin permanencia</span>
           <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Cumplimiento RGPD</span>
           <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Respuesta &lt; 24h</span>
         </div>
       </div>
 
       <div class="hero-graphic">
-        <div class="hero-metrics-float">
-          <div class="hero-metric"><div class="hm-val">24/7</div><div class="hm-label">Operativa</div></div>
-          <div class="hero-metric"><div class="hm-val">0€</div><div class="hm-label">Riesgo inicial</div></div>
-          <div class="hero-metric"><div class="hm-val">30 días</div><div class="hm-label">Prueba gratis</div></div>
+        <div class="hero-console reveal-scale">
+          <div class="hero-console-contrast">
+            <span class="hcc-before">Herramientas sueltas, sin conectar</span>
+            <span class="hcc-arrow" aria-hidden="true">→</span>
+            <span class="hcc-after">Un sistema operativo</span>
+          </div>
+          <div class="hero-console-head">
+            <span>sistema_dcode</span>
+            <span class="window-status"><span class="dot"></span>En vivo</span>
+          </div>
+          <div class="boot-list" data-stagger>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Comercial</span><span class="boot-state">Conectado</span></div>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Marketing</span><span class="boot-state">Conectado</span></div>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Producción</span><span class="boot-state">Conectado</span></div>
+            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Soporte</span><span class="boot-state">Conectado</span></div>
+          </div>
+          <div class="hero-console-foot">+4 Departamentos más · 1 sistema</div>
+          <div class="hero-console-log">
+            <span class="hero-console-log-prompt">&gt;</span>
+            <span class="hero-console-log-line" data-log-cycle='["Comercial → propuesta enviada a 3 empresas","Producción → 2 tareas reasignadas por carga de trabajo","Marketing → 5 leads cualificados esta semana","Soporte → ticket #2291 resuelto en 4 minutos"]'>Comercial → propuesta enviada a 3 empresas</span>
+          </div>
+        </div>
+        <div class="hero-metrics-float" data-stagger>
+          <div class="hero-metric reveal-up"><div class="hm-val">24/7</div><div class="hm-label">Operativa</div></div>
+          <div class="hero-metric reveal-up"><div class="hm-val">0€</div><div class="hm-label">Riesgo inicial</div></div>
+          <div class="hero-metric reveal-up"><div class="hm-val">30 días</div><div class="hm-label">Prueba gratis</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ EL CONCEPTO ============ -->
-  <section class="section" id="concepto">
+  <!-- ============ D-CODE FINANCE (implantación real) — DIR-WEB-20260820-005b ============ -->
+  <section class="section" id="dcode-finance">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">El concepto</span>
-        <h2 class="h-title">Tu empresa no necesita más herramientas sueltas. Necesita un sistema.</h2>
-        <p class="lead">La mayoría de empresas acumula aplicaciones que no se hablan entre sí: un CRM aquí, una hoja de cálculo allí, recordatorios en la cabeza de alguien.</p>
-        <p class="lead">Un Sistema Operativo Empresarial funciona distinto: cada Departamento Inteligente comparte la misma información con los demás. Lo que pasa en Comercial ya lo sabe Producción — sin que nadie tenga que avisar a nadie.</p>
+      <div class="reveal">
+        <span class="eyebrow">D-Code Finance</span>
+        <h2 class="h-title" style="margin:12px 0 14px;">Finanzas, dentro del sistema.</h2>
+        <p class="lead" style="margin-bottom:24px;">D-Code Partners no solo automatiza tu empresa: está construyendo su propio sistema financiero, conectado con el resto de tus Departamentos. Facturas, cobros, gastos y presupuestos, en una misma vista.</p>
+        <a href="/sistema-financiero" class="btn btn-primary">Explorar D-Code Finance</a>
+      </div>
+
+      <div class="demo-disclaimer reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>Lo que ves debajo es una demo interactiva de D-Code Finance, con una empresa y datos ficticios, pensada para enseñarte de lo que el sistema es capaz. La versión real se adapta a la estructura de cada empresa y puede incluir más funcionalidades, configuraciones e integraciones.</p>
+      </div>
+
+      <div class="reveal fdemo-home-stack">
+        <div class="fdemo-scope">
+          <div data-fdemo-mount data-mode="embedded" data-exit-href="/sistema-financiero/app" data-exit-label="Pantalla completa ↗"></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ DEPARTAMENTOS (teaser) ============ -->
+  <!-- ============ DEPARTAMENTOS (teaser) — UN SOLO SISTEMA (DIR-WEB-MASTER-004) ============
+       Sustituye "El concepto" (sección de texto separada, misma idea que
+       aquí se dice mejor viendo el panel) y la grid de 8 tarjetas sueltas
+       por UN único panel .dept-system con 8 filas conectadas -- ver
+       comentario de .dept-system en styles.css para el razonamiento
+       completo. -->
   <section class="section" id="departamentos">
     <div class="container">
       <div class="section-head reveal">
-        <span class="eyebrow">Nuestras áreas</span>
-        <h2 class="h-title">Cómo transformamos tu empresa.</h2>
-        <p class="lead">Cada área de tu empresa puede funcionar con su propio Departamento Inteligente.</p>
+        <span class="eyebrow">Departamentos Inteligentes</span>
+        <h2 class="h-title">No son chatbots. Son un mismo sistema con 8 módulos.</h2>
+        <p class="lead">Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta.</p>
       </div>
 
-      <div class="servicios-cards cols-3" data-stagger>
-        <a class="window service-card reveal-blur" id="dept-comercial" href="/departamentos/comercial">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">comercial.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>Comercial</h3>
-            <p>Que ninguna venta se pierda por falta de seguimiento.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-up" id="dept-marketing" href="/departamentos/marketing">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">marketing.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>Marketing</h3>
-            <p>Leads que llegan ya clasificados, no en bruto.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal" id="dept-clientes" href="/departamentos/clientes">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">clientes.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>Clientes</h3>
-            <p>Que cada cliente se sienta cuidado, sin depender de nadie.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-blur" id="dept-produccion" href="/departamentos/produccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">produccion.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Producción</h3>
-            <p>Proyectos que se ponen en marcha solos y cumplen sus plazos.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-up" id="dept-finanzas" href="/departamentos/finanzas">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">finanzas.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>Finanzas</h3>
-            <p>Próximamente — el control de gasto ya es real.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal" id="dept-soporte" href="/departamentos/soporte">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">soporte.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>Soporte</h3>
-            <p>Respuesta rápida, incluso fuera de horario.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-blur" id="dept-administracion" href="/departamentos/administracion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">administracion.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>Administración</h3>
-            <p>Tu empresa, protegida y ordenada, sin esfuerzo.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-up" id="dept-direccion" href="/departamentos/direccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">direccion.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>Dirección</h3>
-            <p>Una decisión clara cada mañana, con datos reales.</p>
-            <span class="card-link">Saber más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-      </div>
-
-      <div class="window stats-window reveal">
+      <div class="window dept-system reveal">
         <div class="window-bar">
           <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">metricas_dcode.dashboard</span>
-          <span class="window-status"><span class="dot"></span>En vivo</span>
+          <span class="window-title">departamentos_dcode.system</span>
+          <span class="window-status"><span class="dot"></span>8 módulos activos</span>
         </div>
         <div class="window-body">
-          <div class="spec-sheet">
-            <div class="spec-item">
-              <span class="spec-label">Riesgo inicial</span>
-              <div class="spec-value"><span class="counter" data-count="0">0</span>€</div>
-              <p class="spec-caption">No pagas nada hasta demostrar resultados.</p>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Prueba gratuita</span>
-              <div class="spec-value"><span class="counter" data-count="30">0</span> días</div>
-              <p class="spec-caption">Un mes completo de servicio real, sin compromiso.</p>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Disponibilidad</span>
-              <div class="spec-value"><span class="counter" data-count="24">0</span>/7</div>
-              <p class="spec-caption">Tu empresa no se detiene. Tampoco los Departamentos que trabajan por ella.</p>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Tiempo de respuesta</span>
-              <div class="spec-value">&lt;<span class="counter" data-count="24">0</span>h</div>
-              <p class="spec-caption">Cada consulta, atendida en menos de un día laborable.</p>
-            </div>
+          <div class="dept-rows">
+            <a class="dept-row" href="/departamentos/comercial">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
+              <span class="dept-row-name">Comercial</span>
+              <span class="dept-row-desc">Que ninguna venta se pierda por falta de seguimiento.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/marketing">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
+              <span class="dept-row-name">Marketing</span>
+              <span class="dept-row-desc">Leads que llegan ya clasificados, no en bruto.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/clientes">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
+              <span class="dept-row-name">Clientes</span>
+              <span class="dept-row-desc">Que cada cliente se sienta cuidado, sin depender de nadie.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/produccion">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+              <span class="dept-row-name">Producción</span>
+              <span class="dept-row-desc">Proyectos que se ponen en marcha solos y cumplen sus plazos.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/finanzas">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
+              <span class="dept-row-name">Finanzas</span>
+              <span class="dept-row-desc">Factura, cobra y controla el gasto sin perseguir a nadie.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/soporte">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
+              <span class="dept-row-name">Soporte</span>
+              <span class="dept-row-desc">Respuesta rápida, incluso fuera de horario.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/administracion">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
+              <span class="dept-row-name">Administración</span>
+              <span class="dept-row-desc">Tu empresa, protegida y ordenada, sin esfuerzo.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="dept-row" href="/departamentos/direccion">
+              <span class="dept-row-dot"></span>
+              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+              <span class="dept-row-name">Dirección</span>
+              <span class="dept-row-desc">Una decisión clara cada mañana, con datos reales.</span>
+              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -416,13 +333,9 @@
         <div class="metodo-copy reveal">
           <span class="eyebrow">El Método D-Code</span>
           <h2 class="h-title">Una alianza que empieza por los hechos, no por las promesas.</h2>
-          <p style="margin-top:22px;">El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés.</p>
+          <p style="margin-top:22px;">El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés: implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia antes de hablar de cifras.</p>
 
           <p class="offer-statement">"Un mes completo de servicio, sin coste alguno."</p>
-
-          <p>Implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia. Solo cuando los resultados están sobre la mesa, nos sentamos a hablar de cifras.</p>
-
-          <p class="closing">Sin beneficio demostrado, no hay factura. Así de simple.</p>
 
           <div class="metodo-cta" style="display:flex; gap:16px; flex-wrap:wrap;">
             <a href="/metodo" class="btn btn-ghost">Ver el Método completo</a>
@@ -492,102 +405,76 @@
     </div>
   </section>
 
-  <!-- ============ CONÓCENOS (teaser) ============ -->
+  <!-- ============ RESULTADOS (teaser, casos internos reales) ============
+       DIR-WEB-20260819-MASTER (iteración 2): la Home nunca enlazaba a los 3
+       casos internos reales de casos-exito.html -- contenido honesto que ya
+       existía, solo sin usar en el punto de la narrativa donde más falta
+       hacía (RESULTADOS, entre "cómo funciona" y "confianza"). No se inventa
+       nada aquí: mismos 3 casos, resumidos a una frase cada uno. -->
+  <section class="section" id="resultados">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Casos internos, no promesas</span>
+        <h2 class="h-title">Antes de pedirte que confíes, lo probamos en nuestra propia empresa.</h2>
+        <p class="lead">No inventamos casos de cliente. Así es como usamos nuestros propios sistemas para dirigir D-Code — incluido uno que no salió como esperábamos.</p>
+      </div>
+
+      <div class="blog-grid" data-stagger>
+        <a class="window blog-card reveal-blur" href="/casos-exito#caso-comercial-ia">
+          <div class="window-body">
+            <span class="tag case-tag">Comercial</span>
+            <h3>De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse</h3>
+            <div class="case-mini">
+              <div class="case-mini-row"><span class="case-mini-label">Antes</span><p>Pasar de "empresa interesante" a propuesta enviada era manual, sin fecha fija.</p></div>
+              <div class="case-mini-row"><span class="case-mini-label">Ahora</span><p>Cada lunes, el sistema convierte las mejores oportunidades en propuestas con IA, revisadas por una persona.</p></div>
+            </div>
+          </div>
+        </a>
+        <a class="window blog-card reveal-up" href="/casos-exito#caso-produccion-ia">
+          <div class="window-body">
+            <span class="tag case-tag">Producción</span>
+            <h3>Reparto de tareas sin que nadie tenga que decidirlo cada hora</h3>
+            <div class="case-mini">
+              <div class="case-mini-row"><span class="case-mini-label">Antes</span><p>Crear proyectos y repartir tareas dependía de la carga de trabajo de quien tuviera que hacerlo ese día.</p></div>
+              <div class="case-mini-row"><span class="case-mini-label">Ahora</span><p>El sistema crea el proyecto solo, reparte tareas cada hora y avisa cada día de lo que está por vencer.</p></div>
+            </div>
+          </div>
+        </a>
+        <a class="window blog-card reveal-blur" href="/casos-exito#caso-diagnostico">
+          <div class="window-body">
+            <span class="tag case-tag">Disciplina interna</span>
+            <h3>Cuando la hipótesis sobre un fallo no coincidía con los datos</h3>
+            <div class="case-mini">
+              <div class="case-mini-row"><span class="case-mini-label">Antes</span><p>Estuvimos a punto de actuar sobre una hipótesis sin contrastarla contra las ejecuciones reales.</p></div>
+              <div class="case-mini-row"><span class="case-mini-label">Ahora</span><p>Auditamos ejecución por ejecución — la causa real estaba en dos workflows distintos a los señalados.</p></div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div style="text-align:center; margin-top:40px;">
+        <a href="/casos-exito" class="btn btn-ghost">Ver los 3 casos completos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONÓCENOS (teaser) ============
+       DIR-WEB-20260819-MASTER-004: el teaser de Blog se retira de Home por
+       completo (no solo se reordena) -- contenido tangencial, no ayuda a
+       convertir/comprender/confiar/diferenciar en la página que debe ir
+       directa al grano. Sigue accesible desde el menú y el footer. Home
+       pasa a Hero → Departamentos (sistema) → Método → Resultados →
+       Conócenos (confianza justo antes del CTA) → Contacto. -->
   <section class="section metodo" id="conocenos">
     <div class="container">
       <div class="conocenos-intro reveal">
         <span class="eyebrow">La mente detrás de D-Code Partners</span>
         <h2 class="h-title">Dos fundadores. Un mismo código.</h2>
-        <p>Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo.</p>
+        <p>Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. Diego lidera la estrategia y las alianzas; Dimitry, la arquitectura de los Departamentos Inteligentes.</p>
       </div>
 
-      <div class="pull-quote reveal">
-        <span class="quote-mark">"</span>
-        Nuestra juventud no es una falta de experiencia. Es la ausencia de los vicios de un mercado estancado.
-      </div>
-
-      <div class="founders">
-        <div class="window founder-card reveal">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">diego.profile</span>
-          </div>
-          <div class="window-body">
-            <div class="monogram"><span>D.S.</span></div>
-            <h3>Diego Siñeriz</h3>
-            <div class="founder-role">Co-Founder &amp; CEO</div>
-            <p>Lidera la visión estratégica y las alianzas de D-Code Partners.</p>
-          </div>
-        </div>
-        <div class="window founder-card reveal">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">dimitry.profile</span>
-          </div>
-          <div class="window-body">
-            <div class="monogram"><span>D.S.</span></div>
-            <h3>Dimitry Sosenko</h3>
-            <div class="founder-role">Co-Founder &amp; CEO</div>
-            <p>Al frente de la arquitectura de los Departamentos Inteligentes.</p>
-          </div>
-        </div>
-      </div>
-
-      <div style="text-align:center; margin-top:48px;">
+      <div style="text-align:center; margin-top:32px;">
         <a href="/conocenos" class="btn btn-ghost">Conoce toda nuestra historia</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ BLOG (teaser) ============ -->
-  <section class="section" id="blog">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Recursos</span>
-        <h2 class="h-title">Ideas sobre automatización e IA para empresas.</h2>
-      </div>
-
-      <div class="blog-grid">
-        <a class="window blog-card reveal" href="/blog/que-es-la-automatizacion-con-ia">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">art-01.md</span>
-          </div>
-          <div class="window-body">
-            <span class="tag blog-cat">Fundamentos</span>
-            <h3>Qué es la automatización con IA y por qué tu empresa la necesita ya</h3>
-            <p>Una introducción clara a qué cambia realmente cuando automatizas procesos con IA.</p>
-            <div class="blog-meta"><span>6 min de lectura</span></div>
-          </div>
-        </a>
-        <a class="window blog-card reveal" href="/blog/automatizacion-vs-agentes-ia">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">art-02.md</span>
-          </div>
-          <div class="window-body">
-            <span class="tag blog-cat">Estrategia</span>
-            <h3>Automatización vs. Agentes de IA: qué las diferencia y cuándo usar cada una</h3>
-            <p>No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir.</p>
-            <div class="blog-meta"><span>7 min de lectura</span></div>
-          </div>
-        </a>
-        <a class="window blog-card reveal" href="/blog/procesos-que-puedes-automatizar-ya">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">art-03.md</span>
-          </div>
-          <div class="window-body">
-            <span class="tag blog-cat">Práctico</span>
-            <h3>5 procesos de tu empresa que probablemente ya podrías automatizar</h3>
-            <p>Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana.</p>
-            <div class="blog-meta"><span>5 min de lectura</span></div>
-          </div>
-        </a>
-      </div>
-
-      <div style="text-align:center; margin-top:48px;">
-        <a href="/blog" class="btn btn-ghost">Ver todos los artículos</a>
       </div>
     </div>
   </section>
@@ -599,7 +486,7 @@
       <h2 class="h-title">Reserva una reunión de 30 minutos.</h2>
       <p class="lead">Te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y qué puedes esperar del primer mes, sin coste ni compromiso.</p>
       <div class="hero-ctas">
-        <a href="/contacto" class="btn btn-primary">Solicitar una reunión</a>
+        <a href="/contacto" class="btn btn-primary">Reservar mi Llamada Gratuita</a>
         <a href="/faq" class="btn btn-ghost">Ver preguntas frecuentes</a>
       </div>
     </div>
@@ -635,7 +522,7 @@
         <ul>
           <li><a href="/metodo">Método D-Code</a></li>
           <li><a href="/garantias">Garantías y Proceso</a></li>
-          <li><a href="/casos-exito">Casos de Éxito</a></li>
+          <li><a href="/cambios-en-proceso">Cambios en proceso</a></li>
           <li><a href="/conocenos">Conócenos</a></li>
           <li><a href="/blog">Blog</a></li>
         </ul>
@@ -693,7 +580,9 @@
   </button>
 </div>
 
-<script src="/assets/js/main.js?v=adaceffb92" defer></script>
+<script src="/assets/js/finance-demo-data.js?v=2" defer></script>
+<script src="/assets/js/finance-demo.js?v=2" defer></script>
+<script src="/assets/js/main.js?v=c81a8f05a6" defer></script>
 
 </body>
 </html>

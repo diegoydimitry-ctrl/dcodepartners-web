@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="Departamentos Inteligentes — D-Code Partners">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
-<link rel="stylesheet" href="/assets/css/styles.css?v=85a4b18291">
+<link rel="stylesheet" href="/assets/css/styles.css?v=06959a99f5">
 
 <script type="application/ld+json">
 {
@@ -114,7 +114,7 @@
             </a>
             <a class="mega-item" href="/departamentos/finanzas" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span><strong>Finanzas</strong><span>Próximamente — el control de gasto ya es real.</span></span>
+              <span><strong>Finanzas</strong><span>Factura, cobra y controla el gasto sin perseguir a nadie.</span></span>
             </a>
             <a class="mega-item" href="/departamentos/soporte" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
@@ -131,9 +131,8 @@
             <a class="mega-item wide" href="/departamentos" role="menuitem">Ver todos los Departamentos →</a>
           </div>
         </li>
-        <li><a href="/casos-exito">Casos de Éxito</a></li>
+        <li><a href="/cambios-en-proceso">Cambios en proceso</a></li>
         <li><a href="/conocenos">Conócenos</a></li>
-        <li><a href="/blog">Blog</a></li>
       </ul>
     </nav>
 
@@ -185,265 +184,268 @@
     </div>
   </section>
 
-  <!-- ============ DEPARTAMENTOS — ECOSISTEMA EMPRESARIAL VIVO (DIR-047, jerarquía DIR-050) ============
-       Sustituye por completo el árbol "Tu empresa + 8 recuadros + bus"
-       (DIR-040/043/045) por una arquitectura radial: un núcleo central
-       ("Tu empresa") y las 8 estaciones reales — icono real + nombre real,
-       cada una enlazada a su página — cada una con su propio canal de
-       energía hacia el núcleo. No orbitan — esa metáfora ya se probó y
-       se descartó en Home (DIR-046) — el movimiento vive en el detalle:
-       un pulso muy lento en el núcleo, un destello que recorre cada canal
-       muy despacio, un eco sutil y escalonado por estación. Al pasar el
-       cursor o enfocar con teclado la estación se eleva, su canal se
-       ilumina y aparece su descripción real (texto ya publicado en el
-       mega-menú, no es copy nuevo).
-       DIR-050: deja de ser un círculo perfecto a 45°. Cada estación tiene
-       ahora un ángulo Y un radio propios que reflejan una jerarquía real
-       — CAPACIDADES CENTRALES (Comercial, Dirección: sin ellas no hay
-       negocio que sostener) más cerca del núcleo y con placa más grande;
-       CAPACIDADES OPERATIVAS (Marketing, Producción, Clientes: el motor
-       del día a día — atraer, entregar, retener) a media distancia;
-       CAPACIDADES DE SOPORTE (Finanzas, Soporte, Administración: sostienen
-       sin dirigir) más alejadas y con placa más discreta. Los 8 ángulos
-       siguen cubriendo el círculo completo (15°/70°/110°/165°/205°/250°/
-       295°/335° desde arriba, en sentido horario) para que la lectura
-       siga siendo inmediata pese a la asimetría — clase .dept-node--N
-       sigue siendo la misma estación de siempre, solo cambian sus
-       coordenadas y la nueva clase de nivel (central/operativa/soporte).
-       Todo el layout sigue siendo fluido en % + aspect-ratio dentro de
-       un contenedor con container queries. -->
-  <section class="section-sm dept-ecosystem">
+  <!-- ============ DEPARTAMENTOS — PANEL DE CONTROL (DIR-WEB-20260820-002) ============
+       Sustituye por completo el "Tu empresa + 8 nodos flotantes en radios"
+       (DIR-047/050). Dirección lo revisó varias veces y concluyó que se
+       sentía artificial -- una ilustración conceptual pegada a la página,
+       no una parte natural de ella -- y pidió explícitamente NO otro
+       círculo con líneas, NO más nodos flotantes, NO otra red de
+       conexiones, NO animación gratuita: un CONCEPTO visual distinto.
+       La idea nueva no es "cómo dibujar 8 departamentos alrededor de un
+       centro" sino "qué es esta sección realmente": un panel de control
+       de software real -- lista maestra + detalle, como cualquier
+       interfaz de sistema operativo o gestor de procesos -- construido
+       con el MISMO lenguaje ya establecido en todo el sitio (.window,
+       window-bar con dots/título, tipografía mono para los tags COM/MKT/
+       etc.) en vez de inventar un componente aparte. Es interactivo de
+       verdad: el panel de detalle solo cambia cuando el visitante elige
+       un Departamento, no por temporizador ni bucle -- coherente con la
+       lección de DIR-006 sobre "vida ambiental" en bucle infinito.
+       Móvil no es "el desktop encogido": la lista maestra pasa de filas
+       verticales a una rejilla compacta de 4×2 (el mismo patrón de
+       selector que usaría un panel de ajustes real en móvil) y el panel
+       de detalle aparece debajo, llevado a la vista con scroll suave
+       (main.js) en vez de vivir fijo al lado -- interacción propia, no
+       una reducción de la de escritorio. -->
+  <section class="section-sm dept-console" id="departamentos">
     <div class="container">
-      <div class="dept-ecosystem-field">
-
-        <svg class="dept-ecosystem-rays" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-          <line class="dept-ray dept-ray-1" x1="50" y1="50" x2="50.00" y2="22.32"/>
-          <line class="dept-ray dept-ray-2" x1="50" y1="50" x2="79.52" y2="27.69"/>
-          <line class="dept-ray dept-ray-3" x1="50" y1="50" x2="43.30" y2="86.39"/>
-          <line class="dept-ray dept-ray-4" x1="50" y1="50" x2="13.38" y2="46.62"/>
-          <line class="dept-ray dept-ray-5" x1="50" y1="50" x2="93.81" y2="54.07"/>
-          <line class="dept-ray dept-ray-6" x1="50" y1="50" x2="14.94" y2="76.59"/>
-          <line class="dept-ray dept-ray-7" x1="50" y1="50" x2="20.39" y2="17.45"/>
-          <line class="dept-ray dept-ray-8" x1="50" y1="50" x2="69.16" y2="71.17"/>
-        </svg>
-
-        <div class="dept-ecosystem-core">
-          <span class="dept-ecosystem-core-glow" aria-hidden="true"></span>
-          <span class="dept-ecosystem-core-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 21v-4h6v4"/><path d="M8 7h1M8 11h1M15 7h1M15 11h1"/></svg>
-          </span>
-          <span class="dept-ecosystem-core-label">Tu empresa</span>
-        </div>
-
-        <!-- CAPACIDAD CENTRAL — el motor de ingresos -->
-        <a class="dept-node dept-node--1 dept-node--central" href="/departamentos/comercial" style="--node-x:50.00%;--node-y:22.32%;--mod-r:67;--mod-g:224;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">COM</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span></span>
-          <span class="dept-node-name">Comercial</span>
-          <span class="dept-node-tagline">Que ninguna venta se pierda por falta de seguimiento.</span>
-        </a>
-
-        <!-- CAPACIDAD OPERATIVA — atrae demanda -->
-        <a class="dept-node dept-node--2 dept-node--operativa" href="/departamentos/marketing" style="--node-x:79.52%;--node-y:27.69%;--mod-r:155;--mod-g:107;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">MKT</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span></span>
-          <span class="dept-node-name">Marketing</span>
-          <span class="dept-node-tagline">Leads que llegan ya clasificados, no en bruto.</span>
-        </a>
-
-        <!-- CAPACIDAD OPERATIVA — retiene -->
-        <a class="dept-node dept-node--3 dept-node--operativa" href="/departamentos/clientes" style="--node-x:43.30%;--node-y:86.39%;--mod-r:91;--mod-g:140;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">CLI</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span></span>
-          <span class="dept-node-name">Clientes</span>
-          <span class="dept-node-tagline">Que cada cliente se sienta cuidado, sin depender de nadie.</span>
-        </a>
-
-        <!-- CAPACIDAD OPERATIVA — entrega -->
-        <a class="dept-node dept-node--4 dept-node--operativa" href="/departamentos/produccion" style="--node-x:13.38%;--node-y:46.62%;--mod-r:155;--mod-g:107;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">PRD</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span></span>
-          <span class="dept-node-name">Producción</span>
-          <span class="dept-node-tagline">Proyectos que se ponen en marcha solos y cumplen sus plazos.</span>
-        </a>
-
-        <!-- CAPACIDAD DE SOPORTE -->
-        <a class="dept-node dept-node--5 dept-node--soporte" href="/departamentos/finanzas" style="--node-x:93.81%;--node-y:54.07%;--mod-r:52;--mod-g:231;--mod-b:164;">
-          <span class="dept-node-tag" aria-hidden="true">FIN</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span></span>
-          <span class="dept-node-name">Finanzas</span>
-          <span class="dept-node-tagline">Próximamente — el control de gasto ya es real.</span>
-        </a>
-
-        <!-- CAPACIDAD DE SOPORTE -->
-        <a class="dept-node dept-node--6 dept-node--soporte" href="/departamentos/soporte" style="--node-x:14.94%;--node-y:76.59%;--mod-r:91;--mod-g:140;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">SPT</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span></span>
-          <span class="dept-node-name">Soporte</span>
-          <span class="dept-node-tagline">Respuesta rápida, incluso fuera de horario.</span>
-        </a>
-
-        <!-- CAPACIDAD DE SOPORTE -->
-        <a class="dept-node dept-node--7 dept-node--soporte" href="/departamentos/administracion" style="--node-x:20.39%;--node-y:17.45%;--mod-r:155;--mod-g:107;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">ADM</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span></span>
-          <span class="dept-node-name">Administración</span>
-          <span class="dept-node-tagline">Tu empresa, protegida y ordenada, sin esfuerzo.</span>
-        </a>
-
-        <!-- CAPACIDAD CENTRAL — dirige el sistema -->
-        <a class="dept-node dept-node--8 dept-node--central" href="/departamentos/direccion" style="--node-x:69.16%;--node-y:71.17%;--mod-r:67;--mod-g:224;--mod-b:255;">
-          <span class="dept-node-tag" aria-hidden="true">DIR</span>
-          <span class="dept-node-badge"><span class="dept-node-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span></span>
-          <span class="dept-node-name">Dirección</span>
-          <span class="dept-node-tagline">Una decisión clara cada mañana, con datos reales.</span>
-        </a>
-
+      <div class="section-head reveal">
+        <span class="eyebrow">El sistema completo</span>
+        <h2 class="h-title">Un Departamento, ocho módulos, un mismo sistema.</h2>
+        <p class="lead">Elige un Departamento para ver qué hace y con qué otros encaja — no son piezas sueltas, son procesos de un mismo sistema operativo.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- ============ GRID DE DEPARTAMENTOS ============ -->
-  <section class="section-sm" id="departamentos">
-    <div class="container">
-      <div class="servicios-cards" data-stagger>
-        <svg class="dept-connections" aria-hidden="true" focusable="false"></svg>
-        <a class="window service-card reveal-left" id="dept-comercial" href="/departamentos/comercial">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">comercial.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>Comercial</h3>
-            <p><strong>Qué hace:</strong> Prospecta y prioriza empresas automáticamente, centraliza tu pipeline con IA, redacta propuestas verificadas en minutos y avisa cada mañana de lo que toca.</p>
-            <p><strong>Lo que resuelve:</strong> Ninguna oportunidad se pierde por falta de seguimiento. Las propuestas se generan en minutos. El pipeline deja de vivir en la cabeza de una sola persona.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Equipos comerciales de 1 a 8 personas sin proceso escrito, o que lo llevan en un Excel.</p>
-            <p><strong>Combina bien con:</strong> Clientes.</p>
+      <div class="window dept-console-panel reveal" data-dept-console>
+        <div class="window-bar">
+          <span class="window-dots"><span></span><span></span><span></span></span>
+          <span class="window-title">sistema_dcode.control</span>
+          <span class="window-status"><span class="dot"></span>8 módulos</span>
+        </div>
+        <div class="window-body">
+          <div class="dept-console-body">
+
+            <div class="dept-console-list" role="tablist" aria-label="Departamentos">
+              <button class="dept-console-item is-active" type="button" role="tab" aria-selected="true" aria-controls="dcp-comercial" data-dept="comercial">
+                <span class="dci-tag">COM</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
+                <span class="dci-name">No pierdas ventas por falta de seguimiento</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-marketing" data-dept="marketing">
+                <span class="dci-tag">MKT</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
+                <span class="dci-name">Deja de captar clientes al azar</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-clientes" data-dept="clientes">
+                <span class="dci-tag">CLI</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
+                <span class="dci-name">Que ningún cliente se sienta abandonado</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-produccion" data-dept="produccion">
+                <span class="dci-tag">PRD</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+                <span class="dci-name">Que ningún proyecto se quede sin dueño</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-finanzas" data-dept="finanzas">
+                <span class="dci-tag">FIN</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
+                <span class="dci-name">Controla tu dinero sin perseguir facturas</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-soporte" data-dept="soporte">
+                <span class="dci-tag">SPT</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
+                <span class="dci-name">Que ningún ticket se pierda ni se demore</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-administracion" data-dept="administracion">
+                <span class="dci-tag">ADM</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
+                <span class="dci-name">Que un descuido no cueste una crisis</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
+              <button class="dept-console-item" type="button" role="tab" aria-selected="false" aria-controls="dcp-direccion" data-dept="direccion">
+                <span class="dci-tag">DIR</span>
+                <span class="dci-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+                <span class="dci-name">Decide con datos, no a ciegas</span>
+                <span class="dci-dot" aria-hidden="true"></span>
+              </button>
             </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-marketing" href="/departamentos/marketing">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">marketing.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>Marketing</h3>
-            <p><strong>Qué hace:</strong> Capta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables.</p>
-            <p><strong>Lo que resuelve:</strong> Los leads llegan ya clasificados. El comercial sabe a quién llamar primero. La web se convierte en una fuente constante de oportunidades, no en una tarjeta de visita.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Depende hoy del boca a boca o de referidos y quiere un canal de captación propio.</p>
-            <p><strong>Combina bien con:</strong> Comercial.</p>
+
+            <div class="dept-console-detail">
+              <div class="dept-console-pane is-active" id="dcp-comercial" data-dept="comercial" role="tabpanel">
+                <p class="dcp-problem">No pierdas ventas por falta de seguimiento.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Comercial</h3><span class="dcp-tag">COM</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Prospecta y prioriza empresas automáticamente, centraliza tu pipeline con IA y redacta propuestas verificadas en minutos.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-pipeline">
+                    <div class="dcv-pipe-col"><div class="dcv-pipe-bar" style="height:88%;"></div><span class="dcv-pipe-label">Detectada</span></div>
+                    <div class="dcv-pipe-col"><div class="dcv-pipe-bar" style="height:60%;"></div><span class="dcv-pipe-label">En seguimiento</span></div>
+                    <div class="dcv-pipe-col"><div class="dcv-pipe-bar" style="height:38%;"></div><span class="dcv-pipe-label">Propuesta enviada</span></div>
+                    <div class="dcv-pipe-col dcv-pipe-col--won"><div class="dcv-pipe-bar" style="height:18%;"></div><span class="dcv-pipe-label">Ganada</span></div>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/comercial">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Clientes.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-marketing" data-dept="marketing" role="tabpanel" hidden>
+                <p class="dcp-problem">Deja de captar clientes al azar.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Marketing</h3><span class="dcp-tag">MKT</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Capta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-funnel">
+                    <div class="dcv-funnel-stage" style="--fw:100%;">Visitas a la web</div>
+                    <div class="dcv-funnel-stage" style="--fw:66%;">Leads capturados</div>
+                    <div class="dcv-funnel-stage" style="--fw:36%;">Leads clasificados</div>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/marketing">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Comercial.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-clientes" data-dept="clientes" role="tabpanel" hidden>
+                <p class="dcp-problem">Que ningún cliente se sienta abandonado tras la venta.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Clientes</h3><span class="dcp-tag">CLI</span><span class="badge badge-amber">SIN VALIDAR</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Detecta cuándo se cierra una venta, da de alta al cliente y gestiona bienvenida, onboarding, renovaciones y satisfacción.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-cycle">
+                    <div class="dcv-cycle-ring" style="--cv-pct:45%;"><span class="dcv-cycle-pct">45%</span></div>
+                    <ul class="dcv-cycle-steps">
+                      <li class="is-done">Bienvenida enviada</li>
+                      <li class="is-current">Onboarding en curso</li>
+                      <li>Renovación en 12 días</li>
+                    </ul>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/clientes">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Soporte o Producción.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-produccion" data-dept="produccion" role="tabpanel" hidden>
+                <p class="dcp-problem">Que ningún proyecto se quede sin dueño ni sin plazo.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Producción</h3><span class="dcp-tag">PRD</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Crea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo y vigila plazos de entrega.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-kanban">
+                    <div class="dcv-kanban-col">
+                      <span class="dcv-kanban-head">Por hacer</span>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:80%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:50%;"></span></div>
+                    </div>
+                    <div class="dcv-kanban-col dcv-kanban-col--active">
+                      <span class="dcv-kanban-head">En curso</span>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:70%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:40%;"></span></div>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:90%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:55%;"></span></div>
+                    </div>
+                    <div class="dcv-kanban-col">
+                      <span class="dcv-kanban-head">Entregado</span>
+                      <div class="dcv-kanban-card"><span class="dcv-card-bar" style="width:60%;"></span><span class="dcv-card-bar dcv-card-bar--sm" style="width:35%;"></span></div>
+                    </div>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/produccion">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Finanzas.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-finanzas" data-dept="finanzas" role="tabpanel" hidden>
+                <p class="dcp-problem">Controla tu dinero sin perseguir facturas.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Finanzas</h3><span class="dcp-tag">FIN</span><span class="badge badge-amber">EN VALIDACIÓN</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Ya genera facturas desde presupuestos aceptados, escala recordatorios de cobro y calcula el dashboard financiero cada día — construido y funcionando internamente; validando con la primera factura real antes de entrar al catálogo comercial.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-flow">
+                    <div class="dcv-flow-row dcv-flow-row--in"><span class="dcv-flow-label">Cobros</span><div class="dcv-flow-track"><span style="width:72%;"></span></div></div>
+                    <div class="dcv-flow-row dcv-flow-row--out"><span class="dcv-flow-label">Gastos</span><div class="dcv-flow-track"><span style="width:42%;"></span></div></div>
+                    <p class="dcv-flow-note">Próximo vencimiento: <b>5 días</b></p>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/finanzas">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Dirección.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-soporte" data-dept="soporte" role="tabpanel" hidden>
+                <p class="dcp-problem">Que ningún ticket se pierda ni se demore.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Soporte</h3><span class="dcp-tag">SPT</span><span class="badge badge-amber">CHAT EN REVISIÓN</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Convierte cada email de soporte en un ticket priorizado con SLA, con respuesta incluso fuera de horario.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-tickets">
+                    <div class="dcv-ticket dcv-ticket--high"><span class="dcv-ticket-id">#204</span><span class="dcv-ticket-desc">Prioridad alta</span><span class="dcv-ticket-sla">Nuevo</span></div>
+                    <div class="dcv-ticket dcv-ticket--mid"><span class="dcv-ticket-id">#205</span><span class="dcv-ticket-desc">Prioridad media</span><span class="dcv-ticket-sla">En curso</span></div>
+                    <div class="dcv-ticket dcv-ticket--done"><span class="dcv-ticket-id">#203</span><span class="dcv-ticket-desc">Resuelto</span><span class="dcv-ticket-sla">4 min</span></div>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/soporte">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Clientes.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-administracion" data-dept="administracion" role="tabpanel" hidden>
+                <p class="dcp-problem">Que un descuido no cueste una crisis.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Administración</h3><span class="dcp-tag">ADM</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Vigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-checklist">
+                    <label class="dcv-check dcv-check--done"><span class="dcv-check-box">✓</span>Backup semanal completado</label>
+                    <label class="dcv-check dcv-check--done"><span class="dcv-check-box">✓</span>8 Departamentos monitorizados</label>
+                    <label class="dcv-check dcv-check--pending"><span class="dcv-check-box"></span>Revisión de accesos pendiente</label>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/administracion">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Combina bien con:</strong> Cualquiera — es transversal.</p>
+              </div>
+              <div class="dept-console-pane" id="dcp-direccion" data-dept="direccion" role="tabpanel" hidden>
+                <p class="dcp-problem">Decide con datos, no a ciegas.</p>
+                <div class="dcp-dept-head">
+                  <span class="dcp-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+                  <div class="dcp-dept-meta"><h3 class="dcp-name">Dirección</h3><span class="dcp-tag">DIR</span></div>
+                </div>
+                <p class="dcp-does"><strong>Qué hace</strong>Centraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día.</p>
+                <div class="dcp-visual" aria-hidden="true">
+                  <div class="dcv-kpis">
+                    <div class="dcv-kpi dcv-kpi-trend--up">
+                      <span class="dcv-kpi-label">Ingresos del mes</span>
+                      <svg class="dcv-kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline points="0,16 10,14 20,15 30,10 40,11 50,5 60,6"/></svg>
+                      <span class="dcv-kpi-arrow">↑</span>
+                    </div>
+                    <div class="dcv-kpi dcv-kpi-trend--down">
+                      <span class="dcv-kpi-label">Alertas activas</span>
+                      <svg class="dcv-kpi-spark" viewBox="0 0 60 20" preserveAspectRatio="none"><polyline points="0,4 10,6 20,5 30,10 40,12 50,15 60,16"/></svg>
+                      <span class="dcv-kpi-arrow">↓</span>
+                    </div>
+                    <p class="dcv-kpi-note">Decisión sugerida: <b>Hoy</b></p>
+                  </div>
+                  <p class="dcp-visual-note">Representación del sistema — no son datos de un cliente real.</p>
+                </div>
+                <a class="dcp-link" href="/departamentos/direccion">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <p class="dcp-connects"><strong>Punto de llegada:</strong> da más valor cuantos más Departamentos ya estén activos.</p>
+              </div>
             </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+
           </div>
-        </a>
-        <a class="window service-card reveal-left" id="dept-clientes" href="/departamentos/clientes">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">clientes.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>Clientes <span class="badge badge-amber" style="margin-left:8px;">SIN VALIDAR</span></h3>
-            <p><strong>Qué hace:</strong> Detecta cuándo se cierra una venta, da de alta al cliente, gestiona su bienvenida y onboarding, vigila renovaciones y mide satisfacción. Construido y activo, todavía sin un cliente real que lo haya usado.</p>
-            <p><strong>Lo que resuelve:</strong> Todo cliente nuevo recibiría la misma bienvenida. Las renovaciones dejarían de perderse. La satisfacción se mediría de forma continua.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Negocios con contrato recurrente o servicio continuado.</p>
-            <p><strong>Combina bien con:</strong> Soporte o Producción.</p>
-            </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-produccion" href="/departamentos/produccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">produccion.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Producción</h3>
-            <p><strong>Qué hace:</strong> Crea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo, y vigila avance y fechas de entrega.</p>
-            <p><strong>Lo que resuelve:</strong> Cada proyecto ganado se pone en marcha solo. Los retrasos se detectan antes de que el cliente los note. El equipo deja de saturarse.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Empresas de servicios o proyectos con equipo de producción propio.</p>
-            <p><strong>Combina bien con:</strong> Finanzas.</p>
-            </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-left" id="dept-finanzas" href="/departamentos/finanzas">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">finanzas.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>Finanzas <span class="badge badge-violet" style="margin-left:8px;">PRÓXIMAMENTE</span></h3>
-            <p><strong>Qué hace:</strong> Diseñado para generar y enviar facturas, escalar recordatorios de cobro, y vigilar el gasto interno cada día. El control de gastos ya está construido; el resto, en desarrollo.</p>
-            <p><strong>Lo que resolverá:</strong> Facturas en minutos. Cobro más rápido. Impagos prolongados detectados y escalados solos.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Cualquier empresa — cuando esté publicado, el objetivo es el retorno más rápido y fácil de demostrar en euros.</p>
-            <p><strong>Combina bien con:</strong> Dirección.</p>
-            </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-soporte" href="/departamentos/soporte">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">soporte.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>Soporte <span class="badge badge-amber" style="margin-left:8px;">CHAT EN REVISIÓN</span></h3>
-            <p><strong>Qué hace:</strong> Convierte cada email de soporte en un ticket priorizado con SLA — esto ya es operativo. Un chat 24h que usa datos de tus proyectos está en revisión de seguridad antes de ampliarse.</p>
-            <p><strong>Lo que resuelve:</strong> Ningún ticket se pierde ni se prioriza mal. Respuesta incluso fuera de horario. El equipo deja de sentirse desbordado.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Empresas con volumen de consultas de clientes ya activos.</p>
-            <p><strong>Combina bien con:</strong> Clientes.</p>
-            </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-left" id="dept-administracion" href="/departamentos/administracion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">administracion.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>Administración</h3>
-            <p><strong>Qué hace:</strong> Vigila que el resto de Departamentos sigan funcionando, protege la organización de tus documentos y hace copias de seguridad semanales.</p>
-            <p><strong>Lo que resuelve:</strong> Los fallos se detectan en horas, no en semanas. La documentación nunca se pierde. Siempre hay una copia de seguridad reciente.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Empresas que gestionan muchos documentos, o que ya sufrieron una pérdida de información.</p>
-            <p><strong>Combina bien con:</strong> Cualquiera — es transversal, funciona bien con cualquier combinación.</p>
-            </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-        <a class="window service-card reveal-right" id="dept-direccion" href="/departamentos/direccion">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">direccion.dept</span>
-          </div>
-          <div class="window-body">
-            <h3><span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>Dirección</h3>
-            <p><strong>Qué hace:</strong> Centraliza tus indicadores, genera informes periódicos y cruza señales externas e internas para proponer una decisión ejecutiva cada día.</p>
-            <p><strong>Lo que resuelve:</strong> Cada mañana hay una prioridad clara. Las decisiones se basan en datos actualizados. Los riesgos se detectan antes de convertirse en un problema.</p>
-            <div class="card-extra">
-            <p><strong>Perfil de empresa:</strong> Cualquier empresa; da más valor cuantos más Departamentos tenga ya activos.</p>
-            <p><strong>Combina bien con:</strong> — es el punto de llegada natural, no de partida.</p>
-            </div>
-            <span class="card-extra-hint">+ Empresa objetivo y siguiente paso</span>
-            <span class="card-link">Ver Departamento <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
+        </div>
       </div>
     </div>
   </section>
@@ -496,7 +498,7 @@
       <h2 class="h-title">¿Ya sabes por dónde empezar?</h2>
       <p class="lead">Cuéntanos qué Departamento te interesa y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso.</p>
       <div class="hero-ctas">
-        <a href="/contacto" class="btn btn-primary">Solicitar una reunión</a>
+        <a href="/contacto" class="btn btn-primary">Descubrir mi Departamento</a>
         <a href="/como-funciona" class="btn btn-ghost">Ver cómo funciona el Sistema Operativo</a>
       </div>
     </div>
@@ -532,7 +534,7 @@
         <ul>
           <li><a href="/metodo">Método D-Code</a></li>
           <li><a href="/garantias">Garantías y Proceso</a></li>
-          <li><a href="/casos-exito">Casos de Éxito</a></li>
+          <li><a href="/cambios-en-proceso">Cambios en proceso</a></li>
           <li><a href="/conocenos">Conócenos</a></li>
           <li><a href="/blog">Blog</a></li>
         </ul>
@@ -590,7 +592,7 @@
   </button>
 </div>
 
-<script src="/assets/js/main.js?v=adaceffb92" defer></script>
+<script src="/assets/js/main.js?v=c81a8f05a6" defer></script>
 
 </body>
 </html>

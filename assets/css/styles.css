@@ -812,7 +812,8 @@ nav.main-nav > ul{ position:relative; }
   padding:0;
 }
 .breadcrumbs li{ list-style:none; }
-.breadcrumbs a{ color:var(--stone-soft); transition:color .2s ease; }
+/* Objetivo táctil >=24px (WCAG 2.2 SC 2.5.8), igual que en .footer-col a */
+.breadcrumbs a{ display:inline-block; padding:5px 0; color:var(--stone-soft); transition:color .2s ease; }
 .breadcrumbs a:hover{ color:var(--cyan); }
 .breadcrumbs li[aria-current="page"]{ color:var(--stone); }
 .breadcrumbs .sep{ opacity:.5; }
@@ -936,244 +937,12 @@ nav.main-nav > ul{ position:relative; }
 }
 .hero .trust-badges{ margin-top:16px; }
 
-/* pointer-events:none: .hero-graphic es una caja vacía (min-height, sin
-   fondo) salvo por la franja de métricas — sin esto, su propio hitbox
-   transparente tapaba el hover real de los chips de .hero-atmosphere que
-   caen dentro de esa columna (son hermanos, no hay bubbling entre ellos). */
-.hero-graphic{ position:relative; min-height:340px; display:flex; align-items:flex-end; pointer-events:none; }
-.hero-metrics-float{ pointer-events:auto; }
-/* DIR-053: causa real del problema reportado desde iPad ("cuadrados
-   desplazados", "pierde la relación visual que tiene en desktop"). Los 4
-   chips (n8n/Airtable/Notion/Google Workspace) y sus etiquetas viven en
-   un lienzo SVG con viewBox="0 0 1000 600" (relación 5:3) y
-   preserveAspectRatio="none" — se estiran de forma no uniforme para
-   llenar exactamente la caja de .hero-atmosphere, y las etiquetas HTML
-   usan left/top en % de esa MISMA caja, así que nodo y etiqueta siempre
-   se mueven juntos (no hay desalineación entre ellos). El problema real
-   es la FORMA de esa caja: en desktop, .hero-atmosphere ocupa la fila 1
-   de la rejilla junto al texto (alto ≈ el propio texto, ancho ≈ toda la
-   rejilla) y su relación de aspecto ronda 1.3–1.5:1, cercana al diseño.
-   En tablet/móvil (rejilla a una columna) .hero-atmosphere pasa a
-   compartir fila con .hero-graphic, y hasta ahora .hero-graphic tenía
-   una altura FIJA de 240px sin importar el ancho — en iPad portrait
-   (768–1024px de ancho) eso da una caja de hasta 922×240, relación
-   3.13–3.84:1, más del doble de "ancha y plana" que el diseño original.
-   Con preserveAspectRatio="none" eso aplana el eje Y mucho más que el
-   X: los chips (medidos en navegador real) pasan de 30–51px en desktop
-   a apenas 20–27px en iPad portrait, apretados en una banda vertical de
-   solo ~78px — la "pérdida de relación visual" que describe Dirección.
-   Solución: en vez de una altura fija, .hero-graphic lleva un
-   aspect-ratio que mantiene la caja mucho más cercana a la proporción
-   de diseño en cualquier ancho de esta franja (320–1024px), con un
-   suelo y un techo para que ni se aplaste en móviles muy estrechos ni
-   crezca en exceso en el iPad más ancho. Nodo/etiqueta se recolocan
-   juntos automáticamente (siguen siendo % de la misma caja) — no han
-   hecho falta más cambios ni en el HTML ni en las coordenadas del SVG. */
-@media (max-width:1024px){
-  /* width:100% explícito: sin él, en anchos donde max-height recorta el
-     alto derivado del aspect-ratio (~800px de ancho en adelante), Chrome
-     recalculaba también el ancho a partir de ese alto ya recortado
-     (alto x 2 = ancho), y la franja de métricas dejaba de llenar el
-     ancho completo de la columna — efecto colateral no buscado. */
-  .hero-graphic{ width:100%; aspect-ratio:2/1; min-height:220px; max-height:400px; }
-}
-
-/* ============ HERO — ATMÓSFERA DE PROFUNDIDAD (DIR-048) ============
-   Evoluciona el "Cristal de Profundidad" (DIR-047): ya no es un panel
-   dentro de una tarjeta-ventana en la columna derecha, es la propia
-   atmósfera de fondo de TODA la sección — sustituye por completo a la
-   fotografía de ciudad/circuitos (DIR-044), que se retira sin
-   reemplazo fotográfico. .hero-atmosphere vive DETRÁS de .hero-grid
-   (mismo z-index:0 que tenía antes la foto) y se extiende en sangre
-   completa en desktop/tablet (bleed a la izquierda, ver más abajo),
-   apagándose hacia la columna de texto vía mask-image — la misma
-   lógica de "negative space" que ya usaba la foto, generada en vez de
-   fotográfica. Reutiliza --mx/--my (main.js suma .hero-atmosphere al
-   mismo selector que ya usa .window para el tilt+spotlight sitewide) —
-   cero JS nuevo para el paralaje; solo se desplazan las capas
-   internas, la atmósfera en sí nunca gira ni se inclina como una
-   tarjeta. Los 4 módulos representan las herramientas reales del stack
-   de D-Code — n8n, Airtable, Notion, Google Workspace, confirmadas en
-   seguridad.html/condiciones-contratacion.html — con iconografía propia
-   de D-Code (no los logotipos oficiales) y su nombre real en texto. */
-.hero-atmosphere{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  overflow:visible;
-  grid-column:1/-1;
-  grid-row:1;
-  mask-image:linear-gradient(90deg, transparent 0%, transparent 14%, rgba(0,0,0,.5) 32%, black 42%, black 100%);
-  -webkit-mask-image:linear-gradient(90deg, transparent 0%, transparent 14%, rgba(0,0,0,.5) 32%, black 42%, black 100%);
-}
-/* .hero-atmosphere es ahora un item de rejilla más dentro de .hero-grid
-   (no un hijo absoluto de toda .hero) — en desktop ocupa las dos columnas
-   (grid-column:1/-1), que es exactamente el ancho que antes cubría la
-   fotografía. En mobile/tablet (abajo, .hero-grid pasa a una columna) se
-   reasigna a la MISMA fila que .hero-graphic para que nunca se superponga
-   con el texto ni los CTA — antes vivía fuera de la rejilla y por eso
-   "inset:0" la estiraba a la altura de toda la sección apilada. */
-@media (max-width:1024px){
-  .hero-atmosphere{ grid-row:2; opacity:.4; mask-image:none; -webkit-mask-image:none; }
-}
-
-/* DIR-055-v2: en tablet portrait (iPad vertical) el clúster de chips
-   se veía pequeño y desplazado dentro de una caja mucho más grande que
-   él, con grandes zonas vacías — captura real de Production confirmó
-   el problema. Causa raíz: DIR-054 fija xMidYMid meet en el SVG
-   frontal, lo que garantiza que nada se deforme — pero SIEMPRE escala
-   el viewBox COMPLETO (1000x600), y el clúster real de chips solo
-   ocupa una franja de ese lienzo (aprox. x:560-880, y:140-330 de
-   1000x600) — el resto es lienzo vacío salvo las curvas ambientales de
-   fondo. En desktop eso no se nota: .hero-atmosphere ocupa las dos
-   columnas de la rejilla con máscara de degradado, así que el vacío es
-   parte del efecto "atmósfera de fondo" a propósito. En tablet
-   portrait .hero-atmosphere pasa a compartir una única fila compacta
-   con .hero-graphic (mask-image:none, arriba) — ya no hay ni el ancho
-   de dos columnas ni la máscara que justificaban ese vacío, así que la
-   MISMA composición se lee como "versión desktop encogida" en vez de
-   una adaptación real, exactamente lo reportado.
-   Solución (solo en este rango — mobile por debajo de 561px, donde ya
-   se ocultan las etiquetas, y desktop/tablet landscape por encima de
-   1024px, quedan sin tocar):
-   1) .hero-graphic pasa de aspect-ratio:2/1 a 5/3 (la proporción real
-      del viewBox) y max-height baja de 400 a 340 — reduce el margen de
-      letterboxing que xMidYMid meet añade cuando la caja es más ancha
-      que el contenido, sin reintroducir ningún riesgo de distorsión
-      (meet SIEMPRE conserva la proporción real, solo cambia cuánto
-      margen deja alrededor).
-   2) .hero-atmosphere recorta (overflow:hidden) y amplía su contenido
-      con un transform:scale() + transform-origin centrado en el
-      clúster real de chips — un "zoom" uniforme (mismo factor en X e
-      Y, así que ningún cuadrado ni círculo cambia de forma) que hace
-      que el clúster ocupe una fracción mucho mayor de la caja en vez
-      de flotar diminuto en una esquina.
-   El factor 1.15 y el origen 74%/40% se calibraron empíricamente
-   (barrido automatizado de más de 700 combinaciones origen×escala
-   contra iPad Pro 11", iPad Pro 12.9", iPad mini y iPad Air en
-   portrait) para ser el máximo zoom que NO recorta ninguno de los 4
-   chips ni sus 4 etiquetas en ningún ancho de este rango — no es una
-   aproximación visual, es el resultado de medir getBoundingClientRect()
-   real de cada chip/etiqueta contra los límites de la caja en cada
-   combinación probada.
-   Como es un transform CSS aplicado a .hero-atmosphere (el contenedor
-   PADRE de las 3 capas .hero-atm-layer), compone automáticamente con
-   el propio transform de paralaje de cada capa (o con transform:none
-   en touch, ver @media(hover:none) más abajo) sin pisarlo — y el
-   sistema de etiquetas de DIR-054 (getBoundingClientRect() en tiempo
-   real) sigue funcionando sin ningún cambio de JS: ya lee la posición
-   real en pantalla DESPUÉS de este zoom. */
-@media (min-width:561px) and (max-width:1024px){
-  .hero-graphic{ aspect-ratio:5/3; max-height:340px; }
-  .hero-atmosphere{
-    overflow:hidden;
-    transform:scale(1.15);
-    transform-origin:74% 40%;
-  }
-}
-/* Paralaje acotado (DIR-049 2B/2C) + física de muelle (DIR-050 1/1A) +
-   amplitud "vidrio flotando" (DIR-051 1A): "REST POSITION + BOUNDED
-   PARALLAX + SMOOTH RETURN". clamp() sigue fijando un tope en px que
-   nunca se supera. DIR-051 pidió explícitamente reducir la amplitud —
-   con los topes/sensibilidad anteriores (±28px al 16% del ancho
-   propio) el desplazamiento saturaba a solo ~1/3 del recorrido del
-   cursor dentro del área interactiva: pasado ese punto, el resto del
-   movimiento del ratón no producía NINGÚN cambio visual adicional (ya
-   estaba en el tope), lo que se leía como "objeto pegado al cursor"
-   en vez de una respuesta de profundidad progresiva. Aquí los topes
-   bajan a un tercio aprox. (front 28→10px, mid 16→6px, back 8→3px) Y
-   el multiplicador baja en la misma proporción, de forma que el tope
-   ahora se alcanza cerca del borde real del área interactiva, no
-   apenas empezar a moverse — el recorrido completo del cursor se
-   traduce en un desplazamiento gradual y sutil, coherente con "vidrio
-   flotando" en vez de "seguir al cursor". El muelle (main.js) sigue
-   igual: sigue siendo el mismo el que da la aceleración/deceleración
-   orgánica: con una amplitud tan pequeña, su velocidad efectiva en
-   px ya baja proporcionalmente sin tocar sus constantes de tiempo. */
-/* DIR-055: will-change:transform quitado a propósito. Capturas reales
-   desde un iPad confirmaron un fallo real (curvas/spine rellenos de
-   negro sólido y etiquetas sin position:absolute) que no se pudo
-   reproducir en Chromium — no hay forma de confirmar la causa exacta
-   sin Safari/iPadOS real, pero will-change fuerza a Safari a promover
-   este SVG a su propia capa de composición GPU, una condición asociada
-   a bugs de renderizado de SVG en WebKit. Es solo un hint de
-   rendimiento para una animación de paralaje muy ligera — quitarlo no
-   tiene coste funcional y elimina un desencadenante plausible. Como
-   defensa adicional, fill/stroke de las curvas, el spine y los chips
-   ahora también se fijan como atributos SVG directos en el HTML (ver
-   index.html/en/index.html) — no dependen de que el CSS externo llegue
-   a aplicarse a tiempo; el CSS los sigue sobrescribiendo con normalidad
-   cuando carga bien (los atributos de presentación son lo primero que
-   cualquier regla CSS externa gana en la cascada). */
-.hero-atm-layer{ position:absolute; inset:0; width:100%; height:100%; }
-.hero-atm-layer svg{ width:100%; height:100%; display:block; overflow:visible; }
-
-.hero-atm-back{ transform:translate(clamp(-3px, calc((var(--mx,50%) - 50%) * .006), 3px), clamp(-2.5px, calc((var(--my,50%) - 50%) * .006), 2.5px)); filter:blur(1px); }
-.hero-atm-back line{ stroke:var(--surface-sheen); stroke-width:.6; opacity:.09; }
-
-.hero-atm-mid{ transform:translate(clamp(-6px, calc((var(--mx,50%) - 50%) * .011), 6px), clamp(-5px, calc((var(--my,50%) - 50%) * .011), 5px)); }
-.hero-atm-mid .signal-line{ fill:none; stroke-width:1.4; stroke-linecap:round; opacity:.4; }
-.hero-atm-mid .signal-a{ stroke:var(--cyan); stroke-dasharray:6 11; animation:hero-signal-flow 6s linear infinite; }
-.hero-atm-mid .signal-b{ stroke:var(--blue); stroke-dasharray:5 13; animation:hero-signal-flow 7.5s linear infinite reverse; opacity:.3; }
-@keyframes hero-signal-flow{ to{ stroke-dashoffset:-170; } }
-
-.hero-atm-front{ transform:translate(clamp(-10px, calc((var(--mx,50%) - 50%) * .019), 10px), clamp(-8px, calc((var(--my,50%) - 50%) * .019), 8px)); pointer-events:auto; }
-.hero-atm-front .atm-spine{ fill:none; stroke:url(#heroAtmSpine); stroke-width:1.5; opacity:.65; }
-.hero-atm-front .atm-chip{ cursor:default; }
-.hero-atm-front .atm-chip-plate{
-  fill:url(#heroAtmFill);
-  stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
-  stroke-width:1.2;
-  filter:drop-shadow(0 0 4px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.3));
-  transition:filter .25s ease, stroke .25s ease;
-}
-.hero-atm-front .atm-chip-icon{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); fill:none; stroke:currentColor; stroke-width:2; }
-.hero-atm-front .atm-chip-status{
-  fill:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
-  animation:hero-status-blink 3.6s ease-in-out infinite;
-}
-.hero-atm-front .atm-chip:nth-of-type(2) .atm-chip-status{ animation-delay:.7s; }
-.hero-atm-front .atm-chip:nth-of-type(3) .atm-chip-status{ animation-delay:1.6s; }
-.hero-atm-front .atm-chip:nth-of-type(4) .atm-chip-status{ animation-delay:2.3s; }
-@keyframes hero-status-blink{ 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
-.hero-atm-front .atm-chip:hover .atm-chip-plate, .hero-atm-front .atm-chip:focus-visible .atm-chip-plate{
-  filter:drop-shadow(0 0 8px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.6));
-  stroke:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
-}
-.hero-atm-front stop.fill-a{ stop-color:var(--surface-top); }
-.hero-atm-front stop.fill-b{ stop-color:var(--panel-2); }
-.hero-atm-front stop.fill-c{ stop-color:var(--panel); }
-.hero-atm-front stop.spine-a{ stop-color:var(--cyan); stop-opacity:.05; }
-.hero-atm-front stop.spine-b{ stop-color:var(--blue); stop-opacity:.6; }
-.hero-atm-front stop.spine-c{ stop-color:var(--violet); stop-opacity:.05; }
-
-/* Nombre real de cada herramienta — texto HTML (no SVG) sobre el propio
-   SVG, en las mismas coordenadas % que cada chip, para que el rótulo
-   tenga la tipografía y el anti-aliasing reales del sitio en vez de
-   depender del renderizado de <text> en SVG. */
-.atm-chip-label{
-  position:absolute;
-  transform:translate(14px,-6px);
-  font-family:var(--mono);
-  font-size:.62rem;
-  letter-spacing:.03em;
-  color:var(--stone-soft);
-  white-space:nowrap;
-  opacity:.85;
-  pointer-events:none;
-}
-.atm-chip-label--flip{ transform:translate(calc(-100% - 14px), -6px); }
-@media (prefers-reduced-motion: reduce){
-  .hero-atm-mid .signal-a, .hero-atm-mid .signal-b{ animation:none; }
-  .hero-atm-front .atm-chip-status{ animation:none; opacity:.75; }
-}
-@media (hover:none){
-  .hero-atm-back, .hero-atm-mid, .hero-atm-front{ transform:none; }
-}
-@media (max-width:560px){
-  .atm-chip-label{ display:none; }
-}
-
+/* DIR-WEB-MASTER-004: .hero-graphic pasa de "caja vacía + 1 franja al
+   fondo" (cuando la atmósfera SVG vivía como hermano absoluto) a una
+   columna real que apila .hero-console y .hero-metrics-float -- ambos
+   son flujo normal, sin posicionamiento absoluto dependiente de
+   viewport. */
+.hero-graphic{ position:relative; display:flex; flex-direction:column; gap:14px; }
 /* Franja flotante de métricas (DIR-048): ya no vive dentro de una
    tarjeta-ventana — es un HUD ligero de vidrio que flota sobre la
    atmósfera, sin bar/título/estado, para no reintroducir la sensación
@@ -1211,6 +980,124 @@ nav.main-nav > ul{ position:relative; }
   color:var(--stone-soft);
   margin-top:3px;
 }
+
+/* ============ HERO CONSOLE (DIR-WEB-MASTER-004) ============
+   Sustituye la atmósfera de nodos/parallax SVG (n8n/Airtable/Notion/
+   Google Workspace) por una idea distinta y propia de D-Code: un panel
+   que muestra Departamentos conectándose a un mismo sistema, uno a uno,
+   al cargar. Mismo tratamiento visual ya aprobado para .hero-metrics-float
+   (panel traslúcido con blur, sin barra de título ni chrome de ventana —
+   evita a propósito la sensación "dashboard dentro de una tarjeta" que
+   ya se descartó explícitamente para esa franja). Solo transform/opacity
+   vía el sistema .reveal-*/[data-stagger] ya existente: cero SVG, cero
+   posicionamiento absoluto dependiente de viewport — el motivo real por
+   el que el sistema anterior se rompía en iPad. */
+.hero-console{
+  position:relative;
+  z-index:2;
+  width:100%;
+  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
+  border:1px solid var(--surface-border);
+  border-radius:14px;
+  padding:20px 22px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  margin-bottom:14px;
+}
+/* DIR-006: hace visible, en un vistazo, la afirmación del H1 ("no una
+   automatización más") -- responde directamente a la pregunta de la
+   auditoría "¿qué hace D-Code que no pueda hacer una agencia normal?"
+   sin depender de que el visitante lea el párrafo de apoyo. */
+.hero-console-contrast{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+  font-family:var(--mono);
+  font-size:0.74rem;
+  flex-wrap:wrap;
+}
+.hcc-before{ color:var(--stone-soft); text-decoration:line-through; text-decoration-color:rgba(167,176,196,.4); }
+.hcc-arrow{ color:var(--stone-soft); }
+.hcc-after{
+  background:var(--grad-brand);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  font-weight:600;
+}
+.hero-console-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.hero-console-head span:first-child{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.boot-list{ display:flex; flex-direction:column; gap:1px; }
+.boot-row{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:8px 2px;
+}
+.boot-dot{
+  width:7px; height:7px;
+  border-radius:50%;
+  background:var(--green);
+  flex-shrink:0;
+  animation:pulse 2.2s ease-in-out infinite;
+}
+.boot-row:nth-child(2) .boot-dot{ animation-delay:.4s; }
+.boot-row:nth-child(3) .boot-dot{ animation-delay:.8s; }
+.boot-row:nth-child(4) .boot-dot{ animation-delay:1.2s; }
+.boot-name{
+  font-family:var(--mono);
+  font-size:0.84rem;
+  color:var(--ink);
+  flex:1;
+}
+.boot-state{
+  font-family:var(--mono);
+  font-size:0.66rem;
+  letter-spacing:0.03em;
+  color:var(--stone-soft);
+}
+.hero-console-foot{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--stone-soft);
+  text-align:center;
+}
+/* Línea de log que rota (main.js) -- el Hero deja de ser una lista estática
+   de "Conectado" y pasa a leerse como un sistema que sigue trabajando
+   mientras miras: no decora, hace visible la promesa del H1 ("cada
+   Departamento lo hace por ti, todos los días") con eventos concretos.
+   Texto por línea en data-log-cycle (JSON), en el idioma de cada página. */
+.hero-console-log{
+  margin-top:10px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:0.72rem;
+  color:var(--stone-soft);
+}
+.hero-console-log-prompt{ color:var(--cyan); flex-shrink:0; }
+.hero-console-log-line{ transition:opacity .3s ease; }
+.hero-console-log-line.is-swapping{ opacity:0; }
+@media (prefers-reduced-motion: reduce){ .boot-dot{ animation:none; } }
 
 /* ============ PAGE HERO (interior pages) ============ */
 .page-hero{
@@ -1312,266 +1199,320 @@ nav.main-nav > ul{ position:relative; }
 .accordion-item.open .accordion-panel{ max-height:260px; opacity:1; margin-top:9px; padding-bottom:20px; }
 .metodo-cta{ margin-top:40px; }
 
-/* ============ DEPARTAMENTOS — ECOSISTEMA EMPRESARIAL VIVO (DIR-047) ============
-   Sustituye por completo el árbol "Tu empresa + 8 recuadros + bus"
-   (DIR-040/043/045) — no es un restyle de las cajas, es una metáfora
-   distinta: una arquitectura radial estable. El núcleo ("Tu empresa") y
-   las 8 estaciones (departamentos reales) no orbitan — esa idea ya se
-   probó y se descartó en Home (DIR-046) — permanecen fijas, como piezas
-   de un mismo sistema visto desde arriba. El movimiento es todo detalle,
-   nunca desplazamiento: un pulso muy lento en el núcleo, un destello que
-   recorre cada canal muy despacio, un eco muy sutil y escalonado en cada
-   estación. Todo el layout usa % + aspect-ratio dentro de un contenedor
-   con container queries (cqi), así la misma composición se reduce de
-   tamaño en mobile sin ocultarse ni recomponerse — nunca hay una
-   "versión compacta" distinta, a diferencia del patrón usado en Método. */
-.dept-ecosystem{
-  padding-top:clamp(20px,4vw,44px);
-  padding-bottom:clamp(20px,4vw,44px);
+/* ============ DEPARTAMENTOS — PANEL DE CONTROL (DIR-WEB-20260820-002) ============
+   Sustituye el "Tu empresa + 8 nodos flotantes en radios" (DIR-047/050):
+   Dirección lo revisó repetidas veces y concluyó que se sentía artificial,
+   como una ilustración conceptual pegada a la página. La sustitución no es
+   otro diagrama -- es dejar de fingir un diagrama y construir lo que la
+   sección realmente es: un panel de control real, lista maestra + detalle,
+   con el mismo lenguaje visual que el resto del sitio (.window, mono tags,
+   iconos ya usados en el mega-menú). Cambia solo por acción del visitante
+   (main.js), nunca por temporizador -- coherente con la lección DIR-006
+   sobre vida ambiental en bucle. */
+.dept-console-panel .window-body{ padding:0; }
+.dept-console-body{
+  display:grid;
+  grid-template-columns:300px 1fr;
 }
-.dept-ecosystem-field{
+.dept-console-list{
+  display:flex;
+  flex-direction:column;
+  border-right:1px solid var(--border);
+}
+.dept-console-item{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  width:100%;
+  padding:14px 20px;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  text-align:left;
+  font:inherit;
+  color:inherit;
   position:relative;
-  width:min(100%,620px);
-  aspect-ratio:1/1;
-  margin:0 auto;
-  container-type:inline-size;
+  transition:background .2s ease;
 }
-
-.dept-ecosystem-rays{ position:absolute; inset:0; width:100%; height:100%; z-index:1; overflow:visible; }
-.dept-ray{
-  stroke:rgba(91,140,255,.4);
-  stroke-width:.55;
-  stroke-linecap:round;
-  stroke-dasharray:3 2.4;
-  animation:dept-ray-flow 17s linear infinite;
-  opacity:.5;
-  transition:opacity .35s ease, stroke .35s ease;
-}
-.dept-ray-2{ animation-delay:-2.2s; }
-.dept-ray-3{ animation-delay:-4.4s; }
-.dept-ray-4{ animation-delay:-6.6s; }
-.dept-ray-5{ animation-delay:-8.8s; }
-.dept-ray-6{ animation-delay:-11s; }
-.dept-ray-7{ animation-delay:-13.2s; }
-.dept-ray-8{ animation-delay:-15.4s; }
-@keyframes dept-ray-flow{ to{ stroke-dashoffset:-54; } }
-
-/* El núcleo — mismo lenguaje material que las estaciones (anillo con
-   degradado vía mask-composite:exclude) pero en tokens neutros: "Tu
-   empresa" no pertenece a un departamento, es el sistema visto desde
-   el centro. Respira muy despacio; nunca gira ni se desplaza. */
-.dept-ecosystem-core{
-  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  z-index:3;
-  width:clamp(84px,24cqi,124px); height:clamp(84px,24cqi,124px);
-  border-radius:50%;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-  background:
-    radial-gradient(140% 100% at 50% -20%, rgba(214,226,255,.12), transparent 60%),
-    linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 45%, var(--panel) 100%);
-  box-shadow:0 24px 60px -26px rgba(0,0,0,.75), inset 0 1px 0 var(--surface-highlight), inset 0 -12px 20px -18px rgba(0,0,0,.55);
-}
-.dept-ecosystem-core::after{
+.dept-console-item:last-child{ border-bottom:none; }
+.dept-console-item:hover, .dept-console-item:focus-visible{ background:rgba(91,140,255,.06); }
+.dept-console-item:focus-visible{ outline:2px solid var(--cyan); outline-offset:-2px; }
+.dept-console-item.is-active{ background:rgba(91,140,255,.09); }
+.dept-console-item.is-active::before{
   content:"";
-  position:absolute; inset:0; border-radius:inherit;
-  padding:1px;
-  background:linear-gradient(180deg, var(--surface-ring-top) 0%, var(--surface-ring-mid) 45%, var(--surface-ring-bottom) 100%);
-  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;
-          mask-composite:exclude;
-  pointer-events:none;
-  opacity:.7;
+  position:absolute; left:0; top:0; bottom:0;
+  width:3px;
+  background:var(--grad-brand);
 }
-.dept-ecosystem-core-glow{
-  position:absolute; inset:-30%;
-  border-radius:50%;
-  background:radial-gradient(closest-side, rgba(91,140,255,.22), transparent 72%);
-  animation:dept-core-breathe 7s ease-in-out infinite;
-  pointer-events:none;
-  z-index:-1;
-}
-@keyframes dept-core-breathe{ 0%,100%{ opacity:.5; transform:scale(.94); } 50%{ opacity:1; transform:scale(1.06); } }
-.dept-ecosystem-core-icon{
-  width:30px; height:30px; border-radius:9px;
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(91,140,255,.14); border:1px solid rgba(91,140,255,.32);
-  color:var(--cyan);
-  position:relative; z-index:2;
-}
-.dept-ecosystem-core-icon svg{ width:17px; height:17px; }
-.dept-ecosystem-core-label{
-  font-family:var(--serif); font-weight:600; font-size:clamp(.66rem,2.1cqi,.82rem);
-  color:var(--ink); position:relative; z-index:2; text-align:center; line-height:1.15;
-}
-
-/* Las 8 estaciones (DIR-050): posiciones asimétricas fijas en % (sin
-   JS) — ya no un círculo perfecto a 45°, sino una jerarquía espacial
-   real: los departamentos más estructurales (CAPACIDADES CENTRALES —
-   Comercial, Dirección) viven más cerca del núcleo; las capacidades
-   operativas (Marketing, Producción, Clientes) a media distancia; las
-   de soporte (Finanzas, Soporte, Administración) más alejadas. Radio Y
-   ángulo de cada una son irregulares a propósito (ver comentario en
-   departamentos.html junto a cada nodo) para que la red se sienta viva
-   y con ritmo, no un patrón geométrico repetido — sin dejar de ser
-   legible: los ángulos siguen cubriendo las 8 direcciones del campo.
-   El lenguaje visual del componente (placa compacta, borde fino de
-   color propio, halo controlado, identificador mono) se toma prestado
-   de los nodos de la Consola de Progreso de Método — mismo sistema de
-   diseño, sin copiar su estructura SVG literal. Un eco de "actividad"
-   muy sutil y escalonado (no un parpadeo genérico) sugiere que el
-   sistema sigue vivo sin moverse. */
-.dept-node{
-  position:absolute;
-  left:var(--node-x); top:var(--node-y);
-  transform:translate(-50%,-50%);
-  z-index:2;
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-  text-decoration:none;
-  animation:dept-node-echo 5.5s ease-in-out infinite;
-}
-.dept-node--2{ animation-delay:-.7s; }
-.dept-node--3{ animation-delay:-1.4s; }
-.dept-node--4{ animation-delay:-2.1s; }
-.dept-node--5{ animation-delay:-2.8s; }
-.dept-node--6{ animation-delay:-3.5s; }
-.dept-node--7{ animation-delay:-4.2s; }
-.dept-node--8{ animation-delay:-4.9s; }
-@keyframes dept-node-echo{ 0%,88%,100%{ filter:brightness(1); } 94%{ filter:brightness(1.16); } }
-
-/* Identificador de sistema (DIR-050) — mono, 3 letras, sobre la placa,
-   mismo rol que el "01/02/03/04" de los nodos de Método: refuerza la
-   sensación de "componente de sistema" sin tocar el nombre real
-   (que sigue debajo, sin cambios) ni la accesibilidad (aria-hidden;
-   el nombre accesible del enlace lo da .dept-node-name). */
-.dept-node-tag{
+.dci-tag{
   font-family:var(--mono);
   font-size:.6rem;
-  letter-spacing:.05em;
-  color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.8);
-  transition:color .25s ease;
+  letter-spacing:.04em;
+  color:var(--stone-soft);
+  width:26px;
+  flex-shrink:0;
+  margin-top:7px;
+  transition:color .2s ease;
 }
-
-/* Placa compacta con borde fino de color propio + halo controlado —
-   mismo lenguaje que .fases-node-plate/.fases-node-halo de Método
-   (metodo.html), adaptado de SVG a HTML: esquinas redondeadas (no
-   círculo), fondo oscuro translúcido, borde de 1 color en vez del
-   anillo metálico degradado anterior, glow que solo aparece al
-   interactuar en vez de vivir siempre a media potencia. */
-.dept-node-badge{
-  position:relative;
-  width:clamp(50px,13cqi,68px); height:clamp(50px,13cqi,68px);
-  border-radius:clamp(14px,4cqi,19px);
+.dept-console-item.is-active .dci-tag{ color:var(--cyan); }
+.dci-icon{
+  width:28px; height:28px;
+  border-radius:8px;
   display:flex; align-items:center; justify-content:center;
-  background:rgba(10,14,26,.62);
-  border:1.4px solid rgba(var(--mod-r),var(--mod-g),var(--mod-b),.5);
-  box-shadow:0 14px 30px -18px rgba(0,0,0,.7);
-  transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .25s ease;
+  background:rgba(91,140,255,.1);
+  border:1px solid rgba(91,140,255,.25);
+  color:var(--stone-soft);
+  flex-shrink:0;
+  transition:color .2s ease, border-color .2s ease;
 }
-.dept-node-badge::before{
-  content:"";
-  position:absolute; inset:-32%;
+.dci-icon svg{ width:14px; height:14px; }
+.dept-console-item.is-active .dci-icon{ color:var(--cyan); border-color:rgba(67,224,255,.5); }
+/* DIR-WEB-20260820-003: la lista maestra deja de abrir con nombres de
+   departamento ("Comercial", "Marketing"...) -- Dirección pidió
+   explícitamente que la primera capa entre por el PROBLEMA que resuelve
+   cada Departamento, no por su nombre. El nombre real pasa a ser la
+   segunda capa, dentro del panel de detalle (.dcp-dept-head). */
+.dci-name{
+  flex:1;
+  padding-top:2px;
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:.86rem;
+  line-height:1.32;
+  color:var(--stone);
+  transition:color .2s ease;
+}
+.dept-console-item.is-active .dci-name{ color:var(--ink); }
+.dci-dot{
+  width:6px; height:6px;
   border-radius:50%;
-  background:radial-gradient(closest-side, rgba(var(--mod-r),var(--mod-g),var(--mod-b),.24), transparent 72%);
-  opacity:.22;
-  transition:opacity .25s ease, transform .3s cubic-bezier(.16,1,.3,1);
-  pointer-events:none;
-  z-index:-1;
+  background:var(--border);
+  flex-shrink:0;
+  margin-top:9px;
+  transition:background .2s ease, box-shadow .2s ease;
 }
-.dept-node-icon{
-  width:52%; height:52%;
-  display:flex; align-items:center; justify-content:center;
-  color:rgb(var(--mod-r),var(--mod-g),var(--mod-b));
-  position:relative; z-index:2;
-}
-.dept-node-icon svg{ width:100%; height:100%; }
-.dept-node-name{
-  font-family:var(--serif); font-weight:600;
-  font-size:clamp(.6rem,1.8cqi,.76rem);
-  color:var(--ink); text-align:center; line-height:1.15;
-  max-width:clamp(64px,20cqi,110px);
-}
+.dept-console-item.is-active .dci-dot{ background:var(--green); box-shadow:0 0 6px 1px var(--green); }
 
-/* Jerarquía visual por nivel (DIR-050 3D): el tamaño de la placa
-   refuerza la distancia al núcleo — capacidades centrales más grandes,
-   de soporte más discretas — sin tocar el tamaño del icono relativo
-   (52% en los tres casos) ni el nombre. */
-.dept-node--central .dept-node-badge{ width:clamp(58px,15.5cqi,78px); height:clamp(58px,15.5cqi,78px); }
-.dept-node--soporte .dept-node-badge{ width:clamp(42px,11cqi,56px); height:clamp(42px,11cqi,56px); }
-
-/* La descripción real (copy ya publicado en el mega-menú) aparece como
-   una pastilla flotante al pasar el cursor o enfocar. Cada estación
-   ancla su pastilla hacia el lado contrario al borde del campo más
-   cercano, para que nunca se recorte ni provoque scroll horizontal. */
-.dept-node-tagline{
-  position:absolute;
-  width:max-content; max-width:min(58cqi,220px);
-  padding:8px 12px;
-  font-size:.74rem; line-height:1.35; color:var(--muted);
-  background:linear-gradient(180deg, var(--surface-top) 0%, var(--panel-2) 100%);
-  border:1px solid var(--surface-border);
+.dept-console-detail{ position:relative; padding:36px 40px; min-height:280px; }
+.dept-console-pane{ animation:dcp-in .35s ease; }
+@keyframes dcp-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+/* PROBLEMA → DEPARTAMENTO → QUÉ HACE → CÓMO FUNCIONA (visual) → CTA --
+   el orden exacto que pidió Dirección, ahora dentro del propio panel de
+   detalle en vez de repartido entre el panel y una grid aparte. */
+.dcp-problem{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:1.3rem;
+  line-height:1.32;
+  color:var(--ink);
+  margin-bottom:18px;
+  max-width:480px;
+}
+.dcp-dept-head{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.dcp-icon{
+  width:40px; height:40px;
   border-radius:10px;
-  box-shadow:0 16px 34px -18px rgba(0,0,0,.75);
-  opacity:0; pointer-events:none;
-  transition:opacity .22s ease, transform .22s ease;
-  z-index:5;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(91,140,255,.12);
+  border:1px solid rgba(91,140,255,.3);
+  color:var(--cyan);
+  flex-shrink:0;
 }
-/* DIR-050: anclaje recalculado por cuadrante para las nuevas
-   posiciones asimétricas — abajo si el nodo vive en la mitad superior
-   del campo (y<50%), arriba si vive en la inferior; anclado a la
-   derecha si el nodo está en la mitad derecha (x>50%), a la izquierda
-   si está en la izquierda — así la pastilla siempre se abre hacia el
-   centro del campo, nunca hacia el borde más cercano. */
-.dept-node--1 .dept-node-tagline{ top:calc(100% + 10px); left:50%; transform:translate(-50%,4px); }
-.dept-node--1:hover .dept-node-tagline, .dept-node--1:focus-visible .dept-node-tagline{ transform:translate(-50%,0); }
-.dept-node--2 .dept-node-tagline{ top:calc(100% + 10px); right:-8px; transform:translateY(4px); }
-.dept-node--2:hover .dept-node-tagline, .dept-node--2:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--3 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
-.dept-node--3:hover .dept-node-tagline, .dept-node--3:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--4 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
-.dept-node--4:hover .dept-node-tagline, .dept-node--4:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--5 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
-.dept-node--5:hover .dept-node-tagline, .dept-node--5:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--6 .dept-node-tagline{ bottom:calc(100% + 10px); left:-8px; transform:translateY(-4px); }
-.dept-node--6:hover .dept-node-tagline, .dept-node--6:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--7 .dept-node-tagline{ top:calc(100% + 10px); left:-8px; transform:translateY(4px); }
-.dept-node--7:hover .dept-node-tagline, .dept-node--7:focus-visible .dept-node-tagline{ transform:translateY(0); }
-.dept-node--8 .dept-node-tagline{ bottom:calc(100% + 10px); right:-8px; transform:translateY(-4px); }
-.dept-node--8:hover .dept-node-tagline, .dept-node--8:focus-visible .dept-node-tagline{ transform:translateY(0); }
-
-.dept-node:hover, .dept-node:focus-visible{ z-index:6; }
-.dept-node:hover .dept-node-badge, .dept-node:focus-visible .dept-node-badge{
-  transform:translateY(-4px) scale(1.06);
-  border-color:rgba(var(--mod-r),var(--mod-g),var(--mod-b),.9);
-  box-shadow:0 22px 44px -20px rgba(0,0,0,.8), 0 0 12px rgba(var(--mod-r),var(--mod-g),var(--mod-b),.45);
+.dcp-icon svg{ width:20px; height:20px; }
+.dcp-dept-meta{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.dcp-name{ font-family:var(--serif); font-weight:600; font-size:1rem; color:var(--ink); }
+.dcp-tag{
+  font-family:var(--mono);
+  font-size:.64rem;
+  letter-spacing:.06em;
+  color:var(--stone-soft);
 }
-.dept-node:hover .dept-node-badge::before, .dept-node:focus-visible .dept-node-badge::before{
-  opacity:.5;
-  transform:scale(1.18);
+.dcp-does{ color:var(--stone); font-size:.92rem; max-width:480px; }
+.dcp-does strong{
+  display:block;
+  font-family:var(--mono);
+  font-size:.62rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+  font-weight:600;
+  margin-bottom:6px;
 }
-.dept-node:hover .dept-node-tag, .dept-node:focus-visible .dept-node-tag{ color:rgb(var(--mod-r),var(--mod-g),var(--mod-b)); }
-.dept-node:hover .dept-node-tagline, .dept-node:focus-visible .dept-node-tagline{ opacity:1; }
-.dept-node:focus-visible{ outline:2px solid var(--cyan); outline-offset:4px; border-radius:14px; }
-
-/* El canal hacia el núcleo se ilumina con el acento real del
-   departamento cuando su estación recibe foco o cursor — "esto
-   alimenta el sistema", igual que en el árbol anterior (DIR-045), pero
-   ahora cada estación tiene su propio canal en vez de compartir un bus. */
-.dept-ecosystem-field:has(.dept-node--1:hover) .dept-ray-1, .dept-ecosystem-field:has(.dept-node--1:focus-visible) .dept-ray-1{ opacity:1; stroke:rgb(67,224,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--2:hover) .dept-ray-2, .dept-ecosystem-field:has(.dept-node--2:focus-visible) .dept-ray-2{ opacity:1; stroke:rgb(155,107,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--3:hover) .dept-ray-3, .dept-ecosystem-field:has(.dept-node--3:focus-visible) .dept-ray-3{ opacity:1; stroke:rgb(91,140,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--4:hover) .dept-ray-4, .dept-ecosystem-field:has(.dept-node--4:focus-visible) .dept-ray-4{ opacity:1; stroke:rgb(155,107,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--5:hover) .dept-ray-5, .dept-ecosystem-field:has(.dept-node--5:focus-visible) .dept-ray-5{ opacity:1; stroke:rgb(52,231,164); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--6:hover) .dept-ray-6, .dept-ecosystem-field:has(.dept-node--6:focus-visible) .dept-ray-6{ opacity:1; stroke:rgb(91,140,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--7:hover) .dept-ray-7, .dept-ecosystem-field:has(.dept-node--7:focus-visible) .dept-ray-7{ opacity:1; stroke:rgb(155,107,255); animation-duration:3s; }
-.dept-ecosystem-field:has(.dept-node--8:hover) .dept-ray-8, .dept-ecosystem-field:has(.dept-node--8:focus-visible) .dept-ray-8{ opacity:1; stroke:rgb(67,224,255); animation-duration:3s; }
+.dcp-connects{ margin-top:16px; font-size:.82rem; color:var(--stone-soft); }
+.dcp-connects strong{ color:var(--stone); }
+.dcp-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:22px;
+  padding:4px 0;
+  font-size:.9rem;
+  font-weight:600;
+  color:var(--cyan);
+  text-decoration:none;
+}
+.dcp-link svg{ width:14px; height:14px; transition:transform .2s ease; }
+.dcp-link:hover svg{ transform:translateX(3px); }
 
 @media (prefers-reduced-motion:reduce){
-  .dept-ray{ animation:none; }
-  .dept-ecosystem-core-glow{ animation:none; opacity:.65; }
-  .dept-node{ animation:none; }
+  .dept-console-pane{ animation:none; }
 }
-@media (hover:none){
-  .dept-node-tagline{ display:none; }
+
+/* ---- Visualización propia por Departamento (CÓMO FUNCIONA) ----
+   DIR-WEB ajuste final: 8 componentes realmente distintos en estructura,
+   uno por Departamento -- no una plantilla común con datos cambiados.
+   Cada uno representa de forma intuitiva la operación real de ese
+   Departamento (pipeline / embudo / ciclo / kanban / flujo / cola de
+   tickets / checklist / KPIs), con el mismo lenguaje visual del sitio
+   (paleta cian/azul/violeta, --mono para etiquetas, bordes finos, sin
+   3D ni efectos "demo de IA"). Cifras y nombres son ilustrativos --
+   proporciones y etiquetas genéricas, nunca datos de cliente inventados;
+   de ahí el disclaimer .dcp-visual-note en las ocho. Vive dentro de cada
+   .dept-console-pane, cambia con el toggle ya existente en main.js. */
+.dcp-visual{
+  margin-top:20px;
+  padding:18px;
+  border:1px solid var(--surface-border);
+  border-radius:12px;
+  background:rgba(10,14,26,.45);
+  max-width:480px;
+}
+.dcp-visual-note{
+  margin-top:12px;
+  font-family:var(--mono);
+  font-size:.62rem;
+  color:var(--stone-soft);
+}
+
+/* Comercial -- pipeline de ventas: columnas que se estrechan por etapa */
+.dcv-pipeline{ display:flex; gap:8px; align-items:flex-end; height:92px; }
+.dcv-pipe-col{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:6px; }
+.dcv-pipe-bar{ width:100%; max-width:34px; border-radius:4px 4px 0 0; background:var(--grad-brand); opacity:.85; }
+.dcv-pipe-col--won .dcv-pipe-bar{ background:var(--green); opacity:1; }
+.dcv-pipe-label{ font-family:var(--mono); font-size:.56rem; letter-spacing:.02em; text-transform:uppercase; color:var(--stone-soft); text-align:center; line-height:1.25; }
+
+/* Marketing -- embudo de captación: bandas trapezoidales que se estrechan */
+.dcv-funnel{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+.dcv-funnel-stage{
+  width:var(--fw,100%);
+  padding:8px 18px;
+  font-size:.74rem;
+  color:var(--ink);
+  text-align:center;
+  background:linear-gradient(90deg, rgba(67,224,255,.16), rgba(155,107,255,.16));
+  border:1px solid var(--surface-border);
+  clip-path:polygon(6% 0, 94% 0, 100% 100%, 0% 100%);
+}
+
+/* Clientes -- ciclo de vida: anillo de progreso + hitos */
+.dcv-cycle{ display:flex; align-items:center; gap:16px; }
+.dcv-cycle-ring{
+  width:60px; height:60px; border-radius:50%; flex-shrink:0; position:relative;
+  background:conic-gradient(var(--cyan) 0% var(--cv-pct,50%), var(--border) var(--cv-pct,50%) 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+.dcv-cycle-ring::before{ content:""; position:absolute; inset:7px; border-radius:50%; background:var(--panel); }
+.dcv-cycle-pct{ position:relative; font-family:var(--mono); font-size:.68rem; color:var(--ink); }
+.dcv-cycle-steps{ display:flex; flex-direction:column; gap:6px; font-size:.78rem; color:var(--stone); margin:0; padding:0; }
+.dcv-cycle-steps li{ list-style:none; padding-left:14px; position:relative; }
+.dcv-cycle-steps li::before{ content:""; position:absolute; left:0; top:.45em; width:6px; height:6px; border-radius:50%; background:var(--stone-soft); }
+.dcv-cycle-steps li.is-done::before{ background:var(--green); }
+.dcv-cycle-steps li.is-current{ color:var(--ink); }
+.dcv-cycle-steps li.is-current::before{ background:var(--cyan); box-shadow:0 0 6px 1px rgba(67,224,255,.5); }
+
+/* Producción -- kanban de proyectos: columnas con tarjetas esqueleto */
+.dcv-kanban{ display:flex; gap:10px; }
+.dcv-kanban-col{ flex:1; min-width:0; }
+.dcv-kanban-head{ display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.03em; text-transform:uppercase; color:var(--stone-soft); margin-bottom:8px; }
+.dcv-kanban-col--active .dcv-kanban-head{ color:var(--cyan); }
+.dcv-kanban-card{ padding:8px; margin-bottom:6px; border:1px solid var(--surface-border); border-radius:6px; background:rgba(255,255,255,.02); }
+.dcv-kanban-col--active .dcv-kanban-card{ border-color:rgba(67,224,255,.35); }
+.dcv-card-bar{ display:block; height:5px; border-radius:3px; background:var(--border); }
+.dcv-card-bar + .dcv-card-bar{ margin-top:5px; }
+.dcv-card-bar--sm{ background:var(--border-soft); }
+.dcv-kanban-col--active .dcv-card-bar{ background:rgba(67,224,255,.3); }
+
+/* Finanzas -- flujo económico: cobros vs. gastos */
+.dcv-flow{ display:flex; flex-direction:column; gap:10px; }
+.dcv-flow-row{ display:flex; align-items:center; gap:10px; }
+.dcv-flow-label{ width:56px; flex-shrink:0; font-family:var(--mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.02em; color:var(--stone-soft); }
+.dcv-flow-track{ flex:1; height:7px; border-radius:4px; background:var(--border); overflow:hidden; }
+.dcv-flow-track span{ display:block; height:100%; border-radius:4px; }
+.dcv-flow-row--in .dcv-flow-track span{ background:var(--green); }
+.dcv-flow-row--out .dcv-flow-track span{ background:var(--amber); }
+.dcv-flow-note{ margin:2px 0 0; font-size:.78rem; color:var(--stone); }
+.dcv-flow-note b{ color:var(--ink); font-weight:600; }
+
+/* Soporte -- cola de tickets: filas con prioridad y SLA */
+.dcv-tickets{ display:flex; flex-direction:column; gap:6px; }
+.dcv-ticket{ display:flex; align-items:center; gap:10px; padding:7px 10px; border-left:3px solid var(--stone-soft); border-radius:4px; background:rgba(255,255,255,.02); font-size:.78rem; }
+.dcv-ticket--high{ border-left-color:var(--red); }
+.dcv-ticket--mid{ border-left-color:var(--amber); }
+.dcv-ticket--done{ border-left-color:var(--green); opacity:.72; }
+.dcv-ticket-id{ font-family:var(--mono); color:var(--stone-soft); font-size:.68rem; flex-shrink:0; }
+.dcv-ticket-desc{ flex:1; color:var(--stone); }
+.dcv-ticket-sla{ font-family:var(--mono); font-size:.66rem; color:var(--cyan); flex-shrink:0; }
+.dcv-ticket--done .dcv-ticket-sla{ color:var(--green); }
+
+/* Administración -- gestión documental: checklist de tareas */
+.dcv-checklist{ display:flex; flex-direction:column; gap:10px; margin:0; }
+.dcv-check{ display:flex; align-items:center; gap:10px; font-size:.82rem; color:var(--stone); }
+.dcv-check-box{ width:15px; height:15px; border-radius:4px; border:1.5px solid var(--surface-border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.6rem; line-height:1; color:var(--bg); }
+.dcv-check--done .dcv-check-box{ background:var(--green); border-color:var(--green); }
+.dcv-check--pending .dcv-check-box{ background:transparent; }
+
+/* Dirección -- KPIs, tendencias y alertas: mini-tendencias por indicador */
+.dcv-kpis{ display:flex; flex-direction:column; gap:10px; }
+.dcv-kpi{ display:flex; align-items:center; gap:10px; }
+.dcv-kpi-label{ width:98px; flex-shrink:0; font-family:var(--mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.02em; color:var(--stone-soft); }
+.dcv-kpi-spark{ flex:1; height:20px; }
+.dcv-kpi-spark polyline{ fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.dcv-kpi-trend--up .dcv-kpi-spark polyline{ stroke:var(--green); }
+.dcv-kpi-trend--down .dcv-kpi-spark polyline{ stroke:var(--red); }
+.dcv-kpi-arrow{ font-size:.78rem; flex-shrink:0; width:14px; text-align:center; }
+.dcv-kpi-trend--up .dcv-kpi-arrow{ color:var(--green); }
+.dcv-kpi-trend--down .dcv-kpi-arrow{ color:var(--red); }
+.dcv-kpi-note{ margin:2px 0 0; font-size:.78rem; color:var(--stone); }
+.dcv-kpi-note b{ color:var(--ink); font-weight:600; }
+
+/* Móvil no es el desktop encogido: la lista maestra pasa a una rejilla
+   compacta 4×2 de selectores puramente icónicos (icono + tag de 3
+   letras, sin la frase-problema completa -- no cabe en una celda de
+   ~85px) y el detalle aparece debajo, con la frase-problema como primer
+   elemento visible -- main.js hace scroll suave hasta él al elegir, en
+   vez de vivir fijo al lado como en escritorio. */
+@media (max-width:760px){
+  .dept-console-body{ grid-template-columns:1fr; }
+  .dept-console-list{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+  .dept-console-item{
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    padding:16px 6px;
+    border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border);
+    text-align:center;
+  }
+  .dept-console-item:nth-child(4n){ border-right:none; }
+  .dept-console-item:nth-last-child(-n+4){ border-bottom:none; }
+  .dept-console-item.is-active::before{ left:0; right:0; top:0; bottom:auto; width:auto; height:3px; }
+  .dci-tag{ margin-top:0; }
+  .dci-name{ display:none; }
+  .dci-dot{ margin-top:0; }
+  .dept-console-detail{ padding:26px 20px; }
+  .dcp-problem{ font-size:1.1rem; }
+  .dcv-pipeline{ gap:5px; height:76px; }
+  .dcv-pipe-label{ font-size:.5rem; }
+  .dcv-funnel-stage{ padding:7px 10px; font-size:.68rem; }
+  .dcv-kanban{ gap:6px; }
+  .dcv-kanban-card{ padding:6px; }
+  .dcv-kpi-label{ width:78px; font-size:.54rem; }
 }
 
 /* ============ SERVICIOS ============ */
@@ -1819,32 +1760,117 @@ nav.main-nav > ul{ position:relative; }
 .service-card .card-link svg{ width:14px; height:14px; transition:transform .2s ease; }
 .service-card:hover .card-link svg{ transform:translateX(3px); }
 
-.stats-window .window-body{ padding:0; }
-.spec-sheet{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
+/* ============ DEPARTAMENTOS COMO UN ÚNICO SISTEMA (DIR-WEB-MASTER-004) ============
+   Sustituye la grid de 8 tarjetas .service-card sueltas del teaser de
+   Home por UN solo panel .window que contiene las 8 filas conectadas
+   por divisores — deja de leerse como "8 productos" y pasa a leerse
+   como un único sistema con 8 módulos activos. Cada fila lleva su
+   propio punto de estado con el mismo pulso que ya usa
+   metricas_dcode.dashboard ("en vivo"), reforzando la idea sin SVG ni
+   posicionamiento absoluto: solo flexbox y bordes, cero riesgo nuevo de
+   breakpoint. */
+.dept-system .window-body{ padding:0; }
+.dept-system .window-status{ margin-left:auto; }
+/* DIR-005: "organismo conectado", no 8 filas sueltas -- una columna fina
+   corre por detrás de los puntos de estado (::before) y un pulso la
+   recorre de arriba abajo cada 6s (::after), como si un dato viajara por
+   el sistema. Solo CSS, sin geometría dependiente de viewport (la causa
+   raíz de las roturas históricas del Hero): se oculta sin más en mobile,
+   donde las filas cambian de layout, y con prefers-reduced-motion. */
+.dept-rows{ display:flex; flex-direction:column; position:relative; }
+.dept-rows::before{
+  content:'';
+  position:absolute;
+  left:31px; top:0; bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom, transparent, rgba(91,140,255,.4) 8%, rgba(155,107,255,.4) 92%, transparent);
+  pointer-events:none;
 }
-.spec-item{
-  padding:32px 28px;
-  border-right:1px solid var(--border);
-  text-align:left;
+.dept-rows::after{
+  content:'';
+  position:absolute;
+  left:28px; top:0;
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 8px 1px var(--cyan);
+  opacity:0;
+  pointer-events:none;
 }
-.spec-item:last-child{ border-right:none; }
-.spec-label{
-  font-family:var(--mono);
-  font-size:0.65rem;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
+/* DIR-006: un pulso que corre para siempre es "vida ambiental de terminal
+   en bucle" -- el cliché genérico de 2026 que la investigación de esta
+   ronda señala explícitamente. Ahora solo corre cuando la sección entra
+   en pantalla (main.js añade .is-flowing una vez, vía IntersectionObserver)
+   y se detiene tras 2 pasadas: demuestra que el sistema "hizo algo",
+   no decora sin fin. */
+.dept-rows.is-flowing::after{ animation:dept-flow 6s linear 2; }
+@keyframes dept-flow{
+  0%{ top:0; opacity:0; }
+  8%{ opacity:1; }
+  92%{ opacity:1; }
+  100%{ top:100%; opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){ .dept-rows::after{ animation:none; display:none; } }
+@media (max-width:720px){ .dept-rows::before, .dept-rows::after{ display:none; } }
+.dept-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:18px 28px;
+  border-bottom:1px solid var(--border);
+  text-decoration:none;
+  transition:background .2s ease;
+}
+.dept-row:last-child{ border-bottom:none; }
+.dept-row:hover, .dept-row:focus-visible{ background:rgba(91,140,255,.06); }
+.dept-row-dot{
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--green);
+  flex-shrink:0;
+  animation:pulse 2.2s ease-in-out infinite;
+}
+.dept-row:nth-child(2) .dept-row-dot{ animation-delay:.2s; }
+.dept-row:nth-child(3) .dept-row-dot{ animation-delay:.4s; }
+.dept-row:nth-child(4) .dept-row-dot{ animation-delay:.6s; }
+.dept-row:nth-child(5) .dept-row-dot{ animation-delay:.8s; }
+.dept-row:nth-child(6) .dept-row-dot{ animation-delay:1s; }
+.dept-row:nth-child(7) .dept-row-dot{ animation-delay:1.2s; }
+.dept-row:nth-child(8) .dept-row-dot{ animation-delay:1.4s; }
+.dept-row-icon{
+  width:34px; height:34px;
+  border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(91,140,255,.12);
+  border:1px solid rgba(91,140,255,.3);
   color:var(--cyan);
+  flex-shrink:0;
 }
-.spec-value{
+.dept-row-icon svg{ width:17px; height:17px; }
+.dept-row-name{
   font-family:var(--serif);
-  font-weight:700;
-  font-size:2.1rem;
+  font-weight:600;
+  font-size:1.05rem;
   color:var(--ink);
-  margin:10px 0 8px;
+  width:150px;
+  flex-shrink:0;
 }
-.spec-caption{ font-size:0.86rem; color:var(--stone); }
+.dept-row-desc{ color:var(--stone); font-size:0.9rem; flex:1; }
+.dept-row-arrow{
+  color:var(--cyan);
+  flex-shrink:0;
+  opacity:0;
+  transition:opacity .2s ease, transform .2s ease;
+}
+.dept-row-arrow svg{ width:16px; height:16px; display:block; }
+.dept-row:hover .dept-row-arrow, .dept-row:focus-visible .dept-row-arrow{ opacity:1; transform:translateX(3px); }
+@media (max-width:720px){
+  .dept-row{ flex-wrap:wrap; padding:16px 20px; }
+  .dept-row-name{ width:auto; }
+  .dept-row-desc{ width:100%; padding-left:50px; }
+  .dept-row-arrow{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){ .dept-row-dot{ animation:none; } }
 
 /* ============ CONOCENOS / FOUNDERS ============ */
 .conocenos-intro{ max-width:760px; margin:0 auto; text-align:center; }
@@ -1892,6 +1918,7 @@ nav.main-nav > ul{ position:relative; }
   display:block;
 }
 .monogram{
+  position:relative;
   width:72px; height:72px;
   border-radius:50%;
   background:var(--grad-brand);
@@ -1901,6 +1928,30 @@ nav.main-nav > ul{ position:relative; }
   align-items:center;
   justify-content:center;
 }
+/* Diego y Dimitry comparten iniciales (D.S.) -- el degradado invertido del
+   segundo founder-card (ver abajo) no bastaba: en auditoría, las dos fichas
+   seguían leyéndose como una duplicada por error a primera vista. La
+   diferenciación real ahora viene del icono de rol (.founder-role-badge),
+   que visualiza el enfoque que ya describe el copy de cada uno (estrategia
+   vs. arquitectura de sistemas) -- no es un dato inventado, es el mismo
+   texto existente hecho visible de un vistazo. */
+.founders .founder-card:nth-child(2) .monogram{
+  background:linear-gradient(120deg, var(--violet), var(--blue) 55%, var(--cyan));
+}
+.founder-role-badge{
+  position:absolute;
+  bottom:-4px; right:-4px;
+  width:28px; height:28px;
+  border-radius:50%;
+  background:var(--bg);
+  border:2px solid var(--panel);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--cyan);
+}
+.founders .founder-card:nth-child(2) .founder-role-badge{ color:var(--violet); }
+.founder-role-badge svg{ width:14px; height:14px; }
 .monogram span{
   width:100%; height:100%;
   border-radius:50%;
@@ -2197,6 +2248,19 @@ nav.main-nav > ul{ position:relative; }
 .blog-card .blog-cat{ margin-bottom:14px; }
 .blog-card h3{ font-family:var(--serif); font-size:1.12rem; font-weight:600; color:var(--ink); line-height:1.35; margin-bottom:10px; }
 .blog-card p{ color:var(--stone); font-size:0.9rem; flex:1; }
+/* DIR-005 §8: los 3 casos del teaser de Resultados en Home pasan de un
+   párrafo suelto a un antes→ahora compacto -- mismos hechos que ya
+   publica casos-exito.html, sin inventar nada, solo hechos visible sin
+   entrar en la página completa. */
+.case-mini{ display:flex; flex-direction:column; gap:10px; flex:1; }
+.case-mini-row{ display:flex; gap:10px; align-items:baseline; }
+.case-mini-label{
+  flex-shrink:0; width:46px;
+  font-family:var(--mono); font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.case-mini-row:last-child .case-mini-label{ color:var(--cyan); }
+.case-mini-row p{ margin:0; font-size:0.85rem; color:var(--stone); flex:1; }
 .blog-meta{
   display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);
   font-family:var(--mono); font-size:0.68rem; color:var(--stone-soft); letter-spacing:0.03em;
@@ -2245,6 +2309,7 @@ nav.main-nav > ul{ position:relative; }
   margin-top:40px;
 }
 .case-card .window-body{ padding:30px 32px; }
+.case-badges{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px; }
 .case-tag{
   font-family:var(--mono);
   font-size:0.68rem;
@@ -2289,6 +2354,23 @@ nav.main-nav > ul{ position:relative; }
 }
 .future-cases h3{ font-family:var(--serif); font-size:1.3rem; color:var(--ink); font-weight:600; margin-bottom:12px; }
 .future-cases p{ color:var(--stone); max-width:520px; margin:0 auto; }
+
+/* Nota "esto es una demo" -- separa visualmente el CTA de la vista interactiva
+   que sigue, sin sonar a disclaimer legal. Ver DIR-WEB-20260820-006. */
+.demo-disclaimer{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  max-width:720px;
+  margin:36px 0 32px;
+  padding:16px 18px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(67,224,255,.04);
+}
+.demo-disclaimer svg{ width:20px; height:20px; flex-shrink:0; margin-top:1px; color:var(--cyan); }
+.demo-disclaimer p{ margin:0; font-size:.86rem; line-height:1.6; color:var(--stone); }
+@media (max-width:640px){ .demo-disclaimer{ margin:28px 0 24px; padding:14px 16px; } }
 
 /* ============ CONTACT / FORM ============ */
 /* ============ CONTACTO — composición editorial (DIR-018, evolucionada DIR-049) ============
@@ -2664,8 +2746,11 @@ footer{
 .footer-col h2{
   font-family:var(--mono); font-size:0.68rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--stone); margin-bottom:16px;
 }
-.footer-col ul{ display:flex; flex-direction:column; gap:11px; }
-.footer-col a{ font-size:0.86rem; color:var(--stone-soft); transition:color .2s ease; }
+.footer-col ul{ display:flex; flex-direction:column; gap:2px; }
+/* Objetivo táctil >=24px (WCAG 2.2 SC 2.5.8): el link ya no depende solo de
+   su line-height (16px reales) -- el padding vertical amplia el area de
+   toque sin apenas cambiar el ritmo visual (gap 11px -> 2px + padding). */
+.footer-col a{ display:inline-block; padding:5px 0; font-size:0.86rem; color:var(--stone-soft); transition:color .2s ease; }
 .footer-col a:hover{ color:var(--ink); }
 .footer-bottom{
   padding:24px 0 40px;
@@ -2753,10 +2838,6 @@ footer{
 
 @media (max-width: 760px){
   .logo-word{ font-size:1.05rem; }
-  .spec-sheet{ grid-template-columns:1fr 1fr; }
-  .spec-item:nth-child(n){ border-right:1px solid var(--border); }
-  .spec-item:nth-child(2n){ border-right:none; }
-  .spec-item{ border-bottom:1px solid var(--border); }
   .blog-grid{ grid-template-columns:minmax(0,1fr); }
   .footer-top{ grid-template-columns:1fr 1fr; }
 }
@@ -2773,8 +2854,6 @@ footer{
   .case-card .window-body{ padding:24px 20px; }
   .footer-top{ grid-template-columns:minmax(0,1fr); }
   .footer-bottom{ flex-direction:column; }
-  .spec-sheet{ grid-template-columns:minmax(0,1fr); }
-  .spec-item{ border-right:none !important; }
   .timeline-item{ grid-template-columns:40px 1fr; gap:16px; }
   .timeline-num{ width:38px; height:38px; font-size:0.72rem; }
 }

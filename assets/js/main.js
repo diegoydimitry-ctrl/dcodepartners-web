@@ -165,6 +165,90 @@
     }
   }
 
+  /* ---------- Hero console: línea de log ----------
+     El panel del Hero deja de ser una lista estática de "Conectado" y hace
+     visible, con eventos concretos, la promesa del H1 ("cada Departamento
+     lo hace por ti, todos los días"). Mensajes en data-log-cycle (JSON),
+     ya en el idioma de la página -- sin lógica de i18n aquí.
+     DIR-006: recorre la lista UNA vez y se detiene en el último mensaje --
+     un log que rota para siempre es exactamente el cliché de "vida de
+     terminal ambiental" que la investigación de esta ronda señala como
+     genérico en 2026 ("infinite scrolling logs... reads as templated, not
+     alive"). Un evento que ocurre y se asienta se lee como un sistema que
+     hizo algo real, no como una animación decorativa en bucle.
+     Con prefers-reduced-motion se queda en el primer mensaje, sin rotar. */
+  var heroLogLine = document.querySelector('.hero-console-log-line');
+  if (heroLogLine && !prefersReducedMotion) {
+    var logLines = [];
+    try { logLines = JSON.parse(heroLogLine.getAttribute('data-log-cycle') || '[]'); } catch (e) {}
+    if (logLines.length > 1) {
+      var logIdx = 0;
+      var logTimer = setInterval(function () {
+        logIdx += 1;
+        if (logIdx >= logLines.length) { clearInterval(logTimer); return; }
+        heroLogLine.classList.add('is-swapping');
+        setTimeout(function () {
+          heroLogLine.textContent = logLines[logIdx];
+          heroLogLine.classList.remove('is-swapping');
+        }, 300);
+      }, 3800);
+    }
+  }
+
+  /* ---------- Departamentos (Home): pulso del sistema conectado ----------
+     Arranca solo cuando la sección entra en pantalla (dos pasadas y se
+     detiene), no en bucle infinito desde la carga -- ver comentario junto
+     a .dept-flow en styles.css. */
+  var deptRowsEl = document.querySelector('.dept-rows');
+  if (deptRowsEl && !prefersReducedMotion && 'IntersectionObserver' in window) {
+    var deptFlowIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          deptRowsEl.classList.add('is-flowing');
+          deptFlowIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    deptFlowIO.observe(deptRowsEl);
+  }
+
+  /* ---------- Panel de control de Departamentos (DIR-WEB-20260820-002) ----------
+     Solo existe en /departamentos (hub): lista maestra de 8 botones +
+     panel de detalle. Cambia únicamente por acción del visitante (click o
+     teclado), nunca por temporizador. En móvil (<=760px, la misma
+     ruptura que usa el propio CSS del componente) el detalle vive debajo
+     de la rejilla en vez de al lado, así que además de alternar el panel
+     activo se lleva a la vista con scroll suave -- comportamiento propio
+     de móvil, no una versión reducida del de escritorio. */
+  var deptConsole = document.querySelector('[data-dept-console]');
+  if (deptConsole) {
+    var dcItems = Array.prototype.slice.call(deptConsole.querySelectorAll('.dept-console-item'));
+    var dcPanes = Array.prototype.slice.call(deptConsole.querySelectorAll('.dept-console-pane'));
+    var dcDetail = deptConsole.querySelector('.dept-console-detail');
+    dcItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        var dept = item.getAttribute('data-dept');
+        if (item.classList.contains('is-active')) {
+          if (window.innerWidth <= 760 && dcDetail) { dcDetail.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' }); }
+          return;
+        }
+        dcItems.forEach(function (i) {
+          var active = i === item;
+          i.classList.toggle('is-active', active);
+          i.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        dcPanes.forEach(function (pane) {
+          var active = pane.getAttribute('data-dept') === dept;
+          pane.classList.toggle('is-active', active);
+          pane.hidden = !active;
+        });
+        if (window.innerWidth <= 760 && dcDetail) {
+          dcDetail.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+        }
+      });
+    });
+  }
+
   /* ---------- Red de Departamentos (líneas de conexión entre tarjetas) ----------
      Solo existe en /departamentos (hub): un trazo SVG entre cada tarjeta y la
      siguiente, calculado a partir de la posición real (responsive), que se
@@ -262,13 +346,8 @@
      scroll del usuario tras un cambio de página. */
   if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
     runWhenIdle(function () {
-      // .hero-atmosphere (DIR-048) no es un .window — es la atmósfera de
-      // fondo del Hero, sin tarjeta ni tilt propio, así que ya no comparte
-      // este bucle (DIR-050: su paralaje ahora es un muelle con física
-      // propia, ver más abajo). Este bucle solo mueve --rx/--ry/--mx/--my
-      // 1:1 con el cursor para el tilt+spotlight de las tarjetas .window
-      // reales — un efecto sutil de por sí, sin el problema que sí tenía
-      // el Hero (desplazamientos grandes que debían sentirse "físicos").
+      // Mueve --rx/--ry/--mx/--my 1:1 con el cursor para el tilt+spotlight
+      // de las tarjetas .window reales — un efecto sutil y de bajo coste.
       document.querySelectorAll('.window:not(.chat-window)').forEach(function (win) {
         win.addEventListener('mousemove', function (e) {
           var rect = win.getBoundingClientRect();
@@ -289,173 +368,6 @@
       });
     });
   }
-
-  /* ---------- Home Hero — paralaje con muelle amortiguado (DIR-050) ----------
-     DIR-049 acotó el desplazamiento (clamp() en CSS, sigue igual) y
-     corrigió que --mx/--my no volvieran a 50% al salir el cursor. Pero
-     Dirección observó que el movimiento seguía sintiéndose demasiado
-     rápido/agresivo: antes --mx/--my se escribían 1:1 con la posición
-     bruta del cursor en cada mousemove, y toda la sensación de "suavidad"
-     dependía de que la transición CSS de .hero-atm-layer se reiniciara
-     constantemente — con el cursor en movimiento continuo eso da un
-     seguimiento casi instantáneo, y solo se notaba una desaceleración
-     limpia en el momento de soltar el cursor.
-     Aquí --mx/--my dejan de ser la posición bruta del cursor: son el
-     resultado de un muelle amortiguado (spring) que se recalcula en
-     cada frame de animación, seguido tanto para alcanzar al cursor como
-     para volver al centro al salir. Un muelle bien amortiguado da los
-     tres rasgos que pedía la Dirección a la vez: arranca en reposo
-     (aceleración progresiva — la velocidad parte de cero y crece), nunca
-     sobrepasa el objetivo con el damping elegido (sin rebote/overshoot)
-     y decelera de forma continua al acercarse (desaceleración
-     progresiva) — nada de saltos ni de "snap back". */
-  var heroAtmosphere = document.querySelector('.hero-atmosphere');
-  if (heroAtmosphere && !prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
-    runWhenIdle(function () {
-      var restX = 50, restY = 50; // % — posición de reposo (centro)
-      var targetX = restX, targetY = restY;
-      var curX = restX, curY = restY;
-      var velX = 0, velY = 0;
-      // Valores elegidos por simulación numérica (no a ojo): con
-      // stiffness=0.10/damping=0.72 el muelle llegaba a sobrepasar el
-      // objetivo casi un 12% antes de asentarse — exactamente el
-      // "rebote" que la Dirección pidió eliminar. Este par (0.037/0.71)
-      // se comporta como críticamente amortiguado: la velocidad sube de
-      // forma progresiva hasta un pico hacia el 15% del recorrido y baja
-      // de forma igualmente progresiva hasta el objetivo sin sobrepasarlo
-      // (overshoot < 0.01% del recorrido total, imperceptible) en ~550ms.
-      var stiffness = 0.037; // "tirón" hacia el objetivo por frame
-      var damping = 0.71;    // fricción — el par elegido no oscila
-      var settleEps = 0.03; // umbral para considerar el muelle "asentado"
-      var rafId = null;
-
-      var applyFrame = function () {
-        heroAtmosphere.style.setProperty('--mx', curX + '%');
-        heroAtmosphere.style.setProperty('--my', curY + '%');
-      };
-
-      // A propósito NO se escala por delta-time real entre frames: los
-      // valores de stiffness/damping de arriba están verificados (por
-      // simulación numérica) contra un paso fijo por frame. Si se
-      // reescala por dt variable, la fuerza y la fricción dejan de
-      // aplicarse en la misma proporción entre sí frame a frame —eso fue
-      // justamente lo que reintrodujo un pequeño rebote real (medible
-      // en QA) pese a que la simulación en abstracto no lo mostraba: el
-      // jitter normal de requestAnimationFrame bastaba para desajustar
-      // fuerza y fricción entre sí. Un paso fijo por frame reproduce
-      // exactamente la simulación verificada, a costa de que la duración
-      // real en pantallas de refresco muy distinto a 60Hz varíe un poco
-      // — aceptable en un efecto decorativo, y preferible a reabrir la
-      // puerta al rebote.
-      var tick = function () {
-        var fx = (targetX - curX) * stiffness;
-        var fy = (targetY - curY) * stiffness;
-        velX = (velX + fx) * damping;
-        velY = (velY + fy) * damping;
-        curX += velX;
-        curY += velY;
-
-        applyFrame();
-
-        var settled = Math.abs(targetX - curX) < settleEps && Math.abs(targetY - curY) < settleEps &&
-          Math.abs(velX) < settleEps && Math.abs(velY) < settleEps;
-
-        if (settled) {
-          curX = targetX;
-          curY = targetY;
-          velX = 0;
-          velY = 0;
-          applyFrame();
-          rafId = null;
-        } else {
-          rafId = requestAnimationFrame(tick);
-        }
-      };
-
-      var ensureLoop = function () {
-        if (rafId === null) {
-          rafId = requestAnimationFrame(tick);
-        }
-      };
-
-      heroAtmosphere.addEventListener('mousemove', function (e) {
-        var rect = heroAtmosphere.getBoundingClientRect();
-        var px = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-        var py = Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height));
-        targetX = px * 100;
-        targetY = py * 100;
-        ensureLoop();
-      });
-
-      heroAtmosphere.addEventListener('mouseleave', function () {
-        targetX = restX;
-        targetY = restY;
-        ensureLoop();
-      });
-
-      applyFrame();
-    });
-  }
-
-  /* ---------- Etiquetas del Hero anclada a su nodo real (DIR-054) ----------
-     Hasta ahora .atm-chip-label se posicionaba con left/top en % fijo,
-     asumiendo que el SVG frontal se estiraba sin conservar proporción
-     (preserveAspectRatio="none") para llenar exactamente la misma caja
-     que el contenedor — así el % siempre coincidía con el nodo, a costa
-     de que los chips (círculos/cuadrados) se deformaran en cualquier
-     caja que no fuera exactamente 5:3 (el bug real reportado desde
-     iPad: cuadrados aplastados, dejaban de parecer cuadrados). DIR-054
-     quita "none" del SVG frontal — los chips ya NUNCA se deforman,
-     conservan su geometría real en cualquier ancho — pero eso significa
-     que el contenido puede quedar centrado con márgenes (letterboxing)
-     cuando la caja no es exactamente 5:3, y un % fijo ya no coincidiría
-     con el nodo real.
-     En vez de recalcular a mano esos porcentajes por breakpoint (el
-     mismo tipo de aproximación que ya falló en DIR-053), cada etiqueta
-     se ancla a la posición en pantalla que el propio navegador ya
-     calculó para su chip (getBoundingClientRect) — funciona igual sea
-     cual sea el escalado o el letterboxing, sin depender de las
-     coordenadas del viewBox ni de la forma de la caja, y sin necesidad
-     de volver a tocar este código si el diseño del Hero cambia. */
-  (function () {
-    var atmFront = document.querySelector('.hero-atm-front');
-    if (!atmFront) return;
-    var atmChips = atmFront.querySelectorAll('.atm-chip');
-    var atmLabels = atmFront.querySelectorAll('.atm-chip-label');
-    if (!atmChips.length || !atmLabels.length) return;
-
-    var positionAtmLabels = function () {
-      var containerRect = atmFront.getBoundingClientRect();
-      if (!containerRect.width || !containerRect.height) return;
-      atmChips.forEach(function (chip, i) {
-        var label = atmLabels[i];
-        if (!label) return;
-        var r = chip.getBoundingClientRect();
-        var cx = r.left + r.width / 2 - containerRect.left;
-        var cy = r.top + r.height / 2 - containerRect.top;
-        label.style.left = cx + 'px';
-        label.style.top = cy + 'px';
-      });
-    };
-
-    positionAtmLabels();
-    requestAnimationFrame(positionAtmLabels);
-    // Un swap de fuente variable tardío puede cambiar el alto de
-    // .hero-copy (y por tanto la caja de la atmósfera) después del
-    // primer cálculo — se recalcula una vez más cuando las fuentes
-    // reales ya están listas.
-    if (window.document.fonts && window.document.fonts.ready) {
-      window.document.fonts.ready.then(positionAtmLabels).catch(function () {});
-    }
-    var atmLabelResizeTimer;
-    window.addEventListener('resize', function () {
-      clearTimeout(atmLabelResizeTimer);
-      atmLabelResizeTimer = setTimeout(positionAtmLabels, 150);
-    });
-    window.addEventListener('orientationchange', function () {
-      setTimeout(positionAtmLabels, 250);
-    });
-  })();
 
   /* ---------- Generic accordion (Método, FAQ, Garantías) ---------- */
   document.querySelectorAll('[data-accordion]').forEach(function (list) {

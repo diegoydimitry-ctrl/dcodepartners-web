@@ -119,6 +119,15 @@
   </url>
 
   <url>
+    <loc>https://dcodepartners.com/cambios-en-proceso</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cambios-en-proceso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cambios-en-proceso"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cambios-en-proceso"/>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
     <loc>https://dcodepartners.com/servicios</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios"/>
@@ -406,6 +415,15 @@
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
     <lastmod>2026-08-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/cambios-en-proceso</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cambios-en-proceso"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cambios-en-proceso"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cambios-en-proceso"/>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
   </url>
 
   <url>
