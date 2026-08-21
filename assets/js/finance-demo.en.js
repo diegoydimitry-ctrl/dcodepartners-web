@@ -13,16 +13,37 @@
   if (!FS) return;
 
   var NAV_ITEMS = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'facturas', label: 'Invoices' },
-    { id: 'presupuestos', label: 'Quotes' },
-    { id: 'clientes', label: 'Clients' },
-    { id: 'cobros', label: 'Collections' },
-    { id: 'gastos', label: 'Expenses' },
-    { id: 'proyectos', label: 'Projects' },
-    { id: 'ia', label: 'Ask Finance' },
-    { id: 'configuracion', label: 'Settings' }
+    { id: 'dashboard', label: 'Dashboard', grupo: 'dia' },
+    { id: 'facturas', label: 'Invoices', grupo: 'dia' },
+    { id: 'presupuestos', label: 'Quotes', grupo: 'negocio' },
+    { id: 'clientes', label: 'Clients', grupo: 'negocio' },
+    { id: 'cobros', label: 'Collections', grupo: 'dia' },
+    { id: 'gastos', label: 'Expenses', grupo: 'dia' },
+    { id: 'proyectos', label: 'Projects', grupo: 'negocio' },
+    { id: 'ia', label: 'Ask Finance', grupo: 'inteligencia' },
+    { id: 'configuracion', label: 'Settings', grupo: 'administracion' }
   ];
+
+  // Fullpage mode only — mirrors the real repo's nav-items.ts groups and
+  // NavIcono.tsx icon strokes, limited to the modules this demo actually
+  // has built.
+  var NAV_GROUPS = [
+    { clave: 'dia', titulo: 'Day to day' },
+    { clave: 'negocio', titulo: 'Business' },
+    { clave: 'inteligencia', titulo: 'Intelligence' },
+    { clave: 'administracion', titulo: 'Administration' }
+  ];
+  var NAV_ICONS = {
+    dashboard: '<rect x="3" y="3" width="7.5" height="8.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="14.5" width="7.5" height="6.5" rx="1.5"/>',
+    facturas: '<path d="M6 2.75h9.5L19.5 7v13.5a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V3.5A.75.75 0 0 1 6 2.75Z"/><path d="M14.75 3v4.25H19"/><path d="M8.5 12.5h7M8.5 16.5h4.5" stroke-linecap="round"/>',
+    cobros: '<rect x="2.75" y="5.75" width="18.5" height="12.5" rx="2"/><circle cx="12" cy="12" r="2.75"/><path d="M6.25 12h.01M17.75 12h.01" stroke-linecap="round"/>',
+    gastos: '<path d="M3.25 8.5h17.5v10a1.75 1.75 0 0 1-1.75 1.75H5a1.75 1.75 0 0 1-1.75-1.75v-10Z"/><path d="M3.25 8.5 5.6 4.4A1.5 1.5 0 0 1 6.9 3.65h10.2a1.5 1.5 0 0 1 1.3.75l2.35 4.1"/><path d="M9.5 13h5" stroke-linecap="round"/>',
+    presupuestos: '<rect x="4.25" y="2.75" width="15.5" height="18.5" rx="2"/><path d="M8 7.5h8M8 11.5h8M8 15.5h4.5" stroke-linecap="round"/>',
+    clientes: '<circle cx="9" cy="8" r="3.25"/><path d="M2.75 20.25a6.25 6.25 0 0 1 12.5 0"/><path d="M16.25 5.1a3.25 3.25 0 0 1 0 5.8M18 20.25a6.3 6.3 0 0 0-1.4-3.95" stroke-linecap="round"/>',
+    proyectos: '<rect x="2.75" y="6.75" width="18.5" height="13.5" rx="2"/><path d="M8.5 6.75V5A1.75 1.75 0 0 1 10.25 3.25h3.5A1.75 1.75 0 0 1 15.5 5v1.75"/><path d="M2.75 12.5h18.5"/>',
+    ia: '<path d="M12 3.25 13.9 8.4a2 2 0 0 0 1.2 1.2l5.15 1.9-5.15 1.9a2 2 0 0 0-1.2 1.2L12 19.75l-1.9-5.15a2 2 0 0 0-1.2-1.2L3.75 11.5l5.15-1.9a2 2 0 0 0 1.2-1.2L12 3.25Z" stroke-linejoin="round"/>',
+    configuracion: '<circle cx="12" cy="12" r="3"/><path d="M19.5 12a7.6 7.6 0 0 0-.12-1.35l2-1.55-2-3.46-2.36.95a7.5 7.5 0 0 0-2.34-1.35L14.3 2.75h-4l-.38 2.49a7.5 7.5 0 0 0-2.34 1.35l-2.36-.95-2 3.46 2 1.55a7.6 7.6 0 0 0 0 2.7l-2 1.55 2 3.46 2.36-.95a7.5 7.5 0 0 0 2.34 1.35l.38 2.49h4l.38-2.49a7.5 7.5 0 0 0 2.34-1.35l2.36.95 2-3.46-2-1.55c.08-.44.12-.89.12-1.35Z" stroke-linejoin="round"/>'
+  };
 
   var MENU_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/></svg>';
 
@@ -64,6 +85,7 @@
       '<div class="fdemo-topbar-avatar">D</div>' +
       '<a class="fdemo-topbar-exit" href="' + exitHref + '">' + esc(exitLabel) + '</a>' +
       '</div></div>' +
+      (useHash ? '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demo</span><span class="fdemo-demo-banner-text">fictional data, does not reflect real D-Code Partners information</span></div>' : '') +
       '<div class="fdemo-main" data-role="main"><div class="fdemo-page" data-role="content"></div></div>' +
       '</div>';
 
@@ -75,19 +97,51 @@
 
     var state = { route: 'dashboard', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [] } };
 
-    sidebarEl.innerHTML =
-      '<div class="fdemo-brand">' +
-      '<span class="fdemo-brand-mark">D</span>' +
-      '<div><div class="fdemo-brand-name">D-Code Finance</div>' +
-      '<div class="fdemo-brand-sub">D-Code Partners <span class="fdemo-brand-demo">DEMO</span></div></div>' +
-      '</div>' +
-      NAV_ITEMS.map(function (v) {
-        return '<a href="#" class="fdemo-nav-item" data-role="nav" data-view="' + v.id + '"><span class="fdemo-nav-dot"></span>' + esc(v.label) + '</a>';
-      }).join('');
+    var navIndicatorEl = null;
+    if (useHash) {
+      sidebarEl.innerHTML =
+        '<div class="fdemo-brand fdemo-brand--full">' +
+        '<img src="/assets/logo/dcode-icon-sm.png" alt="" width="24" height="20" class="fdemo-brand-logo">' +
+        '<div class="fdemo-brand-word"><span class="fdemo-brand-d">D-Code</span><span class="fdemo-brand-suffix">FINANCE</span></div>' +
+        '</div>' +
+        '<div class="fdemo-nav-groups" data-role="nav-groups">' +
+        '<div class="fdemo-nav-indicator" data-role="nav-indicator"><span class="fdemo-nav-indicator-notch"></span></div>' +
+        NAV_GROUPS.map(function (g, gi) {
+          var entradas = NAV_ITEMS.filter(function (v) { return v.grupo === g.clave; });
+          if (!entradas.length) return '';
+          return (gi > 0 ? '<div class="fdemo-nav-divider"></div>' : '') +
+            '<p class="fdemo-nav-group-title">' + esc(g.titulo) + '</p>' +
+            '<div class="fdemo-nav-group-items">' +
+            entradas.map(function (v) {
+              return '<a href="#" class="fdemo-nav-item fdemo-nav-item--icon" data-role="nav" data-view="' + v.id + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[v.id] || '') + '</svg>' +
+                esc(v.label) + '</a>';
+            }).join('') +
+            '</div>';
+        }).join('') +
+        '</div>';
+      navIndicatorEl = sidebarEl.querySelector('[data-role="nav-indicator"]');
+    } else {
+      sidebarEl.innerHTML =
+        '<div class="fdemo-brand">' +
+        '<span class="fdemo-brand-mark">D</span>' +
+        '<div><div class="fdemo-brand-name">D-Code Finance</div>' +
+        '<div class="fdemo-brand-sub">D-Code Partners <span class="fdemo-brand-demo">DEMO</span></div></div>' +
+        '</div>' +
+        NAV_ITEMS.map(function (v) {
+          return '<a href="#" class="fdemo-nav-item" data-role="nav" data-view="' + v.id + '"><span class="fdemo-nav-dot"></span>' + esc(v.label) + '</a>';
+        }).join('');
+    }
 
     function setActiveNav(viewId) {
       sidebarEl.querySelectorAll('[data-role="nav"]').forEach(function (el) {
-        el.classList.toggle('is-active', el.getAttribute('data-view') === viewId);
+        var active = el.getAttribute('data-view') === viewId;
+        el.classList.toggle('is-active', active);
+        if (active && navIndicatorEl) {
+          navIndicatorEl.style.transform = 'translateY(' + el.offsetTop + 'px)';
+          navIndicatorEl.style.height = el.offsetHeight + 'px';
+          navIndicatorEl.style.opacity = '1';
+        }
       });
     }
     function closeMobileMenu() { sidebarEl.classList.remove('is-open'); overlayEl.classList.remove('is-open'); }

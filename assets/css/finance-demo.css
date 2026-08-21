@@ -59,7 +59,10 @@
   flex-direction:column;
   padding:12px;
   overflow-y:auto;
+  scrollbar-width:none; /* Firefox: hide the native scrollbar, keep functional scroll */
+  -ms-overflow-style:none; /* old Edge/IE */
 }
+.fdemo-sidebar::-webkit-scrollbar{ display:none; } /* Chrome/Safari */
 .fdemo-brand{
   display:flex;
   align-items:center;
@@ -103,6 +106,61 @@
 }
 .fdemo-nav-dot{ width:6px; height:6px; border-radius:50%; flex-shrink:0; background:transparent; }
 .fdemo-nav-item.is-active .fdemo-nav-dot{ background:var(--dc-accent-cyan); }
+
+/* ---------- Fullpage-only: real brand lockup, grouped nav, sliding
+   indicator (ported from MarcaFinance.tsx / Sidebar.tsx / NavIcono.tsx on
+   dcode-finance@finance-product-rebuild). The embedded showcase on Home
+   and Departamentos → Finanzas keeps the simpler markup above, untouched. ---------- */
+.fdemo-brand--full{ padding:14px 8px 16px; }
+.fdemo-brand-logo{ display:block; flex-shrink:0; }
+.fdemo-brand-word{ display:flex; flex-direction:column; line-height:1.1; }
+.fdemo-brand-d{ font-size:.92rem; font-weight:700; color:var(--dc-text); }
+.fdemo-brand-suffix{ margin-top:4px; font-size:.62rem; font-weight:600; letter-spacing:.22em; color:var(--dc-accent-cyan); }
+
+.fdemo-nav-groups{ position:relative; }
+.fdemo-nav-indicator{
+  position:absolute; top:0; left:0; width:100%; border-radius:8px;
+  background:linear-gradient(90deg, rgba(34,211,238,.15), rgba(34,211,238,.02));
+  opacity:0; pointer-events:none;
+  transition:transform .18s ease, height .18s ease, opacity .18s ease;
+}
+.fdemo-nav-indicator-notch{
+  position:absolute; top:50%; left:0; width:2px; height:18px;
+  transform:translateY(-50%); border-radius:999px; background:var(--dc-accent-cyan);
+}
+.fdemo-nav-group-title{
+  margin:0; padding:0 12px 8px;
+  font-size:.66rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--dc-text-faint);
+}
+.fdemo-nav-group-items{ display:flex; flex-direction:column; gap:3px; }
+.fdemo-nav-divider{ height:1px; background:var(--dc-border); margin:18px -12px; }
+.fdemo-nav-item--icon{ position:relative; z-index:1; gap:10px; }
+.fdemo-nav-icon{ width:17px; height:17px; flex-shrink:0; color:var(--dc-text-faint); }
+.fdemo-nav-item--icon.is-active{ background:none; box-shadow:none; font-weight:600; }
+.fdemo-nav-item--icon.is-active .fdemo-nav-icon{ color:var(--dc-accent-cyan); }
+
+.fdemo-demo-banner{
+  display:flex; align-items:center; justify-content:center; gap:8px; flex-shrink:0;
+  padding:6px 16px; text-align:center;
+  border-bottom:1px solid rgba(139,92,246,.2);
+  background:rgba(139,92,246,.07);
+}
+.fdemo-demo-banner-dot{ width:6px; height:6px; border-radius:50%; flex-shrink:0; background:var(--dc-accent-violet); }
+.fdemo-demo-banner-label{
+  font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--dc-accent-violet);
+}
+.fdemo-demo-banner-text{ font-size:.72rem; color:var(--dc-text-muted); }
+@media (max-width:640px){ .fdemo-demo-banner-text{ display:none; } }
+
+@media (min-width:861px){
+  .fdemo-app.is-fullpage .fdemo-sidebar{
+    width:248px;
+    background:var(--dc-surface-2) linear-gradient(180deg, var(--dc-surface-2) 0%, var(--dc-surface) 180px);
+  }
+  .fdemo-app.is-fullpage .fdemo-page{ max-width:1600px; }
+  .fdemo-app.is-fullpage .fdemo-main{ padding:24px 32px; }
+}
 
 /* ---------- Sidebar overlay (mobile) ---------- */
 .fdemo-sidebar-overlay{
@@ -149,7 +207,12 @@
 .fdemo-topbar-exit:hover{ border-color:rgba(239,68,68,.4); color:var(--dc-danger); }
 
 /* ---------- Main ---------- */
-.fdemo-main{ flex:1; min-width:0; overflow-y:auto; padding:16px; }
+.fdemo-main{
+  flex:1; min-width:0; overflow-y:auto; padding:16px;
+  scrollbar-width:none; /* Firefox: hide the native scrollbar, keep functional scroll */
+  -ms-overflow-style:none; /* old Edge/IE */
+}
+.fdemo-main::-webkit-scrollbar{ display:none; } /* Chrome/Safari */
 .fdemo-page{ display:flex; flex-direction:column; gap:20px; max-width:1100px; }
 .fdemo-page.is-narrow{ max-width:760px; }
 .fdemo-page-title{ font-size:1.25rem; font-weight:600; color:var(--dc-text); margin:0; }
