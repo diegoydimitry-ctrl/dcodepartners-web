@@ -1585,6 +1585,88 @@ nav.main-nav > ul{ position:relative; }
 .service-icon svg{ width:19px; height:19px; }
 .service-card:hover .service-icon{ transform:translateY(-2px) scale(1.06); box-shadow:0 0 0 5px rgba(67,224,255,.1); }
 
+/* ============ SERVICIOS — VISUAL DE BUCLE CERRADO (DIR-038 Piloto) ============
+   Solo en servicios/automatizacion-ia.html. Decorativo (aria-hidden), sin
+   texto: anillo cerrado + 4 módulos + puntos de flujo, mismos tokens del
+   acabado cromado que Método/Departamentos. Banda compacta (max-width
+   640px), no un bloque grande — el texto de la página sigue siendo el
+   elemento principal. */
+.servicios-visual{
+  padding-top:clamp(8px,1.5vw,16px);
+  padding-bottom:clamp(8px,1.5vw,16px);
+  margin-top:clamp(-56px,-5vw,-24px);
+  margin-bottom:clamp(-56px,-5vw,-24px);
+  position:relative;
+  z-index:1;
+}
+.servicios-visual-diagram{ max-width:640px; margin:0 auto; }
+.servicios-visual-diagram svg{ display:block; width:100%; height:auto; }
+.servicios-visual-diagram .loop-ring{ fill:none; stroke:url(#loopLine); stroke-width:2; opacity:.55; }
+.servicios-visual-diagram .loop-node{ fill:url(#loopFill); stroke:url(#loopRing); stroke-width:1.4; }
+.servicios-visual-diagram .loop-node-sheen{ stroke:var(--surface-sheen); stroke-width:1.2; opacity:.45; }
+.servicios-visual-diagram .loop-flow{ animation:pulse 2.4s ease-in-out infinite; }
+.servicios-visual-diagram .loop-flow.c-cyan{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.servicios-visual-diagram .loop-flow.c-blue{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
+.servicios-visual-diagram .loop-flow.c-violet{ fill:var(--violet); filter:drop-shadow(0 0 4px var(--violet)); }
+.servicios-visual-diagram stop.fill-a{ stop-color:var(--surface-top); }
+.servicios-visual-diagram stop.fill-b{ stop-color:var(--panel-2); }
+.servicios-visual-diagram stop.fill-c{ stop-color:var(--panel); }
+.servicios-visual-diagram stop.ring-a{ stop-color:var(--surface-ring-top); }
+.servicios-visual-diagram stop.ring-b{ stop-color:var(--surface-ring-mid); }
+.servicios-visual-diagram stop.ring-c{ stop-color:var(--surface-ring-bottom); }
+.servicios-visual-diagram stop.line-a{ stop-color:var(--cyan); }
+.servicios-visual-diagram stop.line-b{ stop-color:var(--blue); }
+.servicios-visual-diagram stop.line-c{ stop-color:var(--violet); }
+
+/* Agentes IA — diálogo: dos paneles distintos (consulta / respuesta,
+   esta última con una capa interior propia) unidos por una línea abierta,
+   con dos puntos recorriéndola en direcciones opuestas y simultáneas.
+   Reutiliza los degradados fill/ring/line ya definidos arriba. */
+.dialog-diagram .dialog-line{ fill:none; stroke:url(#dialogLine); stroke-width:2; opacity:.45; }
+.dialog-diagram .dialog-node{ fill:url(#dialogFill); stroke:url(#dialogRing); stroke-width:1.4; }
+.dialog-diagram .dialog-node-inset{ fill:rgba(255,255,255,.03); stroke:var(--surface-border); stroke-width:1; }
+.dialog-diagram .dialog-node-accent{ stroke:var(--violet); stroke-width:1; opacity:.4; }
+.dialog-diagram .dialog-node-sheen{ stroke:var(--surface-sheen); stroke-width:1.2; opacity:.45; }
+.dialog-diagram .dialog-flow{ filter:drop-shadow(0 0 4px currentColor); }
+.dialog-diagram .dialog-flow.c-cyan{ fill:var(--cyan); color:var(--cyan); }
+.dialog-diagram .dialog-flow.c-blue{ fill:var(--blue); color:var(--blue); }
+.dialog-diagram .flow-right{ animation:dialog-flow-right 3.2s ease-in-out infinite; }
+.dialog-diagram .flow-left{ animation:dialog-flow-left 3.2s ease-in-out infinite; animation-delay:1.6s; }
+@keyframes dialog-flow-right{
+  0%{ transform:translateX(0); opacity:0; }
+  12%{ opacity:1; }
+  88%{ opacity:1; }
+  100%{ transform:translateX(207px); opacity:0; }
+}
+@keyframes dialog-flow-left{
+  0%{ transform:translateX(0); opacity:0; }
+  12%{ opacity:1; }
+  88%{ opacity:1; }
+  100%{ transform:translateX(-207px); opacity:0; }
+}
+
+/* Integraciones — convergencia: 4 nodos periféricos de tamaños distintos
+   conectados por curvas a un punto central pequeño (el conector, no un
+   núcleo grande como el del Hub de Departamentos). Reutiliza los
+   degradados fill/ring ya definidos arriba; convLine es propio (2 paradas,
+   objectBoundingBox por trazo — cada curva funde de cian a azul en su
+   propio recorrido). */
+.converge-diagram .converge-path{ fill:none; stroke:url(#convLine); stroke-width:1.6; opacity:.4; }
+.converge-diagram .converge-node{ fill:url(#convFill); stroke:url(#convRing); stroke-width:1.4; }
+.converge-diagram .converge-node-sheen{ stroke:var(--surface-sheen); stroke-width:1.1; opacity:.45; }
+.converge-diagram .converge-flow{ animation:pulse 2.4s ease-in-out infinite; }
+.converge-diagram .converge-flow.c-cyan{ fill:var(--cyan); filter:drop-shadow(0 0 4px var(--cyan)); }
+.converge-diagram .converge-flow.c-blue{ fill:var(--blue); filter:drop-shadow(0 0 4px var(--blue)); }
+.converge-diagram .converge-core-ring{ fill:var(--panel-2); stroke:url(#convRing); stroke-width:1.2; }
+.converge-diagram .converge-core-dot{ fill:var(--violet); filter:drop-shadow(0 0 6px var(--violet)); animation:pulse 2.8s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce){
+  .servicios-visual-diagram .loop-flow,
+  .dialog-diagram .dialog-flow,
+  .converge-diagram .converge-flow,
+  .converge-diagram .converge-core-dot{ animation:none; opacity:1; }
+}
+
 /* ============ PIPELINE (visualización de sistema) ============
    Representación simplificada del flujo de un Departamento, para las
    páginas de Comercial/Producción/Finanzas/Soporte. Deliberadamente no
