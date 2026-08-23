@@ -2471,7 +2471,7 @@ nav.main-nav > ul{ position:relative; }
   text-align:center;
   background:rgba(255,255,255,.015);
 }
-.future-cases h3{ font-family:var(--serif); font-size:1.3rem; color:var(--ink); font-weight:600; margin-bottom:12px; }
+.future-cases h2{ font-family:var(--serif); font-size:1.3rem; color:var(--ink); font-weight:600; margin-bottom:12px; }
 .future-cases p{ color:var(--stone); max-width:520px; margin:0 auto; }
 
 /* Nota "esto es una demo" -- separa visualmente el CTA de la vista interactiva
