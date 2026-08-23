@@ -146,7 +146,7 @@ function classifyError(error) {
   };
 }
 
-module.exports = async function handler(req, res) {
+async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
   if (req.method !== 'POST') {
@@ -202,20 +202,29 @@ module.exports = async function handler(req, res) {
     const conversation = [...history, { role: 'user', content: message }];
 
     // Recorre la cadena de proveedores en orden (Gemini, luego Anthropic si
-    // está configurado): cada uno ya reintenta internamente sus propios
-    // fallos transitorios (ver lib/providers.js), así que solo se pasa al
-    // siguiente proveedor cuando el anterior se ha rendido de verdad. Esto
-    // es lo que evita que una sobrecarga temporal de un único proveedor
-    // (fallo real visto en producción: Gemini 503 "high demand") se traduzca
-    // en "el chatbot no responde" cuando hay una alternativa real disponible.
+    // está configurado): solo se pasa al siguiente proveedor cuando el
+    // anterior se ha rendido de verdad. Esto es lo que evita que una
+    // sobrecarga temporal de un único proveedor (fallo real visto en
+    // producción: Gemini 503 "high demand") se traduzca en "el chatbot no
+    // responde" cuando hay una alternativa real disponible.
+    //
+    // Solo el PRIMER proveedor de la cadena reintenta internamente sus
+    // fallos transitorios (ver lib/providers.js); el resto se prueba una
+    // única vez. No es un recorte de fiabilidad: es presupuesto de tiempo.
+    // Con maxDuration=60s (ver export de config más abajo) y 12s por
+    // intento, reintentar TAMBIÉN el proveedor de respaldo podría superar
+    // el límite de la función y matarla a mitad, sin poder devolver el
+    // mensaje honesto de error — peor que agotar el respaldo a la primera.
     let lastError = null;
     let lastProviderName = null;
-    for (const provider of providerChain) {
+    for (let i = 0; i < providerChain.length; i += 1) {
+      const provider = providerChain[i];
       lastProviderName = provider.name;
       try {
         console.log(`[chat] Llamando a ${provider.name}...`);
         const callStart = Date.now();
-        const reply = await provider.generate(systemPrompt, conversation);
+        const options = i === 0 ? undefined : { maxAttempts: 1 };
+        const reply = await provider.generate(systemPrompt, conversation, options);
         console.log(
           `[chat] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
             `(total petición: ${Date.now() - requestStart}ms)`
@@ -225,7 +234,7 @@ module.exports = async function handler(req, res) {
         lastError = providerError;
         console.error(
           `[chat] Error del proveedor ${provider.name} tras ${Date.now() - requestStart}ms ` +
-            `(quedan ${providerChain.length - providerChain.indexOf(provider) - 1} proveedor(es) por intentar):`,
+            `(quedan ${providerChain.length - i - 1} proveedor(es) por intentar):`,
           providerError
         );
       }
@@ -252,4 +261,16 @@ module.exports = async function handler(req, res) {
       .status(500)
       .json({ success: false, error: 'Ha ocurrido un error. Inténtalo de nuevo en unos segundos.' });
   }
-};
+}
+
+module.exports = handler;
+// Presupuesto explícito de duración de la función (Vercel Node.js
+// Serverless Function, sin framework). Antes no había ningún valor
+// fijado, así que el límite real dependía implícitamente del plan/cuenta
+// — arriesgado ahora que lib/providers.js puede encadenar varios intentos
+// entre dos proveedores. 60s es el límite máximo del plan Hobby: fijarlo
+// explícito evita que un cambio de plan o de valor por defecto de Vercel
+// deje la función con menos margen del que asume el presupuesto de
+// reintentos de lib/providers.js (ver el comentario junto a
+// REQUEST_TIMEOUT_MS en ese archivo).
+module.exports.config = { maxDuration: 60 };
