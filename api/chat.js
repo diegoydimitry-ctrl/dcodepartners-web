@@ -10,7 +10,7 @@
  * mensaje honesto explicando el motivo — nunca una respuesta de repuesto
  * que aparente venir del modelo.
  */
-const { getProvider } = require('../lib/providers');
+const { getProviderChain } = require('../lib/providers');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
@@ -180,9 +180,9 @@ module.exports = async function handler(req, res) {
       `[chat] Petición recibida — ip=${ip} longitudMensaje=${message.length} turnosHistorial=${history.length}`
     );
 
-    const provider = getProvider();
+    const providerChain = getProviderChain();
 
-    if (!provider) {
+    if (!providerChain.length) {
       // Sin GEMINI_API_KEY3/GEMINI_API_KEY ni ANTHROPIC_API_KEY configuradas
       // en Vercel: no hay nada que pueda generar una respuesta real. Se
       // informa con honestidad en vez de simular una respuesta.
@@ -197,41 +197,55 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    console.log(`[chat] Proveedor seleccionado: ${provider.name}`);
-
     const siteContext = loadSiteContext();
     const systemPrompt = buildSystemPrompt(siteContext);
+    const conversation = [...history, { role: 'user', content: message }];
 
-    try {
-      console.log(`[chat] Llamando a ${provider.name}...`);
-      const callStart = Date.now();
-      const reply = await provider.generate(systemPrompt, [
-        ...history,
-        { role: 'user', content: message },
-      ]);
-      console.log(
-        `[chat] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
-          `(total petición: ${Date.now() - requestStart}ms)`
-      );
-      return res.status(200).json({ success: true, reply, mode: 'generated' });
-    } catch (providerError) {
-      const { category, reply } = classifyError(providerError);
-      const reason = String((providerError && providerError.message) || providerError).slice(0, 300);
-      console.error(
-        `[chat] Error del proveedor ${provider.name} (categoría: ${category}) tras ${Date.now() - requestStart}ms:`,
-        providerError
-      );
-      return res.status(200).json({
-        // El motivo técnico se añade también al propio texto de la respuesta
-        // (no solo al campo providerErrorReason) para poder diagnosticar un
-        // fallo real viendo el chat en el móvil, sin depender de las
-        // herramientas de desarrollador del navegador ni del panel de Vercel.
-        success: true,
-        reply: `${reply}\n\n_Detalle técnico (${category}): ${reason}_`,
-        mode: 'error',
-        providerErrorReason: reason,
-      });
+    // Recorre la cadena de proveedores en orden (Gemini, luego Anthropic si
+    // está configurado): cada uno ya reintenta internamente sus propios
+    // fallos transitorios (ver lib/providers.js), así que solo se pasa al
+    // siguiente proveedor cuando el anterior se ha rendido de verdad. Esto
+    // es lo que evita que una sobrecarga temporal de un único proveedor
+    // (fallo real visto en producción: Gemini 503 "high demand") se traduzca
+    // en "el chatbot no responde" cuando hay una alternativa real disponible.
+    let lastError = null;
+    let lastProviderName = null;
+    for (const provider of providerChain) {
+      lastProviderName = provider.name;
+      try {
+        console.log(`[chat] Llamando a ${provider.name}...`);
+        const callStart = Date.now();
+        const reply = await provider.generate(systemPrompt, conversation);
+        console.log(
+          `[chat] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
+            `(total petición: ${Date.now() - requestStart}ms)`
+        );
+        return res.status(200).json({ success: true, reply, mode: 'generated' });
+      } catch (providerError) {
+        lastError = providerError;
+        console.error(
+          `[chat] Error del proveedor ${provider.name} tras ${Date.now() - requestStart}ms ` +
+            `(quedan ${providerChain.length - providerChain.indexOf(provider) - 1} proveedor(es) por intentar):`,
+          providerError
+        );
+      }
     }
+
+    // Todos los proveedores de la cadena han agotado sus reintentos: se
+    // informa con honestidad, igual que antes, usando el último error real
+    // para clasificar y diagnosticar.
+    const { category, reply } = classifyError(lastError);
+    const reason = String((lastError && lastError.message) || lastError).slice(0, 300);
+    return res.status(200).json({
+      // El motivo técnico se añade también al propio texto de la respuesta
+      // (no solo al campo providerErrorReason) para poder diagnosticar un
+      // fallo real viendo el chat en el móvil, sin depender de las
+      // herramientas de desarrollador del navegador ni del panel de Vercel.
+      success: true,
+      reply: `${reply}\n\n_Detalle técnico (${lastProviderName}, ${category}): ${reason}_`,
+      mode: 'error',
+      providerErrorReason: reason,
+    });
   } catch (error) {
     console.error('[chat] Error inesperado en /api/chat:', error);
     return res
