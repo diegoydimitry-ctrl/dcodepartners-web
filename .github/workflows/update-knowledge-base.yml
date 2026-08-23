@@ -24,6 +24,11 @@ on:
     paths:
       - '**/*.html'
       - 'scripts/build-knowledge-base.js'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**/*.html'
+      - 'scripts/build-knowledge-base.js'
   workflow_dispatch: {}
 
 permissions:
@@ -32,6 +37,19 @@ permissions:
 jobs:
   update-kb:
     runs-on: ubuntu-latest
+    # AUD-DCP 23/08/2026 (segunda ronda): el comentario de arriba ya
+    # afirmaba que esto se ejecutaba "para un push a una rama de PR", pero
+    # el trigger real solo escuchaba `push` a `main` — durante la vida de
+    # una PR (p. ej. PR #74, que toca 73 páginas HTML) la knowledge base
+    # nunca se regeneraba, así que el Preview de esa PR servía al chatbot
+    # contenido desactualizado respecto al propio diff que se estaba
+    # revisando. Añadido el trigger `pull_request` que faltaba para que la
+    # afirmación del comentario sea cierta. Se restringe a PRs del mismo
+    # repositorio (no forks): un `pull_request` disparado desde un fork
+    # recibe un GITHUB_TOKEN de solo lectura pase lo que diga `permissions`
+    # aquí, y el intento de push fallaría en cada PR externa — mejor
+    # saltarlo limpiamente que fallar el check.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: actions/checkout@v4
         with:

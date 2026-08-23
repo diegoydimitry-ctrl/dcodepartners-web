@@ -31,6 +31,29 @@ on:
         default: 'https://dcodepartners.com'
 
 jobs:
+  # AUD-DCP 23/08/2026 (ronda 2): las pruebas unitarias de test/ (fetch
+  # mockeado, sin red — failover de proveedores del chatbot, saneado de
+  # historial, contact-fallback...) existían y pasaban en local, pero
+  # ningún check de CI las ejecutaba nunca: un PR podía fusionarse con esas
+  # pruebas rotas sin que nada lo detectara. Job aparte y sin dependencia de
+  # `qa-preview` (que sí necesita red/Vercel/Playwright) para que un fallo
+  # aquí se vea en segundos, no tras ~10 minutos de sondeo del deployment.
+  unit-tests:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar pruebas unitarias (fetch mockeado, sin llamadas reales)
+        run: npm test
+
   qa-preview:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest

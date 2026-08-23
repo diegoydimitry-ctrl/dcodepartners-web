@@ -1021,6 +1021,19 @@
       }
     };
 
+    /* El array 'history' en memoria (a diferencia de su copia persistida en
+       sessionStorage, ya limitada por saveHistory) no tenía límite: en una
+       sesión larga sin recargar la página, cada turno se acumulaba sin
+       recortarse nunca, así que el payload enviado en cada petición crecía
+       sin límite real (bug real: history.slice(0, -1) en sendMessage
+       reenviaba la conversación entera, turno a turno cada vez más grande,
+       aunque el servidor solo use los últimos 6 turnos). Se recorta aquí,
+       en el propio array en memoria, no solo al persistir. */
+    var trimHistory = function (history) {
+      if (history.length > MAX_STORED_TURNS) history.splice(0, history.length - MAX_STORED_TURNS);
+      return history;
+    };
+
     var scrollToBottom = function () {
       chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
     };
@@ -1071,6 +1084,7 @@
       addMessage(text, 'user');
       if (chatQuick) chatQuick.style.display = 'none';
       history.push({ role: 'user', content: text });
+      trimHistory(history);
       saveHistory(history);
 
       setSending(true);
@@ -1109,6 +1123,7 @@
             : 'Ha ocurrido un problema al procesar tu mensaje. Inténtalo de nuevo en unos segundos o contáctanos directamente.';
           addMessage(reply, 'bot');
           history.push({ role: 'assistant', content: reply });
+          trimHistory(history);
           saveHistory(history);
         })
         .catch(function () {
