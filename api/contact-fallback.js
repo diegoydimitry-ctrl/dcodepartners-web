@@ -83,11 +83,25 @@ const MAX_FIELD_LENGTHS = { nombre: 120, empresa: 120, email: 200, telefono: 40,
 // de intentar enviar la confirmación a esa dirección.
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// AUD-DCP 23/08/2026 (ronda 2): 'nombre' se usa tal cual dentro del
+// `subject` del email interno (ver más abajo). escapeHtml() protege el
+// CUERPO del email (HTML), pero no elimina \r\n — un salto de línea ahí
+// es una inyección de cabeceras de email clásica (permite falsificar
+// cabeceras SMTP adicionales, p. ej. un Bcc: propio, incluso si el
+// proveedor no lo explota, es el tipo de dato que nunca debe llegar
+// crudo a una cabecera). Se eliminan aquí, en el saneado común a todos
+// los campos, no solo en 'nombre': ningún campo de este formulario tiene
+// un uso legítimo para caracteres de control.
+function stripControlChars(value) {
+  // eslint-disable-next-line no-control-regex
+  return value.replace(/[\r\n\t\x00-\x1F\x7F]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function truncateFields(fields) {
   const out = {};
   for (const [key, maxLen] of Object.entries(MAX_FIELD_LENGTHS)) {
     const value = fields[key];
-    out[key] = typeof value === 'string' ? value.trim().slice(0, maxLen) : value;
+    out[key] = typeof value === 'string' ? stripControlChars(value).slice(0, maxLen) : value;
   }
   return out;
 }

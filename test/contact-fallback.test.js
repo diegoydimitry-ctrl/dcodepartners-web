@@ -128,6 +128,23 @@ test('el HTML del nombre/mensaje se escapa antes de interpolarse en el email', a
 // (POST directo al endpoint, sin pasar por el formulario ni su maxlength de
 // navegador) se interpolaba entero en el email. Verifica que el servidor
 // trunca de verdad, no solo que el frontend lo haría.
+// AUD-DCP 23/08/2026 (ronda 2): 'nombre' se interpola sin escapar en el
+// `subject` del email (no es HTML ahí, es una cabecera). Un \r\n en el
+// campo es una inyección de cabeceras de email clásica -- verifica que
+// no llega ningún carácter de control al subject ni al resto de campos.
+test('un salto de línea en el nombre no llega crudo al subject (inyección de cabeceras)', async () => {
+  let capturedSubject = '';
+  const handler = freshHandlerWithMockResend(async (opts) => { if (!capturedSubject) capturedSubject = opts.subject; return { id: 'fake' }; });
+  const { req, res } = mockReqRes({
+    nombre: 'Ana\r\nBcc: atacante@ejemplo-prueba.invalid',
+    email: 'ana@ejemplo-prueba.invalid',
+    turnstileToken: 'tok123',
+  });
+  await handler(req, res);
+  assert.equal(res._status, 200);
+  assert.ok(!capturedSubject.includes('\r') && !capturedSubject.includes('\n'), `subject no debe contener \\r ni \\n: ${JSON.stringify(capturedSubject)}`);
+});
+
 test('un mensaje/nombre gigantes se truncan en servidor, no se envían enteros', async () => {
   let capturedHtml = '';
   let capturedSubject = '';
