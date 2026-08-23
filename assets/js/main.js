@@ -1076,10 +1076,26 @@
       setSending(true);
       showTyping();
 
+      // Sin esto, una conexión que se queda colgada entre navegador y
+      // servidor (no un 405, sino un fallo de red intermedio que nunca
+      // llega a resolver ni rechazar el fetch) deja el indicador
+      // "escribiendo..." congelado indefinidamente — exactamente la
+      // percepción de "el chatbot no responde" que motivó el incidente
+      // original, ahora del lado cliente. 65s: algo por encima del
+      // maxDuration=60s del servidor, para que en el caso normal de
+      // timeout sea el propio servidor quien responda primero con su
+      // mensaje honesto ya existente, y este timeout actúe solo como red
+      // de seguridad para una conexión realmente colgada.
+      var chatAbortController = ('AbortController' in window) ? new AbortController() : null;
+      var chatTimeoutId = chatAbortController
+        ? setTimeout(function () { chatAbortController.abort(); }, 65000)
+        : null;
+
       fetch(CHAT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history: history.slice(0, -1) })
+        body: JSON.stringify({ message: text, history: history.slice(0, -1) }),
+        signal: chatAbortController ? chatAbortController.signal : undefined
       })
         .then(function (response) {
           return response.json().then(function (data) {
@@ -1103,6 +1119,7 @@
           saveHistory(history);
         })
         .then(function () {
+          if (chatTimeoutId) clearTimeout(chatTimeoutId);
           setSending(false);
           if (chatInput) chatInput.focus();
         });

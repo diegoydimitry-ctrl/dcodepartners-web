@@ -4,9 +4,15 @@
  * páginas HTML públicas del sitio. Fuente única de verdad: nadie escribe
  * respuestas a mano, el asistente indexa lo que ya existe en la web.
  *
- * Se ejecuta automáticamente en cada `npm run build` (ver vercel.json), así
- * que cualquier cambio de contenido en una página se refleja solo en el
- * conocimiento del asistente en el siguiente despliegue.
+ * AUD-DCP 23/08/2026: este comentario decía antes que se ejecutaba
+ * automáticamente en cada `npm run build` — eso era falso: no existe
+ * ningún script `build` en package.json ni `buildCommand` en vercel.json
+ * (el proyecto es zero-config). La regeneración es manual
+ * (`npm run sync-content` / `npm run generate-kb`) o vía el workflow de
+ * GitHub Actions `.github/workflows/update-knowledge-base.yml`, que la
+ * regenera y abre un PR automático cuando un push a main toca HTML. Si ese
+ * workflow se desactiva o falla, esta base queda desactualizada en
+ * silencio — no hay ninguna otra red de seguridad.
  */
 const fs = require('fs');
 const path = require('path');
@@ -178,14 +184,24 @@ function buildPage(filePath) {
 function main() {
   const files = findHtmlFiles(ROOT).sort();
   const pages = files.map(buildPage).filter(Boolean);
-
   const totalChunks = pages.reduce((n, p) => n + p.chunks.length, 0);
-  const kb = {
-    generatedAt: new Date().toISOString(),
-    pageCount: pages.length,
-    chunkCount: totalChunks,
-    pages,
-  };
+
+  // generatedAt solo avanza si el contenido real (pages) cambió. Antes
+  // cambiaba en cada ejecución aunque nada más lo hiciera, lo que produce
+  // "ruido": un commit automatizado (ver .github/workflows/
+  // update-knowledge-base.yml) que solo toca un timestamp no dice nada
+  // útil y dificulta ver cuándo cambió contenido de verdad.
+  let generatedAt = new Date().toISOString();
+  try {
+    const previous = JSON.parse(fs.readFileSync(OUT_PATH, 'utf8'));
+    if (previous && JSON.stringify(previous.pages) === JSON.stringify(pages)) {
+      generatedAt = previous.generatedAt;
+    }
+  } catch (e) {
+    // Sin fichero previo o ilegible: se genera uno nuevo con timestamp actual.
+  }
+
+  const kb = { generatedAt, pageCount: pages.length, chunkCount: totalChunks, pages };
 
   fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
   fs.writeFileSync(OUT_PATH, JSON.stringify(kb, null, 2));

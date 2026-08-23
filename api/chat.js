@@ -41,12 +41,19 @@ function sanitizeMessage(raw) {
 
 function sanitizeHistory(raw) {
   if (!Array.isArray(raw)) return [];
-  return raw
+  const turns = raw
     .filter(
       (m) => m && typeof m.content === 'string' && (m.role === 'user' || m.role === 'assistant')
     )
     .slice(-MAX_HISTORY_TURNS)
     .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_LENGTH) }));
+  // Gemini y Anthropic exigen que el primer turno enviado sea 'user'; un
+  // historial que empezara por 'assistant' (posible desde un cliente que
+  // no sea el widget oficial) haría fallar a AMBOS proveedores con un 400
+  // no reintentable, agotando la cadena entera sin ninguna posibilidad
+  // real de éxito.
+  const firstUserIndex = turns.findIndex((t) => t.role === 'user');
+  return firstUserIndex === -1 ? [] : turns.slice(firstUserIndex);
 }
 
 let cachedSiteContext = null;
@@ -54,11 +61,14 @@ let cachedSiteContext = null;
 /**
  * Carga el contenido real del sitio (generado por
  * scripts/build-knowledge-base.js a partir del HTML publicado) y lo
- * concatena entero como contexto. El sitio es pequeño (~7.500 tokens en
- * total): cabe sin problema en una sola petición, así que no hace falta
- * recuperación selectiva — Gemini ve todo el contenido real y decide qué
- * es relevante para cada pregunta, en vez de depender de que un ranking
- * léxico haya elegido el fragmento correcto de antemano.
+ * concatena entero como contexto. El texto real ronda las ~70.000-80.000
+ * palabras/tokens estimados (66 páginas), muy por debajo de la ventana de
+ * contexto de ambos proveedores (1M tokens): cabe sin problema en una
+ * sola petición, así que no hace falta recuperación selectiva — el modelo
+ * ve todo el contenido real y decide qué es relevante para cada pregunta,
+ * en vez de depender de que un ranking léxico haya elegido el fragmento
+ * correcto de antemano. Esto sí tiene coste real por token en cada
+ * llamada (ver cache_control en lib/providers.js para Anthropic).
  */
 function loadSiteContext() {
   if (cachedSiteContext) return cachedSiteContext;
@@ -155,6 +165,11 @@ async function handler(req, res) {
   }
 
   const requestStart = Date.now();
+  // ID corto de correlación: sin él, bajo peticiones concurrentes (misma
+  // instancia caliente o varias instancias en paralelo) las líneas de log
+  // de distintas peticiones se intercalan sin forma de saber cuál
+  // pertenece a cuál — la IP no siempre discrimina (NAT/proxy compartido).
+  const requestId = Math.random().toString(36).slice(2, 10);
 
   try {
     const forwardedFor = req.headers['x-forwarded-for'];
@@ -164,7 +179,7 @@ async function handler(req, res) {
       'unknown';
 
     if (isRateLimited(ip)) {
-      console.warn(`[chat] Rate limit alcanzado para ${ip}`);
+      console.warn(`[chat:${requestId}] Rate limit alcanzado para ${ip}`);
       return res
         .status(429)
         .json({ success: false, error: 'Demasiadas solicitudes. Inténtalo de nuevo en un minuto.' });
@@ -177,7 +192,7 @@ async function handler(req, res) {
     const history = sanitizeHistory(req.body && req.body.history);
 
     console.log(
-      `[chat] Petición recibida — ip=${ip} longitudMensaje=${message.length} turnosHistorial=${history.length}`
+      `[chat:${requestId}] Petición recibida — ip=${ip} longitudMensaje=${message.length} turnosHistorial=${history.length}`
     );
 
     const providerChain = getProviderChain();
@@ -186,7 +201,7 @@ async function handler(req, res) {
       // Sin GEMINI_API_KEY3/GEMINI_API_KEY ni ANTHROPIC_API_KEY configuradas
       // en Vercel: no hay nada que pueda generar una respuesta real. Se
       // informa con honestidad en vez de simular una respuesta.
-      console.error('[chat] Sin proveedor LLM configurado — faltan las variables de entorno de la API key');
+      console.error(`[chat:${requestId}] Sin proveedor LLM configurado — faltan las variables de entorno de la API key`);
       return res.status(200).json({
         success: true,
         reply:
@@ -221,19 +236,19 @@ async function handler(req, res) {
       const provider = providerChain[i];
       lastProviderName = provider.name;
       try {
-        console.log(`[chat] Llamando a ${provider.name}...`);
+        console.log(`[chat:${requestId}] Llamando a ${provider.name}...`);
         const callStart = Date.now();
         const options = i === 0 ? undefined : { maxAttempts: 1 };
         const reply = await provider.generate(systemPrompt, conversation, options);
         console.log(
-          `[chat] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
+          `[chat:${requestId}] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
             `(total petición: ${Date.now() - requestStart}ms)`
         );
         return res.status(200).json({ success: true, reply, mode: 'generated' });
       } catch (providerError) {
         lastError = providerError;
         console.error(
-          `[chat] Error del proveedor ${provider.name} tras ${Date.now() - requestStart}ms ` +
+          `[chat:${requestId}] Error del proveedor ${provider.name} tras ${Date.now() - requestStart}ms ` +
             `(quedan ${providerChain.length - i - 1} proveedor(es) por intentar):`,
           providerError
         );
@@ -256,7 +271,7 @@ async function handler(req, res) {
       providerErrorReason: reason,
     });
   } catch (error) {
-    console.error('[chat] Error inesperado en /api/chat:', error);
+    console.error(`[chat:${requestId}] Error inesperado en /api/chat:`, error);
     return res
       .status(500)
       .json({ success: false, error: 'Ha ocurrido un error. Inténtalo de nuevo en unos segundos.' });
