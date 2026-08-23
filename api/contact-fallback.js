@@ -52,21 +52,53 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Faltan datos obligatorios.' });
   }
 
+  // Los datos del formulario se insertan en HTML de email: sin escapar, un
+  // campo (típicamente "mensaje") con `<`/`>`/`&` puede romper el layout
+  // del email o inyectar marcado no deseado en el cliente de correo de
+  // destino. No es XSS contra el sitio (el email se renderiza fuera de
+  // dcodepartners.com), pero sí hay que sanear antes de interpolar.
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  const safe = {
+    nombre: escapeHtml(nombre),
+    empresa: escapeHtml(empresa),
+    email: escapeHtml(email),
+    telefono: escapeHtml(telefono),
+    mensaje: escapeHtml(mensaje),
+  };
+
+  // El aviso interno al equipo es lo único crítico para no perder el lead:
+  // si falla, hay que decirlo. La confirmación al cliente es un extra —
+  // si el equipo ya recibió el aviso pero la confirmación falla, seguimos
+  // devolviendo éxito (el lead está a salvo) en vez de hacer que el
+  // visitante reintente y duplique su propio aviso interno.
   try {
     await resend.emails.send({
       from: 'D-Code Partners <contact@dcodepartners.com>',
       to: ['dcodedepartment@gmail.com'],
-      subject: `Nueva solicitud de ${nombre} (vía respaldo)`,
+      subject: `Nueva solicitud de ${safe.nombre} (vía respaldo)`,
       html: `
         <h2>Nueva solicitud desde la web (envío de respaldo)</h2>
-        <p><strong>Nombre:</strong> ${nombre}</p>
-        <p><strong>Empresa:</strong> ${empresa || ''}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Teléfono:</strong> ${telefono || ''}</p>
+        <p><strong>Nombre:</strong> ${safe.nombre}</p>
+        <p><strong>Empresa:</strong> ${safe.empresa}</p>
+        <p><strong>Email:</strong> ${safe.email}</p>
+        <p><strong>Teléfono:</strong> ${safe.telefono}</p>
         <p><strong>Mensaje:</strong></p>
-        <p>${mensaje || ''}</p>
+        <p>${safe.mensaje}</p>
       `,
     });
+  } catch (error) {
+    console.error('[contact-fallback] Error enviando aviso interno al equipo (lead en riesgo de perderse):', error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+
+  try {
     await resend.emails.send({
       from: 'D-Code Partners <contact@dcodepartners.com>',
       to: email,
@@ -74,7 +106,7 @@ module.exports = async function handler(req, res) {
       html: `
         <div style="font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:auto;">
           <h2 style="color:#2b2b2b;">¡Gracias por contactar con D-Code Partners!</h2>
-          <p>Hola <strong>${nombre}</strong>,</p>
+          <p>Hola <strong>${safe.nombre}</strong>,</p>
           <p>Hemos recibido correctamente tu solicitud y queremos agradecerte la confianza depositada en nosotros.</p>
           <p>Nuestro equipo revisará la información que nos has enviado y preparará la mejor forma de ayudarte a automatizar y optimizar tu negocio.</p>
           <p>En un plazo inferior a <strong>24 horas laborables</strong> nos pondremos en contacto contigo para conocer mejor tus necesidades y resolver cualquier duda.</p>
@@ -84,9 +116,12 @@ module.exports = async function handler(req, res) {
         </div>
       `,
     });
-    return res.status(200).json({ success: true });
   } catch (error) {
-    console.error('[contact-fallback] Error enviando emails de respaldo:', error);
-    return res.status(500).json({ success: false, error: error.message });
+    // El equipo YA tiene el lead (email interno enviado con éxito): esto
+    // es un fallo de cortesía, no de negocio. Se registra pero no se
+    // reporta como error al visitante.
+    console.error('[contact-fallback] Aviso interno enviado OK, pero falló la confirmación al cliente:', error);
   }
+
+  return res.status(200).json({ success: true });
 };
