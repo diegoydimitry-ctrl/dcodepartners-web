@@ -779,7 +779,18 @@ nav.main-nav > ul{ position:relative; }
   gap:2px;
   flex-shrink:0;
 }
+/* DIR-WEB-TRANSFORM: el conmutador ES/EN medía 31x28px en móvil (medido
+   en 390px). Supera el mínimo de WCAG 2.5.8 (24x24), pero es un control
+   autónomo de la cabecera —no un enlace dentro de una frase— y a 28px de
+   alto se falla con el pulgar con facilidad. Se lleva a 36px de alto
+   real sin cambiar el tamaño del texto ni el aspecto de la píldora:
+   min-height + centrado, no más padding (que sí ensancharía la píldora
+   y desplazaría el resto de la cabecera). */
 .lang-switch a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
   padding:5px 10px;
   border-radius:100px;
   color:var(--stone-soft);
@@ -831,8 +842,18 @@ nav.main-nav > ul{ position:relative; }
   padding:0;
 }
 .breadcrumbs li{ list-style:none; }
-/* Objetivo táctil >=24px (WCAG 2.2 SC 2.5.8), igual que en .footer-col a */
-.breadcrumbs a{ display:inline-block; padding:5px 0; color:var(--stone-soft); transition:color .2s ease; }
+/* Objetivo táctil (WCAG 2.2 SC 2.5.8), igual que en .footer-col a.
+   DIR-WEB-TRANSFORM: medido en 390px daba 28px de alto; subido a 36px
+   con min-height, sin tocar el tamaño de fuente ni el interlineado de la
+   miga de pan. */
+.breadcrumbs a{
+  display:inline-flex;
+  align-items:center;
+  min-height:36px;
+  padding:5px 0;
+  color:var(--stone-soft);
+  transition:color .2s ease;
+}
 .breadcrumbs a:hover{ color:var(--cyan); }
 .breadcrumbs li[aria-current="page"]{ color:var(--stone); }
 .breadcrumbs .sep{ opacity:.5; }
