@@ -76,21 +76,9 @@ test('503 transitorio: reintenta con backoff y acaba respondiendo', () =>
     assert.equal(calls, 3);
   }));
 
-test('429 (cuota) es reintentable igual que un 5xx', () =>
-  withEnv({ GEMINI_API_KEY3: 'k' }, async () => {
-    const providers = loadProviders();
-    let calls = 0;
-    global.fetch = async () => {
-      calls += 1;
-      if (calls === 1) return jsonResponse(429, { error: { code: 429, status: 'RESOURCE_EXHAUSTED' } });
-      return jsonResponse(200, geminiOkBody('Recuperado tras 429.'));
-    };
-    const reply = await providers.getProviderChain()[0].generate('system', [
-      { role: 'user', content: 'hola' },
-    ]);
-    assert.equal(reply, 'Recuperado tras 429.');
-    assert.equal(calls, 2);
-  }));
+// Nota: un 429/cuota agotada YA NO se reintenta como un 5xx — falla rápido
+// a propósito (ver isQuotaError/withRetries en lib/providers.js y los
+// tests de "auditoría de rendimiento" más abajo, que reemplazan a este).
 
 test('agota los reintentos y lanza el último error si el 503 persiste', () =>
   withEnv({ GEMINI_API_KEY3: 'k' }, async () => {
@@ -257,3 +245,79 @@ test('isRetryableError clasifica correctamente los casos límite', () => {
   assert.equal(providers.isRetryableError(abortErr), true);
   assert.equal(providers.isRetryableError(new Error('algo raro sin patrón conocido')), false);
 });
+
+test('isQuotaError distingue cuota agotada de otros fallos retryables', () => {
+  const providers = loadProviders();
+  assert.equal(providers.isQuotaError(new Error('Gemini API respondió con estado 429: RESOURCE_EXHAUSTED')), true);
+  assert.equal(providers.isQuotaError(new Error('Gemini API respondió con estado 503: overloaded')), false);
+  assert.equal(providers.isQuotaError(new Error('fetch failed')), false);
+});
+
+test('auditoría de rendimiento: un 429/cuota falla rápido, sin agotar los reintentos del mismo proveedor', () =>
+  withEnv({ GEMINI_API_KEY3: 'k' }, async () => {
+    const providers = loadProviders();
+    let calls = 0;
+    const start = Date.now();
+    global.fetch = async () => {
+      calls += 1;
+      return jsonResponse(429, { error: { code: 429, status: 'RESOURCE_EXHAUSTED' } });
+    };
+    await assert.rejects(
+      () => providers.getProviderChain()[0].generate('system', [{ role: 'user', content: 'hola' }]),
+      /estado 429/
+    );
+    // Un solo intento, no los 3 configurados por defecto — y sin esperar
+    // ningún backoff (400-1560ms) entre medias, porque no hay medias.
+    assert.equal(calls, 1);
+    assert.ok(Date.now() - start < 300, 'no debería haber esperado ningún backoff en un fallo de cuota');
+  }));
+
+test('auditoría de rendimiento: con Gemini agotado y Anthropic configurado, el respaldo responde sin esperar el backoff de Gemini', () =>
+  withEnv({ GEMINI_API_KEY3: 'k', ANTHROPIC_API_KEY: 'a' }, async () => {
+    const providers = loadProviders();
+    const chain = providers.getProviderChain();
+    let geminiCalls = 0;
+    let anthropicCalls = 0;
+    global.fetch = async (url) => {
+      if (String(url).includes('generativelanguage')) {
+        geminiCalls += 1;
+        return jsonResponse(429, { error: { code: 429, status: 'RESOURCE_EXHAUSTED' } });
+      }
+      anthropicCalls += 1;
+      return jsonResponse(200, { content: [{ type: 'text', text: 'Respondo yo, el respaldo, rápido.' }] });
+    };
+    let reply;
+    try {
+      reply = await chain[0].generate('system', [{ role: 'user', content: 'hola' }]);
+    } catch (e) {
+      reply = await chain[1].generate('system', [{ role: 'user', content: 'hola' }], { maxAttempts: 1 });
+    }
+    assert.equal(reply, 'Respondo yo, el respaldo, rápido.');
+    assert.equal(geminiCalls, 1); // antes de este cambio: 3
+    assert.equal(anthropicCalls, 1);
+  }));
+
+test('onAttempt reporta cada intento con su duración y resultado, sin filtrar al llamador el texto crudo salvo el explícitamente pasado', () =>
+  withEnv({ GEMINI_API_KEY3: 'k' }, async () => {
+    const providers = loadProviders();
+    let calls = 0;
+    global.fetch = async () => {
+      calls += 1;
+      if (calls === 1) return jsonResponse(503, { error: { code: 503, status: 'UNAVAILABLE' } });
+      return jsonResponse(200, { candidates: [{ content: { parts: [{ text: 'ok tras reintento' }] } }] });
+    };
+    const attempts = [];
+    const reply = await providers.getProviderChain()[0].generate(
+      'system',
+      [{ role: 'user', content: 'hola' }],
+      { onAttempt: (a) => attempts.push(a) }
+    );
+    assert.equal(reply, 'ok tras reintento');
+    assert.equal(attempts.length, 2);
+    assert.equal(attempts[0].ok, false);
+    assert.equal(attempts[0].attempt, 1);
+    assert.ok(typeof attempts[0].durationMs === 'number');
+    assert.match(attempts[0].errorMessage, /estado 503/);
+    assert.equal(attempts[1].ok, true);
+    assert.equal(attempts[1].attempt, 2);
+  }));

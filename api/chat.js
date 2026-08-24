@@ -25,14 +25,16 @@
  * endpoint responde (con éxito o con el mensaje de error amable) muy por
  * debajo de cualquier límite de la plataforma.
  */
-const { getProviderChain } = require('../lib/providers');
+const { getProviderChain, isQuotaError } = require('../lib/providers');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
 
 // Presupuesto total de la petición: primario con reintentos completos
-// (hasta 3 intentos x 12s + backoff ≈ 38s en el peor caso) + respaldo con
-// un único intento (12s más) ≈ 50s, con margen bajo maxDuration=60s.
+// (hasta 3 intentos x 12s + backoff ≈ 38s en el peor caso, solo si el
+// primario falla con 5xx/red — un 429/cuota agotada falla mucho más
+// rápido, ver isQuotaError en lib/providers.js) + respaldo con un único
+// intento (12s más) ≈ 50s, con margen bajo maxDuration=60s.
 const DEADLINE_MS = 52_000;
 
 // Rate limiting best-effort en memoria del proceso. No persiste entre
@@ -137,7 +139,7 @@ function classifyError(error) {
   const raw = String((error && error.message) || error || '');
   const lower = raw.toLowerCase();
 
-  if (/estado 429|resource_exhausted|quota|rate limit/.test(lower)) {
+  if (isQuotaError(error)) {
     return {
       category: 'quota',
       reply:
@@ -237,12 +239,24 @@ module.exports = async function handler(req, res) {
           const reply = await provider.generate(systemPrompt, messages, {
             maxAttempts: isPrimary ? undefined : 1,
             outerSignal: deadlineController.signal,
+            // Desglose real por intento (fase 3/4 de la auditoría de
+            // rendimiento) — solo al log del servidor, nunca al cliente.
+            onAttempt: (a) =>
+              console.log(
+                `[chat:${requestId}]   intento ${a.attempt} de ${provider.name}: ${a.ok ? 'OK' : 'fallo'} en ${a.durationMs}ms` +
+                  (a.ok ? '' : ` (${a.errorMessage})`)
+              ),
           });
+          const timingMs = Date.now() - requestStart;
           console.log(
             `[chat:${requestId}] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
-              `(total petición: ${Date.now() - requestStart}ms)`
+              `(total petición: ${timingMs}ms)`
           );
-          return res.status(200).json({ success: true, reply, mode: 'generated' });
+          // timingMs es solo la duración total de la petición (lo mismo que
+          // ya se ve en la pestaña Red del navegador) — no revela ni el
+          // proveedor ni ningún detalle de error, así que es seguro
+          // devolverlo al cliente para poder medir rendimiento real.
+          return res.status(200).json({ success: true, reply, mode: 'generated', timingMs });
         } catch (providerError) {
           lastError = providerError;
           console.error(
@@ -264,15 +278,17 @@ module.exports = async function handler(req, res) {
     // providerErrorReason (un campo interno, no se renderiza en el chat).
     const { category, reply } = classifyError(lastError);
     const reason = String((lastError && lastError.message) || lastError || 'desconocido').slice(0, 300);
+    const timingMs = Date.now() - requestStart;
     console.error(
       `[chat:${requestId}] Cadena de proveedores agotada (último: ${lastProviderName}, categoría: ${category}) ` +
-        `tras ${Date.now() - requestStart}ms: ${reason}`
+        `tras ${timingMs}ms: ${reason}`
     );
     return res.status(200).json({
       success: true,
       reply,
       mode: 'error',
       providerErrorReason: category,
+      timingMs,
     });
   } catch (error) {
     console.error(`[chat:${requestId}] Error inesperado en /api/chat:`, error);

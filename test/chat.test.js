@@ -264,3 +264,43 @@ test('el módulo exporta maxDuration acotado (nunca un handler sin límite)', ()
   assert.equal(typeof handler.config.maxDuration, 'number');
   assert.ok(handler.config.maxDuration > 0 && handler.config.maxDuration <= 60);
 });
+
+test('rendimiento: con Gemini agotado (429) y Anthropic configurado, responde vía respaldo sin agotar los 3 intentos de Gemini', () =>
+  withEnv({ GEMINI_API_KEY3: 'k', ANTHROPIC_API_KEY: 'a' }, async () => {
+    let geminiCalls = 0;
+    let anthropicCalls = 0;
+    global.fetch = async (url) => {
+      if (String(url).includes('generativelanguage')) {
+        geminiCalls += 1;
+        return jsonResponse(429, { error: { code: 429, status: 'RESOURCE_EXHAUSTED' } });
+      }
+      anthropicCalls += 1;
+      return jsonResponse(200, { content: [{ type: 'text', text: 'Respondo yo, el respaldo.' }] });
+    };
+    const req = makeReq({ message: 'hola', history: [] });
+    const res = makeRes();
+    await handler(req, res);
+    assert.equal(res._json.mode, 'generated');
+    assert.equal(geminiCalls, 1, 'un 429 no debería reintentarse en el mismo proveedor');
+    assert.equal(anthropicCalls, 1);
+  }));
+
+test('respuesta incluye timingMs (duración total, sin fuga de proveedor ni error)', () =>
+  withEnv({ GEMINI_API_KEY3: 'k', ANTHROPIC_API_KEY: '' }, async () => {
+    global.fetch = async () => jsonResponse(200, { candidates: [{ content: { parts: [{ text: 'ok' }] } }] });
+    const req = makeReq({ message: 'hola', history: [] });
+    const res = makeRes();
+    await handler(req, res);
+    assert.equal(typeof res._json.timingMs, 'number');
+    assert.ok(res._json.timingMs >= 0);
+  }));
+
+test('respuesta de error también incluye timingMs', () =>
+  withEnv({ GEMINI_API_KEY3: 'k', ANTHROPIC_API_KEY: '' }, async () => {
+    global.fetch = async () => jsonResponse(503, { error: { code: 503 } });
+    const req = makeReq({ message: 'hola', history: [] });
+    const res = makeRes();
+    await handler(req, res);
+    assert.equal(res._json.mode, 'error');
+    assert.equal(typeof res._json.timingMs, 'number');
+  }));
