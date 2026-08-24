@@ -81,8 +81,23 @@ const BYPASS_SECRET = process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
   const chatApiResponses = [];
   const issues = [];
 
-  page.on('console', (msg) => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
-  page.on('pageerror', (err) => consoleErrors.push('pageerror: ' + err.message));
+  // Ruido de terceros conocido, ajeno al chatbot y a este despliegue: la
+  // huella de este banner queda registrada contra el dominio de
+  // producción (dcodepartners.com) en su panel — cualquier Preview en un
+  // dominio *.vercel.app distinto dispara este aviso siempre, sin relación
+  // con si el sitio o el chatbot funcionan bien. Visto en vivo (24/08/2026,
+  // primera ejecución real tras configurarse el bypass de Vercel): la
+  // única razón de que este script fallara fue este mensaje, no ningún
+  // problema real del chatbot.
+  const THIRD_PARTY_NOISE = [/cookieyes/i, /website URL has changed/i];
+  const isThirdPartyNoise = (text) => THIRD_PARTY_NOISE.some((re) => re.test(text));
+
+  page.on('console', (msg) => {
+    if (msg.type() === 'error' && !isThirdPartyNoise(msg.text())) consoleErrors.push(msg.text());
+  });
+  page.on('pageerror', (err) => {
+    if (!isThirdPartyNoise(err.message)) consoleErrors.push('pageerror: ' + err.message);
+  });
   page.on('requestfailed', (req) => {
     if (req.url().startsWith(BASE)) networkFailures.push(`${req.url()} (${req.failure()?.errorText || 'failed'})`);
   });

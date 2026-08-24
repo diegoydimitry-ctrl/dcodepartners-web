@@ -135,18 +135,28 @@ async function checkPage(browser, path, width, baseOrigin) {
     /Failed to load resource/,
     /Provider's accounts list is empty/,
     /\[GSI_LOGGER\]/,
+    // El registro de CookieYes queda atado al dominio de producción
+    // (dcodepartners.com); cualquier Preview en un dominio *.vercel.app
+    // distinto dispara este aviso siempre, sin relación con si el sitio
+    // funciona bien — visto en vivo (24/08/2026) haciendo fallar por error
+    // una comprobación real del chatbot que no tenía ningún problema.
+    /cookieyes/i,
+    /website URL has changed/i,
   ];
+  const isThirdPartyNoise = (text) => THIRD_PARTY_NOISE.some((re) => re.test(text));
   page.on('console', (msg) => {
     // "Failed to load resource" ya se captura (y se filtra por origen)
     // vía requestfailed arriba, y ese mensaje de consola no trae la URL
     // para poder aplicarle el mismo filtro de origen — lo excluimos aquí
     // para no duplicar ni generar falsos positivos por scripts de
     // terceros bloqueados (Cookieyes, Google Tag Manager, etc.).
-    if (msg.type() === 'error' && !THIRD_PARTY_NOISE.some((re) => re.test(msg.text()))) {
+    if (msg.type() === 'error' && !isThirdPartyNoise(msg.text())) {
       consoleErrors.push(msg.text());
     }
   });
-  page.on('pageerror', (err) => consoleErrors.push(String(err)));
+  page.on('pageerror', (err) => {
+    if (!isThirdPartyNoise(String(err))) consoleErrors.push(String(err));
+  });
 
   let resp;
   try {
