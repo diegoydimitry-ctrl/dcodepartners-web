@@ -233,3 +233,51 @@ jobs:
         env:
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/qa-preview-chat-check.js "${{ steps.preview.outputs.url }}"
+
+  # Auditoría de rendimiento (mandato P0, 24/08/2026): mide la latencia
+  # real de /api/chat contra una Preview en vivo — pensado para correr dos
+  # veces (antes/después de un cambio de rendimiento) y comparar
+  # percentiles reales, nunca estimados. No requiere navegador (fetch
+  # directo), así que es mucho más rápido que chat-smoke-test.
+  # Se lanza a mano con:
+  #   gh workflow run "QA Preview vs Production" -f url=https://...
+  chat-latency-benchmark:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolver la URL del deployment de Vercel para este commit (sigue sujeta a Vercel Authentication), si existe
+        id: preview
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHA="${{ github.sha }}"
+          URL="${{ inputs.url }}"
+          for i in $(seq 1 20); do
+            DEPLOY_ID=$(gh api "repos/${{ github.repository }}/deployments?sha=$SHA&environment=Preview" \
+              --jq '.[0].id' 2>/dev/null || echo "")
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              STATE=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].state' 2>/dev/null || echo "")
+              ENV_URL=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].environment_url' 2>/dev/null || echo "")
+              if [ "$STATE" = "success" ] && [ -n "$ENV_URL" ] && [ "$ENV_URL" != "null" ]; then
+                URL="$ENV_URL"
+                break
+              fi
+            fi
+            echo "  intento $i/20: deployment de Vercel para $SHA todavía no listo, esperando 10s..."
+            sleep 10
+          done
+          echo "Usando URL: $URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Benchmark de latencia real (10 peticiones, p50/p95)
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: node scripts/chat-latency-benchmark.js "${{ steps.preview.outputs.url }}" 10
