@@ -127,10 +127,17 @@ jobs:
 
   # Prueba real obligatoria del chatbot (mandato P0 "MISIÓN EXCLUSIVA
   # CHATBOT WEB", sección 15): la Preview tiene Vercel Authentication
-  # (SSO) activada en todos los dominios *.vercel.app, así que no es
-  # alcanzable desde fuera de un runner con acceso normal a Internet (el
-  # job qa-preview de más arriba ya lo demuestra funcionando en cada PR).
-  # Se lanza a mano, contra la Preview que se quiera verificar, con:
+  # (SSO) activada en todos los dominios *.vercel.app. El alias estable
+  # de rama (dcodepartners-web-git-<rama>-...vercel.app) SÍ la sufre —
+  # probado en vivo: page.click('#chat-bubble') nunca encuentra el
+  # elemento porque la página real es la pantalla de login de Vercel. La
+  # URL efímera por commit que expone la API de Deployments de GitHub
+  # como "environment_url" (la misma que resuelve el job qa-preview de
+  # más arriba) SÍ lleva el bypass de automatización de Vercel y carga
+  # el sitio real — así que se resuelve igual aquí, por el SHA del run.
+  # Si no hay un deployment de Vercel para ese SHA (p. ej. al apuntar a
+  # Production a mano), se usa directamente la URL indicada en el input.
+  # Se lanza a mano con:
   #   gh workflow run "QA Preview vs Production" -f url=https://...
   chat-smoke-test:
     if: github.event_name == 'workflow_dispatch'
@@ -148,5 +155,31 @@ jobs:
       - name: Instalar Chromium para Playwright
         run: npx playwright install --with-deps chromium
 
-      - name: Conversación real + forzar 429 contra el chatbot en la URL indicada
-        run: node scripts/qa-preview-chat-check.js "${{ inputs.url }}"
+      - name: Resolver la URL real del deployment de Vercel para este commit (con bypass de SSO), si existe
+        id: preview
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHA="${{ github.sha }}"
+          URL="${{ inputs.url }}"
+          for i in $(seq 1 20); do
+            DEPLOY_ID=$(gh api "repos/${{ github.repository }}/deployments?sha=$SHA&environment=Preview" \
+              --jq '.[0].id' 2>/dev/null || echo "")
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              STATE=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].state' 2>/dev/null || echo "")
+              ENV_URL=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].environment_url' 2>/dev/null || echo "")
+              if [ "$STATE" = "success" ] && [ -n "$ENV_URL" ] && [ "$ENV_URL" != "null" ]; then
+                URL="$ENV_URL"
+                break
+              fi
+            fi
+            echo "  intento $i/20: deployment de Vercel para $SHA todavía no listo, esperando 10s..."
+            sleep 10
+          done
+          echo "Usando URL: $URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Conversación real + forzar 429 contra el chatbot en la URL resuelta
+        run: node scripts/qa-preview-chat-check.js "${{ steps.preview.outputs.url }}"
