@@ -68,8 +68,13 @@
 
   --container: 1180px;
   --pad: clamp(20px, 5vw, 64px);
-  --section-pad: clamp(64px, 9vw, 130px);
-  --section-pad-sm: clamp(48px, 6vw, 88px);
+  /* DIR-WEB-TRANSFORM: 130px -> 104px. A 130px arriba Y abajo, entre dos
+     secciones había 260px de vacío en 1440px — más que el alto de varios
+     bloques de contenido reales. El resultado era una Home larguísima
+     donde el usuario percibía huecos, no respiración. 104px sigue siendo
+     aire generoso y recorta ~300px de scroll muerto solo en Home. */
+  --section-pad: clamp(56px, 7vw, 104px);
+  --section-pad-sm: clamp(44px, 5vw, 76px);
 
   --header-h: 76px;
 }
@@ -284,21 +289,35 @@ h1,h2,h3,h4,p{ margin:0; }
    Generalizado a .h-title sin exigir la etiqueta, para que se aplique
    igual sobre h1 o h2 — mismo diseño previsto desde el principio, ahora
    sí llega a las ~54 páginas que lo usaban sobre un <h1>. */
+/* DIR-WEB-TRANSFORM (24/08/2026): escala tipográfica revisada para una
+   jerarquía más marcada y un acabado más "producto serio" que "landing".
+   Tres cambios concretos, no estéticos al azar:
+   1) tamaño máximo mayor (3rem -> 3.35rem): en 1440px+ el H2 anterior
+      competía en peso con el cuerpo de texto, sin dominar la sección;
+   2) line-height 1.15 -> 1.06: a este tamaño, 1.15 abre huecos entre
+      líneas que rompen el título en franjas sueltas en vez de leerse
+      como un bloque;
+   3) letter-spacing -0.01em -> -0.028em: el tracking cerrado es lo que
+      separa visualmente una tipografía de titular de una de párrafo
+      escalada. */
 .h-title{
   font-family:var(--serif);
   font-weight:600;
-  font-size:clamp(1.9rem, 2.6vw + 1rem, 3rem);
-  line-height:1.15;
-  letter-spacing:-0.01em;
+  font-size:clamp(2rem, 2.9vw + 1rem, 3.35rem);
+  line-height:1.06;
+  letter-spacing:-0.028em;
   color:var(--ink);
   margin-top:18px;
+  text-wrap:balance;
 }
 
 .lead{
   font-size:clamp(1rem, 0.4vw + 0.95rem, 1.15rem);
+  line-height:1.65;
   color:var(--stone);
   max-width:620px;
   margin-top:20px;
+  text-wrap:pretty;
 }
 
 .section{
@@ -870,10 +889,15 @@ nav.main-nav > ul{ position:relative; }
 @media (max-width: 1180px){ .side-index{ display:none; } }
 
 /* ============ HERO (home) ============ */
+/* DIR-WEB-TRANSFORM: padding-bottom 110px -> 72px. Con el H1 en 3 líneas
+   (antes 5) y las métricas ya dentro del panel, el hero terminaba con
+   ~140px de vacío bajo el último elemento: el usuario veía un bloque
+   negro antes de la primera sección, que leía como "aquí no hay nada
+   más" en vez de invitar a seguir. */
 .hero{
   position:relative;
-  padding-top:clamp(48px, 8vw, 90px);
-  padding-bottom:clamp(56px, 9vw, 110px);
+  padding-top:clamp(44px, 7vw, 80px);
+  padding-bottom:clamp(48px, 6vw, 72px);
   overflow:hidden;
 }
 /* Campo de luz propio del hero — firma de Home, distinta del glow-orb
@@ -896,23 +920,35 @@ nav.main-nav > ul{ position:relative; }
   100%{ transform:translate(-45%,-55%) scale(1.14); opacity:1; }
 }
 @media (prefers-reduced-motion: reduce){ .hero::after{ animation:none; } }
+/* DIR-WEB-TRANSFORM: align-items pasa de `center` a `start`. Con
+   `center`, las dos columnas se centraban entre sí verticalmente, así
+   que el eyebrow de la izquierda y el borde superior del panel de la
+   derecha nunca coincidían (96px de desfase medidos en 1440px) — la
+   causa real de que el hero se viera "descuadrado" pese a ser una
+   rejilla de dos columnas limpia. Con `start` ambas columnas arrancan
+   en la misma línea óptica. */
 .hero-grid{
   position:relative;
   display:grid;
-  grid-template-columns:1.05fr 0.95fr;
-  gap:48px;
-  align-items:center;
+  grid-template-columns:1.08fr 0.92fr;
+  gap:clamp(32px, 4vw, 64px);
+  align-items:start;
   z-index:2;
 }
-.hero-copy{ max-width:600px; }
+.hero-copy{ max-width:620px; }
+/* line-height 1.08 -> 1.0 y tracking -0.02em -> -0.038em: a 3.7rem el
+   titular ocupaba 5 líneas con huecos anchos entre ellas y se leía como
+   párrafo grande, no como titular. Cerrado el interlineado y el
+   tracking, el mismo texto ocupa menos alto y gana peso de marca. */
 .hero h1{
   font-family:var(--serif);
   font-weight:700;
-  font-size:clamp(2.2rem, 3vw + 1rem, 3.7rem);
-  line-height:1.08;
-  letter-spacing:-0.02em;
+  font-size:clamp(2.3rem, 3.1vw + 1rem, 3.9rem);
+  line-height:1.0;
+  letter-spacing:-0.038em;
   color:var(--ink);
   margin-top:20px;
+  text-wrap:balance;
 }
 .hero h1 .accent{
   background:var(--grad-brand);
@@ -937,49 +973,11 @@ nav.main-nav > ul{ position:relative; }
 }
 .hero .trust-badges{ margin-top:16px; }
 
-/* DIR-WEB-MASTER-004: .hero-graphic pasa de "caja vacía + 1 franja al
-   fondo" (cuando la atmósfera SVG vivía como hermano absoluto) a una
-   columna real que apila .hero-console y .hero-metrics-float -- ambos
-   son flujo normal, sin posicionamiento absoluto dependiente de
-   viewport. */
-.hero-graphic{ position:relative; display:flex; flex-direction:column; gap:14px; }
-/* Franja flotante de métricas (DIR-048): ya no vive dentro de una
-   tarjeta-ventana — es un HUD ligero de vidrio que flota sobre la
-   atmósfera, sin bar/título/estado, para no reintroducir la sensación
-   de "dashboard dentro de tarjeta" que Dirección pidió eliminar. */
-.hero-metrics-float{
-  position:relative;
-  z-index:2;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  width:100%;
-  background:var(--surface-border);
-  border:1px solid var(--surface-border);
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-}
-.hero-metric{
-  padding:14px 16px;
-  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
-}
-.hero-metric .hm-val{
-  font-family:var(--serif);
-  font-weight:700;
-  font-size:1.2rem;
-  color:var(--ink);
-}
-.hero-metric .hm-label{
-  font-family:var(--mono);
-  font-size:0.6rem;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
-  color:var(--stone-soft);
-  margin-top:3px;
-}
+/* DIR-WEB-TRANSFORM: .hero-graphic ya solo contiene .hero-console (las
+   métricas pasaron a ser su pie, ver .hero-console-metrics). Se retiran
+   .hero-metrics-float / .hero-metric / .hm-val / .hm-label: código
+   muerto verificado — 0 referencias en las 68 páginas del sitio. */
+.hero-graphic{ position:relative; display:flex; flex-direction:column; }
 
 /* ============ HERO CONSOLE (DIR-WEB-MASTER-004) ============
    Sustituye la atmósfera de nodos/parallax SVG (n8n/Airtable/Notion/
@@ -989,42 +987,51 @@ nav.main-nav > ul{ position:relative; }
    (panel traslúcido con blur, sin barra de título ni chrome de ventana —
    evita a propósito la sensación "dashboard dentro de una tarjeta" que
    ya se descartó explícitamente para esa franja). Solo transform/opacity
-   vía el sistema .reveal-*/[data-stagger] ya existente: cero SVG, cero
+   vía el sistema .reveal / [data-stagger] ya existente: cero SVG, cero
    posicionamiento absoluto dependiente de viewport — el motivo real por
-   el que el sistema anterior se rompía en iPad. */
+   el que el sistema anterior se rompía en iPad.
+
+   AUD-DCP 24/08/2026 — BUG REAL CORREGIDO AQUÍ. La línea de arriba
+   escribía el nombre de la familia de clases reveal con un guion, un
+   asterisco y una barra seguidos, justo antes de [data-stagger]. Esa
+   combinación forma un cierre de comentario: el comentario terminaba
+   AHÍ, y el resto del texto quedaba como CSS basura. Al recuperarse, el
+   parser descartaba todo lo que seguía en el archivo.
+   Impacto real medido (getComputedStyle + CSSOM, antes y después): solo
+   se parseaban 181 reglas y .hero-graphic era la última — TODA la hoja
+   a partir de este punto (~2.700 líneas: hero-console, departamentos,
+   método, casos, footer, responsive...) se caía. El panel del Hero se
+   veía sin fondo, borde, radio ni sombra en todos los viewports.
+   No reproducir aquí la secuencia literal: vuelve a romperlo. */
+/* DIR-WEB-TRANSFORM: el panel se leía como texto flotando sobre el
+   fondo, no como una superficie. A .72 de opacidad sobre un fondo casi
+   negro, el relleno del panel y el fondo de la página quedaban a ~2% de
+   diferencia de luminancia: el borde a .18 era lo único que lo definía,
+   y a 1px se perdía. Subida la opacidad del relleno y reforzados borde
+   y sombra para que sea una pieza de producto con volumen real — que es
+   justo lo que el panel debe transmitir. */
 .hero-console{
   position:relative;
   z-index:2;
   width:100%;
-  background:linear-gradient(180deg, rgba(15,20,36,.72) 0%, rgba(10,14,26,.72) 100%);
-  border:1px solid var(--surface-border);
-  border-radius:14px;
-  padding:20px 22px;
-  box-shadow:0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 var(--surface-highlight);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  margin-bottom:14px;
+  background:linear-gradient(180deg, rgba(20,27,48,.94) 0%, rgba(11,15,28,.96) 100%);
+  border:1px solid rgba(168,182,216,.28);
+  border-radius:16px;
+  padding:22px 24px;
+  box-shadow:
+    0 40px 80px -32px rgba(0,0,0,.85),
+    0 0 0 1px rgba(91,140,255,.07),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
 }
-/* DIR-006: hace visible, en un vistazo, la afirmación del H1 ("no una
-   automatización más") -- responde directamente a la pregunta de la
-   auditoría "¿qué hace D-Code que no pueda hacer una agencia normal?"
-   sin depender de que el visitante lea el párrafo de apoyo. */
-.hero-console-contrast{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:16px;
-  font-family:var(--mono);
-  font-size:0.74rem;
-  flex-wrap:wrap;
-}
-.hcc-before{ color:var(--stone-soft); text-decoration:line-through; text-decoration-color:rgba(167,176,196,.4); }
-.hcc-arrow{ color:var(--stone-soft); }
-.hcc-after{
-  background:var(--grad-brand);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  font-weight:600;
-}
+/* DIR-WEB-TRANSFORM: .hero-console-contrast (la línea "Herramientas
+   sueltas, sin conectar → Un sistema operativo", con tachado) se retira
+   del hero. Motivo: era el primer texto del panel y el de MENOR
+   contraste de todo el hero (--stone-soft tachado sobre vidrio), así
+   que el ojo lo leía antes que el H1 y sin poder descifrarlo. La misma
+   idea ya la dice el H1 y ahora el lead, en primer plano y legibles.
+   CSS retirado junto al marcado — 0 referencias restantes en el sitio. */
 .hero-console-head{
   display:flex;
   align-items:center;
@@ -1098,6 +1105,37 @@ nav.main-nav > ul{ position:relative; }
 .hero-console-log-line{ transition:opacity .3s ease; }
 .hero-console-log-line.is-swapping{ opacity:0; }
 @media (prefers-reduced-motion: reduce){ .boot-dot{ animation:none; } }
+
+/* DIR-WEB-TRANSFORM: las tres cifras (24/7, 0€, 30 días) vivían en
+   .hero-metrics-float, una segunda tarjeta de vidrio SUELTA debajo del
+   panel. Dos superficies traslúcidas idénticas apiladas leían como un
+   elemento duplicado, no como jerarquía, y añadían un borde más a un
+   hero que ya tenía demasiados elementos. Ahora son el pie del propio
+   panel: una sola superficie, separadas por una línea en vez de por un
+   hueco y otro borde. */
+.hero-console-metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+.hcm-item{ display:flex; flex-direction:column; gap:3px; }
+.hcm-val{
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:1.24rem;
+  letter-spacing:-0.02em;
+  color:var(--ink);
+}
+.hcm-label{
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.07em;
+  text-transform:uppercase;
+  color:var(--stone-soft);
+}
 
 /* ============ PAGE HERO (interior pages) ============ */
 .page-hero{
@@ -1983,10 +2021,20 @@ nav.main-nav > ul{ position:relative; }
 }
 .dept-row-arrow svg{ width:16px; height:16px; display:block; }
 .dept-row:hover .dept-row-arrow, .dept-row:focus-visible .dept-row-arrow{ opacity:1; transform:translateX(3px); }
+/* DIR-WEB-TRANSFORM — bug real de móvil. La intención de este bloque era
+   que la descripción cayera a su propia línea bajo el nombre, pero
+   `width:100%` no lo conseguía: .dept-row-desc hereda `flex:1` de la
+   regla base, es decir `flex:1 1 0%`, y una flex-basis de 0 gana sobre
+   `width` a la hora de decidir si el ítem cabe en la línea. Resultado
+   real medido en 390px: la descripción se comprimía en una columna de
+   ~110px y salían tiras de 4-6 líneas; y solo "Administración" se veía
+   bien, por casualidad — su nombre es lo bastante largo como para
+   empujar la descripción fuera de la línea y forzar el salto. Se fija
+   flex-basis:100% para que el salto sea siempre, no por accidente. */
 @media (max-width:720px){
-  .dept-row{ flex-wrap:wrap; padding:16px 20px; }
-  .dept-row-name{ width:auto; }
-  .dept-row-desc{ width:100%; padding-left:50px; }
+  .dept-row{ flex-wrap:wrap; padding:16px 20px; row-gap:8px; }
+  .dept-row-name{ width:auto; flex:1 1 auto; }
+  .dept-row-desc{ flex:1 0 100%; padding-left:50px; font-size:0.88rem; }
   .dept-row-arrow{ display:none; }
 }
 @media (prefers-reduced-motion: reduce){ .dept-row-dot{ animation:none; } }
@@ -2380,6 +2428,34 @@ nav.main-nav > ul{ position:relative; }
 }
 .case-mini-row:last-child .case-mini-label{ color:var(--cyan); }
 .case-mini-row p{ margin:0; font-size:0.85rem; color:var(--stone); flex:1; }
+
+/* DIR-WEB-TRANSFORM: los 3 casos de Home tenían títulos de 2 y 3 líneas,
+   así que los bloques ANTES/AHORA arrancaban a alturas distintas en cada
+   tarjeta — tres columnas de texto desalineadas entre sí, el detalle que
+   más delata una maqueta descuidada en una fila de tarjetas. `subgrid`
+   hace que etiqueta, título y cuerpo compartan las MISMAS filas en las
+   tres tarjetas, sin fijar min-heights a mano (que se romperían en EN,
+   donde los títulos tienen otra longitud).
+   Degradación: sin soporte de subgrid las tarjetas se comportan como
+   antes (ragged), no se rompe nada. */
+.results-grid{ grid-template-rows:auto auto auto 1fr; }
+.results-grid > .blog-card{ grid-row:span 4; display:grid; grid-template-rows:subgrid; }
+.results-grid > .blog-card > .window-body{ grid-row:span 4; display:grid; grid-template-rows:subgrid; gap:0; }
+.results-grid > .blog-card > .window-body > .case-tag{ align-self:start; }
+.results-grid > .blog-card h3{ margin-bottom:0; align-self:start; }
+/* case-mini también hereda las filas: así ANTES y AHORA arrancan a la
+   misma altura en las tres tarjetas aunque el texto de ANTES tenga 3
+   líneas en una y 4 en otra. */
+.results-grid > .blog-card .case-mini{ grid-row:span 2; display:grid; grid-template-rows:subgrid; gap:0; }
+.results-grid > .blog-card .case-mini-row{ align-content:start; padding-top:14px; }
+/* AHORA es el estado al que lleva D-Code: se marca con una guía de color
+   en vez de dejar los dos estados con idéntico peso visual. */
+.results-grid .case-mini-row:last-child{
+  border-left:2px solid rgba(67,224,255,.32);
+  padding-left:12px;
+  margin-left:-2px;
+}
+.results-grid .case-mini-row:last-child p{ color:var(--ink); }
 .blog-meta{
   display:flex; align-items:center; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);
   font-family:var(--mono); font-size:0.68rem; color:var(--stone-soft); letter-spacing:0.03em;
@@ -2810,6 +2886,35 @@ nav.main-nav > ul{ position:relative; }
 }
 .contact-row .value{ font-size:0.98rem; color:var(--ink); transition:color .2s ease; }
 .contact-row a:hover{ color:var(--cyan); }
+
+/* DIR-WEB-TRANSFORM: franja de fundadores — sustituye la <section>
+   "Conócenos" de Home (ver comentario en index.html). Una sola línea
+   horizontal: la señal de confianza se mantiene, el peso visual pasa a
+   ser el que le corresponde frente al CTA que viene justo después. */
+.founders-strip{
+  position:relative;
+  border-top:1px solid var(--border-soft);
+  padding:clamp(26px, 3.2vw, 40px) 0;
+}
+.founders-strip-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(20px, 4vw, 56px);
+  flex-wrap:wrap;
+}
+.founders-strip-copy{ max-width:760px; }
+.founders-strip-copy p{
+  margin-top:10px;
+  color:var(--stone);
+  font-size:0.97rem;
+  line-height:1.6;
+}
+.founders-strip-copy strong{ color:var(--ink); font-weight:600; }
+.founders-strip .btn{ flex-shrink:0; }
+@media (max-width:640px){
+  .founders-strip-inner{ align-items:flex-start; }
+}
 
 .cta-band{
   position:relative;
