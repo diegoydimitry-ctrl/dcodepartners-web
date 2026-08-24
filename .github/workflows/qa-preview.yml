@@ -19,6 +19,35 @@ name: QA Preview vs Production
 # forma exacta no se pudo confirmar en vivo desde este entorno). El
 # job "smoke-test" (workflow_dispatch) es la vía de respaldo: se
 # puede lanzar a mano contra cualquier URL, incluida Production.
+#
+# HALLAZGO CONFIRMADO EN VIVO (misión chatbot, 24/08/2026) — AVISO PARA
+# QUIEN LEA ESTO A CONTINUACIÓN: el proyecto de Vercel tiene "Vercel
+# Authentication" (SSO) activado en TODOS los dominios *.vercel.app
+# (Project Settings → Deployment Protection; solo los dominios propios
+# quedan exentos). La URL que resuelve el paso de más abajo
+# (environment_url de la API de Deployments de GitHub) SIGUE estando
+# protegida por ese SSO — comprobado en vivo: un navegador real
+# (Playwright, sin sesión de Vercel) que abre esa URL aterriza en la
+# pantalla de login de Vercel, no en el sitio. El job "qa-preview" NO
+# lo detecta como fallo (sus comprobaciones son: recursos rotos del
+# propio origen, errores de consola, overflow horizontal y la forma de
+# unos selectores concretos — nada de eso salta en la pantalla de login
+# de Vercel, así que un run entero puede reportar "0 problemas" sin
+# haber visto el sitio real ni una sola vez). Esto es anterior a la
+# misión del chatbot, no algo introducido aquí, y arreglarlo de verdad
+# requiere una de estas dos cosas — ninguna disponible desde una sesión
+# de Claude Code sin acceso al dashboard de Vercel:
+#   1. Configurar "Protection Bypass for Automation" en el proyecto de
+#      Vercel y guardar ese secreto como GH secret (p. ej.
+#      VERCEL_AUTOMATION_BYPASS_SECRET), añadiendo la cabecera
+#      `x-vercel-protection-bypass: <secreto>` a cada petición de
+#      Playwright en qa-preview-check.js y qa-preview-chat-check.js.
+#   2. Desactivar Vercel Authentication para Preview Deployments (no
+#      recomendable: expondría todas las Previews públicamente).
+# Hasta que se configure la opción 1, tanto "qa-preview" como
+# "chat-smoke-test" pueden dar un falso "todo OK" sin haber probado
+# nada real — trátese como pendiente de verificación manual (un humano
+# con sesión de Vercel abierta en el navegador) hasta entonces.
 
 on:
   pull_request:
@@ -126,17 +155,22 @@ jobs:
         run: node scripts/qa-preview-check.js "${{ inputs.url }}"
 
   # Prueba real obligatoria del chatbot (mandato P0 "MISIÓN EXCLUSIVA
-  # CHATBOT WEB", sección 15): la Preview tiene Vercel Authentication
-  # (SSO) activada en todos los dominios *.vercel.app. El alias estable
-  # de rama (dcodepartners-web-git-<rama>-...vercel.app) SÍ la sufre —
-  # probado en vivo: page.click('#chat-bubble') nunca encuentra el
-  # elemento porque la página real es la pantalla de login de Vercel. La
-  # URL efímera por commit que expone la API de Deployments de GitHub
-  # como "environment_url" (la misma que resuelve el job qa-preview de
-  # más arriba) SÍ lleva el bypass de automatización de Vercel y carga
-  # el sitio real — así que se resuelve igual aquí, por el SHA del run.
-  # Si no hay un deployment de Vercel para ese SHA (p. ej. al apuntar a
-  # Production a mano), se usa directamente la URL indicada en el input.
+  # CHATBOT WEB", sección 15). INTENTO 1: contra el alias estable de
+  # rama (dcodepartners-web-git-<rama>-...vercel.app) — falló,
+  # page.click('#chat-bubble') nunca encuentra el elemento porque esa
+  # URL está protegida por Vercel Authentication (SSO) y la página real
+  # es el login de Vercel. INTENTO 2 (este código): resolver en su
+  # lugar la URL efímera por commit vía "environment_url" de la API de
+  # Deployments de GitHub, igual que hace qa-preview más arriba —
+  # TAMBIÉN falló con el mismo timeout: esa URL sigue protegida por el
+  # mismo SSO, confirmado en vivo (ver el aviso grande al principio de
+  # este archivo). No hay, desde esta sesión, ninguna URL que se salte
+  # esa protección sin un secreto de bypass que no está configurado.
+  # Este job se deja tal cual (workflow_dispatch, no bloquea nada) para
+  # que funcione en cuanto exista ese secreto — ver el aviso al
+  # principio del archivo para cómo añadirlo. Hasta entonces, fallará
+  # de la misma forma si se lanza contra una Preview; sí sirve ya para
+  # apuntar contra Production (dominio propio, sin SSO) una vez mergeado.
   # Se lanza a mano con:
   #   gh workflow run "QA Preview vs Production" -f url=https://...
   chat-smoke-test:
@@ -155,7 +189,7 @@ jobs:
       - name: Instalar Chromium para Playwright
         run: npx playwright install --with-deps chromium
 
-      - name: Resolver la URL real del deployment de Vercel para este commit (con bypass de SSO), si existe
+      - name: Resolver la URL del deployment de Vercel para este commit (sigue sujeta a Vercel Authentication), si existe
         id: preview
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
