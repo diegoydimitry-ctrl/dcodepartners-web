@@ -35,19 +35,29 @@ name: QA Preview vs Production
 # de Vercel, así que un run entero puede reportar "0 problemas" sin
 # haber visto el sitio real ni una sola vez). Esto es anterior a la
 # misión del chatbot, no algo introducido aquí, y arreglarlo de verdad
-# requiere una de estas dos cosas — ninguna disponible desde una sesión
-# de Claude Code sin acceso al dashboard de Vercel:
-#   1. Configurar "Protection Bypass for Automation" en el proyecto de
-#      Vercel y guardar ese secreto como GH secret (p. ej.
-#      VERCEL_AUTOMATION_BYPASS_SECRET), añadiendo la cabecera
-#      `x-vercel-protection-bypass: <secreto>` a cada petición de
-#      Playwright en qa-preview-check.js y qa-preview-chat-check.js.
-#   2. Desactivar Vercel Authentication para Preview Deployments (no
-#      recomendable: expondría todas las Previews públicamente).
-# Hasta que se configure la opción 1, tanto "qa-preview" como
-# "chat-smoke-test" pueden dar un falso "todo OK" sin haber probado
-# nada real — trátese como pendiente de verificación manual (un humano
-# con sesión de Vercel abierta en el navegador) hasta entonces.
+# requiere algo que ninguna sesión de Claude Code puede hacer sin acceso
+# al dashboard de Vercel: generar un secreto de "Protection Bypass for
+# Automation" (Project Settings → Deployment Protection → Protection
+# Bypass for Automation) y guardarlo como secreto de GitHub Actions con
+# el nombre VERCEL_AUTOMATION_BYPASS_SECRET (Settings → Secrets and
+# variables → Actions → New repository secret, en este repo). El código
+# ya está listo para usarlo en cuanto exista: los tres jobs de más abajo
+# ("qa-preview", "smoke-test", "chat-smoke-test") lo pasan como variable
+# de entorno a scripts/qa-preview-check.js y qa-preview-chat-check.js,
+# que lo añaden como cabecera `x-vercel-protection-bypass` — nada más
+# que hacer en código, no hay que tocar este archivo cuando se añada.
+# IMPORTANTE — verificado en vivo (24/08/2026): antes de este cambio,
+# los dos scripts NO detectaban el muro de SSO — un redirect al login
+# de Vercel pasaba como "0 problemas" (qa-preview) o como un simple
+# "TimeoutError" indistinguible de un bug real (chat-smoke-test). Ambos
+# ahora comprueban explícitamente el acceso ANTES de dar nada por
+# válido y fallan alto y claro si no hay acceso real a la aplicación —
+# así que, sin el secreto, "qa-preview" y "chat-smoke-test" fallan de
+# forma honesta en vez de dar un falso "todo OK". NO desactivar Vercel
+# Authentication para conseguir que pasen: expondría todas las Previews
+# públicamente. Hasta que exista el secreto, la única verificación
+# válida es manual: un humano con sesión de Vercel abierta en el
+# navegador.
 
 on:
   pull_request:
@@ -133,6 +143,8 @@ jobs:
           exit 1
 
       - name: Ejecutar QA contra la Preview
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/qa-preview-check.js "${{ steps.preview.outputs.preview_url }}"
 
   smoke-test:
@@ -152,6 +164,8 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Ejecutar QA contra la URL indicada
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/qa-preview-check.js "${{ inputs.url }}"
 
   # Prueba real obligatoria del chatbot (mandato P0 "MISIÓN EXCLUSIVA
@@ -216,4 +230,6 @@ jobs:
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
       - name: Conversación real + forzar 429 contra el chatbot en la URL resuelta
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/qa-preview-chat-check.js "${{ steps.preview.outputs.url }}"

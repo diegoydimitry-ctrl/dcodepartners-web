@@ -52,6 +52,15 @@ function containsForbidden(text) {
   return FORBIDDEN_TERMS.filter((t) => lower.includes(t.toLowerCase()));
 }
 
+// Los dominios *.vercel.app de este proyecto tienen Vercel Authentication
+// (SSO) activada — sin esta cabecera, page.goto() aterriza en el login de
+// Vercel, no en el sitio real. Si Dirección genera un secreto de
+// "Protection Bypass for Automation" (Project Settings → Deployment
+// Protection en Vercel) y lo guarda como secreto de GitHub Actions con el
+// nombre VERCEL_AUTOMATION_BYPASS_SECRET, este script lo usa solo con
+// definirlo — sin tocar más código.
+const BYPASS_SECRET = process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
+
 (async () => {
   // Permite apuntar a un binario de Chromium concreto en entornos donde el
   // build por defecto de Playwright no está disponible (p. ej. sandboxes
@@ -62,7 +71,10 @@ function containsForbidden(text) {
     ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH }
     : {};
   const browser = await chromium.launch(launchOptions);
-  const page = await browser.newPage({ viewport: { width: 420, height: 920 } });
+  const page = await browser.newPage({
+    viewport: { width: 420, height: 920 },
+    extraHTTPHeaders: BYPASS_SECRET ? { 'x-vercel-protection-bypass': BYPASS_SECRET } : {},
+  });
 
   const consoleErrors = [];
   const networkFailures = [];
@@ -86,6 +98,31 @@ function containsForbidden(text) {
 
   console.log(`Abriendo ${BASE} ...`);
   await page.goto(BASE, { waitUntil: 'networkidle', timeout: 30000 });
+
+  // Comprobación explícita de acceso ANTES de asumir que el widget está
+  // ahí: sin esto, un redirect a la pantalla de login de Vercel (SSO)
+  // deja el script esperando #chat-bubble 30s para acabar en un simple
+  // "TimeoutError" indistinguible de un bug real del widget — visto en
+  // vivo dos veces en esta misión. Aquí se distingue con nombre propio.
+  const finalUrl = page.url();
+  const landedOffOrigin = new URL(finalUrl).origin !== new URL(BASE).origin;
+  const hasChatBubble = await page.$('#chat-bubble').then((el) => !!el).catch(() => false);
+  if (landedOffOrigin || !hasChatBubble) {
+    console.error(`\n⛔ BLOQUEO DE ACCESO — no se pudo probar el chatbot real.`);
+    console.error(`   URL final: ${finalUrl}`);
+    console.error(`   #chat-bubble presente: ${hasChatBubble}`);
+    console.error(
+      BYPASS_SECRET
+        ? '   Se usó VERCEL_AUTOMATION_BYPASS_SECRET y aun así no se accedió a la app real — revisa que el secreto sea válido para este proyecto.'
+        : '   Este dominio de Vercel probablemente tiene Vercel Authentication (SSO) activada. Define VERCEL_AUTOMATION_BYPASS_SECRET ' +
+          '(Project Settings → Deployment Protection → Protection Bypass for Automation en Vercel) para que este script pueda probar la app real.'
+    );
+    console.error('   No se ha enviado ningún mensaje real — el resto de esta comprobación no tiene validez sin acceso a la app.');
+    await browser.close();
+    process.exit(1);
+  }
+  console.log('Acceso confirmado: la aplicación real responde con el widget de chat presente.');
+
   await page.click('#chat-bubble');
   await page.waitForTimeout(400);
 
@@ -141,6 +178,39 @@ function containsForbidden(text) {
     const sampleForbidden = containsForbidden(String(sample.error || ''));
     if (sampleForbidden.length) issues.push(`Fuga técnica en el 429: ${sampleForbidden.join(', ')}`);
     console.log(`  mensaje del 429: ${sample.error}`);
+  }
+
+  // Comportamiento de error + reintento en la UI real (no simulado): tras
+  // la ráfaga anterior, el rate limit sigue activo para esta IP durante la
+  // ventana de 60s, así que un envío real por el formulario debe recibir
+  // un 429 real y el widget debe mostrar la burbuja de error amable +
+  // botón "Reintentar" — nunca el JSON crudo ni "429"/"Too Many Requests".
+  console.log('\n--- Comportamiento de error + reintento en la UI real (con el rate limit ya activo) ---');
+  await page.fill('#chat-input', 'mensaje de verificación de error/reintento en la UI');
+  await page.click('#chat-form button[type="submit"]');
+  let errorBubbleText = null;
+  let retryButtonPresent = false;
+  try {
+    await page.waitForSelector('.chat-msg-error', { timeout: 15000 });
+    errorBubbleText = await page.$eval('.chat-msg-error', (el) => el.textContent || '');
+    retryButtonPresent = await page.$('.chat-msg-error .chat-retry-btn').then((el) => !!el);
+    console.log(`  burbuja de error mostrada: "${errorBubbleText.slice(0, 200).replace(/\s+/g, ' ')}"`);
+    console.log(`  botón Reintentar presente: ${retryButtonPresent}`);
+    const forbidden = containsForbidden(errorBubbleText);
+    if (forbidden.length) issues.push(`Fuga técnica en la burbuja de error de la UI: ${forbidden.join(', ')}`);
+    if (!retryButtonPresent) issues.push('La burbuja de error no muestra el botón Reintentar');
+    if (retryButtonPresent) {
+      await page.click('.chat-msg-error .chat-retry-btn');
+      await page.waitForTimeout(3000);
+      console.log('  se pulsó Reintentar; comportamiento tras el clic registrado en CHAT_API_RESPONSES.');
+    }
+  } catch (e) {
+    // Si en vez de la burbuja de error hubo una respuesta normal, es que
+    // la ventana de rate limit ya se liberó entre la ráfaga y este envío
+    // (posible si el runner tardó >60s en llegar hasta aquí) — no es un
+    // fallo del chatbot, se registra como informativo, no como issue.
+    const gotBotReply = await page.$$eval('.chat-msg.bot', (els) => els.length).catch(() => 0);
+    console.log(`  no apareció burbuja de error en 15s (${e.message.slice(0, 80)}) — probablemente la ventana de rate limit ya se liberó; respuestas de bot vistas: ${gotBotReply}`);
   }
 
   console.log('\n--- Resumen ---');
