@@ -176,7 +176,7 @@
     var RENDERERS = {};
 
     function pageHead(title, sub) {
-      return '<div><h1 class="fdemo-page-title">' + esc(title) + '</h1>' + (sub ? '<p class="fdemo-page-sub">' + esc(sub) + '</p>' : '') + '</div>';
+      return '<div><h2 class="fdemo-page-title">' + esc(title) + '</h2>' + (sub ? '<p class="fdemo-page-sub">' + esc(sub) + '</p>' : '') + '</div>';
     }
     function crumb(parentLabel, parentView, currentLabel) {
       return '<div class="fdemo-crumb"><a data-action="nav" data-view="' + parentView + '">' + esc(parentLabel) + '</a><span>/</span><span class="current">' + esc(currentLabel) + '</span></div>';
@@ -298,7 +298,7 @@
 
       return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
         crumb('Invoices', 'facturas', f.numero) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h1 class="fdemo-page-title">Invoice ' + esc(f.numero) + '</h1><p class="fdemo-page-sub">' + esc(dash(f.clienteNombre)) + '</p></div>' +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h2 class="fdemo-page-title">Invoice ' + esc(f.numero) + '</h2><p class="fdemo-page-sub">' + esc(dash(f.clienteNombre)) + '</p></div>' +
         '<div style="display:flex; gap:8px;">' + pill(f.estado) + (f.estadoCobro ? pill(f.estadoCobro) : '') + '</div></div>' +
         card(cardHead('Invoice details'), '<div class="fdemo-field-grid">' +
           field('Amount', EUR(f.importe)) + field('Collected', EUR(f.importeCobrado)) + field('Pending', EUR(f.importe - (f.importeCobrado || 0))) +
@@ -336,7 +336,7 @@
 
       return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
         crumb('Quotes', 'presupuestos', p.empresa) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(p.empresa) + '</h1>' + pill(p.estado) + '</div>' +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h2 class="fdemo-page-title">' + esc(p.empresa) + '</h2>' + pill(p.estado) + '</div>' +
         card(cardHead('Quote details'), '<div class="fdemo-field-grid">' +
           field('Amount', EUR(p.importe)) + field('Generated on', FDATE(p.fechaGeneracion)) +
           field('Accepted by client', p.aceptadaPorCliente ? 'Yes, ' + FDATE(p.fechaAceptacion) : 'No') + '</div>') +
@@ -389,7 +389,7 @@
 
       return '<div class="fdemo-page" style="gap:20px; max-width:900px;">' +
         crumb('Clients', 'clientes', c.empresa) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(c.empresa) + '</h1>' + pill(c.estado) + '</div>' +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h2 class="fdemo-page-title">' + esc(c.empresa) + '</h2>' + pill(c.estado) + '</div>' +
         card(cardHead('Tax and contact information'), '<div class="fdemo-field-grid">' +
           field('Tax ID', esc(dash(c.nif))) + field('Registered address', esc(dash(c.direccionFiscal))) + field('Sector', esc(dash(c.sector))) +
           field('Email', esc(dash(c.email))) + field('Phone', esc(dash(c.telefono))) + field('Website', c.web ? '<a class="fdemo-link" href="' + esc(c.web) + '" target="_blank" rel="noopener noreferrer">' + esc(c.web) + '</a>' : '—') +
@@ -451,7 +451,7 @@
       if (!g) return empty('Expense not found in the demo.');
       return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
         crumb('Expenses', 'gastos', g.proveedor) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(g.proveedor) + '</h1>' + pill(g.estadoRevision) + '</div>' +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h2 class="fdemo-page-title">' + esc(g.proveedor) + '</h2>' + pill(g.estadoRevision) + '</div>' +
         card(cardHead('Expense details'), '<div class="fdemo-field-grid">' +
           field('Amount', EUR(g.importe)) + field('VAT', g.iva !== null ? EUR(g.iva) : '—') + field('Date', FDATE(g.fecha)) +
           field('Category', esc(dash(g.categoria))) + field('Project', g.proyectoRecordId ? linkTo('proyectos', g.proyectoRecordId, 'View project') : 'No project linked') +
@@ -492,7 +492,7 @@
 
       return '<div class="fdemo-page" style="gap:20px; max-width:900px;">' +
         crumb('Projects', 'proyectos', p.nombre) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h1 class="fdemo-page-title">' + esc(p.nombre) + '</h1><p class="fdemo-page-sub">' + esc(dash(p.empresa)) + '</p></div>' + pill(p.estado) + '</div>' +
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h2 class="fdemo-page-title">' + esc(p.nombre) + '</h2><p class="fdemo-page-sub">' + esc(dash(p.empresa)) + '</p></div>' + pill(p.estado) + '</div>' +
         '<div class="fdemo-stat-row">' + statCard('Billed', EUR(p.totalFacturado)) + statCard('Collected', EUR(p.totalCobrado)) + statCard('Expenses', EUR(p.totalGastos)) + statCard('Profitability', EUR(p.rentabilidad)) + '</div>' +
         card(cardHead('Detail'), '<div class="fdemo-field-grid">' +
           field('Start date', FDATE(p.fechaInicio)) + field('Expected delivery', FDATE(p.fechaEntregaPrevista)) + field('Actual delivery', FDATE(p.fechaEntregaReal)) + field('Owner', esc(dash(p.responsable))) +

@@ -1910,9 +1910,25 @@ nav.main-nav > ul{ position:relative; }
   .service-card:focus-within .card-extra-hint{ opacity:0; height:0; margin:0; overflow:hidden; }
 }
 .service-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+/* DIR-WEB-TRANSFORM: en una fila de tarjetas de servicio, el número de
+   chips de .service-tags varía (2 o 3 según el servicio), así que
+   "Ver el servicio →" quedaba a distinta altura en cada tarjeta — el
+   remate de la fila salía escalonado. Con la tarjeta como columna flex
+   de alto completo y el enlace empujado al fondo, los enlaces alinean
+   solos, sin depender de que los textos midan lo mismo (que en EN no
+   miden lo mismo). Se evita subgrid a propósito: el contenido de
+   .window-body varía entre páginas (2 o 3 párrafos), y una rejilla de
+   filas fijas se rompería en las que no encajan. */
+/* La tarjeta es columna flex y el cuerpo crece: NO se usa height:100% en
+   el cuerpo — la tarjeta también contiene .window-bar, así que un 100%
+   del alto de la tarjeta desborda justo por el alto de esa barra y, con
+   el overflow:hidden de .window, el enlace del pie quedaba recortado. */
+.service-card{ display:flex; flex-direction:column; }
+.service-card .window-body{ display:flex; flex-direction:column; flex:1; min-height:0; }
 .service-card .card-link{
   display:inline-flex; align-items:center; gap:6px;
-  margin-top:20px; font-size:0.86rem; font-weight:600; color:var(--cyan);
+  margin-top:auto; padding-top:20px; font-size:0.86rem; font-weight:600; color:var(--cyan);
+  align-self:flex-start;
 }
 .service-card .card-link svg{ width:14px; height:14px; transition:transform .2s ease; }
 .service-card:hover .card-link svg{ transform:translateX(3px); }
@@ -2411,7 +2427,17 @@ nav.main-nav > ul{ position:relative; }
   grid-template-columns:repeat(3, 1fr);
   gap:26px;
 }
-.blog-card .window-body{ padding:26px; display:flex; flex-direction:column; height:100%; }
+/* DIR-WEB-TRANSFORM — mismo bug real que en .service-card, detectado por
+   el barrido automatizado (scrollHeight > clientHeight en las 3 tarjetas
+   de las 8 páginas de blog, ES+EN): con height:100% el cuerpo mide lo
+   mismo que TODA la tarjeta, pero la tarjeta también contiene
+   .window-bar, así que el cuerpo desborda justo por el alto de esa barra
+   y el overflow:hidden de .window recorta el final. Lo que se perdía era
+   la fila .blog-meta entera (fecha y tiempo de lectura): 46px de
+   contenido invisible en cada tarjeta. La tarjeta pasa a ser columna
+   flex y el cuerpo crece con flex:1, que sí respeta el alto de la barra. */
+.blog-card{ display:flex; flex-direction:column; }
+.blog-card .window-body{ padding:26px; display:flex; flex-direction:column; flex:1; min-height:0; }
 .blog-card .blog-cat{ margin-bottom:14px; }
 .blog-card h3{ font-family:var(--serif); font-size:1.12rem; font-weight:600; color:var(--ink); line-height:1.35; margin-bottom:10px; }
 .blog-card p{ color:var(--stone); font-size:0.9rem; flex:1; }
@@ -2891,11 +2917,13 @@ nav.main-nav > ul{ position:relative; }
    "Conócenos" de Home (ver comentario en index.html). Una sola línea
    horizontal: la señal de confianza se mantiene, el peso visual pasa a
    ser el que le corresponde frente al CTA que viene justo después. */
-.founders-strip{
+.founders-strip,
+.note-strip{
   position:relative;
   border-top:1px solid var(--border-soft);
   padding:clamp(26px, 3.2vw, 40px) 0;
 }
+.note-strip .founders-strip-copy p{ max-width:640px; }
 .founders-strip-inner{
   display:flex;
   align-items:center;
