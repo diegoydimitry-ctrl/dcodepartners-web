@@ -124,3 +124,29 @@ jobs:
 
       - name: Ejecutar QA contra la URL indicada
         run: node scripts/qa-preview-check.js "${{ inputs.url }}"
+
+  # Prueba real obligatoria del chatbot (mandato P0 "MISIÓN EXCLUSIVA
+  # CHATBOT WEB", sección 15): la Preview tiene Vercel Authentication
+  # (SSO) activada en todos los dominios *.vercel.app, así que no es
+  # alcanzable desde fuera de un runner con acceso normal a Internet (el
+  # job qa-preview de más arriba ya lo demuestra funcionando en cada PR).
+  # Se lanza a mano, contra la Preview que se quiera verificar, con:
+  #   gh workflow run "QA Preview vs Production" -f url=https://...
+  chat-smoke-test:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Conversación real + forzar 429 contra el chatbot en la URL indicada
+        run: node scripts/qa-preview-chat-check.js "${{ inputs.url }}"
