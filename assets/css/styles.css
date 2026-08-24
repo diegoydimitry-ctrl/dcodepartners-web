@@ -3235,26 +3235,77 @@ footer{
 .chat-typing{
   align-self:flex-start;
   display:flex;
-  gap:4px;
+  align-items:center;
+  gap:8px;
   padding:12px 14px;
   background:var(--panel-2);
   border:1px solid var(--border);
   border-radius:14px;
   border-bottom-left-radius:4px;
+  max-width:85%;
 }
-.chat-typing span{
+.chat-typing-dots{ display:flex; gap:4px; flex-shrink:0; }
+.chat-typing-dots span{
   width:6px; height:6px;
   border-radius:50%;
   background:var(--stone-soft);
   animation:typingBounce 1.2s ease-in-out infinite;
 }
-.chat-typing span:nth-child(2){ animation-delay:.15s; }
-.chat-typing span:nth-child(3){ animation-delay:.3s; }
+.chat-typing-dots span:nth-child(2){ animation-delay:.15s; }
+.chat-typing-dots span:nth-child(3){ animation-delay:.3s; }
 @keyframes typingBounce{
   0%,60%,100%{ transform:translateY(0); opacity:.5; }
   30%{ transform:translateY(-4px); opacity:1; }
 }
-@media (prefers-reduced-motion: reduce){ .chat-typing span{ animation:none; opacity:.8; } }
+@media (prefers-reduced-motion: reduce){ .chat-typing-dots span{ animation:none; opacity:.8; } }
+/* DIR-CHATBOT-RESILIENCIA: texto honesto y progresivo que aparece solo si
+   la respuesta tarda más de lo habitual (ver showTyping en main.js) — así
+   una espera larga por un reintento transparente del servidor no se lee
+   como que la web se ha quedado colgada. Vacío hasta que main.js lo rellena. */
+.chat-typing-note{
+  font-size:0.74rem;
+  color:var(--stone-soft);
+  line-height:1.3;
+}
+
+/* DIR-CHATBOT-RESILIENCIA: burbuja de error final (proveedor no disponible
+   tras agotar reintentos y respaldo, o fallo de red) — ámbar, no rojo: es
+   un aviso temporal y accionable (botón Reintentar), no una alarma grave.
+   Nunca contiene texto técnico, solo el mensaje amable ya generado por
+   api/chat.js o por main.js en el caso de fallo de red del propio navegador. */
+.chat-msg.chat-msg-error{
+  border-left:2px solid var(--amber);
+}
+.chat-retry-btn{
+  display:block;
+  margin-top:10px;
+  font-family:var(--sans);
+  font-size:0.76rem;
+  font-weight:600;
+  color:var(--amber);
+  background:rgba(255,180,84,.1);
+  border:1px solid rgba(255,180,84,.35);
+  padding:7px 14px;
+  border-radius:100px;
+  cursor:pointer;
+  transition:background .2s ease, border-color .2s ease;
+}
+.chat-retry-btn:hover:not(:disabled){ background:rgba(255,180,84,.2); border-color:var(--amber); }
+.chat-retry-btn:disabled{ opacity:.6; cursor:default; }
+
+/* DIR-CHATBOT-RESILIENCIA: aviso de "estado desconectado" — visible mientras
+   navigator.onLine es false (ver main.js), oculto el resto del tiempo. */
+.chat-offline-banner{
+  flex-shrink:0;
+  padding:8px 16px;
+  font-size:0.76rem;
+  font-weight:500;
+  color:var(--amber);
+  background:rgba(255,180,84,.1);
+  border-bottom:1px solid rgba(255,180,84,.25);
+  text-align:center;
+}
+.chat-offline-banner[hidden]{ display:none; }
 
 .chat-quick-replies{
   display:flex;
