@@ -223,6 +223,13 @@ h1,h2,h3,h4,p{ margin:0; }
   padding:0 var(--pad);
   position:relative;
 }
+/* Nota de la segunda auditoría (24/08/2026): el ancho en pantallas
+   grandes YA está resuelto más abajo — hay un @media (min-width:1600px)
+   que lleva --container a 1280px. Aquí se había añadido un segundo
+   bloque con 1320px que, por orden en el archivo, quedaba anulado por
+   aquel: código muerto y dos fuentes de verdad para el mismo token.
+   Retirado. Si algún día hay que revisar el ancho en pantallas grandes,
+   el único sitio donde tocarlo es ese bloque, no este. */
 ::selection{ background:rgba(91,140,255,.35); color:#fff; }
 
 /* ============ ACCESSIBILITY ============ */
@@ -3310,6 +3317,19 @@ footer{
     right:max(16px, env(safe-area-inset-right) + 8px);
     bottom:max(16px, env(safe-area-inset-bottom) + 8px);
   }
+  /* DIR-WEB-TRANSFORM (segunda auditoría): medido en 390px, la burbuja
+     de 60px ocupaba una esquina efectiva de ~76x76px y, al hacer scroll,
+     pasaba por encima del campo "Tu nombre" del formulario, de los
+     botones del acordeón de FAQ y del CTA principal.
+     Verificado que NO bloquea nada de forma permanente: al final de
+     cualquier página no se solapa con ningún control (comprobado en
+     contacto, servicios, faq e index), así que el solape es transitorio
+     y se resuelve con un pequeño scroll — el comportamiento normal de
+     cualquier widget flotante. Aun así se reduce a 52px en móvil: menos
+     superficie interferida, sin perder presencia ni bajar del objetivo
+     táctil recomendado de 44px. */
+  .chat-bubble{ width:52px; height:52px; }
+  .chat-bubble svg{ width:21px; height:21px; }
   .chat-window{ width:calc(100vw - 32px); height:min(70vh, 520px); }
 }
 

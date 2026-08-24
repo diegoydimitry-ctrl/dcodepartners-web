@@ -11,6 +11,24 @@
    sitio (todas las clases usan el prefijo fdemo-), y viceversa.
    ============================================================ */
 
+/* DIR-WEB-TRANSFORM: /sistema-financiero/app carga ÚNICAMENTE esta hoja,
+   no styles.css (a propósito: es una pantalla de demo a pantalla
+   completa y no necesita los 166KB del sistema del sitio). Por eso la
+   clase .sr-only, que vive en styles.css, no existía aquí — y el <h1>
+   accesible que necesita esa pantalla se habría visto en pantalla,
+   rompiendo el diseño del demo. Se replica aquí la misma definición.
+   Es la única clase sin prefijo fdemo- de esta hoja, y es deliberado:
+   duplicar la definición cuesta menos que cargar toda styles.css. */
+.sr-only{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
 .fdemo-scope{
   --dc-bg:#0a0e17;
   --dc-surface:#10151f;
