@@ -32,6 +32,47 @@ if (!BASE) {
   process.exit(2);
 }
 
+// Los dominios *.vercel.app de este proyecto tienen Vercel Authentication
+// (SSO) activada — sin esta cabecera, page.goto() a cualquiera de ellos
+// aterriza en la pantalla de login de Vercel, no en el sitio real, y sin
+// una comprobación explícita de esto el QA puede "pasar" sin haber
+// probado nada (ver checkAccessible() más abajo). Si Dirección genera un
+// secreto de "Protection Bypass for Automation" (Project Settings →
+// Deployment Protection) y lo guarda como secreto de GitHub Actions con
+// el nombre VERCEL_AUTOMATION_BYPASS_SECRET, este script lo usa solo con
+// definirlo — sin tocar más código. Sin el secreto, sigue funcionando
+// igual que hasta ahora (útil para Production, que no lleva SSO).
+const BYPASS_SECRET = process.env.VERCEL_AUTOMATION_BYPASS_SECRET || '';
+const extraHTTPHeaders = BYPASS_SECRET ? { 'x-vercel-protection-bypass': BYPASS_SECRET } : {};
+
+// Presente en la cabecera compartida de todas las páginas del sitio (ver
+// assets/js/main.js) — si no aparece en el DOM, o si la navegación acaba
+// en un origen distinto al pedido, no se ha cargado la aplicación real
+// (típicamente: redirigido al login SSO de Vercel), y el resto de
+// comprobaciones de esa página no tienen ningún valor.
+async function checkAccessible(browser, baseOrigin) {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, extraHTTPHeaders });
+  const page = await ctx.newPage();
+  let finalUrl = null;
+  try {
+    await page.goto(BASE + '/', { waitUntil: 'load', timeout: 20000 });
+    finalUrl = page.url();
+  } catch (e) {
+    await ctx.close();
+    return { ok: false, reason: `No se pudo cargar ${BASE}/: ${e.message}` };
+  }
+  const landedOffOrigin = new URL(finalUrl).origin !== baseOrigin;
+  const hasSiteHeader = await page.$('#site-header').then((el) => !!el).catch(() => false);
+  await ctx.close();
+  if (landedOffOrigin) {
+    return { ok: false, reason: `la navegación terminó en ${finalUrl} (origen distinto al pedido, ${baseOrigin}) — probable redirección a un login/SSO` };
+  }
+  if (!hasSiteHeader) {
+    return { ok: false, reason: `la página cargó (${finalUrl}) pero no contiene #site-header — no es la aplicación real del sitio` };
+  }
+  return { ok: true };
+}
+
 const PAGES = [
   '/', '/acuerdo-encargado-tratamiento', '/aviso-legal', '/blog',
   '/blog/automatizacion-vs-agentes-ia', '/blog/procesos-que-puedes-automatizar-ya',
@@ -62,7 +103,7 @@ const MAX_FONT_PX = 220; // por encima de esto, casi seguro un bug (ej. rem/px m
 
 async function checkPage(browser, path, width, baseOrigin) {
   const issues = [];
-  const ctx = await browser.newContext({ viewport: { width, height: 900 } });
+  const ctx = await browser.newContext({ viewport: { width, height: 900 }, extraHTTPHeaders });
   const page = await ctx.newPage();
   const failedRequests = [];
   const consoleErrors = [];
@@ -94,18 +135,28 @@ async function checkPage(browser, path, width, baseOrigin) {
     /Failed to load resource/,
     /Provider's accounts list is empty/,
     /\[GSI_LOGGER\]/,
+    // El registro de CookieYes queda atado al dominio de producción
+    // (dcodepartners.com); cualquier Preview en un dominio *.vercel.app
+    // distinto dispara este aviso siempre, sin relación con si el sitio
+    // funciona bien — visto en vivo (24/08/2026) haciendo fallar por error
+    // una comprobación real del chatbot que no tenía ningún problema.
+    /cookieyes/i,
+    /website URL has changed/i,
   ];
+  const isThirdPartyNoise = (text) => THIRD_PARTY_NOISE.some((re) => re.test(text));
   page.on('console', (msg) => {
     // "Failed to load resource" ya se captura (y se filtra por origen)
     // vía requestfailed arriba, y ese mensaje de consola no trae la URL
     // para poder aplicarle el mismo filtro de origen — lo excluimos aquí
     // para no duplicar ni generar falsos positivos por scripts de
     // terceros bloqueados (Cookieyes, Google Tag Manager, etc.).
-    if (msg.type() === 'error' && !THIRD_PARTY_NOISE.some((re) => re.test(msg.text()))) {
+    if (msg.type() === 'error' && !isThirdPartyNoise(msg.text())) {
       consoleErrors.push(msg.text());
     }
   });
-  page.on('pageerror', (err) => consoleErrors.push(String(err)));
+  page.on('pageerror', (err) => {
+    if (!isThirdPartyNoise(String(err))) consoleErrors.push(String(err));
+  });
 
   let resp;
   try {
@@ -169,10 +220,27 @@ async function checkPage(browser, path, width, baseOrigin) {
 
 async function main() {
   console.log(`QA contra: ${BASE}`);
-  console.log(`${PAGES.length} páginas x ${WIDTHS.length} anchos = ${PAGES.length * WIDTHS.length} comprobaciones\n`);
 
   const browser = await chromium.launch();
   const baseOrigin = new URL(BASE).origin;
+
+  const accessible = await checkAccessible(browser, baseOrigin);
+  if (!accessible.ok) {
+    console.error(`\n⛔ BLOQUEO DE ACCESO — no se pudo probar la aplicación real: ${accessible.reason}`);
+    console.error(
+      BYPASS_SECRET
+        ? 'Se usó VERCEL_AUTOMATION_BYPASS_SECRET y aun así falló — revisa que el secreto sea válido para este proyecto.'
+        : 'Este dominio de Vercel probablemente tiene Vercel Authentication (SSO) activada. Define VERCEL_AUTOMATION_BYPASS_SECRET ' +
+          '(Project Settings → Deployment Protection → Protection Bypass for Automation en Vercel) para que este script pueda probar la aplicación real.'
+    );
+    console.error('No se ha ejecutado ninguna de las 512 comprobaciones de página — habrían sido sobre una pantalla de login, no sobre el sitio.');
+    await browser.close();
+    process.exitCode = 1;
+    return;
+  }
+  console.log('Acceso confirmado: la aplicación real responde (no es una pantalla de login/SSO).');
+  console.log(`${PAGES.length} páginas x ${WIDTHS.length} anchos = ${PAGES.length * WIDTHS.length} comprobaciones\n`);
+
   const allIssues = [];
   let checked = 0;
 

@@ -19,6 +19,45 @@ name: QA Preview vs Production
 # forma exacta no se pudo confirmar en vivo desde este entorno). El
 # job "smoke-test" (workflow_dispatch) es la vía de respaldo: se
 # puede lanzar a mano contra cualquier URL, incluida Production.
+#
+# HALLAZGO CONFIRMADO EN VIVO (misión chatbot, 24/08/2026) — AVISO PARA
+# QUIEN LEA ESTO A CONTINUACIÓN: el proyecto de Vercel tiene "Vercel
+# Authentication" (SSO) activado en TODOS los dominios *.vercel.app
+# (Project Settings → Deployment Protection; solo los dominios propios
+# quedan exentos). La URL que resuelve el paso de más abajo
+# (environment_url de la API de Deployments de GitHub) SIGUE estando
+# protegida por ese SSO — comprobado en vivo: un navegador real
+# (Playwright, sin sesión de Vercel) que abre esa URL aterriza en la
+# pantalla de login de Vercel, no en el sitio. El job "qa-preview" NO
+# lo detecta como fallo (sus comprobaciones son: recursos rotos del
+# propio origen, errores de consola, overflow horizontal y la forma de
+# unos selectores concretos — nada de eso salta en la pantalla de login
+# de Vercel, así que un run entero puede reportar "0 problemas" sin
+# haber visto el sitio real ni una sola vez). Esto es anterior a la
+# misión del chatbot, no algo introducido aquí, y arreglarlo de verdad
+# requiere algo que ninguna sesión de Claude Code puede hacer sin acceso
+# al dashboard de Vercel: generar un secreto de "Protection Bypass for
+# Automation" (Project Settings → Deployment Protection → Protection
+# Bypass for Automation) y guardarlo como secreto de GitHub Actions con
+# el nombre VERCEL_AUTOMATION_BYPASS_SECRET (Settings → Secrets and
+# variables → Actions → New repository secret, en este repo). El código
+# ya está listo para usarlo en cuanto exista: los tres jobs de más abajo
+# ("qa-preview", "smoke-test", "chat-smoke-test") lo pasan como variable
+# de entorno a scripts/qa-preview-check.js y qa-preview-chat-check.js,
+# que lo añaden como cabecera `x-vercel-protection-bypass` — nada más
+# que hacer en código, no hay que tocar este archivo cuando se añada.
+# IMPORTANTE — verificado en vivo (24/08/2026): antes de este cambio,
+# los dos scripts NO detectaban el muro de SSO — un redirect al login
+# de Vercel pasaba como "0 problemas" (qa-preview) o como un simple
+# "TimeoutError" indistinguible de un bug real (chat-smoke-test). Ambos
+# ahora comprueban explícitamente el acceso ANTES de dar nada por
+# válido y fallan alto y claro si no hay acceso real a la aplicación —
+# así que, sin el secreto, "qa-preview" y "chat-smoke-test" fallan de
+# forma honesta en vez de dar un falso "todo OK". NO desactivar Vercel
+# Authentication para conseguir que pasen: expondría todas las Previews
+# públicamente. Hasta que exista el secreto, la única verificación
+# válida es manual: un humano con sesión de Vercel abierta en el
+# navegador.
 
 on:
   pull_request:
@@ -31,6 +70,30 @@ on:
         default: 'https://dcodepartners.com'
 
 jobs:
+  # AUD-DCP 23/08/2026 (ronda 2): las pruebas unitarias de test/ (fetch/
+  # Resend mockeados, sin red — failover de proveedores del chatbot,
+  # saneado de historial, contact-fallback...) existían y pasaban en
+  # local, pero ningún check de CI las ejecutaba nunca: un PR podía
+  # fusionarse con esas pruebas rotas sin que nada lo detectara. Job
+  # aparte y sin dependencia de `qa-preview` (que sí necesita red/Vercel/
+  # Playwright) para que un fallo aquí se vea en segundos, no tras ~10
+  # minutos de sondeo del deployment.
+  unit-tests:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar pruebas unitarias (fetch/Resend mockeados, sin llamadas reales)
+        run: npm test
+
   qa-preview:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -80,6 +143,8 @@ jobs:
           exit 1
 
       - name: Ejecutar QA contra la Preview
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/qa-preview-check.js "${{ steps.preview.outputs.preview_url }}"
 
   smoke-test:
@@ -99,4 +164,120 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Ejecutar QA contra la URL indicada
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/qa-preview-check.js "${{ inputs.url }}"
+
+  # Prueba real obligatoria del chatbot (mandato P0 "MISIÓN EXCLUSIVA
+  # CHATBOT WEB", sección 15). INTENTO 1: contra el alias estable de
+  # rama (dcodepartners-web-git-<rama>-...vercel.app) — falló,
+  # page.click('#chat-bubble') nunca encuentra el elemento porque esa
+  # URL está protegida por Vercel Authentication (SSO) y la página real
+  # es el login de Vercel. INTENTO 2 (este código): resolver en su
+  # lugar la URL efímera por commit vía "environment_url" de la API de
+  # Deployments de GitHub, igual que hace qa-preview más arriba —
+  # TAMBIÉN falló con el mismo timeout: esa URL sigue protegida por el
+  # mismo SSO, confirmado en vivo (ver el aviso grande al principio de
+  # este archivo). No hay, desde esta sesión, ninguna URL que se salte
+  # esa protección sin un secreto de bypass que no está configurado.
+  # Este job se deja tal cual (workflow_dispatch, no bloquea nada) para
+  # que funcione en cuanto exista ese secreto — ver el aviso al
+  # principio del archivo para cómo añadirlo. Hasta entonces, fallará
+  # de la misma forma si se lanza contra una Preview; sí sirve ya para
+  # apuntar contra Production (dominio propio, sin SSO) una vez mergeado.
+  # Se lanza a mano con:
+  #   gh workflow run "QA Preview vs Production" -f url=https://...
+  chat-smoke-test:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Resolver la URL del deployment de Vercel para este commit (sigue sujeta a Vercel Authentication), si existe
+        id: preview
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHA="${{ github.sha }}"
+          URL="${{ inputs.url }}"
+          for i in $(seq 1 20); do
+            DEPLOY_ID=$(gh api "repos/${{ github.repository }}/deployments?sha=$SHA&environment=Preview" \
+              --jq '.[0].id' 2>/dev/null || echo "")
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              STATE=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].state' 2>/dev/null || echo "")
+              ENV_URL=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].environment_url' 2>/dev/null || echo "")
+              if [ "$STATE" = "success" ] && [ -n "$ENV_URL" ] && [ "$ENV_URL" != "null" ]; then
+                URL="$ENV_URL"
+                break
+              fi
+            fi
+            echo "  intento $i/20: deployment de Vercel para $SHA todavía no listo, esperando 10s..."
+            sleep 10
+          done
+          echo "Usando URL: $URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Conversación real + forzar 429 contra el chatbot en la URL resuelta
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: node scripts/qa-preview-chat-check.js "${{ steps.preview.outputs.url }}"
+
+  # Auditoría de rendimiento (mandato P0, 24/08/2026): mide la latencia
+  # real de /api/chat contra una Preview en vivo — pensado para correr dos
+  # veces (antes/después de un cambio de rendimiento) y comparar
+  # percentiles reales, nunca estimados. No requiere navegador (fetch
+  # directo), así que es mucho más rápido que chat-smoke-test.
+  # Se lanza a mano con:
+  #   gh workflow run "QA Preview vs Production" -f url=https://...
+  chat-latency-benchmark:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolver la URL del deployment de Vercel para este commit (sigue sujeta a Vercel Authentication), si existe
+        id: preview
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHA="${{ github.sha }}"
+          URL="${{ inputs.url }}"
+          for i in $(seq 1 20); do
+            DEPLOY_ID=$(gh api "repos/${{ github.repository }}/deployments?sha=$SHA&environment=Preview" \
+              --jq '.[0].id' 2>/dev/null || echo "")
+            if [ -n "$DEPLOY_ID" ] && [ "$DEPLOY_ID" != "null" ]; then
+              STATE=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].state' 2>/dev/null || echo "")
+              ENV_URL=$(gh api "repos/${{ github.repository }}/deployments/$DEPLOY_ID/statuses" \
+                --jq '.[0].environment_url' 2>/dev/null || echo "")
+              if [ "$STATE" = "success" ] && [ -n "$ENV_URL" ] && [ "$ENV_URL" != "null" ]; then
+                URL="$ENV_URL"
+                break
+              fi
+            fi
+            echo "  intento $i/20: deployment de Vercel para $SHA todavía no listo, esperando 10s..."
+            sleep 10
+          done
+          echo "Usando URL: $URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Benchmark de latencia real (10 peticiones, p50/p95)
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: node scripts/chat-latency-benchmark.js "${{ steps.preview.outputs.url }}" 10

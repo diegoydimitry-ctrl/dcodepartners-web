@@ -19,9 +19,18 @@
 </head>
 <body>
 
+<!-- DIR-WEB-TRANSFORM: esta pantalla no tenia ningun <h1>. Los titulos
+     que pinta el demo son <h2> (dejaron de ser <h1> al corregir el H1
+     duplicado en las paginas que lo embeben), asi que el documento
+     quedaba sin encabezado de nivel 1 y la jerarquia empezaba en h2.
+     Se anade un h1 solo para lectores de pantalla: da el titulo real de
+     la pantalla sin alterar el diseno del demo a pantalla completa. -->
+<main style="height:100%;">
+<h1 class="sr-only">D-Code Finance — demo interactiva</h1>
 <div class="fdemo-scope" style="height:100%;">
   <div data-fdemo-mount data-mode="fullpage" data-exit-href="/sistema-financiero" data-exit-label="Salir de la demo" style="height:100%;"></div>
 </div>
+</main>
 
 <script src="/assets/js/finance-demo-data.js?v=2"></script>
 <script src="/assets/js/finance-demo.js?v=2"></script>

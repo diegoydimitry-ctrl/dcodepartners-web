@@ -884,7 +884,7 @@
         console.error('[contact-form] Excepción inesperada al enviar el formulario:', err);
       } finally {
         button.disabled = false;
-        button.textContent = 'Solicitar mi Mes Gratuito';
+        button.textContent = 'Solicitar mi Reunión';
       }
     });
   }
@@ -945,6 +945,27 @@
     var MAX_STORED_TURNS = 20;
     var MAX_MESSAGE_LENGTH = 600;
     var isSending = false;
+
+    /* ---- Estado de conexión (DIR-CHATBOT-RESILIENCIA): un aviso claro y
+       no técnico cuando el navegador pierde la conexión, en vez de dejar
+       que cada mensaje falle uno a uno con el mismo error genérico. Se
+       inserta antes de chat-messages para que quede siempre visible sin
+       desplazar la conversación. */
+    var offlineBanner = document.createElement('div');
+    offlineBanner.className = 'chat-offline-banner';
+    offlineBanner.textContent = 'Sin conexión a internet. El asistente se reactivará al reconectar.';
+    offlineBanner.hidden = true;
+    if (chatMessages && chatMessages.parentNode) {
+      chatMessages.parentNode.insertBefore(offlineBanner, chatMessages);
+    }
+    var applyOfflineState = function (offline) {
+      offlineBanner.hidden = !offline;
+      if (chatInput) chatInput.disabled = offline || isSending;
+      if (chatSubmitBtn) chatSubmitBtn.disabled = offline || isSending;
+    };
+    window.addEventListener('online', function () { applyOfflineState(false); });
+    window.addEventListener('offline', function () { applyOfflineState(true); });
+    if ('onLine' in navigator && !navigator.onLine) applyOfflineState(true);
 
     chatBubble.addEventListener('click', function () {
       var isOpen = chatWidget.classList.toggle('open');
@@ -1034,23 +1055,46 @@
       return div;
     };
 
+    /* ---- Indicador de "pensando", con texto progresivo y honesto si la
+       respuesta tarda más de lo habitual. Los reintentos ante un fallo
+       transitorio del proveedor ocurren enteros en el servidor (ver
+       api/chat.js) dentro de una misma petición — el usuario nunca ve un
+       503 ni un JSON de error, solo esta espera que se explica sola en
+       vez de parecer que la web se ha quedado colgada. */
+    var typingTimers = [];
     var showTyping = function () {
       var t = document.createElement('div');
       t.className = 'chat-typing';
       t.id = 'chat-typing-indicator';
-      t.innerHTML = '<span></span><span></span><span></span>';
+      t.innerHTML =
+        '<span class="chat-typing-dots"><span></span><span></span><span></span></span>' +
+        '<span class="chat-typing-note"></span>';
       chatMessages.appendChild(t);
       scrollToBottom();
+      var note = t.querySelector('.chat-typing-note');
+      typingTimers.push(setTimeout(function () {
+        if (!note) return;
+        note.textContent = 'Sigo pensando, dame un segundo…';
+        scrollToBottom();
+      }, 6000));
+      typingTimers.push(setTimeout(function () {
+        if (!note) return;
+        note.textContent = 'Esto está tardando más de lo normal, pero sigo intentando conectar…';
+        scrollToBottom();
+      }, 18000));
     };
     var hideTyping = function () {
+      typingTimers.forEach(function (id) { clearTimeout(id); });
+      typingTimers = [];
       var t = document.getElementById('chat-typing-indicator');
       if (t) t.remove();
     };
 
     var setSending = function (sending) {
       isSending = sending;
-      if (chatInput) chatInput.disabled = sending;
-      if (chatSubmitBtn) chatSubmitBtn.disabled = sending;
+      var offline = !offlineBanner.hidden;
+      if (chatInput) chatInput.disabled = sending || offline;
+      if (chatSubmitBtn) chatSubmitBtn.disabled = sending || offline;
     };
 
     var history = loadHistory();
@@ -1064,22 +1108,40 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    var sendMessage = function (rawText) {
-      var text = (rawText || '').trim().slice(0, MAX_MESSAGE_LENGTH);
-      if (!text || isSending) return;
+    /* ---- Burbuja de error amable + botón "Reintentar" (DIR-CHATBOT-
+       RESILIENCIA). Deliberadamente NO se guarda en `history`/sessionStorage:
+       es un aviso de la interfaz, no un turno real de la conversación — así
+       el contexto que se envía al modelo en el siguiente turno se mantiene
+       limpio (mandato: no enviar historial innecesario) y, si el usuario
+       recarga la página, solo reaparecen los turnos reales. */
+    var addErrorMessage = function (text, retryFn) {
+      var div = addMessage(text, 'bot');
+      div.classList.add('chat-msg-error');
+      var retryBtn = document.createElement('button');
+      retryBtn.type = 'button';
+      retryBtn.className = 'chat-retry-btn';
+      retryBtn.textContent = 'Reintentar';
+      retryBtn.addEventListener('click', function () {
+        retryBtn.disabled = true;
+        retryBtn.textContent = 'Reintentando…';
+        retryFn();
+      });
+      div.appendChild(retryBtn);
+      scrollToBottom();
+    };
 
-      addMessage(text, 'user');
-      if (chatQuick) chatQuick.style.display = 'none';
-      history.push({ role: 'user', content: text });
-      saveHistory(history);
-
+    /* ---- Llamada real al endpoint, separada de sendMessage para que el
+       botón "Reintentar" pueda repetir exactamente la misma petición
+       (mismo mensaje, mismo contexto) sin duplicar la burbuja del usuario
+       ni el turno en el historial. */
+    var callChat = function (text, historyForContext) {
       setSending(true);
       showTyping();
 
-      fetch(CHAT_ENDPOINT, {
+      return fetch(CHAT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history: history.slice(0, -1) })
+        body: JSON.stringify({ message: text, history: historyForContext })
       })
         .then(function (response) {
           return response.json().then(function (data) {
@@ -1088,24 +1150,43 @@
         })
         .then(function (result) {
           hideTyping();
-          var reply = (result.ok && result.data && result.data.success && result.data.reply)
+          var success = result.ok && result.data && result.data.success && result.data.reply;
+          if (success && result.data.mode === 'generated') {
+            addMessage(result.data.reply, 'bot');
+            history.push({ role: 'assistant', content: result.data.reply });
+            saveHistory(history);
+            return;
+          }
+          // El backend ya devuelve, en success && mode === 'error', un
+          // mensaje amable sin ningún detalle técnico (ver api/chat.js) —
+          // se muestra tal cual, con opción de reintentar.
+          var reply = success
             ? result.data.reply
-            : 'Ha ocurrido un problema al procesar tu mensaje. Inténtalo de nuevo en unos segundos o contáctanos directamente.';
-          addMessage(reply, 'bot');
-          history.push({ role: 'assistant', content: reply });
-          saveHistory(history);
+            : 'Parece que el asistente no está disponible temporalmente. Puedes intentarlo de nuevo en unos minutos.';
+          addErrorMessage(reply, function () { callChat(text, historyForContext); });
         })
         .catch(function () {
           hideTyping();
           var reply = 'No se ha podido conectar con el asistente. Comprueba tu conexión e inténtalo de nuevo.';
-          addMessage(reply, 'bot');
-          history.push({ role: 'assistant', content: reply });
-          saveHistory(history);
+          addErrorMessage(reply, function () { callChat(text, historyForContext); });
         })
         .then(function () {
           setSending(false);
-          if (chatInput) chatInput.focus();
+          if (chatInput && offlineBanner.hidden) chatInput.focus();
         });
+    };
+
+    var sendMessage = function (rawText) {
+      var text = (rawText || '').trim().slice(0, MAX_MESSAGE_LENGTH);
+      if (!text || isSending) return;
+
+      addMessage(text, 'user');
+      if (chatQuick) chatQuick.style.display = 'none';
+      var historyForContext = history.slice();
+      history.push({ role: 'user', content: text });
+      saveHistory(history);
+
+      callChat(text, historyForContext);
     };
 
     if (chatQuick) {

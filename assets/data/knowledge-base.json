@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-21T09:42:36.307Z",
+  "generatedAt": "2026-08-25T08:28:54.083Z",
   "pageCount": 66,
-  "chunkCount": 750,
+  "chunkCount": 748,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -381,13 +381,13 @@
         },
         {
           "id": "/casos-exito#c5",
-          "heading": "Cada Departamento Inteligente se mide desde el primer mes, con datos reales sobre la mesa.",
-          "text": "Cada Departamento Inteligente empieza con un mes de prueba, sin coste ni compromiso, para que el resultado se vea en datos concretos, no en promesas."
+          "heading": "Cada Departamento Inteligente se mide desde el arranque, con datos reales sobre la mesa.",
+          "text": "Cada Departamento Inteligente se diseña a medida de tu operativa, para que el resultado se vea en datos concretos, no en promesas."
         },
         {
           "id": "/casos-exito#c6",
           "heading": "¿Empezamos a construir tu caso de éxito?",
-          "text": "Cuéntanos en qué punto está tu negocio y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Empezar mi caso de éxito Ver todos los Departamentos"
+          "text": "Cuéntanos en qué punto está tu negocio y, en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Empezar mi caso de éxito Ver todos los Departamentos"
         }
       ]
     },
@@ -458,7 +458,7 @@
         {
           "id": "/como-funciona#c12",
           "heading": "Descubre qué Departamento necesita tu empresa primero.",
-          "text": "En una reunión de 30 minutos te decimos por dónde empezaríamos y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Ver qué Departamento necesito Ver los Departamentos Inteligentes"
+          "text": "En una reunión de 30 minutos analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Ver qué Departamento necesito Ver los Departamentos Inteligentes"
         }
       ]
     },
@@ -483,8 +483,8 @@
         },
         {
           "id": "/condiciones-contratacion#c3",
-          "heading": "3. Periodo de prueba / mes gratuito",
-          "text": "Cuando D-Code Partners ofrezca un periodo de prueba o mes de servicio sin coste, sus condiciones concretas (duración, alcance incluido y qué ocurre a su finalización) se comunicarán expresamente al cliente antes del inicio del servicio. Salvo que se indique lo contrario en la comunicación específica, la continuidad del servicio tras dicho periodo requerirá la aceptación expresa de una propuesta comercial por parte del cliente; en ningún caso se iniciará una facturación recurrente de forma automática sin informar previamente al cliente."
+          "heading": "3. Condiciones comerciales especiales",
+          "text": "Si la propuesta comercial de un proyecto incluye alguna condición especial (por ejemplo, un periodo inicial reducido o sin coste, ofrecido de forma puntual y a discreción de D-Code Partners), sus términos concretos —duración, alcance incluido y qué ocurre a su finalización— se comunicarán expresamente al cliente por escrito antes del inicio del servicio. Salvo que se indique lo contrario en dicha comunicación, la continuidad del servicio tras esa condición especial requerirá la aceptación expresa de una propuesta comercial por parte del cliente; en ningún caso se iniciará una facturación recurrente de forma automática sin informar previamente al cliente."
         },
         {
           "id": "/condiciones-contratacion#c4",
@@ -545,7 +545,7 @@
         {
           "id": "/conocenos#c1",
           "heading": "La mayoría de las empresas siguen operando en manual, dentro de un mundo que ya es automático.",
-          "text": "Cada herramienta suelta —un CRM aquí, una automatización allá— resuelve una tarea y deja el resto igual: alguien tiene que seguir acordándose de conectar los puntos. Nosotros no construimos herramientas sueltas. Construimos Departamentos Inteligentes: procesos completos que se ejecutan solos y se coordinan entre sí, como partes de un mismo sistema operativo empresarial. Por eso nuestro modelo de trabajo empieza por demostrarlo, no por prometerlo: un mes de servicio real, sin coste ni permanencia, antes de hablar de cifras."
+          "text": "Cada herramienta suelta —un CRM aquí, una automatización allá— resuelve una tarea y deja el resto igual: alguien tiene que seguir acordándose de conectar los puntos. Nosotros no construimos herramientas sueltas. Construimos Departamentos Inteligentes: procesos completos que se ejecutan solos y se coordinan entre sí, como partes de un mismo sistema operativo empresarial. Por eso nuestro modelo de trabajo empieza por entender tu empresa, no por vender un plan cerrado: analizamos tu operativa antes de proponer nada."
         },
         {
           "id": "/conocenos#c2",
@@ -564,7 +564,7 @@
         },
         {
           "id": "/conocenos#c5",
-          "heading": "Diagnóstico, implementación, medición — en ese orden.",
+          "heading": "Diagnóstico, alcance, diseño — así definimos cada proyecto.",
           "text": "El mismo Acuerdo D-Code que aplicamos a cada empresa, resumido. 01"
         },
         {
@@ -574,13 +574,13 @@
         },
         {
           "id": "/conocenos#c7",
-          "heading": "Implementación",
-          "text": "Desplegamos cada Departamento en tu operativa real, supervisado en todo momento. 03"
+          "heading": "Alcance",
+          "text": "Definimos el alcance real del proyecto: nº de procesos, integraciones, departamentos y complejidad. 03"
         },
         {
           "id": "/conocenos#c8",
-          "heading": "Medición",
-          "text": "Revisamos resultados con datos concretos —horas, ingresos, eficiencia— antes de hablar de cifras. Ver el Método completo Seguridad de la información"
+          "heading": "Diseño",
+          "text": "Diseñamos la solución y proponemos la inversión correspondiente — sin plan cerrado ni precio universal. Ver el Método completo Seguridad de la información"
         },
         {
           "id": "/conocenos#c9",
@@ -600,7 +600,7 @@
         {
           "id": "/conocenos#c12",
           "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Una llamada de 30 minutos basta para entender tu operativa y decirte por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
@@ -610,8 +610,8 @@
       "chunks": [
         {
           "id": "/contacto#c0",
-          "heading": "Reclama tu mes de prueba gratuito.",
-          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué Departamento Inteligente te conviene primero y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos. Sin coste. Sin compromiso."
+          "heading": "Hablemos de tu empresa.",
+          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos analizamos tu operativa y te decimos qué Departamento Inteligente te conviene primero y cómo definiríamos el alcance del proyecto — sin coste ni compromiso. Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos. Sin coste. Sin compromiso."
         },
         {
           "id": "/contacto#c1",
@@ -743,7 +743,7 @@
         {
           "id": "/departamentos#c15",
           "heading": "¿Ya sabes por dónde empezar?",
-          "text": "Cuéntanos qué Departamento te interesa y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Descubrir mi Departamento Ver cómo funciona el Sistema Operativo"
+          "text": "Cuéntanos qué Departamento te interesa y, en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Descubrir mi Departamento Ver cómo funciona el Sistema Operativo"
         }
       ]
     },
@@ -814,12 +814,12 @@
         {
           "id": "/departamentos/administracion#c12",
           "heading": "Es el Departamento con menos requisitos de entrada de todo el catálogo.",
-          "text": "Solo necesitas tu estructura de carpetas definida — nada más. En la primera reunión te decimos qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "Solo necesitas tu estructura de carpetas definida — nada más. En la primera reunión analizamos tu caso y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
           "id": "/departamentos/administracion#c13",
           "heading": "¿Empezamos por Administración?",
-          "text": "Cuéntanos cómo proteges hoy tus documentos y tus datos y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo proteges hoy tus documentos y tus datos y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -895,12 +895,12 @@
         {
           "id": "/departamentos/clientes#c13",
           "heading": "No hace falta preparar nada complicado.",
-          "text": "Solo necesitas un criterio claro de cuándo un cliente pasa a estar activo — hoy, en cuanto se acepta una propuesta — y sus datos de contacto. En la primera reunión te decimos qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "Solo necesitas un criterio claro de cuándo un cliente pasa a estar activo — hoy, en cuanto se acepta una propuesta — y sus datos de contacto. En la primera reunión analizamos tu caso y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
           "id": "/departamentos/clientes#c14",
           "heading": "¿Empezamos por Clientes?",
-          "text": "Cuéntanos cómo acompañas hoy a tus clientes y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo acompañas hoy a tus clientes y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -915,68 +915,63 @@
         },
         {
           "id": "/departamentos/comercial#c1",
-          "heading": "Comercial es el Departamento que hace que ninguna oportunidad de venta se pierda por falta de seguimiento.",
-          "text": "En vez de depender de la memoria de una persona o de un Excel que nadie actualiza, Comercial centraliza cada oportunidad, la mantiene viva y avisa cada mañana de qué necesita atención — incluidas las que llegan solas, por sector, todos los días."
-        },
-        {
-          "id": "/departamentos/comercial#c2",
           "heading": "Un radar que encuentra oportunidades, no una lista que hay que revisar.",
           "text": "Representación simplificada del sistema — no son datos de un cliente real. El radar barre el sector cada día. Pasa el ratón — o el foco del teclado — sobre un punto destacado o una fase para ver cómo se corresponden."
         },
         {
-          "id": "/departamentos/comercial#c3",
+          "id": "/departamentos/comercial#c2",
           "heading": "Dejas de depender de la memoria de una persona o de un Excel.",
           "text": "Las ventas dependen de la memoria de una persona. No hay prospección sistemática, solo lo que llega por casualidad. Las propuestas tardan días en salir. El seguimiento se olvida si nadie se acuerda de hacerlo. Cada oportunidad se centraliza en un único lugar, siempre actualizado. Nuevas oportunidades se detectan por sector, todos los días. Las propuestas se generan en minutos, verificadas. Nada se queda sin seguimiento: el equipo lo sabe cada mañana."
         },
         {
-          "id": "/departamentos/comercial#c4",
+          "id": "/departamentos/comercial#c3",
           "heading": "Ninguna oportunidad se pierde",
           "text": "El seguimiento no depende de que alguien se acuerde: nada queda sin atender por olvido."
         },
         {
-          "id": "/departamentos/comercial#c5",
+          "id": "/departamentos/comercial#c4",
           "heading": "Propuestas en minutos, no en días",
           "text": "Cada propuesta se genera a partir de los datos reales del prospecto, lista para enviar."
         },
         {
-          "id": "/departamentos/comercial#c6",
+          "id": "/departamentos/comercial#c5",
           "heading": "El equipo sabe qué toca hoy",
           "text": "Cada mañana queda claro qué leads y qué propuestas necesitan atención."
         },
         {
-          "id": "/departamentos/comercial#c7",
+          "id": "/departamentos/comercial#c6",
           "heading": "El pipeline deja de vivir en una cabeza",
           "text": "Toda oportunidad queda centralizada y visible, no repartida entre notas y memoria."
         },
         {
-          "id": "/departamentos/comercial#c8",
+          "id": "/departamentos/comercial#c7",
           "heading": "Marketing capta y prioriza",
           "text": "Cada contacto que llega a la web se cualifica en tiempo real, antes de llegar al equipo comercial. 02"
         },
         {
-          "id": "/departamentos/comercial#c9",
+          "id": "/departamentos/comercial#c8",
           "heading": "Comercial recibe la oportunidad ya lista",
           "text": "Sin tener que volver a cualificar nada, el equipo sabe si es prioritaria y la incorpora al pipeline. 03"
         },
         {
-          "id": "/departamentos/comercial#c10",
+          "id": "/departamentos/comercial#c9",
           "heading": "Cierra, y el dato sigue su camino solo",
           "text": "En cuanto una propuesta se acepta, esa información no se vuelve a teclear: pone en marcha automáticamente a Clientes y Producción."
         },
         {
-          "id": "/departamentos/comercial#c11",
+          "id": "/departamentos/comercial#c10",
           "heading": "Si tu seguimiento comercial vive en una cabeza o en un Excel, esto es para ti.",
           "text": "Comercial da más resultado en equipos comerciales de 1 a 8 personas que todavía no tienen un proceso escrito, y que hoy llevan el seguimiento a mano o en una hoja de cálculo."
         },
         {
-          "id": "/departamentos/comercial#c12",
+          "id": "/departamentos/comercial#c11",
           "heading": "No hace falta un proceso comercial complicado para empezar.",
-          "text": "Solo necesitas tu catálogo de servicios y una plantilla de propuesta. Si además quieres prospección activa, basta con indicarnos el sector y la zona geográfica que te interesan. En la primera reunión te decimos qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "Solo necesitas tu catálogo de servicios y una plantilla de propuesta. Si además quieres prospección activa, basta con indicarnos el sector y la zona geográfica que te interesan. En la primera reunión analizamos tu caso y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
-          "id": "/departamentos/comercial#c13",
+          "id": "/departamentos/comercial#c12",
           "heading": "¿Empezamos por Comercial?",
-          "text": "Cuéntanos cómo gestionas hoy tus oportunidades y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo gestionas hoy tus oportunidades y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -1047,12 +1042,12 @@
         {
           "id": "/departamentos/direccion#c12",
           "heading": "Su forma base no pide nada adicional.",
-          "text": "En su forma base no necesitas nada adicional. En su forma completa, da más valor cuantos más Departamentos tengas ya activos. En la primera reunión te decimos qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "En su forma base no necesitas nada adicional. En su forma completa, da más valor cuantos más Departamentos tengas ya activos. En la primera reunión analizamos tu caso y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
           "id": "/departamentos/direccion#c13",
           "heading": "¿Empezamos por Dirección?",
-          "text": "Cuéntanos cómo tomas hoy tus decisiones y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo tomas hoy tus decisiones y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -1209,12 +1204,12 @@
         {
           "id": "/departamentos/marketing#c12",
           "heading": "No hace falta preparar nada complicado.",
-          "text": "Solo necesitas un formulario web que podamos conectar — para la auditoría SEO, ni siquiera eso: basta con la URL a analizar. En la primera reunión te decimos qué encontramos y qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "Solo necesitas un formulario web que podamos conectar — para la auditoría SEO, ni siquiera eso: basta con la URL a analizar. En la primera reunión analizamos lo que encontramos y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
           "id": "/departamentos/marketing#c13",
           "heading": "¿Empezamos por Marketing?",
-          "text": "Cuéntanos cómo captas clientes hoy y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo captas clientes hoy y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -1285,12 +1280,12 @@
         {
           "id": "/departamentos/produccion#c12",
           "heading": "No hace falta preparar nada complicado.",
-          "text": "Solo necesitas tener tu equipo definido, con su carga de trabajo y disponibilidad, y tus proyectos con fecha de entrega. En la primera reunión te decimos qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "Solo necesitas tener tu equipo definido, con su carga de trabajo y disponibilidad, y tus proyectos con fecha de entrega. En la primera reunión analizamos tu caso y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
           "id": "/departamentos/produccion#c13",
           "heading": "¿Empezamos por Producción?",
-          "text": "Cuéntanos cómo gestionas hoy tus proyectos y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo gestionas hoy tus proyectos y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -1366,12 +1361,12 @@
         {
           "id": "/departamentos/soporte#c13",
           "heading": "No hace falta preparar nada complicado.",
-          "text": "Solo necesitas una bandeja de soporte dedicada. Para que el chat responda con datos reales, basta con que tus proyectos y propuestas ya estén en el sistema. En la primera reunión te decimos qué puedes esperar del primer mes, sin coste ni compromiso."
+          "text": "Solo necesitas una bandeja de soporte dedicada. Para que el chat responda con datos reales, basta con que tus proyectos y propuestas ya estén en el sistema. En la primera reunión analizamos tu caso y te decimos cómo definiríamos el alcance del proyecto — sin coste ni compromiso."
         },
         {
           "id": "/departamentos/soporte#c14",
           "heading": "¿Empezamos por Soporte?",
-          "text": "Cuéntanos cómo atiendes hoy a tus clientes y te decimos, en una reunión de 30 minutos, qué resultado puedes esperar del primer mes — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
+          "text": "Cuéntanos cómo atiendes hoy a tus clientes y en una reunión de 30 minutos, analizamos tu operativa y te decimos por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver todos los Departamentos"
         }
       ]
     },
@@ -1753,13 +1748,13 @@
         },
         {
           "id": "/en/casos-exito#c5",
-          "heading": "Every Smart Department is measured from month one, with real data on the table.",
-          "text": "Every Smart Department starts with a one-month trial, no cost, no commitment, so the result shows up in concrete data, not promises."
+          "heading": "Every Smart Department is measured from day one, with real data on the table.",
+          "text": "Every Smart Department is designed to fit your operations, so the result shows up in concrete data, not promises."
         },
         {
           "id": "/en/casos-exito#c6",
           "heading": "Ready to start building your success story?",
-          "text": "Tell us where your business stands, and in a 30-minute meeting we'll tell you what results you can expect from month one — no cost, no commitment. Start My Success Story View all Departments"
+          "text": "Tell us where your business stands, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Start My Success Story View all Departments"
         }
       ]
     },
@@ -1830,7 +1825,7 @@
         {
           "id": "/en/como-funciona#c12",
           "heading": "Find out which Department your company needs first.",
-          "text": "In a 30-minute meeting, we'll tell you where we'd start and what results you can expect in month one — no cost, no commitment. See Which Department I Need View the Smart Departments"
+          "text": "In a 30-minute meeting, we'll analyze your operations and tell you where we'd start — no cost, no commitment. See Which Department I Need View the Smart Departments"
         }
       ]
     },
@@ -1855,8 +1850,8 @@
         },
         {
           "id": "/en/condiciones-contratacion#c3",
-          "heading": "3. Trial period / free month",
-          "text": "When D-Code Partners offers a trial period or a month of service at no cost, its specific terms (duration, scope included, and what happens once it ends) will be expressly communicated to the client before the service begins. Unless otherwise stated in the specific communication, continuation of the service after that period will require the client's express acceptance of a commercial proposal; under no circumstances will recurring billing begin automatically without prior notice to the client."
+          "heading": "3. Special commercial terms",
+          "text": "If a project's commercial proposal includes a special condition (for example, a reduced or no-cost initial period, offered on a case-by-case basis at D-Code Partners' discretion), its specific terms — duration, scope included, and what happens once it ends — will be expressly communicated to the client in writing before the service begins. Unless otherwise stated in that communication, continuation of the service after that special condition will require the client's express acceptance of a commercial proposal; under no circumstances will recurring billing begin automatically without prior notice to the client."
         },
         {
           "id": "/en/condiciones-contratacion#c4",
@@ -1917,7 +1912,7 @@
         {
           "id": "/en/conocenos#c1",
           "heading": "Most companies are still operating manually, in a world that has already gone automatic.",
-          "text": "Every standalone tool — a CRM here, an automation there — solves one task and leaves the rest unchanged: someone still has to remember to connect the dots. We don't build standalone tools. We build Smart Departments: complete processes that run themselves and coordinate with each other, as parts of one business operating system. That's why our way of working starts by proving it, not promising it: a full month of real service, no cost, no lock-in, before we talk numbers."
+          "text": "Every standalone tool — a CRM here, an automation there — solves one task and leaves the rest unchanged: someone still has to remember to connect the dots. We don't build standalone tools. We build Smart Departments: complete processes that run themselves and coordinate with each other, as parts of one business operating system. That's why our way of working starts by understanding your company, not by selling a fixed plan: we analyze your operations before proposing anything."
         },
         {
           "id": "/en/conocenos#c2",
@@ -1936,7 +1931,7 @@
         },
         {
           "id": "/en/conocenos#c5",
-          "heading": "Diagnosis, implementation, measurement — in that order.",
+          "heading": "Diagnosis, scope, design — how we define every project.",
           "text": "The same D-Code Agreement we apply to every company, summarized. 01"
         },
         {
@@ -1946,13 +1941,13 @@
         },
         {
           "id": "/en/conocenos#c7",
-          "heading": "Implementation",
-          "text": "We deploy each Department in your real operations, supervised at every step. 03"
+          "heading": "Scope",
+          "text": "We define the real scope of the project: number of processes, integrations, departments and complexity. 03"
         },
         {
           "id": "/en/conocenos#c8",
-          "heading": "Measurement",
-          "text": "We review results with concrete data — hours, revenue, efficiency — before we talk numbers. See the full Method Information security"
+          "heading": "Design",
+          "text": "We design the solution and propose the corresponding investment — no fixed plan, no universal price. See the full Method Information security"
         },
         {
           "id": "/en/conocenos#c9",
@@ -1972,7 +1967,7 @@
         {
           "id": "/en/conocenos#c12",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know whether we can help you and what results to expect from month one — no cost, no commitment. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to understand your operations and tell you where we'd start — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
@@ -1982,8 +1977,8 @@
       "chunks": [
         {
           "id": "/en/contacto#c0",
-          "heading": "Claim your free trial month.",
-          "text": "Tell us where your business stands today. In a 30-minute meeting, we'll tell you which Smart Department to start with and what result to expect from month one — no cost, no commitment. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check Once you submit it, we'll email you within 24h to schedule the 30-minute call. No cost. No commitment."
+          "heading": "Let's talk about your business.",
+          "text": "Tell us where your business stands today. In a 30-minute meeting we'll analyze your operations and tell you which Smart Department to start with and how we'd define the project's scope — no cost, no commitment. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check Once you submit it, we'll email you within 24h to schedule the 30-minute call. No cost. No commitment."
         },
         {
           "id": "/en/contacto#c1",
@@ -2115,7 +2110,7 @@
         {
           "id": "/en/departamentos#c15",
           "heading": "Already know where to start?",
-          "text": "Tell us which Department interests you, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Find My Department See how the Operating System works"
+          "text": "Tell us which Department interests you, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Find My Department See how the Operating System works"
         }
       ]
     },
@@ -2186,12 +2181,12 @@
         {
           "id": "/en/departamentos/administracion#c12",
           "heading": "It's the Department with the fewest entry requirements in the entire catalog.",
-          "text": "All you need is your folder structure defined — nothing else. In the first meeting, we'll tell you what to expect from month one, no cost, no commitment."
+          "text": "All you need is your folder structure defined — nothing else. In the first meeting, we'll analyze your case and tell you how we'd define the project's scope, no cost, no commitment."
         },
         {
           "id": "/en/departamentos/administracion#c13",
           "heading": "Shall we start with Operations?",
-          "text": "Tell us how you protect your documents and data today, and in a 30-minute meeting we'll tell you what result to expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you protect your documents and data today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2267,12 +2262,12 @@
         {
           "id": "/en/departamentos/clientes#c13",
           "heading": "No complicated setup required.",
-          "text": "All you need is a clear rule for when a client becomes active — today, as soon as a proposal is accepted — and their contact details. In the first meeting, we'll tell you what to expect from month one, at no cost and with no commitment."
+          "text": "All you need is a clear rule for when a client becomes active — today, as soon as a proposal is accepted — and their contact details. In the first meeting, we'll analyze your case and tell you how we'd define the project's scope, at no cost and with no commitment."
         },
         {
           "id": "/en/departamentos/clientes#c14",
           "heading": "Shall we start with Customer?",
-          "text": "Tell us how you support your clients today, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you support your clients today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2287,68 +2282,63 @@
         },
         {
           "id": "/en/departamentos/comercial#c1",
-          "heading": "Sales is the Department that makes sure no sales opportunity is ever lost to poor follow-up.",
-          "text": "Instead of relying on one person's memory or a spreadsheet nobody updates, Sales centralizes every opportunity, keeps it alive, and flags each morning what needs attention — including new ones that arrive on their own, by sector, every day."
-        },
-        {
-          "id": "/en/departamentos/comercial#c2",
           "heading": "A radar that finds opportunities, not a list you have to review.",
           "text": "A simplified view of the system — not data from a real client. The radar sweeps the sector every day. Hover — or move keyboard focus — over a highlighted point or a stage to see how they match up."
         },
         {
-          "id": "/en/departamentos/comercial#c3",
+          "id": "/en/departamentos/comercial#c2",
           "heading": "Stop relying on one person's memory, or a spreadsheet.",
           "text": "Sales depend on one person's memory. There's no systematic prospecting, only what shows up by chance. Proposals take days to go out. Follow-up gets forgotten if nobody remembers to do it. Every opportunity is centralized in one place, always up to date. New opportunities are detected by sector, every day. Proposals are generated in minutes, verified. Nothing goes without follow-up: the team knows every morning."
         },
         {
-          "id": "/en/departamentos/comercial#c4",
+          "id": "/en/departamentos/comercial#c3",
           "heading": "No opportunity gets lost",
           "text": "Follow-up no longer depends on someone remembering: nothing goes unattended because it was forgotten."
         },
         {
-          "id": "/en/departamentos/comercial#c5",
+          "id": "/en/departamentos/comercial#c4",
           "heading": "Proposals in minutes, not days",
           "text": "Every proposal is generated from the prospect's real data, ready to send."
         },
         {
-          "id": "/en/departamentos/comercial#c6",
+          "id": "/en/departamentos/comercial#c5",
           "heading": "The team knows what's due today",
           "text": "Every morning it's clear which leads and which proposals need attention."
         },
         {
-          "id": "/en/departamentos/comercial#c7",
+          "id": "/en/departamentos/comercial#c6",
           "heading": "The pipeline stops living in one head",
           "text": "Every opportunity is centralized and visible, not scattered across notes and memory."
         },
         {
-          "id": "/en/departamentos/comercial#c8",
+          "id": "/en/departamentos/comercial#c7",
           "heading": "Marketing captures and prioritizes",
           "text": "Every contact that reaches the website is qualified in real time, before it reaches the sales team. 02"
         },
         {
-          "id": "/en/departamentos/comercial#c9",
+          "id": "/en/departamentos/comercial#c8",
           "heading": "Sales receives the opportunity ready to go",
           "text": "Without having to re-qualify anything, the team knows if it's a priority and adds it to the pipeline. 03"
         },
         {
-          "id": "/en/departamentos/comercial#c10",
+          "id": "/en/departamentos/comercial#c9",
           "heading": "It closes, and the data keeps moving on its own",
           "text": "As soon as a proposal is accepted, that information is never re-typed: it automatically kicks off Customer and Delivery."
         },
         {
-          "id": "/en/departamentos/comercial#c11",
+          "id": "/en/departamentos/comercial#c10",
           "heading": "If your sales follow-up lives in someone's head or a spreadsheet, this is for you.",
           "text": "Sales delivers the most impact for sales teams of 1 to 8 people who don't yet have a documented process, and who currently track follow-up by hand or in a spreadsheet."
         },
         {
-          "id": "/en/departamentos/comercial#c12",
+          "id": "/en/departamentos/comercial#c11",
           "heading": "You don't need a complicated sales process to get started.",
-          "text": "All you need is your services catalog and a proposal template. If you also want active prospecting, just tell us the sector and geographic area you're interested in. In the first meeting, we'll tell you what to expect from month one — no cost, no commitment."
+          "text": "All you need is your services catalog and a proposal template. If you also want active prospecting, just tell us the sector and geographic area you're interested in. In the first meeting, we'll analyze your case and tell you how we'd define the project's scope — no cost, no commitment."
         },
         {
-          "id": "/en/departamentos/comercial#c13",
+          "id": "/en/departamentos/comercial#c12",
           "heading": "Shall we start with Sales?",
-          "text": "Tell us how you manage your opportunities today, and in a 30-minute meeting we'll tell you what result you can expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you manage your opportunities today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2419,12 +2409,12 @@
         {
           "id": "/en/departamentos/direccion#c12",
           "heading": "Its base form asks for nothing extra.",
-          "text": "In its base form, you need nothing extra. In its full form, it delivers more value the more Departments you already have active. In the first meeting, we'll tell you what to expect from month one, no cost, no commitment."
+          "text": "In its base form, you need nothing extra. In its full form, it delivers more value the more Departments you already have active. In the first meeting, we'll analyze your case and tell you how we'd define the project's scope, no cost, no commitment."
         },
         {
           "id": "/en/departamentos/direccion#c13",
           "heading": "Shall we start with Leadership?",
-          "text": "Tell us how you make decisions today, and in a 30-minute meeting we'll tell you what result to expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you make decisions today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2581,12 +2571,12 @@
         {
           "id": "/en/departamentos/marketing#c12",
           "heading": "No complicated setup needed.",
-          "text": "All you need is a web form we can connect to — for the SEO audit, not even that: just the URL to analyze. In the first meeting, we'll tell you what we found and what to expect from month one — no cost, no commitment."
+          "text": "All you need is a web form we can connect to — for the SEO audit, not even that: just the URL to analyze. In the first meeting, we'll analyze what we found and tell you how we'd define the project's scope — no cost, no commitment."
         },
         {
           "id": "/en/departamentos/marketing#c13",
           "heading": "Shall we start with Marketing?",
-          "text": "Tell us how you attract clients today, and in a 30-minute meeting we'll tell you what result you can expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you attract clients today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2657,12 +2647,12 @@
         {
           "id": "/en/departamentos/produccion#c12",
           "heading": "No complicated setup required.",
-          "text": "All you need is your team defined, with their workload and availability, and your projects with delivery dates. In the first meeting, we'll tell you what to expect from month one, at no cost and with no commitment."
+          "text": "All you need is your team defined, with their workload and availability, and your projects with delivery dates. In the first meeting, we'll analyze your case and tell you how we'd define the project's scope, at no cost and with no commitment."
         },
         {
           "id": "/en/departamentos/produccion#c13",
           "heading": "Shall we start with Delivery?",
-          "text": "Tell us how you manage your projects today, and in a 30-minute meeting we'll tell you what results to expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you manage your projects today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2738,12 +2728,12 @@
         {
           "id": "/en/departamentos/soporte#c13",
           "heading": "There's nothing complicated to prepare.",
-          "text": "You just need a dedicated support inbox. For the chat to respond with real data, it's enough for your projects and proposals to already be in the system. In the first meeting, we'll tell you what to expect from month one — no cost, no commitment."
+          "text": "You just need a dedicated support inbox. For the chat to respond with real data, it's enough for your projects and proposals to already be in the system. In the first meeting, we'll analyze your case and tell you how we'd define the project's scope — no cost, no commitment."
         },
         {
           "id": "/en/departamentos/soporte#c14",
           "heading": "Shall we start with Support?",
-          "text": "Tell us how you handle client support today, and in a 30-minute meeting we'll tell you what result to expect from month one — no cost, no commitment. Book My Free Call View all Departments"
+          "text": "Tell us how you handle client support today, and in a 30-minute meeting we'll analyze your operations and tell you where we'd start — no cost, no commitment. Book My Free Call View all Departments"
         }
       ]
     },
@@ -2764,7 +2754,7 @@
         {
           "id": "/en/faq#c2",
           "heading": "What sets you apart from a traditional agency?",
-          "text": "We don't charge until we prove real results during the first month. Most agencies sell a closed project upfront; we'd rather let results speak before promises do. You can see the details in Guarantees & Process."
+          "text": "We don't sell the same package to everyone. We analyze your operations before proposing anything, and the project is designed around your real processes — not a closed template. You can see the details in Guarantees & Process."
         },
         {
           "id": "/en/faq#c3",
@@ -2809,32 +2799,32 @@
         {
           "id": "/en/faq#c11",
           "heading": "What does the process look like from the first meeting?",
-          "text": "We start with a diagnosis of your operations, design the system, implement it over a 30-day trial, and review the results together before talking about price. The full details are in The D-Code Method."
+          "text": "We start with a diagnosis of your operations, identify processes and opportunities, define the project's scope, and design the system. Once the scope is clear, we propose the corresponding investment. The full details are in The D-Code Method."
         },
         {
           "id": "/en/faq#c12",
           "heading": "How long does it take to implement an automation system?",
-          "text": "The diagnosis happens in the first few days. Implementation takes place over the four weeks of the trial month, progressively and under supervision."
+          "text": "It depends on the project's scope. The diagnosis happens in the first few days; implementation moves forward progressively and under supervision, on a timeline we define together based on the system's complexity."
         },
         {
           "id": "/en/faq#c13",
           "heading": "How do you measure results?",
-          "text": "With concrete data: hours saved, processes automated, and response times, compared against your situation before we started. We present them on day 30, before agreeing on any price."
+          "text": "With concrete data: hours saved, processes automated, and response times, compared against your situation before we started. It's part of the ongoing follow-up for every Smart Department."
         },
         {
           "id": "/en/faq#c14",
-          "heading": "What happens if the project doesn't deliver results?",
-          "text": "You pay nothing. If the system doesn't demonstrate a real, measurable benefit during the trial month, we don't invoice for that period."
+          "heading": "What happens if the system needs adjustments after implementation?",
+          "text": "It's included. We closely supervise every Smart Department during its first weeks of operation and make whatever adjustments are needed so it works as designed."
         },
         {
           "id": "/en/faq#c15",
-          "heading": "How much does the service cost after the free month?",
-          "text": "It depends on the system implemented and the measured impact. We agree on it together at the end of the trial month, with the real results already on the table — not before."
+          "heading": "How much does the service cost?",
+          "text": "There's no universal price and no closed plan — every project is quoted based on its real scope: number of processes to automate, integrations required, departments involved, and level of customization. After the diagnosis, and once the scope is defined, we present an investment proposal fitted to your case."
         },
         {
           "id": "/en/faq#c16",
           "heading": "Can I cancel at any time?",
-          "text": "Yes. There's no minimum commitment or cancellation penalty, either during the trial month or afterward."
+          "text": "Yes. There's no minimum commitment or cancellation penalty."
         },
         {
           "id": "/en/faq#c17",
@@ -2870,22 +2860,22 @@
     },
     {
       "url": "/en/garantias",
-      "title": "Guarantees & Process: 0% Risk — D-Code Partners",
+      "title": "Guarantees & Process — D-Code Partners",
       "chunks": [
         {
           "id": "/en/garantias#c0",
-          "heading": "Our risk, not yours. That's why we don't charge until we prove results.",
-          "text": "We'd rather let the result speak than the promise. That's why the model is built so we take on the risk, not you."
+          "heading": "We analyze first. We design after. The price follows the real scope.",
+          "text": "We don't sell the same closed plan to everyone. Every proposal is based on your operations, your processes, and what your company actually needs to automate."
         },
         {
           "id": "/en/garantias#c1",
-          "heading": "0% risk in the first month",
-          "text": "We implement and measure real results for 30 days before we ever talk price. No proven benefit, no invoice."
+          "heading": "Diagnosis before proposal",
+          "text": "We don't propose anything without first analyzing your real operations. The proposal comes after we understand which processes, integrations, and departments are involved."
         },
         {
           "id": "/en/garantias#c2",
           "heading": "No lock-in",
-          "text": "Not during the trial month, and not afterward either. Cancel whenever you want, with no penalty and no fine print."
+          "text": "Cancel whenever you want, with no penalty and no fine print."
         },
         {
           "id": "/en/garantias#c3",
@@ -2895,32 +2885,37 @@
         {
           "id": "/en/garantias#c4",
           "heading": "Diagnosis",
-          "text": "We analyze your operations and design a system tailored to them. No cost or commitment at this stage. 02"
+          "text": "We analyze your operations and your processes: which tasks eat the most hours, where opportunities are being lost, and what makes sense to automate first. No cost or commitment at this stage. 02"
         },
         {
           "id": "/en/garantias#c5",
-          "heading": "Implementation (30 days)",
-          "text": "We deploy the system into your real operations and supervise it closely throughout the entire trial month. 03"
+          "heading": "Opportunities",
+          "text": "We match the diagnosis with real potential impact: what to automate first, what to integrate, and what to build custom. 03"
         },
         {
           "id": "/en/garantias#c6",
-          "heading": "Results review",
-          "text": "We show you concrete data on the impact: hours saved, processes automated, response times. 04"
+          "heading": "Scope",
+          "text": "We define the project's real scope: number of processes, integrations required, departments involved, and level of customization. 04"
         },
         {
           "id": "/en/garantias#c7",
-          "heading": "Agreement on results",
-          "text": "Only then do we agree on the value of the service — with the benefit already proven, not projected. See the full detail of the Method"
+          "heading": "Design",
+          "text": "We design the solution to fit: automation and AI connected to your current systems, not a generic template. 05"
         },
         {
           "id": "/en/garantias#c8",
+          "heading": "Proposal",
+          "text": "With the scope already defined, we propose the corresponding investment — fitted to your real project, not a universal rate. See the full detail of the Method"
+        },
+        {
+          "id": "/en/garantias#c9",
           "heading": "Tested inside our own company first — 3 real cases.",
           "text": "All the detail lives on a single page so we don't duplicate it here. See Internal Cases"
         },
         {
-          "id": "/en/garantias#c9",
+          "id": "/en/garantias#c10",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what result you can expect from the first month, at no cost and no commitment. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to understand your operations and tell you where we'd start — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
@@ -2930,114 +2925,114 @@
       "chunks": [
         {
           "id": "/en/#c0",
-          "heading": "An Operating System for your company, not just another automation.",
-          "text": "Most small and mid-sized businesses lose sales and hours to processes that only work if someone remembers to do them — every D-Code Smart Department does it for you, every day. Book My Free Call See how it works No lock-in contract GDPR compliant Response &lt; 24h Disconnected tools, working alone → One operating system dcode_system Live Sales Connected Marketing Connected Delivery Connected Support Connected +4 more Departments · 1 system &gt; Sales → proposal sent to 3 companies 24/7 Operational €0 Upfront risk 30 days Free trial"
+          "heading": "An Operating System for your company.",
+          "text": "Not just another automation: eight Smart Departments that run the daily work —detect, decide, alert, act— coordinated in a single system. Book My Free Call See how it works No lock-in contract GDPR compliant Response &lt; 24h dcode_system Live Sales Connected Marketing Connected Delivery Connected Support Connected +4 more Departments · 1 system &gt; Sales → proposal sent to 3 companies 24/7 Operational 8 Departments 100% Built to fit A representation of the system — not a real client's data."
         },
         {
           "id": "/en/#c1",
-          "heading": "Finance, inside the system.",
-          "text": "D-Code Partners doesn't just automate your company: it's building its own financial system, connected to the rest of your Departments. Invoices, collections, expenses and quotes, in a single view. Explore D-Code Finance What you see below is an interactive demo of D-Code Finance, with a fictional company and data, built to show you what the system can do. The real product adapts to each company's structure and can include more features, configurations and integrations."
-        },
-        {
-          "id": "/en/#c2",
           "heading": "Not chatbots. One system with 8 modules.",
           "text": "Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool. Sales Never lose a sale to poor follow-up again. Marketing Leads that arrive already qualified, not raw. Customer Every client cared for, without depending on any one person. Delivery Projects that launch themselves and hit their deadlines. Finance Invoice, collect and track spend without chasing anyone. Support Fast responses, even after hours. Operations Your company, protected and organized, effortlessly. Leadership One clear decision every morning, backed by real data."
         },
         {
+          "id": "/en/#c2",
+          "heading": "We didn't describe it. We built it.",
+          "text": "Invoices, collections, expenses and quotes in a single view, connected to the rest of the Departments. Try it right here. Interactive demo with a fictional company and data. The real product adapts to each company. Explore D-Code Finance"
+        },
+        {
           "id": "/en/#c3",
-          "heading": "Day 1 — Diagnosis and design of your custom Department.",
-          "text": "We audit your operations and pinpoint the processes with the greatest potential impact."
+          "heading": "Diagnosis — We analyze your company and your processes.",
+          "text": "We audit your real operations: which tasks eat the most hours, where opportunities are being lost, and which processes make sense to automate first."
         },
         {
           "id": "/en/#c4",
-          "heading": "Weeks 1–4 — Implementation in your real operations.",
-          "text": "We deploy each Department into production, supervised at every step."
+          "heading": "Opportunities — We identify processes and opportunities for improvement.",
+          "text": "We match what we find in the diagnosis with real potential impact: what to automate first, what to integrate, and what to build custom."
         },
         {
           "id": "/en/#c5",
-          "heading": "Day 30 — Results review: hours, revenue, efficiency.",
-          "text": "We show you concrete data: what improved, and by how much."
+          "heading": "Scope — We define the project's real scope.",
+          "text": "Number of processes, integrations required, departments involved, level of customization: that's how a project is defined, not with a generic rate."
         },
         {
           "id": "/en/#c6",
-          "heading": "From here on — We agree on the value of the service, based on results already achieved.",
-          "text": "No surprises: we talk numbers once you already know what you're gaining."
+          "heading": "Design — We design the solution to fit.",
+          "text": "Automation and AI connected to your current systems — not a generic template, a Smart Department built for your company."
         },
         {
           "id": "/en/#c7",
-          "heading": "A partnership that starts with facts, not promises.",
-          "text": "The market is full of consultancies that promise before they prove. We work the other way around: we deploy your Smart Departments and measure their real impact on revenue and efficiency before we talk numbers. \"One full month of service, at no cost at all.\" See the full Method Guarantees & Process 0% RISK No lock-in. No fine print."
+          "heading": "Proposal — We propose the corresponding investment.",
+          "text": "With the scope already defined, we present a proposal fitted to your project — there's no universal price and no closed plan."
         },
         {
           "id": "/en/#c8",
-          "heading": "Before we ask you to trust us, we ran it inside our own company.",
-          "text": "We don't invent client case studies. This is how we use our own systems to run D-Code — including one that didn't go as planned. Sales"
+          "heading": "A partnership that starts with understanding your business, not selling you a closed plan.",
+          "text": "The market is full of consultancies that sell the same package to everyone. We work the other way around: we analyze your operations, identify where the real impact is, and design your Smart Departments to fit your processes, not a template. \"Every company is different. That's why every Smart Department is designed to fit — we don't sell closed plans.\" See the full Method Guarantees & Process BUILT TO FIT No lock-in. No fine print."
         },
         {
           "id": "/en/#c9",
+          "heading": "We ran it inside our own company first.",
+          "text": "We don't invent client case studies. These are our own systems running D-Code — including one that didn't go as planned. Sales"
+        },
+        {
+          "id": "/en/#c10",
           "heading": "From detected company to proposal sent, without anyone having to remember to do it",
           "text": "Before Going from \"interesting company\" to a sent proposal was manual, with no fixed date. Now Every Monday, the system turns the best opportunities into AI-drafted proposals, reviewed by a person. Delivery"
         },
         {
-          "id": "/en/#c10",
+          "id": "/en/#c11",
           "heading": "Distributing the team's workload without anyone having to decide it every hour",
           "text": "Before Creating projects and assigning tasks depended on whoever's workload allowed it that day. Now The system creates the project on its own, distributes tasks hourly, and flags what's about to come due every day. Internal discipline"
         },
         {
-          "id": "/en/#c11",
-          "heading": "When our hypothesis about a failure didn't match what the data actually said",
-          "text": "Before We were about to act on a hypothesis without checking it against the real executions. Now We audited execution by execution — the real cause was in two workflows different from the ones flagged. See all 3 full cases"
-        },
-        {
           "id": "/en/#c12",
-          "heading": "Two founders. One shared code.",
-          "text": "Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. Diego leads strategy and partnerships; Dimitry, the architecture behind the Smart Departments. Read our full story"
+          "heading": "When our hypothesis about a failure didn't match what the data actually said",
+          "text": "Before We were about to act on a hypothesis without checking it against the real executions. Now We audited execution by execution — the real cause was in two workflows different from the ones flagged. See all 3 full cases Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid. Diego leads strategy and partnerships; Dimitry, the architecture behind the Smart Departments. About us"
         },
         {
           "id": "/en/#c13",
           "heading": "Book a 30-minute meeting.",
-          "text": "We'll tell you which Smart Departments would have the most impact on your business, and what to expect from month one — no cost, no commitment. Book My Free Call See FAQ"
+          "text": "We'll analyze your operations and tell you which Smart Departments would have the most impact on your business, and how we'd define the project's scope — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
     {
       "url": "/en/metodo",
-      "title": "The D-Code Method: a free trial month before we invoice you",
+      "title": "The D-Code Method — D-Code Partners",
       "chunks": [
         {
           "id": "/en/metodo#c0",
-          "heading": "We start with facts, not promises.",
-          "text": "The market is full of consultancies that sell smoke before proving anything. We work the other way around: we implement first, measure the real impact, and only then talk about price. 0% RISK No lock-in No fine print"
+          "heading": "Analyze before proposing. Design before invoicing.",
+          "text": "The market is full of consultancies that sell the same package to everyone. We work the other way around: we analyze your operations, define the project's real scope, and design your system to fit — the price is defined afterward, based on what you actually need. BUILT TO FIT No lock-in No fine print"
         },
         {
           "id": "/en/metodo#c1",
-          "heading": "Diagnosis and design of your custom system",
-          "text": "We analyze how your business actually runs: which processes eat up the most hours, where leads slip through the cracks, and what repetitive tasks are holding your team back. From there we design an automation system built specifically for your business — not a generic template. 02"
+          "heading": "Diagnosis and opportunities",
+          "text": "We analyze how your business actually runs: which processes eat up the most hours, where opportunities are being lost, and what repetitive tasks are holding your team back. From there comes a clear map of where the real impact is — not a generic template. 02"
         },
         {
           "id": "/en/metodo#c2",
-          "heading": "Implementation in your real operations (weeks 1–4)",
-          "text": "We deploy the systems directly into your day-to-day operations, not in an isolated test environment. We supervise them closely throughout the month, adjusting whatever's needed along the way. 03"
+          "heading": "Project scope",
+          "text": "We define what's included in the project: number of processes, integrations required, departments involved, and level of customization. That's how a real project gets defined — not with a closed rate. 03"
         },
         {
           "id": "/en/metodo#c3",
-          "heading": "Results review (day 30)",
-          "text": "We sit down with you and go through concrete data: hours saved, response times, processes automated. No estimates, no projections — results that have already happened. 04"
+          "heading": "Solution design",
+          "text": "We design the system to fit and deploy it into your real operations, progressively and under supervision. 04"
         },
         {
           "id": "/en/metodo#c4",
-          "heading": "We agree on the value of the service",
-          "text": "Only then do we talk numbers, with the real impact already proven. If the results aren't there, there's no invoice. If you decide to continue, you do it knowing exactly what you're gaining."
+          "heading": "Investment proposal",
+          "text": "With the scope already defined, we propose the corresponding investment — fitted to your real project, not a universal price."
         },
         {
           "id": "/en/metodo#c5",
-          "heading": "What happens if there are no results in 30 days?",
-          "text": "We simply don't invoice you. There's no penalty and no further commitment on your part."
+          "heading": "How long does it take to get a proposal?",
+          "text": "The diagnosis and scope definition are usually resolved in the first few days after the first call. From there, we present the investment proposal."
         },
         {
           "id": "/en/metodo#c6",
           "heading": "Can I cancel at any time?",
-          "text": "Yes. There's no minimum term and no cancellation penalty, either during the trial month or after."
+          "text": "Yes. There's no minimum term and no cancellation penalty."
         },
         {
           "id": "/en/metodo#c7",
@@ -3047,7 +3042,7 @@
         {
           "id": "/en/metodo#c8",
           "heading": "Trust is proven, not declared.",
-          "text": "Rather than lean on grand promises or inflated case studies, we'd rather let the implementation itself speak for us during that first month. It's a model that puts the obligation on us, not you: if the system doesn't work, we don't get paid. That aligns our incentives with yours from day one. No proven benefit, no invoice. As simple as that. Claim My Trial Month See all questions"
+          "text": "Rather than lean on grand promises, we'd rather understand your business first, design second, and only then talk about price. It's a model that puts the obligation on us, not you: we don't propose anything without first understanding your real operations. That aligns our incentives with yours from day one. Every proposal reflects the real scope of your project. As simple as that. Book My Free Call See all questions"
         },
         {
           "id": "/en/metodo#c9",
@@ -3195,17 +3190,12 @@
         {
           "id": "/en/servicios#c3",
           "heading": "Integrations",
-          "text": "We connect your CRM, your ERP, your website, and the tools you already use so information flows without copying and pasting. CRM / ERP Spreadsheets APIs View service"
+          "text": "We connect your CRM, your ERP, your website, and the tools you already use so information flows without copying and pasting. CRM / ERP Spreadsheets APIs View service You don't need to pick a service in advance. We analyze your operations and propose the combination with the greatest impact for your case, within the D-Code Method. See the Method"
         },
         {
           "id": "/en/servicios#c4",
-          "heading": "In the first call, we'll tell you what to automate first.",
-          "text": "You don't need to pick a service in advance. We analyze your operations and propose the combination with the greatest impact for your case, within the D-Code Method. See the D-Code Method"
-        },
-        {
-          "id": "/en/servicios#c5",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what result to expect from month one, no cost, no commitment. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to understand your operations and tell you where we'd start — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
@@ -3251,7 +3241,7 @@
         {
           "id": "/en/servicios/agentes-ia#c7",
           "heading": "An agent trained on your information, not on generic answers.",
-          "text": "We start from your FAQs, your catalog, and how you communicate. Today we deploy the agent on web chat and email; other channels are evaluated case by case — we don't sell them as available by default. It stays supervised during the trial month so we can tune its behavior against real cases. It's a piece that combines especially well with Integrations, so every conversation gets logged directly in your CRM. See the full D-Code Method"
+          "text": "We start from your FAQs, your catalog, and how you communicate. Today we deploy the agent on web chat and email; other channels are evaluated case by case — we don't sell them as available by default. It stays supervised during its first weeks of operation so we can tune its behavior against real cases. It's a piece that combines especially well with Integrations, so every conversation gets logged directly in your CRM. See the full D-Code Method"
         },
         {
           "id": "/en/servicios/agentes-ia#c8",
@@ -3261,7 +3251,7 @@
         {
           "id": "/en/servicios/agentes-ia#c9",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what result to expect from month one, no cost, no commitment. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to understand your operations and tell you where we'd start — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
@@ -3307,7 +3297,7 @@
         {
           "id": "/en/servicios/automatizacion-ia#c7",
           "heading": "Automation built on your real operations, not a mock-up.",
-          "text": "We start by identifying the highest-impact processes during the initial diagnosis. Then we design the workflow, connect it to your current tools, and deploy it directly into your operations, within the free trial month. You no longer depend on someone \"remembering\" to run the process: the system does it by default, and a person only steps in when their judgment truly adds value. See the full D-Code Method"
+          "text": "We start by identifying the highest-impact processes during the initial diagnosis. Then we design the workflow, connect it to your current tools, and deploy it directly into your operations, gradually, with close follow-up in the early weeks. You no longer depend on someone \"remembering\" to run the process: the system does it by default, and a person only steps in when their judgment truly adds value. See the full D-Code Method"
         },
         {
           "id": "/en/servicios/automatizacion-ia#c8",
@@ -3317,7 +3307,7 @@
         {
           "id": "/en/servicios/automatizacion-ia#c9",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what result to expect from month one, no cost, no commitment. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to understand your operations and tell you where we'd start — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
@@ -3373,7 +3363,7 @@
         {
           "id": "/en/servicios/integraciones#c9",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what result to expect from month one, no cost, no commitment. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to understand your operations and tell you where we'd start — no cost, no commitment. Book My Free Call See FAQ"
         }
       ]
     },
@@ -3465,7 +3455,7 @@
         {
           "id": "/faq#c2",
           "heading": "¿Qué os diferencia de una agencia tradicional?",
-          "text": "No cobramos hasta demostrar resultados reales durante el primer mes. La mayoría de agencias venden un proyecto cerrado por adelantado; nosotros preferimos que los resultados hablen antes que las promesas. Puedes ver el detalle en Garantías y Proceso."
+          "text": "No vendemos el mismo paquete a todo el mundo. Analizamos tu operativa antes de proponer nada, y el proyecto se diseña según tus procesos reales — no según una plantilla cerrada. Puedes ver el detalle en Garantías y Proceso."
         },
         {
           "id": "/faq#c3",
@@ -3510,32 +3500,32 @@
         {
           "id": "/faq#c11",
           "heading": "¿Cómo es el proceso desde la primera reunión?",
-          "text": "Empezamos con un diagnóstico de tu operativa, diseñamos el sistema, lo implementamos durante 30 días de prueba y revisamos juntos los resultados antes de hablar de precio. El detalle completo está en el Método D-Code."
+          "text": "Empezamos con un diagnóstico de tu operativa, identificamos procesos y oportunidades, definimos el alcance del proyecto y diseñamos el sistema. Con el alcance claro, te proponemos la inversión correspondiente. El detalle completo está en el Método D-Code."
         },
         {
           "id": "/faq#c12",
           "heading": "¿Cuánto tarda en implementarse un sistema de automatización?",
-          "text": "El diagnóstico se hace en los primeros días. La implementación ocurre durante las cuatro semanas del mes de prueba, de forma progresiva y supervisada."
+          "text": "Depende del alcance del proyecto. El diagnóstico se hace en los primeros días; la implementación avanza de forma progresiva y supervisada, con un calendario que se define junto contigo según la complejidad del sistema."
         },
         {
           "id": "/faq#c13",
           "heading": "¿Cómo medís los resultados?",
-          "text": "Con datos concretos: horas ahorradas, procesos automatizados y tiempos de respuesta, comparados con tu situación antes de empezar. Te los presentamos el día 30, antes de acordar ningún precio."
+          "text": "Con datos concretos: horas ahorradas, procesos automatizados y tiempos de respuesta, comparados con tu situación antes de empezar. Es parte del seguimiento continuo de cada Departamento Inteligente."
         },
         {
           "id": "/faq#c14",
-          "heading": "¿Qué pasa si el proyecto no consigue resultados?",
-          "text": "No pagas nada. Si el sistema no demuestra un beneficio real y medible durante el mes de prueba, no facturamos ese periodo."
+          "heading": "¿Qué pasa si el sistema necesita ajustes tras la implementación?",
+          "text": "Está incluido. Supervisamos de cerca cada Departamento Inteligente en sus primeras semanas de funcionamiento y ajustamos lo que haga falta para que funcione como se diseñó."
         },
         {
           "id": "/faq#c15",
-          "heading": "¿Cuánto cuesta el servicio después del mes gratuito?",
-          "text": "Depende del sistema implementado y del impacto medido. Lo acordamos juntos al final del mes de prueba, con los resultados reales ya sobre la mesa — no antes."
+          "heading": "¿Cuánto cuesta el servicio?",
+          "text": "No hay un precio universal ni un plan cerrado — cada proyecto se cotiza según su alcance real: número de procesos a automatizar, integraciones necesarias, departamentos implicados y nivel de personalización. Tras el diagnóstico, y con el alcance ya definido, te presentamos una propuesta de inversión ajustada a tu caso."
         },
         {
           "id": "/faq#c16",
           "heading": "¿Puedo cancelar en cualquier momento?",
-          "text": "Sí. No hay permanencia mínima ni penalización por cancelar, ni durante el mes de prueba ni después."
+          "text": "Sí. No hay permanencia mínima ni penalización por cancelar."
         },
         {
           "id": "/faq#c17",
@@ -3571,22 +3561,22 @@
     },
     {
       "url": "/garantias",
-      "title": "Garantías y Proceso: riesgo 0% — D-Code Partners",
+      "title": "Garantías y Proceso — D-Code Partners",
       "chunks": [
         {
           "id": "/garantias#c0",
-          "heading": "Nuestro riesgo, no el tuyo. Por eso no cobramos hasta demostrar resultados.",
-          "text": "Preferimos que sea el resultado el que hable, no la promesa. Por eso el modelo está diseñado para que seamos nosotros quienes asumamos el riesgo, no tú."
+          "heading": "Analizamos primero. Diseñamos después. El precio, según el alcance real.",
+          "text": "No vendemos un plan cerrado igual para todos. Cada propuesta se basa en tu operativa, tus procesos y lo que tu empresa realmente necesita automatizar."
         },
         {
           "id": "/garantias#c1",
-          "heading": "Riesgo 0% el primer mes",
-          "text": "Implementamos y medimos resultados reales durante 30 días antes de hablar de precio. Si no hay beneficio demostrado, no hay factura."
+          "heading": "Diagnóstico antes que propuesta",
+          "text": "No te proponemos nada sin antes analizar tu operativa real. La propuesta llega después de entender qué procesos, integraciones y departamentos están en juego."
         },
         {
           "id": "/garantias#c2",
           "heading": "Sin permanencia",
-          "text": "Ni durante el mes de prueba ni después. Puedes cancelar cuando quieras, sin penalización ni letra pequeña."
+          "text": "Puedes cancelar cuando quieras, sin penalización ni letra pequeña."
         },
         {
           "id": "/garantias#c3",
@@ -3596,32 +3586,37 @@
         {
           "id": "/garantias#c4",
           "heading": "Diagnóstico",
-          "text": "Analizamos tu operativa y diseñamos el sistema a medida. Sin coste ni compromiso en esta fase. 02"
+          "text": "Analizamos tu operativa y tus procesos: qué tareas consumen más horas, dónde se pierden oportunidades y qué tiene sentido automatizar primero. Sin coste ni compromiso en esta fase. 02"
         },
         {
           "id": "/garantias#c5",
-          "heading": "Implementación (30 días)",
-          "text": "Desplegamos el sistema en tu operativa real y lo supervisamos de cerca durante todo el mes de prueba. 03"
+          "heading": "Oportunidades",
+          "text": "Cruzamos el diagnóstico con el impacto potencial: qué automatizar primero, qué integrar y qué construir a medida. 03"
         },
         {
           "id": "/garantias#c6",
-          "heading": "Revisión de resultados",
-          "text": "Te mostramos datos concretos del impacto: horas ahorradas, procesos automatizados, tiempos de respuesta. 04"
+          "heading": "Alcance",
+          "text": "Definimos el alcance real del proyecto: número de procesos, integraciones necesarias, departamentos implicados y nivel de personalización. 04"
         },
         {
           "id": "/garantias#c7",
-          "heading": "Acuerdo sobre resultados",
-          "text": "Solo entonces acordamos el valor del servicio — con el beneficio ya demostrado, no proyectado. Ver el detalle completo del Método"
+          "heading": "Diseño",
+          "text": "Diseñamos la solución a medida: automatización e IA conectadas a tus sistemas actuales, no una plantilla genérica. 05"
         },
         {
           "id": "/garantias#c8",
+          "heading": "Propuesta",
+          "text": "Con el alcance ya definido, te proponemos la inversión correspondiente — ajustada a tu proyecto real, no a una tarifa universal. Ver el detalle completo del Método"
+        },
+        {
+          "id": "/garantias#c9",
           "heading": "Probado primero en nuestra propia empresa — 3 casos reales.",
           "text": "Todo el detalle vive en una sola página para no duplicarlo aquí. Ver Casos internos"
         },
         {
-          "id": "/garantias#c9",
+          "id": "/garantias#c10",
           "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Una llamada de 30 minutos basta para entender tu operativa y decirte por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
@@ -3631,114 +3626,114 @@
       "chunks": [
         {
           "id": "/#c0",
-          "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
-          "text": "La mayoría de pymes pierde ventas y horas en procesos que solo funcionan si alguien se acuerda de hacerlos — cada Departamento Inteligente de D-Code los hace por ti, todos los días. Reservar mi Llamada Gratuita Ver cómo funciona Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h Herramientas sueltas, sin conectar → Un sistema operativo sistema_dcode En vivo Comercial Conectado Marketing Conectado Producción Conectado Soporte Conectado +4 Departamentos más · 1 sistema &gt; Comercial → propuesta enviada a 3 empresas 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
+          "heading": "Un Sistema Operativo para tu empresa.",
+          "text": "No una automatización más: ocho Departamentos Inteligentes que ejecutan el trabajo diario —detectan, deciden, avisan, actúan— coordinados en un mismo sistema. Reservar mi Llamada Gratuita Ver cómo funciona Sin permanencia Cumplimiento RGPD Respuesta &lt; 24h sistema_dcode En vivo Comercial Conectado Marketing Conectado Producción Conectado Soporte Conectado +4 Departamentos más · 1 sistema &gt; Comercial → propuesta enviada a 3 empresas 24/7 Operativa 8 Departamentos 100% A medida Representación del sistema — no son datos de un cliente real."
         },
         {
           "id": "/#c1",
-          "heading": "Finanzas, dentro del sistema.",
-          "text": "D-Code Partners no solo automatiza tu empresa: está construyendo su propio sistema financiero, conectado con el resto de tus Departamentos. Facturas, cobros, gastos y presupuestos, en una misma vista. Explorar D-Code Finance Lo que ves debajo es una demo interactiva de D-Code Finance, con una empresa y datos ficticios, pensada para enseñarte de lo que el sistema es capaz. La versión real se adapta a la estructura de cada empresa y puede incluir más funcionalidades, configuraciones e integraciones."
-        },
-        {
-          "id": "/#c2",
           "heading": "No son chatbots. Son un mismo sistema con 8 módulos.",
           "text": "Cada Departamento Inteligente ejecuta el trabajo — detecta, decide, avisa, actúa — coordinado con los demás, no aislado como una herramienta suelta. Comercial Que ninguna venta se pierda por falta de seguimiento. Marketing Leads que llegan ya clasificados, no en bruto. Clientes Que cada cliente se sienta cuidado, sin depender de nadie. Producción Proyectos que se ponen en marcha solos y cumplen sus plazos. Finanzas Factura, cobra y controla el gasto sin perseguir a nadie. Soporte Respuesta rápida, incluso fuera de horario. Administración Tu empresa, protegida y ordenada, sin esfuerzo. Dirección Una decisión clara cada mañana, con datos reales."
         },
         {
+          "id": "/#c2",
+          "heading": "No lo contamos. Lo hemos construido.",
+          "text": "Facturas, cobros, gastos y presupuestos en una sola vista, conectados con el resto de Departamentos. Pruébalo aquí mismo. Demo interactiva con una empresa y datos ficticios. La versión real se adapta a cada empresa. Explorar D-Code Finance"
+        },
+        {
           "id": "/#c3",
-          "heading": "Día 1 — Diagnóstico y diseño del Departamento a medida.",
-          "text": "Auditamos tu operativa y detectamos los procesos con mayor impacto potencial."
+          "heading": "Diagnóstico — Analizamos tu empresa y tus procesos.",
+          "text": "Auditamos tu operativa real: qué tareas consumen más horas, dónde se pierden oportunidades y qué procesos tiene sentido automatizar primero."
         },
         {
           "id": "/#c4",
-          "heading": "Semanas 1–4 — Implementación en tu operativa real.",
-          "text": "Desplegamos cada Departamento en producción, supervisado en todo momento."
+          "heading": "Oportunidades — Identificamos procesos y oportunidades de mejora.",
+          "text": "Cruzamos lo que vemos en el diagnóstico con el impacto potencial: qué automatizar primero, qué integrar y qué construir a medida."
         },
         {
           "id": "/#c5",
-          "heading": "Día 30 — Revisión de resultados: horas, ingresos, eficiencia.",
-          "text": "Te presentamos datos concretos: qué ha mejorado y cuánto."
+          "heading": "Alcance — Definimos el alcance real del proyecto.",
+          "text": "Número de procesos, integraciones necesarias, departamentos implicados y nivel de personalización: así se define un proyecto, no con una tarifa genérica."
         },
         {
           "id": "/#c6",
-          "heading": "A partir de aquí — Acordamos el valor del servicio, sobre resultados ya obtenidos.",
-          "text": "Sin sorpresas: hablamos de cifras cuando ya sabes lo que vas a ganar."
+          "heading": "Diseño — Diseñamos la solución a medida.",
+          "text": "Automatización e IA conectadas a tus sistemas actuales — no una plantilla genérica, un Departamento Inteligente construido para tu empresa."
         },
         {
           "id": "/#c7",
-          "heading": "Una alianza que empieza por los hechos, no por las promesas.",
-          "text": "El mercado está lleno de consultoras que prometen antes de demostrar. Nosotros trabajamos al revés: implantamos tus Departamentos Inteligentes y medimos su impacto real en ingresos y eficiencia antes de hablar de cifras. \"Un mes completo de servicio, sin coste alguno.\" Ver el Método completo Garantías y Proceso RIESGO 0% Sin permanencia. Sin letra pequeña."
+          "heading": "Propuesta — Te proponemos la inversión correspondiente.",
+          "text": "Con el alcance ya definido, te presentamos una propuesta ajustada a tu proyecto — no hay precio universal ni plan cerrado."
         },
         {
           "id": "/#c8",
-          "heading": "Antes de pedirte que confíes, lo probamos en nuestra propia empresa.",
-          "text": "No inventamos casos de cliente. Así es como usamos nuestros propios sistemas para dirigir D-Code — incluido uno que no salió como esperábamos. Comercial"
+          "heading": "Una alianza que empieza por entender tu empresa, no por vender un plan cerrado.",
+          "text": "El mercado está lleno de consultoras que venden el mismo paquete a todo el mundo. Nosotros trabajamos al revés: analizamos tu operativa, identificamos dónde está el impacto real y diseñamos tus Departamentos Inteligentes a medida de tus procesos, no de una plantilla. \"Cada empresa es distinta. Por eso cada Departamento Inteligente se diseña a medida — no vendemos planes cerrados.\" Ver el Método completo Garantías y Proceso A MEDIDA Sin permanencia. Sin letra pequeña."
         },
         {
           "id": "/#c9",
+          "heading": "Lo probamos en nuestra propia empresa.",
+          "text": "No inventamos casos de cliente. Estos son nuestros propios sistemas dirigiendo D-Code — incluido uno que no salió como esperábamos. Comercial"
+        },
+        {
+          "id": "/#c10",
           "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse",
           "text": "Antes Pasar de \"empresa interesante\" a propuesta enviada era manual, sin fecha fija. Ahora Cada lunes, el sistema convierte las mejores oportunidades en propuestas con IA, revisadas por una persona. Producción"
         },
         {
-          "id": "/#c10",
+          "id": "/#c11",
           "heading": "Reparto de tareas sin que nadie tenga que decidirlo cada hora",
           "text": "Antes Crear proyectos y repartir tareas dependía de la carga de trabajo de quien tuviera que hacerlo ese día. Ahora El sistema crea el proyecto solo, reparte tareas cada hora y avisa cada día de lo que está por vencer. Disciplina interna"
         },
         {
-          "id": "/#c11",
-          "heading": "Cuando la hipótesis sobre un fallo no coincidía con los datos",
-          "text": "Antes Estuvimos a punto de actuar sobre una hipótesis sin contrastarla contra las ejecuciones reales. Ahora Auditamos ejecución por ejecución — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos"
-        },
-        {
           "id": "/#c12",
-          "heading": "Dos fundadores. Un mismo código.",
-          "text": "Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid para que las empresas dejen de depender de que alguien se acuerde de todo. Diego lidera la estrategia y las alianzas; Dimitry, la arquitectura de los Departamentos Inteligentes. Conoce toda nuestra historia"
+          "heading": "Cuando la hipótesis sobre un fallo no coincidía con los datos",
+          "text": "Antes Estuvimos a punto de actuar sobre una hipótesis sin contrastarla contra las ejecuciones reales. Ahora Auditamos ejecución por ejecución — la causa real estaba en dos workflows distintos a los señalados. Ver los 3 casos completos Diego Siñeriz y Dimitry Sosenko fundaron D-Code Partners en Madrid. Diego lidera estrategia y alianzas; Dimitry, la arquitectura de los Departamentos Inteligentes. Conócenos"
         },
         {
           "id": "/#c13",
           "heading": "Reserva una reunión de 30 minutos.",
-          "text": "Te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y qué puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Analizamos tu operativa y te contamos qué Departamentos Inteligentes tendrían más impacto en tu empresa y cómo definiríamos el alcance del proyecto — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
     {
       "url": "/metodo",
-      "title": "El Método D-Code: un mes de prueba gratuito antes de facturar",
+      "title": "El Método D-Code — D-Code Partners",
       "chunks": [
         {
           "id": "/metodo#c0",
-          "heading": "Empezamos por los hechos, no por las promesas.",
-          "text": "El mercado está lleno de consultoras que venden humo antes de demostrar nada. Nosotros trabajamos al revés: implementamos primero, medimos el impacto real, y solo entonces hablamos de precio. RIESGO 0% Sin permanencia Sin letra pequeña"
+          "heading": "Analizar antes de proponer. Diseñar antes de facturar.",
+          "text": "El mercado está lleno de consultoras que venden el mismo paquete a todo el mundo. Nosotros trabajamos al revés: analizamos tu operativa, definimos el alcance real del proyecto y diseñamos tu sistema a medida — el precio se define después, según lo que de verdad necesitas. A MEDIDA Sin permanencia Sin letra pequeña"
         },
         {
           "id": "/metodo#c1",
-          "heading": "Diagnóstico y diseño del sistema a medida",
-          "text": "Analizamos tu operativa real: qué procesos consumen más horas, dónde se pierden leads y qué tareas repetitivas están frenando al equipo. De ahí sale un diseño de automatización específico para tu negocio, no una plantilla genérica. 02"
+          "heading": "Diagnóstico y oportunidades",
+          "text": "Analizamos tu operativa real: qué procesos consumen más horas, dónde se pierden oportunidades y qué tareas repetitivas están frenando al equipo. De ahí sale un mapa claro de dónde está el impacto potencial, no una plantilla genérica. 02"
         },
         {
           "id": "/metodo#c2",
-          "heading": "Implementación en tu operativa real (semanas 1-4)",
-          "text": "Desplegamos los sistemas directamente en tu día a día, no en un entorno de pruebas aislado. Los supervisamos de cerca durante todo el mes para ajustar lo que haga falta sobre la marcha. 03"
+          "heading": "Alcance del proyecto",
+          "text": "Definimos qué entra dentro del proyecto: número de procesos, integraciones necesarias, departamentos implicados y nivel de personalización. Así se acota un proyecto real, no con una tarifa cerrada. 03"
         },
         {
           "id": "/metodo#c3",
-          "heading": "Revisión de resultados (día 30)",
-          "text": "Nos sentamos contigo con datos concretos: horas ahorradas, tiempos de respuesta, procesos automatizados. Sin estimaciones ni proyecciones — resultados que ya han ocurrido. 04"
+          "heading": "Diseño de la solución",
+          "text": "Diseñamos el sistema a medida y lo desplegamos en tu operativa real, de forma progresiva y supervisada. 04"
         },
         {
           "id": "/metodo#c4",
-          "heading": "Acordamos el valor del servicio",
-          "text": "Solo entonces hablamos de cifras, con el impacto real ya demostrado. Si los resultados no están ahí, no hay factura. Si decides seguir, lo haces sabiendo exactamente lo que ganas."
+          "heading": "Propuesta de inversión",
+          "text": "Con el alcance ya definido, te proponemos la inversión correspondiente — ajustada a tu proyecto real, no a un precio universal."
         },
         {
           "id": "/metodo#c5",
-          "heading": "¿Qué pasa si no hay resultados en 30 días?",
-          "text": "Simplemente no facturamos. No hay penalización ni compromiso posterior por tu parte."
+          "heading": "¿Cuánto tarda el proceso hasta tener una propuesta?",
+          "text": "El diagnóstico y la definición del alcance suelen resolverse en los primeros días tras la primera llamada. A partir de ahí, te presentamos la propuesta de inversión."
         },
         {
           "id": "/metodo#c6",
           "heading": "¿Puedo cancelar en cualquier momento?",
-          "text": "Sí. No hay permanencia mínima ni penalización por cancelar, ni durante el mes de prueba ni después."
+          "text": "Sí. No hay permanencia mínima ni penalización por cancelar."
         },
         {
           "id": "/metodo#c7",
@@ -3748,7 +3743,7 @@
         {
           "id": "/metodo#c8",
           "heading": "La confianza se demuestra, no se declara.",
-          "text": "Preferimos no compensar nada con promesas grandilocuentes: dejamos que sea la propia implementación la que hable por nosotros durante el primer mes. Es un modelo que nos obliga a nosotros, no a ti: si el sistema no funciona, no cobramos. Eso alinea nuestros incentivos con los tuyos desde el primer día. Sin beneficio demostrado, no hay factura. Así de simple. Reclamar mi Mes de Prueba Ver todas las preguntas"
+          "text": "Preferimos no compensar nada con promesas grandilocuentes: primero entendemos tu empresa, después diseñamos, y solo entonces hablamos de precio. Es un modelo que nos obliga a nosotros, no a ti: no te proponemos nada sin antes entender tu operativa real. Eso alinea nuestros incentivos con los tuyos desde el primer día. Cada propuesta responde al alcance real de tu proyecto. Así de simple. Reservar mi Llamada Gratuita Ver todas las preguntas"
         },
         {
           "id": "/metodo#c9",
@@ -3896,17 +3891,12 @@
         {
           "id": "/servicios#c3",
           "heading": "Integraciones",
-          "text": "Conectamos tu CRM, tu ERP, tu web y tus herramientas de siempre para que la información fluya sin copiar y pegar. CRM / ERP Hojas de cálculo APIs Ver el servicio"
+          "text": "Conectamos tu CRM, tu ERP, tu web y tus herramientas de siempre para que la información fluya sin copiar y pegar. CRM / ERP Hojas de cálculo APIs Ver el servicio No hace falta que elijas un servicio de antemano. Analizamos tu operativa y te proponemos la combinación con más impacto para tu caso, dentro del Método D-Code. Ver el Método"
         },
         {
           "id": "/servicios#c4",
-          "heading": "En la primera llamada te decimos qué automatizar primero.",
-          "text": "No hace falta que elijas un servicio de antemano. Analizamos tu operativa y te proponemos la combinación que tiene más impacto para tu caso, dentro del Método D-Code. Ver el Método D-Code"
-        },
-        {
-          "id": "/servicios#c5",
           "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Una llamada de 30 minutos basta para entender tu operativa y decirte por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
@@ -3952,7 +3942,7 @@
         {
           "id": "/servicios/agentes-ia#c7",
           "heading": "Un agente entrenado con tu información, no con generalidades.",
-          "text": "Partimos de tus preguntas frecuentes, tu catálogo y tu forma de comunicar. Hoy desplegamos el agente en chat web y email; otros canales se evalúan caso a caso, no los vendemos como disponibles de serie. Queda supervisado durante el mes de prueba para ajustar su comportamiento con casos reales. Es una pieza que combina especialmente bien con Integraciones, para que cada conversación quede registrada directamente en tu CRM. Ver el Método D-Code completo"
+          "text": "Partimos de tus preguntas frecuentes, tu catálogo y tu forma de comunicar. Hoy desplegamos el agente en chat web y email; otros canales se evalúan caso a caso, no los vendemos como disponibles de serie. Queda supervisado en sus primeras semanas de funcionamiento para ajustar su comportamiento con casos reales. Es una pieza que combina especialmente bien con Integraciones, para que cada conversación quede registrada directamente en tu CRM. Ver el Método D-Code completo"
         },
         {
           "id": "/servicios/agentes-ia#c8",
@@ -3962,7 +3952,7 @@
         {
           "id": "/servicios/agentes-ia#c9",
           "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Una llamada de 30 minutos basta para entender tu operativa y decirte por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
@@ -4008,7 +3998,7 @@
         {
           "id": "/servicios/automatizacion-ia#c7",
           "heading": "Automatización sobre tu operativa real, no sobre una maqueta.",
-          "text": "Empezamos identificando los procesos con más impacto potencial durante el diagnóstico inicial. Después diseñamos el flujo, lo conectamos con tus herramientas actuales y lo desplegamos directamente en tu operativa, dentro del mes de prueba gratuito. No dependes de que alguien \"se acuerde\" de ejecutar el proceso: el sistema lo hace por defecto, y solo interviene una persona cuando de verdad aporta criterio. Ver el Método D-Code completo"
+          "text": "Empezamos identificando los procesos con más impacto potencial durante el diagnóstico inicial. Después diseñamos el flujo, lo conectamos con tus herramientas actuales y lo desplegamos directamente en tu operativa, de forma progresiva, con seguimiento cercano en las primeras semanas. No dependes de que alguien \"se acuerde\" de ejecutar el proceso: el sistema lo hace por defecto, y solo interviene una persona cuando de verdad aporta criterio. Ver el Método D-Code completo"
         },
         {
           "id": "/servicios/automatizacion-ia#c8",
@@ -4018,7 +4008,7 @@
         {
           "id": "/servicios/automatizacion-ia#c9",
           "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Una llamada de 30 minutos basta para entender tu operativa y decirte por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
@@ -4074,7 +4064,7 @@
         {
           "id": "/servicios/integraciones#c9",
           "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
+          "text": "Una llamada de 30 minutos basta para entender tu operativa y decirte por dónde empezaríamos — sin coste ni compromiso. Reservar mi Llamada Gratuita Ver preguntas frecuentes"
         }
       ]
     },
