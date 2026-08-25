@@ -884,7 +884,7 @@
         console.error('[contact-form] Excepción inesperada al enviar el formulario:', err);
       } finally {
         button.disabled = false;
-        button.textContent = 'Solicitar mi Mes Gratuito';
+        button.textContent = 'Solicitar mi Reunión';
       }
     });
   }
