@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Daddy Pan — Bar de tapas &amp; cócteles en Madrid</title>
+<meta name="description" content="Daddy Pan: cocina de mercado, coctelería de autor y las mejores noches de Madrid. Reserva tu mesa en segundos.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#16110d">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2316110d'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Georgia,serif' font-weight='700' fill='%23e0aa4f' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,600&amp;family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!--
+  PROTOTIPO / PLANTILLA VISUAL — no es el sitio final de producción.
+  Puntos de conexión reales pendientes (ver assets/js/config.js):
+    · MENU_URL                → PDF o página con la carta completa
+    · GOOGLE_REVIEW_URL       → ficha de Google Business
+    · GOOGLE_MAPS_URL         → "Cómo llegar" / embed real del mapa
+    · GOOGLE_SHEETS_ENDPOINT  → recepción real de reservas del chatbot
+  Todas las fotografías son marcadores de posición (placeholders) en CSS.
+-->
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+<!-- ============================= HEADER ============================= -->
+<header id="site-header">
+  <div class="container nav-wrap">
+    <a href="#top" class="logo">Daddy<span class="logo-dot">Pan</span></a>
+
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="#carta">Carta</a>
+      <a href="#galeria">Galería</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#ubicacion">Cómo llegar</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-outline" href="tel:+34910000000">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Llamar
+      </a>
+      <button class="btn btn-primary" data-open-chat>Reservar mesa</button>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileDrawer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-panel">
+    <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Cerrar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="#carta">Carta</a>
+    <a href="#galeria">Galería</a>
+    <a href="#resenas">Reseñas</a>
+    <a href="#ubicacion">Cómo llegar</a>
+    <a href="tel:+34910000000">Llamar</a>
+    <button class="btn btn-primary btn-block" data-open-chat>Reservar mesa</button>
+  </div>
+</div>
+
+<main id="main-content">
+
+  <!-- ============================= HERO ============================= -->
+  <section class="hero" id="top">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Bar de tapas &amp; cócteles · Madrid</span>
+        <h1 class="hero-title">Buena mesa,<br>buena compañía,<br><span class="accent">buena noche.</span></h1>
+        <p class="hero-desc">Cocina de mercado, coctelería de autor y un ambiente hecho para quedarse. Reserva tu mesa en menos de un minuto, directamente desde aquí.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" data-open-chat>
+            Reservar mesa
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <a class="btn btn-outline" href="#carta">Ver la carta</a>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>
+            <div><strong>Abierto ahora</strong><span>Cierra a las 00:00</span></div>
+          </div>
+          <div class="hero-meta-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div><strong>4.8 / 5 en Google</strong><span>128 reseñas</span></div>
+          </div>
+          <div class="hero-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div><strong>Centro de Madrid</strong><span>Calle de la Reina, 12</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <span class="placeholder-tag">Foto de ejemplo</span>
+        <div class="placeholder-photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ph-icon"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Fotografía real del local — pendiente de sesión fotográfica</span>
+        </div>
+        <div class="hero-badge-card">
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div><strong>4.8</strong> <span>· 128 reseñas en Google</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue"><span class="line"></span>Descubre más</div>
+  </section>
+
+  <!-- ============================= FEATURES ============================= -->
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature-item reveal">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21c8 0 13-6 13-14a1 1 0 0 0-1-1C10 6 4 10 4 18a1 1 0 0 0 1 1z"/><path d="M6 21c2-4 5-8 12-12"/></svg>
+        </div>
+        <div>
+          <h3>Cocina de mercado</h3>
+          <p>Producto de proximidad y receta de siempre, con un punto actual en cada plato.</p>
+        </div>
+      </div>
+      <div class="feature-item reveal reveal-delay-1">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="4" x2="20" y2="4"/><path d="M4 4l8 9 8-9"/><line x1="12" y1="13" x2="12" y2="20"/><line x1="8" y1="20" x2="16" y2="20"/></svg>
+        </div>
+        <div>
+          <h3>Coctelería de autor</h3>
+          <p>Clásicos revisados y creaciones propias, pensados para acompañar toda la noche.</p>
+        </div>
+      </div>
+      <div class="feature-item reveal reveal-delay-2">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <h3>Sitio para quedarse</h3>
+          <p>Ambiente cuidado, buena música y el servicio pendiente de que no falte nada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= MENÚ / CARTA ============================= -->
+  <section class="section-pad" id="carta">
+    <div class="container">
+      <div class="menu-head-row">
+        <div class="section-head reveal">
+          <span class="eyebrow">Nuestra carta</span>
+          <h2 class="section-title">Sabores para <em>compartir</em></h2>
+          <p class="section-sub">Una selección de la carta. Cambia con la temporada — esta es una muestra a modo de ejemplo.</p>
+        </div>
+        <a class="btn btn-outline" href="#" data-menu-url target="_blank" rel="noopener">
+          Descargar carta completa
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="menu-tabs" role="tablist">
+        <button class="menu-tab is-active" data-menu-tab="compartir">Para compartir</button>
+        <button class="menu-tab" data-menu-tab="principales">Platos principales</button>
+        <button class="menu-tab" data-menu-tab="cocteles">Cócteles</button>
+        <button class="menu-tab" data-menu-tab="postres">Postres</button>
+      </div>
+
+      <div class="menu-panel is-active" data-menu-panel="compartir">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div><div class="menu-item-name">Croquetas cremosas de jamón ibérico</div><div class="menu-item-desc">Bechamel de 24 horas, fritas al momento. 6 unidades.</div></div>
+            <div class="menu-item-price">9,50 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Pan de cristal, tomate y burrata</div><div class="menu-item-desc">Aceite de oliva virgen extra y albahaca fresca.</div><span class="menu-tag">Vegetariano</span></div>
+            <div class="menu-item-price">8,90 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Tartar de atún rojo</div><div class="menu-item-desc">Aguacate, sésamo tostado y toque de soja.</div></div>
+            <div class="menu-item-price">13,50 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Patatas Daddy Pan</div><div class="menu-item-desc">Nuestra versión de las bravas, con salsa de la casa.</div><span class="menu-tag">Vegetariano</span></div>
+            <div class="menu-item-price">7,50 €</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-panel" data-menu-panel="principales">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div><div class="menu-item-name">Burger Daddy Pan</div><div class="menu-item-desc">Doble smash, cheddar curado y salsa secreta de la casa.</div></div>
+            <div class="menu-item-price">14,90 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Arroz meloso de pato y setas</div><div class="menu-item-desc">Caldo reducido lentamente, para dos personas.</div></div>
+            <div class="menu-item-price">16,50 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Tataki de salmón</div><div class="menu-item-desc">Teriyaki de naranja y ensalada de algas.</div></div>
+            <div class="menu-item-price">15,90 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Ensalada templada de burrata</div><div class="menu-item-desc">Higos, jamón ibérico y reducción de Módena.</div></div>
+            <div class="menu-item-price">12,90 €</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-panel" data-menu-panel="cocteles">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div><div class="menu-item-name">Old Fashioned Daddy Pan</div><div class="menu-item-desc">Bourbon, naranja ahumada y bitter de la casa.</div></div>
+            <div class="menu-item-price">11,00 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Spritz de flor de saúco</div><div class="menu-item-desc">Refrescante, ligero y muy fácil de querer.</div></div>
+            <div class="menu-item-price">9,50 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Negroni de temporada</div><div class="menu-item-desc">Con el toque de la fruta que manda cada mes.</div></div>
+            <div class="menu-item-price">10,50 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Mojito de fruta de la pasión</div><div class="menu-item-desc">Ron blanco, hierbabuena fresca y lima.</div></div>
+            <div class="menu-item-price">10,00 €</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-panel" data-menu-panel="postres">
+        <div class="menu-grid">
+          <div class="menu-item">
+            <div><div class="menu-item-name">Tarta de queso al horno</div><div class="menu-item-desc">Receta de la casa, cremosa por dentro.</div></div>
+            <div class="menu-item-price">6,50 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Torrija caramelizada</div><div class="menu-item-desc">Con helado de vainilla artesano.</div></div>
+            <div class="menu-item-price">6,90 €</div>
+          </div>
+          <div class="menu-item">
+            <div><div class="menu-item-name">Coulant de chocolate 70%</div><div class="menu-item-desc">Corazón líquido, servido caliente.</div></div>
+            <div class="menu-item-price">7,00 €</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-footnote">
+        <p>Precios de ejemplo, IVA incluido. Consulta alérgenos con el equipo de sala. La carta completa se sustituirá por el documento real del local.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= GALERÍA ============================= -->
+  <section class="section-pad" id="galeria" style="background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Galería</span>
+        <h2 class="section-title">Así se vive <em>Daddy Pan</em></h2>
+        <p class="section-sub">Espacio reservado para la sesión de fotos real del local. De momento, un adelanto de qué mostrará cada hueco.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item reveal">
+          <span class="placeholder-tag" style="top:16px; left:16px;">Foto pendiente</span>
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#4a3319,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Sala y barra principal</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-1">
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#5c2f1f,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Plato estrella</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-2">
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#3d3a1c,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Terraza</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#472418,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Coctelería en directo</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-1">
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#4a3319,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Ambiente nocturno</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal reveal-delay-2">
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#5c2f1f,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Equipo en sala</span>
+          </div>
+        </div>
+        <div class="gallery-item reveal">
+          <div class="placeholder-photo" style="background:linear-gradient(150deg,#3d3a1c,#221a14);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Detalle de cocina</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= RESEÑAS ============================= -->
+  <section class="section-pad" id="resenas">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Reseñas de Google</span>
+        <h2 class="section-title">Lo que dice <em>quien ya vino</em></h2>
+      </div>
+
+      <div class="reviews-summary reveal">
+        <div class="reviews-score">4.8</div>
+        <div class="reviews-score-meta">
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p><strong>Basado en 128 reseñas</strong> en Google — datos de ejemplo</p>
+        </div>
+      </div>
+
+      <div class="reviews-track">
+        <div class="review-card reveal">
+          <div class="review-top">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#e0aa4f,#b9812c);">MG</div>
+            <div><div class="review-name">Marta G.</div><div class="review-date">Hace 3 semanas</div></div>
+          </div>
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="review-quote">"El ambiente es una pasada y la burger de la casa una locura. Repetiremos seguro."</p>
+          <div class="review-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+            Reseña de Google
+          </div>
+        </div>
+
+        <div class="review-card reveal reveal-delay-1">
+          <div class="review-top">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#c1552e,#8a3a1e);">JR</div>
+            <div><div class="review-name">Javier R.</div><div class="review-date">Hace 1 mes</div></div>
+          </div>
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="review-quote">"Reservé por el chatbot de la web en dos minutos, todo súper fácil. La coctelería, de otro nivel."</p>
+          <div class="review-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+            Reseña de Google
+          </div>
+        </div>
+
+        <div class="review-card reveal reveal-delay-2">
+          <div class="review-top">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#6f7a4f,#4c5536);">LM</div>
+            <div><div class="review-name">Laura M.</div><div class="review-date">Hace 1 mes</div></div>
+          </div>
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="review-quote">"Muy buena relación calidad-precio y el servicio atentísimo. Ideal para una cena entre amigos."</p>
+          <div class="review-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+            Reseña de Google
+          </div>
+        </div>
+
+        <div class="review-card reveal reveal-delay-3">
+          <div class="review-top">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#e0aa4f,#c1552e);">CT</div>
+            <div><div class="review-name">Carlos T.</div><div class="review-date">Hace 2 meses</div></div>
+          </div>
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="review-quote">"El sitio perfecto para el after work. Volveremos por las croquetas, sin duda."</p>
+          <div class="review-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+            Reseña de Google
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:40px;">
+        <a class="btn btn-outline" href="#" data-review-url target="_blank" rel="noopener">Ver todas las reseñas en Google</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= UBICACIÓN ============================= -->
+  <section class="section-pad" id="ubicacion" style="background:var(--bg-soft); border-top:1px solid var(--border);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Cómo llegar</span>
+        <h2 class="section-title">Te esperamos <em>aquí</em></h2>
+      </div>
+
+      <div class="location-grid">
+        <div class="location-info-card reveal">
+          <div class="location-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div><h4>Dirección</h4><p>Calle de la Reina, 12 · 28004 Madrid</p></div>
+          </div>
+          <div class="location-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>
+            <div style="flex:1;">
+              <h4>Horario</h4>
+              <div class="hours-line"><span>Lunes a jueves</span><span>13:00–16:30 y 20:00–00:00</span></div>
+              <div class="hours-line"><span>Viernes y sábado</span><span>13:00–16:30 y 20:00–01:30</span></div>
+              <div class="hours-line"><span>Domingo</span><span>13:00–17:00</span></div>
+            </div>
+          </div>
+          <div class="location-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div><h4>Teléfono</h4><p>+34 910 000 000</p></div>
+          </div>
+          <div class="location-actions">
+            <a class="btn btn-primary" href="#" data-maps-url target="_blank" rel="noopener">Cómo llegar</a>
+            <a class="btn btn-outline" href="tel:+34910000000">Llamar ahora</a>
+          </div>
+        </div>
+
+        <div class="map-placeholder reveal reveal-delay-1">
+          <div class="map-pin">
+            <div class="pin-dot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="pin-pulse"></div>
+          </div>
+          <div class="map-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Mapa interactivo de Google Maps — pendiente de conectar con la ubicación real.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= CTA FINAL ============================= -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="cta-banner reveal">
+        <div class="cta-banner-wrap">
+          <span class="eyebrow">Resérvalo antes de que se llene</span>
+          <h2 class="section-title">¿Te apetece <em>venir</em>?</h2>
+          <p class="section-sub">Cuéntale al asistente cuántos sois y cuándo os viene bien: en menos de un minuto tenéis la mesa pedida.</p>
+          <div class="hero-cta">
+            <button class="btn btn-primary" data-open-chat>Reservar mesa</button>
+            <a class="btn btn-outline" href="tel:+34910000000">Llamar: +34 910 000 000</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================= FOOTER ============================= -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo">Daddy<span class="logo-dot">Pan</span></a>
+        <p>Cocina de mercado y coctelería de autor en el centro de Madrid. Abrimos todos los días para comer, cenar y tomar algo.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#carta">Carta</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="#resenas">Reseñas</a></li>
+          <li><a href="#ubicacion">Cómo llegar</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <ul>
+          <li><p>Calle de la Reina, 12 · Madrid</p></li>
+          <li><a href="tel:+34910000000">+34 910 000 000</a></li>
+          <li><a href="mailto:reservas@daddypan.es">reservas@daddypan.es</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Aviso legal</a></li>
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="footYear">2026</span> Daddy Pan. Todos los derechos reservados.</span>
+      <span>Plantilla de demostración — diseñada por D-Code Partners</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================= CHATBOT ============================= -->
+<div class="chat-teaser" id="chatTeaser">
+  <button class="teaser-close" id="chatTeaserClose" aria-label="Cerrar aviso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  ¿Reservamos una mesa? 👋
+</div>
+
+<button class="chat-launcher" id="chatLauncher" aria-label="Abrir chat de reservas" aria-expanded="false">
+  <span class="chat-launcher-badge">1</span>
+  <svg class="chat-launcher-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  <svg class="chat-launcher-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</button>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat de reservas Daddy Pan">
+  <div class="chat-head">
+    <div class="chat-head-avatar">DP</div>
+    <div class="chat-head-info">
+      <strong>Daddy Pan</strong>
+      <div class="chat-head-status"><span class="dot"></span>Asistente virtual · Responde al instante</div>
+    </div>
+    <button class="chat-close-btn" id="chatCloseBtn" aria-label="Cerrar chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Escribe un mensaje…" autocomplete="off">
+    <button class="chat-send-btn" id="chatSendBtn" aria-label="Enviar mensaje">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>
