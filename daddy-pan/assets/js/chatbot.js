@@ -71,7 +71,22 @@
     this.input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); self.onSend(); }
     });
+    this.input.addEventListener('input', function () { self.updateSendState(); });
     this.body.addEventListener('click', function (e) { self.onBodyClick(e); });
+    this.updateSendState();
+  };
+
+  DaddyPanChat.prototype.updateSendState = function () {
+    this.sendBtn.disabled = !this.input.value.trim();
+  };
+
+  DaddyPanChat.prototype.flagInvalid = function () {
+    var self = this;
+    this.input.classList.remove('is-invalid');
+    // force reflow so the shake animation can retrigger on repeated errors
+    void this.input.offsetWidth;
+    this.input.classList.add('is-invalid');
+    setTimeout(function () { self.input.classList.remove('is-invalid'); }, 650);
   };
 
   DaddyPanChat.prototype.open = function () {
@@ -294,6 +309,7 @@
 
       case 'phone':
         if (!/\d{6,}/.test(text.replace(/\D/g, ''))) {
+          this.flagInvalid();
           this.queueBotMessages(['Creo que ese teléfono no es válido 🤔 ¿Puedes escribirlo de nuevo? (mínimo 6 dígitos)']);
           break;
         }
@@ -370,6 +386,8 @@
 
   DaddyPanChat.prototype.confirmBooking = function () {
     var self = this;
+    var confirmBtn = this.body.querySelector('.booking-summary [data-confirm-booking]');
+    if (confirmBtn) confirmBtn.textContent = 'Enviando…';
     this.body.querySelectorAll('.booking-summary .bs-actions .btn').forEach(function (b) { b.disabled = true; });
     this.showTyping();
     submitBooking(this.data).then(function (res) {
@@ -414,6 +432,7 @@
     var text = this.input.value.trim();
     if (!text) return;
     this.input.value = '';
+    this.updateSendState();
     this.userSay(text);
 
     if (this.state === 'confirm') { this.handleConfirmText(text); }

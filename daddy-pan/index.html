@@ -76,17 +76,17 @@
   <section class="hero" id="top">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <span class="eyebrow">Bar de tapas &amp; cócteles · Madrid</span>
-        <h1 class="hero-title">Buena mesa,<br>buena compañía,<br><span class="accent">buena noche.</span></h1>
-        <p class="hero-desc">Cocina de mercado, coctelería de autor y un ambiente hecho para quedarse. Reserva tu mesa en menos de un minuto, directamente desde aquí.</p>
-        <div class="hero-cta">
+        <span class="eyebrow hero-anim">Bar de tapas &amp; cócteles · Madrid</span>
+        <h1 class="hero-title hero-anim d1">Buena mesa,<br>buena compañía,<br><span class="accent">buena noche.</span></h1>
+        <p class="hero-desc hero-anim d2">Cocina de mercado, coctelería de autor y un ambiente hecho para quedarse. Reserva tu mesa en menos de un minuto, directamente desde aquí.</p>
+        <div class="hero-cta hero-anim d3">
           <button class="btn btn-primary" data-open-chat>
             Reservar mesa
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
           <a class="btn btn-outline" href="#carta">Ver la carta</a>
         </div>
-        <div class="hero-meta">
+        <div class="hero-meta hero-anim d4">
           <div class="hero-meta-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>
             <div><strong>Abierto ahora</strong><span>Cierra a las 00:00</span></div>
@@ -102,7 +102,7 @@
         </div>
       </div>
 
-      <div class="hero-visual">
+      <div class="hero-visual hero-anim">
         <span class="placeholder-tag">Foto de ejemplo</span>
         <div class="placeholder-photo">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="ph-icon"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -544,6 +544,21 @@
     </div>
   </div>
 </footer>
+
+<!-- ============================= LIGHTBOX (galería) ============================= -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Fotografía ampliada">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar imagen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Foto anterior">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Foto siguiente">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lightbox-stage" id="lightboxStage"></div>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
 
 <!-- ============================= CHATBOT ============================= -->
 <div class="chat-teaser" id="chatTeaser">
