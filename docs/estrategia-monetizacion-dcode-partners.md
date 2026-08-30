@@ -2,7 +2,11 @@
 
 **Documento interno de estrategia comercial y pricing — no publicar en el sitio web.**
 
-Versión 1.1 · Elaborado como marco oficial de precios y monetización de D-Code Partners.
+Versión 1.2 · Elaborado como marco oficial de precios y monetización de D-Code Partners.
+
+**Changelog v1.2 (30/08/2026, AUD-20260830 — Auditoría General, Fase 2):** una única corrección, del mismo tipo que las dos de v1.1: **`SEO IA` pasa a estar marcado como NO COTIZABLE hasta su reactivación.** Verificado en vivo contra n8n el 30/08/2026: el workflow `MK/SEO IA` está `active: false` desde el 19/08/2026, y su propia descripción en el sistema dice literalmente *"webhook publico sin autenticacion y cada llamada gastaba PageSpeed + Google Places + Gemini. Sin consumidor: la web no lo llama."*
+
+**Matiz importante, para no exagerar el problema:** este caso **no** es igual al de WhatsApp IA en v1.1. WhatsApp IA nunca se construyó. SEO IA **sí está construido y sigue siendo invocable como sub-workflow** — lo que está desactivado es su punto de entrada público, por un motivo real de seguridad y coste. Es decir: la capacidad existe, la vía de venta no. Antes de cotizarlo hace falta (a) reactivarlo con autenticación y (b) conectarle un consumidor real. Hasta entonces no se cotiza, por la misma regla que ya fijó v1.1: no se promete plazo ni precio de algo que hoy no se puede entregar. El número total de servicios catalogados se mantiene en 32; SEO IA no se elimina, se marca.
 
 **Changelog v1.1 (07/08/2026):** corregidas dos discrepancias detectadas al contrastar este catálogo contra el sistema real verificado nodo por nodo en n8n (Fase 2.5, 06/08/2026): (1) **WhatsApp IA se retira del catálogo vendible** — nunca se construyó, no hay credencial de WhatsApp Business API; queda marcado como "Próximamente" en Soporte. (2) **"Captación de Leads" se retira de Marketing** — esa automatización no existe como tal, es una página de Notion obsoleta; su función real la cubre **Radar Comercial IA**, que se añade al catálogo de Comercial junto con su compañera técnica **Detección de Respuestas**. El número total de servicios catalogados se mantiene en 32. Precios de los paquetes Comercial, Marketing y Atención al Cliente recalculados en consecuencia.
 Moneda: EUR. Precios sin IVA (operativa B2B). Todas las cifras son precios de referencia (rack rate) para la fuerza comercial; el descuento máximo autorizado sin escalar a dirección es del 10 % sobre implantación y 0 % sobre mensualidad (la mensualidad es margen recurrente, no se negocia a la baja salvo en volumen — ver §11).
@@ -117,7 +121,7 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Lead IA 360 | Muy alta | 5 | 5 | 95–130 h | Alto | 5 | **Sí — producto insignia** |
 | Contenido IA para Redes Sociales | Media | 4 | 3 | 26–32 h | Medio | 4 | **Sí** — genera borrador, envío/publicación requiere aprobación humana |
 | Newsletter IA | Media | 3 | 3 | 22–28 h | Medio | 3 | **Sí** — genera borrador, envío requiere aprobación humana |
-| SEO IA | Alta | 4 | 4 | 40–52 h | Medio-Alto | 4 | **Sí** |
+| SEO IA | Alta | 4 | 4 | 40–52 h | Medio-Alto | 4 | ⚠️ **NO COTIZAR** — ver nota v1.2 |
 
 *Nota: "Captación de Leads" se retira del catálogo (v1.1) — no existe como automatización real; su función la cubre Radar Comercial IA, catalogada en Comercial (ver más abajo), que es donde vive realmente en el sistema construido.*
 
@@ -170,7 +174,7 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Lead IA 360 | D | 8.500 € |
 | Contenido IA para Redes Sociales | B | 2.800 € |
 | Newsletter IA | B | 2.400 € |
-| SEO IA | C | 4.200 € |
+| SEO IA | C | ~~4.200 €~~ ⚠️ no cotizable hasta reactivación (v1.2) |
 | Seguimiento de Tareas | A | 1.400 € |
 | Gestión de Proyectos | C | 4.600 € |
 | Asignación Automática | B | 2.900 € |
@@ -211,7 +215,7 @@ Para cada servicio: dificultad técnica · valor cliente (1-5) · impacto econó
 | Lead IA 360 | 650 € |
 | Contenido IA para Redes Sociales | 220 € |
 | Newsletter IA | 190 € |
-| SEO IA | 320 € |
+| SEO IA | ~~320 €~~ ⚠️ no cotizable hasta reactivación (v1.2) |
 | Seguimiento de Tareas | 110 € |
 | Gestión de Proyectos | 350 € |
 | Asignación Automática | 230 € |
