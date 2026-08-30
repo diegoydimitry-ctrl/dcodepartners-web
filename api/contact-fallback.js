@@ -14,6 +14,41 @@ const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 10;
 const requestLog = new Map();
 
+/**
+ * Escapa texto antes de incrustarlo en el HTML de un correo.
+ *
+ * Este endpoint es público y no puede verificar el token de Turnstile (ver
+ * más abajo), así que TODO lo que llega aquí es texto no confiable. Sin
+ * escapar, un valor como `<a href="...">` en el campo "nombre" se
+ * renderizaba como enlace real dentro de un correo enviado desde un dominio
+ * verificado de D-Code. AUD-20260830.
+ */
+function escaparHtml(valor) {
+  return String(valor == null ? '' : valor)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Texto para una cabecera de correo (asunto). No lleva escapado HTML —una
+ * cabecera no es HTML y escaparla mostraría "&amp;" literal—, pero sí se le
+ * quitan los saltos de línea, que en una cabecera son un vector de inyección.
+ */
+function textoPlanoSeguro(valor, maxLongitud) {
+  return String(valor == null ? '' : valor)
+    .replace(/[\r\n]+/g, ' ')
+    .trim()
+    .slice(0, maxLongitud);
+}
+
+/** Formato de email mínimamente válido, para no usar basura como replyTo. */
+function esEmailValido(valor) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(valor == null ? '' : valor).trim());
+}
+
 function isRateLimited(ip) {
   const now = Date.now();
   const timestamps = (requestLog.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
@@ -52,36 +87,55 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Faltan datos obligatorios.' });
   }
 
+  const emailValido = esEmailValido(email);
+
   try {
+    // AUD-20260830 — SOLO se envía el aviso INTERNO, a una dirección fija.
+    //
+    // Antes se enviaba también una confirmación a `email`, es decir, a una
+    // dirección que elige quien llama a este endpoint. Como aquí no se puede
+    // verificar el token de Turnstile (ver arriba), eso convertía a
+    // /api/contact-fallback en un RELAY DE CORREO ABIERTO: bastaba un POST
+    // con `turnstileToken` no vacío para que dcodepartners.com —un dominio
+    // verificado— enviase un correo a cualquier destinatario, con contenido
+    // parcialmente controlado por el atacante. Riesgo real de phishing y de
+    // quemar la reputación del dominio.
+    //
+    // El destinatario fijo elimina el vector por completo: lo peor que puede
+    // conseguir un abusador ahora es llenar nuestro propio buzón.
+    //
+    // Qué pierde un visitante legítimo cuyo envío principal falló: el correo
+    // de "hemos recibido tu solicitud". Sigue viendo la confirmación en la
+    // propia página, y el equipo recibe el aviso con sus datos, así que la
+    // solicitud NO se pierde — que es lo único que este respaldo prometía.
+    //
+    // Para recuperar la confirmación al visitante de forma segura hay que
+    // verificar el token contra Cloudflare aceptando el error
+    // `timeout-or-duplicate` (token real ya consumido por el intento
+    // principal) y rechazando `invalid-input-response` (token inventado).
+    // Requiere TURNSTILE_SECRET_KEY en el entorno del sitio; hoy ese secreto
+    // vive en n8n, no aquí, así que no se hace desde este endpoint.
     await resend.emails.send({
       from: 'D-Code Partners <contact@dcodepartners.com>',
       to: ['dcodedepartment@gmail.com'],
-      subject: `Nueva solicitud de ${nombre} (vía respaldo)`,
+      // El asunto NO es HTML: escaparlo aquí mostraría "&amp;" literal al
+      // leer el correo. Lo que sí hay que quitar son los saltos de línea,
+      // que en una cabecera de correo son un vector de inyección.
+      replyTo: emailValido ? email : undefined,
+      subject: `Nueva solicitud de ${textoPlanoSeguro(nombre, 120)} (vía respaldo)`,
       html: `
         <h2>Nueva solicitud desde la web (envío de respaldo)</h2>
-        <p><strong>Nombre:</strong> ${nombre}</p>
-        <p><strong>Empresa:</strong> ${empresa || ''}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Teléfono:</strong> ${telefono || ''}</p>
+        <p><strong>Nombre:</strong> ${escaparHtml(nombre)}</p>
+        <p><strong>Empresa:</strong> ${escaparHtml(empresa)}</p>
+        <p><strong>Email:</strong> ${escaparHtml(email)}</p>
+        <p><strong>Teléfono:</strong> ${escaparHtml(telefono)}</p>
         <p><strong>Mensaje:</strong></p>
-        <p>${mensaje || ''}</p>
-      `,
-    });
-    await resend.emails.send({
-      from: 'D-Code Partners <contact@dcodepartners.com>',
-      to: email,
-      subject: 'Hemos recibido tu solicitud',
-      html: `
-        <div style="font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:auto;">
-          <h2 style="color:#2b2b2b;">¡Gracias por contactar con D-Code Partners!</h2>
-          <p>Hola <strong>${nombre}</strong>,</p>
-          <p>Hemos recibido correctamente tu solicitud y queremos agradecerte la confianza depositada en nosotros.</p>
-          <p>Nuestro equipo revisará la información que nos has enviado y preparará la mejor forma de ayudarte a automatizar y optimizar tu negocio.</p>
-          <p>En un plazo inferior a <strong>24 horas laborables</strong> nos pondremos en contacto contigo para conocer mejor tus necesidades y resolver cualquier duda.</p>
-          <hr style="margin:30px 0;">
-          <p>Un saludo,</p>
-          <p><strong>Equipo de D-Code Partners</strong><br>Automatización e Inteligencia Artificial para Empresas</p>
-        </div>
+        <p>${escaparHtml(mensaje)}</p>
+        <hr>
+        <p style="font-size:12px;color:#888;">Llegó por la vía de respaldo, así que este lead
+        <strong>no está en Airtable ni ha pasado por el análisis de Lead IA 360</strong>.
+        Hay que darlo de alta a mano. Los datos de arriba son texto sin verificar
+        enviado desde el formulario público.</p>
       `,
     });
     return res.status(200).json({ success: true });
