@@ -45,6 +45,26 @@ Detalles que importan:
   que el servidor está vivo y protegido, y tratarlo como fallo convertiría un cambio
   de configuración de Vercel en una alarma diaria falsa.
 
+### El antipatrón de archivarse a sí mismo
+
+Varios workflows enviaban su aviso y, en la misma ejecución, le quitaban la etiqueta
+`INBOX`. Verificado en Gmail el 31/08: la bandeja tenía **52 mensajes** mientras la
+cuenta acumulaba **274 sin leer**. La mayor parte de lo que el sistema produce nunca
+llegaba a donde alguien mira.
+
+| Etiqueta | Mensajes | Sin leer | ¿Correcto archivar? |
+|---|---|---|---|
+| `Comercial/Hot Leads` | 109 | 81 | **No** — son oportunidades accionables |
+| `AI Factory/Workflows con Error` | 66 | 9 | **No** — son alertas |
+| `Comercial/Seguimientos` | 21 | 4 | **No** — es la lista de trabajo comercial |
+| `Sistema/Logs` | 114 | 93 | Sí — nadie quiere 114 logs en la bandeja |
+| `Dirección/Informes Diarios` | 20 | 4 | Preferencia de Dirección |
+
+El patrón no está mal en sí: para logs es correcto. **Está mal para todo aquello sobre
+lo que alguien tiene que actuar.** Antes de copiar un nodo
+`Gmail - Archivar … (quitar Inbox)` a un workflow nuevo, la pregunta es si el correo
+pide una acción. Si la pide, no se archiva.
+
 ### La regla que hace que las alertas sirvan
 
 > **Una alerta que grita en falso todos los días deja de leerse, y entonces
