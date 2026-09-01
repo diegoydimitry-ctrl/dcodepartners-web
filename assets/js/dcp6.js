@@ -187,21 +187,31 @@
     };
   }
 
-  function sCluster(p, tm) {                    // 2 · agrupación
+  function sPatterns(p, tm) {                   // 2 · patrones
+    /* Mismas posiciones que el caos, apenas un temblor: aquí no se mueve
+       nada todavía. Lo que cambia es que se ve lo que se repite. */
+    var k = 0.4 + p.dr * 0.6;
+    return {
+      x: W * (0.05 + p.dx * 0.90) + Math.sin(tm * 0.00016 + p.i) * 14 * k,
+      y: H * (0.07 + p.dy * 0.86) + Math.cos(tm * 0.00013 + p.i * 1.7) * 12 * k
+    };
+  }
+
+  function sCluster(p, tm) {                    // 3 · agrupación
     var c = clusters[p.cl];
     var ang = p.dx * 6.2832 + tm * 0.00022 * (0.5 + p.dq);
     var rad = 26 + p.dr * 104;                  // nube ancha, todavía sin orden
     return { x: c.x + Math.cos(ang) * rad, y: c.y + Math.sin(ang) * rad * 0.78 };
   }
 
-  function sGraph(p, tm) {                      // 3 · conexión
+  function sGraph(p, tm) {                      // 4 · conexión
     var c = clusters[p.cl];
     var ang = p.dx * 6.2832 + tm * 0.00034 * (0.5 + p.dq);
     var rad = 16 + p.dr * 46;                   // los grupos se cierran
     return { x: c.x + Math.cos(ang) * rad, y: c.y + Math.sin(ang) * rad * 0.8 };
   }
 
-  function sSkeleton(p, tm) {                   // 4 · estructura
+  function sSkeleton(p, tm) {                   // 5 · estructura
     /* Las partículas se colocan SOBRE el cableado: se ve el esqueleto del
        sistema antes de que existan las partes. */
     var e = spines[p.sp2 % spines.length];
@@ -213,7 +223,19 @@
     };
   }
 
-  function sModules(p, tm) {                    // 5 · sistemas
+  function sFlows(p, tm) {                      // 6 · flujos
+    /* Las partículas RECORREN el cableado en vez de quedarse quietas sobre
+       él: la estructura deja de ser un plano y empieza a transportar. */
+    var e = spines[p.sp2 % spines.length];
+    var a = modules[e[0]], b = modules[e[1]];
+    var t = (p.along + tm * 0.00022 * (0.5 + p.dq)) % 1;
+    return {
+      x: a.x + (b.x - a.x) * t,
+      y: a.y + (b.y - a.y) * t + Math.sin(tm * 0.001 + p.i) * 3
+    };
+  }
+
+  function sModules(p, tm) {                    // 7 · sistemas
     /* El esqueleto se diferencia: cada parte se convierte en un módulo con
        su propio tono. Es el momento en que aparecen los departamentos. */
     var m = modules[p.mo];
@@ -222,14 +244,14 @@
     return { x: m.x + Math.cos(ang) * m.rx * rad, y: m.y + Math.sin(ang) * m.ry * rad };
   }
 
-  function sRunning(p, tm) {                    // 6 · en marcha
+  function sRunning(p, tm) {                    // 7b · en marcha
     var m = modules[p.mo];
     var ang = p.dx * 6.2832 + tm * 0.0011 * (0.5 + p.dq);
     var rad = 0.24 + p.dr * 0.52 + Math.sin(tm * 0.0016 + p.i) * 0.10;
     return { x: m.x + Math.cos(ang) * m.rx * rad, y: m.y + Math.sin(ang) * m.ry * rad };
   }
 
-  function sMargins(p, tm) {                    // 7 · operando (sitio al producto)
+  function sMargins(p, tm) {                    // 8 · operando (sitio al producto)
     var left = (p.i % 2) === 0;
     var edge = left ? W * (0.015 + p.dx * 0.115) : W * (0.87 + p.dx * 0.115);
     return {
@@ -238,7 +260,7 @@
     };
   }
 
-  function sCollapse(p, tm) {                   // 8 · un solo punto
+  function sCollapse(p, tm) {                   // 9 · un solo punto
     var ang = p.dx * 6.2832, rad = 4 + p.dy * 24;
     return {
       x: W * 0.5 + Math.cos(ang + tm * 0.0005) * rad,
@@ -246,7 +268,11 @@
     };
   }
 
-  var STATES = [sConverge, sChaos, sCluster, sGraph, sSkeleton, sModules, sRunning, sMargins, sCollapse];
+  /* El orden es la historia, y cada estado tiene una sección que lo explica:
+   convergencia · caos · patrones · agrupación · conexiones · estructura ·
+   flujos · sistemas · operando · un solo punto. */
+  var STATES = [sConverge, sChaos, sPatterns, sCluster, sSkeleton,
+                sFlows, sRunning, sMargins, sCollapse];
 
   /* Las paradas se miden en el DOM: cada sección declara a qué estado
      pertenece y el motor coloca ahí su parada. Si el contenido cambia, el
@@ -323,13 +349,13 @@
     var A = STATES[iA], B = STATES[iB];
 
     var conv  = weightOf(0);
-    var group = weightOf(2) + weightOf(3);
-    var skel  = weightOf(4);
-    var mods  = weightOf(5) + weightOf(6);
+    var patt  = weightOf(2);                       // detección, sin mover nada
+    var group = weightOf(3);                       // agrupación por afinidad
+    var skel  = weightOf(4) + weightOf(5);         // cableado y flujos
+    var mods  = weightOf(6);                       // módulos con identidad
     var run   = weightOf(6);
     var coll  = weightOf(8);
-    // Definición creciente: del caos al sistema en marcha, el campo gana
-    // presencia. Es el mismo mensaje que cuenta el texto.
+    // Definición creciente: del caos al sistema, el campo gana presencia.
     var order = weightOf(4) + weightOf(5) + weightOf(6);
 
     /* Núcleo. Nunca blanco puro: azul muy claro con halo largo. */
@@ -369,6 +395,24 @@
         }
         ctx.strokeStyle = rgba(st.hue, 0.24 * conv * acc);
         ctx.lineWidth = st.w * 1.6; ctx.stroke();
+      }
+    }
+
+    /* PATRONES: no se mueve nada, se DETECTA. Se encienden los pares de
+       partículas cercanas que vuelven a coincidir, y ese parpadeo dibuja lo
+       que ya se repetía sin que nadie lo hubiera mirado. */
+    if (patt > 0.05 && !(narrow && W < 560)) {
+      ctx.lineWidth = 1;
+      for (var pi = 0; pi < parts.length; pi += 3) {
+        var p1 = parts[pi], p2 = parts[(pi + 7) % parts.length];
+        var pdx = p1.px - p2.px, pdy = p1.py - p2.py;
+        var pd = Math.sqrt(pdx * pdx + pdy * pdy);
+        if (pd > 190) continue;
+        // Cada pareja late a su ritmo: lo que se repite, se ve repetirse.
+        var beat = 0.5 + 0.5 * Math.sin(tm * 0.0016 + pi * 0.9);
+        ctx.beginPath(); ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py);
+        ctx.strokeStyle = rgba(p1.hue, (1 - pd / 190) * 0.30 * patt * beat * acc);
+        ctx.stroke();
       }
     }
 
@@ -520,8 +564,7 @@
     var last = -1;
     label.style.transition = 'opacity .22s ease';
     (function sync() {
-      var Pn = reduced ? P : Pv, idx = 0;
-      for (var i = 0; i < STOPS.length; i++) if (Pn >= STOPS[i]) idx = i;
+      var idx = (wB >= wA) ? iB : iA;   // el estado dominante, no el anterior
       if (idx !== last && NAMES[idx]) {
         last = idx;
         label.style.opacity = 0;

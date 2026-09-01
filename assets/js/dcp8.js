@@ -609,19 +609,27 @@
         var braid = win(0.04, 0.72);
         var cx = W * (narrow ? 0.5 : 0.62);
         var spread = W * (narrow ? 0.20 : 0.15);
+        var step = small ? 12 : 6;
+        // Se dibuja por tramos y no de un trazo: así un hilo puede pasar por
+        // DETRÁS de otro. Tres líneas que convergen no son un tejido; tres
+        // que se cruzan por delante y por detrás, sí.
         for (var s = 0; s < 3; s++) {
-          ctx.beginPath();
-          var step = small ? 12 : 7;
           for (var y = -20; y <= H + 20; y += step) {
-            var u = y / H;
-            var tw = Math.sin(u * 7 + s * 2.09 + tm * 0.00035) * spread;
-            // Cuanto más abajo, más se cierran los tres hilos en uno.
-            var close = 1 - braid * ease(u);
-            var x = cx + (tw * close) + (s - 1) * spread * 0.9 * close;
-            if (y <= -20) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            var u = y / H, u2 = (y + step) / H;
+            function px(uu, si) {
+              var tw = Math.sin(uu * 7 + si * 2.09 + tm * 0.00035) * spread;
+              var close = 1 - braid * ease(uu);
+              return cx + (tw * close) + (si - 1) * spread * 0.9 * close;
+            }
+            var x1 = px(u, s), x2 = px(u2, s);
+            // Profundidad: la fase decide si este tramo va delante o detrás.
+            var depth = Math.cos(u * 7 + s * 2.09 + tm * 0.00035);
+            var front = depth > 0;
+            ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y + step);
+            ctx.strokeStyle = rgba(HUES[s], (front ? 0.34 : 0.10) + 0.14 * braid);
+            ctx.lineWidth = front ? 2.1 : 1.1;
+            ctx.stroke();
           }
-          ctx.strokeStyle = rgba(HUES[s], 0.20 + 0.16 * braid);
-          ctx.lineWidth = 1.4; ctx.stroke();
         }
       }
     };
@@ -734,6 +742,96 @@
         }
         ctx.beginPath(); ctx.arc(px, py, 2.6, 0, 6.2832);
         ctx.fillStyle = rgba([220, 240, 255], 0.8); ctx.fill();
+      }
+    };
+  })();
+
+
+  /* ==================================================================== */
+  /* 13 · CAPACIDADES (hub) — "El encaje"                                 */
+  /* Piezas sueltas que giran a la deriva y, al bajar, se enderezan y      */
+  /* encajan unas con otras hasta formar un cuerpo único. Es exactamente   */
+  /* lo que dice la página: no se elige un pack, se combinan piezas que    */
+  /* adquieren sentido juntas. Ninguna otra sección usa formas sólidas.    */
+  /* ==================================================================== */
+  INSTR.encaje = (function () {
+    var tiles = [];
+    return {
+      build: function () {
+        tiles.length = 0;
+        // Ocho piezas: una retícula 4x2 (o 2x4 en vertical) como destino.
+        var cols = narrow ? 2 : 4, rows = narrow ? 4 : 2;
+        var gw = (narrow ? W * 0.78 : W * 0.56), gh = (narrow ? H * 0.46 : H * 0.40);
+        var ox = (W - gw) / 2, oy = (H - gh) / 2;
+        var cw = gw / cols, ch = gh / rows;
+        for (var i = 0; i < cols * rows; i++) {
+          var c = i % cols, r = Math.floor(i / cols);
+          tiles.push({
+            i: i,
+            tx: ox + c * cw + cw / 2, ty: oy + r * ch + ch / 2,
+            w: cw, h: ch,
+            // Origen: dispersas, giradas y a distinta escala.
+            sx: W * (0.06 + sd(i, 2) * 0.88), sy: H * (0.08 + sd(i, 3) * 0.84),
+            rot: (sd(i, 4) - 0.5) * 2.2, sc: 0.45 + sd(i, 5) * 0.5,
+            hue: [C.cian, C.rosa, C.verde, C.ambar, C.azul, C.turq, C.lav, C.violeta][i % 8]
+          });
+        }
+      },
+      draw: function (tm) {
+        clear(0.30);
+        var fit = win(0.02, 0.58);                 // el encaje ocurre al bajar
+        var e = ease(fit);
+        for (var i = 0; i < tiles.length; i++) {
+          var t = tiles[i];
+          // Cada pieza encaja con un pequeño desfase: se ve el ensamblaje.
+          var f = ease(Math.max(0, Math.min(1, (fit - i * 0.045) / 0.5)));
+          var x = lerp(t.sx, t.tx, f), y = lerp(t.sy, t.ty, f);
+          var rot = lerp(t.rot, 0, f) + (1 - f) * Math.sin(tm * 0.0004 + i) * 0.12;
+          var sc = lerp(t.sc, 1, f);
+          var w = t.w * sc, h = t.h * sc;
+
+          ctx.save();
+          ctx.translate(x, y); ctx.rotate(rot);
+          // Cuerpo: apenas un tinte, para que manden los filos.
+          var g = ctx.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
+          g.addColorStop(0, rgba(t.hue, 0.030 + 0.034 * f));
+          g.addColorStop(1, rgba(t.hue, 0.008));
+          ctx.fillStyle = g;
+          ctx.fillRect(-w / 2 + 3, -h / 2 + 3, w - 6, h - 6);
+          // Filo: nítido cuando la pieza ya está en su sitio.
+          ctx.strokeStyle = rgba(t.hue, 0.16 + 0.30 * f);
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-w / 2 + 3, -h / 2 + 3, w - 6, h - 6);
+          // Muescas de encaje en los cantos: la pieza tiene por dónde unirse.
+          if (f > 0.25) {
+            ctx.strokeStyle = rgba(t.hue, 0.30 * f);
+            ctx.beginPath();
+            ctx.moveTo(w / 2 - 3, -8); ctx.lineTo(w / 2 - 3 + 6 * f, 0); ctx.lineTo(w / 2 - 3, 8);
+            ctx.moveTo(-w / 2 + 3, -8); ctx.lineTo(-w / 2 + 3 + 6 * f, 0); ctx.lineTo(-w / 2 + 3, 8);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        // Las costuras: solo existen cuando las piezas ya se tocan.
+        if (e > 0.72) {
+          var seam = (e - 0.72) / 0.28;
+          for (var k = 0; k < tiles.length; k++) {
+            for (var j = k + 1; j < tiles.length; j++) {
+              var a = tiles[k], b2 = tiles[j];
+              var dx = Math.abs(a.tx - b2.tx), dy = Math.abs(a.ty - b2.ty);
+              var vecina = (dx < a.w * 1.1 && dy < 2) || (dy < a.h * 1.1 && dx < 2);
+              if (!vecina) continue;
+              ctx.beginPath();
+              ctx.moveTo(a.tx, a.ty); ctx.lineTo(b2.tx, b2.ty);
+              ctx.strokeStyle = rgba([200, 224, 255], 0.22 * seam);
+              ctx.lineWidth = 1; ctx.stroke();
+              var pt = ((tm * 0.0004) + k * 0.2) % 1;
+              ctx.beginPath();
+              ctx.arc(lerp(a.tx, b2.tx, pt), lerp(a.ty, b2.ty, pt), 1.8, 0, 6.2832);
+              ctx.fillStyle = rgba([214, 236, 255], 0.6 * seam); ctx.fill();
+            }
+          }
+        }
       }
     };
   })();

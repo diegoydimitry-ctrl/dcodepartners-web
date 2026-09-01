@@ -66,13 +66,13 @@
   document.body.appendChild(bar);
   var barFill = bar.firstChild;
 
-  var rail = null, fill = null, links = [], now = null;
+  var rail = null, links = [], now = null;
 
   if (items.length >= 2) {
     rail = document.createElement('nav');
     rail.className = 'dcx';
     rail.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Sections' : 'Secciones');
-    var html = '<span class="dcx-rail" aria-hidden="true"></span><span class="dcx-fill" aria-hidden="true"></span>';
+    var html = '';
     items.forEach(function (it, i) {
       if (!it.el.id) it.el.id = 'sec-' + (i + 1);
       html += '<a href="#' + it.el.id + '"><span class="dcx-lab">' + it.label +
@@ -80,7 +80,6 @@
     });
     rail.innerHTML = html;
     document.body.appendChild(rail);
-    fill = rail.querySelector('.dcx-fill');
     links = Array.prototype.slice.call(rail.querySelectorAll('a'));
 
     now = document.createElement('div');
@@ -106,7 +105,6 @@
     var p = Math.max(0, Math.min(1, window.scrollY / max));
     barFill.style.width = (p * 100) + '%';
     if (!rail) return;
-    fill.style.height = (p * 100) + '%';
 
     // Activa: la última sección cuyo inicio ya ha pasado la línea de lectura.
     var line = window.scrollY + window.innerHeight * 0.34;
@@ -119,6 +117,9 @@
       active = idx;
       links.forEach(function (a, i) {
         a.classList.toggle('on', i === idx);
+        // Lo ya recorrido queda encendido: el avance lo llevan las marcas,
+        // no una barra al lado.
+        a.classList.toggle('done', i < idx);
         if (i === idx) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
       });
       if (now) now.textContent = items[idx].label;

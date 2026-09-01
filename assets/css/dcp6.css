@@ -30,7 +30,7 @@
 /* Ni aurora ni malla de la v5: aquí el fondo lo pinta el campo. */
 body.v6::before, body.v6::after{ display:none !important; }
 body.v6{ background:#05070e; }
-body.v6 #main-content, body.v6 header, body.v6 footer{ position:relative; z-index:1; }
+body.v6 #main-content, body.v6 footer{ position:relative; z-index:1; }
 /* El chat y el índice son piezas fijas: solo se les sube la capa. Meterlos en
    la regla de arriba los sacaba de position:fixed y los mandaba al final del
    documento — así es como desapareció el chat de la portada. */
@@ -43,7 +43,11 @@ body.v6 footer{
 }
 
 /* Cabecera integrada: sin fondo hasta que hay algo debajo que tapar. */
-body.v6 #site-header{ background:transparent; border-bottom-color:transparent; }
+/* Jerarquía de capas, explícita y en un solo sitio:
+     lienzo 0 · contenido 1 · índice 120 · CABECERA 200 · chat 300.
+   La cabecera contiene el desplegable de Capacidades, así que tiene que
+   quedar por encima del contenido o el desplegable no se puede ni pulsar. */
+body.v6 #site-header{ position:relative; z-index:200; background:transparent; border-bottom-color:transparent; }
 body.v6 #site-header.scrolled{
   background:rgba(5,7,14,.62);
   backdrop-filter:blur(20px) saturate(1.5); -webkit-backdrop-filter:blur(20px) saturate(1.5);

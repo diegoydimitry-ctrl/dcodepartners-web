@@ -19,10 +19,14 @@
 body.v7{ background:#05070e; }
 body.v7::before, body.v7::after{ display:none !important; }
 body.v7 .glow-orb{ display:none !important; }
-body.v7 #main-content, body.v7 header, body.v7 footer{ position:relative; z-index:1; }
+body.v7 #main-content, body.v7 footer{ position:relative; z-index:1; }
 body.v7 .chat-widget{ z-index:300; }
 
-body.v7 #site-header{ background:transparent; border-bottom-color:transparent; }
+/* Jerarquía de capas, explícita y en un solo sitio:
+     lienzo 0 · contenido 1 · índice 120 · CABECERA 200 · chat 300.
+   La cabecera contiene el desplegable de Capacidades, así que tiene que
+   quedar por encima del contenido o el desplegable no se puede ni pulsar. */
+body.v7 #site-header{ position:relative; z-index:200; background:transparent; border-bottom-color:transparent; }
 body.v7 #site-header.scrolled{
   background:rgba(5,7,14,.62);
   backdrop-filter:blur(20px) saturate(1.5); -webkit-backdrop-filter:blur(20px) saturate(1.5);
@@ -43,8 +47,8 @@ body.v7 .page-hero > .container::before,
 body.v7 .head::before,
 body.v7 .figure::before,
 body.v7 .section-head::before{
-  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-30% -8%;
-  background:radial-gradient(64% 66% at 30% 50%, rgba(5,7,14,.94), rgba(5,7,14,.74) 48%, rgba(5,7,14,0) 84%);
+  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-34% -10%;
+  background:radial-gradient(72% 72% at 32% 50%, rgba(5,7,14,.97), rgba(5,7,14,.86) 44%, rgba(5,7,14,.42) 68%, rgba(5,7,14,0) 88%);
 }
 /* El bloque de afirmación va centrado: su velo también. */
 body.v7 .figure::before{

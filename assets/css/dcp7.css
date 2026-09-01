@@ -14,45 +14,53 @@
    ========================================================================= */
 
 /* =============================================================== 1. ÍNDICE */
+/* UNA SOLA PIEZA DE ORIENTACIÓN POR FORMATO. Antes había dos a la vez —un
+   rail vertical con su barra de avance Y una barra superior— y competían
+   entre sí: dos cosas diciendo lo mismo al lado la una de la otra.
+
+   Ahora el avance lo llevan las propias marcas: las secciones recorridas
+   quedan encendidas, la actual se alarga y se nombra, las que faltan quedan
+   apagadas. No hace falta ninguna barra al lado para saber por dónde vas.
+
+   En pantalla estrecha, donde no cabe el índice, esa única pieza pasa a ser
+   la barra superior de avance más la pastilla con el nombre. */
 .dcx{
-  position:fixed; right:clamp(14px,1.8vw,26px); top:50%; transform:translateY(-50%);
+  position:fixed; right:clamp(16px,2vw,30px); top:50%; transform:translateY(-50%);
   z-index:120; display:none; flex-direction:column; align-items:flex-end; gap:0;
-  pointer-events:auto;
 }
 @media (min-width:1180px){ .dcx{ display:flex; } }
 
-.dcx-rail{ position:absolute; right:5px; top:6px; bottom:6px; width:1px; background:rgba(150,174,245,.16); }
-.dcx-fill{ position:absolute; right:5px; top:6px; width:1px; height:0;
-  background:linear-gradient(180deg, var(--v-a,#4dd0e1), var(--v-b,#7c6cff) 55%, var(--v-c,#ff6b9d));
-  transition:height .12s linear; }
-
 .dcx a{
   position:relative; display:flex; align-items:center; justify-content:flex-end;
-  gap:12px; padding:11px 0; text-decoration:none; z-index:1;
+  gap:14px; padding:9px 0; text-decoration:none;
 }
+/* La marca: una línea corta. Corta y apagada si aún no has llegado, encendida
+   si ya pasaste, larga si estás en ella. El avance se lee sin barra. */
 .dcx-dot{
-  width:5px; height:5px; border-radius:50%; background:#5c6884; flex:none;
-  transition:background .3s ease, transform .3s cubic-bezier(.22,.75,.28,1), box-shadow .3s;
+  width:14px; height:1px; background:#4a5570; flex:none; border-radius:1px;
+  transition:width .34s cubic-bezier(.22,.75,.28,1), background .34s ease, box-shadow .34s ease;
+}
+.dcx a.done .dcx-dot{ width:20px; background:#8fa0c4; }
+.dcx a.on .dcx-dot{
+  width:34px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, var(--v-a,#4dd0e1), var(--v-b,#7c6cff));
+  box-shadow:0 0 14px -2px rgba(124,180,255,.7);
 }
 .dcx-lab{
-  font-family:var(--mono); font-size:.62rem; letter-spacing:.13em; text-transform:uppercase;
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
   color:#8a97b4; white-space:nowrap;
-  opacity:0; transform:translateX(8px);
-  transition:opacity .26s ease, transform .26s cubic-bezier(.22,.75,.28,1), color .26s;
+  opacity:0; transform:translateX(10px);
+  transition:opacity .3s ease, transform .3s cubic-bezier(.22,.75,.28,1), color .3s;
 }
-.dcx:hover .dcx-lab{ opacity:.75; transform:none; }
-.dcx a:hover .dcx-dot{ background:var(--v-a,#4dd0e1); transform:scale(1.5); }
-.dcx a:hover .dcx-lab{ opacity:1; color:#e7eeff; }
-.dcx a.on .dcx-dot{
-  background:var(--v-a,#4dd0e1); transform:scale(1.7);
-  box-shadow:0 0 0 4px rgba(77,208,225,.14);
-}
+.dcx:hover .dcx-lab{ opacity:.7; transform:none; }
+.dcx a:hover .dcx-dot{ width:28px; background:#cfe0ff; }
+.dcx a:hover .dcx-lab{ opacity:1; color:#eaf1ff; }
 .dcx a.on .dcx-lab{ opacity:1; transform:none; color:#eaf1ff; }
-.dcx a:focus-visible{ outline:2px solid var(--v-a,#4dd0e1); outline-offset:4px; border-radius:6px; }
+.dcx a:focus-visible{ outline:2px solid var(--v-a,#4dd0e1); outline-offset:5px; border-radius:6px; }
 
-/* Barra de avance: la única pieza que aparece en pantallas estrechas junto al
-   nombre de la sección. Dos píxeles, arriba del todo, siempre presente. */
-.dcx-bar{ position:fixed; inset:0 0 auto 0; height:2px; z-index:400; pointer-events:none; }
+/* La barra superior es la orientación SOLO donde no cabe el índice. En ancho
+   sobra, y tenerla era exactamente la redundancia que había que quitar. */
+.dcx-bar{ position:fixed; inset:0 0 auto 0; height:2px; z-index:400; pointer-events:none; display:none; }
 .dcx-bar i{
   display:block; height:100%; width:0;
   background:linear-gradient(90deg, var(--v-a,#4dd0e1), var(--v-b,#7c6cff) 55%, var(--v-c,#ff6b9d));
@@ -61,16 +69,16 @@
 .dcx-now{
   position:fixed; left:clamp(12px,4vw,20px); bottom:clamp(12px,3vh,20px); z-index:120;
   display:none; align-items:center; gap:9px; padding:7px 13px; border-radius:999px;
-  background:rgba(8,11,22,.78); backdrop-filter:blur(14px);
+  background:rgba(8,11,22,.82);
   border:1px solid rgba(150,174,245,.13);
   font-family:var(--mono); font-size:.6rem; letter-spacing:.13em; text-transform:uppercase; color:#c2cee9;
   max-width:min(62vw, 320px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 .dcx-now::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--v-a,#4dd0e1); flex:none; }
-@media (max-width:1179px){ .dcx-now{ display:inline-flex; } }
+@media (max-width:1179px){ .dcx-now{ display:inline-flex; } .dcx-bar{ display:block; } }
+@media (max-width:560px){ .dcx-now{ max-width:calc(100vw - 130px); } }
 @media (prefers-reduced-motion: reduce){
-  .dcx-fill, .dcx-bar i{ transition:none; }
-  .dcx-dot, .dcx-lab{ transition:none; }
+  .dcx-bar i, .dcx-dot, .dcx-lab{ transition:none; }
 }
 
 /* ============================================== 2. EL CHAT, INTEGRADO */
@@ -95,3 +103,26 @@
 /* En móvil la pastilla del índice y la burbuja del chat no se pisan: una a la
    izquierda, otra a la derecha. */
 @media (max-width:560px){ .dcx-now{ max-width:calc(100vw - 130px); } }
+
+/* ===================================== 3. CAPACIDADES (desplegable) */
+/* Dos cosas lo rompían: quedaba por debajo del contenido (corregido en la
+   jerarquía de capas) y era translúcido sobre un lienzo en movimiento, así
+   que el texto competía con las partículas de detrás. Aquí se vuelve opaco
+   y sólido: un desplegable se lee, no se contempla. */
+.mega-menu{
+  background:linear-gradient(180deg, #101731 0%, #0a0f22 55%, #070b18 100%) !important;
+  border:1px solid rgba(150,174,245,.18) !important;
+  box-shadow:0 40px 90px -34px rgba(0,0,0,.94), 0 0 0 1px rgba(91,140,255,.10) !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+.mega-item{ position:relative; }
+.mega-item strong{ color:#eef3ff; }
+.mega-item span span{ color:#93a1c1; }
+.mega-item:hover, .mega-item:focus-visible{ background:rgba(91,140,255,.12); }
+.mega-item:hover strong, .mega-item:focus-visible strong{ color:#fff; }
+.mega-item:focus-visible{ outline:2px solid var(--v-a,#4dd0e1); outline-offset:-2px; }
+/* Una zona-puente invisible entre el enlace y el panel: al bajar el ratón en
+   diagonal ya no se cierra a mitad de camino. */
+.has-mega .mega-menu::before{
+  content:""; position:absolute; left:0; right:0; top:-14px; height:14px;
+}

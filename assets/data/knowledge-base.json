@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T21:03:25.080Z",
+  "generatedAt": "2026-09-01T21:33:02.117Z",
   "pageCount": 66,
   "chunkCount": 584,
   "pages": [
@@ -2281,22 +2281,22 @@
         {
           "id": "/en/#c3",
           "heading": "We analyse",
-          "text": "We walk through your real operation: who does what, with which tool, and where it stalls. What is there, unvarnished 02"
+          "text": "We look at what already happens. The same things happen in the same places, over and over — that is a pattern, and it is the first thing to appear. The system detects patterns 02"
         },
         {
           "id": "/en/#c4",
           "heading": "We design",
-          "text": "We decide what gets automated and what a person keeps deciding. The second matters as much as the first. Scope agreed before we build 03"
+          "text": "We decide what goes with what. What repeats together is grouped, what is unrelated is separated, and the mess starts having parts. The system groups 03"
         },
         {
           "id": "/en/#c5",
           "heading": "We build",
-          "text": "We adapt the pieces we already know how to build and develop the ones your case needs that do not exist yet. Inside the tools you already use 04"
+          "text": "We lay the wiring between those parts. For the first time there is a structure, and not a pile of pieces that happen to sit close together. The system gets wired 04"
         },
         {
           "id": "/en/#c6",
           "heading": "We measure",
-          "text": "We leave it running and keep measuring what changes, against your starting point. With data, not estimates What we already know how to build"
+          "text": "Information starts flowing through that wiring. And what flows can be counted, compared and improved. The system flows What we already know how to build"
         },
         {
           "id": "/en/#c7",
@@ -2897,22 +2897,22 @@
         {
           "id": "/#c3",
           "heading": "Analizamos",
-          "text": "Recorremos tu operación real: quién hace qué, con qué herramienta y en qué punto se para. Lo que hay, sin maquillar 02"
+          "text": "Miramos lo que ya ocurre. Las mismas cosas pasan en los mismos sitios, una y otra vez — eso es un patrón, y es lo primero que aparece. El sistema detecta patrones 02"
         },
         {
           "id": "/#c4",
           "heading": "Diseñamos",
-          "text": "Decidimos qué se automatiza y qué sigue decidiendo una persona. Lo segundo importa tanto como lo primero. Alcance acordado antes de construir 03"
+          "text": "Decidimos qué va con qué. Lo que se repite junto se agrupa, lo que no tiene relación se separa, y el desorden empieza a tener partes. El sistema se agrupa 03"
         },
         {
           "id": "/#c5",
           "heading": "Construimos",
-          "text": "Adaptamos las piezas que ya sabemos construir y desarrollamos las que tu caso necesite y no existan. Dentro de tus herramientas actuales 04"
+          "text": "Tendemos el cableado entre esas partes. Por primera vez hay una estructura, y no un montón de piezas que casualmente están cerca. El sistema se cablea 04"
         },
         {
           "id": "/#c6",
           "heading": "Medimos",
-          "text": "Lo dejamos funcionando y seguimos midiendo lo que cambia, comparado con tu punto de partida. Con datos, no con estimaciones Lo que ya sabemos construir"
+          "text": "La información empieza a circular por ese cableado. Y lo que circula se puede contar, comparar y mejorar. El sistema circula Lo que ya sabemos construir"
         },
         {
           "id": "/#c7",
