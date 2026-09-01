@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Finance — D-Code Partners</title>
-<meta name="description" content="Finance: invoices from accepted quotes, escalates collection reminders and tracks internal spend daily. Not yet validated with a real client.">
+<meta name="description" content="Finance: our own system that invoices from accepted quotes, escalates payment reminders and tracks spend day by day, adapted to each company.">
 <meta name="author" content="D-Code Partners">
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="es_ES">
 <meta property="og:title" content="Finance — D-Code Partners">
-<meta property="og:description" content="Finance: invoices from accepted quotes, escalates collection reminders and tracks internal spend daily. Not yet validated with a real client.">
+<meta property="og:description" content="Finance: our own system that invoices from accepted quotes, escalates payment reminders and tracks spend day by day, adapted to each company.">
 <meta property="og:url" content="https://dcodepartners.com/en/departamentos/finanzas">
 <meta property="og:image" content="https://dcodepartners.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -34,6 +34,7 @@
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
 <link rel="stylesheet" href="/assets/css/styles.css?v=25a2d12160">
+<link rel="stylesheet" href="/assets/css/dcp3.css?v=f4c0a5355e">
 <link rel="stylesheet" href="/assets/css/finance-demo.css?v=2">
 
 <script type="application/ld+json">
@@ -52,7 +53,7 @@
   "@context": "https://schema.org",
   "@type": "Service",
   "name": "Finance",
-  "description": "Generates invoices from accepted quotes, escalates automatic collection reminders, calculates the financial dashboard, and tracks internal spend day by day. Built and running internally in controlled tests. It has not issued a real invoice yet: that validation is the step before entering the commercial catalog.",
+  "description": "Generates invoices from accepted quotes, escalates automatic collection reminders, calculates the financial dashboard, and tracks internal spend day by day. Our own system, running daily on our own operation and adaptable to each company’s structure.",
   "provider": { "@type": "Organization", "name": "D-Code Partners", "url": "https://dcodepartners.com/" },
   "areaServed": "ES",
   "url": "https://dcodepartners.com/en/departamentos/finanzas"
@@ -88,10 +89,10 @@
 
     <nav class="main-nav" id="main-nav" aria-label="Main">
       <ul>
-        <li><a href="/en">Home</a></li>
-        <li><a href="/en/metodo">Method</a></li>
+        
+        <li><a href="/en/metodo">How we work</a></li>
         <li class="has-mega">
-          <a href="/en/departamentos" class="nav-link-btn mega-trigger">Departments <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+          <a href="/en/departamentos" class="nav-link-btn mega-trigger">Infrastructure <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
           <div class="mega-menu" role="menu">
             <a class="mega-item" href="/en/departamentos/comercial" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
@@ -128,8 +129,10 @@
             <a class="mega-item wide" href="/en/departamentos" role="menuitem">View all Departments →</a>
           </div>
         </li>
+        <li><a href="/en/servicios">What we build</a></li>
+        <li><a href="/en/sistema-financiero">D-Code Finance</a></li>
         <li><a href="/en/cambios-en-proceso">Changes in Progress</a></li>
-        <li><a href="/en/conocenos">About Us</a></li>
+        
       </ul>
     </nav>
 
@@ -138,7 +141,7 @@
         <a href="#" data-lang="es">ES</a>
         <a href="#" data-lang="en">EN</a>
       </div>
-      <a href="/en/contacto" class="btn btn-primary btn-sm">Book a Meeting</a>
+      <a href="/en/contacto" class="btn btn-primary btn-sm">Let’s talk</a>
       <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
   </div>
@@ -149,7 +152,7 @@
   <div class="container">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <ol>
-        <li><a href="/en">Home</a></li>
+        
         <li class="sep">/</li>
         <li><a href="/en/departamentos">Departments</a></li>
         <li class="sep">/</li>
@@ -165,7 +168,7 @@
       <p class="lead">Finance generates invoices from accepted quotes, escalates collection reminders until they're paid, and watches internal spend day by day — powered by D-Code Finance, the financial system D-Code Partners already uses to run its own accounts.</p>
       <div class="page-hero-meta">
         <span class="badge badge-violet">D-CODE FINANCE</span>
-        <span class="badge badge-amber">UNDER VALIDATION</span>
+        <span class="badge badge-stone">OPERATIONAL</span>
         <span class="trust-badge">Interactive demo available</span>
       </div>
     </div>
@@ -174,7 +177,7 @@
   <div class="container">
     <div class="future-cases reveal" style="margin-top:32px;">
       <h3>How D-Code Finance rolls out</h3>
-      <p>The D-Code Finance circuit —invoicing, collections, spend control and financial dashboard— is built and running daily inside D-Code Partners, on our own operation. It has not processed a real invoice yet: validating it with the first one is the step before offering it to a client. The demo you can explore below is the same interface, with a fictional company and data.</p>
+      <p>D-Code Finance is a complete financial system we built ourselves: it issues invoices from accepted quotes, escalates payment reminders, controls spend and calculates the dashboard. It runs daily on our own operation, and adapts to each company’s structure. The demo you can explore below is the same interface, with a fictional company and data.</p>
     </div>
   </div>
 
@@ -438,7 +441,7 @@
           <li><a href="/en/metodo">The D-Code Method</a></li>
           <li><a href="/en/garantias">Guarantees & Process</a></li>
           <li><a href="/en/cambios-en-proceso">Changes in Progress</a></li>
-          <li><a href="/en/conocenos">About Us</a></li>
+          
           <li><a href="/en/blog">Blog</a></li>
         </ul>
       </div>
@@ -499,5 +502,6 @@
 <script src="/assets/js/finance-demo.en.js?v=2" defer></script>
 <script src="/assets/js/main.js?v=d6b7c433a2" defer></script>
 
+  <script src="/assets/js/dcp3.js?v=0ea58f39a8" defer></script>
 </body>
 </html>

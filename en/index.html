@@ -38,6 +38,7 @@
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
 <link rel="stylesheet" href="/assets/css/styles.css?v=25a2d12160">
+<link rel="stylesheet" href="/assets/css/dcp3.css?v=f4c0a5355e">
 <link rel="stylesheet" href="/assets/css/finance-demo.css?v=2">
 
 <script type="application/ld+json">
@@ -84,10 +85,10 @@
 
     <nav class="main-nav" id="main-nav" aria-label="Main">
       <ul>
-        <li><a href="/en" aria-current="page">Home</a></li>
-        <li><a href="/en/metodo">Method</a></li>
+        
+        <li><a href="/en/metodo">How we work</a></li>
         <li class="has-mega">
-          <a href="/en/departamentos" class="nav-link-btn mega-trigger">Departments <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+          <a href="/en/departamentos" class="nav-link-btn mega-trigger">Infrastructure <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
           <div class="mega-menu" role="menu">
             <a class="mega-item" href="/en/departamentos/comercial" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
@@ -124,8 +125,10 @@
             <a class="mega-item wide" href="/en/departamentos" role="menuitem">View all Departments →</a>
           </div>
         </li>
+        <li><a href="/en/servicios">What we build</a></li>
+        <li><a href="/en/sistema-financiero">D-Code Finance</a></li>
         <li><a href="/en/cambios-en-proceso">Changes in Progress</a></li>
-        <li><a href="/en/conocenos">About Us</a></li>
+        
       </ul>
     </nav>
 
@@ -134,7 +137,7 @@
         <a href="#" data-lang="es">ES</a>
         <a href="#" data-lang="en">EN</a>
       </div>
-      <a href="/en/contacto" class="btn btn-primary btn-sm">Book a Meeting</a>
+      <a href="/en/contacto" class="btn btn-primary btn-sm">Let’s talk</a>
       <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
   </div>
@@ -151,327 +154,312 @@
 
 <main id="main-content">
 
-  <!-- ============ HERO ============
-       DIR-WEB-MASTER-004: see the parallel Spanish comment in index.html —
-       the parallax SVG atmosphere (root cause of the real iPad rendering
-       bugs from DIR-053/054/055) is removed entirely and replaced with a
-       different idea: a panel showing Departments connecting to one
-       system as the page loads (.hero-console), built from plain rows
-       instead of viewport-dependent SVG geometry. -->
-  <section class="hero" id="inicio">
-    <div class="container hero-grid">
+  <!-- ===================== HERO — LA TRANSFORMACIÓN =====================
+       v3. El hero anterior anunciaba "Ocho Departamentos", que leía como
+       catálogo. Este arranca por donde arranca la empresa: el problema del
+       cliente. La escena de la derecha muestra herramientas sueltas que se
+       reorganizan alrededor de un sistema — la propuesta de valor en
+       movimiento, no una ilustración. -->
+  <section class="v3-hero">
+    <div class="container v3-hero-inner">
 
-      <div class="hero-copy">
-        <span class="eyebrow">Business Operating System for SMBs</span>
-        <h1>An <span class="accent">Operating System</span> for your company, not just another automation.</h1>
-        <p class="lead">Most small and mid-sized businesses lose sales and hours to processes that only work if someone remembers to do them — every D-Code Smart Department does it for you, every day.</p>
+      <div class="v3-hero-copy">
+        <span class="eyebrow">Custom business systems</span>
+        <h1>
+          <span class="l">Your company doesn’t have</span>
+          <span class="l">the same problems</span>
+          <span class="l grad">as everyone else.</span>
+        </h1>
+        <p class="lead">That’s why we don’t sell you a package. We analyse how you work, find where time is lost and build the system your operation needs.</p>
 
-        <div class="hero-ctas">
-          <a href="/en/contacto" class="btn btn-primary">Book My Free Call</a>
-          <a href="/en/como-funciona" class="btn btn-ghost">See how it works</a>
+        <div class="v3-hero-ctas">
+          <a href="/en/contacto" class="btn btn-primary">Analyse my operation</a>
+          <a href="/en/metodo" class="btn btn-ghost">How we work</a>
         </div>
 
-        <div class="trust-badges">
-          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg>No lock-in contract</span>
-          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>GDPR compliant</span>
-          <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Response &lt; 24h</span>
+        <div class="v3-hero-foot">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Free diagnosis</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>No lock-in</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>GDPR compliant</span>
         </div>
       </div>
 
-      <div class="hero-graphic">
-        <div class="hero-console reveal-scale">
-          <div class="hero-console-contrast">
-            <span class="hcc-before">Disconnected tools, working alone</span>
-            <span class="hcc-arrow" aria-hidden="true">→</span>
-            <span class="hcc-after">One operating system</span>
-          </div>
-          <div class="hero-console-head">
-            <span>dcode_system</span>
-            <span class="window-status"><span class="dot"></span>Live</span>
-          </div>
-          <div class="boot-list" data-stagger>
-            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Sales</span><span class="boot-state">Connected</span></div>
-            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Marketing</span><span class="boot-state">Connected</span></div>
-            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Delivery</span><span class="boot-state">Connected</span></div>
-            <div class="boot-row reveal-up"><span class="boot-dot"></span><span class="boot-name">Support</span><span class="boot-state">Connected</span></div>
-          </div>
-          <div class="hero-console-foot">+4 more Departments · 1 system</div>
-          <div class="hero-console-log">
-            <span class="hero-console-log-prompt">&gt;</span>
-            <span class="hero-console-log-line" data-log-cycle='["Sales → proposal sent to 3 companies","Delivery → 2 tasks reassigned by workload","Marketing → 5 leads qualified this week","Support → ticket #2291 resolved in 4 minutes"]'>Sales → proposal sent to 3 companies</span>
+      <div class="v3-scene" data-scene data-state="before">
+        <div class="v3-scene-head">
+          <span class="v3-scene-tag">Your operation</span>
+          <div class="v3-scene-toggle" role="group" aria-label="See before or after">
+            <button type="button" data-state="before" aria-pressed="true">Today</button>
+            <button type="button" data-state="after" aria-pressed="false">With D-Code</button>
           </div>
         </div>
-        <div class="hero-metrics-float" data-stagger>
-          <div class="hero-metric reveal-up"><div class="hm-val">24/7</div><div class="hm-label">Operational</div></div>
-          <div class="hero-metric reveal-up"><div class="hm-val">€0</div><div class="hm-label">Upfront risk</div></div>
-          <div class="hero-metric reveal-up"><div class="hm-val">30 days</div><div class="hm-label">Free trial</div></div>
+
+        <div class="v3-scene-stage">
+          <div class="v3-chips-wrap">
+          <div class="v3-chip" style="--hue:var(--p-comercial)"><i></i>Clients in a spreadsheet</div>
+          <div class="v3-chip" style="--hue:var(--p-finanzas)"><i></i>Invoices somewhere else</div>
+          <div class="v3-chip" style="--hue:var(--p-produccion)"><i></i>Projects with no status</div>
+          <div class="v3-chip" style="--hue:var(--p-soporte)"><i></i>Issues buried in email</div>
+          <div class="v3-chip" style="--hue:var(--p-marketing)"><i></i>Forgotten follow-ups</div>
+          <div class="v3-chip" style="--hue:var(--p-direccion)"><i></i>Reports by hand</div>
+          </div>
+          <div class="v3-core"><div><b>Your system</b><span>CONNECTED</span></div></div>
+        </div>
+
+        <p class="v3-scene-note">Illustration of the concept — not data from a real client.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DIAGNÓSTICO INTERACTIVO =====================
+       Pieza central del sitio. Explica el modelo mejor que cualquier
+       párrafo: el visitante elige SU síntoma y ve qué construiríamos y con
+       qué piezas. Las etiquetas con color son infraestructura que ya
+       existe; las de borde discontinuo, desarrollo a medida. Ahí se ve, sin
+       decirlo, que no vendemos un catálogo cerrado. -->
+  <section class="section" id="diagnostico">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Start with the problem</span>
+        <h2 class="h-title">Tell us where it hurts. We’ll tell you what we’d build.</h2>
+        <p class="lead">Every company arrives with a different symptom. The system that comes out of it is never the same twice.</p>
+      </div>
+
+      <div class="v3-diag" data-diagnostic>
+        <div class="v3-symptoms" role="listbox" aria-label="Choose your symptom">
+          <button type="button" class="v3-symptom" role="option" aria-selected="true" style="--hue:var(--p-finanzas)"
+            data-kicker="Finance · custom"
+            data-title="Que el dinero se cobre solo, sin perseguir a nadie"
+            data-now="Alguien revisa qué facturas están vencidas, escribe el recordatorio y espera. Cuando hay trabajo, esa tarea se aplaza — y el cobro se retrasa con ella."
+            data-build="Un circuito que emite la factura desde el presupuesto aceptado, vigila el vencimiento y escala los recordatorios solo. Si nadie responde, abre una incidencia y avisa. Nadie tiene que acordarse."
+            data-pieces="Motor de facturación::--p-finanzas|Escalado de cobros::--p-finanzas|Guardarraíl de envíos::--p-clientes|Conexión con tu banco o ERP">
+            <span class="v3-symptom-n">01</span>I chase payments by phone and email
+          </button>
+
+          <button type="button" class="v3-symptom" role="option" aria-selected="false" tabindex="-1" style="--hue:var(--p-comercial)"
+            data-kicker="Sales · custom"
+            data-title="Que ninguna oportunidad dependa de que alguien se acuerde"
+            data-now="Las oportunidades entran por varios sitios y viven en la cabeza de quien las atendió. El seguimiento se hace si hay tiempo."
+            data-build="Un sistema que detecta, clasifica y prepara la propuesta con los datos reales de esa empresa, y la deja lista para que una persona la revise antes de enviarla. El criterio sigue siendo tuyo; el trabajo mecánico no."
+            data-pieces="Detección y clasificación::--p-comercial|Generador de propuestas::--p-comercial|CRM conectado::--p-comercial|Integración con tu web y tu correo">
+            <span class="v3-symptom-n">02</span>Opportunities slip away for lack of follow-up
+          </button>
+
+          <button type="button" class="v3-symptom" role="option" aria-selected="false" tabindex="-1" style="--hue:var(--p-administracion)"
+            data-kicker="Data · custom"
+            data-title="Que un cliente sea un cliente, no tres fichas distintas"
+            data-now="La misma empresa aparece como oportunidad, como cliente y como proyecto. Nadie sabe cuál es la buena, y los informes salen inflados."
+            data-build="Una capa de identidad que reconoce que esos registros son la misma empresa y los une en una ficha, sin borrar el histórico de ninguno. A partir de ahí, todo lo demás cuadra."
+            data-pieces="Identidad unificada::--p-administracion|Deduplicación continua::--p-administracion|Migración de tus datos actuales">
+            <span class="v3-symptom-n">03</span>The same information lives in three places
+          </button>
+
+          <button type="button" class="v3-symptom" role="option" aria-selected="false" tabindex="-1" style="--hue:var(--p-produccion)"
+            data-kicker="Delivery · custom"
+            data-title="Que el estado de un proyecto no haya que preguntarlo"
+            data-now="Para saber cómo va un proyecto hay que preguntar a quien lo lleva. Los plazos se descubren tarde, cuando ya se han pasado."
+            data-build="El proyecto se crea solo al cerrarse la venta, con sus tareas repartidas según la carga real de cada persona, y avisa antes de que algo venza — no después."
+            data-pieces="Alta automática de proyectos::--p-produccion|Reparto por carga::--p-produccion|Alertas de vencimiento::--p-produccion|Conexión con tu gestor de tareas">
+            <span class="v3-symptom-n">04</span>Nobody knows the real status of projects
+          </button>
+
+          <button type="button" class="v3-symptom" role="option" aria-selected="false" tabindex="-1" style="--hue:var(--p-soporte)"
+            data-kicker="Support · custom"
+            data-title="Que responder rápido no dependa del horario"
+            data-now="Las mismas preguntas llegan cada semana y las contesta quien esté libre. Fuera de horario, nadie."
+            data-build="Un sistema que clasifica lo que entra, responde lo que puede responder con datos reales de tu negocio y escala a una persona lo que necesita criterio, con su tiempo de respuesta comprometido."
+            data-pieces="Clasificación de entrada::--p-soporte|Respuesta con tus datos::--p-soporte|Escalado con SLA::--p-soporte|Integración con tu buzón o chat">
+            <span class="v3-symptom-n">05</span>I answer the same questions every day
+          </button>
+
+          <button type="button" class="v3-symptom" role="option" aria-selected="false" tabindex="-1" style="--hue:var(--p-direccion)"
+            data-kicker="Leadership · custom"
+            data-title="Que los números lleguen antes de que los pidas"
+            data-now="Los datos existen repartidos, pero reunirlos cuesta una mañana. Cuando el informe está listo, la decisión ya se tomó."
+            data-build="Un panel que reúne lo que pasa en cada área y llega cada mañana con lo que ha cambiado y lo que necesita tu atención. Si una fuente falla, lo dice — no rellena el hueco con un cero."
+            data-pieces="Panel de dirección::--p-direccion|Informes automáticos::--p-direccion|Indicadores de tu negocio">
+            <span class="v3-symptom-n">06</span>The data exists, but says nothing
+          </button>
+        </div>
+
+        <div class="v3-answer" data-answer aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CÓMO TRABAJAMOS ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">The D-Code Method</span>
+        <h2 class="h-title">From a concrete problem to a system that works.</h2>
+        <p class="lead">No project starts by choosing a product. It starts by understanding how you work today.</p>
+      </div>
+
+      <div class="v3-arc">
+        <div class="v3-arc-step" style="--hue:var(--p-comercial)">
+          <span class="v3-arc-n">01</span>
+          <h3 class="v3-arc-t">We analyse</h3>
+          <p class="v3-arc-d">Miramos tu operativa real: qué tareas consumen horas, dónde se pierde información y qué decisiones se toman a ciegas.</p>
+        </div>
+        <div class="v3-arc-step" style="--hue:var(--p-direccion)">
+          <span class="v3-arc-n">02</span>
+          <h3 class="v3-arc-t">We design</h3>
+          <p class="v3-arc-d">Definimos el sistema que resuelve eso: qué se automatiza, qué se integra y qué debe seguir decidiendo una persona.</p>
+        </div>
+        <div class="v3-arc-step" style="--hue:var(--p-produccion)">
+          <span class="v3-arc-n">03</span>
+          <h3 class="v3-arc-t">We build</h3>
+          <p class="v3-arc-d">Adaptamos la infraestructura que ya tenemos resuelta y desarrollamos a medida lo que tu caso necesita y no existe.</p>
+        </div>
+        <div class="v3-arc-step" style="--hue:var(--p-clientes)">
+          <span class="v3-arc-n">04</span>
+          <h3 class="v3-arc-t">We connect</h3>
+          <p class="v3-arc-d">Lo enlazamos con las herramientas que ya usas, con los permisos mínimos necesarios. No te pedimos cambiar de todo.</p>
+        </div>
+        <div class="v3-arc-step" style="--hue:var(--p-finanzas)">
+          <span class="v3-arc-n">05</span>
+          <h3 class="v3-arc-t">We operate</h3>
+          <p class="v3-arc-d">El sistema queda funcionando y vigilado: si algo falla, lo sabemos nosotros antes que tú.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ D-CODE FINANCE (real deployment) — DIR-WEB-20260820-005b ============ -->
+  <!-- ===================== INFRAESTRUCTURA =====================
+       NO es una rejilla de ocho tarjetas iguales — eso leía como tienda.
+       Es una lista de piezas ya construidas, con un panel al lado que
+       explica que se combinan, se adaptan o se amplían. -->
+  <section class="section" id="infraestructura">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">What we’ve already built</span>
+        <h2 class="h-title">Infrastructure, not a catalogue.</h2>
+        <p class="lead">These are the pieces we have already solved and can adapt to your case. They are not eight products to pick from: they are the starting point of a system.</p>
+      </div>
+
+      <div class="v3-infra" style="margin-top:36px;">
+        <div class="v3-pieces-list">
+          <a class="v3-piece-row" href="/en/departamentos/comercial" style="--hue:var(--p-comercial)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Sales</span><p class="v3-piece-desc">Detección de oportunidades, cualificación y propuestas preparadas.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/marketing" style="--hue:var(--p-marketing)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Marketing</span><p class="v3-piece-desc">Captación y cualificación de leads antes de que lleguen a ventas.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/clientes" style="--hue:var(--p-clientes)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Customer</span><p class="v3-piece-desc">Alta, bienvenida, seguimiento y renovaciones sin depender de nadie.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/produccion" style="--hue:var(--p-produccion)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Delivery</span><p class="v3-piece-desc">Proyectos, reparto de tareas por carga y control de entregas.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/finanzas" style="--hue:var(--p-finanzas)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Finance</span><p class="v3-piece-desc">Facturación, cobros escalados, control de gasto y cuadro de mando.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/soporte" style="--hue:var(--p-soporte)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Support</span><p class="v3-piece-desc">Clasificación, respuesta con datos reales y escalado con SLA.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/administracion" style="--hue:var(--p-administracion)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Operations</span><p class="v3-piece-desc">Identidad unificada, documentación y copias de seguridad.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+          <a class="v3-piece-row" href="/en/departamentos/direccion" style="--hue:var(--p-direccion)">
+            <span class="v3-piece-dot"></span>
+            <span><span class="v3-piece-name">Leadership</span><p class="v3-piece-desc">Panel de estado e informes con los indicadores de tu negocio.</p></span>
+            <span class="v3-piece-arrow">VIEW →</span>
+          </a>
+        </div>
+
+        <aside class="v3-infra-note">
+          <h3>How this gets used</h3>
+          <p>Una empresa puede necesitar <strong>una sola pieza</strong>, dos conectadas entre sí, o un sistema que no se parece a ninguna de ellas.</p>
+          <p>Cuando lo que necesitas coincide con algo que ya tenemos resuelto, <strong>lo adaptamos</strong> y ganas tiempo. Cuando no existe, <strong>lo construimos</strong>.</p>
+          <p>Lo que nunca hacemos es venderte una pieza porque la tenemos, en vez de la que resuelve tu problema.</p>
+          <div style="margin-top:20px;"><a href="/en/servicios" class="btn btn-ghost btn-sm">What we build</a></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== D-CODE FINANCE (capacidad real) ===================== -->
   <section class="section" id="dcode-finance">
     <div class="container">
-      <div class="reveal">
-        <span class="eyebrow">D-Code Finance</span>
-        <h2 class="h-title" style="margin:12px 0 14px;">Finance, inside the system.</h2>
-        <p class="lead" style="margin-bottom:24px;">D-Code Partners doesn't just automate your company: it's building its own financial system, connected to the rest of your Departments. Invoices, collections, expenses and quotes, in a single view.</p>
-        <a href="/en/sistema-financiero" class="btn btn-primary">Explore D-Code Finance</a>
+      <div class="section-head">
+        <span class="eyebrow">Our own software</span>
+        <h2 class="h-title">We build product, not just automations.</h2>
+        <p class="lead">D-Code Finance es un sistema financiero completo desarrollado por nosotros: facturas, cobros, gastos, presupuestos y análisis en una sola vista. Está aquí para que lo pruebes, no para que te lo creas.</p>
       </div>
 
-      <div class="demo-disclaimer reveal">
+      <div class="demo-disclaimer" style="margin-top:26px;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
-        <p>What you see below is an interactive demo of D-Code Finance, with a fictional company and data, built to show you what the system can do. The real product adapts to each company's structure and can include more features, configurations and integrations.</p>
+        <p>Demo interactiva con una empresa y datos de ejemplo. La versión real se adapta a cada empresa.</p>
       </div>
 
-      <div class="reveal fdemo-home-stack">
+      <div class="fdemo-home-stack">
         <div class="fdemo-scope">
           <div data-fdemo-mount data-mode="embedded" data-exit-href="/en/sistema-financiero/app" data-exit-label="Full screen ↗"></div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ============ DEPARTMENTS (teaser) — ONE SINGLE SYSTEM (DIR-WEB-MASTER-004) ============
-       Replaces "The Concept" (separate text section, same idea told
-       better by looking at the panel) and the grid of 8 loose cards with
-       ONE .dept-system panel holding 8 connected rows -- see the
-       .dept-system comment in styles.css for the full reasoning. -->
-  <section class="section" id="departamentos">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Smart Departments</span>
-        <h2 class="h-title">Not chatbots. One system with 8 modules.</h2>
-        <p class="lead">Every Smart Department does the work — detects, decides, alerts, acts — coordinated with the rest, not isolated like a standalone tool.</p>
-      </div>
-
-      <div class="window dept-system reveal">
-        <div class="window-bar">
-          <span class="window-dots"><span></span><span></span><span></span></span>
-          <span class="window-title">dcode_departments.system</span>
-          <span class="window-status"><span class="dot"></span>8 modules active</span>
-        </div>
-        <div class="window-body">
-          <div class="dept-rows">
-            <a class="dept-row" href="/en/departamentos/comercial">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
-              <span class="dept-row-name">Sales</span>
-              <span class="dept-row-desc">Never lose a sale to poor follow-up again.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/marketing">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v3a1 1 0 001 1h1l4 4V6L5 10H4a1 1 0 00-1 1z"/><path d="M14 8a3 3 0 010 8"/><path d="M17.5 5a7 7 0 010 14"/></svg></span>
-              <span class="dept-row-name">Marketing</span>
-              <span class="dept-row-desc">Leads that arrive already qualified, not raw.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/clientes">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg></span>
-              <span class="dept-row-name">Customer</span>
-              <span class="dept-row-desc">Every client cared for, without depending on any one person.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/produccion">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-              <span class="dept-row-name">Delivery</span>
-              <span class="dept-row-desc">Projects that launch themselves and hit their deadlines.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/finanzas">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span>
-              <span class="dept-row-name">Finance</span>
-              <span class="dept-row-desc">Invoice, collect and track spend without chasing anyone.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/soporte">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg></span>
-              <span class="dept-row-name">Support</span>
-              <span class="dept-row-desc">Fast responses, even after hours.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/administracion">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg></span>
-              <span class="dept-row-name">Operations</span>
-              <span class="dept-row-desc">Your company, protected and organized, effortlessly.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-            <a class="dept-row" href="/en/departamentos/direccion">
-              <span class="dept-row-dot"></span>
-              <span class="dept-row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
-              <span class="dept-row-name">Leadership</span>
-              <span class="dept-row-desc">One clear decision every morning, backed by real data.</span>
-              <span class="dept-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============ METHOD (teaser) ============ -->
-  <section class="section metodo" id="metodo">
-    <div class="container">
-      <div class="metodo-grid">
-
-        <div class="metodo-copy reveal">
-          <span class="eyebrow">The D-Code Method</span>
-          <h2 class="h-title">A partnership that starts with facts, not promises.</h2>
-          <p style="margin-top:22px;">The market is full of consultancies that promise before they prove. We work the other way around: we deploy your Smart Departments and measure their real impact on revenue and efficiency before we talk numbers.</p>
-
-          <p class="offer-statement">"One full month of service, at no cost at all."</p>
-
-          <div class="metodo-cta" style="display:flex; gap:16px; flex-wrap:wrap;">
-            <a href="/en/metodo" class="btn btn-ghost">See the full Method</a>
-            <a href="/en/garantias" class="btn btn-ghost">Guarantees & Process</a>
-          </div>
-        </div>
-
-        <div class="window reveal">
-          <div class="window-bar">
-            <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">dcode_agreement.log</span>
-          </div>
-          <div class="window-body">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-              <span class="eyebrow" style="margin:0;">D-Code Agreement</span>
-              <span class="badge">0% RISK</span>
-            </div>
-
-            <div class="accordion-list" data-accordion>
-              <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false">
-                  <span class="accordion-num">01</span>
-                  <span style="flex:1;">
-                    <span class="accordion-heading">Day 1 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
-                    <span class="accordion-title">Diagnosis and design of your custom Department.</span>
-                    <span class="accordion-panel">We audit your operations and pinpoint the processes with the greatest potential impact.</span>
-                  </span>
-                </button>
-              </div>
-              <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false">
-                  <span class="accordion-num">02</span>
-                  <span style="flex:1;">
-                    <span class="accordion-heading">Weeks 1–4 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
-                    <span class="accordion-title">Implementation in your real operations.</span>
-                    <span class="accordion-panel">We deploy each Department into production, supervised at every step.</span>
-                  </span>
-                </button>
-              </div>
-              <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false">
-                  <span class="accordion-num">03</span>
-                  <span style="flex:1;">
-                    <span class="accordion-heading">Day 30 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
-                    <span class="accordion-title">Results review: hours, revenue, efficiency.</span>
-                    <span class="accordion-panel">We show you concrete data: what improved, and by how much.</span>
-                  </span>
-                </button>
-              </div>
-              <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false">
-                  <span class="accordion-num">04</span>
-                  <span style="flex:1;">
-                    <span class="accordion-heading">From here on <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
-                    <span class="accordion-title">We agree on the value of the service, based on results already achieved.</span>
-                    <span class="accordion-panel">No surprises: we talk numbers once you already know what you're gaining.</span>
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div class="ts-foot" style="margin-top:22px; padding-top:18px; border-top:1px solid var(--border); font-family:var(--mono); font-size:0.72rem; color:var(--stone-soft);">No lock-in. No fine print.</div>
-          </div>
-        </div>
-
+      <div style="margin-top:30px;">
+        <a href="/en/sistema-financiero" class="btn btn-ghost">Explore D-Code Finance</a>
       </div>
     </div>
   </section>
 
-  <!-- ============ RESULTS (teaser, real internal cases) ============ -->
+  <!-- ===================== PRUEBA INTERNA ===================== -->
   <section class="section" id="resultados">
     <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Internal cases, not promises</span>
-        <h2 class="h-title">Before we ask you to trust us, we ran it inside our own company.</h2>
-        <p class="lead">We don't invent client case studies. This is how we use our own systems to run D-Code — including one that didn't go as planned.</p>
+      <div class="section-head">
+        <span class="eyebrow">We run it in-house first</span>
+        <h2 class="h-title">D-Code Partners runs on its own systems.</h2>
+        <p class="lead">Nuestra empresa está dirigida por la misma infraestructura que construimos. Estos son tres casos reales de nuestra operación — incluido uno que nos obligó a corregirnos.</p>
       </div>
 
-      <div class="blog-grid" data-stagger>
-        <a class="window blog-card reveal-blur" href="/en/casos-exito#caso-comercial-ia">
-          <div class="window-body">
-            <span class="tag case-tag">Sales</span>
-            <h3>From detected company to proposal sent, without anyone having to remember to do it</h3>
-            <div class="case-mini">
-              <div class="case-mini-row"><span class="case-mini-label">Before</span><p>Going from "interesting company" to a sent proposal was manual, with no fixed date.</p></div>
-              <div class="case-mini-row"><span class="case-mini-label">Now</span><p>Every Monday, the system turns the best opportunities into AI-drafted proposals, reviewed by a person.</p></div>
-            </div>
-          </div>
+      <div class="v3-cases">
+        <a class="v3-case" href="/en/casos-exito#caso-comercial-ia" style="--hue:var(--p-comercial)">
+          <span class="v3-case-tag">Sales</span>
+          <h3>De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse</h3>
+          <p>Cada semana el sistema convierte las mejores oportunidades en propuestas, revisadas por una persona antes de salir.</p>
         </a>
-        <a class="window blog-card reveal-up" href="/en/casos-exito#caso-produccion-ia">
-          <div class="window-body">
-            <span class="tag case-tag">Delivery</span>
-            <h3>Distributing the team's workload without anyone having to decide it every hour</h3>
-            <div class="case-mini">
-              <div class="case-mini-row"><span class="case-mini-label">Before</span><p>Creating projects and assigning tasks depended on whoever's workload allowed it that day.</p></div>
-              <div class="case-mini-row"><span class="case-mini-label">Now</span><p>The system creates the project on its own, distributes tasks hourly, and flags what's about to come due every day.</p></div>
-            </div>
-          </div>
+        <a class="v3-case" href="/en/casos-exito#caso-produccion-ia" style="--hue:var(--p-produccion)">
+          <span class="v3-case-tag">Delivery</span>
+          <h3>Reparto de tareas sin que nadie tenga que decidirlo cada hora</h3>
+          <p>El proyecto se crea solo, las tareas se reparten por carga real y el sistema avisa de lo que está por vencer.</p>
         </a>
-        <a class="window blog-card reveal-blur" href="/en/casos-exito#caso-diagnostico">
-          <div class="window-body">
-            <span class="tag case-tag">Internal discipline</span>
-            <h3>When our hypothesis about a failure didn't match what the data actually said</h3>
-            <div class="case-mini">
-              <div class="case-mini-row"><span class="case-mini-label">Before</span><p>We were about to act on a hypothesis without checking it against the real executions.</p></div>
-              <div class="case-mini-row"><span class="case-mini-label">Now</span><p>We audited execution by execution — the real cause was in two workflows different from the ones flagged.</p></div>
-            </div>
-          </div>
+        <a class="v3-case" href="/en/casos-exito#caso-diagnostico" style="--hue:var(--p-direccion)">
+          <span class="v3-case-tag">Método</span>
+          <h3>Cuando la hipótesis sobre un fallo no coincidía con los datos</h3>
+          <p>Auditamos ejecución por ejecución antes de actuar. La causa real estaba en dos sitios distintos a los señalados.</p>
         </a>
       </div>
 
-      <div style="text-align:center; margin-top:40px;">
-        <a href="/en/casos-exito" class="btn btn-ghost">See all 3 full cases</a>
+      <div style="margin-top:34px;">
+        <a href="/en/casos-exito" class="btn btn-ghost">See the full cases</a>
       </div>
     </div>
   </section>
 
-  <!-- ============ ABOUT US (teaser) ============
-       DIR-WEB-20260819-MASTER-004: Blog removed entirely from Home (not just
-       reordered) -- it doesn't convert, explain, build trust or differentiate,
-       so per the "does this section earn its place" test it's cut, not moved. -->
-  <section class="section metodo" id="conocenos">
+  <!-- ===================== CIERRE ===================== -->
+  <section class="cta-band v3-cta" id="contacto">
     <div class="container">
-      <div class="conocenos-intro reveal">
-        <span class="eyebrow">The minds behind D-Code Partners</span>
-        <h2 class="h-title">Two founders. One shared code.</h2>
-        <p>Diego Siñeriz and Dimitry Sosenko founded D-Code Partners in Madrid so companies could stop depending on someone remembering everything. Diego leads strategy and partnerships; Dimitry, the architecture behind the Smart Departments.</p>
-      </div>
-
-      <div style="text-align:center; margin-top:32px;">
-        <a href="/en/conocenos" class="btn btn-ghost">Read our full story</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ FINAL CTA ============ -->
-  <section class="cta-band" id="contacto">
-    <div class="container">
-      <span class="eyebrow">Book your meeting</span>
-      <h2 class="h-title">Book a 30-minute meeting.</h2>
-      <p class="lead">We'll tell you which Smart Departments would have the most impact on your business, and what to expect from month one — no cost, no commitment.</p>
-      <div class="hero-ctas">
+      <span class="eyebrow">Next step</span>
+      <h2 class="h-title" style="margin-top:18px;">Let’s start by understanding your operation.</h2>
+      <p class="lead" style="margin:18px auto 0;">Una reunión de 30 minutos para ver cómo trabajas hoy y decirte qué se puede automatizar, qué se puede conectar y qué habría que construir. Sin coste y sin compromiso.</p>
+      <div class="v3-hero-ctas" style="justify-content:center; margin-top:30px;">
         <a href="/en/contacto" class="btn btn-primary">Book My Free Call</a>
-        <a href="/en/faq" class="btn btn-ghost">See FAQ</a>
+        <a href="/en/garantias" class="btn btn-ghost">Guarantees & process</a>
       </div>
     </div>
   </section>
@@ -507,7 +495,7 @@
           <li><a href="/en/metodo">The D-Code Method</a></li>
           <li><a href="/en/garantias">Guarantees & Process</a></li>
           <li><a href="/en/cambios-en-proceso">Changes in Progress</a></li>
-          <li><a href="/en/conocenos">About Us</a></li>
+          
           <li><a href="/en/blog">Blog</a></li>
         </ul>
       </div>
@@ -568,5 +556,6 @@
 <script src="/assets/js/finance-demo.en.js?v=2" defer></script>
 <script src="/assets/js/main.js?v=d6b7c433a2" defer></script>
 
+  <script src="/assets/js/dcp3.js?v=0ea58f39a8" defer></script>
 </body>
 </html>

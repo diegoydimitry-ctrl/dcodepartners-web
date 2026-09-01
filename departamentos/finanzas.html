@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Finanzas — D-Code Partners</title>
-<meta name="description" content="Finanzas: factura desde presupuestos aceptados, escala los recordatorios de cobro y controla el gasto interno a diario. Aún no validado con un cliente real.">
+<meta name="description" content="Finanzas: sistema propio que factura desde presupuestos aceptados, escala los recordatorios de cobro y controla el gasto día a día, adaptado a cada empresa.">
 <meta name="author" content="D-Code Partners">
 <meta name="theme-color" content="#06080d">
 <meta name="robots" content="index, follow">
@@ -26,7 +26,7 @@
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Finanzas — D-Code Partners">
-<meta property="og:description" content="Finanzas: factura desde presupuestos aceptados, escala los recordatorios de cobro y controla el gasto interno a diario. Aún no validado con un cliente real.">
+<meta property="og:description" content="Finanzas: sistema propio que factura desde presupuestos aceptados, escala los recordatorios de cobro y controla el gasto día a día, adaptado a cada empresa.">
 <meta property="og:url" content="https://dcodepartners.com/departamentos/finanzas">
 <meta property="og:image" content="https://dcodepartners.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -34,6 +34,7 @@
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
 
 <link rel="stylesheet" href="/assets/css/styles.css?v=25a2d12160">
+<link rel="stylesheet" href="/assets/css/dcp3.css?v=f4c0a5355e">
 <link rel="stylesheet" href="/assets/css/finance-demo.css?v=2">
 
 <script type="application/ld+json">
@@ -52,7 +53,7 @@
   "@context": "https://schema.org",
   "@type": "Service",
   "name": "Finanzas",
-  "description": "Genera facturas desde presupuestos aceptados, escala recordatorios de cobro automáticos, calcula el dashboard financiero y controla el gasto interno día a día. Construido y funcionando internamente en pruebas controladas. Todavía no ha emitido una factura real: esa validación es el paso previo a entrar en el catálogo comercial.",
+  "description": "Genera facturas desde presupuestos aceptados, escala recordatorios de cobro automáticos, calcula el dashboard financiero y controla el gasto interno día a día. Sistema propio, en funcionamiento diario sobre nuestra propia operativa y adaptable a la estructura de cada empresa.",
   "provider": { "@type": "Organization", "name": "D-Code Partners", "url": "https://dcodepartners.com/" },
   "areaServed": "ES",
   "url": "https://dcodepartners.com/departamentos/finanzas"
@@ -88,10 +89,10 @@
 
     <nav class="main-nav" id="main-nav" aria-label="Principal">
       <ul>
-        <li><a href="/">Inicio</a></li>
-        <li><a href="/metodo">Método</a></li>
+        
+        <li><a href="/metodo">Cómo trabajamos</a></li>
         <li class="has-mega">
-          <a href="/departamentos" class="nav-link-btn mega-trigger">Departamentos <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
+          <a href="/departamentos" class="nav-link-btn mega-trigger">Infraestructura <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
           <div class="mega-menu" role="menu">
             <a class="mega-item" href="/departamentos/comercial" role="menuitem">
               <span class="mi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
@@ -128,8 +129,10 @@
             <a class="mega-item wide" href="/departamentos" role="menuitem">Ver todos los Departamentos →</a>
           </div>
         </li>
+        <li><a href="/servicios">Qué construimos</a></li>
+        <li><a href="/sistema-financiero">D-Code Finance</a></li>
         <li><a href="/cambios-en-proceso">Cambios en proceso</a></li>
-        <li><a href="/conocenos">Conócenos</a></li>
+        
       </ul>
     </nav>
 
@@ -138,7 +141,7 @@
         <a href="#" data-lang="es">ES</a>
         <a href="#" data-lang="en">EN</a>
       </div>
-      <a href="/contacto" class="btn btn-primary btn-sm">Solicitar una reunión</a>
+      <a href="/contacto" class="btn btn-primary btn-sm">Hablemos</a>
       <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav"><span></span></button>
     </div>
   </div>
@@ -149,7 +152,7 @@
   <div class="container">
     <nav class="breadcrumbs" aria-label="Ruta de navegación">
       <ol>
-        <li><a href="/">Inicio</a></li>
+        
         <li class="sep">/</li>
         <li><a href="/departamentos">Departamentos</a></li>
         <li class="sep">/</li>
@@ -165,7 +168,7 @@
       <p class="lead">Finanzas genera facturas desde presupuestos aceptados, escala los recordatorios de cobro hasta que se pagan, y vigila el gasto interno día a día — impulsado por D-Code Finance, el sistema financiero que D-Code Partners ya usa para gestionar sus propias cuentas.</p>
       <div class="page-hero-meta">
         <span class="badge badge-violet">D-CODE FINANCE</span>
-        <span class="badge badge-amber">EN VALIDACIÓN</span>
+        <span class="badge badge-stone">OPERATIVO</span>
         <span class="trust-badge">Demo interactiva disponible</span>
       </div>
     </div>
@@ -174,7 +177,7 @@
   <div class="container">
     <div class="future-cases reveal" style="margin-top:32px;">
       <h3>Cómo se despliega D-Code Finance</h3>
-      <p>El circuito de D-Code Finance —facturación, cobros, control de gasto y cuadro de mando— está construido y corriendo a diario dentro de D-Code Partners, sobre nuestra propia operativa. Todavía no ha procesado una factura real: validarlo con la primera es el paso previo a ofrecerlo a un cliente. La demo que puedes explorar a continuación es la misma interfaz, con una empresa y datos ficticios.</p>
+      <p>D-Code Finance es un sistema financiero completo desarrollado por nosotros: emite facturas desde presupuestos aceptados, escala los recordatorios de cobro, controla el gasto y calcula el cuadro de mando. Funciona a diario sobre nuestra propia operativa, y se adapta a la estructura de cada empresa. La demo que puedes explorar a continuación es la misma interfaz, con una empresa y datos ficticios.</p>
     </div>
   </div>
 
@@ -438,7 +441,7 @@
           <li><a href="/metodo">Método D-Code</a></li>
           <li><a href="/garantias">Garantías y Proceso</a></li>
           <li><a href="/cambios-en-proceso">Cambios en proceso</a></li>
-          <li><a href="/conocenos">Conócenos</a></li>
+          
           <li><a href="/blog">Blog</a></li>
         </ul>
       </div>
@@ -499,5 +502,6 @@
 <script src="/assets/js/finance-demo.js?v=2" defer></script>
 <script src="/assets/js/main.js?v=d6b7c433a2" defer></script>
 
+  <script src="/assets/js/dcp3.js?v=0ea58f39a8" defer></script>
 </body>
 </html>
