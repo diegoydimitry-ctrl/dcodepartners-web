@@ -122,3 +122,134 @@ restaurado es una hipótesis, no una copia de seguridad — y decir lo contrario
 sería exactamente el tipo de afirmación sin verificar que esta auditoría
 existe para evitar. El ensayo es seguro (crea una rama aparte, no toca
 producción) y debería hacerse antes de darlo por bueno.
+
+---
+
+# LAS TRES ACCIONES PENDIENTES, EXACTAS
+
+Autorizadas por Dirección. Ninguna cuesta dinero, ninguna es destructiva,
+todas son reversibles. Requieren el conector de Neon, que a 01/09/2026 está
+intermitente: volvió unos segundos y se cayó de nuevo antes de poder aplicarlas.
+
+**No se han inventado alternativas ni se ha modificado la arquitectura.**
+
+### Identificadores verificados en vivo
+
+| Proyecto | `project_id` | Rama `production` | `protected` |
+|---|---|---|---|
+| D-Code Finance | `crimson-waterfall-36115744` | `br-restless-moon-b2o8o2up` | `false` |
+| D-Code OS | `misty-darkness-36213098` | `br-fancy-star-b1bgqwr7` | `false` |
+
+### Acción 1 · Snapshots diarios en D-Code Finance
+
+    set_snapshot_schedule(
+      project_id: "crimson-waterfall-36115744",
+      branch_id:  "br-restless-moon-b2o8o2up",
+      schedule:   [{ frequency: "daily" }]
+    )
+
+`frequency` solo admite `daily`, `weekly` o `monthly` — verificado contra la
+API, que rechazó `interval`/`max_snapshots` y devolvió los valores válidos.
+
+### Acción 2 · Snapshots diarios en D-Code OS
+
+    set_snapshot_schedule(
+      project_id: "misty-darkness-36213098",
+      branch_id:  "br-fancy-star-b1bgqwr7",
+      schedule:   [{ frequency: "daily" }]
+    )
+
+D-Code OS **no tiene ningún snapshot todavía**, así que conviene crear uno
+manual además del calendario, igual que se hizo con Finance:
+
+    create_snapshot(
+      project_id: "misty-darkness-36213098",
+      branch_id:  "br-fancy-star-b1bgqwr7",
+      name:       "manual-inicial-dcode-os"
+    )
+
+### Acción 3 · Proteger las dos ramas de producción
+
+Hoy las dos están en `protected: false`, lo que significa que se pueden borrar
+sin fricción.
+
+    update_branch(project_id: "crimson-waterfall-36115744",
+                  branch_id: "br-restless-moon-b2o8o2up", protected: true)
+
+    update_branch(project_id: "misty-darkness-36213098",
+                  branch_id: "br-fancy-star-b1bgqwr7",   protected: true)
+
+---
+
+# ENSAYO DE RESTAURACIÓN
+
+Un backup que nunca se ha restaurado es una hipótesis. Esto es el
+procedimiento para convertirlo en un hecho **sin tocar producción**.
+
+## Antes de nada: la comprobación que decide si esto es seguro
+
+**No ejecutes `restore_snapshot` sin haber resuelto esto primero.**
+
+No está verificado si en esta versión de la API `restore_snapshot` restaura
+**sobre la rama de origen** (destructivo) o **crea una rama nueva** (inocuo).
+La diferencia lo es todo, y suponerlo sería exactamente el tipo de afirmación
+sin comprobar que esta auditoría existe para evitar.
+
+Cómo resolverlo, en orden de preferencia:
+
+1. **Ensayar sobre una rama que no sea producción.** Finance tiene una rama
+   `Demo` (`br-frosty-thunder-b2d3uxhi`) y D-Code OS tiene dos ramas viejas de
+   trabajo. Crear un snapshot de una de ellas, restaurarlo, y observar qué
+   ocurre. Si la restauración es en sitio, el daño se queda en una rama
+   prescindible. **Esta es la vía recomendada.**
+2. Consultar la documentación de Neon para la versión de API en uso.
+3. Si tras 1 y 2 sigue habiendo duda, no ejecutarlo y decirlo.
+
+## Qué se restaura, y dónde
+
+- **Qué:** el snapshot `snap-wandering-credit-b28vqsow` («auditoria-20260901-finance-production», 2026-09-01T16:35:35Z).
+- **Dónde:** en una **rama nueva y desechable**, nunca sobre `production`.
+- **Qué NO se toca:** la rama `production` de ninguno de los dos proyectos, y
+  ningún dato de negocio.
+
+## Pasos
+
+1. `list_snapshots(project_id: "crimson-waterfall-36115744")` — confirmar que
+   el snapshot sigue ahí y anotar su id.
+2. Resolver la comprobación de arriba.
+3. Restaurar a una rama nueva, con un nombre que diga lo que es:
+   `ensayo-restauracion-YYYYMMDD`.
+4. `get_connection_string` de **esa rama**, no de producción.
+5. Ejecutar la verificación (abajo) contra la rama restaurada.
+6. `delete_branch` de la rama de ensayo. Es lo único que se borra, y es algo
+   que se acaba de crear.
+
+## Cómo se verifica, y qué evidencia sirve
+
+`scripts/verificar-restauracion.sql`, de solo lectura, se ejecuta **dos veces**:
+primero contra producción para tomar la referencia, después contra la rama
+restaurada.
+
+    psql "$URL_PRODUCCION"  -f scripts/verificar-restauracion.sql > /tmp/ref-produccion.txt
+    psql "$URL_RESTAURADA"  -f scripts/verificar-restauracion.sql > /tmp/ensayo-restauracion.txt
+    diff /tmp/ref-produccion.txt /tmp/ensayo-restauracion.txt
+
+Comprueba seis cosas que pueden fallar por separado: número de tablas, última
+migración de Prisma, filas por tabla crítica, el dato más reciente de cada
+tabla, integridad referencial y la presencia de las columnas del sistema de
+cierre.
+
+**La evidencia que demuestra que funcionó** son cuatro hechos, no una
+impresión:
+
+1. El bloque 1 da el **mismo número de tablas** que producción.
+2. El bloque 2 muestra la **misma última migración**.
+3. El bloque 5 devuelve **cero huérfanos** en las dos consultas.
+4. El bloque 4 da fechas **coherentes con el momento del snapshot** — nunca
+   posteriores.
+
+Las diferencias del bloque 3 (número de filas) **no son un fallo**: son la
+medida exacta de lo que se perdería al restaurar. Ese número es la respuesta
+real a «cuánto margen tenemos», y conviene anotarlo.
+
+Guardar los dos ficheros y el `diff` como prueba del ensayo.
