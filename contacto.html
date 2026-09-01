@@ -167,10 +167,40 @@
         <div class="window form-card reveal">
           <div class="window-bar">
             <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">nueva_solicitud.form</span>
+            <span class="window-title">captacion_pausada.txt</span>
           </div>
           <div class="window-body">
-            <form id="contact-form" novalidate>
+            <!-- ============ CAPTACION PAUSADA ============
+                 Estado temporal (AUD-DCP 01/09/2026, autorizacion de Direccion).
+                 Ahora mismo entran mas solicitudes de las que se pueden atender
+                 bien, asi que se cierra la entrada en vez de acumular peticiones
+                 sin respuesta.
+
+                 EL FORMULARIO NO SE HA BORRADO: sigue integro justo debajo, solo
+                 con el atributo `hidden`. Tampoco se ha tocado el webhook, ni el
+                 workflow, ni ningun dato.
+
+                 EL AVISO VIVE EN EL HTML, NO EN JAVASCRIPT, a proposito: si el JS
+                 no cargara, lo que se ve sigue siendo el aviso y el formulario
+                 sigue oculto. Un formulario que parece funcionar y no se atiende
+                 es peor que no tener formulario.
+
+                 PARA REACTIVAR: borrar este bloque <div class="form-paused">
+                 entero, quitar el `hidden` del <form> y devolver el titulo de la
+                 ventana a `nueva_solicitud.form`. Nada mas. Instrucciones
+                 completas en docs/pausa-captacion-comercial.md
+            -->
+            <div class="form-paused">
+              <span class="form-paused-badge">No aceptamos proyectos nuevos</span>
+              <h3>Ahora mismo tenemos la agenda llena</h3>
+              <p>Preferimos decirlo antes de que escribas: en este momento no estamos aceptando solicitudes de proyectos nuevos, asi que hemos cerrado el formulario en lugar de dejar peticiones sin responder.</p>
+              <p>Si quieres hablar igualmente, las dos vias de abajo <strong>siguen abiertas y se atienden</strong>: puedes reservar una llamada de 30 minutos en el calendario, o escribirnos directamente.</p>
+              <div class="form-paused-actions">
+                <a class="form-paused-mail" href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a>
+              </div>
+            </div>
+
+            <form id="contact-form" novalidate hidden>
               <div class="form-progress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Progreso de la solicitud">
                 <span class="form-progress-dot is-active" data-dot="1"></span>
                 <span class="form-progress-dot" data-dot="2"></span>

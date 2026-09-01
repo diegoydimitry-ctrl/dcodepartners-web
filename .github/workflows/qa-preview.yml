@@ -23,6 +23,15 @@ name: QA Preview vs Production
 on:
   pull_request:
     branches: [main]
+  # AUD-DCP 01/09/2026: un push directo a `main` va a produccion sin pasar
+  # por el pull request, asi que hasta ahora no se comprobaba nada. Ahora
+  # dispara el humo contra produccion en cuanto Vercel termina de publicar.
+  # No bloquea el despliegue -no puede, ya ha ocurrido- pero convierte una
+  # promocion rota en una alerta de minutos en vez de un descubrimiento por
+  # casualidad. Lo que SI evita la promocion rota es
+  # `verificacion-estatica.yml`, que corre antes y sobre los ficheros.
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       url:
@@ -100,3 +109,30 @@ jobs:
 
       - name: Ejecutar QA contra la URL indicada
         run: node scripts/qa-preview-check.js "${{ inputs.url }}"
+
+  smoke-produccion:
+    # Solo en push a main: es el camino que no pasa por pull request.
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      # Vercel publica unos segundos despues del push. Se espera antes de
+      # medir para no acusar de rota una version que todavia no esta
+      # servida: un falso positivo aqui ensena a ignorar esta alerta, que es
+      # exactamente lo que no queremos.
+      - name: Dar tiempo a que Vercel publique
+        run: sleep 90
+
+      - name: Humo contra produccion
+        run: node scripts/qa-preview-check.js "https://dcodepartners.com"

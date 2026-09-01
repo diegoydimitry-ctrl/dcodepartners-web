@@ -5,7 +5,8 @@
   "scripts": {
     "generate-kb": "node scripts/build-knowledge-base.js",
     "update-asset-versions": "node scripts/update-asset-versions.js",
-    "qa:check": "node scripts/qa-preview-check.js"
+    "qa:check": "node scripts/qa-preview-check.js",
+    "verificar": "node scripts/verificar-estatico.js"
   },
   "dependencies": {
     "resend": "^4.0.0"

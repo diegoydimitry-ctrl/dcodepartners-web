@@ -162,10 +162,39 @@
         <div class="window form-card reveal">
           <div class="window-bar">
             <span class="window-dots"><span></span><span></span><span></span></span>
-            <span class="window-title">new_request.form</span>
+            <span class="window-title">intake_paused.txt</span>
           </div>
           <div class="window-body">
-            <form id="contact-form" novalidate>
+            <!-- ============ INTAKE PAUSED ============
+                 Temporary state (AUD-DCP 2026-09-01, authorised by Direccion).
+                 More requests are coming in than can be handled properly, so the
+                 intake is closed rather than left collecting unanswered enquiries.
+
+                 THE FORM HAS NOT BEEN DELETED: it sits intact just below, only
+                 with the `hidden` attribute. The webhook, the workflow and every
+                 existing record are untouched.
+
+                 THE NOTICE LIVES IN HTML, NOT JAVASCRIPT, on purpose: if JS fails
+                 to load, the notice is still what shows and the form stays
+                 hidden. A form that looks like it works but is not attended is
+                 worse than no form at all.
+
+                 TO RE-ENABLE: delete this whole <div class="form-paused"> block,
+                 remove `hidden` from the <form>, and set the window title back to
+                 `new_request.form`. Nothing else. Full instructions in
+                 docs/pausa-captacion-comercial.md
+            -->
+            <div class="form-paused">
+              <span class="form-paused-badge">Not taking new projects</span>
+              <h3>Our books are full right now</h3>
+              <p>We would rather say so before you write: we are not accepting new project enquiries at the moment, so we have closed the form instead of leaving requests unanswered.</p>
+              <p>If you would still like to talk, both routes below <strong>are open and are answered</strong>: book a 30-minute call in the calendar, or email us directly.</p>
+              <div class="form-paused-actions">
+                <a class="form-paused-mail" href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a>
+              </div>
+            </div>
+
+            <form id="contact-form" novalidate hidden>
               <div class="form-progress" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Request progress">
                 <span class="form-progress-dot is-active" data-dot="1"></span>
                 <span class="form-progress-dot" data-dot="2"></span>

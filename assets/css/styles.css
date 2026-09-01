@@ -3537,3 +3537,49 @@ footer{
 @media (prefers-reduced-motion: reduce){
   .reveal-narrow,.reveal-converge{ transition:none; }
 }
+
+/* ============ CAPTACION PAUSADA (AUD-DCP 01/09/2026) ============
+   Estado temporal del formulario de /contacto mientras la captacion de
+   nuevos proyectos esta cerrada por decision de Direccion.
+
+   Se anade en vez de tocar .form-card para que revertir sea quitar el
+   bloque del HTML: ninguna regla existente se ha modificado, asi que al
+   volver a mostrar el formulario recupera exactamente su aspecto anterior.
+
+   POR QUE ES VISIBLE Y NO UN FORMULARIO DESACTIVADO EN SILENCIO: un
+   formulario que parece funcionar y no se atiende es peor que no tener
+   formulario. Quien llega tiene que saber a que atenerse antes de escribir. */
+.form-paused{
+  display:flex; flex-direction:column; gap:18px;
+  padding:4px 2px 2px;
+}
+.form-paused-badge{
+  display:inline-flex; align-items:center; gap:9px; align-self:flex-start;
+  font-family:var(--mono,ui-monospace,monospace);
+  font-size:0.72rem; letter-spacing:.09em; text-transform:uppercase;
+  padding:7px 13px; border-radius:999px;
+  background:rgba(255,176,32,.11); border:1px solid rgba(255,176,32,.34);
+  color:#ffb020;
+}
+.form-paused-badge::before{
+  content:''; width:7px; height:7px; border-radius:50%;
+  background:#ffb020; flex-shrink:0;
+}
+.form-paused h3{
+  font-size:1.22rem; line-height:1.35; margin:0; color:var(--bone,#eef1f5);
+}
+.form-paused p{
+  font-size:0.94rem; line-height:1.65; color:var(--stone); margin:0;
+}
+.form-paused-actions{
+  display:flex; flex-direction:column; gap:10px; margin-top:4px;
+}
+.form-paused-mail{
+  font-family:var(--mono,ui-monospace,monospace);
+  font-size:0.87rem; color:var(--cyan,#43e0ff);
+  text-decoration:none; word-break:break-all;
+}
+.form-paused-mail:hover{ text-decoration:underline; }
+@media (max-width:520px){
+  .form-paused h3{ font-size:1.08rem; }
+}

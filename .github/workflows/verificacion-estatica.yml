@@ -1,0 +1,44 @@
+name: Verificación estática
+
+# ────────────────────────────────────────────────────────────────────────
+# POR QUE EXISTE ESTE WORKFLOW, HABIENDO YA UNO DE QA
+# ────────────────────────────────────────────────────────────────────────
+#
+# `qa-preview.yml` comprueba el sitio con un navegador real, y eso es lo
+# correcto. Pero solo se dispara en pull request, y solo puede ejecutarse
+# DESPUES de que Vercel haya publicado una Preview.
+#
+# Eso deja un agujero concreto: un push directo a `main` llega a produccion
+# sin pasar por ninguna comprobacion. Cuando la QA de navegador podria
+# ejecutarse, el cambio ya esta publicado — asi que puede avisar del
+# incendio, pero no evitarlo.
+#
+# Este workflow es lo unico que puede evitarlo, porque no necesita que el
+# sitio este desplegado: corre sobre los ficheros del repositorio. Por eso
+# se dispara en CADA push y en cada pull request, tarda segundos y no
+# instala Chromium ni depende de la red.
+#
+# Los dos se complementan: este dice "esto no deberia publicarse", y
+# `qa-preview.yml` dice "lo publicado se comporta bien".
+# ────────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verificacion-estatica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Sin `npm install`: las comprobaciones son deliberadamente de
+      # biblioteca estandar, para que este guardarrail no pueda caerse por
+      # un problema de dependencias justo el dia que hace falta.
+      - name: Comprobaciones que no necesitan despliegue
+        run: node scripts/verificar-estatico.js
