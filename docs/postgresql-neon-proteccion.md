@@ -88,3 +88,37 @@ en n8n con la cadena de conexión de cada proyecto.
 - **Ampliar la retención (de pago):** recuperación a cualquier punto en el
   tiempo, no solo a los snapshots. Es la única que cuesta dinero y la única
   que decide Dirección.
+
+---
+
+## Registro de copias (actualizado 01/09/2026)
+
+| Concepto | Estado real |
+|---|---|
+| **Snapshot que existe** | `snap-wandering-credit-b28vqsow` — «auditoria-20260901-finance-production» |
+| **Qué base protege** | D-Code Finance (`crimson-waterfall-36115744`), rama `production` |
+| **Fecha** | 2026-09-01T16:35:35Z |
+| **Frecuencia** | **Ninguna: es manual y de una sola vez.** No hay calendario |
+| **Retención** | Un snapshot manual de Neon no caduca con la ventana de 6 h: persiste hasta que se borre |
+| **D-Code OS** | **Sin ningún snapshot.** Misma exposición, sin cubrir |
+| **Cobertura de los backups a Drive** | Airtable únicamente. Ninguna de las dos bases PostgreSQL |
+
+### Cómo se recuperaría
+
+Restaurar en Neon **no sobrescribe**: crea una rama nueva a partir del
+snapshot, y solo después se decide si se promociona. Por eso es una operación
+segura de ensayar.
+
+1. `list_snapshots(project_id)` — localizar el snapshot por su id.
+2. `restore_snapshot(project_id, snapshot_id)` — Neon crea una rama con el
+   estado guardado. La rama `production` sigue intacta mientras tanto.
+3. Comprobar los datos en la rama nueva con su propia cadena de conexión
+   (`get_connection_string`).
+4. Solo si los datos son correctos, promocionar con `set_default_branch`, o
+   copiar a mano lo que haga falta.
+
+**Lo que no se ha hecho: ensayar la restauración.** Un backup que nunca se ha
+restaurado es una hipótesis, no una copia de seguridad — y decir lo contrario
+sería exactamente el tipo de afirmación sin verificar que esta auditoría
+existe para evitar. El ensayo es seguro (crea una rama aparte, no toca
+producción) y debería hacerse antes de darlo por bueno.

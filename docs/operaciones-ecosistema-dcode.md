@@ -315,3 +315,69 @@ un 301, Hacker News un 502 pasajero. Y de las dos con 404 —Anthropic y Meta—
 se comprobo ademas por busqueda web que **ninguna de las dos publica feed RSS
 oficial**: la URL guardada era una suposicion sobre una ruta convencional que
 nunca existio. No habia nada que reparar.
+
+## 10. El patron que rompio el Executive Board, y donde mas estaba
+
+El informe ejecutivo llego truncado diez de doce dias. La causa no fue el
+modelo: fue como se le pedia la respuesta. Cuatro cosas a la vez:
+
+1. `max_tokens` por debajo de lo que la respuesta necesitaba.
+2. Un esquema de salida sin ningun tope.
+3. Arrays sin limite de elementos.
+4. **El campo mas importante declarado casi al final.** Cuando la respuesta se
+   cortaba, lo primero que se perdia era la decision ejecutiva.
+
+El 01/09/2026 se reviso si el mismo patron estaba en otros procesos de IA.
+
+### Lo que hay que mirar, en este orden
+
+**Primero, la DIRECCION DEL FALLO, no la forma del esquema.** Un array sin
+limite no es un defecto por si solo. Lo que importa es que pasa cuando la
+respuesta llega recortada:
+
+- Si el consumidor no puede parsearla y **bloquea**, el esquema sin topes es
+  aceptable. `RRSS/06 QA-A` es asi: tiene arrays sin limite y campos criticos
+  detras de ellos, pero si el QA no devuelve veredicto valido la pieza se
+  marca REJECTED con el motivo *"un QA caido nunca equivale a un PASS"*. Falla
+  hacia el lado seguro.
+- Si el consumidor **sigue adelante con datos incompletos**, hay defecto,
+  aunque el esquema parezca inofensivo.
+
+**Segundo, si el consumidor DA POR HECHO un tamano.** Este es el fallo
+silencioso, y es el que se encontro en `CF/Investigacion`: el prompt pide
+"EXACTAMENTE 6 ideas" y el codigo reparte estados con `i < 3 ? APROBADA :
+DESCARTADA`. Ese corte solo tiene sentido si hay seis candidatas. Con una
+respuesta recortada de dos ideas, las DOS salian aprobadas y el correo
+anunciaba su "top 3 por score editorial". Un top 3 de dos candidatas no es una
+seleccion: es todo lo que habia, presentado como si se hubiera elegido.
+
+Corregido verificando el recuento antes de repartir estados.
+
+**Tercero, el orden de los campos.** Lo que decide algo va PRIMERO. Si la
+respuesta se corta, que se pierda el detalle, no el veredicto.
+
+### La regla, para lo que se construya despues
+
+> Si un proceso pide a un modelo una respuesta estructurada, el consumidor
+> tiene que **verificar que recibio lo que pidio** antes de usarlo. No basta
+> con que el JSON parsee: si se pidieron seis elementos y llegan dos, eso es
+> un fallo, no un dia flojo.
+
+Y el corolario que evita el otro error: **poner un `max_tokens` bajo no es la
+solucion, es la causa original.** El limite debe ser holgado respecto a la
+salida esperada; la garantia la da la comprobacion en el consumidor.
+
+### Estado de la revision
+
+| Workflow | Riesgo de truncamiento | Veredicto |
+|---|---|---|
+| `DIR/EB Director Estrategico` | Era el origen | Corregido antes |
+| `CF/Investigacion` | Array sin topes + consumidor asumia 6 | **Defecto, corregido** |
+| `RRSS/06 QA-A` | Arrays sin topes, campos criticos detras | Seguro: falla en cerrado |
+| `SP/Tickets IA` | Esquema de 2 campos, critico el primero | Seguro |
+| `MK/Lead IA 360` | 7 campos planos, critico el primero, fallback explicito | Seguro |
+
+Sin revisar todavia: `RRSS/02`, `RRSS/03`, `RRSS/04`, `RRSS/06-B`,
+`CM/Generador de Propuestas IA`, `FNZ/IA Financiera`, `FNZ/Gastos - Registro`,
+`SP/Chat IA Clientes`, `DIR/EB Auditor Interno`. Ninguno se ha declarado
+seguro sin mirarlo.
