@@ -151,6 +151,40 @@ generaciones de propuesta: el documento se generó, Gemini se pagó, y no se gua
 Hace que una tabla vacía emita un item `{}`. Útil cuando el caso vacío tiene su
 propia rama; peligroso cuando aguas abajo se leen campos que no existen.
 
+### Guardar un workflow NO lo publica
+
+La trampa más cara encontrada hasta la fecha, porque no produce ningún error:
+la ejecución sigue saliendo verde mientras produccion corre codigo viejo.
+
+n8n mantiene dos versiones de cada workflow: el **borrador** (lo que se ve y
+se edita) y la **version activa** (lo que ejecutan los disparadores). Guardar
+escribe el borrador. Publicar es un paso aparte. En `get_workflow_details` se
+ven como `versionId` frente a `activeVersionId`, y el campo `activeVersion.
+sameAsDraft: false` lo dice directamente.
+
+**Las ejecuciones manuales corren el BORRADOR; las programadas, la version
+activa.** Por eso una prueba a mano puede salir perfecta y el disparador de
+la manana seguir fallando: no estan ejecutando lo mismo. Este detalle fue lo
+que permitio diagnosticarlo el 01/09/2026, al ver que la misma fuente RSS
+devolvia items reales a las 23:05 (manual) y "NO VERIFICADO" a las 04:30
+(programada).
+
+Casos reales encontrados el 01/09/2026, los dos en workflows activos:
+
+- `DIR/Executive Board - Recolector Externo` — el borrador sustituia el nodo
+  `rssFeedRead` por un HTTP Request con `followRedirects:false` y parser XML
+  propio, es decir **cerraba un agujero de SSRF**. Guardado el 31/08 a las
+  23:00, sin publicar. Produccion llevaba un dia entero con el agujero
+  abierto y el propio codigo activo lo admitia en un comentario.
+- `FNZ/Dashboard - Calculo KPIs` — borrador sin publicar desde el 24/08, ocho
+  dias. Anadia la declaracion, decidida por Direccion, de que la autoridad
+  financiera es D-Code Finance y no Airtable. Sin cambiar ni un importe.
+
+Comprobacion: recorrer los workflows activos y comparar `versionId` con
+`activeVersionId`. Antes de publicar un borrador ajeno, **ejecutarlo y medir
+lo que produce** — y si toca dinero, comparar las dos versiones linea a linea
+antes de tocar nada.
+
 ## 6. Cadencias
 
 Ver `AUD-20260830-CADENCIAS-001` para el análisis completo. Lo esencial:
