@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T12:34:04.379Z",
+  "generatedAt": "2026-09-01T18:26:42.766Z",
   "pageCount": 62,
-  "chunkCount": 718,
+  "chunkCount": 720,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -545,17 +545,22 @@
         {
           "id": "/contacto#c0",
           "heading": "Reclama tu mes de prueba gratuito.",
-          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué Departamento Inteligente te conviene primero y qué resultado puedes esperar del primer mes, sin coste ni compromiso. Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Sin coste. Sin compromiso. Respondemos en menos de 24h."
+          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué Departamento Inteligente te conviene primero y qué resultado puedes esperar del primer mes, sin coste ni compromiso. No aceptamos proyectos nuevos"
         },
         {
           "id": "/contacto#c1",
-          "heading": "Solicitud enviada correctamente",
-          "text": "Hemos recibido tu solicitud. Nuestro equipo la revisará y te escribirá en menos de 24h para contarte qué Departamento Inteligente te conviene empezar primero. Reserva una llamada de 30 min y salta directamente a una conversación — sin pasar por el formulario. Ver preguntas frecuentes"
+          "heading": "Ahora mismo tenemos la agenda llena",
+          "text": "Preferimos decirlo antes de que escribas: en este momento no estamos aceptando solicitudes de proyectos nuevos, asi que hemos cerrado el formulario en lugar de dejar peticiones sin responder. Si quieres hablar igualmente, las dos vias de abajo siguen abiertas y se atienden: puedes reservar una llamada de 30 minutos en el calendario, o escribirnos directamente. dcodedepartment@gmail.com Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Sin coste. Sin compromiso."
         },
         {
           "id": "/contacto#c2",
+          "heading": "Solicitud enviada correctamente",
+          "text": "Hemos recibido tu mensaje. Ahora mismo no estamos aceptando proyectos nuevos, así que no podemos comprometer un plazo de respuesta; si tu caso encaja, te escribiremos en cuanto podamos. Reserva una llamada de 30 min y salta directamente a una conversación — sin pasar por el formulario. Ver preguntas frecuentes"
+        },
+        {
+          "id": "/contacto#c3",
           "heading": "Contacto directo",
-          "text": "Email: dcodedepartment@gmail.com. Teléfono — Diego: 680 22 34 39. Teléfono — Dimitry: 614 54 75 70. Ubicación: Madrid, España. Disponibilidad: Respondemos en menos de 24h."
+          "text": "Email: dcodedepartment@gmail.com. Teléfono — Diego: 680 22 34 39. Teléfono — Dimitry: 614 54 75 70. Ubicación: Madrid, España. Disponibilidad: No aceptamos proyectos nuevos ahora mismo."
         }
       ]
     },
@@ -1841,17 +1846,22 @@
         {
           "id": "/en/contacto#c0",
           "heading": "Claim your free trial month.",
-          "text": "Tell us where your business stands today. In a 30-minute meeting, we'll tell you which Smart Department to start with and what result to expect from month one — no cost, no commitment. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check No cost. No commitment. We respond within 24h."
+          "text": "Tell us where your business stands today. In a 30-minute meeting, we'll tell you which Smart Department to start with and what result to expect from month one — no cost, no commitment. Not taking new projects"
         },
         {
           "id": "/en/contacto#c1",
-          "heading": "Request sent successfully",
-          "text": "We've received your request. Our team will review it and get back to you within 24h to tell you which Smart Department is the best place to start. Book a 30-minute call and jump straight into a conversation — no form needed. See frequently asked questions"
+          "heading": "Our books are full right now",
+          "text": "We would rather say so before you write: we are not accepting new project enquiries at the moment, so we have closed the form instead of leaving requests unanswered. If you would still like to talk, both routes below are open and are answered: book a 30-minute call in the calendar, or email us directly. dcodedepartment@gmail.com Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check No cost. No commitment."
         },
         {
           "id": "/en/contacto#c2",
+          "heading": "Request sent successfully",
+          "text": "We've received your message. We are not taking on new projects at the moment, so we cannot commit to a response time; if your case is a fit, we will write when we can. Book a 30-minute call and jump straight into a conversation — no form needed. See frequently asked questions"
+        },
+        {
+          "id": "/en/contacto#c3",
           "heading": "Contacto directo",
-          "text": "Email: dcodedepartment@gmail.com. Phone — Diego: 680 22 34 39. Phone — Dimitry: 614 54 75 70. Location: Madrid, Spain. Availability: We respond within 24h."
+          "text": "Email: dcodedepartment@gmail.com. Phone — Diego: 680 22 34 39. Phone — Dimitry: 614 54 75 70. Location: Madrid, Spain. Availability: Not taking new projects right now."
         }
       ]
     },
@@ -2602,7 +2612,7 @@
         {
           "id": "/en/faq#c0",
           "heading": "Everything you usually ask us before getting started.",
-          "text": "If you can't find the answer you're looking for, write to us directly — we reply in under 24h."
+          "text": "We are not taking on new projects at the moment. If you still can't find your answer here, write to us and we will read it."
         },
         {
           "id": "/en/faq#c1",
@@ -2712,7 +2722,7 @@
         {
           "id": "/en/faq#c22",
           "heading": "Let's talk directly.",
-          "text": "Book 30 minutes with us, no cost, or write to us and we'll reply in under 24h. Book a Meeting Send an email"
+          "text": "We are not taking on new projects for now. You can still book 30 minutes at no cost if you would like to talk, or write to us. Book a Meeting Send an email"
         }
       ]
     },
@@ -2784,7 +2794,7 @@
         {
           "id": "/en/#c1",
           "heading": "An Operating System for your company, not just another automation.",
-          "text": "Every area of your business —sales, marketing, delivery, finance— can run on its own Smart Department: coordinated with the rest, working every day, without depending on someone remembering to do it. Book a Meeting See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · RESPONSE IN UNDER 24H Protected by Cloudflare GDPR compliant Response &lt; 24h 24/7 Operational €0 Upfront risk 30 days Free trial"
+          "text": "Every area of your business —sales, marketing, delivery, finance— can run on its own Smart Department: coordinated with the rest, working every day, without depending on someone remembering to do it. Book a Meeting See how it works ABSOLUTE CONFIDENTIALITY · GDPR COMPLIANT · BOOKS CURRENTLY FULL Protected by Cloudflare GDPR compliant Books full 24/7 Operational €0 Upfront risk 30 days Free trial"
         },
         {
           "id": "/en/#c2",
@@ -2950,7 +2960,7 @@
         {
           "id": "/en/metodo#c8",
           "heading": "Trust is proven, not declared.",
-          "text": "We're a young company. Rather than make up for that with grand promises or inflated case studies, we'd rather let the implementation itself speak for us during that first month. It's a model that puts the obligation on us, not you: if the system doesn't work, we don't get paid. That aligns our incentives with yours from day one. No proven benefit, no invoice. As simple as that. Claim My Trial Month See all questions"
+          "text": "We're a young company. Rather than make up for that with grand promises or inflated case studies, we'd rather let the implementation itself speak for us during that first month. It's a model that puts the obligation on us, not you: if the system doesn't work, we don't get paid. That aligns our incentives with yours from day one. No proven benefit, no invoice. As simple as that. Talk to us See all questions"
         },
         {
           "id": "/en/metodo#c9",
@@ -3287,7 +3297,7 @@
         {
           "id": "/faq#c0",
           "heading": "Todo lo que sueles preguntarnos antes de empezar.",
-          "text": "Si no encuentras la respuesta que buscas, escríbenos directamente — respondemos en menos de 24h."
+          "text": "Ahora mismo no estamos aceptando proyectos nuevos. Si aun así no encuentras tu respuesta aquí, escríbenos y la leeremos."
         },
         {
           "id": "/faq#c1",
@@ -3397,7 +3407,7 @@
         {
           "id": "/faq#c22",
           "heading": "Hablemos directamente.",
-          "text": "Resérvate 30 minutos sin coste, o escríbenos y te respondemos en menos de 24h. Solicitar una reunión Escribir un email"
+          "text": "No estamos aceptando proyectos nuevos por ahora. Puedes reservar 30 minutos sin coste si quieres hablar igualmente, o escribirnos. Solicitar una reunión Escribir un email"
         }
       ]
     },
@@ -3469,7 +3479,7 @@
         {
           "id": "/#c1",
           "heading": "Un Sistema Operativo para tu empresa, no una automatización más.",
-          "text": "Cada área de tu negocio —comercial, marketing, producción, finanzas— puede funcionar con su propio Departamento Inteligente: coordinado con los demás, trabajando todos los días, sin que dependa de que alguien se acuerde de hacerlo. Solicitar una reunión Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · RESPUESTA EN MENOS DE 24H Protegido con Cloudflare Cumplimiento RGPD Respuesta &lt; 24h 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
+          "text": "Cada área de tu negocio —comercial, marketing, producción, finanzas— puede funcionar con su propio Departamento Inteligente: coordinado con los demás, trabajando todos los días, sin que dependa de que alguien se acuerde de hacerlo. Solicitar una reunión Ver cómo funciona CONFIDENCIALIDAD ABSOLUTA · CUMPLIMIENTO RGPD · AGENDA COMPLETA AHORA MISMO Protegido con Cloudflare Cumplimiento RGPD Agenda completa 24/7 Operativa 0€ Riesgo inicial 30 días Prueba gratis"
         },
         {
           "id": "/#c2",
@@ -3635,7 +3645,7 @@
         {
           "id": "/metodo#c8",
           "heading": "La confianza se demuestra, no se declara.",
-          "text": "Somos una empresa joven. En vez de compensarlo con promesas grandilocuentes o casos inflados, preferimos que sea la propia implementación la que hable por nosotros durante el primer mes. Es un modelo que nos obliga a nosotros, no a ti: si el sistema no funciona, no cobramos. Eso alinea nuestros incentivos con los tuyos desde el primer día. Sin beneficio demostrado, no hay factura. Así de simple. Reclamar mi Mes de Prueba Ver todas las preguntas"
+          "text": "Somos una empresa joven. En vez de compensarlo con promesas grandilocuentes o casos inflados, preferimos que sea la propia implementación la que hable por nosotros durante el primer mes. Es un modelo que nos obliga a nosotros, no a ti: si el sistema no funciona, no cobramos. Eso alinea nuestros incentivos con los tuyos desde el primer día. Sin beneficio demostrado, no hay factura. Así de simple. Hablar con nosotros Ver todas las preguntas"
         },
         {
           "id": "/metodo#c9",
