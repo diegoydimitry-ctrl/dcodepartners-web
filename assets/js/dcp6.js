@@ -1,34 +1,37 @@
 /* ============================================================================
-   D-CODE PARTNERS — CAMPO CONTINUO (portada)
+   D-CODE PARTNERS — EL SISTEMA QUE SE CONSTRUYE  (portada)
    ----------------------------------------------------------------------------
-   UN SOLO SISTEMA PARA TODA LA PÁGINA, con un arco completo.
+   LAS FORMAS NO SON INVENTADAS.
 
-   No hay un gráfico por sección: hay una única materia detrás de todo cuyo
-   estado lo dirige el scroll. Y ese estado cuenta una historia entera:
+   Un campo de puntos puede representar cualquier cosa, y por eso no
+   representa nada. Aquí cada estado se apoya en una estructura reconocible
+   del mundo real, llevada a la abstracción — nunca al dibujo literal:
 
-     CONVERGENCIA  las corrientes entran y se concentran
-     CAOS          el orden se deshace — así llega una empresa
-     AGRUPACIÓN    lo disperso empieza a juntarse por afinidad
-     CONEXIÓN      aparecen las relaciones entre grupos
-     ESTRUCTURA    las partículas se colocan SOBRE el cableado: el esqueleto
-     SISTEMAS      el esqueleto se diferencia en módulos con identidad propia
-     EN MARCHA     los módulos intercambian información: el sistema trabaja
-     OPERANDO      el campo se retira y deja sitio al producto
-     UN SOLO PUNTO todo converge otra vez: la página cierra como abrió
+     1 DESORDEN     rutas que se cruzan mal, trabajo duplicado y trayectos
+                    que acaban en nada. No es ausencia de empresa: es una
+                    empresa funcionando sin sistema.
+     2 PATRONES     las rutas que se repiten quedan acotadas entre marcas de
+                    medida y se superponen: ahí está lo que no se veía.
+     3 AGRUPACIÓN   lo acotado se archiva dentro de bastidores: cada cosa
+                    empieza a saber a qué parte pertenece.
+     4 CONSTRUCCIÓN una celosía se monta pieza a pieza, de abajo arriba, con
+                    sus cartelas en los nudos, sus líneas de replanteo y el
+                    punto de soldadura de cada unión. Dos planos a distinta
+                    profundidad: es una estructura, no un diagrama.
+     5 CANALIZACIÓN sobre esa estructura se tienden canalizaciones en
+                    ortogonal con quiebros a 45°, cajas de registro en los
+                    nudos y dos profundidades de bandeja. Es infraestructura.
+     6 PROCESOS     por esas canalizaciones circula trabajo CON DIRECCIÓN:
+                    origen, recorrido y destino, con colas que se forman y
+                    se vacían en los nudos.
+     7 MÓDULOS      la estructura se resuelve en ocho módulos con conector,
+                    cada uno con su actividad interna. Componentes capaces de
+                    conectarse, no un catálogo.
+     8 RÉGIMEN      todo se retira a los márgenes y sigue funcionando con
+                    ritmo constante. Ya no se construye: opera.
 
-   Dos decisiones que sostienen todo esto:
-
-   1. LOS ESTADOS SALEN DEL DOM, NO DE NÚMEROS FIJOS. Cada sección declara
-      data-state; el motor mide dónde cae y coloca ahí su parada. Si mañana
-      cambia el texto, el estado sigue coincidiendo con su sección.
-
-   2. EN CUALQUIER PUNTO SE VEN DOS ESTADOS MEZCLADOS. Nunca hay un corte:
-      lo que se ve es siempre la interpolación entre el que se va y el que
-      llega, y eso es lo que hace que la página no parezca un collage.
-
-   Brillo: contenido. La luz solo tiene sentido si hay oscuridad alrededor,
-   así que las partículas tienen profundidad (las lejanas son más pequeñas y
-   más tenues) y el núcleo no se quema nunca a blanco puro.
+   Y el arco lo abre y lo cierra el mismo gesto: una convergencia de
+   corrientes en un núcleo, y al final un solo punto.
    ========================================================================= */
 (function () {
   'use strict';
@@ -39,245 +42,221 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var coarse  = window.matchMedia('(pointer: coarse)').matches;
 
-  /* ---------------------------------------------------------------- PALETA */
+  /* Acero frío para la estructura; el color solo marca lo que significa algo. */
+  var STEEL = [150, 178, 226];
   var HUE = [
     [ 77, 208, 225], [ 91, 140, 255], [124, 108, 255],
     [167, 139, 250], [255, 107, 157], [ 45, 212, 191]
   ];
-  /* Tonos de módulo: los mismos que identifican cada capacidad en la web. */
   var MOD_HUE = [
     [ 77, 208, 225], [255, 107, 157], [ 53, 224, 161], [255, 180,  58],
     [ 91, 140, 255], [ 45, 212, 191], [139, 147, 255], [167, 139, 250]
   ];
   function rgba(h, a) { return 'rgba(' + h[0] + ',' + h[1] + ',' + h[2] + ',' + a + ')'; }
+  function sd(i, s) { var x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return x - Math.floor(x); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function ease(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
 
-  /* ------------------------------------------------------------- ESCENARIO */
   var canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
   root.appendChild(canvas);
   var ctx = canvas.getContext('2d', { alpha: false });
 
-  var W = 0, H = 0, dpr = 1, narrow = false;
+  var W = 0, H = 0, dpr = 1, narrow = false, small = false;
   var core = { x: 0, y: 0 };
-  var N = 0, STREAMS = 0;
-  var parts = [], streams = [], clusters = [], modules = [], spines = [];
-
-  function seeded(i, salt) {
-    var x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
-    return x - Math.floor(x);
-  }
+  var streams = [], routes = [], joints = [], members = [], guides = [],
+      trays = [], mods = [], packets = [];
+  var LV = 4, PO = 5;
 
   function measure() {
     dpr = Math.min(window.devicePixelRatio || 1, 1.75);
     W = root.clientWidth; H = root.clientHeight;
-    narrow = W < 900;
+    narrow = W < 900; small = W < 620;
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     core.x = narrow ? W * 0.52 : W * 0.755;
     core.y = narrow ? H * 0.86 : H * 0.44;
-    var target = Math.round((W * H) / 1500);
-    N = Math.max(240, Math.min(reduced ? 420 : 950, target));
-    STREAMS = narrow ? 13 : 26;
     build();
   }
 
+  /* ------------------------------------------------------------ GEOMETRÍAS */
   function build() {
-    /* --- Agrupación: seis núcleos de afinidad repartidos sin simetría. */
-    clusters.length = 0;
-    var CN = narrow ? 4 : 6;
-    for (var c = 0; c < CN; c++) {
-      clusters.push({
-        x: W * (0.16 + 0.68 * seeded(c, 21)),
-        y: H * (0.20 + 0.58 * seeded(c, 22)),
-        hue: HUE[c % HUE.length]
-      });
+    LV = narrow ? 3 : 4;
+    PO = narrow ? 3 : 5;
+
+    /* Corrientes del hero. */
+    var SN = narrow ? 13 : 26;
+    streams.length = 0;
+    for (var s = 0; s < SN; s++) {
+      streams.push({ hue: HUE[s % HUE.length], f: s / (SN - 1) - 0.5,
+                     off: sd(s, 11), w: 0.45 + sd(s, 13) * 0.9 });
     }
 
-    /* --- Arquitectura por capas: entradas, proceso, decisión, salida.
-       No es un suelo cuadriculado: es un sistema con jerarquía. */
-    modules.length = 0; spines.length = 0;
-    var TIERS = narrow ? [[2, .18], [2, .40], [2, .62], [1, .82]]
-                       : [[3, .20], [2, .42], [2, .62], [1, .80]];
-    var idx = 0, tierStart = [];
-    for (var t = 0; t < TIERS.length; t++) {
-      tierStart.push(idx);
-      var n = TIERS[t][0], fy = TIERS[t][1];
-      var span = narrow ? 0.74 : 0.62;
-      for (var q = 0; q < n; q++) {
-        var fx = n === 1 ? 0.5 : 0.5 + (q / (n - 1) - 0.5) * span;
-        modules.push({
-          x: W * fx, y: H * fy,
-          rx: (narrow ? W * 0.15 : W * 0.075), ry: H * 0.055,
-          hue: MOD_HUE[idx % MOD_HUE.length], tier: t
+    /* DESORDEN — rutas reales de una empresa sin sistema: algunas se duplican
+       (dos personas haciendo lo mismo por su cuenta) y otras mueren sin
+       destino (trabajo que no llega a ninguna parte). */
+    routes.length = 0;
+    var RN = small ? 7 : 12;
+    for (var r = 0; r < RN; r++) {
+      var pts = [], n = 3 + Math.floor(sd(r, 2) * 3);
+      for (var k = 0; k < n; k++) {
+        pts.push({ x: W * (0.08 + sd(r * 9 + k, 3) * 0.84),
+                   y: H * (0.10 + sd(r * 9 + k, 4) * 0.80) });
+      }
+      routes.push({
+        pts: pts, hue: HUE[r % HUE.length],
+        // Una de cada tres es copia casi exacta de la anterior: duplicidad.
+        dup: r > 0 && r % 3 === 0,
+        // Una de cada cuatro no llega a ningún sitio.
+        dead: r % 4 === 1,
+        ph: sd(r, 7)
+      });
+      if (routes[r].dup) {
+        var prev = routes[r - 1];
+        routes[r].pts = prev.pts.map(function (p, i2) {
+          return { x: p.x + 26 + sd(r + i2, 5) * 16, y: p.y + 18 + sd(r + i2, 6) * 14 };
         });
-        idx++;
+        routes[r].hue = prev.hue;
+        routes[r].twin = r - 1;
       }
     }
-    for (var t2 = 0; t2 < TIERS.length - 1; t2++) {
-      var a0 = tierStart[t2], a1 = tierStart[t2] + TIERS[t2][0];
-      var b0 = tierStart[t2 + 1], b1 = tierStart[t2 + 1] + TIERS[t2 + 1][0];
-      for (var i2 = a0; i2 < a1; i2++) for (var j2 = b0; j2 < b1; j2++) spines.push([i2, j2]);
+
+    /* CELOSÍA — nudos, miembros y líneas de replanteo, en DOS planos a
+       distinta profundidad para que sea un cuerpo y no un dibujo plano. */
+    joints.length = 0; members.length = 0; guides.length = 0;
+    var x0 = W * (narrow ? 0.10 : 0.30), x1 = W * (narrow ? 0.90 : 0.97);
+    var y0 = H * 0.17, y1 = H * 0.83;
+    var dx = narrow ? W * 0.030 : W * 0.045, dy = -H * 0.055;   // desplazamiento del plano de fondo
+    for (var pl = 0; pl < 2; pl++) {
+      for (var lv = 0; lv < LV; lv++) {
+        for (var po = 0; po < PO; po++) {
+          var fx = PO === 1 ? 0.5 : po / (PO - 1), fy = LV === 1 ? 0.5 : lv / (LV - 1);
+          joints.push({
+            x: lerp(x0, x1, fx) + (pl ? dx : 0),
+            y: lerp(y0, y1, fy) + (pl ? dy : 0),
+            pl: pl, lv: lv, po: po, id: joints.length
+          });
+        }
+      }
+    }
+    function J(pl, lv, po) { return joints[pl * LV * PO + lv * PO + po]; }
+    function push(a, b, kind) {
+      // El orden de montaje es el real: de abajo arriba.
+      members.push({ a: a, b: b, kind: kind, t: 1 - (Math.max(a.y, b.y) - y0) / (y1 - y0 + dy) });
+    }
+    for (var pl2 = 0; pl2 < 2; pl2++) {
+      for (var lv2 = 0; lv2 < LV; lv2++)
+        for (var po2 = 0; po2 < PO - 1; po2++) push(J(pl2, lv2, po2), J(pl2, lv2, po2 + 1), 'beam');
+      for (var lv3 = 0; lv3 < LV - 1; lv3++)
+        for (var po3 = 0; po3 < PO; po3++) push(J(pl2, lv3, po3), J(pl2, lv3 + 1, po3), 'post');
+      for (var lv4 = 0; lv4 < LV - 1; lv4++)
+        for (var po4 = 0; po4 < PO - 1; po4++) {
+          var up = (lv4 + po4) % 2 === 0;
+          push(J(pl2, lv4, up ? po4 : po4 + 1), J(pl2, lv4 + 1, up ? po4 + 1 : po4), 'brace');
+        }
+    }
+    // Riostras entre planos: lo que convierte dos celosías en un volumen.
+    for (var lv5 = 0; lv5 < LV; lv5 += (LV > 3 ? 1 : 1))
+      for (var po5 = 0; po5 < PO; po5 += 2) push(J(0, lv5, po5), J(1, lv5, po5), 'tie');
+    members.sort(function (m1, m2) { return m1.t - m2.t; });
+    members.forEach(function (m, i) { m.t = i / members.length; });
+
+    // Líneas de replanteo: se trazan antes que nada, y sobresalen.
+    for (var lv6 = 0; lv6 < LV; lv6++) {
+      var ja = J(0, lv6, 0), jb = J(0, lv6, PO - 1);
+      guides.push({ ax: ja.x - 46, ay: ja.y, bx: jb.x + 46, by: jb.y });
     }
 
-    /* --- Partículas. z es profundidad: las lejanas son menores y más tenues,
-       y eso es lo que hace que el campo tenga fondo en vez de ser un plano. */
-    parts.length = 0;
-    for (var i = 0; i < N; i++) {
-      var a = seeded(i, 1), b = seeded(i, 2), cc = seeded(i, 3), d = seeded(i, 4);
-      var z = 0.34 + cc * 0.66;
-      parts.push({
-        i: i, hue: HUE[i % HUE.length], z: z,
-        r: (0.5 + d * 1.15) * z,
-        lane: (i % STREAMS) / STREAMS, u: a, sp: (0.0015 + b * 0.0026) * (0.6 + z * 0.6),
-        dx: a, dy: b, dr: cc, dq: d,
-        cl: i % Math.max(1, clusters.length),
-        mo: i % Math.max(1, modules.length),
-        sp2: i % Math.max(1, spines.length),
-        along: d,
-        x: 0, y: 0, px: 0, py: 0, born: false
+    /* CANALIZACIÓN — bandejas ortogonales con quiebro a 45°, dos alturas. */
+    trays.length = 0;
+    var TN = small ? 5 : 10;
+    for (var t2 = 0; t2 < TN; t2++) {
+      var la = Math.floor(sd(t2, 21) * (LV - 1));
+      var pa = Math.floor(sd(t2, 22) * (PO - 1));
+      var pb = Math.min(PO - 1, pa + 1 + Math.floor(sd(t2, 23) * 2));
+      var A = J(0, la, pa), B = J(0, Math.min(LV - 1, la + 1), pb);
+      var off = (sd(t2, 24) - 0.5) * 16;
+      trays.push({
+        A: A, B: B, off: off, deep: sd(t2, 25) > 0.55,
+        hue: MOD_HUE[t2 % MOD_HUE.length]
       });
     }
 
-    streams.length = 0;
-    for (var s = 0; s < STREAMS; s++) {
-      streams.push({
-        hue: HUE[s % HUE.length], f: s / (STREAMS - 1) - 0.5,
-        off: seeded(s, 11), w: 0.45 + seeded(s, 13) * 0.9
+    /* MÓDULOS — ocho componentes con conector, colocados en los vanos. */
+    mods.length = 0;
+    var cols = narrow ? 2 : 4, rows = narrow ? 4 : 2;
+    var mw = (x1 - x0) / cols * 0.74, mh = (y1 - y0) / rows * 0.52;
+    for (var i3 = 0; i3 < 8; i3++) {
+      var c = i3 % cols, rr = Math.floor(i3 / cols);
+      mods.push({
+        x: lerp(x0, x1, cols === 1 ? 0.5 : (c + 0.5) / cols),
+        y: lerp(y0, y1, rows === 1 ? 0.5 : (rr + 0.5) / rows),
+        w: mw, h: mh, hue: MOD_HUE[i3 % 8], i: i3
       });
+    }
+
+    /* PAQUETES — el trabajo que circula. Pocos y con destino. */
+    packets.length = 0;
+    var PN = small ? 26 : 64;
+    for (var q = 0; q < PN; q++) {
+      packets.push({ i: q, tr: q % Math.max(1, trays.length), u: sd(q, 31),
+                     sp: 0.0016 + sd(q, 32) * 0.0026, hue: HUE[q % HUE.length],
+                     wait: 0, dx: sd(q, 33), dy: sd(q, 34) });
     }
   }
 
+  /* ------------------------------------------------------------- PRIMITIVAS */
   function streamPoint(st, u) {
     var e = u * u * (3 - 2 * u);
     if (narrow) {
-      return bez(W * (0.5 + st.f * 1.5), -H * 0.06,
-                 W * (0.5 + st.f * 0.9), H * 0.34,
+      return bez(W * (0.5 + st.f * 1.5), -H * 0.06, W * (0.5 + st.f * 0.9), H * 0.34,
                  core.x - st.f * W * 0.10, core.y - H * 0.10, core.x, core.y, e);
     }
-    return bez(-W * 0.12, core.y + st.f * H * 1.5,
-               W * 0.24, core.y + st.f * H * 1.05,
+    return bez(-W * 0.12, core.y + st.f * H * 1.5, W * 0.24, core.y + st.f * H * 1.05,
                W * 0.52, core.y + st.f * H * 0.30, core.x, core.y, e);
   }
   function bez(x0, y0, x1, y1, x2, y2, x3, y3, t) {
     var m = 1 - t, a = m * m * m, b = 3 * m * m * t, c = 3 * m * t * t, d = t * t * t;
     return { x: a * x0 + b * x1 + c * x2 + d * x3, y: a * y0 + b * y1 + c * y2 + d * y3 };
   }
-
-  /* ============================= LOS NUEVE ESTADOS ======================= */
-
-  function sConverge(p, tm) {                   // 0 · convergencia
-    p.u += p.sp; if (p.u > 1) p.u -= 1;
-    var q = streamPoint(streams[p.i % streams.length], p.u);
-    if (p.u > 0.82) {
-      var g = (p.u - 0.82) / 0.18;
-      var ang = narrow ? seeded(p.i, 5) * 6.2832 : (seeded(p.i, 5) - 0.5) * 1.9;
-      var rad = g * g * (narrow ? H * 0.20 : W * 0.20);
-      q.x = core.x + Math.cos(ang) * rad;
-      q.y = core.y + Math.sin(ang) * rad * (narrow ? 0.8 : 1.05);
+  /* Cartela de nudo: la plaquita que une los miembros en una celosía real. */
+  function plate(j, a, hue) {
+    ctx.save(); ctx.translate(j.x, j.y); ctx.rotate(0.7854);
+    var r = j.pl ? 2.6 : 3.4;
+    ctx.strokeStyle = rgba(hue || STEEL, a); ctx.lineWidth = 1;
+    ctx.strokeRect(-r, -r, r * 2, r * 2);
+    ctx.restore();
+  }
+  /* Recorrido de una bandeja: ortogonal con el quiebro a 45° del final. */
+  function trayPath(t) {
+    var ax = t.A.x, ay = t.A.y + t.off, bx = t.B.x, by = t.B.y + t.off;
+    var mx = bx - Math.sign(bx - ax) * 26;
+    return [{ x: ax, y: ay }, { x: mx, y: ay }, { x: bx, y: by }];
+  }
+  function pointOn(path, u) {
+    var total = 0, segs = [];
+    for (var i = 1; i < path.length; i++) {
+      var d = Math.hypot(path[i].x - path[i - 1].x, path[i].y - path[i - 1].y);
+      segs.push(d); total += d;
     }
-    return q;
+    var want = u * total, acc = 0;
+    for (var k = 1; k < path.length; k++) {
+      if (acc + segs[k - 1] >= want) {
+        var f = (want - acc) / (segs[k - 1] || 1);
+        return { x: lerp(path[k - 1].x, path[k].x, f), y: lerp(path[k - 1].y, path[k].y, f),
+                 ax: path[k].x - path[k - 1].x, ay: path[k].y - path[k - 1].y };
+      }
+      acc += segs[k - 1];
+    }
+    var last = path[path.length - 1];
+    return { x: last.x, y: last.y, ax: 1, ay: 0 };
   }
 
-  function sChaos(p, tm) {                      // 1 · caos
-    var k = 0.4 + p.dr * 0.6;
-    return {
-      x: W * (0.05 + p.dx * 0.90) + Math.sin(tm * 0.00022 + p.i) * 30 * k,
-      y: H * (0.07 + p.dy * 0.86) + Math.cos(tm * 0.00018 + p.i * 1.7) * 26 * k
-    };
-  }
-
-  function sPatterns(p, tm) {                   // 2 · patrones
-    /* Mismas posiciones que el caos, apenas un temblor: aquí no se mueve
-       nada todavía. Lo que cambia es que se ve lo que se repite. */
-    var k = 0.4 + p.dr * 0.6;
-    return {
-      x: W * (0.05 + p.dx * 0.90) + Math.sin(tm * 0.00016 + p.i) * 14 * k,
-      y: H * (0.07 + p.dy * 0.86) + Math.cos(tm * 0.00013 + p.i * 1.7) * 12 * k
-    };
-  }
-
-  function sCluster(p, tm) {                    // 3 · agrupación
-    var c = clusters[p.cl];
-    var ang = p.dx * 6.2832 + tm * 0.00022 * (0.5 + p.dq);
-    var rad = 26 + p.dr * 104;                  // nube ancha, todavía sin orden
-    return { x: c.x + Math.cos(ang) * rad, y: c.y + Math.sin(ang) * rad * 0.78 };
-  }
-
-  function sGraph(p, tm) {                      // 4 · conexión
-    var c = clusters[p.cl];
-    var ang = p.dx * 6.2832 + tm * 0.00034 * (0.5 + p.dq);
-    var rad = 16 + p.dr * 46;                   // los grupos se cierran
-    return { x: c.x + Math.cos(ang) * rad, y: c.y + Math.sin(ang) * rad * 0.8 };
-  }
-
-  function sSkeleton(p, tm) {                   // 5 · estructura
-    /* Las partículas se colocan SOBRE el cableado: se ve el esqueleto del
-       sistema antes de que existan las partes. */
-    var e = spines[p.sp2 % spines.length];
-    var a = modules[e[0]], b = modules[e[1]];
-    var t = (p.along + tm * 0.00004 * (0.4 + p.dq)) % 1;
-    return {
-      x: a.x + (b.x - a.x) * t + Math.sin(tm * 0.0007 + p.i) * 4,
-      y: a.y + (b.y - a.y) * t + Math.cos(tm * 0.0007 + p.i) * 4
-    };
-  }
-
-  function sFlows(p, tm) {                      // 6 · flujos
-    /* Las partículas RECORREN el cableado en vez de quedarse quietas sobre
-       él: la estructura deja de ser un plano y empieza a transportar. */
-    var e = spines[p.sp2 % spines.length];
-    var a = modules[e[0]], b = modules[e[1]];
-    var t = (p.along + tm * 0.00022 * (0.5 + p.dq)) % 1;
-    return {
-      x: a.x + (b.x - a.x) * t,
-      y: a.y + (b.y - a.y) * t + Math.sin(tm * 0.001 + p.i) * 3
-    };
-  }
-
-  function sModules(p, tm) {                    // 7 · sistemas
-    /* El esqueleto se diferencia: cada parte se convierte en un módulo con
-       su propio tono. Es el momento en que aparecen los departamentos. */
-    var m = modules[p.mo];
-    var ang = p.dx * 6.2832 + tm * 0.00042 * (0.4 + p.dq);
-    var rad = 0.30 + p.dr * 0.70;
-    return { x: m.x + Math.cos(ang) * m.rx * rad, y: m.y + Math.sin(ang) * m.ry * rad };
-  }
-
-  function sRunning(p, tm) {                    // 7b · en marcha
-    var m = modules[p.mo];
-    var ang = p.dx * 6.2832 + tm * 0.0011 * (0.5 + p.dq);
-    var rad = 0.24 + p.dr * 0.52 + Math.sin(tm * 0.0016 + p.i) * 0.10;
-    return { x: m.x + Math.cos(ang) * m.rx * rad, y: m.y + Math.sin(ang) * m.ry * rad };
-  }
-
-  function sMargins(p, tm) {                    // 8 · operando (sitio al producto)
-    var left = (p.i % 2) === 0;
-    var edge = left ? W * (0.015 + p.dx * 0.115) : W * (0.87 + p.dx * 0.115);
-    return {
-      x: edge + Math.sin(tm * 0.0003 + p.i) * 12,
-      y: H * (0.04 + p.dy * 0.92) + Math.cos(tm * 0.00025 + p.i) * 14
-    };
-  }
-
-  function sCollapse(p, tm) {                   // 9 · un solo punto
-    var ang = p.dx * 6.2832, rad = 4 + p.dy * 24;
-    return {
-      x: W * 0.5 + Math.cos(ang + tm * 0.0005) * rad,
-      y: H * 0.21 + Math.sin(ang + tm * 0.0005) * rad * 0.85
-    };
-  }
-
-  /* El orden es la historia, y cada estado tiene una sección que lo explica:
-   convergencia · caos · patrones · agrupación · conexiones · estructura ·
-   flujos · sistemas · operando · un solo punto. */
-  var STATES = [sConverge, sChaos, sPatterns, sCluster, sSkeleton,
-                sFlows, sRunning, sMargins, sCollapse];
-
-  /* Las paradas se miden en el DOM: cada sección declara a qué estado
-     pertenece y el motor coloca ahí su parada. Si el contenido cambia, el
-     estado sigue cayendo donde le toca. */
+  /* ------------------------------------------------ ESTADOS (por índice) */
   var STOPS = [];
+  var NST = 9;   // convergencia · desorden · patrones · agrupación ·
+                 // construcción · procesos · módulos · régimen · cierre
   function measureStops() {
     var zones = document.querySelectorAll('[data-state]');
     var d = document.documentElement;
@@ -291,25 +270,26 @@
       found[n] = Math.max(0, Math.min(1, mid / max));
     });
     STOPS = [];
-    for (var i = 0; i < STATES.length; i++) {
-      STOPS[i] = (found[i] !== undefined) ? found[i] : (i / (STATES.length - 1));
-    }
-    // Monótona creciente: una sección nunca puede empezar antes que la anterior.
+    for (var i = 0; i < NST; i++) STOPS[i] = (found[i] !== undefined) ? found[i] : (i / (NST - 1));
     for (var j = 1; j < STOPS.length; j++) if (STOPS[j] <= STOPS[j - 1]) STOPS[j] = STOPS[j - 1] + 0.004;
     var last = STOPS[STOPS.length - 1];
     if (last > 1) for (var k = 0; k < STOPS.length; k++) STOPS[k] /= last;
   }
-
   var wA = 0, wB = 0, iA = 0, iB = 0;
   function weights(P) {
     var i = 0;
     while (i < STOPS.length - 2 && P > STOPS[i + 1]) i++;
     var t = (P - STOPS[i]) / Math.max(0.0001, STOPS[i + 1] - STOPS[i]);
-    t = Math.max(0, Math.min(1, t));
-    t = t * t * (3 - 2 * t);
+    t = Math.max(0, Math.min(1, t)); t = t * t * (3 - 2 * t);
     iA = i; iB = i + 1; wA = 1 - t; wB = t;
   }
-  function weightOf(n) { return (iA === n ? wA : 0) + (iB === n ? wB : 0); }
+  function w(n) { return (iA === n ? wA : 0) + (iB === n ? wB : 0); }
+  /* Progreso DENTRO de un estado: 0 al entrar, 1 al salir. Es lo que permite
+     que algo se construya mientras lees la sección, y no de golpe. */
+  function inside(n) {
+    var a = STOPS[Math.max(0, n - 1)], b = STOPS[Math.min(NST - 1, n + 1)];
+    return ease((Pv - a) / Math.max(0.0001, b - a));
+  }
 
   /* ------------------------------------------------------------- PUNTERO */
   var mx = 0, my = 0, cmx = 0, cmy = 0;
@@ -320,7 +300,6 @@
     }, { passive: true });
   }
 
-  /* --------------------------------------------------------------- SCROLL */
   var P = 0, Pv = 0, ticking = false;
   function readScroll() {
     var d = document.documentElement;
@@ -336,188 +315,286 @@
   function draw(tm, noClear) {
     weights(reduced ? P : Pv);
     cmx += (mx - cmx) * 0.05; cmy += (my - cmy) * 0.05;
-    var ox = cmx * (narrow ? 6 : 20), oy = cmy * (narrow ? 4 : 13);
+    var ox = cmx * (narrow ? 6 : 18), oy = cmy * (narrow ? 4 : 12);
 
     if (!noClear) {
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = reduced ? '#05070e' : 'rgba(5,7,14,0.26)';
+      ctx.fillStyle = reduced ? '#05070e' : 'rgba(5,7,14,0.30)';
       ctx.fillRect(0, 0, W, H);
     }
     ctx.globalCompositeOperation = 'lighter';
-
     var acc = noClear ? 0.12 : 1;
-    var A = STATES[iA], B = STATES[iB];
+    ctx.save(); ctx.translate(ox, oy);
 
-    var conv  = weightOf(0);
-    var patt  = weightOf(2);                       // detección, sin mover nada
-    var group = weightOf(3);                       // agrupación por afinidad
-    var skel  = weightOf(4) + weightOf(5);         // cableado y flujos
-    var mods  = weightOf(6);                       // módulos con identidad
-    var run   = weightOf(6);
-    var coll  = weightOf(8);
-    // Definición creciente: del caos al sistema, el campo gana presencia.
-    var order = weightOf(4) + weightOf(5) + weightOf(6);
+    var conv = w(0), mess = w(1), patt = w(2), grp = w(3),
+        cons = w(4), proc = w(5), modu = w(6), oper = w(7);
+    // Dentro de "Construimos": primero se monta el acero, después se tiende
+    // la instalación. Dos mitades del mismo momento.
+    var insC = inside(4);
+    var raise = ease(Math.min(1, insC / 0.58));          // el acero, primero
+    var lay   = ease(Math.max(0, (insC - 0.46) / 0.48));  // la instalación, después
+    var coll = 0;
+    // El cierre es el último tramo del estado 8: la estructura se va y queda
+    // un punto. Así la página cierra con el mismo gesto con que abrió.
+    if (iA === NST - 2 && iB === NST - 1) coll = 0;
+    if (iA === NST - 1 || (iB === NST - 1 && wB > 0.55)) coll = Math.max(0, (Pv - STOPS[NST - 1]) / Math.max(0.001, 1 - STOPS[NST - 1]));
 
-    /* Núcleo. Nunca blanco puro: azul muy claro con halo largo. */
+    /* ---- NÚCLEO (apertura y cierre) ---- */
     var glow = Math.max(conv, coll);
     if (glow > 0.02 && !noClear) {
-      var gx = coll > conv ? W * 0.5 : core.x + ox * 0.6;
-      var gy = coll > conv ? H * 0.21 : core.y + oy * 0.6;
+      var gx = coll > conv ? W * 0.5 : core.x, gy = coll > conv ? H * 0.21 : core.y;
       var R = (coll > conv ? (narrow ? H * 0.20 : W * 0.13) : (narrow ? H * 0.27 : W * 0.18)) * (0.72 + glow * 0.42);
       var g = ctx.createRadialGradient(gx, gy, 0, gx, gy, R);
       g.addColorStop(0.00, 'rgba(198,222,255,' + (0.30 * glow) + ')');
       g.addColorStop(0.09, 'rgba(140,180,255,' + (0.21 * glow) + ')');
       g.addColorStop(0.26, 'rgba(118,104,240,' + (0.13 * glow) + ')');
       g.addColorStop(1.00, 'rgba(9,12,26,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(gx, gy, R, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(gx, gy, R, 0, 6.2832); ctx.fill();
     }
-
-    /* Corrientes de entrada. */
     if (conv > 0.02) {
       for (var s = 0; s < streams.length; s++) {
         var st = streams[s];
         ctx.beginPath();
-        for (var k = 0; k <= 26; k++) {
-          var q = streamPoint(st, k / 26);
-          if (k === 0) ctx.moveTo(q.x + ox, q.y + oy); else ctx.lineTo(q.x + ox, q.y + oy);
-        }
-        ctx.strokeStyle = rgba(st.hue, 0.052 * conv * acc);
-        ctx.lineWidth = st.w; ctx.stroke();
-
+        for (var k = 0; k <= 26; k++) { var q = streamPoint(st, k / 26);
+          if (k === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y); }
+        ctx.strokeStyle = rgba(st.hue, 0.050 * conv * acc); ctx.lineWidth = st.w; ctx.stroke();
         var head = ((tm * 0.00013) + st.off) % 1;
         ctx.beginPath();
-        for (var m = 0; m <= 8; m++) {
-          var u = head - 0.10 + (m / 8) * 0.10;
-          if (u < 0 || u > 1) continue;
-          var w2 = streamPoint(st, u);
-          if (m === 0) ctx.moveTo(w2.x + ox, w2.y + oy); else ctx.lineTo(w2.x + ox, w2.y + oy);
+        for (var m = 0; m <= 8; m++) { var u = head - 0.10 + (m / 8) * 0.10;
+          if (u < 0 || u > 1) continue; var w2 = streamPoint(st, u);
+          if (m === 0) ctx.moveTo(w2.x, w2.y); else ctx.lineTo(w2.x, w2.y); }
+        ctx.strokeStyle = rgba(st.hue, 0.23 * conv * acc); ctx.lineWidth = st.w * 1.6; ctx.stroke();
+      }
+    }
+
+    /* ---- 1 DESORDEN + 2 PATRONES + 3 AGRUPACIÓN ---- */
+    var live = mess + patt + grp;
+    if (live > 0.02) {
+      var pull = grp;                           // hacia dónde se archiva
+      for (var r = 0; r < routes.length; r++) {
+        var ro = routes[r];
+        // En agrupación cada ruta se recoge dentro de su bastidor.
+        var m0 = mods[r % mods.length];
+        ctx.beginPath();
+        for (var pi = 0; pi < ro.pts.length; pi++) {
+          var pt = ro.pts[pi];
+          var tx = m0.x + (sd(r * 5 + pi, 41) - 0.5) * m0.w * 0.6;
+          var ty = m0.y + (sd(r * 5 + pi, 42) - 0.5) * m0.h * 0.6;
+          var X = lerp(pt.x, tx, ease(pull)), Y = lerp(pt.y, ty, ease(pull));
+          if (pi === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);
         }
-        ctx.strokeStyle = rgba(st.hue, 0.24 * conv * acc);
-        ctx.lineWidth = st.w * 1.6; ctx.stroke();
-      }
-    }
+        var dim = ro.dead ? 0.55 : 1;
+        // Lo duplicado se enciende en PATRONES: es justo lo que se descubre.
+        var hot = ro.dup ? patt : 0;
+        ctx.strokeStyle = rgba(ro.hue, (0.10 * dim * live + 0.30 * hot) * acc);
+        ctx.lineWidth = 1 + hot * 0.8; ctx.stroke();
 
-    /* PATRONES: no se mueve nada, se DETECTA. Se encienden los pares de
-       partículas cercanas que vuelven a coincidir, y ese parpadeo dibuja lo
-       que ya se repetía sin que nadie lo hubiera mirado. */
-    if (patt > 0.05 && !(narrow && W < 560)) {
-      ctx.lineWidth = 1;
-      for (var pi = 0; pi < parts.length; pi += 3) {
-        var p1 = parts[pi], p2 = parts[(pi + 7) % parts.length];
-        var pdx = p1.px - p2.px, pdy = p1.py - p2.py;
-        var pd = Math.sqrt(pdx * pdx + pdy * pdy);
-        if (pd > 190) continue;
-        // Cada pareja late a su ritmo: lo que se repite, se ve repetirse.
-        var beat = 0.5 + 0.5 * Math.sin(tm * 0.0016 + pi * 0.9);
-        ctx.beginPath(); ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py);
-        ctx.strokeStyle = rgba(p1.hue, (1 - pd / 190) * 0.30 * patt * beat * acc);
-        ctx.stroke();
-      }
-    }
-
-    /* Relaciones entre grupos: las conexiones que aparecen antes de que
-       exista una estructura. */
-    if (group > 0.04 && !(narrow && W < 560)) {
-      ctx.lineWidth = 1;
-      for (var a1 = 0; a1 < clusters.length; a1++) {
-        for (var b1 = a1 + 1; b1 < clusters.length; b1++) {
-          var ca = clusters[a1], cb = clusters[b1];
-          var dx1 = cb.x - ca.x, dy1 = cb.y - ca.y;
-          if (Math.sqrt(dx1 * dx1 + dy1 * dy1) > W * 0.52) continue;
+        // El trabajo que muere sin destino: una cruz al final del trayecto.
+        if (ro.dead && mess > 0.2 && pull < 0.4) {
+          var e2 = ro.pts[ro.pts.length - 1];
+          ctx.strokeStyle = rgba([255, 120, 140], 0.32 * mess * acc); ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(ca.x + ox, ca.y + oy); ctx.lineTo(cb.x + ox, cb.y + oy);
-          ctx.strokeStyle = 'rgba(150,180,255,' + (0.055 * group * acc) + ')';
+          ctx.moveTo(e2.x - 4, e2.y - 4); ctx.lineTo(e2.x + 4, e2.y + 4);
+          ctx.moveTo(e2.x + 4, e2.y - 4); ctx.lineTo(e2.x - 4, e2.y + 4); ctx.stroke();
+        }
+        // Marca de medida sobre el par duplicado: acotar es lo que hace ver.
+        if (ro.dup && patt > 0.12 && pull < 0.5) {
+          var xs = ro.pts.map(function (p) { return p.x; }), ys = ro.pts.map(function (p) { return p.y; });
+          var bx0 = Math.min.apply(null, xs) - 10, bx1 = Math.max.apply(null, xs) + 10;
+          var by0 = Math.min.apply(null, ys) - 10, by1 = Math.max.apply(null, ys) + 10;
+          var aa = 0.30 * patt * acc;
+          ctx.strokeStyle = rgba([190, 214, 255], aa); ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bx0 + 7, by0); ctx.lineTo(bx0, by0); ctx.lineTo(bx0, by0 + 7);
+          ctx.moveTo(bx1 - 7, by0); ctx.lineTo(bx1, by0); ctx.lineTo(bx1, by0 + 7);
+          ctx.moveTo(bx0 + 7, by1); ctx.lineTo(bx0, by1); ctx.lineTo(bx0, by1 - 7);
+          ctx.moveTo(bx1 - 7, by1); ctx.lineTo(bx1, by1); ctx.lineTo(bx1, by1 - 7);
           ctx.stroke();
+          // Y el gemelo se superpone: se ve que son la misma forma.
+          var tw = routes[ro.twin];
+          ctx.beginPath();
+          for (var gi = 0; gi < tw.pts.length; gi++) {
+            var gp = tw.pts[gi], sp = ro.pts[Math.min(gi, ro.pts.length - 1)];
+            var GX = lerp(gp.x, sp.x, ease(patt)), GY = lerp(gp.y, sp.y, ease(patt));
+            if (gi === 0) ctx.moveTo(GX, GY); else ctx.lineTo(GX, GY);
+          }
+          ctx.strokeStyle = rgba([214, 236, 255], 0.20 * patt * acc);
+          ctx.setLineDash([3, 4]); ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+        }
+      }
+      // Bastidores del archivado.
+      if (grp > 0.08) {
+        for (var mi = 0; mi < mods.length; mi++) {
+          var mm = mods[mi];
+          ctx.strokeStyle = rgba(mm.hue, 0.18 * grp * acc); ctx.lineWidth = 1;
+          ctx.strokeRect(mm.x - mm.w / 2, mm.y - mm.h / 2, mm.w, mm.h);
         }
       }
     }
 
-    /* Cableado de la arquitectura. */
-    var wire = skel + mods;
-    if (wire > 0.04) {
-      ctx.lineWidth = 1;
-      for (var e = 0; e < spines.length; e++) {
-        var ma = modules[spines[e][0]], mb = modules[spines[e][1]];
+    /* ---- 4 CONSTRUCCIÓN: la celosía se monta pieza a pieza ---- */
+    var frame = cons + proc + modu + oper * 0.4;
+    if (frame > 0.02) {
+      var built = cons > 0 ? raise : 1;                // avance del montaje
+      if (proc + modu > 0) built = 1;
+
+      // Replanteo: lo primero que se traza en una obra.
+      if (cons > 0.05) {
+        ctx.setLineDash([2, 6]);
+        ctx.strokeStyle = rgba(STEEL, 0.10 * cons * acc); ctx.lineWidth = 1;
+        for (var gi2 = 0; gi2 < guides.length; gi2++) {
+          var gg = guides[gi2];
+          ctx.beginPath(); ctx.moveTo(gg.ax, gg.ay); ctx.lineTo(gg.bx, gg.by); ctx.stroke();
+        }
+        ctx.setLineDash([]);
+      }
+
+      var placedIdx = -1;
+      for (var mi2 = 0; mi2 < members.length; mi2++) {
+        var me = members[mi2];
+        var f = Math.max(0, Math.min(1, (built - me.t) / 0.10));
+        if (f <= 0) continue;
+        if (f < 1) placedIdx = mi2;
+        var deep = me.a.pl === 1 || me.b.pl === 1;
+        var base = deep ? 0.13 : 0.26;
+        if (me.kind === 'tie') base = 0.09;
         ctx.beginPath();
-        ctx.moveTo(ma.x + ox, ma.y + oy); ctx.lineTo(mb.x + ox, mb.y + oy);
-        ctx.strokeStyle = 'rgba(146,176,255,' + (0.085 * wire * acc) + ')';
+        ctx.moveTo(me.a.x, me.a.y);
+        ctx.lineTo(lerp(me.a.x, me.b.x, f), lerp(me.a.y, me.b.y, f));
+        ctx.strokeStyle = rgba(STEEL, base * frame * acc);
+        ctx.lineWidth = deep ? 1 : (me.kind === 'brace' ? 1 : 1.5);
         ctx.stroke();
+        // Punto de soldadura: solo mientras esa pieza se está colocando.
+        if (f < 1 && f > 0.02) {
+          var wx = lerp(me.a.x, me.b.x, f), wy = lerp(me.a.y, me.b.y, f);
+          ctx.beginPath(); ctx.arc(wx, wy, 2.4, 0, 6.2832);
+          ctx.fillStyle = rgba([230, 244, 255], 0.85 * acc); ctx.fill();
+          ctx.beginPath(); ctx.arc(wx, wy, 7, 0, 6.2832);
+          ctx.strokeStyle = rgba([160, 200, 255], 0.30 * acc); ctx.lineWidth = 1; ctx.stroke();
+        }
+      }
+      // Cartelas en los nudos ya montados.
+      for (var ji = 0; ji < joints.length; ji++) {
+        var jj = joints[ji];
+        var jf = (built - (1 - (jj.lv / Math.max(1, LV - 1))) * 0.9);
+        if (jf <= 0) continue;
+        plate(jj, (jj.pl ? 0.10 : 0.22) * frame * acc);
       }
     }
 
-    /* Los módulos, cuando ya tienen identidad. Un halo tenue y su filo. */
-    if (mods > 0.05) {
-      for (var mi = 0; mi < modules.length; mi++) {
-        var mo = modules[mi];
-        var mgx = mo.x + ox, mgy = mo.y + oy;
-        var rg = ctx.createRadialGradient(mgx, mgy, 0, mgx, mgy, mo.rx * 1.7);
-        rg.addColorStop(0, rgba(mo.hue, 0.075 * mods * acc));
-        rg.addColorStop(1, rgba(mo.hue, 0));
-        ctx.fillStyle = rg;
-        ctx.beginPath(); ctx.ellipse(mgx, mgy, mo.rx * 1.7, mo.ry * 1.9, 0, 0, 6.2832); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(mgx, mgy, mo.rx, mo.ry, 0, 0, 6.2832);
-        ctx.strokeStyle = rgba(mo.hue, 0.16 * mods * acc); ctx.lineWidth = 1; ctx.stroke();
-      }
-    }
-
-    /* Información viajando entre módulos: el sistema trabajando. */
-    if (run > 0.06) {
-      for (var e2 = 0; e2 < spines.length; e2++) {
-        var sa = modules[spines[e2][0]], sb = modules[spines[e2][1]];
-        for (var pk = 0; pk < 2; pk++) {
-          var t2 = ((tm * 0.00028) + e2 * 0.13 + pk * 0.5) % 1;
-          var px2 = sa.x + (sb.x - sa.x) * t2 + ox;
-          var py2 = sa.y + (sb.y - sa.y) * t2 + oy;
-          var fade = Math.sin(t2 * Math.PI);
-          ctx.beginPath(); ctx.arc(px2, py2, 1.5, 0, 6.2832);
-          ctx.fillStyle = rgba(sb.hue, 0.62 * run * fade * acc); ctx.fill();
+    /* ---- 5 CANALIZACIÓN: bandejas sobre la estructura ---- */
+    var wired = cons * lay + proc + modu;
+    if (wired > 0.03) {
+      if (proc + modu > 0) lay = 1;
+      for (var ti = 0; ti < trays.length; ti++) {
+        var tr = trays[ti], path = trayPath(tr);
+        var fw = Math.max(0, Math.min(1, (lay - ti / trays.length * 0.8) / 0.25));
+        if (fw <= 0) continue;
+        ctx.beginPath();
+        var drawn = pointOn(path, fw);
+        ctx.moveTo(path[0].x, path[0].y);
+        for (var pj = 1; pj < path.length; pj++) {
+          var seg = pointOn(path, Math.min(1, fw));
+          ctx.lineTo(pj === path.length - 1 ? seg.x : path[pj].x, pj === path.length - 1 ? seg.y : path[pj].y);
+          if (pj === path.length - 1) break;
+        }
+        ctx.strokeStyle = rgba(tr.hue, (tr.deep ? 0.10 : 0.22) * wired * acc);
+        ctx.lineWidth = tr.deep ? 1 : 1.8; ctx.stroke();
+        // Caja de registro en el nudo de llegada.
+        if (fw > 0.9) {
+          ctx.strokeStyle = rgba(tr.hue, 0.26 * wired * acc); ctx.lineWidth = 1;
+          ctx.strokeRect(path[path.length - 1].x - 4, path[path.length - 1].y - 4, 8, 8);
         }
       }
     }
 
-    /* Partículas, con profundidad. */
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i];
-      var qa = A(p, tm), qb = B(p, tm);
-      var x = (qa.x * wA + qb.x * wB) + ox * p.z;
-      var y = (qa.y * wA + qb.y * wB) + oy * p.z;
-      if (!p.born) { p.px = x; p.py = y; p.born = true; }
-
-      // Dentro de un módulo la partícula toma el color del módulo: la
-      // diferenciación se ve, no se explica.
-      var hue = p.hue;
-      if (mods > 0.5) hue = modules[p.mo].hue;
-
-      var dxx = x - p.px, dyy = y - p.py;
-      var d2 = dxx * dxx + dyy * dyy;
-      var al = (0.19 + p.dr * 0.30) * p.z * (1 + order * 0.85) * acc;
-
-      if (d2 > 1.2 && d2 < 9000) {
-        ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(x, y);
-        ctx.strokeStyle = rgba(hue, al * 0.5);
-        ctx.lineWidth = p.r * 0.9; ctx.stroke();
+    /* ---- 6 PROCESOS: trabajo con origen, recorrido y destino ---- */
+    if (proc > 0.05 || (modu > 0.05)) {
+      var flowA = Math.max(proc, modu * 0.7);
+      for (var qi = 0; qi < packets.length; qi++) {
+        var pk = packets[qi];
+        if (!trays.length) break;
+        var tr2 = trays[pk.tr % trays.length], path2 = trayPath(tr2);
+        // Cola en el nudo: el trabajo espera y luego sale. Un sistema real
+        // no mueve todo a la vez.
+        if (pk.wait > 0) { pk.wait--; }
+        else {
+          pk.u += pk.sp * (0.5 + flowA);
+          if (pk.u > 0.62 && pk.u - pk.sp <= 0.62 && sd(qi, 51) > 0.55) pk.wait = 20 + sd(qi, 52) * 40;
+          if (pk.u > 1) { pk.u = 0; pk.tr = (pk.tr + 1) % trays.length; }
+        }
+        var pp = pointOn(path2, pk.u);
+        var a2 = (pk.wait > 0 ? 0.34 : 0.80) * flowA * acc;
+        ctx.beginPath(); ctx.arc(pp.x, pp.y, 1.9, 0, 6.2832);
+        ctx.fillStyle = rgba(pk.hue, a2); ctx.fill();
+        // Galón de dirección: se ve HACIA DÓNDE va, no solo que se mueve.
+        if (pk.wait === 0) {
+          var L = Math.hypot(pp.ax, pp.ay) || 1, ux = pp.ax / L, uy = pp.ay / L;
+          ctx.beginPath();
+          ctx.moveTo(pp.x - ux * 6 - uy * 3, pp.y - uy * 6 + ux * 3);
+          ctx.lineTo(pp.x, pp.y);
+          ctx.lineTo(pp.x - ux * 6 + uy * 3, pp.y - uy * 6 - ux * 3);
+          ctx.strokeStyle = rgba(pk.hue, a2 * 0.6); ctx.lineWidth = 1; ctx.stroke();
+        }
       }
-      ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.2832);
-      ctx.fillStyle = rgba(hue, al); ctx.fill();
-
-      p.px = x; p.py = y;
     }
 
-    /* Enlace de cada partícula con su grupo, mientras se están agrupando. */
-    if (group > 0.05 && !(narrow && W < 560)) {
-      ctx.lineWidth = 1;
-      for (var j = 0; j < parts.length; j += 2) {
-        var pp = parts[j], cl = clusters[pp.cl];
-        var ddx = pp.px - (cl.x + ox), ddy = pp.py - (cl.y + oy);
-        var dd = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dd > 130) continue;
+    /* ---- 7 MÓDULOS: componentes con conector y actividad propia ---- */
+    if (modu > 0.05) {
+      for (var mk = 0; mk < mods.length; mk++) {
+        var mo = mods[mk];
+        var x = mo.x - mo.w / 2, y = mo.y - mo.h / 2;
+        var gg2 = ctx.createLinearGradient(x, y, x, y + mo.h);
+        gg2.addColorStop(0, rgba(mo.hue, 0.055 * modu * acc));
+        gg2.addColorStop(1, rgba(mo.hue, 0.012 * modu * acc));
+        ctx.fillStyle = gg2; ctx.fillRect(x, y, mo.w, mo.h);
+        ctx.strokeStyle = rgba(mo.hue, 0.30 * modu * acc); ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, mo.w, mo.h);
+        // Conectores: por aquí se une con los demás. No es una tarjeta.
         ctx.beginPath();
-        ctx.moveTo(pp.px, pp.py); ctx.lineTo(cl.x + ox, cl.y + oy);
-        ctx.strokeStyle = rgba(pp.hue, (1 - dd / 130) * 0.10 * group * acc);
-        ctx.stroke();
+        ctx.moveTo(x + mo.w, mo.y - 7); ctx.lineTo(x + mo.w + 7, mo.y); ctx.lineTo(x + mo.w, mo.y + 7);
+        ctx.moveTo(x, mo.y - 7); ctx.lineTo(x + 7, mo.y); ctx.lineTo(x, mo.y + 7);
+        ctx.strokeStyle = rgba(mo.hue, 0.34 * modu * acc); ctx.stroke();
+        // Actividad interna: barras que laten a su propio ritmo.
+        for (var bi = 0; bi < 4; bi++) {
+          var bw = (0.25 + 0.6 * Math.abs(Math.sin(tm * 0.0011 + mk + bi))) * (mo.w * 0.5);
+          ctx.fillStyle = rgba(mo.hue, 0.16 * modu * acc);
+          ctx.fillRect(x + 10, y + 10 + bi * 7, bw, 2);
+        }
       }
     }
+
+    /* ---- 8 RÉGIMEN: se retira a los márgenes y sigue funcionando ---- */
+    if (oper > 0.05 && coll < 0.5) {
+      var bandsY = 10, o2 = oper * (1 - coll);
+      for (var side = 0; side < 2; side++) {
+        var bx2 = side ? W * 0.955 : W * 0.045;
+        ctx.strokeStyle = rgba(STEEL, 0.12 * o2 * acc); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(bx2, H * 0.10); ctx.lineTo(bx2, H * 0.90); ctx.stroke();
+        for (var bb = 0; bb < bandsY; bb++) {
+          var by2 = lerp(H * 0.12, H * 0.88, bb / (bandsY - 1));
+          var amp = 8 + 12 * Math.abs(Math.sin(tm * 0.0009 + bb * 0.8 + side * 1.7));
+          ctx.strokeStyle = rgba(MOD_HUE[(bb + side * 3) % 8], 0.30 * o2 * acc);
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(bx2 - (side ? amp : 0), by2); ctx.lineTo(bx2 + (side ? 0 : amp), by2); ctx.stroke();
+        }
+      }
+    }
+
+    /* ---- CIERRE: un solo punto ---- */
+    if (coll > 0.04) {
+      for (var ci = 0; ci < packets.length; ci += 2) {
+        var cp = packets[ci];
+        var ang = cp.dx * 6.2832, rad = (4 + cp.dy * 24) * (1 + (1 - coll) * 6);
+        ctx.beginPath();
+        ctx.arc(W * 0.5 + Math.cos(ang + tm * 0.0005) * rad,
+                H * 0.21 + Math.sin(ang + tm * 0.0005) * rad * 0.85, 1.6, 0, 6.2832);
+        ctx.fillStyle = rgba(cp.hue, 0.55 * coll * acc); ctx.fill();
+      }
+    }
+
+    ctx.restore();
   }
 
   /* ---------------------------------------------------------------- BUCLE */
@@ -529,12 +606,7 @@
     if (visible) requestAnimationFrame(loop); else running = false;
   }
   function start() { if (!running && !reduced) { running = true; requestAnimationFrame(loop); } }
-
-  /* Movimiento reducido: exposición larga, quieta y rica. */
-  function drawStill() {
-    draw(0, false);
-    for (var i = 1; i < 40; i++) draw(i * 110, true);
-  }
+  function drawStill() { draw(0, false); for (var i = 1; i < 34; i++) draw(i * 130, true); }
 
   measure(); measureStops(); readScroll(); Pv = P;
   if (reduced) drawStill(); else start();
@@ -542,29 +614,25 @@
   var rt;
   window.addEventListener('resize', function () {
     clearTimeout(rt);
-    rt = setTimeout(function () {
-      measure(); measureStops(); readScroll(); if (reduced) drawStill();
-    }, 180);
+    rt = setTimeout(function () { measure(); measureStops(); readScroll(); if (reduced) drawStill(); }, 180);
   }, { passive: true });
   window.addEventListener('load', function () { measureStops(); readScroll(); });
-
   document.addEventListener('visibilitychange', function () {
     visible = !document.hidden; if (visible) start();
   });
   if (window.IntersectionObserver) {
-    new IntersectionObserver(function (es) {
-      visible = es[0].isIntersecting; if (visible) start();
-    }, { threshold: 0 }).observe(root);
+    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); },
+                             { threshold: 0 }).observe(root);
   }
 
-  /* ------------------------------- EL ESTADO, EN PALABRAS ---------------- */
+  /* --------------------------------- EL ESTADO, EN PALABRAS -------------- */
   var label = document.querySelector('[data-field-state]');
   if (label) {
     var NAMES = (label.getAttribute('data-names') || '').split('|');
     var last = -1;
     label.style.transition = 'opacity .22s ease';
     (function sync() {
-      var idx = (wB >= wA) ? iB : iA;   // el estado dominante, no el anterior
+      var idx = (wB >= wA) ? iB : iA;
       if (idx !== last && NAMES[idx]) {
         last = idx;
         label.style.opacity = 0;

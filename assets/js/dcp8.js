@@ -49,6 +49,11 @@
   var ctx = canvas.getContext('2d', { alpha: false });
 
   var W = 0, H = 0, dpr = 1, narrow = false, small = false;
+  var FW = 0, FH = 0, OFFX = 0, OFFY = 0;
+  /* Instrumentos que trabajan en una banda propia en vez de a pantalla
+     completa: son los de las ocho fichas, donde el texto ocupa casi todo. */
+  var BANDED = { comercial:1, marketing:1, clientes:1, produccion:1,
+                 finanzas:1, soporte:1, administracion:1, direccion:1 };
   var P = 0, Pv = 0;                       // avance de scroll 0..1
   var mx = 0.5, my = 0.5, cmx = 0.5, cmy = 0.5;
   var inst = null;
@@ -68,17 +73,28 @@
 
   function measure() {
     dpr = Math.min(window.devicePixelRatio || 1, 1.75);
-    W = host.clientWidth; H = host.clientHeight;
-    narrow = W < 900; small = W < 620;
-    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    FW = host.clientWidth; FH = host.clientHeight;
+    canvas.width = Math.round(FW * dpr); canvas.height = Math.round(FH * dpr);
+    canvas.style.width = FW + 'px'; canvas.style.height = FH + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (BANDED[NAME] && FW >= 900) {
+      OFFX = FW * 0.44; OFFY = FH * 0.26;
+      W = FW * 0.55; H = FH * 0.70;
+    } else if (BANDED[NAME]) {
+      OFFX = 0; OFFY = FH * 0.42;
+      W = FW; H = FH * 0.56;
+    } else { OFFX = 0; OFFY = 0; W = FW; H = FH; }
+    narrow = W < 900; small = W < 620;
     if (inst && inst.build) inst.build();
   }
   function clear(alpha) {
+    // Se limpia el lienzo ENTERO aunque el instrumento trabaje en su banda:
+    // si no, la estela quedaría recortada en un rectángulo visible.
+    ctx.save(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = reduced ? '#05070e' : 'rgba(5,7,14,' + (alpha || 0.24) + ')';
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, FW, FH);
+    ctx.restore();
     ctx.globalCompositeOperation = 'lighter';
   }
 
@@ -784,9 +800,16 @@
         for (var i = 0; i < tiles.length; i++) {
           var t = tiles[i];
           // Cada pieza encaja con un pequeño desfase: se ve el ensamblaje.
-          var f = ease(Math.max(0, Math.min(1, (fit - i * 0.045) / 0.5)));
+          var raw = Math.max(0, Math.min(1, (fit - i * 0.045) / 0.5));
+          // Rebote de asentamiento: la pieza sobrepasa su hueco y vuelve.
+          // Encajar cuesta; si entra sin resistencia no se percibe el encaje.
+          var f = raw < 1
+            ? ease(raw) + Math.sin(raw * Math.PI) * 0.10 * Math.sin(raw * 12 + i)
+            : 1;
           var x = lerp(t.sx, t.tx, f), y = lerp(t.sy, t.ty, f);
-          var rot = lerp(t.rot, 0, f) + (1 - f) * Math.sin(tm * 0.0004 + i) * 0.12;
+          // Y gira hasta el último momento, resistiéndose a alinearse.
+          var rot = lerp(t.rot, 0, ease(Math.pow(raw, 1.6)))
+                  + (1 - raw) * Math.sin(tm * 0.0006 + i) * 0.16;
           var sc = lerp(t.sc, 1, f);
           var w = t.w * sc, h = t.h * sc;
 
@@ -802,12 +825,13 @@
           ctx.strokeStyle = rgba(t.hue, 0.16 + 0.30 * f);
           ctx.lineWidth = 1;
           ctx.strokeRect(-w / 2 + 3, -h / 2 + 3, w - 6, h - 6);
-          // Muescas de encaje en los cantos: la pieza tiene por dónde unirse.
-          if (f > 0.25) {
-            ctx.strokeStyle = rgba(t.hue, 0.30 * f);
+          // Muescas de encaje: aparecen ANTES de que la pieza llegue, para
+          // que se vea por dónde va a unirse.
+          if (raw > 0.18) {
+            ctx.strokeStyle = rgba(t.hue, 0.24 + 0.32 * raw);
             ctx.beginPath();
-            ctx.moveTo(w / 2 - 3, -8); ctx.lineTo(w / 2 - 3 + 6 * f, 0); ctx.lineTo(w / 2 - 3, 8);
-            ctx.moveTo(-w / 2 + 3, -8); ctx.lineTo(-w / 2 + 3 + 6 * f, 0); ctx.lineTo(-w / 2 + 3, 8);
+            ctx.moveTo(w / 2 - 3, -9); ctx.lineTo(w / 2 - 3 + 8 * raw, 0); ctx.lineTo(w / 2 - 3, 9);
+            ctx.moveTo(-w / 2 + 3, -9); ctx.lineTo(-w / 2 + 3 + 8 * raw, 0); ctx.lineTo(-w / 2 + 3, 9);
             ctx.stroke();
           }
           ctx.restore();
@@ -836,6 +860,397 @@
     };
   })();
 
+
+  /* ====================================================================== */
+  /*  LAS OCHO CAPACIDADES                                                  */
+  /*  Una identidad, ocho instrumentos. Cada uno se apoya en una estructura  */
+  /*  reconocible de lo que ESA capacidad hace, no en geometría decorativa.  */
+  /* ====================================================================== */
+
+  /* COMERCIAL — "El barrido". Un barrido recorre el campo; lo que encuentra
+     queda acotado y sale convertido en una trayectoria. Detectar y convertir. */
+  INSTR.comercial = (function () {
+    var marks = [], shots = [];
+    return {
+      build: function () {
+        marks.length = 0; shots.length = 0;
+        var n = small ? 16 : 40;
+        for (var i = 0; i < n; i++) {
+          marks.push({ x: W * (0.06 + sd(i, 2) * 0.60), y: H * (0.10 + sd(i, 3) * 0.80),
+                       hot: sd(i, 4) > 0.76, seen: 0 });
+        }
+      },
+      draw: function (tm) {
+        clear(0.30);
+        var sweep = ((tm * 0.00011) % 1) * W * 0.72;
+        // El barrido.
+        var g = ctx.createLinearGradient(sweep - 90, 0, sweep, 0);
+        g.addColorStop(0, rgba(C.cian, 0)); g.addColorStop(1, rgba(C.cian, 0.40));
+        ctx.strokeStyle = g; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(sweep, H * 0.06); ctx.lineTo(sweep, H * 0.94); ctx.stroke();
+
+        for (var i = 0; i < marks.length; i++) {
+          var m = marks[i];
+          if (m.seen < 1 && Math.abs(m.x - sweep) < 4) {
+            m.seen = 1;
+            if (m.hot) shots.push({ x: m.x, y: m.y, u: 0, ty: H * (0.3 + sd(i, 9) * 0.4) });
+          }
+          if (sweep < m.x - 20) m.seen = 0;
+          ctx.beginPath(); ctx.arc(m.x, m.y, m.hot ? 2.2 : 1.4, 0, 6.2832);
+          ctx.fillStyle = rgba(m.hot ? C.cian : [130, 150, 190], m.hot ? 0.72 : 0.34); ctx.fill();
+          // Lo que importa queda acotado entre marcas: se ha encontrado algo.
+          if (m.hot && m.seen) {
+            ctx.strokeStyle = rgba(C.cian, 0.52); ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(m.x - 9, m.y - 5); ctx.lineTo(m.x - 9, m.y + 5);
+            ctx.moveTo(m.x + 9, m.y - 5); ctx.lineTo(m.x + 9, m.y + 5); ctx.stroke();
+          }
+        }
+        // Y sale convertido en una conversación.
+        for (var k = shots.length - 1; k >= 0; k--) {
+          var sh = shots[k]; sh.u += 0.006;
+          if (sh.u > 1) { shots.splice(k, 1); continue; }
+          var x = lerp(sh.x, W * 0.94, ease(sh.u)), y = lerp(sh.y, sh.ty, ease(sh.u));
+          ctx.beginPath(); ctx.moveTo(lerp(sh.x, W * 0.94, ease(Math.max(0, sh.u - 0.08))),
+                                      lerp(sh.y, sh.ty, ease(Math.max(0, sh.u - 0.08))));
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = rgba(C.violeta, 0.5 * (1 - sh.u)); ctx.lineWidth = 1.6; ctx.stroke();
+          ctx.beginPath(); ctx.arc(x, y, 2.2, 0, 6.2832);
+          ctx.fillStyle = rgba([220, 240, 255], 0.7 * (1 - sh.u)); ctx.fill();
+        }
+      }
+    };
+  })();
+
+  /* MARKETING — "La propagación". Frentes de onda que salen de unos emisores
+     y encienden a quien alcanzan. Lo alcanzado ya no se apaga. */
+  INSTR.marketing = (function () {
+    var rx = [], em = [];
+    return {
+      build: function () {
+        rx.length = 0; em.length = 0;
+        var n = small ? 40 : 130;
+        for (var i = 0; i < n; i++) rx.push({ x: W * sd(i, 2), y: H * sd(i, 3), lit: 0 });
+        em.push({ x: W * 0.18, y: H * 0.30, t: 0.0 });
+        em.push({ x: W * 0.30, y: H * 0.72, t: 0.4 });
+        if (!small) em.push({ x: W * 0.12, y: H * 0.55, t: 0.75 });
+      },
+      draw: function (tm) {
+        clear(0.26);
+        var R = Math.max(W, H) * 1.2;
+        for (var e = 0; e < em.length; e++) {
+          var E = em[e];
+          for (var w2 = 0; w2 < 3; w2++) {
+            var u = (((tm * 0.00009) + E.t + w2 * 0.33) % 1);
+            var rad = u * R;
+            ctx.beginPath(); ctx.arc(E.x, E.y, rad, 0, 6.2832);
+            ctx.strokeStyle = rgba(C.rosa, 0.26 * (1 - u)); ctx.lineWidth = 1.4; ctx.stroke();
+            for (var i2 = 0; i2 < rx.length; i2++) {
+              var p2 = rx[i2];
+              var d = Math.hypot(p2.x - E.x, p2.y - E.y);
+              if (Math.abs(d - rad) < 7) p2.lit = 1;
+            }
+          }
+          ctx.beginPath(); ctx.arc(E.x, E.y, 3, 0, 6.2832);
+          ctx.fillStyle = rgba(C.rosa, 0.7); ctx.fill();
+        }
+        for (var i3 = 0; i3 < rx.length; i3++) {
+          var p3 = rx[i3];
+          p3.lit *= 0.9975;                       // el alcance se mantiene
+          ctx.beginPath(); ctx.arc(p3.x, p3.y, 1.3 + p3.lit * 1.1, 0, 6.2832);
+          ctx.fillStyle = rgba(p3.lit > 0.15 ? C.rosa : [122, 140, 178], 0.26 + p3.lit * 0.55);
+          ctx.fill();
+        }
+      }
+    };
+  })();
+
+  /* CLIENTES — "La continuidad". Hilos que no se cortan: cada cliente es una
+     línea de tiempo con sus hitos, y el sistema recuerda todos los anteriores. */
+  INSTR.clientes = (function () {
+    var lines = [];
+    return {
+      build: function () {
+        lines.length = 0;
+        var n = small ? 5 : 9;
+        for (var i = 0; i < n; i++) {
+          var ev = [];
+          for (var k = 0; k < 6; k++) ev.push(0.08 + sd(i * 7 + k, 5) * 0.84);
+          ev.sort();
+          lines.push({ y: H * (0.12 + (i / (n - 1)) * 0.76), ev: ev, hue: [C.verde, C.turq, C.cian][i % 3] });
+        }
+      },
+      draw: function (tm) {
+        clear(0.28);
+        var now = ((tm * 0.00007) % 1);
+        for (var i = 0; i < lines.length; i++) {
+          var L = lines[i];
+          // La línea completa existe siempre: la relación no empieza de cero.
+          ctx.beginPath(); ctx.moveTo(W * 0.05, L.y); ctx.lineTo(W * 0.95, L.y);
+          ctx.strokeStyle = rgba(L.hue, 0.24); ctx.lineWidth = 1.2; ctx.stroke();
+          // Lo ya vivido queda marcado, con más peso cuanto más reciente.
+          ctx.beginPath(); ctx.moveTo(W * 0.05, L.y); ctx.lineTo(lerp(W * 0.05, W * 0.95, now), L.y);
+          ctx.strokeStyle = rgba(L.hue, 0.58); ctx.lineWidth = 1.9; ctx.stroke();
+          for (var k2 = 0; k2 < L.ev.length; k2++) {
+            var ex = lerp(W * 0.05, W * 0.95, L.ev[k2]);
+            var past = L.ev[k2] <= now;
+            ctx.beginPath(); ctx.arc(ex, L.y, past ? 3 : 2, 0, 6.2832);
+            ctx.fillStyle = rgba(L.hue, past ? 0.78 : 0.24); ctx.fill();
+            if (past) {   // memoria: cada hito deja su marca hacia atrás
+              ctx.beginPath(); ctx.moveTo(ex, L.y - 6); ctx.lineTo(ex, L.y + 6);
+              ctx.strokeStyle = rgba(L.hue, 0.20); ctx.lineWidth = 1; ctx.stroke();
+            }
+          }
+          var hx = lerp(W * 0.05, W * 0.95, now);
+          ctx.beginPath(); ctx.arc(hx, L.y, 2.4, 0, 6.2832);
+          ctx.fillStyle = rgba([220, 245, 255], 0.75); ctx.fill();
+        }
+      }
+    };
+  })();
+
+  /* PRODUCCIÓN — "El ensamblaje". Piezas que entran por la cinta y se montan
+     una sobre otra hasta que la unidad sale terminada. Y vuelta a empezar. */
+  INSTR.produccion = (function () {
+    var cycle = 0;
+    return {
+      build: function () {},
+      draw: function (tm) {
+        clear(0.30);
+        var beltY = H * 0.80, bx0 = W * 0.06, bx1 = W * 0.94;
+        // La cinta.
+        ctx.strokeStyle = rgba([140, 162, 205], 0.26); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(bx0, beltY); ctx.lineTo(bx1, beltY); ctx.stroke();
+        for (var t = 0; t < 26; t++) {
+          var tx = bx0 + ((t / 26 + (tm * 0.00013)) % 1) * (bx1 - bx0);
+          ctx.beginPath(); ctx.moveTo(tx, beltY); ctx.lineTo(tx, beltY + 6);
+          ctx.strokeStyle = rgba([140, 162, 205], 0.20); ctx.stroke();
+        }
+        var u = ((tm * 0.00011) % 1);
+        var station = W * 0.55;
+        var PARTS = small ? 4 : 6;
+        // Piezas entrando y apilándose en la estación de montaje.
+        for (var i = 0; i < PARTS; i++) {
+          var pu = (u * PARTS - i);
+          if (pu < 0) continue;
+          var w2 = (small ? 46 : 76) - i * 6, h2 = 12;
+          if (pu < 1) {
+            var px = lerp(bx0, station, ease(pu));
+            ctx.strokeStyle = rgba(C.ambar, 0.58); ctx.lineWidth = 1.3;
+            ctx.strokeRect(px - w2 / 2, beltY - h2 - 3, w2, h2);
+          } else {
+            var stackY = beltY - 15 - i * (h2 + 4);
+            ctx.fillStyle = rgba(C.ambar, 0.09); ctx.fillRect(station - w2 / 2, stackY, w2, h2);
+            ctx.strokeStyle = rgba(C.ambar, 0.56); ctx.lineWidth = 1.3;
+            ctx.strokeRect(station - w2 / 2, stackY, w2, h2);
+            // El punto de unión de cada pieza con la anterior.
+            if (i > 0) { ctx.beginPath(); ctx.arc(station, stackY + h2, 1.8, 0, 6.2832);
+              ctx.fillStyle = rgba([235, 245, 255], 0.6); ctx.fill(); }
+          }
+        }
+        // La unidad terminada sale por la derecha.
+        if (u > 0.86) {
+          var ou = (u - 0.86) / 0.14;
+          var ox2 = lerp(station, bx1 + 60, ease(ou));
+          ctx.globalAlpha = 1 - ou;
+          for (var j = 0; j < PARTS; j++) {
+            var jw = (small ? 46 : 76) - j * 6;
+            ctx.strokeStyle = rgba(C.verde, 0.5); ctx.lineWidth = 1.2;
+            ctx.strokeRect(ox2 - jw / 2, beltY - 15 - j * 16, jw, 12);
+          }
+          ctx.globalAlpha = 1;
+        }
+      }
+    };
+  })();
+
+  /* FINANZAS — "El equilibrio". Lo que entra y lo que sale, en sentidos
+     opuestos, y un nivel que busca su punto de equilibrio. */
+  INSTR.finanzas = (function () {
+    var level = 0.5;
+    return {
+      build: function () {},
+      draw: function (tm) {
+        clear(0.28);
+        var midY = H * 0.5, span = W * 0.86, x0 = W * 0.07;
+        var inFlow = 0.5 + 0.5 * Math.sin(tm * 0.00035);
+        var outFlow = 0.5 + 0.5 * Math.sin(tm * 0.00035 + 2.1);
+        level += ((0.5 + (inFlow - outFlow) * 0.3) - level) * 0.02;
+
+        // Entradas: hacia la derecha, por arriba.
+        for (var i = 0; i < (small ? 10 : 22); i++) {
+          var u = ((tm * 0.00022) + i / 22) % 1;
+          var y = midY - 26 - (i % 3) * 9;
+          ctx.beginPath(); ctx.moveTo(x0 + u * span - 14, y); ctx.lineTo(x0 + u * span, y);
+          ctx.strokeStyle = rgba(C.verde, 0.48 * inFlow); ctx.lineWidth = 1.5; ctx.stroke();
+        }
+        // Salidas: hacia la izquierda, por abajo.
+        for (var k = 0; k < (small ? 10 : 22); k++) {
+          var u2 = ((tm * 0.00019) + k / 22) % 1;
+          var y2 = midY + 26 + (k % 3) * 9;
+          ctx.beginPath(); ctx.moveTo(x0 + span - u2 * span + 14, y2); ctx.lineTo(x0 + span - u2 * span, y2);
+          ctx.strokeStyle = rgba(C.rosa, 0.44 * outFlow); ctx.lineWidth = 1.5; ctx.stroke();
+        }
+        // El fiel de la balanza.
+        var ly = midY + (level - 0.5) * H * 0.22;
+        var g = ctx.createLinearGradient(x0, ly, x0 + span, ly);
+        g.addColorStop(0, rgba(C.azul, 0)); g.addColorStop(0.5, rgba(C.azul, 0.5)); g.addColorStop(1, rgba(C.azul, 0));
+        ctx.strokeStyle = g; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x0, ly); ctx.lineTo(x0 + span, ly); ctx.stroke();
+        ctx.setLineDash([2, 6]);
+        ctx.strokeStyle = rgba([150, 174, 245], 0.14); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(x0, midY); ctx.lineTo(x0 + span, midY); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    };
+  })();
+
+  /* SOPORTE — "La reparación". Aparecen roturas en el servicio y una pasada
+     las cierra. Lo reparado vuelve a ser continuo. */
+  INSTR.soporte = (function () {
+    var lines2 = [];
+    return {
+      build: function () {
+        lines2.length = 0;
+        var n = small ? 7 : 13;
+        for (var i = 0; i < n; i++) {
+          lines2.push({ y: H * (0.10 + (i / (n - 1)) * 0.80),
+                        brk: sd(i, 3) * 0.7 + 0.15, w: 0.05 + sd(i, 4) * 0.10,
+                        fix: 0, next: sd(i, 5) });
+        }
+      },
+      draw: function (tm) {
+        clear(0.30);
+        var pass = ((tm * 0.00013) % 1);
+        for (var i = 0; i < lines2.length; i++) {
+          var L = lines2[i];
+          var a = W * 0.06, b = W * 0.94;
+          var b0 = lerp(a, b, L.brk), b1 = lerp(a, b, L.brk + L.w);
+          // La pasada de reparación va cerrando lo que encuentra roto.
+          if (Math.abs(pass - L.brk) < 0.02) L.fix = 1;
+          if (pass < 0.03) L.fix *= 0.0;
+          var closed = L.fix;
+          ctx.strokeStyle = rgba(closed > 0.5 ? C.verde : [150, 170, 210], closed > 0.5 ? 0.44 : 0.28);
+          ctx.lineWidth = 1.3;
+          if (closed > 0.5) {
+            ctx.beginPath(); ctx.moveTo(a, L.y); ctx.lineTo(b, L.y); ctx.stroke();
+            ctx.beginPath(); ctx.arc((b0 + b1) / 2, L.y, 3.2, 0, 6.2832);
+            ctx.strokeStyle = rgba(C.verde, 0.42); ctx.stroke();
+          } else {
+            ctx.beginPath(); ctx.moveTo(a, L.y); ctx.lineTo(b0, L.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(b1, L.y); ctx.lineTo(b, L.y); ctx.stroke();
+            ctx.strokeStyle = rgba([255, 120, 140], 0.42); ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(b0, L.y - 5); ctx.lineTo(b0 + 5, L.y + 5);
+            ctx.moveTo(b1, L.y - 5); ctx.lineTo(b1 - 5, L.y + 5); ctx.stroke();
+          }
+        }
+        var px = lerp(W * 0.06, W * 0.94, pass);
+        var g = ctx.createLinearGradient(px, 0, px + 40, 0);
+        g.addColorStop(0, rgba(C.turq, 0.34)); g.addColorStop(1, rgba(C.turq, 0));
+        ctx.strokeStyle = g; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(px, H * 0.06); ctx.lineTo(px, H * 0.94); ctx.stroke();
+      }
+    };
+  })();
+
+  /* ADMINISTRACIÓN — "El archivo". Lo que llega cae, se coloca en su casilla
+     indexada y queda sellado. Orden y permanencia. */
+  INSTR.administracion = (function () {
+    var slots = [], drops = [];
+    return {
+      build: function () {
+        slots.length = 0; drops.length = 0;
+        var cols = small ? 4 : 9, rows = small ? 7 : 6;
+        var gw = W * 0.80, gh = H * 0.56, ox = (W - gw) / 2, oy = H * 0.30;
+        for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+          slots.push({ x: ox + (c + 0.5) * (gw / cols), y: oy + (r + 0.5) * (gh / rows),
+                       w: gw / cols - 6, h: gh / rows - 5, full: 0 });
+        }
+      },
+      draw: function (tm) {
+        clear(0.32);
+        if (drops.length < 5 && Math.random() < 0.05) {
+          var free = [];
+          for (var i = 0; i < slots.length; i++) if (!slots[i].full) free.push(i);
+          if (free.length) drops.push({ s: free[Math.floor(Math.random() * free.length)],
+                                        x: W * (0.1 + Math.random() * 0.8), y: -20, u: 0 });
+        }
+        for (var k = 0; k < slots.length; k++) {
+          var s2 = slots[k];
+          ctx.strokeStyle = rgba([140, 164, 210], s2.full ? 0.38 : 0.19); ctx.lineWidth = 1;
+          ctx.strokeRect(s2.x - s2.w / 2, s2.y - s2.h / 2, s2.w, s2.h);
+          if (s2.full) {
+            ctx.fillStyle = rgba(C.lav, 0.10); ctx.fillRect(s2.x - s2.w / 2, s2.y - s2.h / 2, s2.w, s2.h);
+            // Sello: lo archivado queda cerrado.
+            ctx.strokeStyle = rgba(C.lav, 0.50); ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(s2.x - 4, s2.y); ctx.lineTo(s2.x - 1, s2.y + 3); ctx.lineTo(s2.x + 5, s2.y - 3);
+            ctx.stroke();
+          }
+        }
+        for (var d = drops.length - 1; d >= 0; d--) {
+          var D = drops[d], S = slots[D.s];
+          D.u += 0.016;
+          if (D.u >= 1) { S.full = 1; drops.splice(d, 1); continue; }
+          var x = lerp(D.x, S.x, ease(D.u)), y = lerp(-20, S.y, ease(D.u));
+          ctx.strokeStyle = rgba(C.lav, 0.55); ctx.lineWidth = 1.2;
+          ctx.strokeRect(x - 7, y - 5, 14, 10);
+        }
+      }
+    };
+  })();
+
+  /* DIRECCIÓN — "La lectura del conjunto". Todo el sistema en miniatura y un
+     retículo que se posa sobre una parte y la lee. Ver el todo y decidir. */
+  INSTR.direccion = (function () {
+    var cells = [], focus = 0, hold = 0;
+    return {
+      build: function () {
+        cells.length = 0;
+        var cols = small ? 3 : 6, rows = small ? 4 : 3;
+        var gw = W * 0.78, gh = H * 0.56, ox = (W - gw) / 2, oy = H * 0.24;
+        for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+          cells.push({ x: ox + (c + 0.5) * (gw / cols), y: oy + (r + 0.5) * (gh / rows),
+                       w: gw / cols * 0.82, h: gh / rows * 0.72,
+                       hue: [C.cian, C.rosa, C.verde, C.ambar, C.azul, C.turq][(r * cols + c) % 6],
+                       k: sd(r * cols + c, 3) });
+        }
+        focus = 0; hold = 0;
+      },
+      draw: function (tm) {
+        clear(0.30);
+        hold++;
+        if (hold > 150) { hold = 0; focus = (focus + 1) % Math.max(1, cells.length); }
+        for (var i = 0; i < cells.length; i++) {
+          var c = cells[i], on = i === focus;
+          ctx.strokeStyle = rgba(c.hue, on ? 0.50 : 0.20); ctx.lineWidth = 1;
+          ctx.strokeRect(c.x - c.w / 2, c.y - c.h / 2, c.w, c.h);
+          // Cada parte muestra su propia actividad en pequeño.
+          var bars = 5;
+          for (var b = 0; b < bars; b++) {
+            var v = 0.2 + 0.8 * Math.abs(Math.sin(tm * 0.0008 + i * 1.3 + b));
+            var bh = (c.h - 12) * v * 0.5;
+            ctx.fillStyle = rgba(c.hue, on ? 0.48 : 0.22);
+            ctx.fillRect(c.x - c.w / 2 + 7 + b * ((c.w - 14) / bars),
+                         c.y + c.h / 2 - 6 - bh, Math.max(2, (c.w - 14) / bars - 3), bh);
+          }
+        }
+        // El retículo: mirar es elegir dónde mirar.
+        var f = cells[focus]; if (!f) return;
+        var e = ease(Math.min(1, hold / 24));
+        ctx.strokeStyle = rgba([210, 232, 255], 0.42 * e); ctx.lineWidth = 1;
+        var R = 14;
+        ctx.beginPath();
+        ctx.moveTo(f.x - f.w / 2 - 6, f.y - f.h / 2 - 6 + R); ctx.lineTo(f.x - f.w / 2 - 6, f.y - f.h / 2 - 6); ctx.lineTo(f.x - f.w / 2 - 6 + R, f.y - f.h / 2 - 6);
+        ctx.moveTo(f.x + f.w / 2 + 6 - R, f.y - f.h / 2 - 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y - f.h / 2 - 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y - f.h / 2 - 6 + R);
+        ctx.moveTo(f.x - f.w / 2 - 6, f.y + f.h / 2 + 6 - R); ctx.lineTo(f.x - f.w / 2 - 6, f.y + f.h / 2 + 6); ctx.lineTo(f.x - f.w / 2 - 6 + R, f.y + f.h / 2 + 6);
+        ctx.moveTo(f.x + f.w / 2 + 6 - R, f.y + f.h / 2 + 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y + f.h / 2 + 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y + f.h / 2 + 6 - R);
+        ctx.stroke();
+      }
+    };
+  })();
+
   /* ------------------------------------------------------------ ARRANQUE */
   inst = INSTR[NAME];
   if (!inst) return;
@@ -853,21 +1268,28 @@
 
   if (!coarse) {
     window.addEventListener('mousemove', function (e) {
-      mx = e.clientX / window.innerWidth; my = e.clientY / window.innerHeight;
+      mx = (e.clientX - OFFX) / Math.max(1, W); my = (e.clientY - OFFY) / Math.max(1, H);
       if (inst.move) inst.move();
     }, { passive: true });
   }
 
   measure(); readScroll(); Pv = P;
 
-  function still() { Pv = P; for (var i = 0; i < 6; i++) inst.draw(i * 260); }
+  function still() {
+    Pv = P;
+    for (var i = 0; i < 6; i++) {
+      ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(i * 260); ctx.restore();
+    }
+  }
 
   var running = false, visible = true;
   function loop(tm) {
     if (!running) return;
     Pv += (P - Pv) * 0.08;
     cmx += (mx - cmx) * 0.08; cmy += (my - cmy) * 0.08;
+    ctx.save(); ctx.translate(OFFX, OFFY);
     inst.draw(tm);
+    ctx.restore();
     if (visible) requestAnimationFrame(loop); else running = false;
   }
   function start() { if (!running && !reduced) { running = true; requestAnimationFrame(loop); } }

@@ -43,13 +43,21 @@ body.v7 .head,
 body.v7 .section-head,
 body.v7 .figure,
 body.v7 .v6-end .v6-veil{ position:relative; }
-body.v7 .page-hero > .container::before,
 body.v7 .head::before,
 body.v7 .figure::before,
 body.v7 .section-head::before{
   content:""; position:absolute; z-index:-1; pointer-events:none; inset:-34% -10%;
   background:radial-gradient(72% 72% at 32% 50%, rgba(5,7,14,.97), rgba(5,7,14,.86) 44%, rgba(5,7,14,.42) 68%, rgba(5,7,14,0) 88%);
 }
+/* La entrada de página: velo lineal ceñido a la columna de lectura. Cubrir el
+   ancho completo dejaba al instrumento sin sitio donde existir. */
+body.v7 .page-hero::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none; inset:0;
+  background:linear-gradient(100deg,
+    rgba(5,7,14,.96) 0%, rgba(5,7,14,.93) 26%, rgba(5,7,14,.72) 44%,
+    rgba(5,7,14,.28) 58%, rgba(5,7,14,0) 72%);
+}
+body.v7 .page-hero{ position:relative; isolation:isolate; }
 /* El bloque de afirmación va centrado: su velo también. */
 body.v7 .figure::before{
   background:radial-gradient(66% 70% at 50% 50%, rgba(5,7,14,.95), rgba(5,7,14,.76) 48%, rgba(5,7,14,0) 86%);
