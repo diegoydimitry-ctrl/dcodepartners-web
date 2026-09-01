@@ -427,6 +427,24 @@
   </url>
 
   <url>
+    <loc>https://dcodepartners.com/sistema-financiero</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/sistema-financiero"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/sistema-financiero"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero"/>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/sistema-financiero</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/sistema-financiero"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/sistema-financiero"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero"/>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
     <loc>https://dcodepartners.com/en/servicios</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios"/>

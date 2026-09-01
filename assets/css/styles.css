@@ -3735,3 +3735,144 @@ footer{
 @media (prefers-reduced-motion: reduce){
   .reveal-narrow,.reveal-converge{ transition:none; }
 }
+
+/* ============================================================
+   D-CODE OS — bloque destacado de /cambios-en-proceso
+   Auditoría web 01/09/2026. Reutiliza .window, .section-head y los
+   tokens existentes; solo añade el contraste "antes/después", los
+   4 pasos y la rejilla de estado. Sin colores nuevos: usa --cyan
+   para lo construido y --amber para lo que sigue en obra, igual
+   que el resto del sitio.
+   ============================================================ */
+
+.dos-contrast{
+  display:grid; grid-template-columns:1fr auto 1fr; gap:clamp(16px,3vw,34px);
+  align-items:stretch; margin-top:36px;
+}
+.dos-side{
+  display:flex; flex-direction:column; gap:14px;
+  padding:clamp(20px,3vw,30px);
+  border:1px solid var(--border); border-radius:16px; background:var(--panel);
+}
+.dos-side--before{ opacity:.9; }
+.dos-side--after{
+  border-color:rgba(67,224,255,.28);
+  background:linear-gradient(180deg, var(--panel-2), var(--panel));
+}
+.dos-side-tag{
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--stone-soft);
+}
+.dos-side-tag--accent{ color:var(--cyan); }
+.dos-side-lead{ font-family:var(--serif); font-size:clamp(1.05rem,2.1vw,1.32rem); line-height:1.35; color:var(--ink); margin:0; }
+.dos-side-foot{ margin:auto 0 0; font-size:0.86rem; line-height:1.55; color:var(--stone-soft); }
+
+.dos-scatter{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+.dos-scatter li{
+  position:relative; padding:10px 14px 10px 30px;
+  border:1px dashed var(--border); border-radius:10px;
+  background:var(--bg-soft); color:var(--stone); font-size:0.88rem; line-height:1.4;
+}
+.dos-scatter li::before{
+  content:""; position:absolute; left:13px; top:50%; transform:translateY(-50%);
+  width:6px; height:6px; border-radius:50%; background:var(--stone-soft); opacity:.55;
+}
+/* Cada tarjeta suelta ligeramente desalineada: la fragmentación se ve,
+   no solo se lee. Se anula en móvil y con reduced-motion. */
+.dos-scatter li:nth-child(2){ margin-left:12px; }
+.dos-scatter li:nth-child(3){ margin-left:5px; }
+.dos-scatter li:nth-child(4){ margin-left:16px; }
+.dos-scatter li:nth-child(5){ margin-left:3px; }
+
+.dos-arrow{
+  align-self:center; display:flex; align-items:center; justify-content:center;
+  width:44px; height:44px; border-radius:50%;
+  border:1px solid rgba(67,224,255,.32); color:var(--cyan); background:var(--bg-elev);
+  flex:none;
+}
+.dos-arrow svg{ width:20px; height:20px; }
+
+.dos-panel{ margin:0; }
+.dos-panel-body{ display:flex; flex-direction:column; gap:0; padding-top:6px; padding-bottom:6px; }
+.dos-row{
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
+  padding:11px 2px; border-bottom:1px solid var(--border-soft);
+}
+.dos-row:last-child{ border-bottom:0; }
+.dos-row-dot{ width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 0 3px rgba(67,224,255,.12); }
+.dos-row-name{ font-size:0.9rem; color:var(--ink); }
+.dos-row-val{ font-family:var(--mono); font-size:0.72rem; color:var(--stone-soft); text-align:right; }
+
+.dos-how{ margin-top:clamp(44px,6vw,70px); }
+.dos-how-title{
+  font-family:var(--serif); font-size:clamp(1.15rem,2.4vw,1.5rem);
+  color:var(--ink); margin:0 0 22px;
+}
+.dos-steps{
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(12px,2vw,20px);
+  counter-reset:none;
+}
+.dos-step{
+  display:flex; flex-direction:column; gap:8px;
+  padding:20px; border:1px solid var(--border); border-radius:14px; background:var(--panel);
+}
+.dos-step-num{ font-family:var(--mono); font-size:0.72rem; color:var(--cyan); letter-spacing:.08em; }
+.dos-step strong{ font-size:0.96rem; color:var(--ink); }
+.dos-step span:last-child{ font-size:0.85rem; line-height:1.55; color:var(--stone); }
+
+.dos-status{ margin-top:clamp(40px,5vw,60px); }
+.dos-status-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,3vw,40px); }
+.dos-status-col ul{ list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.dos-status-col li{
+  position:relative; padding-left:24px; font-size:0.89rem; line-height:1.55; color:var(--stone);
+}
+.dos-status-col li::before{
+  content:""; position:absolute; left:6px; top:.55em;
+  width:6px; height:6px; border-radius:50%; background:currentColor; opacity:.5;
+}
+.dos-status-label{
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:.08em; text-transform:uppercase;
+}
+.dos-status-label--done{ color:var(--green); }
+.dos-status-label--wip{ color:var(--amber); }
+.dos-status-col:first-child li::before{ background:var(--green); opacity:.7; }
+.dos-status-col:last-child li::before{ background:var(--amber); opacity:.7; }
+.dos-status-honest{
+  margin:26px 0 0; padding-top:20px; border-top:1px solid var(--border);
+  font-size:0.87rem; line-height:1.6; color:var(--stone-soft);
+}
+
+.dos-done-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,2vw,22px); }
+.dos-done-item{
+  padding:24px; border:1px solid var(--border); border-radius:14px;
+  background:var(--panel); display:flex; flex-direction:column; gap:10px;
+}
+.dos-done-state{
+  align-self:flex-start; font-family:var(--mono); font-size:0.66rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--green);
+  padding:4px 9px; border:1px solid rgba(52,231,164,.3); border-radius:999px;
+  background:rgba(52,231,164,.07);
+}
+.dos-done-item h3{ font-size:1rem; margin:0; color:var(--ink); }
+.dos-done-item p{ margin:0; font-size:0.87rem; line-height:1.6; color:var(--stone); }
+
+@media (max-width: 940px){
+  .dos-steps{ grid-template-columns:repeat(2,1fr); }
+  .dos-done-grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 760px){
+  .dos-contrast{ grid-template-columns:1fr; }
+  .dos-arrow{ transform:rotate(90deg); margin:0 auto; }
+  .dos-scatter li{ margin-left:0 !important; }
+  .dos-status-grid{ grid-template-columns:1fr; }
+  .dos-done-grid{ grid-template-columns:1fr; }
+}
+@media (max-width: 480px){
+  .dos-steps{ grid-template-columns:1fr; }
+  .dos-row{ grid-template-columns:auto 1fr; }
+  .dos-row-val{ grid-column:2; text-align:left; }
+}
+@media (prefers-reduced-motion: reduce){
+  .dos-scatter li{ margin-left:0 !important; }
+}
