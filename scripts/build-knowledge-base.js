@@ -25,7 +25,7 @@ const EXCLUDED_CLASSES = new Set(['window-bar', 'breadcrumbs', 'faq-search', 'ch
 const HEADING_TAGS = new Set(['H1', 'H2', 'H3', 'H4', 'H5', 'H6']);
 const TEXT_TAGS = new Set(['P', 'LI', 'BLOCKQUOTE', 'TD', 'TH']);
 // Controles de formulario y botones: chrome de UI, no contenido informativo
-// (p. ej. "Nombre completo", "Solicitar mi Mes Gratuito").
+// (p. ej. "Nombre completo", "Solicitar el diagnóstico").
 const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'SVG', 'LABEL', 'INPUT', 'TEXTAREA', 'BUTTON']);
 
 function cleanText(s) {

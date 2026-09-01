@@ -171,7 +171,14 @@ async function main() {
   console.log(`QA contra: ${BASE}`);
   console.log(`${PAGES.length} páginas x ${WIDTHS.length} anchos = ${PAGES.length * WIDTHS.length} comprobaciones\n`);
 
-  const browser = await chromium.launch();
+  // En entornos donde Playwright no descarga sus navegadores (contenedores con
+  // PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD), PLAYWRIGHT_CHROMIUM_PATH apunta al
+  // Chromium ya instalado. Sin la variable, comportamiento de siempre.
+  const browser = await chromium.launch(
+    process.env.PLAYWRIGHT_CHROMIUM_PATH
+      ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH }
+      : {}
+  );
   const baseOrigin = new URL(BASE).origin;
   const allIssues = [];
   let checked = 0;

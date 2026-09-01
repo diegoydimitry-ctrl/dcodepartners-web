@@ -1,0 +1,994 @@
+/* ============================================================================
+   D-CODE PARTNERS — SISTEMA VISUAL v5  ·  "SISTEMA VIVO"
+   ============================================================================
+   La v4 quitó información y acertó. Pero al quitar se quedó quieta: superficies
+   rectangulares, bloques del mismo tamaño, aire muerto entre secciones.
+
+   La v5 NO devuelve el texto. Devuelve la vida. Cuatro reglas:
+
+   1. PROFUNDIDAD ANTES QUE RELLENO. El vacío se resuelve con capas —luz,
+      malla, grano, sombra—, no escribiendo más párrafos.
+
+   2. CADA SECCIÓN TIENE SU FORMA. Escena, split asimétrico, diagrama,
+      constelación, cifra, producto, editorial. Nunca dos seguidas iguales.
+      Si algo se puede enseñar, no se enumera.
+
+   3. EL MOVIMIENTO TIENE MOTIVO. Entra cuando algo aparece, responde cuando
+      alguien apunta, y para cuando ya ha dicho lo que tenía que decir.
+      300-500 ms. Nada gira eternamente.
+
+   4. UNA SOLA BARRA. Se mantiene de la v4: el subrayado lo dibuja
+      .nav-indicator y nadie más. Aquí no hay ningún ::after por enlace.
+   ========================================================================= */
+
+/* ============================================================ 1. FUNDAMENTOS */
+:root{
+  --v-bg:      #06080f;
+  --v-bg-2:    #0a0e1b;
+  --v-panel:   rgba(19, 26, 48, .58);
+  --v-panel-2: rgba(30, 40, 72, .72);
+  --v-edge:    rgba(150, 174, 245, .15);
+  --v-edge-2:  rgba(150, 174, 245, .075);
+
+  --v-ink:   #f5f8ff;
+  --v-ink-2: #b3bfe0;
+  --v-ink-3: #78849f;
+
+  --v-a:  #4dd0e1;   /* cian    */
+  --v-b:  #7c6cff;   /* violeta */
+  --v-c:  #ff6b9d;   /* rosa    */
+  --v-grad: linear-gradient(102deg, var(--v-a), var(--v-b) 54%, var(--v-c));
+
+  /* Tonos por capacidad. Identifican, no decoran. */
+  --k-direccion:#a78bfa; --k-comercial:#4dd0e1; --k-marketing:#ff6b9d;
+  --k-clientes:#35e0a1;  --k-produccion:#ffb43a; --k-finanzas:#5b8cff;
+  --k-soporte:#2dd4bf;   --k-administracion:#8b93ff;
+
+  --f-display: clamp(2.7rem, 6.8vw, 5.6rem);
+  --f-h2:      clamp(1.8rem, 3.3vw, 2.8rem);
+  --f-body:    clamp(0.97rem, 1.02vw, 1.05rem);
+
+  --rad: 18px;
+  --shell: 1180px;
+  --gut: clamp(20px, 5vw, 52px);
+
+  --sp-air:   clamp(76px, 10vw, 132px);
+  --sp-norm:  clamp(52px, 6.5vw, 88px);
+  --sp-tight: clamp(34px, 4vw, 54px);
+
+  --ease: cubic-bezier(.22,.75,.28,1);
+
+  /* Atmósfera. Estas tres variables las mueve el scroll (dcp5.js): cada
+     sección tiene su temperatura y el fondo viaja de una a otra. */
+  --amb-1: 124,108,255;   /* violeta */
+  --amb-2: 77,208,225;    /* cian    */
+  --amb-3: 255,107,157;   /* rosa    */
+  --amb-i: 1;             /* intensidad */
+}
+
+html{ background: var(--v-bg); scroll-behavior: smooth; }
+body{
+  background: var(--v-bg); color: var(--v-ink); font-size: var(--f-body);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+.container{ max-width: var(--shell); padding-inline: var(--gut); }
+.section{ padding-block: var(--sp-norm); position:relative; }
+.section-sm{ padding-block: var(--sp-tight); position:relative; }
+.section-air{ padding-block: var(--sp-air); position:relative; }
+
+/* ------------------------------------------- 1.1 ATMÓSFERA: TRES CAPAS ---- */
+/* Capa A — aurora. Difusa, lenta, y cambia de temperatura al pasar de una
+   sección a otra. Es lo que hace que el fondo deje de estar muerto. */
+.glow-orb{ display:none !important; }
+body::before{
+  content:""; position:fixed; inset:-30vmax; z-index:-3; pointer-events:none;
+  background:
+    radial-gradient(42vmax 34vmax at 10% -2%,  rgba(var(--amb-1), calc(.26 * var(--amb-i))), transparent 58%),
+    radial-gradient(38vmax 30vmax at 94% 10%,  rgba(var(--amb-2), calc(.17 * var(--amb-i))), transparent 56%),
+    radial-gradient(48vmax 40vmax at 46% 104%, rgba(var(--amb-3), calc(.12 * var(--amb-i))), transparent 60%);
+  filter: blur(40px);
+  transition: background 1.1s ease-out;
+  animation: v-drift 46s ease-in-out infinite alternate;
+}
+@keyframes v-drift{ from{transform:translate3d(-2%,-1%,0)} to{transform:translate3d(2%,2%,0)} }
+
+/* Capa B — malla espacial. Da escala y perspectiva al vacío sin dibujar nada
+   que se lea como contenido. Se desvanece hacia el centro. */
+body::after{
+  content:""; position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.5;
+  background-image:
+    linear-gradient(rgba(150,174,245,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150,174,245,.05) 1px, transparent 1px);
+  background-size:72px 72px;
+  mask-image: radial-gradient(120% 90% at 50% 0%, transparent 20%, #000 88%);
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, transparent 20%, #000 88%);
+}
+
+/* Capa C — luz local de sección. Se pone donde una sección necesita peso. */
+.lit{ position:relative; isolation:isolate; }
+.lit::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  /* Sin sangrado horizontal: -20% a cada lado empujaba la página 288 px
+     a la derecha en pantallas anchas. El degradado ya muere suave. */
+  inset:-8% 0;
+  background: radial-gradient(58% 62% at var(--lx,50%) var(--ly,42%),
+              rgba(var(--amb-1), .17), transparent 68%);
+  filter: blur(24px);
+}
+
+/* Filo superior: una línea que nace y muere en los bordes. Separa secciones
+   sin dibujar una caja alrededor de cada una. */
+.edge-top{ position:relative; }
+.edge-top::before{
+  content:""; position:absolute; top:0; left:12%; right:12%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--v-edge), transparent);
+}
+
+/* ============================================================ 2. TIPOGRAFÍA */
+h1,h2,h3,.h-title{ font-family:var(--serif); letter-spacing:-.032em; text-wrap:balance; }
+h1{ font-size:var(--f-display); line-height:.96; font-weight:700; margin:0; }
+.h-title{ font-size:var(--f-h2); line-height:1.05; font-weight:700; }
+.h-xl{ font-size:clamp(2.1rem,4.4vw,3.6rem); line-height:1.02; font-weight:700;
+  font-family:var(--serif); letter-spacing:-.035em; text-wrap:balance; margin:0; }
+p{ color:var(--v-ink-2); }
+.lead{ font-size:clamp(1.02rem,1.28vw,1.15rem); line-height:1.58; color:var(--v-ink-2); max-width:56ch; }
+.micro{ font-family:var(--mono); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--v-ink-3); }
+.grad, .accent{
+  background:var(--v-grad); -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent;
+}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--v-ink-3); padding:0; border:0; background:none;
+}
+.eyebrow::before{ content:""; width:20px; height:1px; background:var(--v-a); }
+.head{ max-width:660px; }
+.head .h-title{ margin:14px 0 0; }
+.head .lead{ margin:12px 0 0; }
+.head--mid{ margin-inline:auto; text-align:center; }
+.head--mid .eyebrow{ margin-inline:auto; }
+.head--mid .lead{ margin-inline:auto; }
+
+/* ================================================= 3. CABECERA — UNA BARRA */
+/* Integrada, no pegada: sin fondo hasta que hay algo debajo que tapar. */
+#site-header{
+  background:transparent; border-bottom:1px solid transparent;
+  transition:background .3s var(--ease), border-color .3s var(--ease), backdrop-filter .3s;
+}
+#site-header.scrolled{
+  background:rgba(6,8,15,.72);
+  backdrop-filter:blur(22px) saturate(1.6); -webkit-backdrop-filter:blur(22px) saturate(1.6);
+  border-bottom-color:var(--v-edge-2);
+}
+.main-nav > ul > li > a{
+  font-size:.875rem; font-weight:500; color:var(--v-ink-2);
+  transition:color .2s ease; white-space:nowrap;
+}
+.main-nav > ul > li > a:hover,
+.main-nav > ul > li > a[aria-current="page"]{ color:var(--v-ink); }
+/* Ningún ::after por enlace, a propósito. El único subrayado es
+   .nav-indicator, que se desliza. Dos a la vez son las "dos barras". */
+.mega-menu{
+  background:rgba(9,13,26,.97); backdrop-filter:blur(26px);
+  border:1px solid var(--v-edge); border-radius:var(--rad);
+  box-shadow:0 44px 110px -46px rgba(0,0,0,.96);
+}
+.mega-item{ border-radius:12px; transition:background .18s, transform .18s; }
+.mega-item:hover{ background:rgba(255,255,255,.05); transform:translateX(3px); }
+
+/* =============================================================== 4. BOTONES */
+.btn{ border-radius:999px; font-weight:600; letter-spacing:-.01em; position:relative; overflow:hidden;
+  transition:transform .22s var(--ease), box-shadow .28s, background .2s, border-color .2s; }
+.btn-primary{ background:var(--v-grad); color:#05070d; border:0; box-shadow:0 12px 38px -14px rgba(124,108,255,.85); }
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 22px 56px -14px rgba(255,107,157,.7); }
+/* Barrido de luz al pasar por encima: 600 ms, una vez, y se acaba. */
+.btn-primary::after{
+  content:""; position:absolute; inset:0; pointer-events:none; transform:translateX(-120%);
+  background:linear-gradient(100deg, transparent 20%, rgba(255,255,255,.42), transparent 80%);
+}
+.btn-primary:hover::after{ animation:v-sweep .6s var(--ease); }
+@keyframes v-sweep{ to{ transform:translateX(120%) } }
+.btn-ghost{ background:rgba(255,255,255,.04); border:1px solid var(--v-edge); color:var(--v-ink); backdrop-filter:blur(8px); }
+.btn-ghost:hover{ background:rgba(255,255,255,.09); border-color:rgba(150,174,245,.34); transform:translateY(-2px); }
+
+/* ============================================ 5. SUPERFICIES Y REACTIVIDAD */
+.window,.service-card,.blog-card,.guarantee-card,.contact-card,.form-card,.faq-category,.case-card{
+  background:var(--v-panel); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--v-edge); border-radius:var(--rad);
+  box-shadow:0 28px 72px -44px rgba(0,0,0,.92);
+}
+.window-bar{ background:rgba(255,255,255,.04); border-bottom:1px solid var(--v-edge-2); }
+.window-title{ font-family:var(--mono); font-size:.7rem; color:var(--v-ink-3); }
+.window-status{ font-family:var(--mono); font-size:.66rem; color:var(--v-ink-2); }
+.window-status .dot{ background:var(--k-clientes); box-shadow:0 0 0 3px rgba(53,224,161,.16); }
+
+/* Foco de cursor. dcp5.js escribe --mx/--my en la superficie apuntada; la luz
+   sigue al puntero por dentro. Es la diferencia entre una caja y algo vivo. */
+.lift{ position:relative; isolation:isolate; overflow:hidden;
+  transition:transform .3s var(--ease), border-color .3s ease; }
+.lift::before{
+  content:""; position:absolute; inset:0; z-index:-1; opacity:0; pointer-events:none;
+  transition:opacity .35s ease;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),
+             color-mix(in srgb, var(--k, var(--v-b)) 20%, transparent), transparent 62%);
+}
+.lift:hover{ transform:translateY(-3px); border-color:color-mix(in srgb, var(--k, var(--v-b)) 38%, transparent); }
+.lift:hover::before{ opacity:1; }
+
+/* ==================================================== 6. ENTRADAS AL SCROLL */
+.rise{ opacity:0; transform:translateY(22px); filter:blur(6px);
+  transition:opacity .62s var(--ease), transform .62s var(--ease), filter .62s var(--ease);
+  transition-delay:calc(var(--i, 0) * 70ms); }
+.rise.in{ opacity:1; transform:none; filter:none; }
+.rise-l{ opacity:0; transform:translateX(-24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.rise-l.in{ opacity:1; transform:none; }
+.rise-s{ opacity:0; transform:scale(.965); transition:opacity .7s var(--ease), transform .7s var(--ease);
+  transition-delay:calc(var(--i, 0) * 70ms); }
+.rise-s.in{ opacity:1; transform:none; }
+/* Trazo que se dibuja: lo usan el diagrama de proceso y la constelación. */
+.draw{ stroke-dasharray:var(--len,600); stroke-dashoffset:var(--len,600);
+  transition:stroke-dashoffset 1.15s var(--ease); transition-delay:calc(var(--i,0) * 110ms); }
+.in .draw, .draw.in{ stroke-dashoffset:0; }
+
+/* ================================================== 7. HERO — LA ESCENA */
+/* Ni recuadro ni composición corporativa: una escena a sangre donde el caos
+   se convierte en sistema delante de quien mira. El lienzo lo pinta dcp5.js. */
+.stage{
+  position:relative; isolation:isolate;
+  min-height:clamp(580px, 84vh, 820px);
+  display:flex; align-items:center;
+  padding-block:clamp(72px,9vh,120px) clamp(56px,7vh,96px);
+  overflow:hidden;
+}
+.stage-canvas{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+.stage-canvas canvas{ width:100%; height:100%; display:block; }
+/* Velo: garantiza contraste del titular sobre cualquier estado de la escena. */
+.stage-veil{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:linear-gradient(100deg, rgba(6,8,15,.94) 4%, rgba(6,8,15,.66) 34%, rgba(6,8,15,.06) 60%, transparent 74%);
+}
+.stage-inner{ position:relative; z-index:3; max-width:860px; }
+/* El titular del hero se dimensiona para que cada frase quepa en UNA línea:
+   partir "Construimos su sistema." en dos deja el hero altísimo y aplasta la
+   escena, que es justo lo que tiene que verse. */
+.stage h1{ font-size:clamp(2.35rem,5vw,4.15rem); line-height:1.02; }
+.stage h1{ margin:22px 0 0; }
+.stage .lead{ margin:24px 0 0; max-width:46ch; font-size:clamp(1.05rem,1.45vw,1.26rem); }
+.stage-ctas{ display:flex; gap:13px; flex-wrap:wrap; margin-top:34px; }
+.stage-foot{
+  position:relative; z-index:3; display:flex; align-items:center; gap:14px;
+  margin-top:44px; font-family:var(--mono); font-size:.66rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-ink-3);
+}
+.stage-foot::before{ content:""; width:34px; height:1px; background:var(--v-edge); }
+/* Estado de la escena, en el idioma de la propia escena. */
+.stage-state{ color:var(--v-ink-2); transition:color .4s ease; }
+
+/* Título en líneas explícitas: nunca deja un punto huérfano al reajustar. */
+.line{ display:block; }
+
+/* ============================== 8. VOCES — el problema, sin tarjetas iguales */
+/* Tres frases reales flotando sobre la atmósfera, desplazadas entre sí. No es
+   una rejilla de tres cajas idénticas: es una conversación. */
+.voices{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,2.4vw,30px); margin-top:40px; }
+.voice{ position:relative; padding-top:26px; }
+.voice:nth-child(2){ margin-top:clamp(0px,3.4vw,44px); }
+.voice:nth-child(3){ margin-top:clamp(0px,6.8vw,88px); }
+.voice::before{
+  content:""; position:absolute; top:0; left:0; width:30px; height:2px;
+  background:var(--k); border-radius:2px;
+  transition:width .45s var(--ease);
+}
+.voice:hover::before{ width:64px; }
+.voice-q{
+  font-family:var(--serif); font-size:clamp(1.15rem,1.7vw,1.42rem); font-weight:650;
+  color:var(--v-ink); line-height:1.24; margin:0 0 12px; letter-spacing:-.02em;
+}
+.voice-a{ font-size:.9rem; line-height:1.6; color:var(--v-ink-3); margin:0; }
+
+/* ========================== 9. DIAGRAMA DE PROCESO — se enseña, no se cuenta */
+/* Cuatro pasos conectados por una línea que se dibuja al entrar. Al apuntar
+   un paso, el sistema responde: se ilumina el nodo y aparece su detalle. */
+.track{ position:relative; margin-top:46px; }
+.track-line{ position:absolute; left:0; right:0; top:13px; height:2px; overflow:hidden; }
+.track-line i{
+  display:block; height:100%; width:100%; transform-origin:left;
+  background:linear-gradient(90deg, var(--v-a), var(--v-b) 55%, var(--v-c));
+  transform:scaleX(0); transition:transform 1.3s var(--ease);
+}
+.track.in .track-line i{ transform:scaleX(1); }
+.track-steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(12px,2vw,26px); position:relative; }
+.step{ background:none; border:0; padding:0; text-align:left; cursor:pointer; color:inherit; font:inherit;
+  display:flex; flex-direction:column; gap:0; }
+.step-dot{
+  width:28px; height:28px; border-radius:50%; flex:none; position:relative;
+  background:var(--v-bg); border:2px solid var(--v-edge);
+  display:grid; place-items:center;
+  font-family:var(--mono); font-size:.6rem; color:var(--v-ink-3);
+  transition:border-color .3s var(--ease), color .3s, box-shadow .3s, transform .3s var(--ease);
+}
+.step[aria-expanded="true"] .step-dot, .step:hover .step-dot{
+  border-color:var(--k); color:var(--k); transform:scale(1.12);
+  box-shadow:0 0 0 6px color-mix(in srgb, var(--k) 12%, transparent);
+}
+.step-t{ font-family:var(--serif); font-size:clamp(1.02rem,1.4vw,1.22rem); font-weight:650;
+  color:var(--v-ink-2); margin:20px 0 0; letter-spacing:-.02em; transition:color .3s; }
+.step[aria-expanded="true"] .step-t, .step:hover .step-t{ color:var(--v-ink); }
+.step-d{ display:none; }
+
+/* Panel compartido: el detalle del paso activo ocurre aquí, con altura
+   estable. Antes cada paso guardaba su texto en su propia columna y el
+   resultado eran tres columnas vacías y un hueco muerto debajo. */
+.track-panel{
+  margin-top:clamp(26px,3.4vw,42px); padding:clamp(22px,2.8vw,32px) clamp(22px,3vw,36px);
+  border:1px solid var(--v-edge); border-radius:var(--rad);
+  background:linear-gradient(160deg, rgba(30,40,72,.42), rgba(9,13,26,.5));
+  backdrop-filter:blur(14px); min-height:150px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:center;
+}
+.track-panel-in{ animation:v-swap .38s var(--ease); }
+.track-panel h3{ font-family:var(--serif); font-size:clamp(1.14rem,1.9vw,1.44rem); font-weight:650;
+  color:var(--v-ink); margin:0; letter-spacing:-.024em; }
+.track-panel p{ font-size:.94rem; line-height:1.62; margin:10px 0 0; max-width:58ch; }
+.track-panel .micro{ display:block; margin-bottom:10px; color:var(--k); }
+/* Miniatura del paso: cuatro estados de una misma idea, dibujados en CSS. */
+.tmini{ width:clamp(130px,13vw,168px); height:auto; aspect-ratio:120/104; flex:none; opacity:.95;
+  padding:14px; border-radius:14px; border:1px solid var(--v-edge-2);
+  background:radial-gradient(70% 70% at 50% 40%, color-mix(in srgb, var(--k) 9%, transparent), transparent 72%); }
+.tmini i{ position:absolute; border-radius:50%; background:var(--k);
+  box-shadow:0 0 0 5px color-mix(in srgb, var(--k) 12%, transparent);
+  transition:all .5s var(--ease); }
+.tmini b{ position:absolute; height:1px; background:linear-gradient(90deg, var(--k), transparent);
+  transform-origin:left; transition:all .5s var(--ease); }
+
+/* ==================== 10. CONSTELACIÓN — las capacidades, no un catálogo */
+/* Ocho capacidades alrededor de la operación de una empresa. Enseña de un
+   vistazo lo que un párrafo tardaría ocho líneas en decir: no se elige un
+   pack, se conectan piezas a lo que ya existe. */
+.constel{ position:relative; width:100%; max-width:800px; margin:40px auto 0; aspect-ratio:1 / .72; }
+.constel svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.constel-link{ stroke:var(--v-edge); stroke-width:1; fill:none; transition:stroke .3s ease, stroke-width .3s ease; }
+.constel-core{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:clamp(128px,17vw,168px); aspect-ratio:1; border-radius:50%;
+  display:grid; place-items:center; text-align:center; padding:12px;
+  background:radial-gradient(circle at 50% 40%, rgba(124,108,255,.24), rgba(9,13,26,.9) 68%);
+  border:1px solid var(--v-edge); backdrop-filter:blur(10px);
+  box-shadow:0 0 70px -18px rgba(124,108,255,.6);
+}
+.constel-core b{ display:block; font-family:var(--serif); font-size:clamp(.92rem,1.2vw,1.06rem);
+  color:var(--v-ink); letter-spacing:-.02em; line-height:1.15; }
+.constel-core span{ display:block; font-family:var(--mono); font-size:.56rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-ink-3); margin-top:6px; }
+.constel-core::after{
+  content:""; position:absolute; inset:-14px; border-radius:50%;
+  border:1px solid color-mix(in srgb, var(--v-b) 26%, transparent);
+  animation:v-pulse 4.5s ease-in-out infinite;
+}
+@keyframes v-pulse{ 0%,100%{ transform:scale(1); opacity:.55 } 50%{ transform:scale(1.07); opacity:.15 } }
+.cnode{
+  position:absolute; left:var(--x); top:var(--y); transform:translate(-50%,-50%);
+  display:inline-flex; align-items:center; gap:9px; white-space:nowrap;
+  padding:9px 15px; border-radius:999px; text-decoration:none;
+  background:rgba(9,13,26,.82); backdrop-filter:blur(8px);
+  border:1px solid color-mix(in srgb, var(--k) 26%, transparent);
+  color:var(--v-ink-2); font-size:.85rem;
+  transition:transform .3s var(--ease), border-color .25s, color .25s, box-shadow .3s;
+}
+.cnode i{ width:7px; height:7px; border-radius:50%; background:var(--k); flex:none;
+  box-shadow:0 0 0 0 color-mix(in srgb, var(--k) 40%, transparent); transition:box-shadow .3s; }
+.cnode:hover, .cnode:focus-visible{
+  color:var(--v-ink); border-color:color-mix(in srgb, var(--k) 62%, transparent);
+  transform:translate(-50%,-50%) scale(1.06);
+  box-shadow:0 12px 40px -16px color-mix(in srgb, var(--k) 80%, transparent);
+}
+.cnode:hover i{ box-shadow:0 0 0 5px color-mix(in srgb, var(--k) 22%, transparent); }
+.constel-note{ text-align:center; font-family:var(--mono); font-size:.63rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--v-ink-3); margin:26px 0 0; }
+/* Versión móvil: la misma idea sin ring. Se activa desde 860px hacia abajo. */
+.constel-list{ display:none; }
+
+/* ================================================ 11. CIFRA / AFIRMACIÓN */
+/* Un momento de respiro con peso. Sustituye a media página de explicación. */
+.figure{ text-align:center; max-width:900px; margin-inline:auto; }
+.figure-n{ font-family:var(--serif); font-weight:700; letter-spacing:-.045em; line-height:.9;
+  font-size:clamp(3.4rem,10vw,7.4rem); background:var(--v-grad);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.figure .figure-t{ font-family:var(--serif); font-size:clamp(1.3rem,2.4vw,2rem); font-weight:650;
+  color:var(--v-ink); letter-spacing:-.028em; margin:18px 0 0; line-height:1.16; }
+.figure > p:not(.figure-t){ margin:16px auto 0; max-width:52ch; font-size:.96rem; line-height:1.6; }
+
+/* ================================================ 12. SPLIT ASIMÉTRICO */
+.split{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);
+  gap:clamp(26px,5vw,72px); align-items:center; }
+.split--r{ grid-template-columns:minmax(0,1.08fr) minmax(0,1fr); }
+.split--r .split-a{ order:2; }
+.split-list{ list-style:none; margin:26px 0 0; padding:0; display:flex; flex-direction:column; gap:0; }
+.split-list li{
+  position:relative; padding:14px 0 14px 28px; font-size:.92rem; line-height:1.55; color:var(--v-ink-2);
+  border-bottom:1px solid var(--v-edge-2); transition:padding-left .3s var(--ease), color .3s;
+}
+.split-list li:last-child{ border-bottom:0; }
+.split-list li::before{
+  content:""; position:absolute; left:2px; top:1.28em; width:10px; height:1px;
+  background:var(--k, var(--v-a)); transition:width .3s var(--ease);
+}
+.split-list li:hover{ padding-left:36px; color:var(--v-ink); }
+.split-list li:hover::before{ width:18px; }
+
+/* ================================================= 13. RAÍL HORIZONTAL */
+/* Para conjuntos que se recorren, no se comparan. Evita la rejilla eterna. */
+.rail{ display:flex; gap:14px; overflow-x:auto; padding:4px 0 18px; margin-top:34px;
+  scroll-snap-type:x mandatory; scrollbar-width:thin; }
+.rail::-webkit-scrollbar{ height:5px; }
+.rail::-webkit-scrollbar-thumb{ background:var(--v-edge); border-radius:99px; }
+.rail > *{ scroll-snap-align:start; flex:0 0 clamp(230px,26vw,300px); }
+
+/* ================================================= 14. PASOS EN VERTICAL */
+/* La barra de progreso se llena con el scroll: recorrer la página ES avanzar
+   por el proceso. Sustituye a cuatro acordeones apilados. */
+.vsteps{ position:relative; margin-top:44px; padding-left:clamp(34px,4vw,54px); }
+.vsteps::before{ content:""; position:absolute; left:9px; top:6px; bottom:6px; width:2px;
+  background:var(--v-edge-2); border-radius:2px; }
+.vsteps-fill{ position:absolute; left:9px; top:6px; width:2px; border-radius:2px; height:0;
+  background:linear-gradient(180deg, var(--v-a), var(--v-b) 55%, var(--v-c));
+  transition:height .18s linear; }
+.vstep{ position:relative; padding-bottom:clamp(28px,3.6vw,44px); }
+.vstep:last-child{ padding-bottom:0; }
+.vstep::before{
+  content:""; position:absolute; left:calc(-1 * clamp(34px,4vw,54px) + 4px); top:6px;
+  width:12px; height:12px; border-radius:50%; background:var(--v-bg);
+  border:2px solid var(--v-edge); transition:border-color .35s, box-shadow .35s;
+}
+.vstep.on::before{ border-color:var(--k, var(--v-a));
+  box-shadow:0 0 0 5px color-mix(in srgb, var(--k, var(--v-a)) 14%, transparent); }
+.vstep-n{ font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; color:var(--v-ink-3); }
+.vstep h3{ font-family:var(--serif); font-size:clamp(1.06rem,1.6vw,1.34rem); font-weight:650;
+  color:var(--v-ink); margin:8px 0 0; letter-spacing:-.024em; }
+.vstep p{ font-size:.92rem; line-height:1.62; margin:10px 0 0; max-width:56ch; }
+/* A partir de tablet, número y título a la izquierda y el texto a la derecha:
+   el paso ocupa el ancho completo en vez de dejar media pantalla muerta. */
+@media (min-width:900px){
+  .vstep{ display:grid; grid-template-columns:minmax(0,.62fr) minmax(0,1fr);
+    grid-template-rows:auto 1fr; column-gap:clamp(24px,4vw,60px); row-gap:0;
+    align-items:start; align-content:start; }
+  .vstep-n{ grid-column:1; grid-row:1; }
+  .vstep h3{ grid-column:1; grid-row:2; margin-top:8px; align-self:start; }
+  .vstep p{ grid-column:2; grid-row:1 / 3; margin-top:0; align-self:start; }
+}
+
+/* ===================================================== 15. D-CODE FINANCE */
+/* El producto se presenta como producto: chrome de aplicación, módulos
+   recorribles y una pantalla amplia por módulo. */
+.prod{ border:1px solid var(--v-edge); border-radius:var(--rad); overflow:hidden;
+  background:linear-gradient(170deg, rgba(30,40,72,.62), rgba(9,13,26,.72));
+  box-shadow:0 60px 140px -60px rgba(0,0,0,.98), 0 0 0 1px rgba(150,174,245,.04);
+  position:relative; }
+.prod::before{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
+  background:radial-gradient(70% 50% at 50% -6%, rgba(91,140,255,.16), transparent 62%);
+}
+.prod-bar{ display:flex; align-items:center; gap:14px; padding:12px 16px; position:relative; z-index:2;
+  border-bottom:1px solid var(--v-edge-2); background:rgba(255,255,255,.03); flex-wrap:wrap; }
+.prod-brand{ display:inline-flex; align-items:center; gap:9px; font-family:var(--mono);
+  font-size:.7rem; letter-spacing:.06em; color:var(--v-ink-2); }
+.prod-brand i{ width:8px; height:8px; border-radius:50%; background:var(--k-finanzas);
+  box-shadow:0 0 0 4px rgba(91,140,255,.16); }
+.prod-tabs{ display:flex; gap:4px; flex-wrap:wrap; margin-left:auto; }
+.prod-tab{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.03em;
+  padding:7px 12px; border-radius:8px; border:1px solid transparent;
+  background:transparent; color:var(--v-ink-3); cursor:pointer; transition:all .18s;
+}
+.prod-tab:hover{ color:var(--v-ink-2); background:rgba(255,255,255,.045); }
+.prod-tab[aria-selected="true"]{ color:var(--k-finanzas); background:rgba(91,140,255,.1);
+  border-color:rgba(91,140,255,.32); }
+.prod-body{ padding:clamp(18px,2.6vw,32px); position:relative; z-index:2; }
+.prod-screen{ display:grid; grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
+  gap:clamp(20px,3vw,42px); align-items:center; }
+.prod-screen.swap{ animation:v-swap .42s var(--ease); }
+@keyframes v-swap{ from{ opacity:0; transform:translateY(10px) } to{ opacity:1; transform:none } }
+.prod-copy h3{ font-family:var(--serif); font-size:clamp(1.16rem,2vw,1.5rem); color:var(--v-ink); margin:0 0 12px; }
+.prod-copy p{ font-size:.92rem; line-height:1.6; margin:0 0 16px; }
+.prod-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+.prod-list li{ position:relative; padding-left:22px; font-size:.86rem; line-height:1.5; color:var(--v-ink-2); }
+.prod-list li::before{ content:""; position:absolute; left:4px; top:.52em; width:7px; height:7px;
+  border-radius:2px; background:var(--k-finanzas); opacity:.75; }
+
+.mock{ border:1px solid var(--v-edge); border-radius:14px; overflow:hidden;
+  background:#0a0e17; box-shadow:0 30px 80px -40px rgba(0,0,0,.95); }
+.mock-top{ display:flex; align-items:center; gap:8px; padding:9px 12px;
+  border-bottom:1px solid var(--v-edge-2); background:rgba(255,255,255,.03); }
+.mock-dots{ display:flex; gap:5px; }
+.mock-dots i{ width:8px; height:8px; border-radius:50%; background:rgba(150,174,245,.26); }
+.mock-name{ font-family:var(--mono); font-size:.62rem; color:var(--v-ink-3); }
+.mock-in{ padding:14px; display:grid; gap:10px; }
+.mock-kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+.mock-kpi{ padding:11px 12px; border-radius:9px; background:rgba(255,255,255,.032); border:1px solid var(--v-edge-2); }
+.mock-kpi b{ display:block; font-family:var(--serif); font-size:1.02rem; color:var(--v-ink); font-variant-numeric:tabular-nums; }
+.mock-kpi span{ font-size:.6rem; color:var(--v-ink-3); font-family:var(--mono); letter-spacing:.04em; }
+.mock-rows{ display:flex; flex-direction:column; gap:6px; }
+.mock-row{ display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center;
+  padding:9px 11px; border-radius:8px; background:rgba(255,255,255,.022); border:1px solid var(--v-edge-2);
+  opacity:0; animation:v-row .4s var(--ease) forwards; animation-delay:calc(var(--i,0) * 60ms); }
+@keyframes v-row{ from{ opacity:0; transform:translateX(-8px) } to{ opacity:1; transform:none } }
+.mock-row span:first-child{ font-size:.74rem; color:var(--v-ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mock-amt{ font-family:var(--mono); font-size:.72rem; color:var(--v-ink); font-variant-numeric:tabular-nums; }
+.mock-pill{ font-family:var(--mono); font-size:.57rem; letter-spacing:.05em; padding:3px 8px; border-radius:999px;
+  color:var(--st); border:1px solid color-mix(in srgb,var(--st) 32%,transparent);
+  background:color-mix(in srgb,var(--st) 9%,transparent); white-space:nowrap; }
+.mock-bars{ display:flex; align-items:flex-end; gap:6px; height:78px; padding:0 2px; }
+.mock-bars i{ flex:1; border-radius:3px 3px 0 0; transform-origin:bottom; transform:scaleY(0);
+  background:linear-gradient(180deg, var(--k-finanzas), rgba(91,140,255,.18));
+  animation:v-grow .55s var(--ease) forwards; animation-delay:calc(var(--i,0) * 55ms); }
+@keyframes v-grow{ to{ transform:scaleY(1) } }
+.mock-note{ font-family:var(--mono); font-size:.58rem; color:var(--v-ink-3); text-align:center; padding:0 0 10px; }
+
+/* ==================================================== 16. TABLERO ESTADO */
+/* Cambios en proceso. Su filosofía no cambia: EN PROCESO + ACTIVO, nada más. */
+.board{ border:1px solid var(--v-edge); border-radius:var(--rad); background:var(--v-panel);
+  backdrop-filter:blur(16px); overflow:hidden; }
+.board + .board{ margin-top:18px; }
+.board-head{ display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:13px 19px; border-bottom:1px solid var(--v-edge-2); background:rgba(255,255,255,.028); }
+.board-state{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono);
+  font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; padding:5px 12px; border-radius:999px; }
+.board-state::before{ content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+.board-state--wip{ color:var(--k-produccion); border:1px solid rgba(255,180,58,.34); background:rgba(255,180,58,.07); }
+.board-state--wip::before{ animation:v-blink 2.4s ease-in-out infinite; }
+@keyframes v-blink{ 0%,100%{ opacity:1 } 50%{ opacity:.25 } }
+.board-state--live{ color:var(--k-clientes); border:1px solid rgba(53,224,161,.34); background:rgba(53,224,161,.07); }
+.board-count{ font-family:var(--mono); font-size:.65rem; color:var(--v-ink-3); }
+.board-row{ display:grid; grid-template-columns:9px minmax(0,1fr) auto; gap:16px; align-items:center;
+  padding:16px 19px; border-bottom:1px solid var(--v-edge-2); transition:background .2s, padding-left .25s var(--ease); }
+.board-row:last-child{ border-bottom:0; }
+.board-row:hover{ background:rgba(255,255,255,.026); padding-left:24px; }
+.board-dot{ width:8px; height:8px; border-radius:50%; background:var(--k);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--k) 14%,transparent); }
+.board-name{ font-family:var(--serif); font-size:1rem; font-weight:650; color:var(--v-ink); margin:0; letter-spacing:-.015em; }
+.board-what{ font-size:.83rem; line-height:1.45; color:var(--v-ink-3); margin:4px 0 0; }
+.board-tag{ font-family:var(--mono); font-size:.62rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--k); padding:4px 10px; border-radius:6px; white-space:nowrap;
+  border:1px solid color-mix(in srgb,var(--k) 30%,transparent); background:color-mix(in srgb,var(--k) 8%,transparent); }
+
+/* ============================================ 17. PÁGINA INTERIOR ESTÁNDAR */
+.page-hero{ padding-block:clamp(64px,8vw,104px) clamp(28px,3.5vw,44px); position:relative; isolation:isolate; }
+.page-hero::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-30% 0 auto 0; height:150%;
+  background:radial-gradient(56% 60% at 24% 26%, rgba(var(--amb-1),.20), transparent 66%);
+  filter:blur(30px);
+}
+.page-hero .h-title, .page-hero h1{ margin-top:18px; max-width:19ch; }
+.page-hero .lead{ margin-top:18px; }
+.breadcrumbs{ padding-top:18px; }
+.breadcrumbs a, .breadcrumbs li{ font-family:var(--mono); font-size:.68rem; color:var(--v-ink-3); }
+
+/* Problema → lo que hacemos. Dos superficies deliberadamente distintas: el
+   problema no se maquilla como si fuera una prestación. */
+.duo{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:32px; }
+.duo-card{ padding:26px 24px; border-radius:var(--rad); border:1px solid var(--v-edge); background:var(--v-panel); }
+.duo-card h3{ font-size:1rem; margin:0 0 10px; color:var(--v-ink); }
+.duo-card p{ font-size:.9rem; line-height:1.6; margin:0; }
+.duo-card--problem{ background:rgba(255,255,255,.016); border-style:dashed; }
+.duo-card--problem h3{ color:var(--v-ink-3); }
+
+/* Resultados: cifra grande + una línea. No una tarjeta con párrafo. */
+.outs{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,2.6vw,34px); margin-top:34px; }
+.out{ position:relative; padding-top:22px; border-top:1px solid var(--v-edge); }
+.out::before{ content:""; position:absolute; top:-1px; left:0; width:0; height:1px;
+  background:var(--k, var(--v-a)); transition:width .6s var(--ease); }
+.out.in::before, .in .out::before{ width:46px; }
+.out b{ display:block; font-family:var(--serif); font-size:clamp(1.02rem,1.4vw,1.2rem);
+  color:var(--v-ink); margin-bottom:8px; letter-spacing:-.02em; }
+.out span{ font-size:.86rem; line-height:1.56; color:var(--v-ink-3); }
+
+/* ============================================================ 18. CIERRE */
+.cta-band{ text-align:center; padding-block:var(--sp-air); position:relative; isolation:isolate; overflow:hidden;
+  border-top:1px solid var(--v-edge-2); }
+.cta-band::before{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(64% 130% at 50% 0%, rgba(var(--amb-1),.20), transparent 62%);
+}
+.cta-band::after{
+  content:""; position:absolute; z-index:-1; left:50%; bottom:-60%; transform:translateX(-50%);
+  width:min(900px,110vw); aspect-ratio:2/1; border-radius:50%;
+  background:radial-gradient(circle, rgba(var(--amb-2),.14), transparent 66%); filter:blur(30px);
+}
+.cta-band .eyebrow{ margin-inline:auto; }
+.cta-band .lead{ margin-inline:auto; }
+.cta-band .stage-ctas, .cta-band .hero4-ctas{ justify-content:center; }
+
+footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg, transparent, rgba(10,14,27,.72)); }
+.footer-col h2{ font-family:var(--mono); font-size:.64rem; letter-spacing:.15em; text-transform:uppercase; color:var(--v-ink-3); }
+.footer-col a,.footer-brand p{ color:var(--v-ink-3); font-size:.84rem; }
+.footer-col a{ transition:color .2s, padding-left .2s var(--ease); }
+.footer-col a:hover{ color:var(--v-ink); padding-left:4px; }
+
+/* ========================================================== 19. RESPONSIVE */
+/* Móvil no es lo mismo apilado: cambian la composición, el ritmo y la forma
+   de cada bloque. La constelación deja de ser un anillo y pasa a ser una
+   columna conectada; las voces dejan de estar desplazadas. */
+@media (max-width:1024px){
+  .voices{ grid-template-columns:1fr; gap:0; }
+  .voice{ padding:22px 0 22px 20px; border-left:2px solid color-mix(in srgb, var(--k) 42%, transparent); }
+  .voice::before{ display:none; }
+  .voice:nth-child(2),.voice:nth-child(3){ margin-top:0; }
+  .track-steps{ grid-template-columns:1fr 1fr; row-gap:30px; }
+  .track-line{ display:none; }
+  .prod-screen{ grid-template-columns:1fr; }
+  .split{ grid-template-columns:1fr; }
+  .split--r .split-a{ order:0; }
+  .duo{ grid-template-columns:1fr; }
+  .outs{ grid-template-columns:1fr; gap:0; }
+  .out{ padding:20px 0; }
+  .out:first-child{ padding-top:0; border-top:0; }
+}
+@media (max-width:860px){
+  /* Constelación → columna. Misma idea, composición propia de móvil. */
+  .constel{ display:none; }
+  .constel-list{ display:block; position:relative; margin-top:34px; padding-left:26px; }
+  .constel-list::before{ content:""; position:absolute; left:5px; top:14px; bottom:14px; width:1px;
+    background:linear-gradient(180deg, transparent, var(--v-edge), transparent); }
+  .constel-list a{
+    position:relative; display:flex; align-items:center; gap:12px; padding:14px 4px;
+    text-decoration:none; color:var(--v-ink-2); font-size:.98rem;
+    border-bottom:1px solid var(--v-edge-2); transition:padding-left .25s var(--ease), color .25s;
+  }
+  .constel-list a:last-child{ border-bottom:0; }
+  .constel-list a::before{
+    content:""; position:absolute; left:-26px; top:50%; transform:translateY(-50%);
+    width:11px; height:11px; border-radius:50%; background:var(--v-bg);
+    border:2px solid var(--k); box-shadow:0 0 0 4px color-mix(in srgb, var(--k) 12%, transparent);
+  }
+  .constel-list a:active, .constel-list a:hover{ padding-left:8px; color:var(--v-ink); }
+  .constel-list a span{ margin-left:auto; font-family:var(--mono); font-size:.6rem;
+    letter-spacing:.1em; color:var(--v-ink-3); text-transform:uppercase; }
+}
+@media (max-width:760px){
+  .track-panel{ grid-template-columns:1fr; min-height:0; }
+  .tmini{ display:none; }
+  .stage{ min-height:auto; padding-block:clamp(56px,10vh,84px) clamp(44px,7vh,72px); }
+  .stage-veil{ background:linear-gradient(180deg, rgba(6,8,15,.72) 0%, rgba(6,8,15,.9) 58%); }
+  .stage .lead{ max-width:100%; }
+  .stage-foot{ margin-top:32px; }
+  .track-steps{ grid-template-columns:1fr; row-gap:0; }
+  /* En móvil el diagrama se convierte en lista conectada y los pasos van
+     siempre abiertos: tocar para desplegar cuatro veces es peor experiencia. */
+  .step{ position:relative; padding:18px 0 18px 40px; border-bottom:1px solid var(--v-edge-2); }
+  .track-steps .step:last-child{ border-bottom:0; }
+  .step-dot{ position:absolute; left:0; top:18px; }
+  .step-t{ margin:0; }
+  .board-row{ grid-template-columns:9px minmax(0,1fr); }
+  .board-row .board-tag{ grid-column:2; justify-self:start; margin-top:8px; }
+  .mock-kpis{ grid-template-columns:1fr 1fr; }
+  .figure-n{ font-size:clamp(3rem,17vw,4.6rem); }
+  .rail{ margin-inline:calc(-1 * var(--gut)); padding-inline:var(--gut); }
+}
+@media (max-width:560px){
+  /* El botón sale de la cabecera —no cabe junto al logotipo y la
+     hamburguesa— y vive dentro del menú. Una sola barra también aquí. */
+  .nav-right .btn.btn-sm{ display:none; }
+  .prod-tabs{ margin-left:0; width:100%; }
+  .prod-tab{ flex:1; text-align:center; }
+}
+
+/* ============================================== 20. MOVIMIENTO REDUCIDO */
+/* Quien pide menos movimiento recibe la escena en su estado final, no una
+   página rota: todo lo que entra al scroll queda visible desde el principio. */
+@media (prefers-reduced-motion: reduce){
+  body::before,.constel-core::after,.board-state--wip::before{ animation:none; }
+  .rise,.rise-l,.rise-s{ opacity:1; transform:none; filter:none; transition:none; }
+  .draw{ stroke-dashoffset:0; transition:none; }
+  .track-line i{ transform:scaleX(1); transition:none; }
+  .mock-row,.mock-bars i{ opacity:1; transform:none; animation:none; }
+  .btn,.lift,.cnode,.prod-tab,.step-dot,.voice::before{ transition:none; }
+  html{ scroll-behavior:auto; }
+}
+:where(a,button,input,textarea,select,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--v-a); outline-offset:3px; border-radius:4px;
+}
+/* La demo empotrada se desplaza dentro de su caja, nunca empuja la página. */
+.fdemo-home-stack{ max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+/* Ritmo: dos secciones seguidas no acumulan su respiración. */
+.section + .section-air{ padding-top: var(--sp-norm); }
+.section + .section{ padding-top: var(--sp-tight); }
+
+/* ============================================ 21. ÍNDICE LATERAL (rail) */
+/* Ya existía, pero apuntaba a secciones que la v4 había eliminado: seis
+   puntos sin destino. Aquí vuelve a corresponderse con la página y se
+   convierte en un rail con progreso — dice dónde estás sin ocupar sitio. */
+.side-index{ right:26px; gap:0; padding:0; }
+.side-index::before{
+  content:""; position:absolute; right:11px; top:-6px; bottom:-6px; width:1px;
+  background:linear-gradient(180deg, transparent, var(--v-edge-2) 18%, var(--v-edge-2) 82%, transparent);
+}
+.side-index a{ padding:11px 0; }
+.side-index .si-dot{
+  width:7px; height:7px; margin-right:8px; background:var(--v-ink-3);
+  border-color:transparent; opacity:.42;
+}
+.side-index a:hover .si-dot{ background:var(--v-a); opacity:1; transform:scale(1.25); }
+.side-index a.active .si-dot{
+  background:var(--v-a); opacity:1; transform:scale(1.35);
+  box-shadow:0 0 0 4px rgba(77,208,225,.16);
+}
+.side-index .si-label{
+  background:rgba(9,13,26,.9); border-color:var(--v-edge); color:var(--v-ink-2);
+  backdrop-filter:blur(10px); font-size:.64rem; letter-spacing:.09em; text-transform:uppercase;
+}
+
+/* ================================================= 22. PACTOS (editorial) */
+/* Compromisos escritos como un documento, no como tarjetas: número, título y
+   texto en tres columnas, separados por filos. Al apuntar una fila, una línea
+   de color la recorre. Ninguna otra sección de la web se compone así. */
+.pacts{ margin-top:clamp(30px,4vw,46px); border-top:1px solid var(--v-edge); }
+.pact{
+  position:relative; display:grid;
+  grid-template-columns:auto minmax(0,.85fr) minmax(0,1.25fr);
+  gap:clamp(16px,4vw,54px); align-items:start;
+  padding:clamp(22px,3vw,34px) 0; border-bottom:1px solid var(--v-edge-2);
+  transition:padding-left .35s var(--ease);
+}
+.pact::before{
+  content:""; position:absolute; top:-1px; left:0; width:0; height:1px;
+  background:var(--k, var(--v-a)); transition:width .55s var(--ease);
+}
+.pact:hover{ padding-left:14px; }
+.pact:hover::before{ width:100%; }
+.pact-n{ font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; color:var(--v-ink-3);
+  padding-top:.45em; transition:color .3s; }
+.pact:hover .pact-n{ color:var(--k, var(--v-a)); }
+.pact h3{ font-family:var(--serif); font-size:clamp(1.08rem,1.75vw,1.4rem); font-weight:650;
+  color:var(--v-ink); margin:0; letter-spacing:-.024em; }
+.pact p{ font-size:.92rem; line-height:1.64; margin:0; }
+@media (max-width:860px){
+  .pact{ grid-template-columns:auto minmax(0,1fr); gap:14px 18px; }
+  .pact p{ grid-column:2; margin-top:8px; }
+}
+
+/* ======================================= 23. CASOS — recorrido, no rejilla */
+/* Tres casos reales, incluido uno que no salió como esperábamos. Se leen en
+   vertical, con el índice pegado arriba mientras dura cada caso. */
+.cases{ display:flex; flex-direction:column; gap:clamp(26px,4vw,52px); margin-top:clamp(30px,4vw,46px); }
+.case5{ position:relative; display:grid; grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
+  gap:clamp(20px,4vw,56px); padding-top:clamp(24px,3vw,34px); border-top:1px solid var(--v-edge); }
+.case5-side{ position:sticky; top:110px; align-self:start; }
+.case5-n{ font-family:var(--serif); font-size:clamp(2.4rem,5vw,4rem); font-weight:700; line-height:.9;
+  letter-spacing:-.05em; color:transparent; -webkit-text-stroke:1px color-mix(in srgb, var(--k) 62%, transparent); }
+.case5-tag{ display:inline-block; margin-top:14px; font-family:var(--mono); font-size:.6rem;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--k);
+  border:1px solid color-mix(in srgb, var(--k) 30%, transparent);
+  background:color-mix(in srgb, var(--k) 8%, transparent); padding:5px 11px; border-radius:6px; }
+.case5 h3{ font-family:var(--serif); font-size:clamp(1.18rem,2.1vw,1.62rem); font-weight:650;
+  color:var(--v-ink); margin:0 0 18px; letter-spacing:-.026em; line-height:1.18; }
+.case5-beat{ position:relative; padding:0 0 18px 26px; }
+.case5-beat:last-child{ padding-bottom:0; }
+.case5-beat::before{ content:""; position:absolute; left:4px; top:.55em; width:7px; height:7px;
+  border-radius:50%; background:var(--k); opacity:.8; }
+.case5-beat::after{ content:""; position:absolute; left:7px; top:1.3em; bottom:2px; width:1px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--k) 40%, transparent), transparent); }
+.case5-beat:last-child::after{ display:none; }
+.case5-beat b{ display:block; font-family:var(--mono); font-size:.6rem; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--v-ink-3); margin-bottom:6px; }
+.case5-beat span{ font-size:.91rem; line-height:1.62; color:var(--v-ink-2); }
+@media (max-width:860px){
+  .case5{ grid-template-columns:1fr; gap:18px; }
+  .case5-side{ position:static; display:flex; align-items:center; gap:14px; }
+  .case5-tag{ margin-top:0; }
+}
+
+/* ============================== 24. TRANSFORMACIÓN (antes → después) */
+/* Dos listas enfrentadas con una flecha viva en medio. Sustituye a los dos
+   "logs" gemelos que enseñaban lo mismo dos veces sin enseñar el cambio. */
+.shift{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:clamp(14px,2.6vw,34px); align-items:center; margin-top:clamp(30px,4vw,44px); }
+.shift-col > b{ display:block; font-family:var(--mono); font-size:.63rem; letter-spacing:.16em;
+  text-transform:uppercase; margin-bottom:16px; }
+.shift-col ul{ list-style:none; margin:0; padding:0; }
+.shift-col li{ position:relative; padding:13px 0 13px 26px; font-size:.9rem; line-height:1.55;
+  border-bottom:1px solid var(--v-edge-2); }
+.shift-col li:last-child{ border-bottom:0; }
+.shift-col li::before{ position:absolute; left:0; top:.85em; width:12px; height:12px; }
+/* Hoy: apagado, con un aspa fina. */
+.shift-a > b{ color:var(--v-ink-3); }
+.shift-a li{ color:var(--v-ink-3); }
+.shift-a li::before{
+  content:""; border-radius:2px; top:1.05em; height:1px; background:var(--v-ink-3); opacity:.55;
+}
+/* Con el sistema: encendido, con el color de la capacidad. */
+.shift-b > b{ color:var(--k); }
+.shift-b li{ color:var(--v-ink-2); }
+.shift-b li::before{
+  content:""; top:1em; width:12px; height:12px; border-radius:50%;
+  background:color-mix(in srgb, var(--k) 22%, transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--k) 60%, transparent);
+}
+.shift-arrow{ position:relative; width:clamp(40px,6vw,84px); height:2px; flex:none;
+  background:linear-gradient(90deg, transparent, var(--k)); border-radius:2px; overflow:visible; }
+.shift-arrow::after{
+  content:""; position:absolute; right:-1px; top:50%; transform:translateY(-50%) rotate(45deg);
+  width:9px; height:9px; border-top:2px solid var(--k); border-right:2px solid var(--k);
+}
+.shift-arrow i{ position:absolute; top:50%; left:0; transform:translateY(-50%);
+  width:6px; height:6px; border-radius:50%; background:#dbe6ff;
+  animation:v-travel 2.6s var(--ease) infinite; }
+@keyframes v-travel{ 0%{ left:0; opacity:0 } 15%{ opacity:1 } 85%{ opacity:1 } 100%{ left:100%; opacity:0 } }
+@media (max-width:860px){
+  .shift{ grid-template-columns:1fr; gap:8px; }
+  .shift-arrow{ width:2px; height:44px; margin:6px 0 6px 5px;
+    background:linear-gradient(180deg, transparent, var(--k)); }
+  .shift-arrow::after{ right:auto; left:50%; top:auto; bottom:-1px;
+    transform:translateX(-50%) rotate(135deg); }
+  .shift-arrow i{ animation:v-travel-v 2.6s var(--ease) infinite; left:-2px; }
+  @keyframes v-travel-v{ 0%{ top:0; opacity:0 } 15%{ opacity:1 } 85%{ opacity:1 } 100%{ top:100%; opacity:0 } }
+}
+@media (prefers-reduced-motion: reduce){ .shift-arrow i{ animation:none; opacity:0; } }
+
+/* ================================== 25. CADENA ENTRE CAPACIDADES */
+/* Tres eslabones en línea: lo que sale de uno entra en el siguiente. */
+.chain{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,2.4vw,26px);
+  margin-top:clamp(28px,3.6vw,42px); }
+.link5{ position:relative; padding:22px 0 0; border-top:2px solid color-mix(in srgb, var(--k) 45%, transparent); }
+.link5::after{
+  content:""; position:absolute; top:-5px; right:-1px; width:8px; height:8px; border-radius:50%;
+  background:var(--k); box-shadow:0 0 0 4px color-mix(in srgb, var(--k) 14%, transparent);
+}
+.link5 h3{ font-family:var(--serif); font-size:clamp(1rem,1.4vw,1.16rem); font-weight:650;
+  color:var(--v-ink); margin:0 0 8px; letter-spacing:-.02em; }
+.link5 p{ font-size:.86rem; line-height:1.58; color:var(--v-ink-3); margin:0; }
+@media (max-width:860px){ .chain{ grid-template-columns:1fr; gap:0; }
+  .link5{ padding:20px 0; border-top:1px solid var(--v-edge-2); }
+  .link5:first-child{ border-top:2px solid color-mix(in srgb, var(--k) 45%, transparent); }
+  .link5::after{ display:none; } }
+
+/* ================================== 26. ENTRADA DE FICHA (dos columnas) */
+/* El titular ocupaba una columna estrecha y la mitad derecha quedaba muerta.
+   Los distintivos de la capacidad se mudan ahí y la entrada se equilibra. */
+.page-hero--split .container{
+  display:grid; grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);
+  gap:clamp(24px,5vw,72px); align-items:start;
+}
+.page-hero--split .ph-main .h-title,
+.page-hero--split .ph-main h1{ max-width:22ch; }
+.page-hero--split .page-hero-meta{
+  display:flex; flex-direction:column; gap:0; margin:0; padding-top:clamp(8px,2vw,42px);
+  border-top:1px solid var(--v-edge);
+}
+.page-hero--split .page-hero-meta .trust-badge{
+  position:relative; display:block; padding:15px 0 15px 24px; border:0; background:none;
+  border-bottom:1px solid var(--v-edge-2); border-radius:0;
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.06em; color:var(--v-ink-2);
+  text-transform:none; transition:padding-left .3s var(--ease), color .3s;
+}
+.page-hero--split .page-hero-meta .trust-badge:last-child{ border-bottom:0; }
+.page-hero--split .page-hero-meta .trust-badge::before{
+  content:""; position:absolute; left:2px; top:50%; transform:translateY(-50%);
+  width:7px; height:7px; border-radius:50%; background:var(--v-a);
+  box-shadow:0 0 0 4px rgba(77,208,225,.13);
+}
+.page-hero--split .page-hero-meta .trust-badge:hover{ padding-left:32px; color:var(--v-ink); }
+@media (max-width:900px){
+  .page-hero--split .container{ grid-template-columns:1fr; gap:26px; }
+  .page-hero--split .ph-main .h-title,
+  .page-hero--split .ph-main h1{ max-width:100%; }
+}
+
+/* Cabeceras de sección: 660px obligaba a partir cualquier titular en tres
+   líneas y dejaba media pantalla vacía a la derecha. */
+.head{ max-width:800px; }
+.page-hero .h-title, .page-hero h1{ max-width:24ch; }
+
+/* Cuatro resultados en tres columnas dejaban un hueco. Se ajusta al número. */
+.outs[data-n="4"]{ grid-template-columns:repeat(4,1fr); gap:clamp(14px,2vw,26px); }
+@media (max-width:1024px){ .outs[data-n="4"]{ grid-template-columns:1fr 1fr; } }
+@media (max-width:640px){ .outs[data-n="4"]{ grid-template-columns:1fr; gap:0; } }
+
+/* Nota previa al cierre: es una frase, no un bloque de código. */
+.pre-cta{ max-width:60ch; margin:0 auto clamp(24px,3vw,34px); font-size:.88rem;
+  line-height:1.62; color:var(--v-ink-3); }
+
+/* ================================== 27. TARJETA DE RAÍL (se recorre) */
+/* Seis prestaciones en rejilla eran seis cajas iguales ocupando media página.
+   En raíl se recorren de lado, ocupan una franja y responden al cursor. */
+.rcard{ padding:24px 22px; border-radius:var(--rad); border:1px solid var(--v-edge);
+  background:var(--v-panel); backdrop-filter:blur(12px); --k:var(--v-a); }
+.rcard .service-icon{ display:inline-grid; place-items:center; width:38px; height:38px;
+  border-radius:11px; background:color-mix(in srgb, var(--k) 12%, transparent);
+  border:1px solid color-mix(in srgb, var(--k) 26%, transparent); margin-bottom:16px; }
+.rcard .service-icon svg{ width:18px; height:18px; stroke:var(--k); }
+.rcard h3{ font-family:var(--serif); font-size:1.02rem; font-weight:650; color:var(--v-ink);
+  margin:0 0 9px; letter-spacing:-.02em; }
+.rcard p{ font-size:.86rem; line-height:1.58; color:var(--v-ink-3); margin:0; }
+.rail-hint{ font-family:var(--mono); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--v-ink-3); margin:0; display:flex; align-items:center; gap:10px; }
+.rail-hint::after{ content:""; flex:1; height:1px; background:linear-gradient(90deg, var(--v-edge-2), transparent); }
+
+/* ============================== 28. FICHA TÉCNICA (superficie real) */
+/* Para enseñar la amplitud de un producto sin convertirla en 14 tarjetas:
+   filas densas con etiqueta en monoespaciada, como una hoja de especificación.
+   Comunica seriedad e ingeniería, que es exactamente lo que hay detrás. */
+.specs{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(28px,5vw,72px); margin-top:clamp(28px,3.6vw,44px); }
+.spec{ display:grid; grid-template-columns:clamp(104px,11vw,134px) minmax(0,1fr); gap:16px;
+  padding:15px 0; border-bottom:1px solid var(--v-edge-2); align-items:baseline;
+  transition:padding-left .3s var(--ease); }
+.spec:hover{ padding-left:8px; }
+.spec b{ font-family:var(--mono); font-size:.62rem; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--v-ink-3); font-weight:400; transition:color .3s; }
+.spec:hover b{ color:var(--v-a); }
+.spec span{ font-size:.88rem; line-height:1.55; color:var(--v-ink-2); }
+@media (max-width:860px){
+  .specs{ grid-template-columns:1fr; }
+  .spec{ grid-template-columns:1fr; gap:5px; padding:14px 0; }
+}
+
+/* Vitrina a escala de producto: el marco se ensancha y la maqueta gana
+   altura, para que no parezca una miniatura de algo grande. */
+.prod--wide{ margin-inline:calc(-1 * clamp(0px, 3vw, 46px)); }
+.prod--wide .prod-body{ padding:clamp(20px,3vw,40px); }
+.prod--wide .mock-in{ padding:18px; gap:14px; }
+.prod--wide .mock-bars{ height:120px; }
+.prod--wide .mock-kpi b{ font-size:1.24rem; }
+.prod--wide .mock-row{ padding:11px 13px; }
+@media (max-width:900px){ .prod--wide{ margin-inline:0; } }
+
+/* ====================== 29. MÓVIL: LA ESCENA TIENE SU SITIO */
+/* En móvil la escena no se esconde detrás del texto en un cuarto de pantalla:
+   se le da una franja propia bajo los botones, a lo ancho, con su composición
+   —entrada a la izquierda, sistema en el centro, salida a la derecha—. La
+   portada sigue viva sin quitarle legibilidad a una sola línea. */
+@media (max-width:760px){
+  .stage{ display:block; padding-bottom:26px; }
+  .stage-canvas{ top:auto; bottom:0; height:230px; }
+  .stage-veil{ display:none; }
+  .stage .container{ padding-bottom:246px; }
+  .stage-foot{ margin-top:26px; }
+}
+/* El pie de la escena se parte limpio: la etiqueta y el estado nunca dejan
+   un separador suelto colgando en una línea propia. */
+.stage-foot{ flex-wrap:wrap; row-gap:6px; column-gap:14px; }
+.stage-foot .stage-state{ position:relative; padding-left:16px; }
+.stage-foot .stage-state::before{ content:"·"; position:absolute; left:4px; color:var(--v-ink-3); }
+@media (max-width:520px){
+  .stage-foot::before{ display:none; }
+  .stage-foot .stage-state{ padding-left:0; }
+  .stage-foot .stage-state::before{ display:none; }
+}
+
+/* El titular de una página interior no es el de la portada: a tamaño de
+   display ocupaba tres líneas y dejaba una palabra huérfana al final. */
+.page-hero h1:not(.h-title){ font-size:clamp(2.1rem,4.2vw,3.4rem); line-height:1.04; }
+
+/* ============================ 30. BOTÓN DE MENÚ (móvil) */
+/* Las dos barras exteriores son ::before/::after DENTRO del <span>, que solo
+   mide 20 px: con left:12px/right:12px heredados del botón su ancho resultaba
+   negativo y no se pintaban. El menú mostraba una única raya, y ninguna al
+   abrirse. Se anclan al span, que ya tiene el ancho correcto. */
+.burger span::before, .burger span::after{ left:0; right:0; }
+
+/* Y una llamada a la acción dentro del menú: al ocultar el botón de la
+   cabecera por falta de sitio, en móvil no quedaba ninguna. */
+.nav-cta-mobile{ display:none; }
+@media (max-width:560px){
+  .nav-cta-mobile{ display:block; margin-top:22px; padding-top:22px;
+    border-top:1px solid var(--v-edge-2); }
+  /* Los estilos de enlace del menú móvil vaciaban el botón (fondo y color
+     heredados de .main-nav a). Se recupera la identidad del botón primario. */
+  .main-nav .nav-cta-mobile > a.btn.btn-primary{
+    display:block; width:100%; text-align:center;
+    background:var(--v-grad); color:#05070d; font-weight:600;
+    font-size:.95rem; padding:15px 20px; border-radius:999px;
+    box-shadow:0 12px 38px -14px rgba(124,108,255,.85);
+  }
+}
+
+/* ============================== 31. PREGUNTAS FRECUENTES */
+/* Una columna única de veinte preguntas convierte la página en un scroll
+   interminable con media pantalla vacía al lado. En dos columnas se lee de
+   un vistazo y la página mide la mitad. */
+@media (min-width:1000px){
+  .faq-list{ display:grid; grid-template-columns:1fr 1fr; gap:22px 30px; align-items:start; }
+  .faq-empty{ grid-column:1 / -1; }
+}
