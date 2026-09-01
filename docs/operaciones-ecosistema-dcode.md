@@ -262,3 +262,56 @@ Conviene saberlo antes de prometerlo o de buscar por qué no pasa nada:
   conectar** — le falta el dominio de producción y el secreto HMAC.
 - `MK/Lead IA 360`: activo y correcto, pero **sin ejecuciones en ≥12 días**. El
   workflow no tiene ningún defecto; simplemente nadie ha enviado el formulario.
+
+## 9. Redirecciones sin reabrir el SSRF
+
+El recolector del Executive Board no sigue redirecciones, y es deliberado: su
+validacion anti-SSRF comprueba la URL ANTES de pedirla, asi que un 302 hacia
+`http://169.254.169.254/` llevaria a un destino que nunca paso por el filtro.
+
+El efecto colateral apareció el 01/09/2026: **un 301 legitimo se lee como
+fuente caida**. Le pasaba a Google AI Blog, que solo habia cambiado de
+direccion.
+
+La tentacion es activar `followRedirects`. No se hace. Lo que abre el agujero
+no es seguir una redireccion: es seguir una redireccion SIN REVALIDARLA. La
+propiedad que hay que conservar es que **toda URL que alguna vez se pida haya
+pasado por el validador**.
+
+De ahi `ADM/Salud de Fuentes de Vigilancia`, que resuelve el caso sin tocar el
+recolector:
+
+1. Pide la URL con `followRedirects:false`, `fullResponse:true` y
+   `neverError:true`. Asi puede LEER la cabecera `Location` sin seguirla.
+2. Si es 301 o 308, resuelve el destino y **lo pasa por el mismo validador**.
+   Una `Location` relativa se resuelve solo contra el origen original;
+   cualquier otra forma se rechaza e informa.
+3. Solo entonces corrige la URL en la tabla, dejando la anterior en `Notas`.
+
+Un 301 permanente significa que la direccion guardada esta caducada, y eso se
+arregla UNA VEZ en la configuracion, no siguiendo la redireccion cada dia para
+siempre. El recolector sigue igual de estricto que antes.
+
+Un 302/303/307 es TEMPORAL y no se toca: el servidor esta diciendo que la URL
+canonica sigue siendo la guardada, y cambiarla seria lo contrario de lo que
+pide.
+
+### Una fuente que no responde no es una fuente muerta
+
+Verificado el 01/09/2026 sobre las 11 fuentes activas:
+
+| Codigo | Significa | Accion |
+|---|---|---|
+| 410 | Retirada para siempre | Desactivar |
+| 404 | Responde, pero ahi ya no hay nada | Buscar URL nueva o desactivar |
+| 301/308 | Direccion caducada | Corregir la URL (automatico) |
+| 302/307 | Desvio temporal | No tocar |
+| 429 | Limitando el ritmo | No tocar |
+| 5xx | Problema del servidor ajeno | No tocar, suele ser pasajero |
+| 200 sin `<item>` | Responde pero no es un feed | Revisar |
+
+De cinco fuentes que se daban por caidas, **solo una lo estaba**. Google era
+un 301, Hacker News un 502 pasajero. Y de las dos con 404 —Anthropic y Meta—
+se comprobo ademas por busqueda web que **ninguna de las dos publica feed RSS
+oficial**: la URL guardada era una suposicion sobre una ruta convencional que
+nunca existio. No habia nada que reparar.
