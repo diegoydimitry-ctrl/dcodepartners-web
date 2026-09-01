@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T19:34:18.169Z",
+  "generatedAt": "2026-09-01T20:28:42.260Z",
   "pageCount": 66,
-  "chunkCount": 574,
+  "chunkCount": 584,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -2265,26 +2265,51 @@
       "chunks": [
         {
           "id": "/en/#c0",
-          "heading": "We read your company. We build its system.",
-          "text": "We look at how you actually work, find where the time goes and build the system that connects your operation. We do not sell closed packages. Talk about your operation How we work From scattered data to a systemScattered"
+          "heading": "",
+          "text": "Business systems, built to fit"
         },
         {
           "id": "/en/#c1",
-          "heading": "It almost always starts the same way.",
-          "text": "“I am always chasing payments.” The money arrives late because chasing it depends on somebody remembering. “Opportunities slip away.” They come in through several channels and follow-up happens if there is time left. “The same data, in three places.” Information is duplicated, it does not reconcile, and the reports come out wrong."
+          "heading": "We read your company.We build its system.",
+          "text": "We look at how you actually work, find where the time goes and build the system that connects your operation. We do not sell closed packages. Talk about your operation How we work The system, right now Converging Why companies call us"
         },
         {
           "id": "/en/#c2",
-          "heading": "Pieces that plug into your operation.",
-          "text": "When your problem matches one of them, we adapt it. When none of them fits, we build the one that is missing. Your operation The centre Sales Marketing Customer Delivery Finance Support Operations Leadership Sales Opportunities Marketing Demand Customer Relationship Delivery Projects Finance Money Support Tickets Operations Documents Leadership Decisions Switched on one at a time · Combined · Extended"
+          "heading": "It almost always starts the same way.",
+          "text": "&ldquo;I am always chasing payments.&rdquo; The money arrives late because chasing it depends on somebody remembering. &ldquo;Opportunities slip away.&rdquo; They come in through several channels and follow-up happens if there is time left. &ldquo;The same data, in three places.&rdquo; Information is duplicated, it does not reconcile, and the reports come out wrong. How we work"
         },
         {
           "id": "/en/#c3",
-          "heading": "D-Code Finance",
-          "text": "A complete financial system we developed ourselves. Walk through it module by module. d-code finance Open the full demo See D-Code Finance"
+          "heading": "We analyse",
+          "text": "We walk through your real operation: who does what, with which tool, and where it stalls. What is there, unvarnished 02"
         },
         {
           "id": "/en/#c4",
+          "heading": "We design",
+          "text": "We decide what gets automated and what a person keeps deciding. The second matters as much as the first. Scope agreed before we build 03"
+        },
+        {
+          "id": "/en/#c5",
+          "heading": "We build",
+          "text": "We adapt the pieces we already know how to build and develop the ones your case needs that do not exist yet. Inside the tools you already use 04"
+        },
+        {
+          "id": "/en/#c6",
+          "heading": "We measure",
+          "text": "We leave it running and keep measuring what changes, against your starting point. With data, not estimates What we already know how to build"
+        },
+        {
+          "id": "/en/#c7",
+          "heading": "Pieces that already exist. And the ones missing.",
+          "text": "Sales Marketing Customer Delivery Finance Support Operations Leadership Automation AI agents Integrations When your problem matches one of them, we adapt it. When none of them fits, we build the one that is missing. There is no catalogue to choose from. Our own software"
+        },
+        {
+          "id": "/en/#c8",
+          "heading": "D-Code Finance",
+          "text": "A complete financial system we developed ourselves. Walk through it module by module. d-code finance Open the full demo See D-Code Finance Let us start"
+        },
+        {
+          "id": "/en/#c9",
           "heading": "Thirty minutes and you will know what can be automated.",
           "text": "Tell us how you work today and we will tell you where we would start. Book a call See real cases"
         }
@@ -2856,26 +2881,51 @@
       "chunks": [
         {
           "id": "/#c0",
-          "heading": "Analizamos tu empresa. Construimos su sistema.",
-          "text": "Miramos cómo trabajas de verdad, encontramos dónde se pierde el tiempo y construimos el sistema que conecta tu operación. No vendemos paquetes cerrados. Hablemos de tu operación Cómo trabajamos Del dato suelto al sistemaDisperso"
+          "heading": "",
+          "text": "Sistemas empresariales a medida"
         },
         {
           "id": "/#c1",
-          "heading": "Casi siempre empieza igual.",
-          "text": "«Persigo cobros.» El dinero llega tarde porque avisar depende de que alguien se acuerde. «Se me escapan oportunidades.» Entran por varios sitios y el seguimiento se hace si queda tiempo. «Lo mismo, en tres sitios.» La información se repite, no cuadra y los informes salen mal."
+          "heading": "Analizamos tu empresa.Construimos su sistema.",
+          "text": "Miramos cómo trabajas de verdad, encontramos dónde se pierde el tiempo y construimos el sistema que conecta tu operación. No vendemos paquetes cerrados. Hablemos de tu operación Cómo trabajamos El sistema, ahora mismo Convergiendo Por qué nos llaman"
         },
         {
           "id": "/#c2",
-          "heading": "Piezas que conectan con tu operación.",
-          "text": "Cuando tu problema encaja con una de ellas, la adaptamos. Cuando no encaja ninguna, construimos la que falta. Tu operación El centro Comercial Marketing Clientes Producción Finanzas Soporte Administración Dirección Comercial Oportunidades Marketing Captación Clientes Relación Producción Entrega Finanzas Dinero Soporte Incidencias Administración Documentos Dirección Decisiones Se activan una a una · Se combinan · Se amplían"
+          "heading": "Casi siempre empieza igual.",
+          "text": "«Persigo cobros.» El dinero llega tarde porque avisar depende de que alguien se acuerde. «Se me escapan oportunidades.» Entran por varios sitios y el seguimiento se hace si queda tiempo. «Lo mismo, en tres sitios.» La información se repite, no cuadra y los informes salen mal. Cómo trabajamos"
         },
         {
           "id": "/#c3",
-          "heading": "D-Code Finance",
-          "text": "Un sistema financiero completo desarrollado por nosotros. Recórrelo módulo a módulo. d-code finance Abrir la demo completa Ver D-Code Finance"
+          "heading": "Analizamos",
+          "text": "Recorremos tu operación real: quién hace qué, con qué herramienta y en qué punto se para. Lo que hay, sin maquillar 02"
         },
         {
           "id": "/#c4",
+          "heading": "Diseñamos",
+          "text": "Decidimos qué se automatiza y qué sigue decidiendo una persona. Lo segundo importa tanto como lo primero. Alcance acordado antes de construir 03"
+        },
+        {
+          "id": "/#c5",
+          "heading": "Construimos",
+          "text": "Adaptamos las piezas que ya sabemos construir y desarrollamos las que tu caso necesite y no existan. Dentro de tus herramientas actuales 04"
+        },
+        {
+          "id": "/#c6",
+          "heading": "Medimos",
+          "text": "Lo dejamos funcionando y seguimos midiendo lo que cambia, comparado con tu punto de partida. Con datos, no con estimaciones Lo que ya sabemos construir"
+        },
+        {
+          "id": "/#c7",
+          "heading": "Piezas que ya existen. Y las que falten.",
+          "text": "Comercial Marketing Clientes Producción Finanzas Soporte Administración Dirección Automatizaciones Agentes de IA Integraciones Cuando tu problema encaja con una de ellas, la adaptamos. Cuando no encaja ninguna, construimos la que falta. No hay un catálogo del que elegir. Software propio"
+        },
+        {
+          "id": "/#c8",
+          "heading": "D-Code Finance",
+          "text": "Un sistema financiero completo desarrollado por nosotros. Recórrelo módulo a módulo. d-code finance Abrir la demo completa Ver D-Code Finance Empecemos"
+        },
+        {
+          "id": "/#c9",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
           "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Ver casos reales"
         }
