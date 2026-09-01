@@ -1,0 +1,81 @@
+name: Actualizar base de conocimiento del chatbot
+
+# AUD-DCP 23/08/2026 (checkpoint continuación — mejora continua). Cierra el
+# ciclo "cambio en la web -> knowledge base actualizada -> chatbot
+# actualizado" sin depender de que alguien recuerde ejecutar
+# `npm run sync-content` a mano tras tocar HTML. Solo regenera y COMMITEA
+# assets/data/knowledge-base.json — nunca toca nada más y nunca hace merge
+# por sí solo: si hay un cambio real, lo deja como commit directo a la rama
+# que disparó el push (para un push a main) o como comentario/commit en el
+# propio PR (para un push a una rama de PR), igual que cualquier otro commit
+# humano — sigue pasando por el resto de checks (CI, Vercel) con normalidad.
+#
+# Por qué commit directo y no un PR aparte: abrir un PR nuevo por cada
+# cambio de contenido crearía ruido y una segunda ronda de revisión para
+# algo puramente derivado y determinista (el propio script ya evita commits
+# vacíos, ver scripts/build-knowledge-base.js — generatedAt solo avanza si
+# el contenido real cambió). El diff del commit generado siempre queda
+# visible en el historial normal de git para auditar qué cambió y por qué.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.html'
+      - 'scripts/build-knowledge-base.js'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**/*.html'
+      - 'scripts/build-knowledge-base.js'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-kb:
+    runs-on: ubuntu-latest
+    # AUD-DCP 23/08/2026 (segunda ronda): el comentario de arriba ya
+    # afirmaba que esto se ejecutaba "para un push a una rama de PR", pero
+    # el trigger real solo escuchaba `push` a `main` — durante la vida de
+    # una PR (p. ej. PR #74, que toca 73 páginas HTML) la knowledge base
+    # nunca se regeneraba, así que el Preview de esa PR servía al chatbot
+    # contenido desactualizado respecto al propio diff que se estaba
+    # revisando. Añadido el trigger `pull_request` que faltaba para que la
+    # afirmación del comentario sea cierta. Se restringe a PRs del mismo
+    # repositorio (no forks): un `pull_request` disparado desde un fork
+    # recibe un GITHUB_TOKEN de solo lectura pase lo que diga `permissions`
+    # aquí, y el intento de push fallaría en cada PR externa — mejor
+    # saltarlo limpiamente que fallar el check.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Regenerar knowledge-base.json
+        run: npm run generate-kb
+
+      - name: Commitear si hay cambios reales de contenido
+        run: |
+          set -e
+          if git diff --quiet -- assets/data/knowledge-base.json; then
+            echo "Sin cambios de contenido reales — nada que commitear."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/knowledge-base.json
+          git commit \
+            -m "chore(chatbot): actualizar base de conocimiento tras cambio de contenido" \
+            -m "Regenerado automaticamente por .github/workflows/update-knowledge-base.yml a partir del HTML publicado, disparado por un push que toco *.html."
+          git push

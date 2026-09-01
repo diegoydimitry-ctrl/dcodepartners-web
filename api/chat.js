@@ -10,7 +10,7 @@
  * mensaje honesto explicando el motivo — nunca una respuesta de repuesto
  * que aparente venir del modelo.
  */
-const { getProvider } = require('../lib/providers');
+const { getProviderChain } = require('../lib/providers');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
@@ -41,12 +41,19 @@ function sanitizeMessage(raw) {
 
 function sanitizeHistory(raw) {
   if (!Array.isArray(raw)) return [];
-  return raw
+  const turns = raw
     .filter(
       (m) => m && typeof m.content === 'string' && (m.role === 'user' || m.role === 'assistant')
     )
     .slice(-MAX_HISTORY_TURNS)
     .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_LENGTH) }));
+  // Gemini y Anthropic exigen que el primer turno enviado sea 'user'; un
+  // historial que empezara por 'assistant' (posible desde un cliente que
+  // no sea el widget oficial) haría fallar a AMBOS proveedores con un 400
+  // no reintentable, agotando la cadena entera sin ninguna posibilidad
+  // real de éxito.
+  const firstUserIndex = turns.findIndex((t) => t.role === 'user');
+  return firstUserIndex === -1 ? [] : turns.slice(firstUserIndex);
 }
 
 let cachedSiteContext = null;
@@ -54,11 +61,14 @@ let cachedSiteContext = null;
 /**
  * Carga el contenido real del sitio (generado por
  * scripts/build-knowledge-base.js a partir del HTML publicado) y lo
- * concatena entero como contexto. El sitio es pequeño (~7.500 tokens en
- * total): cabe sin problema en una sola petición, así que no hace falta
- * recuperación selectiva — Gemini ve todo el contenido real y decide qué
- * es relevante para cada pregunta, en vez de depender de que un ranking
- * léxico haya elegido el fragmento correcto de antemano.
+ * concatena entero como contexto. El texto real ronda las ~70.000-80.000
+ * palabras/tokens estimados (66 páginas), muy por debajo de la ventana de
+ * contexto de ambos proveedores (1M tokens): cabe sin problema en una
+ * sola petición, así que no hace falta recuperación selectiva — el modelo
+ * ve todo el contenido real y decide qué es relevante para cada pregunta,
+ * en vez de depender de que un ranking léxico haya elegido el fragmento
+ * correcto de antemano. Esto sí tiene coste real por token en cada
+ * llamada (ver cache_control en lib/providers.js para Anthropic).
  */
 function loadSiteContext() {
   if (cachedSiteContext) return cachedSiteContext;
@@ -146,7 +156,7 @@ function classifyError(error) {
   };
 }
 
-module.exports = async function handler(req, res) {
+async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
   if (req.method !== 'POST') {
@@ -155,6 +165,11 @@ module.exports = async function handler(req, res) {
   }
 
   const requestStart = Date.now();
+  // ID corto de correlación: sin él, bajo peticiones concurrentes (misma
+  // instancia caliente o varias instancias en paralelo) las líneas de log
+  // de distintas peticiones se intercalan sin forma de saber cuál
+  // pertenece a cuál — la IP no siempre discrimina (NAT/proxy compartido).
+  const requestId = Math.random().toString(36).slice(2, 10);
 
   try {
     const forwardedFor = req.headers['x-forwarded-for'];
@@ -164,7 +179,7 @@ module.exports = async function handler(req, res) {
       'unknown';
 
     if (isRateLimited(ip)) {
-      console.warn(`[chat] Rate limit alcanzado para ${ip}`);
+      console.warn(`[chat:${requestId}] Rate limit alcanzado para ${ip}`);
       return res
         .status(429)
         .json({ success: false, error: 'Demasiadas solicitudes. Inténtalo de nuevo en un minuto.' });
@@ -177,16 +192,16 @@ module.exports = async function handler(req, res) {
     const history = sanitizeHistory(req.body && req.body.history);
 
     console.log(
-      `[chat] Petición recibida — ip=${ip} longitudMensaje=${message.length} turnosHistorial=${history.length}`
+      `[chat:${requestId}] Petición recibida — ip=${ip} longitudMensaje=${message.length} turnosHistorial=${history.length}`
     );
 
-    const provider = getProvider();
+    const providerChain = getProviderChain();
 
-    if (!provider) {
+    if (!providerChain.length) {
       // Sin GEMINI_API_KEY3/GEMINI_API_KEY ni ANTHROPIC_API_KEY configuradas
       // en Vercel: no hay nada que pueda generar una respuesta real. Se
       // informa con honestidad en vez de simular una respuesta.
-      console.error('[chat] Sin proveedor LLM configurado — faltan las variables de entorno de la API key');
+      console.error(`[chat:${requestId}] Sin proveedor LLM configurado — faltan las variables de entorno de la API key`);
       return res.status(200).json({
         success: true,
         reply:
@@ -197,45 +212,80 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    console.log(`[chat] Proveedor seleccionado: ${provider.name}`);
-
     const siteContext = loadSiteContext();
     const systemPrompt = buildSystemPrompt(siteContext);
+    const conversation = [...history, { role: 'user', content: message }];
 
-    try {
-      console.log(`[chat] Llamando a ${provider.name}...`);
-      const callStart = Date.now();
-      const reply = await provider.generate(systemPrompt, [
-        ...history,
-        { role: 'user', content: message },
-      ]);
-      console.log(
-        `[chat] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
-          `(total petición: ${Date.now() - requestStart}ms)`
-      );
-      return res.status(200).json({ success: true, reply, mode: 'generated' });
-    } catch (providerError) {
-      const { category, reply } = classifyError(providerError);
-      const reason = String((providerError && providerError.message) || providerError).slice(0, 300);
-      console.error(
-        `[chat] Error del proveedor ${provider.name} (categoría: ${category}) tras ${Date.now() - requestStart}ms:`,
-        providerError
-      );
-      return res.status(200).json({
-        // El motivo técnico se añade también al propio texto de la respuesta
-        // (no solo al campo providerErrorReason) para poder diagnosticar un
-        // fallo real viendo el chat en el móvil, sin depender de las
-        // herramientas de desarrollador del navegador ni del panel de Vercel.
-        success: true,
-        reply: `${reply}\n\n_Detalle técnico (${category}): ${reason}_`,
-        mode: 'error',
-        providerErrorReason: reason,
-      });
+    // Recorre la cadena de proveedores en orden (Gemini, luego Anthropic si
+    // está configurado): solo se pasa al siguiente proveedor cuando el
+    // anterior se ha rendido de verdad. Esto es lo que evita que una
+    // sobrecarga temporal de un único proveedor (fallo real visto en
+    // producción: Gemini 503 "high demand") se traduzca en "el chatbot no
+    // responde" cuando hay una alternativa real disponible.
+    //
+    // Solo el PRIMER proveedor de la cadena reintenta internamente sus
+    // fallos transitorios (ver lib/providers.js); el resto se prueba una
+    // única vez. No es un recorte de fiabilidad: es presupuesto de tiempo.
+    // Con maxDuration=60s (ver export de config más abajo) y 12s por
+    // intento, reintentar TAMBIÉN el proveedor de respaldo podría superar
+    // el límite de la función y matarla a mitad, sin poder devolver el
+    // mensaje honesto de error — peor que agotar el respaldo a la primera.
+    let lastError = null;
+    let lastProviderName = null;
+    for (let i = 0; i < providerChain.length; i += 1) {
+      const provider = providerChain[i];
+      lastProviderName = provider.name;
+      try {
+        console.log(`[chat:${requestId}] Llamando a ${provider.name}...`);
+        const callStart = Date.now();
+        const options = i === 0 ? undefined : { maxAttempts: 1 };
+        const reply = await provider.generate(systemPrompt, conversation, options);
+        console.log(
+          `[chat:${requestId}] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
+            `(total petición: ${Date.now() - requestStart}ms)`
+        );
+        return res.status(200).json({ success: true, reply, mode: 'generated' });
+      } catch (providerError) {
+        lastError = providerError;
+        console.error(
+          `[chat:${requestId}] Error del proveedor ${provider.name} tras ${Date.now() - requestStart}ms ` +
+            `(quedan ${providerChain.length - i - 1} proveedor(es) por intentar):`,
+          providerError
+        );
+      }
     }
+
+    // Todos los proveedores de la cadena han agotado sus reintentos: se
+    // informa con honestidad, igual que antes, usando el último error real
+    // para clasificar y diagnosticar.
+    const { category, reply } = classifyError(lastError);
+    const reason = String((lastError && lastError.message) || lastError).slice(0, 300);
+    return res.status(200).json({
+      // El motivo técnico se añade también al propio texto de la respuesta
+      // (no solo al campo providerErrorReason) para poder diagnosticar un
+      // fallo real viendo el chat en el móvil, sin depender de las
+      // herramientas de desarrollador del navegador ni del panel de Vercel.
+      success: true,
+      reply: `${reply}\n\n_Detalle técnico (${lastProviderName}, ${category}): ${reason}_`,
+      mode: 'error',
+      providerErrorReason: reason,
+    });
   } catch (error) {
-    console.error('[chat] Error inesperado en /api/chat:', error);
+    console.error(`[chat:${requestId}] Error inesperado en /api/chat:`, error);
     return res
       .status(500)
       .json({ success: false, error: 'Ha ocurrido un error. Inténtalo de nuevo en unos segundos.' });
   }
-};
+}
+
+module.exports = handler;
+// Presupuesto explícito de duración de la función (Vercel Node.js
+// Serverless Function, sin framework). Antes no había ningún valor
+// fijado, así que el límite real dependía implícitamente del plan/cuenta
+// — arriesgado ahora que lib/providers.js puede encadenar varios intentos
+// entre dos proveedores. 60s es el límite máximo del plan Hobby: fijarlo
+// explícito evita que un cambio de plan o de valor por defecto de Vercel
+// deje la función con menos margen del que asume el presupuesto de
+// reintentos de lib/providers.js (ver el comentario junto a
+// REQUEST_TIMEOUT_MS en ese archivo).
+module.exports.config = { maxDuration: 60 };
