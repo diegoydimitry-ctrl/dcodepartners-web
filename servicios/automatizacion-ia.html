@@ -215,6 +215,51 @@
     </div>
   </section>
 
+  <!-- ============ VISUAL DE BUCLE CERRADO (DIR-038 Piloto — Servicios/Automatización IA) ============
+       Decorativo (aria-hidden), sin texto: un anillo cerrado con 4 nodos y
+       puntos de flujo que recorren el circuito, para reforzar la idea de
+       proceso continuo ("24 horas al día"). Mismos tokens del acabado
+       cromado que Método/Departamentos. Sin núcleo central: aquí el
+       propio bucle es el sistema, no algo que se distribuye desde un centro. -->
+  <section class="section-sm servicios-visual">
+    <div class="container">
+      <div class="servicios-visual-diagram" aria-hidden="true">
+        <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
+          <defs>
+            <linearGradient id="loopFill" x1="0" y1="0" x2="0" y2="1">
+              <stop class="fill-a" offset="0%"/><stop class="fill-b" offset="45%"/><stop class="fill-c" offset="100%"/>
+            </linearGradient>
+            <linearGradient id="loopRing" x1="0" y1="0" x2="0" y2="1">
+              <stop class="ring-a" offset="0%"/><stop class="ring-b" offset="45%"/><stop class="ring-c" offset="100%"/>
+            </linearGradient>
+            <linearGradient id="loopLine" gradientUnits="userSpaceOnUse" x1="200" y1="0" x2="500" y2="0">
+              <stop class="line-a" offset="0%"/><stop class="line-b" offset="55%"/><stop class="line-c" offset="100%"/>
+            </linearGradient>
+          </defs>
+
+          <ellipse class="loop-ring" cx="350" cy="100" rx="150" ry="68"/>
+
+          <circle class="loop-flow c-blue" cx="456.1" cy="51.9" r="3" style="animation-delay:0s"/>
+          <circle class="loop-flow c-violet" cx="456.1" cy="148.1" r="3" style="animation-delay:.4s"/>
+          <circle class="loop-flow c-cyan" cx="243.9" cy="148.1" r="3" style="animation-delay:.8s"/>
+          <circle class="loop-flow c-cyan" cx="243.9" cy="51.9" r="3" style="animation-delay:1.2s"/>
+
+          <rect class="loop-node" x="318" y="9" width="64" height="46" rx="10"/>
+          <line class="loop-node-sheen" x1="326" y1="13" x2="374" y2="13"/>
+
+          <rect class="loop-node" x="468" y="77" width="64" height="46" rx="10"/>
+          <line class="loop-node-sheen" x1="476" y1="81" x2="524" y2="81"/>
+
+          <rect class="loop-node" x="318" y="145" width="64" height="46" rx="10"/>
+          <line class="loop-node-sheen" x1="326" y1="149" x2="374" y2="149"/>
+
+          <rect class="loop-node" x="168" y="77" width="64" height="46" rx="10"/>
+          <line class="loop-node-sheen" x1="176" y1="81" x2="224" y2="81"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
   <section class="section-sm metodo">
     <div class="container">
       <div class="metodo-grid">
