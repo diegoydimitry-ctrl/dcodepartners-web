@@ -617,35 +617,89 @@
   /* hasta salir como uno solo. No se venden por separado.                 */
   /* ==================================================================== */
   INSTR.servicios = (function () {
-    var HUES = [];
+    // Un cable trenzado bajo carga, no tres líneas decorativas.
+    // Un cable real es lo único que reúne a la vez las seis cosas que
+    // tiene que transmitir esta página: profundidad (unas hebras pasan
+    // por detrás de otras), cruce (se trenzan de verdad), unión (entran
+    // tres y sale uno), tensión (el conjunto tira), continuidad (el cable
+    // viene de antes del encuadre y sigue después) y — la importante —
+    // dependencia: cuando una hebra afloja, las otras toman su carga.
+    var HUES = [], LAY = 0;
     return {
-      build: function () { HUES = [C.cian, C.violeta, C.rosa]; },
+      build: function () {
+        HUES = [C.cian, C.violeta, C.rosa];
+        LAY = 7.4;                       // paso de cableado
+      },
       draw: function (tm) {
         clear(0.26);
-        var braid = win(0.04, 0.72);
-        var cx = W * (narrow ? 0.5 : 0.62);
-        var spread = W * (narrow ? 0.20 : 0.15);
-        var step = small ? 12 : 6;
-        // Se dibuja por tramos y no de un trazo: así un hilo puede pasar por
-        // DETRÁS de otro. Tres líneas que convergen no son un tejido; tres
-        // que se cruzan por delante y por detrás, sí.
-        for (var s = 0; s < 3; s++) {
-          for (var y = -20; y <= H + 20; y += step) {
-            var u = y / H, u2 = (y + step) / H;
-            function px(uu, si) {
-              var tw = Math.sin(uu * 7 + si * 2.09 + tm * 0.00035) * spread;
-              var close = 1 - braid * ease(uu);
-              return cx + (tw * close) + (si - 1) * spread * 0.9 * close;
-            }
-            var x1 = px(u, s), x2 = px(u2, s);
-            // Profundidad: la fase decide si este tramo va delante o detrás.
-            var depth = Math.cos(u * 7 + s * 2.09 + tm * 0.00035);
-            var front = depth > 0;
-            ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y + step);
-            ctx.strokeStyle = rgba(HUES[s], (front ? 0.34 : 0.10) + 0.14 * braid);
-            ctx.lineWidth = front ? 2.1 : 1.1;
+        // El cable vive en su propia banda: no cruza la columna de texto.
+        var cx = W * (narrow ? 0.5 : 0.80);
+        var spread = W * (narrow ? 0.17 : 0.085);
+        var step = small ? 0.020 : 0.010;
+        var tense = win(0.04, 0.72);     // el cable se tensa al recorrer
+
+        // Turno de carga: una hebra afloja y las otras dos la sostienen.
+        var cyc = (tm * 0.00013) % 1;
+        var flojo = Math.floor(cyc * 3);
+        var cede = Math.sin(((cyc * 3) % 1) * Math.PI);
+
+        function radio(u) { return spread * (1 - 0.62 * ease(u) * tense); }
+        function fase(u, si) { return u * LAY + si * 2.0944 + tm * 0.00022; }
+        function equis(u, si) {
+          var s2 = si === flojo ? 1 + 0.42 * cede : 1 - 0.16 * cede;
+          return cx + Math.cos(fase(u, si)) * radio(u) * s2;
+        }
+
+        // El cable entra por encima del encuadre y sale por debajo: no
+        // empieza aquí ni termina aquí.
+        for (var si = 0; si < 3; si++) {
+          var suelta = si === flojo ? cede : 0;
+          var carga  = si === flojo ? 0 : cede;   // las que sostienen
+          for (var u = -0.12; u <= 1.12; u += step) {
+            var u2 = u + step;
+            var x1 = equis(u, si), x2 = equis(u2, si);
+            var y1 = u * H, y2 = u2 * H;
+            var d = Math.sin(fase(u, si));        // >0 pasa por delante
+            var frente = d > 0;
+            var a = (frente ? 0.22 : 0.06) + 0.08 * tense
+                  + 0.10 * carga - 0.09 * suelta;
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+            ctx.strokeStyle = rgba(HUES[si], Math.max(0.04, a));
+            ctx.lineWidth = (frente ? 1.8 : 1.0) + 0.4 * carga;
             ctx.stroke();
           }
+        }
+
+        // Las ataduras: cada cierto tramo el haz queda ceñido. Es lo que
+        // convierte tres hebras sueltas en un solo cable.
+        var paso = 0.145;
+        for (var b = paso; b < 1.1; b += paso) {
+          var ap = ease((tense - (b - 0.1) * 0.5) / 0.35);
+          if (ap <= 0) continue;
+          var xs = [equis(b, 0), equis(b, 1), equis(b, 2)];
+          var izq = Math.min(xs[0], xs[1], xs[2]) - 4;
+          var der = Math.max(xs[0], xs[1], xs[2]) + 4;
+          var yb = b * H;
+          ctx.strokeStyle = rgba([214, 236, 255], 0.09 * ap);
+          ctx.lineWidth = 1;
+          for (var k = 0; k < 3; k++) {
+            var yy = yb + (k - 1) * 3;
+            ctx.beginPath(); ctx.moveTo(izq, yy); ctx.lineTo(der, yy); ctx.stroke();
+          }
+        }
+
+        // La carga que recorre el cable de arriba abajo: se ve que tira.
+        var lp = ((tm * 0.00019) % 1) * 1.2 - 0.1;
+        for (var si2 = 0; si2 < 3; si2++) {
+          if (si2 === flojo) continue;               // la floja no transmite
+          var xg = equis(lp, si2), yg = lp * H;
+          if (Math.sin(fase(lp, si2)) <= 0) continue; // solo si va por delante
+          var g = ctx.createLinearGradient(xg, yg - 26, xg, yg + 26);
+          g.addColorStop(0, rgba(HUES[si2], 0));
+          g.addColorStop(0.5, rgba(HUES[si2], 0.26 * tense));
+          g.addColorStop(1, rgba(HUES[si2], 0));
+          ctx.strokeStyle = g; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(xg, yg - 26); ctx.lineTo(xg, yg + 26); ctx.stroke();
         }
       }
     };
@@ -828,7 +882,7 @@
           // Muescas de encaje: aparecen ANTES de que la pieza llegue, para
           // que se vea por dónde va a unirse.
           if (raw > 0.18) {
-            ctx.strokeStyle = rgba(t.hue, 0.24 + 0.32 * raw);
+            ctx.strokeStyle = rgba(t.hue, 0.12 + 0.26 * raw);
             ctx.beginPath();
             ctx.moveTo(w / 2 - 3, -9); ctx.lineTo(w / 2 - 3 + 8 * raw, 0); ctx.lineTo(w / 2 - 3, 9);
             ctx.moveTo(-w / 2 + 3, -9); ctx.lineTo(-w / 2 + 3 + 8 * raw, 0); ctx.lineTo(-w / 2 + 3, 9);
