@@ -55,6 +55,10 @@ const dcpCssHash = hashFile('assets/css/dcp5.css');
 const dcpJsHash = hashFile('assets/js/dcp5.js');
 const dcp6CssHash = hashFile('assets/css/dcp6.css');
 const dcp6JsHash = hashFile('assets/js/dcp6.js');
+const dcp7CssHash = hashFile('assets/css/dcp7.css');
+const dcp7JsHash = hashFile('assets/js/dcp7.js');
+const dcp8CssHash = hashFile('assets/css/dcp8.css');
+const dcp8JsHash = hashFile('assets/js/dcp8.js');
 
 const htmlFiles = findHtmlFiles(ROOT, []);
 let changed = 0;
@@ -67,7 +71,11 @@ for (const file of htmlFiles) {
     .replace(/dcp5\.css\?v=[A-Za-z0-9_-]+/g, `dcp5.css?v=${dcpCssHash}`)
     .replace(/dcp5\.js\?v=[A-Za-z0-9_-]+/g, `dcp5.js?v=${dcpJsHash}`)
     .replace(/dcp6\.css\?v=[A-Za-z0-9_-]+/g, `dcp6.css?v=${dcp6CssHash}`)
-    .replace(/dcp6\.js\?v=[A-Za-z0-9_-]+/g, `dcp6.js?v=${dcp6JsHash}`);
+    .replace(/dcp6\.js\?v=[A-Za-z0-9_-]+/g, `dcp6.js?v=${dcp6JsHash}`)
+    .replace(/dcp7\.css\?v=[A-Za-z0-9_-]+/g, `dcp7.css?v=${dcp7CssHash}`)
+    .replace(/dcp7\.js\?v=[A-Za-z0-9_-]+/g, `dcp7.js?v=${dcp7JsHash}`)
+    .replace(/dcp8\.css\?v=[A-Za-z0-9_-]+/g, `dcp8.css?v=${dcp8CssHash}`)
+    .replace(/dcp8\.js\?v=[A-Za-z0-9_-]+/g, `dcp8.js?v=${dcp8JsHash}`);
   if (updated !== original) {
     fs.writeFileSync(file, updated, 'utf8');
     changed++;
@@ -80,4 +88,8 @@ console.log(`dcp5.css   -> ?v=${dcpCssHash}`);
 console.log(`dcp5.js    -> ?v=${dcpJsHash}`);
 console.log(`dcp6.css   -> ?v=${dcp6CssHash}`);
 console.log(`dcp6.js    -> ?v=${dcp6JsHash}`);
+console.log(`dcp7.css   -> ?v=${dcp7CssHash}`);
+console.log(`dcp7.js    -> ?v=${dcp7JsHash}`);
+console.log(`dcp8.css   -> ?v=${dcp8CssHash}`);
+console.log(`dcp8.js    -> ?v=${dcp8JsHash}`);
 console.log(`Archivos .html actualizados: ${changed}/${htmlFiles.length}`);

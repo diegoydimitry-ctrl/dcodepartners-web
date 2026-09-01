@@ -31,7 +31,8 @@
 <meta name="twitter:description" content="We read your company and build the system it needs. We do not sell closed packages.">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png"> <link rel="stylesheet" href="/assets/css/styles.css?v=25a2d12160">
 <link rel="stylesheet" href="/assets/css/dcp5.css?v=19119ed432">
-<link rel="stylesheet" href="/assets/css/dcp6.css?v=45f6e2340f">
+<link rel="stylesheet" href="/assets/css/dcp7.css?v=dc4bbf35e5">
+<link rel="stylesheet" href="/assets/css/dcp6.css?v=eb8a6f3e7b">
 <script type="application/ld+json">
 { "@context": "https://schema.org", "@type": "Organization", "name": "D-Code Partners", "alternateName": "D-Code", "url": "https://dcodepartners.com/", "logo": "https://dcodepartners.com/assets/logo/dcode-icon-sm.png", "image": "https://dcodepartners.com/assets/og-image.png", "description": "We analyse how a company works, find where time is lost, and build the system that connects its operation.", "email": "dcodedepartment@gmail.com", "address": { "@type": "PostalAddress", "addressLocality": "Madrid", "addressCountry": "ES" }
 }
@@ -52,7 +53,7 @@
   <!-- ======================== 1. ENTRADA =========================
        El campo entra por el borde, converge en un núcleo y se abre. No es un
        adorno detrás del titular: es lo que hacemos, ocurriendo. -->
-  <section class="v6-hero" id="inicio">
+  <section class="v6-hero" id="inicio" data-state="0" data-idx="Home">
     <div class="container">
       <div class="v6-lede v6-veil">
         <span class="v6-kicker">Business systems, built to fit</span>
@@ -62,7 +63,7 @@
           <a href="/en/contacto" class="btn btn-primary">Talk about your operation</a>
           <a href="/en/metodo" class="btn btn-ghost">How we work</a>
         </div>
-        <p class="v6-status">The system, right now <b data-field-state data-names="Converging|Scattered|Connecting|Structuring|Running|Operating|One system">Converging</b></p>
+        <p class="v6-status">The system, right now <b data-field-state data-names="Converging|Scattered|Grouping|Connecting|Structuring|Systems|Running|Operating|One system">Converging</b></p>
       </div>
     </div>
     <span class="v6-cue" aria-hidden="true"><i></i></span>
@@ -71,7 +72,7 @@
   <!-- ======================== 2. LO QUE NOS CUENTAN =========================
        El orden se deshace: el campo se dispersa mientras se leen las tres
        frases con las que casi siempre empieza una conversación. -->
-  <section class="v6-block v6-block--tall" id="problema">
+  <section class="v6-block v6-block--tall" id="problema" data-state="1" data-idx="The problem">
     <div class="container">
       <div class="v6-veil">
         <span class="v6-kicker">Why companies call us</span>
@@ -89,7 +90,7 @@
        Cuatro bloques. Entre ellos no hay una caja con la explicación: está el
        campo pasando de disperso a conectado, de conectado a estructura, y de
        estructura a sistema en marcha. Eso es lo que se está contando. -->
-  <section class="v6-block" id="proceso">
+  <section class="v6-block" id="proceso" data-state="2" data-idx="The process">
     <div class="container">
       <div class="v6-veil">
         <span class="v6-kicker">How we work</span>
@@ -98,7 +99,7 @@
     </div>
   </section>
 
-  <section class="v6-block v6-step v6-step--l" style="--k:var(--k-comercial)" aria-labelledby="paso-01">
+  <section class="v6-block v6-step v6-step--l" style="--k:var(--k-comercial)" data-state="3" aria-labelledby="paso-01">
     <div class="container">
       <div class="v6-step-in">
         <span class="v6-step-n" aria-hidden="true">01</span>
@@ -109,7 +110,7 @@
     </div>
   </section>
 
-  <section class="v6-block v6-step v6-step--r" style="--k:var(--k-direccion)" aria-labelledby="paso-02">
+  <section class="v6-block v6-step v6-step--r" style="--k:var(--k-direccion)" data-state="4" aria-labelledby="paso-02">
     <div class="container">
       <div class="v6-step-in">
         <span class="v6-step-n" aria-hidden="true">02</span>
@@ -120,7 +121,7 @@
     </div>
   </section>
 
-  <section class="v6-block v6-step v6-step--l" style="--k:var(--k-produccion)" aria-labelledby="paso-03">
+  <section class="v6-block v6-step v6-step--l" style="--k:var(--k-produccion)" data-state="5" aria-labelledby="paso-03">
     <div class="container">
       <div class="v6-step-in">
         <span class="v6-step-n" aria-hidden="true">03</span>
@@ -131,7 +132,7 @@
     </div>
   </section>
 
-  <section class="v6-block v6-step v6-step--r" style="--k:var(--k-clientes)" aria-labelledby="paso-04">
+  <section class="v6-block v6-step v6-step--r" style="--k:var(--k-clientes)" data-state="6" aria-labelledby="paso-04">
     <div class="container">
       <div class="v6-step-in">
         <span class="v6-step-n" aria-hidden="true">04</span>
@@ -145,7 +146,7 @@
   <!-- ======================== 4. LO QUE SABEMOS HACER =========================
        Una corriente de nombres, no una rejilla ni un centro con radios. Cada
        uno enciende su tono y lleva a su página. -->
-  <section class="v6-block v6-block--tall" id="capacidades">
+  <section class="v6-block v6-block--tall" id="capacidades" data-idx="Capabilities">
     <div class="container">
       <div class="v6-veil">
         <span class="v6-kicker">What we already know how to build</span>
@@ -173,7 +174,7 @@
   <!-- ======================== 5. D-CODE FINANCE =========================
        El campo se retira a los márgenes y deja el centro libre. El único
        marco de la página, porque es la ventana de un producto real. -->
-  <section class="v6-block v6-block--tall" id="dcode-finance">
+  <section class="v6-block v6-block--tall" id="dcode-finance" data-state="7" data-idx="Finance">
     <div class="container">
       <div class="v6-veil v6-veil--mid">
         <span class="v6-kicker">Our own software</span>
@@ -207,7 +208,7 @@
   <!-- ======================== 6. CIERRE =========================
        Todo vuelve a un solo punto de luz. La página cierra con el mismo gesto
        con el que abrió. -->
-  <section class="v6-block v6-end" id="contacto">
+  <section class="v6-block v6-end" id="contacto" data-state="8" data-idx="Contact">
     <div class="container">
       <div class="v6-veil v6-veil--mid">
         <span class="v6-kicker" style="margin-inline:auto;">Let us start</span>
@@ -223,6 +224,6 @@
 
 </main> <footer> <div class="container"> <div class="footer-top"> <div class="footer-brand"> <a href="/en" class="footer-logo"> <img src="/assets/logo/dcode-icon-sm.png" alt="D-Code Partners" width="30" height="26"> <span>D-Code Partners</span> </a> <p>We analyse how your company works and build the system it needs. Madrid, Spain.</p> </div> <div class="footer-col"> <h2>Capabilities</h2> <ul> <li><a href="/en/departamentos/marketing">Marketing</a></li> <li><a href="/en/departamentos/comercial">Sales</a></li> <li><a href="/en/departamentos/clientes">Customer</a></li> <li><a href="/en/departamentos/produccion">Delivery</a></li> <li><a href="/en/departamentos/finanzas">Finance</a></li> <li><a href="/en/departamentos/soporte">Support</a></li> <li><a href="/en/departamentos/administracion">Operations</a></li> <li><a href="/en/departamentos/direccion">Leadership</a></li> </ul> </div> <div class="footer-col"> <h2>Company</h2> <ul> <li><a href="/en/metodo">The D-Code Method</a></li> <li><a href="/en/garantias">Guarantees & Process</a></li> <li><a href="/en/cambios-en-proceso">Changes in Progress</a></li> <li><a href="/en/blog">Blog</a></li> </ul> </div> <div class="footer-col"> <h2>Resources</h2> <ul> <li><a href="/en/faq">FAQ</a></li> <li><a href="/en/contacto">Contact</a></li> </ul> </div> <div class="footer-col"> <h2>Legal</h2> <ul> <li><a href="/en/privacidad">Privacy Policy</a></li> <li><a href="/en/aviso-legal">Legal Notice</a></li> <li><a href="/en/cookies">Cookie Policy</a></li> <li><a href="/en/seguridad">Information Security</a></li> <li><a href="/en/condiciones-contratacion">Terms of Service</a></li> <li><a href="/en/acuerdo-encargado-tratamiento">Data Processing Agreement</a></li> </ul> </div> </div> <div class="footer-bottom"> <span>© 2026 D-Code Partners. All rights reserved.</span> <span>Confidentiality and professionalism, in every Department.</span> </div> </div>
 </footer> <div class="chat-widget" id="chat-widget"> <div class="window chat-window" role="dialog" aria-label="D-Code Partners Assistant" aria-hidden="true"> <div class="window-bar"> <span class="window-dots"><span></span><span></span><span></span></span> <span class="window-title">dcode_assistant.chat</span> </div> <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"> <div class="chat-msg bot">Hi. I'm D-Code Partners' AI assistant. I can help you understand how we automate processes, how our AI agents work, answer questions about our Departments, or help you discover how we could optimize your business. What would you like to talk about?</div> </div> <div class="chat-quick-replies" id="chat-quick-replies"> <button type="button" class="chat-quick-question">I want to automate my company</button> <button type="button" class="chat-quick-question">I want an AI agent</button> <button type="button" class="chat-quick-question">Talk to a specialist</button> </div> <form class="chat-input-row" id="chat-form"> <label for="chat-input" class="sr-only">Type your message</label> <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" maxlength="600"> <button type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button> </form> </div> <button class="chat-bubble" id="chat-bubble" aria-expanded="false" aria-controls="chat-widget" aria-label="Open D-Code Partners Assistant"> <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg> <span class="cb-dot"></span> </button>
-</div> <script src="/assets/js/main.js?v=d6b7c433a2" defer></script> <script src="/assets/js/dcp5.js?v=ada6a30e82" defer></script><script src="/assets/js/dcp6.js?v=866e733a14" defer></script>
+</div> <script src="/assets/js/main.js?v=d6b7c433a2" defer></script> <script src="/assets/js/dcp5.js?v=ada6a30e82" defer></script><script src="/assets/js/dcp7.js?v=9325631b3d" defer></script><script src="/assets/js/dcp6.js?v=465191c176" defer></script>
 </body>
 </html>

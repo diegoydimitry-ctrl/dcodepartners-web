@@ -30,8 +30,11 @@
 /* Ni aurora ni malla de la v5: aquí el fondo lo pinta el campo. */
 body.v6::before, body.v6::after{ display:none !important; }
 body.v6{ background:#05070e; }
-body.v6 #main-content, body.v6 header, body.v6 footer,
-body.v6 .side-index, body.v6 .chat-widget{ position:relative; z-index:1; }
+body.v6 #main-content, body.v6 header, body.v6 footer{ position:relative; z-index:1; }
+/* El chat y el índice son piezas fijas: solo se les sube la capa. Meterlos en
+   la regla de arriba los sacaba de position:fixed y los mandaba al final del
+   documento — así es como desapareció el chat de la portada. */
+body.v6 .chat-widget{ z-index:300; }
 
 /* El campo se apaga bajo el pie para que los enlaces legales no compitan. */
 body.v6 footer{
@@ -239,9 +242,8 @@ body.v6 main .lit::before{ display:none; }
 .v6-prodwrap{ margin-top:clamp(30px,4vw,48px); position:relative; }
 body.v6 .prod{
   border-color:rgba(150,174,245,.13);
-  background:linear-gradient(168deg, rgba(20,28,54,.80), rgba(7,10,22,.90));
+  background:linear-gradient(168deg, rgba(20,28,54,.94), rgba(7,10,22,.97));
   box-shadow:0 70px 160px -70px rgba(0,0,0,.98), 0 0 120px -50px rgba(91,140,255,.5);
-  backdrop-filter:blur(10px);
 }
 body.v6 .prod-body{ padding:clamp(20px,3vw,38px); }
 body.v6 .mock-bars{ height:112px; }
@@ -312,9 +314,7 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
   .v6-cap, .v6-cap::after{ transition:none; }
 }
 
-/* El índice lateral de la v5 no aporta sobre una página continua: la propia
-   página ya dice dónde estás. */
-body.v6 .side-index{ display:none; }
+
 
 /* Titular de sección: tipografía, no cabecera de tabla. */
 .v6-title{
