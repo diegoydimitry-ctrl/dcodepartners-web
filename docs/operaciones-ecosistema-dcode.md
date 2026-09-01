@@ -185,6 +185,54 @@ Comprobacion: recorrer los workflows activos y comparar `versionId` con
 lo que produce** — y si toca dinero, comparar las dos versiones linea a linea
 antes de tocar nada.
 
+### Coincidencia de subcadena sobre texto de terceros
+
+El 01/09/2026, nueve de las veintisiete filas de la tabla Supresiones eran
+boletines de proveedores -Airtable cinco veces, Neon cuatro- clasificados como
+"Oposicion expresa" porque la palabra `unsubscribe` aparece en su pie. La lista
+`oposicionKeywords` de `CM/Deteccion de Respuestas` se buscaba como subcadena
+sobre el CUERPO COMPLETO del correo.
+
+Y una de esas filas llego a suprimir el propio buzon operativo de D-Code: un
+aviso interno generado a partir de un boletin volvio a la bandeja y se leyo
+como la oposicion de un tercero.
+
+**La correccion no fue tocar la lista de palabras.** Debilitar la deteccion
+arriesga perder una oposicion real, que es mucho peor que un falso positivo.
+Lo que fallaba era el detector de correo masivo: solo miraba `Precedence: bulk`,
+la convencion vieja. Las plataformas de marketing actuales usan
+`List-Unsubscribe` (RFC 2369 / RFC 8058), que no se estaba mirando.
+
+Un mensaje con `List-Unsubscribe` **es por definicion** correo de lista, y esa
+cabecera la pone el gestor de listas del remitente, no la persona: alguien que
+contesta "no estoy interesado" desde su buzon jamas la lleva. Anadirla al
+bloque que ya descartaba `Precedence: bulk` elimina los falsos positivos sin
+poder perder ni un positivo real.
+
+REGLA GENERAL: cuando haya que distinguir texto escrito por una persona de
+texto generado por una maquina, buscar la senal en los METADATOS del mensaje,
+no en su cuerpo. El cuerpo lo controla el remitente; las cabeceras de lista
+las pone su infraestructura.
+
+### Lo que el sistema sabe decir y lo que no
+
+Este ecosistema tiene un vocabulario excelente para la incertidumbre:
+`NO VERIFICADO`, `SIN DATOS`, el prefijo `PARCIAL` en los ficheros de backup,
+el `(INCOMPLETO)` en el asunto de los correos. En toda la auditoria del
+01/09/2026 no se encontro ni un solo cero inventado ocupando el sitio de un
+fallo.
+
+No tiene ninguna palabra para decir "esto lleva seis dias roto y nadie ha
+hecho nada". Cada aviso cuenta un fallo suelto; ninguno cuenta la racha. Por
+eso el backup pudo gritar PARCIAL cada domingo, el informe ejecutivo llegar
+marcado (INCOMPLETO) doce dias seguidos y la sincronizacion de identidad caer
+cinco madrugadas, sin que nada de eso escalara.
+
+El sistema mide la VERDAD de cada dato. No mide el TIEMPO QUE LLEVA ABIERTO
+un problema. `lib/automatizaciones/rachas.ts` en D-Code OS ya cuenta rachas
+-y define bien el corte: el primer exito- pero solo se pintan en pantalla, y
+mirar una pantalla es justamente lo que fallo.
+
 ## 6. Cadencias
 
 Ver `AUD-20260830-CADENCIAS-001` para el análisis completo. Lo esencial:
