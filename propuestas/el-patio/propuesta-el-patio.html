@@ -7,7 +7,10 @@
 /* ==================================================================
    Propuesta comercial — El Patio (Las Rozas)
    D-Code Partners · documento A4, 6 páginas
-   Tipografías: Fraunces (display) + Inter (texto)
+
+   Identidad tomada de la marca del propio restaurante (elpatio.es):
+   negro, papel cálido y dorado #A88A63. El logotipo es el suyo.
+   Tipografías: Fraunces (títulos) + Inter (texto).
    ================================================================== */
 
 @font-face{
@@ -33,26 +36,28 @@
 @page{ size:A4; margin:0; }
 
 :root{
-  --paper:      #FAF6F0;
-  --paper-warm: #F3ECE2;
-  --ink:        #1A1510;
-  --ink-2:      #4A4139;
-  --ink-soft:   #837769;
-  --line:       #E2D8CA;
-  --line-soft:  #EBE3D7;
-  --accent:     #B0512C;
-  --accent-2:   #C9A227;
+  --paper:      #FAF8F5;
+  --paper-warm: #F1ECE4;
+  --ink:        #141010;
+  --ink-2:      #45403A;
+  --ink-soft:   #837B70;
+  --line:       #E2DCD1;
+  --line-soft:  #EDE8DF;
+
+  --gold:       #A88A63;
+  --gold-deep:  #8A6E4B;
+  --gold-light: #C9AC85;
+
+  --night:      #0E0C0A;
 
   --serif: "Fraunces", "Liberation Serif", Georgia, serif;
   --sans:  Inter, "Helvetica Neue", Arial, sans-serif;
 
-  --mx: 21mm;   /* margen lateral */
+  --mx: 21mm;
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-
-html,body{ margin:0; padding:0; background:#8E877E; }
-
+html,body{ margin:0; padding:0; background:#7E7871; }
 body{
   font-family:var(--sans);
   color:var(--ink);
@@ -71,52 +76,24 @@ body{
   margin:0 auto;
 }
 .page:last-child{ page-break-after:auto; break-after:auto; }
+@media screen{ .page{ margin:10mm auto; box-shadow:0 6mm 18mm rgba(0,0,0,.30); } }
 
-@media screen{
-  .page{ margin:10mm auto; box-shadow:0 6mm 18mm rgba(0,0,0,.28); }
-}
-
-/* ---------- tipografía base ---------- */
+/* ---------- tipografía ---------- */
 h1,h2,h3{ margin:0; font-family:var(--serif); font-weight:400; }
 p{ margin:0; }
 
 .eyebrow{
-  font-size:7.2pt;
-  letter-spacing:.20em;
+  font-size:7pt;
+  letter-spacing:.24em;
   text-transform:uppercase;
   font-weight:600;
-  color:var(--accent);
+  color:var(--gold-deep);
 }
+.h2{ font-size:23pt; line-height:1.16; letter-spacing:-.012em; }
+.lead{ font-size:10.6pt; line-height:1.62; color:var(--ink-2); max-width:134mm; }
+.body{ font-size:9.1pt; line-height:1.60; color:var(--ink-2); }
 
-.h2{
-  font-size:23pt;
-  line-height:1.16;
-  letter-spacing:-.012em;
-  color:var(--ink);
-}
-
-.lead{
-  font-size:10.6pt;
-  line-height:1.62;
-  color:var(--ink-2);
-  max-width:132mm;
-}
-
-.body{
-  font-size:9.1pt;
-  line-height:1.60;
-  color:var(--ink-2);
-}
-
-.caption{
-  font-size:7.2pt;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  font-weight:600;
-  color:var(--ink-soft);
-}
-
-/* ---------- estructura de página interior ---------- */
+/* ---------- estructura interior ---------- */
 .sheet{
   position:absolute;
   inset:0;
@@ -124,602 +101,414 @@ p{ margin:0; }
   display:flex;
   flex-direction:column;
 }
-
-.head{ margin-bottom:12mm; }
+.head{ margin-bottom:10mm; }
 .head .eyebrow{ display:block; margin-bottom:5mm; }
 .head .h2{ margin-bottom:5mm; }
 
 .foot{
   position:absolute;
-  left:var(--mx);
-  right:var(--mx);
-  bottom:12mm;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  left:var(--mx); right:var(--mx); bottom:12mm;
+  display:flex; justify-content:space-between; align-items:center;
   padding-top:3mm;
   border-top:.25mm solid var(--line);
-  font-size:7pt;
-  letter-spacing:.11em;
-  text-transform:uppercase;
+  font-size:7pt; letter-spacing:.11em; text-transform:uppercase;
   color:var(--ink-soft);
 }
+.foot .pg{ color:var(--gold-deep); font-weight:600; }
 
 /* ==================================================================
-   PÁGINA 1 — PORTADA
+   1 · PORTADA
    ================================================================== */
-.cover{ background:var(--ink); color:var(--paper); }
-
-.cover .arch{
+.cover{ background:var(--night); color:var(--paper); }
+.cover .glow{
   position:absolute;
-  right:-34mm;
-  bottom:-34mm;
-  width:132mm;
-  height:186mm;
-  opacity:.085;
+  right:-40mm; bottom:-60mm;
+  width:190mm; height:190mm;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(190,120,80,.30) 0%, rgba(150,90,60,.13) 42%, rgba(14,12,10,0) 70%);
 }
-
+.cover .hairline{
+  position:absolute; left:var(--mx); right:var(--mx); top:42mm;
+  height:.25mm; background:rgba(250,248,245,.14);
+}
 .cover-inner{
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
   padding:22mm var(--mx) 20mm;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
+  display:flex; flex-direction:column; justify-content:space-between;
 }
-
 .cover-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  font-size:7.2pt;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color:rgba(250,246,240,.62);
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-size:7pt; letter-spacing:.24em; text-transform:uppercase;
+  color:rgba(250,248,245,.55);
 }
-.cover-top strong{ color:var(--paper); font-weight:600; letter-spacing:.22em; }
+.cover-top strong{ color:var(--paper); font-weight:600; letter-spacing:.24em; }
 
-.cover-mid{ max-width:130mm; }
-
+.cover-mid{ max-width:134mm; }
 .cover-mid .tag{
-  display:block;
-  font-size:7.6pt;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  font-weight:600;
-  color:#D98A5F;
-  margin-bottom:9mm;
+  display:block; font-size:7.4pt; letter-spacing:.24em; text-transform:uppercase;
+  font-weight:600; color:var(--gold-light); margin-bottom:11mm;
 }
-
 .cover-mid h1{
-  font-size:38pt;
-  line-height:1.10;
-  letter-spacing:-.02em;
-  color:#FBF8F3;
+  font-size:31pt; line-height:1.14; letter-spacing:-.018em; color:#FDFBF8;
 }
-.cover-mid h1 em{ font-style:italic; color:#E9A97F; }
-
-.cover-rule{
-  width:26mm;
-  height:.5mm;
-  background:#B0512C;
-  margin:10mm 0 8mm;
-}
-
+.cover-logo{ display:block; width:96mm; margin:11mm 0 0; }
+.cover-rule{ width:24mm; height:.5mm; background:var(--gold); margin:12mm 0 8mm; }
 .cover-mid .sub{
-  font-size:10.4pt;
-  line-height:1.66;
-  color:rgba(250,246,240,.72);
-  max-width:104mm;
+  font-size:10.4pt; line-height:1.66; color:rgba(250,248,245,.70); max-width:108mm;
 }
 
-.cover-bottom{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:14mm;
-}
-.cover-bottom .who{ font-size:8.4pt; line-height:1.62; color:rgba(250,246,240,.80); }
+.cover-bottom{ display:flex; justify-content:space-between; align-items:flex-end; gap:14mm; }
+.cover-bottom .who{ font-size:8.4pt; line-height:1.66; color:rgba(250,248,245,.78); }
 .cover-bottom .who b{ font-weight:600; color:var(--paper); }
 .cover-bottom .contact{
-  text-align:right;
-  font-size:7.4pt;
-  line-height:1.75;
-  letter-spacing:.04em;
-  color:rgba(250,246,240,.55);
+  text-align:right; font-size:7.4pt; line-height:1.8; letter-spacing:.04em;
+  color:rgba(250,248,245,.52);
 }
+.cover-bottom .contact span{ white-space:nowrap; }
 
 /* ==================================================================
-   PÁGINA 2 — EL OBJETIVO
+   2 · EL OBJETIVO
    ================================================================== */
-.goals{ margin-top:4mm; }
-
+.goals{ margin-top:3mm; }
 .goal{
-  display:flex;
-  gap:12mm;
-  align-items:flex-start;
+  display:flex; gap:12mm; align-items:flex-start;
   padding:11.5mm 0;
   border-top:.25mm solid var(--line);
 }
 .goal:last-child{ border-bottom:.25mm solid var(--line); }
-
 .goal .num{
-  flex:0 0 16mm;
-  font-family:var(--serif);
-  font-size:19pt;
-  line-height:1;
-  color:var(--accent);
-  padding-top:1mm;
+  flex:0 0 15mm;
+  font-family:var(--serif); font-size:18pt; line-height:1;
+  color:var(--gold); padding-top:1mm;
 }
 .goal .txt{ flex:1; }
-.goal h3{
-  font-size:13.5pt;
-  line-height:1.25;
-  margin-bottom:3.4mm;
-  letter-spacing:-.008em;
-}
-.goal .body{ max-width:118mm; }
+.goal h3{ font-size:13.5pt; line-height:1.25; margin-bottom:3.4mm; letter-spacing:-.008em; }
+.goal .body{ max-width:120mm; }
 
 .note{
   margin-top:auto;
   background:var(--paper-warm);
-  border-left:.8mm solid var(--accent);
-  padding:7mm 9mm;
+  border-left:.8mm solid var(--gold);
+  padding:7.5mm 9mm;
 }
-.note p{
-  font-family:var(--serif);
-  font-size:11.4pt;
-  line-height:1.52;
-  color:var(--ink);
-}
+.note p{ font-family:var(--serif); font-size:11.4pt; line-height:1.52; color:var(--ink); }
 
 /* ==================================================================
-   PÁGINA 3 — QR DE RESEÑAS
+   3 · SOPORTES QR PERSONALIZADOS
    ================================================================== */
-.qr-hero{
-  display:flex;
-  justify-content:center;
-  margin-top:2mm;
-}
+.qr-hero{ display:flex; justify-content:center; margin-top:1mm; }
 
+/* — plantilla 1: tarjeta de mesa, fondo negro — */
 .tent{
-  width:86mm;
-  background:#fff;
-  border:.3mm solid var(--line);
+  width:84mm;
+  background:var(--night);
   border-radius:2.4mm;
-  padding:7mm 9mm 7mm;
+  padding:6mm 8mm 5.5mm;
   text-align:center;
-  box-shadow:0 2mm 6mm rgba(26,21,16,.06);
+  box-shadow:0 3mm 9mm rgba(20,16,16,.16);
 }
-.tent .brand{
-  font-family:var(--serif);
-  font-size:11.5pt;
-  letter-spacing:.30em;
-  text-transform:uppercase;
-  color:var(--ink);
-}
-.tent .brand-sub{
-  font-size:6.2pt;
-  letter-spacing:.30em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-  margin-top:1.6mm;
-}
-.tent .hair{ width:14mm; height:.4mm; background:var(--accent); margin:5mm auto; }
+.tent .logo{ display:block; width:38mm; margin:0 auto; }
+.tent .hair{ width:12mm; height:.35mm; background:var(--gold); margin:4mm auto 3.5mm; }
 .tent .ask{
-  font-family:var(--serif);
-  font-size:13pt;
-  line-height:1.3;
-  color:var(--ink);
-  margin-bottom:5mm;
+  font-family:var(--serif); font-size:12pt; line-height:1.3;
+  color:#FDFBF8; margin-bottom:4.5mm;
 }
-.tent img{ width:37mm; height:37mm; display:block; margin:0 auto; }
+.qr-plate{
+  background:#fff; border-radius:1.6mm; padding:3.4mm;
+  width:-moz-fit-content; width:fit-content; margin:0 auto;
+}
+.qr-plate img{ display:block; }
+.tent .qr-plate img{ width:27mm; height:27mm; }
 .tent .scan{
-  margin-top:5mm;
-  font-size:7.6pt;
-  letter-spacing:.10em;
-  text-transform:uppercase;
-  font-weight:600;
-  color:var(--ink-2);
+  margin-top:4.5mm; font-size:7pt; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; color:rgba(250,248,245,.82);
 }
-.stars{ margin-top:3.4mm; color:var(--accent-2); font-size:9pt; letter-spacing:.22em; }
+.stars{ margin-top:2.6mm; color:var(--gold-light); font-size:8.5pt; letter-spacing:.24em; }
 
-.hero-cap{
-  margin-top:4.5mm;
-  text-align:center;
-  font-size:7pt;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
+.tpl-cap{
+  margin-top:3.5mm; text-align:center;
+  font-size:6.8pt; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft);
 }
 
-.qr-row{
-  display:flex;
-  gap:8mm;
-  margin-top:9mm;
-}
-.support{
+.qr-row{ display:flex; gap:8mm; margin-top:7mm; align-items:stretch; }
+
+/* — plantilla 2: placa de recepción, papel — */
+.plate{
   flex:1;
-  background:#fff;
-  border:.3mm solid var(--line);
+  background:#fff; border:.3mm solid var(--line); border-radius:2.4mm;
+  padding:5.5mm 6mm 5mm;
+  display:flex; flex-direction:column; align-items:center;
+}
+.plate .logo{ display:block; width:29mm; }
+.plate .hair{ width:10mm; height:.35mm; background:var(--gold); margin:3.5mm auto; }
+.plate .ask{ font-family:var(--serif); font-size:9.2pt; color:var(--ink); margin-bottom:3.5mm; }
+.plate .qr-plate{ padding:0; }
+.plate .qr-plate img{ width:20mm; height:20mm; }
+.plate .scan{
+  margin-top:3.5mm; font-size:6.4pt; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; color:var(--ink-2);
+}
+
+/* — plantilla 3: adhesivo de barra, negro con filete dorado — */
+.sticker{
+  flex:1;
+  background:var(--night);
   border-radius:2.4mm;
-  padding:6mm 6mm 6mm;
-  text-align:center;
+  padding:5mm;
+  display:flex; flex-direction:column; align-items:center;
+  box-shadow:0 2mm 6mm rgba(20,16,16,.12);
 }
-.support .kicker{
-  font-size:6.4pt;
-  letter-spacing:.24em;
-  text-transform:uppercase;
-  font-weight:600;
-  color:var(--accent);
-  margin-bottom:5mm;
+.sticker .frame{
+  border:.3mm solid rgba(201,172,133,.55);
+  border-radius:1.4mm;
+  padding:4.5mm 5mm 4mm;
+  width:100%; flex:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
 }
-.support img{ width:26mm; height:26mm; display:block; margin:0 auto; }
-.support .lbl{
-  margin-top:5mm;
-  font-size:8.2pt;
-  line-height:1.45;
-  color:var(--ink-2);
+.sticker .logo{ display:block; width:24mm; }
+.sticker .ask{
+  margin:3.2mm 0 3.5mm;
+  font-size:6.4pt; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gold-light); font-weight:600;
+}
+.sticker .qr-plate img{ width:19mm; height:19mm; }
+.sticker .scan{
+  margin-top:3.5mm; font-size:6.4pt; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:600; color:rgba(250,248,245,.78);
+}
+
+.support-caps{ display:flex; gap:8mm; margin-top:3.5mm; }
+.support-caps > div{ flex:1; text-align:center; }
+.support-caps .t{
+  font-size:6.8pt; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft);
 }
 
 .microtext{
-  margin-top:9mm;
-  font-size:7.6pt;
-  line-height:1.6;
-  color:var(--ink-soft);
-  max-width:150mm;
+  margin-top:auto;
+  font-size:7.6pt; line-height:1.6; color:var(--ink-soft); max-width:152mm;
 }
 
 /* ==================================================================
-   PÁGINA 4 — PRESENCIA DIGITAL
+   4 · PRESENCIA DIGITAL
    ================================================================== */
-.mock{
-  display:flex;
-  gap:8mm;
-  align-items:stretch;
-  margin-top:1mm;
-}
+.mock{ display:flex; gap:8mm; align-items:stretch; margin-top:1mm; }
 
-/* navegador */
 .browser{
   flex:1 1 auto;
-  border:.3mm solid var(--line);
-  border-radius:2.4mm;
-  overflow:hidden;
-  background:#fff;
-  box-shadow:0 2mm 7mm rgba(26,21,16,.07);
+  border:.3mm solid var(--line); border-radius:2.4mm; overflow:hidden;
+  background:#fff; box-shadow:0 2mm 7mm rgba(20,16,16,.08);
 }
 .browser .bar{
-  display:flex;
-  align-items:center;
-  gap:2.4mm;
-  padding:3mm 4mm;
-  background:var(--paper-warm);
+  display:flex; align-items:center; gap:2.4mm;
+  padding:3mm 4mm; background:var(--paper-warm);
   border-bottom:.25mm solid var(--line);
 }
-.dot{ width:1.7mm; height:1.7mm; border-radius:50%; background:#D6C9B8; }
+.dot{ width:1.7mm; height:1.7mm; border-radius:50%; background:#D9CFC0; }
 .url{
-  margin-left:2mm;
-  flex:1;
-  background:#fff;
-  border:.25mm solid var(--line);
-  border-radius:6mm;
-  padding:1.3mm 4mm;
-  font-size:6.4pt;
-  letter-spacing:.06em;
-  color:var(--ink-soft);
+  margin-left:2mm; flex:1; background:#fff; border:.25mm solid var(--line);
+  border-radius:6mm; padding:1.3mm 4mm;
+  font-size:6.4pt; letter-spacing:.06em; color:var(--ink-soft);
 }
 .site-nav{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:4mm;
-  padding:4.4mm 5mm;
-  border-bottom:.25mm solid var(--line-soft);
+  display:flex; align-items:center; justify-content:space-between; gap:4mm;
+  padding:4mm 5mm; border-bottom:.25mm solid var(--line-soft);
 }
-.site-nav .logo{
-  font-family:var(--serif);
-  font-size:7.4pt;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  white-space:nowrap;
-}
+.site-nav .logo{ width:21mm; display:block; }
 .site-nav .links{
-  display:flex;
-  gap:3.4mm;
-  font-size:6pt;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-  white-space:nowrap;
+  display:flex; gap:2.6mm; white-space:nowrap;
+  font-size:5.4pt; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft);
 }
+.site-nav .links .on{ color:var(--gold-deep); font-weight:700; }
 .site-nav .cta{
-  font-size:6.2pt;
-  letter-spacing:.10em;
-  text-transform:uppercase;
-  font-weight:600;
-  white-space:nowrap;
-  color:#fff;
-  background:var(--accent);
-  border-radius:5mm;
-  padding:1.7mm 3.2mm;
+  font-size:5.8pt; letter-spacing:.10em; text-transform:uppercase; font-weight:700;
+  white-space:nowrap; color:#fff; background:var(--gold-deep);
+  border-radius:5mm; padding:1.6mm 3.2mm;
 }
 .site-hero{
-  padding:13mm 9mm 12mm;
-  background:linear-gradient(135deg,#241C15 0%,#3A2A1E 58%,#5A3A24 100%);
-  color:#F7F1E8;
+  position:relative; overflow:hidden;
+  padding:14mm 9mm 13mm;
+  background:var(--night); color:#FDFBF8;
 }
+.site-hero .glow{
+  position:absolute; right:-20mm; top:-30mm; width:110mm; height:110mm; border-radius:50%;
+  background:radial-gradient(circle, rgba(200,120,80,.34) 0%, rgba(150,80,55,.14) 45%, rgba(14,12,10,0) 72%);
+}
+.site-hero .in{ position:relative; }
 .site-hero .kick{
-  font-size:6.2pt;
-  letter-spacing:.26em;
-  text-transform:uppercase;
-  color:#E0A276;
-  margin-bottom:5mm;
+  font-size:5.8pt; letter-spacing:.26em; text-transform:uppercase;
+  color:var(--gold-light); margin-bottom:5mm;
 }
-.site-hero h3{
-  font-family:var(--serif);
-  font-size:16pt;
-  line-height:1.20;
-  max-width:74mm;
-  color:#FBF6EE;
+.site-hero .logo{ width:52mm; display:block; margin-bottom:6mm; }
+.site-hero .row{ display:flex; gap:3mm; align-items:center; }
+.btn{
+  font-size:5.8pt; letter-spacing:.12em; text-transform:uppercase; font-weight:700;
+  border-radius:5mm; padding:2mm 4.6mm;
 }
-.site-hero .btn{
-  display:inline-block;
-  margin-top:7mm;
-  font-size:6.6pt;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  font-weight:600;
-  color:#241C15;
-  background:#F1E4D2;
-  border-radius:5mm;
-  padding:2.2mm 5.5mm;
-}
-.site-cards{ display:flex; gap:3.4mm; padding:6mm; }
-.site-cards > div{
-  flex:1;
-  border:.25mm solid var(--line);
-  border-radius:1.6mm;
-  padding:4.4mm 4mm 5mm;
-}
-.site-cards .t{
-  font-family:var(--serif);
-  font-size:8.6pt;
-  color:var(--ink);
-  margin-bottom:2.4mm;
-}
-.site-cards .d{ font-size:6.4pt; line-height:1.5; color:var(--ink-soft); }
+.btn-solid{ background:var(--gold); color:#17120E; }
+.btn-ghost{ border:.25mm solid rgba(250,248,245,.42); color:rgba(250,248,245,.86); }
 
-/* teléfono */
+.site-cards{ display:flex; gap:3.4mm; padding:7mm 6mm; }
+.site-cards > div{
+  flex:1; border:.25mm solid var(--line); border-radius:1.6mm; padding:4.4mm 4mm 5mm;
+}
+.site-cards .t{ font-family:var(--serif); font-size:8.4pt; margin-bottom:2.4mm; }
+.site-cards .d{ font-size:6.2pt; line-height:1.5; color:var(--ink-soft); }
+
 .phone{
   flex:0 0 44mm;
-  border:.5mm solid var(--ink);
-  border-radius:5mm;
-  padding:3mm 2.4mm;
-  background:#fff;
-  display:flex;
-  flex-direction:column;
+  border:.5mm solid var(--ink); border-radius:5mm;
+  padding:3mm 2.4mm; background:#fff;
+  display:flex; flex-direction:column;
 }
-.phone .notch{ width:12mm; height:1.2mm; border-radius:1mm; background:#E0D6C7; margin:0 auto 3.4mm; }
+.phone .notch{ width:12mm; height:1.2mm; border-radius:1mm; background:#E4DCD0; margin:0 auto 3.4mm; }
 .phone .ph-head{ display:flex; align-items:center; gap:2.4mm; padding:0 2mm 3.4mm; border-bottom:.25mm solid var(--line-soft); }
 .phone .av{
-  width:8mm; height:8mm; border-radius:50%;
-  background:linear-gradient(140deg,#3A2A1E,#8A4A2A);
-  color:#F7EDE1; font-family:var(--serif); font-size:6.4pt;
-  display:flex; align-items:center; justify-content:center;
+  width:9mm; height:9mm; border-radius:50%; background:var(--night);
+  display:flex; align-items:center; justify-content:center; padding:1.6mm;
 }
-.phone .ph-name{ font-size:6.4pt; font-weight:700; color:var(--ink); letter-spacing:.04em; }
+.phone .av img{ width:100%; display:block; }
+.phone .ph-name{ font-size:6pt; font-weight:700; letter-spacing:.04em; }
 .phone .ph-meta{ font-size:5.4pt; color:var(--ink-soft); margin-top:.8mm; letter-spacing:.04em; }
 .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.2mm; padding:3.4mm 2mm 0; }
 .grid i{ display:block; padding-top:100%; border-radius:.8mm; }
-.g1{ background:#E7D8C6; } .g2{ background:#CDB69E; }
+.g1{ background:#EAE2D6; } .g2{ background:#CBBBA4; } .g3{ background:#241D18; }
 .phone .ph-foot{
-  margin-top:auto;
-  padding:3.4mm 2mm 0;
-  font-size:5.6pt;
-  line-height:1.5;
-  color:var(--ink-soft);
-  text-align:center;
+  margin-top:auto; padding:3.4mm 2mm 0;
+  font-size:5.6pt; line-height:1.5; color:var(--ink-soft); text-align:center;
 }
 
-.three{
-  display:flex;
-  gap:9mm;
-  margin-top:auto;
-  padding-top:8mm;
-  border-top:.25mm solid var(--line);
-}
+.three{ display:flex; gap:9mm; margin-top:auto; padding-top:8mm; border-top:.25mm solid var(--line); }
 .three > div{ flex:1; }
-.three h3{ font-size:10.6pt; margin-bottom:3mm; letter-spacing:-.005em; }
+.three h3{ font-size:10.6pt; margin-bottom:3mm; }
 .three p{ font-size:8.2pt; line-height:1.58; color:var(--ink-2); }
 
 /* ==================================================================
-   PÁGINA 5 — AUTOMATIZACIÓN
+   5 · AUTOMATIZACIÓN (servicio independiente)
    ================================================================== */
-.flow{
-  display:flex;
-  align-items:stretch;
-  gap:0;
-  margin-top:2mm;
+.badge{
+  display:inline-block;
+  border:.25mm solid var(--gold);
+  color:var(--gold-deep);
+  border-radius:5mm;
+  padding:1.6mm 4mm;
+  font-size:6.6pt; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
+  margin-bottom:6mm;
 }
-.step{
-  flex:1;
-  padding:0 4mm;
-  position:relative;
-}
+.flow{ display:flex; margin-top:1mm; }
+.step{ flex:1; padding:0 4mm; position:relative; }
 .step:first-child{ padding-left:0; }
 .step:last-child{ padding-right:0; }
 .step .n{
-  width:7mm; height:7mm;
-  border-radius:50%;
-  border:.3mm solid var(--accent);
-  color:var(--accent);
-  font-size:7pt;
-  font-weight:700;
+  width:7mm; height:7mm; border-radius:50%;
+  border:.3mm solid var(--gold); color:var(--gold-deep);
+  font-size:7pt; font-weight:700;
   display:flex; align-items:center; justify-content:center;
-  margin-bottom:5mm;
-  background:var(--paper);
+  margin-bottom:5mm; background:var(--paper);
 }
-/* reserva dos líneas para que todos los párrafos arranquen a la misma altura */
-.step h3{ font-size:10pt; line-height:1.30; margin-bottom:3mm; min-height:9.4mm; }
-.step p{ font-size:7.8pt; line-height:1.58; color:var(--ink-soft); padding-right:2mm; }
-/* hilo conductor entre pasos: hairline a la altura del círculo */
+/* hilo conductor entre pasos */
 .step::after{
-  content:"";
-  position:absolute;
-  top:3.5mm;
-  left:11mm;
-  right:-4mm;
-  height:.25mm;
-  background:var(--line);
+  content:""; position:absolute; top:3.5mm; left:11mm; right:-4mm;
+  height:.25mm; background:var(--line);
 }
 .step:first-child::after{ left:8mm; }
 .step:last-child::after{ display:none; }
+.step h3{ font-size:10pt; line-height:1.30; margin-bottom:3mm; }
+.step p{ font-size:7.8pt; line-height:1.58; color:var(--ink-soft); padding-right:2mm; }
 
 .auto-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0;
-  margin-top:18mm;
-  border-top:.25mm solid var(--line);
+  display:grid; grid-template-columns:1fr 1fr;
+  margin-top:14mm; border-top:.25mm solid var(--line);
 }
-.auto-grid > div{
-  padding:13mm 10mm 13mm 0;
-  border-bottom:.25mm solid var(--line);
-}
-.auto-grid > div:nth-child(even){ padding-left:10mm; border-left:.25mm solid var(--line); padding-right:0; }
+.auto-grid > div{ padding:9.5mm 10mm 9.5mm 0; border-bottom:.25mm solid var(--line); }
+.auto-grid > div:nth-child(even){ padding-left:10mm; padding-right:0; border-left:.25mm solid var(--line); }
 .auto-grid h3{ font-size:10.4pt; margin-bottom:2.6mm; }
 .auto-grid p{ font-size:8.2pt; line-height:1.55; color:var(--ink-2); }
 
-.closing-line{
+.callout{
   margin-top:auto;
-  font-family:var(--serif);
-  font-size:11.4pt;
-  line-height:1.55;
-  color:var(--ink);
-  max-width:140mm;
+  display:flex; gap:10mm; align-items:baseline;
+  background:var(--paper-warm); border-left:.8mm solid var(--gold);
+  padding:8mm 9mm;
 }
+.callout h3{ flex:0 0 46mm; font-size:11.4pt; line-height:1.3; }
+.callout p{ flex:1; font-size:8.6pt; line-height:1.6; color:var(--ink-2); }
 
 /* ==================================================================
-   PÁGINA 6 — LA PROPUESTA
+   6 · LA PROPUESTA
    ================================================================== */
-.price-block{ margin-top:1mm; }
-.price-row{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:10mm;
-  padding:8.5mm 0;
-  border-top:.25mm solid var(--line);
-}
-.price-row:last-of-type{ border-bottom:.25mm solid var(--line); }
-.price-row .what h3{ font-size:11pt; margin-bottom:2mm; }
-.price-row .what p{ font-size:8pt; line-height:1.5; color:var(--ink-soft); }
-.price-row .amount{
-  font-family:var(--serif);
-  font-size:17pt;
-  color:var(--ink);
-  white-space:nowrap;
-}
-.price-row .amount span{ font-family:var(--sans); font-size:7.6pt; letter-spacing:.10em; text-transform:uppercase; color:var(--ink-soft); margin-left:1.5mm; }
-
 .plan{
-  margin-top:13mm;
-  background:var(--ink);
-  color:var(--paper);
-  border-radius:2.4mm;
-  padding:13mm 12mm 12mm;
-  display:flex;
-  gap:12mm;
+  background:var(--night); color:var(--paper);
+  border-radius:2.4mm; padding:12mm 12mm 11mm;
+  display:flex; gap:12mm; margin-top:1mm;
 }
-.plan .left{ flex:0 0 56mm; }
+.plan .left{ flex:0 0 58mm; }
 .plan .tag{
-  font-size:6.8pt;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  font-weight:600;
-  color:#D98A5F;
+  font-size:6.6pt; letter-spacing:.24em; text-transform:uppercase; font-weight:700;
+  color:var(--gold-light);
 }
-.plan h3{
-  font-size:15pt;
-  line-height:1.22;
-  margin:4mm 0 6mm;
-  color:#FBF8F3;
-}
-.plan .fee{
-  font-family:var(--serif);
-  font-size:28pt;
-  line-height:1;
-  color:#FBF8F3;
-}
+.plan h3{ font-size:14pt; line-height:1.24; margin:4mm 0 6mm; color:#FDFBF8; }
+.plan .fee{ font-family:var(--serif); font-size:27pt; line-height:1; color:#FDFBF8; }
 .plan .fee span{
-  font-family:var(--sans);
-  font-size:8pt;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:rgba(250,246,240,.6);
-  margin-left:2mm;
+  font-family:var(--sans); font-size:8pt; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(250,248,245,.58); margin-left:2mm;
 }
-.plan ul{
-  flex:1;
-  margin:0;
-  padding:0;
-  list-style:none;
-  columns:2;
-  column-gap:9mm;
-}
+.plan ul{ flex:1; margin:0; padding:0; list-style:none; columns:2; column-gap:9mm; }
 .plan li{
-  font-size:8.2pt;
-  line-height:1.45;
-  color:rgba(250,246,240,.86);
-  padding:0 0 3.6mm 4.6mm;
-  position:relative;
-  break-inside:avoid;
+  font-size:8.2pt; line-height:1.45; color:rgba(250,248,245,.88);
+  padding:0 0 3.6mm 4.6mm; position:relative; break-inside:avoid;
 }
 .plan li::before{
-  content:"";
-  position:absolute;
-  left:0; top:1.5mm;
-  width:1.6mm; height:1.6mm;
-  border-radius:50%;
-  background:#B0512C;
+  content:""; position:absolute; left:0; top:1.5mm;
+  width:1.6mm; height:1.6mm; border-radius:50%; background:var(--gold);
 }
 
-.sign{
-  margin-top:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:12mm;
+.two-cards{ display:flex; gap:8mm; margin-top:9mm; }
+.card{
+  flex:1; border:.3mm solid var(--line); border-radius:2.4mm;
+  padding:8mm 8mm 7.5mm; background:#fff;
+  display:flex; flex-direction:column;
 }
-.sign .msg{
-  font-family:var(--serif);
-  font-size:11.6pt;
-  line-height:1.52;
-  color:var(--ink);
-  max-width:112mm;
+.card .tag{
+  font-size:6.6pt; letter-spacing:.22em; text-transform:uppercase; font-weight:700;
+  color:var(--gold-deep); margin-bottom:4mm;
 }
-.sign .card{
-  text-align:right;
-  font-size:7.6pt;
-  line-height:1.7;
-  color:var(--ink-soft);
-  letter-spacing:.03em;
+.card h3{ font-size:12pt; line-height:1.25; margin-bottom:5mm; }
+.card .rows{ margin-top:auto; }
+.card .r{
+  display:flex; justify-content:space-between; align-items:baseline; gap:5mm;
+  padding:3.4mm 0; border-top:.25mm solid var(--line-soft);
 }
-.sign .card b{ display:block; font-size:8.4pt; color:var(--ink); letter-spacing:.14em; text-transform:uppercase; margin-bottom:2mm; }
-.sign .card span{ white-space:nowrap; }
+.card .r:last-child{ border-bottom:.25mm solid var(--line-soft); }
+.card .r .k{ font-size:8pt; line-height:1.4; color:var(--ink-2); }
+.card .r .v{ font-family:var(--serif); font-size:13pt; white-space:nowrap; }
+.card.quote .r{ align-items:center; }
+.card.quote .r .v{
+  font-family:var(--sans); font-size:8.4pt; font-weight:700; letter-spacing:.04em;
+  color:var(--gold-deep); text-transform:uppercase;
+}
+.card .r .v small{
+  font-family:var(--sans); font-size:6.6pt; letter-spacing:.10em; text-transform:uppercase;
+  color:var(--ink-soft); margin-left:1.2mm;
+}
+.card p.desc{ font-size:8pt; line-height:1.56; color:var(--ink-2); margin-bottom:5mm; }
+
+.sign{ margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; gap:12mm; }
+.sign .msg{ font-family:var(--serif); font-size:11.4pt; line-height:1.52; max-width:112mm; }
+.sign .card-c{
+  text-align:right; font-size:7.6pt; line-height:1.72; color:var(--ink-soft); letter-spacing:.03em;
+}
+.sign .card-c b{
+  display:block; font-size:8.2pt; color:var(--ink); letter-spacing:.16em;
+  text-transform:uppercase; margin-bottom:2mm;
+}
+.sign .card-c span{ white-space:nowrap; }
 </style>
 </head>
 <body>
 
-<!-- ============================ 1 · PORTADA ============================ -->
+<!-- ======================= 1 · PORTADA ======================= -->
 <section class="page cover">
-  <svg class="arch" viewBox="0 0 300 420" fill="none" aria-hidden="true">
-    <path d="M20 420 V150 A130 130 0 0 1 280 150 V420" stroke="#F6EDE2" stroke-width="1.2"/>
-    <path d="M62 420 V162 A88 88 0 0 1 238 162 V420" stroke="#F6EDE2" stroke-width="1.2"/>
-    <path d="M104 420 V174 A46 46 0 0 1 196 174 V420" stroke="#F6EDE2" stroke-width="1.2"/>
-  </svg>
-
+  <div class="glow"></div>
   <div class="cover-inner">
     <div class="cover-top">
       <strong>D-Code Partners</strong>
@@ -727,10 +516,11 @@ p{ margin:0; }
     </div>
 
     <div class="cover-mid">
-      <span class="tag">El Patio · Las Rozas</span>
-      <h1>Una propuesta digital<br>para <em>El Patio</em></h1>
+      <span class="tag">Para el equipo de El Patio · Las Rozas</span>
+      <h1>Una propuesta digital para</h1>
+      <img class="cover-logo" src="assets/logo-elpatio-light.svg" alt="El Patio">
       <div class="cover-rule"></div>
-      <p class="sub">Más reseñas de clientes, una presencia digital cuidada y menos tareas repetitivas en el día a día del restaurante.</p>
+      <p class="sub">Más reseñas de clientes, una presencia digital cuidada y procesos internos que dejan de robar tiempo al equipo.</p>
     </div>
 
     <div class="cover-bottom">
@@ -739,15 +529,15 @@ p{ margin:0; }
         para su traslado a dirección.
       </div>
       <div class="contact">
-        dcodepartners.com<br>
-        dcodedepartment@gmail.com<br>
-        +34 680 223 439
+        <span>dcodepartners.com</span><br>
+        <span>dcodedepartment@gmail.com</span><br>
+        <span>+34 680 223 439</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============================ 2 · EL OBJETIVO ============================ -->
+<!-- ======================= 2 · EL OBJETIVO ======================= -->
 <section class="page">
   <div class="sheet">
     <div class="head">
@@ -764,20 +554,18 @@ p{ margin:0; }
           <p class="body">Un cliente contento rara vez deja una reseña: hay que ponérselo fácil. Con un gesto —escanear— la buena impresión de la mesa acaba escrita en Google.</p>
         </div>
       </div>
-
       <div class="goal">
         <div class="num">02</div>
         <div class="txt">
           <h3>La presencia digital</h3>
-          <p class="body">Quien busca dónde comer en Las Rozas decide en un minuto. La web, las reseñas y las redes deben contar la misma historia y estar siempre al día.</p>
+          <p class="body">Quien busca dónde comer o qué plan hay en Las Rozas decide en un minuto. La web, las reseñas y las redes deben contar la misma historia y estar siempre al día.</p>
         </div>
       </div>
-
       <div class="goal">
         <div class="num">03</div>
         <div class="txt">
           <h3>La eficiencia del negocio</h3>
-          <p class="body">Las tareas que se repiten cada día consumen tiempo del equipo. Automatizarlas devuelve ese tiempo a lo que de verdad importa: la sala y la cocina.</p>
+          <p class="body">Reservas, conciertos, eventos y proveedores generan tareas que se repiten cada semana. Ordenarlas y automatizarlas devuelve ese tiempo a la sala y a la cocina.</p>
         </div>
       </div>
     </div>
@@ -786,97 +574,116 @@ p{ margin:0; }
       <p>No vendemos herramientas sueltas. Analizamos cómo funciona el restaurante y diseñamos la solución que encaja con sus procesos reales.</p>
     </div>
 
-    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span>02</span></div>
+    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span class="pg">02</span></div>
   </div>
 </section>
 
-<!-- ============================ 3 · QR RESEÑAS ============================ -->
+<!-- ======================= 3 · SOPORTES QR ======================= -->
 <section class="page">
   <div class="sheet">
     <div class="head">
       <span class="eyebrow">02 · Reseñas de Google</span>
       <h2 class="h2">Más opiniones.<br>Mejor experiencia.</h2>
-      <p class="lead">Códigos QR diseñados con la identidad de El Patio y colocados donde tienen sentido: la mesa, la recepción y la barra.</p>
+      <p class="lead">Tres soportes diseñados con la marca de El Patio, uno para cada punto del local. Así quedarían:</p>
     </div>
 
     <div class="qr-hero">
       <div class="tent">
-        <div class="brand">El Patio</div>
-        <div class="brand-sub">Las Rozas</div>
+        <img class="logo" src="assets/logo-elpatio-light.svg" alt="El Patio">
         <div class="hair"></div>
         <div class="ask">¿Nos dejas tu opinión?</div>
-        <img src="assets/qr-el-patio.svg" alt="Código QR de reseñas de El Patio">
+        <div class="qr-plate"><img src="assets/qr-el-patio.svg" alt="Código QR de reseñas"></div>
         <div class="scan">Escanea y valóranos en Google</div>
         <div class="stars">★★★★★</div>
       </div>
     </div>
-
-    <div class="hero-cap">Mesa · soporte de pie a dos caras</div>
+    <div class="tpl-cap">Plantilla 01 · Mesa · soporte a dos caras</div>
 
     <div class="qr-row">
-      <div class="support">
-        <div class="kicker">Recepción</div>
-        <img src="assets/qr-el-patio.svg" alt="Código QR de reseñas de El Patio">
-        <div class="lbl">Placa de sobremesa junto al mostrador de entrada.</div>
+      <div class="plate">
+        <img class="logo" src="assets/logo-elpatio-ink.svg" alt="El Patio">
+        <div class="hair"></div>
+        <div class="ask">Tu opinión nos ayuda</div>
+        <div class="qr-plate"><img src="assets/qr-el-patio.svg" alt="Código QR de reseñas"></div>
+        <div class="scan">Valóranos en Google</div>
       </div>
-      <div class="support">
-        <div class="kicker">Barra y punto de pago</div>
-        <img src="assets/qr-el-patio.svg" alt="Código QR de reseñas de El Patio">
-        <div class="lbl">Adhesivo discreto en el momento en que se paga la cuenta.</div>
+
+      <div class="sticker">
+        <div class="frame">
+          <img class="logo" src="assets/logo-elpatio-light.svg" alt="El Patio">
+          <div class="ask">¿Qué tal ha ido?</div>
+          <div class="qr-plate"><img src="assets/qr-el-patio.svg" alt="Código QR de reseñas"></div>
+          <div class="scan">Escanea y valóranos</div>
+        </div>
       </div>
     </div>
 
-    <p class="microtext">Los QR de esta propuesta son de muestra: los definitivos enlazan directamente con la ficha de Google de El Patio, sin pasos intermedios. Cada soporte se diseña para su ubicación y se entrega listo para colocar.</p>
+    <div class="support-caps">
+      <div class="t">Plantilla 02 · Recepción</div>
+      <div class="t">Plantilla 03 · Barra y cobro</div>
+    </div>
 
-    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span>03</span></div>
+    <p class="microtext">Los QR de esta propuesta son de muestra y llevan a elpatio.es; los definitivos enlazan directamente con la ficha de Google del restaurante, sin pasos intermedios. Cada soporte se ajusta a su ubicación y se entrega listo para colocar.</p>
+
+    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span class="pg">03</span></div>
   </div>
 </section>
 
-<!-- ============================ 4 · PRESENCIA DIGITAL ============================ -->
+<!-- ======================= 4 · PRESENCIA DIGITAL ======================= -->
 <section class="page">
   <div class="sheet">
     <div class="head">
       <span class="eyebrow">03 · Presencia digital</span>
       <h2 class="h2">Una presencia digital que<br>trabaja por el restaurante</h2>
-      <p class="lead">Una web clara y rápida, mantenida al día, y unas redes que acompañan lo que ya ocurre cada día en la casa.</p>
+      <p class="lead">Partimos de lo que ya existe: mantenemos y mejoramos elpatio.es, con unas redes que cuentan lo que pasa cada semana en la casa.</p>
     </div>
 
     <div class="mock">
       <div class="browser">
         <div class="bar">
           <i class="dot"></i><i class="dot"></i><i class="dot"></i>
-          <div class="url">elpatiolasrozas.com</div>
+          <div class="url">elpatio.es</div>
         </div>
         <div class="site-nav">
-          <div class="logo">El Patio</div>
-          <div class="links"><span>Carta</span><span>Reservas</span><span>Nosotros</span><span>Contacto</span></div>
+          <img class="logo" src="assets/logo-elpatio-ink.svg" alt="El Patio">
+          <div class="links">
+            <span class="on">Inicio</span><span>Restaurante</span><span>Cartas</span><span>Reservas</span><span>Conciertos</span>
+          </div>
           <div class="cta">Reservar</div>
         </div>
         <div class="site-hero">
-          <div class="kick">Las Rozas de Madrid</div>
-          <h3>Cocina de siempre, en un patio de toda la vida</h3>
-          <div class="btn">Ver la carta</div>
+          <div class="glow"></div>
+          <div class="in">
+            <div class="kick">Restaurante · Conciertos · Eventos</div>
+            <img class="logo" src="assets/logo-elpatio-light.svg" alt="El Patio">
+            <div class="row">
+              <div class="btn btn-solid">Reservar mesa</div>
+              <div class="btn btn-ghost">Ver la carta</div>
+            </div>
+          </div>
         </div>
         <div class="site-cards">
-          <div><div class="t">La carta</div><div class="d">Actualizada cada temporada, legible desde el móvil.</div></div>
-          <div><div class="t">Reservas</div><div class="d">Un solo clic desde Google, la web o Instagram.</div></div>
-          <div><div class="t">Eventos</div><div class="d">Comidas de empresa, celebraciones y grupos.</div></div>
+          <div><div class="t">Cartas</div><div class="d">Actualizadas cada temporada y legibles desde el móvil.</div></div>
+          <div><div class="t">Reservas</div><div class="d">Un solo clic desde Google, la web o las redes.</div></div>
+          <div><div class="t">Conciertos</div><div class="d">Agenda al día de la programación y los eventos.</div></div>
         </div>
       </div>
 
       <div class="phone">
         <div class="notch"></div>
         <div class="ph-head">
-          <div class="av">EP</div>
+          <div class="av"><img src="assets/logo-elpatio-light.svg" alt="El Patio"></div>
           <div>
-            <div class="ph-name">elpatio.lasrozas</div>
-            <div class="ph-meta">Restaurante · Las Rozas</div>
+            <div class="ph-name">El Patio</div>
+            <div class="ph-meta">Las Rozas de Madrid</div>
           </div>
         </div>
         <div class="grid">
-          <i class="g1"></i><i class="g2"></i><i class="g1"></i>
-          <i class="g2"></i><i class="g1"></i><i class="g2"></i>
-          <i class="g1"></i><i class="g2"></i><i class="g1"></i>
+          <i class="g1"></i><i class="g3"></i><i class="g2"></i>
+          <i class="g2"></i><i class="g1"></i><i class="g3"></i>
+          <i class="g3"></i><i class="g2"></i><i class="g1"></i>
+          <i class="g1"></i><i class="g2"></i><i class="g3"></i>
+          <i class="g2"></i><i class="g3"></i><i class="g1"></i>
         </div>
         <div class="ph-foot">Publicaciones y contenido<br>con un calendario fijo</div>
       </div>
@@ -885,51 +692,51 @@ p{ margin:0; }
     <div class="three">
       <div>
         <h3>Web</h3>
-        <p>Diseño propio, rápido y claro, pensado para que el cliente encuentre carta, horario y reserva en segundos.</p>
+        <p>Mejoras de diseño, velocidad y navegación sobre la web actual, para que carta, reservas y agenda se encuentren en segundos.</p>
       </div>
       <div>
         <h3>Mantenimiento</h3>
-        <p>Actualizaciones, mejoras y revisión continua. La web no se queda parada ni desactualizada.</p>
+        <p>Actualizaciones, copias, revisión continua y cambios cuando el restaurante los necesita.</p>
       </div>
       <div>
         <h3>Redes y contenido</h3>
-        <p>Publicaciones con criterio y una imagen coherente con el restaurante, sin improvisar cada semana.</p>
+        <p>Publicaciones con criterio y una imagen coherente con la marca, sin improvisar cada semana.</p>
       </div>
     </div>
 
-    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span>04</span></div>
+    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span class="pg">04</span></div>
   </div>
 </section>
 
-<!-- ============================ 5 · AUTOMATIZACIÓN ============================ -->
+<!-- ======================= 5 · AUTOMATIZACIÓN ======================= -->
 <section class="page">
   <div class="sheet">
     <div class="head">
       <span class="eyebrow">04 · Automatización</span>
       <h2 class="h2">Menos tareas repetitivas.<br>Más tiempo para el negocio.</h2>
-      <p class="lead">Identificamos las tareas que se repiten cada día y las convertimos en procesos que se hacen solos. Un ejemplo real, de principio a fin:</p>
+      <p class="lead">Este es un servicio propio de D-Code Partners e independiente del plan mensual. Estudiamos los procesos del restaurante, detectamos qué se repite y automatizamos solo lo que compensa.</p>
     </div>
 
     <div class="flow">
       <div class="step">
         <div class="n">1</div>
-        <h3>Entra una reserva</h3>
-        <p>Desde la web, Google o el teléfono. Queda registrada en un mismo sitio.</p>
+        <h3>Analizamos</h3>
+        <p>Vemos cómo trabaja el equipo y qué tareas se repiten cada día y cada semana.</p>
       </div>
       <div class="step">
         <div class="n">2</div>
-        <h3>Confirmación automática</h3>
-        <p>El cliente recibe la confirmación al momento, sin que nadie escriba nada.</p>
+        <h3>Priorizamos</h3>
+        <p>Elegimos los procesos que más tiempo consumen o más errores provocan.</p>
       </div>
       <div class="step">
         <div class="n">3</div>
-        <h3>Recordatorio</h3>
-        <p>Aviso el mismo día. Menos mesas vacías por olvidos y cancelaciones tardías.</p>
+        <h3>Presupuestamos</h3>
+        <p>Cada automatización se valora aparte, con precio cerrado antes de empezar.</p>
       </div>
       <div class="step">
         <div class="n">4</div>
-        <h3>Después de la visita</h3>
-        <p>Invitación a valorar el restaurante en Google, en el mejor momento.</p>
+        <h3>Implantamos</h3>
+        <p>La ponemos en marcha, formamos al equipo y la mantenemos funcionando.</p>
       </div>
     </div>
 
@@ -948,46 +755,32 @@ p{ margin:0; }
       </div>
       <div>
         <h3>Mensajes frecuentes</h3>
-        <p>Respuestas preparadas para horarios, grupos, alérgenos o eventos, siempre iguales y a tiempo.</p>
+        <p>Respuestas preparadas para horarios, grupos, alérgenos, conciertos o eventos.</p>
       </div>
     </div>
 
-    <p class="closing-line">Cada automatización se diseña sobre el funcionamiento real de El Patio. Empezamos por lo que más tiempo consume hoy.</p>
+    <div class="callout">
+      <h3>Fuera del plan mensual</h3>
+      <p>La automatización no está incluida en los 400 €/mes. Se estudia caso por caso y se presupuesta por separado, según el proceso y el trabajo que exija.</p>
+    </div>
 
-    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span>05</span></div>
+    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span class="pg">05</span></div>
   </div>
 </section>
 
-<!-- ============================ 6 · LA PROPUESTA ============================ -->
+<!-- ======================= 6 · LA PROPUESTA ======================= -->
 <section class="page">
   <div class="sheet">
     <div class="head">
       <span class="eyebrow">05 · La propuesta</span>
       <h2 class="h2">La propuesta</h2>
-      <p class="lead">Dos formas de empezar: por unidades, o con un plan que cubre todo lo anterior de forma continua.</p>
-    </div>
-
-    <div class="price-block">
-      <div class="price-row">
-        <div class="what">
-          <h3>QR personalizado con soporte</h3>
-          <p>Diseño a medida de El Patio y soporte físico incluido. Precio por unidad.</p>
-        </div>
-        <div class="amount">20 €<span>/ unidad</span></div>
-      </div>
-      <div class="price-row">
-        <div class="what">
-          <h3>A partir de 10 unidades</h3>
-          <p>Para equipar todas las mesas y puntos del restaurante de una vez.</p>
-        </div>
-        <div class="amount">15 €<span>/ unidad</span></div>
-      </div>
+      <p class="lead">Un plan mensual que cubre el día a día digital, y dos servicios que se contratan cuando hacen falta.</p>
     </div>
 
     <div class="plan">
       <div class="left">
-        <div class="tag">Plan integral</div>
-        <h3>Todo lo anterior,<br>cada mes</h3>
+        <div class="tag">Plan mensual</div>
+        <h3>El día a día,<br>cubierto</h3>
         <div class="fee">400 €<span>/ mes</span></div>
       </div>
       <ul>
@@ -995,14 +788,36 @@ p{ margin:0; }
         <li>Gestión de la presencia digital</li>
         <li>Redes sociales y contenido</li>
         <li>Códigos QR cuando se necesiten</li>
-        <li>Automatización de tareas y procesos</li>
+        <li>Seguimiento de reseñas</li>
         <li>Soporte continuo del equipo D-Code</li>
       </ul>
     </div>
 
+    <div class="two-cards">
+      <div class="card">
+        <div class="tag">Por unidades</div>
+        <h3>Códigos QR<br>personalizados</h3>
+        <p class="desc">Diseño con la marca de El Patio y soporte físico incluido.</p>
+        <div class="rows">
+          <div class="r"><span class="k">Precio por unidad</span><span class="v">20 €<small>/ ud</small></span></div>
+          <div class="r"><span class="k">A partir de 10 unidades</span><span class="v">15 €<small>/ ud</small></span></div>
+        </div>
+      </div>
+
+      <div class="card quote">
+        <div class="tag">Servicio aparte</div>
+        <h3>Automatización<br>de procesos</h3>
+        <p class="desc">No incluida en el plan mensual: analizamos, priorizamos y presupuestamos cada proceso.</p>
+        <div class="rows">
+          <div class="r"><span class="k">Análisis de procesos</span><span class="v">A medida</span></div>
+          <div class="r"><span class="k">Cada proceso</span><span class="v">Presupuesto cerrado</span></div>
+        </div>
+      </div>
+    </div>
+
     <div class="sign">
       <p class="msg">Podemos empezar por donde a El Patio le resulte más útil. Nos sentamos con vosotros, vemos cómo trabajáis y construimos la solución a vuestra medida.</p>
-      <div class="card">
+      <div class="card-c">
         <b>D-Code Partners</b>
         <span>dcodepartners.com</span><br>
         <span>dcodedepartment@gmail.com</span><br>
@@ -1011,7 +826,7 @@ p{ margin:0; }
       </div>
     </div>
 
-    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span>06</span></div>
+    <div class="foot"><span>D-Code Partners · Propuesta para El Patio</span><span class="pg">06</span></div>
   </div>
 </section>
 

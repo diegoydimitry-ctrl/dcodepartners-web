@@ -37,10 +37,31 @@ const report = await page.evaluate(() => {
     const n = i + 1;
     const box = pg.getBoundingClientRect();
 
-    // 1. contenido que se sale de la página (texto cortado)
+    // 1. contenido que rebasa la caja de contenido de la hoja.
+    //    scrollHeight no basta: el margen del último hijo de un flex no cuenta,
+    //    así que se compara cada descendiente contra el área útil real.
     const container = pg.querySelector('.sheet, .cover-inner');
-    if (container && container.scrollHeight > container.clientHeight + 1) {
-      problems.push(`p${n}: contenido desbordado ${container.scrollHeight} > ${container.clientHeight}`);
+    if (container) {
+      const cr = container.getBoundingClientRect();
+      const cs = getComputedStyle(container);
+      const safe = {
+        top: cr.top + parseFloat(cs.paddingTop),
+        bottom: cr.bottom - parseFloat(cs.paddingBottom),
+        left: cr.left + parseFloat(cs.paddingLeft),
+        right: cr.right - parseFloat(cs.paddingRight),
+      };
+      for (const el of container.querySelectorAll('*')) {
+        if (el.closest('.foot') || el.classList.contains('glow')) continue;
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) continue;
+        if (r.bottom > safe.bottom + 0.5 || r.top < safe.top - 0.5 ||
+            r.left < safe.left - 0.5 || r.right > safe.right + 0.5) {
+          problems.push(
+            `p${n}: "${(el.textContent || el.tagName).trim().slice(0, 34)}" fuera del área útil ` +
+              `(${(r.bottom - safe.bottom).toFixed(0)}px por debajo)`
+          );
+        }
+      }
     }
 
     // 2. cualquier elemento fuera de los límites físicos de la hoja
@@ -49,7 +70,7 @@ const report = await page.evaluate(() => {
     );
     for (const el of nodes) {
       const r = el.getBoundingClientRect();
-      if (el.closest('.arch')) continue; // decorativo, sangra a propósito
+      if (el.closest('.arch') || el.classList.contains('glow')) continue; // decorativos, sangran a propósito
       if (r.left < box.left - 0.5 || r.right > box.right + 0.5 ||
           r.top < box.top - 0.5 || r.bottom > box.bottom + 0.5) {
         problems.push(`p${n}: "${(el.textContent || el.tagName).trim().slice(0, 40)}" fuera de la hoja`);
@@ -91,6 +112,7 @@ const report = await page.evaluate(() => {
       for (const el of box.querySelectorAll('*')) {
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue;
+        if (el.classList.contains('glow')) continue; // fondo decorativo
         if (r.right > rb.right + 0.5 || r.left < rb.left - 0.5) {
           problems.push(
             `p${n}: "${(el.textContent || el.tagName).trim().slice(0, 30)}" recortado por ${
