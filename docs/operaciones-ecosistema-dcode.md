@@ -371,13 +371,44 @@ salida esperada; la garantia la da la comprobacion en el consumidor.
 
 | Workflow | Riesgo de truncamiento | Veredicto |
 |---|---|---|
-| `DIR/EB Director Estrategico` | Era el origen | Corregido antes |
+| `DIR/EB Director Estrategico` | Era el origen | **Implementacion de referencia** (ver abajo) |
 | `CF/Investigacion` | Array sin topes + consumidor asumia 6 | **Defecto, corregido** |
+| `FNZ/IA Financiera` | Texto libre sin comprobar `stop_reason` | **Defecto, corregido** |
 | `RRSS/06 QA-A` | Arrays sin topes, campos criticos detras | Seguro: falla en cerrado |
 | `SP/Tickets IA` | Esquema de 2 campos, critico el primero | Seguro |
 | `MK/Lead IA 360` | 7 campos planos, critico el primero, fallback explicito | Seguro |
 
+### El patron tambien existe en texto libre
+
+`FNZ/IA Financiera` no devuelve JSON: devuelve prosa. Parecia fuera del
+patron, y no lo estaba. El consumidor solo comprobaba que HUBIERA texto, sin
+mirar `stop_reason`, asi que una respuesta cortada se entregaba como si
+estuviera entera.
+
+Y lo que se pierde al cortar no es cualquier cosa. El prompt exige separar
+HECHO de INFERENCIA y decir explicitamente "no tengo informacion suficiente
+para responder esto con precision porque...". Esas salvedades van al final del
+razonamiento: son justo lo primero que desaparece. Quedaria la parte que suena
+segura y se perderia la que avisa.
+
+Corregido comprobando `stop_reason` y anteponiendo el aviso al texto -delante,
+no al final, porque si algo se lee por encima se lee el principio-.
+
+### Que hace bien el Executive Board, para copiarlo
+
+Es la referencia porque hace las cuatro cosas a la vez:
+
+1. `stop_reason === 'max_tokens'` se comprueba y provoca el modo degradado,
+   con `(INCOMPLETO)` en el asunto del correo.
+2. Los dos arrays llevan `maxItems` (5 riesgos, 4 ideas).
+3. **`decision_ejecutiva_dia` se declara ANTES de los arrays.** El modelo emite
+   el JSON en el orden del esquema, asi que lo que se corta es siempre la cola:
+   el campo que da sentido al informe ya no puede ser el primero en caer.
+4. `max_tokens` holgado (16000 para una salida real de 5-6k), con la salida
+   acotada por construccion y tambien pedida en palabras dentro del prompt.
+
 Sin revisar todavia: `RRSS/02`, `RRSS/03`, `RRSS/04`, `RRSS/06-B`,
-`CM/Generador de Propuestas IA`, `FNZ/IA Financiera`, `FNZ/Gastos - Registro`,
-`SP/Chat IA Clientes`, `DIR/EB Auditor Interno`. Ninguno se ha declarado
-seguro sin mirarlo.
+`CM/Generador de Propuestas IA`, `FNZ/Gastos - Registro` y `SP/Chat IA
+Clientes`. Ninguno se ha declarado seguro sin mirarlo. (`DIR/EB Auditor
+Interno` no llama a ningun modelo: mide y escribe, asi que el patron no le
+aplica.)
