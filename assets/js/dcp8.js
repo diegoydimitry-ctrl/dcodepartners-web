@@ -223,529 +223,19 @@
     ctx.globalCompositeOperation = 'lighter';
   }
 
-  /* ==================================================================== */
-  /* 1 · AUTOMATIZACIÓN — "La tarea repetida"                             */
-  /* Una columna de marcas idénticas cayendo sin fin. Una línea de captura */
-  /* barre la pantalla y cada repetición atrapada se funde en un único     */
-  /* proceso que cruza y sale por la derecha. Lo repetitivo deja de serlo. */
-  /* ==================================================================== */
+  /* Cada página tiene su instrumento; todos comparten la misma materia. */
   var INSTR = {};
 
-  INSTR.automatizacion = (function () {
-    var marks = [], tokens = [], sweep = 0;
-    return {
-      build: function () {
-        marks.length = 0;
-        var n = small ? 26 : 46;
-        for (var i = 0; i < n; i++) {
-          marks.push({ i: i, y: sd(i, 3), x: 0.10 + sd(i, 5) * 0.12, w: 10 + sd(i, 7) * 26, taken: 0 });
-        }
-        tokens.length = 0;
-      },
-      draw: function (tm) {
-        clear(0.30);
-        var lane = narrow ? H * 0.62 : H * 0.5;
-        var open = win(0.02, 0.42);           // la captura empieza al bajar
+  /* Los once que quedaban en geometría dibujada pasan a la MISMA materia que
+     el resto del sitio. Cada uno conserva su idea; lo que cambia es que ahora
+     está hecho de lo mismo que la portada, y por eso todo pertenece al mismo
+     universo en lugar de parecer once piezas de once sitios distintos. */
 
-        // Marcas repetidas: siempre iguales, siempre bajando.
-        for (var i = 0; i < marks.length; i++) {
-          var m = marks[i];
-          var y = ((m.y + tm * 0.000035 * (0.7 + sd(i, 9) * 0.6)) % 1) * H;
-          var x = m.x * W;
-          var caught = open > 0.15 && Math.abs(y - lane) < 26;
-          if (caught && m.taken < 1) {
-            m.taken = 1;
-            tokens.push({ x: x, y: lane, v: 0.5 + sd(i + tm, 2) * 0.5, hue: C.cian, life: 1 });
-          }
-          if (y > lane + 40) m.taken = 0;
-          var a = caught ? 0.5 : 0.16 + sd(i, 11) * 0.10;
-          ctx.fillStyle = rgba(caught ? C.azul : [140, 156, 190], a);
-          ctx.fillRect(x, y, m.w, 1.4);
-        }
-
-        // La línea de captura.
-        if (open > 0.05) {
-          var g = ctx.createLinearGradient(0, lane, W, lane);
-          g.addColorStop(0, rgba(C.cian, 0));
-          g.addColorStop(0.16, rgba(C.cian, 0.30 * open));
-          g.addColorStop(0.5, rgba(C.violeta, 0.20 * open));
-          g.addColorStop(1, rgba(C.rosa, 0));
-          ctx.strokeStyle = g; ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(0, lane); ctx.lineTo(W, lane); ctx.stroke();
-        }
-
-        // Un solo proceso corriendo hacia la derecha, con estela.
-        for (var t = tokens.length - 1; t >= 0; t--) {
-          var k = tokens[t];
-          k.x += k.v * (1.6 + open * 3.4);
-          k.life -= 0.0016;
-          if (k.x > W + 40 || k.life <= 0) { tokens.splice(t, 1); continue; }
-          ctx.strokeStyle = rgba(C.cian, 0.26 * k.life); ctx.lineWidth = 1.6;
-          ctx.beginPath(); ctx.moveTo(k.x - 90, k.y); ctx.lineTo(k.x, k.y); ctx.stroke();
-          ctx.beginPath(); ctx.arc(k.x, k.y, 2.1, 0, 6.2832);
-          ctx.fillStyle = rgba([206, 232, 255], 0.7 * k.life); ctx.fill();
-        }
-        sweep = open;
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 2 · AGENTES DE IA — "La conversación"                                */
-  /* Dos envolventes de voz que se turnan. La de arriba sigue al puntero   */
-  /* (habla el visitante); la de abajo responde después, en otro tono.     */
-  /* ==================================================================== */
-  INSTR.agentes = (function () {
-    var phase = 0, answering = 0, lastMove = 0;
-    return {
-      build: function () {},
-      draw: function (tm) {
-        clear(0.26);
-        var midY = H * 0.5, amp = (narrow ? H * 0.10 : H * 0.13);
-        var speak = coarse ? (0.5 + Math.sin(tm * 0.0011) * 0.5) : (1 - Math.min(1, (tm - lastMove) / 900));
-        answering += ((1 - speak) - answering) * 0.04;
-
-        function envelope(yBase, hue, energy, seedOff, dir) {
-          ctx.beginPath();
-          var step = small ? 10 : 6;
-          for (var x = 0; x <= W; x += step) {
-            var u = x / W;
-            // Sobre de voz: fuerte en el centro, apagado en los extremos.
-            var env = Math.pow(Math.sin(u * Math.PI), 1.4);
-            var n = Math.sin(u * 13 + tm * 0.0026 + seedOff) * 0.5
-                  + Math.sin(u * 31 + tm * 0.0041 + seedOff * 2) * 0.3
-                  + Math.sin(u * 61 + tm * 0.0067 + seedOff * 3) * 0.2;
-            var y = yBase + n * amp * env * energy * dir;
-            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-          }
-          ctx.strokeStyle = rgba(hue, 0.10 + 0.42 * energy);
-          ctx.lineWidth = 1.4; ctx.stroke();
-        }
-
-        // Quien pregunta.
-        envelope(midY - amp * 0.55, C.cian, 0.22 + speak * 0.78, 0, 1);
-        // Quien responde, un instante después y hacia el otro lado.
-        envelope(midY + amp * 0.55, C.violeta, 0.16 + answering * 0.84, 2.2, -1);
-
-        // La línea de turno entre las dos voces.
-        var g = ctx.createLinearGradient(0, midY, W, midY);
-        g.addColorStop(0, rgba(C.cian, 0));
-        g.addColorStop(0.5, rgba([150, 174, 245], 0.12));
-        g.addColorStop(1, rgba(C.rosa, 0));
-        ctx.strokeStyle = g; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(W, midY); ctx.stroke();
-
-        // Un punto marca de quién es el turno.
-        var tx = W * (0.5 + (speak > 0.5 ? -0.22 : 0.22));
-        ctx.beginPath(); ctx.arc(tx, midY, 3, 0, 6.2832);
-        ctx.fillStyle = rgba(speak > 0.5 ? C.cian : C.violeta, 0.6); ctx.fill();
-      },
-      move: function () { lastMove = performance.now(); }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 3 · INTEGRACIONES — "El puente"                                      */
-  /* Dos constelaciones que no se tocan. Al bajar, se tiende un puente y   */
-  /* la información empieza a cruzar en los dos sentidos.                 */
-  /* ==================================================================== */
-  INSTR.integraciones = (function () {
-    var A = [], B = [];
-    return {
-      build: function () {
-        A.length = 0; B.length = 0;
-        var n = small ? 10 : 16;
-        for (var i = 0; i < n; i++) {
-          A.push({ x: W * (0.05 + sd(i, 2) * 0.26), y: H * (0.16 + sd(i, 3) * 0.68), r: 1 + sd(i, 4) * 1.6 });
-          B.push({ x: W * (0.69 + sd(i, 5) * 0.26), y: H * (0.16 + sd(i, 6) * 0.68), r: 1 + sd(i, 7) * 1.6 });
-        }
-      },
-      draw: function (tm) {
-        clear(0.26);
-        var built = win(0.06, 0.52);
-        function island(pts, hue) {
-          for (var i = 0; i < pts.length; i++) {
-            for (var j = i + 1; j < pts.length; j++) {
-              var dx = pts[j].x - pts[i].x, dy = pts[j].y - pts[i].y;
-              var d = Math.sqrt(dx * dx + dy * dy);
-              if (d > W * 0.16) continue;
-              ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
-              ctx.strokeStyle = rgba(hue, 0.10 * (1 - d / (W * 0.16))); ctx.lineWidth = 1; ctx.stroke();
-            }
-            var b = 0.30 + Math.sin(tm * 0.0013 + i) * 0.12;
-            ctx.beginPath(); ctx.arc(pts[i].x, pts[i].y, pts[i].r, 0, 6.2832);
-            ctx.fillStyle = rgba(hue, b); ctx.fill();
-          }
-        }
-        island(A, C.cian); island(B, C.rosa);
-
-        // El puente: se tiende desde los dos lados a la vez.
-        var ax = W * 0.31, bx = W * 0.69, y = H * 0.5;
-        var reach = built;
-        ctx.lineWidth = 1.2;
-        var g = ctx.createLinearGradient(ax, y, bx, y);
-        g.addColorStop(0, rgba(C.cian, 0.42 * reach));
-        g.addColorStop(0.5, rgba([210, 232, 255], 0.5 * reach));
-        g.addColorStop(1, rgba(C.rosa, 0.42 * reach));
-        ctx.strokeStyle = g;
-        ctx.beginPath();
-        ctx.moveTo(lerp(ax, bx, 0.5 - reach * 0.5), y);
-        ctx.lineTo(lerp(ax, bx, 0.5 + reach * 0.5), y);
-        ctx.stroke();
-
-        // Tirantes hacia cada isla.
-        if (reach > 0.35) {
-          for (var k = 0; k < A.length; k += 3) {
-            ctx.beginPath(); ctx.moveTo(A[k].x, A[k].y); ctx.lineTo(ax, y);
-            ctx.strokeStyle = rgba(C.cian, 0.08 * reach); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(B[k].x, B[k].y); ctx.lineTo(bx, y);
-            ctx.strokeStyle = rgba(C.rosa, 0.08 * reach); ctx.stroke();
-          }
-        }
-        // Y el dato cruzando, en los dos sentidos.
-        if (reach > 0.6) {
-          for (var t = 0; t < 5; t++) {
-            var f = ((tm * 0.00022) + t * 0.2) % 1;
-            var go = t % 2 === 0;
-            var px = go ? lerp(ax, bx, f) : lerp(bx, ax, f);
-            ctx.beginPath(); ctx.arc(px, y, 2, 0, 6.2832);
-            ctx.fillStyle = rgba(go ? C.cian : C.rosa, 0.65 * Math.sin(f * Math.PI) * reach);
-            ctx.fill();
-          }
-        }
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 4 · D-CODE FINANCE — "El circuito"                                   */
-  /* El dinero recorriendo sus estados y acumulándose en lo cobrado. Es    */
-  /* una representación del circuito, no de ninguna cuenta real.          */
-  /* ==================================================================== */
-  INSTR.finance = (function () {
-    var toks = [], basin = 0;
-    var GATES = [0.18, 0.40, 0.62, 0.84];
-    return {
-      build: function () { toks.length = 0; basin = 0; },
-      draw: function (tm) {
-        clear(0.34);
-        var y0 = H * 0.30, y1 = H * 0.72;
-        var live = win(0.02, 0.35);
-
-        // Carriles y compuertas: emitido → enviado → vencido → cobrado.
-        for (var g = 0; g < GATES.length; g++) {
-          var gx = W * GATES[g];
-          ctx.beginPath(); ctx.moveTo(gx, y0); ctx.lineTo(gx, y1);
-          ctx.strokeStyle = rgba(g === GATES.length - 1 ? C.verde : [150, 174, 245], 0.20);
-          ctx.lineWidth = 1; ctx.stroke();
-        }
-        if (toks.length < (small ? 18 : 34) && Math.random() < 0.16 * (0.35 + live)) {
-          toks.push({ x: W * 0.04, y: lerp(y0, y1, Math.random()), v: 0.5 + Math.random() * 1.1,
-                      hue: C.azul, st: 0, hold: 0 });
-        }
-        for (var i = toks.length - 1; i >= 0; i--) {
-          var k = toks[i];
-          if (k.hold > 0) { k.hold--; }
-          else {
-            k.x += k.v * (0.5 + live * 1.9);
-            for (var q = 0; q < GATES.length; q++) {
-              var gx2 = W * GATES[q];
-              if (k.st === q && k.x >= gx2) {
-                k.st = q + 1;
-                k.hold = q === 2 ? 40 + Math.random() * 60 : 8 + Math.random() * 16;
-                k.hue = q === 0 ? C.cian : q === 1 ? C.ambar : C.verde;
-              }
-            }
-          }
-          if (k.x > W * 0.90) { basin = Math.min(1, basin + 0.012); toks.splice(i, 1); continue; }
-          var a = k.hold > 0 ? 0.42 : 0.85;
-          ctx.beginPath(); ctx.moveTo(k.x - 12, k.y); ctx.lineTo(k.x, k.y);
-          ctx.strokeStyle = rgba(k.hue, a * 0.6); ctx.lineWidth = 1.5; ctx.stroke();
-          ctx.beginPath(); ctx.arc(k.x, k.y, 2.2, 0, 6.2832);
-          ctx.fillStyle = rgba(k.hue, a); ctx.fill();
-        }
-
-        // La cuenca de lo cobrado: se llena y se sostiene.
-        basin *= 0.9985;
-        var bx = W * 0.93, bh = (y1 - y0) * Math.min(1, basin);
-        var bg = ctx.createLinearGradient(bx, y1, bx, y1 - bh);
-        bg.addColorStop(0, rgba(C.verde, 0.46));
-        bg.addColorStop(1, rgba(C.verde, 0.06));
-        ctx.fillStyle = bg;
-        ctx.fillRect(bx, y1 - bh, Math.max(2, W * 0.035), bh);
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 5 · CAMBIOS EN PROCESO — "El pulso"                                  */
-  /* Lo que ya está activo late con ritmo propio. Lo que está en obra se   */
-  /* dibuja como andamio: trazo discontinuo que todavía no cierra.        */
-  /* ==================================================================== */
-  INSTR.curso = (function () {
-    return {
-      build: function () {},
-      draw: function (tm) {
-        clear(0.30);
-        var rows = small ? 4 : 7;
-        for (var r = 0; r < rows; r++) {
-          var y = H * (0.16 + (r / (rows - 1)) * 0.68);
-          var wip = r < 2;                       // dos frentes en obra
-          var hue = wip ? C.ambar : C.verde;
-          ctx.beginPath();
-          var step = small ? 14 : 11;
-          for (var x = 0; x <= W; x += step) {
-            var u = x / W;
-            var beat;
-            if (wip) {
-              // Andamio: trazo que se interrumpe. Todavía no es una línea.
-              beat = (Math.sin(u * 40 + r) > 0.2 ? 1 : 0) * Math.sin(u * 9 + tm * 0.0012 + r) * 4;
-            } else {
-              // Latido: reposo largo y un pico limpio, como un monitor.
-              var t = (u * 3 + tm * 0.00016 + r * 0.31) % 1;
-              var dd = (t - 0.5) * 34; var pk = dd * dd > 30 ? 0 : Math.exp(-dd * dd);
-              beat = -pk * (narrow ? 16 : 26) + Math.sin(u * 60 + tm * 0.002) * 0.7;
-            }
-            var yy = y + beat;
-            if (x === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);
-          }
-          ctx.strokeStyle = rgba(hue, wip ? 0.20 : 0.30);
-          ctx.lineWidth = 1.2; ctx.stroke();
-        }
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 6 · MÉTODO — "El plano"                                              */
-  /* Un plano dibujándose en el orden en que se dibuja de verdad: primero  */
-  /* las guías, luego el trazo firme, y al final las cotas.                */
-  /* ==================================================================== */
-  INSTR.metodo = (function () {
-    var pts = [];
-    return {
-      build: function () {
-        pts.length = 0;
-        var n = 7;
-        for (var i = 0; i < n; i++) {
-          pts.push({ x: W * (0.14 + sd(i, 12) * 0.72), y: H * (0.16 + (i / (n - 1)) * 0.68) });
-        }
-      },
-      draw: function (tm) {
-        clear(0.34);
-        var guides = win(0.00, 0.22), firm = win(0.20, 0.60), dims = win(0.55, 0.88);
-
-        // Guías: retícula de construcción, tenue y ortogonal.
-        if (guides > 0.02) {
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = rgba([150, 174, 245], 0.055 * guides);
-          for (var i = 0; i < pts.length; i++) {
-            ctx.beginPath(); ctx.moveTo(0, pts[i].y); ctx.lineTo(W * guides, pts[i].y); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(pts[i].x, 0); ctx.lineTo(pts[i].x, H * guides); ctx.stroke();
-          }
-        }
-        // Trazo firme: la polilínea que une los puntos, dibujándose.
-        if (firm > 0.01) {
-          var upto = firm * (pts.length - 1);
-          ctx.beginPath();
-          ctx.moveTo(pts[0].x, pts[0].y);
-          for (var k = 1; k < pts.length; k++) {
-            var f = Math.max(0, Math.min(1, upto - (k - 1)));
-            if (f <= 0) break;
-            ctx.lineTo(lerp(pts[k - 1].x, pts[k].x, f), lerp(pts[k - 1].y, pts[k].y, f));
-          }
-          ctx.strokeStyle = rgba(C.cian, 0.42); ctx.lineWidth = 1.5; ctx.stroke();
-          for (var m = 0; m < pts.length; m++) {
-            if (upto < m - 0.02) break;
-            ctx.beginPath(); ctx.arc(pts[m].x, pts[m].y, 3, 0, 6.2832);
-            ctx.strokeStyle = rgba(C.cian, 0.55); ctx.lineWidth = 1; ctx.stroke();
-          }
-        }
-        // Cotas: lo último que se añade a un plano.
-        if (dims > 0.02) {
-          ctx.setLineDash([3, 5]);
-          ctx.strokeStyle = rgba(C.lav, 0.24 * dims); ctx.lineWidth = 1;
-          for (var d = 1; d < pts.length; d++) {
-            ctx.beginPath();
-            ctx.moveTo(pts[d - 1].x, pts[d - 1].y); ctx.lineTo(pts[d].x, pts[d - 1].y);
-            ctx.lineTo(pts[d].x, pts[d].y); ctx.stroke();
-          }
-          ctx.setLineDash([]);
-        }
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 7 · CASOS — "La linterna"                                            */
-  /* Una sala a oscuras con evidencia sobre la mesa. Solo se ve donde se   */
-  /* mira: examinar es una acción, no una lectura.                        */
-  /* ==================================================================== */
-  INSTR.casos = (function () {
-    var marks = [];
-    return {
-      build: function () {
-        marks.length = 0;
-        var cols = small ? 6 : 14, rows = small ? 10 : 12;
-        for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
-          marks.push({
-            x: W * ((c + 0.5) / cols), y: H * ((r + 0.5) / rows),
-            w: 6 + sd(r * cols + c, 3) * 26,
-            bad: sd(r * cols + c, 8) > 0.93          // una hipótesis tachada
-          });
-        }
-      },
-      draw: function (tm) {
-        clear(0.5);
-        var lx = coarse ? W * (0.5 + Math.sin(tm * 0.0004) * 0.3) : cmx * W;
-        var ly = coarse ? H * (0.5 + Math.cos(tm * 0.00031) * 0.3) : cmy * H;
-        var R = narrow ? W * 0.42 : W * 0.24;
-
-        var g = ctx.createRadialGradient(lx, ly, 0, lx, ly, R);
-        g.addColorStop(0, 'rgba(120,150,220,0.10)');
-        g.addColorStop(1, 'rgba(9,12,26,0)');
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(lx, ly, R, 0, 6.2832); ctx.fill();
-
-        for (var i = 0; i < marks.length; i++) {
-          var m = marks[i];
-          var d = Math.sqrt((m.x - lx) * (m.x - lx) + (m.y - ly) * (m.y - ly));
-          if (d > R) continue;
-          var a = (1 - d / R);
-          ctx.strokeStyle = rgba(m.bad ? C.rosa : [176, 196, 232], 0.42 * a * a);
-          ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(m.x - m.w / 2, m.y); ctx.lineTo(m.x + m.w / 2, m.y); ctx.stroke();
-          if (m.bad) {   // lo que resultó no ser cierto, tachado
-            ctx.beginPath();
-            ctx.moveTo(m.x - m.w / 2, m.y - 4); ctx.lineTo(m.x + m.w / 2, m.y + 4); ctx.stroke();
-          }
-        }
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 8 · CONTACTO — "La señal"                                            */
-  /* Una señal que gana fuerza a medida que se completa el formulario y    */
-  /* alcanza el nodo del otro extremo cuando ya se puede enviar.           */
-  /* ==================================================================== */
-  INSTR.contacto = (function () {
-    var strength = 0;
-    /* El formulario se mira cuando cambia, no sesenta veces por segundo:
-       consultarlo en cada fotograma costaba la mitad de la tasa de refresco. */
-    var cachedReq = null, cachedVal = 0.35;
-    function recompute() {
-      var f = document.getElementById('contact-form');
-      if (!f) return;
-      if (!cachedReq) cachedReq = f.querySelectorAll('input[required], textarea[required]');
-      if (!cachedReq.length) return;
-      var ok = 0;
-      Array.prototype.forEach.call(cachedReq, function (el) {
-        if (el.type === 'checkbox') { if (el.checked) ok++; }
-        else if (String(el.value || '').trim().length > 1) ok++;
-      });
-      cachedVal = ok / cachedReq.length;
-    }
-    ['input', 'change'].forEach(function (ev) {
-      document.addEventListener(ev, recompute, true);
-    });
-    setTimeout(recompute, 400);
-    function formProgress() { return cachedVal; }
-    return {
-      build: function () {},
-      draw: function (tm) {
-        clear(0.28);
-        strength += (formProgress() - strength) * 0.06;
-        var ax = W * 0.10, bx = W * 0.90, y = H * 0.5;
-
-        // Anillos del emisor: cuanta más señal, más lejos llegan.
-        for (var r = 0; r < 4; r++) {
-          var t = ((tm * 0.00035) + r * 0.25) % 1;
-          var rad = t * (W * 0.16) * (0.4 + strength);
-          ctx.beginPath(); ctx.arc(ax, y, rad, 0, 6.2832);
-          ctx.strokeStyle = rgba(C.cian, 0.24 * (1 - t) * (0.3 + strength)); ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-        // El trayecto, que solo se completa cuando el formulario está listo.
-        var reach = ease(strength);
-        var g = ctx.createLinearGradient(ax, y, bx, y);
-        g.addColorStop(0, rgba(C.cian, 0.42));
-        g.addColorStop(Math.max(0.02, reach), rgba(C.violeta, 0.30));
-        g.addColorStop(Math.min(1, reach + 0.02), rgba(C.violeta, 0));
-        ctx.strokeStyle = g; ctx.lineWidth = 1.4;
-        ctx.beginPath(); ctx.moveTo(ax, y); ctx.lineTo(lerp(ax, bx, reach), y); ctx.stroke();
-
-        // Paquetes en camino.
-        for (var k = 0; k < 3; k++) {
-          var f = ((tm * 0.0004) + k * 0.33) % 1;
-          if (f > reach) continue;
-          ctx.beginPath(); ctx.arc(lerp(ax, bx, f), y, 2, 0, 6.2832);
-          ctx.fillStyle = rgba([214, 236, 255], 0.7 * (0.3 + strength)); ctx.fill();
-        }
-        // El nodo receptor: se enciende cuando la señal llega.
-        var on = reach > 0.96 ? 1 : reach * 0.4;
-        ctx.beginPath(); ctx.arc(bx, y, 4 + on * 3, 0, 6.2832);
-        ctx.fillStyle = rgba(C.verde, 0.28 + on * 0.5); ctx.fill();
-        ctx.beginPath(); ctx.arc(bx, y, 12 + on * 10, 0, 6.2832);
-        ctx.strokeStyle = rgba(C.verde, 0.16 + on * 0.28); ctx.lineWidth = 1; ctx.stroke();
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 9 · CONÓCENOS — "Dos mitades"                                        */
-  /* Una mitad ortogonal (arquitectura) y otra curva (estrategia) que se   */
-  /* encuentran en el centro. Dos formas de pensar, un mismo sistema.      */
-  /* ==================================================================== */
-  INSTR.conocenos = (function () {
-    return {
-      build: function () {},
-      draw: function (tm) {
-        clear(0.28);
-        var mid = W * 0.5, join = win(0.05, 0.55);
-        var n = small ? 8 : 13;
-        // Izquierda: trazos rectos, ángulos, orden.
-        for (var i = 0; i < n; i++) {
-          var y = H * (0.12 + (i / (n - 1)) * 0.76);
-          var ext = mid * (0.30 + 0.70 * join) * (0.5 + sd(i, 4) * 0.5);
-          ctx.beginPath();
-          ctx.moveTo(mid - ext, y);
-          ctx.lineTo(mid - ext * 0.4, y);
-          ctx.lineTo(mid - ext * 0.4, y + (sd(i, 6) - 0.5) * 40);
-          ctx.lineTo(mid - 6, y + (sd(i, 6) - 0.5) * 40);
-          ctx.strokeStyle = rgba(C.azul, 0.16 + 0.18 * join); ctx.lineWidth = 1; ctx.stroke();
-        }
-        // Derecha: curvas, continuidad, dirección.
-        for (var j = 0; j < n; j++) {
-          var y2 = H * (0.12 + (j / (n - 1)) * 0.76);
-          var ext2 = (W - mid) * (0.30 + 0.70 * join) * (0.5 + sd(j, 9) * 0.5);
-          ctx.beginPath();
-          ctx.moveTo(mid + 6, y2);
-          ctx.bezierCurveTo(mid + ext2 * 0.4, y2 + Math.sin(tm * 0.0006 + j) * 26,
-                            mid + ext2 * 0.7, y2 - Math.cos(tm * 0.0005 + j) * 26,
-                            mid + ext2, y2);
-          ctx.strokeStyle = rgba(C.rosa, 0.14 + 0.18 * join); ctx.lineWidth = 1; ctx.stroke();
-        }
-        // La costura donde se juntan.
-        var g = ctx.createLinearGradient(mid, 0, mid, H);
-        g.addColorStop(0, rgba([150, 174, 245], 0));
-        g.addColorStop(0.5, rgba([190, 214, 255], 0.16 + 0.2 * join));
-        g.addColorStop(1, rgba([150, 174, 245], 0));
-        ctx.strokeStyle = g; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(mid, 0); ctx.lineTo(mid, H); ctx.stroke();
-      }
-    };
-  })();
-
-  /* ==================================================================== */
-  /* 10 · SERVICIOS — "El tejido"                                         */
-  /* Tres hilos de distinto color que bajan por la página y se trenzan     */
-  /* hasta salir como uno solo. No se venden por separado.                 */
-  /* ==================================================================== */
+  /* SERVICIOS — "El cable". Tres hebras cableadas en hélice, hechas de
+     partículas: se ve DE QUÉ está hecho. Unas pasan por delante y otras por
+     detrás, el haz se ciñe al recorrer la página, entra y sale del encuadre,
+     y por turnos una hebra afloja mientras las otras dos toman su carga. */
   INSTR.servicios = (function () {
-    /* El cable, hecho de partículas. Un cable reúne a la vez las seis cosas
-       que esta página tiene que transmitir — profundidad, cruce, unión,
-       tensión, continuidad y dependencia — y ahora se ve DE QUÉ está hecho:
-       cada hebra es una fila de partículas que se sostienen entre sí. */
     var HUE = [CI.cian, CI.violeta, CI.rosa];
     return {
       build: function () { nube(small ? 300 : narrow ? 520 : 840); },
@@ -768,8 +258,8 @@
           o.y = uu * H;
           var frente = Math.sin(fase) > 0;              // pasa por delante
           var carga = si === flojo ? 0 : cede;
-          o.a = (frente ? 0.62 : 0.16) + 0.20 * tense + 0.26 * carga
-              - (si === flojo ? 0.26 * cede : 0);
+          o.a = (frente ? 0.52 : 0.14) + 0.16 * tense + 0.22 * carga
+              - (si === flojo ? 0.22 * cede : 0);
           o.c = HUE[si];
           o.g = si;
         }, tm);
@@ -779,12 +269,12 @@
         var paso = 0.145;
         ctx.globalCompositeOperation = 'lighter';
         ctx.lineWidth = 1;
-        for (var b = paso; b < 1.1; b += paso) {
-          var ap = ease((tense - (b - 0.1) * 0.5) / 0.35);
+        for (var b2 = paso; b2 < 1.1; b2 += paso) {
+          var ap = ease((tense - (b2 - 0.1) * 0.5) / 0.35);
           if (ap <= 0) continue;
-          var yb = b * H;
+          var yb = b2 * H;
           var izq = cx - spread * 1.25, der = cx + spread * 1.25;
-          ctx.strokeStyle = rgba([214, 236, 255], 0.07 * ap);
+          ctx.strokeStyle = rgba([214, 236, 255], 0.06 * ap);
           for (var k = 0; k < 3; k++) {
             ctx.beginPath();
             ctx.moveTo(izq, yb + (k - 1) * 3); ctx.lineTo(der, yb + (k - 1) * 3);
@@ -796,124 +286,355 @@
     };
   })();
 
+  /* AUTOMATIZACIÓN — "La tarea repetida". Lo mismo, una y otra vez, a mano.
+     Hasta que se captura: entonces deja de repetirse y pasa a correr solo. */
+  INSTR.automatizacion = {
+    build: function () { nube(small ? 260 : 520); },
+    draw: function (tm) {
+      clear(0.30);
+      var capt = win(0.06, 0.52);
+      var FIL = small ? 4 : 6, per = 0;
+      materia(function (i, u, o) {
+        per = NUB.length / FIL;
+        var f = Math.min(FIL - 1, (i / per) | 0);
+        var j = (i - f * per) / per;
+        var fy = H * (0.16 + f / (FIL - 1) * 0.66);
+        /* Antes: cada fila repite el mismo gesto, desalineada y a destiempo. */
+        var manual = H * 0.055 * Math.sin(j * 12.566 + f * 1.1);
+        /* Después: una sola línea limpia, y lo que circula por ella es continuo. */
+        var auto = Math.sin(j * 6.28 + tm * 0.0009) * 2;
+        var cerr = ease((capt - f / FIL * 0.4) / 0.42);
+        o.x = W * (0.06 + j * 0.88);
+        o.y = lerp(fy + manual, H * 0.5 + (f - (FIL - 1) / 2) * 7 + auto, cerr);
+        o.a = (0.20 + 0.34 * Math.abs(Math.sin(j * 12.566 + f))) * (1 - cerr * 0.4)
+            + 0.44 * cerr * (Math.abs(((j + tm * 0.00028) % 1) - 0.5) < 0.16 ? 1 : 0.25);
+        o.c = cerr > 0.6 ? CI.verde : CI.acero;
+        o.g = 100 + f;
+      }, tm);
+      pinta(0.10, tm);
+    }
+  };
 
-  /* ==================================================================== */
-  /* 11 · GARANTÍAS — "Lo que está escrito"                               */
-  /* Cada compromiso se escribe de izquierda a derecha y, una vez escrito, */
-  /* se queda. Nada parpadea: lo escrito no se retira.                    */
-  /* ==================================================================== */
-  INSTR.garantias = (function () {
-    var lines = [];
+  /* AGENTES — "La conversación". Dos voces que se turnan: la del visitante
+     manda y la otra responde. Nunca hablan a la vez. */
+  INSTR.agentes = {
+    build: function () { nube(small ? 240 : 460); },
+    draw: function (tm) {
+      clear(0.30);
+      var turno = ((tm * 0.00018) % 2) | 0;              // de quién es el turno
+      var fase = (tm * 0.00018) % 1;
+      materia(function (i, u, o) {
+        var lado = i % 2;
+        var j = ((i / 2) | 0) / (NUB.length / 2);
+        var activo = lado === turno;
+        var y = H * (0.20 + j * 0.60);
+        /* Quien habla avanza hacia el centro; quien escucha se retira. */
+        var av = activo ? ease(fase / 0.8) : 0;
+        var x0 = lado ? W * 0.94 : W * 0.06;
+        o.x = lerp(x0, W * 0.5, av * (0.4 + 0.5 * Math.sin(j * 3.14)));
+        o.y = y + Math.sin(j * 9 + tm * 0.0006) * 5;
+        o.a = activo ? 0.22 + 0.56 * Math.sin(av * 3.1416) : 0.12;
+        o.c = lado ? CI.cian : CI.violeta;
+        o.g = 200 + lado;
+      }, tm);
+      pinta(0.12, tm);
+    }
+  };
+
+  /* INTEGRACIONES — "El puente". Dos sistemas que no se hablaban, y el puente
+     que se construye entre ellos hasta que el dato cruza. */
+  INSTR.integraciones = {
+    build: function () { nube(small ? 260 : 520); },
+    draw: function (tm) {
+      clear(0.30);
+      var puente = win(0.08, 0.58);
+      var xa = W * 0.16, xb = W * 0.84, my = H * 0.5;
+      materia(function (i, u, o) {
+        var rol = i % 5;
+        if (rol < 2) {
+          /* Los dos sistemas: dos cuerpos con su propia estructura. */
+          var lado = rol, cx = lado ? xb : xa;
+          var k = ((i / 5) | 0) % 16;
+          var an = (k / 16) * 6.2832 + tm * 0.00008 * (lado ? -1 : 1);
+          o.x = cx + Math.cos(an) * W * 0.085;
+          o.y = my + Math.sin(an) * H * 0.20;
+          o.a = 0.34; o.c = lado ? CI.violeta : CI.cian; o.g = 300 + lado;
+        } else if (rol === 2) {
+          /* El puente: se tiende de un lado al otro. */
+          var j = ((i / 5) | 0) / (NUB.length / 5);
+          var lleg = clamp(j / Math.max(0.01, puente));
+          o.x = lerp(xa, xb, Math.min(j, puente));
+          o.y = my + Math.sin(Math.min(j, puente) * 3.1416) * -H * 0.10;
+          o.a = j <= puente ? 0.44 : 0;
+          o.c = CI.acero; o.g = 310;
+        } else {
+          /* Y el dato cruzando, una vez que el puente existe. */
+          var t = ((tm * 0.00035) + sd(i, 61)) % 1;
+          if (puente < 0.94) { o.x = xa; o.y = my; o.a = 0; o.g = -1; return; }
+          o.x = lerp(xa, xb, t);
+          o.y = my + Math.sin(t * 3.1416) * -H * 0.10;
+          o.a = 0.70 * Math.sin(t * 3.1416);
+          o.c = CI.verde; o.g = -1;
+        }
+      }, tm);
+      pinta(0.11, tm);
+    }
+  };
+
+  /* FINANCE — "El circuito". El dinero baja por sus estados —emitido,
+     enviado, vencido, cobrado— y lo cobrado se acumula abajo y se queda.
+     Va en vertical y en la banda libre: esta página es de dos columnas de
+     texto y el circuito no puede cruzarlas. */
+  INSTR.finance = {
+    build: function () { nube(small ? 240 : 480); },
+    draw: function (tm) {
+      clear(0.30);
+      var X0 = narrow ? 0.06 : 0.70, X1 = narrow ? 0.94 : 0.97;
+      var EST = 4;
+      var xs = [0.18, 0.44, 0.68, 0.86];                 // los cuatro estados
+      materia(function (i, u, o) {
+        var acum = (i % 6) === 0;
+        var t = ((tm * 0.00009) + sd(i, 71)) % 1;
+        if (acum) {
+          /* Lo cobrado: se posa abajo y ya no se mueve. Es el resultado. */
+          var k = (i / 6) | 0, cols = small ? 8 : 12;
+          o.x = W * (X0 + ((k % cols) + 0.5) * ((X1 - X0) / cols));
+          o.y = H * (0.93 - (((k / cols) | 0) % 4) * 0.028);
+          o.a = 0.26; o.c = CI.verde; o.g = -1;
+          return;
+        }
+        var e = Math.min(EST - 1, (t * EST) | 0);
+        var f = (t * EST) - e;
+        /* Baja de estado en estado, y en cada uno se desplaza un poco. */
+        o.x = W * lerp(X0 + xs[e] * (X1 - X0), X0 + xs[Math.min(EST - 1, e + 1)] * (X1 - X0), ease(f));
+        o.y = H * (0.10 + t * 0.74);
+        o.a = 0.12 + 0.40 * Math.abs(Math.sin(t * 12.566));
+        o.c = e >= 2 ? CI.ambar : CI.cian;
+        o.g = 400 + e;
+      }, tm);
+      pinta(0.09, tm);
+    }
+  };
+
+  /* CURSO — "El pulso". Lo que ya late está encendido y tiene ritmo; lo que
+     todavía es andamio está ahí, pero apagado y a trazos. */
+  INSTR.curso = {
+    build: function () { nube(small ? 240 : 480); },
+    draw: function (tm) {
+      clear(0.30);
+      var L = small ? 5 : 8;
+      materia(function (i, u, o) {
+        var per = NUB.length / L;
+        var l = Math.min(L - 1, (i / per) | 0);
+        var j = (i - l * per) / per;
+        var vivo = l < Math.ceil(L * 0.55);
+        var y = H * (0.14 + l / (L - 1) * 0.70);
+        if (vivo) {
+          /* Late: un pulso recorre la línea a ritmo constante. */
+          var p2 = ((tm * 0.00022) + l * 0.14) % 1;
+          var d = Math.abs(j - p2);
+          o.x = W * (0.06 + j * 0.88);
+          o.y = y + (d < 0.03 ? -Math.cos(d / 0.03 * 1.57) * 16 : 0);
+          o.a = 0.20 + 0.66 * Math.exp(-d * d * 1400);
+          o.c = CI.verde; o.g = 500 + l;
+        } else {
+          /* Andamio: presente, pero todavía no funciona. */
+          var trazo = Math.abs(Math.sin(j * 40)) > 0.5 ? 1 : 0;
+          o.x = W * (0.06 + j * 0.88); o.y = y;
+          o.a = 0.16 * trazo; o.c = CI.acero; o.g = -1;
+        }
+      }, tm);
+      pinta(0.10, tm);
+    }
+  };
+
+  /* MÉTODO — "El plano". Se dibuja como se dibuja un plano: primero las
+     guías, después los trazos, y al final las cotas. En ese orden. */
+  INSTR.metodo = {
+    build: function () { nube(small ? 260 : 520); },
+    draw: function (tm) {
+      clear(0.30);
+      var g1 = win(0.02, 0.24), g2 = win(0.18, 0.56), g3 = win(0.50, 0.86);
+      materia(function (i, u, o) {
+        var rol = i % 3;
+        var j = ((i / 3) | 0) / (NUB.length / 3);
+        if (rol === 0) {                                  // guías
+          var k = ((i / 3) | 0) % 9;
+          var vert = k % 2 === 0;
+          o.x = vert ? W * (0.10 + (k / 9) * 0.82) : W * (0.06 + j * 0.88);
+          o.y = vert ? H * (0.10 + j * 0.80) : H * (0.14 + (k / 9) * 0.72);
+          o.a = 0.13 * g1 * (Math.abs(Math.sin(j * 60)) > 0.5 ? 1 : 0.2);
+          o.c = CI.acero; o.g = -1;
+        } else if (rol === 1) {                           // trazos
+          var m = ((i / 3) | 0) % 5;
+          var ax = 0.14 + sd(m, 81) * 0.30, ay = 0.20 + sd(m, 82) * 0.56;
+          var bx = 0.52 + sd(m, 83) * 0.34, by = 0.20 + sd(m, 84) * 0.56;
+          var av = clamp((g2 - m * 0.14) / 0.30);
+          o.x = W * lerp(ax, bx, Math.min(j, av));
+          o.y = H * lerp(ay, by, Math.min(j, av));
+          o.a = j <= av ? 0.50 : 0;
+          o.c = CI.cian; o.g = 600 + m;
+        } else {                                          // cotas
+          var c2 = ((i / 3) | 0) % 4;
+          var cy = H * (0.86 - c2 * 0.055);
+          o.x = W * (0.12 + j * (0.30 + c2 * 0.14));
+          o.y = cy;
+          o.a = 0.40 * g3 * (Math.abs(Math.sin(j * 30)) > 0.35 ? 1 : 0.25);
+          o.c = CI.ambar; o.g = 650 + c2;
+        }
+      }, tm);
+      pinta(0.09, tm);
+    }
+  };
+
+  /* CASOS — "La linterna". Una sala a oscuras: la evidencia solo aparece
+     donde se está mirando. Lo demás sigue ahí, pero no se ve. */
+  INSTR.casos = {
+    build: function () { nube(small ? 240 : 480); },
+    draw: function (tm) {
+      clear(0.30);
+      var lx = cmx * W, ly = cmy * H;
+      if (coarse) { lx = W * (0.5 + Math.cos(tm * 0.00016) * 0.28); ly = H * (0.5 + Math.sin(tm * 0.00021) * 0.24); }
+      var r2 = Math.pow(Math.min(W, H) * 0.30, 2);
+      materia(function (i, u, o) {
+        var k = i % 40;
+        var cx = W * (0.08 + sd(k, 91) * 0.84), cy = H * (0.10 + sd(k, 92) * 0.80);
+        var j = ((i / 40) | 0) / Math.max(1, NUB.length / 40);
+        o.x = cx + Math.cos(j * 6.2832) * W * 0.030;
+        o.y = cy + Math.sin(j * 6.2832) * H * 0.045;
+        var dx = o.x - lx, dy = o.y - ly;
+        var luz = Math.exp(-(dx * dx + dy * dy) / r2);
+        o.a = 0.05 + 0.80 * luz;
+        o.c = luz > 0.5 ? CI.ambar : CI.acero;
+        o.g = luz > 0.28 ? 700 + k : -1;
+      }, tm);
+      pinta(0.12, tm);
+    }
+  };
+
+  /* CONTACTO — "La señal". Empieza débil y gana fuerza a medida que se
+     completa el formulario: se ve que el mensaje va a llegar. */
+  INSTR.contacto = (function () {
+    var campos = null, fuerza = 0;
     return {
-      build: function () {
-        lines.length = 0;
-        var n = small ? 7 : 11;
-        for (var i = 0; i < n; i++) {
-          lines.push({
-            y: H * (0.12 + (i / (n - 1)) * 0.76),
-            x0: W * (0.06 + sd(i, 3) * 0.10),
-            len: W * (0.30 + sd(i, 5) * 0.52),
-            at: i / n
-          });
-        }
-      },
+      build: function () { nube(small ? 240 : 460); campos = null; },
       draw: function (tm) {
-        clear(0.34);
-        for (var i = 0; i < lines.length; i++) {
-          var L = lines[i];
-          var w = ease((Pv - L.at * 0.55) / 0.22);      // se escribe al llegar
-          if (w <= 0) continue;
-          var g = ctx.createLinearGradient(L.x0, L.y, L.x0 + L.len, L.y);
-          g.addColorStop(0, rgba(C.cian, 0.30));
-          g.addColorStop(1, rgba(C.violeta, 0.18));
-          ctx.strokeStyle = g; ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(L.x0, L.y); ctx.lineTo(L.x0 + L.len * w, L.y); ctx.stroke();
-          // La punta que está escribiendo, solo mientras escribe.
-          if (w < 0.995) {
-            ctx.beginPath(); ctx.arc(L.x0 + L.len * w, L.y, 1.8, 0, 6.2832);
-            ctx.fillStyle = rgba([214, 236, 255], 0.6); ctx.fill();
-          } else {
-            // Y la marca de cerrado al final de cada línea escrita.
-            ctx.beginPath();
-            ctx.moveTo(L.x0 + L.len + 8, L.y - 3); ctx.lineTo(L.x0 + L.len + 12, L.y + 2);
-            ctx.lineTo(L.x0 + L.len + 20, L.y - 7);
-            ctx.strokeStyle = rgba(C.verde, 0.34); ctx.lineWidth = 1.3; ctx.stroke();
-          }
+        clear(0.30);
+        if (campos === null) {
+          var f = document.querySelectorAll('#contact-form [required], .form-card [required]');
+          campos = f.length ? f : [];
         }
+        var hechos = 0;
+        for (var q = 0; q < campos.length; q++) if (campos[q].value && campos[q].value.trim()) hechos++;
+        var obj = campos.length ? hechos / campos.length : 0.42;
+        fuerza += (obj - fuerza) * 0.05;
+        var cx = W * 0.5, cy = H * 0.52;
+        materia(function (i, u, o) {
+          var anillo = i % 7;
+          var j = ((i / 7) | 0) / Math.max(1, NUB.length / 7);
+          var t = ((tm * 0.00020) + anillo * 0.14) % 1;
+          var rad = t * Math.min(W, H) * (0.12 + 0.24 * fuerza);
+          var an = j * 6.2832;
+          o.x = cx + Math.cos(an) * rad * 1.5;
+          o.y = cy + Math.sin(an) * rad;
+          /* La señal sale del lado libre, no desde el centro del texto. */
+          o.x += W * (narrow ? 0 : 0.22);
+          o.a = (0.08 + 0.42 * fuerza) * Math.sin(t * 3.1416);
+          o.c = fuerza > 0.7 ? CI.verde : (fuerza > 0.35 ? CI.cian : CI.acero);
+          o.g = 800 + anillo;
+        }, tm);
+        pinta(0.10, tm);
       }
     };
   })();
 
-  /* ==================================================================== */
-  /* 12 · CÓMO FUNCIONA — "El dato que viaja"                             */
-  /* Un solo dato recorre las áreas y va dejando registro en cada una. Se  */
-  /* escribe una vez y lo leen todas: eso es un sistema operativo.        */
-  /* ==================================================================== */
-  INSTR.dato = (function () {
-    var stops = [], trail = [];
-    return {
-      build: function () {
-        stops.length = 0; trail.length = 0;
-        var n = small ? 4 : 6;
-        for (var i = 0; i < n; i++) {
-          stops.push({
-            x: W * (0.12 + (i / (n - 1)) * 0.76),
-            y: H * (0.34 + Math.sin(i * 1.7) * 0.20),
-            hue: [C.cian, C.rosa, C.verde, C.ambar, C.azul, C.lav][i % 6],
-            written: 0
-          });
+  /* CONÓCENOS — "Dos mitades". Estrategia y arquitectura: dos materias que
+     vienen de lados opuestos y se traban en el centro. */
+  INSTR.conocenos = {
+    build: function () { nube(small ? 240 : 480); },
+    draw: function (tm) {
+      clear(0.30);
+      var junta = win(0.06, 0.56);
+      materia(function (i, u, o) {
+        var lado = i % 2;
+        var j = ((i / 2) | 0) / (NUB.length / 2);
+        var fil = ((i / 2) | 0) % 14;
+        var y = H * (0.14 + (fil / 13) * 0.70);
+        var x0 = lado ? 1.06 : -0.06;
+        var x1 = lado ? 0.505 + (fil % 2) * 0.012 : 0.495 - (fil % 2) * 0.012;
+        o.x = W * lerp(x0, x1, ease(junta) * (0.55 + 0.45 * j));
+        o.y = y + Math.sin(j * 6 + fil) * 3;
+        o.a = 0.12 + 0.34 * junta;
+        o.c = lado ? CI.violeta : CI.cian;
+        o.g = 900 + lado * 20 + fil;
+      }, tm);
+      pinta(0.12, tm);
+    }
+  };
+
+  /* GARANTÍAS — "Lo que está escrito". Cada compromiso se escribe de
+     izquierda a derecha y, una vez escrito, se queda. Nada parpadea. */
+  INSTR.garantias = {
+    build: function () { nube(small ? 220 : 440); },
+    draw: function (tm) {
+      clear(0.30);
+      var L = small ? 6 : 10;
+      materia(function (i, u, o) {
+        var per = NUB.length / L;
+        var l = Math.min(L - 1, (i / per) | 0);
+        var j = (i - l * per) / per;
+        var largo = 0.30 + sd(l, 95) * 0.52;
+        var esc = ease((Pv - l / L * 0.55) / 0.22);
+        var fin = largo * esc;
+        o.x = W * (0.06 + j * largo * 0.90);
+        o.y = H * (0.12 + (l / (L - 1)) * 0.74);
+        o.a = j <= esc ? 0.30 : 0;
+        /* La marca de cerrado, al final de lo ya escrito. */
+        if (j > esc - 0.04 && j <= esc && esc > 0.96) { o.a = 0.58; o.c = CI.verde; }
+        else o.c = CI.acero;
+        o.g = j <= esc ? 1000 + l : -1;
+      }, tm);
+      pinta(0.10, tm);
+    }
+  };
+
+  /* DATO — "El dato que se escribe una vez". Entra por un sitio y llega a
+     todos los demás sin que nadie lo vuelva a teclear. */
+  INSTR.dato = {
+    build: function () { nube(small ? 240 : 480); },
+    draw: function (tm) {
+      clear(0.30);
+      var D = small ? 5 : 7;
+      /* En su banda: esta página tiene dos columnas de texto y el dato no
+         puede atravesarlas para llegar a sus destinos. */
+      var X0 = narrow ? 0.08 : 0.62, X1 = narrow ? 0.94 : 0.97;
+      var ox = W * X0, oy = H * 0.5;
+      materia(function (i, u, o) {
+        var rol = i % 4;
+        if (rol === 0) {
+          /* Los destinos: donde el dato tiene que llegar. */
+          var k = ((i / 4) | 0) % D;
+          var an = (k / D) * 3.1416 - 1.5708;
+          var j2 = ((i / 4) | 0) / Math.max(1, NUB.length / 4);
+          o.x = W * (X0 + (X1 - X0) * 0.82) + Math.cos(j2 * 6.2832) * W * 0.022;
+          o.y = H * (0.14 + (k / (D - 1)) * 0.72) + Math.sin(j2 * 6.2832) * H * 0.026;
+          o.a = 0.34; o.c = CI.acero; o.g = 1100 + k;
+        } else {
+          /* El dato viajando: se escribe una vez y va a todos. */
+          var k2 = i % D;
+          var t = ((tm * 0.00028) + sd(i, 96)) % 1;
+          var dy = H * (0.14 + (k2 / (D - 1)) * 0.72);
+          o.x = lerp(ox, W * (X0 + (X1 - X0) * 0.82), t);
+          o.y = lerp(oy, dy, ease(t));
+          o.a = 0.14 + 0.60 * Math.sin(t * 3.1416);
+          o.c = t > 0.9 ? CI.verde : CI.cian;
+          o.g = -1;
         }
-      },
-      draw: function (tm) {
-        clear(0.28);
-        var t = ((tm * 0.00007) % 1);
-        var seg = t * (stops.length - 1);
-        var si = Math.floor(seg), sf = seg - si;
-        var a = stops[Math.min(si, stops.length - 1)];
-        var b = stops[Math.min(si + 1, stops.length - 1)];
-        var px = lerp(a.x, b.x, ease(sf)), py = lerp(a.y, b.y, ease(sf));
+      }, tm);
+      pinta(0.10, tm);
+    }
+  };
 
-        // El camino entre áreas.
-        ctx.beginPath();
-        for (var i = 0; i < stops.length; i++) {
-          if (i === 0) ctx.moveTo(stops[i].x, stops[i].y); else ctx.lineTo(stops[i].x, stops[i].y);
-        }
-        ctx.strokeStyle = rgba([150, 174, 245], 0.10); ctx.lineWidth = 1; ctx.stroke();
-
-        // Cada área guarda su registro cuando el dato pasa por ella.
-        for (var k = 0; k < stops.length; k++) {
-          var s2 = stops[k];
-          if (Math.abs(px - s2.x) < 14 && Math.abs(py - s2.y) < 14) s2.written = 1;
-          s2.written *= 0.9992;
-          ctx.beginPath(); ctx.arc(s2.x, s2.y, 4, 0, 6.2832);
-          ctx.strokeStyle = rgba(s2.hue, 0.24 + s2.written * 0.5); ctx.lineWidth = 1; ctx.stroke();
-          for (var r = 0; r < 3; r++) {
-            var ry = s2.y + 16 + r * 7;
-            ctx.beginPath(); ctx.moveTo(s2.x - 14, ry); ctx.lineTo(s2.x - 14 + 28 * s2.written, ry);
-            ctx.strokeStyle = rgba(s2.hue, 0.30 * s2.written); ctx.lineWidth = 1; ctx.stroke();
-          }
-        }
-
-        // El dato, con su estela.
-        trail.push({ x: px, y: py });
-        if (trail.length > 30) trail.shift();
-        for (var q = 1; q < trail.length; q++) {
-          ctx.beginPath(); ctx.moveTo(trail[q - 1].x, trail[q - 1].y); ctx.lineTo(trail[q].x, trail[q].y);
-          ctx.strokeStyle = rgba(C.cian, 0.30 * (q / trail.length)); ctx.lineWidth = 1.4; ctx.stroke();
-        }
-        ctx.beginPath(); ctx.arc(px, py, 2.6, 0, 6.2832);
-        ctx.fillStyle = rgba([220, 240, 255], 0.8); ctx.fill();
-      }
-    };
-  })();
-
-
-  /* ==================================================================== */
-  /* 13 · CAPACIDADES (hub) — "El encaje"                                 */
-  /* Piezas sueltas que giran a la deriva y, al bajar, se enderezan y      */
-  /* encajan unas con otras hasta formar un cuerpo único. Es exactamente   */
-  /* lo que dice la página: no se elige un pack, se combinan piezas que    */
-  /* adquieren sentido juntas. Ninguna otra sección usa formas sólidas.    */
   /* ==================================================================== */
   INSTR.encaje = (function () {
     /* EL ENCAJE, llevado al límite. Las piezas no van derechas a su hueco:

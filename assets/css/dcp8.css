@@ -49,12 +49,14 @@ body.v7 .v6-end .v6-veil{ position:relative; }
 body.v7 .timeline, body.v7 .outs, body.v7 .chain, body.v7 .shift,
 body.v7 .split-list, body.v7 .specs, body.v7 .split, body.v7 .cases,
 body.v7 .rail, body.v7 .rail-hint, body.v7 .metodo-copy,
-body.v7 .duo, body.v7 .board, body.v7 .prod{ position:relative; }
+body.v7 .duo, body.v7 .board, body.v7 .prod,
+body.v7 .pacts, body.v7 .track, body.v7 .pre-cta{ position:relative; }
 body.v7 .timeline::before, body.v7 .outs::before, body.v7 .chain::before,
 body.v7 .shift::before, body.v7 .split-list::before, body.v7 .specs::before,
 body.v7 .split::before, body.v7 .cases::before, body.v7 .rail::before,
 body.v7 .rail-hint::before, body.v7 .metodo-copy::before,
-body.v7 .duo::before, body.v7 .board::before, body.v7 .prod::before{
+body.v7 .duo::before, body.v7 .board::before, body.v7 .prod::before,
+body.v7 .pacts::before, body.v7 .track::before, body.v7 .pre-cta::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-9% -7%;
   background:radial-gradient(84% 74% at 50% 50%,

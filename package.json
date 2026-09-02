@@ -6,7 +6,8 @@
     "sync-content": "npm run update-asset-versions && npm run generate-kb",
     "generate-kb": "node scripts/build-knowledge-base.js",
     "update-asset-versions": "node scripts/update-asset-versions.js",
-    "qa:check": "node scripts/qa-preview-check.js"
+    "qa:check": "node scripts/qa-preview-check.js",
+    "check-instruments": "node scripts/check-instruments.js"
   },
   "dependencies": {
     "resend": "^4.0.0"
