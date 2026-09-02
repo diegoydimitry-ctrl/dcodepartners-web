@@ -48,11 +48,13 @@ body.v7 .v6-end .v6-veil{ position:relative; }
    esto una estructura brillante por detrás baja de 4,5:1. */
 body.v7 .timeline, body.v7 .outs, body.v7 .chain, body.v7 .shift,
 body.v7 .split-list, body.v7 .specs, body.v7 .split, body.v7 .cases,
-body.v7 .rail, body.v7 .rail-hint, body.v7 .metodo-copy{ position:relative; }
+body.v7 .rail, body.v7 .rail-hint, body.v7 .metodo-copy,
+body.v7 .duo, body.v7 .board, body.v7 .prod{ position:relative; }
 body.v7 .timeline::before, body.v7 .outs::before, body.v7 .chain::before,
 body.v7 .shift::before, body.v7 .split-list::before, body.v7 .specs::before,
 body.v7 .split::before, body.v7 .cases::before, body.v7 .rail::before,
-body.v7 .rail-hint::before, body.v7 .metodo-copy::before{
+body.v7 .rail-hint::before, body.v7 .metodo-copy::before,
+body.v7 .duo::before, body.v7 .board::before, body.v7 .prod::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-9% -7%;
   background:radial-gradient(84% 74% at 50% 50%,
@@ -106,3 +108,18 @@ body.v7 h1, body.v7 h2, body.v7 .h-title, body.v7 .v6-title{
 /* El rótulo de las ventanas se quedaba en 4,45:1 sobre su propia barra —
    justo por debajo del mínimo. Un punto más de luz y cumple. */
 body.v7 .window-title{ color:#95a3c2; }
+
+/* El pie es texto desnudo sobre el campo igual que el resto: con la
+   floración, una estructura brillante por detrás lo dejaba en 2,6:1. */
+body.v7 footer, body.v6 footer{ position:relative; isolation:isolate; }
+body.v7 footer::before, body.v6 footer::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-14% 0 0 0;
+  background:linear-gradient(180deg,
+    rgba(5,7,14,0) 0%, rgba(5,7,14,.80) 12%, rgba(5,7,14,.97) 26%, rgba(5,7,14,.995) 46%);
+}
+/* Y la cadena de pasos gana un punto de velo por el mismo motivo. */
+body.v7 .chain::before{
+  background:radial-gradient(88% 80% at 50% 50%,
+    rgba(5,7,14,.985), rgba(5,7,14,.94) 46%, rgba(5,7,14,.60) 74%, rgba(5,7,14,0) 94%);
+}

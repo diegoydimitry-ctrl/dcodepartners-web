@@ -183,12 +183,20 @@
       var p = NUB[i];
       var ldx = NPX[i] - lx, ldy = NPY[i] - ly;
       var luz = Math.exp(-(ldx * ldx + ldy * ldy) / lr2) * 0.34;
-      var a = (NPA[i] + luz) * (0.40 + p.z * 0.70);
+      var a = (NPA[i] + luz) * (0.34 + p.z * 0.58);
       if (a <= 0.012) continue;
       var sp = Math.min(1.1, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.22);
       var r = (1.2 + p.s * 2.6) * (0.58 + p.z * 1.05) * (1 + sp);
-      ctx.globalAlpha = Math.min(0.78, a);
-      ctx.drawImage(NSPR[p.e][NPC[i]], NPX[i] - r, NPY[i] - r, r * 2, r * 2);
+      var spr = NSPR[p.e][NPC[i]];
+      /* Floración: lo que de verdad brilla deja halo. Es lo que separa un
+         punto encendido de una fuente de luz. */
+      if (a > 0.46) {
+        var rb = r * 2.7;
+        ctx.globalAlpha = Math.min(0.13, (a - 0.46) * 0.32);
+        ctx.drawImage(spr, NPX[i] - rb, NPY[i] - rb, rb * 2, rb * 2);
+      }
+      ctx.globalAlpha = Math.min(0.62, a);
+      ctx.drawImage(spr, NPX[i] - r, NPY[i] - r, r * 2, r * 2);
     }
     ctx.globalAlpha = 1;
     if (enl) {
@@ -1098,7 +1106,7 @@
         var vivo = j <= av;
         /* Los hitos: momentos que quedan marcados y ya no se apagan. */
         var hito = Math.abs(Math.sin(j * 15.7 + l * 2)) > 0.985;
-        o.a = vivo ? (hito ? 0.92 : 0.42) : 0.07;
+        o.a = vivo ? (hito ? 0.62 : 0.30) : 0.06;
         o.c = hito && vivo ? CI.verde : CI.turq;
         o.g = vivo ? 300 + l : -1;
       }, tm);
@@ -1195,8 +1203,8 @@
           var j = sd(i, 41);
           var t = ((tm * (arriba ? 0.00022 : 0.00019)) + j) % 1;
           o.x = W * (arriba ? (0.06 + t * 0.88) : (0.94 - t * 0.88));
-          o.y = midY + (arriba ? -1 : 1) * (24 + (i % 4) * 9);
-          o.a = 0.16 + 0.62 * (arriba ? ent : sal) * Math.sin(t * 3.1416);
+          o.y = midY + (arriba ? -1 : 1) * (30 + (i % 6) * 13);
+          o.a = 0.10 + 0.34 * (arriba ? ent : sal) * Math.sin(t * 3.1416);
           o.c = arriba ? CI.verde : CI.rosa;
           o.g = -1;
         }, tm);

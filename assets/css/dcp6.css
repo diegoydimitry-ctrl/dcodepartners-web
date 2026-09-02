@@ -189,8 +189,11 @@ body.v6 main .lit::before{ display:none; }
 .v6-step-in{ position:relative; max-width:min(500px, 88%); }
 /* Velo propio, ceñido al texto: la retícula pasa por debajo, no por encima. */
 .v6-step-in::before{
-  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-18% -16%;
-  background:radial-gradient(62% 66% at 50% 50%, rgba(5,7,14,.97), rgba(5,7,14,.86) 46%, rgba(5,7,14,.36) 70%, rgba(5,7,14,0) 88%);
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-26% -22%;
+  background:radial-gradient(82% 84% at 34% 50%,
+    rgba(5,7,14,.99), rgba(5,7,14,.95) 40%, rgba(5,7,14,.70) 64%,
+    rgba(5,7,14,.26) 82%, rgba(5,7,14,0) 96%);
 }
 .v6-step-n{
   display:block; font-family:var(--serif); font-weight:700; letter-spacing:-.05em;

@@ -178,151 +178,176 @@
      monotonía de "texto a un lado, animación al otro". */
   var MARCO = [
     { x: 0.50, y: 0.48, w: 1.00, h: 1.00, d: 1.00 },  // 0 a pantalla completa
-    { x: 0.54, y: 0.50, w: 1.02, h: 0.94, d: 0.72 },  // 1 disperso y ancho
+    { x: 0.56, y: 0.50, w: 1.00, h: 0.94, d: 0.88 },  // 1 disperso y ancho
     { x: 0.775, y: 0.44, w: 0.34, h: 0.40, d: 0.62 }, // 2 íntimo y preciso
     { x: 0.735, y: 0.50, w: 0.46, h: 0.60, d: 0.80 }, // 3 medio
     { x: 0.635, y: 0.52, w: 0.70, h: 1.02, d: 1.00 }, // 4 MONUMENTAL
     { x: 0.700, y: 0.50, w: 0.34, h: 0.52, d: 0.78 },  // 5 circuito compacto
     { x: 0.895, y: 0.50, w: 0.15, h: 0.84, d: 0.66 }, // 6 columna estrecha
     { x: 0.760, y: 0.47, w: 0.38, h: 0.56, d: 0.86 }, // 7 instrumento denso
-    { x: 0.500, y: 0.46, w: 1.06, h: 1.06, d: 1.00 }  // 8 envolvente
+    { x: 0.500, y: 0.47, w: 0.86, h: 0.84, d: 1.00 }  // 8 envolvente
   ];
   /* Cuánta de la materia participa; el resto queda como bruma de fondo. Así
      la densidad cambia de una sección a otra en vez de ser siempre la misma. */
-  var USO = [1.00, 0.72, 0.46, 0.68, 1.00, 0.55, 0.50, 0.62, 1.00];
+  var USO = [1.00, 0.90, 0.46, 0.68, 1.00, 0.55, 0.50, 0.62, 1.00];
 
   /* ------------------------------------------------------- FORMACIONES */
   /* Todas escriben en o.nx, o.ny (0..1 dentro del marco), o.a, o.g, o.c. */
   var TAU = 6.2832;
   var o1 = { nx: 0, ny: 0, a: 1, g: -1, c: 6 };
 
-  /* 0 · ANÁLISIS — información dispersa que está siendo interpretada. Un
-     frente de lectura la recorre: a su paso, lo que es SEÑAL se alinea en
-     filas y viaja al punto de análisis; lo que es RUIDO se dispersa y baja.
-     Si quitas el texto: algo está leyendo mucha información y separando lo
-     que importa de lo que no. */
+  /* LA PRUEBA DE LOS DOS SEGUNDOS. Cada formación tiene que entenderse
+     mirándola dos segundos, sin leer el texto. Por eso ninguna es geometría
+     abstracta: todas se apoyan en un arquetipo que cualquiera reconoce —un
+     embudo, una celosía, un circuito, un archivo con un hueco, un anillo de
+     componentes—. Si una forma necesita explicación técnica, está mal. */
+
+  /* 0 · ANÁLISIS — una máquina de analizar, de arriba abajo: cae un
+     revoltijo → se aprieta en una GARGANTA → y se posa abajo como barras de
+     distinta altura, un resultado ya clasificado. Va en vertical, en la banda
+     libre de la derecha: el titular ocupa la izquierda y la máquina tiene que
+     verse entera, no medio tapada. El resto del encuadre queda como
+     atmósfera profunda, que es lo que hace grande a la portada. */
   function F0(i, u, g, G, o, tm, ins) {
-    /* La información NO está suelta: llega en trayectorias. Las partículas de
-       una misma trayectoria son CONSECUTIVAS, así que el enlace las dibuja y
-       se ven como recorridos, no como puntos sueltos. Un frente de lectura
-       las recorre y separa la señal del ruido: la señal abandona su
-       trayectoria, se alinea en filas y converge en el punto de análisis; el
-       ruido se abre y baja de nivel. */
-    var TR = narrow ? 16 : 26;
-    var per = N / TR;
-    var tr = Math.min(TR - 1, (i / per) | 0);
-    var j = (i - tr * per) / per;
-    var a0 = sd(tr, 11), a1 = sd(tr, 12), a2 = sd(tr, 13);
+    var X0 = 0.63, X1 = 0.99, AN = X1 - X0;           // la banda de la máquina
+    var maq = sd(i, 10) > 0.34;                       // el resto es atmósfera
 
-    var bx = -0.08 + j * 1.18;
-    var by = 0.05 + a0 * 0.90
-           + Math.sin(j * 3.1 + a1 * 6.28) * 0.10
-           + Math.sin(j * 7.4 + a2 * 6.28) * 0.032;
-
-    var frente = ((tm * 0.000062) % 1.46) - 0.26;
-    var d = bx - frente;
-    var leido = cl(-d / 0.16);
-    var senal = sd(i, 14) > 0.68;
-
-    if (senal) {
-      var fila = Math.floor(sd(i, 15) * 7);
-      var fy = 0.20 + fila * 0.100;
-      var conv = cl((-d - 0.24) / 0.38);
-      o.nx = lerp(bx, lerp(bx, 0.965, conv * conv), leido);
-      o.ny = lerp(by, lerp(fy, 0.50, conv * conv), leido);
-      o.a = 0.30 + 0.44 * leido + 0.50 * conv;
-      o.c = conv > 0.55 ? 1 : (leido > 0.4 ? 0 : 6);
-      /* Mientras es señal alineada forma fila; al converger deja de enlazar. */
-      o.g = (leido > 0.65 && conv < 0.45) ? 100 + fila : -1;
-    } else {
-      o.nx = bx + leido * 0.045;
-      o.ny = by + leido * (by - 0.5) * 0.55;
-      o.a = 0.40 - 0.30 * leido;
-      o.c = 6;
-      /* Antes de ser leída, la trayectoria se ve entera. */
-      o.g = leido < 0.30 ? 60 + tr : -1;
+    if (!maq) {
+      var hx = sd(i, 16), hy = sd(i, 17);
+      o.nx = hx * 0.62 + Math.sin(tm * 0.00012 + i) * 0.006;
+      o.ny = hy + Math.cos(tm * 0.00010 + i) * 0.008;
+      o.a = 0.10 + 0.14 * sd(i, 18);
+      o.c = 6; o.g = -1;
+      return;
     }
-    /* El frente de lectura: la banda más brillante de toda la portada. */
-    o.a += 1.05 * Math.exp(-d * d * 120);
+
+    var col   = Math.floor(sd(i, 12) * 8);            // su columna de salida
+    var alto  = 0.20 + sd(col + 1, 13) * 0.52;        // cada una mide distinto
+    var t = (sd(i, 14) + tm * 0.00009) % 1;
+    var y = -0.08 + t * 1.20;
+
+    var xEnt = X0 + sd(i, 11) * AN;                   // entra desordenado
+    var xCol = X0 + (col + 0.5) * (AN / 8);           // sale en su columna
+    var kG = cl((y - 0.16) / 0.24);                   // la garganta aprieta
+    var kS = cl((y - 0.46) / 0.08);                   // y suelta ya clasificado
+    var x = lerp(lerp(xEnt, X0 + AN * 0.5, kG * kG), xCol, kS);
+
+    /* La barra termina donde le toca: por eso es un resultado y no una raya. */
+    var fin = 0.54 + alto * 0.44;
+    var pasado = cl((y - fin) / 0.05);
+    o.nx = x;
+    o.ny = Math.min(y, fin + 0.010);
+    o.a = (0.26 + 0.34 * kG + 0.50 * kS) * (1 - pasado);
+    o.c = kS > 0.6 ? (col < 3 ? 0 : 1) : 6;
+    o.g = (kS > 0.75 && pasado < 0.5) ? 100 + col : (y < 0.16 ? 60 + (col % 5) : -1);
+    /* La garganta: el punto más brillante del recorrido, donde se decide. */
+    var dg = y - 0.46;
+    o.a += 0.95 * Math.exp(-dg * dg * 1100) * (1 - Math.abs(x - (X0 + AN * 0.5)) * 5.0);
   }
 
-  /* 1 · SIN SISTEMA — una empresa funcionando, pero sin sistema: rutas que
-     se cruzan mal, TRES CALCADAS (lo mismo hecho en tres sitios) y trayectos
-     que se apagan sin llegar a ninguna parte. */
+  /* 1 · SIN SISTEMA — actividad real, pero sin sistema. Se ve lo que dice el
+     texto: rutas que se cruzan mal, TRES CALCADAS una al lado de otra —lo
+     mismo hecho en tres sitios— y trayectos que se paran a medio camino y
+     amontonan ahí lo que llevaban. */
   function F1(i, u, g, G, o, tm, ins) {
-    var dup = (g % 8) < 3;                       // tres rutas idénticas
+    var dup = (g % 9) < 3;                            // el trío calcado
     var src = dup ? 2 : g;
-    var off = dup ? (g % 8) * 0.035 : 0;
-    var sx = 0.04 + sd(src, 21) * 0.92, sy = 0.06 + sd(src, 22) * 0.88;
-    var ex = 0.04 + sd(src, 23) * 0.92, ey = 0.06 + sd(src, 24) * 0.88;
-    var cx = (sx + ex) / 2 + Math.cos(sd(src, 25) * TAU) * 0.30;
-    var cy = (sy + ey) / 2 + Math.sin(sd(src, 26) * TAU) * 0.30;
-    var muere = (src % 5) === 2;                 // no lleva a ninguna parte
-    var uu = muere ? Math.min(u, 0.54) : u;
+    var off = dup ? ((g % 9) - 1) * 0.055 : 0;        // separadas y paralelas
+    var sx = 0.04 + sd(src, 21) * 0.90, sy = 0.07 + sd(src, 22) * 0.86;
+    var ex = 0.04 + sd(src, 23) * 0.90, ey = 0.07 + sd(src, 24) * 0.86;
+    var cx = (sx + ex) / 2 + Math.cos(sd(src, 25) * TAU) * 0.32;
+    var cy = (sy + ey) / 2 + Math.sin(sd(src, 26) * TAU) * 0.32;
+    var muere = (src % 4) === 1;
+    /* El que muere no llega: se para y lo que llevaba se apila en el corte. */
+    var corte = 0.46 + sd(src, 27) * 0.16;
+    var uu = muere ? Math.min(u, corte + (u - corte) * 0.04) : u;
     var m = 1 - uu;
     o.nx = m * m * sx + 2 * m * uu * cx + uu * uu * ex + off;
-    o.ny = m * m * sy + 2 * m * uu * cy + uu * uu * ey + off * 0.4;
-    o.a = muere && u > 0.54 ? 0.04 : 0.34 + 0.20 * Math.sin(u * 9 + tm * 0.0011 + g);
-    o.c = muere ? (u > 0.5 ? 4 : 6) : (dup ? 3 : 6);
-    o.g = muere && u > 0.54 ? -1 : g;
+    o.ny = m * m * sy + 2 * m * uu * cy + uu * uu * ey + off * 0.35;
+    if (muere && u > corte) {
+      o.a = 0.30 + 0.34 * Math.sin(tm * 0.0016 + i);  // parpadea, atascado
+      o.c = 4;                                        // el rosa: lo que falla
+      o.g = -1;
+    } else {
+      o.a = 0.34 + 0.22 * Math.sin(u * 9 + tm * 0.0011 + g);
+      o.c = dup ? 3 : 6;
+      o.g = g;
+    }
   }
 
-  /* 2 · DETECCIÓN — el MISMO patrón, exacto, aparece en varios puntos del
-     campo. Queda acotado entre marcas y se enciende; lo demás se apaga.
-     Si quitas el texto: algo escondido acaba de ser encontrado. */
+  /* 2 · DETECCIÓN — el MISMO motivo, exacto, en tres puntos del campo. Se
+     acota entre marcas y se enciende; todo lo demás se apaga de golpe. */
   function F2(i, u, g, G, o, tm, ins) {
-    var R = 3;                                   // tres repeticiones
+    var R = 3;
     var k = g % (R + 2);
-    var hallado = ease((ins - 0.14) / 0.34);
+    var hallado = ease((ins - 0.14) / 0.30);
     if (k < R) {
-      var sy2 = 0.16 + k * 0.32;
-      /* motivo idéntico en los tres: por eso se reconoce como patrón */
+      var sy2 = 0.15 + k * 0.33;
       var mo = Math.sin(u * TAU * 1.5), mv = Math.sin(u * TAU * 0.5);
-      o.nx = 0.10 + u * 0.80;
-      o.ny = sy2 + mo * 0.085 + mv * 0.030;
-      o.a = 0.16 + 0.80 * hallado;
+      o.nx = 0.11 + u * 0.78;
+      o.ny = sy2 + mo * 0.082 + mv * 0.028;
+      o.a = 0.14 + 0.86 * hallado;
       o.c = hallado > 0.5 ? 0 : 6;
       o.g = 200 + k;
     } else {
-      /* Lo que no es el patrón se retira. */
+      /* Las marcas que acotan cada hallazgo: cuatro esquinas por motivo. */
+      var q = g % 4, kk = (g / 4 | 0) % R;
+      var ex2 = q < 2 ? 0.08 : 0.83, ey2 = 0.15 + kk * 0.33 + (q % 2 ? 0.09 : -0.09);
+      if (sd(i, 30) > 0.55) {
+        o.nx = ex2 + (u - 0.5) * 0.05; o.ny = ey2;
+        o.a = 0.70 * hallado; o.c = 7; o.g = -1;
+        return;
+      }
       o.nx = sd(i, 31); o.ny = sd(i, 32);
-      o.a = 0.20 * (1 - hallado * 0.86);
+      o.a = 0.22 * (1 - hallado * 0.90);
       o.c = 6; o.g = -1;
     }
   }
 
-  /* 3 · PERTENENCIA Y CONEXIÓN — lo suelto emigra a partes definidas; y
-     cuando ya pertenece, las partes descubren que se conectan entre sí.
-     Antes eran cosas separadas; ahora son un sistema. */
+  /* 3 · PERTENENCIA — lo suelto sube en columnas hacia su parte, se coloca
+     dentro, y cuando las partes ya están llenas se enlazan ENTRE ELLAS: se
+     decide qué va con qué. */
   function F3(i, u, g, G, o, tm, ins) {
     var K = narrow ? 3 : 4;
     var per = N / K;
     var k = Math.min(K - 1, (i / per) | 0);
     var j = i - k * per;
     var cols = 6, rows = Math.ceil(per / cols);
-    var bx = 0.06 + k * (0.92 / K), bw = (0.92 / K) * 0.74;
-    var lleg = ease((ins - 0.06 - (j / per) * 0.40) / 0.30);
+    var bx = 0.07 + k * (0.90 / K), bw = (0.90 / K) * 0.70;
+    var lleg = ease((ins - 0.04 - (j / per) * 0.42) / 0.28);
     var tx = bx + ((j % cols) + 0.5) * (bw / cols);
-    var ty = 0.10 + ((((j / cols) | 0) % rows) + 0.5) * (0.80 / rows);
-    o.nx = lerp(0.5 + Math.cos(i * 2.4) * 0.42, tx, lleg);
-    o.ny = lerp(0.5 + Math.sin(i * 3.1) * 0.46, ty, lleg);
-    o.a = 0.16 + 0.50 * lleg;
+    var ty = 0.10 + ((((j / cols) | 0) % rows) + 0.5) * (0.66 / rows);
+
+    /* El enlace entre partes: unos pocos viajan de una parte a la vecina. */
+    var puente = (g % 23) === 7 && k < K - 1;
+    var pu = ease((ins - 0.62) / 0.30);
+    if (puente && pu > 0) {
+      var bx2 = 0.07 + (k + 1) * (0.90 / K);
+      var pt = ((tm * 0.00035) + k * 0.3) % 1;
+      o.nx = lerp(bx + bw, bx2, pt);
+      o.ny = 0.83 - Math.sin(pt * 3.1416) * 0.10;
+      o.a = 0.80 * pu; o.c = 5; o.g = -1;
+      return;
+    }
+    /* Antes de pertenecer, sube desde abajo en columna: se ve llegar. */
+    o.nx = lerp(tx + (sd(i, 33) - 0.5) * 0.05, tx, lleg);
+    o.ny = lerp(1.10 + sd(i, 34) * 0.30, ty, lleg);
+    o.a = 0.14 + 0.54 * lleg;
     o.c = lleg > 0.7 ? (k % 2 ? 2 : 1) : 6;
     o.g = lleg > 0.6 ? 300 + k : -1;
   }
 
-  /* 4 · CONSTRUCCIÓN — el momento grande. Se establece una base, suben los
-     pilares desde el suelo, las vigas salvan la luz, las diagonales
-     arriostran y por encima se tiende la instalación. Las piezas ENTRAN
-     desde fuera del encuadre y encajan: no aparecen, llegan. */
+  /* 4 · CONSTRUCCIÓN — el momento grande. Base, pilares que suben del suelo,
+     vigas que salvan la luz, diagonales que arriostran y la instalación por
+     encima. Las piezas ENTRAN desde fuera del encuadre y encajan. */
   function F4(i, u, g, G, o, tm, ins) {
-    var tend = (g % 11) === 5;                   // la instalación, por encima
+    var tend = (g % 11) === 5;
     if (tend && VIG.length) {
       var vg = MEM[VIG[g % VIG.length]];
       var lay = ease((ins - 0.62) / 0.32);
       o.nx = lerp(vg.ax, vg.bx, u);
       o.ny = vg.ay - 0.035 - 0.015 * lay;
-      o.a = 0.66 * lay;
+      o.a = 0.70 * lay;
       o.c = lay > 0.5 ? 0 : 6;
       o.g = lay > 0.2 ? 400 + (g % VIG.length) : -1;
       return;
@@ -330,107 +355,136 @@
     var m = MEM[g % MEM.length];
     var sube = ease((ins - 0.06 - m.t * 0.62) / 0.24);
     var tx = lerp(m.ax, m.bx, u), ty = lerp(m.ay, m.by, u);
-    /* Antes de encajar, la pieza viene de fuera del encuadre. */
     var ex = tx + (tx - 0.5) * 1.9 + (sd(i, 41) - 0.5) * 0.5;
     var ey = ty - 0.85 - sd(i, 42) * 0.5;
     o.nx = lerp(ex, tx, sube);
     o.ny = lerp(ey, ty, sube);
-    o.a = 0.10 + 0.78 * sube;
-    /* La soldadura: un destello solo mientras la pieza está entrando. */
-    if (sube > 0.55 && sube < 0.98) o.a += 0.5 * Math.sin((sube - 0.55) / 0.43 * 3.1416);
+    o.a = 0.10 + 0.82 * sube;
+    if (sube > 0.55 && sube < 0.98) o.a += 0.55 * Math.sin((sube - 0.55) / 0.43 * 3.1416);
     o.c = m.k === 'base' ? 6 : (sube > 0.96 ? 1 : 7);
-    o.g = sube > 0.30 ? 500 + (g % MEM.length) : -1;
+    /* Solo enlaza cuando ya está casi asentada: si no, el enlace dibuja el
+       viaje y la estructura se ve sucia mientras se monta. */
+    o.g = sube > 0.62 ? 500 + (g % MEM.length) : -1;
   }
 
-  /* 5 · AUTOMATIZACIÓN — un ciclo cerrado. Lo que termina en una estación
-     dispara la siguiente. Puesto en marcha, sigue funcionando solo. */
+  /* 5 · AUTOMATIZACIÓN — un circuito cerrado con estaciones: lo que termina
+     en una dispara la siguiente. Puesto en marcha, vuelve al principio. */
   function F5(i, u, g, G, o, tm, ins) {
     var EST = 5;
     var ciclo = (tm * 0.00012) % 1;
-    var act = Math.floor(ciclo * EST);           // la estación activa ahora
+    var act = Math.floor(ciclo * EST);
     var esEst = (g % 3) === 0;
     if (esEst) {
-      /* Las estaciones: puntos fijos del circuito, que se encienden por turno. */
       var k = g % EST;
       var ang = (k / EST) * TAU - 1.5708;
       var pulso = (k === act) ? 1 : 0;
-      var rr = 0.34 + pulso * 0.03;
-      o.nx = 0.5 + Math.cos(ang) * rr * 0.72;
-      o.ny = 0.5 + Math.sin(ang) * rr;
-      o.nx += Math.cos(u * TAU) * 0.022;
-      o.ny += Math.sin(u * TAU) * 0.055;
-      o.a = 0.18 + 0.72 * pulso;
+      var rr = 0.34 + pulso * 0.035;
+      o.nx = 0.5 + Math.cos(ang) * rr * 0.72 + Math.cos(u * TAU) * 0.024;
+      o.ny = 0.5 + Math.sin(ang) * rr + Math.sin(u * TAU) * 0.058;
+      o.a = 0.16 + 0.80 * pulso;
       o.c = pulso ? 5 : 6;
       o.g = 600 + k;
     } else {
-      /* Lo que circula: recorre el ciclo y llega justo a la que se enciende. */
       var t = (u * 0.5 + ciclo) % 1;
       var a2 = t * TAU - 1.5708;
       o.nx = 0.5 + Math.cos(a2) * 0.34 * 0.72;
       o.ny = 0.5 + Math.sin(a2) * 0.34;
       var cerca = Math.abs(((t * EST) % 1) - 0.5) * 2;
-      o.a = 0.14 + 0.56 * (1 - cerca);
+      o.a = 0.12 + 0.62 * (1 - cerca);
       o.c = 0; o.g = -1;
     }
   }
 
-  /* 6 · CAPACIDAD — módulos con puerto, en columna. Uno de los huecos se
-     puebla (la pieza que faltaba) y cada módulo saca una rama nueva: la
-     estructura pasa a soportar más de lo que soportaba. */
+  /* 6 · CAPACIDAD — «Piezas que ya existen. Y las que falten.» Una columna de
+     módulos llenos y UN HUECO VACÍO, marcado a trazos. Después llega la pieza
+     que falta desde fuera, se instala, y el hueco deja de estar vacío. */
   function F6(i, u, g, G, o, tm, ins) {
     var M = 6, k = g % M;
-    var falta = (k === M - 2);
-    var lleno = falta ? ease((ins - 0.42) / 0.34) : 1;
-    var rama = ease((ins - 0.58) / 0.36);
-    var my = 0.06 + k * 0.158, mh = 0.108;
-    if ((g % 5) === 3 && !falta) {
-      /* La rama nueva: sale del módulo hacia fuera. */
-      o.nx = 0.5 + (u - 0.5) * 2.4 * rama;
-      o.ny = my + mh * 0.5;
-      o.a = 0.52 * rama;
-      o.c = 5; o.g = -1;
+    var falta = (k === 3);
+    var llega = ease((ins - 0.34) / 0.30);            // la pieza que faltaba
+    var my = 0.05 + k * 0.160, mh = 0.112;
+
+    var p = u * 4, e = p | 0, f = p - e, lx, ly;
+    if (e === 0)      { lx = f;       ly = 0; }
+    else if (e === 1) { lx = 1;       ly = f; }
+    else if (e === 2) { lx = 1 - f;   ly = 1; }
+    else              { lx = 0;       ly = 1 - f; }
+
+    if (falta) {
+      /* El hueco: a trazos y apagado mientras está vacío; la pieza entra
+         desde la derecha y al llegar el contorno se cierra y se enciende. */
+      var trazo = Math.abs(Math.sin(u * 25.0)) > 0.45 ? 1 : 0;
+      o.nx = lerp(1.9, lx, llega);
+      o.ny = my + ly * mh;
+      o.a = llega < 0.5 ? 0.30 * trazo : lerp(0.30 * trazo, 0.80, (llega - 0.5) * 2);
+      o.c = llega > 0.7 ? 5 : 6;
+      o.g = llega > 0.6 ? 700 + k : -1;
       return;
     }
-    var p = u * 4, e = p | 0, f = p - e;
-    if (e === 0)      { o.nx = f;       o.ny = my; }
-    else if (e === 1) { o.nx = 1;       o.ny = my + f * mh; }
-    else if (e === 2) { o.nx = 1 - f;   o.ny = my + mh; }
-    else              { o.nx = 0;       o.ny = my + mh - f * mh; }
-    o.a = (0.16 + 0.56 * Math.abs(Math.sin(u * 3 + k))) * lleno;
-    o.c = falta ? (lleno > 0.6 ? 5 : 6) : 6;
-    o.g = lleno > 0.3 ? 700 + k : -1;
+    /* Los módulos que ya existen, con su puerto de conexión a la derecha. */
+    var puerto = (g % 17) === 4;
+    if (puerto) {
+      o.nx = 1 + u * 0.55; o.ny = my + mh * 0.5;
+      o.a = 0.44; o.c = 6; o.g = -1;
+      return;
+    }
+    o.nx = lx; o.ny = my + ly * mh;
+    o.a = 0.20 + 0.58 * Math.abs(Math.sin(u * 3 + k));
+    o.c = 6;
+    o.g = 700 + k;
   }
 
-  /* 7 · RÉGIMEN — órbitas que se CIÑEN vuelta a vuelta y se reparten mejor:
-     el sistema hace lo mismo cada vez con menos desperdicio. */
+  /* 7 · FINANCE — esta sección ya se explica sola con el panel del producto,
+     así que la materia no compite: hace lo que dice el texto. Todo lo que el
+     sistema produce ENTRA por la derecha y converge en el panel. */
   function F7(i, u, g, G, o, tm, ins) {
-    var R = 5, r = g % R;
-    var afina = ease((ins - 0.10) / 0.66);        // la mejora, al recorrer
-    var rad = (0.16 + r * 0.088) * (1 - 0.14 * afina);
-    var disp = (1 - afina) * 0.055 * (sd(i, 71) - 0.5);
-    var sp = (r % 2 ? -1 : 1) * (0.00011 + r * 0.00002);
-    var a = u * TAU + tm * sp + r;
-    o.nx = 0.5 + Math.cos(a) * (rad + disp) * 1.45;
-    o.ny = 0.5 + Math.sin(a) * (rad + disp);
-    o.a = 0.16 + 0.44 * (0.5 + 0.5 * Math.sin(a * 3)) + 0.20 * afina;
-    o.c = afina > 0.7 ? 0 : 6;
-    o.g = 800 + r;
+    var L = 7, l = g % L;
+    var t = ((sd(i, 71) + tm * 0.00013) % 1);
+    var x = 1.10 - t * 1.24;                          // viaja hacia el panel
+    var yl = 0.10 + l * 0.132;
+    var conv = cl((0.85 - x) / 0.75);                 // y converge al llegar
+    o.nx = x;
+    o.ny = lerp(yl, 0.50, conv * conv);
+    /* Se enciende según se acerca: llega, no solo pasa. */
+    o.a = 0.10 + 0.74 * conv;
+    o.c = conv > 0.72 ? 5 : (conv > 0.4 ? 0 : 6);
+    o.g = 800 + l;
   }
 
-  /* 8 · RESULTADO — todo lo anterior en un solo cuerpo: una envolvente
-     estable, enlazada, que rodea a quien lee. El centro queda despejado
-     porque ahí va el texto: estás DENTRO del sistema, no delante. */
+  /* 8 · RESULTADO — no una esfera: un ANILLO DE COMPONENTES conectados que
+     rodea al titular. Cada nodo es una pieza del sistema, el anillo los une y
+     un pulso los recorre. Estás dentro de algo que funciona. */
   function F8(i, u, g, G, o, tm, ins) {
-    var ph = Math.acos(1 - 2 * ((i + 0.5) / N));
-    var th = 3.8833 * (i + 0.5) + tm * 0.00005;
-    var sx = Math.sin(ph) * Math.cos(th), sy = Math.cos(ph);
-    var sz = Math.sin(ph) * Math.sin(th);
-    o.nx = 0.5 + sx * 0.5;
-    o.ny = 0.5 + sy * 0.5;
-    var canto = sx * sx + sy * sy;                // el contorno del cuerpo
-    o.a = (0.05 + 0.86 * Math.pow(canto, 2.6)) * (0.56 + 0.44 * (0.5 + sz * 0.5));
-    o.c = canto > 0.86 ? 1 : 6;
-    o.g = canto > 0.55 ? 900 + (g % 14) : -1;
+    var NODOS = narrow ? 8 : 12;
+    var esNodo = (g % 5) < 2;
+    var giro = tm * 0.000022;
+    if (esNodo) {
+      /* Los componentes: pequeños módulos repartidos por el anillo. */
+      var k = g % NODOS;
+      var ang = (k / NODOS) * TAU + giro;
+      var cx = 0.5 + Math.cos(ang) * 0.46, cy = 0.5 + Math.sin(ang) * 0.46;
+      var p = u * 4, e = p | 0, f = p - e, s2 = 0.034;
+      var lx2, ly2;
+      if (e === 0)      { lx2 = -s2 + f * s2 * 2; ly2 = -s2; }
+      else if (e === 1) { lx2 =  s2;              ly2 = -s2 + f * s2 * 2; }
+      else if (e === 2) { lx2 =  s2 - f * s2 * 2; ly2 =  s2; }
+      else              { lx2 = -s2;              ly2 =  s2 - f * s2 * 2; }
+      /* El pulso que recorre el sistema, nodo a nodo. */
+      var vivo = Math.abs(((tm * 0.00016) % 1) * NODOS - k) < 0.9 ? 1 : 0;
+      o.nx = cx + lx2 * 0.86; o.ny = cy + ly2;
+      o.a = 0.34 + 0.56 * vivo;
+      o.c = vivo ? 0 : 1;
+      o.g = 900 + k;
+    } else {
+      /* El anillo que los une: continuo, sin cortes. */
+      var a3 = u * TAU + giro;
+      o.nx = 0.5 + Math.cos(a3) * 0.46 * 0.86;
+      o.ny = 0.5 + Math.sin(a3) * 0.46;
+      var frente = Math.abs(((a3 - giro) / TAU % 1) - ((tm * 0.00016) % 1));
+      o.a = 0.13 + 0.52 * Math.exp(-frente * frente * 120);
+      o.c = 6;
+      o.g = 950;
+    }
   }
 
   var FORM = [F0, F1, F2, F3, F4, F5, F6, F7, F8];
@@ -569,8 +623,16 @@
       var r = (1.05 + p.s * 2.5) * (0.55 + p.z * 1.15) * (1 + sp) * dep;
       var a2 = (al + luz) * (0.40 + p.z * 0.72) * (0.68 + 0.32 * dep);
       if (a2 <= 0.012) continue;
+      var spr = SPR[p.e][(t < 0.5 ? oa.c : ob.c)];
+      if (a2 > 0.40) {
+        /* Halo: solo lo que de verdad brilla lo tiene, y por eso significa
+           algo cuando aparece. */
+        var rb = r * 3.0;
+        ctx.globalAlpha = Math.min(0.20, (a2 - 0.40) * 0.42);
+        ctx.drawImage(spr, dx - rb, dy - rb, rb * 2, rb * 2);
+      }
       ctx.globalAlpha = Math.min(0.80, a2);
-      ctx.drawImage(SPR[p.e][(t < 0.5 ? oa.c : ob.c)], dx - r, dy - r, r * 2, r * 2);
+      ctx.drawImage(spr, dx - r, dy - r, r * 2, r * 2);
     }
 
     /* El enlace une partículas CONSECUTIVAS DEL MISMO GRUPO: la estructura
