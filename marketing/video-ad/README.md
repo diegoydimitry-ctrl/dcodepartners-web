@@ -1,22 +1,27 @@
-# Anuncio en vídeo — D-Code Partners
+# Anuncios en vídeo — D-Code Partners
 
-Anuncio de 40 s para LinkedIn, reutilizable en Instagram Reels, TikTok y Shorts.
-Se renderiza desde este repositorio, con la identidad real de la marca: mismas
+Tres piezas para LinkedIn, reutilizables en Instagram Reels, TikTok y Shorts.
+Se renderizan desde este repositorio, con la identidad real de la marca: mismas
 tipografías, misma paleta y mismo logotipo que la web.
 
-El guion completo, la voz en off con sus entradas y las notas de dirección están
-en **[GUION.md](GUION.md)**.
+El guion completo de cada anuncio, con sus entradas y notas de dirección, está
+en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)** (anuncio
+2) y **[GUION-3.md](GUION-3.md)** (teaser DCode OS).
 
 ## Resultado
 
 | Archivo | Formato | Uso |
 |---------|---------|-----|
-| `out/dcode-anuncio-9x16.mp4` | 1080×1920 · 30 fps | LinkedIn móvil, Reels, TikTok, Shorts |
-| `out/dcode-anuncio-16x9.mp4` | 1920×1080 · 30 fps | LinkedIn escritorio, web |
-| `out/banda-sonora.wav` | 44,1 kHz estéreo | Música y efectos por separado |
+| `out/dcode-anuncio-9x16.mp4` | 1080×1920 · 30 fps · 40 s | LinkedIn móvil, Reels, TikTok, Shorts |
+| `out/dcode-anuncio-16x9.mp4` | 1920×1080 · 30 fps · 40 s | LinkedIn escritorio, web |
+| `out/dcode-ad3-9x16.mp4` | 1080×1920 · 30 fps · 18 s | Teaser DCode OS — móvil, Reels, Stories |
+| `out/dcode-ad3-16x9.mp4` | 1920×1080 · 30 fps · 18 s | Teaser DCode OS — escritorio, web |
+| `out/banda-sonora.wav` / `-2.wav` / `-3.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
 
-H.264 High + AAC 192 kbps, `+faststart`. Con música y efectos; **sin locución**
-(ver GUION.md § 7 para añadirla — la mezcla ya deja los huecos hechos).
+H.264 High + AAC 192 kbps, `+faststart`. Con música y efectos. Los anuncios 1
+y 2 salen **sin locución** (ver GUION.md § 7 para añadirla — la mezcla ya
+deja los huecos hechos); el teaser DCode OS se apoya solo en rótulos y
+música, sin voz en off (ver GUION-3.md).
 
 ## Cómo se genera
 
@@ -35,6 +40,16 @@ node render.js --fmt 16x9 --workers 4
 Requiere Node con Playwright y Chromium instalados. Si `ffmpeg` no está en el
 PATH ni como dependencia, indícalo con `FFMPEG_PATH=/ruta/a/ffmpeg`.
 
+Para el anuncio 2 o el teaser DCode OS, indicar `--src` y su duración propia:
+
+```bash
+python3 audio2.py out/banda-sonora-2.wav
+node render.js --src ad2.html --fmt 9x16 --dur 60 --audio out/banda-sonora-2.wav --workers 4
+
+python3 audio3.py out/banda-sonora-3.wav
+node render.js --src ad3.html --fmt 9x16 --dur 18 --audio out/banda-sonora-3.wav --workers 4
+```
+
 ## Previsualizar sin renderizar
 
 Abrir `ad.html` en el navegador: sin parámetros se reproduce en bucle a tiempo
@@ -45,9 +60,9 @@ segundo exacto, que es lo cómodo para ajustar una escena.
 
 | Archivo | Qué hace |
 |---------|----------|
-| `ad.html` | La animación. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
-| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. |
-| `audio.py` | Sintetiza música y efectos desde cero. Sin dependencias. |
+| `ad.html` / `ad2.html` / `ad3.html` | Las tres animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
+| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las tres piezas (`--src`). |
+| `audio.py` / `audio2.py` / `audio3.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
 | `tools/clean-logo.py` | Recupera el logotipo sobre transparencia real. |
 | `assets/dcode-mark.png` | Logotipo limpio que usa el cierre. |
 | `montar-voz.py` | Coloca los clips de locución en su segundo y los mezcla con la música. |
