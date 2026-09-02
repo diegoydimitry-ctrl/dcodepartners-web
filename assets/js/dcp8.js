@@ -629,6 +629,118 @@
 
   /* CONTACTO — "La señal". Empieza débil y gana fuerza a medida que se
      completa el formulario: se ve que el mensaje va a llegar. */
+  /* PREGUNTAS FRECUENTES — «la consulta». Era una de las cuatro paginas sin
+     instrumento: una pagina negra con cajas encima, la que mas parecia de
+     cualquier agencia. Y no le hacia falta una figura bonita, le hacia falta
+     decir lo que hace la pagina: SE PREGUNTA Y SE ENCUENTRA.
+
+     Tres cosas ocurren a la vez. Por la izquierda entran consultas —hilos
+     cortos de materia que avanzan hacia un frente de lectura vertical—. El
+     frente las recibe y, cada pocos segundos, UNA de ellas es la que encaja:
+     se enciende, cruza el frente y sale por la derecha ya resuelta, en
+     turquesa. Las demas siguen circulando: no toda pregunta se responde a la
+     vez.
+
+     Y el frente responde a lo que hace el visitante: si hay algo escrito en el
+     buscador, se estrecha y se aviva —el sistema esta buscando—. */
+  INSTR.consulta = (function () {
+    var caja = null, busca = 0, foco = 0, obj = 0, tic = 0;
+    return {
+      build: function () { nube(small ? 420 : narrow ? 700 : 1080); caja = null; },
+      draw: function (tm) {
+        clear(0.30);
+        if (caja === null) caja = document.getElementById('faq-search-input') || false;
+        var hay = caja && caja.value && caja.value.trim().length ? 1 : 0;
+        busca += (hay - busca) * 0.06;
+        /* Cuantas respuestas hay abiertas: el sistema tiene mas encendido. Se
+           consulta cada veinte fotogramas, no en cada uno: preguntarle al DOM
+           sesenta veces por segundo por algo que cambia cuando alguien pulsa
+           es exactamente el trabajo por fotograma que no hay que hacer. */
+        if ((tic++ % 20) === 0) obj = Math.min(1, document.querySelectorAll('.accordion-item.open').length / 3);
+        foco += (obj - foco) * 0.05;
+
+        var fx = W * (narrow ? 0.50 : 0.72);          // el frente de lectura
+        var ancho = W * (0.30 - 0.10 * busca);
+        var elegida = Math.floor((tm * 0.00007) % 1 * 9);
+
+        materia(function (i, u, o) {
+          if (u < 0.20) {                              // EL FRENTE DE LECTURA
+            var qf = banda(u, 0, 0.20, 1);
+            var yy = qf.j;
+            o.x = fx + Math.sin(yy * 9.4 + tm * 0.0004) * (5 + 9 * busca);
+            o.y = H * (0.10 + yy * 0.80);
+            o.a = 0.16 + 0.30 * busca + 0.12 * Math.sin(yy * 22 + tm * 0.0011);
+            o.c = busca > 0.4 ? CI.cian : CI.acero;
+            o.g = 700;                                  // una sola linea continua
+            return;
+          }
+          /* LAS CONSULTAS: nueve hilos que entran, llegan al frente y esperan. */
+          var q = banda(u, 0.20, 1, 9);
+          var hilo = q.k, j = q.j;
+          var fase = ((tm * 0.00016) + hilo * 0.111) % 1;
+          var esta = (hilo === elegida);
+          /* Avance del hilo: entra, toca el frente y —si es la elegida— sigue. */
+          var av = fase < 0.62 ? (fase / 0.62) : 1;
+          var pasa = esta ? clamp((fase - 0.62) / 0.30) : 0;
+          var x0 = -W * 0.12, xF = fx - ancho * 0.06;
+          var x = x0 + (xF - x0) * ease(av) + (W * 0.30) * ease(pasa);
+          var yBase = H * (0.13 + hilo * 0.093);
+          o.x = x - (1 - j) * (W * 0.055);              // el hilo tiene longitud
+          o.y = yBase + Math.sin(j * 3.1 + hilo + tm * 0.00035) * H * 0.014;
+          var cerca = 1 - Math.min(1, Math.abs(o.x - fx) / (W * 0.10));
+          o.a = (0.10 + 0.34 * av) * (0.45 + 0.55 * j) * (1 + 0.9 * cerca * (esta ? 1 : 0.25))
+              * (1 - 0.55 * pasa * pasa) * (0.72 + 0.5 * foco);
+          o.c = pasa > 0.05 ? CI.turq : (esta && cerca > 0.5 ? CI.blanco : (av > 0.9 ? CI.violeta : CI.azul));
+          o.g = 710 + hilo;
+        }, tm);
+        pinta(0.11 + 0.06 * busca, tm);
+      }
+    };
+  })();
+
+  /* BLOG — «lo que se ordena». La otra pagina sin instrumento, y la que mas
+     parecia una plantilla: tres tarjetas iguales sobre negro.
+
+     Aqui la materia hace lo que hace un articulo: DESORDEN QUE SE VUELVE
+     LEGIBLE. Las particulas empiezan repartidas al azar y se van asentando en
+     renglones —lineas de texto, vistas de muy lejos— de arriba abajo, con
+     calma. Cuando el ultimo renglon cuaja, la pieza respira y vuelve a
+     empezar. No hay prisa: es una pagina para leer, no para impresionar. */
+  INSTR.saber = (function () {
+    var REN = 11;
+    return {
+      build: function () { nube(small ? 380 : narrow ? 650 : 980); },
+      draw: function (tm) {
+        clear(0.26);
+        var ciclo = (tm * 0.000042) % 1;                 // 24 s por vuelta
+        materia(function (i, u, o) {
+          var q = banda(u, 0, 1, REN);
+          var ren = q.k, j = q.j;
+          /* Cada renglon cuaja en su turno, de arriba abajo. */
+          var turno = ren / REN;
+          var cuaja = ease(clamp((ciclo - turno * 0.66) / 0.30));
+          /* Y se deshace al final de la vuelta, para volver a empezar. */
+          var suelta = ease(clamp((ciclo - 0.86) / 0.14));
+          var orden = cuaja * (1 - suelta);
+
+          var rx = sd(i, 41), ry = sd(i, 42);
+          /* Sitio en el renglon: margen izquierdo comun, largo desigual —como
+             un parrafo de verdad, no como una rejilla. */
+          var largo = 0.34 + 0.42 * sd(ren, 43);
+          var xr = 0.10 + j * largo;
+          var yr = 0.13 + ren * (0.74 / (REN - 1));
+          o.x = W * (rx * 1.02 - 0.01 + (xr - rx) * orden);
+          o.y = H * (ry + (yr - ry) * orden);
+          o.a = (0.07 + 0.30 * orden) * (0.6 + 0.4 * Math.sin(j * 3.1416));
+          o.c = orden > 0.72 ? (ren % 3 === 0 ? CI.cian : CI.lav)
+              : (orden > 0.3 ? CI.azul : CI.acero);
+          o.g = orden > 0.5 ? (760 + ren) : -1;          // el renglon se enlaza al cuajar
+        }, tm);
+        pinta(0.09, tm);
+      }
+    };
+  })();
+
   INSTR.contacto = (function () {
     var campos = null, fuerza = 0;
     return {

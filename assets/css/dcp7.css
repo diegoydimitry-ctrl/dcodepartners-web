@@ -509,3 +509,272 @@ body.v6 section:not(.v6-hero) .v6-kicker::before{
 }
 /* Y el pie cierra con la línea de la marca, no con una raya gris. */
 footer .footer-top::after{ opacity:.46; }
+
+/* ============================================================================
+   v12 — PREGUNTAS FRECUENTES: SE CONSULTA UN SISTEMA, NO SE LEE UN FOLLETO
+   ============================================================================
+   Era la página que más parecía de cualquier agencia, y la auditoría lo decía
+   en números: cinco cajas con borde repartidas en un mosaico de dos columnas
+   de alturas dispares, sin ningún sistema visual detrás —una de las cuatro
+   páginas del sitio sin instrumento— y con el orden de lectura roto: se leía
+   General, luego Automatización, y luego había que volver a la izquierda para
+   Inteligencia Artificial.
+
+   Ahora es una CONSULTA. Una sola columna de preguntas, sin cajas, y el nombre
+   del bloque anclado a la izquierda mientras recorres sus preguntas: siempre
+   sabes qué estás consultando. Detrás, el instrumento «la consulta»: nueve
+   hilos entran por la izquierda, llegan al frente de lectura y cada pocos
+   segundos uno de ellos —el que encaja— lo cruza y sale resuelto en turquesa.
+   El frente se estrecha y se aviva en cuanto escribes en el buscador.
+   ========================================================================= */
+
+/* Fuera el mosaico y fuera la caja: una pregunta no es una tarjeta. */
+.faq-list{ max-width:1120px; }
+/* Especificidad a propósito: dcp8.css da a .faq-category el tratamiento de
+   ventana —fondo, filo y sombra— y se carga DESPUÉS que esta hoja. Con una
+   clase más, este bloque gana sin recurrir a !important. */
+body.v7 .faq-list .faq-category{
+  background:none; border:0; box-shadow:none;
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  padding:0; margin-bottom:clamp(38px,4.6vw,64px);
+}
+.faq-search{ max-width:560px; }
+
+@media (min-width:1000px){
+  /* El mosaico de dos columnas se deshace: rompía el orden de lectura. */
+  .faq-list{ display:block; }
+  /* Cada bloque pasa a ser un capítulo con su nombre anclado al margen. */
+  .faq-category{
+    display:grid; grid-template-columns:clamp(190px,20vw,250px) minmax(0,1fr);
+    gap:0 clamp(30px,4.4vw,66px); align-items:start;
+  }
+  .faq-category-head{
+    grid-column:1; position:sticky; top:clamp(104px,13vh,150px);
+    display:block; margin:0; padding-top:4px;
+  }
+  .faq-category .accordion-list{ grid-column:2; }
+}
+.faq-category-head h2{
+  font-size:clamp(1.02rem,1.3vw,1.18rem); line-height:1.3; margin:0;
+}
+/* El icono deja de ser una pastilla y pasa a ser la señal de la sección: el
+   mismo trazo que abre cada capítulo del resto de la web. */
+.faq-category-head .service-icon{
+  width:auto; height:auto; background:none !important; border:0 !important;
+  border-radius:0; display:flex; align-items:center; gap:10px; margin:0 0 10px;
+}
+.faq-category-head .service-icon::before{
+  content:""; width:26px; height:2px; border-radius:2px; flex:none;
+  background:linear-gradient(90deg, transparent, var(--cat, var(--v-a)) 62%, var(--cat, var(--v-a)));
+  box-shadow:0 0 10px -2px color-mix(in srgb, var(--cat, var(--v-a)) 60%, transparent);
+}
+.faq-category-head .service-icon svg{ width:15px; height:15px; stroke:var(--cat, var(--v-a)); opacity:.85; }
+/* Cinco bloques, cinco tonos del mismo sistema — no cinco colores sueltos. */
+.faq-category[data-category="general"]      { --cat:#4dd0e1; }
+.faq-category[data-category="automatizacion"]{ --cat:#5b8cff; }
+.faq-category[data-category="ia"]           { --cat:#7c6cff; }
+.faq-category[data-category="proyecto"]     { --cat:#ff6b9d; }
+.faq-category[data-category="seguridad"]    { --cat:#35e0a1; }
+
+/* Las preguntas cuelgan de una línea continua, con su nodo. Es el mismo
+   lenguaje que el resto de la web: no son diez cosas sueltas, es un índice. */
+.faq-list .accordion-list{ position:relative; border-top:0; padding-left:22px; }
+.faq-list .accordion-list::before{
+  content:""; position:absolute; left:3px; top:14px; bottom:14px; width:1px;
+  background:linear-gradient(180deg,
+    color-mix(in srgb, var(--cat, var(--v-a)) 46%, transparent),
+    rgba(150,174,245,.16) 30%, rgba(150,174,245,.16) 70%,
+    color-mix(in srgb, var(--cat, var(--v-a)) 26%, transparent));
+}
+.faq-list .accordion-item{ position:relative; border-bottom:1px solid rgba(150,174,245,.09); }
+.faq-list .accordion-item::before{
+  content:""; position:absolute; left:-22px; top:22px; width:7px; height:7px;
+  border-radius:50%; background:var(--v-bg,#06080f);
+  border:1px solid color-mix(in srgb, var(--cat, var(--v-a)) 50%, transparent);
+  transition:background .3s ease, box-shadow .3s ease;
+}
+.faq-list .accordion-item.open::before,
+.faq-list .accordion-item:hover::before{
+  background:var(--cat, var(--v-a)); border-color:var(--cat, var(--v-a));
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--cat, var(--v-a)) 14%, transparent);
+}
+.faq-list .accordion-item.open{ background:linear-gradient(90deg,
+  color-mix(in srgb, var(--cat, var(--v-a)) 6%, transparent), transparent 62%); }
+.faq-list .accordion-title{ transition:color .22s ease; }
+.faq-list .accordion-item.open .accordion-title{ color:#fff; }
+.faq-list .accordion-item.open .faq-plus::before,
+.faq-list .accordion-item.open .faq-plus::after{ background:var(--cat, var(--v-a)); }
+@media (prefers-reduced-motion: reduce){
+  .faq-list .accordion-item::before, .faq-list .accordion-title{ transition:none; }
+}
+
+/* Con el instrumento corriendo por detrás, el texto necesita su velo — igual
+   que el resto de los interiores. Se pone por bloque y no sobre la lista
+   entera: un velo radial sobre dos mil píxeles de alto concentra la oscuridad
+   en el centro y deja los extremos sin cubrir. */
+body.v7 .faq-category{ position:relative; }
+body.v7 .faq-category::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-8% -6%;
+  background:radial-gradient(84% 74% at 50% 50%,
+    rgba(5,7,14,.97), rgba(5,7,14,.90) 46%, rgba(5,7,14,.52) 72%, rgba(5,7,14,0) 94%);
+}
+body.v7 .faq-wrap{ position:relative; }
+body.v7 .faq-wrap::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-40% -10%;
+  background:radial-gradient(70% 80% at 50% 50%,
+    rgba(5,7,14,.94), rgba(5,7,14,.66) 56%, rgba(5,7,14,0) 92%);
+}
+
+/* ============================================================================
+   v12b — EL BLOG NO ES UN ESCAPARATE DE TRES TARJETAS: ES UNA LECTURA
+   ============================================================================
+   Era, medido y mirado, la página más genérica del sitio: tres tarjetas
+   idénticas con borde, en fila, sobre negro — sin instrumento detrás (ni
+   siquiera cargaba la capa de interiores) y sin jerarquía: los tres artículos
+   pesaban exactamente lo mismo.
+
+   Ahora es un índice editorial. Cada artículo ocupa una franja completa: a la
+   izquierda su ficha —categoría, fecha, minutos—, en el centro el titular con
+   el tamaño que merece, y a la derecha la entradilla. Una línea los separa; no
+   hay cajas. El primero pesa más que los demás, porque es el último publicado
+   y porque una lista en la que todo pesa igual no es una lista, es un muro.
+
+   Y detrás va «lo que se ordena»: la materia empieza repartida al azar y se
+   asienta en renglones, de arriba abajo, hasta que la página entera cuaja.
+   Que es lo que hace un artículo.
+   ========================================================================= */
+@media (min-width:900px){
+  .blog-grid{ display:block; }
+  .blog-card{
+    display:grid !important;
+    grid-template-columns:clamp(150px,15vw,196px) minmax(0,1.05fr) minmax(0,1fr);
+    gap:0 clamp(26px,3.4vw,52px); align-items:start;
+    padding:clamp(26px,3vw,40px) 0;
+  }
+  .blog-card .window-bar{ grid-column:1; grid-row:1; }
+  .blog-card .window-body{ display:contents; }
+  .blog-card .blog-cat{ grid-column:1; grid-row:1; align-self:start; margin-top:34px; }
+  .blog-card h3{ grid-column:2; grid-row:1; margin:0; }
+  .blog-card p{ grid-column:3; grid-row:1; margin:0; }
+  .blog-card .blog-meta{ grid-column:1; grid-row:1; align-self:start; margin-top:76px; }
+  /* El primero es el último publicado: se lee antes y pesa más. */
+  .blog-card:first-child h3{ font-size:clamp(1.34rem,2.3vw,1.86rem); line-height:1.18; }
+  .blog-card:first-child{ padding-top:clamp(18px,2vw,26px); }
+}
+/* Fuera la caja, dentro la línea. Especificidad por encima de dcp8.css, que
+   da a .blog-card el tratamiento de ventana y se carga después. */
+body.v7 .blog-grid .blog-card{
+  background:none; border:0; border-radius:0; box-shadow:none;
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  border-top:1px solid rgba(150,174,245,.13);
+  position:relative; transition:none;
+}
+body.v7 .blog-grid .blog-card:first-child{ border-top:0; }
+body.v7 .blog-grid .blog-card .window-bar{ background:none; border:0; padding:0; }
+body.v7 .blog-grid .blog-card .window-body{ padding:0; }
+/* El nodo del artículo, colgado de la línea, en el lenguaje del resto. */
+body.v7 .blog-grid .blog-card::before{
+  content:""; position:absolute; left:0; top:-4px; width:7px; height:7px; border-radius:50%;
+  background:var(--v-bg,#06080f); border:1px solid rgba(150,174,245,.42);
+  transition:background .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+body.v7 .blog-grid .blog-card:first-child::before{ display:none; }
+/* Y el acento que recorre la franja al pasar por encima: la señal llega. */
+body.v7 .blog-grid .blog-card::after{
+  content:""; position:absolute; left:0; top:-1px; height:1px; width:0;
+  background:linear-gradient(90deg, var(--v-a), var(--v-b) 60%, transparent);
+  transition:width .5s cubic-bezier(.22,.75,.28,1);
+}
+body.v7 .blog-grid .blog-card:hover::after,
+body.v7 .blog-grid .blog-card:focus-visible::after{ width:min(360px, 42%); }
+body.v7 .blog-grid .blog-card:hover::before,
+body.v7 .blog-grid .blog-card:focus-visible::before{
+  background:var(--v-a); border-color:var(--v-a);
+  box-shadow:0 0 0 5px rgba(77,208,225,.14);
+}
+body.v7 .blog-grid .blog-card:hover h3{ color:#fff; }
+body.v7 .blog-grid .blog-card h3{ transition:color .24s ease; }
+body.v7 .blog-grid .blog-card .window-title{ letter-spacing:.06em; }
+/* El velo de lectura, como en el resto de los interiores. */
+body.v7 .blog-grid{ position:relative; }
+body.v7 .blog-grid::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-6% -7%;
+  background:radial-gradient(80% 76% at 50% 50%,
+    rgba(5,7,14,.96), rgba(5,7,14,.88) 48%, rgba(5,7,14,.48) 74%, rgba(5,7,14,0) 94%);
+}
+@media (prefers-reduced-motion: reduce){
+  body.v7 .blog-grid .blog-card::after, body.v7 .blog-grid .blog-card::before,
+  body.v7 .blog-grid .blog-card h3{ transition:none; }
+}
+
+/* Restos de la tarjeta que sobran ya en la franja: los puntitos de ventana no
+   pintan nada aquí, y la categoría deja de ser una pastilla con borde para ser
+   lo que es —una etiqueta— con la misma señal que abre todo lo demás. */
+@media (min-width:900px){
+  body.v7 .blog-grid .blog-card .window-dots{ display:none; }
+  body.v7 .blog-grid .blog-card .blog-cat{
+    background:none; border:0; padding:0; margin-top:10px;
+    display:inline-flex; align-items:center; gap:9px; color:var(--v-ink-2);
+  }
+  body.v7 .blog-grid .blog-card .blog-cat::before{
+    content:""; width:18px; height:2px; border-radius:2px; flex:none;
+    background:linear-gradient(90deg, transparent, var(--v-a));
+  }
+  body.v7 .blog-grid .blog-card .blog-meta{ margin-top:52px; }
+}
+
+/* ============================================================================
+   v12c — EL ANTES Y EL DESPUÉS, QUE OCURRA
+   ============================================================================
+   Es el bloque más importante de las ocho fichas de Departamento —su tesis: lo
+   que hoy depende de que alguien se acuerde, mañana lo hace el sistema— y
+   estaba dibujado como dos listas quietas, una al lado de la otra. Se leía la
+   transformación; no se veía.
+
+   Ahora ocurre: al llegar al bloque, el lado del sistema se enciende LÍNEA A
+   LÍNEA, de arriba abajo, entrando desde la flecha; y la flecha lleva un pulso
+   que la recorre mientras dura. La columna «hoy» no se toca —bajarle el
+   contraste para hacer efecto sería estropear la lectura por estética—, lo que
+   cambia es que la otra llega.
+   ========================================================================= */
+.shift-b li{
+  opacity:.34; transform:translateX(-10px);
+  transition:opacity .55s ease, transform .65s cubic-bezier(.22,.75,.28,1);
+}
+.shift.in .shift-b li, .in .shift .shift-b li{ opacity:1; transform:none; }
+.shift-b li:nth-child(1){ transition-delay:.06s }
+.shift-b li:nth-child(2){ transition-delay:.20s }
+.shift-b li:nth-child(3){ transition-delay:.34s }
+.shift-b li:nth-child(4){ transition-delay:.48s }
+.shift-b li:nth-child(5){ transition-delay:.62s }
+.shift-b li:nth-child(6){ transition-delay:.76s }
+/* El marcador del lado que funciona se llena cuando le toca. */
+.shift-b li::before{ transition:background .5s ease, box-shadow .5s ease; }
+.shift.in .shift-b li::before, .in .shift .shift-b li::before{
+  background:color-mix(in srgb, var(--k) 46%, transparent);
+  box-shadow:inset 0 0 0 1px var(--k), 0 0 12px -3px color-mix(in srgb, var(--k) 80%, transparent);
+}
+/* Y la flecha lleva un pulso mientras la transformación está pasando. */
+.shift-arrow{ overflow:hidden; }
+.shift-arrow i{
+  position:absolute; left:0; top:0; height:100%; width:34%;
+  background:linear-gradient(90deg, transparent, #fff, transparent);
+  opacity:0; transform:translateX(-40%);
+}
+.shift.in .shift-arrow i, .in .shift .shift-arrow i{
+  animation:dcx-cruza 1.5s cubic-bezier(.4,0,.3,1) .1s 2 both;
+}
+@keyframes dcx-cruza{
+  0%{ opacity:0; transform:translateX(-60%); }
+  25%{ opacity:.85; }
+  100%{ opacity:0; transform:translateX(260%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .shift-b li{ opacity:1; transform:none; transition:none; }
+  .shift-b li::before{ transition:none;
+    background:color-mix(in srgb, var(--k) 46%, transparent);
+    box-shadow:inset 0 0 0 1px var(--k); }
+  .shift.in .shift-arrow i, .in .shift .shift-arrow i{ animation:none; }
+}
