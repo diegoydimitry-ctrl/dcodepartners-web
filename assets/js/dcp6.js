@@ -197,7 +197,7 @@
      anomalía es pequeña y precisa, la red es monumental, el resultado
      envuelve. Si todos ocuparan el mismo sitio, el recorrido sería plano. */
   var MARCO = [
-    { x: 0.775, y: 0.50, w: 0.50, h: 1.02, d: 1.00 },  // 0 CONVERGENCIA el hero
+    { x: 0.752, y: 0.50, w: 0.58, h: 1.06, d: 1.04 },  // 0 CONVERGENCIA el hero
     { x: 0.720, y: 0.52, w: 0.54, h: 1.02, d: 0.96 },  // 1 AISLADOS     el problema
     { x: 0.730, y: 0.50, w: 0.50, h: 0.82, d: 0.90 },  // 2 ANÁLISIS     banda de trayectos
     { x: 0.640, y: 0.50, w: 0.56, h: 1.00, d: 1.06 },  // 3 RED          monumental
@@ -391,100 +391,210 @@
     return { k: k, j: t - k };
   }
 
-  /* 0 · EL HERO — «Del caos al control».
-     Es lo unico de la portada que no es un diagrama: es un FENOMENO, y ahora
-     tiene LATIDO. Antes era una imagen fija con brillo variable; se veia bien
-     el primer segundo y no pasaba nada mas. Ahora ocurre un ciclo completo
-     cada pocos segundos, y ese ciclo ES el argumento de la empresa:
+  /* ================== EL LOGO, EN COORDENADAS DE MATERIA ==================
+     Leído del asset real (assets/logo/dcode-icon-sm.png, 120x101) píxel a
+     píxel, no dibujado a ojo. La marca son dos cosas:
 
-       1  una oleada de materia entra por el borde, ancha y desordenada
-       2  se acelera y se estrecha al acercarse al foco
-       3  atraviesa el diafragma, que se cierra y se enciende a su paso
-       4  el nucleo destella: ahi la materia deja de ser lo que era
-       5  y sale, por el otro lado, en trazos regulares y espaciados
+       EL ARCO   una «D» de trazo grueso: barra superior, cuenco derecho y
+                 barra inferior. Centro del cuenco en (0.72, 0.50), radios
+                 0.184 y 0.405; las barras salen de ahí hacia la x 0.40.
+       LA RETÍCULA  siete módulos cuadrados repartidos por el lomo de la D,
+                 en el patrón exacto del original: dos en los brazos, dos
+                 exteriores, dos interiores y UNO en el centro, que en el
+                 logo real es el único relleno.
 
-     Complejidad → inteligencia → organizacion → sistema, en bucle, sin que
-     haga falta hacer scroll ni leer una palabra. */
+     No se traza un PNG con miles de puntos: se interpreta. El arco lo
+     dibujan tres hebras de partículas en paralelo —por eso tiene cuerpo y
+     por eso el enlace lo cierra en un trazo continuo— y cada módulo lo
+     dibujan sus propias partículas recorriendo su contorno, exactamente
+     igual que los módulos de los otros ocho capítulos. La identidad no se
+     pega encima del sistema: está hecha del mismo material que el sistema. */
+  var LOGO_MOD = [
+    [0.288, 0.094], [0.288, 0.926],     // en los brazos de la D
+    [0.067, 0.327], [0.067, 0.703],     // exteriores
+    [0.338, 0.327], [0.338, 0.703],     // interiores
+    [0.196, 0.520]                      // el centro: el único relleno del logo
+  ];
+  /* Recorrido del trazo de la D, de 0 a 1: barra, cuenco, barra. */
+  /* El parámetro va por LONGITUD DE ARCO, no a partes iguales. Repartiendo el
+     recorrido en tercios, el cuenco —que mide casi el triple que cada barra—
+     recibía la mitad de densidad de partículas y salía apagado al lado de
+     unas barras brillantes. Con los cortes en 0.204 y 0.796, que es la
+     proporción real de las tres piezas, el trazo tiene el mismo peso en todo
+     su recorrido. */
+  function arcoD(s, off, out) {
+    if (s < 0.204) {
+      out.x = 0.40 + (s / 0.204) * 0.32;
+      out.y = 0.095 + off;
+    } else if (s < 0.796) {
+      /* El grosor va RESTANDO al radio, no sumando. Con el signo al revés,
+         en la unión de la barra con el cuenco cada hebra saltaba el doble de
+         su separación y las cuatro se cruzaban: en pantalla salía una costura
+         vertical en los dos extremos del trazo. Con el signo correcto,
+         y = 0.095 + off en la barra y también en el arranque del cuenco, y la
+         unión es continua. */
+      var an = -1.5708 + ((s - 0.204) / 0.592) * 3.1416;
+      out.x = 0.72 + Math.cos(an) * (0.184 - off * 0.46);
+      out.y = 0.50 + Math.sin(an) * (0.405 - off);
+    } else {
+      out.x = 0.72 - ((s - 0.796) / 0.204) * 0.32;
+      out.y = 0.905 - off;
+    }
+  }
+  var _lg = { x: 0, y: 0 };
+
+  /* 0 · EL HERO — «Del caos al control», y el momento en el que el sistema
+     construye nuestra propia identidad.
+
+     UN CICLO DE ONCE SEGUNDOS, en cuatro tiempos:
+
+       1  REUNIÓN (0 → 0.42). Tres oleadas de materia entran por el borde,
+          anchas y desordenadas, se aceleran, se estrechan y atraviesan el
+          diafragma. La tercera llega justo al final de este tiempo.
+       2  FORMACIÓN (0.42 → 0.56). El núcleo destella y las MISMAS partículas
+          que venían siendo corrientes se reorganizan: unas trazan el arco de
+          la D, otras ocupan los siete módulos del lomo. El diafragma se
+          cierra un punto y sube de luz, encuadrando la marca.
+       3  RESPIRACIÓN (0.56 → 0.86). El logo se sostiene y late. Un pulso de
+          luz recorre el trazo y el módulo central —el único relleno del logo
+          real— parpadea en azul.
+       4  REGRESO (0.86 → 1). La marca se deshace y la materia vuelve a ser
+          corriente. El sistema sigue.
+
+     Complejidad → convergencia → organización → identidad → el sistema
+     continúa. Sin scroll, sin leer una palabra y sin un solo SVG encima. */
   function F0(i, u, g, G, o, tm, ins) {
     var ar = (MARCO[0].h * H) / (MARCO[0].w * W);
-    /* En vertical el fenomeno no se aparta: ENVUELVE. La portada de un movil
-       es texto de arriba abajo, asi que no hay banda libre donde ponerlo. */
+    /* En vertical el fenómeno no se aparta: ENVUELVE. La portada de un móvil
+       es texto de arriba abajo, así que no hay banda libre donde ponerlo. */
     var fx = narrow ? 0.500 : 0.600, fy = narrow ? 0.400 : 0.575;
 
-    /* La oleada. Recorre el trayecto de 0 a 1 y vuelve a empezar. */
-    var onda = (tm * 0.00020) % 1;
-    var enFoco = Math.exp(-(onda - 0.97) * (onda - 0.97) * 260)
-               + Math.exp(-(onda - 0.03) * (onda - 0.03) * 260);
+    var cic = (tm * 0.000091) % 1;
+    var L = cic < 0.42 ? 0
+          : cic < 0.56 ? ease((cic - 0.42) / 0.14)
+          : cic < 0.86 ? 1
+          : 1 - ease((cic - 0.86) / 0.14);
+    /* Las oleadas solo existen mientras la materia se está reuniendo; la
+       tercera termina exactamente cuando empieza a formarse la marca. */
+    var onda = cic < 0.42 ? ((cic / 0.42) * 3) % 1 : 0;
+    var enFoco = (Math.exp(-(onda - 0.97) * (onda - 0.97) * 260)
+                + Math.exp(-(onda - 0.03) * (onda - 0.03) * 260)) * (1 - L);
+    var nace = Math.exp(-(cic - 0.455) * (cic - 0.455) * 900);   // el destello
+    var LS = narrow ? 0.34 : 0.32;                                // alto de la marca
+    var late = 0.5 + 0.5 * Math.sin(tm * 0.0016);                 // respiración
 
-    if (u < 0.62) {                                   // LAS CORRIENTES
+    if (u < 0.62) {                                   // CORRIENTES  ⟶  EL ARCO
       var CO = 36;
       var q = tramo(u, 0, 0.62, CO);
       var k = q.k, sp = q.j;
       var acc = sp * sp;
       var abre = 1 - acc;
       var yk = fy + (sd(k, 21) - 0.5) * 1.18;
-      o.nx = -0.10 + (fx + 0.10) * acc;
-      o.ny = fy + (yk - fy) * abre * abre
-                + Math.sin(sp * 3.1 + k * 2.3 + tm * 0.00020) * 0.10 * abre
-                + Math.sin(sp * 7.7 + k * 1.1) * 0.028 * abre;
-      /* La oleada es un paquete de luz que viaja por la corriente, no un
-         parpadeo repartido: se ve LLEGAR. Cada corriente va un poco
-         desfasada de la anterior, asi que el frente entra en diagonal. */
+      var sx = -0.10 + (fx + 0.10) * acc;
+      var sy = fy + (yk - fy) * abre * abre
+                  + Math.sin(sp * 3.1 + k * 2.3 + tm * 0.00020) * 0.10 * abre
+                  + Math.sin(sp * 7.7 + k * 1.1) * 0.028 * abre;
       var d = sp - ((onda + sd(k, 26) * 0.13) % 1);
       var paso = Math.exp(-d * d * 62);
       var base = 0.5 + 0.5 * Math.sin(sp * 15.0 - tm * 0.0022 + k * 1.9);
-      o.a = (0.19 + 0.56 * acc) * (0.30 + 0.34 * base + 0.62 * paso)
-          * cl((sp - 0.32) / 0.24);
-      /* El color cuenta el trayecto: entra como informacion en bruto,
-         se procesa, pasa a circular por un sistema y llega como energia. */
-      o.c = sp < 0.62 ? C_DATO : sp < 0.81 ? C_PROC : sp < 0.94 ? C_FLUJO : C_LUZ;
-      o.g = 10 + k;
+      var sa = (0.19 + 0.56 * acc) * (0.30 + 0.34 * base + 0.62 * paso)
+             * cl((sp - 0.32) / 0.24);
+      var sc = sp < 0.62 ? C_DATO : sp < 0.81 ? C_PROC : sp < 0.94 ? C_FLUJO : C_LUZ;
+
+      if (L <= 0.001) { o.nx = sx; o.ny = sy; o.a = sa; o.c = sc; o.g = 10 + k; return; }
+
+      /* Tres hebras en paralelo recorren el trazo de la D. Cada una es una
+         banda contigua, así que el enlace las cierra en tres líneas
+         continuas y el trazo tiene cuerpo en vez de ser un rosario. */
+      var qa = tramo(u, 0, 0.62, 4);
+      arcoD(qa.j, (qa.k - 1.5) * 0.036, _lg);
+      var ax = fx + (_lg.x - 0.5) * LS * 1.188 * ar;
+      var ay = fy + (_lg.y - 0.5) * LS;
+      /* Un pulso de luz recorre el trazo mientras la marca respira. */
+      var pl = ((tm * 0.00034) % 1);
+      var dp = qa.j - pl; if (dp < -0.5) dp += 1; if (dp > 0.5) dp -= 1;
+      var punta = Math.exp(-dp * dp * 620);
+      /* El cuenco mide casi el triple que una barra, así que cada hebra
+         reparte ahí sus partículas sobre más recorrido y sale más floja. Se
+         compensa con luz para que el trazo pese igual de principio a fin. */
+      var aa = (0.56 + 0.28 * late + 0.62 * punta)
+             * (0.78 + 0.22 * (qa.k === 1 || qa.k === 2 ? 1 : 0))
+             * (qa.j > 0.204 && qa.j < 0.796 ? 1.30 : 1);
+
+      o.nx = lerp(sx, ax, L); o.ny = lerp(sy, ay, L);
+      o.a = lerp(sa, aa, L);
+      /* El pulso sube de luz sin perder el color: el blanco queda solo para
+         su cresta. Con el umbral bajo, medio cuenco se volvía blanco a la vez
+         y, al lado de unas barras de cian saturado, se leía como apagado. */
+      o.c = L > 0.5 ? (punta > 0.78 ? C_LUZ : C_FLUJO) : sc;
+      o.g = L > 0.5 ? 20 + qa.k : 10 + k;
+      return;
       return;
     }
 
-    if (u < 0.72) {                                   // EL FOCO
+    if (u < 0.78) {                                   // EL FOCO  ⟶  LOS MÓDULOS
       var an0 = sd(i, 31) * TAU;
       var g0 = sd(i, 32);
-      /* El nucleo respira con la oleada: se comprime justo antes de que
-         llegue y estalla de luz cuando pasa. */
       var rr = Math.pow(g0, 2.2) * 0.062 * (1 + enFoco * 0.85);
-      o.nx = fx + Math.cos(an0) * rr * ar;
-      o.ny = fy + Math.sin(an0) * rr;
-      o.a = (0.30 + 0.34 * (0.5 + 0.5 * Math.sin(tm * 0.0013 + sd(i, 33) * 6.3)))
-          + 0.62 * enFoco;
-      o.c = g0 < 0.62 ? C_LUZ : C_DEC;
-      o.g = -1;
+      var nx0 = fx + Math.cos(an0) * rr * ar;
+      var ny0 = fy + Math.sin(an0) * rr;
+      var na = (0.30 + 0.34 * (0.5 + 0.5 * Math.sin(tm * 0.0013 + sd(i, 33) * 6.3)))
+             + 0.62 * enFoco + 0.90 * nace;
+
+      if (L <= 0.001) {
+        o.nx = nx0; o.ny = ny0; o.a = na;
+        o.c = g0 < 0.62 ? C_LUZ : C_DEC; o.g = -1; return;
+      }
+      var qm = tramo(u, 0.62, 0.78, LOGO_MOD.length);
+      var M = LOGO_MOD[qm.k];
+      var mx2 = fx + (M[0] - 0.5) * LS * 1.188 * ar;
+      var my2 = fy + (M[1] - 0.5) * LS;
+      /* Los módulos aparecen escalonados, del centro hacia fuera: la marca se
+         monta, no se enciende de golpe. */
+      var sale = cl((L - 0.15 - (LOGO_MOD.length - 1 - qm.k) * 0.055) / 0.42);
+      var centro = qm.k === LOGO_MOD.length - 1;
+      ponNodo(o, mx2, my2, qm.j, 0.082 * LS * sale, ar);
+      /* El original tiene un solo módulo relleno, y es el del centro: aquí es
+         el que late en azul mientras los demás quedan en blanco. */
+      o.a = lerp(na, (centro ? 0.82 + 0.30 * late : 0.94) * sale, L);
+      o.c = L > 0.5 ? (centro ? C_DATO : C_LUZ) : (g0 < 0.62 ? C_LUZ : C_DEC);
+      o.g = L > 0.5 && sale > 0.1 ? 40 + qm.k : -1;
       return;
     }
 
-    if (u < 0.86) {                                   // EL DIAFRAGMA
-      /* Dos arcos, no un circulo cerrado: un anillo perfecto parece un
-         planeta; dos arcos con sus aperturas parecen un instrumento. Y se
-         CIERRA al paso de cada oleada, como un obturador. */
-      var q2 = tramo(u, 0.72, 0.86, 2);
+    if (u < 0.88) {                                   // EL DIAFRAGMA
+      /* Dos arcos, no un círculo cerrado: un anillo perfecto parece un
+         planeta; dos arcos con sus aperturas parecen un instrumento. Se
+         cierra al paso de cada oleada y, cuando la marca está formada, se
+         ciñe y sube de luz para encuadrarla. */
+      var q2 = tramo(u, 0.78, 0.88, 2);
       var a2 = (q2.k ? 0.34 : 3.48) + q2.j * 2.60;
-      var R2 = (0.168 + 0.008 * Math.sin(tm * 0.0009)) * (1 - enFoco * 0.16);
+      /* Cuando la marca se forma, el diafragma SE ABRE y se retira: crece un
+         30% y baja a un tercio de luz. El instrumento deja de ser el
+         protagonista y pasa a ser el marco. Sin esto se solapaba con el
+         cuenco de la D y la marca no se leia. */
+      var R2 = (0.168 + 0.008 * Math.sin(tm * 0.0009))
+             * (1 - enFoco * 0.16) * (1 + L * 0.30);
       o.nx = fx + Math.cos(a2) * R2 * ar;
       o.ny = fy + Math.sin(a2) * R2;
-      o.a = 0.42 + 0.30 * Math.sin(q2.j * 3.1416) + 0.46 * enFoco;
-      o.c = enFoco > 0.35 ? C_LUZ : (q2.j > 0.42 && q2.j < 0.58 ? C_LUZ : C_FLUJO);
+      o.a = (0.42 + 0.30 * Math.sin(q2.j * 3.1416) + 0.46 * enFoco) * (1 - L * 0.66);
+      o.c = enFoco > 0.35 ? C_LUZ : C_FLUJO;
       o.g = 70 + q2.k;
       return;
     }
 
-    if (u < 0.94) {                                   // LO QUE SALE, YA ORDENADO
-      var q3 = tramo(u, 0.86, 0.94, 5);
-      /* Sale a la misma cadencia que entra: lo que se ve marcharse por la
-         derecha es la oleada anterior, ya convertida en algo regular. */
+    if (u < 0.95) {                                   // LO QUE SALE, YA ORDENADO
+      var q3 = tramo(u, 0.88, 0.95, 5);
       var t3 = ((tm * 0.00020) + q3.j * 0.85 + q3.k * 0.06) % 1;
       o.nx = fx + 0.040 + t3 * 0.150;
       o.ny = fy + (q3.k - 2) * 0.048;
-      o.a = 0.66 * Math.sin(t3 * 3.1416);
+      /* Mientras la marca está formada, la salida calla: el momento es uno. */
+      o.a = 0.66 * Math.sin(t3 * 3.1416) * (1 - L);
       o.c = C_OK; o.g = -1;
       return;
     }
 
-    /* El campo en el que ocurre todo: volumen, no vacio negro. */
+    /* El campo en el que ocurre todo: volumen, no vacío negro. */
     o.nx = sd(i, 23); o.ny = sd(i, 24);
     o.a = 0.10 + 0.10 * Math.sin(tm * 0.0006 + sd(i, 25) * 6.3);
     o.c = C_MASA; o.g = -1;

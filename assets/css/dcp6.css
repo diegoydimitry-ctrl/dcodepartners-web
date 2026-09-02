@@ -94,11 +94,21 @@ body.v6 main .lit::before{ display:none; }
 .v6-veil{ position:relative; }
 .v6-veil::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-20% -16%;
-  background:radial-gradient(78% 80% at 32% 50%, rgba(5,7,14,.985), rgba(5,7,14,.93) 42%, rgba(5,7,14,.62) 64%, rgba(5,7,14,.20) 82%, rgba(5,7,14,0) 95%);
+  /* VELOS QUE NO SON CAJAS. Antes el núcleo llegaba a 0.985 de opacidad: en
+     la práctica, un rectángulo negro pegado encima de la animación. La
+     transformación que ocurría detrás del texto no se veía, y eso es
+     justamente lo que hace especial a esta portada.
+
+     Ahora el núcleo se queda en 0.90 —el campo se percibe a través de todo el
+     velo— y el desvanecido es mucho más largo, así que no hay borde en ningún
+     sitio: el velo no se ve, solo se nota. Lo que ese 10% deja de aportar lo
+     recuperan los halos de glifo del final del archivo, que oscurecen SOLO
+     alrededor de cada letra en vez de tapar media pantalla. */
+  inset:-26% -22%;
+  background:radial-gradient(72% 78% at 30% 50%, rgba(5,7,14,.90), rgba(5,7,14,.80) 34%, rgba(5,7,14,.50) 58%, rgba(5,7,14,.18) 78%, rgba(5,7,14,0) 96%);
 }
-.v6-veil--mid::before{ background:radial-gradient(80% 82% at 50% 50%, rgba(5,7,14,.985), rgba(5,7,14,.93) 44%, rgba(5,7,14,.62) 66%, rgba(5,7,14,.20) 84%, rgba(5,7,14,0) 96%); }
-.v6-veil--right::before{ background:radial-gradient(78% 80% at 68% 50%, rgba(5,7,14,.985), rgba(5,7,14,.93) 42%, rgba(5,7,14,.62) 64%, rgba(5,7,14,.20) 82%, rgba(5,7,14,0) 95%); }
+.v6-veil--mid::before{ background:radial-gradient(74% 80% at 50% 50%, rgba(5,7,14,.90), rgba(5,7,14,.80) 36%, rgba(5,7,14,.50) 60%, rgba(5,7,14,.18) 80%, rgba(5,7,14,0) 97%); }
+.v6-veil--right::before{ background:radial-gradient(72% 78% at 68% 50%, rgba(5,7,14,.90), rgba(5,7,14,.80) 34%, rgba(5,7,14,.50) 58%, rgba(5,7,14,.18) 78%, rgba(5,7,14,0) 96%); }
 
 /* ============================================================ 3. ENTRADA */
 .v6-hero{ position:relative; overflow-x:clip; min-height:100svh; display:flex; align-items:center;
@@ -108,9 +118,13 @@ body.v6 main .lit::before{ display:none; }
    energía se vea entera. El contraste entre oscuridad y luz es el diseño. */
 .v6-hero::before{
   content:""; position:absolute; z-index:-1; pointer-events:none; inset:0;
+  /* Mismo criterio que los demás velos: la mitad izquierda deja de ser una
+     plancha casi opaca. Con 0.90 las corrientes que entran por el borde se
+     perciben POR DETRÁS del titular, que es justo lo que cuenta el capítulo:
+     la complejidad llega desde fuera y atraviesa la página. */
   background:linear-gradient(100deg,
-    rgba(5,7,14,.97) 0%, rgba(5,7,14,.95) 28%, rgba(5,7,14,.80) 44%,
-    rgba(5,7,14,.42) 56%, rgba(5,7,14,.12) 68%, rgba(5,7,14,0) 78%);
+    rgba(5,7,14,.90) 0%, rgba(5,7,14,.86) 28%, rgba(5,7,14,.70) 44%,
+    rgba(5,7,14,.36) 58%, rgba(5,7,14,.10) 70%, rgba(5,7,14,0) 80%);
 }
 .v6-hero > .container{ flex:1 1 auto; width:100%; }
 .v6-lede{ max-width:min(940px, 94%); }
@@ -171,7 +185,7 @@ body.v6 main .lit::before{ display:none; }
    las tres dejaba la última sobre el campo abierto. */
 .v6-say::after{
   content:""; position:absolute; z-index:-1; pointer-events:none; inset:-14% -10%;
-  background:radial-gradient(58% 66% at 34% 50%, rgba(5,7,14,.95), rgba(5,7,14,.70) 50%, rgba(5,7,14,0) 84%);
+  background:radial-gradient(56% 64% at 34% 50%, rgba(5,7,14,.88), rgba(5,7,14,.58) 50%, rgba(5,7,14,0) 88%);
 }
 .v6-say + .v6-say::before{
   content:""; position:absolute; top:0; left:0; width:min(100%, 420px); height:1px;
@@ -320,8 +334,8 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
   .v6-flow > *{ margin-left:0 !important; }
   .v6-flow{ gap:0 clamp(14px,3vw,24px); }
   .v6-veil::before, .v6-veil--right::before, .v6-veil--mid::before{
-    inset:-12% -22%;
-    background:radial-gradient(86% 66% at 40% 50%, rgba(5,7,14,.96), rgba(5,7,14,.80) 50%, rgba(5,7,14,.34) 72%, rgba(5,7,14,0) 90%);
+    inset:-16% -26%;
+    background:radial-gradient(82% 70% at 40% 50%, rgba(5,7,14,.91), rgba(5,7,14,.74) 50%, rgba(5,7,14,.30) 74%, rgba(5,7,14,0) 94%);
   }
 }
 @media (max-width:560px){
@@ -359,9 +373,9 @@ body.v6 .v6-river::before{
      y apagaba la retícula de módulos que va en la banda libre. Cubre lo que
      hay que cubrir —los nombres de las capacidades— y suelta el resto. */
   inset:-22% -12% -22% -14%;
-  background:radial-gradient(94% 92% at 42% 50%,
-    rgba(5,7,14,.99), rgba(5,7,14,.97) 44%, rgba(5,7,14,.86) 66%,
-    rgba(5,7,14,.40) 84%, rgba(5,7,14,0) 98%);
+  background:radial-gradient(86% 88% at 40% 50%,
+    rgba(5,7,14,.92), rgba(5,7,14,.84) 46%, rgba(5,7,14,.56) 68%,
+    rgba(5,7,14,.18) 86%, rgba(5,7,14,0) 99%);
 }
 
 
@@ -471,4 +485,38 @@ body.v6 .v6-step  > .container{
    anterior y simplemente no ancla. */
 @supports (overflow-x: clip){
   body.v6{ overflow-x:clip; }
+}
+
+
+/* ================================== HALOS DE GLIFO ==========================
+   La otra mitad de la solución. En vez de recuperar la legibilidad tapando el
+   fondo, se oscurece SOLO el entorno inmediato de cada letra: un halo corto y
+   muy oscuro pegado al glifo, y otro más abierto que lo separa del campo.
+   Entre línea y línea, y entre párrafo y párrafo, el sistema se sigue viendo.
+   Es lo que permite bajar los velos de 0.985 a 0.90 sin perder lectura.
+
+   Nota honesta: el auditor de contraste apaga los text-shadow para medir solo
+   el fondo compuesto, así que estos halos NO cuentan en las cifras. Las que se
+   publican son, por tanto, conservadoras: la pantalla real se lee algo mejor
+   que lo que dice la medición. */
+body.v6 h1, body.v6 .v6-title, body.v6 .v6-end h2, body.v6 .v6-step-in h2{
+  text-shadow:0 2px 12px rgba(3,5,12,.95), 0 0 38px rgba(3,5,12,.66);
+}
+body.v6 .v6-sub, body.v6 .v6-intro, body.v6 .v6-end p,
+body.v6 .v6-step-in p, body.v6 .v6-say q, body.v6 .v6-say p,
+body.v6 .v6-river-note, body.v6 .v6-kicker, body.v6 .v6-step-tag,
+body.v6 .v6-status, body.v6 .v6-cap{
+  text-shadow:0 1px 9px rgba(3,5,12,.96), 0 0 24px rgba(3,5,12,.60);
+}
+
+
+/* La ventana de Finance es la única superficie opaca legítima de la portada
+   —es la interfaz de un producto real—, pero tampoco tiene por qué ser un
+   bloque estanco. Se le deja un punto de transparencia y un desvanecido en el
+   borde inferior, de modo que la capa de supervisión que trabaja detrás se
+   sigue percibiendo alrededor y por debajo del panel. El contenido interior
+   no cambia: sus propias superficies siguen siendo opacas. */
+body.v6 .prod{
+  background:linear-gradient(180deg, rgba(11,15,27,.94), rgba(8,11,21,.90));
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
 }
