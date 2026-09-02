@@ -509,8 +509,15 @@
       faqCategories.forEach(function (cat) {
         var items = cat.querySelectorAll('.accordion-item');
         var catHasMatch = false;
+        /* El nombre del bloque cuenta como texto buscable. Sin esto, buscar
+           «seguridad» en una página que TIENE un bloque llamado «Seguridad y
+           Confidencialidad» devolvía cero resultados, porque las preguntas de
+           dentro dicen «seguros» y no «seguridad». Comprobado antes y después. */
+        var cabecera = cat.querySelector('.faq-category-head');
+        var nomCat = cabecera ? cabecera.textContent.toLowerCase() : '';
+        var catCoincide = q !== '' && nomCat.indexOf(q) !== -1;
         items.forEach(function (item, i) {
-          var match = q === '' || item.textContent.toLowerCase().indexOf(q) !== -1;
+          var match = q === '' || catCoincide || item.textContent.toLowerCase().indexOf(q) !== -1;
           item.style.display = match ? '' : 'none';
           if (match) {
             catHasMatch = true;
