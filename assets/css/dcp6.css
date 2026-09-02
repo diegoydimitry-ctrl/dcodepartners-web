@@ -215,7 +215,10 @@ body.v6 main .lit::before{ display:none; }
 /* ================================================= 6. LO QUE SABEMOS HACER */
 /* Ni retícula ni un centro con radios artificiales. Una corriente de nombres
    que fluye por la página: cada uno es un enlace y enciende su propio tono. */
-.v6-river{ margin-top:clamp(30px,4vw,50px); }
+/* La corriente se para antes del borde. Se extendía hasta el filo derecho
+   del contenedor y chocaba con el tótem de módulos que va en la banda libre;
+   ahora hay una columna de texto y una banda de sistema, sin solapes. */
+.v6-river{ margin-top:clamp(30px,4vw,50px); max-width:min(100%, 780px); }
 .v6-flow{ display:flex; flex-wrap:wrap; align-items:baseline; gap:0 clamp(18px,2.6vw,40px); }
 .v6-cap{
   position:relative; text-decoration:none; white-space:nowrap;
@@ -339,8 +342,11 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
 body.v6 .v6-river{ position:relative; }
 body.v6 .v6-river::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-22% -14%;
-  background:radial-gradient(96% 92% at 44% 50%,
-    rgba(5,7,14,.99), rgba(5,7,14,.97) 42%, rgba(5,7,14,.86) 64%,
-    rgba(5,7,14,.44) 82%, rgba(5,7,14,0) 97%);
+  /* El borde derecho se recoge: este velo llegaba hasta fuera del contenedor
+     y apagaba la retícula de módulos que va en la banda libre. Cubre lo que
+     hay que cubrir —los nombres de las capacidades— y suelta el resto. */
+  inset:-22% -12% -22% -14%;
+  background:radial-gradient(94% 92% at 42% 50%,
+    rgba(5,7,14,.99), rgba(5,7,14,.97) 44%, rgba(5,7,14,.86) 66%,
+    rgba(5,7,14,.40) 84%, rgba(5,7,14,0) 98%);
 }
