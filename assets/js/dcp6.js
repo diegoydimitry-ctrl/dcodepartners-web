@@ -428,7 +428,7 @@
         o.g = -1;
       } else {
         o.nx = nx; o.ny = ny;
-        o.a = (0.32 - 0.23 * hall) * (0.6 + 0.4 * Math.sin(cx2 * 1.7 + cy2 * 2.3));
+        o.a = (0.40 - 0.26 * hall) * (0.6 + 0.4 * Math.sin(cx2 * 1.7 + cy2 * 2.3));
         o.c = 6; o.g = -1;
       }
       return;
@@ -438,9 +438,9 @@
     var esq = q2.k >> 1, lado = q2.k & 1;
     var ex = 0.05 + (esq & 1 ? 10.7 : 7.3) * (0.90 / (C2 - 1));
     var ey = 0.07 + (esq & 2 ? 6.7 : 3.3) * (0.86 / (F2n - 1));
-    o.nx = ex + (lado ? (esq & 1 ? -1 : 1) * q2.j * 0.055 : 0);
-    o.ny = ey + (lado ? 0 : (esq & 2 ? -1 : 1) * q2.j * 0.075);
-    o.a = 0.86 * hall; o.c = 7; o.g = 250 + q2.k;
+    o.nx = ex + (lado ? (esq & 1 ? -1 : 1) * q2.j * 0.090 : 0);
+    o.ny = ey + (lado ? 0 : (esq & 2 ? -1 : 1) * q2.j * 0.125);
+    o.a = 0.94 * hall; o.c = 7; o.g = 250 + q2.k;
   }
 
   /* 3 · DISEÑAMOS — «Decidimos qué va con qué». Los mismos cuatro sistemas
