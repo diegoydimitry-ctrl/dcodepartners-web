@@ -111,3 +111,12 @@ python3 montar-voz.py --anuncio 1 --voces voces/anuncio-1 --fmt 9x16
 la tabla de narración de `GUION.md` / `GUION-2.md`—, así que los tiempos no
 se repiten en ningún sitio. Avisa antes de montar si algún clip no cabe en su
 hueco; con eso ya se sabe qué frase hay que retocar.
+
+## Confirmación en producción: anuncio 4
+
+El anuncio 4 (D-Code Finance, `GUION-4.md`) confirma la hipótesis de arriba:
+su guion tiene el mismo registro pausado y profesional que el anuncio 1, y
+Kokoro (`em_alex`, velocidad 1,1) encaja en sus doce huecos sin necesidad de
+`--forzar` — solo hizo falta ensanchar dos ventanas ~0,3–1,1 s tras la
+primera pasada, exactamente el ajuste que se predecía aquí. Es la primera
+pieza que sale a producción con esta locución.

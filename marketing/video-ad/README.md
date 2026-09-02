@@ -1,12 +1,14 @@
 # Anuncios en vídeo — D-Code Partners
 
-Tres piezas para LinkedIn, reutilizables en Instagram Reels, TikTok y Shorts.
+Cinco piezas para LinkedIn, reutilizables en Instagram Reels, TikTok y Shorts.
 Se renderizan desde este repositorio, con la identidad real de la marca: mismas
 tipografías, misma paleta y mismo logotipo que la web.
 
 El guion completo de cada anuncio, con sus entradas y notas de dirección, está
 en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)** (anuncio
-2) y **[GUION-3.md](GUION-3.md)** (teaser DCode OS).
+2), **[GUION-3.md](GUION-3.md)** (teaser DCode OS), **[GUION-4.md](GUION-4.md)**
+(D-Code Finance, corporativo) y **[GUION-5.md](GUION-5.md)** (D-Code Finance,
+recorte social).
 
 ## Resultado
 
@@ -16,12 +18,18 @@ en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)** (anuncio
 | `out/dcode-anuncio-16x9.mp4` | 1920×1080 · 30 fps · 40 s | LinkedIn escritorio, web |
 | `out/dcode-ad3-9x16.mp4` | 1080×1920 · 30 fps · 18 s | Teaser DCode OS — móvil, Reels, Stories |
 | `out/dcode-ad3-16x9.mp4` | 1920×1080 · 30 fps · 18 s | Teaser DCode OS — escritorio, web |
-| `out/banda-sonora.wav` / `-2.wav` / `-3.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
+| `out/dcode-ad4-9x16-vo.mp4` | 1080×1920 · 30 fps · 56,4 s | D-Code Finance corporativo, con locución — LinkedIn móvil |
+| `out/dcode-ad4-16x9-vo.mp4` | 1920×1080 · 30 fps · 56,4 s | D-Code Finance corporativo, con locución — LinkedIn escritorio, web |
+| `out/dcode-ad5-9x16.mp4` | 1080×1920 · 30 fps · 22 s | D-Code Finance, recorte social — Reels, Stories, TikTok |
+| `out/dcode-ad5-16x9.mp4` | 1920×1080 · 30 fps · 22 s | D-Code Finance, recorte social — web |
+| `out/banda-sonora.wav` … `-5.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
 
 H.264 High + AAC 192 kbps, `+faststart`. Con música y efectos. Los anuncios 1
 y 2 salen **sin locución** (ver GUION.md § 7 para añadirla — la mezcla ya
-deja los huecos hechos); el teaser DCode OS se apoya solo en rótulos y
-música, sin voz en off (ver GUION-3.md).
+deja los huecos hechos); el teaser DCode OS y el recorte social de D-Code
+Finance se apoyan solo en rótulos y música, sin voz en off (ver GUION-3.md y
+GUION-5.md). El anuncio 4 (D-Code Finance corporativo) sí lleva locución
+masculina en español, generada con Kokoro local (ver GUION-4.md).
 
 ## Cómo se genera
 
@@ -40,7 +48,7 @@ node render.js --fmt 16x9 --workers 4
 Requiere Node con Playwright y Chromium instalados. Si `ffmpeg` no está en el
 PATH ni como dependencia, indícalo con `FFMPEG_PATH=/ruta/a/ffmpeg`.
 
-Para el anuncio 2 o el teaser DCode OS, indicar `--src` y su duración propia:
+Para el resto de anuncios, indicar `--src` y su duración propia:
 
 ```bash
 python3 audio2.py out/banda-sonora-2.wav
@@ -48,6 +56,14 @@ node render.js --src ad2.html --fmt 9x16 --dur 60 --audio out/banda-sonora-2.wav
 
 python3 audio3.py out/banda-sonora-3.wav
 node render.js --src ad3.html --fmt 9x16 --dur 18 --audio out/banda-sonora-3.wav --workers 4
+
+python3 audio4.py out/banda-sonora-4.wav
+node render.js --src ad4.html --fmt 9x16 --dur 56.4 --audio out/banda-sonora-4.wav --workers 4
+python3 tools/generar-locucion-kokoro.py --anuncio 4 --voz em_alex --speed 1.1 --out voces/anuncio-4
+python3 montar-voz.py --anuncio 4 --voces voces/anuncio-4 --fmt 9x16
+
+python3 audio5.py out/banda-sonora-5.wav
+node render.js --src ad5.html --fmt 9x16 --dur 22 --audio out/banda-sonora-5.wav --workers 4
 ```
 
 ## Previsualizar sin renderizar
@@ -60,9 +76,9 @@ segundo exacto, que es lo cómodo para ajustar una escena.
 
 | Archivo | Qué hace |
 |---------|----------|
-| `ad.html` / `ad2.html` / `ad3.html` | Las tres animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
-| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las tres piezas (`--src`). |
-| `audio.py` / `audio2.py` / `audio3.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
+| `ad.html` … `ad5.html` | Las cinco animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
+| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las cinco piezas (`--src`). |
+| `audio.py` … `audio5.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
 | `tools/clean-logo.py` | Recupera el logotipo sobre transparencia real. |
 | `assets/dcode-mark.png` | Logotipo limpio que usa el cierre. |
 | `montar-voz.py` | Coloca los clips de locución en su segundo y los mezcla con la música. |

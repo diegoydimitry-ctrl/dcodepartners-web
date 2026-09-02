@@ -31,6 +31,8 @@ ANUNCIOS = {
               master='out/dcode-anuncio-{fmt}.mp4', dur=40.0),
     '2': dict(guion='GUION-2.md', cabecera='| Entra | Sale | Texto | Cómo |',
               master='out/dcode-ad2-{fmt}.mp4', dur=60.0),
+    '4': dict(guion='GUION-4.md', cabecera='| Entrada | Salida | Texto |',
+              master='out/dcode-ad4-{fmt}.mp4', dur=55.0),
 }
 
 AUDIO_EXT = ('.wav', '.mp3', '.m4a', '.aac', '.ogg', '.flac', '.opus')
@@ -88,7 +90,7 @@ def duracion(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--anuncio', choices=('1', '2'), required=True)
+    ap.add_argument('--anuncio', choices=('1', '2', '4'), required=True)
     ap.add_argument('--voces', required=True,
                     help='carpeta con los clips, numerados por orden')
     ap.add_argument('--fmt', default='9x16', choices=('9x16', '16x9'))
