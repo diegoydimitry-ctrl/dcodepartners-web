@@ -562,7 +562,9 @@
     cmx += (mx - cmx) * 0.045; cmy += (my - cmy) * 0.045;
 
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = noClear ? 'rgba(5,7,14,0.10)' : 'rgba(5,7,14,0.28)';
+    var trans = Math.sin(tw * 3.1416);
+    ctx.fillStyle = noClear ? 'rgba(5,7,14,0.10)'
+                            : 'rgba(5,7,14,' + (0.30 - 0.13 * trans).toFixed(3) + ')';
     ctx.fillRect(0, 0, W, H);
 
     var FA = FORM[iA], FB = FORM[iB];
@@ -601,6 +603,21 @@
       var tx = lerp(ma.x, mb.x, t), ty = lerp(ma.y, mb.y, t);
       var al = lerp(oa.a, ob.a, t);
       var dep = lerp(frA.d, frB.d, t);
+
+      /* LA TRANSFORMACIÓN. Entre dos secciones la materia no se desliza: se
+         SUELTA y se vuelve a reunir. A mitad de camino recibe un empuje
+         radial y gana luz, así que se ve romperse y rehacerse en la forma
+         siguiente. Es lo que convierte el scroll en una transformación y no
+         en un cambio de diapositiva. */
+      var disp = Math.sin(tw * 3.1416);
+      if (disp > 0.01) {
+        var adx = tx - W * 0.5, ady = ty - H * 0.5;
+        var ad = Math.sqrt(adx * adx + ady * ady) || 1;
+        var emp = disp * disp * (0.35 + p.z * 0.85);
+        tx += (adx / ad) * emp * 62;
+        ty += (ady / ad) * emp * 40;
+        al += disp * 0.26;
+      }
 
       if (p.x < 0) { p.x = tx; p.y = ty; }
       p.vx += (tx - p.x) * 0.10; p.vy += (ty - p.y) * 0.10;
