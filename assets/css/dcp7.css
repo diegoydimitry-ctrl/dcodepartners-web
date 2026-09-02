@@ -27,6 +27,15 @@
 .dcx{
   position:fixed; right:clamp(16px,2vw,30px); top:50%; transform:translateY(-50%);
   z-index:120; display:none; flex-direction:column; align-items:flex-end; gap:0;
+  isolation:isolate;
+}
+/* El índice es interfaz sobre un campo que se mueve: se defiende solo. Sin
+   este velo, una estructura brillante pasando por detrás lo deja ilegible. */
+.dcx::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-18px -22px -18px -34px;
+  background:radial-gradient(120% 62% at 100% 50%,
+    rgba(5,7,14,.94), rgba(5,7,14,.78) 46%, rgba(5,7,14,0) 82%);
 }
 @media (min-width:1180px){ .dcx{ display:flex; } }
 
