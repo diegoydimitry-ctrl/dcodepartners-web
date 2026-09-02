@@ -161,6 +161,25 @@
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { paint(); ticking = false; });
   }, { passive: true });
+  /* ------------------------------------------- QUÉ SECCIÓN ESTÁ HABLANDO
+     El indice dice donde estas en el recorrido; esto dice donde estas en la
+     PAGINA. La seccion que ocupa la banda de lectura se marca, y su señal
+     —la marca del antetitulo, la costura de su filo— se alarga y se enciende
+     en su color; las demas se apartan sin apagarse.
+
+     Solo toca mobiliario: rayas, costuras y nodos. Ningun texto cambia de
+     color ni de contraste, asi que no hay nada que romper en accesibilidad.
+     Y no cuesta nada por fotograma: lo resuelve el navegador con un
+     IntersectionObserver, no el scroll. */
+  (function () {
+    var zonas = document.querySelectorAll('[data-amb]');
+    if (!zonas.length || !window.IntersectionObserver) return;
+    var io = new IntersectionObserver(function (es) {
+      for (var i = 0; i < es.length; i++) es[i].target.classList.toggle('sec-on', es[i].isIntersecting);
+    }, { rootMargin: '-32% 0px -42% 0px' });
+    for (var j = 0; j < zonas.length; j++) io.observe(zonas[j]);
+  })();
+
   window.addEventListener('resize', function () { medir(); paint(); }, { passive: true });
   window.addEventListener('load', function () { medir(); paint(); });
   medir(); paint();

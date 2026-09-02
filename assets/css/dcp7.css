@@ -191,3 +191,321 @@ body.v6 .dcx.dcx--fuera a:focus-visible .dcx-lab{ opacity:1; }
 .has-mega .mega-menu::before{
   content:""; position:absolute; left:0; right:0; top:-14px; height:14px;
 }
+
+/* ============================================================================
+   v11 — EL SISTEMA SE DECLARA  ·  todas las páginas menos el hero
+   ============================================================================
+   El problema, mirado de frente: fuera de la portada TODA la web hablaba con
+   la misma voz. Antetítulo gris con su rayita cian, titular blanco, párrafo
+   gris, y —si acaso— tres bloques idénticos de rayita + título + texto. Una
+   sección de Método, una de Servicios y una de Garantías se veían iguales.
+   No es que estuviera mal hecho: es que no había NADA que dijera dónde estás.
+
+   Aquí no se añade decoración. Se hace visible una información que ya existía
+   y no se usaba: cada sección declara su color en el HTML (data-amb) desde
+   hace versiones, y solo lo usaba un halo de fondo casi imperceptible. Ahora
+   ese color es la SEÑAL de la sección, y aparece en el sitio donde importa:
+   la marca del antetítulo, la costura entre secciones y los nodos de cada
+   sistema de tres.
+
+   Regla que no se rompe: el color va en el MOBILIARIO —rayas, nodos,
+   costuras—, nunca en el texto. Ni un solo contraste de lectura cambia.
+   ========================================================================= */
+
+/* -------------------------------------------------- 1. EL COLOR DE CADA UNA */
+[data-amb]           { --sec:#4dd0e1; --sec2:#5b8cff; }
+[data-amb="cian"]    { --sec:#4dd0e1; --sec2:#5b8cff; }
+[data-amb="violeta"] { --sec:#7c6cff; --sec2:#4dd0e1; }
+[data-amb="rosa"]    { --sec:#ff6b9d; --sec2:#7c6cff; }
+[data-amb="verde"]   { --sec:#35e0a1; --sec2:#4dd0e1; }
+[data-amb="ambar"]   { --sec:#ffb43a; --sec2:#ff6b9d; }
+
+/* ------------------------------------- 2. EL ANTETÍTULO ES UNA SEÑAL QUE LLEGA
+   Era una rayita cian de 20 px, igual en las 72 páginas. Ahora es un trazo que
+   ENTRA: arranca de la nada, se enciende en el color de la sección y termina
+   en una cabeza brillante. Se lee como una señal que llega, que es justo lo
+   que hace un antetítulo. Y como cada sección tiene su color, bajando por
+   cualquier página se VE cambiar el asunto. */
+[data-amb] .eyebrow::before{
+  width:30px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, transparent, var(--sec) 62%, var(--sec));
+  box-shadow:0 0 10px -2px color-mix(in srgb, var(--sec) 62%, transparent);
+  transition:width .45s cubic-bezier(.22,.75,.28,1), box-shadow .45s ease;
+}
+/* La sección que estás leyendo alarga su señal. El resto se aparta sin
+   apagarse: siguen ahí, sin competir. */
+[data-amb].sec-on .eyebrow::before{
+  width:44px;
+  box-shadow:0 0 16px -1px color-mix(in srgb, var(--sec) 78%, transparent);
+}
+[data-amb]:not(.sec-on) .eyebrow::before{ opacity:.62; }
+
+/* ------------------------------------- 3. LA COSTURA ENTRE SECCIONES SIGNIFICA
+   Era una línea gris idéntica en todas partes. Ahora el filo se enciende en el
+   centro con el color de la sección que EMPIEZA: el sitio donde cambia el
+   asunto se ve que es el sitio donde cambia el asunto. */
+[data-amb].edge-top::before{
+  height:1px;
+  background:linear-gradient(90deg,
+    transparent, var(--v-edge) 18%,
+    color-mix(in srgb, var(--sec) 58%, transparent) 50%,
+    var(--v-edge) 82%, transparent);
+}
+[data-amb].edge-top.sec-on::before{
+  background:linear-gradient(90deg,
+    transparent, var(--v-edge) 14%,
+    color-mix(in srgb, var(--sec) 86%, transparent) 50%,
+    var(--v-edge) 86%, transparent);
+}
+
+/* -------------------------------- 4. TRES COSAS PASAN A SER UN SOLO SISTEMA
+   El bloque de tres era el gesto más repetido de la web —y el más plano—:
+   tres columnas con un filo cada una, cortadas por el hueco de la rejilla.
+   Tres cajas sin caja.
+
+   Ahora los tres filos se sustituyen por UNA línea continua que los atraviesa
+   y un NODO por elemento colgando de ella. Es exactamente lo que se está
+   contando en todas esas secciones: no son tres cosas sueltas, son tres
+   puntos del mismo sistema. Y responde: el nodo del elemento sobre el que
+   estás se enciende en su color. */
+/* Ojo: .outs::before ya es el velo de lectura de los interiores (dcp8.css) y
+   ese velo es lo que mantiene el contraste sobre el campo. La línea va en
+   ::after, que estaba libre. */
+.outs{ position:relative; padding-top:1px; }
+.outs::after{
+  content:""; position:absolute; top:0; left:0; right:0; height:1px; pointer-events:none;
+  background:linear-gradient(90deg,
+    color-mix(in srgb, var(--sec,#4dd0e1) 55%, transparent),
+    rgba(150,174,245,.34) 30%, rgba(150,174,245,.34) 70%,
+    color-mix(in srgb, var(--sec2,#5b8cff) 48%, transparent));
+}
+/* Y los tres nodos recorren el par de colores de la sección de un extremo a
+   otro: no son tres cosas iguales, son la primera, la de en medio y la
+   última. La progresión es dentro del par de la sección, no un arcoíris. */
+.outs > .out:nth-child(1){ --nodo: var(--sec,#4dd0e1); }
+.outs > .out:nth-child(2){ --nodo: color-mix(in srgb, var(--sec,#4dd0e1) 50%, var(--sec2,#5b8cff)); }
+.outs > .out:nth-child(3){ --nodo: var(--sec2,#5b8cff); }
+.outs > .out:nth-child(4){ --nodo: var(--sec2,#5b8cff); }
+.outs > .out{ border-top:0; }
+.out::after{
+  content:""; position:absolute; top:-3px; left:0; width:7px; height:7px; border-radius:50%;
+  background:var(--v-bg); border:1px solid color-mix(in srgb, var(--k, var(--nodo,#4dd0e1)) 62%, transparent);
+  transition:background .34s ease, box-shadow .34s ease, border-color .34s ease;
+}
+.out:hover::after, .out:focus-within::after{
+  background:var(--k, var(--nodo,#4dd0e1)); border-color:var(--k, var(--nodo,#4dd0e1));
+  box-shadow:0 0 0 5px color-mix(in srgb, var(--k, var(--nodo,#4dd0e1)) 16%, transparent);
+}
+.out:hover b{ color:#fff; }
+/* El acento que ya crecía al entrar se ancla ahora al nodo y toma su color. */
+.out::before{ left:13px; background:var(--k, var(--nodo, var(--v-a))); }
+.out.in::before, .in .out::before{ width:52px; }
+@media (max-width:640px){
+  /* Apilado, la línea horizontal no significa nada: el sistema se lee en
+     vertical, así que el nodo se queda y la línea se va. */
+  .outs::after{ display:none; }
+  .outs > .out{ border-top:1px solid var(--v-edge); }
+  .outs > .out:first-child{ border-top:0; }
+}
+
+/* ---------------------------------------------------------- 5. EL PIE CIERRA
+   Era una lista de enlaces en cinco columnas, sin relación con el universo del
+   resto. Es lo último que se ve: tiene que parecer de la misma empresa. */
+footer .footer-col h2{ position:relative; padding-left:16px; }
+footer .footer-col h2::before{
+  content:""; position:absolute; left:0; top:50%; width:9px; height:1px; margin-top:-1px;
+  background:linear-gradient(90deg, transparent, var(--v-a));
+}
+footer .footer-top{ position:relative; }
+footer .footer-top::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, var(--v-a), var(--v-b) 46%, var(--v-c) 78%, transparent);
+  opacity:.30;
+}
+footer .footer-col a{ position:relative; }
+footer .footer-col a::before{
+  content:""; position:absolute; left:-11px; top:50%; width:4px; height:1px; margin-top:-1px;
+  background:var(--v-a); opacity:0; transform:translateX(-4px);
+  transition:opacity .24s ease, transform .24s cubic-bezier(.22,.75,.28,1);
+}
+footer .footer-col a:hover::before, footer .footer-col a:focus-visible::before{
+  opacity:.9; transform:none;
+}
+
+@media (prefers-reduced-motion: reduce){
+  [data-amb] .eyebrow::before, .out::after, .out::before,
+  footer .footer-col a::before{ transition:none; }
+}
+
+/* ------------------------------- 6. EL MÉTODO SE CAMINA, NO SE LEE EN LISTA
+   Era lo que el encargo señalaba: cuatro pasos numerados en vertical con una
+   raya al lado. Se entendía leyéndolo, no mirándolo. Y había un salto de 430
+   px entre el número y su párrafo, en blanco, sin nada que los uniera: el ojo
+   tenía que adivinar qué texto pertenecía a qué paso.
+
+   Ahora el recorrido es un CONDUCTO con nodos. La barra que ya se llenaba con
+   el scroll gana cuerpo y halo —se ve avanzar—, cada paso tiene su nodo, y del
+   nodo sale una DERIVACIÓN que cruza la columna hasta el texto: número, título
+   y párrafo quedan cosidos por una línea, que es justo lo que faltaba.
+
+   Y el paso al que has llegado habla: su nodo se llena de su color y su número
+   se enciende. Los que aún no has alcanzado no se apagan —el texto no cambia
+   de contraste—, solo se retira su mobiliario. */
+.vsteps::before{ background:rgba(150,174,245,.13); }
+.vsteps-fill{
+  box-shadow:0 0 14px -2px rgba(124,180,255,.55);
+}
+.vstep::before{ width:13px; height:13px; border-width:1px; }
+.vstep.on::before{
+  background:var(--k, var(--v-a)); border-color:var(--k, var(--v-a));
+  box-shadow:0 0 0 6px color-mix(in srgb, var(--k, var(--v-a)) 13%, transparent),
+             0 0 18px -3px color-mix(in srgb, var(--k, var(--v-a)) 85%, transparent);
+}
+/* La derivación: sale del número y cruza hasta donde empieza el párrafo.
+   Se dibuja siempre —así ocupa su sitio y no mueve nada al aparecer— y se
+   despliega de izquierda a derecha cuando llegas al paso. */
+.vstep-n{ position:relative; display:inline-flex; align-items:center; gap:12px;
+  transition:color .35s ease; }
+.vstep-n::after{
+  content:""; display:block; width:clamp(60px, 16vw, 190px); height:1px;
+  background:linear-gradient(90deg, var(--k, var(--v-a)), transparent);
+  opacity:0; transform:scaleX(0); transform-origin:left center;
+  transition:opacity .38s ease, transform .55s cubic-bezier(.22,.75,.28,1);
+}
+.vstep.on .vstep-n{ color:var(--k, var(--v-a)); }
+.vstep.on .vstep-n::after{ opacity:1; transform:none; }
+@media (min-width:900px){
+  /* En rejilla la derivación llega hasta el borde de su columna: el número
+     apunta literalmente al párrafo que le corresponde. */
+  .vstep-n{ display:flex; }
+  .vstep-n::after{ flex:1; width:auto; }
+}
+@media (prefers-reduced-motion: reduce){
+  .vstep-n::after{ transition:none; }
+}
+
+/* --------------------------- 7. CAMBIOS EN PROCESO: SE VE QUE ESTÁ PASANDO
+   Era un tablero honesto pero quieto: filas con una etiqueta de estado. Decía
+   QUÉ estado tiene cada cosa, no que las cosas se MUEVEN de un estado a otro,
+   que es justo lo que la sección quiere contar.
+
+   Ahora cada fila lleva su TRAYECTORIA: tres paradas —se construye, se
+   despliega, funciona— con las alcanzadas encendidas en el color de la pieza.
+   La misma información que ya estaba en la etiqueta, dicha como posición en
+   un recorrido en vez de como una palabra suelta. Se ve de un vistazo qué va
+   por delante y qué acaba de empezar.
+
+   Y lo que ya está en marcha late: un recorrido lento por los puntos del
+   grupo activo, escalonado, como un sistema pasando lista. Es una sola
+   propiedad animada y se apaga con movimiento reducido. */
+.board-row{ --e1:#39435e; --e2:#39435e; --e3:#39435e; }
+.board-row[data-etapa="1"]{ --e1:var(--k, var(--v-a)); }
+.board-row[data-etapa="2"]{ --e1:var(--k, var(--v-a)); --e2:var(--k, var(--v-a)); }
+.board-row[data-etapa="3"]{ --e1:var(--k, var(--v-a)); --e2:var(--k, var(--v-a)); --e3:var(--k, var(--v-a)); }
+/* La fila tenía tres columnas y la trayectoria caía a una cuarta implícita,
+   es decir a la fila de abajo. Se declara la cuarta. */
+@media (min-width:901px){
+  .board-row{ grid-template-columns:9px minmax(0,1fr) auto 58px; }
+  .board-row::after{ grid-column:4; grid-row:1; }
+}
+.board-row::after{
+  content:""; width:58px; height:10px; align-self:center; justify-self:end; flex:none;
+  background:
+    radial-gradient(circle 3.4px at 3px 5px,  var(--e1) 0 99%, transparent 0),
+    radial-gradient(circle 3.4px at 29px 5px, var(--e2) 0 99%, transparent 0),
+    radial-gradient(circle 3.4px at 55px 5px, var(--e3) 0 99%, transparent 0),
+    linear-gradient(90deg, var(--e1), var(--e2) 50%, var(--e3));
+  background-repeat:no-repeat;
+  background-size:100% 100%, 100% 100%, 100% 100%, 58px 1px;
+  background-position:0 0, 0 0, 0 0, 0 4.5px;
+  opacity:.92;
+}
+@media (max-width:900px){ .board-row::after{ display:none; } }
+
+/* El latido del grupo que ya funciona. */
+.board:has(.board-state--live) .board-row[data-etapa="3"] .board-dot{
+  animation:dcx-vivo 5.2s ease-in-out infinite;
+}
+.board:has(.board-state--live) .board-row:nth-child(3) .board-dot{ animation-delay:.42s; }
+.board:has(.board-state--live) .board-row:nth-child(4) .board-dot{ animation-delay:.84s; }
+.board:has(.board-state--live) .board-row:nth-child(5) .board-dot{ animation-delay:1.26s; }
+.board:has(.board-state--live) .board-row:nth-child(6) .board-dot{ animation-delay:1.68s; }
+@keyframes dcx-vivo{
+  0%, 62%, 100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--k, #4dd0e1) 0%, transparent); }
+  16%{ box-shadow:0 0 0 5px color-mix(in srgb, var(--k, #4dd0e1) 20%, transparent); }
+  34%{ box-shadow:0 0 0 9px color-mix(in srgb, var(--k, #4dd0e1) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce){
+  .board:has(.board-state--live) .board-row .board-dot{ animation:none; }
+}
+
+/* ------------------------------------ 8. CONTACTO: EL PASO NATURAL, SIN FRICCIÓN
+   Es la página que decide si el recorrido sirve de algo, y era la más genérica:
+   cuatro rayitas anónimas de progreso, campos que son rectángulos vacíos y una
+   columna derecha que se acababa a media altura dejando un hueco muerto.
+
+   Tres cosas, ninguna que complique el formulario:
+
+   1. El progreso pasa a ser un RECORRIDO con paradas, el mismo lenguaje de
+      nodos que ahora usa toda la web. Se ve cuánto llevas y cuánto queda, que
+      es lo que quita la ansiedad de "¿esto cuántos pasos son?".
+   2. El campo en el que estás se señala: su etiqueta se enciende y el campo
+      lleva un filo de acento. Sabes dónde estás escribiendo.
+   3. La columna de contacto directo acompaña mientras rellenas en vez de
+      quedarse arriba con un hueco debajo. */
+.form-progress{
+  position:relative; display:flex; justify-content:space-between; align-items:center;
+  gap:0; margin-bottom:14px; padding:6px 3px;
+}
+.form-progress::before{
+  content:""; position:absolute; left:3px; right:3px; top:50%; height:1px; margin-top:-1px;
+  background:rgba(150,174,245,.20);
+}
+.form-progress-dot{
+  position:relative; flex:none; width:10px; height:10px; border-radius:50%;
+  background:var(--v-bg,#06080f); border:1px solid rgba(150,174,245,.34);
+  transition:background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease;
+}
+.form-progress-dot.is-done{
+  background:var(--cyan); border-color:var(--cyan); box-shadow:none;
+}
+.form-progress-dot.is-active{
+  background:var(--cyan); border-color:var(--cyan); transform:scale(1.24);
+  box-shadow:0 0 0 5px rgba(67,224,255,.16), 0 0 14px -2px rgba(67,224,255,.85);
+}
+/* El tramo recorrido se enciende por detrás de las paradas. */
+.form-progress::after{
+  content:""; position:absolute; left:3px; top:50%; height:1px; margin-top:-1px;
+  width:var(--avance, 0%);
+  background:linear-gradient(90deg, var(--cyan), rgba(67,224,255,.55));
+  transition:width .34s cubic-bezier(.22,.75,.28,1);
+}
+.form-step-count{ margin-bottom:22px; }
+
+/* El campo en el que estás. Acotado a los formularios A PROPÓSITO: «.field»
+   es también la clase del lienzo de partículas, y una regla suelta sobre ella
+   sacaría el campo de position:fixed. */
+form .field{ position:relative; }
+form .field label{ transition:color .22s ease; }
+form .field:focus-within label{ color:var(--cyan); }
+form .field input, form .field textarea{ transition:border-color .22s ease, background .22s ease, box-shadow .22s ease; }
+
+@media (min-width:900px){
+  .contacto-side{ position:sticky; top:clamp(96px,12vh,140px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .form-progress-dot, .form-progress::after, form .field label{ transition:none; }
+}
+
+/* ---------------------- 9. LA PORTADA HABLA EL MISMO IDIOMA QUE EL RESTO
+   La portada no se toca: sigue exactamente como está aprobada. Lo único que
+   se iguala es la marca del antetítulo, para que la señal que ahora abre cada
+   sección del sitio sea LA MISMA señal en toda la web. Es una raya de 26 px
+   que pasa a ser un trazo que llega, con su cabeza encendida. Nada más. */
+body.v6 .v6-kicker::before{
+  width:30px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, transparent, var(--v-a) 62%, var(--v-a));
+  box-shadow:0 0 10px -2px rgba(77,208,225,.62);
+}
+/* Y el pie cierra con la línea de la marca, no con una raya gris. */
+footer .footer-top::after{ opacity:.46; }

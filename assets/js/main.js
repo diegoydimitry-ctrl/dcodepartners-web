@@ -666,6 +666,12 @@
         dot.classList.toggle('is-done', i < n - 1);
       });
       if (stepCounter) stepCounter.textContent = n;
+      /* El tramo recorrido del carril: de la primera parada a la actual. Las
+         paradas son puntos, no barras, así que el avance es la distancia
+         entre centros, no una fracción del total. */
+      if (progressBar && totalSteps > 1) {
+        progressBar.style.setProperty('--avance', ((n - 1) / (totalSteps - 1) * 100) + '%');
+      }
       if (progressBar) progressBar.setAttribute('aria-valuenow', n);
       if (backBtn) backBtn.style.display = n > 1 ? 'inline-flex' : 'none';
       if (nextBtn) nextBtn.style.display = n < totalSteps ? 'inline-flex' : 'none';
