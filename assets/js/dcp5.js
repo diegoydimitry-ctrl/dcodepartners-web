@@ -239,8 +239,34 @@
         e.target.classList.add('in');
         io.unobserve(e.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    els.forEach(function (el) { io.observe(el); });
+      /* threshold 0.12 pide que se vea el 12% del AREA del elemento. En una
+         tarjeta pequeña son unos pocos pixeles; en un bloque alto son cientos,
+         y en una ventana baja puede no ocurrir nunca. Basta con que asome. */
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    var pend = [];
+    els.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('in'); return; }
+      io.observe(el); pend.push(el);
+    });
+    /* La misma red de seguridad que en main.js, por la misma razon: el
+       observador entrega una vez por fotograma contra la posicion del momento,
+       y un arrastre de la barra de scroll salta por encima de bloques enteros
+       que se quedan invisibles para siempre. Se retira sola al vaciarse. */
+    if (pend.length) {
+      var pt = null;
+      var barrer = function () {
+        for (var i = pend.length - 1; i >= 0; i--) {
+          var e2 = pend[i], b = e2.getBoundingClientRect();
+          if (b.top < window.innerHeight * 0.92 && b.bottom > 0) {
+            e2.classList.add('in'); io.unobserve(e2); pend.splice(i, 1);
+          }
+        }
+        if (!pend.length) window.removeEventListener('scroll', tras);
+      };
+      var tras = function () { clearTimeout(pt); pt = setTimeout(barrer, 140); };
+      window.addEventListener('scroll', tras, { passive: true });
+    }
     // Escalonado automático entre hermanos: no hace falta escribir --i a mano.
     document.querySelectorAll('[data-stagger]').forEach(function (g) {
       Array.prototype.forEach.call(g.children, function (c, i) { c.style.setProperty('--i', i); });

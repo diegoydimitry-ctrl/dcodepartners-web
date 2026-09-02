@@ -147,7 +147,30 @@
     window.requestAnimationFrame(function () { moveNavIndicator(navActiveLink); });
   }
 
-  /* ---------- Scroll reveal ---------- */
+  /* ---------- Scroll reveal ----------
+     EL UMBRAL PROPORCIONAL ESCONDIA LAS PAGINAS LARGAS. Estaba en
+     threshold:0.15, que quiere decir "el 15% del AREA DEL ELEMENTO tiene que
+     estar en pantalla". Para una tarjeta de 300 px eso son 45 px y entra
+     enseguida; para el cuerpo de la Politica de Privacidad, que mide 4.457 px,
+     son 668 px — asi que la pagina se abria con el titulo y CUATRO MIL
+     QUINIENTOS PIXELES EN BLANCO, y el texto solo aparecia despues de
+     desplazarse un buen trecho.
+
+     Y en una ventana mas baja que ese 15% no aparecia NUNCA: en un navegador
+     de 600 px de alto la politica de privacidad era, sencillamente, invisible.
+
+     Medido antes del arreglo, con la ventana a 1440x900:
+       /privacidad                     .prose 4.457 px · opacidad 0 al cargar
+       /condiciones-contratacion       igual
+       /acuerdo-encargado-tratamiento  igual
+       /aviso-legal (3.086 px)         entraba por los pelos
+
+     La correccion es la que debio ser desde el principio: threshold 0 —basta
+     con que ASOME— y un margen negativo abajo para que entre un poco antes de
+     llegar del todo. El efecto se ve igual en los bloques pequeños, y los
+     grandes dejan de desaparecer. Ademas se marca visible de entrada todo lo
+     que ya esta en la primera pantalla, para que nada se vea "aparecer" en un
+     sitio donde el usuario no ha llegado a hacer scroll todavia. */
   var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur, .reveal-narrow, .reveal-converge');
   if (revealEls.length) {
     if ('IntersectionObserver' in window) {
@@ -158,8 +181,40 @@
             io.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.15 });
-      revealEls.forEach(function (el) { io.observe(el); });
+      }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+      var pend = [];
+      revealEls.forEach(function (el) {
+        // Lo que ya se ve al cargar no se "revela": ya esta.
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('is-visible'); return; }
+        io.observe(el); pend.push(el);
+      });
+      /* RED DE SEGURIDAD. El observador entrega sus avisos una vez por
+         fotograma y contra la posicion del momento de la entrega: si el
+         visitante arrastra la barra de scroll o da un golpe de trackpad, la
+         pagina salta por encima de bloques enteros y esos bloques SE QUEDAN
+         INVISIBLES. Medido en /departamentos/comercial recorriendola a
+         saltos: doce bloques seguian a opacidad 0 al terminar — el radar, las
+         cabeceras, los enlaces y toda la fila de resultados. Media pagina en
+         blanco.
+
+         Esto barre lo que quede pendiente cuando el scroll para. Se
+         autolimita: cada elemento sale de la lista al mostrarse, y cuando la
+         lista se vacia el oyente se retira solo. */
+      if (pend.length) {
+        var pt = null;
+        var barrer = function () {
+          for (var i = pend.length - 1; i >= 0; i--) {
+            var e = pend[i], b = e.getBoundingClientRect();
+            if (b.top < window.innerHeight * 0.92 && b.bottom > 0) {
+              e.classList.add('is-visible'); io.unobserve(e); pend.splice(i, 1);
+            }
+          }
+          if (!pend.length) window.removeEventListener('scroll', tras);
+        };
+        var tras = function () { clearTimeout(pt); pt = setTimeout(barrer, 140); };
+        window.addEventListener('scroll', tras, { passive: true });
+      }
     } else {
       revealEls.forEach(function (el) { el.classList.add('is-visible'); });
     }
