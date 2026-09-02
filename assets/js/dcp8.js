@@ -67,6 +67,7 @@
   function sd(i, s) { var x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return x - Math.floor(x); }
   function lerp(a, b, t) { return a + (b - a) * t; }
   function ease(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
+  function clamp(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
   /* Ventana de avance: 0 antes de `a`, 1 después de `b`. Con esto cada
      instrumento decide en qué tramo de la página ocurre cada cosa. */
   function win(a, b) { return ease((Pv - a) / Math.max(0.0001, b - a)); }
@@ -975,171 +976,124 @@
   /*  reconocible de lo que ESA capacidad hace, no en geometría decorativa.  */
   /* ====================================================================== */
 
+  /* ====================================================================== */
+  /*  Las ocho, con la misma materia que el resto del sitio. Cada una        */
+  /*  conserva su idea; lo que cambia es que ahora se ve DE QUÉ está hecha.  */
+  /* ====================================================================== */
+
   /* COMERCIAL — "El barrido". Un barrido recorre el campo; lo que encuentra
-     queda acotado y sale convertido en una trayectoria. Detectar y convertir. */
-  INSTR.comercial = (function () {
-    var marks = [], shots = [];
-    return {
-      build: function () {
-        marks.length = 0; shots.length = 0;
-        var n = small ? 16 : 40;
-        for (var i = 0; i < n; i++) {
-          marks.push({ x: W * (0.06 + sd(i, 2) * 0.60), y: H * (0.10 + sd(i, 3) * 0.80),
-                       hot: sd(i, 4) > 0.76, seen: 0 });
+     deja de ser ruido y sale despedido como una trayectoria con destino. */
+  INSTR.comercial = {
+    build: function () { nube(small ? 200 : 420); },
+    draw: function (tm) {
+      clear(0.30);
+      var sw = ((tm * 0.00013) % 1.35) - 0.18;
+      materia(function (i, u, o) {
+        var sem = sd(i, 21), sy = sd(i, 22);
+        var bx = W * (0.05 + sem * 0.90), by = H * (0.10 + sy * 0.80);
+        var d = (bx / W) - sw;
+        var visto = clamp(-d / 0.16);                 // ya barrido
+        var val = sd(i, 23) > 0.72;                   // y además, vale
+        if (val && visto > 0.5) {
+          /* Lo que vale sale disparado hacia el destino, no se queda. */
+          var vv = ease((visto - 0.5) / 0.5);
+          o.x = lerp(bx, W * 1.02, vv);
+          o.y = lerp(by, H * (0.30 + sd(i, 24) * 0.36), vv);
+          o.a = 0.50 * (1 - vv * 0.35); o.c = CI.cian; o.g = -1;
+        } else {
+          o.x = bx; o.y = by;
+          o.a = 0.09 + 0.48 * Math.exp(-d * d * 120);
+          o.c = CI.acero; o.g = -1;
         }
-      },
-      draw: function (tm) {
-        clear(0.30);
-        var sweep = ((tm * 0.00011) % 1) * W * 0.72;
-        // El barrido.
-        var g = ctx.createLinearGradient(sweep - 90, 0, sweep, 0);
-        g.addColorStop(0, rgba(C.cian, 0)); g.addColorStop(1, rgba(C.cian, 0.40));
-        ctx.strokeStyle = g; ctx.lineWidth = 1.4;
-        ctx.beginPath(); ctx.moveTo(sweep, H * 0.06); ctx.lineTo(sweep, H * 0.94); ctx.stroke();
+      }, tm);
+      pinta(0);
+      /* El frente del barrido: se ve por dónde va mirando. */
+      ctx.globalCompositeOperation = 'lighter';
+      var fx = (sw + 0.18) % 1.35 - 0.18;
+      var g = ctx.createLinearGradient(fx * W - 40, 0, fx * W + 8, 0);
+      g.addColorStop(0, rgba(C.cian, 0)); g.addColorStop(1, rgba(C.cian, 0.18));
+      ctx.fillStyle = g; ctx.fillRect(fx * W - 40, 0, 48, H);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+  };
 
-        for (var i = 0; i < marks.length; i++) {
-          var m = marks[i];
-          if (m.seen < 1 && Math.abs(m.x - sweep) < 4) {
-            m.seen = 1;
-            if (m.hot) shots.push({ x: m.x, y: m.y, u: 0, ty: H * (0.3 + sd(i, 9) * 0.4) });
-          }
-          if (sweep < m.x - 20) m.seen = 0;
-          ctx.beginPath(); ctx.arc(m.x, m.y, m.hot ? 2.2 : 1.4, 0, 6.2832);
-          ctx.fillStyle = rgba(m.hot ? C.cian : [130, 150, 190], m.hot ? 0.72 : 0.34); ctx.fill();
-          // Lo que importa queda acotado entre marcas: se ha encontrado algo.
-          if (m.hot && m.seen) {
-            ctx.strokeStyle = rgba(C.cian, 0.52); ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(m.x - 9, m.y - 5); ctx.lineTo(m.x - 9, m.y + 5);
-            ctx.moveTo(m.x + 9, m.y - 5); ctx.lineTo(m.x + 9, m.y + 5); ctx.stroke();
-          }
-        }
-        // Y sale convertido en una conversación.
-        for (var k = shots.length - 1; k >= 0; k--) {
-          var sh = shots[k]; sh.u += 0.006;
-          if (sh.u > 1) { shots.splice(k, 1); continue; }
-          var x = lerp(sh.x, W * 0.94, ease(sh.u)), y = lerp(sh.y, sh.ty, ease(sh.u));
-          ctx.beginPath(); ctx.moveTo(lerp(sh.x, W * 0.94, ease(Math.max(0, sh.u - 0.08))),
-                                      lerp(sh.y, sh.ty, ease(Math.max(0, sh.u - 0.08))));
-          ctx.lineTo(x, y);
-          ctx.strokeStyle = rgba(C.violeta, 0.5 * (1 - sh.u)); ctx.lineWidth = 1.6; ctx.stroke();
-          ctx.beginPath(); ctx.arc(x, y, 2.2, 0, 6.2832);
-          ctx.fillStyle = rgba([220, 240, 255], 0.7 * (1 - sh.u)); ctx.fill();
-        }
+  /* MARKETING — "La propagación". Frentes que salen de unos emisores y
+     encienden a quien alcanzan. Lo alcanzado ya no vuelve a apagarse. */
+  INSTR.marketing = {
+    build: function () { nube(small ? 200 : 440); },
+    draw: function (tm) {
+      clear(0.30);
+      var EM = [[W * 0.16, H * 0.30], [W * 0.10, H * 0.72], [W * 0.30, H * 0.52]];
+      var ondas = [];
+      for (var e = 0; e < EM.length; e++) {
+        ondas.push(((tm * 0.00016 + e * 0.33) % 1) * Math.max(W, H) * 1.15);
       }
-    };
-  })();
+      materia(function (i, u, o) {
+        var bx = W * (0.06 + sd(i, 31) * 0.90), by = H * (0.08 + sd(i, 32) * 0.86);
+        o.x = bx + Math.sin(tm * 0.0004 + i) * 1.4;
+        o.y = by + Math.cos(tm * 0.0004 + i) * 1.4;
+        var mejor = 0, tocado = 0;
+        for (var k = 0; k < EM.length; k++) {
+          var dx = bx - EM[k][0], dy = by - EM[k][1];
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var df = Math.abs(dist - ondas[k]);
+          if (df < 26) mejor = Math.max(mejor, 1 - df / 26);
+          if (dist < ondas[k]) tocado = 1;             // alcanzado: se queda
+        }
+        o.a = 0.08 + 0.30 * tocado + 0.62 * mejor;
+        o.c = tocado ? CI.rosa : CI.acero;
+        o.g = -1;
+      }, tm);
+      pinta(0);
+    }
+  };
 
-  /* MARKETING — "La propagación". Frentes de onda que salen de unos emisores
-     y encienden a quien alcanzan. Lo alcanzado ya no se apaga. */
-  INSTR.marketing = (function () {
-    var rx = [], em = [];
-    return {
-      build: function () {
-        rx.length = 0; em.length = 0;
-        var n = small ? 40 : 130;
-        for (var i = 0; i < n; i++) rx.push({ x: W * sd(i, 2), y: H * sd(i, 3), lit: 0 });
-        em.push({ x: W * 0.18, y: H * 0.30, t: 0.0 });
-        em.push({ x: W * 0.30, y: H * 0.72, t: 0.4 });
-        if (!small) em.push({ x: W * 0.12, y: H * 0.55, t: 0.75 });
-      },
-      draw: function (tm) {
-        clear(0.26);
-        var R = Math.max(W, H) * 1.2;
-        for (var e = 0; e < em.length; e++) {
-          var E = em[e];
-          for (var w2 = 0; w2 < 3; w2++) {
-            var u = (((tm * 0.00009) + E.t + w2 * 0.33) % 1);
-            var rad = u * R;
-            ctx.beginPath(); ctx.arc(E.x, E.y, rad, 0, 6.2832);
-            ctx.strokeStyle = rgba(C.rosa, 0.26 * (1 - u)); ctx.lineWidth = 1.4; ctx.stroke();
-            for (var i2 = 0; i2 < rx.length; i2++) {
-              var p2 = rx[i2];
-              var d = Math.hypot(p2.x - E.x, p2.y - E.y);
-              if (Math.abs(d - rad) < 7) p2.lit = 1;
-            }
-          }
-          ctx.beginPath(); ctx.arc(E.x, E.y, 3, 0, 6.2832);
-          ctx.fillStyle = rgba(C.rosa, 0.7); ctx.fill();
-        }
-        for (var i3 = 0; i3 < rx.length; i3++) {
-          var p3 = rx[i3];
-          p3.lit *= 0.9975;                       // el alcance se mantiene
-          ctx.beginPath(); ctx.arc(p3.x, p3.y, 1.3 + p3.lit * 1.1, 0, 6.2832);
-          ctx.fillStyle = rgba(p3.lit > 0.15 ? C.rosa : [122, 140, 178], 0.26 + p3.lit * 0.55);
-          ctx.fill();
-        }
-      }
-    };
-  })();
+  /* CLIENTES — "La continuidad". Cada cliente es una línea que no se corta,
+     con sus hitos, y el sistema no olvida ninguno de los anteriores. */
+  INSTR.clientes = {
+    build: function () { nube(small ? 220 : 460); },
+    draw: function (tm) {
+      clear(0.30);
+      var L = small ? 4 : 6, per = 0;
+      materia(function (i, u, o) {
+        per = NUB.length / L;
+        var l = Math.min(L - 1, (i / per) | 0);
+        var j = (i - l * per) / per;
+        var ly = H * (0.16 + (l / (L - 1)) * 0.68);
+        var av = ((tm * 0.00006) + l * 0.13) % 1;      // hasta dónde ha llegado
+        o.x = W * (0.05 + j * 0.90);
+        o.y = ly + Math.sin(j * 9 + l) * 3;
+        var vivo = j <= av;
+        /* Los hitos: momentos que quedan marcados y ya no se apagan. */
+        var hito = Math.abs(Math.sin(j * 15.7 + l * 2)) > 0.985;
+        o.a = vivo ? (hito ? 0.92 : 0.42) : 0.07;
+        o.c = hito && vivo ? CI.verde : CI.turq;
+        o.g = vivo ? 300 + l : -1;
+      }, tm);
+      pinta(0.12);
+    }
+  };
 
-  /* CLIENTES — "La continuidad". Hilos que no se cortan: cada cliente es una
-     línea de tiempo con sus hitos, y el sistema recuerda todos los anteriores. */
-  INSTR.clientes = (function () {
-    var lines = [];
-    return {
-      build: function () {
-        lines.length = 0;
-        var n = small ? 5 : 9;
-        for (var i = 0; i < n; i++) {
-          var ev = [];
-          for (var k = 0; k < 6; k++) ev.push(0.08 + sd(i * 7 + k, 5) * 0.84);
-          ev.sort();
-          lines.push({ y: H * (0.12 + (i / (n - 1)) * 0.76), ev: ev, hue: [C.verde, C.turq, C.cian][i % 3] });
-        }
-      },
-      draw: function (tm) {
-        clear(0.28);
-        var now = ((tm * 0.00007) % 1);
-        for (var i = 0; i < lines.length; i++) {
-          var L = lines[i];
-          // La línea completa existe siempre: la relación no empieza de cero.
-          ctx.beginPath(); ctx.moveTo(W * 0.05, L.y); ctx.lineTo(W * 0.95, L.y);
-          ctx.strokeStyle = rgba(L.hue, 0.24); ctx.lineWidth = 1.2; ctx.stroke();
-          // Lo ya vivido queda marcado, con más peso cuanto más reciente.
-          ctx.beginPath(); ctx.moveTo(W * 0.05, L.y); ctx.lineTo(lerp(W * 0.05, W * 0.95, now), L.y);
-          ctx.strokeStyle = rgba(L.hue, 0.58); ctx.lineWidth = 1.9; ctx.stroke();
-          for (var k2 = 0; k2 < L.ev.length; k2++) {
-            var ex = lerp(W * 0.05, W * 0.95, L.ev[k2]);
-            var past = L.ev[k2] <= now;
-            ctx.beginPath(); ctx.arc(ex, L.y, past ? 3 : 2, 0, 6.2832);
-            ctx.fillStyle = rgba(L.hue, past ? 0.78 : 0.24); ctx.fill();
-            if (past) {   // memoria: cada hito deja su marca hacia atrás
-              ctx.beginPath(); ctx.moveTo(ex, L.y - 6); ctx.lineTo(ex, L.y + 6);
-              ctx.strokeStyle = rgba(L.hue, 0.20); ctx.lineWidth = 1; ctx.stroke();
-            }
-          }
-          var hx = lerp(W * 0.05, W * 0.95, now);
-          ctx.beginPath(); ctx.arc(hx, L.y, 2.4, 0, 6.2832);
-          ctx.fillStyle = rgba([220, 245, 255], 0.75); ctx.fill();
-        }
-      }
-    };
-  })();
-
-  /* PRODUCCIÓN — "El ensamblaje". Piezas que entran por la cinta y se montan
-     una sobre otra hasta que la unidad sale terminada. Y vuelta a empezar. */
+  /* PRODUCCIÓN — "El ensamblaje". Las piezas llegan por la cinta como nubes;
+     al llegar a la estación no se posan enteras: sus partículas se desprenden
+     y vuelan a la unidad que se monta, capa sobre capa. Y sale terminada. */
   INSTR.produccion = (function () {
-    /* EL ENSAMBLAJE, hecho de materia. Las piezas llegan por la cinta como
-       nubes de partículas; al llegar a la estación NO se posan enteras: sus
-       partículas se desprenden y VUELAN a la unidad que se está montando,
-       capa sobre capa. Cuando la unidad está completa, sale. */
     var CAPAS = 4;
     return {
       build: function () { nube(small ? 240 : narrow ? 420 : 640); },
       draw: function (tm) {
         clear(0.30);
         var beltY = H * 0.74, bx0 = W * 0.05, bx1 = W * 0.95;
-        var est = bx0 + (bx1 - bx0) * 0.62;             // la estación
+        var est = bx0 + (bx1 - bx0) * 0.62;
         var ciclo = (tm * 0.00011) % 1;
-        var per = NUB.length / (CAPAS + 1);             // + la que viaja
+        var per = NUB.length / (CAPAS + 1);
 
-        materia(function (i, u, o, t2) {
+        materia(function (i, u, o) {
           var k = Math.min(CAPAS, (i / per) | 0);
           var j = (i - k * per) / per;
 
           if (k === CAPAS) {
-            /* La que todavía viaja por la cinta hacia la estación. */
+            /* La pieza que todavía viaja hacia la estación. */
             var uu = (ciclo * 1.6 + j * 0.09) % 1.6;
             var w0 = (small ? 40 : 66);
             var px2 = bx0 + uu * (est - bx0);
@@ -1155,8 +1109,7 @@
             return;
           }
 
-          /* Las capas ya montadas, y la que está montándose ahora mismo. */
-          var apar = ease((ciclo - k * 0.17) / 0.15);   // le toca a esta capa
+          var apar = ease((ciclo - k * 0.17) / 0.15);
           var w2 = (small ? 46 : 78) - k * 7;
           var yk = beltY - 24 - k * 15;
           var pp2 = j * 4, e2 = pp2 | 0, f3 = pp2 - e2, hw2 = w2 / 2, hh2 = 6;
@@ -1168,7 +1121,7 @@
 
           /* Antes de que le toque, esa materia todavía está en la cinta. */
           var vx = bx0 + (0.25 + j * 0.5) * (est - bx0), vy = beltY - 12;
-          var sal = ease((ciclo - 0.86) / 0.14);        // y al final, sale
+          var sal = ease((ciclo - 0.86) / 0.14);
           o.x = lerp(lerp(vx, est + lx2, apar), est + lx2 + (bx1 + 80 - est) * sal, sal);
           o.y = lerp(vy, yk + ly2, apar);
           o.a = (0.20 + 0.62 * apar) * (1 - sal * 0.85);
@@ -1177,7 +1130,7 @@
         }, tm);
         pinta(0.11);
 
-        /* La cinta: la referencia fija sobre la que ocurre todo. */
+        /* La cinta y la marca de la estación: la referencia fija. */
         ctx.globalCompositeOperation = 'lighter';
         ctx.strokeStyle = rgba(ACERO, 0.20); ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(bx0, beltY); ctx.lineTo(bx1, beltY); ctx.stroke();
@@ -1186,7 +1139,6 @@
           ctx.beginPath(); ctx.moveTo(tx, beltY); ctx.lineTo(tx, beltY + 5);
           ctx.strokeStyle = rgba(ACERO, 0.13); ctx.stroke();
         }
-        /* Y la marca de la estación: aquí es donde se monta. */
         ctx.strokeStyle = rgba(C.ambar, 0.24);
         ctx.beginPath(); ctx.moveTo(est, beltY + 8); ctx.lineTo(est, beltY - 96); ctx.stroke();
         ctx.globalCompositeOperation = 'source-over';
@@ -1195,191 +1147,158 @@
   })();
 
   /* FINANZAS — "El equilibrio". Lo que entra y lo que sale, en sentidos
-     opuestos, y un nivel que busca su punto de equilibrio. */
+     opuestos, y un fiel que busca su punto. */
   INSTR.finanzas = (function () {
-    var level = 0.5;
+    var nivel = 0.5;
     return {
-      build: function () {},
-      draw: function (tm) {
-        clear(0.28);
-        var midY = H * 0.5, span = W * 0.86, x0 = W * 0.07;
-        var inFlow = 0.5 + 0.5 * Math.sin(tm * 0.00035);
-        var outFlow = 0.5 + 0.5 * Math.sin(tm * 0.00035 + 2.1);
-        level += ((0.5 + (inFlow - outFlow) * 0.3) - level) * 0.02;
-
-        // Entradas: hacia la derecha, por arriba.
-        for (var i = 0; i < (small ? 10 : 22); i++) {
-          var u = ((tm * 0.00022) + i / 22) % 1;
-          var y = midY - 26 - (i % 3) * 9;
-          ctx.beginPath(); ctx.moveTo(x0 + u * span - 14, y); ctx.lineTo(x0 + u * span, y);
-          ctx.strokeStyle = rgba(C.verde, 0.48 * inFlow); ctx.lineWidth = 1.5; ctx.stroke();
-        }
-        // Salidas: hacia la izquierda, por abajo.
-        for (var k = 0; k < (small ? 10 : 22); k++) {
-          var u2 = ((tm * 0.00019) + k / 22) % 1;
-          var y2 = midY + 26 + (k % 3) * 9;
-          ctx.beginPath(); ctx.moveTo(x0 + span - u2 * span + 14, y2); ctx.lineTo(x0 + span - u2 * span, y2);
-          ctx.strokeStyle = rgba(C.rosa, 0.44 * outFlow); ctx.lineWidth = 1.5; ctx.stroke();
-        }
-        // El fiel de la balanza.
-        var ly = midY + (level - 0.5) * H * 0.22;
-        var g = ctx.createLinearGradient(x0, ly, x0 + span, ly);
-        g.addColorStop(0, rgba(C.azul, 0)); g.addColorStop(0.5, rgba(C.azul, 0.5)); g.addColorStop(1, rgba(C.azul, 0));
-        ctx.strokeStyle = g; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(x0, ly); ctx.lineTo(x0 + span, ly); ctx.stroke();
-        ctx.setLineDash([2, 6]);
-        ctx.strokeStyle = rgba([150, 174, 245], 0.14); ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(x0, midY); ctx.lineTo(x0 + span, midY); ctx.stroke();
-        ctx.setLineDash([]);
-      }
-    };
-  })();
-
-  /* SOPORTE — "La reparación". Aparecen roturas en el servicio y una pasada
-     las cierra. Lo reparado vuelve a ser continuo. */
-  INSTR.soporte = (function () {
-    var lines2 = [];
-    return {
-      build: function () {
-        lines2.length = 0;
-        var n = small ? 7 : 13;
-        for (var i = 0; i < n; i++) {
-          lines2.push({ y: H * (0.10 + (i / (n - 1)) * 0.80),
-                        brk: sd(i, 3) * 0.7 + 0.15, w: 0.05 + sd(i, 4) * 0.10,
-                        fix: 0, next: sd(i, 5) });
-        }
-      },
+      build: function () { nube(small ? 200 : 420); },
       draw: function (tm) {
         clear(0.30);
-        var pass = ((tm * 0.00013) % 1);
-        for (var i = 0; i < lines2.length; i++) {
-          var L = lines2[i];
-          var a = W * 0.06, b = W * 0.94;
-          var b0 = lerp(a, b, L.brk), b1 = lerp(a, b, L.brk + L.w);
-          // La pasada de reparación va cerrando lo que encuentra roto.
-          if (Math.abs(pass - L.brk) < 0.02) L.fix = 1;
-          if (pass < 0.03) L.fix *= 0.0;
-          var closed = L.fix;
-          ctx.strokeStyle = rgba(closed > 0.5 ? C.verde : [150, 170, 210], closed > 0.5 ? 0.44 : 0.28);
-          ctx.lineWidth = 1.3;
-          if (closed > 0.5) {
-            ctx.beginPath(); ctx.moveTo(a, L.y); ctx.lineTo(b, L.y); ctx.stroke();
-            ctx.beginPath(); ctx.arc((b0 + b1) / 2, L.y, 3.2, 0, 6.2832);
-            ctx.strokeStyle = rgba(C.verde, 0.42); ctx.stroke();
-          } else {
-            ctx.beginPath(); ctx.moveTo(a, L.y); ctx.lineTo(b0, L.y); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(b1, L.y); ctx.lineTo(b, L.y); ctx.stroke();
-            ctx.strokeStyle = rgba([255, 120, 140], 0.42); ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(b0, L.y - 5); ctx.lineTo(b0 + 5, L.y + 5);
-            ctx.moveTo(b1, L.y - 5); ctx.lineTo(b1 - 5, L.y + 5); ctx.stroke();
-          }
-        }
-        var px = lerp(W * 0.06, W * 0.94, pass);
-        var g = ctx.createLinearGradient(px, 0, px + 40, 0);
-        g.addColorStop(0, rgba(C.turq, 0.34)); g.addColorStop(1, rgba(C.turq, 0));
+        var midY = H * 0.5;
+        var ent = 0.5 + 0.5 * Math.sin(tm * 0.00035);
+        var sal = 0.5 + 0.5 * Math.sin(tm * 0.00035 + 2.1);
+        nivel += ((0.5 + (ent - sal) * 0.30) - nivel) * 0.02;
+        materia(function (i, u, o) {
+          var arriba = (i % 2) === 0;
+          var j = sd(i, 41);
+          var t = ((tm * (arriba ? 0.00022 : 0.00019)) + j) % 1;
+          o.x = W * (arriba ? (0.06 + t * 0.88) : (0.94 - t * 0.88));
+          o.y = midY + (arriba ? -1 : 1) * (24 + (i % 4) * 9);
+          o.a = 0.16 + 0.62 * (arriba ? ent : sal) * Math.sin(t * 3.1416);
+          o.c = arriba ? CI.verde : CI.rosa;
+          o.g = -1;
+        }, tm);
+        pinta(0);
+        /* El fiel: sube y baja buscando su punto, y la referencia fija. */
+        ctx.globalCompositeOperation = 'lighter';
+        var ly = midY + (nivel - 0.5) * H * 0.22;
+        var g = ctx.createLinearGradient(W * 0.07, ly, W * 0.93, ly);
+        g.addColorStop(0, rgba(C.azul, 0)); g.addColorStop(0.5, rgba(C.azul, 0.5));
+        g.addColorStop(1, rgba(C.azul, 0));
         ctx.strokeStyle = g; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(px, H * 0.06); ctx.lineTo(px, H * 0.94); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W * 0.07, ly); ctx.lineTo(W * 0.93, ly); ctx.stroke();
+        ctx.setLineDash([2, 6]);
+        ctx.strokeStyle = rgba(ACERO, 0.13); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(W * 0.07, midY); ctx.lineTo(W * 0.93, midY); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalCompositeOperation = 'source-over';
       }
     };
   })();
 
-  /* ADMINISTRACIÓN — "El archivo". Lo que llega cae, se coloca en su casilla
-     indexada y queda sellado. Orden y permanencia. */
-  INSTR.administracion = (function () {
-    var slots = [], drops = [];
-    return {
-      build: function () {
-        slots.length = 0; drops.length = 0;
-        var cols = small ? 4 : 9, rows = small ? 7 : 6;
-        var gw = W * 0.80, gh = H * 0.56, ox = (W - gw) / 2, oy = H * 0.30;
-        for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
-          slots.push({ x: ox + (c + 0.5) * (gw / cols), y: oy + (r + 0.5) * (gh / rows),
-                       w: gw / cols - 6, h: gh / rows - 5, full: 0 });
-        }
-      },
-      draw: function (tm) {
-        clear(0.32);
-        if (drops.length < 5 && Math.random() < 0.05) {
-          var free = [];
-          for (var i = 0; i < slots.length; i++) if (!slots[i].full) free.push(i);
-          if (free.length) drops.push({ s: free[Math.floor(Math.random() * free.length)],
-                                        x: W * (0.1 + Math.random() * 0.8), y: -20, u: 0 });
-        }
-        for (var k = 0; k < slots.length; k++) {
-          var s2 = slots[k];
-          ctx.strokeStyle = rgba([140, 164, 210], s2.full ? 0.38 : 0.19); ctx.lineWidth = 1;
-          ctx.strokeRect(s2.x - s2.w / 2, s2.y - s2.h / 2, s2.w, s2.h);
-          if (s2.full) {
-            ctx.fillStyle = rgba(C.lav, 0.10); ctx.fillRect(s2.x - s2.w / 2, s2.y - s2.h / 2, s2.w, s2.h);
-            // Sello: lo archivado queda cerrado.
-            ctx.strokeStyle = rgba(C.lav, 0.50); ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.moveTo(s2.x - 4, s2.y); ctx.lineTo(s2.x - 1, s2.y + 3); ctx.lineTo(s2.x + 5, s2.y - 3);
-            ctx.stroke();
-          }
-        }
-        for (var d = drops.length - 1; d >= 0; d--) {
-          var D = drops[d], S = slots[D.s];
-          D.u += 0.016;
-          if (D.u >= 1) { S.full = 1; drops.splice(d, 1); continue; }
-          var x = lerp(D.x, S.x, ease(D.u)), y = lerp(-20, S.y, ease(D.u));
-          ctx.strokeStyle = rgba(C.lav, 0.55); ctx.lineWidth = 1.2;
-          ctx.strokeRect(x - 7, y - 5, 14, 10);
-        }
+  /* SOPORTE — "La reparación". El servicio se rompe por algún punto y una
+     pasada lo cierra. Lo reparado vuelve a ser continuo. */
+  INSTR.soporte = {
+    build: function () { nube(small ? 220 : 460); },
+    draw: function (tm) {
+      clear(0.30);
+      var L = small ? 4 : 5;
+      var pasada = ((tm * 0.00011) % 1.3) - 0.15;
+      materia(function (i, u, o) {
+        var per = NUB.length / L;
+        var l = Math.min(L - 1, (i / per) | 0);
+        var j = (i - l * per) / per;
+        var ly = H * (0.18 + (l / (L - 1)) * 0.64);
+        /* Las roturas: puntos concretos donde el servicio se corta. */
+        var r1 = sd(l, 51), r2 = sd(l, 52);
+        var roto = (Math.abs(j - r1) < 0.055) || (Math.abs(j - r2) < 0.045);
+        var arreglado = j < pasada;                    // la pasada ya cerró aquí
+        o.x = W * (0.05 + j * 0.90);
+        o.y = ly + (roto && !arreglado ? (sd(i, 53) - 0.5) * 26 : 0);
+        o.a = roto && !arreglado ? 0.22 : (arreglado ? 0.66 : 0.34);
+        o.c = roto && !arreglado ? CI.rosa : (arreglado ? CI.verde : CI.acero);
+        o.g = (roto && !arreglado) ? -1 : 400 + l;
+      }, tm);
+      pinta(0.13);
+      /* El frente de la pasada, para que se vea reparar. */
+      if (pasada > 0 && pasada < 1) {
+        ctx.globalCompositeOperation = 'lighter';
+        var g = ctx.createLinearGradient(W * (0.05 + pasada * 0.90) - 30, 0,
+                                         W * (0.05 + pasada * 0.90), 0);
+        g.addColorStop(0, rgba(C.verde, 0)); g.addColorStop(1, rgba(C.verde, 0.22));
+        ctx.fillStyle = g;
+        ctx.fillRect(W * (0.05 + pasada * 0.90) - 30, 0, 32, H);
+        ctx.globalCompositeOperation = 'source-over';
       }
-    };
-  })();
+    }
+  };
+
+  /* ADMINISTRACIÓN — "El archivo". Lo que llega cae, encuentra su casilla
+     indexada y queda sellado. Orden y permanencia, no actividad. */
+  INSTR.administracion = {
+    build: function () { nube(small ? 200 : 420); },
+    draw: function (tm) {
+      clear(0.30);
+      var cols = small ? 4 : 7, rows = 5, S = cols * rows;
+      var gw = W * 0.84, gh = H * 0.64, ox = W * 0.08, oy = H * 0.18;
+      var cw = gw / cols, ch = gh / rows;
+      materia(function (i, u, o) {
+        var k = i % S;
+        var c = k % cols, r = (k / cols) | 0;
+        var tx = ox + (c + 0.5) * cw, ty = oy + (r + 0.5) * ch;
+        /* Cada casilla se archiva por turno y ya no se mueve más. */
+        var turno = ((tm * 0.00008) % 1) * S;
+        var arch = clamp((turno - k) / 2.2);
+        var caida = ease(arch);
+        o.x = tx + ((i / S) | 0) % 3 * 5 - 5;
+        o.y = lerp(oy - H * 0.22, ty, caida) + (((i / S) | 0) % 3) * 4 - 4;
+        o.a = 0.10 + 0.56 * caida;
+        o.c = arch >= 1 ? CI.lav : CI.acero;
+        o.g = -1;
+      }, tm);
+      pinta(0);
+      /* Las casillas del archivo: la estructura que da el orden. */
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = rgba(ACERO, 0.10); ctx.lineWidth = 1;
+      for (var c2 = 0; c2 <= cols; c2++) {
+        ctx.beginPath(); ctx.moveTo(ox + c2 * cw, oy); ctx.lineTo(ox + c2 * cw, oy + gh); ctx.stroke();
+      }
+      for (var r2 = 0; r2 <= rows; r2++) {
+        ctx.beginPath(); ctx.moveTo(ox, oy + r2 * ch); ctx.lineTo(ox + gw, oy + r2 * ch); ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+  };
 
   /* DIRECCIÓN — "La lectura del conjunto". Todo el sistema en miniatura y un
      retículo que se posa sobre una parte y la lee. Ver el todo y decidir. */
-  INSTR.direccion = (function () {
-    var cells = [], focus = 0, hold = 0;
-    return {
-      build: function () {
-        cells.length = 0;
-        var cols = small ? 3 : 6, rows = small ? 4 : 3;
-        var gw = W * 0.78, gh = H * 0.56, ox = (W - gw) / 2, oy = H * 0.24;
-        for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
-          cells.push({ x: ox + (c + 0.5) * (gw / cols), y: oy + (r + 0.5) * (gh / rows),
-                       w: gw / cols * 0.82, h: gh / rows * 0.72,
-                       hue: [C.cian, C.rosa, C.verde, C.ambar, C.azul, C.turq][(r * cols + c) % 6],
-                       k: sd(r * cols + c, 3) });
-        }
-        focus = 0; hold = 0;
-      },
-      draw: function (tm) {
-        clear(0.30);
-        hold++;
-        if (hold > 150) { hold = 0; focus = (focus + 1) % Math.max(1, cells.length); }
-        for (var i = 0; i < cells.length; i++) {
-          var c = cells[i], on = i === focus;
-          ctx.strokeStyle = rgba(c.hue, on ? 0.50 : 0.20); ctx.lineWidth = 1;
-          ctx.strokeRect(c.x - c.w / 2, c.y - c.h / 2, c.w, c.h);
-          // Cada parte muestra su propia actividad en pequeño.
-          var bars = 5;
-          for (var b = 0; b < bars; b++) {
-            var v = 0.2 + 0.8 * Math.abs(Math.sin(tm * 0.0008 + i * 1.3 + b));
-            var bh = (c.h - 12) * v * 0.5;
-            ctx.fillStyle = rgba(c.hue, on ? 0.48 : 0.22);
-            ctx.fillRect(c.x - c.w / 2 + 7 + b * ((c.w - 14) / bars),
-                         c.y + c.h / 2 - 6 - bh, Math.max(2, (c.w - 14) / bars - 3), bh);
-          }
-        }
-        // El retículo: mirar es elegir dónde mirar.
-        var f = cells[focus]; if (!f) return;
-        var e = ease(Math.min(1, hold / 24));
-        ctx.strokeStyle = rgba([210, 232, 255], 0.42 * e); ctx.lineWidth = 1;
-        var R = 14;
-        ctx.beginPath();
-        ctx.moveTo(f.x - f.w / 2 - 6, f.y - f.h / 2 - 6 + R); ctx.lineTo(f.x - f.w / 2 - 6, f.y - f.h / 2 - 6); ctx.lineTo(f.x - f.w / 2 - 6 + R, f.y - f.h / 2 - 6);
-        ctx.moveTo(f.x + f.w / 2 + 6 - R, f.y - f.h / 2 - 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y - f.h / 2 - 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y - f.h / 2 - 6 + R);
-        ctx.moveTo(f.x - f.w / 2 - 6, f.y + f.h / 2 + 6 - R); ctx.lineTo(f.x - f.w / 2 - 6, f.y + f.h / 2 + 6); ctx.lineTo(f.x - f.w / 2 - 6 + R, f.y + f.h / 2 + 6);
-        ctx.moveTo(f.x + f.w / 2 + 6 - R, f.y + f.h / 2 + 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y + f.h / 2 + 6); ctx.lineTo(f.x + f.w / 2 + 6, f.y + f.h / 2 + 6 - R);
-        ctx.stroke();
-      }
-    };
-  })();
+  INSTR.direccion = {
+    build: function () { nube(small ? 220 : 480); },
+    draw: function (tm) {
+      clear(0.30);
+      var cols = small ? 2 : 4, rows = small ? 3 : 3, S = cols * rows;
+      var gw = W * 0.86, gh = H * 0.68, ox = W * 0.07, oy = H * 0.16;
+      var pw = gw / cols, ph = gh / rows;
+      var foco = Math.floor(((tm * 0.00013) % 1) * S);
+      materia(function (i, u, o) {
+        var k = i % S;
+        var c = k % cols, r = (k / cols) | 0;
+        var px2 = ox + c * pw, py2 = oy + r * ph;
+        var j = ((i / S) | 0) / Math.max(1, (NUB.length / S));
+        /* Cada panel tiene su propia actividad: una lectura, no un adorno. */
+        var v = 0.5 + 0.5 * Math.sin(j * 9 + k * 2 + tm * 0.0006);
+        o.x = px2 + pw * (0.12 + j * 0.76);
+        o.y = py2 + ph * (0.74 - v * 0.48);
+        var mira = (k === foco);
+        o.a = mira ? 0.86 : 0.20;
+        o.c = mira ? CI.cian : CI.acero;
+        o.g = 500 + k;
+      }, tm);
+      pinta(0.10);
+      /* El retículo: se posa sobre una parte cada vez. */
+      ctx.globalCompositeOperation = 'lighter';
+      var fc = foco % cols, fr = (foco / cols) | 0;
+      var fx2 = ox + fc * pw, fy2 = oy + fr * ph;
+      ctx.strokeStyle = rgba(C.cian, 0.42); ctx.lineWidth = 1.2;
+      var m = 10;
+      [[0,0,1,0],[0,0,0,1],[1,0,-1,0],[1,0,0,1],
+       [0,1,1,0],[0,1,0,-1],[1,1,-1,0],[1,1,0,-1]].forEach(function (q) {
+        var X = fx2 + q[0] * pw, Y = fy2 + q[1] * ph;
+        ctx.beginPath(); ctx.moveTo(X, Y); ctx.lineTo(X + q[2] * m, Y + q[3] * m); ctx.stroke();
+      });
+      ctx.globalCompositeOperation = 'source-over';
+    }
+  };
 
   /* ------------------------------------------------------------ ARRANQUE */
   inst = INSTR[NAME];
@@ -1405,11 +1324,14 @@
 
   measure(); readScroll(); Pv = P;
 
+  /* Movimiento reducido: una sola imagen, y tomada en un instante que
+     REPRESENTE al instrumento. Dibujarla en el instante cero dejaba en
+     blanco a los que tienen un ciclo (el ensamblaje, el archivo, la
+     reparación): todavía no había ocurrido nada que enseñar. */
   function still() {
     Pv = P;
-    for (var i = 0; i < 6; i++) {
-      ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(i * 260); ctx.restore();
-    }
+    ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(6000); ctx.restore();
+    ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(6120); ctx.restore();
   }
 
   var running = false, visible = true;

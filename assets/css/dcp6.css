@@ -334,7 +334,8 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
 body.v6 .v6-river{ position:relative; }
 body.v6 .v6-river::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-10% -6%;
-  background:radial-gradient(80% 76% at 42% 50%,
-    rgba(5,7,14,.96), rgba(5,7,14,.88) 48%, rgba(5,7,14,.44) 74%, rgba(5,7,14,0) 92%);
+  inset:-22% -14%;
+  background:radial-gradient(96% 92% at 44% 50%,
+    rgba(5,7,14,.99), rgba(5,7,14,.97) 42%, rgba(5,7,14,.86) 64%,
+    rgba(5,7,14,.44) 82%, rgba(5,7,14,0) 97%);
 }
