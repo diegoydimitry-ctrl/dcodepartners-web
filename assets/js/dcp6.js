@@ -78,7 +78,7 @@
   var ctx = canvas.getContext('2d', { alpha: false });
 
   var W = 0, H = 0, dpr = 1, narrow = false, small = false;
-  var N = 0, PT = [], ORD = [], SPR = [], MEM = [], VIG = [];
+  var N = 0, PT = [], ORD = [], SPR = [];
 
   /* Un destello por color Y POR ESTRATO. El lejano es ancho y sin núcleo —
      así es como se ve algo desenfocado —; el cercano tiene núcleo duro. */
@@ -147,348 +147,460 @@
     /* De lejos a cerca: lo cercano tapa a lo lejano, no al revés. */
     ORD.sort(function (a, b) { return PT[a].z - PT[b].z; });
 
-    /* La celosía del estado 4, en coordenadas normalizadas 0..1. */
-    MEM = []; VIG = [];
-    var bays = narrow ? 3 : 4, lv = 3;
-    var x0 = 0.06, x1 = 0.94, yb = 0.94, yt = 0.10;
-    var bw = (x1 - x0) / bays, lh = (yb - yt) / lv;
-    var c, l;
-    MEM.push({ ax: x0, ay: yb, bx: x1, by: yb, t: -0.12, k: 'base' });   // el suelo
-    for (c = 0; c <= bays; c++) {                                        // pilares
-      MEM.push({ ax: x0 + c * bw, ay: yb, bx: x0 + c * bw, by: yt, t: 0.04, k: 'pil' });
-    }
-    for (l = 1; l <= lv; l++) {                                          // vigas
-      VIG.push(MEM.length);
-      MEM.push({ ax: x0, ay: yb - l * lh, bx: x1, by: yb - l * lh, t: 0.14 + (l / lv) * 0.46, k: 'vig' });
-    }
-    for (l = 0; l < lv; l++) {                                           // diagonales
-      for (c = 0; c < bays; c++) {
-        var d0 = yb - l * lh, d1 = yb - (l + 1) * lh;
-        var f = (l + c) % 2 === 0;
-        MEM.push({ ax: x0 + c * bw, ay: f ? d0 : d1,
-                   bx: x0 + (c + 1) * bw, by: f ? d1 : d0,
-                   t: 0.20 + (l / lv) * 0.46, k: 'dia' });
-      }
-    }
+    figuras();
     sprites();
   }
 
   /* ------------------------------------------------------- COMPOSICIÓN */
-  /* Cada estado ocupa el espacio a su manera. Esto es lo que rompe la
-     monotonía de "texto a un lado, animación al otro". */
+  /* Cada estado ocupa el espacio a su manera: monumental, íntimo, ancho,
+     envolvente. La escala forma parte del significado. */
   var MARCO = [
-    { x: 0.50, y: 0.48, w: 1.00, h: 1.00, d: 1.00 },  // 0 a pantalla completa
-    { x: 0.56, y: 0.50, w: 1.00, h: 0.94, d: 0.88 },  // 1 disperso y ancho
-    { x: 0.775, y: 0.44, w: 0.34, h: 0.40, d: 0.62 }, // 2 íntimo y preciso
-    { x: 0.735, y: 0.50, w: 0.46, h: 0.60, d: 0.80 }, // 3 medio
-    { x: 0.635, y: 0.52, w: 0.70, h: 1.02, d: 1.00 }, // 4 MONUMENTAL
-    { x: 0.700, y: 0.50, w: 0.34, h: 0.52, d: 0.78 },  // 5 circuito compacto
-    { x: 0.895, y: 0.50, w: 0.15, h: 0.84, d: 0.66 }, // 6 columna estrecha
-    { x: 0.760, y: 0.47, w: 0.38, h: 0.56, d: 0.86 }, // 7 instrumento denso
-    { x: 0.500, y: 0.47, w: 0.86, h: 0.84, d: 1.00 }  // 8 envolvente
+    { x: 0.795, y: 0.50, w: 0.34, h: 0.94, d: 1.00 },  // 0 FARO      vertical
+    { x: 0.600, y: 0.50, w: 0.78, h: 0.86, d: 0.80 },  // 1 MARAÑA    ancha
+    { x: 0.770, y: 0.46, w: 0.30, h: 0.62, d: 0.72 },  // 2 LUPA      íntima
+    { x: 0.730, y: 0.52, w: 0.46, h: 0.52, d: 0.84 },  // 3 PUENTE    horizontal
+    { x: 0.640, y: 0.505, w: 0.64, h: 0.94, d: 1.00 }, // 4 GRÚA      MONUMENTAL
+    { x: 0.720, y: 0.50, w: 0.34, h: 0.56, d: 0.82 },  // 5 ENGRANAJES
+    { x: 0.830, y: 0.545, w: 0.36, h: 0.76, d: 0.86 }, // 6 ÁRBOL
+    { x: 0.775, y: 0.185, w: 0.30, h: 0.32, d: 0.84 }, // 7 BALANZA  (arriba)
+    { x: 0.500, y: 0.58, w: 1.00, h: 0.72, d: 1.00 }   // 8 CIUDAD    envolvente
   ];
-  /* Cuánta de la materia participa; el resto queda como bruma de fondo. Así
-     la densidad cambia de una sección a otra en vez de ser siempre la misma. */
-  var USO = [1.00, 0.90, 0.46, 0.68, 1.00, 0.55, 0.50, 0.62, 1.00];
+  /* Cuánta materia participa en la figura; el resto es atmósfera de fondo. */
+  var USO = [0.88, 0.86, 0.72, 0.80, 1.00, 0.74, 0.82, 0.70, 1.00];
+
+  /* ---------------------------------------------------------- FIGURAS */
+  /* LA REGLA: las partículas forman SILUETAS RECONOCIBLES, no geometría.
+     Cada figura es un conjunto de trazos reales; se muestrea su contorno a
+     una tabla y cada partícula ocupa un punto de ese contorno. Como el
+     enlace une partículas consecutivas del mismo trazo, la silueta la
+     dibujan ellas: un faro es un faro, una grúa es una grúa.
+
+     Nueve objetos, uno por estado, elegidos para que en dos segundos y sin
+     leer una palabra se entienda de qué se está hablando:
+
+       FARO        miramos · MARAÑA     el lío de partida
+       LUPA        encontramos · PUENTE   decidimos qué va con qué
+       GRÚA        construimos · ENGRANAJES  funciona solo
+       ÁRBOL       crece · BALANZA      control · CIUDAD  el resultado   */
+
+  var TAU = 6.2832;
+  function pt(x, y) { return [x, y]; }
+  function arco(cx, cy, r, a0, a1, n, ar) {
+    var p = [];
+    for (var i = 0; i <= n; i++) {
+      var a = a0 + (a1 - a0) * (i / n);
+      p.push([cx + Math.cos(a) * r * (ar || 1), cy + Math.sin(a) * r]);
+    }
+    return p;
+  }
+  function caja(x0, y0, x1, y1) {
+    return [[x0, y0], [x1, y0], [x1, y1], [x0, y1], [x0, y0]];
+  }
+
+  /* Muestreo del contorno a una tabla: buscar el punto es entonces un
+     acceso a un índice, no un recorrido. Con 1250 partículas y dos figuras
+     activas por fotograma, esa diferencia es la que permite 60 fps. */
+  function prep(trazos) {
+    var M = 1600;
+    var LX = new Float32Array(M), LY = new Float32Array(M), LG = new Int16Array(M);
+    var segs = [], total = 0, si, k;
+    for (si = 0; si < trazos.length; si++) {
+      var q = trazos[si];
+      for (k = 1; k < q.length; k++) {
+        var dx = q[k][0] - q[k - 1][0], dy = q[k][1] - q[k - 1][1];
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d <= 0) continue;
+        segs.push({ a: q[k - 1], b: q[k], d: d, acc: total, g: si });
+        total += d;
+      }
+    }
+    if (!total) total = 1;
+    var j = 0;
+    for (var m = 0; m < M; m++) {
+      var dist = (m / M) * total;
+      while (j < segs.length - 1 && dist > segs[j].acc + segs[j].d) j++;
+      var sg = segs[j];
+      var f = sg.d > 0 ? (dist - sg.acc) / sg.d : 0;
+      f = f < 0 ? 0 : f > 1 ? 1 : f;
+      LX[m] = sg.a[0] + (sg.b[0] - sg.a[0]) * f;
+      LY[m] = sg.a[1] + (sg.b[1] - sg.a[1]) * f;
+      LG[m] = sg.g;
+    }
+    return { X: LX, Y: LY, G: LG, M: M, n: trazos.length };
+  }
+  function enFig(fig, t, o, gb) {
+    var m = (t * fig.M) | 0;
+    if (m < 0) m = 0; else if (m >= fig.M) m = fig.M - 1;
+    o.nx = fig.X[m]; o.ny = fig.Y[m]; o.g = gb + fig.G[m];
+  }
+
+  var FG = {}, CIU_ALT = [], CIU_BW = 0.1;
+  function figuras() {
+    var i, k, t;
+
+    /* FARO — miramos cómo trabajas de verdad. Torre, linterna, tejado y la
+       roca sobre la que se levanta. El haz se dibuja aparte, porque barre. */
+    var faro = [];
+    faro.push([[0.20, 0.90], [0.335, 0.90], [0.425, 0.33]]);          // fuste izq.
+    faro.push([[0.80, 0.90], [0.665, 0.90], [0.575, 0.33]]);          // fuste der.
+    faro.push([[0.405, 0.33], [0.595, 0.33]]);                        // galería
+    faro.push(caja(0.435, 0.32, 0.565, 0.21));                        // linterna
+    faro.push([[0.395, 0.21], [0.50, 0.10], [0.605, 0.21]]);          // tejado
+    faro.push([[0.50, 0.10], [0.50, 0.045]]);                         // remate
+    faro.push([[0.365, 0.57], [0.635, 0.57]]);                        // anillos
+    faro.push([[0.31, 0.75], [0.69, 0.75]]);
+    faro.push([[0.06, 0.955], [0.28, 0.90], [0.50, 0.925], [0.72, 0.90], [0.96, 0.955]]);  // roca
+    FG.faro = prep(faro);
+
+    /* MARAÑA — casi siempre empieza igual: hilos que se enredan, se cruzan
+       y no llevan a ninguna parte. Es un nudo, y se reconoce como un nudo. */
+    var mar = [];
+    for (k = 0; k < 7; k++) {
+      var q = [];
+      var ax = 0.10 + sd(k, 41) * 0.80, ay = 0.14 + sd(k, 42) * 0.72;
+      for (i = 0; i <= 26; i++) {
+        t = i / 26;
+        q.push([ax + Math.sin(t * 7.4 + k * 2.1) * 0.30 + t * 0.10 - 0.05,
+                ay + Math.cos(t * 5.2 + k * 1.7) * 0.26 + Math.sin(t * 11 + k) * 0.05]);
+      }
+      mar.push(q);
+    }
+    FG.marana = prep(mar);
+
+    /* LUPA — el sistema encuentra lo que se repite. Lente, aro y mango. */
+    var ar2 = (MARCO[2].h * H) / (MARCO[2].w * W);
+    var lupa = [];
+    lupa.push(arco(0.40, 0.30, 0.215, 0, TAU, 44, ar2));         // aro exterior
+    lupa.push(arco(0.40, 0.30, 0.185, 0, TAU, 38, ar2));         // aro interior
+    /* El mango: sin él una lupa es un círculo y no significa nada. Va grueso
+       —tres trazos paralelos— porque tiene que verse a la primera. */
+    var ha = 0.83;
+    var hx = 0.40 + Math.cos(ha) * 0.20 * ar2, hy = 0.30 + Math.sin(ha) * 0.20;
+    var dx2 = Math.cos(ha) * 0.40 * ar2, dy2 = Math.sin(ha) * 0.40;
+    for (var q = -1; q <= 1; q++) {
+      var ox2 = -Math.sin(ha) * q * 0.020 * ar2, oy2 = Math.cos(ha) * q * 0.020;
+      lupa.push([[hx + ox2, hy + oy2], [hx + dx2 + ox2, hy + dy2 + oy2]]);
+    }
+    lupa.push([[hx + dx2 - Math.sin(ha) * 0.022 * ar2, hy + dy2 + Math.cos(ha) * 0.022],
+               [hx + dx2 + Math.sin(ha) * 0.022 * ar2, hy + dy2 - Math.cos(ha) * 0.022]]);
+    FG.lupa = prep(lupa);
+
+    /* PUENTE — decidimos qué va con qué: dos orillas y lo que las une. */
+    var pu = [];
+    pu.push([[0.00, 0.34], [1.00, 0.34]]);                 // tablero
+    pu.push([[0.00, 0.40], [1.00, 0.40]]);
+    for (k = 0; k < 3; k++) {
+      var cx2 = 0.20 + k * 0.30;
+      pu.push(arco(cx2, 0.40, 0.145, 0, 3.1416, 22, 1.0));   // el arco sostiene
+      pu.push([[cx2 - 0.145, 0.40], [cx2 - 0.145, 0.86]]);
+      pu.push([[cx2 + 0.145, 0.40], [cx2 + 0.145, 0.86]]);
+    }
+    pu.push([[0.00, 0.86], [1.00, 0.86]]);                 // suelo
+    FG.puente = prep(pu);
+
+    /* GRÚA — se levanta la estructura. Torre arriostrada, pluma, contrapluma,
+       tirantes, cable y gancho. Y el edificio que va subiendo debajo. */
+    var gr = [];
+    gr.push([[0.30, 0.98], [0.30, 0.16]]);                 // torre
+    gr.push([[0.40, 0.98], [0.40, 0.16]]);
+    for (k = 0; k < 9; k++) {                              // celosía de la torre
+      var y0 = 0.98 - k * 0.091, y1 = 0.98 - (k + 1) * 0.091;
+      gr.push(k % 2 ? [[0.30, y0], [0.40, y1]] : [[0.40, y0], [0.30, y1]]);
+      gr.push([[0.30, y1], [0.40, y1]]);
+    }
+    gr.push([[0.06, 0.16], [0.96, 0.16]]);                 // pluma
+    gr.push([[0.06, 0.205], [0.96, 0.205]]);
+    gr.push([[0.35, 0.16], [0.35, 0.04], [0.35, 0.16]]);   // mástil
+    gr.push([[0.35, 0.04], [0.94, 0.16]]);                 // tirantes
+    gr.push([[0.35, 0.04], [0.08, 0.16]]);
+    gr.push([[0.74, 0.205], [0.74, 0.56]]);                // cable
+    gr.push(caja(0.68, 0.56, 0.80, 0.62));                 // carga colgando
+    gr.push([[0.00, 0.98], [1.00, 0.98]]);                 // suelo
+    FG.grua = prep(gr);
+
+    /* La obra: la estructura que la grúa está levantando. Aparte, porque
+       crece con el avance. */
+    var ob = [];
+    for (k = 0; k < 4; k++) {
+      var oy = 0.92 - k * 0.115;
+      ob.push([[0.52, oy], [0.96, oy]]);
+    }
+    for (k = 0; k < 4; k++) {
+      var ox = 0.52 + k * 0.1466;
+      ob.push([[ox, 0.92], [ox, 0.575]]);
+    }
+    FG.obra = prep(ob);
+
+    /* ENGRANAJES — el trabajo circula solo. Dos ruedas dentadas engranadas.
+       Se generan al vuelo porque giran, pero el perfil es de engranaje. */
+
+    /* ÁRBOL — piezas que ya existen, y las que falten. Tronco y ramas; una
+       de ellas todavía está creciendo. */
+    /* El marco es más alto que ancho, así que la componente horizontal de
+       cada rama se corrige: sin esto el árbol sale aplastado y parece un
+       palo. Cuatro niveles de bifurcación: una copa, no dos ramitas. */
+    var ar6 = (MARCO[6].h * H) / (MARCO[6].w * W);
+    var arb = [];
+    arb.push([[0.435, 0.99], [0.462, 0.62]]);              // tronco
+    arb.push([[0.565, 0.99], [0.538, 0.62]]);
+    arb.push([[0.30, 0.99], [0.70, 0.99]]);                // suelo
+    function rama(x, y, an, len, prof, out) {
+      var x2 = x + Math.cos(an) * len * ar6, y2 = y + Math.sin(an) * len;
+      out.push([[x, y], [x2, y2]]);
+      if (prof <= 0) return;
+      rama(x2, y2, an - 0.46 - prof * 0.04, len * 0.72, prof - 1, out);
+      rama(x2, y2, an + 0.44 + prof * 0.04, len * 0.70, prof - 1, out);
+    }
+    rama(0.50, 0.62, -1.5708, 0.165, 5, arb);
+    FG.arbol = prep(arb);
+
+    /* BALANZA — un sistema financiero completo: lo que entra, lo que sale, y
+       el fiel buscando su punto. */
+    var ar7 = (MARCO[7].h * H) / (MARCO[7].w * W);
+    var bal = [];
+    bal.push([[0.50, 0.92], [0.50, 0.22]]);                // columna
+    bal.push([[0.30, 0.96], [0.70, 0.96]]);                // base
+    bal.push([[0.38, 0.92], [0.62, 0.92]]);
+    bal.push(arco(0.50, 0.19, 0.045, 0, TAU, 14, ar7));    // el fiel
+    FG.balanza = prep(bal);
+
+    /* CIUDAD — el resultado: todo lo anterior, construido y funcionando. */
+    var ciu = [];
+    var alturas = narrow ? [0.34, 0.52, 0.40, 0.62, 0.46, 0.58, 0.36]
+                         : [0.30, 0.46, 0.36, 0.58, 0.42, 0.66, 0.38, 0.54, 0.32, 0.48, 0.40];
+    var nb = alturas.length, bw2 = 0.92 / nb;
+    CIU_ALT = alturas; CIU_BW = bw2;
+    for (k = 0; k < nb; k++) {
+      var bx = 0.04 + k * bw2, by = 0.98 - alturas[k];
+      ciu.push([[bx + 0.008, 0.98], [bx + 0.008, by], [bx + bw2 - 0.008, by], [bx + bw2 - 0.008, 0.98]]);
+      if (k % 3 === 1) ciu.push([[bx + bw2 * 0.5, by], [bx + bw2 * 0.5, by - 0.07]]);  // antena
+    }
+    ciu.push([[0.00, 0.98], [1.00, 0.98]]);
+    FG.ciudad = prep(ciu);
+  }
 
   /* ------------------------------------------------------- FORMACIONES */
-  /* Todas escriben en o.nx, o.ny (0..1 dentro del marco), o.a, o.g, o.c. */
-  var TAU = 6.2832;
   var o1 = { nx: 0, ny: 0, a: 1, g: -1, c: 6 };
 
-  /* LA PRUEBA DE LOS DOS SEGUNDOS. Cada formación tiene que entenderse
-     mirándola dos segundos, sin leer el texto. Por eso ninguna es geometría
-     abstracta: todas se apoyan en un arquetipo que cualquiera reconoce —un
-     embudo, una celosía, un circuito, un archivo con un hueco, un anillo de
-     componentes—. Si una forma necesita explicación técnica, está mal. */
-
-  /* 0 · ANÁLISIS — una máquina de analizar, de arriba abajo: cae un
-     revoltijo → se aprieta en una GARGANTA → y se posa abajo como barras de
-     distinta altura, un resultado ya clasificado. Va en vertical, en la banda
-     libre de la derecha: el titular ocupa la izquierda y la máquina tiene que
-     verse entera, no medio tapada. El resto del encuadre queda como
-     atmósfera profunda, que es lo que hace grande a la portada. */
+  /* 0 · FARO — «Miramos cómo trabajas de verdad». Un faro sobre la roca y su
+     haz barriendo la oscuridad. Observación: se entiende sin leer nada. */
   function F0(i, u, g, G, o, tm, ins) {
-    var X0 = 0.63, X1 = 0.99, AN = X1 - X0;           // la banda de la máquina
-    var maq = sd(i, 10) > 0.34;                       // el resto es atmósfera
-
-    if (!maq) {
-      var hx = sd(i, 16), hy = sd(i, 17);
-      o.nx = hx * 0.62 + Math.sin(tm * 0.00012 + i) * 0.006;
-      o.ny = hy + Math.cos(tm * 0.00010 + i) * 0.008;
-      o.a = 0.10 + 0.14 * sd(i, 18);
-      o.c = 6; o.g = -1;
+    /* El haz barre la oscuridad. Es lo que convierte una torre en un faro y
+       lo que dice, sin una palabra, que aquí se está MIRANDO. */
+    var haz = (i % 5) < 2;
+    var barr = Math.sin(tm * 0.00011) * 0.62;
+    if (haz) {
+      var k = ((i / 5) | 0);
+      var j = (k / Math.max(1, N / 5)) % 1;                 // avance por el haz
+      var w2 = ((k * 0.618) % 1) - 0.5;                      // ancho del cono
+      var an = barr + w2 * 0.34;
+      var lar = 0.22 + j * 4.6;                              // sale del encuadre
+      o.nx = 0.50 - Math.sin(an) * lar;
+      o.ny = 0.265 - Math.cos(an) * lar * 0.055 - j * 0.02;
+      /* Se abre y se apaga con la distancia, como la luz de verdad. */
+      o.a = 0.62 * (1 - j * 0.86) * (1 - j * 0.86) * (1 - Math.abs(w2) * 1.2);
+      o.c = 0; o.g = -1;
       return;
     }
-
-    var col   = Math.floor(sd(i, 12) * 8);            // su columna de salida
-    var alto  = 0.20 + sd(col + 1, 13) * 0.52;        // cada una mide distinto
-    var t = (sd(i, 14) + tm * 0.00009) % 1;
-    var y = -0.08 + t * 1.20;
-
-    var xEnt = X0 + sd(i, 11) * AN;                   // entra desordenado
-    var xCol = X0 + (col + 0.5) * (AN / 8);           // sale en su columna
-    var kG = cl((y - 0.16) / 0.24);                   // la garganta aprieta
-    var kS = cl((y - 0.46) / 0.08);                   // y suelta ya clasificado
-    var x = lerp(lerp(xEnt, X0 + AN * 0.5, kG * kG), xCol, kS);
-
-    /* La barra termina donde le toca: por eso es un resultado y no una raya. */
-    var fin = 0.54 + alto * 0.44;
-    var pasado = cl((y - fin) / 0.05);
-    o.nx = x;
-    o.ny = Math.min(y, fin + 0.010);
-    o.a = (0.26 + 0.34 * kG + 0.50 * kS) * (1 - pasado);
-    o.c = kS > 0.6 ? (col < 3 ? 0 : 1) : 6;
-    o.g = (kS > 0.75 && pasado < 0.5) ? 100 + col : (y < 0.16 ? 60 + (col % 5) : -1);
-    /* La garganta: el punto más brillante del recorrido, donde se decide. */
-    var dg = y - 0.46;
-    o.a += 0.95 * Math.exp(-dg * dg * 1100) * (1 - Math.abs(x - (X0 + AN * 0.5)) * 5.0);
+    enFig(FG.faro, u, o, 100);
+    var lat = 0.5 + 0.5 * Math.sin(tm * 0.0016);
+    var esLuz = o.ny < 0.33 && o.ny > 0.20;
+    o.a = 0.44 + (esLuz ? 0.50 * lat : 0.12 * Math.sin(u * 11 + tm * 0.0006));
+    o.c = esLuz ? 7 : 6;
   }
 
-  /* 1 · SIN SISTEMA — actividad real, pero sin sistema. Se ve lo que dice el
-     texto: rutas que se cruzan mal, TRES CALCADAS una al lado de otra —lo
-     mismo hecho en tres sitios— y trayectos que se paran a medio camino y
-     amontonan ahí lo que llevaban. */
+  /* 1 · MARAÑA — «Casi siempre empieza igual». Un nudo de hilos que se
+     cruzan, se repiten y no llegan a ninguna parte. */
   function F1(i, u, g, G, o, tm, ins) {
-    var dup = (g % 9) < 3;                            // el trío calcado
-    var src = dup ? 2 : g;
-    var off = dup ? ((g % 9) - 1) * 0.055 : 0;        // separadas y paralelas
-    var sx = 0.04 + sd(src, 21) * 0.90, sy = 0.07 + sd(src, 22) * 0.86;
-    var ex = 0.04 + sd(src, 23) * 0.90, ey = 0.07 + sd(src, 24) * 0.86;
-    var cx = (sx + ex) / 2 + Math.cos(sd(src, 25) * TAU) * 0.32;
-    var cy = (sy + ey) / 2 + Math.sin(sd(src, 26) * TAU) * 0.32;
-    var muere = (src % 4) === 1;
-    /* El que muere no llega: se para y lo que llevaba se apila en el corte. */
-    var corte = 0.46 + sd(src, 27) * 0.16;
-    var uu = muere ? Math.min(u, corte + (u - corte) * 0.04) : u;
-    var m = 1 - uu;
-    o.nx = m * m * sx + 2 * m * uu * cx + uu * uu * ex + off;
-    o.ny = m * m * sy + 2 * m * uu * cy + uu * uu * ey + off * 0.35;
-    if (muere && u > corte) {
-      o.a = 0.30 + 0.34 * Math.sin(tm * 0.0016 + i);  // parpadea, atascado
-      o.c = 4;                                        // el rosa: lo que falla
-      o.g = -1;
-    } else {
-      o.a = 0.34 + 0.22 * Math.sin(u * 9 + tm * 0.0011 + g);
-      o.c = dup ? 3 : 6;
-      o.g = g;
-    }
+    enFig(FG.marana, u, o, 200);
+    o.nx += Math.sin(tm * 0.0004 + i) * 0.004;
+    o.ny += Math.cos(tm * 0.0004 + i) * 0.004;
+    /* Uno de los hilos está atascado y parpadea: no llega. */
+    var atasco = (o.g % 7) === 3;
+    o.a = atasco ? 0.20 + 0.26 * Math.abs(Math.sin(tm * 0.0016 + i)) : 0.34;
+    o.c = atasco ? 4 : 6;
   }
 
-  /* 2 · DETECCIÓN — el MISMO motivo, exacto, en tres puntos del campo. Se
-     acota entre marcas y se enciende; todo lo demás se apaga de golpe. */
+  /* 2 · LUPA — «El sistema encuentra lo que se repite». Una lupa, y dentro
+     el patrón hallado, encendido. Fuera, lo que no importa se apaga. */
   function F2(i, u, g, G, o, tm, ins) {
-    var R = 3;
-    var k = g % (R + 2);
-    var hallado = ease((ins - 0.14) / 0.30);
-    if (k < R) {
-      var sy2 = 0.15 + k * 0.33;
-      var mo = Math.sin(u * TAU * 1.5), mv = Math.sin(u * TAU * 0.5);
-      o.nx = 0.11 + u * 0.78;
-      o.ny = sy2 + mo * 0.082 + mv * 0.028;
-      o.a = 0.14 + 0.86 * hallado;
+    var hallado = ease((ins - 0.12) / 0.34);
+    var dentro = (i % 7) < 2;
+    if (dentro) {
+      /* El patrón encontrado: el mismo motivo, tres veces, dentro del cristal. */
+      var k = ((i / 7) | 0) % 3;
+      var j = (((i / 7) | 0) / Math.max(1, N / 7)) % 1;
+      var ar2 = (MARCO[2].h * H) / (MARCO[2].w * W);
+      o.nx = 0.40 + (j - 0.5) * 0.25 * ar2;
+      o.ny = 0.30 + (k - 1) * 0.072 + Math.sin(j * 12.566) * 0.024;
+      o.a = 0.16 + 0.80 * hallado;
       o.c = hallado > 0.5 ? 0 : 6;
-      o.g = 200 + k;
-    } else {
-      /* Las marcas que acotan cada hallazgo: cuatro esquinas por motivo. */
-      var q = g % 4, kk = (g / 4 | 0) % R;
-      var ex2 = q < 2 ? 0.08 : 0.83, ey2 = 0.15 + kk * 0.33 + (q % 2 ? 0.09 : -0.09);
-      if (sd(i, 30) > 0.55) {
-        o.nx = ex2 + (u - 0.5) * 0.05; o.ny = ey2;
-        o.a = 0.70 * hallado; o.c = 7; o.g = -1;
+      o.g = 300 + k;
+      return;
+    }
+    enFig(FG.lupa, u, o, 320);
+    o.a = 0.30 + 0.36 * hallado;
+    o.c = 6;
+  }
+
+  /* 3 · PUENTE — «Decidimos qué va con qué». Dos orillas y lo que las une.
+     Se construye de una orilla a la otra según se avanza. */
+  function F3(i, u, g, G, o, tm, ins) {
+    var cruza = (i % 9) === 4;
+    var tendido = ease((ins - 0.04) / 0.52);
+    if (cruza && tendido > 0.92) {
+      /* Y una vez unido, algo cruza: el puente sirve para algo. */
+      var t = ((tm * 0.00030) + sd(i, 54)) % 1;
+      o.nx = t; o.ny = 0.315;
+      o.a = 0.80 * Math.sin(t * 3.1416);
+      o.c = 5; o.g = -1;
+      return;
+    }
+    enFig(FG.puente, u, o, 400);
+    /* Se tiende de izquierda a derecha: no aparece hecho. */
+    var puesto = o.nx <= tendido * 1.06;
+    o.a = puesto ? 0.44 : 0.04;
+    o.c = 6;
+    if (!puesto) o.g = -1;
+  }
+
+  /* 4 · GRÚA — «Se levanta la estructura». El momento monumental: una grúa
+     torre con su pluma, sus tirantes y su carga colgando, y debajo la obra
+     que va subiendo planta a planta. */
+  function F4(i, u, g, G, o, tm, ins) {
+    var enObra = (i % 5) < 2;
+    if (enObra) {
+      enFig(FG.obra, u, o, 500);
+      /* La obra sube de abajo arriba con el avance. */
+      var alto = 0.92 - ease(ins) * 0.40;
+      var puesto = o.ny >= alto;
+      o.a = puesto ? 0.52 : 0.03;
+      o.c = puesto ? 1 : 6;
+      if (!puesto) o.g = -1;
+      return;
+    }
+    enFig(FG.grua, u, o, 520);
+    /* La carga baja y sube: la grúa está trabajando ahora mismo. */
+    var vaiven = Math.sin(tm * 0.00045) * 0.5 + 0.5;
+    if (o.ny > 0.54 && o.ny < 0.64) { o.ny += vaiven * 0.16; o.c = 7; }
+    else if (o.nx > 0.735 && o.nx < 0.745 && o.ny > 0.20) { o.ny += 0; o.c = 6; }
+    else o.c = 6;
+    var monta = ease((ins - 0.02) / 0.34);
+    o.a = 0.16 + 0.62 * monta;
+  }
+
+  /* 5 · ENGRANAJES — «El trabajo circula». Dos ruedas dentadas engranadas:
+     una mueve a la otra y no para. Si funciona, se ve que funciona. */
+  function F5(i, u, g, G, o, tm, ins) {
+    var ar5 = (MARCO[5].h * H) / (MARCO[5].w * W);
+    var gir = tm * 0.00028;
+    var chica = (i % 5) < 2;
+    var cx = chica ? 0.665 : 0.335, cy = chica ? 0.605 : 0.375;
+    var R = chica ? 0.17 : 0.26, D = chica ? 8 : 12;
+    var sent = chica ? -1 : 1;
+    var brazo = (i % 17) === 3;
+    var j = sd(i, 58);
+    if (brazo) {
+      /* Los radios: sin ellos una rueda dentada es solo un círculo. */
+      var b = ((i / 17) | 0) % D;
+      var ab = (b / D) * TAU + gir * sent;
+      var rr = j * R * 0.82;
+      o.nx = cx + Math.cos(ab) * rr * ar5;
+      o.ny = cy + Math.sin(ab) * rr;
+      o.a = 0.26; o.c = 6; o.g = 600 + (chica ? 40 : 0) + b;
+      return;
+    }
+    /* El perfil dentado. */
+    var n = D * 4;
+    var m = Math.floor(j * n), f = j * n - m;
+    var a0 = ((m + f) / n) * TAU + gir * sent;
+    var dd = (m % 4 < 2) ? R : R * 0.74;
+    o.nx = cx + Math.cos(a0) * dd * ar5;
+    o.ny = cy + Math.sin(a0) * dd;
+    o.a = 0.44 + 0.24 * Math.abs(Math.sin(a0 * 3));
+    o.c = chica ? 5 : 6;
+    o.g = (chica ? 660 : 610) + (m % 4 < 2 ? 0 : 1);
+  }
+
+  /* 6 · ÁRBOL — «Piezas que ya existen. Y las que falten». Un árbol cuyas
+     ramas son las capacidades; una de ellas todavía está creciendo. */
+  function F6(i, u, g, G, o, tm, ins) {
+    enFig(FG.arbol, u, o, 700);
+    var nueva = (o.g % 11) === 6;                    // la rama que falta
+    var crece = ease((ins - 0.34) / 0.40);
+    if (nueva) {
+      /* Crece desde su nacimiento, no aparece hecha. */
+      o.nx = lerp(0.50, o.nx, crece);
+      o.ny = lerp(0.62, o.ny, crece);
+      o.a = 0.70 * crece; o.c = 5;
+      if (crece < 0.2) o.g = -1;
+      return;
+    }
+    o.a = 0.42 + 0.26 * Math.abs(Math.sin(u * 7 + o.g));
+    o.c = o.ny < 0.55 ? 0 : 6;
+  }
+
+  /* 7 · BALANZA — «Un sistema financiero completo». Los platillos se mueven
+     con lo que entra y lo que sale, y el fiel busca su punto. */
+  function F7(i, u, g, G, o, tm, ins) {
+    var ar7 = (MARCO[7].h * H) / (MARCO[7].w * W);
+    var incl = Math.sin(tm * 0.00022) * 0.055 * (1 - ease(ins) * 0.72);
+    var brazo = (i % 4) < 2;
+    if (brazo) {
+      /* El brazo y los dos platillos, que suben y bajan. */
+      var j = sd(i, 61);
+      var lado = ((i / 4) | 0) % 2;
+      if (j < 0.5) {                                  // el brazo
+        o.nx = 0.14 + (j / 0.5) * 0.72;
+        o.ny = 0.22 + (o.nx - 0.50) * incl / 0.36 * 0.36;
+        o.a = 0.46; o.c = 6; o.g = 800;
         return;
       }
-      o.nx = sd(i, 31); o.ny = sd(i, 32);
-      o.a = 0.22 * (1 - hallado * 0.90);
-      o.c = 6; o.g = -1;
-    }
-  }
-
-  /* 3 · PERTENENCIA — lo suelto sube en columnas hacia su parte, se coloca
-     dentro, y cuando las partes ya están llenas se enlazan ENTRE ELLAS: se
-     decide qué va con qué. */
-  function F3(i, u, g, G, o, tm, ins) {
-    var K = narrow ? 3 : 4;
-    var per = N / K;
-    var k = Math.min(K - 1, (i / per) | 0);
-    var j = i - k * per;
-    var cols = 6, rows = Math.ceil(per / cols);
-    var bx = 0.07 + k * (0.90 / K), bw = (0.90 / K) * 0.70;
-    var lleg = ease((ins - 0.04 - (j / per) * 0.42) / 0.28);
-    var tx = bx + ((j % cols) + 0.5) * (bw / cols);
-    var ty = 0.10 + ((((j / cols) | 0) % rows) + 0.5) * (0.66 / rows);
-
-    /* El enlace entre partes: unos pocos viajan de una parte a la vecina. */
-    var puente = (g % 23) === 7 && k < K - 1;
-    var pu = ease((ins - 0.62) / 0.30);
-    if (puente && pu > 0) {
-      var bx2 = 0.07 + (k + 1) * (0.90 / K);
-      var pt = ((tm * 0.00035) + k * 0.3) % 1;
-      o.nx = lerp(bx + bw, bx2, pt);
-      o.ny = 0.83 - Math.sin(pt * 3.1416) * 0.10;
-      o.a = 0.80 * pu; o.c = 5; o.g = -1;
+      var px2 = lado ? 0.86 : 0.14;
+      var py2 = 0.22 + (px2 - 0.50) * incl / 0.36 * 0.36;
+      var jj = (j - 0.5) / 0.5;
+      if (jj < 0.36) { o.nx = px2; o.ny = py2 + jj / 0.36 * 0.20; o.a = 0.34; }
+      else {
+        var aa = 3.1416 * ((jj - 0.36) / 0.64);
+        o.nx = px2 + Math.cos(aa) * 0.11 * ar7;
+        o.ny = py2 + 0.20 + Math.sin(aa) * 0.055;
+        o.a = 0.52;
+      }
+      o.c = lado ? 5 : 0; o.g = 810 + lado;
       return;
     }
-    /* Antes de pertenecer, sube desde abajo en columna: se ve llegar. */
-    o.nx = lerp(tx + (sd(i, 33) - 0.5) * 0.05, tx, lleg);
-    o.ny = lerp(1.10 + sd(i, 34) * 0.30, ty, lleg);
-    o.a = 0.14 + 0.54 * lleg;
-    o.c = lleg > 0.7 ? (k % 2 ? 2 : 1) : 6;
-    o.g = lleg > 0.6 ? 300 + k : -1;
+    enFig(FG.balanza, u, o, 830);
+    o.a = 0.40; o.c = 6;
   }
 
-  /* 4 · CONSTRUCCIÓN — el momento grande. Base, pilares que suben del suelo,
-     vigas que salvan la luz, diagonales que arriostran y la instalación por
-     encima. Las piezas ENTRAN desde fuera del encuadre y encajan. */
-  function F4(i, u, g, G, o, tm, ins) {
-    var tend = (g % 11) === 5;
-    if (tend && VIG.length) {
-      var vg = MEM[VIG[g % VIG.length]];
-      var lay = ease((ins - 0.62) / 0.32);
-      o.nx = lerp(vg.ax, vg.bx, u);
-      o.ny = vg.ay - 0.035 - 0.015 * lay;
-      o.a = 0.70 * lay;
-      o.c = lay > 0.5 ? 0 : 6;
-      o.g = lay > 0.2 ? 400 + (g % VIG.length) : -1;
-      return;
-    }
-    var m = MEM[g % MEM.length];
-    var sube = ease((ins - 0.06 - m.t * 0.62) / 0.24);
-    var tx = lerp(m.ax, m.bx, u), ty = lerp(m.ay, m.by, u);
-    var ex = tx + (tx - 0.5) * 1.9 + (sd(i, 41) - 0.5) * 0.5;
-    var ey = ty - 0.85 - sd(i, 42) * 0.5;
-    o.nx = lerp(ex, tx, sube);
-    o.ny = lerp(ey, ty, sube);
-    o.a = 0.10 + 0.82 * sube;
-    if (sube > 0.55 && sube < 0.98) o.a += 0.55 * Math.sin((sube - 0.55) / 0.43 * 3.1416);
-    o.c = m.k === 'base' ? 6 : (sube > 0.96 ? 1 : 7);
-    /* Solo enlaza cuando ya está casi asentada: si no, el enlace dibuja el
-       viaje y la estructura se ve sucia mientras se monta. */
-    o.g = sube > 0.62 ? 500 + (g % MEM.length) : -1;
-  }
-
-  /* 5 · AUTOMATIZACIÓN — un circuito cerrado con estaciones: lo que termina
-     en una dispara la siguiente. Puesto en marcha, vuelve al principio. */
-  function F5(i, u, g, G, o, tm, ins) {
-    var EST = 5;
-    var ciclo = (tm * 0.00012) % 1;
-    var act = Math.floor(ciclo * EST);
-    var esEst = (g % 3) === 0;
-    if (esEst) {
-      var k = g % EST;
-      var ang = (k / EST) * TAU - 1.5708;
-      var pulso = (k === act) ? 1 : 0;
-      var rr = 0.34 + pulso * 0.035;
-      o.nx = 0.5 + Math.cos(ang) * rr * 0.72 + Math.cos(u * TAU) * 0.024;
-      o.ny = 0.5 + Math.sin(ang) * rr + Math.sin(u * TAU) * 0.058;
-      o.a = 0.16 + 0.80 * pulso;
-      o.c = pulso ? 5 : 6;
-      o.g = 600 + k;
-    } else {
-      var t = (u * 0.5 + ciclo) % 1;
-      var a2 = t * TAU - 1.5708;
-      o.nx = 0.5 + Math.cos(a2) * 0.34 * 0.72;
-      o.ny = 0.5 + Math.sin(a2) * 0.34;
-      var cerca = Math.abs(((t * EST) % 1) - 0.5) * 2;
-      o.a = 0.12 + 0.62 * (1 - cerca);
-      o.c = 0; o.g = -1;
-    }
-  }
-
-  /* 6 · CAPACIDAD — «Piezas que ya existen. Y las que falten.» Una columna de
-     módulos llenos y UN HUECO VACÍO, marcado a trazos. Después llega la pieza
-     que falta desde fuera, se instala, y el hueco deja de estar vacío. */
-  function F6(i, u, g, G, o, tm, ins) {
-    var M = 6, k = g % M;
-    var falta = (k === 3);
-    var llega = ease((ins - 0.34) / 0.30);            // la pieza que faltaba
-    var my = 0.05 + k * 0.160, mh = 0.112;
-
-    var p = u * 4, e = p | 0, f = p - e, lx, ly;
-    if (e === 0)      { lx = f;       ly = 0; }
-    else if (e === 1) { lx = 1;       ly = f; }
-    else if (e === 2) { lx = 1 - f;   ly = 1; }
-    else              { lx = 0;       ly = 1 - f; }
-
-    if (falta) {
-      /* El hueco: a trazos y apagado mientras está vacío; la pieza entra
-         desde la derecha y al llegar el contorno se cierra y se enciende. */
-      var trazo = Math.abs(Math.sin(u * 25.0)) > 0.45 ? 1 : 0;
-      o.nx = lerp(1.9, lx, llega);
-      o.ny = my + ly * mh;
-      o.a = llega < 0.5 ? 0.30 * trazo : lerp(0.30 * trazo, 0.80, (llega - 0.5) * 2);
-      o.c = llega > 0.7 ? 5 : 6;
-      o.g = llega > 0.6 ? 700 + k : -1;
-      return;
-    }
-    /* Los módulos que ya existen, con su puerto de conexión a la derecha. */
-    var puerto = (g % 17) === 4;
-    if (puerto) {
-      o.nx = 1 + u * 0.55; o.ny = my + mh * 0.5;
-      o.a = 0.44; o.c = 6; o.g = -1;
-      return;
-    }
-    o.nx = lx; o.ny = my + ly * mh;
-    o.a = 0.20 + 0.58 * Math.abs(Math.sin(u * 3 + k));
-    o.c = 6;
-    o.g = 700 + k;
-  }
-
-  /* 7 · FINANCE — esta sección ya se explica sola con el panel del producto,
-     así que la materia no compite: hace lo que dice el texto. Todo lo que el
-     sistema produce ENTRA por la derecha y converge en el panel. */
-  function F7(i, u, g, G, o, tm, ins) {
-    var L = 7, l = g % L;
-    var t = ((sd(i, 71) + tm * 0.00013) % 1);
-    var x = 1.10 - t * 1.24;                          // viaja hacia el panel
-    var yl = 0.10 + l * 0.132;
-    var conv = cl((0.85 - x) / 0.75);                 // y converge al llegar
-    o.nx = x;
-    o.ny = lerp(yl, 0.50, conv * conv);
-    /* Se enciende según se acerca: llega, no solo pasa. */
-    o.a = 0.10 + 0.74 * conv;
-    o.c = conv > 0.72 ? 5 : (conv > 0.4 ? 0 : 6);
-    o.g = 800 + l;
-  }
-
-  /* 8 · RESULTADO — no una esfera: un ANILLO DE COMPONENTES conectados que
-     rodea al titular. Cada nodo es una pieza del sistema, el anillo los une y
-     un pulso los recorre. Estás dentro de algo que funciona. */
+  /* 8 · CIUDAD — «Empecemos». Todo lo anterior, construido: una ciudad de
+     luz. Las ventanas se van encendiendo. Es el final del viaje. */
   function F8(i, u, g, G, o, tm, ins) {
-    var NODOS = narrow ? 8 : 12;
-    var esNodo = (g % 5) < 2;
-    var giro = tm * 0.000022;
-    if (esNodo) {
-      /* Los componentes: pequeños módulos repartidos por el anillo. */
-      var k = g % NODOS;
-      var ang = (k / NODOS) * TAU + giro;
-      var cx = 0.5 + Math.cos(ang) * 0.46, cy = 0.5 + Math.sin(ang) * 0.46;
-      var p = u * 4, e = p | 0, f = p - e, s2 = 0.034;
-      var lx2, ly2;
-      if (e === 0)      { lx2 = -s2 + f * s2 * 2; ly2 = -s2; }
-      else if (e === 1) { lx2 =  s2;              ly2 = -s2 + f * s2 * 2; }
-      else if (e === 2) { lx2 =  s2 - f * s2 * 2; ly2 =  s2; }
-      else              { lx2 = -s2;              ly2 =  s2 - f * s2 * 2; }
-      /* El pulso que recorre el sistema, nodo a nodo. */
-      var vivo = Math.abs(((tm * 0.00016) % 1) * NODOS - k) < 0.9 ? 1 : 0;
-      o.nx = cx + lx2 * 0.86; o.ny = cy + ly2;
-      o.a = 0.34 + 0.56 * vivo;
-      o.c = vivo ? 0 : 1;
-      o.g = 900 + k;
-    } else {
-      /* El anillo que los une: continuo, sin cortes. */
-      var a3 = u * TAU + giro;
-      o.nx = 0.5 + Math.cos(a3) * 0.46 * 0.86;
-      o.ny = 0.5 + Math.sin(a3) * 0.46;
-      var frente = Math.abs(((a3 - giro) / TAU % 1) - ((tm * 0.00016) % 1));
-      o.a = 0.13 + 0.52 * Math.exp(-frente * frente * 120);
-      o.c = 6;
-      o.g = 950;
+    var vent = (i % 3) < 1;
+    if (vent) {
+      /* Las ventanas: la ciudad está habitada, no es una maqueta. */
+      var k = (i / 3) | 0;
+      var nb2 = CIU_ALT.length;
+      var b = k % nb2;                                   // a qué edificio va
+      var m2 = (k / nb2) | 0;
+      var cols2 = 3, fil = (m2 / cols2 | 0) % 9, col = m2 % cols2;
+      var bx2 = 0.04 + b * CIU_BW;
+      o.nx = bx2 + CIU_BW * (0.24 + col * 0.26);
+      o.ny = 0.93 - fil * 0.055;
+      var techo = 0.98 - CIU_ALT[b];
+      var dentro = o.ny > techo + 0.03;                  // solo dentro del suyo
+      var ence = ((tm * 0.00007) + sd(i, 64)) % 1;
+      o.a = dentro ? (ence < 0.62 ? 0.66 : 0.09) : 0;
+      o.c = ence < 0.30 ? 6 : (ence < 0.5 ? 0 : 1);
+      o.g = -1;
+      return;
     }
+    enFig(FG.ciudad, u, o, 900);
+    o.a = 0.58 + 0.16 * Math.sin(u * 5 + o.g);
+    o.c = 6;
   }
 
   var FORM = [F0, F1, F2, F3, F4, F5, F6, F7, F8];
-  var GRP  = [1, 26, 22, 1, 0, 24, 22, 20, 22];   // 0 = usar MEM.length, 1 = por partícula
 
   /* --------------------------------------------------- ESTADOS Y SCROLL */
   var STOPS = [], MIR = [];
@@ -568,7 +680,6 @@
     ctx.fillRect(0, 0, W, H);
 
     var FA = FORM[iA], FB = FORM[iB];
-    var GA = GRP[iA] || MEM.length, GB = GRP[iB] || MEM.length;
     var frA = MARCO[iA], frB = MARCO[iB];
     var insA = inside(iA), insB = inside(iB);
     var usoA = USO[iA], usoB = USO[iB];
@@ -584,15 +695,14 @@
     for (var q = 0; q < N; q++) {
       var i = ORD[q];                       // de lejos a cerca
       var p = PT[i];
-      var ga = GA === 1 ? i : (i * GA / N) | 0, ua = GA === 1 ? sd(i, 61) : (i * GA / N) - ga;
-      var gb = GB === 1 ? i : (i * GB / N) | 0, ub = GB === 1 ? sd(i, 61) : (i * GB / N) - gb;
+      var ua = i / N, ub = i / N;
 
       var frac = i / N;
       var enA = frac < usoA, enB = frac < usoB;
 
-      if (enA) { oa.a = 1; oa.g = -1; oa.c = 6; FA(i, ua, ga, GA, oa, tm, insA); }
+      if (enA) { oa.a = 1; oa.g = -1; oa.c = 6; FA(i, ua, 0, 0, oa, tm, insA); }
       else     { oa.nx = p.hx; oa.ny = p.hy; oa.a = 0.10; oa.g = -1; oa.c = 6; }
-      if (enB) { ob.a = 1; ob.g = -1; ob.c = 6; FB(i, ub, gb, GB, ob, tm, insB); }
+      if (enB) { ob.a = 1; ob.g = -1; ob.c = 6; FB(i, ub, 0, 0, ob, tm, insB); }
       else     { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.10; ob.g = -1; ob.c = 6; }
 
       marco(oa, frA, MIR[iA], ma);
