@@ -107,28 +107,43 @@
      teclado sin salir del hero. */
   var hero = document.body.classList.contains('v6')
     ? document.querySelector('.v6-hero') : null;
-  var fuera = false;
-  function retirada() {
+  var fuera = false, heroFin = 0;
+
+  /* GEOMETRIA EN CACHE. Antes cada fotograma de scroll preguntaba al navegador
+     por la caja de CADA seccion del indice —hasta nueve lecturas forzadas de
+     geometria por fotograma, en las 72 paginas— y por la del hero. Ninguna de
+     esas cajas se mueve al hacer scroll: lo que cambia es scrollY. Se miden
+     una vez, al cargar y al redimensionar, y se vuelven a medir solas si la
+     altura del documento cambia (imagenes, fuentes, un panel que se abre). */
+  var TOP = [], docH = -1;
+  function medir() {
+    var sy = window.scrollY;
+    for (var i = 0; i < items.length; i++) TOP[i] = items[i].el.getBoundingClientRect().top + sy;
+    if (hero) heroFin = hero.getBoundingClientRect().bottom + sy;
+    docH = document.documentElement.scrollHeight;
+  }
+  function retirada(sy) {
     if (!rail || !hero) return;
-    var q = hero.getBoundingClientRect().bottom > window.innerHeight * 0.62;
+    var q = (heroFin - sy) > window.innerHeight * 0.62;
     if (q !== fuera) { fuera = q; rail.classList.toggle('dcx--fuera', q); }
   }
 
   var active = -1, ticking = false;
   function paint() {
     var d = document.documentElement;
+    if (d.scrollHeight !== docH) medir();      // el documento ha cambiado de alto
     var max = Math.max(1, d.scrollHeight - window.innerHeight);
-    var p = Math.max(0, Math.min(1, window.scrollY / max));
+    var sy = window.scrollY;
+    var p = Math.max(0, Math.min(1, sy / max));
     barFill.style.width = (p * 100) + '%';
     if (!rail) return;
-    retirada();
+    retirada(sy);
 
     // Activa: la última sección cuyo inicio ya ha pasado la línea de lectura.
-    var line = window.scrollY + window.innerHeight * 0.34;
+    var line = sy + window.innerHeight * 0.34;
     var idx = 0;
     for (var i = 0; i < items.length; i++) {
-      var t = items[i].el.getBoundingClientRect().top + window.scrollY;
-      if (t <= line) idx = i;
+      if (TOP[i] <= line) idx = i;
     }
     if (idx !== active) {
       active = idx;
@@ -146,7 +161,7 @@
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { paint(); ticking = false; });
   }, { passive: true });
-  window.addEventListener('resize', paint, { passive: true });
-  window.addEventListener('load', paint);
-  paint();
+  window.addEventListener('resize', function () { medir(); paint(); }, { passive: true });
+  window.addEventListener('load', function () { medir(); paint(); });
+  medir(); paint();
 })();

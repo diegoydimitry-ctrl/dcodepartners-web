@@ -250,12 +250,21 @@
   /* ================================================= 4. FOCO DE CURSOR */
   function initLift() {
     if (coarse || reduced) return;
+    /* La caja del elemento se leia EN CADA movimiento del raton: una lectura
+       forzada de geometria por evento, y el raton dispara decenas por segundo.
+       Mientras el puntero no cambie de elemento la caja es la misma, asi que
+       se guarda; se descarta al cambiar de elemento y al hacer scroll o
+       redimensionar, que son las dos cosas que la mueven. */
+    var ult = null, caja = null;
+    function olvida() { ult = null; caja = null; }
+    window.addEventListener('scroll', olvida, { passive: true });
+    window.addEventListener('resize', olvida, { passive: true });
     document.addEventListener('mousemove', function (e) {
       var el = e.target.closest ? e.target.closest('.lift') : null;
-      if (!el) return;
-      var r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-      el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+      if (!el) { olvida(); return; }
+      if (el !== ult) { ult = el; caja = el.getBoundingClientRect(); }
+      el.style.setProperty('--mx', ((e.clientX - caja.left) / caja.width * 100) + '%');
+      el.style.setProperty('--my', ((e.clientY - caja.top) / caja.height * 100) + '%');
     }, { passive: true });
   }
 
@@ -312,20 +321,27 @@
   function initVSteps() {
     var blocks = document.querySelectorAll('[data-vsteps]');
     if (!blocks.length) return;
-    var list = Array.prototype.slice.call(blocks);
+    /* Se consultaba el DOM y se leia la geometria de CADA paso EN CADA
+       fotograma de scroll, y encima intercalado: leer caja, escribir altura,
+       leer caja, escribir clase... que es la receta exacta del layout
+       thrashing —el navegador tiene que rehacer el calculo entre lectura y
+       escritura—. Ahora las consultas se hacen una vez, se leen TODAS las
+       cajas y despues se escribe TODO. Mismo resultado en pantalla. */
+    var list = Array.prototype.slice.call(blocks).map(function (b) {
+      return { el: b, fill: b.querySelector('.vsteps-fill'),
+               steps: Array.prototype.slice.call(b.querySelectorAll('.vstep')) };
+    });
     function paint() {
-      list.forEach(function (b) {
-        var fill = b.querySelector('.vsteps-fill');
-        var steps = b.querySelectorAll('.vstep');
-        var r = b.getBoundingClientRect();
-        var mid = window.innerHeight * 0.58;
-        var p = (mid - r.top) / r.height;
-        p = p < 0 ? 0 : p > 1 ? 1 : p;
-        if (fill) fill.style.height = (p * 100) + '%';
-        steps.forEach(function (s) {
-          var sr = s.getBoundingClientRect();
-          s.classList.toggle('on', sr.top < mid);
-        });
+      var mid = window.innerHeight * 0.58;
+      var lect = list.map(function (o) {
+        var r = o.el.getBoundingClientRect();
+        return { p: Math.max(0, Math.min(1, (mid - r.top) / r.height)),
+                 tops: o.steps.map(function (s) { return s.getBoundingClientRect().top; }) };
+      });
+      list.forEach(function (o, i) {
+        var L = lect[i];
+        if (o.fill) o.fill.style.height = (L.p * 100) + '%';
+        o.steps.forEach(function (s, j) { s.classList.toggle('on', L.tops[j] < mid); });
       });
     }
     var tick = false;

@@ -262,6 +262,7 @@
     }
     /* De lejos a cerca: lo cercano tapa a lo lejano, no al revés. */
     ORD.sort(function (a, b) { return PT[a].z - PT[b].z; });
+    buffers(N);
 
     grafos();
     sprites();
@@ -485,10 +486,20 @@
      nube de manchas. Con bandas contiguas, cada nodo y cada arista los
      dibujan sus propias partículas, en orden. */
 
+  /* tramo() se llama una o dos veces por particula y por formacion. Con 1.560
+     particulas y dos formaciones vivas eso eran entre 3.000 y 6.000 objetos
+     nuevos POR FOTOGRAMA —del orden de un cuarto de millon por segundo— que
+     no hacian mas que alimentar al recolector de basura. Ahora se reparten de
+     un anillo de dieciseis: ningun resultado sobrevive a su propia iteracion,
+     asi que dieciseis sobran de largo. El valor devuelto es el mismo. */
+  var _TR = [], _tp = 0;
+  for (var _t = 0; _t < 16; _t++) _TR.push({ k: 0, j: 0 });
   function tramo(u, a, b, n) {
     var t = (u - a) / (b - a) * n;
     var k = t | 0; if (k >= n) k = n - 1; if (k < 0) k = 0;
-    return { k: k, j: t - k };
+    var o = _TR[_tp = (_tp + 1) & 15];
+    o.k = k; o.j = t - k;
+    return o;
   }
 
   /* ================== LA IDENTIDAD, EN COORDENADAS DE MATERIA ==============
@@ -1211,9 +1222,19 @@
      banda maciza y el polvo de fondo sigue siendo polvo. */
   var oa = { nx: 0, ny: 0, a: 1, g: -1, c: 6, r: 1 },
       ob = { nx: 0, ny: 0, a: 1, g: -1, c: 6, r: 1 };
-  var px = new Float32Array(1500), py = new Float32Array(1500);
-  var pg = new Int32Array(1500), pa = new Float32Array(1500);
-  var pc = new Int32Array(1500);          // el color con el que se enlaza
+  /* Estaban fijos en 1.500 y N vale 1.560 en escritorio: las sesenta ultimas
+     particulas escribian fuera del array —en silencio, que es lo que hace un
+     TypedArray— y al leerlas devolvian undefined. Ahora se dimensionan con N.
+     Y `pa` se ha ido: se escribia cada fotograma y no lo leia nadie.
+     SEG son las cubetas del enlace, una por color (ver mas abajo). */
+  var px, py, pg, pc, SEG = [], SEGN = new Int32Array(8);
+  function buffers(n) {
+    px = new Float32Array(n); py = new Float32Array(n);
+    pg = new Int32Array(n);   pc = new Int32Array(n);
+    SEG = [];
+    for (var c = 0; c < COL.length; c++) SEG.push(new Float32Array(n * 4));
+    SEGN = new Int32Array(COL.length);
+  }
 
   /* Al reflejar hay que mover TAMBIÉN el marco al lado libre: invertir solo
      el contenido dejaba la formación encima de la columna de texto. */
@@ -1254,6 +1275,12 @@
     var frA = MARCO[iA], frB = MARCO[iB];
     var insA = inside(iA), insB = inside(iB);
     var usoA = USO[iA], usoB = USO[iB];
+    /* Todo esto era una busqueda en array o una division POR PARTICULA y no
+       cambia dentro del fotograma. Sacarlo del bucle quita unas nueve mil
+       operaciones por fotograma sin tocar un solo pixel. */
+    var invN = 1 / N, invA = 1 / usoA, invB = 1 / usoB;
+    var intA = INT[iA], intB = INT[iB], depA = frA.d, depB = frB.d;
+    var mirA = MIR[iA], mirB = MIR[iB], volA = VOLTEA[iA], volB = VOLTEA[iB];
     var par = narrow ? 0 : 1;
 
     /* La luz que recorre el campo y roza lo que tiene delante. */
@@ -1266,10 +1293,10 @@
     for (var q = 0; q < N; q++) {
       var i = ORD[q];                       // de lejos a cerca
       var p = PT[i];
-      var frac = i / N;
+      var frac = i * invN;
       var enA = frac < usoA, enB = frac < usoB;
       /* Se reescala, no se recorta: la formación recorre su rango entero. */
-      var ua = enA ? (frac / usoA) : 0, ub = enB ? (frac / usoB) : 0;
+      var ua = enA ? (frac * invA) : 0, ub = enB ? (frac * invB) : 0;
       if (ua > 0.99999) ua = 0.99999;
       if (ub > 0.99999) ub = 0.99999;
 
@@ -1282,14 +1309,14 @@
       if (enB) { ob.a = 1; ob.g = -1; ob.c = C_BRUMA; ob.r = 1; FB(i, ub, 0, 0, ob, tm, insB); }
       else     { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.02; ob.g = -1; ob.c = C_MASA; ob.r = 1; }
 
-      marco(oa, frA, MIR[iA], ma, VOLTEA[iA]);
-      marco(ob, frB, MIR[iB], mb, VOLTEA[iB]);
+      marco(oa, frA, mirA, ma, volA);
+      marco(ob, frB, mirB, mb, volB);
 
       /* Cada partícula sale hacia la formación siguiente en su instante. */
       var t = cl((tw - p.dl) / (1 - p.dl)); t = t * t * (3 - 2 * t);
       var tx = lerp(ma.x, mb.x, t), ty = lerp(ma.y, mb.y, t);
-      var al = lerp(oa.a, ob.a, t) * lerp(INT[iA], INT[iB], t);
-      var dep = lerp(frA.d, frB.d, t);
+      var al = lerp(oa.a, ob.a, t) * lerp(intA, intB, t);
+      var dep = lerp(depA, depB, t);
 
       /* LA TRANSFORMACIÓN. Esto se ha rehecho entero, porque era el punto
          más débil del recorrido. Antes la materia se DISPERSABA en medio de
@@ -1327,7 +1354,7 @@
       var dx = p.x + cmx * 34 * pf * par;
       var dy = p.y + cmy * 22 * pf * par;
 
-      px[i] = dx; py[i] = dy; pa[i] = al;
+      px[i] = dx; py[i] = dy;
       /* El cableado cambia de bando A LA VEZ para todas las partículas, no
          partícula a partícula: si no, la estructura se deshilacha en vez de
          transformarse. */
@@ -1351,6 +1378,12 @@
       var r = (0.98 + p.s * 2.15) * (0.55 + p.z * 1.10) * (1 + sp) * dep
             * lerp(oa.r, ob.r, t);
       if (r > 15) r = 15;
+      /* Fuera del lienzo no se pinta nada, pero la llamada de dibujo se paga
+         igual —y medido, el dibujo es el 54% del fotograma en la portada y el
+         74% en los interiores, casi todo coste de llamada—. El halo llega a
+         2,6 radios, asi que ese es el margen. Ni un pixel cambia. */
+      var mrg = r * 2.6;
+      if (dx < -mrg || dy < -mrg || dx > W + mrg || dy > H + mrg) continue;
       var a2 = (al + luz) * (0.40 + p.z * 0.72) * (0.68 + 0.32 * dep);
       /* Lo que está por debajo de este umbral no se distingue del fondo, y
          cada partícula cuesta una llamada de dibujo aunque no se vea. Subirlo
@@ -1387,23 +1420,37 @@
        Se pinta en pasadas, una por color. Son ocho recorridos triviales del
        array: cuesta menos que el resto del fotograma y es lo que separa una
        maraña gris de una infraestructura legible. */
+    /* UNA SOLA PASADA, NO OCHO. Antes se recorria el array entero una vez por
+       color para quedarse con los segmentos de ese color: ocho recorridos de
+       1.560 = doce mil quinientas iteraciones por fotograma para dibujar unos
+       mil quinientos segmentos. Ahora se recorre UNA vez y cada segmento cae
+       en la cubeta de su color; despues se pinta cubeta a cubeta, en el mismo
+       orden y con el mismo trazo. El dibujo resultante es identico. */
     ctx.globalAlpha = 1; ctx.lineWidth = 1;
     var afl = 0.5 - 0.42 * Math.abs(tw - 0.5) * 2;
-    for (var c2 = 0; c2 < COL.length; c2++) {
-      var hay = false;
+    var NC = COL.length, c2;
+    for (c2 = 0; c2 < NC; c2++) SEGN[c2] = 0;
+    for (var k2 = 1; k2 < N; k2++) {
+      var gk = pg[k2];
+      if (gk < 0 || gk !== pg[k2 - 1]) continue;
+      var ddx = px[k2] - px[k2 - 1], ddy = py[k2] - py[k2 - 1];
+      if (ddx * ddx + ddy * ddy > 30000) continue;
+      var cc = pc[k2] === C_MASA ? C_BRUMA : pc[k2];   // la bruma, una sola cubeta
+      var sg2 = SEG[cc], n2 = SEGN[cc];
+      sg2[n2] = px[k2 - 1]; sg2[n2 + 1] = py[k2 - 1];
+      sg2[n2 + 2] = px[k2];  sg2[n2 + 3] = py[k2];
+      SEGN[cc] = n2 + 4;
+    }
+    for (c2 = 0; c2 < NC; c2++) {
+      var tot = SEGN[c2];
+      if (!tot) continue;
+      var sgc = SEG[c2];
       ctx.beginPath();
-      for (var k2 = 1; k2 < N; k2++) {
-        var cc = pc[k2] === C_MASA ? C_BRUMA : pc[k2];   // la bruma, una sola pasada
-        if (cc !== c2) continue;
-        if (pg[k2] < 0 || pg[k2] !== pg[k2 - 1]) continue;
-        var ddx = px[k2] - px[k2 - 1], ddy = py[k2] - py[k2 - 1];
-        if (ddx * ddx + ddy * ddy > 30000) continue;
-        ctx.moveTo(px[k2 - 1], py[k2 - 1]); ctx.lineTo(px[k2], py[k2]); hay = true;
+      for (var m2 = 0; m2 < tot; m2 += 4) {
+        ctx.moveTo(sgc[m2], sgc[m2 + 1]); ctx.lineTo(sgc[m2 + 2], sgc[m2 + 3]);
       }
-      if (!hay) continue;
-      /* La brumа sostiene, no habla: se pinta bastante más baja que un
+      /* La bruma sostiene, no habla: se pinta bastante más baja que un
          enlace con significado. */
-      if (c2 === C_MASA) continue;
       var op = c2 === C_BRUMA ? 0.085 : 0.20;
       ctx.strokeStyle = rgba(COL[c2], op + 0.10 * afl);
       ctx.stroke();

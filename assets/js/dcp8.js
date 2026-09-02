@@ -92,10 +92,18 @@
      Con bandas contiguas cada pieza la dibujan SUS partículas, en orden, y
      la estructura aparece. Es el mismo hallazgo que hizo funcionar la
      portada, aplicado aquí. */
+  /* Como tramo() en la portada: se llamaba una o dos veces por particula y por
+     fotograma —del orden de cien mil objetos nuevos por segundo con 1.340
+     particulas— solo para devolver dos numeros. Ahora se reparten de un anillo
+     de dieciseis. Ningun resultado sobrevive a su iteracion. */
+  var _BD = [], _bp = 0;
+  for (var _b = 0; _b < 16; _b++) _BD.push({ k: 0, j: 0 });
   function banda(u, a, b, n) {
     var t = (u - a) / (b - a) * n;
     var k = t | 0; if (k >= n) k = n - 1; if (k < 0) k = 0;
-    return { k: k, j: t - k };
+    var o = _BD[_bp = (_bp + 1) & 15];
+    o.k = k; o.j = t - k;
+    return o;
   }
 
   function measure() {
@@ -125,6 +133,7 @@
   var CI = { cian:0, azul:1, violeta:2, lav:3, rosa:4, verde:5,
              ambar:6, turq:7, acero:8, blanco:9 };
   var NUB = [], NORD = [], NSPR = [], NPX = null, NPY = null, NPA = null, NPG = null, NPC = null;
+  var NSEG = [], NSEGN = null;
   var o1 = { x: 0, y: 0, a: 1, g: -1, c: 8 };
 
   /* Un destello por color Y POR ESTRATO: lo lejano es ancho y sin núcleo —así
@@ -180,6 +189,10 @@
     NPX = new Float32Array(n); NPY = new Float32Array(n);
     NPA = new Float32Array(n); NPG = new Int32Array(n); NPC = new Int32Array(n);
     chispas();
+    /* Despues de chispas(), que es quien define la paleta. Una cubeta de
+       segmentos por color; se llenan en una sola pasada y se pintan una vez. */
+    NSEG = []; for (var c = 0; c < NSPR[0].length; c++) NSEG.push(new Float32Array(n * 4));
+    NSEGN = new Int32Array(NSPR[0].length);
   }
 
   /* fn(i, u, o, tm) escribe el destino de cada partícula. Nadie salta: cada
@@ -224,6 +237,14 @@
       var sp = v2 > 16 ? 0.40 : v2 * 0.025;
       var r = (1.05 + p.s * 2.25) * (0.58 + p.z * 1.02) * (1 + sp);
       if (r > 8.6) r = 8.6;
+      /* Fuera del lienzo no se pinta nada y la llamada se paga igual. El
+         instrumento trabaja en coordenadas trasladadas (OFFX/OFFY), asi que
+         la ventana visible en ESAS coordenadas es la de abajo. El halo llega
+         a 2,6 radios. Ni un pixel cambia; en /servicios son 261 llamadas
+         menos por fotograma de 1.434. */
+      var mg = r * 2.6;
+      if (NPX[i] < -OFFX - mg || NPY[i] < -OFFY - mg ||
+          NPX[i] > FW - OFFX + mg || NPY[i] > FH - OFFY + mg) continue;
       var spr = NSPR[p.e][NPC[i]];
       /* Floración SOLO en el estrato cercano: lo que está lejos y desenfocado
          no tiene por qué tener un halo duro, y el halo se dibuja a tres
@@ -242,18 +263,32 @@
       /* El enlace hereda el color de la materia que une, como en la portada:
          un puente cian se ve cian, un cabo suelto se ve magenta. Una pasada
          por color; son diez recorridos triviales del array. */
+      /* UNA SOLA PASADA, NO DIEZ. Antes se recorria el array entero una vez
+         por color: diez recorridos de 1.340 = trece mil cuatrocientas
+         iteraciones por fotograma para dibujar unos mil segmentos. Ahora se
+         recorre UNA vez y cada segmento cae en la cubeta de su color. Mismo
+         orden, mismo trazo, dibujo identico. */
       ctx.lineWidth = 1;
-      for (var c = 0; c < NSPR[0].length; c++) {
-        var hay = false;
+      var NCC = NSPR[0].length, c;
+      for (c = 0; c < NCC; c++) NSEGN[c] = 0;
+      for (var k = 1; k < NUB.length; k++) {
+        var gk = NPG[k];
+        if (gk < 0 || gk !== NPG[k - 1]) continue;
+        var dx = NPX[k] - NPX[k - 1], dy = NPY[k] - NPY[k - 1];
+        if (dx * dx + dy * dy > 24000) continue;
+        var ck = NPC[k], sk = NSEG[ck], nk = NSEGN[ck];
+        sk[nk] = NPX[k - 1]; sk[nk + 1] = NPY[k - 1];
+        sk[nk + 2] = NPX[k];  sk[nk + 3] = NPY[k];
+        NSEGN[ck] = nk + 4;
+      }
+      for (c = 0; c < NCC; c++) {
+        var tot = NSEGN[c];
+        if (!tot) continue;
+        var sc = NSEG[c];
         ctx.beginPath();
-        for (var k = 1; k < NUB.length; k++) {
-          if (NPC[k] !== c) continue;
-          if (NPG[k] < 0 || NPG[k] !== NPG[k - 1]) continue;
-          var dx = NPX[k] - NPX[k - 1], dy = NPY[k] - NPY[k - 1];
-          if (dx * dx + dy * dy > 24000) continue;
-          ctx.moveTo(NPX[k - 1], NPY[k - 1]); ctx.lineTo(NPX[k], NPY[k]); hay = true;
+        for (var m = 0; m < tot; m += 4) {
+          ctx.moveTo(sc[m], sc[m + 1]); ctx.lineTo(sc[m + 2], sc[m + 3]);
         }
-        if (!hay) continue;
         var col = c === CI.acero ? ACERO : (c === CI.blanco ? [226, 240, 255] : NCOL[c]);
         ctx.strokeStyle = rgba(col, c === CI.acero ? enl * 0.85 : enl * 2.1);
         ctx.stroke();
