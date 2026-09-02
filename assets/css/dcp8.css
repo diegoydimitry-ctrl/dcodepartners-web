@@ -50,17 +50,34 @@ body.v7 .timeline, body.v7 .outs, body.v7 .chain, body.v7 .shift,
 body.v7 .split-list, body.v7 .specs, body.v7 .split, body.v7 .cases,
 body.v7 .rail, body.v7 .rail-hint, body.v7 .metodo-copy,
 body.v7 .duo, body.v7 .board, body.v7 .prod,
+body.v7 .spec, body.v7 .section-sm .container > div,
 body.v7 .pacts, body.v7 .track, body.v7 .pre-cta{ position:relative; }
 body.v7 .timeline::before, body.v7 .outs::before, body.v7 .chain::before,
 body.v7 .shift::before, body.v7 .split-list::before, body.v7 .specs::before,
 body.v7 .split::before, body.v7 .cases::before, body.v7 .rail::before,
 body.v7 .rail-hint::before, body.v7 .metodo-copy::before,
 body.v7 .duo::before, body.v7 .board::before, body.v7 .prod::before,
+body.v7 .spec::before,
 body.v7 .pacts::before, body.v7 .track::before, body.v7 .pre-cta::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-9% -7%;
-  background:radial-gradient(84% 74% at 50% 50%,
-    rgba(5,7,14,.96), rgba(5,7,14,.88) 46%, rgba(5,7,14,.46) 72%, rgba(5,7,14,0) 92%);
+  /* Los instrumentos han subido de presencia —más materia, más floración,
+     enlaces con color— y el velo que bastaba antes ya no basta. Medido con
+     la tinta oculta y la pantalla compuesta: sin este punto de más, /metodo
+     y /sistema-financiero caían a 1,5:1 sobre un trazo brillante. */
+  inset:-11% -8%;
+  background:radial-gradient(88% 78% at 50% 50%,
+    rgba(5,7,14,.985), rgba(5,7,14,.94) 48%, rgba(5,7,14,.58) 74%, rgba(5,7,14,0) 94%);
+}
+/* Las cejillas van solas sobre el campo y son texto pequeño: llevan su propio
+   velo, ceñido, porque no pertenecen a ningún bloque con fondo. Va en ::after
+   a propósito: el ::before de .eyebrow es la rayita que la precede, y ponerlo
+   ahí la borraba en todo el sitio. */
+body.v6 .eyebrow, body.v7 .eyebrow{ position:relative; }
+body.v6 .eyebrow::after, body.v7 .eyebrow::after{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-160% -20%;
+  background:radial-gradient(74% 100% at 42% 50%,
+    rgba(5,7,14,.985), rgba(5,7,14,.86) 54%, rgba(5,7,14,0) 94%);
 }
 body.v7 .head::before,
 body.v7 .figure::before,
@@ -125,4 +142,24 @@ body.v7 footer::before, body.v6 footer::before{
 body.v7 .chain::before{
   background:radial-gradient(88% 80% at 50% 50%,
     rgba(5,7,14,.985), rgba(5,7,14,.94) 46%, rgba(5,7,14,.60) 74%, rgba(5,7,14,0) 94%);
+}
+
+/* /metodo: la lista de pasos ya usa su ::before para la barra de progreso, así
+   que su velo va en ::after. Sin él, un trazo brillante del plano por detrás
+   dejaba el párrafo del paso activo en 1,5:1 — medido, no estimado. */
+body.v7 .vsteps{ position:relative; }
+body.v7 .vsteps::after{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-6% -9%;
+  background:radial-gradient(88% 80% at 46% 50%,
+    rgba(5,7,14,.985), rgba(5,7,14,.94) 50%, rgba(5,7,14,.56) 76%, rgba(5,7,14,0) 95%);
+}
+
+/* Las tarjetas del raíl tienen fondo translúcido y su contenedor recorta el
+   velo —lleva overflow-x para poder desplazarse—, así que el velo del bloque
+   no llega a cubrirlas. Con un instrumento brillante justo detrás, el párrafo
+   caía a 1,6:1. La tarjeta se hace opaca: es una superficie de contenido, no
+   una ventana al campo. */
+body.v7 .rcard{
+  background:linear-gradient(180deg, rgba(12,16,29,.985), rgba(8,11,21,.975));
 }

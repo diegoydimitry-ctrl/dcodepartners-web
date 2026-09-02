@@ -58,10 +58,19 @@
   var mx = 0.5, my = 0.5, cmx = 0.5, cmy = 0.5;
   var inst = null;
 
+  /* LA MISMA PALETA QUE LA PORTADA, con los mismos significados. El interior
+     tenía sus propios valores —otro azul, otro cian, otro rosa— y por eso,
+     aunque compartiera el motor, parecía otro sitio. Ahora una arista cian
+     significa lo mismo en la portada que en Integraciones. */
   var C = {
-    cian:  [ 77, 208, 225], azul: [ 91, 140, 255], violeta: [124, 108, 255],
-    lav:   [167, 139, 250], rosa: [255, 107, 157], verde:   [ 53, 224, 161],
-    ambar: [255, 180,  58], turq: [ 45, 212, 191]
+    cian:  [ 46, 216, 240],   // conexión viva
+    azul:  [ 78, 128, 255],   // información, dato
+    violeta:[141, 98, 250],   // proceso, inteligencia
+    lav:   [178, 138, 255],   // volumen, campo
+    rosa:  [255,  86, 168],   // anomalía, decisión, lo que falla
+    verde: [ 52, 224, 198],   // resuelto
+    ambar: [255, 180,  58],   // aviso (solo donde hay un aviso real)
+    turq:  [ 52, 224, 198]    // lo que ya funciona
   };
   function rgba(h, a) { return 'rgba(' + h[0] + ',' + h[1] + ',' + h[2] + ',' + a + ')'; }
   function sd(i, s) { var x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return x - Math.floor(x); }
@@ -71,6 +80,23 @@
   /* Ventana de avance: 0 antes de `a`, 1 después de `b`. Con esto cada
      instrumento decide en qué tramo de la página ocurre cada cosa. */
   function win(a, b) { return ease((Pv - a) / Math.max(0.0001, b - a)); }
+
+  /* BANDAS CONTIGUAS. Esta es la corrección de fondo de todo el interior.
+     Los papeles se repartían con `i % N`, así que dos partículas
+     consecutivas NUNCA pertenecían a la misma pieza. Y como el enlace une
+     partículas consecutivas del mismo grupo, no se dibujaba una sola línea:
+     los instrumentos tenían escrita una estructura —dos sistemas y un
+     puente, un plano con guías y cotas, un dato que llega a siete destinos—
+     y en pantalla salía una nube de puntos sueltos que no decía nada.
+
+     Con bandas contiguas cada pieza la dibujan SUS partículas, en orden, y
+     la estructura aparece. Es el mismo hallazgo que hizo funcionar la
+     portada, aplicado aquí. */
+  function banda(u, a, b, n) {
+    var t = (u - a) / (b - a) * n;
+    var k = t | 0; if (k >= n) k = n - 1; if (k < 0) k = 0;
+    return { k: k, j: t - k };
+  }
 
   function measure() {
     dpr = Math.min(window.devicePixelRatio || 1, 1.75);
@@ -95,7 +121,7 @@
      usan LA MISMA materia: lo que cambia de una página a otra es la forma
      que se le pide, no de qué está hecha. Eso es lo que mantiene un solo
      universo mientras cada sección conserva su idea propia. */
-  var ACERO = [150, 178, 226];
+  var ACERO = [ 96, 122, 186];
   var CI = { cian:0, azul:1, violeta:2, lav:3, rosa:4, verde:5,
              ambar:6, turq:7, acero:8, blanco:9 };
   var NUB = [], NORD = [], NSPR = [], NPX = null, NPY = null, NPA = null, NPG = null, NPC = null;
@@ -104,10 +130,12 @@
   /* Un destello por color Y POR ESTRATO: lo lejano es ancho y sin núcleo —así
      se ve lo desenfocado—, lo cercano tiene núcleo duro. Es lo que da cuerpo
      a la materia en lugar de dejarla en una nube plana de puntos. */
+  var NCOL = null;
   function chispas() {
     NSPR = [];
-    var todos = [C.cian, C.azul, C.violeta, C.lav, C.rosa, C.verde,
-                 C.ambar, C.turq, ACERO, [226, 240, 255]];
+    NCOL = [C.cian, C.azul, C.violeta, C.lav, C.rosa, C.verde,
+            C.ambar, C.turq, ACERO, [226, 240, 255]];
+    var todos = NCOL;
     for (var e = 0; e < 3; e++) {
       var fila = [];
       for (var i = 0; i < todos.length; i++) {
@@ -183,31 +211,42 @@
       var p = NUB[i];
       var ldx = NPX[i] - lx, ldy = NPY[i] - ly;
       var luz = Math.exp(-(ldx * ldx + ldy * ldy) / lr2) * 0.34;
-      var a = (NPA[i] + luz) * (0.34 + p.z * 0.58);
+      var a = (NPA[i] + luz) * (0.40 + p.z * 0.70);
       if (a <= 0.012) continue;
       var sp = Math.min(1.1, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.22);
       var r = (1.2 + p.s * 2.6) * (0.58 + p.z * 1.05) * (1 + sp);
       var spr = NSPR[p.e][NPC[i]];
       /* Floración: lo que de verdad brilla deja halo. Es lo que separa un
          punto encendido de una fuente de luz. */
-      if (a > 0.46) {
-        var rb = r * 2.7;
-        ctx.globalAlpha = Math.min(0.13, (a - 0.46) * 0.32);
+      if (a > 0.48) {
+        var rb = r * 3.0;
+        ctx.globalAlpha = Math.min(0.20, (a - 0.48) * 0.48);
         ctx.drawImage(spr, NPX[i] - rb, NPY[i] - rb, rb * 2, rb * 2);
       }
-      ctx.globalAlpha = Math.min(0.62, a);
+      ctx.globalAlpha = Math.min(0.78, a);
       ctx.drawImage(spr, NPX[i] - r, NPY[i] - r, r * 2, r * 2);
     }
     ctx.globalAlpha = 1;
     if (enl) {
-      ctx.lineWidth = 1; ctx.beginPath();
-      for (var k = 1; k < NUB.length; k++) {
-        if (NPG[k] < 0 || NPG[k] !== NPG[k - 1]) continue;
-        var dx = NPX[k] - NPX[k - 1], dy = NPY[k] - NPY[k - 1];
-        if (dx * dx + dy * dy > 24000) continue;
-        ctx.moveTo(NPX[k - 1], NPY[k - 1]); ctx.lineTo(NPX[k], NPY[k]);
+      /* El enlace hereda el color de la materia que une, como en la portada:
+         un puente cian se ve cian, un cabo suelto se ve magenta. Una pasada
+         por color; son diez recorridos triviales del array. */
+      ctx.lineWidth = 1;
+      for (var c = 0; c < NSPR[0].length; c++) {
+        var hay = false;
+        ctx.beginPath();
+        for (var k = 1; k < NUB.length; k++) {
+          if (NPC[k] !== c) continue;
+          if (NPG[k] < 0 || NPG[k] !== NPG[k - 1]) continue;
+          var dx = NPX[k] - NPX[k - 1], dy = NPY[k] - NPY[k - 1];
+          if (dx * dx + dy * dy > 24000) continue;
+          ctx.moveTo(NPX[k - 1], NPY[k - 1]); ctx.lineTo(NPX[k], NPY[k]); hay = true;
+        }
+        if (!hay) continue;
+        var col = c === CI.acero ? ACERO : (c === CI.blanco ? [226, 240, 255] : NCOL[c]);
+        ctx.strokeStyle = rgba(col, c === CI.acero ? enl * 0.85 : enl * 2.1);
+        ctx.stroke();
       }
-      ctx.strokeStyle = rgba(ACERO, enl); ctx.stroke();
     }
     ctx.globalCompositeOperation = 'source-over';
   }
@@ -238,7 +277,7 @@
   INSTR.servicios = (function () {
     var HUE = [CI.cian, CI.violeta, CI.rosa];
     return {
-      build: function () { nube(small ? 300 : narrow ? 520 : 840); },
+      build: function () { nube(small ? 480 : narrow ? 830 : 1340); },
       draw: function (tm) {
         clear(0.30);
         var cx = W * (narrow ? 0.5 : 0.80);
@@ -289,7 +328,7 @@
   /* AUTOMATIZACIÓN — "La tarea repetida". Lo mismo, una y otra vez, a mano.
      Hasta que se captura: entonces deja de repetirse y pasa a correr solo. */
   INSTR.automatizacion = {
-    build: function () { nube(small ? 260 : 520); },
+    build: function () { nube(small ? 410 : 830); },
     draw: function (tm) {
       clear(0.30);
       var capt = win(0.06, 0.52);
@@ -315,69 +354,96 @@
     }
   };
 
-  /* AGENTES — "La conversación". Dos voces que se turnan: la del visitante
-     manda y la otra responde. Nunca hablan a la vez. */
+  /* AGENTES — "La conversación". Dos voces que se turnan, dibujadas como lo
+     que realmente son en un sistema de agentes: DOS SEÑALES. La de arriba es
+     la del visitante; la de abajo, la del agente. Cuando a una le toca, su
+     onda se abre y recorre la banda de un extremo al otro; la otra se queda
+     plana esperando. Nunca hablan a la vez, y eso —que una calle mientras la
+     otra habla— es lo único que hace falta para que se lea como un diálogo.
+
+     Antes eran dos nubes de puntos avanzando hacia el centro de la pantalla,
+     que es justo donde va el texto: no se veía ninguna de las dos. */
   INSTR.agentes = {
-    build: function () { nube(small ? 240 : 460); },
+    build: function () { nube(small ? 380 : 740); },
     draw: function (tm) {
       clear(0.30);
-      var turno = ((tm * 0.00018) % 2) | 0;              // de quién es el turno
-      var fase = (tm * 0.00018) % 1;
+      var ciclo = (tm * 0.00016) % 2;
+      var turno = ciclo | 0;                            // de quién es el turno
+      var fase = ciclo - turno;
+      var YB = [0.735, 0.875];
       materia(function (i, u, o) {
-        var lado = i % 2;
-        var j = ((i / 2) | 0) / (NUB.length / 2);
-        var activo = lado === turno;
-        var y = H * (0.20 + j * 0.60);
-        /* Quien habla avanza hacia el centro; quien escucha se retira. */
-        var av = activo ? ease(fase / 0.8) : 0;
-        var x0 = lado ? W * 0.94 : W * 0.06;
-        o.x = lerp(x0, W * 0.5, av * (0.4 + 0.5 * Math.sin(j * 3.14)));
-        o.y = y + Math.sin(j * 9 + tm * 0.0006) * 5;
-        o.a = activo ? 0.22 + 0.56 * Math.sin(av * 3.1416) : 0.12;
-        o.c = lado ? CI.cian : CI.violeta;
-        o.g = 200 + lado;
+        var q = banda(u, 0, 1, 2);
+        var voz = q.k, j = q.j;
+        var activo = voz === turno;
+        var y = H * YB[voz];
+        o.x = W * (0.05 + j * 0.90);
+        if (activo) {
+          /* La onda se abre por delante del frente de habla y se cierra
+             detrás: se ve la frase avanzar, no un adorno oscilando. */
+          var frente = ease(fase / 0.86);
+          var dentro = clamp((frente - j) * 9);
+          var amp = dentro * (1 - clamp((frente - j - 0.30) * 3.2));
+          o.y = y + Math.sin(j * 64 + voz * 2.1) * H * 0.052 * amp
+                  + Math.sin(j * 23) * H * 0.016 * amp;
+          o.a = 0.16 + 0.70 * amp;
+          o.c = voz ? CI.violeta : CI.cian;
+        } else {
+          o.y = y;
+          o.a = 0.16;
+          o.c = CI.acero;
+        }
+        o.g = 200 + voz;
       }, tm);
-      pinta(0.12, tm);
+      pinta(0.16, tm);
     }
   };
 
   /* INTEGRACIONES — "El puente". Dos sistemas que no se hablaban, y el puente
      que se construye entre ellos hasta que el dato cruza. */
   INSTR.integraciones = {
-    build: function () { nube(small ? 260 : 520); },
+    build: function () { nube(small ? 410 : 830); },
     draw: function (tm) {
       clear(0.30);
       var puente = win(0.08, 0.58);
       var xa = W * 0.16, xb = W * 0.84, my = H * 0.5;
       materia(function (i, u, o) {
-        var rol = i % 5;
-        if (rol < 2) {
-          /* Los dos sistemas: dos cuerpos con su propia estructura. */
-          var lado = rol, cx = lado ? xb : xa;
-          var k = ((i / 5) | 0) % 16;
-          var an = (k / 16) * 6.2832 + tm * 0.00008 * (lado ? -1 : 1);
-          o.x = cx + Math.cos(an) * W * 0.085;
-          o.y = my + Math.sin(an) * H * 0.20;
-          o.a = 0.34; o.c = lado ? CI.violeta : CI.cian; o.g = 300 + lado;
-        } else if (rol === 2) {
-          /* El puente: se tiende de un lado al otro. */
-          var j = ((i / 5) | 0) / (NUB.length / 5);
-          var lleg = clamp(j / Math.max(0.01, puente));
-          o.x = lerp(xa, xb, Math.min(j, puente));
-          o.y = my + Math.sin(Math.min(j, puente) * 3.1416) * -H * 0.10;
-          o.a = j <= puente ? 0.44 : 0;
-          o.c = CI.acero; o.g = 310;
-        } else {
-          /* Y el dato cruzando, una vez que el puente existe. */
-          var t = ((tm * 0.00035) + sd(i, 61)) % 1;
-          if (puente < 0.94) { o.x = xa; o.y = my; o.a = 0; o.g = -1; return; }
-          o.x = lerp(xa, xb, t);
-          o.y = my + Math.sin(t * 3.1416) * -H * 0.10;
-          o.a = 0.70 * Math.sin(t * 3.1416);
-          o.c = CI.verde; o.g = -1;
+        if (u < 0.46) {
+          /* Los dos sistemas. Cada uno es una espiral apretada dibujada por
+             sus propias partículas en orden: un cuerpo cerrado, con vueltas,
+             que se lee como algo que ya funciona por dentro. Antes eran
+             dieciséis puntos sueltos sobre un círculo imaginario. */
+          var q = banda(u, 0, 0.46, 2);
+          var lado = q.k, cx = lado ? xb : xa;
+          var an = q.j * 18.85 + tm * 0.00010 * (lado ? -1 : 1);
+          var rad = 0.30 + 0.70 * q.j;
+          o.x = cx + Math.cos(an) * W * 0.088 * rad;
+          o.y = my + Math.sin(an) * H * 0.21 * rad;
+          o.a = 0.30 + 0.26 * q.j;
+          o.c = lado ? CI.violeta : CI.azul;
+          o.g = 300 + lado;
+          return;
         }
+        if (u < 0.74) {
+          /* El puente: se tiende de un lado al otro, y hasta que no está
+             tendido no cruza nada. */
+          var q2 = banda(u, 0.46, 0.74, 1);
+          var j = q2.j;
+          var av = Math.min(j, puente);
+          o.x = lerp(xa, xb, av);
+          o.y = my + Math.sin(av * 3.1416) * -H * 0.11;
+          o.a = j <= puente ? 0.52 : 0;
+          o.c = CI.cian; o.g = j <= puente ? 310 : -1;
+          return;
+        }
+        /* Y el dato cruzando, una vez que el puente existe. */
+        var t = ((tm * 0.00035) + sd(i, 61)) % 1;
+        if (puente < 0.94) { o.x = xa; o.y = my; o.a = 0; o.g = -1; return; }
+        o.x = lerp(xa, xb, t);
+        o.y = my + Math.sin(t * 3.1416) * -H * 0.11;
+        o.a = 0.86 * Math.sin(t * 3.1416);
+        o.c = CI.verde; o.g = -1;
       }, tm);
-      pinta(0.11, tm);
+      pinta(0.13, tm);
     }
   };
 
@@ -386,21 +452,22 @@
      Va en vertical y en la banda libre: esta página es de dos columnas de
      texto y el circuito no puede cruzarlas. */
   INSTR.finance = {
-    build: function () { nube(small ? 240 : 480); },
+    build: function () { nube(small ? 380 : 760); },
     draw: function (tm) {
       clear(0.30);
       var X0 = narrow ? 0.06 : 0.70, X1 = narrow ? 0.94 : 0.97;
       var EST = 4;
       var xs = [0.18, 0.44, 0.68, 0.86];                 // los cuatro estados
       materia(function (i, u, o) {
-        var acum = (i % 6) === 0;
         var t = ((tm * 0.00009) + sd(i, 71)) % 1;
-        if (acum) {
-          /* Lo cobrado: se posa abajo y ya no se mueve. Es el resultado. */
-          var k = (i / 6) | 0, cols = small ? 8 : 12;
-          o.x = W * (X0 + ((k % cols) + 0.5) * ((X1 - X0) / cols));
-          o.y = H * (0.93 - (((k / cols) | 0) % 4) * 0.028);
-          o.a = 0.26; o.c = CI.verde; o.g = -1;
+        if (u < 0.20) {
+          /* Lo cobrado: se posa abajo y ya no se mueve. Es el resultado, y
+             es lo único de este instrumento que se queda quieto. */
+          var qa = banda(u, 0, 0.20, small ? 8 : 12);
+          var cols = small ? 8 : 12;
+          o.x = W * (X0 + (qa.k + 0.5) * ((X1 - X0) / cols));
+          o.y = H * (0.935 - ((qa.j * 4) | 0) * 0.026);
+          o.a = 0.34; o.c = CI.verde; o.g = -1;
           return;
         }
         var e = Math.min(EST - 1, (t * EST) | 0);
@@ -408,9 +475,11 @@
         /* Baja de estado en estado, y en cada uno se desplaza un poco. */
         o.x = W * lerp(X0 + xs[e] * (X1 - X0), X0 + xs[Math.min(EST - 1, e + 1)] * (X1 - X0), ease(f));
         o.y = H * (0.10 + t * 0.74);
-        o.a = 0.12 + 0.40 * Math.abs(Math.sin(t * 12.566));
-        o.c = e >= 2 ? CI.ambar : CI.cian;
-        o.g = 400 + e;
+        o.a = 0.14 + 0.48 * Math.abs(Math.sin(t * 12.566));
+        /* El color dice el estado: azul mientras es sólo un apunte, magenta
+           cuando ya está vencido y hay que hacer algo. */
+        o.c = e >= 2 ? CI.rosa : CI.azul;
+        o.g = -1;
       }, tm);
       pinta(0.09, tm);
     }
@@ -419,7 +488,7 @@
   /* CURSO — "El pulso". Lo que ya late está encendido y tiene ritmo; lo que
      todavía es andamio está ahí, pero apagado y a trazos. */
   INSTR.curso = {
-    build: function () { nube(small ? 240 : 480); },
+    build: function () { nube(small ? 380 : 760); },
     draw: function (tm) {
       clear(0.30);
       var L = small ? 5 : 8;
@@ -451,37 +520,37 @@
   /* MÉTODO — "El plano". Se dibuja como se dibuja un plano: primero las
      guías, después los trazos, y al final las cotas. En ese orden. */
   INSTR.metodo = {
-    build: function () { nube(small ? 260 : 520); },
+    build: function () { nube(small ? 410 : 830); },
     draw: function (tm) {
       clear(0.30);
       var g1 = win(0.02, 0.24), g2 = win(0.18, 0.56), g3 = win(0.50, 0.86);
       materia(function (i, u, o) {
-        var rol = i % 3;
-        var j = ((i / 3) | 0) / (NUB.length / 3);
-        if (rol === 0) {                                  // guías
-          var k = ((i / 3) | 0) % 9;
-          var vert = k % 2 === 0;
-          o.x = vert ? W * (0.10 + (k / 9) * 0.82) : W * (0.06 + j * 0.88);
-          o.y = vert ? H * (0.10 + j * 0.80) : H * (0.14 + (k / 9) * 0.72);
-          o.a = 0.13 * g1 * (Math.abs(Math.sin(j * 60)) > 0.5 ? 1 : 0.2);
-          o.c = CI.acero; o.g = -1;
-        } else if (rol === 1) {                           // trazos
-          var m = ((i / 3) | 0) % 5;
+        if (u < 0.34) {                                   // las guías
+          var q = banda(u, 0, 0.34, 9);
+          var vert = q.k % 2 === 0;
+          o.x = vert ? W * (0.10 + (q.k / 9) * 0.82) : W * (0.06 + q.j * 0.88);
+          o.y = vert ? H * (0.10 + q.j * 0.80) : H * (0.14 + (q.k / 9) * 0.72);
+          o.a = 0.20 * g1 * (Math.abs(Math.sin(q.j * 60)) > 0.5 ? 1 : 0.2);
+          o.c = CI.acero; o.g = 590 + q.k;
+          return;
+        }
+        if (u < 0.74) {                                   // los trazos
+          var q2 = banda(u, 0.34, 0.74, 5);
+          var m = q2.k, j2 = q2.j;
           var ax = 0.14 + sd(m, 81) * 0.30, ay = 0.20 + sd(m, 82) * 0.56;
           var bx = 0.52 + sd(m, 83) * 0.34, by = 0.20 + sd(m, 84) * 0.56;
           var av = clamp((g2 - m * 0.14) / 0.30);
-          o.x = W * lerp(ax, bx, Math.min(j, av));
-          o.y = H * lerp(ay, by, Math.min(j, av));
-          o.a = j <= av ? 0.50 : 0;
-          o.c = CI.cian; o.g = 600 + m;
-        } else {                                          // cotas
-          var c2 = ((i / 3) | 0) % 4;
-          var cy = H * (0.86 - c2 * 0.055);
-          o.x = W * (0.12 + j * (0.30 + c2 * 0.14));
-          o.y = cy;
-          o.a = 0.40 * g3 * (Math.abs(Math.sin(j * 30)) > 0.35 ? 1 : 0.25);
-          o.c = CI.ambar; o.g = 650 + c2;
+          o.x = W * lerp(ax, bx, Math.min(j2, av));
+          o.y = H * lerp(ay, by, Math.min(j2, av));
+          o.a = j2 <= av ? 0.62 : 0;
+          o.c = CI.cian; o.g = j2 <= av ? 600 + m : -1;
+          return;
         }
+        var q3 = banda(u, 0.74, 1, 4);                    // las cotas
+        o.x = W * (0.12 + q3.j * (0.30 + q3.k * 0.14));
+        o.y = H * (0.86 - q3.k * 0.055);
+        o.a = 0.52 * g3 * (Math.abs(Math.sin(q3.j * 30)) > 0.35 ? 1 : 0.25);
+        o.c = CI.violeta; o.g = 650 + q3.k;
       }, tm);
       pinta(0.09, tm);
     }
@@ -490,22 +559,22 @@
   /* CASOS — "La linterna". Una sala a oscuras: la evidencia solo aparece
      donde se está mirando. Lo demás sigue ahí, pero no se ve. */
   INSTR.casos = {
-    build: function () { nube(small ? 240 : 480); },
+    build: function () { nube(small ? 380 : 760); },
     draw: function (tm) {
       clear(0.30);
       var lx = cmx * W, ly = cmy * H;
       if (coarse) { lx = W * (0.5 + Math.cos(tm * 0.00016) * 0.28); ly = H * (0.5 + Math.sin(tm * 0.00021) * 0.24); }
       var r2 = Math.pow(Math.min(W, H) * 0.30, 2);
       materia(function (i, u, o) {
-        var k = i % 40;
+        var q = banda(u, 0, 1, 40);
+        var k = q.k, j = q.j;
         var cx = W * (0.08 + sd(k, 91) * 0.84), cy = H * (0.10 + sd(k, 92) * 0.80);
-        var j = ((i / 40) | 0) / Math.max(1, NUB.length / 40);
         o.x = cx + Math.cos(j * 6.2832) * W * 0.030;
         o.y = cy + Math.sin(j * 6.2832) * H * 0.045;
         var dx = o.x - lx, dy = o.y - ly;
         var luz = Math.exp(-(dx * dx + dy * dy) / r2);
         o.a = 0.05 + 0.80 * luz;
-        o.c = luz > 0.5 ? CI.ambar : CI.acero;
+        o.c = luz > 0.5 ? CI.cian : CI.acero;
         o.g = luz > 0.28 ? 700 + k : -1;
       }, tm);
       pinta(0.12, tm);
@@ -517,7 +586,7 @@
   INSTR.contacto = (function () {
     var campos = null, fuerza = 0;
     return {
-      build: function () { nube(small ? 240 : 460); campos = null; },
+      build: function () { nube(small ? 380 : 730); campos = null; },
       draw: function (tm) {
         clear(0.30);
         if (campos === null) {
@@ -530,8 +599,8 @@
         fuerza += (obj - fuerza) * 0.05;
         var cx = W * 0.5, cy = H * 0.52;
         materia(function (i, u, o) {
-          var anillo = i % 7;
-          var j = ((i / 7) | 0) / Math.max(1, NUB.length / 7);
+          var q = banda(u, 0, 1, 7);
+          var anillo = q.k, j = q.j;
           var t = ((tm * 0.00020) + anillo * 0.14) % 1;
           var rad = t * Math.min(W, H) * (0.12 + 0.24 * fuerza);
           var an = j * 6.2832;
@@ -551,14 +620,15 @@
   /* CONÓCENOS — "Dos mitades". Estrategia y arquitectura: dos materias que
      vienen de lados opuestos y se traban en el centro. */
   INSTR.conocenos = {
-    build: function () { nube(small ? 240 : 480); },
+    build: function () { nube(small ? 380 : 760); },
     draw: function (tm) {
       clear(0.30);
       var junta = win(0.06, 0.56);
       materia(function (i, u, o) {
-        var lado = i % 2;
-        var j = ((i / 2) | 0) / (NUB.length / 2);
-        var fil = ((i / 2) | 0) % 14;
+        var q = banda(u, 0, 1, 2);
+        var lado = q.k;
+        var q2 = banda(q.j, 0, 1, 14);
+        var fil = q2.k, j = q2.j;
         var y = H * (0.14 + (fil / 13) * 0.70);
         var x0 = lado ? 1.06 : -0.06;
         var x1 = lado ? 0.505 + (fil % 2) * 0.012 : 0.495 - (fil % 2) * 0.012;
@@ -575,7 +645,7 @@
   /* GARANTÍAS — "Lo que está escrito". Cada compromiso se escribe de
      izquierda a derecha y, una vez escrito, se queda. Nada parpadea. */
   INSTR.garantias = {
-    build: function () { nube(small ? 220 : 440); },
+    build: function () { nube(small ? 350 : 700); },
     draw: function (tm) {
       clear(0.30);
       var L = small ? 6 : 10;
@@ -601,7 +671,7 @@
   /* DATO — "El dato que se escribe una vez". Entra por un sitio y llega a
      todos los demás sin que nadie lo vuelva a teclear. */
   INSTR.dato = {
-    build: function () { nube(small ? 240 : 480); },
+    build: function () { nube(small ? 380 : 760); },
     draw: function (tm) {
       clear(0.30);
       var D = small ? 5 : 7;
@@ -610,26 +680,26 @@
       var X0 = narrow ? 0.08 : 0.62, X1 = narrow ? 0.94 : 0.97;
       var ox = W * X0, oy = H * 0.5;
       materia(function (i, u, o) {
-        var rol = i % 4;
-        if (rol === 0) {
-          /* Los destinos: donde el dato tiene que llegar. */
-          var k = ((i / 4) | 0) % D;
-          var an = (k / D) * 3.1416 - 1.5708;
-          var j2 = ((i / 4) | 0) / Math.max(1, NUB.length / 4);
-          o.x = W * (X0 + (X1 - X0) * 0.82) + Math.cos(j2 * 6.2832) * W * 0.022;
-          o.y = H * (0.14 + (k / (D - 1)) * 0.72) + Math.sin(j2 * 6.2832) * H * 0.026;
-          o.a = 0.34; o.c = CI.acero; o.g = 1100 + k;
-        } else {
-          /* El dato viajando: se escribe una vez y va a todos. */
-          var k2 = i % D;
-          var t = ((tm * 0.00028) + sd(i, 96)) % 1;
-          var dy = H * (0.14 + (k2 / (D - 1)) * 0.72);
-          o.x = lerp(ox, W * (X0 + (X1 - X0) * 0.82), t);
-          o.y = lerp(oy, dy, ease(t));
-          o.a = 0.14 + 0.60 * Math.sin(t * 3.1416);
-          o.c = t > 0.9 ? CI.verde : CI.cian;
-          o.g = -1;
+        if (u < 0.40) {
+          /* Los destinos: cada uno es un recuadro cerrado que dibujan sus
+             propias partículas, no una mancha. Se ve que son sitios. */
+          var q = banda(u, 0, 0.40, D);
+          var k = q.k;
+          var an = q.j * 6.2832;
+          o.x = W * (X0 + (X1 - X0) * 0.82) + Math.cos(an) * W * 0.026;
+          o.y = H * (0.14 + (k / (D - 1)) * 0.72) + Math.sin(an) * H * 0.032;
+          o.a = 0.42; o.c = CI.azul; o.g = 1100 + k;
+          return;
         }
+        /* El dato viajando: se escribe una vez y va a todos. */
+        var q3 = banda(u, 0.40, 1, D);
+        var t = ((tm * 0.00028) + sd(i, 96)) % 1;
+        var dy = H * (0.14 + (q3.k / (D - 1)) * 0.72);
+        o.x = lerp(ox, W * (X0 + (X1 - X0) * 0.82), t);
+        o.y = lerp(oy, dy, ease(t));
+        o.a = 0.16 + 0.72 * Math.sin(t * 3.1416);
+        o.c = t > 0.88 ? CI.verde : CI.cian;
+        o.g = -1;
       }, tm);
       pinta(0.10, tm);
     }
@@ -662,7 +732,7 @@
             rot: (sd(i, 8) - 0.5) * 2.6, hu: HU[i], d: sd(i, 9)
           });
         }
-        nube(small ? 300 : narrow ? 520 : 880);
+        nube(small ? 480 : narrow ? 830 : 1400);
       },
       draw: function (tm) {
         clear(0.30);
@@ -745,7 +815,7 @@
   /* COMERCIAL — "El barrido". Un barrido recorre el campo; lo que encuentra
      deja de ser ruido y sale despedido como una trayectoria con destino. */
   INSTR.comercial = {
-    build: function () { nube(small ? 200 : 420); },
+    build: function () { nube(small ? 320 : 670); },
     draw: function (tm) {
       clear(0.30);
       var sw = ((tm * 0.00013) % 1.35) - 0.18;
@@ -781,7 +851,7 @@
   /* MARKETING — "La propagación". Frentes que salen de unos emisores y
      encienden a quien alcanzan. Lo alcanzado ya no vuelve a apagarse. */
   INSTR.marketing = {
-    build: function () { nube(small ? 200 : 440); },
+    build: function () { nube(small ? 320 : 700); },
     draw: function (tm) {
       clear(0.30);
       var EM = [[W * 0.16, H * 0.30], [W * 0.10, H * 0.72], [W * 0.30, H * 0.52]];
@@ -812,7 +882,7 @@
   /* CLIENTES — "La continuidad". Cada cliente es una línea que no se corta,
      con sus hitos, y el sistema no olvida ninguno de los anteriores. */
   INSTR.clientes = {
-    build: function () { nube(small ? 220 : 460); },
+    build: function () { nube(small ? 350 : 730); },
     draw: function (tm) {
       clear(0.30);
       var L = small ? 4 : 6, per = 0;
@@ -841,7 +911,7 @@
   INSTR.produccion = (function () {
     var CAPAS = 4;
     return {
-      build: function () { nube(small ? 240 : narrow ? 420 : 640); },
+      build: function () { nube(small ? 380 : narrow ? 670 : 1020); },
       draw: function (tm) {
         clear(0.30);
         var beltY = H * 0.74, bx0 = W * 0.05, bx1 = W * 0.95;
@@ -912,7 +982,7 @@
   INSTR.finanzas = (function () {
     var nivel = 0.5;
     return {
-      build: function () { nube(small ? 200 : 420); },
+      build: function () { nube(small ? 320 : 670); },
       draw: function (tm) {
         clear(0.30);
         var midY = H * 0.5;
@@ -920,11 +990,12 @@
         var sal = 0.5 + 0.5 * Math.sin(tm * 0.00035 + 2.1);
         nivel += ((0.5 + (ent - sal) * 0.30) - nivel) * 0.02;
         materia(function (i, u, o) {
-          var arriba = (i % 2) === 0;
-          var j = sd(i, 41);
-          var t = ((tm * (arriba ? 0.00022 : 0.00019)) + j) % 1;
+          var q = banda(u, 0, 1, 2);
+          var arriba = q.k === 0;
+          var carril = banda(q.j, 0, 1, 6);
+          var t = ((tm * (arriba ? 0.00022 : 0.00019)) + carril.j) % 1;
           o.x = W * (arriba ? (0.06 + t * 0.88) : (0.94 - t * 0.88));
-          o.y = midY + (arriba ? -1 : 1) * (30 + (i % 6) * 13);
+          o.y = midY + (arriba ? -1 : 1) * (30 + carril.k * 13);
           o.a = 0.10 + 0.34 * (arriba ? ent : sal) * Math.sin(t * 3.1416);
           o.c = arriba ? CI.verde : CI.rosa;
           o.g = -1;
@@ -950,7 +1021,7 @@
   /* SOPORTE — "La reparación". El servicio se rompe por algún punto y una
      pasada lo cierra. Lo reparado vuelve a ser continuo. */
   INSTR.soporte = {
-    build: function () { nube(small ? 220 : 460); },
+    build: function () { nube(small ? 350 : 730); },
     draw: function (tm) {
       clear(0.30);
       var L = small ? 4 : 5;
@@ -987,25 +1058,29 @@
   /* ADMINISTRACIÓN — "El archivo". Lo que llega cae, encuentra su casilla
      indexada y queda sellado. Orden y permanencia, no actividad. */
   INSTR.administracion = {
-    build: function () { nube(small ? 200 : 420); },
+    build: function () { nube(small ? 320 : 670); },
     draw: function (tm) {
       clear(0.30);
       var cols = small ? 4 : 7, rows = 5, S = cols * rows;
       var gw = W * 0.84, gh = H * 0.64, ox = W * 0.08, oy = H * 0.18;
       var cw = gw / cols, ch = gh / rows;
       materia(function (i, u, o) {
-        var k = i % S;
+        var q = banda(u, 0, 1, S);
+        var k = q.k;
         var c = k % cols, r = (k / cols) | 0;
         var tx = ox + (c + 0.5) * cw, ty = oy + (r + 0.5) * ch;
         /* Cada casilla se archiva por turno y ya no se mueve más. */
         var turno = ((tm * 0.00008) % 1) * S;
         var arch = clamp((turno - k) / 2.2);
         var caida = ease(arch);
-        o.x = tx + ((i / S) | 0) % 3 * 5 - 5;
-        o.y = lerp(oy - H * 0.22, ty, caida) + (((i / S) | 0) % 3) * 4 - 4;
-        o.a = 0.10 + 0.56 * caida;
+        /* Cada expediente es un pequeño recuadro dentro de su casilla: se
+           ve archivado, no amontonado. */
+        var an2 = q.j * 6.2832;
+        o.x = tx + Math.cos(an2) * cw * 0.24;
+        o.y = lerp(oy - H * 0.22, ty, caida) + Math.sin(an2) * ch * 0.22;
+        o.a = 0.12 + 0.64 * caida;
         o.c = arch >= 1 ? CI.lav : CI.acero;
-        o.g = -1;
+        o.g = arch > 0.3 ? 1200 + k : -1;
       }, tm);
       pinta(0, tm);
       /* Las casillas del archivo: la estructura que da el orden. */
@@ -1024,7 +1099,7 @@
   /* DIRECCIÓN — "La lectura del conjunto". Todo el sistema en miniatura y un
      retículo que se posa sobre una parte y la lee. Ver el todo y decidir. */
   INSTR.direccion = {
-    build: function () { nube(small ? 220 : 480); },
+    build: function () { nube(small ? 350 : 760); },
     draw: function (tm) {
       clear(0.30);
       var cols = small ? 2 : 4, rows = small ? 3 : 3, S = cols * rows;
@@ -1032,10 +1107,10 @@
       var pw = gw / cols, ph = gh / rows;
       var foco = Math.floor(((tm * 0.00013) % 1) * S);
       materia(function (i, u, o) {
-        var k = i % S;
+        var q = banda(u, 0, 1, S);
+        var k = q.k, j = q.j;
         var c = k % cols, r = (k / cols) | 0;
         var px2 = ox + c * pw, py2 = oy + r * ph;
-        var j = ((i / S) | 0) / Math.max(1, (NUB.length / S));
         /* Cada panel tiene su propia actividad: una lectura, no un adorno. */
         var v = 0.5 + 0.5 * Math.sin(j * 9 + k * 2 + tm * 0.0006);
         o.x = px2 + pw * (0.12 + j * 0.76);
