@@ -156,7 +156,7 @@
      envolvente. La escala forma parte del significado. */
   var MARCO = [
     { x: 0.795, y: 0.50, w: 0.34, h: 0.94, d: 1.00 },  // 0 FARO      vertical
-    { x: 0.600, y: 0.50, w: 0.78, h: 0.86, d: 0.80 },  // 1 MARAÑA    ancha
+    { x: 0.755, y: 0.50, w: 0.40, h: 0.76, d: 0.88 },  // 1 MARAÑA    el nudo
     { x: 0.770, y: 0.46, w: 0.30, h: 0.62, d: 0.72 },  // 2 LUPA      íntima
     { x: 0.730, y: 0.52, w: 0.46, h: 0.52, d: 0.84 },  // 3 PUENTE    horizontal
     { x: 0.640, y: 0.505, w: 0.64, h: 0.94, d: 1.00 }, // 4 GRÚA      MONUMENTAL
@@ -254,14 +254,18 @@
 
     /* MARAÑA — casi siempre empieza igual: hilos que se enredan, se cruzan
        y no llevan a ninguna parte. Es un nudo, y se reconoce como un nudo. */
+    /* Un NUDO, no hilos sueltos: bucles apretados que se cruzan una y otra
+       vez sobre el mismo sitio. Repartidos por la pantalla no dicen nada;
+       enmarañados sí. */
     var mar = [];
-    for (k = 0; k < 7; k++) {
+    for (k = 0; k < 9; k++) {
       var q = [];
-      var ax = 0.10 + sd(k, 41) * 0.80, ay = 0.14 + sd(k, 42) * 0.72;
-      for (i = 0; i <= 26; i++) {
-        t = i / 26;
-        q.push([ax + Math.sin(t * 7.4 + k * 2.1) * 0.30 + t * 0.10 - 0.05,
-                ay + Math.cos(t * 5.2 + k * 1.7) * 0.26 + Math.sin(t * 11 + k) * 0.05]);
+      var f0 = 2.4 + sd(k, 41) * 3.2, f1 = 3.1 + sd(k, 42) * 3.6;
+      var ph0 = sd(k, 43) * 6.2832, ph1 = sd(k, 44) * 6.2832;
+      for (i = 0; i <= 60; i++) {
+        t = (i / 60) * 6.2832;
+        q.push([0.50 + Math.sin(t * f0 * 0.34 + ph0) * 0.30 + Math.cos(t + ph1) * 0.13,
+                0.50 + Math.cos(t * f1 * 0.34 + ph1) * 0.28 + Math.sin(t + ph0) * 0.12]);
       }
       mar.push(q);
     }
@@ -417,7 +421,7 @@
     o.ny += Math.cos(tm * 0.0004 + i) * 0.004;
     /* Uno de los hilos está atascado y parpadea: no llega. */
     var atasco = (o.g % 7) === 3;
-    o.a = atasco ? 0.20 + 0.26 * Math.abs(Math.sin(tm * 0.0016 + i)) : 0.34;
+    o.a = atasco ? 0.28 + 0.34 * Math.abs(Math.sin(tm * 0.0016 + i)) : 0.46;
     o.c = atasco ? 4 : 6;
   }
 
