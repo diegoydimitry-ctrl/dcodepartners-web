@@ -75,7 +75,30 @@ invadiría el siguiente, que es lo que pasa cuando la voz se genera demasiado
 lenta. Con `--forzar` se monta igualmente; con `--volumen` se ajusta la ganancia
 de la voz sobre la música (1,6 por defecto).
 
+## Locución con Kokoro (opcional, no es el flujo por defecto)
+
+Probado y funcional para el anuncio 1 (voz masculina española `em_alex`, motor
+Kokoro local sin cuenta ni nube); no encaja para el anuncio 2, cuyo ritmo cómico
+es demasiado corto para su cadencia. Detalle completo, con las cifras de cada
+fragmento, en **[PRUEBA-KOKORO.md](PRUEBA-KOKORO.md)**. Para generarla:
+
+```bash
+python3 tools/generar-locucion-kokoro.py --anuncio 1 --voz em_alex --speed 1.1 --out voces/anuncio-1
+python3 montar-voz.py --anuncio 1 --voces voces/anuncio-1 --fmt 9x16
+```
+
 ## Notas de implementación
+
+**Corte entre escenas (cut-the-curve).** El corte por defecto entre escenas no es
+un crossfade por opacidad — se probó y dejaba las dos escenas casi a alfa 0 a la
+vez, un fotograma "muerto" en cada corte (anti-patrón documentado en la doctrina
+de movimiento de HyperFrames: *"the crossfade has no carrier"*). En su lugar,
+`cutOffsetX()` en `ad.html`/`ad2.html` desplaza el contenido ~12 % del ancho de
+fotograma: la escena saliente se desliza a la izquierda acelerando
+(`power4.in`), la entrante continúa decelerando (`power4.out`) — las dos mitades
+de una misma curva `power4.inOut`, así que la velocidad coincide exactamente en
+el corte. Los fundidos de borde de cada escena se recortaron de ~0,3–0,45 s a
+~0,10 s: ya no cargan con la transición, solo evitan un pop de un fotograma.
 
 **Render determinista.** `render(t)` dibuja el fotograma del segundo `t` sin
 depender de fotogramas anteriores: no hay `requestAnimationFrame` ni acumuladores,

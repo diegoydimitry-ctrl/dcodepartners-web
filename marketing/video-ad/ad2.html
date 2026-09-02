@@ -62,6 +62,29 @@ const easeInOut    = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
 const easeOutBack  = t => { const c=1.70158, s=c+1; return 1 + s*Math.pow(t-1,3) + c*Math.pow(t-1,2); };
 const ramp = (t,a,b,fn=easeOut) => fn(clamp((t - a) / (b - a)));
 const win  = (t,a,b,c,d) => Math.min(ramp(t,a,b), 1 - ramp(t,c,d));
+const easeInPower4  = t => t*t*t*t;
+const easeOutPower4 = t => 1 - Math.pow(1 - t, 4);
+
+/* Corte entre escenas (cut-the-curve, motion-doctrine): ver la nota gemela en
+   ad.html. Sustituye el crossfade por opacidad — que dejaba las dos escenas
+   casi a alfa 0 a la vez en cada corte — por un desplazamiento direccional de
+   velocidad emparejada: la saliente se desliza a la izquierda acelerando, la
+   entrante continúa decelerando, mismo recorrido y duración en los dos lados. */
+const CUT_TRAVEL = 0.12;
+const CUT_DUR    = 0.32;
+
+function cutOffsetX(localT, sceneDur, isFirst, isLast){
+  const travel = CUT_TRAVEL * W;
+  if (!isLast && sceneDur - localT < CUT_DUR){
+    const p = easeInPower4(clamp((localT - (sceneDur - CUT_DUR)) / CUT_DUR));
+    return -travel * p;
+  }
+  if (!isFirst && localT < CUT_DUR){
+    const p = easeOutPower4(clamp(localT / CUT_DUR));
+    return travel * (1 - p);
+  }
+  return 0;
+}
 
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
   let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
@@ -289,8 +312,8 @@ function windowFrame(alpha, title, wRatio, hPx, cy){
 /* ═══════════ ACTO 1 · ESCENA 1 — «Ahora mismo te respondo» (0 – 7,2) ═══════════ */
 
 function s1(t){
-  const inn = ramp(t, 0, 0.4, easeInOut);
-  const out = 1 - ramp(t, 6.35, 6.6, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 6.50, 6.6, easeInOut);
   const box = phoneFrame(inn * out, 1);
 
   // La hora salta de 11:02 a 17:34 en el corte.
@@ -347,8 +370,8 @@ const NOTIS = [
 ];
 
 function s2(t){
-  const inn = ramp(t, 0, 0.3, easeInOut);
-  const out = 1 - ramp(t, 4.95, 5.2, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 5.10, 5.2, easeInOut);
   const box = phoneFrame(inn * out, 1);
   statusBar(box, '17:34');
 
@@ -388,8 +411,8 @@ function s2(t){
 /* ═══════════ ESCENA 3 — 47 pestañas (12,4 – 17,2) ═══════════ */
 
 function s3(t){
-  const inn = ramp(t, 0, 0.35, easeInOut);
-  const out = 1 - ramp(t, 4.55, 4.8, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 4.70, 4.8, easeInOut);
   const a = inn * out;
   const win_ = windowFrame(a, 'Navegador', 0.90, V ? 760 : 620, V ? H * 0.42 : CY);
 
@@ -440,8 +463,8 @@ const FILES = [
 ];
 
 function s4(t){
-  const inn = ramp(t, 0, 0.35, easeInOut);
-  const out = 1 - ramp(t, 5.15, 5.4, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 5.30, 5.4, easeInOut);
   const a = inn * out;
   const win_ = windowFrame(a, 'Documentos', 0.92, V ? 700 : 600, V ? H * 0.42 : CY);
 
@@ -512,7 +535,7 @@ const notaLayout = (() => {
 })();
 
 function s5(t){
-  const out = 1 - ramp(t, 4.75, 5.0, easeInOut);
+  const out = 1 - ramp(t, 4.90, 5.0, easeInOut);
 
   notaLayout.forEach((n, i) => {
     const p = ramp(t, n.at, n.at + 0.32, easeOutBack);
@@ -555,8 +578,8 @@ const EVENTOS = [
 ];
 
 function s6(t){
-  const inn = ramp(t, 0, 0.35, easeInOut);
-  const out = 1 - ramp(t, 4.75, 5.0, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 4.90, 5.0, easeInOut);
   const a = inn * out;
   const win_ = windowFrame(a, 'Agenda · Hoy', 0.90, V ? 820 : 640, V ? H * 0.40 : CY);
 
@@ -651,7 +674,7 @@ function s8(t){
   /* Beat A: la misma conversación del principio, pero contestada al instante. */
   const aOut = 1 - ramp(t, 5.5, 5.9, easeInOut);
   if (aOut > 0){
-    const inn = ramp(t, 0, 0.35, easeInOut);
+    const inn = ramp(t, 0, 0.10, easeInOut);
     const box = phoneFrame(inn * aOut, 1);
     statusBar(box, '11:02');
     chatHeader(box, 'Marta · Cliente', 'respondiendo automáticamente', C.blue);
@@ -693,7 +716,7 @@ function s8(t){
 
   /* Beat B: el flujo que hay detrás. */
   const bIn = ramp(t, 5.9, 6.3, easeInOut);
-  const bOut = 1 - ramp(t, 8.9, 9.2, easeInOut);
+  const bOut = 1 - ramp(t, 9.10, 9.2, easeInOut);
   if (bIn > 0){
     g.save(); g.globalAlpha = bIn * bOut;
     const n = FLOW.length;
@@ -951,8 +974,16 @@ function render(t){
   const m = activeTint(t);
   background(t, m.c, m.i);
 
-  for (const s of SCENES){
-    if (t >= s.a && t < s.b){ g.save(); s.fn(t - s.a); g.restore(); }
+  for (let i = 0; i < SCENES.length; i++){
+    const sc = SCENES[i];
+    if (t >= sc.a && t < sc.b){
+      const localT = t - sc.a;
+      const dx = cutOffsetX(localT, sc.b - sc.a, i === 0, i === SCENES.length - 1);
+      g.save();
+      g.translate(dx, 0);
+      sc.fn(localT);
+      g.restore();
+    }
   }
   if (t >= DUR - 0.001){ g.save(); s9(DUR - 49.2); g.restore(); }
 

@@ -78,6 +78,32 @@ const easeOutBack = t => { const c=1.70158, s=c+1; return 1 + s*Math.pow(t-1,3) 
 const ramp = (t,a,b,fn=easeOut) => fn(clamp((t - a) / (b - a)));
 /** Ventana: sube en [a,b], se mantiene, baja en [c,d]. */
 const win = (t,a,b,c,d) => Math.min(ramp(t,a,b), 1 - ramp(t,c,d));
+const easeInPower4  = t => t*t*t*t;
+const easeOutPower4 = t => 1 - Math.pow(1 - t, 4);
+
+/* ─────────────────────── corte entre escenas (cut-the-curve) ───────────────────────
+   Corte por defecto entre escenas, según la doctrina de movimiento: en vez de un
+   crossfade por opacidad (que deja las dos escenas casi a alfa 0 a la vez y crea un
+   fotograma "muerto" en cada corte), la escena saliente se desliza en la dirección de
+   la corriente (izquierda) acelerando, y la entrante continúa esa misma dirección
+   decelerando hasta su sitio — las dos mitades de una misma curva power4.inOut, así que
+   la velocidad coincide exactamente en el corte. Recorrido parcial (~12% del fotograma),
+   nunca fuera de plano del todo. */
+const CUT_TRAVEL = 0.12;   // fracción del ancho de fotograma
+const CUT_DUR    = 0.32;   // s, igual en salida y entrada — mitades espejadas
+
+function cutOffsetX(localT, sceneDur, isFirst, isLast){
+  const travel = CUT_TRAVEL * W;
+  if (!isLast && sceneDur - localT < CUT_DUR){
+    const p = easeInPower4(clamp((localT - (sceneDur - CUT_DUR)) / CUT_DUR));
+    return -travel * p;
+  }
+  if (!isFirst && localT < CUT_DUR){
+    const p = easeOutPower4(clamp(localT / CUT_DUR));
+    return travel * (1 - p);
+  }
+  return 0;
+}
 
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
   let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
@@ -254,7 +280,7 @@ function drawChip(c, appear, dim){
 }
 
 function scene1(t){                     // t local 0 → 4.5
-  const out = 1 - ramp(t, 4.25, 4.5, easeInOut);
+  const out = 1 - ramp(t, 4.40, 4.5, easeInOut);
 
   for (const c of chipLayout){
     if (t < c.at) continue;
@@ -310,8 +336,8 @@ const WORDS = [
 ];
 
 function scene2(t){                     // t local 0 → 6.0
-  const inn = ramp(t, 0, 0.35, easeInOut);
-  const out = 1 - ramp(t, 5.75, 6.0, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 5.90, 6.0, easeInOut);
   const a   = inn * out;
 
   // Columna de tareas manuales que se repiten sin fin.
@@ -387,8 +413,8 @@ function scene2(t){                     // t local 0 → 6.0
 /* ═══════════════════ ESCENA 3 — EL COSTE OCULTO (10.5 – 15.5 s) ═══════════════════ */
 
 function scene3(t){                     // t local 0 → 5.0
-  const inn = ramp(t, 0, 0.4, easeInOut);
-  const out = 1 - ramp(t, 4.7, 5.0, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 4.90, 5.0, easeInOut);
   const a   = inn * out;
 
   const cy = V ? H * 0.33 : CY;
@@ -580,7 +606,7 @@ function scene5(t){                     // t local 0 → 7.8
   const aOut = 1 - ramp(t, 3.55, 3.95, easeInOut);
   if (aOut > 0){
     const n = FLOW.length;
-    g.save(); g.globalAlpha = aOut * ramp(t, 0, 0.3, easeInOut);
+    g.save(); g.globalAlpha = aOut * ramp(t, 0, 0.10, easeInOut);
 
     if (V){
       const top = H * 0.20, gap = H * 0.115;
@@ -653,7 +679,7 @@ function scene5(t){                     // t local 0 → 7.8
 
   /* Beat B (3.95 – 7.8): el método, escalonado. */
   const bIn = ramp(t, 3.95, 4.3, easeInOut);
-  const bOut = 1 - ramp(t, 7.55, 7.8, easeInOut);
+  const bOut = 1 - ramp(t, 7.70, 7.8, easeInOut);
   if (bIn > 0){
     g.save(); g.globalAlpha = bIn * bOut;
     const size = V ? 64 : 66 * TS;
@@ -698,8 +724,8 @@ function scene5(t){                     // t local 0 → 7.8
 const GAINS = ['MENOS TAREAS MANUALES', 'MÁS ORGANIZACIÓN', 'MÁS TIEMPO PARA CRECER'];
 
 function scene6(t){                     // t local 0 → 6.0
-  const inn = ramp(t, 0, 0.45, easeInOut);
-  const out = 1 - ramp(t, 5.75, 6.0, easeInOut);
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 5.90, 6.0, easeInOut);
   const a = inn * out;
 
   /* La misma empresa de la escena 1, ahora ordenada: rejilla alineada,
@@ -882,8 +908,16 @@ function render(t){
 
   background(t);
 
-  for (const s of SCENES){
-    if (t >= s.a && t < s.b){ g.save(); s.fn(t - s.a); g.restore(); }
+  for (let i = 0; i < SCENES.length; i++){
+    const sc = SCENES[i];
+    if (t >= sc.a && t < sc.b){
+      const localT = t - sc.a;
+      const dx = cutOffsetX(localT, sc.b - sc.a, i === 0, i === SCENES.length - 1);
+      g.save();
+      g.translate(dx, 0);
+      sc.fn(localT);
+      g.restore();
+    }
   }
   if (t >= DUR){ g.save(); scene7(DUR - 34.6); g.restore(); }
 
