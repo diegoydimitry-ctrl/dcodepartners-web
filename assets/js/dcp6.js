@@ -1,43 +1,50 @@
 /* ============================================================================
-   D-CODE PARTNERS — LA MISMA MATERIA (portada)
+   D-CODE PARTNERS — LA MATERIA (portada)
    ----------------------------------------------------------------------------
-   UNA SOLA NUBE DE PARTÍCULAS DURANTE TODO EL RECORRIDO.
+   UNA SOLA MATERIA. NUEVE ESTADOS. CADA UNO SIGNIFICA LO QUE DICE EL TEXTO.
 
-   No hay escenas. No hay un gráfico por sección. Existe un único conjunto de
-   partículas — las mismas, con la misma identidad — y lo que cambia es la
-   FORMACIÓN hacia la que cada una viaja. La partícula 412 es la partícula 412
-   en los nueve estados: la ves desplazarse de una estructura a la siguiente.
+   Tres cosas sostienen esta portada, y ninguna es decorativa:
 
-   Cada formación sale de lo que dice el texto que la acompaña, no al revés:
+   1 · MATERIA CONTINUA. Existe un único conjunto de partículas durante todo
+       el recorrido. La partícula 412 es la partícula 412 en los nueve
+       estados; lo que cambia es la FORMACIÓN hacia la que viaja. Nada
+       aparece ni desaparece: se desplaza, se reorganiza, se agrupa, se
+       separa, construye, conecta y crece.
 
-     0 TERRENO    «Miramos cómo trabajas de verdad» — curvas de nivel sobre el
-                  terreno y un barrido de atención que las va leyendo.
-     1 SIN SISTEMA «Persigo cobros · se me escapan · lo mismo en tres sitios» —
-                  trayectos que se cruzan mal, tres de ellos calcados con
-                  desfase, y otros que se apagan sin llegar a ninguna parte.
-     2 REPETICIÓN «Aparecen los trayectos que se repiten» — el mismo motivo
-                  exacto aparece en varios puntos del campo. Lo que se repite
-                  se ve porque es idéntico; lo que no llevaba a nada se apaga.
-     3 PERTENENCIA «Cada cosa deja de estar suelta y pasa a pertenecer a una
-                  parte» — las partículas emigran y se recogen dentro de una
-                  región cerrada. Ya no se enlazan con todo: solo con los suyos.
-     4 ARMAZÓN    «Se levanta la estructura y se tiende la instalación por
-                  encima» — las partículas se ALINEAN sobre montantes, vigas y
-                  diagonales: la celosía está hecha de ellas. Se monta de abajo
-                  arriba, y solo después se tiende por encima lo que circula.
-     5 CIRCULACIÓN «Circula con origen y destino, hace cola donde toca y sale.
-                  Y lo que circula se puede contar» — avanzan por carriles, se
-                  acumulan en la estación, salen, y el recuento sube.
-     6 MÓDULOS    «Piezas que ya existen. Y las que falten» — se agrupan en
-                  módulos con conectores, y un hueco queda vacío hasta que se
-                  puebla: la pieza que falta se construye.
-     7 RÉGIMEN    «Un sistema financiero completo» — anillos concéntricos con
-                  paso constante. Ya no se construye: opera, y se lee.
-     8 UN SISTEMA «Empecemos» — todo converge en un solo cuerpo enlazado.
+   2 · PROFUNDIDAD REAL. Tres estratos. Lo lejano es grande, difuso y lento;
+       lo cercano, pequeño, nítido y rápido. Cada estrato se desplaza a
+       distinta velocidad con el scroll y el puntero, y se pinta de lejos a
+       cerca. Una luz recorre el campo y roza lo que tiene delante. Eso es lo
+       que separa una nube de puntos de una materia con cuerpo.
 
-   La transición nunca corta: se mezcla siempre entre dos formaciones vecinas,
-   y cada partícula sale hacia la siguiente en un instante ligeramente distinto,
-   de modo que la reorganización se percibe como una ola y no como un salto.
+   3 · COMPOSICIÓN POR SECCIÓN. Cada estado ocupa el espacio de otra manera:
+       hay un momento monumental, otro íntimo y preciso, una banda
+       horizontal, una columna estrecha, una envolvente. Si todas las
+       secciones fueran "texto a un lado, animación al otro", el recorrido
+       sería predecible a los diez segundos.
+
+   LAS NUEVE FORMACIONES — cada una responde a: si quitas el texto, ¿se
+   intuye el concepto?
+
+     0 ANÁLISIS      información dispersa siendo interpretada: un frente de
+                     lectura separa la señal del ruido y la señal se alinea
+     1 SIN SISTEMA   rutas que se cruzan mal, tres calcadas — lo mismo hecho
+                     en tres sitios — y trayectos que mueren sin destino
+     2 DETECCIÓN     el mismo patrón exacto aparece en varios puntos, queda
+                     acotado y se enciende; lo demás se apaga
+     3 PERTENENCIA   lo suelto emigra a partes definidas, y las partes
+                     descubren que se conectan entre sí
+     4 CONSTRUCCIÓN  base, pilares que suben desde el suelo, vigas que salvan
+                     la luz, diagonales que arriostran y la instalación por
+                     encima. El momento monumental del recorrido.
+     5 AUTOMATIZACIÓN un ciclo cerrado: lo que termina una estación dispara
+                     la siguiente. Puesto en marcha, sigue solo.
+     6 CAPACIDAD     módulos con puerto; entra uno que faltaba y cada módulo
+                     gana una rama. Ahora soporta más que antes.
+     7 RÉGIMEN       órbitas que se ciñen vuelta a vuelta: lo mismo, cada vez
+                     con menos desperdicio
+     8 RESULTADO     todo lo anterior en un solo cuerpo estable y enlazado,
+                     rodeando a quien lee
    ========================================================================= */
 (function () {
   'use strict';
@@ -48,16 +55,22 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var coarse  = window.matchMedia('(pointer: coarse)').matches;
 
-  var STEEL = [150, 178, 226];
-  var HUE = [
-    [128, 222, 234], [ 91, 140, 255], [124, 108, 255],
-    [167, 139, 250], [255, 107, 157], [ 45, 212, 191]
+  var ACERO = [150, 178, 226];
+  var COL = [
+    [128, 222, 234],  // 0 cian
+    [ 91, 140, 255],  // 1 azul eléctrico
+    [124, 108, 255],  // 2 violeta
+    [167, 139, 250],  // 3 lavanda
+    [255, 107, 157],  // 4 rosa   (solo para lo que falla)
+    [ 45, 212, 191],  // 5 turquesa (solo para lo que ya funciona)
+    ACERO,            // 6 acero: la mayoría
+    [226, 240, 255]   // 7 blanco: el destello
   ];
   function rgba(h, a) { return 'rgba(' + h[0] + ',' + h[1] + ',' + h[2] + ',' + a + ')'; }
   function sd(i, s) { var x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return x - Math.floor(x); }
   function lerp(a, b, t) { return a + (b - a) * t; }
   function ease(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
-  function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+  function cl(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
 
   var canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
@@ -65,24 +78,39 @@
   var ctx = canvas.getContext('2d', { alpha: false });
 
   var W = 0, H = 0, dpr = 1, narrow = false, small = false;
-  var N = 0, PT = [], MEM = [], BEAMS = [], SPR = [];
+  var N = 0, PT = [], ORD = [], SPR = [], MEM = [], VIG = [];
 
-  /* Un destello pre-dibujado por color. Crear un gradiente por partícula y por
-     fotograma cuesta el doble de lo que cuesta pintarlas todas. */
+  /* Un destello por color Y POR ESTRATO. El lejano es ancho y sin núcleo —
+     así es como se ve algo desenfocado —; el cercano tiene núcleo duro. */
   function sprites() {
     SPR = [];
-    var all = HUE.concat([STEEL, [226, 240, 255]]);
-    for (var i = 0; i < all.length; i++) {
-      var s = document.createElement('canvas'), R = 32;
-      s.width = s.height = R * 2;
-      var g = s.getContext('2d');
-      var gr = g.createRadialGradient(R, R, 0, R, R, R);
-      gr.addColorStop(0,    rgba(all[i], 1));
-      gr.addColorStop(0.22, rgba(all[i], 0.55));
-      gr.addColorStop(0.55, rgba(all[i], 0.13));
-      gr.addColorStop(1,    rgba(all[i], 0));
-      g.fillStyle = gr; g.fillRect(0, 0, R * 2, R * 2);
-      SPR.push(s);
+    for (var e = 0; e < 3; e++) {
+      var fila = [];
+      for (var i = 0; i < COL.length; i++) {
+        var cv = document.createElement('canvas'), R = 32;
+        cv.width = cv.height = R * 2;
+        var g = cv.getContext('2d');
+        var gr = g.createRadialGradient(R, R, 0, R, R, R);
+        if (e === 0) {                         // lejos: difuso, sin núcleo
+          gr.addColorStop(0,    rgba(COL[i], 0.64));
+          gr.addColorStop(0.42, rgba(COL[i], 0.34));
+          gr.addColorStop(1,    rgba(COL[i], 0));
+        } else if (e === 1) {                  // medio
+          gr.addColorStop(0,    rgba(COL[i], 0.86));
+          gr.addColorStop(0.26, rgba(COL[i], 0.40));
+          gr.addColorStop(0.66, rgba(COL[i], 0.09));
+          gr.addColorStop(1,    rgba(COL[i], 0));
+        } else {                               // cerca: núcleo duro y nítido
+          gr.addColorStop(0,    rgba(COL[i], 1));
+          gr.addColorStop(0.13, rgba(COL[i], 0.80));
+          gr.addColorStop(0.34, rgba(COL[i], 0.22));
+          gr.addColorStop(0.72, rgba(COL[i], 0.04));
+          gr.addColorStop(1,    rgba(COL[i], 0));
+        }
+        g.fillStyle = gr; g.fillRect(0, 0, R * 2, R * 2);
+        fila.push(cv);
+      }
+      SPR.push(fila);
     }
   }
 
@@ -98,257 +126,317 @@
   }
 
   function build() {
-    N = small ? 360 : narrow ? 620 : 1000;
-    PT = [];
+    N = small ? 420 : narrow ? 760 : 1250;
+    PT = []; ORD = [];
     for (var i = 0; i < N; i++) {
       var r = sd(i, 1), r2 = sd(i, 2), r3 = sd(i, 3);
-      /* El acero domina; el color es minoría y por eso significa algo. */
-      var hi = r3 < 0.62 ? 6 : (r3 < 0.72 ? 0 : (r3 < 0.80 ? 1 : (r3 < 0.87 ? 2 :
-               (r3 < 0.93 ? 3 : (r3 < 0.975 ? 5 : 4)))));
+      /* Tres estratos con reparto desigual: más lejos que cerca, como en
+         cualquier profundidad real. */
+      var e = r < 0.42 ? 0 : (r < 0.78 ? 1 : 2);
+      var z = e === 0 ? 0.22 + r * 0.30 : (e === 1 ? 0.52 + r2 * 0.26 : 0.80 + r2 * 0.32);
       PT.push({
-        h: hi,                       // índice en SPR
-        z: 0.35 + r * 0.65,          // profundidad
-        s: 0.7 + r2 * 0.9,           // tamaño base
-        ph: r * 6.2832,              // fase propia
-        dl: r2 * 0.34,               // retardo: la reorganización es una ola
-        vx: 0, vy: 0, x: -1, y: 0
+        e: e, z: z,
+        s: 0.62 + r2 * 0.86,
+        c: 6,
+        dl: r2 * 0.30,                 // la reorganización es una ola
+        vx: 0, vy: 0, x: -1, y: 0,
+        hx: sd(i, 4), hy: sd(i, 5)     // sitio en la bruma de fondo
       });
+      ORD.push(i);
     }
-    /* La celosía del estado 4: montantes, vigas y diagonales reales. */
-    MEM = []; BEAMS = [];
-    var x0 = narrow ? W * 0.10 : W * 0.50, x1 = narrow ? W * 0.90 : W * 0.93;
-    var yb = H * 0.86, yt = H * 0.20, bays = narrow ? 3 : 4, lv = 3;
+    /* De lejos a cerca: lo cercano tapa a lo lejano, no al revés. */
+    ORD.sort(function (a, b) { return PT[a].z - PT[b].z; });
+
+    /* La celosía del estado 4, en coordenadas normalizadas 0..1. */
+    MEM = []; VIG = [];
+    var bays = narrow ? 3 : 4, lv = 3;
+    var x0 = 0.06, x1 = 0.94, yb = 0.94, yt = 0.10;
     var bw = (x1 - x0) / bays, lh = (yb - yt) / lv;
     var c, l;
-    for (c = 0; c <= bays; c++) {                     // montantes
-      var mx0 = x0 + c * bw;
-      MEM.push({ ax: mx0, ay: yb, bx: mx0, by: yt, t: 0 });
+    MEM.push({ ax: x0, ay: yb, bx: x1, by: yb, t: -0.12, k: 'base' });   // el suelo
+    for (c = 0; c <= bays; c++) {                                        // pilares
+      MEM.push({ ax: x0 + c * bw, ay: yb, bx: x0 + c * bw, by: yt, t: 0.04, k: 'pil' });
     }
-    for (l = 0; l <= lv; l++) {                       // vigas
-      var my = yb - l * lh;
-      BEAMS.push(MEM.length);
-      MEM.push({ ax: x0, ay: my, bx: x1, by: my, t: l / lv });
+    for (l = 1; l <= lv; l++) {                                          // vigas
+      VIG.push(MEM.length);
+      MEM.push({ ax: x0, ay: yb - l * lh, bx: x1, by: yb - l * lh, t: 0.14 + (l / lv) * 0.46, k: 'vig' });
     }
-    for (l = 0; l < lv; l++) {                        // diagonales
+    for (l = 0; l < lv; l++) {                                           // diagonales
       for (c = 0; c < bays; c++) {
-        var dy0 = yb - l * lh, dy1 = yb - (l + 1) * lh;
+        var d0 = yb - l * lh, d1 = yb - (l + 1) * lh;
         var f = (l + c) % 2 === 0;
-        MEM.push({ ax: x0 + c * bw, ay: f ? dy0 : dy1,
-                   bx: x0 + (c + 1) * bw, by: f ? dy1 : dy0, t: l / lv });
+        MEM.push({ ax: x0 + c * bw, ay: f ? d0 : d1,
+                   bx: x0 + (c + 1) * bw, by: f ? d1 : d0,
+                   t: 0.20 + (l / lv) * 0.46, k: 'dia' });
       }
     }
     sprites();
   }
 
-  /* --------------------------------------------------------- FORMACIONES */
-  /* Cada una escribe en o.x, o.y, o.a (presencia) y o.g (grupo, para el
-     enlace). El grupo es lo que hace que la estructura EMANE de las propias
-     partículas: dos partículas consecutivas del mismo grupo se unen. */
+  /* ------------------------------------------------------- COMPOSICIÓN */
+  /* Cada estado ocupa el espacio a su manera. Esto es lo que rompe la
+     monotonía de "texto a un lado, animación al otro". */
+  var MARCO = [
+    { x: 0.50, y: 0.48, w: 1.00, h: 1.00, d: 1.00 },  // 0 a pantalla completa
+    { x: 0.54, y: 0.50, w: 1.02, h: 0.94, d: 0.72 },  // 1 disperso y ancho
+    { x: 0.775, y: 0.44, w: 0.34, h: 0.40, d: 0.62 }, // 2 íntimo y preciso
+    { x: 0.735, y: 0.50, w: 0.46, h: 0.60, d: 0.80 }, // 3 medio
+    { x: 0.635, y: 0.52, w: 0.70, h: 1.02, d: 1.00 }, // 4 MONUMENTAL
+    { x: 0.700, y: 0.50, w: 0.56, h: 0.30, d: 0.74 }, // 5 banda horizontal
+    { x: 0.895, y: 0.50, w: 0.15, h: 0.84, d: 0.66 }, // 6 columna estrecha
+    { x: 0.760, y: 0.47, w: 0.38, h: 0.56, d: 0.86 }, // 7 instrumento denso
+    { x: 0.500, y: 0.46, w: 1.06, h: 1.06, d: 1.00 }  // 8 envolvente
+  ];
+  /* Cuánta de la materia participa; el resto queda como bruma de fondo. Así
+     la densidad cambia de una sección a otra en vez de ser siempre la misma. */
+  var USO = [1.00, 0.72, 0.46, 0.68, 1.00, 0.55, 0.50, 0.62, 1.00];
 
+  /* ------------------------------------------------------- FORMACIONES */
+  /* Todas escriben en o.nx, o.ny (0..1 dentro del marco), o.a, o.g, o.c. */
   var TAU = 6.2832;
+  var o1 = { nx: 0, ny: 0, a: 1, g: -1, c: 6 };
 
-  function F0(i, u, g, G, o, tm, ins) {              // TERRENO
-    /* «Analizamos tu empresa. Construimos su sistema.» El titular dice dos
-       cosas, así que la portada hace las dos: un barrido recorre el terreno
-       y, justo a su paso, la materia se ORDENA en retícula un instante antes
-       de volver a relajarse. Se ve analizar y se ve construir. */
-    var y = H * (0.14 + (g / (G - 1)) * 0.74);
-    var x = W * (0.02 + u * 0.96);
-    var ty = y + Math.sin(u * 5.2 + g * 0.8) * H * 0.048
-               + Math.sin(u * 11.0 + g * 1.7) * H * 0.015;
+  /* 0 · ANÁLISIS — información dispersa que está siendo interpretada. Un
+     frente de lectura la recorre: a su paso, lo que es SEÑAL se alinea en
+     filas y viaja al punto de análisis; lo que es RUIDO se dispersa y baja.
+     Si quitas el texto: algo está leyendo mucha información y separando lo
+     que importa de lo que no. */
+  function F0(i, u, g, G, o, tm, ins) {
+    /* La información NO está suelta: llega en trayectorias. Las partículas de
+       una misma trayectoria son CONSECUTIVAS, así que el enlace las dibuja y
+       se ven como recorridos, no como puntos sueltos. Un frente de lectura
+       las recorre y separa la señal del ruido: la señal abandona su
+       trayectoria, se alinea en filas y converge en el punto de análisis; el
+       ruido se abre y baja de nivel. */
+    var TR = narrow ? 16 : 26;
+    var per = N / TR;
+    var tr = Math.min(TR - 1, (i / per) | 0);
+    var j = (i - tr * per) / per;
+    var a0 = sd(tr, 11), a1 = sd(tr, 12), a2 = sd(tr, 13);
 
-    var sw = ((tm * 0.00010) % 1.5) - 0.26;
-    var d = u - sw;                          // >0 sin leer todavía
-    var tras  = clamp01(-d / 0.20);          // justo detrás del barrido
-    var suelt = clamp01((-d - 0.20) / 0.34); // y después se suelta otra vez
-    var orden = tras * (1 - suelt);
+    var bx = -0.08 + j * 1.18;
+    var by = 0.05 + a0 * 0.90
+           + Math.sin(j * 3.1 + a1 * 6.28) * 0.10
+           + Math.sin(j * 7.4 + a2 * 6.28) * 0.032;
 
-    var cel = W * 0.052;
-    o.x = lerp(x,  Math.round(x  / cel) * cel, orden);
-    o.y = lerp(ty, Math.round(ty / (cel * 0.62)) * (cel * 0.62), orden);
-    /* El frente del barrido es lo más brillante del recorrido. */
-    o.a = 0.30 + 0.70 * Math.exp(-d * d * 42) + 0.46 * orden
-              + 0.12 * Math.sin(u * 7 + g);
-    o.g = g;
-  }
+    var frente = ((tm * 0.000062) % 1.46) - 0.26;
+    var d = bx - frente;
+    var leido = cl(-d / 0.16);
+    var senal = sd(i, 14) > 0.68;
 
-  function F1(i, u, g, G, o, tm, ins) {              // SIN SISTEMA
-    /* Tres trayectos calcados con desfase: «lo mismo, en tres sitios». */
-    var dup = (g % 7 === 3);
-    var src = dup ? 3 : g;
-    var off = dup ? ((g / 7) | 0) * 16 : 0;
-    var a1 = sd(src, 11) * TAU, a2 = sd(src, 12) * TAU;
-    var sx = W * (0.05 + sd(src, 13) * 0.9), sy = H * (0.10 + sd(src, 14) * 0.8);
-    var ex = W * (0.05 + sd(src, 15) * 0.9), ey = H * (0.10 + sd(src, 16) * 0.8);
-    var cx = (sx + ex) / 2 + Math.cos(a1) * W * 0.26;
-    var cy = (sy + ey) / 2 + Math.sin(a2) * H * 0.26;
-    /* Los que no llevan a ninguna parte se detienen y se apagan. */
-    var dead = (src % 5 === 2);
-    var uu = dead ? Math.min(u, 0.52) : u;
-    var m = 1 - uu;
-    o.x = m * m * sx + 2 * m * uu * cx + uu * uu * ex + off;
-    o.y = m * m * sy + 2 * m * uu * cy + uu * uu * ey + off * 0.5;
-    o.a = dead ? (u > 0.52 ? 0.05 : 0.50) : 0.46 + 0.24 * Math.sin(u * 9 + tm * 0.0012 + g);
-    o.g = g;
-  }
-
-  function F2(i, u, g, G, o, tm, ins) {              // REPETICIÓN
-    /* El MISMO motivo, exacto, en varios puntos: eso es el patrón. */
-    var cols = narrow ? 2 : 3, rows = 2;
-    var slot = g % (cols * rows);
-    var cxx = W * (narrow ? 0.10 : 0.50) + (slot % cols) * W * (narrow ? 0.40 : 0.155);
-    var cyy = H * 0.26 + ((slot / cols) | 0) * H * 0.34;
-    var sw = W * (narrow ? 0.32 : 0.125), sh = H * 0.20;
-    /* motivo idéntico para todos los repetidos */
-    var mo = Math.sin(u * TAU * 1.5), mv = Math.sin(u * TAU * 0.5);
-    var rep = g < G * 0.72;
-    if (rep) {
-      o.x = cxx + u * sw;
-      o.y = cyy + mo * sh * 0.30 + mv * sh * 0.10;
-      /* Los repetidos se afirman a la vez: ahí está. */
-      o.a = 0.30 + 0.62 * ease((ins - 0.15) / 0.5);
-      o.g = 100 + slot;
+    if (senal) {
+      var fila = Math.floor(sd(i, 15) * 7);
+      var fy = 0.20 + fila * 0.100;
+      var conv = cl((-d - 0.24) / 0.38);
+      o.nx = lerp(bx, lerp(bx, 0.965, conv * conv), leido);
+      o.ny = lerp(by, lerp(fy, 0.50, conv * conv), leido);
+      o.a = 0.30 + 0.44 * leido + 0.50 * conv;
+      o.c = conv > 0.55 ? 1 : (leido > 0.4 ? 0 : 6);
+      /* Mientras es señal alineada forma fila; al converger deja de enlazar. */
+      o.g = (leido > 0.65 && conv < 0.45) ? 100 + fila : -1;
     } else {
-      /* Los que no llevaban a nada siguen sueltos y se apagan. */
-      F1(i, u, g, G, o, tm, ins);
-      o.a *= 0.22 * (1 - ease(ins));
-      o.g = -1;
+      o.nx = bx + leido * 0.045;
+      o.ny = by + leido * (by - 0.5) * 0.55;
+      o.a = 0.40 - 0.30 * leido;
+      o.c = 6;
+      /* Antes de ser leída, la trayectoria se ve entera. */
+      o.g = leido < 0.30 ? 60 + tr : -1;
+    }
+    /* El frente de lectura: la banda más brillante de toda la portada. */
+    o.a += 1.05 * Math.exp(-d * d * 120);
+  }
+
+  /* 1 · SIN SISTEMA — una empresa funcionando, pero sin sistema: rutas que
+     se cruzan mal, TRES CALCADAS (lo mismo hecho en tres sitios) y trayectos
+     que se apagan sin llegar a ninguna parte. */
+  function F1(i, u, g, G, o, tm, ins) {
+    var dup = (g % 8) < 3;                       // tres rutas idénticas
+    var src = dup ? 2 : g;
+    var off = dup ? (g % 8) * 0.035 : 0;
+    var sx = 0.04 + sd(src, 21) * 0.92, sy = 0.06 + sd(src, 22) * 0.88;
+    var ex = 0.04 + sd(src, 23) * 0.92, ey = 0.06 + sd(src, 24) * 0.88;
+    var cx = (sx + ex) / 2 + Math.cos(sd(src, 25) * TAU) * 0.30;
+    var cy = (sy + ey) / 2 + Math.sin(sd(src, 26) * TAU) * 0.30;
+    var muere = (src % 5) === 2;                 // no lleva a ninguna parte
+    var uu = muere ? Math.min(u, 0.54) : u;
+    var m = 1 - uu;
+    o.nx = m * m * sx + 2 * m * uu * cx + uu * uu * ex + off;
+    o.ny = m * m * sy + 2 * m * uu * cy + uu * uu * ey + off * 0.4;
+    o.a = muere && u > 0.54 ? 0.04 : 0.34 + 0.20 * Math.sin(u * 9 + tm * 0.0011 + g);
+    o.c = muere ? (u > 0.5 ? 4 : 6) : (dup ? 3 : 6);
+    o.g = muere && u > 0.54 ? -1 : g;
+  }
+
+  /* 2 · DETECCIÓN — el MISMO patrón, exacto, aparece en varios puntos del
+     campo. Queda acotado entre marcas y se enciende; lo demás se apaga.
+     Si quitas el texto: algo escondido acaba de ser encontrado. */
+  function F2(i, u, g, G, o, tm, ins) {
+    var R = 3;                                   // tres repeticiones
+    var k = g % (R + 2);
+    var hallado = ease((ins - 0.14) / 0.34);
+    if (k < R) {
+      var sy2 = 0.16 + k * 0.32;
+      /* motivo idéntico en los tres: por eso se reconoce como patrón */
+      var mo = Math.sin(u * TAU * 1.5), mv = Math.sin(u * TAU * 0.5);
+      o.nx = 0.10 + u * 0.80;
+      o.ny = sy2 + mo * 0.085 + mv * 0.030;
+      o.a = 0.16 + 0.80 * hallado;
+      o.c = hallado > 0.5 ? 0 : 6;
+      o.g = 200 + k;
+    } else {
+      /* Lo que no es el patrón se retira. */
+      o.nx = sd(i, 31); o.ny = sd(i, 32);
+      o.a = 0.20 * (1 - hallado * 0.86);
+      o.c = 6; o.g = -1;
     }
   }
 
-  function F3(i, u, g, G, o, tm, ins) {              // PERTENENCIA
-    /* Los bloques son CONTIGUOS por índice: cada parte es un cuerpo, no
-       partículas alternas. Si el grupo salta, nada parece pertenecer a nada. */
+  /* 3 · PERTENENCIA Y CONEXIÓN — lo suelto emigra a partes definidas; y
+     cuando ya pertenece, las partes descubren que se conectan entre sí.
+     Antes eran cosas separadas; ahora son un sistema. */
+  function F3(i, u, g, G, o, tm, ins) {
     var K = narrow ? 3 : 4;
     var per = N / K;
     var k = Math.min(K - 1, (i / per) | 0);
-    var j = i - k * per;                       // posición dentro de su parte
-    var cols = narrow ? 6 : 7, rows = Math.ceil(per / cols);
-    var bw = W * (narrow ? 0.25 : 0.098), bh = H * 0.42;
-    var bx = W * (narrow ? 0.11 : 0.50) + k * W * (narrow ? 0.27 : 0.112);
-    var by = H * 0.27;
-    /* Emigran una a una: las últimas de cada parte todavía están llegando. */
-    var arr = ease((ins - 0.10 - (j / per) * 0.42) / 0.30);
-    var cx2 = bx + bw / 2, cy2 = by + bh / 2;
-    var tx2 = bx + ((j % cols) + 0.5) * (bw / cols);
-    var ty2 = by + ((((j / cols) | 0) % rows) + 0.5) * (bh / rows);
-    o.x = lerp(cx2 + Math.cos(i * 2.4) * W * 0.16, tx2, arr)
-        + Math.sin(tm * 0.0006 + i) * 1.1;
-    o.y = lerp(cy2 + Math.sin(i * 3.1) * H * 0.22, ty2, arr)
-        + Math.cos(tm * 0.0006 + i) * 1.1;
-    o.a = 0.30 + 0.52 * arr;
-    o.g = arr > 0.6 ? 200 + k : -1;            // solo enlaza cuando ya pertenece
+    var j = i - k * per;
+    var cols = 6, rows = Math.ceil(per / cols);
+    var bx = 0.06 + k * (0.92 / K), bw = (0.92 / K) * 0.74;
+    var lleg = ease((ins - 0.06 - (j / per) * 0.40) / 0.30);
+    var tx = bx + ((j % cols) + 0.5) * (bw / cols);
+    var ty = 0.10 + ((((j / cols) | 0) % rows) + 0.5) * (0.80 / rows);
+    o.nx = lerp(0.5 + Math.cos(i * 2.4) * 0.42, tx, lleg);
+    o.ny = lerp(0.5 + Math.sin(i * 3.1) * 0.46, ty, lleg);
+    o.a = 0.16 + 0.50 * lleg;
+    o.c = lleg > 0.7 ? (k % 2 ? 2 : 1) : 6;
+    o.g = lleg > 0.6 ? 300 + k : -1;
   }
 
-  function F4(i, u, g, G, o, tm, ins) {              // ARMAZÓN
-    var m = MEM[g % MEM.length];
-    /* Se monta de abajo arriba: cada pieza aparece cuando le toca. */
-    var raise = ease((ins - m.t * 0.42) / 0.34);
-    var x = lerp(m.ax, m.bx, u), y = lerp(m.ay, m.by, u);
-    /* La instalación se tiende DESPUÉS, y por encima del acero. */
-    var over = (g % 9 === 4);
-    if (over) {
-      /* El tendido va por encima de las vigas, en horizontal. Una instalación
-         no serpentea: sigue el recorrido que le deja la estructura. */
-      var bm = MEM[BEAMS[g % BEAMS.length]];
-      var lay = ease((ins - 0.52) / 0.40);
-      o.x = lerp(bm.ax, bm.bx, u);
-      o.y = bm.ay - 9 - 4 * lay;
+  /* 4 · CONSTRUCCIÓN — el momento grande. Se establece una base, suben los
+     pilares desde el suelo, las vigas salvan la luz, las diagonales
+     arriostran y por encima se tiende la instalación. Las piezas ENTRAN
+     desde fuera del encuadre y encajan: no aparecen, llegan. */
+  function F4(i, u, g, G, o, tm, ins) {
+    var tend = (g % 11) === 5;                   // la instalación, por encima
+    if (tend && VIG.length) {
+      var vg = MEM[VIG[g % VIG.length]];
+      var lay = ease((ins - 0.62) / 0.32);
+      o.nx = lerp(vg.ax, vg.bx, u);
+      o.ny = vg.ay - 0.035 - 0.015 * lay;
       o.a = 0.66 * lay;
-      o.g = 400 + (g % BEAMS.length);
+      o.c = lay > 0.5 ? 0 : 6;
+      o.g = lay > 0.2 ? 400 + (g % VIG.length) : -1;
+      return;
+    }
+    var m = MEM[g % MEM.length];
+    var sube = ease((ins - 0.06 - m.t * 0.62) / 0.24);
+    var tx = lerp(m.ax, m.bx, u), ty = lerp(m.ay, m.by, u);
+    /* Antes de encajar, la pieza viene de fuera del encuadre. */
+    var ex = tx + (tx - 0.5) * 1.9 + (sd(i, 41) - 0.5) * 0.5;
+    var ey = ty - 0.85 - sd(i, 42) * 0.5;
+    o.nx = lerp(ex, tx, sube);
+    o.ny = lerp(ey, ty, sube);
+    o.a = 0.10 + 0.78 * sube;
+    /* La soldadura: un destello solo mientras la pieza está entrando. */
+    if (sube > 0.55 && sube < 0.98) o.a += 0.5 * Math.sin((sube - 0.55) / 0.43 * 3.1416);
+    o.c = m.k === 'base' ? 6 : (sube > 0.96 ? 1 : 7);
+    o.g = sube > 0.30 ? 500 + (g % MEM.length) : -1;
+  }
+
+  /* 5 · AUTOMATIZACIÓN — un ciclo cerrado. Lo que termina en una estación
+     dispara la siguiente. Puesto en marcha, sigue funcionando solo. */
+  function F5(i, u, g, G, o, tm, ins) {
+    var EST = 5;
+    var ciclo = (tm * 0.00012) % 1;
+    var act = Math.floor(ciclo * EST);           // la estación activa ahora
+    var esEst = (g % 3) === 0;
+    if (esEst) {
+      /* Las estaciones: puntos fijos del circuito, que se encienden por turno. */
+      var k = g % EST;
+      var ang = (k / EST) * TAU - 1.5708;
+      var pulso = (k === act) ? 1 : 0;
+      var rr = 0.34 + pulso * 0.03;
+      o.nx = 0.5 + Math.cos(ang) * rr * 0.72;
+      o.ny = 0.5 + Math.sin(ang) * rr;
+      o.nx += Math.cos(u * TAU) * 0.022;
+      o.ny += Math.sin(u * TAU) * 0.055;
+      o.a = 0.18 + 0.72 * pulso;
+      o.c = pulso ? 5 : 6;
+      o.g = 600 + k;
     } else {
-      /* Antes de asentar, la partícula todavía flota cerca de su sitio. */
-      var w2 = 1 - raise;
-      o.x = x + Math.sin(i * 1.7 + tm * 0.0008) * 26 * w2;
-      o.y = y + Math.cos(i * 2.3 + tm * 0.0008) * 26 * w2;
-      o.a = 0.24 + 0.66 * raise;
-      o.g = 300 + (g % MEM.length);
+      /* Lo que circula: recorre el ciclo y llega justo a la que se enciende. */
+      var t = (u * 0.5 + ciclo) % 1;
+      var a2 = t * TAU - 1.5708;
+      o.nx = 0.5 + Math.cos(a2) * 0.34 * 0.72;
+      o.ny = 0.5 + Math.sin(a2) * 0.34;
+      var cerca = Math.abs(((t * EST) % 1) - 0.5) * 2;
+      o.a = 0.14 + 0.56 * (1 - cerca);
+      o.c = 0; o.g = -1;
     }
   }
 
-  function F5(i, u, g, G, o, tm, ins) {              // CIRCULACIÓN
-    var L = narrow ? 3 : 4;
-    var lane = g % L;
-    var ly = H * (0.28 + lane * (narrow ? 0.16 : 0.13));
-    var x0 = W * (narrow ? 0.06 : 0.46), x1 = W * 0.96;
-    var st = x0 + (x1 - x0) * 0.52;                 // la estación
-    /* Avanza con el tiempo, hace cola en la estación y sale. */
-    var t = (u + tm * 0.000045 + lane * 0.13) % 1;
-    var x, hold = 0.30;
-    if (t < 0.46) x = lerp(x0, st, t / 0.46);
-    else if (t < 0.46 + hold) {                      // la cola: se acumula
-      var q = (t - 0.46) / hold;
-      x = st - (1 - q) * 26 * ((i % 7) + 1) * 0.5;
-    } else x = lerp(st, x1, (t - 0.46 - hold) / (1 - 0.46 - hold));
-    o.x = x;
-    o.y = ly + Math.sin(t * TAU + i) * 3.0;
-    /* Solo va encendido lo que está circulando de verdad. */
-    o.a = 0.16 + 0.74 * Math.pow(Math.abs(Math.sin(u * 9.0 + lane)), 3);
-    o.g = -1;                                        // aquí no se enlaza: circula
+  /* 6 · CAPACIDAD — módulos con puerto, en columna. Uno de los huecos se
+     puebla (la pieza que faltaba) y cada módulo saca una rama nueva: la
+     estructura pasa a soportar más de lo que soportaba. */
+  function F6(i, u, g, G, o, tm, ins) {
+    var M = 6, k = g % M;
+    var falta = (k === M - 2);
+    var lleno = falta ? ease((ins - 0.42) / 0.34) : 1;
+    var rama = ease((ins - 0.58) / 0.36);
+    var my = 0.06 + k * 0.158, mh = 0.108;
+    if ((g % 5) === 3 && !falta) {
+      /* La rama nueva: sale del módulo hacia fuera. */
+      o.nx = 0.5 + (u - 0.5) * 2.4 * rama;
+      o.ny = my + mh * 0.5;
+      o.a = 0.52 * rama;
+      o.c = 5; o.g = -1;
+      return;
+    }
+    var p = u * 4, e = p | 0, f = p - e;
+    if (e === 0)      { o.nx = f;       o.ny = my; }
+    else if (e === 1) { o.nx = 1;       o.ny = my + f * mh; }
+    else if (e === 2) { o.nx = 1 - f;   o.ny = my + mh; }
+    else              { o.nx = 0;       o.ny = my + mh - f * mh; }
+    o.a = (0.16 + 0.56 * Math.abs(Math.sin(u * 3 + k))) * lleno;
+    o.c = falta ? (lleno > 0.6 ? 5 : 6) : 6;
+    o.g = lleno > 0.3 ? 700 + k : -1;
   }
 
-  function F6(i, u, g, G, o, tm, ins) {              // MÓDULOS
-    /* Esta sección lleva una lista larga de capacidades: el instrumento se
-       retira a su propia columna en vez de pisarla. */
-    var cols = narrow ? 3 : 1, rows = narrow ? 4 : 6, S = cols * rows;
-    var k = g % S;
-    var mw = W * (narrow ? 0.26 : 0.088), mh = H * (narrow ? 0.15 : 0.108);
-    var gx = W * (narrow ? 0.08 : 0.876) + (k % cols) * W * (narrow ? 0.29 : 0);
-    var gy = H * (narrow ? 0.20 : 0.13) + ((k / cols) | 0) * H * (narrow ? 0.21 : 0.140);
-    /* El hueco que falta: se puebla al final. «Y las que falten.» */
-    var missing = (k === S - 2);
-    var fill = missing ? ease((ins - 0.55) / 0.4) : 1;
-    /* Perímetro del módulo + dos conectores: son piezas conectables. */
-    var p = u * 4;
-    var e = p | 0, f = p - e;
-    var px, py;
-    if (e === 0)      { px = gx + f * mw;       py = gy; }
-    else if (e === 1) { px = gx + mw;           py = gy + f * mh; }
-    else if (e === 2) { px = gx + (1 - f) * mw; py = gy + mh; }
-    else              { px = gx;                py = gy + (1 - f) * mh; }
-    o.x = px; o.y = py;
-    o.a = (0.24 + 0.60 * Math.abs(Math.sin(u * 3 + tm * 0.0007 + k))) * fill;
-    o.g = 500 + k;
+  /* 7 · RÉGIMEN — órbitas que se CIÑEN vuelta a vuelta y se reparten mejor:
+     el sistema hace lo mismo cada vez con menos desperdicio. */
+  function F7(i, u, g, G, o, tm, ins) {
+    var R = 5, r = g % R;
+    var afina = ease((ins - 0.10) / 0.66);        // la mejora, al recorrer
+    var rad = (0.16 + r * 0.088) * (1 - 0.14 * afina);
+    var disp = (1 - afina) * 0.055 * (sd(i, 71) - 0.5);
+    var sp = (r % 2 ? -1 : 1) * (0.00011 + r * 0.00002);
+    var a = u * TAU + tm * sp + r;
+    o.nx = 0.5 + Math.cos(a) * (rad + disp) * 1.45;
+    o.ny = 0.5 + Math.sin(a) * (rad + disp);
+    o.a = 0.16 + 0.44 * (0.5 + 0.5 * Math.sin(a * 3)) + 0.20 * afina;
+    o.c = afina > 0.7 ? 0 : 6;
+    o.g = 800 + r;
   }
 
-  function F7(i, u, g, G, o, tm, ins) {              // RÉGIMEN
-    var R = 5, ring = g % R;
-    var cx = narrow ? W * 0.5 : W * 0.72, cy = narrow ? H * 0.44 : H * 0.48;
-    var rad = Math.min(W, H) * (0.10 + ring * 0.055);
-    /* Paso constante y sentidos alternos: precisión, no agitación. */
-    var sp = (ring % 2 ? -1 : 1) * (0.00010 + ring * 0.000018);
-    var a = u * TAU + tm * sp + ring;
-    o.x = cx + Math.cos(a) * rad;
-    o.y = cy + Math.sin(a) * rad * 0.82;
-    o.a = 0.34 + 0.44 * (0.5 + 0.5 * Math.sin(a * 3));
-    o.g = 600 + ring;
-  }
-
-  function F8(i, u, g, G, o, tm, ins) {              // UN SISTEMA
-    /* El cierre va centrado, así que la envolvente lo rodea: el titular
-       queda DENTRO del sistema, no encima de él. */
-    var cx = W * 0.5, cy = H * 0.46;
-    var rr = Math.min(W, H) * (narrow ? 0.46 : 0.58);
-    /* Una esfera de puntos: el conjunto, por fin, es un solo cuerpo. */
+  /* 8 · RESULTADO — todo lo anterior en un solo cuerpo: una envolvente
+     estable, enlazada, que rodea a quien lee. El centro queda despejado
+     porque ahí va el texto: estás DENTRO del sistema, no delante. */
+  function F8(i, u, g, G, o, tm, ins) {
     var ph = Math.acos(1 - 2 * ((i + 0.5) / N));
-    var th = 3.8833 * (i + 0.5);
-    var sp2 = tm * 0.00006;
-    var sx = Math.sin(ph) * Math.cos(th + sp2), sy = Math.cos(ph);
-    var sz = Math.sin(ph) * Math.sin(th + sp2);
-    o.x = cx + sx * rr;
-    o.y = cy + sy * rr * 0.9;
-    /* Una envolvente, no una bola maciza: el brillo se concentra en el canto
-       del cuerpo y el centro queda despejado — que es justo donde va el
-       titular del cierre. Un sistema se reconoce por su contorno. */
-    var canto = sx * sx + sy * sy;
-    o.a = (0.06 + 0.92 * Math.pow(canto, 2.6)) * (0.55 + 0.45 * (0.5 + sz * 0.5));
-    o.g = canto > 0.55 ? 700 + (g % 12) : -1;
+    var th = 3.8833 * (i + 0.5) + tm * 0.00005;
+    var sx = Math.sin(ph) * Math.cos(th), sy = Math.cos(ph);
+    var sz = Math.sin(ph) * Math.sin(th);
+    o.nx = 0.5 + sx * 0.5;
+    o.ny = 0.5 + sy * 0.5;
+    var canto = sx * sx + sy * sy;                // el contorno del cuerpo
+    o.a = (0.05 + 0.86 * Math.pow(canto, 2.6)) * (0.56 + 0.44 * (0.5 + sz * 0.5));
+    o.c = canto > 0.86 ? 1 : 6;
+    o.g = canto > 0.55 ? 900 + (g % 14) : -1;
   }
 
   var FORM = [F0, F1, F2, F3, F4, F5, F6, F7, F8];
-  var GRPS = [22, 28, 24, 24, 0, 24, 24, 20, 24];   // 0 = usar MEM.length
+  var GRP  = [1, 26, 22, 1, 0, 24, 22, 20, 22];   // 0 = usar MEM.length, 1 = por partícula
 
-  /* ------------------------------------------------ ESTADOS (por índice) */
+  /* --------------------------------------------------- ESTADOS Y SCROLL */
   var STOPS = [], MIR = [];
   var NST = 9;
   function measureStops() {
@@ -360,9 +448,7 @@
       var n = parseInt(z.getAttribute('data-state'), 10);
       if (isNaN(n)) return;
       var r = z.getBoundingClientRect();
-      var mid = r.top + window.scrollY + r.height / 2 - window.innerHeight / 2;
-      found[n] = Math.max(0, Math.min(1, mid / max));
-      /* Si el texto va a la derecha, la formación se refleja a la izquierda. */
+      found[n] = Math.max(0, Math.min(1, (r.top + window.scrollY + r.height / 2 - window.innerHeight / 2) / max));
       MIR[n] = z.classList.contains('v6-step--r');
     });
     STOPS = [];
@@ -375,8 +461,7 @@
   function weights(P) {
     var i = 0;
     while (i < STOPS.length - 2 && P > STOPS[i + 1]) i++;
-    var t = (P - STOPS[i]) / Math.max(0.0001, STOPS[i + 1] - STOPS[i]);
-    t = Math.max(0, Math.min(1, t));
+    var t = cl((P - STOPS[i]) / Math.max(0.0001, STOPS[i + 1] - STOPS[i]));
     iA = i; iB = i + 1; tw = t;
     var e = ease(t); wA = 1 - e; wB = e;
   }
@@ -385,7 +470,6 @@
     return ease((Pv - a) / Math.max(0.0001, b - a));
   }
 
-  /* ------------------------------------------------------------- PUNTERO */
   var mx = 0, my = 0, cmx = 0, cmy = 0;
   if (!coarse && !reduced) {
     window.addEventListener('mousemove', function (e) {
@@ -397,92 +481,117 @@
   var P = 0, Pv = 0, ticking = false;
   function readScroll() {
     var d = document.documentElement;
-    var max = Math.max(1, d.scrollHeight - window.innerHeight);
-    P = Math.max(0, Math.min(1, window.scrollY / max));
+    P = cl(window.scrollY / Math.max(1, d.scrollHeight - window.innerHeight));
   }
   window.addEventListener('scroll', function () {
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { readScroll(); ticking = false; if (reduced) drawStill(); });
   }, { passive: true });
 
-  /* ---------------------------------------------------------------- PINTA */
-  var oa = { x: 0, y: 0, a: 1, g: -1 }, ob = { x: 0, y: 0, a: 1, g: -1 };
-  var px = new Float32Array(4000), py = new Float32Array(4000);
-  var pg = new Int32Array(4000), pa = new Float32Array(4000);
+  /* ------------------------------------------------------------- PINTA */
+  var oa = { nx: 0, ny: 0, a: 1, g: -1, c: 6 }, ob = { nx: 0, ny: 0, a: 1, g: -1, c: 6 };
+  var px = new Float32Array(1400), py = new Float32Array(1400);
+  var pg = new Int32Array(1400), pa = new Float32Array(1400);
+
+  /* Al reflejar hay que mover TAMBIÉN el marco al lado libre: invertir solo
+     el contenido dejaba la formación encima de la columna de texto. */
+  function marco(o, fr, mir, out) {
+    var cx = mir ? 1 - fr.x : fr.x;
+    var nx = mir ? 1 - o.nx : o.nx;
+    out.x = W * (cx + (nx - 0.5) * fr.w);
+    out.y = H * (fr.y + (o.ny - 0.5) * fr.h);
+  }
+  var ma = { x: 0, y: 0 }, mb = { x: 0, y: 0 };
 
   function draw(tm, noClear) {
     weights(reduced ? P : Pv);
-    cmx += (mx - cmx) * 0.05; cmy += (my - cmy) * 0.05;
+    cmx += (mx - cmx) * 0.045; cmy += (my - cmy) * 0.045;
 
-    /* Estela corta: la materia deja rastro, y por eso parece viva. */
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = noClear ? 'rgba(5,7,14,0.10)' : 'rgba(5,7,14,0.36)';
+    ctx.fillStyle = noClear ? 'rgba(5,7,14,0.10)' : 'rgba(5,7,14,0.28)';
     ctx.fillRect(0, 0, W, H);
 
     var FA = FORM[iA], FB = FORM[iB];
-    var GA = GRPS[iA] || MEM.length, GB = GRPS[iB] || MEM.length;
+    var GA = GRP[iA] || MEM.length, GB = GRP[iB] || MEM.length;
+    var frA = MARCO[iA], frB = MARCO[iB];
     var insA = inside(iA), insB = inside(iB);
+    var usoA = USO[iA], usoB = USO[iB];
     var par = narrow ? 0 : 1;
+
+    /* La luz que recorre el campo y roza lo que tiene delante. */
+    var lz = (tm * 0.00007) % 1.6 - 0.3;
+    var lx = W * lz, ly = H * (0.42 + 0.16 * Math.sin(tm * 0.00019));
+    var lr = Math.max(W, H) * 0.30, lr2 = lr * lr;
 
     ctx.globalCompositeOperation = 'lighter';
 
-    for (var i = 0; i < N; i++) {
+    for (var q = 0; q < N; q++) {
+      var i = ORD[q];                       // de lejos a cerca
       var p = PT[i];
-      var ga = (i * GA / N) | 0, ua = (i * GA / N) - ga;
-      var gb = (i * GB / N) | 0, ub = (i * GB / N) - gb;
-      FA(i, ua, ga, GA, oa, tm, insA);
-      FB(i, ub, gb, GB, ob, tm, insB);
-      if (MIR[iA]) oa.x = W - oa.x;
-      if (MIR[iB]) ob.x = W - ob.x;
+      var ga = GA === 1 ? i : (i * GA / N) | 0, ua = GA === 1 ? sd(i, 61) : (i * GA / N) - ga;
+      var gb = GB === 1 ? i : (i * GB / N) | 0, ub = GB === 1 ? sd(i, 61) : (i * GB / N) - gb;
 
-      /* La ola: cada partícula sale hacia la formación siguiente en su
-         propio instante. Sin esto la transición es un salto colectivo. */
-      var t = clamp01((tw - p.dl) / (1 - p.dl));
-      t = t * t * (3 - 2 * t);
+      var frac = i / N;
+      var enA = frac < usoA, enB = frac < usoB;
 
-      var tx = lerp(oa.x, ob.x, t), ty = lerp(oa.y, ob.y, t);
+      if (enA) { oa.a = 1; oa.g = -1; oa.c = 6; FA(i, ua, ga, GA, oa, tm, insA); }
+      else     { oa.nx = p.hx; oa.ny = p.hy; oa.a = 0.10; oa.g = -1; oa.c = 6; }
+      if (enB) { ob.a = 1; ob.g = -1; ob.c = 6; FB(i, ub, gb, GB, ob, tm, insB); }
+      else     { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.10; ob.g = -1; ob.c = 6; }
+
+      marco(oa, frA, MIR[iA], ma);
+      marco(ob, frB, MIR[iB], mb);
+
+      /* Cada partícula sale hacia la formación siguiente en su instante. */
+      var t = cl((tw - p.dl) / (1 - p.dl)); t = t * t * (3 - 2 * t);
+      var tx = lerp(ma.x, mb.x, t), ty = lerp(ma.y, mb.y, t);
       var al = lerp(oa.a, ob.a, t);
+      var dep = lerp(frA.d, frB.d, t);
 
-      /* Inercia: la partícula persigue su objetivo, no se teletransporta. */
       if (p.x < 0) { p.x = tx; p.y = ty; }
       p.vx += (tx - p.x) * 0.10; p.vy += (ty - p.y) * 0.10;
-      p.vx *= 0.74; p.vy *= 0.74;
+      p.vx *= 0.75; p.vy *= 0.75;
       p.x += p.vx; p.y += p.vy;
 
-      var dx = p.x + cmx * 26 * p.z * par;
-      var dy = p.y + cmy * 18 * p.z * par;
+      /* Paralaje por estrato: lo cercano se mueve más que lo lejano. */
+      var pf = 0.30 + p.z * 1.10;
+      var dx = p.x + cmx * 34 * pf * par;
+      var dy = p.y + cmy * 22 * pf * par;
+
       px[i] = dx; py[i] = dy; pa[i] = al;
       pg[i] = (t < 0.5) ? oa.g : ob.g;
 
-      /* Velocidad = estiramiento. Lo que viaja rápido se ve viajar. */
-      var sp = Math.min(1.15, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.22);
-      var r = (1.9 + p.s * 3.1) * p.z * (1 + sp);
-      var a2 = al * (0.42 + p.z * 0.66);
+      /* La luz roza: no ilumina todo por igual. */
+      var ldx = dx - lx, ldy = dy - ly;
+      var luz = Math.exp(-(ldx * ldx + ldy * ldy) / lr2) * 0.42;
+
+      var sp = Math.min(1.10, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.20);
+      var r = (1.05 + p.s * 2.5) * (0.55 + p.z * 1.15) * (1 + sp) * dep;
+      var a2 = (al + luz) * (0.40 + p.z * 0.72) * (0.68 + 0.32 * dep);
       if (a2 <= 0.012) continue;
-      ctx.globalAlpha = Math.min(0.72, a2);
-      ctx.drawImage(SPR[p.h], dx - r, dy - r, r * 2, r * 2);
+      ctx.globalAlpha = Math.min(0.80, a2);
+      ctx.drawImage(SPR[p.e][(t < 0.5 ? oa.c : ob.c)], dx - r, dy - r, r * 2, r * 2);
     }
 
-    /* El enlace no es decoración: une partículas del MISMO grupo, así que la
-       estructura la dibujan ellas. Un carril en circulación no se enlaza. */
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = 1;
-    var link = 0.5 - 0.42 * Math.abs(tw - 0.5) * 2;   // se afloja al transitar
+    /* El enlace une partículas CONSECUTIVAS DEL MISMO GRUPO: la estructura
+       la dibujan ellas, no una línea añadida por encima. */
+    ctx.globalAlpha = 1; ctx.lineWidth = 1;
+    var afl = 0.5 - 0.42 * Math.abs(tw - 0.5) * 2;
     ctx.beginPath();
-    for (var k = 1; k < N; k++) {
-      if (pg[k] < 0 || pg[k] !== pg[k - 1]) continue;
-      var ddx = px[k] - px[k - 1], ddy = py[k] - py[k - 1];
-      if (ddx * ddx + ddy * ddy > 26000) continue;
-      ctx.moveTo(px[k - 1], py[k - 1]); ctx.lineTo(px[k], py[k]);
+    for (var k2 = 1; k2 < N; k2++) {
+      if (pg[k2] < 0 || pg[k2] !== pg[k2 - 1]) continue;
+      var ddx = px[k2] - px[k2 - 1], ddy = py[k2] - py[k2 - 1];
+      if (ddx * ddx + ddy * ddy > 30000) continue;
+      ctx.moveTo(px[k2 - 1], py[k2 - 1]); ctx.lineTo(px[k2], py[k2]);
     }
-    ctx.strokeStyle = rgba(STEEL, 0.05 + 0.15 * link);
+    ctx.strokeStyle = rgba(ACERO, 0.045 + 0.14 * afl);
     ctx.stroke();
 
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
   }
 
-  /* ---------------------------------------------------------------- BUCLE */
+  /* ------------------------------------------------------------- BUCLE */
   var running = false, visible = true;
   function loop(tm) {
     if (!running) return;
@@ -491,11 +600,12 @@
     if (visible) requestAnimationFrame(loop); else running = false;
   }
   function start() { if (!running && !reduced) { running = true; requestAnimationFrame(loop); } }
-  /* Movimiento reducido: una exposición larga, quieta. */
+  /* Movimiento reducido: una exposición larga, quieta, tomada en un instante
+     en el que cada formación ya tiene algo que enseñar. */
   function drawStill() {
     for (var i = 0; i < N; i++) PT[i].x = -1;
-    draw(0, false);
-    for (var j = 1; j < 46; j++) draw(j * 120, true);
+    draw(7000, false);
+    for (var j = 1; j < 42; j++) draw(7000 + j * 110, true);
   }
 
   measure(); measureStops(); readScroll(); Pv = P;
@@ -515,7 +625,7 @@
                              { threshold: 0 }).observe(root);
   }
 
-  /* --------------------------------- EL ESTADO, EN PALABRAS -------------- */
+  /* --------------------------------- EL ESTADO, EN PALABRAS ------------- */
   var label = document.querySelector('[data-field-state]');
   if (label) {
     var NAMES = (label.getAttribute('data-names') || '').split('|');

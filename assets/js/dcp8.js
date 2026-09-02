@@ -98,33 +98,57 @@
   var ACERO = [150, 178, 226];
   var CI = { cian:0, azul:1, violeta:2, lav:3, rosa:4, verde:5,
              ambar:6, turq:7, acero:8, blanco:9 };
-  var NUB = [], NSPR = [], NPX = null, NPY = null, NPA = null, NPG = null, NPC = null;
+  var NUB = [], NORD = [], NSPR = [], NPX = null, NPY = null, NPA = null, NPG = null, NPC = null;
   var o1 = { x: 0, y: 0, a: 1, g: -1, c: 8 };
 
+  /* Un destello por color Y POR ESTRATO: lo lejano es ancho y sin núcleo —así
+     se ve lo desenfocado—, lo cercano tiene núcleo duro. Es lo que da cuerpo
+     a la materia en lugar de dejarla en una nube plana de puntos. */
   function chispas() {
     NSPR = [];
     var todos = [C.cian, C.azul, C.violeta, C.lav, C.rosa, C.verde,
                  C.ambar, C.turq, ACERO, [226, 240, 255]];
-    for (var i = 0; i < todos.length; i++) {
-      var cv = document.createElement('canvas'), R = 28;
-      cv.width = cv.height = R * 2;
-      var g = cv.getContext('2d');
-      var gr = g.createRadialGradient(R, R, 0, R, R, R);
-      gr.addColorStop(0,    rgba(todos[i], 1));
-      gr.addColorStop(0.22, rgba(todos[i], 0.52));
-      gr.addColorStop(0.55, rgba(todos[i], 0.12));
-      gr.addColorStop(1,    rgba(todos[i], 0));
-      g.fillStyle = gr; g.fillRect(0, 0, R * 2, R * 2);
-      NSPR.push(cv);
+    for (var e = 0; e < 3; e++) {
+      var fila = [];
+      for (var i = 0; i < todos.length; i++) {
+        var cv = document.createElement('canvas'), R = 28;
+        cv.width = cv.height = R * 2;
+        var g = cv.getContext('2d');
+        var gr = g.createRadialGradient(R, R, 0, R, R, R);
+        if (e === 0) {
+          gr.addColorStop(0,    rgba(todos[i], 0.60));
+          gr.addColorStop(0.44, rgba(todos[i], 0.30));
+          gr.addColorStop(1,    rgba(todos[i], 0));
+        } else if (e === 1) {
+          gr.addColorStop(0,    rgba(todos[i], 0.88));
+          gr.addColorStop(0.26, rgba(todos[i], 0.42));
+          gr.addColorStop(0.66, rgba(todos[i], 0.10));
+          gr.addColorStop(1,    rgba(todos[i], 0));
+        } else {
+          gr.addColorStop(0,    rgba(todos[i], 1));
+          gr.addColorStop(0.13, rgba(todos[i], 0.82));
+          gr.addColorStop(0.34, rgba(todos[i], 0.22));
+          gr.addColorStop(1,    rgba(todos[i], 0));
+        }
+        g.fillStyle = gr; g.fillRect(0, 0, R * 2, R * 2);
+        fila.push(cv);
+      }
+      NSPR.push(fila);
     }
   }
 
   function nube(n) {
-    NUB = [];
+    NUB = []; NORD = [];
     for (var i = 0; i < n; i++) {
-      NUB.push({ z: 0.40 + sd(i, 1) * 0.60, s: 0.70 + sd(i, 2) * 0.90,
-                 vx: 0, vy: 0, x: -1, y: 0 });
+      var r = sd(i, 1), r2 = sd(i, 2);
+      var e = r < 0.40 ? 0 : (r < 0.76 ? 1 : 2);
+      NUB.push({ e: e,
+                 z: e === 0 ? 0.24 + r * 0.28 : (e === 1 ? 0.52 + r2 * 0.26 : 0.80 + r2 * 0.30),
+                 s: 0.62 + r2 * 0.88, vx: 0, vy: 0, x: -1, y: 0 });
+      NORD.push(i);
     }
+    /* De lejos a cerca: lo cercano tapa a lo lejano, no al revés. */
+    NORD.sort(function (a, b) { return NUB[a].z - NUB[b].z; });
     NPX = new Float32Array(n); NPY = new Float32Array(n);
     NPA = new Float32Array(n); NPG = new Int32Array(n); NPC = new Int32Array(n);
     chispas();
@@ -148,15 +172,23 @@
 
   /* El enlace une partículas CONSECUTIVAS DEL MISMO GRUPO: así la estructura
      la dibujan ellas y no una línea añadida por encima. */
-  function pinta(enl) {
+  function pinta(enl, tm) {
     ctx.globalCompositeOperation = 'lighter';
-    for (var i = 0; i < NUB.length; i++) {
-      var p = NUB[i], a = NPA[i] * (0.42 + p.z * 0.66);
+    /* Una luz recorre el instrumento y roza lo que tiene delante: sin ella
+       todo se ilumina por igual y la materia se aplana. */
+    var lz = ((tm || 0) * 0.00007) % 1.6 - 0.3;
+    var lx = W * lz, ly = H * 0.48, lr2 = Math.pow(Math.max(W, H) * 0.32, 2);
+    for (var q = 0; q < NORD.length; q++) {
+      var i = NORD[q];
+      var p = NUB[i];
+      var ldx = NPX[i] - lx, ldy = NPY[i] - ly;
+      var luz = Math.exp(-(ldx * ldx + ldy * ldy) / lr2) * 0.34;
+      var a = (NPA[i] + luz) * (0.40 + p.z * 0.70);
       if (a <= 0.012) continue;
       var sp = Math.min(1.1, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.22);
-      var r = (1.7 + p.s * 2.8) * p.z * (1 + sp);
-      ctx.globalAlpha = Math.min(0.72, a);
-      ctx.drawImage(NSPR[NPC[i]], NPX[i] - r, NPY[i] - r, r * 2, r * 2);
+      var r = (1.2 + p.s * 2.6) * (0.58 + p.z * 1.05) * (1 + sp);
+      ctx.globalAlpha = Math.min(0.78, a);
+      ctx.drawImage(NSPR[p.e][NPC[i]], NPX[i] - r, NPY[i] - r, r * 2, r * 2);
     }
     ctx.globalAlpha = 1;
     if (enl) {
@@ -733,7 +765,7 @@
           o.c = HUE[si];
           o.g = si;
         }, tm);
-        pinta(0.10);
+        pinta(0.10, tm);
 
         /* Las ataduras: lo que convierte tres hebras en un solo cable. */
         var paso = 0.145;
@@ -944,7 +976,7 @@
           o.c = t.hu;
           o.g = raw > 0.10 ? 900 + k : -1;
         }, tm);
-        pinta(0.05);
+        pinta(0.05, tm);
 
         /* Cuando dos vecinas ya están dentro, se ve pasar materia de una a
            otra: la conexión no se declara, se hace. */
@@ -1006,7 +1038,7 @@
           o.c = CI.acero; o.g = -1;
         }
       }, tm);
-      pinta(0);
+      pinta(0, tm);
       /* El frente del barrido: se ve por dónde va mirando. */
       ctx.globalCompositeOperation = 'lighter';
       var fx = (sw + 0.18) % 1.35 - 0.18;
@@ -1044,7 +1076,7 @@
         o.c = tocado ? CI.rosa : CI.acero;
         o.g = -1;
       }, tm);
-      pinta(0);
+      pinta(0, tm);
     }
   };
 
@@ -1070,7 +1102,7 @@
         o.c = hito && vivo ? CI.verde : CI.turq;
         o.g = vivo ? 300 + l : -1;
       }, tm);
-      pinta(0.12);
+      pinta(0.12, tm);
     }
   };
 
@@ -1128,7 +1160,7 @@
           o.c = sal > 0.05 ? CI.verde : (apar > 0.98 ? CI.ambar : CI.blanco);
           o.g = apar > 0.35 ? 1100 + k : -1;
         }, tm);
-        pinta(0.11);
+        pinta(0.11, tm);
 
         /* La cinta y la marca de la estación: la referencia fija. */
         ctx.globalCompositeOperation = 'lighter';
@@ -1168,7 +1200,7 @@
           o.c = arriba ? CI.verde : CI.rosa;
           o.g = -1;
         }, tm);
-        pinta(0);
+        pinta(0, tm);
         /* El fiel: sube y baja buscando su punto, y la referencia fija. */
         ctx.globalCompositeOperation = 'lighter';
         var ly = midY + (nivel - 0.5) * H * 0.22;
@@ -1209,7 +1241,7 @@
         o.c = roto && !arreglado ? CI.rosa : (arreglado ? CI.verde : CI.acero);
         o.g = (roto && !arreglado) ? -1 : 400 + l;
       }, tm);
-      pinta(0.13);
+      pinta(0.13, tm);
       /* El frente de la pasada, para que se vea reparar. */
       if (pasada > 0 && pasada < 1) {
         ctx.globalCompositeOperation = 'lighter';
@@ -1246,7 +1278,7 @@
         o.c = arch >= 1 ? CI.lav : CI.acero;
         o.g = -1;
       }, tm);
-      pinta(0);
+      pinta(0, tm);
       /* Las casillas del archivo: la estructura que da el orden. */
       ctx.globalCompositeOperation = 'lighter';
       ctx.strokeStyle = rgba(ACERO, 0.10); ctx.lineWidth = 1;
@@ -1284,7 +1316,7 @@
         o.c = mira ? CI.cian : CI.acero;
         o.g = 500 + k;
       }, tm);
-      pinta(0.10);
+      pinta(0.10, tm);
       /* El retículo: se posa sobre una parte cada vez. */
       ctx.globalCompositeOperation = 'lighter';
       var fc = foco % cols, fr = (foco / cols) | 0;
