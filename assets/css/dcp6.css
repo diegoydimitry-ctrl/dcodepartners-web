@@ -260,8 +260,10 @@ body.v6 .mock-bars{ height:112px; }
    borde superior, sin caja. */
 body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-items:flex-end; }
 .v6-end .v6-veil--mid::before{
-  inset:-8% -12% -22% -12%;
-  background:radial-gradient(64% 62% at 50% 62%, rgba(5,7,14,.94), rgba(5,7,14,.72) 48%, rgba(5,7,14,0) 84%);
+  inset:-26% -20% -30% -20%;
+  background:radial-gradient(82% 80% at 50% 56%,
+    rgba(5,7,14,.99), rgba(5,7,14,.96) 40%, rgba(5,7,14,.76) 62%,
+    rgba(5,7,14,.30) 82%, rgba(5,7,14,0) 96%);
 }
 .v6-end h2{
   font-family:var(--serif); font-weight:700; letter-spacing:-.034em;

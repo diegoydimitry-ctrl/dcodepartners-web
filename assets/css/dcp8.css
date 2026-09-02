@@ -116,9 +116,10 @@ body.v7 .window-title{ color:#95a3c2; }
 body.v7 footer, body.v6 footer{ position:relative; isolation:isolate; }
 body.v7 footer::before, body.v6 footer::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-14% 0 0 0;
+  inset:-22% 0 0 0;
   background:linear-gradient(180deg,
-    rgba(5,7,14,0) 0%, rgba(5,7,14,.80) 12%, rgba(5,7,14,.97) 26%, rgba(5,7,14,.995) 46%);
+    rgba(5,7,14,0) 0%, rgba(5,7,14,.72) 9%, rgba(5,7,14,.95) 18%,
+    rgba(5,7,14,.99) 30%, rgba(5,7,14,.998) 46%);
 }
 /* Y la cadena de pasos gana un punto de velo por el mismo motivo. */
 body.v7 .chain::before{
