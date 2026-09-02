@@ -161,7 +161,7 @@
   }
 
   function build() {
-    N = small ? 440 : narrow ? 800 : 1360;
+    N = small ? 420 : narrow ? 720 : 1060;
     PT = []; ORD = [];
     for (var i = 0; i < N; i++) {
       var r = sd(i, 1), r2 = sd(i, 2), r3 = sd(i, 3);
@@ -173,7 +173,12 @@
         e: e, z: z,
         s: 0.62 + r2 * 0.86,
         c: 6,
-        dl: r2 * 0.30,                 // la reorganización es una ola
+        /* El retardo de cada particula ya no es aleatorio: depende de su
+           sitio en la banda, y las bandas van ordenadas por papel —primero
+           los nodos, luego las aristas, luego lo que circula—. Asi la
+           estructura siguiente SE CONSTRUYE en el orden en que se lee, en
+           vez de deslizarse entera de golpe. */
+        dl: (i / (small ? 420 : narrow ? 720 : 1060)) * 0.52,
         vx: 0, vy: 0, x: -1, y: 0,
         hx: sd(i, 4), hy: sd(i, 5)     // sitio en la bruma de fondo
       });
@@ -193,14 +198,14 @@
      envuelve. Si todos ocuparan el mismo sitio, el recorrido sería plano. */
   var MARCO = [
     { x: 0.775, y: 0.50, w: 0.50, h: 1.02, d: 1.00 },  // 0 CONVERGENCIA el hero
-    { x: 0.755, y: 0.50, w: 0.44, h: 0.90, d: 0.92 },  // 1 AISLADOS     el problema
-    { x: 0.760, y: 0.47, w: 0.40, h: 0.62, d: 0.82 },  // 2 ANÁLISIS     banda de trayectos
-    { x: 0.665, y: 0.50, w: 0.48, h: 0.94, d: 1.00 },  // 3 RED          monumental
+    { x: 0.720, y: 0.52, w: 0.54, h: 1.02, d: 0.96 },  // 1 AISLADOS     el problema
+    { x: 0.730, y: 0.50, w: 0.50, h: 0.82, d: 0.90 },  // 2 ANÁLISIS     banda de trayectos
+    { x: 0.640, y: 0.50, w: 0.56, h: 1.00, d: 1.06 },  // 3 RED          monumental
     { x: 0.700, y: 0.50, w: 0.46, h: 0.86, d: 0.94 },  // 4 ARQUITECTURA vertical
-    { x: 0.690, y: 0.50, w: 0.44, h: 0.52, d: 0.88 },  // 5 CADENA       banda
+    { x: 0.700, y: 0.50, w: 0.52, h: 0.62, d: 0.92 },  // 5 CADENA       banda
     { x: 0.880, y: 0.50, w: 0.20, h: 0.90, d: 0.92 },  // 6 INVENTARIO   tótem
     { x: 0.745, y: 0.180, w: 0.46, h: 0.32, d: 0.90 }, // 7 SUPERVISIÓN  arriba
-    { x: 0.500, y: 0.475, w: 0.98, h: 0.80, d: 1.00 }  // 8 CONVERGENCIA envolvente
+    { x: 0.500, y: 0.470, w: 1.04, h: 0.86, d: 1.06 }  // 8 CONVERGENCIA envolvente
   ];
   /* USO recorta el rango de índices que participa en cada estado. Estaba
      pensado como un control de densidad y funcionaba como una AMPUTACIÓN:
@@ -212,6 +217,17 @@
      y sin este original no habría a qué volver al girar el aparato. */
   var MARCO_ANCHO = MARCO.map(function (m) { return { x: m.x, w: m.w, h: m.h }; });
   var USO = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+  /* RITMO. Un recorrido en el que todo suena igual de fuerte no tiene
+     momentos. Estos son los que hay: el hero es un fenomeno, el problema es
+     apagado a proposito —es el unico capitulo que no debe gustar—, la red y
+     la convergencia son los dos picos, y Finance es contemplativo porque
+     el protagonista ahi es el producto, no el campo. */
+  /* Los dos picos suben y los valles bajan: el impacto aparece cuando algo
+     cambia, no cuando todo está al máximo. El problema es el capítulo más
+     apagado del recorrido a propósito, y Finance el más contemplativo porque
+     ahí el protagonista es el producto. */
+  var INT = [1.08, 0.82, 0.94, 1.34, 1.04, 0.96, 0.92, 0.76, 1.34];
 
   /* ---------------------------------------------------------- EL GRAFO */
   /* EL LENGUAJE. Todo lo que se ve está hecho de tres cosas, y solo tres:
@@ -376,31 +392,34 @@
   }
 
   /* 0 · EL HERO — «Del caos al control».
-     Es la declaración de identidad de la empresa, y por eso es lo único de
-     toda la portada que no es un diagrama: es un FENÓMENO. Materia dispersa
-     entra por el borde izquierdo en corrientes anchas y desordenadas, se
-     acelera, se estrecha, y atraviesa un diafragma luminoso. Lo que sale por
-     el otro lado ya no es una nube: son trazos regulares, espaciados, con
-     dirección. Entra complejidad y sale sistema, ocurriendo delante de ti.
+     Es lo unico de la portada que no es un diagrama: es un FENOMENO, y ahora
+     tiene LATIDO. Antes era una imagen fija con brillo variable; se veia bien
+     el primer segundo y no pasaba nada mas. Ahora ocurre un ciclo completo
+     cada pocos segundos, y ese ciclo ES el argumento de la empresa:
 
-     El color hace el relato: azul mientras es información en bruto, violeta
-     mientras se procesa, cian cuando ya circula por un sistema, blanco en el
-     instante del foco, turquesa a la salida —lo que ya funciona—. */
+       1  una oleada de materia entra por el borde, ancha y desordenada
+       2  se acelera y se estrecha al acercarse al foco
+       3  atraviesa el diafragma, que se cierra y se enciende a su paso
+       4  el nucleo destella: ahi la materia deja de ser lo que era
+       5  y sale, por el otro lado, en trazos regulares y espaciados
+
+     Complejidad → inteligencia → organizacion → sistema, en bucle, sin que
+     haga falta hacer scroll ni leer una palabra. */
   function F0(i, u, g, G, o, tm, ins) {
     var ar = (MARCO[0].h * H) / (MARCO[0].w * W);
-    /* En vertical el fenómeno no se aparta: ENVUELVE. La portada de un móvil
-       es texto de arriba abajo, así que no hay banda libre donde ponerlo, y
-       relegarlo al pie lo dejaba en un arco tímido que no se veía. Centrado
-       y grande, el diafragma rodea al titular y las corrientes lo cruzan por
-       detrás; los velos se ocupan de que se siga leyendo. */
+    /* En vertical el fenomeno no se aparta: ENVUELVE. La portada de un movil
+       es texto de arriba abajo, asi que no hay banda libre donde ponerlo. */
     var fx = narrow ? 0.500 : 0.600, fy = narrow ? 0.400 : 0.575;
+
+    /* La oleada. Recorre el trayecto de 0 a 1 y vuelve a empezar. */
+    var onda = (tm * 0.00020) % 1;
+    var enFoco = Math.exp(-(onda - 0.97) * (onda - 0.97) * 260)
+               + Math.exp(-(onda - 0.03) * (onda - 0.03) * 260);
 
     if (u < 0.62) {                                   // LAS CORRIENTES
       var CO = 36;
       var q = tramo(u, 0, 0.62, CO);
       var k = q.k, sp = q.j;
-      /* Aceleración real: la materia entra despacio y ancha, y en el último
-         tercio se lanza. Sin eso la convergencia parece un embudo dibujado. */
       var acc = sp * sp;
       var abre = 1 - acc;
       var yk = fy + (sd(k, 21) - 0.5) * 1.18;
@@ -408,16 +427,16 @@
       o.ny = fy + (yk - fy) * abre * abre
                 + Math.sin(sp * 3.1 + k * 2.3 + tm * 0.00020) * 0.10 * abre
                 + Math.sin(sp * 7.7 + k * 1.1) * 0.028 * abre;
-      /* Un pulso de luz recorre cada corriente. La geometría no se mueve —si
-         se moviera, el filamento repta—; lo que viaja es la energía. */
-      var pul = 0.5 + 0.5 * Math.sin(sp * 15.0 - tm * 0.0030 + k * 1.9);
-      /* Y nace de la oscuridad, no del borde: la primera cuarta parte del
-         recorrido está apagada, así que la corriente no cruza el titular. */
-      o.a = (0.20 + 0.62 * acc) * (0.46 + 0.54 * pul) * cl((sp - 0.32) / 0.24);
-      /* El recorrido del color ES el relato del hero: entra como información
-         en bruto (azul), se procesa (violeta), pasa a circular por un sistema
-         (cian) y llega al foco como energía (blanco). Las bandas están
-         desplazadas al final del trayecto a propósito: es el tramo que se ve. */
+      /* La oleada es un paquete de luz que viaja por la corriente, no un
+         parpadeo repartido: se ve LLEGAR. Cada corriente va un poco
+         desfasada de la anterior, asi que el frente entra en diagonal. */
+      var d = sp - ((onda + sd(k, 26) * 0.13) % 1);
+      var paso = Math.exp(-d * d * 62);
+      var base = 0.5 + 0.5 * Math.sin(sp * 15.0 - tm * 0.0022 + k * 1.9);
+      o.a = (0.19 + 0.56 * acc) * (0.30 + 0.34 * base + 0.62 * paso)
+          * cl((sp - 0.32) / 0.24);
+      /* El color cuenta el trayecto: entra como informacion en bruto,
+         se procesa, pasa a circular por un sistema y llega como energia. */
       o.c = sp < 0.62 ? C_DATO : sp < 0.81 ? C_PROC : sp < 0.94 ? C_FLUJO : C_LUZ;
       o.g = 10 + k;
       return;
@@ -426,108 +445,131 @@
     if (u < 0.72) {                                   // EL FOCO
       var an0 = sd(i, 31) * TAU;
       var g0 = sd(i, 32);
-      var rr = Math.pow(g0, 2.2) * 0.062;
+      /* El nucleo respira con la oleada: se comprime justo antes de que
+         llegue y estalla de luz cuando pasa. */
+      var rr = Math.pow(g0, 2.2) * 0.062 * (1 + enFoco * 0.85);
       o.nx = fx + Math.cos(an0) * rr * ar;
       o.ny = fy + Math.sin(an0) * rr;
-      o.a = 0.42 + 0.54 * (0.5 + 0.5 * Math.sin(tm * 0.0013 + sd(i, 33) * 6.3));
-      /* Blanco en el centro, magenta en la corona: el punto exacto en el que
-         la materia deja de ser lo que era. */
+      o.a = (0.30 + 0.34 * (0.5 + 0.5 * Math.sin(tm * 0.0013 + sd(i, 33) * 6.3)))
+          + 0.62 * enFoco;
       o.c = g0 < 0.62 ? C_LUZ : C_DEC;
       o.g = -1;
       return;
     }
 
     if (u < 0.86) {                                   // EL DIAFRAGMA
-      /* Dos arcos, no un círculo cerrado: un anillo perfecto parece un
-         planeta; dos arcos con sus aperturas parecen un instrumento. */
+      /* Dos arcos, no un circulo cerrado: un anillo perfecto parece un
+         planeta; dos arcos con sus aperturas parecen un instrumento. Y se
+         CIERRA al paso de cada oleada, como un obturador. */
       var q2 = tramo(u, 0.72, 0.86, 2);
       var a2 = (q2.k ? 0.34 : 3.48) + q2.j * 2.60;
-      var R2 = 0.168 + 0.008 * Math.sin(tm * 0.0009);
+      var R2 = (0.168 + 0.008 * Math.sin(tm * 0.0009)) * (1 - enFoco * 0.16);
       o.nx = fx + Math.cos(a2) * R2 * ar;
       o.ny = fy + Math.sin(a2) * R2;
-      o.a = 0.50 + 0.40 * Math.sin(q2.j * 3.1416);
-      o.c = q2.j > 0.42 && q2.j < 0.58 ? C_LUZ : C_FLUJO;
+      o.a = 0.42 + 0.30 * Math.sin(q2.j * 3.1416) + 0.46 * enFoco;
+      o.c = enFoco > 0.35 ? C_LUZ : (q2.j > 0.42 && q2.j < 0.58 ? C_LUZ : C_FLUJO);
       o.g = 70 + q2.k;
       return;
     }
 
     if (u < 0.94) {                                   // LO QUE SALE, YA ORDENADO
       var q3 = tramo(u, 0.86, 0.94, 5);
-      var t3 = ((tm * 0.00011) + q3.j * 0.85 + sd(q3.k, 35)) % 1;
+      /* Sale a la misma cadencia que entra: lo que se ve marcharse por la
+         derecha es la oleada anterior, ya convertida en algo regular. */
+      var t3 = ((tm * 0.00020) + q3.j * 0.85 + q3.k * 0.06) % 1;
       o.nx = fx + 0.040 + t3 * 0.150;
       o.ny = fy + (q3.k - 2) * 0.048;
-      o.a = 0.62 * Math.sin(t3 * 3.1416);
+      o.a = 0.66 * Math.sin(t3 * 3.1416);
       o.c = C_OK; o.g = -1;
       return;
     }
 
-    /* El campo en el que ocurre todo: volumen, no vacío negro. */
+    /* El campo en el que ocurre todo: volumen, no vacio negro. */
     o.nx = sd(i, 23); o.ny = sd(i, 24);
     o.a = 0.10 + 0.10 * Math.sin(tm * 0.0006 + sd(i, 25) * 6.3);
     o.c = C_MASA; o.g = -1;
   }
 
   /* 1 · EL PROBLEMA — «Persigo cobros · se me escapan · lo mismo en tres
-     sitios». Cuatro sistemas que por dentro funcionan, cada uno con su vida,
-     y ninguno habla con los demás. De cada uno salen flujos que no llegan a
-     ningún sitio y se apagan en magenta: es trabajo que se pierde.
+     sitios». Cuatro sistemas CALCADOS, cada uno funcionando por dentro, y
+     ninguno hablando con los demas.
 
-     Color: violeta apagado —hay inteligencia dentro de cada isla, pero
-     encerrada— y magenta solo en lo que se pierde. Deliberadamente sin cian:
-     el cian es conexión, y aquí no hay ninguna. Ese vacío de color es el
-     que hace que el estado siguiente, cuando aparece el cian, se sienta. */
+     EN CUATRO ACTOS, conducidos por el scroll:
+       1  aparecen las cuatro islas, apagadas
+       2  cada una se enciende por dentro: hay trabajo ahi
+       3  INTENTAN SALIR — lanzan senales hacia las otras y se apagan a medio
+          camino, en magenta. Es el acto que da sentido a todo el capitulo:
+          no es que no hagan nada, es que lo que hacen no llega
+       4  se quedan asi, latiendo, separadas
+
+     Este es el unico capitulo de la portada que no debe gustar. Por eso es
+     el mas apagado del recorrido: el alivio del siguiente depende de que
+     este se sienta cerrado. */
   function F1(i, u, g, G, o, tm, ins) {
     var gi = GR.redInt, ar = (MARCO[1].h * H) / (MARCO[1].w * W);
+    var a1 = ease(cl(ins / 0.22));                 // aparecen
+    var a2 = ease(cl((ins - 0.20) / 0.26));        // vida interior
+    var a3 = ease(cl((ins - 0.46) / 0.30));        // intentan salir
+    var a4 = ease(cl((ins - 0.78) / 0.22));        // se quedan asi
+
     if (u < 0.26) {                                          // los nodos
       var q = tramo(u, 0, 0.26, gi.n.length);
       var nodo = gi.n[q.k];
-      ponNodo(o, nodo.x, nodo.y, q.j, 0.026, ar);
-      o.a = 0.78; o.c = C_PROC; o.g = 150 + q.k;
+      /* Aparecen isla por isla, no todas de golpe: se cuentan. */
+      var mio = ease(cl((a1 * 4.6 - nodo.k) / 1.1));
+      ponNodo(o, nodo.x, nodo.y, q.j, 0.026 * (0.4 + 0.6 * mio), ar);
+      o.a = 0.80 * mio; o.c = C_PROC; o.g = mio > 0.2 ? 150 + q.k : -1;
       return;
     }
     if (u < 0.62) {                                          // su red interna
       var q2 = tramo(u, 0.26, 0.62, gi.e.length);
+      var kk = gi.e[q2.k].a.k;
+      var vis = ease(cl((a1 * 4.6 - kk) / 1.1));
       ponArista(o, gi.e[q2.k], q2.j);
-      o.a = 0.46; o.c = C_MASA; o.g = 190 + q2.k;
+      o.a = 0.46 * vis; o.c = C_MASA; o.g = vis > 0.3 ? 190 + q2.k : -1;
       return;
     }
-    if (u < 0.82) {                                          // lo que se pierde
+    if (u < 0.82) {                                          // LO QUE SE PIERDE
       var q3 = tramo(u, 0.62, 0.82, gi.n.length);
       var org = gi.n[q3.k];
-      var t2 = ((tm * 0.00022) + sd(q3.k, 45) + q3.j * 0.3) % 1;
+      /* Las senales salen con el tercer acto y no antes: hasta entonces
+         cada isla solo se ocupa de lo suyo. */
+      var t2 = ((tm * 0.00026) + sd(q3.k, 45) + q3.j * 0.3) % 1;
       var an = sd(q3.k, 46) * TAU;
-      o.nx = org.x + Math.cos(an) * t2 * 0.36 * ar;
-      o.ny = org.y + Math.sin(an) * t2 * 0.36;
-      o.a = 0.86 * (1 - t2) * (1 - t2);
-      o.c = t2 > 0.40 ? C_DEC : C_PROC;
+      var alc = 0.20 + 0.24 * a3;                  // cada vez llegan mas lejos
+      o.nx = org.x + Math.cos(an) * t2 * alc * ar;
+      o.ny = org.y + Math.sin(an) * t2 * alc;
+      o.a = a3 * 0.95 * (1 - t2) * (1 - t2);
+      o.c = t2 > 0.34 ? C_DEC : C_PROC;
       o.g = -1;
       return;
     }
-    var q4 = tramo(u, 0.82, 1.0, gi.e.length);                // tráfico interno
+    var q4 = tramo(u, 0.82, 1.0, gi.e.length);                // trafico interno
     var t = ((tm * 0.00034) + sd(q4.k, 47) + q4.j) % 1;
     ponArista(o, gi.e[q4.k], t);
-    o.a = 0.20 + 0.72 * Math.sin(t * 3.1416);
+    /* El latido del cuarto acto: siguen vivas, y siguen solas. */
+    var lat = 1 + 0.30 * a4 * Math.sin(tm * 0.0011 + gi.e[q4.k].a.k * 1.6);
+    o.a = a2 * (0.20 + 0.72 * Math.sin(t * 3.1416)) * lat;
     o.c = C_PROC; o.g = -1;
   }
 
   /* 2 · ANALIZAMOS — «Miramos lo que ya ocurre. Aparecen los trayectos que
-     se repiten y los que no llevan a ninguna parte — eso es lo primero que
-     se ve.» Literalmente eso, y nada más que eso.
+     se repiten y los que no llevan a ninguna parte.»
 
-     El campo se llena de TRAYECTOS: treinta recorridos que cruzan la
-     operación. Un frente de lectura los recorre de izquierda a derecha y, a
-     su paso, los clasifica:
+     EL CAMBIO IMPORTANTE: el frente de lectura ya no va por su cuenta con un
+     reloj. LO MUEVES TU con el scroll. La primera vez que se vio funcionando
+     quedo claro que era lo que le faltaba a toda la portada: no estas
+     mirando una animacion sobre el analisis, estas haciendo el analisis.
 
-       · tres trayectos tienen EXACTAMENTE la misma forma a distintas
-         alturas —lo mismo hecho en tres sitios— y se encienden en cian
-       · otros se cortan a media altura y se apagan en magenta: empiezan y
-         no llegan a ningún sitio
-       · el resto sigue siendo materia de fondo
-
-     No hace falta explicarlo: el ojo ve tres curvas calcadas y ve cabos
-     sueltos. Esa es la lectura, hecha delante de ti. */
+     EN CUATRO ACTOS:
+       1  el campo se llena de trayectos, todos igual de apagados
+       2  el frente recorre la operacion y va clasificando a su paso
+       3  al terminar, los tres CALCADOS se encienden juntos y los cabos
+          sueltos quedan marcados: eso es lo que se ha encontrado
+       4  el hallazgo se sostiene */
   function F2(i, u, g, G, o, tm, ins) {
-    var lect = -0.16 + ((tm * 0.00009) % 1.34);
+    var lect = -0.12 + ease(cl(ins / 0.74)) * 1.26;   // el frente lo mueve el scroll
+    var hall = ease(cl((ins - 0.70) / 0.20));         // el hallazgo, al final
     var TR = 30;
 
     if (u < 0.90) {
@@ -547,73 +589,110 @@
 
       if (muere && sp > corte) {                // el cabo suelto
         var cerca = cl((sp - corte) / 0.06);
-        o.a = 0.60 * leido * (1 - cerca);
+        o.a = (0.62 + 0.34 * hall) * leido * (1 - cerca);
         o.c = C_DEC;
         o.g = sp < corte + 0.055 ? 200 + k : -1;
         return;
       }
-      /* Delante del frente, actividad en bruto. Detrás, ya clasificado. */
       var base = 0.14 + 0.34 * Math.exp(-(x - lect) * (x - lect) * 55);
       if (rep) {
-        var lat = 0.5 + 0.5 * Math.sin(tm * 0.0022 + k);
-        o.a = base + leido * (0.30 + 0.42 * lat);
+        /* En el tercer acto los tres laten A LA VEZ. Que sincronicen es lo
+           que hace que se lean como el mismo trayecto repetido y no como
+           tres curvas cualesquiera. */
+        var lat = 0.5 + 0.5 * Math.sin(tm * 0.0024);
+        o.a = base + leido * (0.28 + 0.30 * lat + 0.40 * hall * lat);
         o.c = leido > 0.4 ? C_FLUJO : C_DATO;
       } else {
-        o.a = base * (1 - 0.34 * leido);
+        o.a = base * (1 - 0.42 * leido) * (1 - 0.20 * hall);
         o.c = leido > 0.4 ? C_BRUMA : C_DATO;
       }
       o.g = 210 + k;
       return;
     }
 
-    /* El frente de lectura: una línea vertical fina que barre la operación.
-       Es lo único de este estado que no es dato — es la mirada. */
+    /* El frente de lectura: una linea vertical fina que barre la operacion.
+       Es lo unico de este estado que no es dato — es la mirada. Se apaga
+       cuando termina su recorrido, porque ya ha hecho su trabajo. */
     var q2 = tramo(u, 0.90, 1.0, 1);
     o.nx = lect;
     o.ny = 0.02 + q2.j * 0.96;
-    o.a = 0.30 + 0.34 * Math.sin(q2.j * 3.1416);
+    o.a = (0.34 + 0.40 * Math.sin(q2.j * 3.1416)) * (1 - hall * 0.8);
     o.c = C_LUZ; o.g = 260;
   }
 
-  /* 3 · DISEÑAMOS — «Decidimos qué va con qué». Los mismos cuatro sistemas
-     del estado anterior, pero ahora se tienden los PUENTES entre ellos y, en
-     cuanto existen, el tráfico empieza a cruzarlos. Deja de haber cuatro
-     sistemas y pasa a haber una infraestructura. */
+  /* 3 · DISEÑAMOS — «Decidimos qué va con qué.» Los MISMOS cuatro sistemas
+     del capitulo anterior. Eso importa: no aparece una figura nueva, es la
+     de antes resolviendose. Es el primer pico del recorrido.
+
+     EN CUATRO ACTOS:
+       1  los cuatro sistemas, todavia separados
+       2  LO INTENTAN — vuelven a salir senales hacia los otros y siguen
+          muriendo a medio camino, igual que en el capitulo anterior
+       3  se tiende el primer puente, y luego los demas, uno a uno. En cuanto
+          existe un puente, las senales que morian ahi ya no mueren: cruzan
+       4  la red entera respira con trafico en los dos sentidos
+
+     El segundo acto existe para que el tercero signifique algo: si los
+     puentes aparecieran sin mas, serian lineas. Apareciendo justo donde
+     antes se perdia el trabajo, son la solucion. */
   function F3(i, u, g, G, o, tm, ins) {
     var gi = GR.redInt, gp = GR.redPue;
     var ar = (MARCO[3].h * H) / (MARCO[3].w * W);
-    var une = ease((ins - 0.10) / 0.42);
+    var a1 = ease(cl(ins / 0.16));
+    var intento = ease(cl((ins - 0.14) / 0.22)) * (1 - ease(cl((ins - 0.44) / 0.16)));
+    var une = ease(cl((ins - 0.38) / 0.32));       // los puentes
+    var vivo = ease(cl((ins - 0.70) / 0.24));      // la red viva
+
     if (u < 0.22) {
       var q = tramo(u, 0, 0.22, gi.n.length), nodo = gi.n[q.k];
       ponNodo(o, nodo.x, nodo.y, q.j, 0.024, ar);
-      o.a = 0.46 + 0.30 * une;
+      o.a = (0.46 + 0.34 * une) * a1;
       o.c = une > 0.6 ? C_DATO : C_PROC;
       o.g = 400 + q.k;
       return;
     }
-    if (u < 0.52) {
-      var q2 = tramo(u, 0.22, 0.52, gi.e.length);
+    if (u < 0.46) {
+      var q2 = tramo(u, 0.22, 0.46, gi.e.length);
       ponArista(o, gi.e[q2.k], q2.j);
-      o.a = 0.28; o.c = C_MASA; o.g = 440 + q2.k;
+      o.a = 0.30 * a1; o.c = C_MASA; o.g = 440 + q2.k;
       return;
     }
-    if (u < 0.76) {                                          // los puentes
-      var q3 = tramo(u, 0.52, 0.76, gp.e.length);
-      var av = cl((une - q3.k * 0.09) / 0.42);
+    if (u < 0.60) {
+      /* LO QUE TODAVIA SE PIERDE. Sale del nodo que en breve sera el
+         extremo de un puente: por eso el puente aparece justo ahi. */
+      var q5 = tramo(u, 0.46, 0.60, gp.e.length);
+      var org = gp.e[q5.k].a;
+      var tt = ((tm * 0.00030) + sd(q5.k, 55) + q5.j * 0.4) % 1;
+      var dx = gp.e[q5.k].b.x - org.x, dy = gp.e[q5.k].b.y - org.y;
+      o.nx = org.x + dx * tt * 0.42;
+      o.ny = org.y + dy * tt * 0.42;
+      o.a = intento * 0.90 * (1 - tt) * (1 - tt);
+      o.c = tt > 0.4 ? C_DEC : C_PROC;
+      o.g = -1;
+      return;
+    }
+    if (u < 0.78) {                                          // los puentes
+      var q3 = tramo(u, 0.60, 0.78, gp.e.length);
+      /* Uno a uno, no todos a la vez: se ve tender cada uno. */
+      var av = cl((une - q3.k * 0.16) / 0.34);
       ponArista(o, gp.e[q3.k], q3.j * av);
-      o.a = q3.j <= av ? 0.66 : 0;
-      o.c = C_FLUJO; o.g = q3.j <= av ? 480 + q3.k : -1;
+      /* Destello en la punta mientras se tiende. */
+      var punta = q3.j > av - 0.05 && q3.j <= av && av < 0.99;
+      o.a = q3.j <= av ? (punta ? 1.0 : 0.68) : 0;
+      o.c = punta ? C_LUZ : C_FLUJO;
+      o.g = q3.j <= av ? 480 + q3.k : -1;
       return;
     }
-    /* El tráfico. Cuando el puente existe, una parte cruza al otro sistema:
-       ahí es donde se ve la integración, no en la línea sino en lo que pasa. */
-    var q4 = tramo(u, 0.76, 1.0, gi.e.length + gp.e.length);
+    /* El trafico. Cuando el puente existe, una parte cruza al otro sistema:
+       ahi es donde se ve la integracion, no en la linea sino en lo que pasa. */
+    var q4 = tramo(u, 0.78, 1.0, gi.e.length + gp.e.length);
     var cruza = q4.k >= gi.e.length;
-    if (cruza && une < 0.86) { o.a = 0; o.g = -1; o.nx = 0.5; o.ny = 0.5; return; }
+    if (cruza && une < 0.80) { o.a = 0; o.g = -1; o.nx = 0.5; o.ny = 0.5; return; }
     var E = cruza ? gp.e[q4.k - gi.e.length] : gi.e[q4.k];
     var t = ((tm * 0.00040) + sd(q4.k, 41) + q4.j) % 1;
     ponArista(o, E, t);
-    o.a = (cruza ? 0.24 : 0.14) + (cruza ? 0.76 : 0.46) * Math.sin(t * 3.1416);
+    o.a = ((cruza ? 0.24 : 0.14) + (cruza ? 0.80 : 0.46) * Math.sin(t * 3.1416))
+        * (cruza ? vivo : a1);
     o.c = cruza ? C_FLUJO : C_DATO; o.g = -1;
   }
 
@@ -624,7 +703,7 @@
     var gr = GR.arq, ar = (MARCO[4].h * H) / (MARCO[4].w * W);
     if (u < 0.42) {                                          // los módulos
       var q = tramo(u, 0, 0.42, gr.n.length), nodo = gr.n[q.k];
-      var sube = ease((ins - 0.02 - (3 - nodo.k) * 0.085) / 0.19);
+      var sube = ease((ins - 0.02 - (3 - nodo.k) * 0.100) / 0.16);
       ponNodo(o, nodo.x, nodo.y + (1 - sube) * 0.26, q.j, 0.030, ar);
       /* El destello es el INSTANTE de encajar, no el estado de reposo. Con
          el blanco permanente los módulos se velaban y la arquitectura perdía
@@ -638,7 +717,7 @@
     if (u < 0.86) {                                          // los enlaces
       var q2 = tramo(u, 0.42, 0.86, gr.e.length), E = gr.e[q2.k];
       var kmax = Math.max(E.a.k, E.b.k);
-      var une = ease((ins - 0.07 - (3 - kmax) * 0.085) / 0.18);
+      var une = ease((ins - 0.26 - (3 - kmax) * 0.085) / 0.16);
       ponArista(o, E, q2.j * une);
       o.a = q2.j <= une ? 0.38 : 0;
       o.c = C_MASA; o.g = q2.j <= une ? 340 + q2.k : -1;
@@ -646,10 +725,14 @@
     }
     /* Y por encima empieza a circular lo que la estructura sostiene. */
     var q3 = tramo(u, 0.86, 1.0, gr.e.length);
-    var lay = ease((ins - 0.46) / 0.34);
+    /* La instalación llega cuando el armazón ya está: primero el hueso,
+       después lo que circula por él. Y en el último tramo la estructura ya
+       montada respira, que es el momento de contemplarla. */
+    var lay = ease((ins - 0.58) / 0.26);
+    var pleno = ease(cl((ins - 0.84) / 0.16));
     var t = ((tm * 0.00032) + sd(q3.k, 51) + q3.j) % 1;
     ponArista(o, gr.e[q3.k], t);
-    o.a = lay * (0.18 + 0.68 * Math.sin(t * 3.1416));
+    o.a = lay * (0.18 + 0.68 * Math.sin(t * 3.1416)) * (1 + 0.34 * pleno);
     o.c = C_FLUJO; o.g = -1;
   }
 
@@ -659,12 +742,20 @@
      siguiente. Y lo que circula se puede contar. */
   function F5(i, u, g, G, o, tm, ins) {
     var gr = GR.cadena, ar = (MARCO[5].h * H) / (MARCO[5].w * W);
-    var ciclo = (tm * 0.00020) % 1;
+    /* EL PROCESO CORRE DE VERDAD. El ciclo avanza con el reloj Y con el
+       scroll, así que durante el reposo del capítulo se ven varias vueltas
+       completas: entra algo, se procesa, se DECIDE por dónde sigue, se
+       dispara la acción y el resultado vuelve. No es una figura que
+       represente un proceso: es un proceso ocurriendo. */
+    var mont = ease(cl(ins / 0.22));
+    var corre = ease(cl((ins - 0.18) / 0.20));
+    var ciclo = ((tm * 0.00017) + ins * 2.4) % 1;
     if (u < 0.34) {                                          // las etapas
       var q = tramo(u, 0, 0.34, gr.n.length), nodo = gr.n[q.k];
-      var mio = cl(1 - Math.abs(ciclo * 5 - nodo.k) * 1.5);
-      ponNodo(o, nodo.x, nodo.y, q.j, 0.034 + 0.010 * mio, ar);
-      o.a = 0.28 + 0.72 * mio;
+      var mio = corre * cl(1 - Math.abs(ciclo * 5 - nodo.k) * 1.5);
+      var vis = ease(cl((mont * 6.4 - nodo.k) / 1.2));
+      ponNodo(o, nodo.x, nodo.y, q.j, 0.034 + 0.012 * mio, ar);
+      o.a = (0.28 + 0.72 * mio) * vis;
       o.c = mio > 0.5 ? C_LUZ : (nodo.k === 2 ? C_DEC : C_DATO);
       o.g = 500 + q.k;
       return;
@@ -672,7 +763,7 @@
     if (u < 0.64) {                                          // los enlaces
       var q2 = tramo(u, 0.34, 0.64, gr.e.length);
       ponArista(o, gr.e[q2.k], q2.j);
-      o.a = 0.28; o.c = C_MASA; o.g = 540 + q2.k;
+      o.a = 0.30 * mont; o.c = C_MASA; o.g = 540 + q2.k;
       return;
     }
     if (u < 0.88) {
@@ -680,10 +771,10 @@
     var q3 = tramo(u, 0.64, 0.88, 2);
     var ruta = q3.k ? [gr.e[0], gr.e[1], gr.e[3], gr.e[5]]
                     : [gr.e[0], gr.e[1], gr.e[2], gr.e[4]];
-    var t2 = ((tm * 0.00020) + q3.j * 0.7 + q3.k * 0.13) % 1;
+    var t2 = (ciclo + q3.j * 0.7 + q3.k * 0.13) % 1;
     var seg = Math.min(3, (t2 * 4) | 0), f2 = t2 * 4 - seg;
     ponArista(o, ruta[seg], f2);
-    o.a = 0.24 + 0.74 * Math.sin(t2 * 3.1416);
+    o.a = corre * (0.24 + 0.76 * Math.sin(t2 * 3.1416));
     o.c = seg === 2 ? C_DEC : (seg > 2 ? C_OK : C_FLUJO); o.g = -1;
     return;
     }
@@ -695,7 +786,9 @@
        es la única que se lee de abajo arriba. */
     var MARCAS = 8;
     var q4 = tramo(u, 0.88, 1.0, MARCAS);
-    var lleno = ((tm * 0.00020) * MARCAS) % (MARCAS + 1.4);
+    /* Sube con las vueltas del proceso, no con un reloj aparte: cada ciclo
+       completo deja su marca, y al final del capítulo se ha visto llenarse. */
+    var lleno = corre * ins * 9.6;
     var esta = cl(lleno - q4.k);
     o.nx = 0.905 + q4.j * 0.070;
     o.ny = 0.615 + q4.k * 0.046;
@@ -722,13 +815,13 @@
   function F6(i, u, g, G, o, tm, ins) {
     var gr = GR.cap, ar = (MARCO[6].h * H) / (MARCO[6].w * W);
     var HUECO = 8;                                   // el sitio que falta
-    var llega = ease((ins - 0.16) / 0.34);            // la pieza que llega
+    var llega = ease(cl((ins - 0.52) / 0.30));        // la pieza que llega
     var hueco = gr.n[HUECO];
 
     if (u < 0.44) {                                  // los módulos que ya están
       var q = tramo(u, 0, 0.44, HUECO);
       var nodo = gr.n[q.k];
-      var sale = ease((ins - 0.02 - q.k * 0.026) / 0.20);
+      var sale = ease(cl((ins - 0.02 - q.k * 0.036) / 0.16));
       ponNodo(o, nodo.x, nodo.y, q.j, 0.040, ar);
       /* Se enciende uno cada vez: así se cuentan, y se ve que son once. */
       var turno = cl(1 - Math.abs(((tm * 0.00013) % 1) * HUECO - q.k) * 0.70);
@@ -742,7 +835,7 @@
       var q2 = tramo(u, 0.44, 0.72, gr.e.length), E = gr.e[q2.k];
       var toca = (E.i0 === HUECO || E.i1 === HUECO);
       var kmax = Math.max(E.i0, E.i1);
-      var une = toca ? llega : ease((ins - 0.05 - kmax * 0.016) / 0.20);
+      var une = toca ? llega : ease(cl((ins - 0.06 - kmax * 0.030) / 0.16));
       ponArista(o, E, q2.j * une);
       o.a = q2.j <= une ? (toca ? 0.52 : 0.30) : 0;
       o.c = toca ? C_OK : C_MASA;
@@ -779,7 +872,10 @@
      lo mira. */
   function F7(i, u, g, G, o, tm, ins) {
     var gr = GR.escala, ar = (MARCO[7].h * H) / (MARCO[7].w * W);
-    var capa = ease((ins - 0.12) / 0.38);
+    /* Primero el sistema trabajando abajo; DESPUÉS desciende el plano que
+       lo vigila. Si aparecen a la vez no se entiende que uno observa al otro. */
+    var abajo = ease(cl(ins / 0.26));
+    var capa = ease(cl((ins - 0.30) / 0.34));
     var SUP = 7, sub = 0.26, esc = 0.70;
     if (u < 0.16) {                                          // la capa que vigila
       var q = tramo(u, 0, 0.16, SUP);
@@ -803,21 +899,21 @@
     if (u < 0.56) {                                          // el sistema, abajo
       var q3 = tramo(u, 0.32, 0.56, gr.n.length), nodo = gr.n[q3.k];
       ponNodo(o, nodo.x, nodo.y * esc + sub, q3.j, 0.030, ar);
-      o.a = 0.42; o.c = C_DATO; o.g = 850 + q3.k;
+      o.a = 0.42 * abajo; o.c = C_DATO; o.g = 850 + q3.k;
       return;
     }
     if (u < 0.86) {
       var q4 = tramo(u, 0.56, 0.86, gr.e.length), E = gr.e[q4.k];
       o.nx = E.a.x + (E.b.x - E.a.x) * q4.j;
       o.ny = (E.a.y + (E.b.y - E.a.y) * q4.j) * esc + sub;
-      o.a = 0.26; o.c = C_MASA; o.g = 880 + q4.k;
+      o.a = 0.26 * abajo; o.c = C_MASA; o.g = 880 + q4.k;
       return;
     }
     var q5 = tramo(u, 0.86, 1.0, gr.e.length), E2 = gr.e[q5.k];
     var t = ((tm * 0.00034) + sd(q5.k, 71) + q5.j) % 1;
     o.nx = E2.a.x + (E2.b.x - E2.a.x) * t;
     o.ny = (E2.a.y + (E2.b.y - E2.a.y) * t) * esc + sub;
-    o.a = 0.20 + 0.66 * Math.sin(t * 3.1416);
+    o.a = abajo * (0.20 + 0.66 * Math.sin(t * 3.1416));
     o.c = C_FLUJO; o.g = -1;
   }
 
@@ -827,27 +923,45 @@
      vistazo. Y rodea al lector, que queda dentro de él. */
   function F8(i, u, g, G, o, tm, ins) {
     var gr = GR.conv, ar = (MARCO[8].h * H) / (MARCO[8].w * W);
+    /* EL CIERRE, EN CUATRO ACTOS. Los anillos entran girando y se cierran,
+       la red se cose de dentro afuera, el trabajo converge hacia el centro y
+       al final todo el sistema late A LA VEZ: deja de ser un conjunto de
+       piezas y pasa a ser un cuerpo. Es el último pico del recorrido y el
+       único que rodea al lector en vez de ponerse a un lado. */
+    var cierra = ease(cl(ins / 0.30));
+    var enlaza = ease(cl((ins - 0.24) / 0.28));
+    var fluye  = ease(cl((ins - 0.50) / 0.28));
+    var pleno  = ease(cl((ins - 0.80) / 0.20));
+
     if (u < 0.26) {
       var q = tramo(u, 0, 0.26, gr.n.length), nodo = gr.n[q.k];
       var t3 = nodo.k === 1 ? 0.026 : 0.020;
-      ponNodo(o, nodo.x, nodo.y, q.j, t3, ar);
+      var gir = (1 - cierra) * 0.85;
+      var cg = Math.cos(gir), sg = Math.sin(gir);
+      var cx = 0.5 + (nodo.x - 0.5) * cg - (nodo.y - 0.5) * sg;
+      var cy = 0.5 + (nodo.x - 0.5) * sg + (nodo.y - 0.5) * cg;
+      ponNodo(o, cx, cy, q.j, t3, ar);
       var lat = 0.5 + 0.5 * Math.sin(tm * 0.0009 + q.k * 0.7);
-      o.a = 0.44 + 0.34 * lat;
+      var uni = 0.5 + 0.5 * Math.sin(tm * 0.0011);
+      o.a = cierra * (0.40 + 0.34 * lerp(lat, uni, pleno) + 0.24 * pleno);
       o.c = nodo.k === 1 ? C_FLUJO : C_DATO;
-      o.g = 900 + q.k;
+      o.g = cierra > 0.2 ? 900 + q.k : -1;
       return;
     }
     if (u < 0.72) {
-      var q2 = tramo(u, 0.26, 0.72, gr.e.length);
-      ponArista(o, gr.e[q2.k], q2.j);
-      o.a = 0.32; o.c = C_MASA; o.g = 940 + q2.k;
+      var q2 = tramo(u, 0.26, 0.72, gr.e.length), E3 = gr.e[q2.k];
+      var orden = (E3.i0 > E3.i1 ? E3.i0 : E3.i1) / gr.n.length;
+      var ap = cl((enlaza * 1.5 - orden) / 0.5);
+      ponArista(o, E3, q2.j * ap);
+      o.a = q2.j <= ap ? 0.36 : 0;
+      o.c = C_MASA; o.g = q2.j <= ap ? 940 + q2.k : -1;
       return;
     }
     var q3 = tramo(u, 0.72, 1.0, gr.e.length), E2 = gr.e[q3.k];
     var t = ((tm * 0.00030) + sd(q3.k, 81) + q3.j) % 1;
     var dentro = E2.b.k < E2.a.k;
     ponArista(o, E2, dentro ? t : 1 - t);
-    o.a = 0.20 + 0.72 * Math.sin(t * 3.1416);
+    o.a = fluye * (0.20 + 0.72 * Math.sin(t * 3.1416)) * (1 + 0.40 * pleno);
     /* Lo que va hacia dentro llega blanco: es el resultado reuniéndose. */
     o.c = dentro ? C_LUZ : C_FLUJO; o.g = -1;
   }
@@ -872,21 +986,55 @@
     STOPS = [];
     for (var i = 0; i < NST; i++) STOPS[i] = (found[i] !== undefined) ? found[i] : (i / (NST - 1));
     for (var j = 1; j < STOPS.length; j++) if (STOPS[j] <= STOPS[j - 1]) STOPS[j] = STOPS[j - 1] + 0.004;
-    var last = STOPS[STOPS.length - 1];
-    if (last > 1) for (var k = 0; k < STOPS.length; k++) STOPS[k] /= last;
+    /* El ultimo estado no se normaliza a 1 a proposito: por debajo de su
+       seccion queda el pie, y ese tramo es el reposo del cierre. Sin el, la
+       convergencia final llegaba y se acababa la pagina en el mismo gesto. */
+    for (var k = 0; k < STOPS.length; k++) if (STOPS[k] > 1) STOPS[k] = 1;
   }
-  var wA = 0, wB = 0, iA = 0, iB = 0, tw = 0;
+  /* ===================== LA DRAMATURGIA DEL SCROLL =====================
+
+     ESTE ERA EL PROBLEMA DE FONDO DE LA PORTADA, y no era de dibujo.
+
+     El motor mezclaba dos estados con un peso que iba de 0 a 1 LINEALMENTE a
+     lo largo de todo el tramo entre dos secciones. Dicho de otra manera: la
+     transformacion ocupaba el 100% del recorrido y no existia un solo
+     instante en el que una estructura estuviera quieta, salvo el punto
+     matematico en el que se cruzaba su seccion. Por eso, por bien dibujada
+     que estuviera cada figura, la sensacion era «aparece, empieza a
+     entenderse y ya esta cambiando»: literalmente nunca dejaba de cambiar.
+
+     Ahora cada tramo se parte en dos:
+
+       REPOSO      el estado se sostiene. La mezcla no se mueve (tw = 0) y lo
+                   que avanza es el GUION INTERNO del estado: una fase de 0 a
+                   1 que cada formacion usa para contar algo en cuatro actos
+                   —aparece, funciona, culmina, se sostiene—.
+       TRANSFORMA  solo el ultimo tercio. Ahi si se pasa a la siguiente.
+
+     Con REPOSO al 68% y capitulos de mas de una pantalla de alto, cada
+     estado tiene cientos de pixeles de scroll en los que esta quieto y
+     PASANDO COSAS, y la transformacion llega cuando el concepto ya se ha
+     entendido. El scroll deja de cambiar de figura y pasa a conducir una
+     narracion. */
+  var REPOSO = 0.68;
+  var wA = 0, wB = 0, iA = 0, iB = 0, tw = 0, FASE = 0;
   function weights(P) {
     var i = 0;
-    while (i < STOPS.length - 2 && P > STOPS[i + 1]) i++;
+    while (i < NST - 1 && P > STOPS[i + 1]) i++;
+    if (i >= NST - 1) {                       // el cierre: solo reposo
+      iA = iB = NST - 1; tw = 0; wA = 1; wB = 0;
+      FASE = cl((P - STOPS[NST - 1]) / Math.max(0.0001, 1 - STOPS[NST - 1]));
+      return;
+    }
     var t = cl((P - STOPS[i]) / Math.max(0.0001, STOPS[i + 1] - STOPS[i]));
-    iA = i; iB = i + 1; tw = t;
-    var e = ease(t); wA = 1 - e; wB = e;
+    iA = i; iB = i + 1;
+    FASE = cl(t / REPOSO);                    // guion del estado que se sostiene
+    tw   = cl((t - REPOSO) / (1 - REPOSO));   // y solo despues, la transformacion
+    var e = ease(tw); wA = 1 - e; wB = e;
   }
-  function inside(n) {
-    var a = STOPS[Math.max(0, n - 1)], b = STOPS[Math.min(NST - 1, n + 1)];
-    return ease((Pv - a) / Math.max(0.0001, b - a));
-  }
+  /* El estado que sale va por su guion; el que entra empieza el suyo de cero
+     en cuanto termina de formarse. */
+  function inside(n) { return n === iA ? FASE : 0; }
 
   var mx = 0, my = 0, cmx = 0, cmy = 0;
   if (!coarse && !reduced) {
@@ -927,8 +1075,18 @@
   }
   var ma = { x: 0, y: 0 }, mb = { x: 0, y: 0 };
 
+  var VEL = 0;
   function draw(tm, noClear) {
     weights(reduced ? P : Pv);
+    /* Con capítulos de más de una pantalla la portada es ahora mucho más
+       larga, y un barrido rápido mueve la materia muchísimo más por
+       fotograma. La floración —que dibuja un halo de tres radios sobre cada
+       partícula encendida— se convertía entonces en el coste dominante y
+       además emborronaba justo cuando no hay nada que contemplar. Se apaga
+       con la velocidad de scroll: cuando estás mirando, está; cuando pasas
+       de largo, sobra. */
+    VEL += (Math.abs(P - Pv) - VEL) * 0.20;
+    var flor = 1 - cl(VEL * 30);
     cmx += (mx - cmx) * 0.045; cmy += (my - cmy) * 0.045;
 
     ctx.globalCompositeOperation = 'source-over';
@@ -969,7 +1127,7 @@
       /* Cada partícula sale hacia la formación siguiente en su instante. */
       var t = cl((tw - p.dl) / (1 - p.dl)); t = t * t * (3 - 2 * t);
       var tx = lerp(ma.x, mb.x, t), ty = lerp(ma.y, mb.y, t);
-      var al = lerp(oa.a, ob.a, t);
+      var al = lerp(oa.a, ob.a, t) * lerp(INT[iA], INT[iB], t);
       var dep = lerp(frA.d, frB.d, t);
 
       /* LA TRANSFORMACIÓN. Esto se ha rehecho entero, porque era el punto
@@ -1020,17 +1178,38 @@
       var lq = (ldx * ldx + ldy * ldy) / lr2;
       var luz = 0.42 / (1 + lq * lq);
 
+      /* EL ESTIRADO POR VELOCIDAD, CONTENIDO. Medido: en los capítulos con
+         tráfico la portada dibujaba un megapíxel de relleno aditivo por
+         fotograma y caía a 32 fps ESTANDO QUIETA. La causa no era el scroll:
+         era que las partículas que transportan datos no paran nunca, así que
+         vivían permanentemente estiradas, y el radio entra al cuadrado en el
+         área. Con el estirado a menos de la mitad y un tope duro de radio, la
+         estela se sigue viendo y el relleno baja a un tercio. */
       var v2 = p.vx * p.vx + p.vy * p.vy;
-      var sp = v2 > 30 ? 1.10 : v2 * 0.040;
-      var r = (1.05 + p.s * 2.5) * (0.55 + p.z * 1.15) * (1 + sp) * dep;
+      var sp = v2 > 16 ? 0.40 : v2 * 0.025;
+      var r = (0.98 + p.s * 2.15) * (0.55 + p.z * 1.10) * (1 + sp) * dep;
+      if (r > 8.6) r = 8.6;
       var a2 = (al + luz) * (0.40 + p.z * 0.72) * (0.68 + 0.32 * dep);
-      if (a2 <= 0.012) continue;
+      /* Lo que está por debajo de este umbral no se distingue del fondo, y
+         cada partícula cuesta una llamada de dibujo aunque no se vea. Subirlo
+         retira varios cientos de llamadas por fotograma en los capítulos
+         densos sin que se note una sola partícula de menos. */
+      if (a2 <= 0.048) continue;
       var spr = SPR[p.e][(t < 0.5 ? oa.c : ob.c)];
-      if (a2 > 0.50) {
-        /* Halo: solo lo que de verdad brilla lo tiene, y por eso significa
-           algo cuando aparece. */
-        var rb = r * 3.0;
-        ctx.globalAlpha = Math.min(0.22, (a2 - 0.50) * 0.52);
+      /* FLORACIÓN, SOLO EN EL ESTRATO CERCANO. Medido: quieto en mitad del
+         recorrido la portada caía a 25 fps, y no era el scroll —era esto—.
+         El halo se dibuja a casi tres radios, así que cada partícula
+         florecida cuesta unas treinta veces su propia área; con la subida de
+         intensidad de los capítulos, cientos de ellas cruzaban el umbral a
+         la vez y el relleno se comía el fotograma.
+
+         Limitarlo al estrato cercano no es un recorte, es lo correcto: lo
+         que está lejos y desenfocado no tiene por qué tener un halo duro. Y
+         se apaga con la velocidad de scroll, porque al pasar de largo solo
+         emborrona. */
+      if (p.e === 2 && a2 > 0.56 && flor > 0.06) {
+        var rb = r * 2.6;
+        ctx.globalAlpha = Math.min(0.26, (a2 - 0.56) * 0.60) * flor;
         ctx.drawImage(spr, dx - rb, dy - rb, rb * 2, rb * 2);
       }
       ctx.globalAlpha = Math.min(0.80, a2);
@@ -1052,7 +1231,8 @@
       var hay = false;
       ctx.beginPath();
       for (var k2 = 1; k2 < N; k2++) {
-        if (pc[k2] !== c2) continue;
+        var cc = pc[k2] === C_MASA ? C_BRUMA : pc[k2];   // la bruma, una sola pasada
+        if (cc !== c2) continue;
         if (pg[k2] < 0 || pg[k2] !== pg[k2 - 1]) continue;
         var ddx = px[k2] - px[k2 - 1], ddy = py[k2] - py[k2 - 1];
         if (ddx * ddx + ddy * ddy > 30000) continue;
@@ -1061,7 +1241,8 @@
       if (!hay) continue;
       /* La brumа sostiene, no habla: se pinta bastante más baja que un
          enlace con significado. */
-      var op = (c2 === C_BRUMA || c2 === C_MASA) ? 0.075 : 0.20;
+      if (c2 === C_MASA) continue;
+      var op = c2 === C_BRUMA ? 0.085 : 0.20;
       ctx.strokeStyle = rgba(COL[c2], op + 0.10 * afl);
       ctx.stroke();
     }

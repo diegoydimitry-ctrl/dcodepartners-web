@@ -70,15 +70,24 @@ body.v6 main .lit::before{ display:none; }
      `clip` recorta en horizontal sin crear contenedor de scroll, así que el
      sangrado vertical se conserva. */
   overflow-x:clip;
-  display:flex; align-items:center;
-  min-height:clamp(430px, 66vh, 660px);
-  padding-block:clamp(40px, 6vh, 76px);
+  /* En bloque, no en flex: un elemento anclado dentro de un contenedor flex
+     con align-items:center parte de una posicion estatica ya centrada y el
+     anclaje se comporta de forma distinta a la esperada. En bloque la
+     columna de lectura se ancla de forma limpia. */
+  display:block;
+  /* RECORRIDO. Cada estado necesita metros de scroll para respirar: la
+     estructura aparece, se la mira, evoluciona, culmina y solo entonces
+     empieza a transformarse. Con secciones de 66vh el motor no tenia sitio
+     donde sostener nada y la portada se sentia como una sucesion de efectos.
+     A partir de aqui, una seccion es un capitulo, no una diapositiva. */
+  min-height:clamp(760px, 128vh, 1280px);
+  padding-block:clamp(70px, 13vh, 150px) clamp(40px, 6vh, 76px);
 }
 /* El contenedor es hijo de un flex: sin esto se encoge al ancho de su texto y
    los márgenes automáticos lo centran, así que "izquierda" y "derecha" dejaban
    de significar nada. */
 .v6-block > .container{ flex:1 1 auto; width:100%; }
-.v6-block--tall{ min-height:clamp(520px, 84vh, 820px); }
+.v6-block--tall{ min-height:clamp(860px, 148vh, 1480px); }
 
 /* Velo difuso bajo el texto. Sin borde y sin recuadro: solo garantiza que
    ninguna corriente del campo se coma una línea. */
@@ -182,7 +191,10 @@ body.v6 main .lit::before{ display:none; }
 /* Cuatro bloques altos, alternando lado. Entre uno y otro no hay una caja
    con la explicación: hay el propio campo cambiando de estado. Eso es lo que
    se está explicando. */
-.v6-step{ position:relative; }
+/* Los cuatro pasos del proceso son los capitulos mas largos: es donde la
+   materia tiene que construir, conectar, procesar y medir delante de ti. */
+.v6-step{ position:relative; min-height:clamp(820px, 142vh, 1420px);
+  padding-block:clamp(70px, 13vh, 150px) clamp(40px, 6vh, 76px); }
 .v6-step .container{ display:flex; }
 .v6-step--l .container{ justify-content:flex-start; }
 .v6-step--r .container{ justify-content:flex-end; }
@@ -298,8 +310,9 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
   }
   /* En vertical el campo trabaja detrás y debajo del texto, no al lado:
      todos los bloques se alinean a la izquierda y bajan de altura. */
-  .v6-block{ min-height:clamp(340px, 54vh, 520px); }
-  .v6-block--tall{ min-height:clamp(400px, 62vh, 580px); }
+  .v6-block{ min-height:clamp(560px, 104vh, 900px); }
+  .v6-block--tall{ min-height:clamp(620px, 116vh, 1000px); }
+  .v6-step{ min-height:clamp(600px, 110vh, 980px); }
   .v6-step .container, .v6-step--r .container{ justify-content:flex-start; }
   .v6-step-in{ max-width:100%; }
   .v6-say:nth-child(2), .v6-say:nth-child(3){ margin-left:0; }
@@ -364,10 +377,15 @@ body.v6 .v6-river::before{
    encima del pie. Con capa propia deja de depender de ese orden. */
 body.v6 footer{ position:relative; z-index:2; }
 
+/* El pie se apoya en superficie propia EN TODOS LOS ANCHOS. Su degradado
+   arrancaba transparente y el campo se ve a traves; al subir la intensidad
+   del cierre —que es uno de los dos picos del recorrido— los titulillos de
+   las columnas del pie caian a 1,68:1 sobre los anillos. Para cuando se
+   llega al pie el campo ya ha contado todo lo que tenia que contar. */
+body.v6 footer{
+  background:linear-gradient(180deg, rgba(6,9,17,.90), rgba(5,7,14,.99) 40%);
+}
 @media (max-width:640px){
-  /* En vertical el pie ocupa casi una pantalla y su degradado arranca
-     transparente: se apoya en superficie propia. */
-  body.v6 footer{ background:linear-gradient(180deg, rgba(7,10,19,.95), rgba(5,7,14,.995)); }
 
 
   /* BOTONES EN VERTICAL. Dos intentos previos fallaron y el motivo es el
@@ -413,4 +431,44 @@ body.v6 footer{ position:relative; z-index:2; }
     background:radial-gradient(76% 100% at 42% 50%,
       rgba(5,7,14,.99), rgba(5,7,14,.90) 54%, rgba(5,7,14,0) 95%);
   }
+}
+
+
+/* ===================================================== EL TEXTO SE QUEDA
+   Al alargar los capitulos aparecio un problema que antes no existia: el
+   texto de la seccion se iba por arriba cuando la figura llevaba recorrida
+   la mitad de su guion, asi que la segunda mitad de cada capitulo se veia
+   acompanada del titular del capitulo siguiente. Contaba una cosa y decia
+   otra.
+
+   La columna de lectura se ancla mientras dura su capitulo. Es ademas el
+   gesto que hace que esto funcione como una secuencia y no como una lista:
+   el texto se sostiene, y lo que se transforma delante de el es la materia.
+   Cuando el capitulo acaba, el texto se despega y sale con normalidad. */
+body.v6 .v6-block > .container,
+body.v6 .v6-step  > .container{
+  position:sticky;
+  /* Lo mas arriba que puede sin meterse bajo la cabecera: cuanto menor es
+     este desplazamiento, mas largo es el tramo en el que el texto se
+     sostiene mientras la materia trabaja. */
+  top:clamp(92px, 13vh, 148px);
+}
+@media (max-width:900px){
+  body.v6 .v6-block > .container,
+  body.v6 .v6-step  > .container{ top:clamp(80px, 11vh, 120px); }
+}
+
+
+/* Y para que el anclaje funcione hay que quitarle a <body> su scroll propio.
+   dcp5.css le pone overflow-x:hidden para atajar cualquier desborde
+   horizontal, y eso convierte al body en contenedor de scroll: a partir de
+   ahi, position:sticky se mide contra un puerto que no se desplaza y no se
+   pega nunca. Se resolvio midiendo, no leyendo: el estilo calculado decia
+   `position: sticky` y el elemento seguia subiendo.
+
+   overflow-x:clip recorta igual y NO crea contenedor de scroll. Se aplica
+   solo donde se soporta, asi que un navegador antiguo conserva la guarda
+   anterior y simplemente no ancla. */
+@supports (overflow-x: clip){
+  body.v6{ overflow-x:clip; }
 }
