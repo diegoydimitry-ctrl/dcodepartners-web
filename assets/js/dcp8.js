@@ -87,6 +87,90 @@
     narrow = W < 900; small = W < 620;
     if (inst && inst.build) inst.build();
   }
+
+  /* ------------------------------------------------- MATERIA COMPARTIDA */
+  /* La portada demostró que una nube de partículas que se reorganiza dice
+     mucho más que una figura dibujada encima de la página. Los instrumentos
+     usan LA MISMA materia: lo que cambia de una página a otra es la forma
+     que se le pide, no de qué está hecha. Eso es lo que mantiene un solo
+     universo mientras cada sección conserva su idea propia. */
+  var ACERO = [150, 178, 226];
+  var CI = { cian:0, azul:1, violeta:2, lav:3, rosa:4, verde:5,
+             ambar:6, turq:7, acero:8, blanco:9 };
+  var NUB = [], NSPR = [], NPX = null, NPY = null, NPA = null, NPG = null, NPC = null;
+  var o1 = { x: 0, y: 0, a: 1, g: -1, c: 8 };
+
+  function chispas() {
+    NSPR = [];
+    var todos = [C.cian, C.azul, C.violeta, C.lav, C.rosa, C.verde,
+                 C.ambar, C.turq, ACERO, [226, 240, 255]];
+    for (var i = 0; i < todos.length; i++) {
+      var cv = document.createElement('canvas'), R = 28;
+      cv.width = cv.height = R * 2;
+      var g = cv.getContext('2d');
+      var gr = g.createRadialGradient(R, R, 0, R, R, R);
+      gr.addColorStop(0,    rgba(todos[i], 1));
+      gr.addColorStop(0.22, rgba(todos[i], 0.52));
+      gr.addColorStop(0.55, rgba(todos[i], 0.12));
+      gr.addColorStop(1,    rgba(todos[i], 0));
+      g.fillStyle = gr; g.fillRect(0, 0, R * 2, R * 2);
+      NSPR.push(cv);
+    }
+  }
+
+  function nube(n) {
+    NUB = [];
+    for (var i = 0; i < n; i++) {
+      NUB.push({ z: 0.40 + sd(i, 1) * 0.60, s: 0.70 + sd(i, 2) * 0.90,
+                 vx: 0, vy: 0, x: -1, y: 0 });
+    }
+    NPX = new Float32Array(n); NPY = new Float32Array(n);
+    NPA = new Float32Array(n); NPG = new Int32Array(n); NPC = new Int32Array(n);
+    chispas();
+  }
+
+  /* fn(i, u, o, tm) escribe el destino de cada partícula. Nadie salta: cada
+     una PERSIGUE su objetivo, y por eso se ve viajar de una forma a otra. */
+  function materia(fn, tm) {
+    for (var i = 0; i < NUB.length; i++) {
+      var p = NUB[i];
+      o1.a = 1; o1.g = -1; o1.c = CI.acero;
+      fn(i, i / NUB.length, o1, tm);
+      if (p.x < 0) { p.x = o1.x; p.y = o1.y; }
+      p.vx += (o1.x - p.x) * 0.11; p.vy += (o1.y - p.y) * 0.11;
+      p.vx *= 0.74; p.vy *= 0.74;
+      p.x += p.vx; p.y += p.vy;
+      NPX[i] = p.x; NPY[i] = p.y; NPA[i] = o1.a;
+      NPG[i] = o1.g; NPC[i] = o1.c;
+    }
+  }
+
+  /* El enlace une partículas CONSECUTIVAS DEL MISMO GRUPO: así la estructura
+     la dibujan ellas y no una línea añadida por encima. */
+  function pinta(enl) {
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < NUB.length; i++) {
+      var p = NUB[i], a = NPA[i] * (0.42 + p.z * 0.66);
+      if (a <= 0.012) continue;
+      var sp = Math.min(1.1, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.22);
+      var r = (1.7 + p.s * 2.8) * p.z * (1 + sp);
+      ctx.globalAlpha = Math.min(0.72, a);
+      ctx.drawImage(NSPR[NPC[i]], NPX[i] - r, NPY[i] - r, r * 2, r * 2);
+    }
+    ctx.globalAlpha = 1;
+    if (enl) {
+      ctx.lineWidth = 1; ctx.beginPath();
+      for (var k = 1; k < NUB.length; k++) {
+        if (NPG[k] < 0 || NPG[k] !== NPG[k - 1]) continue;
+        var dx = NPX[k] - NPX[k - 1], dy = NPY[k] - NPY[k - 1];
+        if (dx * dx + dy * dy > 24000) continue;
+        ctx.moveTo(NPX[k - 1], NPY[k - 1]); ctx.lineTo(NPX[k], NPY[k]);
+      }
+      ctx.strokeStyle = rgba(ACERO, enl); ctx.stroke();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
   function clear(alpha) {
     // Se limpia el lienzo ENTERO aunque el instrumento trabaje en su banda:
     // si no, la estela quedaría recortada en un rectángulo visible.
@@ -617,90 +701,56 @@
   /* hasta salir como uno solo. No se venden por separado.                 */
   /* ==================================================================== */
   INSTR.servicios = (function () {
-    // Un cable trenzado bajo carga, no tres líneas decorativas.
-    // Un cable real es lo único que reúne a la vez las seis cosas que
-    // tiene que transmitir esta página: profundidad (unas hebras pasan
-    // por detrás de otras), cruce (se trenzan de verdad), unión (entran
-    // tres y sale uno), tensión (el conjunto tira), continuidad (el cable
-    // viene de antes del encuadre y sigue después) y — la importante —
-    // dependencia: cuando una hebra afloja, las otras toman su carga.
-    var HUES = [], LAY = 0;
+    /* El cable, hecho de partículas. Un cable reúne a la vez las seis cosas
+       que esta página tiene que transmitir — profundidad, cruce, unión,
+       tensión, continuidad y dependencia — y ahora se ve DE QUÉ está hecho:
+       cada hebra es una fila de partículas que se sostienen entre sí. */
+    var HUE = [CI.cian, CI.violeta, CI.rosa];
     return {
-      build: function () {
-        HUES = [C.cian, C.violeta, C.rosa];
-        LAY = 7.4;                       // paso de cableado
-      },
+      build: function () { nube(small ? 300 : narrow ? 520 : 840); },
       draw: function (tm) {
-        clear(0.26);
-        // El cable vive en su propia banda: no cruza la columna de texto.
+        clear(0.30);
         var cx = W * (narrow ? 0.5 : 0.80);
         var spread = W * (narrow ? 0.17 : 0.085);
-        var step = small ? 0.020 : 0.010;
-        var tense = win(0.04, 0.72);     // el cable se tensa al recorrer
-
-        // Turno de carga: una hebra afloja y las otras dos la sostienen.
+        var tense = win(0.04, 0.72);
         var cyc = (tm * 0.00013) % 1;
-        var flojo = Math.floor(cyc * 3);
-        var cede = Math.sin(((cyc * 3) % 1) * Math.PI);
+        var flojo = Math.floor(cyc * 3), cede = Math.sin(((cyc * 3) % 1) * Math.PI);
+        var per = NUB.length / 3;
 
-        function radio(u) { return spread * (1 - 0.62 * ease(u) * tense); }
-        function fase(u, si) { return u * LAY + si * 2.0944 + tm * 0.00022; }
-        function equis(u, si) {
+        materia(function (i, u, o) {
+          var si = Math.min(2, (i / per) | 0);
+          var uu = ((i - si * per) / per) * 1.24 - 0.12;   // sale del encuadre
+          var fase = uu * 7.4 + si * 2.0944 + tm * 0.00022;
           var s2 = si === flojo ? 1 + 0.42 * cede : 1 - 0.16 * cede;
-          return cx + Math.cos(fase(u, si)) * radio(u) * s2;
-        }
+          var rad = spread * (1 - 0.62 * ease(uu) * tense);
+          o.x = cx + Math.cos(fase) * rad * s2;
+          o.y = uu * H;
+          var frente = Math.sin(fase) > 0;              // pasa por delante
+          var carga = si === flojo ? 0 : cede;
+          o.a = (frente ? 0.62 : 0.16) + 0.20 * tense + 0.26 * carga
+              - (si === flojo ? 0.26 * cede : 0);
+          o.c = HUE[si];
+          o.g = si;
+        }, tm);
+        pinta(0.10);
 
-        // El cable entra por encima del encuadre y sale por debajo: no
-        // empieza aquí ni termina aquí.
-        for (var si = 0; si < 3; si++) {
-          var suelta = si === flojo ? cede : 0;
-          var carga  = si === flojo ? 0 : cede;   // las que sostienen
-          for (var u = -0.12; u <= 1.12; u += step) {
-            var u2 = u + step;
-            var x1 = equis(u, si), x2 = equis(u2, si);
-            var y1 = u * H, y2 = u2 * H;
-            var d = Math.sin(fase(u, si));        // >0 pasa por delante
-            var frente = d > 0;
-            var a = (frente ? 0.22 : 0.06) + 0.08 * tense
-                  + 0.10 * carga - 0.09 * suelta;
-            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
-            ctx.strokeStyle = rgba(HUES[si], Math.max(0.04, a));
-            ctx.lineWidth = (frente ? 1.8 : 1.0) + 0.4 * carga;
-            ctx.stroke();
-          }
-        }
-
-        // Las ataduras: cada cierto tramo el haz queda ceñido. Es lo que
-        // convierte tres hebras sueltas en un solo cable.
+        /* Las ataduras: lo que convierte tres hebras en un solo cable. */
         var paso = 0.145;
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.lineWidth = 1;
         for (var b = paso; b < 1.1; b += paso) {
           var ap = ease((tense - (b - 0.1) * 0.5) / 0.35);
           if (ap <= 0) continue;
-          var xs = [equis(b, 0), equis(b, 1), equis(b, 2)];
-          var izq = Math.min(xs[0], xs[1], xs[2]) - 4;
-          var der = Math.max(xs[0], xs[1], xs[2]) + 4;
           var yb = b * H;
-          ctx.strokeStyle = rgba([214, 236, 255], 0.09 * ap);
-          ctx.lineWidth = 1;
+          var izq = cx - spread * 1.25, der = cx + spread * 1.25;
+          ctx.strokeStyle = rgba([214, 236, 255], 0.07 * ap);
           for (var k = 0; k < 3; k++) {
-            var yy = yb + (k - 1) * 3;
-            ctx.beginPath(); ctx.moveTo(izq, yy); ctx.lineTo(der, yy); ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(izq, yb + (k - 1) * 3); ctx.lineTo(der, yb + (k - 1) * 3);
+            ctx.stroke();
           }
         }
-
-        // La carga que recorre el cable de arriba abajo: se ve que tira.
-        var lp = ((tm * 0.00019) % 1) * 1.2 - 0.1;
-        for (var si2 = 0; si2 < 3; si2++) {
-          if (si2 === flojo) continue;               // la floja no transmite
-          var xg = equis(lp, si2), yg = lp * H;
-          if (Math.sin(fase(lp, si2)) <= 0) continue; // solo si va por delante
-          var g = ctx.createLinearGradient(xg, yg - 26, xg, yg + 26);
-          g.addColorStop(0, rgba(HUES[si2], 0));
-          g.addColorStop(0.5, rgba(HUES[si2], 0.26 * tense));
-          g.addColorStop(1, rgba(HUES[si2], 0));
-          ctx.strokeStyle = g; ctx.lineWidth = 3;
-          ctx.beginPath(); ctx.moveTo(xg, yg - 26); ctx.lineTo(xg, yg + 26); ctx.stroke();
-        }
+        ctx.globalCompositeOperation = 'source-over';
       }
     };
   })();
@@ -825,90 +875,94 @@
   /* adquieren sentido juntas. Ninguna otra sección usa formas sólidas.    */
   /* ==================================================================== */
   INSTR.encaje = (function () {
-    var tiles = [];
+    /* EL ENCAJE, llevado al límite. Las piezas no van derechas a su hueco:
+       llegan girando, SE RESISTEN, sobrepasan y se asientan. Y una vez
+       dentro, ceden materia a la vecina — se ve la unión hacerse — y el
+       conjunto entero se re-tensa. Cada pieza que entra cambia el todo. */
+    var pz = [], K = 8;
     return {
       build: function () {
-        tiles.length = 0;
-        // Ocho piezas: una retícula 4x2 (o 2x4 en vertical) como destino.
+        pz.length = 0;
         var cols = narrow ? 2 : 4, rows = narrow ? 4 : 2;
-        var gw = (narrow ? W * 0.78 : W * 0.56), gh = (narrow ? H * 0.46 : H * 0.40);
+        var gw = narrow ? W * 0.78 : W * 0.58, gh = narrow ? H * 0.46 : H * 0.40;
         var ox = (W - gw) / 2, oy = (H - gh) / 2;
         var cw = gw / cols, ch = gh / rows;
-        for (var i = 0; i < cols * rows; i++) {
-          var c = i % cols, r = Math.floor(i / cols);
-          tiles.push({
-            i: i,
+        var HU = [CI.cian, CI.rosa, CI.verde, CI.ambar,
+                  CI.azul, CI.turq, CI.violeta, CI.lav];
+        for (var i = 0; i < K; i++) {
+          var c = i % cols, r = (i / cols) | 0;
+          var ang = sd(i, 7) * 6.2832;
+          pz.push({
             tx: ox + c * cw + cw / 2, ty: oy + r * ch + ch / 2,
-            w: cw, h: ch,
-            // Origen: dispersas, giradas y a distinta escala.
-            sx: W * (0.06 + sd(i, 2) * 0.88), sy: H * (0.08 + sd(i, 3) * 0.84),
-            rot: (sd(i, 4) - 0.5) * 2.2, sc: 0.45 + sd(i, 5) * 0.5,
-            hue: [C.cian, C.rosa, C.verde, C.ambar, C.azul, C.turq, C.lav, C.violeta][i % 8]
+            w: cw * 0.80, h: ch * 0.74,
+            sx: ox + gw / 2 + Math.cos(ang) * W * 0.46,
+            sy: oy + gh / 2 + Math.sin(ang) * H * 0.52,
+            rot: (sd(i, 8) - 0.5) * 2.6, hu: HU[i], d: sd(i, 9)
           });
         }
+        nube(small ? 300 : narrow ? 520 : 880);
       },
       draw: function (tm) {
         clear(0.30);
-        var fit = win(0.02, 0.58);                 // el encaje ocurre al bajar
-        var e = ease(fit);
-        for (var i = 0; i < tiles.length; i++) {
-          var t = tiles[i];
-          // Cada pieza encaja con un pequeño desfase: se ve el ensamblaje.
-          var raw = Math.max(0, Math.min(1, (fit - i * 0.045) / 0.5));
-          // Rebote de asentamiento: la pieza sobrepasa su hueco y vuelve.
-          // Encajar cuesta; si entra sin resistencia no se percibe el encaje.
-          var f = raw < 1
-            ? ease(raw) + Math.sin(raw * Math.PI) * 0.10 * Math.sin(raw * 12 + i)
-            : 1;
-          var x = lerp(t.sx, t.tx, f), y = lerp(t.sy, t.ty, f);
-          // Y gira hasta el último momento, resistiéndose a alinearse.
-          var rot = lerp(t.rot, 0, ease(Math.pow(raw, 1.6)))
-                  + (1 - raw) * Math.sin(tm * 0.0006 + i) * 0.16;
-          var sc = lerp(t.sc, 1, f);
-          var w = t.w * sc, h = t.h * sc;
+        var fit = win(0.06, 0.62);
+        var per = NUB.length / K;
 
-          ctx.save();
-          ctx.translate(x, y); ctx.rotate(rot);
-          // Cuerpo: apenas un tinte, para que manden los filos.
-          var g = ctx.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
-          g.addColorStop(0, rgba(t.hue, 0.030 + 0.034 * f));
-          g.addColorStop(1, rgba(t.hue, 0.008));
-          ctx.fillStyle = g;
-          ctx.fillRect(-w / 2 + 3, -h / 2 + 3, w - 6, h - 6);
-          // Filo: nítido cuando la pieza ya está en su sitio.
-          ctx.strokeStyle = rgba(t.hue, 0.16 + 0.30 * f);
-          ctx.lineWidth = 1;
-          ctx.strokeRect(-w / 2 + 3, -h / 2 + 3, w - 6, h - 6);
-          // Muescas de encaje: aparecen ANTES de que la pieza llegue, para
-          // que se vea por dónde va a unirse.
-          if (raw > 0.18) {
-            ctx.strokeStyle = rgba(t.hue, 0.12 + 0.26 * raw);
-            ctx.beginPath();
-            ctx.moveTo(w / 2 - 3, -9); ctx.lineTo(w / 2 - 3 + 8 * raw, 0); ctx.lineTo(w / 2 - 3, 9);
-            ctx.moveTo(-w / 2 + 3, -9); ctx.lineTo(-w / 2 + 3 + 8 * raw, 0); ctx.lineTo(-w / 2 + 3, 9);
-            ctx.stroke();
-          }
-          ctx.restore();
-        }
-        // Las costuras: solo existen cuando las piezas ya se tocan.
-        if (e > 0.72) {
-          var seam = (e - 0.72) / 0.28;
-          for (var k = 0; k < tiles.length; k++) {
-            for (var j = k + 1; j < tiles.length; j++) {
-              var a = tiles[k], b2 = tiles[j];
-              var dx = Math.abs(a.tx - b2.tx), dy = Math.abs(a.ty - b2.ty);
-              var vecina = (dx < a.w * 1.1 && dy < 2) || (dy < a.h * 1.1 && dx < 2);
-              if (!vecina) continue;
+        materia(function (i, u, o) {
+          var k = Math.min(K - 1, (i / per) | 0);
+          var t = pz[k];
+          var j = (i - k * per) / per;                 // recorrido del contorno
+
+          var raw = Math.max(0, Math.min(1, (fit - k * 0.052) / 0.46));
+          /* Resistencia: sobrepasa el hueco y vuelve. Encajar cuesta. */
+          var f = raw < 1
+            ? ease(raw) + Math.sin(raw * Math.PI) * 0.11 * Math.sin(raw * 11 + k)
+            : 1;
+          /* Y gira hasta el último momento: no se alinea hasta que entra. */
+          var rot = lerp(t.rot, 0, ease(Math.pow(raw, 1.7)))
+                  + (1 - raw) * Math.sin(tm * 0.0007 + k) * 0.20;
+          var cx = lerp(t.sx, t.tx, f), cy = lerp(t.sy, t.ty, f);
+
+          /* La pieza es su CONTORNO, dibujado por sus propias partículas. */
+          var pp = j * 4, e = pp | 0, ff = pp - e;
+          var lx, ly, hw = t.w / 2, hh = t.h / 2;
+          if (e === 0)      { lx = -hw + ff * t.w; ly = -hh; }
+          else if (e === 1) { lx =  hw;            ly = -hh + ff * t.h; }
+          else if (e === 2) { lx =  hw - ff * t.w; ly =  hh; }
+          else              { lx = -hw;            ly =  hh - ff * t.h; }
+
+          /* Las muescas: se ven ANTES de llegar, para saber por dónde une. */
+          var mu = Math.abs(Math.sin(j * 12.566));
+          if (raw > 0.16 && mu > 0.86) lx += (lx > 0 ? 1 : -1) * 7 * raw;
+
+          var co = Math.cos(rot), si = Math.sin(rot);
+          o.x = cx + lx * co - ly * si;
+          o.y = cy + lx * si + ly * co;
+          /* Presencia contenida: es estructura de fondo y la página tiene
+             mucho texto encima. La materia se lee sin competir con él. */
+          o.a = 0.13 + 0.26 * raw + 0.11 * mu;
+          o.c = t.hu;
+          o.g = raw > 0.10 ? 900 + k : -1;
+        }, tm);
+        pinta(0.05);
+
+        /* Cuando dos vecinas ya están dentro, se ve pasar materia de una a
+           otra: la conexión no se declara, se hace. */
+        var seam = ease((fit - 0.62) / 0.30);
+        if (seam > 0) {
+          ctx.globalCompositeOperation = 'lighter';
+          for (var k2 = 0; k2 + 1 < K; k2++) {
+            var a = pz[k2], b2 = pz[k2 + 1];
+            ctx.strokeStyle = rgba(ACERO, 0.09 * seam);
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.tx, a.ty); ctx.lineTo(b2.tx, b2.ty); ctx.stroke();
+            for (var q = 0; q < 3; q++) {
+              var pt = ((tm * 0.00045) + k2 * 0.2 + q * 0.33) % 1;
               ctx.beginPath();
-              ctx.moveTo(a.tx, a.ty); ctx.lineTo(b2.tx, b2.ty);
-              ctx.strokeStyle = rgba([200, 224, 255], 0.22 * seam);
-              ctx.lineWidth = 1; ctx.stroke();
-              var pt = ((tm * 0.0004) + k * 0.2) % 1;
-              ctx.beginPath();
-              ctx.arc(lerp(a.tx, b2.tx, pt), lerp(a.ty, b2.ty, pt), 1.8, 0, 6.2832);
-              ctx.fillStyle = rgba([214, 236, 255], 0.6 * seam); ctx.fill();
+              ctx.arc(lerp(a.tx, b2.tx, pt), lerp(a.ty, b2.ty, pt), 2.0, 0, 6.2832);
+              ctx.fillStyle = rgba([214, 236, 255], 0.30 * seam); ctx.fill();
             }
           }
+          ctx.globalCompositeOperation = 'source-over';
         }
       }
     };
@@ -1066,54 +1120,76 @@
   /* PRODUCCIÓN — "El ensamblaje". Piezas que entran por la cinta y se montan
      una sobre otra hasta que la unidad sale terminada. Y vuelta a empezar. */
   INSTR.produccion = (function () {
-    var cycle = 0;
+    /* EL ENSAMBLAJE, hecho de materia. Las piezas llegan por la cinta como
+       nubes de partículas; al llegar a la estación NO se posan enteras: sus
+       partículas se desprenden y VUELAN a la unidad que se está montando,
+       capa sobre capa. Cuando la unidad está completa, sale. */
+    var CAPAS = 4;
     return {
-      build: function () {},
+      build: function () { nube(small ? 240 : narrow ? 420 : 640); },
       draw: function (tm) {
         clear(0.30);
-        var beltY = H * 0.80, bx0 = W * 0.06, bx1 = W * 0.94;
-        // La cinta.
-        ctx.strokeStyle = rgba([140, 162, 205], 0.26); ctx.lineWidth = 1;
+        var beltY = H * 0.74, bx0 = W * 0.05, bx1 = W * 0.95;
+        var est = bx0 + (bx1 - bx0) * 0.62;             // la estación
+        var ciclo = (tm * 0.00011) % 1;
+        var per = NUB.length / (CAPAS + 1);             // + la que viaja
+
+        materia(function (i, u, o, t2) {
+          var k = Math.min(CAPAS, (i / per) | 0);
+          var j = (i - k * per) / per;
+
+          if (k === CAPAS) {
+            /* La que todavía viaja por la cinta hacia la estación. */
+            var uu = (ciclo * 1.6 + j * 0.09) % 1.6;
+            var w0 = (small ? 40 : 66);
+            var px2 = bx0 + uu * (est - bx0);
+            var pp = j * 4, e = pp | 0, f2 = pp - e, hw = w0 / 2, hh = 7;
+            var lx, ly;
+            if (e === 0)      { lx = -hw + f2 * w0; ly = -hh; }
+            else if (e === 1) { lx =  hw;           ly = -hh + f2 * hh * 2; }
+            else if (e === 2) { lx =  hw - f2 * w0; ly =  hh; }
+            else              { lx = -hw;           ly =  hh - f2 * hh * 2; }
+            o.x = px2 + lx; o.y = beltY - 12 + ly;
+            o.a = uu < 1 ? 0.62 : 0;
+            o.c = CI.ambar; o.g = uu < 1 ? 1200 : -1;
+            return;
+          }
+
+          /* Las capas ya montadas, y la que está montándose ahora mismo. */
+          var apar = ease((ciclo - k * 0.17) / 0.15);   // le toca a esta capa
+          var w2 = (small ? 46 : 78) - k * 7;
+          var yk = beltY - 24 - k * 15;
+          var pp2 = j * 4, e2 = pp2 | 0, f3 = pp2 - e2, hw2 = w2 / 2, hh2 = 6;
+          var lx2, ly2;
+          if (e2 === 0)      { lx2 = -hw2 + f3 * w2; ly2 = -hh2; }
+          else if (e2 === 1) { lx2 =  hw2;           ly2 = -hh2 + f3 * hh2 * 2; }
+          else if (e2 === 2) { lx2 =  hw2 - f3 * w2; ly2 =  hh2; }
+          else               { lx2 = -hw2;           ly2 =  hh2 - f3 * hh2 * 2; }
+
+          /* Antes de que le toque, esa materia todavía está en la cinta. */
+          var vx = bx0 + (0.25 + j * 0.5) * (est - bx0), vy = beltY - 12;
+          var sal = ease((ciclo - 0.86) / 0.14);        // y al final, sale
+          o.x = lerp(lerp(vx, est + lx2, apar), est + lx2 + (bx1 + 80 - est) * sal, sal);
+          o.y = lerp(vy, yk + ly2, apar);
+          o.a = (0.20 + 0.62 * apar) * (1 - sal * 0.85);
+          o.c = sal > 0.05 ? CI.verde : (apar > 0.98 ? CI.ambar : CI.blanco);
+          o.g = apar > 0.35 ? 1100 + k : -1;
+        }, tm);
+        pinta(0.11);
+
+        /* La cinta: la referencia fija sobre la que ocurre todo. */
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.strokeStyle = rgba(ACERO, 0.20); ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(bx0, beltY); ctx.lineTo(bx1, beltY); ctx.stroke();
-        for (var t = 0; t < 26; t++) {
-          var tx = bx0 + ((t / 26 + (tm * 0.00013)) % 1) * (bx1 - bx0);
-          ctx.beginPath(); ctx.moveTo(tx, beltY); ctx.lineTo(tx, beltY + 6);
-          ctx.strokeStyle = rgba([140, 162, 205], 0.20); ctx.stroke();
+        for (var t = 0; t < 22; t++) {
+          var tx = bx0 + (((t / 22) + (tm * 0.00008)) % 1) * (bx1 - bx0);
+          ctx.beginPath(); ctx.moveTo(tx, beltY); ctx.lineTo(tx, beltY + 5);
+          ctx.strokeStyle = rgba(ACERO, 0.13); ctx.stroke();
         }
-        var u = ((tm * 0.00011) % 1);
-        var station = W * 0.55;
-        var PARTS = small ? 4 : 6;
-        // Piezas entrando y apilándose en la estación de montaje.
-        for (var i = 0; i < PARTS; i++) {
-          var pu = (u * PARTS - i);
-          if (pu < 0) continue;
-          var w2 = (small ? 46 : 76) - i * 6, h2 = 12;
-          if (pu < 1) {
-            var px = lerp(bx0, station, ease(pu));
-            ctx.strokeStyle = rgba(C.ambar, 0.58); ctx.lineWidth = 1.3;
-            ctx.strokeRect(px - w2 / 2, beltY - h2 - 3, w2, h2);
-          } else {
-            var stackY = beltY - 15 - i * (h2 + 4);
-            ctx.fillStyle = rgba(C.ambar, 0.09); ctx.fillRect(station - w2 / 2, stackY, w2, h2);
-            ctx.strokeStyle = rgba(C.ambar, 0.56); ctx.lineWidth = 1.3;
-            ctx.strokeRect(station - w2 / 2, stackY, w2, h2);
-            // El punto de unión de cada pieza con la anterior.
-            if (i > 0) { ctx.beginPath(); ctx.arc(station, stackY + h2, 1.8, 0, 6.2832);
-              ctx.fillStyle = rgba([235, 245, 255], 0.6); ctx.fill(); }
-          }
-        }
-        // La unidad terminada sale por la derecha.
-        if (u > 0.86) {
-          var ou = (u - 0.86) / 0.14;
-          var ox2 = lerp(station, bx1 + 60, ease(ou));
-          ctx.globalAlpha = 1 - ou;
-          for (var j = 0; j < PARTS; j++) {
-            var jw = (small ? 46 : 76) - j * 6;
-            ctx.strokeStyle = rgba(C.verde, 0.5); ctx.lineWidth = 1.2;
-            ctx.strokeRect(ox2 - jw / 2, beltY - 15 - j * 16, jw, 12);
-          }
-          ctx.globalAlpha = 1;
-        }
+        /* Y la marca de la estación: aquí es donde se monta. */
+        ctx.strokeStyle = rgba(C.ambar, 0.24);
+        ctx.beginPath(); ctx.moveTo(est, beltY + 8); ctx.lineTo(est, beltY - 96); ctx.stroke();
+        ctx.globalCompositeOperation = 'source-over';
       }
     };
   })();

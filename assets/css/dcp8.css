@@ -43,6 +43,19 @@ body.v7 .head,
 body.v7 .section-head,
 body.v7 .figure,
 body.v7 .v6-end .v6-veil{ position:relative; }
+/* Todo bloque de TEXTO DESNUDO sobre el campo necesita su velo, no solo los
+   encabezados: medido con la tinta oculta y la pantalla ya compuesta, sin
+   esto una estructura brillante por detrás baja de 4,5:1. */
+body.v7 .timeline, body.v7 .outs, body.v7 .chain, body.v7 .shift,
+body.v7 .split-list, body.v7 .specs, body.v7 .split, body.v7 .cases{ position:relative; }
+body.v7 .timeline::before, body.v7 .outs::before, body.v7 .chain::before,
+body.v7 .shift::before, body.v7 .split-list::before, body.v7 .specs::before,
+body.v7 .split::before, body.v7 .cases::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-9% -7%;
+  background:radial-gradient(84% 74% at 50% 50%,
+    rgba(5,7,14,.96), rgba(5,7,14,.88) 46%, rgba(5,7,14,.46) 72%, rgba(5,7,14,0) 92%);
+}
 body.v7 .head::before,
 body.v7 .figure::before,
 body.v7 .section-head::before{
@@ -87,3 +100,7 @@ body.v7 .spec span, body.v7 .split-list li{ color:#a7b4d2; }
 body.v7 h1, body.v7 h2, body.v7 .h-title, body.v7 .v6-title{
   text-shadow:0 3px 28px rgba(3,5,12,.86);
 }
+
+/* El rótulo de las ventanas se quedaba en 4,45:1 sobre su propia barra —
+   justo por debajo del mínimo. Un punto más de luz y cumple. */
+body.v7 .window-title{ color:#95a3c2; }

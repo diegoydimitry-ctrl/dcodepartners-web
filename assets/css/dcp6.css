@@ -328,3 +328,13 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
 }
 .v6-title--wide{ max-width:26ch; }
 .v6-intro{ margin:18px 0 0; max-width:52ch; font-size:1rem; line-height:1.64; color:#a9b6d2; }
+
+/* La lista de capacidades queda justo donde pasan los módulos del campo. Es
+   texto desnudo sobre materia en movimiento: necesita su propio velo. */
+body.v6 .v6-river{ position:relative; }
+body.v6 .v6-river::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-10% -6%;
+  background:radial-gradient(80% 76% at 42% 50%,
+    rgba(5,7,14,.96), rgba(5,7,14,.88) 48%, rgba(5,7,14,.44) 74%, rgba(5,7,14,0) 92%);
+}
