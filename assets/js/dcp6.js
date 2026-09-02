@@ -182,7 +182,7 @@
     { x: 0.775, y: 0.44, w: 0.34, h: 0.40, d: 0.62 }, // 2 íntimo y preciso
     { x: 0.735, y: 0.50, w: 0.46, h: 0.60, d: 0.80 }, // 3 medio
     { x: 0.635, y: 0.52, w: 0.70, h: 1.02, d: 1.00 }, // 4 MONUMENTAL
-    { x: 0.700, y: 0.50, w: 0.56, h: 0.30, d: 0.74 }, // 5 banda horizontal
+    { x: 0.700, y: 0.50, w: 0.34, h: 0.52, d: 0.78 },  // 5 circuito compacto
     { x: 0.895, y: 0.50, w: 0.15, h: 0.84, d: 0.66 }, // 6 columna estrecha
     { x: 0.760, y: 0.47, w: 0.38, h: 0.56, d: 0.86 }, // 7 instrumento denso
     { x: 0.500, y: 0.46, w: 1.06, h: 1.06, d: 1.00 }  // 8 envolvente
