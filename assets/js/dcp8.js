@@ -658,10 +658,13 @@
         var fin = largo * esc;
         o.x = W * (0.06 + j * largo * 0.90);
         o.y = H * (0.12 + (l / (L - 1)) * 0.74);
-        o.a = j <= esc ? 0.30 : 0;
-        /* La marca de cerrado, al final de lo ya escrito. */
-        if (j > esc - 0.04 && j <= esc && esc > 0.96) { o.a = 0.58; o.c = CI.verde; }
-        else o.c = CI.acero;
+        /* Se escribe en azul —es un compromiso que se está redactando— y en
+           cuanto la línea llega al final se queda en turquesa: cerrado. Antes
+           todo era acero a 0,30 y no se veía escribirse nada. */
+        var cerrado = esc > 0.98;
+        o.a = j <= esc ? (cerrado ? 0.52 : 0.44) : 0;
+        if (j > esc - 0.05 && j <= esc && !cerrado) { o.a = 0.80; o.c = CI.blanco; }
+        else o.c = cerrado ? CI.verde : CI.azul;
         o.g = j <= esc ? 1000 + l : -1;
       }, tm);
       pinta(0.10, tm);
@@ -914,9 +917,12 @@
       build: function () { nube(small ? 380 : narrow ? 670 : 1020); },
       draw: function (tm) {
         clear(0.30);
-        var beltY = H * 0.74, bx0 = W * 0.05, bx1 = W * 0.95;
+        /* La cinta sube a la parte alta de la banda y arranca más a la
+           derecha: abajo va la tarjeta ancha de la página y el montaje
+           entero quedaba detrás de ella, invisible. */
+        var beltY = H * 0.19, bx0 = W * 0.26, bx1 = W * 0.98;
         var est = bx0 + (bx1 - bx0) * 0.62;
-        var ciclo = (tm * 0.00011) % 1;
+        var ciclo = (tm * 0.000065) % 1;
         var per = NUB.length / (CAPAS + 1);
 
         materia(function (i, u, o) {
@@ -925,8 +931,8 @@
 
           if (k === CAPAS) {
             /* La pieza que todavía viaja hacia la estación. */
-            var uu = (ciclo * 1.6 + j * 0.09) % 1.6;
-            var w0 = (small ? 40 : 66);
+            var uu = (ciclo * 1.6 + j * 0.05) % 1.6;
+            var w0 = (small ? 56 : 104);
             var px2 = bx0 + uu * (est - bx0);
             var pp = j * 4, e = pp | 0, f2 = pp - e, hw = w0 / 2, hh = 7;
             var lx, ly;
@@ -935,15 +941,16 @@
             else if (e === 2) { lx =  hw - f2 * w0; ly =  hh; }
             else              { lx = -hw;           ly =  hh - f2 * hh * 2; }
             o.x = px2 + lx; o.y = beltY - 12 + ly;
-            o.a = uu < 1 ? 0.62 : 0;
-            o.c = CI.ambar; o.g = uu < 1 ? 1200 : -1;
+            o.a = uu < 1 ? 0.74 : 0;
+            /* Lo que todavía viaja es material en bruto: azul. */
+            o.c = CI.azul; o.g = uu < 1 ? 1200 : -1;
             return;
           }
 
           var apar = ease((ciclo - k * 0.17) / 0.15);
-          var w2 = (small ? 46 : 78) - k * 7;
-          var yk = beltY - 24 - k * 15;
-          var pp2 = j * 4, e2 = pp2 | 0, f3 = pp2 - e2, hw2 = w2 / 2, hh2 = 6;
+          var w2 = (small ? 64 : 118) - k * 11;
+          var yk = beltY - 32 - k * 22;
+          var pp2 = j * 4, e2 = pp2 | 0, f3 = pp2 - e2, hw2 = w2 / 2, hh2 = 9;
           var lx2, ly2;
           if (e2 === 0)      { lx2 = -hw2 + f3 * w2; ly2 = -hh2; }
           else if (e2 === 1) { lx2 =  hw2;           ly2 = -hh2 + f3 * hh2 * 2; }
@@ -955,8 +962,15 @@
           var sal = ease((ciclo - 0.86) / 0.14);
           o.x = lerp(lerp(vx, est + lx2, apar), est + lx2 + (bx1 + 80 - est) * sal, sal);
           o.y = lerp(vy, yk + ly2, apar);
-          o.a = (0.20 + 0.62 * apar) * (1 - sal * 0.85);
-          o.c = sal > 0.05 ? CI.verde : (apar > 0.98 ? CI.ambar : CI.blanco);
+          /* Bajada de brillo: con el blanco y el ámbar permanentes las
+             piezas se velaban unas con otras y el montaje salía como una
+             mancha luminosa en vez de como piezas apiladas. Cada capa lleva
+             ahora su propia luz —un proyecto se monta con partes distintas—
+             y el blanco queda solo para el instante de asentarse. */
+          o.a = (0.16 + 0.46 * apar) * (1 - sal * 0.85);
+          var CAPACOL = [CI.azul, CI.violeta, CI.cian, CI.lav];
+          var golpe = Math.abs(apar - 0.92) < 0.06;
+          o.c = sal > 0.05 ? CI.verde : (golpe ? CI.blanco : CAPACOL[k % 4]);
           o.g = apar > 0.35 ? 1100 + k : -1;
         }, tm);
         pinta(0.11, tm);
@@ -970,8 +984,8 @@
           ctx.beginPath(); ctx.moveTo(tx, beltY); ctx.lineTo(tx, beltY + 5);
           ctx.strokeStyle = rgba(ACERO, 0.13); ctx.stroke();
         }
-        ctx.strokeStyle = rgba(C.ambar, 0.24);
-        ctx.beginPath(); ctx.moveTo(est, beltY + 8); ctx.lineTo(est, beltY - 96); ctx.stroke();
+        ctx.strokeStyle = rgba(C.cian, 0.26);
+        ctx.beginPath(); ctx.moveTo(est, beltY + 8); ctx.lineTo(est, beltY - 108); ctx.stroke();
         ctx.globalCompositeOperation = 'source-over';
       }
     };
