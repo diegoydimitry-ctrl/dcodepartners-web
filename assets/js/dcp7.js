@@ -98,6 +98,22 @@
   }
 
   /* ------------------------------------------------------------- ESTADO */
+  /* EN LA PORTADA, EL INDICE SE RETIRA MIENTRAS EL HERO LLENA LA VENTANA.
+     Ahi se cruzaba por encima de la marca —la parte mas importante de la
+     primera pantalla— y ademas no tenia nada que decir: estas en la primera
+     seccion de nueve y todavia no has empezado a recorrer nada. Se retrae a
+     sus trazos minimos (el estilo esta en dcp7.css) y vuelve entero en cuanto
+     el hero deja de ocupar la ventana. Sigue siendo accesible con raton y con
+     teclado sin salir del hero. */
+  var hero = document.body.classList.contains('v6')
+    ? document.querySelector('.v6-hero') : null;
+  var fuera = false;
+  function retirada() {
+    if (!rail || !hero) return;
+    var q = hero.getBoundingClientRect().bottom > window.innerHeight * 0.62;
+    if (q !== fuera) { fuera = q; rail.classList.toggle('dcx--fuera', q); }
+  }
+
   var active = -1, ticking = false;
   function paint() {
     var d = document.documentElement;
@@ -105,6 +121,7 @@
     var p = Math.max(0, Math.min(1, window.scrollY / max));
     barFill.style.width = (p * 100) + '%';
     if (!rail) return;
+    retirada();
 
     // Activa: la última sección cuyo inicio ya ha pasado la línea de lectura.
     var line = window.scrollY + window.innerHeight * 0.34;

@@ -31,12 +31,18 @@
 }
 /* El índice es interfaz sobre un campo que se mueve: se defiende solo. Sin
    este velo, una estructura brillante pasando por detrás lo deja ilegible. */
+/* El velo era una mancha oscura de 196 px de ancho colgada del filo derecho:
+   protegia el indice, si, pero se comia una franja de la composicion en TODAS
+   las paginas. Ahora ciñe las marcas —46 px a la izquierda en vez de 58— y
+   cae a cero mucho antes, asi que sigue haciendo su trabajo sin oscurecer
+   nada que no sea el propio indice. */
 .dcx::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-26px -30px -26px -58px;
-  background:radial-gradient(140% 74% at 100% 50%,
-    rgba(5,7,14,.99), rgba(5,7,14,.95) 38%, rgba(5,7,14,.72) 62%,
-    rgba(5,7,14,.28) 82%, rgba(5,7,14,0) 96%);
+  inset:-22px -26px -22px -46px;
+  background:radial-gradient(120% 66% at 100% 50%,
+    rgba(5,7,14,.98), rgba(5,7,14,.92) 34%, rgba(5,7,14,.58) 58%,
+    rgba(5,7,14,.16) 78%, rgba(5,7,14,0) 92%);
+  transition:opacity .40s ease;
 }
 @media (min-width:1180px){ .dcx{ display:flex; } }
 
@@ -89,6 +95,55 @@
 @media (max-width:560px){ .dcx-now{ max-width:calc(100vw - 130px); } }
 @media (prefers-reduced-motion: reduce){
   .dcx-bar i, .dcx-dot, .dcx-lab{ transition:none; }
+}
+
+
+/* --------------------------------- EL INDICE SE RETIRA DE LA PORTADA ------
+   En la portada el indice se cruzaba por encima de la marca del hero: medido,
+   se metia entre 27 y 86 px por debajo de la pieza en todos los formatos, y
+   su velo oscurecia otros 58 px mas a la izquierda.
+
+   La solucion no es taparlo ni moverlo de sitio: es que al principio del
+   recorrido, que es justo donde estorba, no tiene nada que decir. Mientras el
+   hero llena la ventana el indice se RETRAE a una sucesion de trazos minimos
+   pegados al filo —sigue estando, sigue diciendo cuantas secciones hay y en
+   cual estas— y su velo se apaga. En cuanto empieza la lectura vuelve entero.
+
+   Y sigue siendo utilizable: basta pasar el raton o tabular hasta el para que
+   se despliegue al completo sin haber salido del hero. */
+body.v6 .dcx{ transition:opacity .40s ease; }
+body.v6 .dcx.dcx--fuera::before{ opacity:0; }
+/* Retraido, el rotulo sale del flujo: si se queda, el <a> sigue midiendo
+   100 px de ancho y deja una zona sensible invisible por encima de la marca,
+   asi que rozar el logo desplegaba el indice. Fuera del flujo, la franja para
+   agarrarlo son los ~40 px pegados al filo, y ahi ya no hay nada dibujado. */
+body.v6 .dcx.dcx--fuera a{ padding-right:0; padding-left:18px; }
+body.v6 .dcx.dcx--fuera .dcx-lab{
+  position:absolute; right:100%; margin-right:14px; top:50%; transform:translateY(-50%) translateX(10px);
+  opacity:0; pointer-events:none;
+}
+body.v6 .dcx.dcx--fuera:hover .dcx-lab,
+body.v6 .dcx.dcx--fuera:focus-within .dcx-lab{ transform:translateY(-50%); }
+body.v6 .dcx.dcx--fuera .dcx-dot{ width:6px; background:#3f4a68; box-shadow:none; }
+body.v6 .dcx.dcx--fuera a.done .dcx-dot{ width:6px; background:#5d6c92; }
+body.v6 .dcx.dcx--fuera a.on .dcx-dot{
+  width:12px; height:2px;
+  background:linear-gradient(90deg, var(--v-a,#4dd0e1), var(--v-b,#7c6cff));
+  box-shadow:0 0 10px -3px rgba(124,180,255,.6);
+}
+body.v6 .dcx.dcx--fuera:hover::before,
+body.v6 .dcx.dcx--fuera:focus-within::before{ opacity:1; }
+body.v6 .dcx.dcx--fuera:hover .dcx-dot{ width:14px; background:#4a5570; }
+body.v6 .dcx.dcx--fuera:hover a.done .dcx-dot,
+body.v6 .dcx.dcx--fuera:focus-within a.done .dcx-dot{ width:20px; background:#8fa0c4; }
+body.v6 .dcx.dcx--fuera:hover a.on .dcx-dot,
+body.v6 .dcx.dcx--fuera:focus-within a.on .dcx-dot{ width:34px; }
+body.v6 .dcx.dcx--fuera:hover a:hover .dcx-dot{ width:28px; background:#cfe0ff; }
+body.v6 .dcx.dcx--fuera:hover .dcx-lab{ opacity:.7; }
+body.v6 .dcx.dcx--fuera a.on .dcx-lab,
+body.v6 .dcx.dcx--fuera a:focus-visible .dcx-lab{ opacity:1; }
+@media (prefers-reduced-motion: reduce){
+  body.v6 .dcx, .dcx::before{ transition:none; }
 }
 
 /* ============================================== 2. EL CHAT, INTEGRADO */

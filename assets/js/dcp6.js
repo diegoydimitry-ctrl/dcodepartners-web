@@ -134,6 +134,81 @@
     }
   }
 
+  /* ===================================== EL CORREDOR DE LA MARCA (hero) ====
+     La marca del hero se DIMENSIONABA con la altura de la ventana y se
+     POSICIONABA con la anchura. Las dos cosas iban por su cuenta, y el
+     resultado medido era este: el hueco al titular pasaba de 34 px a
+     1366x880 —el formato desde el que se vio el problema— a 190 px a
+     1920x1080, y por la derecha la pieza se metia entre 27 y 86 px por
+     debajo del indice en TODOS los formatos.
+
+     Aqui las dos cosas salen del sitio que realmente hay. Se mide el borde
+     pintado del titular (rangos de texto, no la caja del bloque, que es
+     mucho mas ancha) y el filo del indice, y la marca se coloca y se escala
+     dentro de ese corredor con un hueco minimo garantizado a cada lado.
+
+     La geometria NO se toca: LOGO_LS es un factor de escala uniforme sobre
+     la misma forma. Solo se reduce cuando el corredor no da de si, y nunca
+     por debajo del 82% de la escala aprobada.
+
+     La relacion, deducida de la propia formacion:
+       ancho pintado = 1.1671 * LS * marco.h * H     (no depende de marco.w)
+       centro pintado = W * marco.x - 0.014 * LS * marco.h * H
+     De ahi se despeja LS a partir del ancho que cabe, y marco.x del centro
+     donde debe caer. */
+  var LOGO_LS = 0.545;
+  var _rgo = null;
+  function bordeTitular() {
+    var h1 = document.querySelector('.v6-hero h1');
+    if (!h1) return 0;
+    var sp = h1.querySelectorAll('span'), der = 0;
+    if (!_rgo) _rgo = document.createRange();
+    for (var i = 0; i < sp.length; i++) {
+      _rgo.selectNodeContents(sp[i]);
+      var rr = _rgo.getClientRects();
+      for (var j = 0; j < rr.length; j++) if (rr[j].right > der) der = rr[j].right;
+    }
+    return der;
+  }
+  function encuadreMarca() {
+    var fr = MARCO[0];
+    var base = narrow ? 0.54 : 0.545;
+    LOGO_LS = base;
+    if (narrow) return;                       // en vertical no hay corredor
+    var der = bordeTitular();
+    if (!der || der > W * 0.86) return;       // sin medida fiable, como estaba
+
+    /* El filo del indice. Sobre el hero esta retraido a un trazo de 12 px
+       pegado al borde, asi que lo que hay que esquivar es ese trazo, no la
+       caja de 108 px que ocupa cuando esta desplegado. */
+    var tope = W - 16;
+    var idx = document.querySelector('.dcx');
+    if (idx && getComputedStyle(idx).display !== 'none') {
+      tope = Math.round(idx.getBoundingClientRect().right) - 12;
+    }
+
+    var HUECO = Math.max(58, Math.min(112, W * 0.050));   // aire al titular
+    var MARGEN = Math.max(26, Math.min(52, W * 0.022));   // aire al filo
+    var corredor = tope - der;
+    /* El tamano aprobado sale de la ALTURA, y en una ventana mucho mas alta
+       que ancha —900x1200, por ejemplo— eso pedia una pieza de 427 px dentro
+       de 900 px de ventana: se salia por la derecha y se comia el titular.
+       El tope por anchura solo entra en juego en ese caso. */
+    var aprob = 1.1671 * base * fr.h * Math.min(H, W * 0.72);
+    var cabe = corredor - HUECO - MARGEN;
+    var anchoP = Math.max(0.72 * aprob, Math.min(aprob, cabe));
+    /* Y pase lo que pase, la pieza no invade: si ni con el suelo cabe, cede
+       ella antes que solaparse con el texto o salirse por el filo. */
+    if (corredor - anchoP < 40) anchoP = Math.max(60, corredor - 40);
+
+    var sobra = corredor - anchoP, hueco;
+    if (sobra >= HUECO + MARGEN) hueco = HUECO + (sobra - HUECO - MARGEN) * 0.62;
+    else hueco = sobra * (HUECO / (HUECO + MARGEN));
+
+    LOGO_LS = anchoP / (1.1671 * fr.h * H);
+    fr.x = (der + hueco + anchoP / 2 + 0.014 * LOGO_LS * fr.h * H) / W;
+  }
+
   function measure() {
     dpr = Math.min(window.devicePixelRatio || 1, 1.75);
     W = root.clientWidth; H = root.clientHeight;
@@ -153,6 +228,7 @@
       MARCO[mi].w = narrow ? (mi === 0 ? 0.88 : 0.94) : MARCO_ANCHO[mi].w;
       MARCO[mi].h = narrow ? (mi === 0 ? 0.62 : Math.min(1.02, MARCO_ANCHO[mi].h * 1.12)) : MARCO_ANCHO[mi].h;
     }
+    encuadreMarca();
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -474,7 +550,7 @@
   function F0(i, u, g, G, o, tm, ins) {
     var ar = (MARCO[0].h * H) / (MARCO[0].w * W);
     var fx = 0.500, fy = 0.500;
-    var LS = narrow ? 0.54 : 0.545;
+    var LS = LOGO_LS;
     var LX = LS * 1.188 * ar;
     var late = 0.5 + 0.5 * Math.sin(tm * 0.0013);
     var pulso = (tm * 0.00026) % 1;
@@ -1362,7 +1438,13 @@
     clearTimeout(rt);
     rt = setTimeout(function () { measure(); measureStops(); readScroll(); if (reduced) drawStill(); }, 180);
   }, { passive: true });
-  window.addEventListener('load', function () { measureStops(); readScroll(); });
+  window.addEventListener('load', function () { encuadreMarca(); measureStops(); readScroll(); });
+  /* El corredor se mide sobre el texto PINTADO, asi que hasta que la fuente
+     real no esta cargada el borde del titular es el de la fuente de reserva
+     y la marca quedaria colocada sobre una medida que ya no es la buena. */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { encuadreMarca(); if (reduced) drawStill(); });
+  }
   document.addEventListener('visibilitychange', function () {
     visible = !document.hidden; if (visible) start();
   });
