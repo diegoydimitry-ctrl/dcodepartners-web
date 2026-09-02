@@ -699,10 +699,14 @@ body.v7 .blog-grid .blog-card h3{ transition:color .24s ease; }
 body.v7 .blog-grid .blog-card .window-title{ letter-spacing:.06em; }
 /* El velo de lectura, como en el resto de los interiores. */
 body.v7 .blog-grid{ position:relative; }
+/* Velo LINEAL, no radial: un radial sobre una lista alta concentra la
+   oscuridad en el centro y deja la primera y la ultima franja al aire — que es
+   justo donde caia la etiqueta de categoria que bajo a 2,25. */
 body.v7 .blog-grid::before{
-  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-6% -7%;
-  background:radial-gradient(80% 76% at 50% 50%,
-    rgba(5,7,14,.96), rgba(5,7,14,.88) 48%, rgba(5,7,14,.48) 74%, rgba(5,7,14,0) 94%);
+  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-4% -7%;
+  background:linear-gradient(180deg,
+    rgba(5,7,14,0) 0%, rgba(5,7,14,.94) 3%, rgba(5,7,14,.97) 50%,
+    rgba(5,7,14,.94) 97%, rgba(5,7,14,0) 100%);
 }
 @media (prefers-reduced-motion: reduce){
   body.v7 .blog-grid .blog-card::after, body.v7 .blog-grid .blog-card::before,
@@ -715,14 +719,14 @@ body.v7 .blog-grid::before{
 @media (min-width:900px){
   body.v7 .blog-grid .blog-card .window-dots{ display:none; }
   body.v7 .blog-grid .blog-card .blog-cat{
-    background:none; border:0; padding:0; margin-top:10px;
+    background:none; border:0; padding:0; margin-top:28px;
     display:inline-flex; align-items:center; gap:9px; color:var(--v-ink-2);
   }
   body.v7 .blog-grid .blog-card .blog-cat::before{
     content:""; width:18px; height:2px; border-radius:2px; flex:none;
     background:linear-gradient(90deg, transparent, var(--v-a));
   }
-  body.v7 .blog-grid .blog-card .blog-meta{ margin-top:52px; }
+  body.v7 .blog-grid .blog-card .blog-meta{ margin-top:64px; }
 }
 
 /* ============================================================================
@@ -778,3 +782,49 @@ body.v7 .blog-grid::before{
     box-shadow:inset 0 0 0 1px var(--k); }
   .shift.in .shift-arrow i, .in .shift .shift-arrow i{ animation:none; }
 }
+
+/* ---------------------------------------------------------- EL VELO DEL BLOG
+   AUTOAUDITORÍA: al meter el blog en el sistema visual, el instrumento se puso
+   a correr por detrás del texto y NADIE le había puesto velo. Medido con la
+   tinta oculta y la pantalla ya compuesta: /blog cayó a 2,28 y el cuerpo de un
+   artículo a 2,47, cuando antes estaban en 5,26. Por debajo del mínimo.
+
+   Es exactamente la clase de regresión que se cuela por hacer una página más
+   bonita, y por eso se mide en vez de mirarla. Cada bloque de texto desnudo
+   lleva ahora su velo, como el resto de los interiores. */
+body.v7 .prose, body.v7 .article-header, body.v7 .article-footer,
+body.v7 .article-hero{ position:relative; }
+body.v7 .prose::before, body.v7 .article-header::before,
+body.v7 .article-footer::before, body.v7 .article-hero::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-3% -8%;
+  background:linear-gradient(180deg,
+      rgba(5,7,14,0) 0%, rgba(5,7,14,.93) 3%, rgba(5,7,14,.96) 50%,
+      rgba(5,7,14,.93) 97%, rgba(5,7,14,0) 100%);
+}
+/* La etiqueta de categoría perdió su pastilla al pasar a franja: sin fondo y
+   sobre el instrumento se quedaba en 2,28. Recupera contraste con tinta, no
+   con caja. */
+/* La etiqueta perdio su pastilla al pasar a franja y se quedo a 2,25 sobre el
+   instrumento. El velo del bloque no la salva: es una linea de 10 px en el
+   borde superior, donde el degradado todavia esta subiendo. Se le da su propia
+   proteccion —un halo oscuro pegado a la letra, la misma tecnica que ya usan
+   los antetitulos de la portada— en vez de devolverle la caja. */
+/* Y se le pone VELO, no halo de texto. El halo se dibuja desde la letra, asi
+   que al medir el contraste —que oculta la tinta y lee el fondo compuesto— el
+   halo desaparece con ella: protege al lector pero no se puede demostrar. Un
+   velo detras si se mide. Es una mancha difusa, no una pastilla: la caja no
+   vuelve. */
+body.v7 .blog-grid .blog-card .window-bar,
+body.v7 .blog-grid .blog-card .blog-cat,
+body.v7 .blog-grid .blog-card .blog-meta{ position:relative; }
+body.v7 .blog-grid .blog-card .window-bar::after,
+body.v7 .blog-grid .blog-card .blog-cat::after,
+body.v7 .blog-grid .blog-card .blog-meta::after{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-9px -16px;
+  background:radial-gradient(72% 120% at 40% 50%,
+    rgba(5,7,14,.99), rgba(5,7,14,.95) 42%, rgba(5,7,14,.62) 70%, rgba(5,7,14,0) 96%);
+}
+body.v7 .blog-grid .blog-card .blog-cat{ color:var(--v-ink-2); }
+body.v7 .blog-grid .blog-card .window-title{ color:var(--v-ink-3); }
