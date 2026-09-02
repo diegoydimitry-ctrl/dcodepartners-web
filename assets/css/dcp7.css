@@ -498,11 +498,11 @@ form .field input, form .field textarea{ transition:border-color .22s ease, back
 }
 
 /* ---------------------- 9. LA PORTADA HABLA EL MISMO IDIOMA QUE EL RESTO
-   La portada no se toca: sigue exactamente como está aprobada. Lo único que
-   se iguala es la marca del antetítulo, para que la señal que ahora abre cada
-   sección del sitio sea LA MISMA señal en toda la web. Es una raya de 26 px
-   que pasa a ser un trazo que llega, con su cabeza encendida. Nada más. */
-body.v6 .v6-kicker::before{
+   El HERO queda EXCLUIDO a propósito —está aprobado y no se toca ni en un
+   detalle—. Lo que se iguala es la marca del antetítulo de las OTRAS secciones
+   de la portada, para que la señal que ahora abre cada sección del sitio sea
+   LA MISMA señal en toda la web. Nada más. */
+body.v6 section:not(.v6-hero) .v6-kicker::before{
   width:30px; height:2px; border-radius:2px;
   background:linear-gradient(90deg, transparent, var(--v-a) 62%, var(--v-a));
   box-shadow:0 0 10px -2px rgba(77,208,225,.62);
