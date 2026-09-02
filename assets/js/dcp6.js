@@ -150,8 +150,8 @@
        inferior, que es la única franja libre de un móvil. */
     for (var mi = 0; mi < MARCO.length; mi++) {
       MARCO[mi].x = narrow ? 0.500 : MARCO_ANCHO[mi].x;
-      MARCO[mi].w = narrow ? (mi === 0 ? 0.96 : 0.94) : MARCO_ANCHO[mi].w;
-      MARCO[mi].h = narrow ? Math.min(1.02, MARCO_ANCHO[mi].h * 1.12) : MARCO_ANCHO[mi].h;
+      MARCO[mi].w = narrow ? (mi === 0 ? 0.88 : 0.94) : MARCO_ANCHO[mi].w;
+      MARCO[mi].h = narrow ? (mi === 0 ? 0.62 : Math.min(1.02, MARCO_ANCHO[mi].h * 1.12)) : MARCO_ANCHO[mi].h;
     }
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
@@ -197,7 +197,11 @@
      anomalía es pequeña y precisa, la red es monumental, el resultado
      envuelve. Si todos ocuparan el mismo sitio, el recorrido sería plano. */
   var MARCO = [
-    { x: 0.752, y: 0.50, w: 0.58, h: 1.06, d: 1.04 },  // 0 CONVERGENCIA el hero
+    /* El hero deja de usar un encuadre ancho con la marca perdida dentro.
+       Ahora el marco ES la caja de la identidad: banda derecha, 34% de ancho
+       y 56% de alto, calculada para que la marca entera y su anillo queden
+       DENTRO de la ventana y a la derecha del titular. */
+    { x: 0.845, y: 0.50, w: 0.34, h: 0.56, d: 1.06 },  // 0 IDENTIDAD    el hero
     { x: 0.720, y: 0.52, w: 0.54, h: 1.02, d: 0.96 },  // 1 AISLADOS     el problema
     { x: 0.730, y: 0.50, w: 0.50, h: 0.82, d: 0.90 },  // 2 ANÁLISIS     banda de trayectos
     { x: 0.640, y: 0.50, w: 0.56, h: 1.00, d: 1.06 },  // 3 RED          monumental
@@ -227,7 +231,7 @@
      cambia, no cuando todo está al máximo. El problema es el capítulo más
      apagado del recorrido a propósito, y Finance el más contemplativo porque
      ahí el protagonista es el producto. */
-  var INT = [1.08, 0.82, 0.94, 1.34, 1.04, 0.96, 0.92, 0.76, 1.34];
+  var INT = [1.18, 0.82, 0.94, 1.34, 1.04, 0.96, 0.92, 0.76, 1.34];
 
   /* ---------------------------------------------------------- EL GRAFO */
   /* EL LENGUAJE. Todo lo que se ve está hecho de tres cosas, y solo tres:
@@ -312,7 +316,11 @@
            se ve antes de leerlo. */
         var an = (i / 5) * TAU;
         g2.push(nodos.length);
-        nodos.push(nd(CENT[k][0] + Math.cos(an) * 0.115, CENT[k][1] + Math.sin(an) * 0.115, k));
+        /* Islas algo más grandes: repartidas por las esquinas del encuadre y
+           con este radio se leían como cuatro constelaciones flojas. Con más
+           cuerpo se leen como cuatro SISTEMAS, que es lo que son, tanto en el
+           capítulo del problema como en el de la conexión. */
+        nodos.push(nd(CENT[k][0] + Math.cos(an) * 0.132, CENT[k][1] + Math.sin(an) * 0.132, k));
       }
       grp.push(g2);
       for (i = 0; i < 5; i++) ar.push([g2[i], g2[(i + 1) % 5]]);   // red interna
@@ -391,48 +399,51 @@
     return { k: k, j: t - k };
   }
 
-  /* ================== EL LOGO, EN COORDENADAS DE MATERIA ==================
-     Leído del asset real (assets/logo/dcode-icon-sm.png, 120x101) píxel a
-     píxel, no dibujado a ojo. La marca son dos cosas:
+  /* ================== LA IDENTIDAD, EN COORDENADAS DE MATERIA ==============
 
-       EL ARCO   una «D» de trazo grueso: barra superior, cuenco derecho y
-                 barra inferior. Centro del cuenco en (0.72, 0.50), radios
-                 0.184 y 0.405; las barras salen de ahí hacia la x 0.40.
-       LA RETÍCULA  siete módulos cuadrados repartidos por el lomo de la D,
-                 en el patrón exacto del original: dos en los brazos, dos
-                 exteriores, dos interiores y UNO en el centro, que en el
-                 logo real es el único relleno.
+     LO QUE FALLABA EN LA VERSIÓN ANTERIOR, dicho sin rodeos: era un dibujo
+     técnico hecho con puntos. Los siete módulos eran CONTORNOS de cuentas y
+     el conjunto solo se sostenía por el efecto. Hay una prueba de diseño que
+     lo explica bien —la del color plano—: si rellenas la forma en plano y
+     deja de leerse, el efecto estaba haciendo un trabajo estructural que no
+     le corresponde. Rellenar aquellos contornos daba... nada. No había forma
+     debajo.
 
-     No se traza un PNG con miles de puntos: se interpreta. El arco lo
-     dibujan tres hebras de partículas en paralelo —por eso tiene cuerpo y
-     por eso el enlace lo cierra en un trazo continuo— y cada módulo lo
-     dibujan sus propias partículas recorriendo su contorno, exactamente
-     igual que los módulos de los otros ocho capítulos. La identidad no se
-     pega encima del sistema: está hecha del mismo material que el sistema. */
+     LO QUE SE HACE AHORA. Se conserva la geometría real de la marca —leída
+     del asset, píxel a píxel— pero se construye con la materia que este motor
+     dibuja bien, que son FILAMENTOS CONTINUOS, no cuentas sueltas:
+
+       EL ARCO      la «D» es una cinta de ocho hebras paralelas y juntas. En
+                    plano sigue siendo un arco grueso: pasa la prueba.
+       LOS MÓDULOS  cada uno es una PLACA MACIZA, no un contorno: sus
+                    partículas recorren el cuadrado en zigzag de cuatro
+                    filas, así que el enlace lo rellena de luz. En plano
+                    sigue siendo un cuadrado.
+       EL CENTRO    el único módulo relleno del logo real, en azul.
+
+     Y, sobre todo: LA COMPOSICIÓN ESTÁ COMPLETA EN EL PRIMER FOTOGRAMA. No
+     hay construcción que esperar. Lo que ocurre después es vida interior
+     —un pulso recorriendo la cinta, las placas encendiéndose por turno, el
+     diafragma respirando, las corrientes alimentando el conjunto—, no un
+     montaje. Se entra y ya está ahí. */
   var LOGO_MOD = [
     [0.288, 0.094], [0.288, 0.926],     // en los brazos de la D
     [0.067, 0.327], [0.067, 0.703],     // exteriores
     [0.338, 0.327], [0.338, 0.703],     // interiores
     [0.196, 0.520]                      // el centro: el único relleno del logo
   ];
-  /* Recorrido del trazo de la D, de 0 a 1: barra, cuenco, barra. */
-  /* El parámetro va por LONGITUD DE ARCO, no a partes iguales. Repartiendo el
-     recorrido en tercios, el cuenco —que mide casi el triple que cada barra—
-     recibía la mitad de densidad de partículas y salía apagado al lado de
-     unas barras brillantes. Con los cortes en 0.204 y 0.796, que es la
-     proporción real de las tres piezas, el trazo tiene el mismo peso en todo
-     su recorrido. */
+  var MOD_W = 0.150, MOD_H = 0.150;     // tamaño real de cada módulo
+
+  /* Recorrido del trazo de la D, de 0 a 1: barra, cuenco, barra. El parámetro
+     va por LONGITUD DE ARCO —cortes en 0.204 y 0.796, la proporción real de
+     las tres piezas—, así el trazo pesa igual en todo su recorrido. Y el
+     grosor RESTA al radio en el cuenco para que la unión con las barras sea
+     continua: sumando, las hebras se cruzaban en los dos extremos. */
   function arcoD(s, off, out) {
     if (s < 0.204) {
       out.x = 0.40 + (s / 0.204) * 0.32;
       out.y = 0.095 + off;
     } else if (s < 0.796) {
-      /* El grosor va RESTANDO al radio, no sumando. Con el signo al revés,
-         en la unión de la barra con el cuenco cada hebra saltaba el doble de
-         su separación y las cuatro se cruzaban: en pantalla salía una costura
-         vertical en los dos extremos del trazo. Con el signo correcto,
-         y = 0.095 + off en la barra y también en el arranque del cuenco, y la
-         unión es continua. */
       var an = -1.5708 + ((s - 0.204) / 0.592) * 3.1416;
       out.x = 0.72 + Math.cos(an) * (0.184 - off * 0.46);
       out.y = 0.50 + Math.sin(an) * (0.405 - off);
@@ -441,162 +452,168 @@
       out.y = 0.905 - off;
     }
   }
-  var _lg = { x: 0, y: 0 };
+  /* LOS MÓDULOS SON CINTA, NO CUADRÍCULA. Tercer intento y el que funciona.
+     Los dos anteriores —contorno de cuentas y luego relleno por filas— fallan
+     por la misma razón: a este tamaño un cuadrado de 50 px no tiene
+     resolución para siete filas de puntos, y de lejos se lee como polvo gris,
+     no como una pieza.
 
-  /* 0 · EL HERO — «Del caos al control», y el momento en el que el sistema
-     construye nuestra propia identidad.
+     La solución no es más densidad: es cambiar de material. Cada módulo pasa
+     a ser una CINTA CORTA de tres hebras muy juntas, exactamente el mismo
+     material con el que está hecha la «D». Así el conjunto deja de ser «una
+     letra bonita al lado de unas cuadrículas feas» y pasa a ser UNA SOLA
+     PIEZA hecha de un material coherente. Y una cinta corta sí se lee a
+     cualquier tamaño. */
+  var PLACA_HEB = 3;
+  function placa(j, out) {
+    var t = j * PLACA_HEB;
+    var h = t | 0; if (h >= PLACA_HEB) h = PLACA_HEB - 1;
+    out.x = (t - h) - 0.5;
+    out.y = (h - 1) * 0.24;
+    out.f = h;
+  }
+  var _lg = { x: 0, y: 0, f: 0 };
 
-     UN CICLO DE ONCE SEGUNDOS, en cuatro tiempos:
+  /* 0 · EL HERO — «Del caos al control», con la identidad ya puesta.
 
-       1  REUNIÓN (0 → 0.42). Tres oleadas de materia entran por el borde,
-          anchas y desordenadas, se aceleran, se estrechan y atraviesan el
-          diafragma. La tercera llega justo al final de este tiempo.
-       2  FORMACIÓN (0.42 → 0.56). El núcleo destella y las MISMAS partículas
-          que venían siendo corrientes se reorganizan: unas trazan el arco de
-          la D, otras ocupan los siete módulos del lomo. El diafragma se
-          cierra un punto y sube de luz, encuadrando la marca.
-       3  RESPIRACIÓN (0.56 → 0.86). El logo se sostiene y late. Un pulso de
-          luz recorre el trazo y el módulo central —el único relleno del logo
-          real— parpadea en azul.
-       4  REGRESO (0.86 → 1). La marca se deshace y la materia vuelve a ser
-          corriente. El sistema sigue.
+     JERARQUÍA, de mayor a menor peso visual:
+       1  la cinta de la D          cian saturado, es lo primero que se mira
+       2  las placas del lomo       blanco suave, la estructura de la marca
+       3  la placa central          azul, el único acento — como en el logo
+       4  el diafragma              cian tenue, es marco y no protagonista
+       5  las corrientes            azul y violeta, ambiente que alimenta
+       6  la órbita y el polvo      profundidad, casi nada
 
-     Complejidad → convergencia → organización → identidad → el sistema
-     continúa. Sin scroll, sin leer una palabra y sin un solo SVG encima. */
+     Nada de esto se construye al entrar. Todo está desde el primer fotograma
+     y lo que se mueve es la vida interior del conjunto. */
   function F0(i, u, g, G, o, tm, ins) {
     var ar = (MARCO[0].h * H) / (MARCO[0].w * W);
-    /* En vertical el fenómeno no se aparta: ENVUELVE. La portada de un móvil
-       es texto de arriba abajo, así que no hay banda libre donde ponerlo. */
-    var fx = narrow ? 0.500 : 0.600, fy = narrow ? 0.400 : 0.575;
+    var fx = 0.500, fy = 0.500;
+    /* Medido contra la ventana: con 0.72 del alto del marco, la marca entera
+       ocupa de 1002 a 1432 px en una pantalla de 1440, y el titular termina
+       en 1005. Se rozan sin pisarse. */
+    var LS = narrow ? 0.62 : 0.68;
+    var LX = LS * 1.188 * ar;                     // ancho de la marca, en nx
+    var late = 0.5 + 0.5 * Math.sin(tm * 0.0013);
+    var pulso = (tm * 0.00030) % 1;               // recorre la cinta
 
-    var cic = (tm * 0.000091) % 1;
-    var L = cic < 0.42 ? 0
-          : cic < 0.56 ? ease((cic - 0.42) / 0.14)
-          : cic < 0.86 ? 1
-          : 1 - ease((cic - 0.86) / 0.14);
-    /* Las oleadas solo existen mientras la materia se está reuniendo; la
-       tercera termina exactamente cuando empieza a formarse la marca. */
-    var onda = cic < 0.42 ? ((cic / 0.42) * 3) % 1 : 0;
-    var enFoco = (Math.exp(-(onda - 0.97) * (onda - 0.97) * 260)
-                + Math.exp(-(onda - 0.03) * (onda - 0.03) * 260)) * (1 - L);
-    var nace = Math.exp(-(cic - 0.455) * (cic - 0.455) * 900);   // el destello
-    var LS = narrow ? 0.34 : 0.32;                                // alto de la marca
-    var late = 0.5 + 0.5 * Math.sin(tm * 0.0016);                 // respiración
-
-    if (u < 0.62) {                                   // CORRIENTES  ⟶  EL ARCO
-      var CO = 36;
-      var q = tramo(u, 0, 0.62, CO);
+    if (u < 0.20) {                               // LAS CORRIENTES — ambiente
+      var CO = 16;
+      var q = tramo(u, 0, 0.20, CO);
       var k = q.k, sp = q.j;
       var acc = sp * sp;
       var abre = 1 - acc;
-      var yk = fy + (sd(k, 21) - 0.5) * 1.18;
-      var sx = -0.10 + (fx + 0.10) * acc;
-      var sy = fy + (yk - fy) * abre * abre
-                  + Math.sin(sp * 3.1 + k * 2.3 + tm * 0.00020) * 0.10 * abre
-                  + Math.sin(sp * 7.7 + k * 1.1) * 0.028 * abre;
-      var d = sp - ((onda + sd(k, 26) * 0.13) % 1);
-      var paso = Math.exp(-d * d * 62);
-      var base = 0.5 + 0.5 * Math.sin(sp * 15.0 - tm * 0.0022 + k * 1.9);
-      var sa = (0.19 + 0.56 * acc) * (0.30 + 0.34 * base + 0.62 * paso)
-             * cl((sp - 0.32) / 0.24);
-      var sc = sp < 0.62 ? C_DATO : sp < 0.81 ? C_PROC : sp < 0.94 ? C_FLUJO : C_LUZ;
-
-      if (L <= 0.001) { o.nx = sx; o.ny = sy; o.a = sa; o.c = sc; o.g = 10 + k; return; }
-
-      /* Tres hebras en paralelo recorren el trazo de la D. Cada una es una
-         banda contigua, así que el enlace las cierra en tres líneas
-         continuas y el trazo tiene cuerpo en vez de ser un rosario. */
-      var qa = tramo(u, 0, 0.62, 4);
-      arcoD(qa.j, (qa.k - 1.5) * 0.036, _lg);
-      var ax = fx + (_lg.x - 0.5) * LS * 1.188 * ar;
-      var ay = fy + (_lg.y - 0.5) * LS;
-      /* Un pulso de luz recorre el trazo mientras la marca respira. */
-      var pl = ((tm * 0.00034) % 1);
-      var dp = qa.j - pl; if (dp < -0.5) dp += 1; if (dp > 0.5) dp -= 1;
-      var punta = Math.exp(-dp * dp * 620);
-      /* El cuenco mide casi el triple que una barra, así que cada hebra
-         reparte ahí sus partículas sobre más recorrido y sale más floja. Se
-         compensa con luz para que el trazo pese igual de principio a fin. */
-      var aa = (0.56 + 0.28 * late + 0.62 * punta)
-             * (0.78 + 0.22 * (qa.k === 1 || qa.k === 2 ? 1 : 0))
-             * (qa.j > 0.204 && qa.j < 0.796 ? 1.30 : 1);
-
-      o.nx = lerp(sx, ax, L); o.ny = lerp(sy, ay, L);
-      o.a = lerp(sa, aa, L);
-      /* El pulso sube de luz sin perder el color: el blanco queda solo para
-         su cresta. Con el umbral bajo, medio cuenco se volvía blanco a la vez
-         y, al lado de unas barras de cian saturado, se leía como apagado. */
-      o.c = L > 0.5 ? (punta > 0.78 ? C_LUZ : C_FLUJO) : sc;
-      o.g = L > 0.5 ? 20 + qa.k : 10 + k;
-      return;
+      var yk = fy + (sd(k, 21) - 0.5) * 2.40;
+      /* Las corrientes NO llegan hasta la marca: convergen en el borde del
+         diafragma y se disuelven ahí. Atravesándola le pasaban por encima a
+         las placas y el conjunto se ensuciaba. */
+      var fxc = fx - 0.50;
+      o.nx = -1.60 + (fxc + 1.60) * acc;
+      o.ny = fy + (yk - fy) * abre * abre
+                + Math.sin(sp * 3.1 + k * 2.3 + tm * 0.00020) * 0.11 * abre
+                + Math.sin(sp * 7.7 + k * 1.1) * 0.030 * abre;
+      /* Oleadas cortas y continuas: la materia sigue llegando, pero ya no
+         hace falta esperarla para que la escena esté completa. */
+      var onda = ((tm * 0.00026) + sd(k, 26) * 0.4) % 1;
+      var d = sp - onda;
+      var paso = Math.exp(-d * d * 46);
+      o.a = (0.14 + 0.36 * acc) * (0.34 + 0.66 * paso)
+          * cl((sp - 0.30) / 0.26) * (1 - cl((acc - 0.86) / 0.14));
+      o.c = sp < 0.66 ? C_DATO : C_PROC;
+      o.g = 10 + k;
       return;
     }
 
-    if (u < 0.78) {                                   // EL FOCO  ⟶  LOS MÓDULOS
-      var an0 = sd(i, 31) * TAU;
-      var g0 = sd(i, 32);
-      var rr = Math.pow(g0, 2.2) * 0.062 * (1 + enFoco * 0.85);
-      var nx0 = fx + Math.cos(an0) * rr * ar;
-      var ny0 = fy + Math.sin(an0) * rr;
-      var na = (0.30 + 0.34 * (0.5 + 0.5 * Math.sin(tm * 0.0013 + sd(i, 33) * 6.3)))
-             + 0.62 * enFoco + 0.90 * nace;
+    if (u < 0.52) {                               // LA CINTA — la «D»
+      /* DECISIÓN DE FONDO, después de probar las tres opciones: con 340
+         partículas NO se puede rellenar una banda de 58 x 538 px. Sale o a
+         rayas —pocas partículas a lo largo— o a manchas —destellos
+         demasiado grandes—. Las dos cosas se ven mal.
 
-      if (L <= 0.001) {
-        o.nx = nx0; o.ny = ny0; o.a = na;
-        o.c = g0 < 0.62 ? C_LUZ : C_DEC; o.g = -1; return;
-      }
-      var qm = tramo(u, 0.62, 0.78, LOGO_MOD.length);
-      var M = LOGO_MOD[qm.k];
-      var mx2 = fx + (M[0] - 0.5) * LS * 1.188 * ar;
-      var my2 = fy + (M[1] - 0.5) * LS;
-      /* Los módulos aparecen escalonados, del centro hacia fuera: la marca se
-         monta, no se enciende de golpe. */
-      var sale = cl((L - 0.15 - (LOGO_MOD.length - 1 - qm.k) * 0.055) / 0.42);
-      var centro = qm.k === LOGO_MOD.length - 1;
-      ponNodo(o, mx2, my2, qm.j, 0.082 * LS * sale, ar);
-      /* El original tiene un solo módulo relleno, y es el del centro: aquí es
-         el que late en azul mientras los demás quedan en blanco. */
-      o.a = lerp(na, (centro ? 0.82 + 0.30 * late : 0.94) * sale, L);
-      o.c = L > 0.5 ? (centro ? C_DATO : C_LUZ) : (g0 < 0.62 ? C_LUZ : C_DEC);
-      o.g = L > 0.5 && sale > 0.1 ? 40 + qm.k : -1;
+         Así que la marca deja de pintarse rellena y pasa a DIBUJARSE: tres
+         hebras muy juntas, destellos pequeños y densidad alta a lo largo del
+         recorrido. Resultado: un trazo de unos 20 px, continuo, nítido y
+         brillante. Es más fino que el logo impreso, y a cambio es preciso.
+         En una pantalla oscura la precisión se lee como calidad; la mancha
+         luminosa, no. */
+      var q2 = tramo(u, 0.20, 0.52, 3);
+      var h = q2.k, sj = q2.j;
+      arcoD(sj, (h - 1) * 0.022, _lg);
+      o.nx = fx + (_lg.x - 0.5) * LX;
+      o.ny = fy + (_lg.y - 0.5) * LS;
+      /* Un pulso de luz recorre la cinta. Es lo único que se mueve en la
+         marca, y por eso se ve. */
+      var dp = sj - pulso; if (dp < -0.5) dp += 1; if (dp > 0.5) dp -= 1;
+      var punta = Math.exp(-dp * dp * 520);
+      /* El canto interior de la cinta va más encendido que el exterior: eso
+         es lo que le da grosor y materia en vez de aplanarla. */
+      var canto = 1 - Math.abs(h - 1) / 1.6;
+      o.r = 1.12;
+      o.a = (0.46 + 0.34 * canto + 0.24 * late * canto + 0.66 * punta)
+          * (sj > 0.204 && sj < 0.796 ? 1.24 : 1);
+      o.c = punta > 0.72 ? C_LUZ : C_FLUJO;
+      o.g = 20 + h;
       return;
     }
 
-    if (u < 0.88) {                                   // EL DIAFRAGMA
-      /* Dos arcos, no un círculo cerrado: un anillo perfecto parece un
-         planeta; dos arcos con sus aperturas parecen un instrumento. Se
-         cierra al paso de cada oleada y, cuando la marca está formada, se
-         ciñe y sube de luz para encuadrarla. */
-      var q2 = tramo(u, 0.78, 0.88, 2);
-      var a2 = (q2.k ? 0.34 : 3.48) + q2.j * 2.60;
-      /* Cuando la marca se forma, el diafragma SE ABRE y se retira: crece un
-         30% y baja a un tercio de luz. El instrumento deja de ser el
-         protagonista y pasa a ser el marco. Sin esto se solapaba con el
-         cuenco de la D y la marca no se leia. */
-      var R2 = (0.168 + 0.008 * Math.sin(tm * 0.0009))
-             * (1 - enFoco * 0.16) * (1 + L * 0.30);
-      o.nx = fx + Math.cos(a2) * R2 * ar;
-      o.ny = fy + Math.sin(a2) * R2;
-      o.a = (0.42 + 0.30 * Math.sin(q2.j * 3.1416) + 0.46 * enFoco) * (1 - L * 0.66);
-      o.c = enFoco > 0.35 ? C_LUZ : C_FLUJO;
-      o.g = 70 + q2.k;
+    if (u < 0.88) {                               // LAS PLACAS — el lomo
+      var q3 = tramo(u, 0.52, 0.88, LOGO_MOD.length);
+      var M = LOGO_MOD[q3.k];
+      placa(q3.j, _lg);
+      o.nx = fx + (M[0] + _lg.x * MOD_W - 0.5) * LX;
+      o.ny = fy + (M[1] + _lg.y * MOD_H - 0.5) * LS;
+      var centro = q3.k === LOGO_MOD.length - 1;
+      /* Se encienden por turno, de arriba abajo: la marca respira sin
+         moverse. */
+      var turno = cl(1 - Math.abs(((tm * 0.00013) % 1) * 7 - q3.k) * 0.80);
+      /* Blanco a media luz sobre negro se lee como gris sucio: las placas
+         iban a 0.40 y de lejos parecían ruido. Subidas, son piezas. */
+      /* El canto central de cada cinta va más encendido, igual que en la
+         «D»: es lo que le da cuerpo en vez de dejarla plana. */
+      /* Mismo criterio que la cinta: tres hebras finas y densas. El módulo
+         queda como una barra nítida de unos 24 px, del mismo peso de trazo
+         que la «D». Toda la marca tiene un solo grosor: eso es lo que la
+         hace parecer una pieza dibujada y no un montón de efectos. */
+      o.r = 1.12;
+      var canto2 = 1 - Math.abs(_lg.f - 1) / 1.7;
+      /* Los módulos van por debajo de la «D» a propósito. El blanco a alta
+         alfa cruzaba el umbral de floración y salía reventado y blando; bajo
+         de él es nítido, y además queda clara la jerarquía: primero se mira
+         el trazo, después el lomo, y el acento azul del centro cierra. */
+      o.a = (centro ? (0.72 + 0.22 * late) : (0.46 + 0.20 * turno)) * (0.70 + 0.30 * canto2);
+      o.c = centro ? C_DATO : C_LUZ;
+      o.g = 40 + q3.k * 4 + _lg.f;
       return;
     }
 
-    if (u < 0.95) {                                   // LO QUE SALE, YA ORDENADO
-      var q3 = tramo(u, 0.88, 0.95, 5);
-      var t3 = ((tm * 0.00020) + q3.j * 0.85 + q3.k * 0.06) % 1;
-      o.nx = fx + 0.040 + t3 * 0.150;
-      o.ny = fy + (q3.k - 2) * 0.048;
-      /* Mientras la marca está formada, la salida calla: el momento es uno. */
-      o.a = 0.66 * Math.sin(t3 * 3.1416) * (1 - L);
-      o.c = C_OK; o.g = -1;
+    if (u < 0.95) {                               // EL DIAFRAGMA — el marco
+      var q4 = tramo(u, 0.88, 0.95, 2);
+      var a4 = (q4.k ? 0.30 : 3.44) + q4.j * 2.68;
+      var R4 = 0.378 + 0.013 * Math.sin(tm * 0.0009);
+      o.nx = fx + Math.cos(a4) * R4 * ar;
+      o.ny = fy + Math.sin(a4) * R4;
+      o.a = (0.26 + 0.24 * Math.sin(q4.j * 3.1416)) * (0.7 + 0.3 * late);
+      o.r = 0.85;
+      o.c = C_FLUJO; o.g = 70 + q4.k;
       return;
     }
 
-    /* El campo en el que ocurre todo: volumen, no vacío negro. */
+    if (u < 0.985) {                              // LA ÓRBITA — profundidad
+      /* Un anillo exterior, lento y muy tenue, que gira en sentido contrario.
+         No dice nada: da fondo, y evita que la marca flote sobre el vacío. */
+      var q5 = tramo(u, 0.95, 0.985, 1);
+      var a5 = q5.j * TAU - tm * 0.000045;
+      var R5 = 0.412 + 0.022 * Math.sin(q5.j * 12.6);
+      o.nx = fx + Math.cos(a5) * R5 * ar;
+      o.ny = fy + Math.sin(a5) * R5;
+      o.a = 0.10 + 0.10 * Math.sin(q5.j * 25.1 + tm * 0.0007);
+      o.r = 0.8;
+      o.c = C_MASA; o.g = -1;
+      return;
+    }
+
     o.nx = sd(i, 23); o.ny = sd(i, 24);
-    o.a = 0.10 + 0.10 * Math.sin(tm * 0.0006 + sd(i, 25) * 6.3);
+    o.a = 0.09 + 0.09 * Math.sin(tm * 0.0006 + sd(i, 25) * 6.3);
     o.c = C_MASA; o.g = -1;
   }
 
@@ -1165,7 +1182,13 @@
   }, { passive: true });
 
   /* ------------------------------------------------------------- PINTA */
-  var oa = { nx: 0, ny: 0, a: 1, g: -1, c: 6 }, ob = { nx: 0, ny: 0, a: 1, g: -1, c: 6 };
+  /* Cada formación puede pedir un TAMAÑO además de una posición. Sin esto,
+     una cinta sólida exigía muchísimas partículas —una hebra de cuentas
+     separadas por hueco— y con 1.060 en total no salían las cuentas. Con un
+     multiplicador de radio, tres hebras de destellos grandes se funden en una
+     banda maciza y el polvo de fondo sigue siendo polvo. */
+  var oa = { nx: 0, ny: 0, a: 1, g: -1, c: 6, r: 1 },
+      ob = { nx: 0, ny: 0, a: 1, g: -1, c: 6, r: 1 };
   var px = new Float32Array(1500), py = new Float32Array(1500);
   var pg = new Int32Array(1500), pa = new Float32Array(1500);
   var pc = new Int32Array(1500);          // el color con el que se enlaza
@@ -1226,10 +1249,10 @@
       var frac = i / N;
       var enA = frac < usoA, enB = frac < usoB;
 
-      if (enA) { oa.a = 1; oa.g = -1; oa.c = C_BRUMA; FA(i, ua, 0, 0, oa, tm, insA); }
-      else     { oa.nx = p.hx; oa.ny = p.hy; oa.a = 0.11; oa.g = -1; oa.c = C_MASA; }
-      if (enB) { ob.a = 1; ob.g = -1; ob.c = C_BRUMA; FB(i, ub, 0, 0, ob, tm, insB); }
-      else     { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.11; ob.g = -1; ob.c = C_MASA; }
+      if (enA) { oa.a = 1; oa.g = -1; oa.c = C_BRUMA; oa.r = 1; FA(i, ua, 0, 0, oa, tm, insA); }
+      else     { oa.nx = p.hx; oa.ny = p.hy; oa.a = 0.11; oa.g = -1; oa.c = C_MASA; oa.r = 1; }
+      if (enB) { ob.a = 1; ob.g = -1; ob.c = C_BRUMA; ob.r = 1; FB(i, ub, 0, 0, ob, tm, insB); }
+      else     { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.11; ob.g = -1; ob.c = C_MASA; ob.r = 1; }
 
       marco(oa, frA, MIR[iA], ma, VOLTEA[iA]);
       marco(ob, frB, MIR[iB], mb, VOLTEA[iB]);
@@ -1297,8 +1320,9 @@
          estela se sigue viendo y el relleno baja a un tercio. */
       var v2 = p.vx * p.vx + p.vy * p.vy;
       var sp = v2 > 16 ? 0.40 : v2 * 0.025;
-      var r = (0.98 + p.s * 2.15) * (0.55 + p.z * 1.10) * (1 + sp) * dep;
-      if (r > 8.6) r = 8.6;
+      var r = (0.98 + p.s * 2.15) * (0.55 + p.z * 1.10) * (1 + sp) * dep
+            * lerp(oa.r, ob.r, t);
+      if (r > 15) r = 15;
       var a2 = (al + luz) * (0.40 + p.z * 0.72) * (0.68 + 0.32 * dep);
       /* Lo que está por debajo de este umbral no se distingue del fondo, y
          cada partícula cuesta una llamada de dibujo aunque no se vea. Subirlo

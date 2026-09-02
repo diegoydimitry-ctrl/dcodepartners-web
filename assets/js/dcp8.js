@@ -212,15 +212,26 @@
       var ldx = NPX[i] - lx, ldy = NPY[i] - ly;
       var luz = Math.exp(-(ldx * ldx + ldy * ldy) / lr2) * 0.34;
       var a = (NPA[i] + luz) * (0.40 + p.z * 0.70);
-      if (a <= 0.012) continue;
-      var sp = Math.min(1.1, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.22);
-      var r = (1.2 + p.s * 2.6) * (0.58 + p.z * 1.05) * (1 + sp);
+      /* Por debajo de este umbral no se distingue del fondo y cada partícula
+         cuesta una llamada de dibujo aunque no se vea. */
+      if (a <= 0.045) continue;
+      /* Mismo hallazgo que en la portada, aplicado aquí: las partículas que
+         transportan datos no paran nunca, así que viven permanentemente
+         estiradas por velocidad, y el radio entra al cuadrado en el área. Con
+         el estirado contenido y un tope duro, /como-funciona sube de 46 a
+         60 fps sin que se note una estela de menos. */
+      var v2 = p.vx * p.vx + p.vy * p.vy;
+      var sp = v2 > 16 ? 0.40 : v2 * 0.025;
+      var r = (1.05 + p.s * 2.25) * (0.58 + p.z * 1.02) * (1 + sp);
+      if (r > 8.6) r = 8.6;
       var spr = NSPR[p.e][NPC[i]];
-      /* Floración: lo que de verdad brilla deja halo. Es lo que separa un
-         punto encendido de una fuente de luz. */
-      if (a > 0.48) {
-        var rb = r * 3.0;
-        ctx.globalAlpha = Math.min(0.20, (a - 0.48) * 0.48);
+      /* Floración SOLO en el estrato cercano: lo que está lejos y desenfocado
+         no tiene por qué tener un halo duro, y el halo se dibuja a tres
+         radios, así que cada partícula florecida cuesta treinta veces su
+         propia área. */
+      if (p.e === 2 && a > 0.54) {
+        var rb = r * 2.6;
+        ctx.globalAlpha = Math.min(0.24, (a - 0.54) * 0.56);
         ctx.drawImage(spr, NPX[i] - rb, NPY[i] - rb, rb * 2, rb * 2);
       }
       ctx.globalAlpha = Math.min(0.78, a);
