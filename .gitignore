@@ -2,3 +2,9 @@ node_modules/
 .vercel/
 .DS_Store
 package-lock.json
+
+# Skills instaladas en local con `npx skills add` (código de terceros).
+# Se quedan fuera del repositorio: se reinstalan con skills-lock.json.
+.agents/
+.claude/
+skills-lock.json
