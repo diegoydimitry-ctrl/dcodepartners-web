@@ -350,3 +350,67 @@ body.v6 .v6-river::before{
     rgba(5,7,14,.99), rgba(5,7,14,.97) 44%, rgba(5,7,14,.86) 66%,
     rgba(5,7,14,.40) 84%, rgba(5,7,14,0) 98%);
 }
+
+
+/* ==================================================== VERTICAL: LEGIBILIDAD
+   Estas reglas estaban escritas en dcp8.css —la hoja de las paginas
+   interiores— y la portada no la carga, asi que no se aplicaban nunca. El
+   fallo se vio midiendo: el parrafo de marca del pie caia a 1,27:1 sobre el
+   estado de convergencia. Aqui si llegan. */
+
+/* El pie queda fuera de <main> y sin posicionar, y el lienzo del campo es
+   fixed con z-index 0: en el orden de pintado, un posicionado con z-index 0
+   va DESPUES de los bloques sin posicionar, asi que el campo se pintaba por
+   encima del pie. Con capa propia deja de depender de ese orden. */
+body.v6 footer{ position:relative; z-index:2; }
+
+@media (max-width:640px){
+  /* En vertical el pie ocupa casi una pantalla y su degradado arranca
+     transparente: se apoya en superficie propia. */
+  body.v6 footer{ background:linear-gradient(180deg, rgba(7,10,19,.95), rgba(5,7,14,.995)); }
+
+
+  /* BOTONES EN VERTICAL. Dos intentos previos fallaron y el motivo es el
+     mismo: en vertical la pieza se compone bastante mas oscura de lo que
+     declara su CSS —medido con la tinta oculta, un relleno #bfe6f2 acaba
+     pintado como rgb(68,83,92)— y ademas no lo hace igual en todas las
+     paginas, asi que ni la letra oscura sobre relleno claro ni la letra
+     blanca sobre el degradado de marca aguantan en todas.
+
+     La solucion no pelea con eso, lo esquiva: SUPERFICIE OSCURA Y LETRA
+     BLANCA. Un fondo oscuro sigue siendo oscuro aunque se componga al 30%
+     sobre una pagina oscura, asi que el contraste deja de depender de como
+     se pinte. La jerarquia se mantiene con el filo y el halo de marca, no
+     con el relleno. En escritorio no cambia nada. */
+  body.v6 .btn-primary{
+    background:linear-gradient(180deg, rgba(18,25,44,.985), rgba(11,15,28,.99));
+    color:#ffffff;
+    /* La jerarquia la marcan el filo y el halo, ya que el relleno no puede
+       ser claro: el principal lleva borde de marca y luz propia; el
+       secundario, un filo neutro y nada de halo. */
+    border:1px solid rgba(126,214,255,.85);
+    box-shadow:inset 0 0 0 1px rgba(160,120,255,.35),
+               0 0 22px -6px rgba(90,190,255,.55),
+               0 14px 34px -16px rgba(124,108,255,.9);
+  }
+  body.v6 .btn-ghost, body.v6 .btn:not(.btn-primary){
+    background:rgba(14,19,33,.97);
+    border:1px solid rgba(170,190,230,.26);
+    color:#eef3ff;
+  }
+  body.v6 .v6-acts{ width:100%; }
+  body.v6 .v6-acts > .btn{ width:100%; justify-content:center; }
+}
+
+@media (max-width:640px){
+  /* La cejilla de seccion es texto pequeno y en vertical se queda sobre el
+     campo sin bloque que la cubra. Velo propio, en ::after: el ::before es la
+     rayita que la precede. */
+  body.v6 .v6-kicker{ position:relative; }
+  body.v6 .v6-kicker::after{
+    content:""; position:absolute; z-index:-1; pointer-events:none;
+    inset:-170% -22%;
+    background:radial-gradient(76% 100% at 42% 50%,
+      rgba(5,7,14,.99), rgba(5,7,14,.90) 54%, rgba(5,7,14,0) 95%);
+  }
+}

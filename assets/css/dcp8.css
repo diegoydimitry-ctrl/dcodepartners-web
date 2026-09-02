@@ -163,3 +163,93 @@ body.v7 .vsteps::after{
 body.v7 .rcard{
   background:linear-gradient(180deg, rgba(12,16,29,.985), rgba(8,11,21,.975));
 }
+
+/* ================================ BOTONES EN MOVIL ==========================
+   Medido con la tinta oculta sobre la pantalla ya compuesta: en vertical, la
+   llamada principal de las bandas de cierre caia a 1,55:1 y el boton
+   secundario apenas se distinguia del fondo. En un movil el boton es pequeno,
+   el degradado recorre menos espacio y su tramo central —el violeta— queda
+   demasiado oscuro bajo una etiqueta casi negra.
+
+   En vertical, por tanto: degradado mas claro en toda su longitud, boton a
+   ancho completo —que es como se pulsa con el pulgar— y secundario con
+   superficie propia en vez de transparencia. En escritorio no cambia nada. */
+@media (max-width:640px){
+
+  /* BOTONES EN VERTICAL. Dos intentos previos fallaron y el motivo es el
+     mismo: en vertical la pieza se compone bastante mas oscura de lo que
+     declara su CSS —medido con la tinta oculta, un relleno #bfe6f2 acaba
+     pintado como rgb(68,83,92)— y ademas no lo hace igual en todas las
+     paginas, asi que ni la letra oscura sobre relleno claro ni la letra
+     blanca sobre el degradado de marca aguantan en todas.
+
+     La solucion no pelea con eso, lo esquiva: SUPERFICIE OSCURA Y LETRA
+     BLANCA. Un fondo oscuro sigue siendo oscuro aunque se componga al 30%
+     sobre una pagina oscura, asi que el contraste deja de depender de como
+     se pinte. La jerarquia se mantiene con el filo y el halo de marca, no
+     con el relleno. En escritorio no cambia nada. */
+  body.v6 .btn-primary, body.v7 .btn-primary{
+    background:linear-gradient(180deg, rgba(18,25,44,.985), rgba(11,15,28,.99));
+    color:#ffffff;
+    /* La jerarquia la marcan el filo y el halo, ya que el relleno no puede
+       ser claro: el principal lleva borde de marca y luz propia; el
+       secundario, un filo neutro y nada de halo. */
+    border:1px solid rgba(126,214,255,.85);
+    box-shadow:inset 0 0 0 1px rgba(160,120,255,.35),
+               0 0 22px -6px rgba(90,190,255,.55),
+               0 14px 34px -16px rgba(124,108,255,.9);
+  }
+  body.v6 .btn-ghost, body.v7 .btn-ghost,
+  body.v6 .btn:not(.btn-primary), body.v7 .btn:not(.btn-primary){
+    background:rgba(14,19,33,.97);
+    border:1px solid rgba(170,190,230,.26);
+    color:#eef3ff;
+  }
+
+  body.v6 .hero4-ctas, body.v7 .hero4-ctas,
+  body.v6 .stage-ctas, body.v7 .stage-ctas,
+  body.v6 .hero-ctas,  body.v7 .hero-ctas{ width:100%; }
+  body.v6 .hero4-ctas > .btn, body.v7 .hero4-ctas > .btn,
+  body.v6 .stage-ctas > .btn, body.v7 .stage-ctas > .btn,
+  body.v6 .hero-ctas  > .btn, body.v7 .hero-ctas  > .btn{
+    width:100%; justify-content:center;
+  }
+}
+
+/* La banda de cierre y el pie se suben a su propia capa. El lienzo del campo
+   es `position:fixed` con z-index 0, y en el orden de pintado un elemento
+   posicionado con z-index 0 va DESPUES de los bloques sin posicionar: el pie,
+   que queda fuera de <main>, se pintaba por debajo del campo. Con capa propia
+   dejan de depender de ese orden. */
+body.v6 footer, body.v7 footer,
+body.v6 .cta-band, body.v7 .cta-band{ position:relative; z-index:2; }
+body.v6 .cta-band > .container, body.v7 .cta-band > .container{ position:relative; z-index:2; }
+
+/* El pie en vertical: su fondo arranca transparente y en un movil ocupa casi
+   una pantalla entera, asi que el campo se veia a traves de todo el bloque de
+   enlaces y el parrafo de marca caia a 4,1:1. En vertical el pie se apoya en
+   superficie propia; en escritorio conserva su degradado. */
+@media (max-width:640px){
+  body.v6 footer, body.v7 footer{
+    background:linear-gradient(180deg, rgba(7,10,19,.95), rgba(5,7,14,.995));
+  }
+}
+
+/* En vertical el instrumento ocupa la pantalla entera y el texto va encima
+   sin banda libre a la que apartarse, asi que los velos tienen que apretar
+   mas que en escritorio. Medido: sin esto, la entradilla de /como-funciona
+   caia a 3,5:1 y la lista de /departamentos/soporte a 4,2:1. */
+@media (max-width:640px){
+  body.v7 .timeline::before, body.v7 .outs::before, body.v7 .chain::before,
+  body.v7 .shift::before, body.v7 .split-list::before, body.v7 .specs::before,
+  body.v7 .split::before, body.v7 .cases::before, body.v7 .rail::before,
+  body.v7 .rail-hint::before, body.v7 .metodo-copy::before,
+  body.v7 .duo::before, body.v7 .board::before, body.v7 .prod::before,
+  body.v7 .spec::before, body.v7 .pacts::before, body.v7 .track::before,
+  body.v7 .pre-cta::before, body.v7 .vsteps::after,
+  body.v7 .head::before, body.v7 .figure::before, body.v7 .section-head::before{
+    inset:-14% -14%;
+    background:radial-gradient(96% 88% at 50% 50%,
+      rgba(5,7,14,.995), rgba(5,7,14,.97) 52%, rgba(5,7,14,.70) 78%, rgba(5,7,14,0) 97%);
+  }
+}

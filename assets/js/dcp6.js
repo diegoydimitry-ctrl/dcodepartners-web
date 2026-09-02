@@ -138,10 +138,21 @@
     dpr = Math.min(window.devicePixelRatio || 1, 1.75);
     W = root.clientWidth; H = root.clientHeight;
     narrow = W < 900; small = W < 620;
-    /* En vertical no hay banda libre a la derecha: el fenómeno se centra y
-       se abre. Es la misma escena, encuadrada para el formato. */
-    MARCO[0].x = narrow ? 0.500 : 0.775;
-    MARCO[0].w = narrow ? 0.96  : 0.50;
+    /* ENCUADRE PARA VERTICAL. Los marcos están pensados para el reparto de
+       escritorio —texto a un lado, campo al otro—, y en vertical ese reparto
+       no existe: el texto ocupa el ancho entero. Manteniéndolos, cada
+       formación quedaba comprimida en una banda de metro y medio de ancho y
+       lo que en escritorio era una red se veía como una maraña.
+
+       En vertical los marcos se centran y se abren al ancho completo: la
+       figura pasa por detrás del texto —para eso están los velos— pero se
+       lee como lo que es. Y el fenómeno de la portada baja al tercio
+       inferior, que es la única franja libre de un móvil. */
+    for (var mi = 0; mi < MARCO.length; mi++) {
+      MARCO[mi].x = narrow ? 0.500 : MARCO_ANCHO[mi].x;
+      MARCO[mi].w = narrow ? (mi === 0 ? 0.96 : 0.94) : MARCO_ANCHO[mi].w;
+      MARCO[mi].h = narrow ? Math.min(1.02, MARCO_ANCHO[mi].h * 1.12) : MARCO_ANCHO[mi].h;
+    }
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -197,6 +208,9 @@
      el contador de Medimos, el tráfico por encima de la arquitectura— caían
      fuera del corte y no se dibujaban nunca. Se habían escrito y no se veían.
      La variación de densidad la da el encuadre, que para eso está. */
+  /* Copia de los valores de escritorio: measure() reescribe MARCO en vertical
+     y sin este original no habría a qué volver al girar el aparato. */
+  var MARCO_ANCHO = MARCO.map(function (m) { return { x: m.x, w: m.w, h: m.h }; });
   var USO = [1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   /* ---------------------------------------------------------- EL GRAFO */
@@ -374,7 +388,12 @@
      instante del foco, turquesa a la salida —lo que ya funciona—. */
   function F0(i, u, g, G, o, tm, ins) {
     var ar = (MARCO[0].h * H) / (MARCO[0].w * W);
-    var fx = narrow ? 0.520 : 0.600, fy = narrow ? 0.50 : 0.575;
+    /* En vertical el fenómeno no se aparta: ENVUELVE. La portada de un móvil
+       es texto de arriba abajo, así que no hay banda libre donde ponerlo, y
+       relegarlo al pie lo dejaba en un arco tímido que no se veía. Centrado
+       y grande, el diafragma rodea al titular y las corrientes lo cruzan por
+       detrás; los velos se ocupan de que se siga leyendo. */
+    var fx = narrow ? 0.500 : 0.600, fy = narrow ? 0.400 : 0.575;
 
     if (u < 0.62) {                                   // LAS CORRIENTES
       var CO = 36;
