@@ -229,6 +229,7 @@
       MARCO[mi].h = narrow ? (mi === 0 ? 0.62 : Math.min(1.02, MARCO_ANCHO[mi].h * 1.12)) : MARCO_ANCHO[mi].h;
     }
     encuadreMarca();
+    sucioReset();                      // el lienzo cambia de tamano: se borra entero
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1251,6 +1252,12 @@
   }
   var ma = { x: 0, y: 0 }, mb = { x: 0, y: 0 };
 
+  /* El anillo de cajas sucias: 40 fotogramas de historia. SUCIO_TODO fuerza un
+     borrado completo cuando el lienzo puede tener tinta en cualquier sitio —al
+     arrancar y despues de cada cambio de tamano—. */
+  var SUC_N = 40, SUC = new Float32Array(SUC_N * 4), SUC_P = 0, SUCIO_TODO = true, SUC_LLENO = 0, SUC_T = 0;
+  function sucioReset() { SUC.fill(0); SUC_P = 0; SUCIO_TODO = true; SUC_LLENO = 0; SUC_T = 0; }
+
   var VEL = 0;
   function draw(tm, noClear) {
     weights(reduced ? P : Pv);
@@ -1265,11 +1272,62 @@
     var flor = 1 - cl(VEL * 30);
     cmx += (mx - cmx) * 0.045; cmy += (my - cmy) * 0.045;
 
+    /* ================= BORRADO POR REGION SUCIA =========================
+       Medido: el borrado a pantalla completa era el 86% de todo el area que
+       se pinta en un fotograma de la portada (630.720 px de 730.698 a 1440,
+       y eso a dpr 1; a 1,75 son 1,9 millones). Los destellos, todos juntos,
+       eran el 8%.
+
+       Pero la tinta solo existe donde se ha dibujado. Fuera de ahi el lienzo
+       ya converge al fondo y volver a pintarlo encima no cambia un solo bit.
+       Asi que se lleva la cuenta de la caja que ocupa lo dibujado y se borra
+       la union de las ultimas 40 —el rastro se apaga con factor 0,70 a 0,83
+       por fotograma, y 0,83^40 = 0,0006, muy por debajo de 1/255—.
+
+       No es una aproximacion visible: es no repintar lo que ya es fondo. Si
+       la union cubre casi todo, se borra entero y se ahorra la contabilidad. */
     ctx.globalCompositeOperation = 'source-over';
     var trans = Math.sin(tw * 3.1416);
     ctx.fillStyle = noClear ? 'rgba(5,7,14,0.10)'
                             : 'rgba(5,7,14,' + (0.30 - 0.13 * trans).toFixed(3) + ')';
-    ctx.fillRect(0, 0, W, H);
+    /* Seguro barato: un borrado completo cada 2 segundos. El fundido a
+       rgba(5,7,14,a) sobre un lienzo de 8 bits se ESTANCA —un pixel a 15 con
+       fondo 14 y alfa 0,17 baja 0,17, que redondea a cero y ya no se mueve—,
+       asi que fuera de la region viva puede quedar un residuo de unas pocas
+       unidades sobre el fondo. Invisible, pero se limpia igual: 1 fotograma
+       de cada 120 vuelve a costar lo de antes, un 0,8%. */
+    if (++SUC_T >= 120) { SUC_T = 0; ctx.fillRect(0, 0, W, H); }
+    else if (noClear || SUCIO_TODO) {
+      ctx.fillRect(0, 0, W, H);
+    } else {
+      var ux0 = 1e9, uy0 = 1e9, ux1 = -1e9, uy1 = -1e9;
+      for (var rb = 0; rb < SUC_N; rb++) {
+        var o4 = rb * 4;
+        if (SUC[o4 + 2] <= SUC[o4]) continue;              // caja vacia
+        if (SUC[o4]     < ux0) ux0 = SUC[o4];
+        if (SUC[o4 + 1] < uy0) uy0 = SUC[o4 + 1];
+        if (SUC[o4 + 2] > ux1) ux1 = SUC[o4 + 2];
+        if (SUC[o4 + 3] > uy1) uy1 = SUC[o4 + 3];
+      }
+      if (ux1 <= ux0) { ux0 = 0; uy0 = 0; ux1 = W; uy1 = H; }
+      ux0 = ux0 < 0 ? 0 : ux0; uy0 = uy0 < 0 ? 0 : uy0;
+      ux1 = ux1 > W ? W : ux1; uy1 = uy1 > H ? H : uy1;
+      if ((ux1 - ux0) * (uy1 - uy0) > W * H * 0.88) ctx.fillRect(0, 0, W, H);
+      else {
+        /* El rectangulo se pinta en pixeles de dispositivo ENTEROS. Con
+           coordenadas fraccionarias el navegador suaviza los cuatro bordes y
+           el borde recibe una cobertura parcial: un borrado ligeramente mas
+           flojo justo en esa linea. Se veia —1.262 px con delta de hasta 9
+           frente al borrado completo— y desaparece al cuadrar la caja. */
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        var qx = Math.floor(ux0 * dpr), qy = Math.floor(uy0 * dpr);
+        ctx.fillRect(qx, qy, Math.ceil(ux1 * dpr) - qx, Math.ceil(uy1 * dpr) - qy);
+        ctx.restore();
+      }
+    }
+    /* La caja de este fotograma se va llenando mientras se dibuja. */
+    var bx0 = 1e9, by0 = 1e9, bx1 = -1e9, by1 = -1e9;
 
     var FA = FORM[iA], FB = FORM[iB];
     var frA = MARCO[iA], frB = MARCO[iB];
@@ -1278,6 +1336,9 @@
     /* Todo esto era una busqueda en array o una division POR PARTICULA y no
        cambia dentro del fotograma. Sacarlo del bucle quita unas nueve mil
        operaciones por fotograma sin tocar un solo pixel. */
+    /* Con tw exactamente en 0 o en 1, uno de los dos lados de la mezcla no
+       aporta nada y no hace falta calcularlo. */
+    var soloA = (tw <= 0), soloB = (tw >= 1);
     var invN = 1 / N, invA = 1 / usoA, invB = 1 / usoB;
     var intA = INT[iA], intB = INT[iB], depA = frA.d, depB = frB.d;
     var mirA = MIR[iA], mirB = MIR[iB], volA = VOLTEA[iA], volB = VOLTEA[iB];
@@ -1300,17 +1361,31 @@
       if (ua > 0.99999) ua = 0.99999;
       if (ub > 0.99999) ub = 0.99999;
 
-      if (enA) { oa.a = 1; oa.g = -1; oa.c = C_BRUMA; oa.r = 1; FA(i, ua, 0, 0, oa, tm, insA); }
+      /* SOLO SE CALCULA LA FORMACION QUE SE VE.
+
+         El bucle resolvia SIEMPRE las dos formaciones —la que sale y la que
+         entra— y despues las mezclaba. Pero durante el REPOSO de cada
+         capitulo `tw` vale 0: la mezcla devuelve exactamente la formacion A y
+         todo el trabajo de la B se tira. Y el reposo es el 68% del recorrido
+         de cada tramo, ademas del estado normal del hero, que es donde mas
+         cuesta el fotograma.
+
+         Con `tw` en 0 se salta la B; con `tw` en 1, la A. No es una
+         aproximacion: es el mismo resultado, porque la interpolacion con
+         t = 0 (o 1) descarta el otro lado entero. */
+      if (enA && !soloB) { oa.a = 1; oa.g = -1; oa.c = C_BRUMA; oa.r = 1; FA(i, ua, 0, 0, oa, tm, insA); }
       /* Las que no participan en este capítulo quedan por debajo del umbral
          de descarte: así no cuestan una llamada de dibujo cada fotograma. Es
          lo que permite que la marca del hero tenga 1.560 partículas sin que
          los otros ocho capítulos paguen por ellas. */
-      else     { oa.nx = p.hx; oa.ny = p.hy; oa.a = 0.02; oa.g = -1; oa.c = C_MASA; oa.r = 1; }
-      if (enB) { ob.a = 1; ob.g = -1; ob.c = C_BRUMA; ob.r = 1; FB(i, ub, 0, 0, ob, tm, insB); }
-      else     { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.02; ob.g = -1; ob.c = C_MASA; ob.r = 1; }
+      else if (!soloB) { oa.nx = p.hx; oa.ny = p.hy; oa.a = 0.02; oa.g = -1; oa.c = C_MASA; oa.r = 1; }
+      if (enB && !soloA) { ob.a = 1; ob.g = -1; ob.c = C_BRUMA; ob.r = 1; FB(i, ub, 0, 0, ob, tm, insB); }
+      else if (!soloA) { ob.nx = p.hx; ob.ny = p.hy; ob.a = 0.02; ob.g = -1; ob.c = C_MASA; ob.r = 1; }
 
-      marco(oa, frA, mirA, ma, volA);
-      marco(ob, frB, mirB, mb, volB);
+      if (!soloB) marco(oa, frA, mirA, ma, volA);
+      if (!soloA) marco(ob, frB, mirB, mb, volB);
+      if (soloA) { mb.x = ma.x; mb.y = ma.y; ob.a = oa.a; ob.c = oa.c; ob.g = oa.g; ob.r = oa.r; }
+      if (soloB) { ma.x = mb.x; ma.y = mb.y; oa.a = ob.a; oa.c = ob.c; oa.g = ob.g; oa.r = ob.r; }
 
       /* Cada partícula sale hacia la formación siguiente en su instante. */
       var t = cl((tw - p.dl) / (1 - p.dl)); t = t * t * (3 - 2 * t);
@@ -1355,6 +1430,16 @@
       var dy = p.y + cmy * 22 * pf * par;
 
       px[i] = dx; py[i] = dy;
+      /* La caja tiene que cubrir TAMBIEN a las particulas descartadas por
+         alfa: no se dibujan, pero SI se enlazan —el trazo une consecutivas del
+         mismo grupo sin mirar su brillo— y ese trazo dejaba tinta fuera de la
+         region que se borra. Fue justo la fuga que aparecio al comparar con
+         reloj determinista: hasta 742 de delta en /portada a mitad de
+         recorrido. */
+      if (dx - 2 < bx0) bx0 = dx - 2;
+      if (dy - 2 < by0) by0 = dy - 2;
+      if (dx + 2 > bx1) bx1 = dx + 2;
+      if (dy + 2 > by1) by1 = dy + 2;
       /* El cableado cambia de bando A LA VEZ para todas las partículas, no
          partícula a partícula: si no, la estructura se deshilacha en vez de
          transformarse. */
@@ -1409,6 +1494,12 @@
       }
       ctx.globalAlpha = Math.min(0.80, a2);
       ctx.drawImage(spr, dx - r, dy - r, r * 2, r * 2);
+      /* Lo que se pinta, se apunta: es lo unico que habra que borrar. */
+      var mrg2 = r * 2.7;
+      if (dx - mrg2 < bx0) bx0 = dx - mrg2;
+      if (dy - mrg2 < by0) by0 = dy - mrg2;
+      if (dx + mrg2 > bx1) bx1 = dx + mrg2;
+      if (dy + mrg2 > by1) by1 = dy + mrg2;
     }
 
     /* EL ENLACE, AHORA CON COLOR. Une partículas CONSECUTIVAS DEL MISMO
@@ -1458,6 +1549,18 @@
 
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
+
+    /* Los enlaces se dibujan entre particulas ya contabilizadas, asi que
+       caben dentro de la misma caja. Se guarda en el anillo. */
+    if (!noClear) {
+      var o5 = SUC_P * 4;
+      if (bx1 > bx0) { SUC[o5] = bx0; SUC[o5 + 1] = by0; SUC[o5 + 2] = bx1; SUC[o5 + 3] = by1; }
+      else           { SUC[o5] = 0; SUC[o5 + 1] = 0; SUC[o5 + 2] = 0; SUC[o5 + 3] = 0; }
+      SUC_P = (SUC_P + 1) % SUC_N;
+      /* Hasta que el anillo no tiene historia completa se sigue borrando
+         entero: si no, quedaria tinta vieja fuera de la union. */
+      if (SUC_LLENO < SUC_N) { SUC_LLENO++; if (SUC_LLENO >= SUC_N) SUCIO_TODO = false; }
+    }
   }
 
   /* ------------------------------------------------------------- BUCLE */
