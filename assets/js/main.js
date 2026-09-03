@@ -880,19 +880,43 @@
     // servidor de n8n) — evitarlo así es más fiable que depender de que n8n
     // lo arregle. n8n y el endpoint de respaldo parsean form-urlencoded en
     // un objeto igual que JSON, así que no hace falta cambiar nada más.
+    /* TIEMPO LIMITE POR INTENTO. Sin esto, un servidor que acepta la conexion
+       y no responde nunca dejaba el formulario colgado para siempre: medido
+       con la red congelada, a los 30 segundos el boton seguia diciendo
+       "Enviando..." y bloqueado, el respaldo no llegaba a lanzarse nunca y el
+       lead se perdia en silencio, sin que la persona pudiera reintentar.
+       Ahora cada intento se aborta a los 12 s y cuenta como fallo, con lo que
+       el respaldo entra y, si tampoco responde, se lo decimos y se desbloquea.
+
+       Contrapartida asumida a proposito: si el principal SI proceso el lead
+       pero tardo mas de 12 s en contestar, el respaldo enviara ademas sus
+       correos y la persona recibira dos confirmaciones. Un correo duplicado es
+       mejor que un lead perdido; queda anotado en el informe. */
+    var LIMITE_MS = 12000;
     var intentarEnvio = function (url, datos) {
       var params = new URLSearchParams();
       Object.keys(datos).forEach(function (key) { params.append(key, datos[key]); });
-      return fetch(url, {
+      var ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+      var corte = setTimeout(function () { if (ctl) ctl.abort(); }, LIMITE_MS);
+      var opciones = {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString()
+      };
+      if (ctl) opciones.signal = ctl.signal;
+      return fetch(url, opciones).then(function (respuesta) {
+        clearTimeout(corte);
+        return respuesta;
       }).then(function (respuesta) {
         return respuesta.text().catch(function () { return ''; }).then(function (texto) {
           return { ok: respuesta.ok, status: respuesta.status, texto: texto };
         });
       }).catch(function (err) {
-        return { ok: false, status: 0, texto: String(err && err.message || err) };
+        clearTimeout(corte);
+        var abortado = err && (err.name === 'AbortError');
+        return { ok: false, status: 0,
+                 texto: abortado ? ('sin respuesta en ' + (LIMITE_MS / 1000) + ' s')
+                                 : String(err && err.message || err) };
       });
     };
 
@@ -909,19 +933,63 @@
                    form.querySelector('button');
       var textoBoton = button.textContent;
 
-      if (typeof turnstile === 'undefined') {
-        note.textContent = 'No se pudo cargar la verificación anti-spam. Recarga la página e inténtalo de nuevo.';
+      /* ESPERAR A TURNSTILE, NO RENDIRSE AL INSTANTE.
+         El script de Cloudflare se carga con async defer. Medido: si llega 4
+         segundos despues de que la persona pulse enviar —cosa normal en una
+         conexion movil lenta—, se le decia "recarga la pagina" y no se
+         enviaba nada, cuando dos segundos mas tarde el widget ya funcionaba.
+         Recargar, ademas, le habria borrado los cuatro pasos que acababa de
+         rellenar. Ahora se espera, diciendolo, y solo se abandona si de
+         verdad no aparece. */
+      var esperar = function (cond, ms) {
+        return new Promise(function (listo) {
+          if (cond()) return listo(true);
+          var t0 = Date.now();
+          var tic = setInterval(function () {
+            if (cond()) { clearInterval(tic); listo(true); }
+            else if (Date.now() - t0 > ms) { clearInterval(tic); listo(false); }
+          }, 150);
+        });
+      };
+
+      button.disabled = true;                 // se bloquea YA: nada de dos envios
+      button.textContent = 'Comprobando...';
+
+      try {
+        if (typeof turnstile === 'undefined') {
+          note.textContent = 'Comprobando la verificación de seguridad...';
+          note.className = 'form-note';
+          var llego = await esperar(function () { return typeof turnstile !== 'undefined'; }, 8000);
+          if (!llego) {
+            note.textContent = 'No se pudo cargar la verificación anti-spam. Comprueba tu conexión y vuelve a pulsar enviar; no hace falta que recargues, no perderás lo que has escrito.';
+            note.className = 'form-note err';
+            button.disabled = false; button.textContent = textoBoton;
+            return;
+          }
+        }
+        if (!turnstile.getResponse()) {
+          note.textContent = 'Comprobando la verificación de seguridad...';
+          note.className = 'form-note';
+          var resuelto = await esperar(function () {
+            try { return !!turnstile.getResponse(); } catch (e) { return false; }
+          }, 5000);
+          if (!resuelto) {
+            note.textContent = 'Marca la verificación de seguridad y vuelve a pulsar enviar.';
+            note.className = 'form-note err';
+            button.disabled = false; button.textContent = textoBoton;
+            return;
+          }
+        }
+      } catch (e) {
+        note.textContent = 'No se pudo comprobar la verificación de seguridad. Vuelve a pulsar enviar.';
         note.className = 'form-note err';
-        return;
-      }
-      if (!turnstile.getResponse()) {
-        note.textContent = 'Completa la verificación anti-spam.';
-        note.className = 'form-note err';
+        button.disabled = false; button.textContent = textoBoton;
         return;
       }
 
-      button.disabled = true;
       button.textContent = 'Enviando...';
+      note.textContent = 'Enviando tu solicitud...';
+      note.className = 'form-note';
 
       // Todo el cuerpo va en try/finally: si document.getElementById(...)
       // devolviera null por cualquier motivo inesperado, o cualquier otra
@@ -972,7 +1040,10 @@
           // tuviera el wizard por algún motivo, para no romper el envío.
           if (typeof showFormSuccess === 'function') showFormSuccess();
         } else {
-          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
+          /* Se avisa de que hay que volver a marcar: justo debajo se llama a
+             turnstile.reset() —el token es de un solo uso—, y sin decirlo la
+             persona reintenta con el widget en blanco y vuelve a fallar. */
+          note.textContent = 'No hemos podido enviar tu solicitud. Vuelve a marcar la verificación de seguridad e inténtalo otra vez; lo que has escrito sigue aquí. (' + resultado.texto + ')';
           note.className = 'form-note err';
           // Un token de Turnstile es de un solo uso: si el intento principal
           // llegó a consumirlo (p. ej. rechazado ya verificado o caducado),
