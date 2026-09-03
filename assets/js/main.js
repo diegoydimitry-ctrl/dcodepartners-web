@@ -173,7 +173,17 @@
      sitio donde el usuario no ha llegado a hacer scroll todavia. */
   var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur, .reveal-narrow, .reveal-converge');
   if (revealEls.length) {
-    if ('IntersectionObserver' in window) {
+    /* MOVIMIENTO REDUCIDO: TODO VISIBLE YA.
+       Esto faltaba. Con prefers-reduced-motion los bloques seguian empezando a
+       opacidad 0 esperando al observador, asi que quien tiene esa preferencia
+       activada —justo quien no deberia depender de una animacion— se
+       encontraba /conocenos, /blog, /departamentos y /contacto con bloques en
+       blanco hasta que hiciera scroll. Medido: 2 bloques invisibles en
+       /conocenos, 2 en /blog, 2 en /departamentos, 1 en /contacto.
+       La entrada es un adorno; el contenido no. */
+    if (prefersReducedMotion) {
+      revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    } else if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
@@ -206,14 +216,28 @@
         var barrer = function () {
           for (var i = pend.length - 1; i >= 0; i--) {
             var e = pend[i], b = e.getBoundingClientRect();
-            if (b.top < window.innerHeight * 0.92 && b.bottom > 0) {
+            /* Antes pedia ademas b.bottom > 0, o sea "que siga a la vista".
+               Un arrastre de la barra hasta el final deja los bloques POR
+               ENCIMA de la ventana y ya no volvian a cumplirlo nunca: se
+               quedaban invisibles para siempre. Medido saltando al final de
+               /conocenos, /blog, /departamentos y /servicios/agentes-ia.
+               Entrar sin animacion es infinitamente mejor que no entrar. */
+            if (b.top < window.innerHeight * 0.92) {
               e.classList.add('is-visible'); io.unobserve(e); pend.splice(i, 1);
             }
           }
-          if (!pend.length) window.removeEventListener('scroll', tras);
+          if (!pend.length) {
+            window.removeEventListener('scroll', tras);
+            window.removeEventListener('pageshow', tras);
+          }
         };
         var tras = function () { clearTimeout(pt); pt = setTimeout(barrer, 140); };
         window.addEventListener('scroll', tras, { passive: true });
+        /* Al volver con el boton de atras el navegador restaura la posicion de
+           scroll DESPUES de que este codigo haya decidido que se ve y que no,
+           asi que hay que volver a mirar. */
+        window.addEventListener('pageshow', tras);
+        setTimeout(barrer, 260);
       }
     } else {
       revealEls.forEach(function (el) { el.classList.add('is-visible'); });

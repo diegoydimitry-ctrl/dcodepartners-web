@@ -266,14 +266,27 @@
         var caja = host.getBoundingClientRect();
         var fs = host.querySelectorAll('.spec');
         if (fs.length < 4) { est.m = { no: true }; return; }
-        var izq = [], der = [], medio = caja.left + caja.width * 0.5, i;
+        /* Las columnas se agrupan por la POSICION IZQUIERDA REAL de cada fila,
+           no por si su centro cae a un lado u otro del bloque. Con el hueco
+           que se deja para el propio circuito, en una sola columna el centro
+           de cada fila queda desplazado a la derecha del centro del bloque y
+           TODAS acababan clasificadas en la columna derecha: la izquierda se
+           quedaba vacia, la guarda de seguridad abortaba y el circuito no se
+           dibujaba a 768 ni a 390. Sin un solo error en consola. */
+        var cols = [], i;
         for (i = 0; i < fs.length; i++) {
           var r = fs[i].getBoundingClientRect();
-          var p = { y: r.top + 13 - caja.top, x: r.left - caja.left };
-          (r.left + r.width * 0.5 < medio ? izq : der).push(p);
+          var x = Math.round(r.left - caja.left);
+          var p = { y: r.top + 13 - caja.top, x: x };
+          var j, met = false;
+          for (j = 0; j < cols.length; j++) {
+            if (Math.abs(cols[j].x - x) < 12) { cols[j].pts.push(p); met = true; break; }
+          }
+          if (!met) cols.push({ x: x, pts: [p] });
         }
-        /* En una sola columna no hay dos ramales que enhebrar: se dibuja un
-           unico recorrido y punto. */
+        cols.sort(function (a, b) { return a.x - b.x; });
+        var izq = cols[0] ? cols[0].pts : [];
+        var der = cols[1] ? cols[1].pts : [];
         est.m = { izq: izq, der: der, una: der.length === 0, ancho: caja.width };
       }
       var m = est.m;

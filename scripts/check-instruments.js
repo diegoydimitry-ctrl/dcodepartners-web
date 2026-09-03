@@ -18,6 +18,14 @@ const js = fs.readFileSync(path.join(raiz, 'assets/js/dcp8.js'), 'utf8');
 const definidos = new Set();
 for (const m of js.matchAll(/INSTR\.([a-zA-Z0-9_]+)\s*=/g)) definidos.add(m[1]);
 
+/* Lo mismo para las composiciones de dcp9: una pagina puede declarar
+   data-comp="x" sin que exista COMP.x, y el motor sale por `if (!comp) return`
+   sin un solo error en consola. Y peor todavia: puede declararla sin cargar
+   dcp9.js, con lo que no pasa absolutamente nada y el hueco se queda vacio. */
+const js9 = fs.readFileSync(path.join(raiz, 'assets/js/dcp9.js'), 'utf8');
+const comps = new Set();
+for (const m of js9.matchAll(/COMP\.([a-zA-Z0-9_]+)\s*=/g)) comps.add(m[1]);
+
 function paginas(dir, acc = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (e.name === 'node_modules' || e.name === '.git' || e.name.startsWith('.')) continue;
@@ -40,7 +48,23 @@ for (const f of paginas(raiz)) {
   }
 }
 
+let usadosC = 0;
+for (const f of paginas(raiz)) {
+  const html = fs.readFileSync(f, 'utf8');
+  const refs = [...html.matchAll(/data-comp="([a-zA-Z0-9_]+)"/g)];
+  if (refs.length && !/assets\/js\/dcp9\.js/.test(html)) {
+    fallos.push(path.relative(raiz, f) + ' → declara data-comp pero NO carga dcp9.js');
+  }
+  for (const m of refs) {
+    usadosC++;
+    if (!comps.has(m[1])) {
+      fallos.push(path.relative(raiz, f) + ' → COMP.' + m[1] + ' no existe');
+    }
+  }
+}
+
 console.log(usados + ' referencias a instrumentos · ' + definidos.size + ' definidos');
+console.log(usadosC + ' referencias a composiciones · ' + comps.size + ' definidas');
 if (fallos.length) {
   console.error('\nINSTRUMENTOS QUE FALTAN:');
   for (const x of fallos) console.error('  ' + x);

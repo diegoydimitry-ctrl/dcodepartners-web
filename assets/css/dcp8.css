@@ -496,3 +496,20 @@ body.v7 .aparte h3{ margin-top:0; }
 @media (max-width:760px){
   body.v7 .pieza{ height:132px; margin-bottom:20px; }
 }
+
+/* Medido con el auditor de contraste real —se oculta la tinta, se captura la
+   pagina ya compuesta y se leen los pixeles bajo los glifos, tomando el
+   percentil 90 de luminancia, o sea el peor caso—: el titular de
+   /servicios/agentes-ia daba 3,09. Es texto de 44,8 px en negrita, asi que el
+   umbral que le aplica es 3:1 y pasaba, pero pasaba raspando y era el peor de
+   toda la web. La causa es que esa seccion coloca su luz local justo debajo
+   del titular (--lx:50%, --ly:44%) y por detras cruzan las particulas mas
+   brillantes del instrumento. El velo de cabecera se refuerza solo dentro de
+   las secciones con luz local, que son las unicas donde hace falta. */
+body.v7 .section.lit .head::before,
+body.v7 .section-sm.lit .head::before,
+body.v7 .section-air.lit .head::before{
+  inset:-40% -12%;
+  background:radial-gradient(78% 78% at 34% 50%,
+    rgba(5,7,14,.995), rgba(5,7,14,.965) 46%, rgba(5,7,14,.60) 72%, rgba(5,7,14,0) 92%);
+}

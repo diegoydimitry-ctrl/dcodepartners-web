@@ -243,11 +243,51 @@
          tarjeta pequeña son unos pocos pixeles; en un bloque alto son cientos,
          y en una ventana baja puede no ocurrir nunca. Basta con que asome. */
     }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    /* LO QUE VIVE DENTRO DE UN RAIL HORIZONTAL NO SE OBSERVA SOLO.
+       Medido en /servicios/agentes-ia y sus dos hermanas: las tarjetas quinta
+       y sexta del rail estan a 1438 y 1752 px de la izquierda, o sea FUERA de
+       la ventana en horizontal. El observador nunca las cruza, asi que nunca
+       reciben la clase de entrada, asi que se quedan en opacidad 0 para
+       siempre: quien desliza el rail se encuentra dos tarjetas en blanco. La
+       red de seguridad tampoco las salvaba, porque solo mira si el elemento
+       esta a la altura correcta y para cuando saltaba ya habian pasado.
+
+       Un elemento dentro de un contenedor que se desplaza en horizontal se
+       revela con SU RAIL, no por su cuenta: cuando el rail asoma, entran
+       todas, esten donde esten en el eje X. */
+    function railDe(el) {
+      for (var n = el.parentNode; n && n.nodeType === 1 && n !== document.body; n = n.parentNode) {
+        var ov = getComputedStyle(n).overflowX;
+        if ((ov === 'auto' || ov === 'scroll') && n.scrollWidth > n.clientWidth + 4) return n;
+      }
+      return null;
+    }
+    var porRail = [], vistos = [];
     var pend = [];
     els.forEach(function (el) {
+      var rail = railDe(el);
+      if (rail) {
+        var k = vistos.indexOf(rail);
+        if (k === -1) { vistos.push(rail); porRail.push([rail, [el]]); }
+        else porRail[k][1].push(el);
+        return;
+      }
       var r = el.getBoundingClientRect();
       if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('in'); return; }
       io.observe(el); pend.push(el);
+    });
+    porRail.forEach(function (par) {
+      var rail = par[0], hijos = par[1];
+      var entrar = function () { hijos.forEach(function (h, i) {
+        h.style.setProperty('--i', i); h.classList.add('in'); }); };
+      var rr = rail.getBoundingClientRect();
+      if (rr.top < window.innerHeight && rr.bottom > 0) { entrar(); return; }
+      var ior = new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { entrar(); ior.disconnect(); }
+      }, { threshold: 0, rootMargin: '0px 0px -6% 0px' });
+      ior.observe(rail);
+      pend.push(rail);
+      rail.__entrar = entrar;
     });
     /* La misma red de seguridad que en main.js, por la misma razon: el
        observador entrega una vez por fotograma contra la posicion del momento,
@@ -258,14 +298,26 @@
       var barrer = function () {
         for (var i = pend.length - 1; i >= 0; i--) {
           var e2 = pend[i], b = e2.getBoundingClientRect();
-          if (b.top < window.innerHeight * 0.92 && b.bottom > 0) {
-            e2.classList.add('in'); io.unobserve(e2); pend.splice(i, 1);
+          /* Ya no basta con "esta a la altura": si el bloque ha quedado por
+             ENCIMA de la ventana porque el salto de scroll paso por delante,
+             tambien hay que encenderlo. Invisible para siempre es peor que
+             entrar sin animacion. */
+          if (b.top < window.innerHeight * 0.92) {
+            if (e2.__entrar) e2.__entrar(); else e2.classList.add('in');
+            io.unobserve(e2); pend.splice(i, 1);
           }
         }
-        if (!pend.length) window.removeEventListener('scroll', tras);
+        if (!pend.length) {
+          window.removeEventListener('scroll', tras);
+          window.removeEventListener('pageshow', tras);
+        }
       };
       var tras = function () { clearTimeout(pt); pt = setTimeout(barrer, 140); };
       window.addEventListener('scroll', tras, { passive: true });
+      /* Y lo mismo al volver con el boton de atras: la posicion de scroll se
+         restaura despues de esta decision. */
+      window.addEventListener('pageshow', tras);
+      setTimeout(barrer, 260);
     }
     // Escalonado automático entre hermanos: no hace falta escribir --i a mano.
     document.querySelectorAll('[data-stagger]').forEach(function (g) {
