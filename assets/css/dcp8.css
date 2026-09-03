@@ -278,3 +278,176 @@ body.v6 .cta-band > .container, body.v7 .cta-band > .container{ position:relativ
       rgba(5,7,14,.995), rgba(5,7,14,.97) 52%, rgba(5,7,14,.70) 78%, rgba(5,7,14,0) 97%);
   }
 }
+
+/* ==========================================================================
+   EL EJE — /conocenos
+   La frase de la seccion es "dos fundadores, cada uno al frente de una mitad
+   del sistema", y lo que habia debajo eran dos tarjetas gemelas con una barra
+   de ventana falsa que ponia "diego.profile". Dos tarjetas iguales no son dos
+   mitades: son dos tarjetas.
+
+   Ahora la pagina se parte por un eje real: mitad fria la estrategia, mitad
+   calida la arquitectura, y la costura donde se tocan. El primer intento puso
+   un degradado radial por mitad y volvio a dibujar dos rectangulos visibles
+   —el mismo error con otra sintaxis—, asi que el color de cada territorio va
+   en UN solo degradado horizontal continuo sobre el conjunto, difuminado por
+   arriba y por abajo para que no tenga borde por ningun lado.
+   ========================================================================== */
+body.v7 .eje{
+  display:grid;
+  grid-template-columns:1fr 1px 1fr;
+  gap:0 clamp(30px,3.6vw,58px);
+  align-items:start;
+  margin-top:clamp(40px,5vw,70px);
+  padding:clamp(26px,3vw,44px) 0 clamp(30px,3.4vw,48px);
+  position:relative;
+}
+/* Las dos temperaturas, sin caja: un degradado que cruza toda la anchura y se
+   apaga arriba y abajo con una mascara. No hay ningun filo que cortar. */
+/* Velo de lectura primero: el campo pasa por detras y aqui hay parrafo largo.
+   Con `closest-side` el degradado llega a cero EXACTAMENTE en el borde de la
+   caja, asi que no queda ningun filo recto —que es justo lo que fallo en el
+   primer intento, y en el segundo—. */
+body.v7 .eje::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-10px clamp(-56px,-4vw,-20px);
+  background:radial-gradient(closest-side at 50% 50%,
+    rgba(5,7,14,.88), rgba(5,7,14,.74) 46%, rgba(5,7,14,.34) 76%, transparent 100%);
+}
+/* Y encima, las dos temperaturas: un solo degradado que cruza toda la
+   anchura, transparente en los dos extremos y difuminado arriba y abajo. */
+body.v7 .eje::after{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-10px clamp(-56px,-4vw,-20px);
+  background:linear-gradient(90deg,
+    transparent 0%, rgba(46,216,240,.13) 17%, rgba(46,216,240,.045) 36%,
+    transparent 47%, transparent 53%,
+    rgba(141,98,250,.05) 64%, rgba(141,98,250,.14) 83%, transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);
+          mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);
+}
+body.v7 .eje-mitad{ position:relative; }
+body.v7 .eje-mitad--a{ --tono:46,216,240; justify-self:end; }
+body.v7 .eje-mitad--b{ --tono:141,98,250; justify-self:start; }
+
+/* La identidad se apoya contra el eje —etiqueta, nombre y cargo alineados a
+   la costura—; el parrafo no, porque un parrafo de cinco lineas alineado a la
+   derecha se lee peor y eso no lo compensa ninguna simetria. */
+body.v7 .eje-mitad--a > :not(p){ text-align:right; }
+body.v7 .eje-dominio{
+  display:block; font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(var(--tono),.95); margin-bottom:15px;
+}
+body.v7 .eje-mitad h3{
+  font-size:clamp(21px,2.1vw,27px); line-height:1.2; margin:0 0 5px;
+  letter-spacing:-.01em;
+}
+body.v7 .eje-mitad .founder-role{
+  font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--txt-3,#8ea0c4); margin-bottom:18px;
+}
+body.v7 .eje-mitad p{
+  margin:0; max-width:37ch; color:var(--txt-2,#b7c4de);
+  font-size:15.5px; line-height:1.64;
+}
+
+/* La costura. Arranca fria, termina calida, y donde se cruza esta el punto en
+   el que estan los dos nombres. */
+body.v7 .eje-linea{
+  position:relative; align-self:stretch; min-height:210px;
+  background:linear-gradient(180deg,
+    transparent 0, rgba(46,216,240,.50) 14%, rgba(222,238,255,.72) 42%,
+    rgba(141,98,250,.50) 72%, transparent 100%);
+}
+body.v7 .eje-nodo{
+  position:absolute; top:72px; width:9px; height:9px; border-radius:50%;
+  transform:translateY(-50%);
+}
+body.v7 .eje-nodo--a{ right:5px; background:#2ed8f0; box-shadow:0 0 14px 3px rgba(46,216,240,.55); }
+body.v7 .eje-nodo--b{ left:5px;  background:#9a72ff; box-shadow:0 0 14px 3px rgba(141,98,250,.55); }
+
+/* En vertical el eje se tumba: siguen siendo dos mitades con una costura
+   entre ellas, cada una leyendo alineada a la izquierda. */
+@media (max-width:860px){
+  body.v7 .eje{ grid-template-columns:1fr; gap:0; padding-block:20px; }
+  body.v7 .eje-mitad--a > :not(p){ text-align:left; }
+  body.v7 .eje-mitad{ padding-block:22px; justify-self:stretch; }
+  body.v7 .eje::after{
+    background:linear-gradient(180deg,
+      transparent 0%, rgba(46,216,240,.12) 16%, transparent 44%,
+      transparent 56%, rgba(141,98,250,.12) 84%, transparent 100%);
+    -webkit-mask-image:none; mask-image:none;
+  }
+  body.v7 .eje-linea{
+    min-height:0; height:1px; width:100%; align-self:auto;
+    background:linear-gradient(90deg, transparent 0, rgba(46,216,240,.55) 20%,
+      rgba(222,238,255,.7) 50%, rgba(141,98,250,.55) 80%, transparent 100%);
+  }
+  body.v7 .eje-nodo{ top:50%; }
+  body.v7 .eje-nodo--a{ right:auto; left:calc(50% - 11px); }
+  body.v7 .eje-nodo--b{ left:calc(50% + 3px); }
+}
+
+/* ==========================================================================
+   EL CORTE — /servicios, "El problema" frente a "Lo que hacemos"
+   Eran dos tarjetas gemelas, y las dos decian lo contrario la una de la otra
+   con exactamente la misma forma. Ahora la diferencia esta en el material:
+   a la izquierda tres piezas sueltas, cada una con su propio trozo de raiz y
+   descolocada respecto a las demas; a la derecha una sola pieza continua
+   apoyada en un raíl que no se interrumpe. Se ve cual es cual sin leerlo.
+   ========================================================================== */
+body.v7 .duo--corte{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:clamp(30px,4.4vw,74px); align-items:start;
+}
+body.v7 .duo-lado h3{
+  font-size:13px; letter-spacing:.13em; text-transform:uppercase;
+  font-family:var(--font-mono,ui-monospace,monospace);
+  margin:0 0 20px; font-weight:600;
+}
+body.v7 .duo-lado--suelto h3{ color:var(--txt-3,#8ea0c4); }
+body.v7 .duo-lado--junto  h3{ color:#4bd6ea; }
+
+/* Las tres sueltas: sin viñeta, cada una con su raiz corta y su desplazamiento
+   propio. Nada las une, y ese es el punto. */
+body.v7 .sueltas{ list-style:none; margin:0; padding:0; }
+body.v7 .sueltas li{
+  position:relative; padding-left:22px; margin-bottom:15px;
+  color:var(--txt-2,#b7c4de); font-size:15.5px; line-height:1.55;
+  max-width:34ch; opacity:.86;
+}
+body.v7 .sueltas li::before{
+  content:""; position:absolute; left:0; top:.72em; width:12px; height:1px;
+  background:rgba(150,168,204,.55);
+}
+body.v7 .sueltas li:nth-child(2){ margin-left:26px; }
+body.v7 .sueltas li:nth-child(3){ margin-left:11px; }
+body.v7 .sueltas li:nth-child(2)::before{ width:8px; }
+body.v7 .sueltas li:nth-child(3)::before{ width:16px; }
+
+/* La continua: un solo raíl de arriba abajo y el texto apoyado en el. */
+body.v7 .duo-lado--junto{ position:relative; padding-left:22px; }
+body.v7 .duo-lado--junto::before{
+  content:""; position:absolute; left:0; top:2px; bottom:2px; width:1px;
+  background:linear-gradient(180deg,
+    rgba(46,216,240,.15), rgba(46,216,240,.85) 22%, rgba(46,216,240,.85) 78%, rgba(46,216,240,.15));
+}
+body.v7 .duo-lado--junto p{
+  margin:0; color:var(--txt-1,#dbe5f7); font-size:16px; line-height:1.62; max-width:36ch;
+}
+@media (max-width:760px){
+  body.v7 .duo--corte{ grid-template-columns:1fr; gap:34px; }
+  body.v7 .sueltas li{ max-width:none; }
+  body.v7 .sueltas li:nth-child(2){ margin-left:18px; }
+  body.v7 .sueltas li:nth-child(3){ margin-left:8px; }
+}
+
+/* La banda donde se teje la trenza de /servicios. Alto fijo por tramo: es un
+   elemento de composicion, no una decoracion que se estire sola. */
+body.v7 .trenza{
+  position:relative; height:clamp(104px,11vw,142px);
+  margin:-4px 0 clamp(2px,0.8vw,10px);
+}
+@media (max-width:760px){ body.v7 .trenza{ height:96px; } }
