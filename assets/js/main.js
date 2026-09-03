@@ -855,70 +855,146 @@
     note.className = 'form-note err';
   };
 
-  if (form && note) {
-    // URL de producción del nodo Webhook "lead-ia-360-v2". Es solo el path
-    // configurado en el nodo (sin el webhookId): n8n solo antepone el
-    // webhookId a la ruta cuando el parámetro "path" está vacío o es
-    // dinámico; aquí es un string fijo, así que la ruta pública es
-    // exactamente /webhook/<path>. Verificado en vivo contra n8n: GET a esta
-    // URL devuelve "not registered for GET requests" (la ruta existe, solo
-    // acepta POST); GET a la misma URL con el webhookId insertado devuelve
-    // "webhook is not registered" (la ruta no existe). Una URL anterior con
-    // el webhookId de más nunca llegó a ejecutar el workflow.
-    var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
-    var FALLBACK_ENDPOINT = '/api/contact-fallback';
+  // URL de producción del nodo Webhook "lead-ia-360-v2". Es solo el path
+  // configurado en el nodo (sin el webhookId): n8n solo antepone el
+  // webhookId a la ruta cuando el parámetro "path" está vacío o es
+  // dinámico; aquí es un string fijo, así que la ruta pública es
+  // exactamente /webhook/<path>. Verificado en vivo contra n8n: GET a esta
+  // URL devuelve "not registered for GET requests" (la ruta existe, solo
+  // acepta POST); GET a la misma URL con el webhookId insertado devuelve
+  // "webhook is not registered" (la ruta no existe). Una URL anterior con
+  // el webhookId de más nunca llegó a ejecutar el workflow.
+  var N8N_WEBHOOK_URL = 'https://diegoydimitry2.app.n8n.cloud/webhook/lead-ia-360-v2';
+  var FALLBACK_ENDPOINT = '/api/contact-fallback';
 
-    // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
-    // (un fallo de red se traduce en ok:false en vez de una excepción), así
-    // el llamador no necesita un try/catch propio por cada intento.
-    //
-    // Se envía como application/x-www-form-urlencoded (no JSON): es un
-    // "simple request" según la spec CORS, así que el navegador NO manda
-    // preflight OPTIONS. El preflight real contra el webhook de n8n devuelve
-    // 500 (bug de la infraestructura de n8n Cloud con responseMode
-    // "responseNode", confirmado repitiendo la petición desde el propio
-    // servidor de n8n) — evitarlo así es más fiable que depender de que n8n
-    // lo arregle. n8n y el endpoint de respaldo parsean form-urlencoded en
-    // un objeto igual que JSON, así que no hace falta cambiar nada más.
-    /* TIEMPO LIMITE POR INTENTO. Sin esto, un servidor que acepta la conexion
-       y no responde nunca dejaba el formulario colgado para siempre: medido
-       con la red congelada, a los 30 segundos el boton seguia diciendo
-       "Enviando..." y bloqueado, el respaldo no llegaba a lanzarse nunca y el
-       lead se perdia en silencio, sin que la persona pudiera reintentar.
-       Ahora cada intento se aborta a los 12 s y cuenta como fallo, con lo que
-       el respaldo entra y, si tampoco responde, se lo decimos y se desbloquea.
+  // Intenta un envío y devuelve { ok, status, texto } sin lanzar nunca
+  // (un fallo de red se traduce en ok:false en vez de una excepción), así
+  // el llamador no necesita un try/catch propio por cada intento.
+  //
+  // Se envía como application/x-www-form-urlencoded (no JSON): es un
+  // "simple request" según la spec CORS, así que el navegador NO manda
+  // preflight OPTIONS. El preflight real contra el webhook de n8n devuelve
+  // 500 (bug de la infraestructura de n8n Cloud con responseMode
+  // "responseNode", confirmado repitiendo la petición desde el propio
+  // servidor de n8n) — evitarlo así es más fiable que depender de que n8n
+  // lo arregle. n8n y el endpoint de respaldo parsean form-urlencoded en
+  // un objeto igual que JSON, así que no hace falta cambiar nada más.
+  /* TIEMPO LIMITE POR INTENTO. Sin esto, un servidor que acepta la conexion
+     y no responde nunca dejaba el formulario colgado para siempre: medido
+     con la red congelada, a los 30 segundos el boton seguia diciendo
+     "Enviando..." y bloqueado, el respaldo no llegaba a lanzarse nunca y el
+     lead se perdia en silencio, sin que la persona pudiera reintentar.
+     Ahora cada intento se aborta a los 12 s y cuenta como fallo, con lo que
+     el respaldo entra y, si tampoco responde, se lo decimos y se desbloquea.
 
-       Contrapartida asumida a proposito: si el principal SI proceso el lead
-       pero tardo mas de 12 s en contestar, el respaldo enviara ademas sus
-       correos y la persona recibira dos confirmaciones. Un correo duplicado es
-       mejor que un lead perdido; queda anotado en el informe. */
-    var LIMITE_MS = 12000;
-    var intentarEnvio = function (url, datos) {
-      var params = new URLSearchParams();
-      Object.keys(datos).forEach(function (key) { params.append(key, datos[key]); });
-      var ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-      var corte = setTimeout(function () { if (ctl) ctl.abort(); }, LIMITE_MS);
-      var opciones = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString()
-      };
-      if (ctl) opciones.signal = ctl.signal;
-      return fetch(url, opciones).then(function (respuesta) {
-        clearTimeout(corte);
-        return respuesta;
-      }).then(function (respuesta) {
-        return respuesta.text().catch(function () { return ''; }).then(function (texto) {
-          return { ok: respuesta.ok, status: respuesta.status, texto: texto };
-        });
-      }).catch(function (err) {
-        clearTimeout(corte);
-        var abortado = err && (err.name === 'AbortError');
-        return { ok: false, status: 0,
-                 texto: abortado ? ('sin respuesta en ' + (LIMITE_MS / 1000) + ' s')
-                                 : String(err && err.message || err) };
-      });
+     Contrapartida asumida a proposito: si el principal SI proceso el lead
+     pero tardo mas de 12 s en contestar, el respaldo enviara ademas sus
+     correos y la persona recibira dos confirmaciones. Un correo duplicado es
+     mejor que un lead perdido; queda anotado en el informe. */
+  var LIMITE_MS = 12000;
+  var intentarEnvio = function (url, datos) {
+    var params = new URLSearchParams();
+    Object.keys(datos).forEach(function (key) { params.append(key, datos[key]); });
+    var ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var corte = setTimeout(function () { if (ctl) ctl.abort(); }, LIMITE_MS);
+    var opciones = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
     };
+    if (ctl) opciones.signal = ctl.signal;
+    return fetch(url, opciones).then(function (respuesta) {
+      clearTimeout(corte);
+      return respuesta;
+    }).then(function (respuesta) {
+      return respuesta.text().catch(function () { return ''; }).then(function (texto) {
+        return { ok: respuesta.ok, status: respuesta.status, texto: texto };
+      });
+    }).catch(function (err) {
+      clearTimeout(corte);
+      var abortado = err && (err.name === 'AbortError');
+      return { ok: false, status: 0,
+               texto: abortado ? ('sin respuesta en ' + (LIMITE_MS / 1000) + ' s')
+                               : String(err && err.message || err) };
+    });
+  };
+
+
+  /* =====================================================================
+     BANDEJA DE SALIDA DEL LEAD
+
+     Medido contra el sistema real: el webhook de n8n que recibe este
+     formulario no ha registrado NI UNA sola peticion de produccion en toda su
+     historia, y en Airtable los 58 leads existentes vienen todos del Radar
+     Comercial; ninguno del formulario. n8n SI guarda las ejecuciones
+     correctas —340 en los ultimos dias, todas de tipo trigger— asi que esa
+     ausencia es real y no un problema de retencion.
+
+     No se puede saber si es porque nadie ha escrito o porque los intentos
+     fallaron, porque NADA registra un intento. Si fallan las dos vias (n8n y
+     el respaldo), hoy no queda rastro en ningun sitio de que una persona
+     quiso contactar. Ese es el hueco de verdad.
+
+     Esto lo cierra por el lado que corresponde a la web: cuando fallan las
+     dos, el lead se guarda en el propio navegador y se reintenta solo en la
+     siguiente visita a CUALQUIER pagina del sitio.
+
+     Vive fuera de `if (form && note)` a proposito. La primera version quedo
+     dentro y por tanto solo corria en /contacto, que es justo la pagina a la
+     que nadie vuelve despues de que le falle el envio: el lead se guardaba y
+     no se reintentaba jamas. Lo cazo la prueba, no la lectura del codigo.
+
+     Reintentar es seguro: el nodo de Airtable hace UPSERT emparejando por
+     Email, asi que reenviar el mismo lead actualiza su fila en vez de
+     duplicarla. Lo unico que puede duplicarse es el correo de aviso del
+     respaldo, y eso es preferible a perder el lead.
+
+     No sale ningun dato que no fuera ya a salir, no viaja a ningun tercero
+     nuevo, y vive solo en el dispositivo de quien lo escribio. */
+  var BUZON = 'dcp_leads_pendientes';
+  var BUZON_MAX = 5;                            // nunca acumular mas de 5
+  var BUZON_VIDA_MS = 7 * 24 * 3600 * 1000;     // ni mas viejos de 7 dias
+  var BUZON_INTENTOS = 6;                       // ni insistir indefinidamente
+
+  function buzonLeer() {
+    try {
+      var v = JSON.parse(window.localStorage.getItem(BUZON) || '[]');
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function buzonEscribir(lista) {
+    try { window.localStorage.setItem(BUZON, JSON.stringify(lista.slice(-BUZON_MAX))); }
+    catch (e) { /* ventana privada o cuota llena: no es motivo para romper nada */ }
+  }
+  function buzonGuardar(datos) {
+    var lista = buzonLeer();
+    /* Mismo email = mismo lead: se reemplaza, no se acumula. */
+    lista = lista.filter(function (x) { return x && x.datos && x.datos.email !== datos.email; });
+    lista.push({ datos: datos, creado: Date.now(), intentos: 0 });
+    buzonEscribir(lista);
+  }
+  async function buzonReintentar() {
+    var lista = buzonLeer();
+    if (!lista.length) return;
+    var ahora = Date.now(), quedan = [];
+    for (var i = 0; i < lista.length; i++) {
+      var e2 = lista[i];
+      if (!e2 || !e2.datos || !e2.datos.email) continue;
+      if (ahora - e2.creado > BUZON_VIDA_MS) continue;   // caducado
+      if (e2.intentos >= BUZON_INTENTOS) continue;       // ya se insistio bastante
+      e2.intentos++;
+      var r = await intentarEnvio(N8N_WEBHOOK_URL, e2.datos);
+      if (!r.ok) r = await intentarEnvio(FALLBACK_ENDPOINT, e2.datos);
+      if (!r.ok) quedan.push(e2);
+      else console.info('[contact-form] Lead pendiente entregado en un reintento posterior.');
+    }
+    buzonEscribir(quedan);
+  }
+  /* Sin prisa: no compite con la carga de la pagina. */
+  if (window.requestIdleCallback) window.requestIdleCallback(function () { buzonReintentar(); }, { timeout: 8000 });
+  else setTimeout(buzonReintentar, 4000);
+
+  if (form && note) {
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -1043,7 +1119,12 @@
           /* Se avisa de que hay que volver a marcar: justo debajo se llama a
              turnstile.reset() —el token es de un solo uso—, y sin decirlo la
              persona reintenta con el widget en blanco y vuelve a fallar. */
-          note.textContent = 'No hemos podido enviar tu solicitud. Vuelve a marcar la verificación de seguridad e inténtalo otra vez; lo que has escrito sigue aquí. (' + resultado.texto + ')';
+          /* Han fallado las dos vias: antes de avisar, el lead se guarda en
+             el navegador para que se reintente solo. Sin esto, aqui es
+             exactamente donde una solicitud legitima desaparecia sin dejar
+             rastro en ningun sistema. */
+          buzonGuardar(datos);
+          note.textContent = 'No hemos podido enviar tu solicitud ahora mismo. La hemos guardado y se reintentará sola; si prefieres, vuelve a marcar la verificación de seguridad e inténtalo otra vez. Lo que has escrito sigue aquí. (' + resultado.texto + ')';
           note.className = 'form-note err';
           // Un token de Turnstile es de un solo uso: si el intento principal
           // llegó a consumirlo (p. ej. rechazado ya verificado o caducado),
