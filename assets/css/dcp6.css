@@ -402,34 +402,27 @@ body.v6 footer{
 @media (max-width:640px){
 
 
-  /* BOTONES EN VERTICAL. Dos intentos previos fallaron y el motivo es el
-     mismo: en vertical la pieza se compone bastante mas oscura de lo que
-     declara su CSS —medido con la tinta oculta, un relleno #bfe6f2 acaba
-     pintado como rgb(68,83,92)— y ademas no lo hace igual en todas las
-     paginas, asi que ni la letra oscura sobre relleno claro ni la letra
-     blanca sobre el degradado de marca aguantan en todas.
+    /* EL CTA EN MOVIL RECUPERA EL DEGRADADO DE MARCA.
 
-     La solucion no pelea con eso, lo esquiva: SUPERFICIE OSCURA Y LETRA
-     BLANCA. Un fondo oscuro sigue siendo oscuro aunque se componga al 30%
-     sobre una pagina oscura, asi que el contraste deja de depender de como
-     se pinte. La jerarquia se mantiene con el filo y el halo de marca, no
-     con el relleno. En escritorio no cambia nada. */
-  body.v6 .btn-primary{
-    background:linear-gradient(180deg, rgba(18,25,44,.985), rgba(11,15,28,.99));
-    color:#ffffff;
-    /* La jerarquia la marcan el filo y el halo, ya que el relleno no puede
-       ser claro: el principal lleva borde de marca y luz propia; el
-       secundario, un filo neutro y nada de halo. */
-    border:1px solid rgba(126,214,255,.85);
-    box-shadow:inset 0 0 0 1px rgba(160,120,255,.35),
-               0 0 22px -6px rgba(90,190,255,.55),
-               0 14px 34px -16px rgba(124,108,255,.9);
-  }
-  body.v6 .btn-ghost, body.v6 .btn:not(.btn-primary){
-    background:rgba(14,19,33,.97);
-    border:1px solid rgba(170,190,230,.26);
-    color:#eef3ff;
-  }
+     Aqui hubo durante varias fases un "rodeo": superficie oscura y letra
+     blanca, puesto porque una medicion decia que en vertical el relleno se
+     componia al ~32% de su color declarado. Esa medicion estaba MAL.
+
+     La sonda elegia el primer .btn-primary del documento, y en vertical ese
+     es el CTA del MENU MOVIL CERRADO —.nav-cta-mobile, con visibility:hidden—,
+     cuya caja cae justo sobre el parrafo del hero. Se estaba leyendo el fondo
+     de la pagina por debajo de un boton invisible y atribuyendoselo al boton
+     visible.
+
+     Medido de nuevo, filtrando a botones que existen de verdad (visibles, con
+     caja, y que reciben su propio impacto con elementFromPoint):
+
+       escritorio 1440   rgb(131,132,233)
+       movil 390         rgb(137,134,227)
+       movil 360         rgb(136,134,228)
+
+     Son el mismo boton. No habia nada que rodear. */
+
   body.v6 .v6-acts{ width:100%; }
   body.v6 .v6-acts > .btn{ width:100%; justify-content:center; }
 }

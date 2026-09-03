@@ -131,12 +131,45 @@ body.v7 .window-title{ color:#95a3c2; }
 /* El pie es texto desnudo sobre el campo igual que el resto: con la
    floración, una estructura brillante por detrás lo dejaba en 2,6:1. */
 body.v7 footer, body.v6 footer{ position:relative; isolation:isolate; }
+/* EL VELO DEL PIE DESBORDABA HACIA ARRIBA UN 22% — Y ESE ERA EL FAMOSO FALLO
+   DEL CTA EN MOVIL.
+
+   Estaba escrito como `inset:-22% 0 0 0`, y ese porcentaje se mide sobre la
+   ALTURA DEL PIE. En escritorio el pie mide unos 280 px y el 22% son 60 px de
+   desborde: inofensivo. En vertical el pie se apila y mide 1.295 px, asi que el
+   22% son 285 PIXELES de velo casi opaco cayendo por encima del contenido —
+   justo sobre la banda de cierre, es decir, sobre la llamada a la accion.
+
+   La correlacion, medida pagina por pagina a 390 px con el boton forzado a un
+   color plano #4dd0e1 = rgb(77,208,225):
+
+     pagina              boton y   velo empieza en   pintado
+     /blog                 395          300          rgb(39,101,112)
+     /cambios-en-proceso   396          325          rgb(47,125,138)
+     /servicios            395          353          rgb(58,154,169)
+     /faq                  395          357          rgb(60,158,173)
+     /conocenos            395          370          rgb(64,172,187)
+     /casos-exito          373          389          rgb(77,208,225)  intacto
+     /metodo               373          389          rgb(77,208,225)  intacto
+
+   Cuanto mas arriba empieza el velo respecto al boton, mas oscuro sale. Y en
+   las dos paginas donde el velo empieza POR DEBAJO del boton, el color es
+   exacto. Desactivando solo este pseudo-elemento, las siete quedan exactas.
+
+   Durante varias fases esto se interpreto como "el boton composita al 32%" y
+   se rodeo pintandolo de oscuro. No habia nada raro en el boton: habia un velo
+   encima.
+
+   La correccion: el desborde deja de ser un porcentaje de una altura variable
+   y pasa a ser una distancia fija de 64 px, con el degradado expresado tambien
+   en pixeles. Protege el pie igual —se comprueba abajo el contraste— y no
+   alcanza a nada que este por encima. */
 body.v7 footer::before, body.v6 footer::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-22% 0 0 0;
-  background:linear-gradient(180deg,
-    rgba(5,7,14,0) 0%, rgba(5,7,14,.72) 9%, rgba(5,7,14,.95) 18%,
-    rgba(5,7,14,.99) 30%, rgba(5,7,14,.998) 46%);
+  inset:-64px 0 0 0;
+  background:
+    linear-gradient(180deg, rgba(5,7,14,0) 0, rgba(5,7,14,.86) 60px, rgba(5,7,14,.985) 96px),
+    rgba(5,7,14,.985);
 }
 /* Y la cadena de pasos gana un punto de velo por el mismo motivo. */
 body.v7 .chain::before{
@@ -176,35 +209,27 @@ body.v7 .rcard{
    superficie propia en vez de transparencia. En escritorio no cambia nada. */
 @media (max-width:640px){
 
-  /* BOTONES EN VERTICAL. Dos intentos previos fallaron y el motivo es el
-     mismo: en vertical la pieza se compone bastante mas oscura de lo que
-     declara su CSS —medido con la tinta oculta, un relleno #bfe6f2 acaba
-     pintado como rgb(68,83,92)— y ademas no lo hace igual en todas las
-     paginas, asi que ni la letra oscura sobre relleno claro ni la letra
-     blanca sobre el degradado de marca aguantan en todas.
+    /* EL CTA EN MOVIL RECUPERA EL DEGRADADO DE MARCA.
 
-     La solucion no pelea con eso, lo esquiva: SUPERFICIE OSCURA Y LETRA
-     BLANCA. Un fondo oscuro sigue siendo oscuro aunque se componga al 30%
-     sobre una pagina oscura, asi que el contraste deja de depender de como
-     se pinte. La jerarquia se mantiene con el filo y el halo de marca, no
-     con el relleno. En escritorio no cambia nada. */
-  body.v6 .btn-primary, body.v7 .btn-primary{
-    background:linear-gradient(180deg, rgba(18,25,44,.985), rgba(11,15,28,.99));
-    color:#ffffff;
-    /* La jerarquia la marcan el filo y el halo, ya que el relleno no puede
-       ser claro: el principal lleva borde de marca y luz propia; el
-       secundario, un filo neutro y nada de halo. */
-    border:1px solid rgba(126,214,255,.85);
-    box-shadow:inset 0 0 0 1px rgba(160,120,255,.35),
-               0 0 22px -6px rgba(90,190,255,.55),
-               0 14px 34px -16px rgba(124,108,255,.9);
-  }
-  body.v6 .btn-ghost, body.v7 .btn-ghost,
-  body.v6 .btn:not(.btn-primary), body.v7 .btn:not(.btn-primary){
-    background:rgba(14,19,33,.97);
-    border:1px solid rgba(170,190,230,.26);
-    color:#eef3ff;
-  }
+     Aqui hubo durante varias fases un "rodeo": superficie oscura y letra
+     blanca, puesto porque una medicion decia que en vertical el relleno se
+     componia al ~32% de su color declarado. Esa medicion estaba MAL.
+
+     La sonda elegia el primer .btn-primary del documento, y en vertical ese
+     es el CTA del MENU MOVIL CERRADO —.nav-cta-mobile, con visibility:hidden—,
+     cuya caja cae justo sobre el parrafo del hero. Se estaba leyendo el fondo
+     de la pagina por debajo de un boton invisible y atribuyendoselo al boton
+     visible.
+
+     Medido de nuevo, filtrando a botones que existen de verdad (visibles, con
+     caja, y que reciben su propio impacto con elementFromPoint):
+
+       escritorio 1440   rgb(131,132,233)
+       movil 390         rgb(137,134,227)
+       movil 360         rgb(136,134,228)
+
+     Son el mismo boton. No habia nada que rodear. */
+
 
   body.v6 .hero4-ctas, body.v7 .hero4-ctas,
   body.v6 .stage-ctas, body.v7 .stage-ctas,
