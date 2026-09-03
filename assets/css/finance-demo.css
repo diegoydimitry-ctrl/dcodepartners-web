@@ -19,7 +19,12 @@
   --dc-border-strong:#2e3650;
   --dc-text:#e8ecf5;
   --dc-text-muted:#8b93a7;
-  --dc-text-faint:#545e78;
+  /* #545e78 daba 2,94 sobre el fondo de la app (#0a0e17) y 2,90 sobre el de
+     la portada de la demo (#10151f): por debajo del 4,5 que le toca a texto
+     de este tamaño. Lo usan los rotulos de grupo del menu lateral y el enlace
+     "Volver a D-Code Finance". #7b86a1 sube el contraste a 5,23 y 4,97
+     respectivamente; sigue siendo el gris mas tenue de la escala. */
+  --dc-text-faint:#7b86a1;
   --dc-accent:#3b82f6;
   --dc-accent-cyan:#22d3ee;
   --dc-accent-violet:#8b5cf6;
@@ -148,7 +153,10 @@
 }
 .fdemo-demo-banner-dot{ width:6px; height:6px; border-radius:50%; flex-shrink:0; background:var(--dc-accent-violet); }
 .fdemo-demo-banner-label{
-  font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--dc-accent-violet);
+  font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  /* El violeta de acento (#8b5cf6) daba 4,47 sobre el fondo de la app: se
+     quedaba a tres centesimas del umbral. El violeta claro llega a 6,97. */
+  color:#a78bfa;
 }
 .fdemo-demo-banner-text{ font-size:.72rem; color:var(--dc-text-muted); }
 @media (max-width:640px){ .fdemo-demo-banner-text{ display:none; } }
@@ -321,7 +329,14 @@
 .fdemo-btn:disabled{ cursor:not-allowed; opacity:.5; }
 .fdemo-btn.variant-primary{
   background:linear-gradient(90deg, var(--dc-accent) 0%, var(--dc-accent-cyan) 100%);
-  color:#fff;
+  /* EL UNICO CAMBIO VISIBLE DE ESTA FASE, y esta medido.
+     El texto blanco sobre este degradado da 3,69 en el extremo azul y 1,82 en
+     el cian: el boton principal de la demo era ilegible en su propia mitad
+     derecha. El degradado NO se toca —es el elemento aprobado—; lo que cambia
+     es la tinta, que pasa a azul muy oscuro: 5,06 sobre el azul y 10,24 sobre
+     el cian, o sea por encima del umbral en TODO el recorrido del degradado.
+     Para revertir: volver a color:#fff en esta linea. */
+  color:#06121f;
 }
 .fdemo-btn.variant-primary:hover{ filter:brightness(1.1); }
 .fdemo-btn.variant-secondary{ border-color:var(--dc-border-strong); background:var(--dc-surface-2); color:var(--dc-text); }

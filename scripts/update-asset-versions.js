@@ -61,6 +61,15 @@ const dcp8CssHash = hashFile('assets/css/dcp8.css');
 const dcp8JsHash = hashFile('assets/js/dcp8.js');
 // dcp9 son las composiciones atadas a un bloque concreto del contenido.
 const dcp9JsHash = hashFile('assets/js/dcp9.js');
+/* La demo de Finance tenia su ?v= escrito a mano ("?v=2") y este script no la
+   conocia: al cambiar su CSS, produccion podia seguir sirviendo los bytes
+   viejos bajo la misma URL. Es exactamente lo que este script existe para
+   evitar, asi que ahora tambien la versiona por el hash de su contenido. */
+const finCssHash  = hashFile('assets/css/finance-demo.css');
+const finJsHash   = hashFile('assets/js/finance-demo.js');
+const finJsEnHash = hashFile('assets/js/finance-demo.en.js');
+const finDataHash   = hashFile('assets/js/finance-demo-data.js');
+const finDataEnHash = hashFile('assets/js/finance-demo-data.en.js');
 
 const htmlFiles = findHtmlFiles(ROOT, []);
 let changed = 0;
@@ -78,7 +87,12 @@ for (const file of htmlFiles) {
     .replace(/dcp7\.js\?v=[A-Za-z0-9_-]+/g, `dcp7.js?v=${dcp7JsHash}`)
     .replace(/dcp8\.css\?v=[A-Za-z0-9_-]+/g, `dcp8.css?v=${dcp8CssHash}`)
     .replace(/dcp8\.js\?v=[A-Za-z0-9_-]+/g, `dcp8.js?v=${dcp8JsHash}`)
-    .replace(/dcp9\.js\?v=[A-Za-z0-9_-]+/g, `dcp9.js?v=${dcp9JsHash}`);
+    .replace(/dcp9\.js\?v=[A-Za-z0-9_-]+/g, `dcp9.js?v=${dcp9JsHash}`)
+    .replace(/finance-demo\.css\?v=[A-Za-z0-9_-]+/g, `finance-demo.css?v=${finCssHash}`)
+    .replace(/finance-demo\.en\.js\?v=[A-Za-z0-9_-]+/g, `finance-demo.en.js?v=${finJsEnHash}`)
+    .replace(/finance-demo-data\.en\.js\?v=[A-Za-z0-9_-]+/g, `finance-demo-data.en.js?v=${finDataEnHash}`)
+    .replace(/finance-demo-data\.js\?v=[A-Za-z0-9_-]+/g, `finance-demo-data.js?v=${finDataHash}`)
+    .replace(/finance-demo\.js\?v=[A-Za-z0-9_-]+/g, `finance-demo.js?v=${finJsHash}`);
   if (updated !== original) {
     fs.writeFileSync(file, updated, 'utf8');
     changed++;
@@ -96,4 +110,5 @@ console.log(`dcp7.js    -> ?v=${dcp7JsHash}`);
 console.log(`dcp8.css   -> ?v=${dcp8CssHash}`);
 console.log(`dcp8.js    -> ?v=${dcp8JsHash}`);
 console.log(`dcp9.js    -> ?v=${dcp9JsHash}`);
+console.log(`finance-demo.css -> ?v=${finCssHash}`);
 console.log(`Archivos .html actualizados: ${changed}/${htmlFiles.length}`);
