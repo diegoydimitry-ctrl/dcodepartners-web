@@ -137,6 +137,353 @@
     }
   };
 
+  /* ----------------------------------------------------------------- TRAZA
+     /casos-exito. Cada caso ocupaba dos columnas: a la derecha cuatro tiempos
+     —Problema, Antes, Automatizacion, Que aprendimos— y a la izquierda un
+     numero, una etiqueta y despues 250 px de nada, tres veces seguidas.
+
+     Ese hueco es el sitio natural para lo que el caso afirma: como se hacia y
+     como se hace. La linea de la izquierda es el trabajo a mano —a trozos,
+     con huecos cada vez mas grandes, y se apaga—; la de la derecha es lo que
+     queda funcionando, continua a partir del tiempo en que arranca.
+
+     Las cuatro marcas NO estan repartidas a ojo: se leen las posiciones reales
+     de los cuatro bloques de texto, asi que el dibujo y la lectura van a la
+     misma altura aunque el texto crezca o cambie de idioma.
+
+     El caso 03 no es de automatizacion —lo dice el propio texto: "es un caso
+     de disciplina"—, asi que no dibuja lo mismo: ahi la linea que continua no
+     es la que se automatizo, es la que se comprobo contra la evidencia, y la
+     hipotesis se separa y se pierde. Un instrumento que dijera lo mismo en los
+     tres casos estaria decorando, no contando. */
+  COMP.traza = {
+    dibujar: function (ctx, W, H, tm, host, est) {
+      if (!est.m) {
+        var caja = host.getBoundingClientRect();
+        var lado = host.querySelector('.case5-side');
+        var bs = host.querySelectorAll('.case5-beat');
+        var ys = [], i;
+        for (i = 0; i < bs.length; i++) {
+          var r = bs[i].getBoundingClientRect();
+          ys.push(r.top + 11 - caja.top);
+        }
+        var lr = lado ? lado.getBoundingClientRect() : null;
+        var tono = (getComputedStyle(host).getPropertyValue('--k') || '').trim();
+        est.m = {
+          ys: ys,
+          x0: 6,
+          x1: lr ? (lr.right - caja.left) : W * 0.30,
+          arriba: lr ? (lr.bottom - caja.top + 26) : 60,
+          tono: /^#|^rgb/.test(tono) ? tono : 'rgba(120,190,255,1)',
+          modo: host.getAttribute('data-traza') || 'auto'
+        };
+      }
+      var m = est.m;
+      if (m.ys.length < 4 || m.x1 - m.x0 < 90) return;
+
+      var izq = m.x0 + 10, der = m.x1 - 12;
+      var y0 = Math.max(m.arriba, m.ys[0] - 20), y1 = m.ys[3] + 46;
+      if (y1 - y0 < 90) return;
+      var corte = m.ys[m.modo === 'disciplina' ? 1 : 2];   // donde deja de hacerse a mano
+
+      /* A MANO: no una linea, sino la repeticion. Cada marca es una vez que
+         alguien tuvo que acordarse de hacerlo. Se amontonan, no son iguales
+         entre si, y se acaban: eso es lo que el caso cuenta. */
+      var n = 0, y = y0;
+      var paso = Math.max(9, (corte - y0) / 22);
+      while (y < corte - 2) {
+        var s1 = 0.55 + 0.45 * ((n * 2654435761 % 97) / 97);
+        var w = (der - izq) * (0.30 + 0.44 * s1);
+        var desp = (der - izq) * 0.06 * (((n * 40503) % 71) / 71 - 0.5);
+        ctx.strokeStyle = 'rgba(150,168,204,' + (0.22 + 0.30 * clamp((corte - y) / 150)).toFixed(3) + ')';
+        ctx.lineWidth = 1.1;
+        ctx.beginPath(); ctx.moveTo(izq + desp, y); ctx.lineTo(izq + desp + w, y); ctx.stroke();
+        y += paso; n++;
+      }
+
+      /* SOLO: a partir del tiempo en que arranca, una sola linea que ya no se
+         interrumpe y se sale por abajo del caso. */
+      var xs = der - (der - izq) * 0.16;
+      var g = ctx.createLinearGradient(0, corte - 16, 0, y1);
+      g.addColorStop(0, 'rgba(150,168,204,0)');
+      g.addColorStop(0.30, m.tono); g.addColorStop(1, m.tono);
+      ctx.strokeStyle = g; ctx.lineWidth = 2.1;
+      ctx.beginPath();
+      if (m.modo === 'disciplina') {
+        /* El caso 03 no es de automatizacion: lo dice su propio texto. Aqui la
+           que sigue es la linea que se comprobo contra la evidencia, y se
+           desvia de donde apuntaba la sospecha. */
+        ctx.moveTo(xs, corte - 16); ctx.lineTo(xs, m.ys[2] - 6);
+        ctx.bezierCurveTo(xs, m.ys[2] + 20, xs - 26, m.ys[2] + 14, xs - 30, m.ys[2] + 42);
+        ctx.lineTo(xs - 30, y1);
+      } else {
+        ctx.moveTo(xs, corte - 16); ctx.lineTo(xs, y1);
+      }
+      ctx.stroke();
+
+      if (m.modo === 'disciplina') {
+        ctx.strokeStyle = 'rgba(255,86,168,.40)';
+        ctx.lineWidth = 1.2; ctx.setLineDash([4, 6]);
+        ctx.beginPath(); ctx.moveTo(xs, m.ys[2] - 6); ctx.lineTo(xs, m.ys[3] + 10); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      /* El punto donde una cosa deja de hacerse y empieza la otra. */
+      ctx.fillStyle = m.tono;
+      ctx.beginPath(); ctx.arc(xs, corte - 16, 3.4, 0, 6.2832); ctx.fill();
+      ctx.strokeStyle = m.tono; ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(izq, corte - 16); ctx.lineTo(xs - 6, corte - 16); ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      /* Un pulso, lento, solo por lo que sigue funcionando. */
+      var u = (tm * 0.00016) % 1;
+      var arr = corte - 16;
+      var py = arr + (y1 - arr) * u;
+      var px = xs - (m.modo === 'disciplina' && py > m.ys[2] + 36 ? 30 : 0);
+      ctx.fillStyle = m.tono;
+      ctx.globalAlpha = 0.25 + 0.60 * Math.sin(u * 3.1416);
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, 6.2832); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  };
+
+  /* -------------------------------------------------------------- CIRCUITO
+     /sistema-financiero dice, con estas palabras: "no es una pantalla de
+     facturas con graficos alrededor: es el circuito completo del dinero de una
+     empresa". Y debajo habia catorce filas en dos columnas. Una tabla.
+
+     Aqui las catorce siguen siendo catorce filas legibles —no se toca el
+     texto ni el orden— pero estan enhebradas en un circuito que se cierra: baja
+     por la primera columna, salta a la segunda, baja, y vuelve por fuera hasta
+     el principio. Un pulso lo recorre entero, siempre en el mismo sentido.
+
+     No hay ninguna cifra aqui, ni ninguna forma que insinue una. Es la
+     topologia de lo que la pagina afirma, no un grafico de datos que no
+     existen. Cada nodo esta a la altura real de su fila, leida del DOM. */
+  COMP.circuito = {
+    dibujar: function (ctx, W, H, tm, host, est) {
+      if (!est.m) {
+        var caja = host.getBoundingClientRect();
+        var fs = host.querySelectorAll('.spec');
+        if (fs.length < 4) { est.m = { no: true }; return; }
+        var izq = [], der = [], medio = caja.left + caja.width * 0.5, i;
+        for (i = 0; i < fs.length; i++) {
+          var r = fs[i].getBoundingClientRect();
+          var p = { y: r.top + 13 - caja.top, x: r.left - caja.left };
+          (r.left + r.width * 0.5 < medio ? izq : der).push(p);
+        }
+        /* En una sola columna no hay dos ramales que enhebrar: se dibuja un
+           unico recorrido y punto. */
+        est.m = { izq: izq, der: der, una: der.length === 0, ancho: caja.width };
+      }
+      var m = est.m;
+      if (m.no || !m.izq.length) return;
+
+      var col = m.una ? [m.izq] : [m.izq, m.der];
+      var xr = [], k, i2;
+      for (k = 0; k < col.length; k++) xr.push(col[k][0].x - 17);
+
+      /* El recorrido completo, como una sola lista de puntos. */
+      var ruta = [];
+      for (k = 0; k < col.length; k++) {
+        for (i2 = 0; i2 < col[k].length; i2++) ruta.push({ x: xr[k], y: col[k][i2].y });
+      }
+
+      var y0 = ruta[0].y, yN = ruta[ruta.length - 1].y;
+      var vuelta = yN + 30;                       // por donde regresa
+      var fuera = Math.max(4, xr[0] - 34);
+
+      function trazado() {
+        ctx.beginPath();
+        ctx.moveTo(xr[0], y0);
+        for (k = 0; k < col.length; k++) {
+          var ul = col[k][col[k].length - 1].y;
+          ctx.lineTo(xr[k], ul);
+          if (k < col.length - 1) {
+            /* El salto de columna: baja un poco, cruza y vuelve a subir. */
+            ctx.bezierCurveTo(xr[k], ul + 26, xr[k + 1], col[k + 1][0].y - 30,
+                              xr[k + 1], col[k + 1][0].y);
+          }
+        }
+        /* Y el retorno: por debajo y por fuera, hasta el punto de partida.
+           Esto es lo que lo convierte en circuito y no en lista. */
+        var ux = xr[col.length - 1];
+        ctx.bezierCurveTo(ux, vuelta, ux - 20, vuelta + 4, ux - 46, vuelta + 4);
+        ctx.lineTo(fuera + 16, vuelta + 4);
+        ctx.bezierCurveTo(fuera, vuelta + 4, fuera, vuelta - 12, fuera, vuelta - 30);
+        ctx.lineTo(fuera, y0 - 14);
+        ctx.bezierCurveTo(fuera, y0 - 24, fuera + 8, y0 - 26, fuera + 18, y0 - 26);
+        ctx.lineTo(xr[0] - 8, y0 - 26);
+        ctx.bezierCurveTo(xr[0], y0 - 26, xr[0], y0 - 18, xr[0], y0);
+      }
+
+      trazado();
+      ctx.strokeStyle = 'rgba(78,128,255,.26)';
+      ctx.lineWidth = 1.2; ctx.stroke();
+
+      /* El pulso: un tramo corto de luz que recorre el circuito entero. Con
+         line-dash sobre el propio trazado va exactamente por donde va la
+         linea, sin recalcular la geometria en cada fotograma. */
+      var largo = 0;
+      for (k = 0; k < col.length; k++) largo += Math.abs(col[k][col[k].length - 1].y - col[k][0].y);
+      largo += (vuelta - y0) + (xr[col.length - 1] - fuera) * 2 + 140;
+      var av = ((tm * 0.035) % largo);
+      trazado();
+      ctx.setLineDash([54, Math.max(10, largo)]);
+      ctx.lineDashOffset = -av;
+      ctx.strokeStyle = 'rgba(46,216,240,.85)';
+      ctx.lineWidth = 2; ctx.stroke();
+      ctx.setLineDash([]); ctx.lineDashOffset = 0;
+
+      /* Las catorce estaciones, cada una a la altura de su fila. */
+      for (k = 0; k < col.length; k++) {
+        for (i2 = 0; i2 < col[k].length; i2++) {
+          ctx.fillStyle = 'rgba(10,14,26,1)';
+          ctx.beginPath(); ctx.arc(xr[k], col[k][i2].y, 3.6, 0, 6.2832); ctx.fill();
+          ctx.strokeStyle = 'rgba(120,168,255,.72)'; ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(xr[k], col[k][i2].y, 3.1, 0, 6.2832); ctx.stroke();
+        }
+      }
+    }
+  };
+
+  /* ------------------------------------------------- LAS TRES DE SERVICIO
+     Las tres paginas de servicio tenian la misma forma y, en el hueco de la
+     derecha, una ventana con una barra de titulo y un nombre de fichero que no
+     existe ("para-quien.md"). Cromo falso: no aporta y miente un poco.
+
+     En su sitio, cada una tiene ahora una composicion que sale de SU frase.
+     Son tres ideas distintas a proposito: si las tres dibujaran lineas con
+     nodos, seguirian siendo la misma pagina con otro fondo. */
+
+  /* EL CICLO — /servicios/automatizacion-ia
+     "Lo que hoy se hace a mano cada semana pasa a ejecutarse solo."
+     Siete ejecuciones encadenadas. Las primeras llevan encima el tallo de la
+     mano que tuvo que acordarse; a partir de cierto punto el tallo desaparece
+     y el encadenado sigue igual de vivo. */
+  COMP.ciclo = {
+    dibujar: function (ctx, W, H, tm) {
+      var N = 7, m = 16, an = (W - m * 2) / N, yb = H * 0.66, r = Math.min(an * 0.5, H * 0.22);
+      var fase = (tm * 0.00013) % 1;
+      for (var i = 0; i < N; i++) {
+        var cx = m + an * (i + 0.5);
+        var manual = i < 3;
+        var vivo = 0.34 + 0.52 * ease(clamp((i + 1) / N + 0.15));
+        ctx.strokeStyle = manual ? 'rgba(150,168,204,.42)' : rgba(C.cian, vivo);
+        ctx.lineWidth = manual ? 1.2 : 1.9;
+        ctx.beginPath(); ctx.arc(cx, yb, r, 3.1416, 0); ctx.stroke();
+        /* el cierre por abajo: cada ejecucion entrega a la siguiente */
+        if (i < N - 1) {
+          ctx.beginPath(); ctx.moveTo(cx + r, yb); ctx.lineTo(cx + an - r, yb); ctx.stroke();
+        }
+        if (manual) {
+          /* el tallo: alguien tuvo que estar ahi */
+          ctx.strokeStyle = 'rgba(150,168,204,.50)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(cx, yb - r); ctx.lineTo(cx, yb - r - 16); ctx.stroke();
+          ctx.fillStyle = 'rgba(150,168,204,.62)';
+          ctx.beginPath(); ctx.arc(cx, yb - r - 19, 2.4, 0, 6.2832); ctx.fill();
+        }
+      }
+      /* un solo paso recorriendo el encadenado, siempre en el mismo sentido */
+      var u = fase * N, k = Math.floor(u), fr = u - k;
+      var cx2 = m + an * (k + 0.5), a = 3.1416 - 3.1416 * fr;
+      ctx.fillStyle = rgba(C.luz, 0.86);
+      ctx.beginPath(); ctx.arc(cx2 + Math.cos(a) * r, yb - Math.sin(a) * r, 3, 0, 6.2832); ctx.fill();
+      /* la linea de suelo: lo que queda funcionando sin nadie encima */
+      ctx.strokeStyle = 'rgba(46,216,240,.16)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(m, yb); ctx.lineTo(W - m, yb); ctx.stroke();
+    }
+  };
+
+  /* EL HILO — /servicios/agentes-ia
+     "No es un chatbot aislado... y sabe cuando pasar la conversacion a una
+     persona." Un hilo que va y viene, y en un punto se abre un ramal que
+     termina en una persona. El hilo no se corta: sigue. */
+  COMP.hilo = {
+    dibujar: function (ctx, W, H, tm) {
+      var eje = W * 0.30, y0 = H * 0.10, y1 = H * 0.90, N = 9;
+      var salto = 6;                                   // donde escala
+      ctx.strokeStyle = rgba(C.violeta, 0.30); ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(eje, y0); ctx.lineTo(eje, y1); ctx.stroke();
+
+      var t = (tm * 0.00022) % 1;
+      for (var i = 0; i < N; i++) {
+        var y = y0 + (y1 - y0) * ((i + 0.5) / N);
+        var dcha = i % 2 === 1;
+        var largo = W * (0.10 + 0.13 * ((i * 37 % 11) / 11));
+        var x2 = dcha ? eje + largo : eje - largo;
+        var brillo = 0.30 + 0.55 * Math.max(0, 1 - Math.abs(((i + 0.5) / N) - t) * 6);
+        ctx.strokeStyle = dcha ? rgba(C.cian, brillo) : rgba(C.lav, brillo * 0.85);
+        ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(eje, y); ctx.lineTo(x2, y); ctx.stroke();
+      }
+
+      /* el ramal a una persona: sale, no vuelve, y el hilo continua */
+      var ys = y0 + (y1 - y0) * ((salto + 0.5) / N);
+      ctx.strokeStyle = rgba(C.verde, 0.72); ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(eje, ys);
+      ctx.bezierCurveTo(eje + W * 0.22, ys, eje + W * 0.26, ys + 18, eje + W * 0.40, ys + 22);
+      ctx.stroke();
+      var px = eje + W * 0.40, py = ys + 22;
+      ctx.fillStyle = rgba(C.verde, 0.95);
+      ctx.beginPath(); ctx.arc(px, py, 3.4, 0, 6.2832); ctx.fill();
+      ctx.strokeStyle = rgba(C.verde, 0.34); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(px, py, 8.5, 0, 6.2832); ctx.stroke();
+    }
+  };
+
+  /* LA PUERTA — /servicios/integraciones
+     "Tu CRM, tu ERP, tu web y tus hojas, conectados con los permisos minimos
+     necesarios." Lo que importa no es que haya cables: es que hay una puerta,
+     y que no pasa todo. Las que no tienen permiso llegan y se paran. */
+  COMP.puerta = {
+    dibujar: function (ctx, W, H, tm) {
+      var xa = W * 0.10, xb = W * 0.90, xp = W * 0.50;
+      var N = 5, pasan = [1, 1, 0, 1, 0];        // no pasa todo: ese es el punto
+      var y0 = H * 0.20, y1 = H * 0.80;
+      var t = (tm * 0.00026) % 1;
+
+      for (var i = 0; i < N; i++) {
+        var y = y0 + (y1 - y0) * (N === 1 ? 0.5 : i / (N - 1));
+        var yc = H * 0.5;
+        ctx.strokeStyle = rgba(C.azul, 0.42); ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(xa, y);
+        ctx.bezierCurveTo(xa + (xp - xa) * 0.55, y, xp - (xp - xa) * 0.35, yc, xp - 13, yc);
+        ctx.stroke();
+        ctx.fillStyle = rgba(C.azul, 0.85);
+        ctx.beginPath(); ctx.arc(xa, y, 3, 0, 6.2832); ctx.fill();
+
+        if (pasan[i]) {
+          ctx.strokeStyle = rgba(C.verde, 0.60); ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(xp + 13, yc);
+          ctx.bezierCurveTo(xp + (xb - xp) * 0.35, yc, xb - (xb - xp) * 0.55, y, xb, y);
+          ctx.stroke();
+          ctx.fillStyle = rgba(C.verde, 0.85);
+          ctx.beginPath(); ctx.arc(xb, y, 3, 0, 6.2832); ctx.fill();
+        } else {
+          /* llega y se para. Sin drama y sin rojo de error: simplemente no
+             tiene permiso, que es como debe ser. */
+          ctx.strokeStyle = 'rgba(150,168,204,.30)'; ctx.lineWidth = 1.2;
+          ctx.setLineDash([3, 5]);
+          ctx.beginPath(); ctx.moveTo(xp + 13, yc); ctx.lineTo(xp + 34, yc); ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
+      /* la puerta */
+      var yc2 = H * 0.5, alto = (y1 - y0) * 0.30;
+      ctx.strokeStyle = rgba(C.cian, 0.80); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(xp, yc2 - alto); ctx.lineTo(xp, yc2 - 9); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(xp, yc2 + 9); ctx.lineTo(xp, yc2 + alto); ctx.stroke();
+      /* y lo que la cruza, de uno en uno */
+      ctx.fillStyle = rgba(C.luz, 0.30 + 0.62 * Math.sin(t * 3.1416));
+      ctx.beginPath(); ctx.arc(xp - 13 + 26 * t, yc2, 3.2, 0, 6.2832); ctx.fill();
+    }
+  };
+
   /* ----------------------------------------------------------------- MOTOR */
   function montar(host) {
     var nombre = host.getAttribute('data-comp');

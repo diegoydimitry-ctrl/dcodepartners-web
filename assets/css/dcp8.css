@@ -451,3 +451,48 @@ body.v7 .trenza{
   margin:-4px 0 clamp(2px,0.8vw,10px);
 }
 @media (max-width:760px){ body.v7 .trenza{ height:96px; } }
+
+/* La traza de cada caso vive en el hueco de la columna izquierda. El lienzo
+   cubre el articulo entero para poder leer la altura real de cada tiempo, asi
+   que el texto tiene que quedar por encima. */
+body.v7 .case5{ position:relative; }
+body.v7 .case5 > div{ position:relative; z-index:1; }
+body.v7 .case5 > canvas{ z-index:0; }
+/* En vertical no hay columna izquierda que rellenar: el dibujo se retira en
+   vez de meterse debajo del texto. */
+@media (max-width:860px){ body.v7 .case5 > canvas{ display:none; } }
+
+/* El circuito de /sistema-financiero necesita carril a la izquierda de cada
+   columna y un pasillo por debajo para el retorno. Las catorce filas no se
+   tocan: solo se les hace sitio. */
+body.v7 .specs[data-comp]{
+  position:relative;
+  padding-left:58px; padding-bottom:52px;
+}
+body.v7 .specs[data-comp] > canvas{ z-index:0; }
+body.v7 .specs[data-comp] > .spec{ position:relative; z-index:1; }
+@media (max-width:760px){
+  body.v7 .specs[data-comp]{ padding-left:28px; padding-bottom:44px; }
+}
+
+/* ==========================================================================
+   LAS TRES DE SERVICIO — el aparte y su pieza
+   Donde habia una ventana con barra de titulo y un nombre de fichero que no
+   existe, ahora hay un aparte apoyado en un filo y, encima, la composicion
+   propia de ese servicio.
+   ========================================================================== */
+body.v7 .pieza{
+  position:relative; height:clamp(150px,15vw,196px); margin-bottom:26px;
+}
+body.v7 .aparte{
+  display:block; position:relative; padding:2px 0 2px 20px;
+}
+body.v7 .aparte::before{
+  content:""; position:absolute; left:0; top:4px; bottom:4px; width:1px;
+  background:linear-gradient(180deg,
+    rgba(46,216,240,.12), rgba(46,216,240,.72) 20%, rgba(46,216,240,.72) 80%, rgba(46,216,240,.12));
+}
+body.v7 .aparte h3{ margin-top:0; }
+@media (max-width:760px){
+  body.v7 .pieza{ height:132px; margin-bottom:20px; }
+}
