@@ -2952,7 +2952,17 @@ footer{
   .has-mega.mega-open .mega-menu{ display:grid; }
   .has-mega .mega-trigger{ width:100%; justify-content:space-between; }
   .mega-item{ padding:10px 0; }
-  .mega-item.wide{ display:none; }
+  /* "Ver todas las capacidades" NO se oculta en movil.
+     Medido recorriendo el menu con el movil: pulsar "Capacidades" abre el
+     submenu pero NO navega —es un desplegable—, y este era el unico enlace
+     del menu que llevaba al hub /departamentos. Oculto aqui, el hub quedaba
+     inalcanzable desde el menu movil: desde cualquier pagina interior no
+     habia forma de llegar a el. Se queda, con su filo separandolo de las
+     ocho fichas. */
+  .mega-item.wide{
+    display:block; border-top:1px solid var(--border); border-radius:0;
+    margin-top:6px; padding-top:12px;
+  }
 }
 
 @media (max-width: 760px){

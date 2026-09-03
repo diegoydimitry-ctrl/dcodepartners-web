@@ -898,7 +898,16 @@
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      var button = form.querySelector('button');
+      /* EL BOTON DE ENVIAR, NO EL PRIMERO QUE HAYA.
+         form.querySelector('button') devolvia #form-back-btn —"Atras"—,
+         porque en un formulario de cuatro pasos ese es el primer boton del
+         DOM. Consecuencia medida: al enviar se bloqueaba y se renombraba el
+         boton de VOLVER, mientras el de enviar seguia activo, asi que se podia
+         pulsar otra vez y mandar el mismo lead dos veces. */
+      var button = document.getElementById('form-submit-btn') ||
+                   form.querySelector('button[type="submit"]') ||
+                   form.querySelector('button');
+      var textoBoton = button.textContent;
 
       if (typeof turnstile === 'undefined') {
         note.textContent = 'No se pudo cargar la verificación anti-spam. Recarga la página e inténtalo de nuevo.';
@@ -976,7 +985,11 @@
         console.error('[contact-form] Excepción inesperada al enviar el formulario:', err);
       } finally {
         button.disabled = false;
-        button.textContent = 'Solicitar mi Mes Gratuito';
+        /* Y se devuelve SU texto, el que tenia. Antes escribia aqui
+           "Solicitar mi Mes Gratuito": una oferta retirada de toda la web
+           hace varias fases, que reaparecia en el boton en cuanto alguien
+           intentaba enviar el formulario. */
+        button.textContent = textoBoton;
       }
     });
   }
