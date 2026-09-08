@@ -114,3 +114,90 @@ verdad en dos ocasiones y **no hay ni un solo registro de severidad SEGURIDAD**.
 El sistema hace lo que debe. Lo que falla está alrededor: avisos correctos que
 nadie lee, y una rutina de validación paralela que compara contra un sistema
 apagado.
+
+---
+
+## Semana del 1 al 7 de septiembre de 2026 · comprobado el 08/09/2026
+
+### Pasadas del orquestador RRSS/00
+
+Las tres pasadas Mié/Vie/Lun se ejecutaron y **cerraron COMPLETADA**, verificado
+tanto en `RRSS_Runs` como en las ejecuciones de n8n del propio `RRSS/00 -
+Orquestador`:
+
+| Fecha | Ejecución | Estado | Etapas |
+|---|---|---|---|
+| Mié 02/09 07:00 | RUN-3714-dcode | COMPLETADA | 01→09 todas OK |
+| Vie 04/09 07:00 | RUN-3958-dcode | COMPLETADA | 01→09 todas OK |
+| Lun 07/09 07:00 | RUN-4326-dcode | COMPLETADA | 01→09 todas OK |
+
+Todas en `modo: Produccion`, `modo_ejecucion: DRY_RUN`. Publicaciones reales: 0.
+
+### RRSS_NoPublishLog — 5 registros
+
+Ninguno de severidad **SEGURIDAD**. Sin sellos inválidos, sin intentos
+huérfanos, sin saltos de aprobación ni de QA.
+
+- **02/09 — QA_FALLIDO** (RRSS/06 QA-A, Producción). Puntuación 55/70: la pieza
+  afirmaba «la empresa empieza a liberar horas desde el primer mes» como hecho
+  general sin condicionarlo ni acotarlo a un caso concreto. Bloqueada antes de
+  llegar a adaptar ningún canal.
+- **04/09 — QA_FALLIDO** (RRSS/06 QA-B, Producción, variante Instagram).
+  Puntuación 52/70: contenido fiel a la pieza base, pero formato de «muro de
+  texto» sin los saltos visuales que exige el canal. La variante de LinkedIn de
+  esa misma pieza **sí pasó** (88/100).
+- **02/09, 04/09 y 07/09 — QA_A_NO_PASS** (RRSS/09, `modo: Prueba`,
+  INFORMATIVO). Los tres apuntan al mismo registro fixture `rectxZ2KjSBBqPGNm`
+  de siempre — ruido ya señalado en la entrada anterior, sigue sin resolverse.
+
+### Hallazgo nuevo: por primera vez hay contenido esperando una decisión humana
+
+**07/09 es la primera pasada de todo el expediente en la que la pieza base y
+las dos variantes superan el QA completo el mismo día**: pieza base 88/100,
+LinkedIn 93/100, Instagram 76/100. Sumada a la variante de LinkedIn del 04/09
+(88/100, que había quedado huérfana porque su hermana de Instagram falló),
+**hay dos piezas de LinkedIn en `QA_PASS` con `notificado_en` cumplimentado** —
+es decir, ya incluidas en el dossier que `RRSS/07 - Aprobacion` envía al
+aprobador — y la de Instagram del 07/09 igual.
+
+Comprobado contra `RRSS_Approvals`: **cero decisiones humanas registradas en
+toda la semana**. No es un fallo — `RRSS/07` exige precisamente esa aprobación
+sellada antes de dejar pasar nada, y aquí no ha hecho falta bloquear nada
+porque nadie ha decidido todavía — pero es la primera vez que hay contenido
+real, en `Produccion`, aprobado por QA y esperando a una persona. Vale la pena
+que el aprobador (`email_aprobador` del Tenant) revise el dossier: son los
+primeros candidatos genuinos que ha producido el sistema desde que arrancó.
+
+### RRSS/ERR — Captura de Fallos
+
+Cero ejecuciones en la semana. Ningún error real capturado.
+
+### Comparación con el ritmo de MK/ — sigue sin proceder
+
+`MK/Contenido IA Redes Sociales` sigue `active: false`. Su Data Table
+*Contenido IA Redes Sociales* no ha recibido ninguna escritura nueva: sigue
+congelada en **2026-08-21T07:01:00Z**, la misma marca que la semana pasada.
+Nada que comparar.
+
+### Seguimiento de lo anotado la semana anterior
+
+1. **`ADM/Backup RRSS`** — sigue corregido; no se ha vuelto a comprobar esta
+   semana porque no era el objeto de este chequeo.
+2. **`RUN-2141-dcode`** — sigue **EN_CURSO desde el 21/08**, ya van 18 días.
+   Sigue sin bloquear pasadas nuevas (las tres de esta semana corrieron y
+   cerraron con normalidad), pero como cerrojo blando contra solapes es un
+   registro que ya no representa nada real y sigue falseando cualquier
+   recuento de pasadas abiertas.
+3. **Inanición de pilares** — no verificable esta semana: el pilar *Actualidad*
+   no volvió a salir elegido, así que no hay nueva evidencia ni a favor ni en
+   contra de la hipótesis.
+
+### Veredicto
+
+Tres pasadas, tres COMPLETADA, cero SEGURIDAD, cero errores técnicos. El QA
+volvió a discriminar de verdad dos veces (55/70 y 52/70) y, por primera vez,
+dejó pasar contenido real completo: dos piezas de LinkedIn y una de Instagram
+esperan hoy una decisión humana que todavía no se ha tomado. Nada de esto
+requiere aviso inmediato — es exactamente el comportamiento para el que se
+construyó la cadena —, pero es el primer punto de la validación paralela en el
+que "qué pasaría si se aprobara" deja de ser hipotético.
