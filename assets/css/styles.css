@@ -3081,6 +3081,21 @@ footer{
 .chat-msg.bot a{ color:var(--cyan); text-decoration:underline; text-underline-offset:2px; }
 .chat-msg.bot a:hover{ color:var(--ink); }
 .chat-msg-note{ margin-top:8px !important; font-size:0.76rem; color:var(--stone-soft); }
+/* Cursor parpadeante mientras el mensaje se está escribiendo en streaming
+   (ver assets/js/main.js). Se engancha al último párrafo para que quede
+   pegado al texto en vez de en una línea suelta debajo. */
+.chat-msg.bot.streaming p:last-child::after{
+  content:'';
+  display:inline-block;
+  width:2px; height:0.9em;
+  margin-left:2px;
+  background:currentColor;
+  opacity:.6;
+  vertical-align:text-bottom;
+  animation:chatCursorBlink 0.9s step-end infinite;
+}
+@keyframes chatCursorBlink{ 50%{ opacity:0; } }
+@media (prefers-reduced-motion: reduce){ .chat-msg.bot.streaming p:last-child::after{ animation:none; } }
 .chat-typing{
   align-self:flex-start;
   display:flex;

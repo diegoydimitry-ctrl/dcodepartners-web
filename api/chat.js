@@ -1,16 +1,33 @@
 /**
  * Endpoint del asistente de IA de D-Code Partners.
  *
- * Arquitectura, deliberadamente simple: Frontend → este endpoint → Gemini →
- * respuesta. No hay capas de reglas, FAQs ni respuestas preescritas: cada
- * mensaje se envía siempre al modelo (lib/providers.js), con el contenido
- * real del sitio (assets/data/knowledge-base.json) como contexto en el
- * system prompt. Si el modelo no puede responder (sin proveedor
- * configurado, error de conexión, cuota agotada, API caída), se devuelve un
- * mensaje honesto explicando el motivo — nunca una respuesta de repuesto
- * que aparente venir del modelo.
+ * Arquitectura: Frontend → este endpoint → cadena de proveedores LLM
+ * (lib/providers.js) → texto en streaming. No hay capas de reglas, FAQs ni
+ * respuestas preescritas: cada mensaje se envía siempre al modelo, con el
+ * contenido real del sitio (assets/data/knowledge-base.json) como contexto
+ * en el system prompt.
+ *
+ * CONTRATO DE RESPUESTA — texto plano en streaming, no JSON.
+ * AUD-DCP 08/09/2026. El contrato anterior era `{success, reply, mode,
+ * providerErrorReason}` en un único JSON al final de la petición. Se
+ * sustituye por `Content-Type: text/plain` con el cuerpo emitido en
+ * fragmentos según se genera: el frontend ya no tiene que esperar a que
+ * termine toda la respuesta para empezar a mostrarla, y no necesita
+ * distinguir formatos — cualquier respuesta de este endpoint (una
+ * generación real, un aviso de límite de uso, un error de configuración)
+ * es directamente el texto que hay que enseñar en el chat. Sin excepción:
+ * el estado HTTP no cambia ese hecho, así que un 429/500 sigue llevando un
+ * cuerpo legible por si algo fuera de este código llega a inspeccionarlo.
+ *
+ * RESILIENCIA — cadena de proveedores, no reintento del mismo proveedor.
+ * Si el proveedor principal no responde con contenido real (falla al
+ * conectar, o conecta pero no emite ningún texto), se prueba el siguiente
+ * de la cadena antes de darse por vencido. Solo se escribe algo al
+ * navegador en cuanto hay contenido real que enseñar — así una caída del
+ * proveedor principal nunca se ve como una respuesta a medias ni como un
+ * error crudo, salvo que fallen TODOS los proveedores configurados.
  */
-const { getProvider } = require('../lib/providers');
+const { getProviderChain, MAX_STREAM_MS } = require('../lib/providers');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
@@ -56,9 +73,9 @@ let cachedSiteContext = null;
  * scripts/build-knowledge-base.js a partir del HTML publicado) y lo
  * concatena entero como contexto. El sitio es pequeño (~7.500 tokens en
  * total): cabe sin problema en una sola petición, así que no hace falta
- * recuperación selectiva — Gemini ve todo el contenido real y decide qué
- * es relevante para cada pregunta, en vez de depender de que un ranking
- * léxico haya elegido el fragmento correcto de antemano.
+ * recuperación selectiva — el modelo ve todo el contenido real y decide
+ * qué es relevante para cada pregunta, en vez de depender de que un
+ * ranking léxico haya elegido el fragmento correcto de antemano.
  */
 function loadSiteContext() {
   if (cachedSiteContext) return cachedSiteContext;
@@ -100,63 +117,23 @@ Contenido real publicado en el sitio de D-Code Partners (todas las páginas — 
 ${siteContext}`;
 }
 
-/**
- * Traduce un fallo de proveedor en un mensaje honesto para el usuario, sin
- * disfrazarlo de respuesta generada. Estas categorías son exactamente las
- * únicas excepciones en las que el asistente no responde con Gemini:
- * error de conexión, límite de cuota, o la API caída/rechazando la
- * petición por otro motivo.
- */
-function classifyError(error) {
-  const raw = String((error && error.message) || error || '');
-  const lower = raw.toLowerCase();
-
-  if (/estado 429|resource_exhausted|quota|rate limit/.test(lower)) {
-    return {
-      category: 'quota',
-      reply:
-        'Ahora mismo se ha alcanzado el límite de uso del asistente de IA. Prueba de nuevo en unos minutos, o ' +
-        '[contacta directamente con el equipo](/contacto) si lo necesitas ya.',
-    };
-  }
-
-  if (/econnrefused|enotfound|etimedout|fetch failed|network|abort/.test(lower)) {
-    return {
-      category: 'connection',
-      reply:
-        'No he podido conectar con el servicio de IA en este momento. Puede ser un problema de red puntual — ' +
-        'inténtalo de nuevo en unos segundos, o [contacta con el equipo](/contacto) si el problema continúa.',
-    };
-  }
-
-  if (/estado 5\d\d/.test(lower)) {
-    return {
-      category: 'provider_down',
-      reply:
-        'El servicio de IA no está respondiendo correctamente ahora mismo (parece un problema en su extremo, no en el tuyo). ' +
-        'Inténtalo de nuevo en unos minutos, o [contacta con el equipo](/contacto) si lo necesitas ya.',
-    };
-  }
-
-  return {
-    category: 'unknown',
-    reply:
-      'Ha ocurrido un problema técnico al generar la respuesta. Inténtalo de nuevo en unos segundos, o ' +
-      '[contacta con el equipo](/contacto) si el problema continúa.',
-  };
+function sendPlainText(res, statusCode, text) {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.status(statusCode);
+  res.end(text);
 }
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ success: false, error: 'Método no permitido' });
-  }
-
   const requestStart = Date.now();
+  let committed = false; // true en cuanto se ha escrito contenido real al navegador
 
   try {
+    if (req.method !== 'POST') {
+      res.setHeader('Allow', 'POST');
+      return sendPlainText(res, 405, 'Método no permitido.');
+    }
+
     const forwardedFor = req.headers['x-forwarded-for'];
     const ip =
       (typeof forwardedFor === 'string' && forwardedFor.split(',')[0].trim()) ||
@@ -165,14 +142,12 @@ module.exports = async function handler(req, res) {
 
     if (isRateLimited(ip)) {
       console.warn(`[chat] Rate limit alcanzado para ${ip}`);
-      return res
-        .status(429)
-        .json({ success: false, error: 'Demasiadas solicitudes. Inténtalo de nuevo en un minuto.' });
+      return sendPlainText(res, 429, 'Demasiadas solicitudes. Inténtalo de nuevo en un minuto.');
     }
 
     const message = sanitizeMessage(req.body && req.body.message);
     if (!message) {
-      return res.status(400).json({ success: false, error: 'El mensaje es obligatorio.' });
+      return sendPlainText(res, 400, 'El mensaje es obligatorio.');
     }
     const history = sanitizeHistory(req.body && req.body.history);
 
@@ -180,62 +155,98 @@ module.exports = async function handler(req, res) {
       `[chat] Petición recibida — ip=${ip} longitudMensaje=${message.length} turnosHistorial=${history.length}`
     );
 
-    const provider = getProvider();
-
-    if (!provider) {
+    const chain = getProviderChain();
+    if (chain.length === 0) {
       // Sin GEMINI_API_KEY3/GEMINI_API_KEY ni ANTHROPIC_API_KEY configuradas
-      // en Vercel: no hay nada que pueda generar una respuesta real. Se
-      // informa con honestidad en vez de simular una respuesta.
+      // en Vercel: no hay nada que pueda generar una respuesta real.
       console.error('[chat] Sin proveedor LLM configurado — faltan las variables de entorno de la API key');
-      return res.status(200).json({
-        success: true,
-        reply:
-          'El asistente de IA no está configurado en este momento (falta la clave de API en el servidor). ' +
-          '[Contacta con el equipo](/contacto) mientras tanto.',
-        mode: 'error',
-        providerErrorReason: 'no_provider_configured',
-      });
+      return sendPlainText(
+        res,
+        200,
+        'El asistente de IA no está configurado en este momento. Contacta con el equipo en /contacto mientras tanto.'
+      );
     }
-
-    console.log(`[chat] Proveedor seleccionado: ${provider.name}`);
 
     const siteContext = loadSiteContext();
     const systemPrompt = buildSystemPrompt(siteContext);
+    const fullMessages = [...history, { role: 'user', content: message }];
 
-    try {
-      console.log(`[chat] Llamando a ${provider.name}...`);
-      const callStart = Date.now();
-      const reply = await provider.generate(systemPrompt, [
-        ...history,
-        { role: 'user', content: message },
-      ]);
-      console.log(
-        `[chat] Respuesta de ${provider.name} recibida en ${Date.now() - callStart}ms ` +
-          `(total petición: ${Date.now() - requestStart}ms)`
-      );
-      return res.status(200).json({ success: true, reply, mode: 'generated' });
-    } catch (providerError) {
-      const { category, reply } = classifyError(providerError);
-      const reason = String((providerError && providerError.message) || providerError).slice(0, 300);
-      console.error(
-        `[chat] Error del proveedor ${provider.name} (categoría: ${category}) tras ${Date.now() - requestStart}ms:`,
-        providerError
-      );
-      return res.status(200).json({
-        // El motivo técnico se añade también al propio texto de la respuesta
-        // (no solo al campo providerErrorReason) para poder diagnosticar un
-        // fallo real viendo el chat en el móvil, sin depender de las
-        // herramientas de desarrollador del navegador ni del panel de Vercel.
-        success: true,
-        reply: `${reply}\n\n_Detalle técnico (${category}): ${reason}_`,
-        mode: 'error',
-        providerErrorReason: reason,
-      });
+    for (const provider of chain) {
+      const providerStart = Date.now();
+      try {
+        const iterator = provider.stream(systemPrompt, fullMessages);
+
+        // Se consume el primer fragmento ANTES de tocar la respuesta HTTP.
+        // Si el proveedor falla al conectar (lanza) o conecta pero no
+        // entrega ningún texto (p. ej. bloqueo de seguridad del modelo),
+        // esto se resuelve aquí sin que el navegador haya recibido nada
+        // todavía — así se puede pasar limpiamente al siguiente proveedor
+        // de la cadena en cualquiera de los dos casos.
+        const primero = await iterator.next();
+        if (primero.done || !primero.value) {
+          console.warn(
+            `[chat] ${provider.name} no entregó contenido tras ${Date.now() - providerStart}ms, probando siguiente proveedor`
+          );
+          continue;
+        }
+
+        committed = true;
+        console.log(`[chat] Streaming con ${provider.name} (primer fragmento a los ${Date.now() - requestStart}ms)`);
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.status(200);
+        res.write(primero.value);
+        let totalCaracteres = primero.value.length;
+
+        const limiteEmision = requestStart + MAX_STREAM_MS;
+        for (;;) {
+          if (Date.now() > limiteEmision) {
+            console.warn('[chat] Límite de tiempo de streaming alcanzado; se cierra con lo generado hasta ahora');
+            break;
+          }
+          const siguiente = await iterator.next();
+          if (siguiente.done) break;
+          res.write(siguiente.value);
+          totalCaracteres += siguiente.value.length;
+        }
+
+        console.log(
+          `[chat] Respuesta de ${provider.name} completada en ${Date.now() - requestStart}ms (${totalCaracteres} caracteres)`
+        );
+        return res.end();
+      } catch (err) {
+        console.warn(
+          `[chat] ${provider.name} falló al conectar tras ${Date.now() - providerStart}ms: ` +
+            String((err && err.message) || err).slice(0, 300)
+        );
+        // Se prueba el siguiente proveedor de la cadena. No se reintenta
+        // este mismo: probar uno independiente es más rápido y más eficaz
+        // que insistir con el que acaba de fallar.
+      }
     }
+
+    // Han fallado todos los proveedores configurados sin llegar a emitir
+    // ningún contenido real.
+    console.error(`[chat] Todos los proveedores de la cadena fallaron tras ${Date.now() - requestStart}ms`);
+    return sendPlainText(
+      res,
+      200,
+      'El asistente de IA no está respondiendo con normalidad ahora mismo. Inténtalo de nuevo en unos segundos, ' +
+        'o contáctanos directamente en /contacto.'
+    );
   } catch (error) {
     console.error('[chat] Error inesperado en /api/chat:', error);
-    return res
-      .status(500)
-      .json({ success: false, error: 'Ha ocurrido un error. Inténtalo de nuevo en unos segundos.' });
+    if (committed) {
+      try {
+        res.end();
+      } catch (e) {
+        /* la conexión ya se cerró por su cuenta */
+      }
+      return;
+    }
+    try {
+      sendPlainText(res, 500, 'Ha ocurrido un error. Inténtalo de nuevo en unos segundos.');
+    } catch (e) {
+      /* las cabeceras ya se habían enviado por otra vía */
+    }
   }
 };
