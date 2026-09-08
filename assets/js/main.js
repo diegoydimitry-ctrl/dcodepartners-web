@@ -1181,35 +1181,78 @@
       setSending(true);
       showTyping();
 
+      /* El backend responde en texto plano, emitido en fragmentos según el
+         modelo va generando (ver api/chat.js): cualquier cuerpo de
+         respuesta -generación real, aviso de límite, error de
+         configuración- es directamente el texto a mostrar, así que no hace
+         falta distinguir formatos aquí. finish() cierra el turno una sola
+         vez, venga por donde venga. */
+      var finish = function (fullReply) {
+        setSending(false);
+        if (chatInput) chatInput.focus();
+        if (fullReply) {
+          history.push({ role: 'assistant', content: fullReply });
+          saveHistory(history);
+        }
+      };
+
       fetch(CHAT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history: history.slice(0, -1) })
       })
         .then(function (response) {
-          return response.json().then(function (data) {
-            return { ok: response.ok, data: data };
+          // Navegadores sin streaming de fetch (muy minoritarios hoy):
+          // se degrada a mostrar la respuesta completa de una vez en
+          // cuanto llega, en vez de fallar.
+          if (!response.body || !response.body.getReader) {
+            return response.text().then(function (full) {
+              hideTyping();
+              addMessage(
+                full || 'Ha ocurrido un problema al procesar tu mensaje. Inténtalo de nuevo en unos segundos o contáctanos directamente.',
+                'bot'
+              );
+              finish(full);
+            });
+          }
+
+          var reader = response.body.getReader();
+          var decoder = new TextDecoder();
+          var full = '';
+          var botDiv = null;
+
+          var pump = function () {
+            return reader.read().then(function (step) {
+              if (step.done) return;
+              var chunk = decoder.decode(step.value, { stream: true });
+              if (chunk) {
+                if (!botDiv) {
+                  hideTyping();
+                  botDiv = addMessage('', 'bot', true);
+                  botDiv.classList.add('streaming');
+                }
+                full += chunk;
+                botDiv.innerHTML = renderMarkdown(full);
+                scrollToBottom();
+              }
+              return pump();
+            });
+          };
+
+          return pump().then(function () {
+            if (botDiv) botDiv.classList.remove('streaming');
+            if (!full) {
+              hideTyping();
+              addMessage('Ha ocurrido un problema al procesar tu mensaje. Inténtalo de nuevo en unos segundos o contáctanos directamente.', 'bot');
+            }
+            finish(full);
           });
-        })
-        .then(function (result) {
-          hideTyping();
-          var reply = (result.ok && result.data && result.data.success && result.data.reply)
-            ? result.data.reply
-            : 'Ha ocurrido un problema al procesar tu mensaje. Inténtalo de nuevo en unos segundos o contáctanos directamente.';
-          addMessage(reply, 'bot');
-          history.push({ role: 'assistant', content: reply });
-          saveHistory(history);
         })
         .catch(function () {
           hideTyping();
           var reply = 'No se ha podido conectar con el asistente. Comprueba tu conexión e inténtalo de nuevo.';
           addMessage(reply, 'bot');
-          history.push({ role: 'assistant', content: reply });
-          saveHistory(history);
-        })
-        .then(function () {
-          setSending(false);
-          if (chatInput) chatInput.focus();
+          finish(reply);
         });
     };
 
