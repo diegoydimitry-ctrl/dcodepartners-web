@@ -41,25 +41,60 @@ retraso era irrecuperable por definición.
 gratuito.** Se creía que proteger estas bases exigía pagar. No es cierto —
 está demostrado por el snapshot de arriba.
 
-## Lo que quedó preparado y no aplicado
+## Lo que quedó preparado y no aplicado — RESUELTO EL 8/09/2026
 
-Al intentar programar snapshots automáticos, la API rechazó el formato y
-devolvió los valores válidos; el conector se cayó antes del segundo intento.
-El formato correcto es:
+El 1/09 se dejaron tres acciones «pendientes de intervención manual» porque el
+conector de Neon estaba caído. El 8/09 el conector volvió y se ejecutaron las
+tres. **Dos de ellas no estaban pendientes: son imposibles en este plan.** Eso
+cambia la conclusión, así que se corrige aquí en vez de dejarlo como una tarea
+que nadie podría cerrar.
 
-    set_snapshot_schedule(
-      project_id: "crimson-waterfall-36115744",
-      branch_id:  "br-restless-moon-b2o8o2up",
-      schedule:   [{ frequency: "daily" }]      // daily | weekly | monthly
-    )
+| Acción | Resultado real | Evidencia |
+|---|---|---|
+| Snapshots diarios en `production` de **Finance** | **IMPOSIBLE en este plan** | `HTTP 404 — backup schedule creation is not enabled for this project` |
+| Snapshots diarios en `production` de **D-Code OS** | **IMPOSIBLE en este plan** | `HTTP 404 — backup schedule creation is not enabled for this project` |
+| Marcar `production` como protegida (las dos) | **IMPOSIBLE en este plan** | `HTTP 422 — You have reached the maximum number of protected branches for your current plan` |
+| Snapshot manual de **D-Code OS** (no estaba en la lista) | **HECHO** | `snap-super-term-b13k6r24`, `auditoria-20260908-dcodeos-production`, 2026-09-08T05:36:55Z |
 
-**Acción mínima necesaria** (tres pasos, ninguno destructivo):
+El 1/09 se interpretó el fallo del calendario como «la API rechazó el formato».
+No lo era: el formato de arriba es correcto y la API lo acepta sintácticamente.
+Lo que devuelve es **404 sobre la propia funcionalidad**, porque los calendarios
+de copia no existen en `free_v3`.
 
-1. Programar snapshots **diarios** en `production` de **D-Code Finance**.
-2. Lo mismo en **D-Code OS** (`misty-darkness-36213098`), que tiene el mismo
-   riesgo y no estaba en el informe anterior.
-3. Marcar como **protegida** la rama `production` de las dos. Hoy está en
-   `protected: false`, lo que significa que se puede borrar sin fricción.
+### Y un límite que no se conocía: un snapshot por proyecto
+
+Al intentar refrescar el snapshot de Finance (el que existe es del 1/09) la API
+respondió `HTTP 422 — snapshots limit exceeded`. El plan gratuito admite **un
+solo snapshot por proyecto**.
+
+La consecuencia operativa es incómoda y conviene decirla entera: **para tener
+una copia más reciente hay que borrar antes la única que existe**, y entre el
+borrado y el nuevo snapshot el proyecto se queda sin ninguna copia. No se ha
+hecho: destruir el único punto de restauración existente no es una operación
+que deba tomarse sin autorización expresa.
+
+### Estado real de la protección, a 8/09/2026
+
+| | D-Code Finance | D-Code OS |
+|---|---|---|
+| Recuperación a un punto en el tiempo | **6 h** | **6 h** |
+| Snapshots manuales | 1 — del **1/09** | 1 — del **8/09** |
+| Calendario automático | no disponible en el plan | no disponible en el plan |
+| Rama `production` protegida | no disponible en el plan | no disponible en el plan |
+
+Dicho sin rodeos: **si alguien corrompe datos y nadie se da cuenta en seis
+horas, el único punto de recuperación es un snapshot manual que envejece un día
+por cada día que pasa, y que no se puede refrescar sin quedarse temporalmente
+sin ninguno.**
+
+Solo hay dos salidas reales, y las dos son decisión de Dirección:
+
+1. **Subir de plan** en Neon: habilita calendarios automáticos, más de un
+   snapshot y protección de rama. Es la única que resuelve las tres a la vez.
+2. **Automatizar el snapshot manual** desde fuera (por ejemplo un workflow de
+   n8n contra la API de Neon que borre y recree la copia). Es gratis, pero
+   reproduce el hueco del borrado y necesita una credencial de la API de Neon
+   que hoy no existe en n8n.
 
 ## Por qué no se pudo hacer un backup por otra vía
 

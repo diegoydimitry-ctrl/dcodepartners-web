@@ -1,5 +1,27 @@
 # Lead IA 360 — Plantilla n8n
 
+> ## AVISO (AUD-DCP 08/09/2026): esta plantilla YA NO refleja producción
+>
+> `lead-ia-360.workflow.json` es una **instantánea histórica**, no un espejo del
+> workflow que hoy corre en n8n (`0NQvFFWYj3cNI6Zo`). Diverge al menos en esto:
+>
+> - El correo de confirmación de esta plantilla sigue diciendo **«En un plazo
+>   inferior a 24 horas laborables … se pondrá en contacto contigo»**. En
+>   producción esa promesa se retiró el 1/09/2026 al pausarse la captación
+>   comercial: hoy el correo dice que no se aceptan proyectos nuevos y no
+>   compromete plazo.
+> - Producción tiene además la consulta a la lista de supresiones antes de
+>   enviar, el escapado HTML de los campos del formulario y las alertas de lead
+>   perdido, que aquí no están o están en versión antigua.
+>
+> **Reimportar este JSON reintroduciría la promesa de 24 h.** Antes de
+> desplegarlo en un cliente hay que exportar de nuevo desde n8n o, como mínimo,
+> revisar el nodo del correo de confirmación.
+>
+> El detector de deriva (`ADM/Deriva Editor vs Produccion`) NO cubre este caso:
+> compara borrador contra publicado dentro de n8n, no n8n contra este
+> repositorio.
+
 Cualificación automática de leads con IA. Stack: **n8n Cloud + Airtable + Gemini API + Gmail**.
 
 Diseñada como plantilla reutilizable: para desplegarla en un cliente nuevo se
