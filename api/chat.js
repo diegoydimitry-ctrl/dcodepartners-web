@@ -66,33 +66,65 @@ function sanitizeHistory(raw) {
     .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_LENGTH) }));
 }
 
+// Páginas de contenido legal/seguridad/privacidad: se cargan aparte y solo
+// se añaden al contexto cuando la pregunta realmente las necesita (ver
+// ON_DEMAND_TRIGGER más abajo). AUD-DCP 09/09/2026 — el sitio creció hasta
+// ~48.000 tokens de contexto real (192.519 caracteres, 66 páginas) y un
+// tercio de eso son estas 12 páginas (ES+EN), que el propio estilo del
+// asistente ya desaconseja citar en detalle salvo que se pregunte
+// explícitamente por ellas. No se borra nada: siguen íntegras en
+// knowledge-base.json y se cargan completas en cuanto la pregunta las toca.
+const ON_DEMAND_URLS = new Set([
+  '/privacidad',
+  '/en/privacidad',
+  '/condiciones-contratacion',
+  '/en/condiciones-contratacion',
+  '/aviso-legal',
+  '/en/aviso-legal',
+  '/acuerdo-encargado-tratamiento',
+  '/en/acuerdo-encargado-tratamiento',
+  '/seguridad',
+  '/en/seguridad',
+  '/cookies',
+  '/en/cookies',
+]);
+
+// Deliberadamente amplia: un falso positivo solo añade contexto de más (sin
+// coste de calidad, unos KB de más), mientras que un falso negativo deja a
+// alguien preguntando por RGPD/seguridad sin la página real delante. Cubre
+// ES/EN y las variantes más habituales de cómo se pregunta esto.
+const ON_DEMAND_TRIGGER =
+  /rgpd|gdpr|privacid|privacy|\bdatos\b|\bdata\b|delegado\s*de\s*protecci[oó]n|\bdpo\b|\bdpa\b|encargado\s*de\s*tratamiento|cookie|seguridad\s*de\s*la\s*informaci[oó]n|iso\s*27001|confidencialidad|\bnda\b|t[ée]rminos\s*(y\s*condiciones|de\s*(servicio|uso))|condiciones\s*de\s*(contrataci[oó]n|uso|servicio)|terms\s*(of\s*service|and\s*conditions)|aviso\s*legal|legal\s*notice|pol[ií]tica\s*de\s*(privacidad|cookies)|encriptad|cifrad|\bssl\b/i;
+
 let cachedSiteContext = null;
 
 /**
  * Carga el contenido real del sitio (generado por
- * scripts/build-knowledge-base.js a partir del HTML publicado) y lo
- * concatena entero como contexto. El sitio es pequeño (~7.500 tokens en
- * total): cabe sin problema en una sola petición, así que no hace falta
- * recuperación selectiva — el modelo ve todo el contenido real y decide
- * qué es relevante para cada pregunta, en vez de depender de que un
- * ranking léxico haya elegido el fragmento correcto de antemano.
+ * scripts/build-knowledge-base.js a partir del HTML publicado), separado en
+ * dos bloques: `core` (todo lo que no es legal/seguridad — se envía
+ * siempre) y `onDemand` (las 12 páginas legales — solo se envía cuando
+ * ON_DEMAND_TRIGGER detecta que la pregunta lo necesita). Ninguna página
+ * desaparece: la única diferencia es en cuál de los dos bloques cae y, por
+ * tanto, si viaja en todas las peticiones o solo en las que la piden.
  */
 function loadSiteContext() {
   if (cachedSiteContext) return cachedSiteContext;
   // eslint-disable-next-line global-require
   const kb = require('../assets/data/knowledge-base.json');
-  cachedSiteContext = (kb.pages || [])
-    .map((page) => {
-      const body = (page.chunks || [])
-        .map((chunk) => (chunk.heading ? `${chunk.heading}\n${chunk.text}` : chunk.text))
-        .join('\n\n');
-      return `### ${page.title} (${page.url})\n${body}`;
-    })
-    .join('\n\n---\n\n');
+  const core = [];
+  const onDemand = [];
+  for (const page of kb.pages || []) {
+    const body = (page.chunks || [])
+      .map((chunk) => (chunk.heading ? `${chunk.heading}\n${chunk.text}` : chunk.text))
+      .join('\n\n');
+    const bloque = `### ${page.title} (${page.url})\n${body}`;
+    (ON_DEMAND_URLS.has(page.url) ? onDemand : core).push(bloque);
+  }
+  cachedSiteContext = { core: core.join('\n\n---\n\n'), onDemand: onDemand.join('\n\n---\n\n') };
   return cachedSiteContext;
 }
 
-function buildSystemPrompt(siteContext) {
+function buildSystemPrompt(siteContext, onDemandContext) {
   return `Eres el asistente de IA de D-Code Partners, una consultora que diseña e implementa sistemas de automatización e inteligencia artificial para empresas. Hablas como lo haría un consultor senior de la empresa en una llamada real: cercano, directo y útil — nunca como un buscador que copia párrafos ni como un vendedor.
 
 ## Estilo
@@ -113,8 +145,12 @@ function buildSystemPrompt(siteContext) {
 - Si muestra intención de contratar o automatizar algo pero sin detalle (p. ej. "quiero automatizar mi empresa"), no le vendas nada todavía: pregúntale primero a qué se dedica su empresa y qué proceso quiere automatizar, como haría un consultor antes de proponer nada. Nunca hagas más de una o dos preguntas de diagnóstico seguidas.
 - El objetivo no es solo responder preguntas: es entender qué necesita la persona y, cuando tenga sentido, invitarla de forma natural (nunca forzada) a reservar una llamada en /contacto. Aporta valor primero.
 
-Contenido real publicado en el sitio de D-Code Partners (todas las páginas — úsalo como fuente de verdad para hechos del negocio, ignóralo si no viene a cuento):
-${siteContext}`;
+Contenido real publicado en el sitio de D-Code Partners (úsalo como fuente de verdad para hechos del negocio, ignóralo si no viene a cuento):
+${siteContext}${
+    onDemandContext
+      ? `\n\n---\n\nInformación legal, de seguridad y privacidad de D-Code Partners (incluida porque la pregunta la necesita — úsala igual que el resto: como fuente de verdad, sin inventar nada que no esté aquí):\n${onDemandContext}`
+      : ''
+  }`;
 }
 
 function sendPlainText(res, statusCode, text) {
@@ -168,8 +204,22 @@ module.exports = async function handler(req, res) {
     }
 
     const siteContext = loadSiteContext();
-    const systemPrompt = buildSystemPrompt(siteContext);
+    // Regla determinista, no un modelo aparte: mirar solo el mensaje añadiría
+    // latencia cero pero perdería seguimiento ("¿y mis datos?" tras hablar de
+    // privacidad); mirar también el historial reciente cubre ese caso sin
+    // coste (es una regexp sobre texto que ya está en memoria).
+    const necesitaContextoLegal =
+      ON_DEMAND_TRIGGER.test(message) || history.some((m) => ON_DEMAND_TRIGGER.test(m.content));
+    const systemPrompt = buildSystemPrompt(
+      siteContext.core,
+      necesitaContextoLegal ? siteContext.onDemand : ''
+    );
     const fullMessages = [...history, { role: 'user', content: message }];
+
+    console.log(
+      `[chat] Contexto — core=${siteContext.core.length}c` +
+        (necesitaContextoLegal ? ` +onDemand=${siteContext.onDemand.length}c` : ' (sin onDemand)')
+    );
 
     for (const provider of chain) {
       const providerStart = Date.now();
