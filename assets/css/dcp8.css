@@ -368,11 +368,30 @@ body.v7 .eje-nodo{
 body.v7 .eje-nodo--a{ right:5px; background:#2ed8f0; box-shadow:0 0 14px 3px rgba(46,216,240,.55); }
 body.v7 .eje-nodo--b{ left:5px;  background:#9a72ff; box-shadow:0 0 14px 3px rgba(141,98,250,.55); }
 
+/* El retrato de cada fundador. Va DENTRO de cada mitad, con el mismo --tono
+   que ya tiñe esa mitad (frío para Estrategia, cálido para Arquitectura):
+   no es una tarjeta nueva ni un color añadido, es el mismo eje pintando
+   también el aro de la foto. Por eso tampoco son dos círculos gemelos —el
+   error que el propio comentario de arriba explica que esta sección vino a
+   corregir—: cada uno se ancla al lado de su mitad, como el nombre y el
+   cargo que tiene debajo. */
+body.v7 .eje-foto{
+  /* `height:auto` no es relleno: sin ella el atributo HTML height="320"
+     —que existe para reservar espacio y evitar salto de layout mientras
+     carga— gana sobre `aspect-ratio` y el círculo sale ovalado. */
+  display:block; width:clamp(84px,8vw,104px); height:auto; aspect-ratio:1;
+  border-radius:50%; object-fit:cover; margin-bottom:16px;
+  box-shadow:0 0 0 2px rgba(var(--tono),.55), 0 8px 26px -8px rgba(var(--tono),.5);
+}
+body.v7 .eje-mitad--a .eje-foto{ margin-left:auto; }
+body.v7 .eje-mitad--b .eje-foto{ margin-right:auto; }
+
 /* En vertical el eje se tumba: siguen siendo dos mitades con una costura
    entre ellas, cada una leyendo alineada a la izquierda. */
 @media (max-width:860px){
   body.v7 .eje{ grid-template-columns:1fr; gap:0; padding-block:20px; }
   body.v7 .eje-mitad--a > :not(p){ text-align:left; }
+  body.v7 .eje-mitad--a .eje-foto{ margin-left:0; margin-right:auto; }
   body.v7 .eje-mitad{ padding-block:22px; justify-self:stretch; }
   body.v7 .eje::after{
     background:linear-gradient(180deg,
