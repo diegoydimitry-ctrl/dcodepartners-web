@@ -876,6 +876,32 @@ nav.main-nav > ul{ position:relative; }
   padding-bottom:clamp(56px, 9vw, 110px);
   overflow:hidden;
 }
+/* Imagen D-Code de fondo (DIR-044): infraestructura/ciudad de circuitos,
+   ancla a la derecha — la composición del propio asset ya deja el
+   tercio izquierdo casi negro, y el degradado aquí lo refuerza para
+   garantizar contraste del H1/CTA en cualquier ancho de contenedor.
+   Vive detrás de .hero-grid (z-index:2) y de .hero::after (el campo de
+   luz existente, que se mantiene sin cambios). Muy atenuada en mobile,
+   donde la sección pasa a una columna y el recorte por aspect-ratio ya
+   no favorece la composición. */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background-image:
+    linear-gradient(90deg, var(--bg) 0%, var(--bg) 30%, rgba(6,9,20,.75) 48%, rgba(6,9,20,.25) 66%, transparent 82%),
+    linear-gradient(0deg, var(--bg) 0%, transparent 22%, transparent 78%, var(--bg) 100%),
+    url('/assets/img/home-hero-bg.webp');
+  background-position:0 0, 0 0, 92% center;
+  background-size:100% 100%, 100% 100%, cover;
+  background-repeat:no-repeat, no-repeat, no-repeat;
+  opacity:.7;
+  pointer-events:none;
+}
+@media (max-width:900px){
+  .hero::before{ opacity:.16; }
+}
 /* Campo de luz propio del hero — firma de Home, distinta del glow-orb
    ambiental que ya existe en el resto del sitio. Muy lento, muy sutil. */
 .hero::after{
