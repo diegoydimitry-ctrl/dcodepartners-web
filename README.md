@@ -36,14 +36,17 @@ funciona** con un servidor estático — para probarlo en local hace falta `verc
 ## Despliegue
 
 El sitio está desplegado en **Vercel**, no en GitHub Pages: `vercel.json` configura
-las cabeceras y el proyecto depende de la función serverless `/api/chat`, que GitHub
-Pages no puede ejecutar (solo sirve archivos estáticos). El despliegue se dispara
-automáticamente al hacer push a `main`, a través de la integración de Vercel con este
-repositorio de GitHub.
+las cabeceras y el proyecto depende de funciones serverless (`/api/chat`,
+`/api/contact-fallback`) que GitHub Pages no puede ejecutar (solo sirve archivos
+estáticos). El despliegue se dispara automáticamente al hacer push a `main`, a través
+de la integración de Vercel con este repositorio de GitHub.
 
-Variable de entorno necesaria en Vercel:
+Variables de entorno usadas en Vercel:
 
-- `GEMINI_API_KEY3` (o `GEMINI_API_KEY`) — clave de Google AI Studio para el asistente de IA.
+- `GEMINI_API_KEY3` (o `GEMINI_API_KEY`) — clave de Google AI Studio para el asistente de IA. Proveedor principal de `/api/chat`.
+- `ANTHROPIC_API_KEY` — clave de Anthropic, proveedor alternativo del asistente de IA (`lib/providers.js`). Se usa automáticamente si no hay clave de Gemini configurada, o si `AI_PROVIDER=anthropic` fuerza este proveedor.
+- `AI_PROVIDER` (opcional) — `gemini` o `anthropic`, para fijar el proveedor del asistente de IA explícitamente en vez de dejar que se elija por disponibilidad de clave.
+- `RESEND_API_KEY` — clave de [Resend](https://resend.com) usada por `/api/contact-fallback` para enviar los emails de respaldo del formulario de contacto cuando el envío principal (webhook de n8n) falla.
 
 ## Notas
 
@@ -51,7 +54,9 @@ Variable de entorno necesaria en Vercel:
   al webhook de producción del workflow de n8n **Lead IA 360**
   (`assets/js/main.js` → constante `N8N_WEBHOOK_URL`). n8n verifica Cloudflare
   Turnstile, guarda el lead en Airtable, lo analiza con Gemini y envía los emails de
-  confirmación y alerta interna — no hay backend intermedio en este repositorio para
-  ese formulario. Detalle completo en `automation/n8n/lead-ia-360/README.md`.
+  confirmación y alerta interna. Si ese envío falla, el propio formulario reintenta
+  automáticamente contra `/api/contact-fallback` (Resend) para que una solicitud
+  legítima nunca se pierda por un fallo puntual. Detalle completo en
+  `automation/n8n/lead-ia-360/README.md`.
 - Los teléfonos y el email de contacto están escritos directamente en el HTML
   (`contacto.html`); edítalos ahí si cambian.
