@@ -77,6 +77,13 @@
     mainNav.querySelectorAll('.mega-menu a').forEach(function (a) {
       a.addEventListener('click', closeMobileNav);
     });
+    // Esc cierra el menú móvil y devuelve el foco al botón que lo abrió
+    // (contrato Drawer del D-Code Design System).
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || !mainNav.classList.contains('open')) return;
+      closeMobileNav();
+      burger.focus();
+    });
   }
 
   /* ---------- Language switcher (ES default, /en/ mirrors every ES path) ----------
@@ -98,6 +105,19 @@
   document.querySelectorAll('.has-mega').forEach(function (item) {
     var trigger = item.querySelector('.mega-trigger');
     if (!trigger) return;
+    // Escritorio: el menú se abre con :hover y :focus-within, así que con el
+    // teclado no había forma de cerrarlo sin salir del bloque. Esc lo oculta
+    // (.mega-dismissed), deja el foco en el disparador y el menú vuelve a
+    // abrirse en cuanto el ratón o el foco salen y regresan.
+    item.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || window.innerWidth <= 940) return;
+      item.classList.add('mega-dismissed');
+      trigger.focus();
+    });
+    item.addEventListener('mouseleave', function () { item.classList.remove('mega-dismissed'); });
+    item.addEventListener('focusout', function (e) {
+      if (!item.contains(e.relatedTarget)) item.classList.remove('mega-dismissed');
+    });
     trigger.setAttribute('aria-expanded', 'false');
     trigger.addEventListener('click', function (e) {
       if (window.innerWidth > 940) return; // desktop uses hover/focus via CSS — umbral alineado con el CSS (DIR-052)
@@ -1054,11 +1074,27 @@
     var MAX_MESSAGE_LENGTH = 600;
     var isSending = false;
 
-    chatBubble.addEventListener('click', function () {
-      var isOpen = chatWidget.classList.toggle('open');
+    var setChatOpen = function (isOpen) {
+      chatWidget.classList.toggle('open', isOpen);
       chatBubble.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       chatWindowEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-      if (isOpen && chatInput) chatInput.focus();
+      // La ventana pasa de visibility:hidden a visible en el siguiente
+      // fotograma: un focus() síncrono se perdía y el foco se quedaba en la
+      // burbuja.
+      if (isOpen && chatInput) {
+        var focusInput = function () { if (chatWidget.classList.contains('open')) chatInput.focus(); };
+        setTimeout(focusInput, 60);
+        setTimeout(function () { if (document.activeElement !== chatInput) focusInput(); }, 260);
+      }
+    };
+    chatBubble.addEventListener('click', function () {
+      setChatOpen(!chatWidget.classList.contains('open'));
+    });
+    // Esc cierra el asistente y devuelve el foco a la burbuja.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || !chatWidget.classList.contains('open')) return;
+      setChatOpen(false);
+      chatBubble.focus();
     });
 
     /* ---- Markdown ligero y seguro: escapa todo el HTML primero, y solo

@@ -733,6 +733,9 @@ nav.main-nav > ul{ position:relative; }
   .has-mega:focus-within .mega-menu{
     opacity:1; visibility:visible; pointer-events:auto; transform:translate(-50%,0);
   }
+  /* Cerrado con Esc (main.js): gana a :hover y :focus-within hasta salir. */
+  .has-mega.mega-dismissed .mega-menu{ opacity:0; visibility:hidden; pointer-events:none; }
+  .has-mega.mega-dismissed .chev{ transform:none; }
 }
 .mega-item{
   display:flex;
