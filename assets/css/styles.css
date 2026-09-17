@@ -600,6 +600,12 @@ header.scrolled{
   color:var(--ink);
   flex-shrink:0;
 }
+/* La marca mide 34 px de alto. En táctil el área pulsable llega a 44 px sin
+   estirar la cabecera (DS: objetivos de 44 px en móvil). */
+@media (max-width:940px){
+  .logo{ position:relative; }
+  .logo::after{ content:""; position:absolute; inset:-6px -4px; }
+}
 .logo img, .logo .logo-mark{ width:34px; height:auto; flex-shrink:0; }
 /* Marca vectorial del D-Code Design System (brand/dcode-mark.svg): los seis
    píxeles y la «D» toman el color del texto; el píxel central, el azul de la web. */
@@ -888,7 +894,7 @@ nav.main-nav > ul{ position:relative; }
   box-shadow:0 0 0 4px rgba(67,224,255,.18);
   transform:scale(1.3);
 }
-.side-index a.active .si-label{ color:var(--cyan); }
+.side-index a.active .si-label{ color:var(--blue); }
 @media (max-width: 1180px){ .side-index{ display:none; } }
 
 /* ============ HERO (home) ============ */
@@ -1371,7 +1377,7 @@ nav.main-nav > ul{ position:relative; }
   padding:4px 0;
   font-size:.9rem;
   font-weight:600;
-  color:var(--cyan);
+  color:var(--blue);
   text-decoration:none;
 }
 .dcp-link svg{ width:14px; height:14px; transition:transform .2s ease; }
@@ -1403,7 +1409,7 @@ nav.main-nav > ul{ position:relative; }
 .dcp-visual-note{
   margin-top:12px;
   font-family:var(--mono);
-  font-size:0.6875rem;
+  font-size:0.75rem;
   color:var(--stone-soft);
 }
 
@@ -1419,7 +1425,7 @@ nav.main-nav > ul{ position:relative; }
 .dcv-funnel-stage{
   width:var(--fw,100%);
   padding:8px 18px;
-  font-size:.74rem;
+  font-size:0.75rem;
   color:var(--ink);
   text-align:center;
   background:linear-gradient(90deg, rgba(67,224,255,.16), rgba(155,107,255,.16));
@@ -1435,7 +1441,7 @@ nav.main-nav > ul{ position:relative; }
   display:flex; align-items:center; justify-content:center;
 }
 .dcv-cycle-ring::before{ content:""; position:absolute; inset:7px; border-radius:50%; background:var(--panel); }
-.dcv-cycle-pct{ position:relative; font-family:var(--mono); font-size:0.6875rem; color:var(--ink); }
+.dcv-cycle-pct{ position:relative; font-family:var(--mono); font-size:0.75rem; color:var(--ink); }
 .dcv-cycle-steps{ display:flex; flex-direction:column; gap:6px; font-size:.78rem; color:var(--stone); margin:0; padding:0; }
 .dcv-cycle-steps li{ list-style:none; padding-left:14px; position:relative; }
 .dcv-cycle-steps li::before{ content:""; position:absolute; left:0; top:.45em; width:6px; height:6px; border-radius:50%; background:var(--stone-soft); }
@@ -1472,15 +1478,15 @@ nav.main-nav > ul{ position:relative; }
 .dcv-ticket--high{ border-left-color:var(--red); }
 .dcv-ticket--mid{ border-left-color:var(--amber); }
 .dcv-ticket--done{ border-left-color:var(--green); opacity:.72; }
-.dcv-ticket-id{ font-family:var(--mono); color:var(--stone-soft); font-size:0.6875rem; flex-shrink:0; }
+.dcv-ticket-id{ font-family:var(--mono); color:var(--stone-soft); font-size:0.75rem; flex-shrink:0; }
 .dcv-ticket-desc{ flex:1; color:var(--stone); }
-.dcv-ticket-sla{ font-family:var(--mono); font-size:0.6875rem; color:var(--cyan); flex-shrink:0; }
+.dcv-ticket-sla{ font-family:var(--mono); font-size:0.75rem; color:var(--cyan); flex-shrink:0; }
 .dcv-ticket--done .dcv-ticket-sla{ color:var(--green); }
 
 /* Administración -- gestión documental: checklist de tareas */
 .dcv-checklist{ display:flex; flex-direction:column; gap:10px; margin:0; }
 .dcv-check{ display:flex; align-items:center; gap:10px; font-size:.82rem; color:var(--stone); }
-.dcv-check-box{ width:15px; height:15px; border-radius:4px; border:1.5px solid var(--surface-border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.6875rem; line-height:1; color:var(--bg); }
+.dcv-check-box{ width:15px; height:15px; border-radius:4px; border:1.5px solid var(--surface-border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.75rem; line-height:1; color:var(--bg); }
 .dcv-check--done .dcv-check-box{ background:var(--green); border-color:var(--green); }
 .dcv-check--pending .dcv-check-box{ background:transparent; }
 
@@ -1650,7 +1656,7 @@ nav.main-nav > ul{ position:relative; }
   .dcp-problem{ font-size:1.1rem; }
   .dcv-pipeline{ gap:5px; height:76px; }
   .dcv-pipe-label{ font-size:0.6875rem; }
-  .dcv-funnel-stage{ padding:7px 10px; font-size:0.6875rem; }
+  .dcv-funnel-stage{ padding:7px 10px; font-size:0.75rem; }
   .dcv-kanban{ gap:6px; }
   .dcv-kanban-card{ padding:6px; }
   .dcv-kpi-label{ width:78px; font-size:0.6875rem; }
@@ -1896,7 +1902,7 @@ nav.main-nav > ul{ position:relative; }
 .service-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
 .service-card .card-link{
   display:inline-flex; align-items:center; gap:6px;
-  margin-top:20px; font-size:0.86rem; font-weight:600; color:var(--cyan);
+  margin-top:20px; font-size:0.86rem; font-weight:600; color:var(--blue);
 }
 .service-card .card-link svg{ width:14px; height:14px; transition:transform .2s ease; }
 .service-card:hover .card-link svg{ transform:translateX(3px); }
@@ -2330,7 +2336,7 @@ nav.main-nav > ul{ position:relative; }
 .faq-list .accordion-list{ border-top:1px solid var(--border); }
 .faq-list .accordion-title{ font-size:1rem; }
 .faq-list .accordion-panel{ color:var(--stone); }
-.faq-list .accordion-panel a{ color:var(--cyan); text-decoration:underline; text-underline-offset:3px; }
+.faq-list .accordion-panel a{ color:var(--blue); text-decoration:underline; text-underline-offset:3px; }
 .faq-list .accordion-item.open .accordion-panel{ max-height:400px; }
 .faq-list .accordion-item{ scroll-margin-top:100px; }
 .faq-list .accordion-item.open .faq-plus{ transform:rotate(45deg); }
@@ -2416,7 +2422,7 @@ nav.main-nav > ul{ position:relative; }
 .prose ol{ list-style:decimal; }
 .prose li{ margin-bottom:8px; }
 .prose li::marker{ color:var(--cyan); }
-.prose a{ color:var(--cyan); text-decoration:underline; text-underline-offset:3px; }
+.prose a{ color:var(--blue); text-decoration:underline; text-underline-offset:3px; }
 .prose blockquote{
   border-left:2px solid var(--cyan);
   padding-left:20px;
@@ -2663,7 +2669,9 @@ nav.main-nav > ul{ position:relative; }
   color:var(--ink);
   margin-bottom:20px;
 }
-.field-optional{ color:var(--stone-soft); font-weight:400; text-transform:none; letter-spacing:0; }
+/* La etiqueta va en mayúsculas a 11 px; el marcador de opcional la acompaña
+   en el mismo registro (DS: 11 px solo en etiquetas en mayúsculas). */
+.field-optional{ color:var(--stone-soft); font-weight:400; letter-spacing:0; }
 
 .form-nav{ display:flex; gap:12px; margin-top:22px; }
 .form-nav-back{ display:none; flex:0 0 auto; padding-left:22px; padding-right:22px; }
@@ -2741,7 +2749,7 @@ nav.main-nav > ul{ position:relative; }
   cursor:pointer;
   margin:0;
 }
-.consent-field a{ color:var(--cyan); text-decoration:underline; }
+.consent-field a{ color:var(--blue); text-decoration:underline; }
 
 /* data-size="flexible" en el propio widget (contacto.html) hace que
    Cloudflare Turnstile ocupe el ancho del contenedor en vez de su caja
@@ -3009,7 +3017,7 @@ footer{
   .footer-top{ grid-template-columns:minmax(0,1fr); }
   .footer-bottom{ flex-direction:column; }
   .timeline-item{ grid-template-columns:40px 1fr; gap:16px; }
-  .timeline-num{ width:38px; height:38px; font-size:0.72rem; }
+  .timeline-num{ width:38px; height:38px; font-size:0.75rem; }
 }
 
 @media (min-width: 1600px){
@@ -3104,7 +3112,7 @@ footer{
 .chat-msg ul{ margin:8px 0 0; padding-left:18px; }
 .chat-msg li + li{ margin-top:4px; }
 .chat-msg strong{ font-weight:600; }
-.chat-msg.bot a{ color:var(--cyan); text-decoration:underline; text-underline-offset:2px; }
+.chat-msg.bot a{ color:var(--blue); text-decoration:underline; text-underline-offset:2px; }
 .chat-msg.bot a:hover{ color:var(--ink); }
 .chat-msg-note{ margin-top:8px !important; font-size:0.76rem; color:var(--stone-soft); }
 /* Cursor parpadeante mientras el mensaje se está escribiendo en streaming
@@ -3153,19 +3161,26 @@ footer{
   padding:0 16px 16px;
   flex-shrink:0;
 }
+/* Estas pastillas se pulsan, así que no pueden ir en cian: en el DS el cian
+   es el color del dato y nunca es clicable. Van en el azul de acción, en su
+   variante secundaria. En táctil el objetivo llega a 44 px; en escritorio
+   denso se queda en su altura compacta. */
 .chat-quick-replies button{
   font-family:var(--sans);
   font-size:0.76rem;
   font-weight:500;
-  color:var(--cyan);
-  background:rgba(67,224,255,.08);
-  border:1px solid rgba(67,224,255,.3);
+  color:var(--blue);
+  background:rgba(91,140,255,.08);
+  border:1px solid rgba(91,140,255,.32);
   padding:8px 12px;
   border-radius:100px;
   cursor:pointer;
   transition:background .2s ease, border-color .2s ease;
 }
-.chat-quick-replies button:hover{ background:rgba(67,224,255,.16); border-color:var(--cyan); }
+.chat-quick-replies button:hover{ background:rgba(91,140,255,.16); border-color:var(--blue); }
+@media (max-width:940px){
+  .chat-quick-replies button{ min-height:44px; padding-block:0; }
+}
 
 .chat-input-row{
   display:flex;
@@ -3305,7 +3320,7 @@ footer{
   text-align:left;
 }
 .radar-stage:hover,.radar-stage.is-active,.radar-stage:focus-visible{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); color:var(--ink); }
-.radar-stage-num{ font-family:var(--mono); font-size:0.7rem; color:var(--cyan); }
+.radar-stage-num{ font-family:var(--mono); font-size:0.75rem; color:var(--cyan); }
 .radar-note{ flex-basis:100%; color:var(--stone-soft); font-size:0.85rem; margin-top:6px; }
 @media (prefers-reduced-motion: reduce){ .radar-sweep{ animation:none; opacity:.3; } }
 @media (max-width:640px){ .radar-window .window-body{ flex-direction:column; align-items:stretch; } .radar-scope{ width:180px; height:180px; margin:0 auto; } }
@@ -3357,12 +3372,12 @@ footer{
   width:64px; height:44px;
   transform:rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%);
   background:var(--panel); border:1px solid var(--border); border-radius:9px;
-  font-family:var(--sans); font-size:0.72rem; color:var(--stone); cursor:pointer;
+  font-family:var(--sans); font-size:0.75rem; color:var(--stone); cursor:pointer;
   transition:border-color .2s ease, color .2s ease, background .2s ease;
 }
 .orbit-node:hover,.orbit-node:focus-visible,.orbit-node.is-active{ border-color:var(--cyan); color:var(--ink); background:rgba(67,224,255,.08); }
 .orbit-caption{ color:var(--stone-soft); font-size:0.85rem; min-height:1.4em; text-align:center; max-width:360px; }
-@media (max-width:640px){ .orbit-scope{ width:220px; height:220px; } .orbit-node{ transform:rotate(var(--angle)) translate(88px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); width:56px; font-size:0.6875rem; } }
+@media (max-width:640px){ .orbit-scope{ width:220px; height:220px; } .orbit-node{ transform:rotate(var(--angle)) translate(88px) rotate(calc(-1 * var(--angle))) translate(-50%,-50%); width:56px; font-size:0.75rem; } }
 
 /* ---------- Producción: piloto — el caos se convierte en sistema ----------
    Contenedor deliberadamente distinto al resto de Departamentos: sin chrome
@@ -3393,7 +3408,7 @@ footer{
   transition:background .3s ease;
 }
 .chaos-order-labels{ position:relative; display:inline-grid; }
-.chaos-order-label{ grid-area:1/1; color:var(--stone-soft); opacity:1; white-space:nowrap; }
+.chaos-order-label{ grid-area:1/1; font-size:0.75rem; color:var(--stone-soft); opacity:1; white-space:nowrap; }
 .chaos-order-label--after{ opacity:0; color:var(--green); }
 .chaos-order-stage{ position:relative; }
 .chaos-chip{
@@ -3868,7 +3883,7 @@ footer{
   display:flex; flex-direction:column; gap:8px;
   padding:20px; border:1px solid var(--border); border-radius:14px; background:var(--panel);
 }
-.dos-step-num{ font-family:var(--mono); font-size:0.72rem; color:var(--cyan); letter-spacing:.08em; }
+.dos-step-num{ font-family:var(--mono); font-size:0.75rem; color:var(--cyan); letter-spacing:.08em; }
 .dos-step strong{ font-size:0.96rem; color:var(--ink); }
 .dos-step span:last-child{ font-size:0.85rem; line-height:1.55; color:var(--stone); }
 
@@ -3926,4 +3941,22 @@ footer{
 }
 @media (prefers-reduced-motion: reduce){
   .dos-scatter li{ margin-left:0 !important; }
+}
+
+/* ============================================================
+   OBJETIVOS TÁCTILES — DS: 44 px en móvil
+   Medido con Playwright sobre las 72 páginas a 390 y 768 px: el
+   logotipo del pie, los enlaces de contacto y los botones se
+   quedaban entre 19 y 43 px. El área pulsable crece con un
+   pseudoelemento dentro del propio enlace, así que no se mueve
+   nada de sitio ni cambia ningún tamaño visible.
+   ============================================================ */
+@media (max-width:940px){
+  .footer-brand .footer-logo{ position:relative; }
+  .footer-brand .footer-logo::after{ content:""; position:absolute; inset:-9px -6px; }
+
+  .contact-row .value a{ position:relative; display:inline-block; }
+  .contact-row .value a::after{ content:""; position:absolute; inset:-13px -6px; }
+
+  .btn{ min-height:44px; }
 }

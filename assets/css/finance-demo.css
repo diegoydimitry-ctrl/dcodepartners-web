@@ -11,13 +11,18 @@
    sitio (todas las clases usan el prefijo fdemo-), y viceversa.
    ============================================================ */
 
+/* Los cuatro primeros valores venían del tema oscuro que Finance tenía antes
+   del rediseño y no eran tokens del DS (#0a0e17, #10151f, #161c2b, #232a3b):
+   la demo pintaba un fondo distinto al del resto del sitio. Ahora son los
+   tokens noche del D-Code Design System, los mismos que usan la Web, la
+   Partners App y el OS. */
 .fdemo-scope{
-  --dc-bg:#0a0e17;
-  --dc-surface:#10151f;
-  --dc-surface-2:#161c2b;
-  --dc-border:#232a3b;
-  --dc-border-strong:#2e3650;
-  --dc-text:#e8ecf5;
+  --dc-bg:#06080d;           /* DS noche · bg */
+  --dc-surface:#0b0f17;      /* DS noche · surface-1 */
+  --dc-surface-2:#111623;    /* DS noche · surface-2 */
+  --dc-border:rgba(255,255,255,.08);       /* DS noche · line */
+  --dc-border-strong:rgba(255,255,255,.15);/* DS noche · line-strong */
+  --dc-text:#edf1f8;         /* DS noche · text */
   --dc-text-muted:#a7b0c4;   /* DS noche · text-2 */
   --dc-text-faint:#8c95aa;   /* DS noche · text-3 (antes #545e78: 2,8:1, no llegaba a AA) */
   --dc-accent:#5b8cff;       /* DS · signal (un solo azul de acción) */
@@ -454,6 +459,18 @@
 .fdemo-gate-back{ display:block; margin-top:16px; font-size:.78rem; color:var(--dc-text-faint); text-decoration:none; }
 .fdemo-gate-back:hover{ color:var(--dc-text); }
 
+/* La fila del panel (resumen + actividad) venía con las columnas escritas en
+   el atributo style desde el JS, y un atributo no lo puede corregir ninguna
+   media query: a 390 px el panel entero se iba en horizontal. Vive aquí, y
+   por debajo de 860 px se apila. */
+.fdemo-dash-row{
+  display:grid; gap:16px;
+  grid-template-columns:minmax(0,1fr) minmax(0,2fr);
+}
+@media (max-width:860px){
+  .fdemo-dash-row{ grid-template-columns:minmax(0,1fr); }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width:1080px){
   .fdemo-kpi-grid{ grid-template-columns:repeat(2,1fr); }
@@ -496,4 +513,13 @@
 
 @media (prefers-reduced-motion:reduce){
   .fdemo-sidebar, .fdemo-sidebar-overlay{ transition:none; }
+}
+
+/* Objetivos táctiles de la demo (DS: 44 px en móvil). Medido a 390 px:
+   la navegación medía 35 px, el botón 43 y el enlace de vuelta 21. */
+@media (max-width:860px){
+  .fdemo-nav-item{ min-height:44px; }
+  .fdemo-btn{ min-height:44px; }
+  .fdemo-gate-back{ position:relative; }
+  .fdemo-gate-back::after{ content:""; position:absolute; inset:-12px -6px; }
 }

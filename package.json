@@ -9,7 +9,8 @@
     "qa:check": "node scripts/qa-preview-check.js",
     "check-instruments": "node scripts/check-instruments.js",
     "check:superficie": "node scripts/check-deploy-surface.mjs",
-    "check:enlaces": "node scripts/check-internal-links.mjs"
+    "check:enlaces": "node scripts/check-internal-links.mjs",
+    "qa:ds": "node scripts/qa-ds-responsive.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"

@@ -310,7 +310,7 @@ p{ color:var(--v-ink-2); }
   width:28px; height:28px; border-radius:50%; flex:none; position:relative;
   background:var(--v-bg); border:2px solid var(--v-edge);
   display:grid; place-items:center;
-  font-family:var(--mono); font-size:0.6875rem; color:var(--v-ink-3);
+  font-family:var(--mono); font-size:0.75rem; color:var(--v-ink-3);
   transition:border-color .3s var(--ease), color .3s, box-shadow .3s, transform .3s var(--ease);
 }
 .step[aria-expanded="true"] .step-dot, .step:hover .step-dot{
@@ -448,7 +448,7 @@ p{ color:var(--v-ink-2); }
 }
 .vstep.on::before{ border-color:var(--k, var(--v-a));
   box-shadow:0 0 0 5px color-mix(in srgb, var(--k, var(--v-a)) 14%, transparent); }
-.vstep-n{ font-family:var(--mono); font-size:0.6875rem; letter-spacing:.14em; color:var(--v-ink-3); }
+.vstep-n{ font-family:var(--mono); font-size:0.75rem; letter-spacing:.14em; color:var(--v-ink-3); }
 .vstep h3{ font-family:var(--serif); font-size:clamp(1.06rem,1.6vw,1.34rem); font-weight:650;
   color:var(--v-ink); margin:8px 0 0; letter-spacing:-.024em; }
 .vstep p{ font-size:.92rem; line-height:1.62; margin:10px 0 0; max-width:56ch; }
@@ -502,7 +502,7 @@ p{ color:var(--v-ink-2); }
   border-radius:2px; background:var(--k-finanzas); opacity:.75; }
 
 .mock{ border:1px solid var(--v-edge); border-radius:14px; overflow:hidden;
-  background:#0a0e17; box-shadow:0 30px 80px -40px rgba(0,0,0,.95); }
+  background:#0b0f17; /* DS noche · surface-1 */ box-shadow:0 30px 80px -40px rgba(0,0,0,.95); }
 .mock-top{ display:flex; align-items:center; gap:8px; padding:9px 12px;
   border-bottom:1px solid var(--v-edge-2); background:rgba(255,255,255,.03); }
 .mock-dots{ display:flex; gap:5px; }
@@ -670,6 +670,10 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .figure-n{ font-size:clamp(3rem,17vw,4.6rem); }
   .rail{ margin-inline:calc(-1 * var(--gut)); padding-inline:var(--gut); }
 }
+@media (max-width:860px){
+  /* Las pestañas son controles, no texto: en táctil llegan a 44 px (DS). */
+  .prod-tab{ min-height:44px; }
+}
 @media (max-width:560px){
   /* El botón sale de la cabecera —no cabe junto al logotipo y la
      hamburguesa— y vive dentro del menú. Una sola barra también aquí. */
@@ -742,7 +746,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
 }
 .pact:hover{ padding-left:14px; }
 .pact:hover::before{ width:100%; }
-.pact-n{ font-family:var(--mono); font-size:0.6875rem; letter-spacing:.14em; color:var(--v-ink-3);
+.pact-n{ font-family:var(--mono); font-size:0.75rem; letter-spacing:.14em; color:var(--v-ink-3);
   padding-top:.45em; transition:color .3s; }
 .pact:hover .pact-n{ color:var(--k, var(--v-a)); }
 .pact h3{ font-family:var(--serif); font-size:clamp(1.08rem,1.75vw,1.4rem); font-weight:650;

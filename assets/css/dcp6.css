@@ -515,3 +515,10 @@ body.v6 .prod{
   background:linear-gradient(180deg, rgba(11,15,27,.94), rgba(8,11,21,.90));
   -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
 }
+
+/* El titular-enlace mide 38 px a 390 px; el área pulsable llega a 44 sin
+   tocar el subrayado animado, que ya usa ::after. */
+@media (max-width:940px){
+  .v6-cap{ position:relative; }
+  .v6-cap::before{ content:""; position:absolute; inset:-3px 0; }
+}

@@ -273,7 +273,7 @@
 
       return pageHead('Dashboard', 'Último cálculo: ' + FDATETIME(snap.fechaCalculo)) +
         '<div class="fdemo-kpi-grid">' + kpis + '</div>' +
-        '<div style="display:grid; grid-template-columns:1fr 2fr; gap:16px;" class="fdemo-dash-row">' +
+        '<div class="fdemo-dash-row">' +
         card(cardHead('Alertas', 'Generadas por el cálculo de KPIs'), alertasHtml) +
         card(cardHead('Actividad reciente', 'Últimas facturas y gastos registrados'), actividadHtml) +
         '</div>';
