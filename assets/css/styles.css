@@ -598,7 +598,10 @@ header.scrolled{
   color:var(--ink);
   flex-shrink:0;
 }
-.logo img{ width:34px; height:auto; flex-shrink:0; }
+.logo img, .logo .logo-mark{ width:34px; height:auto; flex-shrink:0; }
+/* Marca vectorial del D-Code Design System (brand/dcode-mark.svg): los seis
+   píxeles y la «D» toman el color del texto; el píxel central, el azul de la web. */
+.logo-mark{ display:block; color:#fff; }
 .logo-word{
   font-family:var(--serif);
   font-size:1.2rem;
@@ -771,7 +774,8 @@ nav.main-nav > ul{ position:relative; }
   transition:color .2s ease, background .2s ease;
 }
 .lang-switch a:hover{ color:var(--ink); }
-.lang-switch a[aria-current="true"]{ color:var(--bg); background:var(--cyan); font-weight:600; }
+/* Selección = azul de acción (DS: el cian es solo para datos, nunca clicable). */
+.lang-switch a[aria-current="true"]{ color:#04070f; background:var(--blue); font-weight:600; }
 
 .burger{
   display:none;
@@ -2861,7 +2865,7 @@ footer{
   align-items:center;
   gap:10px;
 }
-.footer-brand .footer-logo img{ width:30px; }
+.footer-brand .footer-logo img, .footer-brand .footer-logo .logo-mark{ width:30px; height:auto; flex-shrink:0; }
 .footer-brand .footer-logo span{
   font-family:var(--serif); font-weight:700; color:var(--ink); font-size:1rem;
 }
@@ -3225,7 +3229,7 @@ footer{
   :root{ --pad:12px; }
   .nav-right{ gap:4px; }
   .logo-word{ font-size:0.92rem; }
-  .logo img{ width:28px; }
+  .logo img, .logo .logo-mark{ width:28px; }
   .nav-right .btn-primary{ padding:9px 9px; }
   .lang-switch a{ padding:5px 5px; font-size:0.78rem; }
 }

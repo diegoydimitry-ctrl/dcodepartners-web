@@ -79,12 +79,15 @@
     });
   }
 
-  /* ---------- Language switcher (ES default, /en/ mirrors every ES path) ---------- */
+  /* ---------- Language switcher (ES default, /en/ mirrors every ES path) ----------
+     Los enlaces ya llevan en el HTML su href real (rastreable sin JS). Esto
+     solo los reajusta a la URL exacta de la visita (p. ej. una 404 en una
+     ruta cualquiera). */
   document.querySelectorAll('.lang-switch').forEach(function (switcher) {
     var path = window.location.pathname;
     var isEn = path === '/en' || path.indexOf('/en/') === 0;
     var esHref = isEn ? (path.replace(/^\/en/, '') || '/') : path;
-    var enHref = isEn ? path : ('/en' + (path === '/' ? '/' : path));
+    var enHref = isEn ? path : ('/en' + (path === '/' ? '' : path));
     var esLink = switcher.querySelector('[data-lang="es"]');
     var enLink = switcher.querySelector('[data-lang="en"]');
     if (esLink) { esLink.href = esHref; esLink.setAttribute('aria-current', isEn ? 'false' : 'true'); }
