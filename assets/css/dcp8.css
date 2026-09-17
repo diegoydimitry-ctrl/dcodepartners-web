@@ -176,7 +176,11 @@ body.v7 footer, body.v6 footer{ position:relative; isolation:isolate; }
    alcanza a nada que este por encima. */
 body.v7 footer::before, body.v6 footer::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
-  inset:-64px 0 0 0;
+  /* Antes inset:-64px 0 0 0: el pie está aislado (isolation) y se pinta después
+     de <main>, así que esos 64 px oscurecían lo último del contenido. En
+     /contacto a 390 px dejaban «Ver preguntas frecuentes» casi invisible.
+     El fundido empieza ahora en el borde del pie. */
+  inset:0;
   background:
     linear-gradient(180deg, rgba(5,7,14,0) 0, rgba(5,7,14,.86) 60px, rgba(5,7,14,.985) 96px),
     rgba(5,7,14,.985);
