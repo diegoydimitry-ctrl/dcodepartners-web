@@ -52,7 +52,15 @@ const PAGES = [
   '/en/servicios/integraciones', '/faq', '/garantias', '/metodo', '/privacidad',
   '/seguridad', '/servicios', '/servicios/agentes-ia', '/servicios/automatizacion-ia',
   '/servicios/integraciones',
+  // D-Code Finance: página de producto propia (ES/EN). Faltaba en la lista.
+  '/sistema-financiero', '/en/sistema-financiero',
 ];
+
+// QA_PATHS=/ruta1,/ruta2 limita la pasada a esas rutas (útil en local para
+// repetir solo lo que se está corrigiendo). Sin la variable, la lista completa.
+const PAGES_RUN = process.env.QA_PATHS
+  ? process.env.QA_PATHS.split(',').map((p) => p.trim()).filter(Boolean)
+  : PAGES;
 
 const WIDTHS = [320, 375, 390, 768, 834, 1024, 1440, 1920];
 
@@ -169,7 +177,7 @@ async function checkPage(browser, path, width, baseOrigin) {
 
 async function main() {
   console.log(`QA contra: ${BASE}`);
-  console.log(`${PAGES.length} páginas x ${WIDTHS.length} anchos = ${PAGES.length * WIDTHS.length} comprobaciones\n`);
+  console.log(`${PAGES_RUN.length} páginas x ${WIDTHS.length} anchos = ${PAGES_RUN.length * WIDTHS.length} comprobaciones\n`);
 
   // En entornos donde Playwright no descarga sus navegadores (contenedores con
   // PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD), PLAYWRIGHT_CHROMIUM_PATH apunta al
@@ -183,7 +191,7 @@ async function main() {
   const allIssues = [];
   let checked = 0;
 
-  for (const path of PAGES) {
+  for (const path of PAGES_RUN) {
     for (const width of WIDTHS) {
       const issues = await checkPage(browser, path, width, baseOrigin);
       checked++;

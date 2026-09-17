@@ -130,7 +130,7 @@ body.v6 main .lit::before{ display:none; }
 .v6-lede{ max-width:min(940px, 94%); }
 .v6-kicker{
   display:inline-flex; align-items:center; gap:12px;
-  font-family:var(--mono); font-size:.66rem; letter-spacing:.24em; text-transform:uppercase;
+  font-family:var(--mono); font-size:0.6875rem; letter-spacing:.24em; text-transform:uppercase;
   color:#8fa2c9;
 }
 .v6-kicker::before{ content:""; width:26px; height:1px; background:linear-gradient(90deg, var(--v-a), transparent); }
@@ -157,7 +157,7 @@ body.v6 main .lit::before{ display:none; }
   position:relative;
   display:flex; align-items:center; gap:14px; flex-wrap:wrap; row-gap:6px;
   margin-top:clamp(34px,5vh,58px);
-  font-family:var(--mono); font-size:.63rem; letter-spacing:.18em; text-transform:uppercase; color:#6f7d9c;
+  font-family:var(--mono); font-size:0.6875rem; letter-spacing:.18em; text-transform:uppercase; color:#6f7d9c;
 }
 .v6-status::before{ content:""; width:30px; height:1px; background:rgba(150,174,245,.4); }
 /* En vertical esta línea cae justo sobre la convergencia. Su propio velo la
@@ -234,7 +234,7 @@ body.v6 main .lit::before{ display:none; }
 .v6-step p{ margin:16px 0 0; font-size:clamp(.94rem,1.1vw,1.02rem); line-height:1.66; color:#9dabca; max-width:44ch; }
 .v6-step-tag{
   display:inline-block; margin-top:20px;
-  font-family:var(--mono); font-size:.6rem; letter-spacing:.16em; text-transform:uppercase;
+  font-family:var(--mono); font-size:0.6875rem; letter-spacing:.16em; text-transform:uppercase;
   color:var(--k);
 }
 
@@ -342,7 +342,7 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
   .v6-hero{ min-height:100svh; }
   .v6-cap{ font-size:clamp(1.28rem, 7vw, 1.9rem); }
   .v6-acts .btn{ width:100%; justify-content:center; }
-  .v6-status{ font-size:.58rem; letter-spacing:.14em; }
+  .v6-status{ font-size:0.6875rem; letter-spacing:.14em; }
 }
 
 /* ================================================= 10. MOVIMIENTO REDUCIDO */
