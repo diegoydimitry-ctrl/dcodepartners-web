@@ -13,10 +13,10 @@
      profundo, de modo que un panel parezca una ventana y no una pegatina.
    ========================================================================= */
 
-.field--inst{ position:fixed; inset:0; z-index:0; pointer-events:none; background:#05070e; }
+.field--inst{ position:fixed; inset:0; z-index:0; pointer-events:none; background:#06080d; }
 .field--inst canvas{ display:block; width:100%; height:100%; }
 
-body.v7{ background:#05070e; }
+body.v7{ background:#06080d; }
 body.v7::before, body.v7::after{ display:none !important; }
 body.v7 .glow-orb{ display:none !important; }
 body.v7 #main-content, body.v7 footer{ position:relative; z-index:1; }
@@ -28,13 +28,13 @@ body.v7 .chat-widget{ z-index:300; }
    quedar por encima del contenido o el desplegable no se puede ni pulsar. */
 body.v7 #site-header{ position:relative; z-index:200; background:transparent; border-bottom-color:transparent; }
 body.v7 #site-header.scrolled{
-  background:rgba(5,7,14,.62);
+  background:rgba(6,8,13,.62);
   backdrop-filter:blur(20px) saturate(1.5); -webkit-backdrop-filter:blur(20px) saturate(1.5);
   border-bottom-color:rgba(150,174,245,.08);
 }
 body.v7 footer{
   border-top:0;
-  background:linear-gradient(180deg, rgba(5,7,14,0) 0%, rgba(5,7,14,.88) 24%, #05070e 58%);
+  background:linear-gradient(180deg, rgba(6,8,13,0) 0%, rgba(6,8,13,.88) 24%, #06080d 58%);
 }
 
 /* Velo bajo cada encabezado: sin borde, sin caja, solo oscuridad difusa. */
@@ -66,7 +66,7 @@ body.v7 .pacts::before, body.v7 .track::before, body.v7 .pre-cta::before{
      y /sistema-financiero caían a 1,5:1 sobre un trazo brillante. */
   inset:-11% -8%;
   background:radial-gradient(88% 78% at 50% 50%,
-    rgba(5,7,14,.985), rgba(5,7,14,.94) 48%, rgba(5,7,14,.58) 74%, rgba(5,7,14,0) 94%);
+    rgba(6,8,13,.985), rgba(6,8,13,.94) 48%, rgba(6,8,13,.58) 74%, rgba(6,8,13,0) 94%);
 }
 /* Las cejillas van solas sobre el campo y son texto pequeño: llevan su propio
    velo, ceñido, porque no pertenecen a ningún bloque con fondo. Va en ::after
@@ -77,7 +77,7 @@ body.v6 .eyebrow::after, body.v7 .eyebrow::after{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-160% -20%;
   background:radial-gradient(74% 100% at 42% 50%,
-    rgba(5,7,14,.985), rgba(5,7,14,.86) 54%, rgba(5,7,14,0) 94%);
+    rgba(6,8,13,.985), rgba(6,8,13,.86) 54%, rgba(6,8,13,0) 94%);
 }
 /* Dentro de una ventana el fondo ya es opaco: el velo sobraba y, al
    sobresalir hacia arriba, tapaba la barra de título («reservar.cal» en
@@ -93,20 +93,20 @@ body.v7 .head::before,
 body.v7 .figure::before,
 body.v7 .section-head::before{
   content:""; position:absolute; z-index:-1; pointer-events:none; inset:-34% -10%;
-  background:radial-gradient(72% 72% at 32% 50%, rgba(5,7,14,.97), rgba(5,7,14,.86) 44%, rgba(5,7,14,.42) 68%, rgba(5,7,14,0) 88%);
+  background:radial-gradient(72% 72% at 32% 50%, rgba(6,8,13,.97), rgba(6,8,13,.86) 44%, rgba(6,8,13,.42) 68%, rgba(6,8,13,0) 88%);
 }
 /* La entrada de página: velo lineal ceñido a la columna de lectura. Cubrir el
    ancho completo dejaba al instrumento sin sitio donde existir. */
 body.v7 .page-hero::before{
   content:""; position:absolute; z-index:-1; pointer-events:none; inset:0;
   background:linear-gradient(100deg,
-    rgba(5,7,14,.96) 0%, rgba(5,7,14,.93) 26%, rgba(5,7,14,.72) 44%,
-    rgba(5,7,14,.28) 58%, rgba(5,7,14,0) 72%);
+    rgba(6,8,13,.96) 0%, rgba(6,8,13,.93) 26%, rgba(6,8,13,.72) 44%,
+    rgba(6,8,13,.28) 58%, rgba(6,8,13,0) 72%);
 }
 body.v7 .page-hero{ position:relative; isolation:isolate; }
 /* El bloque de afirmación va centrado: su velo también. */
 body.v7 .figure::before{
-  background:radial-gradient(66% 70% at 50% 50%, rgba(5,7,14,.95), rgba(5,7,14,.76) 48%, rgba(5,7,14,0) 86%);
+  background:radial-gradient(66% 70% at 50% 50%, rgba(6,8,13,.95), rgba(6,8,13,.76) 48%, rgba(6,8,13,0) 86%);
   inset:-26% -10%;
 }
 body.v7 .page-hero{ overflow-x:clip; }
@@ -182,13 +182,13 @@ body.v7 footer::before, body.v6 footer::before{
      El fundido empieza ahora en el borde del pie. */
   inset:0;
   background:
-    linear-gradient(180deg, rgba(5,7,14,0) 0, rgba(5,7,14,.86) 60px, rgba(5,7,14,.985) 96px),
-    rgba(5,7,14,.985);
+    linear-gradient(180deg, rgba(6,8,13,0) 0, rgba(6,8,13,.86) 60px, rgba(6,8,13,.985) 96px),
+    rgba(6,8,13,.985);
 }
 /* Y la cadena de pasos gana un punto de velo por el mismo motivo. */
 body.v7 .chain::before{
   background:radial-gradient(88% 80% at 50% 50%,
-    rgba(5,7,14,.985), rgba(5,7,14,.94) 46%, rgba(5,7,14,.60) 74%, rgba(5,7,14,0) 94%);
+    rgba(6,8,13,.985), rgba(6,8,13,.94) 46%, rgba(6,8,13,.60) 74%, rgba(6,8,13,0) 94%);
 }
 
 /* /metodo: la lista de pasos ya usa su ::before para la barra de progreso, así
@@ -199,7 +199,7 @@ body.v7 .vsteps::after{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-6% -9%;
   background:radial-gradient(88% 80% at 46% 50%,
-    rgba(5,7,14,.985), rgba(5,7,14,.94) 50%, rgba(5,7,14,.56) 76%, rgba(5,7,14,0) 95%);
+    rgba(6,8,13,.985), rgba(6,8,13,.94) 50%, rgba(6,8,13,.56) 76%, rgba(6,8,13,0) 95%);
 }
 
 /* Las tarjetas del raíl tienen fondo translúcido y su contenedor recorta el
@@ -270,7 +270,7 @@ body.v6 .cta-band > .container, body.v7 .cta-band > .container{ position:relativ
    superficie propia; en escritorio conserva su degradado. */
 @media (max-width:640px){
   body.v6 footer, body.v7 footer{
-    background:linear-gradient(180deg, rgba(7,10,19,.95), rgba(5,7,14,.995));
+    background:linear-gradient(180deg, rgba(7,10,19,.95), rgba(6,8,13,.995));
   }
 }
 
@@ -289,7 +289,7 @@ body.v6 .cta-band > .container, body.v7 .cta-band > .container{ position:relativ
   body.v7 .head::before, body.v7 .figure::before, body.v7 .section-head::before{
     inset:-14% -14%;
     background:radial-gradient(96% 88% at 50% 50%,
-      rgba(5,7,14,.995), rgba(5,7,14,.97) 52%, rgba(5,7,14,.70) 78%, rgba(5,7,14,0) 97%);
+      rgba(6,8,13,.995), rgba(6,8,13,.97) 52%, rgba(6,8,13,.70) 78%, rgba(6,8,13,0) 97%);
   }
 }
 
@@ -326,7 +326,7 @@ body.v7 .eje::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-10px clamp(-56px,-4vw,-20px);
   background:radial-gradient(closest-side at 50% 50%,
-    rgba(5,7,14,.88), rgba(5,7,14,.74) 46%, rgba(5,7,14,.34) 76%, transparent 100%);
+    rgba(6,8,13,.88), rgba(6,8,13,.74) 46%, rgba(6,8,13,.34) 76%, transparent 100%);
 }
 /* Y encima, las dos temperaturas: un solo degradado que cruza toda la
    anchura, transparente en los dos extremos y difuminado arriba y abajo. */
@@ -544,5 +544,5 @@ body.v7 .section-sm.lit .head::before,
 body.v7 .section-air.lit .head::before{
   inset:-40% -12%;
   background:radial-gradient(78% 78% at 34% 50%,
-    rgba(5,7,14,.995), rgba(5,7,14,.965) 46%, rgba(5,7,14,.60) 72%, rgba(5,7,14,0) 92%);
+    rgba(6,8,13,.995), rgba(6,8,13,.965) 46%, rgba(6,8,13,.60) 72%, rgba(6,8,13,0) 92%);
 }

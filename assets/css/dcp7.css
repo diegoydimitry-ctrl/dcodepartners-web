@@ -40,8 +40,8 @@
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-22px -26px -22px -46px;
   background:radial-gradient(120% 66% at 100% 50%,
-    rgba(5,7,14,.98), rgba(5,7,14,.92) 34%, rgba(5,7,14,.58) 58%,
-    rgba(5,7,14,.16) 78%, rgba(5,7,14,0) 92%);
+    rgba(6,8,13,.98), rgba(6,8,13,.92) 34%, rgba(6,8,13,.58) 58%,
+    rgba(6,8,13,.16) 78%, rgba(6,8,13,0) 92%);
   transition:opacity .40s ease;
 }
 @media (min-width:1180px){ .dcx{ display:flex; } }
@@ -618,14 +618,14 @@ body.v7 .faq-category::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-8% -6%;
   background:radial-gradient(84% 74% at 50% 50%,
-    rgba(5,7,14,.97), rgba(5,7,14,.90) 46%, rgba(5,7,14,.52) 72%, rgba(5,7,14,0) 94%);
+    rgba(6,8,13,.97), rgba(6,8,13,.90) 46%, rgba(6,8,13,.52) 72%, rgba(6,8,13,0) 94%);
 }
 body.v7 .faq-wrap{ position:relative; }
 body.v7 .faq-wrap::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-40% -10%;
   background:radial-gradient(70% 80% at 50% 50%,
-    rgba(5,7,14,.94), rgba(5,7,14,.66) 56%, rgba(5,7,14,0) 92%);
+    rgba(6,8,13,.94), rgba(6,8,13,.66) 56%, rgba(6,8,13,0) 92%);
 }
 
 /* ============================================================================
@@ -706,8 +706,8 @@ body.v7 .blog-grid{ position:relative; }
 body.v7 .blog-grid::before{
   content:""; position:absolute; z-index:-1; pointer-events:none; inset:-4% -7%;
   background:linear-gradient(180deg,
-    rgba(5,7,14,0) 0%, rgba(5,7,14,.94) 3%, rgba(5,7,14,.97) 50%,
-    rgba(5,7,14,.94) 97%, rgba(5,7,14,0) 100%);
+    rgba(6,8,13,0) 0%, rgba(6,8,13,.94) 3%, rgba(6,8,13,.97) 50%,
+    rgba(6,8,13,.94) 97%, rgba(6,8,13,0) 100%);
 }
 @media (prefers-reduced-motion: reduce){
   body.v7 .blog-grid .blog-card::after, body.v7 .blog-grid .blog-card::before,
@@ -800,8 +800,8 @@ body.v7 .article-footer::before, body.v7 .article-hero::before{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-3% -8%;
   background:linear-gradient(180deg,
-      rgba(5,7,14,0) 0%, rgba(5,7,14,.93) 3%, rgba(5,7,14,.96) 50%,
-      rgba(5,7,14,.93) 97%, rgba(5,7,14,0) 100%);
+      rgba(6,8,13,0) 0%, rgba(6,8,13,.93) 3%, rgba(6,8,13,.96) 50%,
+      rgba(6,8,13,.93) 97%, rgba(6,8,13,0) 100%);
 }
 /* La etiqueta de categoría perdió su pastilla al pasar a franja: sin fondo y
    sobre el instrumento se quedaba en 2,28. Recupera contraste con tinta, no
@@ -825,7 +825,7 @@ body.v7 .blog-grid .blog-card .blog-meta::after{
   content:""; position:absolute; z-index:-1; pointer-events:none;
   inset:-9px -16px;
   background:radial-gradient(72% 120% at 40% 50%,
-    rgba(5,7,14,.99), rgba(5,7,14,.95) 42%, rgba(5,7,14,.62) 70%, rgba(5,7,14,0) 96%);
+    rgba(6,8,13,.99), rgba(6,8,13,.95) 42%, rgba(6,8,13,.62) 70%, rgba(6,8,13,0) 96%);
 }
 body.v7 .blog-grid .blog-card .blog-cat{ color:var(--v-ink-2); }
 body.v7 .blog-grid .blog-card .window-title{ color:var(--v-ink-3); }

@@ -27,7 +27,7 @@
  * proveedor principal nunca se ve como una respuesta a medias ni como un
  * error crudo, salvo que fallen TODOS los proveedores configurados.
  */
-const { getProviderChain, MAX_STREAM_MS } = require('../lib/providers');
+const { getProviderChain, MAX_STREAM_MS } = require('./_lib/providers');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;

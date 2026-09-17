@@ -615,10 +615,12 @@ header.scrolled{
   white-space:nowrap;
 }
 .logo-sub{
+  /* DS: etiqueta de producto del lockup — mono en mayúsculas, 11px, texto
+     secundario. El cian del sistema es dato y no debe ir dentro de un enlace. */
   font-family:var(--mono);
-  font-size:0.625rem;
-  letter-spacing:0.24em;
-  color:var(--cyan);
+  font-size:0.6875rem;
+  letter-spacing:0.22em;
+  color:var(--stone);
   margin-top:5px;
 }
 

@@ -51,7 +51,7 @@ const FORBIDDEN = [
 // Ficheros que existen fuera de assets/ y deben llegar (no se sirven como estático
 // o se cortan por redirección, pero el despliegue los necesita).
 const SERVER_ONLY = new Set(['package.json', 'vercel.json', 'assets/.gitkeep']);
-const REQUIRED = ['index.html', 'en/index.html', '404.html', 'contacto.html', 'sistema-financiero/demo.html', 'assets/css/styles.css', 'assets/js/main.js', 'assets/data/knowledge-base.json', 'robots.txt', 'sitemap.xml', 'api/chat.js', 'api/contact-fallback.js', 'lib/providers.js', 'package.json', 'vercel.json'];
+const REQUIRED = ['index.html', 'en/index.html', '404.html', 'contacto.html', 'sistema-financiero/demo.html', 'assets/css/styles.css', 'assets/js/main.js', 'assets/data/knowledge-base.json', 'robots.txt', 'sitemap.xml', 'api/chat.js', 'api/contact-fallback.js', 'api/_lib/providers.js', 'package.json', 'vercel.json'];
 
 function staticCheck() {
   const files = execSync('git ls-files -z', { cwd: ROOT }).toString().split('\0').filter(Boolean).filter((f) => existsSync(join(ROOT, f)));
@@ -70,9 +70,9 @@ function staticCheck() {
   // se coma una sección nueva sin que nadie lo note).
   for (const f of files) if (/\.html$/.test(f) && !FORBIDDEN.some((re) => re.test(f)) && !set.has(f)) errors.push(`Página HTML fuera del despliegue: ${f}`);
 
-  const vercel = JSON.parse(readFileSync(join(ROOT, 'vercel.json'), 'utf8'));
-  const libCut = (vercel.redirects || []).some((r) => r.source === '/lib/:path*' && /404/.test(r.destination));
-  if (deployed.some((f) => f.startsWith('lib/')) && !libCut) errors.push('lib/ se despliega y vercel.json ya no redirige /lib/:path* a /404');
+  // Nada de código de servidor fuera de api/: lo que api/ necesita vive en
+  // api/_lib/, que Vercel ni publica como estático ni convierte en función.
+  for (const f of deployed) if (/^lib\//.test(f)) errors.push(`Código servido fuera de api/: ${f} (muévelo a api/_lib/)`);
 
   const internalsInRepo = files.filter((f) => FORBIDDEN.some((re) => re.test(f)));
   console.log(`Superficie estática: ${files.length} ficheros versionados → ${deployed.length} desplegados; ${internalsInRepo.length} internos en el repo, ${internalsInRepo.filter((f) => set.has(f)).length} desplegados.`);
@@ -86,7 +86,7 @@ async function liveCheck(base) {
     const body = res.status === 200 ? await res.text() : '';
     return { status: res.status, body };
   };
-  const internal = ['/docs/estrategia-monetizacion-dcode-partners.md', '/scripts/qa-preview-check.js', '/scripts/check-deploy-surface.mjs', '/.github/workflows/qa-preview.yml', '/automation/n8n/lead-ia-360/lead-ia-360.workflow.json', '/automation/n8n/linkedin-auto-post/README.md', '/lib/providers.js', '/README.md', '/.vercelignore', '/package.json'];
+  const internal = ['/api/_lib/providers.js', '/lib/providers.js', '/docs/estrategia-monetizacion-dcode-partners.md', '/scripts/qa-preview-check.js', '/scripts/check-deploy-surface.mjs', '/.github/workflows/qa-preview.yml', '/automation/n8n/lead-ia-360/lead-ia-360.workflow.json', '/automation/n8n/linkedin-auto-post/README.md', '/lib/providers.js', '/README.md', '/.vercelignore', '/package.json'];
   for (const p of internal) {
     const { status, body } = await probe(p);
     // Una SPA/404 personalizada puede devolver 200 con HTML de la 404: solo es fuga si el cuerpo no es HTML.
