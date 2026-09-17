@@ -1,0 +1,22 @@
+name: Superficie de despliegue
+
+# Falla si un fichero interno (docs, scripts, .github, automation, *.md, *.yml,
+# workflows de n8n…) entraría en el despliegue de Vercel. Aplica la misma lógica
+# que @vercel/client sobre `git ls-files` + .vercelignore. No necesita red ni
+# secretos. Ver scripts/check-deploy-surface.mjs.
+on:
+  push:
+  pull_request:
+
+jobs:
+  superficie:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+      - name: Comprobar superficie de despliegue
+        run: npm run check:superficie

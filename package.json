@@ -7,13 +7,15 @@
     "generate-kb": "node scripts/build-knowledge-base.js",
     "update-asset-versions": "node scripts/update-asset-versions.js",
     "qa:check": "node scripts/qa-preview-check.js",
-    "check-instruments": "node scripts/check-instruments.js"
+    "check-instruments": "node scripts/check-instruments.js",
+    "check:superficie": "node scripts/check-deploy-surface.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"
   },
   "devDependencies": {
     "node-html-parser": "^9.0.1",
-    "playwright": "^1.62.1"
+    "playwright": "^1.62.1",
+    "ignore": "^5.3.2"
   }
 }

@@ -82,6 +82,9 @@ jobs:
       - name: Ejecutar QA contra la Preview
         run: node scripts/qa-preview-check.js "${{ steps.preview.outputs.preview_url }}"
 
+      - name: Superficie de despliegue — nada interno responde en la Preview
+        run: node scripts/check-deploy-surface.mjs --url "${{ steps.preview.outputs.preview_url }}"
+
   smoke-test:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -100,3 +103,6 @@ jobs:
 
       - name: Ejecutar QA contra la URL indicada
         run: node scripts/qa-preview-check.js "${{ inputs.url }}"
+
+      - name: Superficie de despliegue — nada interno responde en la URL indicada
+        run: node scripts/check-deploy-surface.mjs --url "${{ inputs.url }}"
