@@ -79,6 +79,16 @@ body.v6 .eyebrow::after, body.v7 .eyebrow::after{
   background:radial-gradient(74% 100% at 42% 50%,
     rgba(5,7,14,.985), rgba(5,7,14,.86) 54%, rgba(5,7,14,0) 94%);
 }
+/* Dentro de una ventana el fondo ya es opaco: el velo sobraba y, al
+   sobresalir hacia arriba, tapaba la barra de título («reservar.cal» en
+   /contacto, a 390 px). */
+body.v6 .window .eyebrow::after, body.v7 .window .eyebrow::after{ display:none; }
+/* Los velos de legibilidad de los bloques siguientes (.timeline, .outs…)
+   sobresalen hacia arriba y viven en un contexto de apilamiento posterior
+   (.reveal), así que pintaban ENCIMA del titular anterior: en /departamentos
+   a 390 px la mitad de «Así se combinan los Departamentos entre sí» quedaba
+   bajo una banda oscura. El titular sube un nivel. */
+body.v7 .section-head, body.v7 .head{ position:relative; z-index:1; }
 body.v7 .head::before,
 body.v7 .figure::before,
 body.v7 .section-head::before{
