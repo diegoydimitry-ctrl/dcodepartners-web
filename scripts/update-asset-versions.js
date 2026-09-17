@@ -61,13 +61,28 @@ const dcp8CssHash = hashFile('assets/css/dcp8.css');
 const dcp8JsHash = hashFile('assets/js/dcp8.js');
 // dcp9 son las composiciones atadas a un bloque concreto del contenido.
 const dcp9JsHash = hashFile('assets/js/dcp9.js');
+// La demo de Finance (/sistema-financiero/demo, /sistema-financiero/app y el
+// bloque de /departamentos/finanzas) llevaba ?v=2 escrito a mano: quedaba
+// fuera de este script y un cambio en su CSS/JS no invalidaba la caché.
+const FINANCE_ASSETS = [
+  'assets/css/finance-demo.css',
+  'assets/js/finance-demo.js',
+  'assets/js/finance-demo.en.js',
+  'assets/js/finance-demo-data.js',
+  'assets/js/finance-demo-data.en.js',
+].map((rel) => {
+  const name = path.basename(rel);
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // (?<![\w-]) evita que "finance-demo.js" coincida dentro de otro nombre.
+  return { name, hash: hashFile(rel), re: new RegExp('(?<![\\w-])' + escaped + '\\?v=[A-Za-z0-9_-]+', 'g') };
+});
 
 const htmlFiles = findHtmlFiles(ROOT, []);
 let changed = 0;
 
 for (const file of htmlFiles) {
   const original = fs.readFileSync(file, 'utf8');
-  const updated = original
+  let updated = original
     .replace(/styles\.css\?v=[A-Za-z0-9_-]+/g, `styles.css?v=${cssHash}`)
     .replace(/main\.js\?v=[A-Za-z0-9_-]+/g, `main.js?v=${jsHash}`)
     .replace(/dcp5\.css\?v=[A-Za-z0-9_-]+/g, `dcp5.css?v=${dcpCssHash}`)
@@ -79,6 +94,7 @@ for (const file of htmlFiles) {
     .replace(/dcp8\.css\?v=[A-Za-z0-9_-]+/g, `dcp8.css?v=${dcp8CssHash}`)
     .replace(/dcp8\.js\?v=[A-Za-z0-9_-]+/g, `dcp8.js?v=${dcp8JsHash}`)
     .replace(/dcp9\.js\?v=[A-Za-z0-9_-]+/g, `dcp9.js?v=${dcp9JsHash}`);
+  for (const a of FINANCE_ASSETS) updated = updated.replace(a.re, `${a.name}?v=${a.hash}`);
   if (updated !== original) {
     fs.writeFileSync(file, updated, 'utf8');
     changed++;
@@ -96,4 +112,5 @@ console.log(`dcp7.js    -> ?v=${dcp7JsHash}`);
 console.log(`dcp8.css   -> ?v=${dcp8CssHash}`);
 console.log(`dcp8.js    -> ?v=${dcp8JsHash}`);
 console.log(`dcp9.js    -> ?v=${dcp9JsHash}`);
+for (const a of FINANCE_ASSETS) console.log(`${a.name} -> ?v=${a.hash}`);
 console.log(`Archivos .html actualizados: ${changed}/${htmlFiles.length}`);

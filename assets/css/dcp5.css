@@ -23,24 +23,27 @@
 
 /* ============================================================ 1. FUNDAMENTOS */
 :root{
-  --v-bg:      #06080f;
-  --v-bg-2:    #0a0e1b;
+  --v-bg:      #06080d;   /* DS noche · bg */
+  --v-bg-2:    #0b0f17;   /* DS noche · surface-1 */
   --v-panel:   rgba(19, 26, 48, .58);
   --v-panel-2: rgba(30, 40, 72, .72);
   --v-edge:    rgba(150, 174, 245, .15);
   --v-edge-2:  rgba(150, 174, 245, .075);
 
-  --v-ink:   #f5f8ff;
-  --v-ink-2: #b3bfe0;
-  --v-ink-3: #78849f;
+  --v-ink:   #edf1f8;   /* DS noche · text */
+  --v-ink-2: #a7b0c4;   /* DS noche · text-2 */
+  --v-ink-3: #8c95aa;   /* DS noche · text-3 */
 
-  --v-a:  #4dd0e1;   /* cian    */
-  --v-b:  #7c6cff;   /* violeta */
+  --v-a:  #43e0ff;   /* cian = DS data (y --cyan de styles.css) */
+  --v-b:  #9b6bff;   /* violeta = --violet de styles.css */
   --v-c:  #ff6b9d;   /* rosa    */
-  --v-grad: linear-gradient(102deg, var(--v-a), var(--v-b) 54%, var(--v-c));
+  /* Degradado de marca (cian → azul → violeta): el mismo que --grad-brand de
+     styles.css. Solo para momentos de marca (titulares .grad, cifra); la
+     acción usa el azul plano (DS: "un solo azul para la acción"). */
+  --v-grad: linear-gradient(102deg, var(--v-a), var(--blue, #5b8cff) 54%, var(--v-b));
 
   /* Tonos por capacidad. Identifican, no decoran. */
-  --k-direccion:#a78bfa; --k-comercial:#4dd0e1; --k-marketing:#ff6b9d;
+  --k-direccion:#a78bfa; --k-comercial:#43e0ff; --k-marketing:#ff6b9d;
   --k-clientes:#35e0a1;  --k-produccion:#ffb43a; --k-finanzas:#5b8cff;
   --k-soporte:#2dd4bf;   --k-administracion:#8b93ff;
 
@@ -60,8 +63,8 @@
 
   /* Atmósfera. Estas tres variables las mueve el scroll (dcp5.js): cada
      sección tiene su temperatura y el fondo viaja de una a otra. */
-  --amb-1: 124,108,255;   /* violeta */
-  --amb-2: 77,208,225;    /* cian    */
+  --amb-1: 155,107,255;   /* violeta */
+  --amb-2: 67,224,255;    /* cian    */
   --amb-3: 255,107,157;   /* rosa    */
   --amb-i: 1;             /* intensidad */
 }
@@ -157,7 +160,7 @@ p{ color:var(--v-ink-2); }
   transition:background .3s var(--ease), border-color .3s var(--ease), backdrop-filter .3s;
 }
 #site-header.scrolled{
-  background:rgba(6,8,15,.72);
+  background:rgba(6,8,13,.72);
   backdrop-filter:blur(22px) saturate(1.6); -webkit-backdrop-filter:blur(22px) saturate(1.6);
   border-bottom-color:var(--v-edge-2);
 }
@@ -180,8 +183,8 @@ p{ color:var(--v-ink-2); }
 /* =============================================================== 4. BOTONES */
 .btn{ border-radius:999px; font-weight:600; letter-spacing:-.01em; position:relative; overflow:hidden;
   transition:transform .22s var(--ease), box-shadow .28s, background .2s, border-color .2s; }
-.btn-primary{ background:var(--v-grad); color:#05070d; border:0; box-shadow:0 12px 38px -14px rgba(124,108,255,.85); }
-.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 22px 56px -14px rgba(255,107,157,.7); }
+.btn-primary{ background:var(--blue, #5b8cff); color:#04070f; border:0; box-shadow:0 12px 38px -14px rgba(91,140,255,.75); }
+.btn-primary:hover{ background:#7ba2ff; transform:translateY(-2px); box-shadow:0 22px 56px -14px rgba(91,140,255,.8); }
 /* Barrido de luz al pasar por encima: 600 ms, una vez, y se acaba. */
 .btn-primary::after{
   content:""; position:absolute; inset:0; pointer-events:none; transform:translateX(-120%);
@@ -246,7 +249,7 @@ p{ color:var(--v-ink-2); }
 /* Velo: garantiza contraste del titular sobre cualquier estado de la escena. */
 .stage-veil{
   position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:linear-gradient(100deg, rgba(6,8,15,.94) 4%, rgba(6,8,15,.66) 34%, rgba(6,8,15,.06) 60%, transparent 74%);
+  background:linear-gradient(100deg, rgba(6,8,13,.94) 4%, rgba(6,8,13,.66) 34%, rgba(6,8,13,.06) 60%, transparent 74%);
 }
 .stage-inner{ position:relative; z-index:3; max-width:860px; }
 /* El titular del hero se dimensiona para que cada frase quepa en UNA línea:
@@ -353,9 +356,9 @@ p{ color:var(--v-ink-2); }
   position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
   width:clamp(128px,17vw,168px); aspect-ratio:1; border-radius:50%;
   display:grid; place-items:center; text-align:center; padding:12px;
-  background:radial-gradient(circle at 50% 40%, rgba(124,108,255,.24), rgba(9,13,26,.9) 68%);
+  background:radial-gradient(circle at 50% 40%, rgba(155,107,255,.24), rgba(9,13,26,.9) 68%);
   border:1px solid var(--v-edge); backdrop-filter:blur(10px);
-  box-shadow:0 0 70px -18px rgba(124,108,255,.6);
+  box-shadow:0 0 70px -18px rgba(155,107,255,.6);
 }
 .constel-core b{ display:block; font-family:var(--serif); font-size:clamp(.92rem,1.2vw,1.06rem);
   color:var(--v-ink); letter-spacing:-.02em; line-height:1.15; }
@@ -649,7 +652,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .track-panel{ grid-template-columns:1fr; min-height:0; }
   .tmini{ display:none; }
   .stage{ min-height:auto; padding-block:clamp(56px,10vh,84px) clamp(44px,7vh,72px); }
-  .stage-veil{ background:linear-gradient(180deg, rgba(6,8,15,.72) 0%, rgba(6,8,15,.9) 58%); }
+  .stage-veil{ background:linear-gradient(180deg, rgba(6,8,13,.72) 0%, rgba(6,8,13,.9) 58%); }
   .stage .lead{ max-width:100%; }
   .stage-foot{ margin-top:32px; }
   .track-steps{ grid-template-columns:1fr; row-gap:0; }
@@ -712,7 +715,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
 .side-index a:hover .si-dot{ background:var(--v-a); opacity:1; transform:scale(1.25); }
 .side-index a.active .si-dot{
   background:var(--v-a); opacity:1; transform:scale(1.35);
-  box-shadow:0 0 0 4px rgba(77,208,225,.16);
+  box-shadow:0 0 0 4px rgba(67,224,255,.16);
 }
 .side-index .si-label{
   background:rgba(9,13,26,.9); border-color:var(--v-edge); color:var(--v-ink-2);
@@ -866,7 +869,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
 .page-hero--split .page-hero-meta .trust-badge::before{
   content:""; position:absolute; left:2px; top:50%; transform:translateY(-50%);
   width:7px; height:7px; border-radius:50%; background:var(--v-a);
-  box-shadow:0 0 0 4px rgba(77,208,225,.13);
+  box-shadow:0 0 0 4px rgba(67,224,255,.13);
 }
 .page-hero--split .page-hero-meta .trust-badge:hover{ padding-left:32px; color:var(--v-ink); }
 @media (max-width:900px){
@@ -978,9 +981,9 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
      heredados de .main-nav a). Se recupera la identidad del botón primario. */
   .main-nav .nav-cta-mobile > a.btn.btn-primary{
     display:block; width:100%; text-align:center;
-    background:var(--v-grad); color:#05070d; font-weight:600;
+    background:var(--blue, #5b8cff); color:#04070f; font-weight:600;
     font-size:.95rem; padding:15px 20px; border-radius:999px;
-    box-shadow:0 12px 38px -14px rgba(124,108,255,.85);
+    box-shadow:0 12px 38px -14px rgba(91,140,255,.75);
   }
 }
 

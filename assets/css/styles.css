@@ -28,6 +28,10 @@
 }
 
 /* ============ TOKENS ============ */
+/* Valores alineados con el D-Code Design System v1.0, tema noche
+   (dcode-design-system/tokens/dcode-tokens.css). Se conservan los NOMBRES
+   (--bg, --ink, --stone, --blue...) y dcp5.css usa los mismos valores en sus
+   --v-*: una sola paleta para toda la web. */
 :root{
   --bg:        #06080d;
   --bg-soft:   #090c14;
@@ -47,9 +51,9 @@
   --surface-ring-mid:    rgba(168,182,216,.14);
   --surface-ring-bottom: rgba(91,140,255,.32);
   --surface-sheen:    rgba(214,226,255,.55);
-  --ink:       #eef2fb;
+  --ink:       #edf1f8;
   --stone:     #a7b0c4;
-  --stone-soft:#8089a0;
+  --stone-soft:#8c95aa;
   --line:      #1e2536;
 
   --blue:      #5b8cff;
