@@ -72,7 +72,7 @@
 .dcx a:hover .dcx-dot{ width:28px; background:#cfe0ff; }
 .dcx a:hover .dcx-lab{ opacity:1; color:#eaf1ff; }
 .dcx a.on .dcx-lab{ opacity:1; transform:none; color:#eaf1ff; }
-.dcx a:focus-visible{ outline:2px solid var(--v-a,#43e0ff); outline-offset:5px; border-radius:6px; }
+.dcx a:focus-visible{ outline:2px solid var(--blue,#5b8cff); outline-offset:5px; border-radius:6px; }
 
 /* La barra superior es la orientación SOLO donde no cabe el índice. En ancho
    sobra, y tenerla era exactamente la redundancia que había que quitar. */
@@ -186,7 +186,7 @@ body.v6 .dcx.dcx--fuera a:focus-visible .dcx-lab{ opacity:1; }
 .mega-item span span{ color:#93a1c1; }
 .mega-item:hover, .mega-item:focus-visible{ background:rgba(91,140,255,.12); }
 .mega-item:hover strong, .mega-item:focus-visible strong{ color:#fff; }
-.mega-item:focus-visible{ outline:2px solid var(--v-a,#43e0ff); outline-offset:-2px; }
+.mega-item:focus-visible{ outline:2px solid var(--blue,#5b8cff); outline-offset:-2px; }
 /* Una zona-puente invisible entre el enlace y el panel: al bajar el ratón en
    diagonal ya no se cierra a mitad de camino. */
 .has-mega .mega-menu::before{
@@ -488,7 +488,7 @@ footer .footer-col a:hover::before, footer .footer-col a:focus-visible::before{
    sacaría el campo de position:fixed. */
 form .field{ position:relative; }
 form .field label{ transition:color .22s ease; }
-form .field:focus-within label{ color:var(--cyan); }
+form .field:focus-within label{ color:var(--signal-text, #a9c2ff); }
 form .field input, form .field textarea{ transition:border-color .22s ease, background .22s ease, box-shadow .22s ease; }
 
 @media (min-width:900px){
