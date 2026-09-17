@@ -2347,7 +2347,7 @@ nav.main-nav > ul{ position:relative; }
   transition:border-color .2s ease, box-shadow .2s ease;
 }
 .faq-search input::placeholder{ color:var(--stone-soft); }
-.faq-search input:focus{ border-color:var(--blue); box-shadow:0 0 0 3px rgba(91,140,255,.18); }
+.faq-search input:focus{ border-color:var(--blue); box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--blue); /* DS: anillo de foco */ }
 .faq-search .faq-search-icon{
   position:absolute; left:15px; top:50%; transform:translateY(-50%);
   width:17px; height:17px; color:var(--stone-soft); pointer-events:none;
@@ -2774,7 +2774,7 @@ nav.main-nav > ul{ position:relative; }
   transition:border-color .25s ease, background .25s ease, box-shadow .25s ease;
 }
 .field input::placeholder, .field textarea::placeholder{ color:var(--stone-soft); }
-.field input:focus, .field textarea:focus{ border-color:var(--blue); background:rgba(91,140,255,.04); box-shadow:0 0 0 3px rgba(91,140,255,.18); }
+.field input:focus, .field textarea:focus{ border-color:var(--blue); background:rgba(91,140,255,.04); box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--blue); /* DS: anillo de foco */ }
 .field textarea{ resize:vertical; min-height:90px; font-family:var(--sans); }
 
 .form-note{
@@ -3185,7 +3185,7 @@ footer{
   outline:none;
   transition:border-color .2s ease, box-shadow .2s ease;
 }
-.chat-input-row input:focus{ border-color:var(--blue); box-shadow:0 0 0 3px rgba(91,140,255,.18); }
+.chat-input-row input:focus{ border-color:var(--blue); box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--blue); /* DS: anillo de foco */ }
 .chat-input-row button{
   width:44px; height:44px;
   border-radius:8px;
