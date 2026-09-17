@@ -54,6 +54,9 @@ const PAGES = [
   '/servicios/integraciones',
   // D-Code Finance: página de producto propia (ES/EN). Faltaba en la lista.
   '/sistema-financiero', '/en/sistema-financiero',
+  // La demo pública de Finance: puerta de entrada y aplicación (ES/EN).
+  '/sistema-financiero/demo', '/en/sistema-financiero/demo',
+  '/sistema-financiero/app', '/en/sistema-financiero/app',
 ];
 
 // QA_PATHS=/ruta1,/ruta2 limita la pasada a esas rutas (útil en local para

@@ -20,3 +20,5 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Comprobar superficie de despliegue
         run: npm run check:superficie
+      - name: Comprobar enlaces internos, idiomas, sitemap y JSON-LD
+        run: npm run check:enlaces
