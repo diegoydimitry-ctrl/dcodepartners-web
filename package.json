@@ -8,7 +8,8 @@
     "update-asset-versions": "node scripts/update-asset-versions.js",
     "qa:check": "node scripts/qa-preview-check.js",
     "check-instruments": "node scripts/check-instruments.js",
-    "check:superficie": "node scripts/check-deploy-surface.mjs"
+    "check:superficie": "node scripts/check-deploy-surface.mjs",
+    "check:enlaces": "node scripts/check-internal-links.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"
