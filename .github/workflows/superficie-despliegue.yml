@@ -1,4 +1,4 @@
-name: Superficie de despliegue
+name: Superficie y sistema de diseño
 
 # Falla si un fichero interno (docs, scripts, .github, automation, *.md, *.yml,
 # workflows de n8n…) entraría en el despliegue de Vercel. Aplica la misma lógica
@@ -22,3 +22,23 @@ jobs:
         run: npm run check:superficie
       - name: Comprobar enlaces internos, idiomas, sitemap y JSON-LD
         run: npm run check:enlaces
+
+  diseno:
+    # Las reglas del D-Code Design System en las 72 páginas y a los cinco
+    # anchos de referencia: sin scroll horizontal, un solo fondo, el cian
+    # nunca en algo clicable, nada de texto bajo 12 px que no sea etiqueta en
+    # mayúsculas, 44 px de objetivo táctil medido con elementFromPoint (no con
+    # la caja visible), campos con nombre accesible y consola limpia.
+    # Levanta el sitio como lo sirve Vercel; no necesita red ni secretos.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Conformidad con el sistema de diseño
+        run: npm run qa:ds
