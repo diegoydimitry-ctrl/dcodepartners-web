@@ -156,7 +156,8 @@ body.v6 .dcx.dcx--fuera a:focus-visible .dcx-lab{ opacity:1; }
 .chat-bubble::after{
   content:""; position:absolute; inset:-5px; border-radius:50%;
   border:1px solid rgba(124,180,255,.22); pointer-events:none;
-  animation:dcx-ring 4.5s ease-in-out infinite;
+  /* Tres latidos para señalar el asistente y se detiene (DS: sin bucles infinitos). */
+  animation:dcx-ring 4.5s ease-in-out 3;
 }
 @keyframes dcx-ring{ 0%,100%{ transform:scale(1); opacity:.5 } 50%{ transform:scale(1.09); opacity:.12 } }
 .chat-window{
