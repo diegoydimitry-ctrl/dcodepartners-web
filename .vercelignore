@@ -1,0 +1,21 @@
+# Archivos internos que NO deben desplegarse ni servirse en dcodepartners.com.
+# Vercel aplica este fichero también en los despliegues de la integración con
+# GitHub (el build registra "Removed N ignored files defined in .vercelignore").
+# Patrones anclados con "/" inicial: sin él, "docs" coincidiría con cualquier
+# carpeta llamada docs a cualquier profundidad (p. ej. dentro de assets/).
+#
+# Comprobado en producción el 17-09-2026 (HTTP 200 antes de este cambio):
+#   /docs/estrategia-monetizacion-dcode-partners.md, /scripts/qa-preview-check.js,
+#   /automation/n8n/linkedin-auto-post/README.md, /.github/workflows/qa-preview.yml
+#
+# NO se ignoran, a propósito:
+#   - package.json: Vercel lo necesita para instalar "resend" (api/contact-fallback.js).
+#     Ya no se sirve como estático (HTTP 404 en producción).
+#   - lib/: api/chat.js hace require('../lib/providers'). Ignorarlo rompería el
+#     asistente. Su lectura pública se corta con un redirect en vercel.json.
+#   - assets/data/knowledge-base.json: lo lee api/chat.js y es contenido público.
+/docs
+/automation
+/scripts
+/.github
+/README.md
