@@ -49,7 +49,7 @@
 
   --f-display: clamp(2.7rem, 6.8vw, 5.6rem);
   --f-h2:      clamp(1.8rem, 3.3vw, 2.8rem);
-  --f-body:    clamp(0.97rem, 1.02vw, 1.05rem);
+  --f-body:    clamp(1rem, 1.02vw, 1.05rem);   /* DS · cuerpo web 16 px como mínimo */
 
   --rad: 12px;   /* DS · radio de superficies (antes 18px) */
   --shell: 1180px;

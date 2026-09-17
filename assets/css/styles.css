@@ -2939,6 +2939,9 @@ footer{
     left:0;
     width:100%;
     height:calc(100vh - var(--header-h));
+    /* DS: dvh en contenedores de alto completo (en móvil, 100vh incluye la barra
+       del navegador y el final del menú quedaba fuera de pantalla). */
+    height:calc(100dvh - var(--header-h));
     background:var(--bg);
     display:flex;
     flex-direction:column;
@@ -3053,6 +3056,7 @@ footer{
   width:368px;
   max-width:calc(100vw - 48px);
   height:min(540px, calc(100vh - 140px));
+  height:min(540px, calc(100dvh - 140px));
   display:flex;
   flex-direction:column;
   opacity:0;
