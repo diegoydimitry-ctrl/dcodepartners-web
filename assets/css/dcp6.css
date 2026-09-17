@@ -342,7 +342,9 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
   .v6-hero{ min-height:100svh; }
   .v6-cap{ font-size:clamp(1.28rem, 7vw, 1.9rem); }
   .v6-acts .btn{ width:100%; justify-content:center; }
-  .v6-status{ font-size:0.6875rem; letter-spacing:.14em; }
+  /* 11 px (mínimo del DS) sin partir la línea: menos tracking y guion más corto. */
+  .v6-status{ font-size:0.6875rem; letter-spacing:.06em; gap:10px; }
+  .v6-status::before{ width:18px; }
 }
 
 /* ================================================= 10. MOVIMIENTO REDUCIDO */
