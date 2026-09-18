@@ -36,12 +36,37 @@
 <script type="application/ld+json">
 { "@context": "https://schema.org", "@type": "ItemList", "itemListElement": [ { "@type": "ListItem", "position": 1, "item": { "@type": "Service", "name": "Marketing", "description": "Capta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 2, "item": { "@type": "Service", "name": "Comercial", "description": "Prospecta y prioriza empresas automáticamente, centraliza tu pipeline con IA, redacta propuestas verificadas en minutos.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 3, "item": { "@type": "Service", "name": "Clientes", "description": "Construido y activo: detecta cuándo se cierra una venta, da de alta al cliente, gestiona bienvenida, onboarding, renovaciones y satisfacción.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 4, "item": { "@type": "Service", "name": "Producción", "description": "Crea el proyecto en cuanto se gana un cliente, reparte tareas y vigila avance y fechas de entrega.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 5, "item": { "@type": "Service", "name": "Finanzas", "description": "Construido y funcionando internamente: genera y envía facturas, escala recordatorios de cobro y vigila el gasto interno cada día. En validación con la primera factura real de un cliente antes de ofrecerse como Departamento comercial.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 6, "item": { "@type": "Service", "name": "Soporte", "description": "Convierte cada email de soporte en un ticket priorizado con SLA. El chat conversacional 24h está en revisión de seguridad antes de ampliar su acceso a datos de cliente.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 7, "item": { "@type": "Service", "name": "Administración", "description": "Vigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } }, { "@type": "ListItem", "position": 8, "item": { "@type": "Service", "name": "Dirección", "description": "Centraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día.", "provider": { "@type": "Organization", "name": "D-Code Partners" } } } ]
 }
-</script> <!-- Start cookieyes banner -->
-<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/4d2e8fd4065176703ddc3e2999debec6/script.js"></script>
-<!-- End cookieyes banner -->
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL004F9EBH"></script>
-<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-ZL004F9EBH');
+</script> <!-- Consentimiento y analitica: SOLO en el dominio real.
+     Fuera de el (Previews de Vercel, local) no se carga ninguno de los dos, y
+     por dos razones distintas. CookieYes tiene registrado dcodepartners.com:
+     en cualquier otro dominio no levanta el banner y avisa por consola de que
+     la URL no es la suya, asi que en un Preview no hay consentimiento que dar
+     ni banner que probar. Y Google Analytics contaba las visitas de Preview en
+     la misma propiedad que las reales, que es ensuciar el dato de produccion
+     con nuestras propias comprobaciones.
+     El orden se conserva y se endurece: analitica SOLO despues de que
+     CookieYes haya cargado, nunca en paralelo. Si CookieYes no carga, la
+     analitica tampoco. -->
+<script>
+(function () {
+  var host = location.hostname;
+  if (host !== 'dcodepartners.com' && host !== 'www.dcodepartners.com') return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', 'G-ZL004F9EBH');
+  var cookieyes = document.createElement('script');
+  cookieyes.id = 'cookieyes';
+  cookieyes.type = 'text/javascript';
+  cookieyes.src = 'https://cdn-cookieyes.com/client_data/4d2e8fd4065176703ddc3e2999debec6/script.js';
+  cookieyes.onload = function () {
+    var analitica = document.createElement('script');
+    analitica.async = true;
+    analitica.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZL004F9EBH';
+    document.head.appendChild(analitica);
+  };
+  document.head.appendChild(cookieyes);
+})();
 </script>
 </head>
 <body class="v7">

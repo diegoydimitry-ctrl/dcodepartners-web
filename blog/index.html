@@ -32,12 +32,37 @@
 <link rel="stylesheet" href="/assets/css/dcp8.css?v=0f2cc60ab2"> <script type="application/ld+json">
 { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://dcodepartners.com/" }, { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://dcodepartners.com/blog" } ]
 }
-</script> <!-- Start cookieyes banner -->
-<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/4d2e8fd4065176703ddc3e2999debec6/script.js"></script>
-<!-- End cookieyes banner -->
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL004F9EBH"></script>
-<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-ZL004F9EBH');
+</script> <!-- Consentimiento y analitica: SOLO en el dominio real.
+     Fuera de el (Previews de Vercel, local) no se carga ninguno de los dos, y
+     por dos razones distintas. CookieYes tiene registrado dcodepartners.com:
+     en cualquier otro dominio no levanta el banner y avisa por consola de que
+     la URL no es la suya, asi que en un Preview no hay consentimiento que dar
+     ni banner que probar. Y Google Analytics contaba las visitas de Preview en
+     la misma propiedad que las reales, que es ensuciar el dato de produccion
+     con nuestras propias comprobaciones.
+     El orden se conserva y se endurece: analitica SOLO despues de que
+     CookieYes haya cargado, nunca en paralelo. Si CookieYes no carga, la
+     analitica tampoco. -->
+<script>
+(function () {
+  var host = location.hostname;
+  if (host !== 'dcodepartners.com' && host !== 'www.dcodepartners.com') return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', 'G-ZL004F9EBH');
+  var cookieyes = document.createElement('script');
+  cookieyes.id = 'cookieyes';
+  cookieyes.type = 'text/javascript';
+  cookieyes.src = 'https://cdn-cookieyes.com/client_data/4d2e8fd4065176703ddc3e2999debec6/script.js';
+  cookieyes.onload = function () {
+    var analitica = document.createElement('script');
+    analitica.async = true;
+    analitica.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZL004F9EBH';
+    document.head.appendChild(analitica);
+  };
+  document.head.appendChild(cookieyes);
+})();
 </script>
 </head>
 <body class="v7">

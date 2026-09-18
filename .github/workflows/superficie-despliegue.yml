@@ -28,6 +28,12 @@ jobs:
       - name: Comprobar que el asistente sabe lo que dice la web
         run: npm run check:kb
 
+      # El consentimiento y la analitica son mecanismos con efectos legales y
+      # con efectos sobre el dato: no pueden volver a ejecutarse fuera del
+      # dominio real, ni la analitica por delante del consentimiento.
+      - name: Comprobar la carga de consentimiento y analitica
+        run: npm run check:consentimiento
+
   diseno:
     # Las reglas del D-Code Design System en las 72 páginas y a los cinco
     # anchos de referencia: sin scroll horizontal, un solo fondo, el cian
