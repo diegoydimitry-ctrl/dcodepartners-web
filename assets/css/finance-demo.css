@@ -50,6 +50,10 @@
 }
 .fdemo-app.is-fullpage{ height:100dvh; }
 .fdemo-app.is-embedded{
+  /* Contexto de posicionamiento del cajon lateral y de su velo: sin esto el
+     `absolute` de abajo buscaba el ancestro posicionado mas cercano, que en
+     la Home es la propia seccion, y el cajon se salia del marco. */
+  position:relative;
   height:min(760px, 82vh);
   border-radius:16px;
   border:1px solid var(--dc-border);
@@ -485,7 +489,14 @@
     transform:translateX(-100%);
     transition:transform .2s ease;
   }
-  .fdemo-app.is-embedded .fdemo-sidebar,
+  /* MEDIDO EN LA HOME A 390 px: el cajon estaba en `fixed` tambien cuando la
+     demo va empotrada, asi que al tocar el boton del menu se abria un panel
+     de 260x844 px pegado al borde de la VENTANA —tapando la web entera— para
+     navegar una aplicacion que ocupa 350x560 px a media pagina. El velo
+     tampoco coincidia: cubria 673 px a partir del pixel 293, ni la ventana ni
+     el marco. En pantalla completa `fixed` si es lo correcto, porque ahi la
+     aplicacion ES la ventana; empotrada, el cajon pertenece al marco. */
+  .fdemo-app.is-embedded .fdemo-sidebar{ position:absolute; }
   .fdemo-app.is-fullpage .fdemo-sidebar{ position:fixed; }
   .fdemo-sidebar.is-open{ transform:translateX(0); }
   .fdemo-topbar-menu-btn{ display:inline-flex; align-items:center; justify-content:center; }
@@ -516,10 +527,19 @@
 }
 
 /* Objetivos táctiles de la demo (DS: 44 px en móvil). Medido a 390 px:
-   la navegación medía 35 px, el botón 43 y el enlace de vuelta 21. */
+   la navegación medía 35 px, el botón 43 y el enlace de vuelta 21.
+
+   Al montar la demo en la Home aparecieron dos que este bloque no cubría,
+   porque hasta ahora solo se llegaba a ellos en la pantalla completa y nadie
+   los había medido con dedos: el botón del menú de la barra superior (34×34)
+   y el enlace de salida (126×31). Los dos son la única forma de navegar la
+   demo en un móvil — abrir el menú y salir de ella—, así que eran justo los
+   peores dos para dejar pequeños. */
 @media (max-width:860px){
   .fdemo-nav-item{ min-height:44px; }
   .fdemo-btn{ min-height:44px; }
   .fdemo-gate-back{ position:relative; }
   .fdemo-gate-back::after{ content:""; position:absolute; inset:-12px -6px; }
+  .fdemo-topbar-menu-btn{ min-width:44px; min-height:44px; padding:8px; }
+  .fdemo-topbar-exit{ display:inline-flex; align-items:center; min-height:44px; padding:6px 14px; }
 }

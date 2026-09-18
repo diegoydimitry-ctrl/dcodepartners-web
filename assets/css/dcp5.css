@@ -463,73 +463,9 @@ p{ color:var(--v-ink-2); }
   .vstep p{ grid-column:2; grid-row:1 / 3; margin-top:0; align-self:start; }
 }
 
-/* ===================================================== 15. D-CODE FINANCE */
-/* El producto se presenta como producto: chrome de aplicación, módulos
-   recorribles y una pantalla amplia por módulo. */
-.prod{ border:1px solid var(--v-edge); border-radius:var(--rad); overflow:hidden;
-  background:linear-gradient(170deg, rgba(30,40,72,.62), rgba(9,13,26,.72));
-  box-shadow:0 60px 140px -60px rgba(0,0,0,.98), 0 0 0 1px rgba(150,174,245,.04);
-  position:relative; }
-.prod::before{
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
-  background:radial-gradient(70% 50% at 50% -6%, rgba(91,140,255,.16), transparent 62%);
-}
-.prod-bar{ display:flex; align-items:center; gap:14px; padding:12px 16px; position:relative; z-index:2;
-  border-bottom:1px solid var(--v-edge-2); background:rgba(255,255,255,.03); flex-wrap:wrap; }
-.prod-brand{ display:inline-flex; align-items:center; gap:9px; font-family:var(--mono);
-  font-size:0.75rem; letter-spacing:.06em; color:var(--v-ink-2); }
-.prod-brand i{ width:8px; height:8px; border-radius:50%; background:var(--k-finanzas);
-  box-shadow:0 0 0 4px rgba(91,140,255,.16); }
-.prod-tabs{ display:flex; gap:4px; flex-wrap:wrap; margin-left:auto; }
-.prod-tab{
-  font-family:var(--mono); font-size:0.75rem; letter-spacing:.03em;
-  padding:7px 12px; border-radius:8px; border:1px solid transparent;
-  background:transparent; color:var(--v-ink-3); cursor:pointer; transition:all .18s;
-}
-.prod-tab:hover{ color:var(--v-ink-2); background:rgba(255,255,255,.045); }
-.prod-tab[aria-selected="true"]{ color:var(--k-finanzas); background:rgba(91,140,255,.1);
-  border-color:rgba(91,140,255,.32); }
-.prod-body{ padding:clamp(18px,2.6vw,32px); position:relative; z-index:2; }
-.prod-screen{ display:grid; grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
-  gap:clamp(20px,3vw,42px); align-items:center; }
-.prod-screen.swap{ animation:v-swap .42s var(--ease); }
 @keyframes v-swap{ from{ opacity:0; transform:translateY(10px) } to{ opacity:1; transform:none } }
-.prod-copy h3{ font-family:var(--serif); font-size:clamp(1.16rem,2vw,1.5rem); color:var(--v-ink); margin:0 0 12px; }
-.prod-copy p{ font-size:.92rem; line-height:1.6; margin:0 0 16px; }
-.prod-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
-.prod-list li{ position:relative; padding-left:22px; font-size:.86rem; line-height:1.5; color:var(--v-ink-2); }
-.prod-list li::before{ content:""; position:absolute; left:4px; top:.52em; width:7px; height:7px;
-  border-radius:2px; background:var(--k-finanzas); opacity:.75; }
-
-.mock{ border:1px solid var(--v-edge); border-radius:14px; overflow:hidden;
-  background:#0b0f17; /* DS noche · surface-1 */ box-shadow:0 30px 80px -40px rgba(0,0,0,.95); }
-.mock-top{ display:flex; align-items:center; gap:8px; padding:9px 12px;
-  border-bottom:1px solid var(--v-edge-2); background:rgba(255,255,255,.03); }
-.mock-dots{ display:flex; gap:5px; }
-.mock-dots i{ width:8px; height:8px; border-radius:50%; background:rgba(150,174,245,.26); }
-.mock-name{ font-family:var(--mono); font-size:0.75rem; color:var(--v-ink-3); }
-.mock-in{ padding:14px; display:grid; gap:10px; }
-.mock-kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
-.mock-kpi{ padding:11px 12px; border-radius:9px; background:rgba(255,255,255,.032); border:1px solid var(--v-edge-2); }
-.mock-kpi b{ display:block; font-family:var(--serif); font-size:1.02rem; color:var(--v-ink); font-variant-numeric:tabular-nums; }
-.mock-kpi span{ font-size:0.6875rem; color:var(--v-ink-3); font-family:var(--mono); letter-spacing:.04em; }
-.mock-rows{ display:flex; flex-direction:column; gap:6px; }
-.mock-row{ display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center;
-  padding:9px 11px; border-radius:8px; background:rgba(255,255,255,.022); border:1px solid var(--v-edge-2);
-  opacity:0; animation:v-row .4s var(--ease) forwards; animation-delay:calc(var(--i,0) * 60ms); }
 @keyframes v-row{ from{ opacity:0; transform:translateX(-8px) } to{ opacity:1; transform:none } }
-.mock-row span:first-child{ font-size:.74rem; color:var(--v-ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.mock-amt{ font-family:var(--mono); font-size:.72rem; color:var(--v-ink); font-variant-numeric:tabular-nums; }
-.mock-pill{ font-family:var(--mono); font-size:0.6875rem; letter-spacing:.05em; padding:3px 8px; border-radius:999px;
-  color:var(--st); border:1px solid color-mix(in srgb,var(--st) 32%,transparent);
-  background:color-mix(in srgb,var(--st) 9%,transparent); white-space:nowrap; }
-.mock-bars{ display:flex; align-items:flex-end; gap:6px; height:78px; padding:0 2px; }
-.mock-bars i{ flex:1; border-radius:3px 3px 0 0; transform-origin:bottom; transform:scaleY(0);
-  background:linear-gradient(180deg, var(--k-finanzas), rgba(91,140,255,.18));
-  animation:v-grow .55s var(--ease) forwards; animation-delay:calc(var(--i,0) * 55ms); }
 @keyframes v-grow{ to{ transform:scaleY(1) } }
-.mock-note{ font-family:var(--mono); font-size:0.75rem; color:var(--v-ink-3); text-align:center; padding:0 0 10px; }
-
 /* ==================================================== 16. TABLERO ESTADO */
 /* Cambios en proceso. Su filosofía no cambia: EN PROCESO + ACTIVO, nada más. */
 .board{ border:1px solid var(--v-edge); border-radius:var(--rad); background:var(--v-panel);
@@ -621,8 +557,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .voice:nth-child(2),.voice:nth-child(3){ margin-top:0; }
   .track-steps{ grid-template-columns:1fr 1fr; row-gap:30px; }
   .track-line{ display:none; }
-  .prod-screen{ grid-template-columns:1fr; }
-  .split{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
   .split--r .split-a{ order:0; }
   .duo{ grid-template-columns:1fr; }
   .outs{ grid-template-columns:1fr; gap:0; }
@@ -666,20 +601,14 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .step-t{ margin:0; }
   .board-row{ grid-template-columns:9px minmax(0,1fr); }
   .board-row .board-tag{ grid-column:2; justify-self:start; margin-top:8px; }
-  .mock-kpis{ grid-template-columns:1fr 1fr; }
-  .figure-n{ font-size:clamp(3rem,17vw,4.6rem); }
+    .figure-n{ font-size:clamp(3rem,17vw,4.6rem); }
   .rail{ margin-inline:calc(-1 * var(--gut)); padding-inline:var(--gut); }
 }
-@media (max-width:860px){
-  /* Las pestañas son controles, no texto: en táctil llegan a 44 px (DS). */
-  .prod-tab{ min-height:44px; }
-}
+@media (max-width:860px){}
 @media (max-width:560px){
   /* El botón sale de la cabecera —no cabe junto al logotipo y la
      hamburguesa— y vive dentro del menú. Una sola barra también aquí. */
   .nav-right .btn.btn-sm{ display:none; }
-  .prod-tabs{ margin-left:0; width:100%; }
-  .prod-tab{ flex:1; text-align:center; }
 }
 
 /* ============================================== 20. MOVIMIENTO REDUCIDO */
@@ -690,8 +619,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .rise,.rise-l,.rise-s{ opacity:1; transform:none; filter:none; transition:none; }
   .draw{ stroke-dashoffset:0; transition:none; }
   .track-line i{ transform:scaleX(1); transition:none; }
-  .mock-row,.mock-bars i{ opacity:1; transform:none; animation:none; }
-  .btn,.lift,.cnode,.prod-tab,.step-dot,.voice::before{ transition:none; }
+  .btn,.lift,.cnode,.step-dot,.voice::before{ transition:none; }
   html{ scroll-behavior:auto; }
 }
 :where(a,button,input,textarea,select,summary,[tabindex]):focus-visible{
@@ -699,6 +627,85 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
 }
 /* La demo empotrada se desplaza dentro de su caja, nunca empuja la página. */
 .fdemo-home-stack{ max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+/* ---------------------------------------------------------------
+   MARCO PARA LA DEMO DE D-CODE FINANCE EMPOTRADA
+   ---------------------------------------------------------------
+   Lo usan la Home y /sistema-financiero: las dos enseñaban una maqueta
+   estatica —filas escritas a mano y barras de altura fija— y las dos montan
+   ahora la aplicacion de verdad. Este bloque solo le da sitio; los colores,
+   bordes y tipografias los trae finance-demo.css, que se pide sola cuando la
+   seccion se acerca. */
+.demo-host{
+  margin-top:clamp(26px, 3.2vw, 40px);
+  position:relative;
+  z-index:2; /* por delante del lienzo del recorrido, que es de fondo */
+}
+
+/* El aviso va ARRIBA y en el flujo de la pagina, no dentro del marco: quien
+   mira una tabla de importes tiene que haber leido antes que son inventados,
+   no despues. La demo ademas lleva su propia banda «Demostracion» dentro. */
+.demo-aviso{
+  margin:0 0 14px;
+  max-width:74ch;
+  font-size:.86rem;
+  line-height:1.6;
+  color:#93a1bd;
+  display:flex;
+  gap:10px;
+  align-items:baseline;
+  flex-wrap:wrap;
+}
+.demo-tag{
+  flex-shrink:0;
+  font-size:11px;            /* DS: 11px solo para etiquetas en mayusculas */
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:600;
+  color:#c3cfe6;
+  border:1px solid rgba(195,207,230,.32);
+  border-radius:999px;
+  padding:3px 9px;
+}
+
+/* A partir de 1600 px la aplicacion se sale de la columna de lectura. No es
+   capricho: la caja de texto de esta web mide 1076 px (--shell 1180 menos el
+   canal), y a 1920 eso deja una aplicacion de finanzas con ocho columnas
+   metida en poco mas de la mitad de la pantalla mientras sobran 400 px a cada
+   lado. Adaptar de verdad a una pantalla grande es usarla, no encoger lo
+   mismo. El texto se queda donde estaba: solo se ensancha la demo.
+
+   (Medido: styles.css sube --container a 1280 por encima de 1600 px, pero
+   dcp5.css redefine .container con --shell:1180 fijo, asi que esa regla no
+   llega a aplicarse en ninguna pagina. No se toca aqui: cambiarla movería
+   las 72 paginas de sitio.) */
+@media (min-width:1600px){
+  /* Doble clase a proposito: finance-demo.css se inyecta DESPUES de esta hoja
+     (la pide el cargador diferido) y trae `.fdemo-home-stack{width:100%}` con
+     la misma especificidad, asi que una sola clase perdia el desempate por
+     orden y el ancho se quedaba en 1076 px. Medido antes de darlo por bueno. */
+  .demo-host.fdemo-home-stack{
+    --demo-ancho:min(1420px, calc(100vw - 120px));
+    width:var(--demo-ancho);
+    /* dcp5.css le pone max-width:100%, que aqui vale 1076 px y anulaba el
+       ancho de arriba sin decir nada. Medido: sin esta linea se quedaba
+       exactamente igual que antes del cambio. */
+    max-width:none;
+    margin-inline:calc((100% - var(--demo-ancho)) / 2);
+  }
+  .fdemo-home-stack .fdemo-app.is-embedded{ height:min(820px, 80vh); }
+}
+
+/* En un movil la aplicacion necesita alto util o no se puede recorrer: con
+   82vh se comia la pantalla entera y no se veia que hay pagina debajo. */
+@media (max-width:860px){
+  .fdemo-home-stack .fdemo-app.is-embedded{ height:min(620px, 74vh); }
+}
+@media (max-width:560px){
+  .fdemo-home-stack .fdemo-app.is-embedded{ height:min(560px, 72vh); border-radius:12px; }
+  .demo-aviso{ font-size:.82rem; }
+}
+
 
 /* Ritmo: dos secciones seguidas no acumulan su respiración. */
 .section + .section-air{ padding-top: var(--sp-norm); }
@@ -933,15 +940,7 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .spec{ grid-template-columns:1fr; gap:5px; padding:14px 0; }
 }
 
-/* Vitrina a escala de producto: el marco se ensancha y la maqueta gana
-   altura, para que no parezca una miniatura de algo grande. */
-.prod--wide{ margin-inline:calc(-1 * clamp(0px, 3vw, 46px)); }
-.prod--wide .prod-body{ padding:clamp(20px,3vw,40px); }
-.prod--wide .mock-in{ padding:18px; gap:14px; }
-.prod--wide .mock-bars{ height:120px; }
-.prod--wide .mock-kpi b{ font-size:1.24rem; }
-.prod--wide .mock-row{ padding:11px 13px; }
-@media (max-width:900px){ .prod--wide{ margin-inline:0; } }
+@media (max-width:900px){ }
 
 /* ====================== 29. MÓVIL: LA ESCENA TIENE SU SITIO */
 /* En móvil la escena no se esconde detrás del texto en un cuarto de pantalla:

@@ -93,6 +93,29 @@
 .dcx-now::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--v-a,#43e0ff); flex:none; }
 @media (max-width:1179px){ .dcx-now{ display:inline-flex; } .dcx-bar{ display:block; } }
 @media (max-width:560px){ .dcx-now{ max-width:calc(100vw - 130px); } }
+
+/* MEDIDO EN LA PORTADA A 390 px, con la demo de Finance abierta: esta pastilla
+   es `fixed` con capa 120, y el contenido de la pagina vive dentro de
+   #main-content, que esta en la capa 1. O sea que ningun z-index de dentro
+   puede ponerse por delante: cuando se abre el cajon lateral de la demo, la
+   pastilla se queda encima y tapa la mitad de «Pregunta a Finanzas».
+
+   Ningun control queda inalcanzable —se ha comprobado con elementFromPoint en
+   el centro de los nueve— pero medio rotulo tapado se lee como un defecto, y
+   lo es. Se apaga mientras el cajon esta abierto: el indice dice en que
+   seccion estas, y mientras alguien navega por dentro de la demo esa pregunta
+   ya no es la suya.
+
+   Va en la hoja del sitio, no en la de la demo: la demo no puede tocar nada
+   de fuera (es su regla, y es buena). Aqui el sitio se aparta solo, mirando
+   una clase que la demo ya se pone a si misma. Sin `:has()` —navegadores
+   anteriores a 2023— no pasa nada: se queda como estaba. */
+body:has(.fdemo-app.is-embedded .fdemo-sidebar.is-open) .dcx-now{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .16s ease;
+}
+
 @media (prefers-reduced-motion: reduce){
   .dcx-bar i, .dcx-dot, .dcx-lab{ transition:none; }
 }

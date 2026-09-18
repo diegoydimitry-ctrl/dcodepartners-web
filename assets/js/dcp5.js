@@ -431,165 +431,86 @@
     paint();
   }
 
-  /* ========================================== 6. VITRINA DE D-CODE FINANCE */
-  var ES = {
-    panel: {
-      title: 'Panel financiero',
-      text: 'Toda la salud financiera en una pantalla: lo facturado, lo cobrado, lo que está por vencer y la previsión del periodo.',
-      points: ['Cifras del periodo con comparación', 'Previsión de cobro a 30 días', 'Alertas con su base de cálculo'],
-      mock: 'kpis'
-    },
-    facturas: {
-      title: 'Facturación',
-      text: 'Emisión desde presupuesto aceptado o desde proyecto, con series, numeración correlativa y PDF generado por el sistema.',
-      points: ['Series y numeración correlativa', 'Rectificativas enlazadas al original', 'PDF y envío al cliente'],
-      mock: 'rows-fact'
-    },
-    cobros: {
-      title: 'Cobros',
-      text: 'Seguimiento del dinero pendiente con recordatorios que escalan solos y registro de cobros parciales.',
-      points: ['Antigüedad de la deuda por tramos', 'Recordatorios escalados', 'Cobros parciales sobre una factura'],
-      mock: 'rows-cobro'
-    },
-    gastos: {
-      title: 'Gastos y proveedores',
-      text: 'Registro de gasto con revisión humana, clasificación asistida y control de presupuesto por categoría.',
-      points: ['Alta desde documento con revisión', 'Categorías y proveedores', 'Cuentas por pagar y vencimientos'],
-      mock: 'rows-gasto'
-    },
-    analisis: {
-      title: 'Análisis y consulta',
-      text: 'Rentabilidad real por proyecto y consulta en lenguaje natural sobre los datos, citando siempre de dónde sale cada cifra.',
-      points: ['Rentabilidad devengada y de caja', 'Detección de anomalías explicables', 'Consulta con origen del dato'],
-      mock: 'bars'
-    }
-  };
-  var EN = {
-    panel: {
-      title: 'Financial dashboard',
-      text: 'The whole financial picture on one screen: invoiced, collected, falling due, and the forecast for the period.',
-      points: ['Period figures with comparison', '30-day collection forecast', 'Alerts that show their arithmetic'],
-      mock: 'kpis'
-    },
-    facturas: {
-      title: 'Invoicing',
-      text: 'Issued from an accepted quote or from a project, with series, sequential numbering and a PDF the system generates.',
-      points: ['Series and sequential numbering', 'Credit notes linked to the original', 'PDF and delivery to the client'],
-      mock: 'rows-fact'
-    },
-    cobros: {
-      title: 'Collections',
-      text: 'Outstanding money tracked, with reminders that escalate on their own and partial payments recorded against an invoice.',
-      points: ['Debt ageing by bracket', 'Escalating reminders', 'Partial payments on one invoice'],
-      mock: 'rows-cobro'
-    },
-    gastos: {
-      title: 'Expenses and suppliers',
-      text: 'Expenses captured with human review, assisted classification and budget control by category.',
-      points: ['Captured from a document, reviewed by a person', 'Categories and suppliers', 'Payables and due dates'],
-      mock: 'rows-gasto'
-    },
-    analisis: {
-      title: 'Analysis and questions',
-      text: 'Real profitability per project, and plain-language questions about the data that always cite where each figure comes from.',
-      points: ['Accrual and cash profitability', 'Explainable anomaly detection', 'Answers that cite their source'],
-      mock: 'bars'
-    }
-  };
-  var LABELS = {
-    es: { fact: ['PAGADA', 'ENVIADA', 'VENCIDA', 'PAGADA'], note: 'Cifras de ejemplo para ilustrar la interfaz',
-          kpi: ['FACTURADO', 'COBRADO', 'PENDIENTE'], kpi2: ['MARGEN MEDIO', 'PROYECTOS', 'ANOMALÍAS'],
-          cob: [['Vence en 5 días', 'AVISADO'], ['Vencido 12 días', '2.º AVISO'], ['Vencido 34 días', 'ESCALADO'], ['Cobro parcial', 'PARCIAL']],
-          gas: [['Infraestructura cloud', 'APROBADO'], ['Licencias de software', 'REVISIÓN'], ['Asesoría', 'APROBADO'], ['Suministros', 'APROBADO']] },
-    en: { fact: ['PAID', 'SENT', 'OVERDUE', 'PAID'], note: 'Sample figures, shown to illustrate the interface',
-          kpi: ['INVOICED', 'COLLECTED', 'OUTSTANDING'], kpi2: ['AVG MARGIN', 'PROJECTS', 'ANOMALIES'],
-          cob: [['Due in 5 days', 'REMINDED'], ['12 days overdue', '2ND NOTICE'], ['34 days overdue', 'ESCALATED'], ['Partial payment', 'PARTIAL']],
-          gas: [['Cloud infrastructure', 'APPROVED'], ['Software licences', 'REVIEW'], ['Advisory', 'APPROVED'], ['Utilities', 'APPROVED']] }
-  };
+  /* ========================================== 6. VITRINA DE D-CODE FINANCE
+   * Aqui vivian las lineas que dibujaban una maqueta: cuatro filas de factura
+   * escritas a mano, unas barras de altura fija, cinco pestañas que cambiaban
+   * un parrafo y una nota al pie diciendo que las cifras eran de ejemplo. La
+   * Home y /sistema-financiero enseñaban eso, mientras la demo de verdad
+   * estaba construida al lado y solo se llegaba a ella por un boton.
+   *
+   * Ya no hay maqueta en ninguna de las dos: las dos montan la aplicacion
+   * (finance-demo.js sobre finance-demo-data.js, el mismo dataset ficticio
+   * que el producto real usa en modo mock). De este apartado solo queda el
+   * cargador de mas abajo. El CSS que vestia la maqueta se borra tambien.
+   */
 
-  function row(r, i) {
-    return '<div class="mock-row" style="--i:' + i + '"><span>' + r[0] + '</span>' +
-           '<span class="mock-amt">' + r[1] + '</span>' +
-           '<span class="mock-pill" style="--st:' + r[3] + '">' + r[2] + '</span></div>';
-  }
-  function bars(hs) {
-    return '<div class="mock-bars">' + hs.map(function (h, i) {
-      return '<i style="height:' + h + '%;--i:' + i + '"></i>';
-    }).join('') + '</div>';
-  }
-  function mocks(L) {
-    var ST = ['var(--k-clientes)', 'var(--k-finanzas)', 'var(--k-marketing)', 'var(--k-clientes)'];
-    var STC = ['var(--k-finanzas)', 'var(--k-produccion)', 'var(--k-marketing)', 'var(--k-soporte)'];
-    var STG = ['var(--k-clientes)', 'var(--k-produccion)', 'var(--k-clientes)', 'var(--k-clientes)'];
-    var amt = ['4.850,00 €', '2.310,00 €', '7.900,00 €', '1.180,00 €'];
-    var amtC = ['2.310,00 €', '7.900,00 €', '3.400,00 €', '1.500,00 €'];
-    var amtG = ['412,90 €', '289,00 €', '650,00 €', '128,40 €'];
-    var num = ['F-2026-0148', 'F-2026-0147', 'F-2026-0146', 'F-2026-0145'];
-    function kpi(vals, names) {
-      return '<div class="mock-kpis">' + vals.map(function (v, i) {
-        return '<div class="mock-kpi"><b>' + v + '</b><span>' + names[i] + '</span></div>';
-      }).join('') + '</div>';
-    }
-    return {
-      kpis: kpi(['128.400 €', '96.150 €', '32.250 €'], L.kpi) + bars(['38', '54', '46', '70', '62', '84', '76', '92']),
-      'rows-fact': '<div class="mock-rows">' + num.map(function (n, i) {
-        return row([n, amt[i], L.fact[i], ST[i]], i);
-      }).join('') + '</div>',
-      'rows-cobro': '<div class="mock-rows">' + L.cob.map(function (c, i) {
-        return row([c[0], amtC[i], c[1], STC[i]], i);
-      }).join('') + '</div>',
-      'rows-gasto': '<div class="mock-rows">' + L.gas.map(function (g, i) {
-        return row([g[0], amtG[i], g[1], STG[i]], i);
-      }).join('') + '</div>',
-      bars: kpi(['34,2 %', '6', '2'], L.kpi2) + bars(['64', '48', '82', '36', '70', '58'])
-    };
-  }
 
-  function initProduct() {
-    var root = document.querySelector('[data-product]');
-    if (!root) return;
-    var en = document.documentElement.lang === 'en';
-    var MODULES = en ? EN : ES;
-    var L = en ? LABELS.en : LABELS.es;
-    var MOCKS = mocks(L);
-    var tabs = Array.prototype.slice.call(root.querySelectorAll('.prod-tab'));
-    var out = root.querySelector('[data-product-screen]');
-    if (!tabs.length || !out) return;
+  /* ---------------------------------------------------------------
+   * LA DEMO DE FINANCE, PEDIDA CUANDO HACE FALTA
+   * ---------------------------------------------------------------
+   * La Home monta la demo de verdad (la misma que /sistema-financiero/app),
+   * y eso son 96 KB entre su hoja y sus dos scripts. Ponerlos en el <head>
+   * los cobra a TODO el que abre la portada, incluido quien no baja nunca
+   * hasta la ultima seccion. Aqui se piden cuando esa seccion esta a una
+   * pantalla de distancia, que en una pagina de 9.700 px de alto es tiempo
+   * de sobra para que lleguen antes que el lector.
+   *
+   * Las URL viven en el HTML, no aqui: `update-asset-versions.js` solo
+   * reescribe el `?v=` dentro de los .html, asi que un hash escrito en este
+   * fichero se quedaria viejo y serviria bytes cacheados de una version
+   * anterior — el defecto exacto que ese script existe para evitar.
+   *
+   * Si el navegador no tiene IntersectionObserver, se cargan y ya. Diferir
+   * no puede significar nunca «no aparece».
+   */
+  function initFinanceLazy() {
+    var hosts = Array.prototype.slice.call(document.querySelectorAll('[data-fdemo-lazy]'));
+    if (!hosts.length) return;
 
-    function render(key) {
-      var m = MODULES[key];
-      if (!m) return;
-      out.innerHTML =
-        '<div class="prod-copy"><h3>' + m.title + '</h3><p>' + m.text + '</p>' +
-        '<ul class="prod-list">' + m.points.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="mock"><div class="mock-top"><span class="mock-dots"><i></i><i></i><i></i></span>' +
-        '<span class="mock-name">d-code finance · ' + key + '</span></div>' +
-        '<div class="mock-in">' + MOCKS[m.mock] + '</div>' +
-        '<p class="mock-note">' + L.note + '</p></div>';
-      out.classList.remove('swap'); void out.offsetWidth; out.classList.add('swap');
+    function cargar(host) {
+      if (host.getAttribute('data-fdemo-listo')) return;
+      host.setAttribute('data-fdemo-listo', '1');
+
+      var css = host.getAttribute('data-fdemo-css');
+      if (css && !document.querySelector('link[href="' + css + '"]')) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = css;
+        document.head.appendChild(link);
+      }
+
+      // En orden: los datos definen window.FinanceStore, que el motor exige.
+      var pendientes = (host.getAttribute('data-fdemo-js') || '').split(',').filter(Boolean);
+      (function siguiente() {
+        if (!pendientes.length) return;
+        var src = pendientes.shift();
+        var ya = document.querySelector('script[src="' + src + '"]');
+        if (ya) { siguiente(); return; }
+        var sc = document.createElement('script');
+        sc.src = src;
+        sc.onload = siguiente;
+        sc.onerror = function () {
+          // No se finge que esta: se dice. Ocultarlo dejaria un hueco mudo.
+          host.setAttribute('data-fdemo-error', '1');
+        };
+        document.head.appendChild(sc);
+      })();
     }
-    function select(tab) {
-      tabs.forEach(function (t) {
-        t.setAttribute('aria-selected', String(t === tab));
-        t.tabIndex = t === tab ? 0 : -1;
+
+    if (!('IntersectionObserver' in window)) { hosts.forEach(cargar); return; }
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        obs.unobserve(e.target);
+        cargar(e.target);
       });
-      render(tab.getAttribute('data-module'));
-    }
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { select(tab); });
-      tab.addEventListener('keydown', function (e) {
-        var n = null;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = tabs[(i + 1) % tabs.length];
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = tabs[(i - 1 + tabs.length) % tabs.length];
-        if (n) { e.preventDefault(); select(n); n.focus(); }
-      });
-    });
-    select(tabs[0]);
+    }, { rootMargin: '100% 0px' });
+    hosts.forEach(function (h) { obs.observe(h); });
   }
 
   function boot() {
     initStage(); initAmbient(); initReveal(); initLift();
-    initTrack(); initVSteps(); initProduct();
+    initTrack(); initVSteps(); initFinanceLazy();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

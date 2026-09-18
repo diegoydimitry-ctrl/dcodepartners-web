@@ -111,7 +111,11 @@
       '<div class="fdemo-topbar-avatar">D</div>' +
       '<a class="fdemo-topbar-exit" href="' + exitHref + '">' + esc(exitLabel) + '</a>' +
       '</div></div>' +
-      (useHash ? '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demostración</span><span class="fdemo-demo-banner-text">datos ficticios, no reflejan información real de D-Code Partners</span></div>' : '') +
+      // La marca DEMO va en las DOS modalidades. Antes solo la llevaba la
+      // pantalla completa, así que la instancia empotrada en la Home enseñaba
+      // importes, clientes y vencimientos sin que nada visible dijera que son
+      // inventados. Quien cae en la Home la ve igual que quien abre la demo.
+      '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demostración</span><span class="fdemo-demo-banner-text">datos ficticios, no reflejan información real de D-Code Partners</span></div>' +
       '<div class="fdemo-main" data-role="main"><div class="fdemo-page" data-role="content"></div></div>' +
       '</div>';
 

@@ -34,6 +34,13 @@ jobs:
       - name: Comprobar la carga de consentimiento y analitica
         run: npm run check:consentimiento
 
+      # La demo de Finance falla en silencio: sin su contenedor de tokens se
+      # pinta transparente, con el motor del otro idioma sale en el idioma
+      # equivocado y con el motor antes que los datos no monta nada. Ninguna
+      # de las tres cosas da un error en consola.
+      - name: Comprobar el montaje de la demo de D-Code Finance
+        run: npm run check:demo
+
   diseno:
     # Las reglas del D-Code Design System en las 72 páginas y a los cinco
     # anchos de referencia: sin scroll horizontal, un solo fondo, el cian

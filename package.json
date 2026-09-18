@@ -13,7 +13,8 @@
     "check:enlaces": "node scripts/check-internal-links.mjs",
     "check:kb": "node scripts/check-knowledge-base.mjs",
     "check:consentimiento": "node scripts/check-consentimiento.mjs",
-    "qa:ds": "node scripts/qa-ds-responsive.mjs"
+    "qa:ds": "node scripts/qa-ds-responsive.mjs",
+    "check:demo": "node scripts/check-demo-finance.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"

@@ -346,15 +346,24 @@ body.v6 main .lit::before{ display:none; }
 /* ===================================================== 7. D-CODE FINANCE */
 /* Aquí sí hay marco, y no es decorativo: es la ventana de un producto real.
    Se le quita el borde duro y se deja que el campo se vea alrededor. */
-.v6-prodwrap{ margin-top:clamp(30px,4vw,48px); position:relative; }
-body.v6 .prod{
-  border-color:rgba(150,174,245,.13);
-  background:linear-gradient(168deg, rgba(20,28,54,.94), rgba(7,10,22,.97));
-  box-shadow:0 70px 160px -70px rgba(0,0,0,.98), 0 0 120px -50px rgba(91,140,255,.5);
-}
-body.v6 .prod-body{ padding:clamp(20px,3vw,38px); }
-body.v6 .mock-bars{ height:112px; }
+/* ---------------------------------------------------------------
+   D-CODE FINANCE EN LA HOME: LA APLICACION, NO SU RETRATO
+   ---------------------------------------------------------------
+   Lo que habia aqui era una maqueta: cuatro filas escritas a mano, unas
+   barras de altura fija y cinco pestañas que cambiaban un parrafo. Se leia
+   como lo que era, una captura con botones, y eso hace pequeño a un sistema
+   grande. Ahora esta montada la demo de verdad —la misma que
+   /sistema-financiero/app— sobre el mismo dataset ficticio que el producto
+   real usa en modo mock.
 
+   El marco que le da sitio (.demo-host) vive en dcp5.css, porque tambien lo
+   usa /sistema-financiero y esta hoja solo se carga en la portada. Aqui solo
+   queda lo que es del recorrido: la altura de esta seccion la manda su
+   contenido, no una medida de escenografia, asi que no hereda el min-height
+   de .v6-block--tall —que aqui solo añadiria hueco debajo—. */
+.v6-block--demo{ min-height:auto; }
+
+.v6-prodwrap{ margin-top:clamp(30px,4vw,48px); position:relative; }
 /* ============================================================= 8. CIERRE */
 /* La página termina donde empezó: en un solo punto de luz. Sin banda, sin
    borde superior, sin caja. */
@@ -575,17 +584,6 @@ body.v6 .v6-status, body.v6 .v6-cap{
   text-shadow:0 1px 9px rgba(3,5,12,.96), 0 0 24px rgba(3,5,12,.60);
 }
 
-
-/* La ventana de Finance es la única superficie opaca legítima de la portada
-   —es la interfaz de un producto real—, pero tampoco tiene por qué ser un
-   bloque estanco. Se le deja un punto de transparencia y un desvanecido en el
-   borde inferior, de modo que la capa de supervisión que trabaja detrás se
-   sigue percibiendo alrededor y por debajo del panel. El contenido interior
-   no cambia: sus propias superficies siguen siendo opacas. */
-body.v6 .prod{
-  background:linear-gradient(180deg, rgba(11,15,27,.94), rgba(8,11,21,.90));
-  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
-}
 
 /* El titular-enlace mide 38 px a 390 px; el área pulsable llega a 44 sin
    tocar el subrayado animado, que ya usa ::after. */

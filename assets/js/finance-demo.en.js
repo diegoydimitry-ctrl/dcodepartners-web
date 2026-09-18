@@ -85,7 +85,10 @@
       '<div class="fdemo-topbar-avatar">D</div>' +
       '<a class="fdemo-topbar-exit" href="' + exitHref + '">' + esc(exitLabel) + '</a>' +
       '</div></div>' +
-      (useHash ? '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demo</span><span class="fdemo-demo-banner-text">fictional data, does not reflect real D-Code Partners information</span></div>' : '') +
+      // The DEMO mark shows in BOTH modes. It used to be full-screen only, so
+      // the instance embedded in the home page showed amounts, clients and due
+      // dates with nothing visible saying they are made up.
+      '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demo</span><span class="fdemo-demo-banner-text">fictional data, does not reflect real D-Code Partners information</span></div>' +
       '<div class="fdemo-main" data-role="main"><div class="fdemo-page" data-role="content"></div></div>' +
       '</div>';
 
