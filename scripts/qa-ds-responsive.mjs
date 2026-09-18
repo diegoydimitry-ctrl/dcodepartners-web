@@ -9,6 +9,8 @@
  *     es el color del dato y nunca es clicable);
  *   · que no haya texto por debajo de 12 px que no sea una etiqueta en
  *     mayúsculas;
+ *   · que ningún importe se escriba sin agrupar los miles («1200 €» junto a
+ *     «28.442,50 €» rompe la lectura por longitud);
  *   · que en táctil todo objetivo pulsable llegue a 44 px —midiendo el
  *     área real, no la caja visible—;
  *   · que todo campo de formulario tenga nombre accesible;
@@ -74,7 +76,17 @@ for (const w of WIDTHS) {
     await page.goto(`http://127.0.0.1:${PORT}${p}`, { waitUntil:'domcontentloaded' });
     await page.waitForTimeout(160);
     const r = await page.evaluate((w)=>{
-      const out = { ov: document.documentElement.scrollWidth - w, bg: getComputedStyle(document.body).backgroundColor, cyanClick: [], tiny: [], touch: [], noLabel: [] };
+      const out = { ov: document.documentElement.scrollWidth - w, bg: getComputedStyle(document.body).backgroundColor, cyanClick: [], tiny: [], touch: [], noLabel: [], importes: [] };
+      /*
+        AGRUPACIÓN DE MILES SIEMPRE (regla del DS). Un importe de cuatro
+        cifras sin punto —«1200,00 €»— junto a otro de cinco —«28.442,50 €»—
+        rompe la lectura por longitud, que es como se leen las cifras de un
+        vistazo. Se busca sobre el texto pintado, no sobre el código: así
+        también caza lo que escribe el JavaScript en tiempo de ejecución.
+      */
+      for (const [, cifra] of (document.body.innerText || '').matchAll(/(?<![\d.,])(\d{4,})(?:,\d{2})?\s*€/g)) {
+        out.importes.push(cifra + '… €');
+      }
       const cyan = /rgb\(67,\s*224,\s*255\)/;
       for (const el of document.querySelectorAll('a,button,[role=button],summary')) {
         const b = el.getBoundingClientRect(); if (!b.width || !b.height) continue;
@@ -111,6 +123,7 @@ for (const w of WIDTHS) {
     if (r.tiny.length) bad.tiny = [...new Set(r.tiny)].slice(0,4);
     if (r.touch.length) bad.touch = [...new Set(r.touch)].slice(0,4);
     if (r.noLabel.length) bad.noLabel = [...new Set(r.noLabel)].slice(0,4);
+    if (r.importes.length) bad.importes = [...new Set(r.importes)].slice(0,4);
     const errsReales = [...new Set(errs)].filter(e => !/ERR_FAILED|ERR_BLOCKED|net::ERR_ABORTED/.test(e));
     if (errsReales.length) bad.errs = errsReales.slice(0,3);
     if (Object.keys(bad).length) issues.push({ p, w, ...bad });

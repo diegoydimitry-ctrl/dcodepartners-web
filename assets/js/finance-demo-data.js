@@ -85,7 +85,12 @@
   // ---------------------------------------------------------------
   function fmtEUR(value) {
     if (value === null || value === undefined) return 'Sin datos suficientes';
-    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
+    // useGrouping 'always': es-ES no agrupa los enteros de CUATRO cifras, y
+    // casi todos los importes de esta demo lo son. Sin esto se enseñaba
+    // «1200,00 €» al lado de «28.442,50 €» en la misma columna, que es justo
+    // lo que el producto real corrige en src/lib/format.ts — el fichero que
+    // el comentario de arriba dice estar copiando.
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', useGrouping: 'always' }).format(value);
   }
   function fmtFecha(value) {
     if (!value) return '—';
