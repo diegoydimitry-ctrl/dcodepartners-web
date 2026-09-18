@@ -9,6 +9,7 @@
     "qa:check": "node scripts/qa-preview-check.js",
     "check-instruments": "node scripts/check-instruments.js",
     "check:superficie": "node scripts/check-deploy-surface.mjs",
+    "superficie:diff": "node scripts/superficie-diff.mjs",
     "check:enlaces": "node scripts/check-internal-links.mjs",
     "check:kb": "node scripts/check-knowledge-base.mjs",
     "qa:ds": "node scripts/qa-ds-responsive.mjs"
