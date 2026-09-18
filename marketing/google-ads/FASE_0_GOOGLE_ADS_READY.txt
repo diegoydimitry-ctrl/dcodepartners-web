@@ -1,0 +1,33 @@
+  · e2e: 13 pruebas
+  · servidor: 31 pruebas
+
+FASE_0_GOOGLE_ADS_READY
+
+✓ landing 1 · /automatizacion-procesos
+✓ landing 2 · /automatizacion-seguimiento-comercial
+✓ landing 3 · /automatizacion-atencion-clientes
+✓ demo (datos DEMO, sin datos reales)
+✓ vídeo (MP4 + subtítulos + póster)
+✓ formulario (campos, privacidad, ocultos)
+✓ tracking (eventos; solo «formulario» es conversión)
+✓ consentimiento (Consent Mode v2 + CookieYes primero)
+✓ GCLID / UTM (captura y fuente google_ads)
+✓ Airtable (contrato de columnas + barrera de producción)
+✓ CRM (etapas; google_ads ⇒ borrador interno)
+✓ cualificación (ficha HECHO ≠ INFERENCIA)
+✓ reserva (gracias → Cal.com → reunión programada)
+✓ conversiones offline (modelo, mapeo, CSV)
+✓ keywords (estudio sin alterar; exacta/frase)
+✓ negativas (DCODE-BASE)
+✓ anuncios (mapa completo; nada BLOQUEADO en los ficheros de carga)
+✓ tests (servidor + e2e)
+✓ seguridad (sin secretos, superficie, barreras)
+✓ producción intacta
+
+GOOGLE ADS: NO ACTIVADO
+GASTO: 0 €
+CUENTA: NO CREADA
+PROMOCIÓN: NO CANJEADA
+
+✓ 20 comprobaciones superadas.
+exit 0

@@ -1,0 +1,45 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:06.000
+Demo con datos inventados: así se ordenan las consultas de clientes cuando lo construimos.
+
+2
+00:00:06.000 --> 00:00:14.000
+El problema: las consultas llegan al buzón y nadie sabe cuál es urgente ni quién la lleva.
+
+3
+00:00:14.000 --> 00:00:20.000
+Entra un email de un cliente.
+
+4
+00:00:20.000 --> 00:00:27.000
+Se detecta que es una consulta de cliente y se crea un ticket con prioridad.
+
+5
+00:00:27.000 --> 00:00:33.000
+Un boletín comercial no es una consulta: no genera ticket.
+
+6
+00:00:33.000 --> 00:00:42.000
+Se asigna a quien tiene menos carga en ese momento.
+
+7
+00:00:42.000 --> 00:00:52.000
+Cada ticket tiene un plazo según su prioridad.
+
+8
+00:00:52.000 --> 00:01:00.000
+Si se acerca el plazo, el sistema avisa al responsable.
+
+9
+00:01:00.000 --> 00:01:08.000
+Si se incumple, se escala a dirección. No se pierde en el buzón.
+
+10
+00:01:08.000 --> 00:01:16.000
+De un vistazo: qué está abierto, de quién es y cuánto queda.
+
+11
+00:01:16.000 --> 00:01:24.000
+En el diagnóstico lo vemos con tu buzón y tus plazos reales.

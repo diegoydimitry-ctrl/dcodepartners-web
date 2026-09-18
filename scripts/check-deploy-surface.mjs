@@ -41,9 +41,10 @@ export function deployedFiles(files, vercelignoreText) {
   return files.filter((f) => !ig.ignores(f));
 }
 
-const PUBLIC_EXT = /\.(html|css|js|mjs|json|png|jpe?g|webp|avif|gif|svg|ico|woff2?|ttf|otf|xml|txt|webmanifest|mp4|webm|pdf)$/i;
+// vtt: subtítulos públicos de los vídeos de demostración de las landings de Google Ads.
+const PUBLIC_EXT = /\.(html|css|js|mjs|json|png|jpe?g|webp|avif|gif|svg|ico|woff2?|ttf|otf|xml|txt|webmanifest|mp4|webm|vtt|pdf)$/i;
 const FORBIDDEN = [
-  /^docs\//, /^scripts\//, /^\.github\//, /^automation\//, /^auditoria\//, /^informes?\//i,
+  /^docs\//, /^scripts\//, /^marketing\//, /^tests\//, /^\.github\//, /^automation\//, /^auditoria\//, /^informes?\//i,
   /(^|\/)README(\.[a-z]+)?$/i, /(^|\/)CLAUDE\.md$/i, /(^|\/)AGENTS\.md$/i, /\.mdx?$/i, /\.ya?ml$/i,
   /\.workflow\.json$/i, /(^|\/)\.env/, /(^|\/)\.vercelignore$/, /\.bundle$/, /\.patch$/, /\.bat$/i,
   /(^|\/)package-lock\.json$/, /(^|\/)tsconfig\.json$/,

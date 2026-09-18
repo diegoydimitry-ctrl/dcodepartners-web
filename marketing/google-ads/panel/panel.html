@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel del embudo · Google Ads · D-Code (interno)</title>
+<style>
+:root{--bg:#06080d;--panel:#0e1320;--line:#1e2536;--ink:#edf1f8;--stone:#a7b0c4;--blue:#5b8cff;--cyan:#43e0ff;--amber:#f5a524}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif;padding:20px}
+h1{font-size:22px;margin:0 0 4px}p{color:var(--stone);margin:4px 0 14px;max-width:900px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+label{display:block;margin:6px 0}input[type=number]{width:80px;background:#080b12;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px}
+button{background:var(--blue);color:#04070f;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}th{color:var(--stone);font-weight:600}
+tr.total td{font-weight:700;border-top:2px solid var(--blue)}
+.aviso{color:var(--amber)}.scroll{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+</style>
+</head>
+<body>
+<h1>Panel del embudo — Google Ads → cliente</h1>
+<p>Herramienta INTERNA y local: los ficheros se leen en tu navegador y no se envían a ningún sitio. No se publica en la web (la carpeta <code>marketing/</code> no está en el despliegue).</p>
+<div class="box grid">
+  <label>1 · Google Ads: informe de grupos de anuncios (CSV)<br><input type="file" id="f-ads" accept=".csv,.tsv,text/csv"></label>
+  <label>2 · Airtable: vista de Leads (CSV)<br><input type="file" id="f-leads" accept=".csv,text/csv"></label>
+  <label>3 · GA4 (opcional): landing · evento · recuento (CSV)<br><input type="file" id="f-ga4" accept=".csv,text/csv"></label>
+</div>
+<div class="box grid">
+  <label>Coste interno €/h <input type="number" id="p-costeHora" value="20" step="1"></label>
+  <label>Horas triaje por lead <input type="number" id="p-horasTriaje" value="0.25" step="0.05"></label>
+  <label>Horas por reunión <input type="number" id="p-horasReunion" value="1.5" step="0.25"></label>
+  <label>Horas por propuesta <input type="number" id="p-horasPropuesta" value="2" step="0.25"></label>
+  <label>Horas impl. por prueba fallida (si no hay dato real) <input type="number" id="p-horasImplantacionDefecto" value="35" step="1"></label>
+</div>
+<p class="aviso">Horas por etapa: HIPÓTESIS del estudio hasta que haya registro real. El coste interno de 20 €/h es dato de Dirección.</p>
+<p><button id="calcular">Calcular</button> <button id="ejemplo" style="background:#2b3553;color:#edf1f8">Cargar datos INVENTADOS de ejemplo</button></p>
+<div class="box scroll"><table id="tabla"><thead></thead><tbody></tbody></table></div>
+<p>CAC anuncios = coste de Google Ads / clientes. CAC completo = (coste + horas comerciales × €/h + horas de implantación de pruebas que no acabaron en cliente × €/h) / clientes. Solo leads con Fuente = google_ads y Entorno = production.</p>
+<script src="calculo.js"></script>
+<script>
+(function () {
+  var D = window.DCODE_PANEL, datos = { ads: [], leads: [], ga4: [] };
+  function leer(id, k) {
+    document.getElementById(id).addEventListener('change', function (e) {
+      var f = e.target.files[0]; if (!f) return;
+      var r = new FileReader(); r.onload = function () { datos[k] = D.parseCsv(r.result); }; r.readAsText(f);
+    });
+  }
+  leer('f-ads', 'ads'); leer('f-leads', 'leads'); leer('f-ga4', 'ga4');
+  var eur = function (v) { return v == null ? '—' : v.toLocaleString('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }); };
+  var pct = function (v) { return v == null ? '—' : (v * 100).toLocaleString('es-ES', { maximumFractionDigits: 1 }) + ' %'; };
+  var n = function (v) { return v.toLocaleString('es-ES'); };
+  var COLS = [['landing', 'Landing', String], ['impresiones', 'Impr.', n], ['clics', 'Clics', n], ['ctr', 'CTR', pct], ['cpc', 'CPC', eur], ['coste', 'Coste', eur],
+    ['visitas', 'Visitas', n], ['demoIniciada', 'Demo iniciada', n], ['demo50', 'Demo 50 %', n], ['leads', 'Leads', n], ['cpl', 'Coste/lead', eur],
+    ['cualificados', 'Cualificados', n], ['reuniones', 'Reuniones', n], ['costeReunion', 'Coste/reunión', eur], ['propuestas', 'Propuestas', n], ['pruebas', 'Pruebas', n],
+    ['clientes', 'Clientes', n], ['facturacion', 'Facturación', eur], ['mrr', 'MRR', eur], ['cacAnuncios', 'CAC anuncios', eur], ['cacCompleto', 'CAC completo', eur]];
+  function pintar() {
+    var p = {}; ['costeHora', 'horasTriaje', 'horasReunion', 'horasPropuesta', 'horasImplantacionDefecto'].forEach(function (k) { p[k] = parseFloat(document.getElementById('p-' + k).value) || 0; });
+    var r = D.calcular(datos.ads, datos.leads, datos.ga4, p);
+    var t = document.getElementById('tabla');
+    t.tHead.innerHTML = '<tr>' + COLS.map(function (c) { return '<th>' + c[1] + '</th>'; }).join('') + '</tr>';
+    t.tBodies[0].innerHTML = r.filas.concat([r.total]).map(function (f) {
+      return '<tr class="' + (f.landing === 'TOTAL' ? 'total' : '') + '">' + COLS.map(function (c) { return '<td>' + c[2](f[c[0]]) + '</td>'; }).join('') + '</tr>';
+    }).join('');
+  }
+  document.getElementById('calcular').addEventListener('click', pintar);
+  document.getElementById('ejemplo').addEventListener('click', function () {
+    // DATOS INVENTADOS para ver el panel funcionando. No son previsiones.
+    datos.ads = [{ 'Grupo de anuncios': 'GA1 Proveedor de automatizacion', 'Impr.': '1200', 'Clics': '48', 'Coste': '96,00' }, { 'Grupo de anuncios': 'GA2 Seguimiento comercial', 'Impr.': '600', 'Clics': '30', 'Coste': '66,00' }];
+    datos.ga4 = [{ Landing: '/automatizacion-procesos', Evento: 'session_start', Recuento: '46' }, { Landing: '/automatizacion-procesos', Evento: 'demo_start', Recuento: '19' }, { Landing: '/automatizacion-procesos', Evento: 'demo_50', Recuento: '11' }];
+    var L = function (landing, etapa, extra) { return Object.assign({ Fuente: 'google_ads', Entorno: 'production', Empresa: 'Ejemplo', Landing: landing, 'Etapa embudo': etapa }, extra || {}); };
+    datos.leads = [L('/automatizacion-procesos', 'Nuevo'), L('/automatizacion-procesos', 'Descartado'), L('/automatizacion-procesos', 'Reunión celebrada'),
+      L('/automatizacion-seguimiento-comercial', 'Cliente', { 'Valor cliente': '2600', 'Mensualidad cliente': '280', 'Horas implantación reales': '48' }),
+      L('/automatizacion-seguimiento-comercial', 'Descartado', { 'Horas implantación reales': '30' })];
+    pintar();
+  });
+})();
+</script>
+</body>
+</html>

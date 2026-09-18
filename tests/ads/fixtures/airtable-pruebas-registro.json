@@ -1,0 +1,19 @@
+[
+  {
+    "_origen": "Leído de la base de PRUEBAS appwMWJvQPpu0Ypvg (tabla Leads) el 18/09/2026 tras escribir con typecast=false exactamente los campos que genera el código.",
+    "id": "recimdSaQWNES2umB",
+    "fields": {
+      "Empresa": "Reformas Ejemplo TEST",
+      "GCLID": "Cj0KCQjw_CONTRATO-0001",
+      "Entorno": "test",
+      "Fuente": "google_ads",
+      "Nº envíos": 2,
+      "Primer envío": "2026-09-18T20:30:00.000Z",
+      "Fecha cualificado": "2026-09-19T09:00:00.000Z",
+      "Reunión celebrada": "2026-09-22T10:00:00.000Z",
+      "Fecha cliente": "2026-10-30T12:00:00.000Z",
+      "Valor cliente": 2600,
+      "Conversiones enviadas": ["lead_cualificado"]
+    }
+  }
+]

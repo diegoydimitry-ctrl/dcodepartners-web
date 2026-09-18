@@ -1,0 +1,97 @@
+Shared Set Name,Keyword,Criterion Type
+DCODE-BASE,trabajo,Negative Broad
+DCODE-BASE,empleo,Negative Broad
+DCODE-BASE,oferta de empleo,Negative Phrase
+DCODE-BASE,sueldo,Negative Broad
+DCODE-BASE,salario,Negative Broad
+DCODE-BASE,vacantes,Negative Broad
+DCODE-BASE,prácticas,Negative Broad
+DCODE-BASE,becario,Negative Broad
+DCODE-BASE,infojobs,Negative Broad
+DCODE-BASE,linkedin empleo,Negative Phrase
+DCODE-BASE,teletrabajo,Negative Broad
+DCODE-BASE,freelance trabajo,Negative Phrase
+DCODE-BASE,cv,Negative Broad
+DCODE-BASE,curso,Negative Broad
+DCODE-BASE,cursos,Negative Broad
+DCODE-BASE,master,Negative Broad
+DCODE-BASE,máster,Negative Broad
+DCODE-BASE,formación,Negative Broad
+DCODE-BASE,certificación,Negative Broad
+DCODE-BASE,grado,Negative Broad
+DCODE-BASE,fp,Negative Broad
+DCODE-BASE,universidad,Negative Broad
+DCODE-BASE,tfg,Negative Broad
+DCODE-BASE,tfm,Negative Broad
+DCODE-BASE,apuntes,Negative Broad
+DCODE-BASE,temario,Negative Broad
+DCODE-BASE,pdf,Negative Broad
+DCODE-BASE,libro,Negative Broad
+DCODE-BASE,ejemplos de,Negative Phrase
+DCODE-BASE,qué es,Negative Phrase
+DCODE-BASE,que es,Negative Phrase
+DCODE-BASE,definición,Negative Broad
+DCODE-BASE,wikipedia,Negative Broad
+DCODE-BASE,ventajas y desventajas,Negative Phrase
+DCODE-BASE,tipos de,Negative Phrase
+DCODE-BASE,historia,Negative Broad
+DCODE-BASE,aprender,Negative Broad
+DCODE-BASE,tutorial,Negative Broad
+DCODE-BASE,youtube,Negative Broad
+DCODE-BASE,gratis,Negative Broad
+DCODE-BASE,gratuito,Negative Broad
+DCODE-BASE,free,Negative Broad
+DCODE-BASE,plantilla,Negative Broad
+DCODE-BASE,excel,Negative Broad
+DCODE-BASE,macro,Negative Broad
+DCODE-BASE,vba,Negative Broad
+DCODE-BASE,python,Negative Broad
+DCODE-BASE,github,Negative Broad
+DCODE-BASE,open source,Negative Phrase
+DCODE-BASE,descargar,Negative Broad
+DCODE-BASE,app,Negative Broad
+DCODE-BASE,chatgpt,Negative Broad
+DCODE-BASE,prompt,Negative Broad
+DCODE-BASE,cómo hacer,Negative Phrase
+DCODE-BASE,como hacer,Negative Phrase
+DCODE-BASE,crear un,Negative Phrase
+DCODE-BASE,plc,Negative Broad
+DCODE-BASE,scada,Negative Broad
+DCODE-BASE,industrial,Negative Broad
+DCODE-BASE,robot,Negative Broad
+DCODE-BASE,robótica,Negative Broad
+DCODE-BASE,domótica,Negative Broad
+DCODE-BASE,hogar,Negative Broad
+DCODE-BASE,puertas,Negative Broad
+DCODE-BASE,persianas,Negative Broad
+DCODE-BASE,riego,Negative Broad
+DCODE-BASE,siemens,Negative Broad
+DCODE-BASE,neumática,Negative Broad
+DCODE-BASE,electricidad,Negative Broad
+DCODE-BASE,cuadro eléctrico,Negative Phrase
+DCODE-BASE,almacén,Negative Broad
+DCODE-BASE,kit digital,Negative Phrase
+DCODE-BASE,kit consulting,Negative Phrase
+DCODE-BASE,subvención,Negative Broad
+DCODE-BASE,ayudas,Negative Broad
+DCODE-BASE,login,Negative Broad
+DCODE-BASE,iniciar sesión,Negative Phrase
+DCODE-BASE,precio licencia,Negative Phrase
+DCODE-BASE,hubspot,Negative Broad
+DCODE-BASE,salesforce,Negative Broad
+DCODE-BASE,uipath,Negative Broad
+DCODE-BASE,power automate,Negative Phrase
+DCODE-BASE,zapier precio,Negative Phrase
+DCODE-BASE,odoo,Negative Broad
+DCODE-BASE,holded,Negative Broad
+DCODE-BASE,mexico,Negative Broad
+DCODE-BASE,méxico,Negative Broad
+DCODE-BASE,argentina,Negative Broad
+DCODE-BASE,colombia,Negative Broad
+DCODE-BASE,chile,Negative Broad
+DCODE-BASE,perú,Negative Broad
+DCODE-BASE,noticias,Negative Broad
+DCODE-BASE,peligros,Negative Broad
+DCODE-BASE,ética,Negative Broad
+DCODE-BASE,reemplazará,Negative Broad
+DCODE-BASE,empleos que desaparecerán,Negative Phrase

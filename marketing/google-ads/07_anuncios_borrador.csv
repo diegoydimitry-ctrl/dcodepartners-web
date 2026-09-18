@@ -1,0 +1,76 @@
+﻿grupo;elemento;n;texto;caracteres;limite;condicion_antes_de_usar
+GA1 Automatización de procesos (genérico proveedor);Título;1;Automatización para Empresas;28;30;
+GA1 Automatización de procesos (genérico proveedor);Título;2;Automatizamos Procesos Reales;29;30;
+GA1 Automatización de procesos (genérico proveedor);Título;3;Empieza por el Problema;23;30;
+GA1 Automatización de procesos (genérico proveedor);Título;4;Mira la Demo en 2 Minutos;25;30;Solo cuando exista el vídeo de demo publicado
+GA1 Automatización de procesos (genérico proveedor);Título;5;30 Días de Prueba Sin Factura;29;30;Confirmar que Modelo 3 sigue vigente y está explicado en la landing (política Google de tergiversación)
+GA1 Automatización de procesos (genérico proveedor);Título;6;Diagnóstico Gratuito 30 min;27;30;
+GA1 Automatización de procesos (genérico proveedor);Título;7;Equipo en Madrid;16;30;
+GA1 Automatización de procesos (genérico proveedor);Título;8;Sistemas a Medida, No Packs;27;30;
+GA1 Automatización de procesos (genérico proveedor);Título;9;Con Tus Herramientas Actuales;29;30;
+GA1 Automatización de procesos (genérico proveedor);Título;10;Menos Tareas Repetitivas;24;30;
+GA1 Automatización de procesos (genérico proveedor);Título;11;D-Code Partners;15;30;
+GA1 Automatización de procesos (genérico proveedor);Título;12;Precios Publicados en la Web;28;30;Solo si la landing publica precios
+GA1 Automatización de procesos (genérico proveedor);Título;13;Del Problema al Sistema;23;30;
+GA1 Automatización de procesos (genérico proveedor);Título;14;Automatización con IA Útil;26;30;
+GA1 Automatización de procesos (genérico proveedor);Título;15;Hablas con Quien lo Construye;29;30;
+GA1 Automatización de procesos (genérico proveedor);Descripción;1;Analizamos un proceso concreto, construimos el sistema y lo ves funcionar antes de pagar.;89;90;
+GA1 Automatización de procesos (genérico proveedor);Descripción;2;Mira una demo real de 2 minutos. Si encaja, reserva un diagnóstico gratuito de 30 min.;86;90;Ídem
+GA1 Automatización de procesos (genérico proveedor);Descripción;3;Conectamos tus herramientas actuales. Sin cambiar de software si no hace falta.;79;90;
+GA1 Automatización de procesos (genérico proveedor);Descripción;4;Implantación con 30 días de prueba sin factura. Después decides si continúas.;77;90;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;1;Presupuestos Sin Seguimiento;28;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;2;Automatiza el Seguimiento;25;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;3;Ningún Presupuesto Olvidado;27;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;4;CRM + Propuestas + Avisos;25;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;5;Mira Cómo Funciona en 2 min;27;30;Ídem
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;6;30 Días de Prueba Sin Factura;29;30;Confirmar que Modelo 3 sigue vigente y está explicado en la landing (política Google de tergiversación)
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;7;Diagnóstico Gratuito 30 min;27;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;8;Tus Leads en un Solo Sitio;26;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;9;Propuestas Generadas con IA;27;30;Verificar que el generador está activo (catálogo 16/08: sí)
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;10;Recordatorios Automáticos;25;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;11;Equipo en Madrid;16;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;12;D-Code Partners;15;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;13;Implantación desde 2.600 €;26;30;Reconciliar PRICING OFICIAL (19/08, niveles Starter/Pro) con criterios de pricing del 18/09
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;14;Para Pymes de Servicios;23;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Título;15;Tú Decides Tras 30 Días;23;30;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;1;Cada lead entra en un CRM, recibe su propuesta y un recordatorio si no hay respuesta.;85;90;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;2;Mira la demo: de la solicitud a la propuesta enviada, sin copiar datos a mano.;78;90;Ídem
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;3;Lo implantamos sobre tu forma real de vender. 30 días de prueba sin factura.;76;90;
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;4;Diagnóstico gratuito de 30 min para ver qué parte de tu seguimiento se automatiza.;82;90;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;1;Consultas de Clientes en Orden;30;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;2;Cada Consulta, Un Ticket;24;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;3;Prioriza lo Urgente Solo;24;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;4;Automatiza tu Atención;22;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;5;Mira la Demo en 2 Minutos;25;30;Solo cuando exista el vídeo de demo publicado
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;6;30 Días de Prueba Sin Factura;29;30;Confirmar que Modelo 3 sigue vigente y está explicado en la landing (política Google de tergiversación)
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;7;Diagnóstico Gratuito 30 min;27;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;8;Nada se Queda Sin Responder;27;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;9;Clasificación con IA;20;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;10;Equipo en Madrid;16;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;11;D-Code Partners;15;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;12;Implantación desde 1.600 €;26;30;Ídem
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;13;Emails y Formularios;20;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;14;Visibilidad de Cada Consulta;28;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;15;Tú Decides Tras 30 Días;23;30;
+GA3 Consultas de clientes (Soporte IA · Tickets);Descripción;1;Cada email o formulario de cliente se convierte en un ticket priorizado y asignado.;83;90;
+GA3 Consultas de clientes (Soporte IA · Tickets);Descripción;2;Mira la demo de 2 minutos: la consulta entra, se clasifica y se asigna sola.;76;90;Ídem
+GA3 Consultas de clientes (Soporte IA · Tickets);Descripción;3;Implantación con 30 días de prueba sin factura. Después decides si continúas.;77;90;
+GA3 Consultas de clientes (Soporte IA · Tickets);Descripción;4;Diagnóstico gratuito de 30 min para ver qué consultas se pueden automatizar.;76;90;
+Compartido;Enlace de sitio;;Ver la demo;11;25;Ídem
+Compartido;Descripción enlace;;Demo real de 2 minutos;22;35;
+Compartido;Descripción enlace;;Sin registro;12;35;
+Compartido;Enlace de sitio;;Cómo trabajamos;15;25;
+Compartido;Descripción enlace;;Diagnóstico, sistema, prueba;28;35;
+Compartido;Descripción enlace;;30 días antes de facturar;25;35;
+Compartido;Enlace de sitio;;Precios;7;25;
+Compartido;Descripción enlace;;Implantación y mensualidad;26;35;
+Compartido;Descripción enlace;;Qué incluye cada cosa;21;35;
+Compartido;Enlace de sitio;;Reservar diagnóstico;20;25;
+Compartido;Descripción enlace;;30 min con el equipo;20;35;
+Compartido;Descripción enlace;;Gratuito y sin compromiso;25;35;
+Compartido;Texto destacado;;30 días sin factura;19;25;Ídem
+Compartido;Texto destacado;;Diagnóstico gratuito;20;25;
+Compartido;Texto destacado;;Equipo en Madrid;16;25;
+Compartido;Texto destacado;;Precios publicados;18;25;Solo si la landing publica precios
+Compartido;Texto destacado;;Demo antes de hablar;20;25;Ídem
+Compartido;Texto destacado;;Hablas con los fundadores;25;25;

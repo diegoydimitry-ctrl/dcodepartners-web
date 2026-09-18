@@ -14,7 +14,14 @@
     "check:kb": "node scripts/check-knowledge-base.mjs",
     "check:consentimiento": "node scripts/check-consentimiento.mjs",
     "qa:ds": "node scripts/qa-ds-responsive.mjs",
-    "check:demo": "node scripts/check-demo-finance.mjs"
+    "check:demo": "node scripts/check-demo-finance.mjs",
+    "ads:landings": "node marketing/google-ads/landings/generar.mjs",
+    "ads:borradores": "node marketing/google-ads/campana/generar-borradores.mjs",
+    "ads:servidor": "node tests/ads/servidor-local.mjs",
+    "ads:videos": "node marketing/google-ads/demos/grabar-videos.mjs",
+    "test:ads": "node --test tests/ads/backend.test.mjs",
+    "test:ads:e2e": "node --test --test-concurrency=1 tests/ads/e2e.test.mjs",
+    "fase0:ads": "node scripts/check-ads-fase0.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"

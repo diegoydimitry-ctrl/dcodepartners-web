@@ -1,0 +1,8 @@
+﻿grupo;elemento;n;texto;caracteres;limite;condicion_antes_de_usar;motivo_del_cambio
+GA1 Automatización de procesos (genérico proveedor);Descripción;5;Elegimos contigo el proceso que más tiempo os quita y construimos el sistema que lo hace.;89;90;;Faltaban descripciones sin condiciones pendientes
+GA1 Automatización de procesos (genérico proveedor);Descripción;6;Diagnóstico de 30 min por videollamada: te enseñamos el sistema funcionando.;76;90;;Ídem
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;5;Cada solicitud entra sola en un CRM y el responsable recibe aviso si no hay respuesta.;86;90;;Sustituye a la D1 del 07, que daba a entender propuesta automática
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;6;"El sistema prepara el borrador de propuesta; una persona la revisa y decide enviarla.";85;90;;Faltaban descripciones sin condiciones pendientes
+GA2 Seguimiento comercial / presupuestos (Comercial IA);Descripción;7;Diagnóstico de 30 min: vemos qué parte de tu seguimiento comercial se puede automatizar.;88;90;;Sustituye a la D4 del 07 sin «gratuito» (no confirmado)
+GA3 Consultas de clientes (Soporte IA · Tickets);Descripción;5;Diagnóstico de 30 min: vemos qué consultas de tu buzón se pueden ordenar solas.;79;90;;Sustituye a la D4 del 07 sin «gratuito» (no confirmado)
+GA3 Consultas de clientes (Soporte IA · Tickets);Título;16;No Es un Chatbot;16;30;;Aclara el alcance: Chat IA Clientes está NO VIGENTE

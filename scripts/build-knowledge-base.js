@@ -22,7 +22,9 @@ const ROOT = path.join(__dirname, '..');
 const OUT_PATH = path.join(ROOT, 'assets/data/knowledge-base.json');
 
 // Directorios/archivos que nunca deben indexarse como contenido público.
-const EXCLUDED_FILES = new Set(['404.html']);
+// Landings de Google Ads (noindex, tráfico de pago) y su página de gracias:
+// el asistente responde desde la web principal, no desde páginas de campaña.
+const EXCLUDED_FILES = new Set(['404.html', 'automatizacion-procesos.html', 'automatizacion-seguimiento-comercial.html', 'automatizacion-atencion-clientes.html', 'gracias-diagnostico.html']);
 const EXCLUDED_DIRS = new Set(['node_modules', '.git', 'api', 'scripts', 'assets']);
 
 // 'eyebrow': kickers cortos sobre un título (p. ej. "Servicios · Agentes de
