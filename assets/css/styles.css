@@ -3960,3 +3960,15 @@ footer{
 
   .btn{ min-height:44px; }
 }
+
+/* La nota que aclara de quién es la operación: estos cinco sistemas están en
+   marcha en la nuestra, no en la de un cliente. Decirlo es lo que convierte
+   una lista de infraestructura interna en una prueba de que sabemos
+   construirlos — y lo que evita que parezca un caso de cliente inventado. */
+.board-note{
+  margin:clamp(20px,2.4vw,30px) 0 0;
+  max-width:68ch;
+  font-size:0.9rem;
+  line-height:1.66;
+  color:var(--stone-soft);
+}
