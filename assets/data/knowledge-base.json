@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T11:56:16.070Z",
+  "generatedAt": "2026-09-18T11:58:19.956Z",
   "pageCount": 66,
   "chunkCount": 588,
   "pages": [
@@ -2311,7 +2311,7 @@
         {
           "id": "/en/#c9",
           "heading": "D-Code Finance",
-          "text": "Invoices, collections, expenses, clients and projects in one place. We built it ourselves. What you see below is not a screenshot: it is the application, and it moves. DEMO The clients, the amounts and the dates are made up. The screens, the columns and the statuses are the ones in the real system. <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can still read what the system does on its page.</p> Open it full screen What else it does Before you call"
+          "text": "Invoices, collections, expenses, clients and projects in one place. We built it ourselves. What you see below is not a screenshot: it is the application, and it moves. DEMO Start from the menu on the left: nine modules, and you can open any invoice, client or project. The clients, the amounts and the dates are made up; the screens, the columns and the statuses are the ones in the real system. <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can still read what the system does on its page.</p> Open it full screen What else it does Before you call"
         },
         {
           "id": "/en/#c10",
@@ -2321,7 +2321,7 @@
         {
           "id": "/en/#c11",
           "heading": "Thirty minutes and you will know what can be automated.",
-          "text": "Tell us how you work today and we will tell you where we would start. Book a call See internal cases"
+          "text": "Tell us how you work today and we will tell you where we would start. Book a call What people usually ask"
         }
       ]
     },
@@ -2694,7 +2694,7 @@
         {
           "id": "/en/sistema-financiero#c0",
           "heading": "A complete financial system, built by us.",
-          "text": "Invoicing, collections, expenses, quotes and analytics in one place. It adapts to each company’s structure. Open the demo Talk to us DEMO The clients, the amounts and the dates are made up. The screens, the columns and the statuses are the ones in the real system. This demo covers nine of its modules; all fourteen are listed below."
+          "text": "Invoicing, collections, expenses, quotes and analytics in one place. It adapts to each company’s structure. Open the demo Talk to us DEMO Start from the menu on the left and open any invoice, client or project. The clients, the amounts and the dates are made up; the screens, the columns and the statuses are the ones in the real system. The demo covers nine modules; all fourteen are listed below."
         },
         {
           "id": "/en/sistema-financiero#c1",
@@ -2937,7 +2937,7 @@
         {
           "id": "/#c9",
           "heading": "D-Code Finance",
-          "text": "Facturas, cobros, gastos, clientes y proyectos en el mismo sitio. Lo hemos construido nosotros. Lo de aquí abajo no es una captura: es la aplicación, y se mueve. DEMO Los clientes, los importes y las fechas son inventados. Las pantallas, las columnas y los estados son los del sistema de verdad. <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver lo que hace el sistema en su ficha.</p> Abrirla a pantalla completa Qué más hace Antes de llamar"
+          "text": "Facturas, cobros, gastos, clientes y proyectos en el mismo sitio. Lo hemos construido nosotros. Lo de aquí abajo no es una captura: es la aplicación, y se mueve. DEMO Empieza por el menú de la izquierda: nueve módulos, y se entra en cada factura, cliente o proyecto. Los clientes, los importes y las fechas son inventados; las pantallas, las columnas y los estados son los del sistema de verdad. <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver lo que hace el sistema en su ficha.</p> Abrirla a pantalla completa Qué más hace Antes de llamar"
         },
         {
           "id": "/#c10",
@@ -2947,7 +2947,7 @@
         {
           "id": "/#c11",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
-          "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Ver casos internos"
+          "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Lo que sueles preguntar"
         }
       ]
     },
@@ -3320,7 +3320,7 @@
         {
           "id": "/sistema-financiero#c0",
           "heading": "Un sistema financiero completo, construido por nosotros.",
-          "text": "Facturación, cobros, gastos, presupuestos y análisis en un mismo sitio. Se adapta a la estructura de cada empresa. Abrir la demo Hablar con nosotros DEMO Los clientes, los importes y las fechas son inventados. Las pantallas, las columnas y los estados son los del sistema de verdad. Esta demo recorre nueve de sus módulos; los catorce están abajo."
+          "text": "Facturación, cobros, gastos, presupuestos y análisis en un mismo sitio. Se adapta a la estructura de cada empresa. Abrir la demo Hablar con nosotros DEMO Empieza por el menú de la izquierda y entra en cualquier factura, cliente o proyecto. Los clientes, los importes y las fechas son inventados; las pantallas, las columnas y los estados son los del sistema de verdad. La demo recorre nueve módulos; los catorce están abajo."
         },
         {
           "id": "/sistema-financiero#c1",
