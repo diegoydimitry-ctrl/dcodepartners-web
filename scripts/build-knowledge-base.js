@@ -4,9 +4,15 @@
  * páginas HTML públicas del sitio. Fuente única de verdad: nadie escribe
  * respuestas a mano, el asistente indexa lo que ya existe en la web.
  *
- * Se ejecuta automáticamente en cada `npm run build` (ver vercel.json), así
- * que cualquier cambio de contenido en una página se refleja solo en el
- * conocimiento del asistente en el siguiente despliegue.
+ * NO se ejecuta solo al desplegar. Este proyecto de Vercel no tiene framework
+ * ni comando de construcción —la misma ausencia que publicaba como estático
+ * todo lo versionado—, así que lo que se sirve es este JSON tal y como esté en
+ * el repositorio. Durante diecisiete días el asistente respondió que el cargo
+ * de un fundador era «D.S.» porque la página cambió y el fichero no.
+ *
+ * Por eso hay que ejecutarlo a mano —`npm run sync-content`— cuando cambie el
+ * texto de una página, y por eso `npm run check:kb` falla si el fichero y el
+ * HTML dejan de coincidir.
  */
 const fs = require('fs');
 const path = require('path');

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T21:33:02.117Z",
+  "generatedAt": "2026-09-18T09:19:15.943Z",
   "pageCount": 66,
   "chunkCount": 584,
   "pages": [
@@ -520,12 +520,12 @@
         {
           "id": "/conocenos#c2",
           "heading": "Dos fundadores, cada uno al frente de una mitad del sistema.",
-          "text": "D.S."
+          "text": "Estrategia y alianzas"
         },
         {
           "id": "/conocenos#c3",
           "heading": "Diego Siñeriz",
-          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible: cómo traducir tecnología en resultados concretos para cada cliente. D.S."
+          "text": "Co-Founder &amp; CEO Lidera la visión estratégica y las alianzas de D-Code Partners. Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible: cómo traducir tecnología en resultados concretos para cada cliente. Arquitectura de sistemas"
         },
         {
           "id": "/conocenos#c4",
@@ -1562,12 +1562,12 @@
         {
           "id": "/en/conocenos#c2",
           "heading": "Two founders, each leading one half of the system.",
-          "text": "D.S."
+          "text": "Strategy and partnerships"
         },
         {
           "id": "/en/conocenos#c3",
           "heading": "Diego Siñeriz",
-          "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. Specialized in AI applied to business and measurable growth: how to translate technology into concrete results for every client. D.S."
+          "text": "Co-Founder &amp; CEO Leads D-Code Partners' strategic vision and partnerships. Specialized in AI applied to business and measurable growth: how to translate technology into concrete results for every client. Systems architecture"
         },
         {
           "id": "/en/conocenos#c4",
@@ -2281,22 +2281,22 @@
         {
           "id": "/en/#c3",
           "heading": "We analyse",
-          "text": "We look at what already happens. The same things happen in the same places, over and over — that is a pattern, and it is the first thing to appear. The system detects patterns 02"
+          "text": "We look at what already happens. The routes that repeat show up, and so do the ones that lead nowhere — that is the first thing you see. The system finds what repeats 02"
         },
         {
           "id": "/en/#c4",
           "heading": "We design",
-          "text": "We decide what goes with what. What repeats together is grouped, what is unrelated is separated, and the mess starts having parts. The system groups 03"
+          "text": "We decide what goes with what. Nothing stays loose: each thing starts belonging to a part. Every piece finds its place 03"
         },
         {
           "id": "/en/#c5",
           "heading": "We build",
-          "text": "We lay the wiring between those parts. For the first time there is a structure, and not a pile of pieces that happen to sit close together. The system gets wired 04"
+          "text": "The structure goes up and the wiring is laid over it. First the frame, then what will run through it. The structure goes up 04"
         },
         {
           "id": "/en/#c6",
           "heading": "We measure",
-          "text": "Information starts flowing through that wiring. And what flows can be counted, compared and improved. The system flows What we already know how to build"
+          "text": "Work flows with an origin and a destination, queues where it must and moves on. And what flows can be counted. Work flows and gets counted What we already know how to build"
         },
         {
           "id": "/en/#c7",
@@ -2311,7 +2311,7 @@
         {
           "id": "/en/#c9",
           "heading": "Thirty minutes and you will know what can be automated.",
-          "text": "Tell us how you work today and we will tell you where we would start. Book a call See real cases"
+          "text": "Tell us how you work today and we will tell you where we would start. Book a call See internal cases"
         }
       ]
     },
@@ -2485,12 +2485,12 @@
         {
           "id": "/en/servicios#c1",
           "heading": "The problem",
-          "text": "Tools that don’t talk to each other, tasks repeated every week and decisions waiting for someone to gather the data by hand."
+          "text": "Tools that don't talk to each other Tasks repeated every week Decisions waiting for someone to pull the data by hand"
         },
         {
           "id": "/en/servicios#c2",
           "heading": "What we do",
-          "text": "We automate repetitive work, put AI where it adds judgement and connect your tools so information moves on its own."
+          "text": "We automate repetitive work, put AI where judgement is needed and connect your tools so information moves on its own."
         },
         {
           "id": "/en/servicios#c3",
@@ -2897,22 +2897,22 @@
         {
           "id": "/#c3",
           "heading": "Analizamos",
-          "text": "Miramos lo que ya ocurre. Las mismas cosas pasan en los mismos sitios, una y otra vez — eso es un patrón, y es lo primero que aparece. El sistema detecta patrones 02"
+          "text": "Miramos lo que ya ocurre. Aparecen los trayectos que se repiten y los que no llevan a ninguna parte — eso es lo primero que se ve. El sistema encuentra lo que se repite 02"
         },
         {
           "id": "/#c4",
           "heading": "Diseñamos",
-          "text": "Decidimos qué va con qué. Lo que se repite junto se agrupa, lo que no tiene relación se separa, y el desorden empieza a tener partes. El sistema se agrupa 03"
+          "text": "Decidimos qué va con qué. Cada cosa deja de estar suelta y pasa a pertenecer a una parte. Cada pieza encuentra su sitio 03"
         },
         {
           "id": "/#c5",
           "heading": "Construimos",
-          "text": "Tendemos el cableado entre esas partes. Por primera vez hay una estructura, y no un montón de piezas que casualmente están cerca. El sistema se cablea 04"
+          "text": "Se levanta la estructura y se tiende la instalación por encima. Primero el armazón, después lo que va a circular por él. Se monta la estructura 04"
         },
         {
           "id": "/#c6",
           "heading": "Medimos",
-          "text": "La información empieza a circular por ese cableado. Y lo que circula se puede contar, comparar y mejorar. El sistema circula Lo que ya sabemos construir"
+          "text": "El trabajo circula con origen y destino, hace cola donde toca y sale. Y lo que circula se puede contar. El trabajo circula y se cuenta Lo que ya sabemos construir"
         },
         {
           "id": "/#c7",
@@ -2927,7 +2927,7 @@
         {
           "id": "/#c9",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
-          "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Ver casos reales"
+          "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Ver casos internos"
         }
       ]
     },
@@ -3101,7 +3101,7 @@
         {
           "id": "/servicios#c1",
           "heading": "El problema",
-          "text": "Herramientas que no se hablan, tareas repetidas cada semana y decisiones que esperan a que alguien reúna los datos a mano."
+          "text": "Herramientas que no se hablan Tareas repetidas cada semana Decisiones que esperan a que alguien reúna los datos a mano"
         },
         {
           "id": "/servicios#c2",
