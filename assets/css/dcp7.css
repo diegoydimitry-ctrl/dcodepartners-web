@@ -92,6 +92,13 @@
 }
 .dcx-now::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--v-a,#43e0ff); flex:none; }
 @media (max-width:1179px){ .dcx-now{ display:inline-flex; } .dcx-bar{ display:block; } }
+/* Visible mientras se avanza, fuera mientras se lee. El porque, en dcp7.js:
+   por debajo de 1180 px esta pastilla se queda encima de una linea del texto
+   del cuerpo, y ahi se queda mientras alguien lee. */
+@media (max-width:1179px){
+  .dcx-now{ opacity:0; transition:opacity .22s ease; }
+  .dcx-now.is-moviendo{ opacity:1; }
+}
 @media (max-width:560px){ .dcx-now{ max-width:calc(100vw - 130px); } }
 
 /* MEDIDO EN LA PORTADA A 390 px, con la demo de Finance abierta: esta pastilla
@@ -117,7 +124,7 @@ body:has(.fdemo-app.is-embedded .fdemo-sidebar.is-open) .dcx-now{
 }
 
 @media (prefers-reduced-motion: reduce){
-  .dcx-bar i, .dcx-dot, .dcx-lab{ transition:none; }
+  .dcx-bar i, .dcx-dot, .dcx-lab, .dcx-now{ transition:none; }
 }
 
 

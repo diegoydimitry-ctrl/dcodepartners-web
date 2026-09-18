@@ -95,6 +95,13 @@ body.v6 main .lit::before{ display:none; }
 .v6-block > .container{ flex:1 1 auto; width:100%; }
 .v6-block--tall{ min-height:clamp(580px, 98vh, 950px); }
 
+/* MEDIDO A 1440: la seccion que solo lleva «El proceso» y su titular medía
+   792 px para 136 px de texto. Una pantalla entera para un rotulo. Es una
+   entrada a las cuatro etapas, no una etapa: se le da la altura de un rotulo
+   y el aire vuelve a las etapas, que es donde hay algo que leer. */
+.v6-block--rotulo{ min-height:clamp(280px, 44vh, 420px);
+  display:flex; align-items:center; }
+
 /* Velo difuso bajo el texto. Sin borde y sin recuadro: solo garantiza que
    ninguna corriente del campo se coma una línea. */
 .v6-veil{ position:relative; }
@@ -213,8 +220,19 @@ body.v6 main .lit::before{ display:none; }
    se está explicando. */
 /* Los cuatro pasos del proceso son los capitulos mas largos: es donde la
    materia tiene que construir, conectar, procesar y medir delante de ti. */
-.v6-step{ position:relative; min-height:clamp(540px, 92vh, 900px);
-  padding-block:clamp(56px, 9vh, 104px) clamp(40px, 6vh, 72px); }
+/* MEDIDO A 1440: cada etapa ocupaba 828 px y su texto 273. Los 555 px que
+   sobraban no estaban repartidos: estaban TODOS debajo, porque la seccion es
+   un bloque y el texto se apoya en el borde de arriba. Eso no se lee como
+   aire, se lee como que la pagina se ha quedado sin nada que decir y sigue
+   bajando. Cuatro etapas asi son 2.220 px, el 23 % de la portada.
+
+   No se quita el recorrido —el campo necesita metros para cambiar de estado,
+   y `measureStops()` se recalcula solo—: se centra. El mismo hueco, repartido
+   arriba y abajo, deja de ser un agujero y pasa a ser margen. Y la altura
+   baja de 92vh a 84vh, que es lo que sobraba de verdad. */
+.v6-step{ position:relative; min-height:clamp(500px, 84vh, 800px);
+  padding-block:clamp(56px, 9vh, 104px) clamp(40px, 6vh, 72px);
+  display:flex; align-items:center; }
 .v6-step .container{ display:flex; }
 .v6-step--l .container{ justify-content:flex-start; }
 .v6-step--r .container{ justify-content:flex-end; }
@@ -406,7 +424,10 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
      todos los bloques se alinean a la izquierda y bajan de altura. */
   .v6-block{ min-height:clamp(440px, 76vh, 640px); }
   .v6-block--tall{ min-height:clamp(500px, 86vh, 720px); }
-  .v6-step{ min-height:clamp(470px, 80vh, 680px); }
+  /* Medido a 768: la etapa medía 680 px para 213 px de texto. Misma cuenta
+     que en escritorio, mismo remedio. */
+  .v6-step{ min-height:clamp(430px, 72vh, 600px); }
+  .v6-block--rotulo{ min-height:clamp(240px, 38vh, 340px); }
   .v6-step .container, .v6-step--r .container{ justify-content:flex-start; }
   .v6-step-in{ max-width:100%; }
   .v6-say:nth-child(2), .v6-say:nth-child(3){ margin-left:0; }

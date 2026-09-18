@@ -157,7 +157,27 @@
       if (now) now.textContent = items[idx].label;
     }
   }
+  /* ------------------------------------- LA PASTILLA SE VA CUANDO SE LEE
+     MEDIDO A 390 px: esta pastilla solo existe por debajo de 1180 px, y ahi
+     la columna de lectura ocupa el ancho entero. Es `fixed` abajo a la
+     izquierda, con fondo casi opaco, asi que se queda permanentemente encima
+     de una linea de texto del cuerpo. En la seccion de sistemas tapaba la
+     primera linea de «Facturar y cobrar sin perseguir a nadie».
+
+     No se mueve de sitio ni se apaga del todo: se apaga cuando se PARA. La
+     pastilla contesta «por donde voy», que es una pregunta que se tiene
+     mientras se avanza, no mientras se lee. Vuelve al primer pixel de scroll.
+     Quien pide menos movimiento la recibe sin transicion, no sin pastilla. */
+  var quieto = null;
+  function despertar() {
+    if (!now) return;
+    now.classList.add('is-moviendo');
+    if (quieto) clearTimeout(quieto);
+    quieto = setTimeout(function () { now.classList.remove('is-moviendo'); }, 1200);
+  }
+
   window.addEventListener('scroll', function () {
+    despertar();
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { paint(); ticking = false; });
   }, { passive: true });

@@ -642,6 +642,19 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   z-index:2; /* por delante del lienzo del recorrido, que es de fondo */
 }
 
+/* EL HUECO SE RESERVA ANTES DE QUE LLEGUE LA DEMO. Mientras los 96 KB estan
+   en camino el punto de montaje mide 0, y al montarse la pagina crece de
+   golpe: 738 px a 1440 y 526 px a 390 (medido). No se ve saltar nada porque
+   la demo esta siempre por debajo de la ventana cuando se pide —el cargador
+   la pide con una pantalla de margen— y el desplazamiento acumulado medido
+   era de 0,002, muy por debajo del umbral. Aun asi, un hueco reservado es
+   una medida que no depende de que eso siga siendo cierto. La altura es la
+   misma que la aplicacion se pone a si misma en finance-demo.css. */
+.demo-host [data-fdemo-mount]{ min-height:min(760px, 82vh); }
+@media (min-width:1600px){ .demo-host [data-fdemo-mount]{ min-height:min(820px, 80vh); } }
+@media (max-width:860px){ .demo-host [data-fdemo-mount]{ min-height:min(620px, 74vh); } }
+@media (max-width:560px){ .demo-host [data-fdemo-mount]{ min-height:min(560px, 72vh); } }
+
 /* El aviso va ARRIBA y en el flujo de la pagina, no dentro del marco: quien
    mira una tabla de importes tiene que haber leido antes que son inventados,
    no despues. La demo ademas lleva su propia banda «Demostracion» dentro. */
