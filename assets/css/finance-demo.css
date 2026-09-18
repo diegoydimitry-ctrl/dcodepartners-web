@@ -543,3 +543,76 @@
   .fdemo-topbar-menu-btn{ min-width:44px; min-height:44px; padding:8px; }
   .fdemo-topbar-exit{ display:inline-flex; align-items:center; min-height:44px; padding:6px 14px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PREGUNTA A FINANZAS — la vista con la que abre la demo
+   ═══════════════════════════════════════════════════════════════════════
+   La demo abría en el Dashboard y lo que se veía primero era una rejilla de
+   cifras: exactamente igual que cualquier otro panel financiero, y sin nada
+   que explicara para qué sirve este. Ahora abre por la conversación, con una
+   pregunta ya respondida, y el resto de módulos siguen a un clic en el menú.
+
+   La respuesta no es una burbuja de chat: es conclusión, los datos con los
+   que se ha calculado, qué significa, qué revisar y el enlace al registro del
+   que sale cada cifra. Un chat que solo escupe texto no se distingue de uno
+   inventado; este enseña de dónde viene todo.                              */
+
+.fdemo-ask{ display:flex; flex-direction:column; gap:16px; flex:1; min-height:0; max-width:900px; }
+.fdemo-ask-head{ display:flex; flex-direction:column; gap:4px; }
+.fdemo-ask-kicker{
+  margin:0; font-size:0.6875rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--dc-accent-cyan); font-weight:600;
+}
+.fdemo-ask-title{ margin:0; font-size:1.5rem; line-height:1.2; font-weight:600; color:var(--dc-text); }
+.fdemo-ask-sub{ margin:0; font-size:.9rem; line-height:1.55; color:var(--dc-text-muted); max-width:62ch; }
+
+.fdemo-ask-thread{ flex:1; min-height:0; overflow-y:auto; padding:2px; }
+.fdemo-ask-thread .fdemo-ia-msgs{ gap:14px; }
+
+/* La respuesta */
+.fdemo-ans{
+  width:100%; border:1px solid var(--dc-border); border-radius:14px;
+  background:var(--dc-surface-2); padding:16px 18px;
+  display:flex; flex-direction:column; gap:14px;
+  border-left:3px solid var(--dc-accent);
+}
+.fdemo-ans-conclusion{ margin:0; font-size:1.05rem; line-height:1.5; color:var(--dc-text); font-weight:500; }
+.fdemo-ans-datos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:8px; }
+.fdemo-dato{
+  display:flex; flex-direction:column; gap:2px;
+  border:1px solid var(--dc-border); border-radius:10px;
+  background:var(--dc-surface); padding:9px 11px;
+}
+.fdemo-dato-k{ font-size:0.75rem; color:var(--dc-text-muted); }
+.fdemo-dato-v{ font-size:1rem; font-weight:600; color:var(--dc-text); font-variant-numeric:tabular-nums; }
+.fdemo-dato-n{ font-size:0.75rem; color:var(--dc-text-muted); }
+.fdemo-ans-sig{ margin:0; font-size:.875rem; line-height:1.55; color:var(--dc-text-muted); }
+.fdemo-ans-sig b{ color:var(--dc-text); font-weight:600; }
+.fdemo-ans-rev{ display:flex; flex-direction:column; gap:6px; }
+.fdemo-ans-rev-t{
+  margin:0; font-size:0.6875rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--dc-text-muted); font-weight:600;
+}
+.fdemo-ans-rev ul{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:5px; }
+.fdemo-ans-rev li{ font-size:.875rem; line-height:1.5; color:var(--dc-text); }
+.fdemo-ia-refs-t{ font-size:0.75rem; color:var(--dc-text-muted); align-self:center; }
+
+/* Preguntar */
+.fdemo-ask-form{ display:flex; gap:8px; flex-wrap:wrap; }
+.fdemo-ask-form .fdemo-input{ flex:1; min-width:180px; min-height:42px; }
+.fdemo-ask-chips{ display:flex; flex-direction:column; gap:8px; }
+.fdemo-ask-chips-t{ margin:0; font-size:.8125rem; color:var(--dc-text-muted); }
+.fdemo-ask-chips .fdemo-ia-chips{ flex-direction:row; flex-wrap:wrap; }
+.fdemo-ask-chips .fdemo-ia-chip{ flex:0 1 auto; }
+.fdemo-ask-foot{ margin:0; font-size:0.75rem; line-height:1.5; color:var(--dc-text-muted); }
+
+/* Objetivos táctiles: hasta ahora estos dos solo existían dentro del estado
+   vacío de la vista antigua, al que la QA no llegaba porque la demo abría en
+   el Dashboard. Ahora salen en cada respuesta, así que se miden. */
+@media (max-width:860px){
+  .fdemo-ia-chip{ min-height:44px; display:inline-flex; align-items:center; }
+  .fdemo-ia-ref{ min-height:44px; display:inline-flex; align-items:center; padding:3px 12px; }
+  .fdemo-ask-title{ font-size:1.25rem; }
+  .fdemo-ans-conclusion{ font-size:1rem; }
+  .fdemo-ans-datos{ grid-template-columns:1fr; }
+}

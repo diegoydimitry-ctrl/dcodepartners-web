@@ -56,22 +56,70 @@
     { id: 'mock-proy-3', nombre: 'AI inventory', empresa: 'Southern Hardware Co.', estado: 'Delivered', fechaInicio: '2026-05-01', fechaEntregaPrevista: '2026-06-15', fechaEntregaReal: '2026-06-18', serviciosContratados: 'Automatic stock classification', responsable: 'D-Code Team', totalFacturado: 3900, totalCobrado: 1000, totalGastos: 0, rentabilidad: 3900 }
   ];
 
-  var DASHBOARD_SNAPSHOT = {
-    fechaCalculo: '2026-08-16T07:00:00.000Z',
-    totalFacturado: 9100,
-    totalCobrado: 3800,
-    totalPendiente: 5300,
-    totalVencido: 1200,
-    totalGastos: 869.9,
-    proyectosActivos: 2,
-    prevision30Dias: 2700,
-    alertas: [
-      '1 overdue invoice(s) not yet collected',
-      '1 invoice(s) in follow-up over repeated non-payment',
-      '2 expense(s) pending human review',
-      '1 invoice(s) in Draft pending approval to send'
-    ]
-  };
+  // ---------------------------------------------------------------
+  // El "hoy" de la demo. Los datos están fijados a este día: si se usara la fecha
+  // real del navegador, los vencimientos se irían alejando solos y la demo
+  // enseñaría retrasos distintos cada semana sin que nadie los haya escrito.
+  // ---------------------------------------------------------------
+  var HOY = '2026-08-16';
+  var DIA_MS = 86400000;
+
+  function diasEntre(desde, hasta) {
+    var a = Date.parse(desde), b = Date.parse(hasta);
+    if (isNaN(a) || isNaN(b)) return null;
+    return Math.round((b - a) / DIA_MS);
+  }
+  function diasDeRetraso(f) {
+    if (!f.fechaVencimiento || f.pagada) return 0;
+    var d = diasEntre(f.fechaVencimiento, HOY);
+    return d && d > 0 ? d : 0;
+  }
+  function pendienteDe(f) { return (f.importe || 0) - (f.importeCobrado || 0); }
+  function emitidas() {
+    return FACTURAS.filter(function (f) { return f.estado !== 'Draft'; });
+  }
+  function suma(lista, fn) {
+    return lista.reduce(function (s, x) { return s + (fn(x) || 0); }, 0);
+  }
+  function redondear(n) { return Math.round(n * 100) / 100; }
+
+  // ---------------------------------------------------------------
+  // El panel se calcula sobre los registros, no se escribe a mano. Es lo que
+  // hace el producto real, y además evita que el panel y las tablas digan
+  // cosas distintas: cualquier cambio en una factura mueve los dos.
+  // ---------------------------------------------------------------
+  var DASHBOARD_SNAPSHOT = (function () {
+    var lista = emitidas();
+    var facturado = suma(lista, function (f) { return f.importe; });
+    var cobrado = suma(lista, function (f) { return f.importeCobrado; });
+    var vencidas = lista.filter(function (f) { return diasDeRetraso(f) > 0 && pendienteDe(f) > 0; });
+    var proximas = lista.filter(function (f) {
+      if (f.pagada || pendienteDe(f) <= 0 || !f.fechaVencimiento) return false;
+      var d = diasEntre(HOY, f.fechaVencimiento);
+      return d !== null && d >= 0 && d <= 30;
+    });
+    var seguimiento = lista.filter(function (f) { return f.estadoCobro === 'Following up'; });
+    var gastosPendientes = GASTOS.filter(function (g) { return g.estadoRevision === 'Pending review'; });
+    var borradores = FACTURAS.filter(function (f) { return f.estado === 'Draft'; });
+
+    var alertas = [];
+    if (vencidas.length) alertas.push(vencidas.length + ' overdue invoice(s) not collected, ' + fmtEUR(suma(vencidas, pendienteDe)));
+    if (seguimiento.length) alertas.push(seguimiento.length + ' invoice(s) in follow-up over repeated non-payment');
+    if (gastosPendientes.length) alertas.push(gastosPendientes.length + ' expense(s) pending human review');
+    if (borradores.length) alertas.push(borradores.length + ' invoice(s) in draft, never sent');
+
+    return {
+      fechaCalculo: HOY + 'T07:00:00.000Z',
+      totalFacturado: redondear(facturado),
+      totalCobrado: redondear(cobrado),
+      totalPendiente: redondear(facturado - cobrado),
+      totalVencido: redondear(suma(vencidas, pendienteDe)),
+      totalGastos: redondear(suma(GASTOS, function (g) { return g.importe; })),
+      proyectosActivos: PROYECTOS.filter(function (p) { return p.estado === 'In progress'; }).length,
+      prevision30Dias: redondear(suma(proximas, pendienteDe)),
+      alertas: alertas
+    };
+  })();
 
   // ---------------------------------------------------------------
   // Formatting -- same rules as src/lib/format.ts in the real product
@@ -132,59 +180,199 @@
     listProyectos: function () { return PROYECTOS.slice(); },
     getProyecto: function (id) { return byId(PROYECTOS, id); },
 
-    // --- Ask Finance: same 3 suggestions as the real product
-    // (src/app/(app)/ia/page.tsx), computed here over the demo dataset
-    // instead of calling the real Finance AI webhook. ---
+    // --- Pregunta a Finanzas ---------------------------------------
+    // El sistema real responde en abierto: manda la pregunta a su webhook de
+    // IA Financiera con los datos de la empresa detrás. Esta demo pública no
+    // llama a nada: las seis respuestas se calculan aquí mismo, sobre el
+    // dataset ficticio, para que se pueda ver cómo responde sin conectar
+    // ninguna cuenta. La forma de la respuesta -- conclusión, datos, qué
+    // significa y qué revisar -- es la que da el sistema real.
     askQuestions: function () {
       var self = this;
+
+      function refFactura(f) { return { type: 'facturas', id: f.id, label: f.numero }; }
+
       return [
         {
-          q: 'How much am I owed in total, and which invoices are overdue?',
+          clave: 'deudores',
+          pistas: ['owe', 'owes', 'owed', 'debt', 'receivable', 'who owes', 'outstanding'],
+          q: 'Who owes us money right now?',
           a: function () {
-            var cobros = self.listCobros();
-            var pendientes = cobros.filter(function (c) { return c.pendiente > 0; });
-            var totalPendiente = pendientes.reduce(function (s, c) { return s + c.pendiente; }, 0);
-            var vencidas = cobros.filter(function (c) { return c.estadoCobro === 'Overdue'; });
-            var text = 'You are owed ' + fmtEUR(totalPendiente) + ' in total, across ' + pendientes.length + ' invoice(s).';
-            if (vencidas.length) {
-              text += ' Of those, ' + vencidas.length + ' ' + (vencidas.length === 1 ? 'is' : 'are') + ' already overdue: ' +
-                vencidas.map(function (c) { return c.numeroFactura + ' (' + (c.clienteNombre || 'unresolved client') + ')'; }).join(', ') + '.';
-            }
-            return { text: text, refs: vencidas.map(function (c) { return { type: 'facturas', id: c.facturaId, label: c.numeroFactura }; }) };
+            var lista = emitidas().filter(function (f) { return pendienteDe(f) > 0; });
+            if (!lista.length) return { conclusion: 'There are no invoices left to collect.', datos: [], refs: [] };
+            var total = suma(lista, pendienteDe);
+            var fuera = lista.filter(function (f) { return diasDeRetraso(f) > 0; });
+            var porCliente = {};
+            lista.forEach(function (f) {
+              var k = f.clienteNombre || 'Unresolved client';
+              porCliente[k] = (porCliente[k] || 0) + pendienteDe(f);
+            });
+            var nombres = Object.keys(porCliente).sort(function (a, b) { return porCliente[b] - porCliente[a]; });
+            var mayor = nombres[0];
+            var cuota = Math.round((porCliente[mayor] / total) * 100);
+            return {
+              conclusion: 'You are owed ' + fmtEUR(total) + ' across ' + lista.length + ' invoices. ' + (fuera.length ? fmtEUR(suma(fuera, pendienteDe)) + ' is already past due.' : 'None of it is past due yet.'),
+              datos: nombres.map(function (n) {
+                var suyas = lista.filter(function (f) { return (f.clienteNombre || 'Unresolved client') === n; });
+                var atraso = Math.max.apply(null, suyas.map(diasDeRetraso));
+                return { k: n, v: fmtEUR(porCliente[n]), n: (atraso > 0 ? atraso + ' days late' : 'within terms') + (suyas.length > 1 ? ' · ' + suyas.length + ' invoices' : '') };
+              }),
+              significado: cuota + '% of what you are owed sits with a single client: ' + (mayor.slice(-1) === '.' ? mayor : mayor + '.'),
+              refs: fuera.map(refFactura)
+            };
           }
         },
         {
-          q: 'What is the profitability of active projects?',
+          clave: 'atrasadas',
+          pistas: ['late', 'overdue', 'past due', 'behind', 'unpaid'],
+          q: 'Which invoices are furthest behind?',
+          a: function () {
+            var atrasadas = emitidas().filter(function (f) { return diasDeRetraso(f) > 0 && pendienteDe(f) > 0; })
+              .sort(function (a, b) { return diasDeRetraso(b) - diasDeRetraso(a); });
+            if (!atrasadas.length) return { conclusion: 'No invoice is past due.', datos: [], refs: [] };
+            var peor = atrasadas[0];
+            return {
+              conclusion: atrasadas.length + ' invoices past due, ' + fmtEUR(suma(atrasadas, pendienteDe)) + ' uncollected. The oldest is ' + diasDeRetraso(peor) + ' days late.',
+              datos: atrasadas.map(function (f) {
+                return {
+                  k: f.numero + ' · ' + (f.clienteNombre || 'Unresolved client'),
+                  v: fmtEUR(pendienteDe(f)),
+                  n: diasDeRetraso(f) + ' days · due ' + fmtFecha(f.fechaVencimiento) + ' · ' + (f.recordatoriosEnviados || 0) + ' reminders'
+                };
+              }),
+              significado: peor.observaciones ? 'The oldest, ' + peor.numero + ', has a note on it: «' + peor.observaciones + '» That is not reflected in the invoice status.' : 'The oldest, ' + peor.numero + ', has had ' + (peor.recordatoriosEnviados || 0) + ' reminders sent with nothing to show for it.',
+              revisar: ['Decide what happens with ' + peor.numero + ': another reminder has already failed ' + (peor.recordatoriosEnviados || 0) + ' times.'],
+              refs: atrasadas.map(refFactura)
+            };
+          }
+        },
+        {
+          clave: 'gastos',
+          pistas: ['expense', 'expenses', 'cost', 'costs', 'growing', 'rising', 'spend', 'supplier'],
+          q: 'Which costs are growing?',
+          a: function () {
+            var gastos = GASTOS.filter(function (g) { return g.fecha; });
+            var meses = {};
+            gastos.forEach(function (g) {
+              var m = g.fecha.slice(0, 7);
+              meses[m] = meses[m] || { total: 0, cat: {} };
+              meses[m].total += g.importe;
+              var c = g.categoria || 'Uncategorised';
+              meses[m].cat[c] = (meses[m].cat[c] || 0) + g.importe;
+            });
+            var clavesMes = Object.keys(meses).sort();
+            var ultimo = clavesMes[clavesMes.length - 1];
+            var previo = clavesMes[clavesMes.length - 2];
+            if (!previo) {
+              return { conclusion: 'Only one month of expenses is on record: there is nothing to compare against.', datos: [], refs: [] };
+            }
+            var difTotal = meses[ultimo].total - meses[previo].total;
+            var categorias = {};
+            Object.keys(meses[ultimo].cat).concat(Object.keys(meses[previo].cat)).forEach(function (c) { categorias[c] = true; });
+            var filas = Object.keys(categorias).map(function (c) {
+              var ahora = meses[ultimo].cat[c] || 0;
+              var antes = meses[previo].cat[c] || 0;
+              return { cat: c, ahora: ahora, antes: antes, dif: ahora - antes };
+            }).sort(function (a, b) { return b.dif - a.dif; });
+            var suben = filas.filter(function (f) { return f.dif > 0; });
+            return {
+              conclusion: (difTotal > 0 ? 'Spending is up ' + fmtEUR(difTotal) : 'Spending is down ' + fmtEUR(-difTotal)) + ' on the previous month (' + fmtEUR(meses[ultimo].total) + ' against ' + fmtEUR(meses[previo].total) + ').',
+              datos: filas.map(function (f) {
+                return { k: f.cat, v: f.ahora === 0 ? '\u2014' : fmtEUR(f.ahora), n: (f.antes === 0 ? 'new this month' : (f.ahora === 0 ? 'did not repeat (' + fmtEUR(f.antes) + ' last month)' : (f.dif >= 0 ? '+' : '') + fmtEUR(f.dif) + ' on last month')) };
+              }),
+              significado: 'With ' + clavesMes.length + ' months on record there is not enough of a series to call it a trend. This is what changed, not a forecast' + (suben.length ? ': ' + (suben.length === 1 ? 'the only thing going up is ' : 'what is going up is ') + suben.map(function (x) { return x.cat; }).join(' and ') + '.' : '.'),
+              refs: []
+            };
+          }
+        },
+        {
+          clave: 'hoy',
+          pistas: ['today', 'review', 'priority', 'urgent', 'what should i', 'attention'],
+          q: 'What should I look at today?',
+          a: function () {
+            var pendientes = [];
+            var refs = [];
+            emitidas().filter(function (f) { return diasDeRetraso(f) > 0 && pendienteDe(f) > 0; })
+              .sort(function (a, b) { return diasDeRetraso(b) - diasDeRetraso(a); })
+              .forEach(function (f) { pendientes.push(f.numero + ' (' + f.clienteNombre + '): ' + fmtEUR(pendienteDe(f)) + ', ' + diasDeRetraso(f) + ' days late.'); refs.push(refFactura(f)); });
+            FACTURAS.filter(function (f) { return f.estado === 'Draft'; })
+              .forEach(function (f) { pendientes.push(f.numero + ': ' + fmtEUR(f.importe) + ' sitting in draft, never sent. Nobody has been asked for it.'); refs.push(refFactura(f)); });
+            var gastosPte = GASTOS.filter(function (g) { return g.estadoRevision === 'Pending review'; });
+            if (gastosPte.length) pendientes.push(gastosPte.length + ' expenses waiting for review: ' + gastosPte.map(function (g) { return g.proveedor + ' (' + fmtEUR(g.importe) + ')'; }).join(', ') + '.');
+            PROYECTOS.filter(function (p) { return p.estado === 'In progress' && p.fechaEntregaPrevista; })
+              .forEach(function (p) {
+                var quedan = diasEntre(HOY, p.fechaEntregaPrevista);
+                if (quedan !== null && quedan <= 21) pendientes.push(p.nombre + ': due ' + fmtFecha(p.fechaEntregaPrevista) + ', ' + quedan + ' days left.');
+              });
+            return {
+              conclusion: pendientes.length ? 'There are ' + pendientes.length + ' things waiting on a decision from you today.' : 'Nothing needs a decision today.',
+              revisar: pendientes,
+              refs: refs
+            };
+          }
+        },
+        {
+          clave: 'resumen',
+          pistas: ['summary', 'summarise', 'summarize', 'how are we', 'overview', 'what is happening', 'whats happening'],
+          q: 'Give me today\'s financial summary.',
+          a: function () {
+            var s = self.getDashboardSnapshot();
+            var margen = s.totalFacturado - s.totalGastos;
+            var cobradoPct = s.totalFacturado > 0 ? Math.round((s.totalCobrado / s.totalFacturado) * 100) : 0;
+            return {
+              conclusion: 'You have invoiced ' + fmtEUR(s.totalFacturado) + ' and collected ' + fmtEUR(s.totalCobrado) + '. ' + fmtEUR(s.totalPendiente) + ' is still to come in, of which ' + fmtEUR(s.totalVencido) + ' is past due.',
+              datos: [
+                { k: 'Invoiced', v: fmtEUR(s.totalFacturado) },
+                { k: 'Collected', v: fmtEUR(s.totalCobrado), n: cobradoPct + '%' },
+                { k: 'Outstanding', v: fmtEUR(s.totalPendiente) },
+                { k: 'Past due', v: fmtEUR(s.totalVencido) },
+                { k: 'Expenses', v: fmtEUR(s.totalGastos) },
+                { k: 'Due within 30 days', v: fmtEUR(s.prevision30Dias) }
+              ],
+              significado: 'The problem is not the margin (' + fmtEUR(margen) + ' between invoiced and spent): it is that only ' + cobradoPct + '% of what you invoiced has actually come in.',
+              revisar: ['The ' + fmtEUR(s.totalVencido) + ' past due, before anything else.'],
+              refs: []
+            };
+          }
+        },
+        {
+          clave: 'proyectos',
+          pistas: ['project', 'projects', 'profitab', 'margin'],
+          q: 'How profitable are the active projects?',
           a: function () {
             var activos = self.listProyectos().filter(function (p) { return p.estado === 'In progress'; });
-            if (!activos.length) return { text: 'There are no projects in progress right now.', refs: [] };
-            var text = activos.map(function (p) {
-              return p.nombre + ' (' + p.empresa + '): ' + fmtEUR(p.rentabilidad) + ' of profit on ' + fmtEUR(p.totalFacturado) + ' billed.';
-            }).join(' ');
-            return { text: text, refs: activos.map(function (p) { return { type: 'proyectos', id: p.id, label: p.nombre }; }) };
-          }
-        },
-        {
-          q: 'Which category have we spent the most on this month?',
-          a: function () {
-            var gastos = self.listGastos();
-            var porCategoria = {};
-            gastos.forEach(function (g) {
-              var cat = g.categoria || 'Uncategorized';
-              porCategoria[cat] = (porCategoria[cat] || 0) + g.importe;
-            });
-            var categorias = Object.keys(porCategoria).sort(function (a, b) { return porCategoria[b] - porCategoria[a]; });
-            var top = categorias[0];
-            var total = gastos.reduce(function (s, g) { return s + g.importe; }, 0);
-            var pct = total > 0 ? Math.round((porCategoria[top] / total) * 100) : 0;
+            if (!activos.length) return { conclusion: 'There are no projects in progress right now.', datos: [], refs: [] };
+            var mejor = activos.slice().sort(function (a, b) { return b.rentabilidad - a.rentabilidad; })[0];
             return {
-              text: 'The category with the most spend is "' + top + '", at ' + fmtEUR(porCategoria[top]) + ' (' + pct + '% of total recorded spend).',
-              refs: []
+              conclusion: activos.length + ' projects in progress, ' + fmtEUR(suma(activos, function (p) { return p.rentabilidad; })) + ' of estimated profit.',
+              datos: activos.map(function (p) {
+                return { k: p.nombre + ' · ' + p.empresa, v: fmtEUR(p.rentabilidad), n: fmtEUR(p.totalFacturado) + ' invoiced · ' + fmtEUR(p.totalCobrado) + ' collected · ' + fmtEUR(p.totalGastos) + ' spent' };
+              }),
+              significado: 'The best one is ' + mejor.nombre + ', and ' + (mejor.totalFacturado - mejor.totalCobrado > 0 ? fmtEUR(mejor.totalFacturado - mejor.totalCobrado) + ' of it is still uncollected.' : 'all of it has been collected.'),
+              refs: activos.map(function (p) { return { type: 'proyectos', id: p.id, label: p.nombre }; })
             };
           }
         }
       ];
-    }
+    },
+
+    // Busca la pregunta preparada que más se parece a lo que se ha escrito.
+    // No es comprensión de lenguaje: son palabras clave. Cuando no encuentra
+    // ninguna lo dice, en vez de inventarse una respuesta.
+    matchQuestion: function (texto) {
+      var t = (texto || '').toLowerCase();
+      var preguntas = this.askQuestions();
+      var mejor = null, mejorPuntos = 0;
+      preguntas.forEach(function (p) {
+        var puntos = 0;
+        p.pistas.forEach(function (pista) { if (t.indexOf(pista) !== -1) puntos++; });
+        if (puntos > mejorPuntos) { mejorPuntos = puntos; mejor = p; }
+      });
+      return mejorPuntos > 0 ? mejor : null;
+    },
+
+    hoy: HOY
+
   };
 
   global.FinanceStore = FinanceStore;

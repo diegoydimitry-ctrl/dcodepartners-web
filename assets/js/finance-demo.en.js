@@ -98,7 +98,18 @@
     var contentEl = root.querySelector('[data-role="content"]');
     var menuBtn = root.querySelector('[data-role="menu-btn"]');
 
-    var state = { route: 'dashboard', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [] } };
+    var state = { route: 'ia', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false } };
+
+    // La conversación no empieza en blanco. Quien llega a la demo ve una
+    // pregunta ya respondida -- con sus cifras y sus enlaces -- antes de
+    // escribir nada: es lo que hay que entender de este sistema, y pedirle al
+    // visitante que lo descubra escribiendo es pedirle demasiado.
+    (function () {
+      var inicial = FS.askQuestions().filter(function (q) { return q.clave === 'resumen'; })[0];
+      if (!inicial) return;
+      state.ia.mensajes.push({ autor: 'usuario', texto: inicial.q });
+      state.ia.mensajes.push({ autor: 'ia', resp: inicial.a() });
+    })();
 
     var navIndicatorEl = null;
     if (useHash) {
@@ -151,9 +162,9 @@
 
     function parseRoute() {
       if (!useHash) return { view: state.route, id: state.id };
-      var h = (location.hash || '#dashboard').replace('#', '');
+      var h = (location.hash || '#ia').replace('#', '');
       var parts = h.split('/');
-      var view = NAV_ITEMS.some(function (v) { return v.id === parts[0]; }) ? parts[0] : 'dashboard';
+      var view = NAV_ITEMS.some(function (v) { return v.id === parts[0]; }) ? parts[0] : 'ia';
       return { view: view, id: parts[1] || null };
     }
     function navigate(view, id) {
@@ -505,40 +516,87 @@
         '</div>';
     }
 
-    // ---------- Ask Finance ----------
+    // ---------- Pregunta a Finanzas ----------
+    // Es la vista con la que abre la demo, en las dos modalidades. El resto de
+    // módulos siguen ahí, en el menú, pero lo primero que se ve es una
+    // pregunta contestada: un panel de cifras no explica por sí solo para qué
+    // sirve el sistema, y una respuesta sí.
+    function datoHtml(d) {
+      return '<div class="fdemo-dato"><span class="fdemo-dato-k">' + esc(d.k) + '</span>' +
+        '<span class="fdemo-dato-v">' + esc(d.v) + '</span>' +
+        (d.n ? '<span class="fdemo-dato-n">' + esc(d.n) + '</span>' : '') + '</div>';
+    }
+
+    function respuestaHtml(r) {
+      var partes = ['<div class="fdemo-ans">'];
+      partes.push('<p class="fdemo-ans-conclusion">' + esc(r.conclusion) + '</p>');
+      if (r.datos && r.datos.length) {
+        partes.push('<div class="fdemo-ans-datos">' + r.datos.map(datoHtml).join('') + '</div>');
+      }
+      if (r.significado) {
+        partes.push('<p class="fdemo-ans-sig"><b>What it means.</b> ' + esc(r.significado) + '</p>');
+      }
+      if (r.revisar && r.revisar.length) {
+        partes.push('<div class="fdemo-ans-rev"><p class="fdemo-ans-rev-t">What to check</p><ul>' +
+          r.revisar.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>');
+      }
+      if (r.refs && r.refs.length) {
+        partes.push('<div class="fdemo-ia-refs"><span class="fdemo-ia-refs-t">Taken from:</span>' +
+          r.refs.map(function (ref) {
+            return '<button type="button" class="fdemo-ia-ref" data-action="nav" data-view="' + ref.type + '" data-id="' + ref.id + '">' + esc(ref.label) + '</button>';
+          }).join('') + '</div>');
+      }
+      partes.push('</div>');
+      return partes.join('');
+    }
+
+    function mensajeHtml(m) {
+      if (m.autor === 'usuario') {
+        return '<div class="fdemo-ia-msg from-user"><div class="fdemo-ia-bubble">' + esc(m.texto) + '</div></div>';
+      }
+      if (m.resp) {
+        return '<div class="fdemo-ia-msg from-ia">' + respuestaHtml(m.resp) + '</div>';
+      }
+      return '<div class="fdemo-ia-msg from-ia"><div class="fdemo-ia-bubble">' + esc(m.texto || '') + '</div></div>';
+    }
+
     RENDERERS.ia = function () {
       var sugerencias = FS.askQuestions();
-      var threadHtml;
-      if (!state.ia.mensajes.length) {
-        threadHtml = '<div class="fdemo-ia-empty"><p>Try one of these questions:</p><div class="fdemo-ia-chips">' +
-          sugerencias.map(function (s, i) { return '<button type="button" class="fdemo-ia-chip" data-action="ask" data-idx="' + i + '">' + esc(s.q) + '</button>'; }).join('') +
-          '</div></div>';
-      } else {
-        threadHtml = '<div class="fdemo-ia-msgs">' + state.ia.mensajes.map(function (m) {
-          if (m.autor === 'usuario') return '<div class="fdemo-ia-msg from-user"><div class="fdemo-ia-bubble">' + esc(m.texto) + '</div></div>';
-          var refs = (m.refs || []).map(function (r) { return '<button type="button" class="fdemo-ia-ref" data-action="nav" data-view="' + r.type + '" data-id="' + r.id + '">' + esc(r.label) + '</button>'; }).join('');
-          return '<div class="fdemo-ia-msg from-ia"><div class="fdemo-ia-bubble">' + esc(m.texto) + (refs ? '<div class="fdemo-ia-refs">' + refs + '</div>' : '') + '</div></div>';
-        }).join('') + '</div>';
-      }
+      var hechas = state.ia.mensajes.filter(function (m) { return m.autor === 'usuario'; }).map(function (m) { return m.texto; });
+      var chips = sugerencias.map(function (s, i) {
+        if (hechas.indexOf(s.q) !== -1) return '';
+        return '<button type="button" class="fdemo-ia-chip" data-action="ask" data-idx="' + i + '">' + esc(s.q) + '</button>';
+      }).join('');
 
-      return pageHead('Ask Finance', 'Answers only with data from the demo (billing, collections, expenses and projects). Not a substitute for tax advice.') +
-        '<div class="fdemo-card fdemo-ia-card">' +
-        '<div class="fdemo-ia-thread" data-role="ia-thread">' + threadHtml + '</div>' +
-        '<form class="fdemo-ia-form" data-role="ia-form">' +
-        '<input class="fdemo-input" type="text" name="pregunta" placeholder="Type your financial question…" autocomplete="off">' +
-        '<button type="submit" class="fdemo-btn variant-primary">Send</button>' +
-        '</form></div>';
+      return '<div class="fdemo-ask">' +
+        '<header class="fdemo-ask-head">' +
+        '<p class="fdemo-ask-kicker">Financial intelligence</p>' +
+        '<h1 class="fdemo-ask-title">Ask Finance</h1>' +
+        '<p class="fdemo-ask-sub">Ask the system what is going on in your company. It answers from your own data and shows where every figure came from.</p>' +
+        '</header>' +
+        '<div class="fdemo-ask-thread" data-role="ia-thread"><div class="fdemo-ia-msgs">' +
+        state.ia.mensajes.map(mensajeHtml).join('') +
+        '</div></div>' +
+        '<form class="fdemo-ask-form" data-role="ia-form">' +
+        '<input class="fdemo-input" type="text" name="pregunta" aria-label="Type your question" placeholder="What is going on in my company?" autocomplete="off" maxlength="200">' +
+        '<button type="submit" class="fdemo-btn variant-primary">Ask</button>' +
+        '</form>' +
+        (chips ? '<div class="fdemo-ask-chips"><p class="fdemo-ask-chips-t">Or try one of these:</p><div class="fdemo-ia-chips">' + chips + '</div></div>' : '') +
+        '<p class="fdemo-ask-foot">Fictional data. In this demo the answers are computed right here in your browser; the real system answers over your company’s data.</p>' +
+        '</div>';
     };
 
-    function askIndex(idx) {
-      var q = FS.askQuestions()[idx];
-      if (!q) return;
-      var a = q.a();
+    function empujarPregunta(q) {
       state.ia.mensajes.push({ autor: 'usuario', texto: q.q });
-      state.ia.mensajes.push({ autor: 'ia', texto: a.text, refs: a.refs });
+      state.ia.mensajes.push({ autor: 'ia', resp: q.a() });
       render();
       var thread = root.querySelector('[data-role="ia-thread"]');
       if (thread) thread.scrollTop = thread.scrollHeight;
+    }
+
+    function askIndex(idx) {
+      var q = FS.askQuestions()[idx];
+      if (q) empujarPregunta(q);
     }
 
     // ---------- Settings ----------
@@ -598,9 +656,17 @@
         var input = form.pregunta;
         var texto = input.value.trim();
         if (!texto) return;
-        state.ia.mensajes.push({ autor: 'usuario', texto: texto });
-        state.ia.mensajes.push({ autor: 'ia', texto: 'This demo answers the three suggested questions, computed over the fictional dataset. Try one of the suggestions above.', refs: [] });
         input.value = '';
+        var encontrada = FS.matchQuestion ? FS.matchQuestion(texto) : null;
+        if (encontrada) {
+          state.ia.mensajes.push({ autor: 'usuario', texto: texto });
+          state.ia.mensajes.push({ autor: 'ia', resp: encontrada.a() });
+        } else {
+          // Sin coincidencia no se improvisa: se dice lo que esta demo puede
+          // contestar y lo que hace el sistema real, que no es lo mismo.
+          state.ia.mensajes.push({ autor: 'usuario', texto: texto });
+          state.ia.mensajes.push({ autor: 'ia', resp: { conclusion: 'This demo has six prepared questions and that one does not look like any of them, so I am not going to make it up. The real system answers openly over your company data. Try one of the ones below.', datos: [], refs: [] } });
+        }
         render();
         var thread = root.querySelector('[data-role="ia-thread"]');
         if (thread) thread.scrollTop = thread.scrollHeight;

@@ -63,22 +63,70 @@
     { id: 'mock-proy-3', nombre: 'Inventario IA', empresa: 'Ferretera del Sur', estado: 'Entregado', fechaInicio: '2026-05-01', fechaEntregaPrevista: '2026-06-15', fechaEntregaReal: '2026-06-18', serviciosContratados: 'Clasificación automática de stock', responsable: 'Equipo D-Code', totalFacturado: 3900, totalCobrado: 1000, totalGastos: 0, rentabilidad: 3900 }
   ];
 
-  var DASHBOARD_SNAPSHOT = {
-    fechaCalculo: '2026-08-16T07:00:00.000Z',
-    totalFacturado: 9100,
-    totalCobrado: 3800,
-    totalPendiente: 5300,
-    totalVencido: 1200,
-    totalGastos: 869.9,
-    proyectosActivos: 2,
-    prevision30Dias: 2700,
-    alertas: [
-      '1 factura(s) vencida(s) sin cobrar',
-      '1 factura(s) en seguimiento por impago reiterado',
-      '2 gasto(s) pendiente(s) de revisión humana',
-      '1 factura(s) en Borrador pendiente(s) de aprobación para envío'
-    ]
-  };
+  // ---------------------------------------------------------------
+  // El "hoy" de la demo. Los datos están fijados a este día: si se usara la fecha
+  // real del navegador, los vencimientos se irían alejando solos y la demo
+  // enseñaría retrasos distintos cada semana sin que nadie los haya escrito.
+  // ---------------------------------------------------------------
+  var HOY = '2026-08-16';
+  var DIA_MS = 86400000;
+
+  function diasEntre(desde, hasta) {
+    var a = Date.parse(desde), b = Date.parse(hasta);
+    if (isNaN(a) || isNaN(b)) return null;
+    return Math.round((b - a) / DIA_MS);
+  }
+  function diasDeRetraso(f) {
+    if (!f.fechaVencimiento || f.pagada) return 0;
+    var d = diasEntre(f.fechaVencimiento, HOY);
+    return d && d > 0 ? d : 0;
+  }
+  function pendienteDe(f) { return (f.importe || 0) - (f.importeCobrado || 0); }
+  function emitidas() {
+    return FACTURAS.filter(function (f) { return f.estado !== 'Borrador'; });
+  }
+  function suma(lista, fn) {
+    return lista.reduce(function (s, x) { return s + (fn(x) || 0); }, 0);
+  }
+  function redondear(n) { return Math.round(n * 100) / 100; }
+
+  // ---------------------------------------------------------------
+  // El panel se calcula sobre los registros, no se escribe a mano. Es lo que
+  // hace el producto real, y además evita que el panel y las tablas digan
+  // cosas distintas: cualquier cambio en una factura mueve los dos.
+  // ---------------------------------------------------------------
+  var DASHBOARD_SNAPSHOT = (function () {
+    var lista = emitidas();
+    var facturado = suma(lista, function (f) { return f.importe; });
+    var cobrado = suma(lista, function (f) { return f.importeCobrado; });
+    var vencidas = lista.filter(function (f) { return diasDeRetraso(f) > 0 && pendienteDe(f) > 0; });
+    var proximas = lista.filter(function (f) {
+      if (f.pagada || pendienteDe(f) <= 0 || !f.fechaVencimiento) return false;
+      var d = diasEntre(HOY, f.fechaVencimiento);
+      return d !== null && d >= 0 && d <= 30;
+    });
+    var seguimiento = lista.filter(function (f) { return f.estadoCobro === 'En seguimiento'; });
+    var gastosPendientes = GASTOS.filter(function (g) { return g.estadoRevision === 'Pendiente revisión'; });
+    var borradores = FACTURAS.filter(function (f) { return f.estado === 'Borrador'; });
+
+    var alertas = [];
+    if (vencidas.length) alertas.push(vencidas.length + ' factura(s) vencida(s) sin cobrar, ' + fmtEUR(suma(vencidas, pendienteDe)));
+    if (seguimiento.length) alertas.push(seguimiento.length + ' factura(s) en seguimiento por impago reiterado');
+    if (gastosPendientes.length) alertas.push(gastosPendientes.length + ' gasto(s) pendiente(s) de revisión humana');
+    if (borradores.length) alertas.push(borradores.length + ' factura(s) en borrador, sin enviar');
+
+    return {
+      fechaCalculo: HOY + 'T07:00:00.000Z',
+      totalFacturado: redondear(facturado),
+      totalCobrado: redondear(cobrado),
+      totalPendiente: redondear(facturado - cobrado),
+      totalVencido: redondear(suma(vencidas, pendienteDe)),
+      totalGastos: redondear(suma(GASTOS, function (g) { return g.importe; })),
+      proyectosActivos: PROYECTOS.filter(function (p) { return p.estado === 'En curso'; }).length,
+      prevision30Dias: redondear(suma(proximas, pendienteDe)),
+      alertas: alertas
+    };
+  })();
 
   // ---------------------------------------------------------------
   // Formato -- mismas reglas que src/lib/format.ts del producto real
@@ -147,59 +195,199 @@
     listProyectos: function () { return PROYECTOS.slice(); },
     getProyecto: function (id) { return byId(PROYECTOS, id); },
 
-    // --- Pregunta a Finanzas: mismas 3 sugerencias que en el producto
-    // real (src/app/(app)/ia/page.tsx), calculadas aquí sobre el dataset
-    // de la demo en vez de llamar al webhook real de IA Financiera. ---
+    // --- Pregunta a Finanzas ---------------------------------------
+    // El sistema real responde en abierto: manda la pregunta a su webhook de
+    // IA Financiera con los datos de la empresa detrás. Esta demo pública no
+    // llama a nada: las seis respuestas se calculan aquí mismo, sobre el
+    // dataset ficticio, para que se pueda ver cómo responde sin conectar
+    // ninguna cuenta. La forma de la respuesta -- conclusión, datos, qué
+    // significa y qué revisar -- es la que da el sistema real.
     askQuestions: function () {
       var self = this;
+
+      function refFactura(f) { return { type: 'facturas', id: f.id, label: f.numero }; }
+
       return [
         {
-          q: '¿Cuánto me deben en total y qué facturas están vencidas?',
+          clave: 'deudores',
+          pistas: ['deben', 'debe', 'deuda', 'deudor', 'cobrar', 'pendiente', 'quién nos debe', 'quien nos debe'],
+          q: '¿Quién nos debe dinero ahora mismo?',
           a: function () {
-            var cobros = self.listCobros();
-            var pendientes = cobros.filter(function (c) { return c.pendiente > 0; });
-            var totalPendiente = pendientes.reduce(function (s, c) { return s + c.pendiente; }, 0);
-            var vencidas = cobros.filter(function (c) { return c.estadoCobro === 'Vencido'; });
-            var text = 'En total te deben ' + fmtEUR(totalPendiente) + ' repartidos en ' + pendientes.length + ' factura(s).';
-            if (vencidas.length) {
-              text += ' De ellas, ' + vencidas.length + ' ya está' + (vencidas.length === 1 ? '' : 'n') + ' vencida' + (vencidas.length === 1 ? '' : 's') + ': ' +
-                vencidas.map(function (c) { return c.numeroFactura + ' (' + (c.clienteNombre || 'cliente sin resolver') + ')'; }).join(', ') + '.';
-            }
-            return { text: text, refs: vencidas.map(function (c) { return { type: 'facturas', id: c.facturaId, label: c.numeroFactura }; }) };
+            var lista = emitidas().filter(function (f) { return pendienteDe(f) > 0; });
+            if (!lista.length) return { conclusion: 'No hay ninguna factura pendiente de cobro.', datos: [], refs: [] };
+            var total = suma(lista, pendienteDe);
+            var fuera = lista.filter(function (f) { return diasDeRetraso(f) > 0; });
+            var porCliente = {};
+            lista.forEach(function (f) {
+              var k = f.clienteNombre || 'Cliente sin resolver';
+              porCliente[k] = (porCliente[k] || 0) + pendienteDe(f);
+            });
+            var nombres = Object.keys(porCliente).sort(function (a, b) { return porCliente[b] - porCliente[a]; });
+            var mayor = nombres[0];
+            var cuota = Math.round((porCliente[mayor] / total) * 100);
+            return {
+              conclusion: 'Te deben ' + fmtEUR(total) + ' en ' + lista.length + ' facturas. ' + (fuera.length ? fmtEUR(suma(fuera, pendienteDe)) + ' ya están fuera de plazo.' : 'Ninguna está fuera de plazo todavía.'),
+              datos: nombres.map(function (n) {
+                var suyas = lista.filter(function (f) { return (f.clienteNombre || 'Cliente sin resolver') === n; });
+                var atraso = Math.max.apply(null, suyas.map(diasDeRetraso));
+                return { k: n, v: fmtEUR(porCliente[n]), n: (atraso > 0 ? atraso + ' días de retraso' : 'dentro de plazo') + (suyas.length > 1 ? ' · ' + suyas.length + ' facturas' : '') };
+              }),
+              significado: 'El ' + cuota + '% de lo que te deben es de un solo cliente: ' + mayor + '.',
+              refs: fuera.map(refFactura)
+            };
           }
         },
         {
+          clave: 'atrasadas',
+          pistas: ['atrasad', 'retras', 'vencid', 'fuera de plazo', 'impag'],
+          q: '¿Qué facturas están más atrasadas?',
+          a: function () {
+            var atrasadas = emitidas().filter(function (f) { return diasDeRetraso(f) > 0 && pendienteDe(f) > 0; })
+              .sort(function (a, b) { return diasDeRetraso(b) - diasDeRetraso(a); });
+            if (!atrasadas.length) return { conclusion: 'Ninguna factura está fuera de plazo.', datos: [], refs: [] };
+            var peor = atrasadas[0];
+            return {
+              conclusion: atrasadas.length + ' facturas fuera de plazo, ' + fmtEUR(suma(atrasadas, pendienteDe)) + ' sin cobrar. La más antigua lleva ' + diasDeRetraso(peor) + ' días.',
+              datos: atrasadas.map(function (f) {
+                return {
+                  k: f.numero + ' · ' + (f.clienteNombre || 'Cliente sin resolver'),
+                  v: fmtEUR(pendienteDe(f)),
+                  n: diasDeRetraso(f) + ' días · venció el ' + fmtFecha(f.fechaVencimiento) + ' · ' + (f.recordatoriosEnviados || 0) + ' recordatorios'
+                };
+              }),
+              significado: peor.observaciones ? 'La más antigua, ' + peor.numero + ', tiene una nota puesta: «' + peor.observaciones + '» Eso no está reflejado en el estado de la factura.' : 'La más antigua, ' + peor.numero + ', acumula ' + (peor.recordatoriosEnviados || 0) + ' recordatorios enviados sin resultado.',
+              revisar: ['Decidir qué se hace con ' + peor.numero + ': otro recordatorio ya no ha funcionado ' + (peor.recordatoriosEnviados || 0) + ' veces.'],
+              refs: atrasadas.map(refFactura)
+            };
+          }
+        },
+        {
+          clave: 'gastos',
+          pistas: ['gasto', 'gastos', 'cost', 'creciendo', 'crecer', 'subiendo', 'proveedor'],
+          q: '¿Qué gastos están creciendo?',
+          a: function () {
+            var gastos = GASTOS.filter(function (g) { return g.fecha; });
+            var meses = {};
+            gastos.forEach(function (g) {
+              var m = g.fecha.slice(0, 7);
+              meses[m] = meses[m] || { total: 0, cat: {} };
+              meses[m].total += g.importe;
+              var c = g.categoria || 'Sin categoría';
+              meses[m].cat[c] = (meses[m].cat[c] || 0) + g.importe;
+            });
+            var clavesMes = Object.keys(meses).sort();
+            var ultimo = clavesMes[clavesMes.length - 1];
+            var previo = clavesMes[clavesMes.length - 2];
+            if (!previo) {
+              return { conclusion: 'Solo hay un mes de gastos registrado: no hay con qué comparar.', datos: [], refs: [] };
+            }
+            var difTotal = meses[ultimo].total - meses[previo].total;
+            var categorias = {};
+            Object.keys(meses[ultimo].cat).concat(Object.keys(meses[previo].cat)).forEach(function (c) { categorias[c] = true; });
+            var filas = Object.keys(categorias).map(function (c) {
+              var ahora = meses[ultimo].cat[c] || 0;
+              var antes = meses[previo].cat[c] || 0;
+              return { cat: c, ahora: ahora, antes: antes, dif: ahora - antes };
+            }).sort(function (a, b) { return b.dif - a.dif; });
+            var suben = filas.filter(function (f) { return f.dif > 0; });
+            return {
+              conclusion: (difTotal > 0 ? 'El gasto ha subido ' + fmtEUR(difTotal) : 'El gasto ha bajado ' + fmtEUR(-difTotal)) + ' respecto al mes anterior (' + fmtEUR(meses[ultimo].total) + ' frente a ' + fmtEUR(meses[previo].total) + ').',
+              datos: filas.map(function (f) {
+                return { k: f.cat, v: f.ahora === 0 ? '\u2014' : fmtEUR(f.ahora), n: (f.antes === 0 ? 'nuevo este mes' : (f.ahora === 0 ? 'no se ha repetido (' + fmtEUR(f.antes) + ' el mes anterior)' : (f.dif >= 0 ? '+' : '') + fmtEUR(f.dif) + ' respecto al mes anterior')) };
+              }),
+              significado: 'Con ' + clavesMes.length + ' meses registrados no hay serie suficiente para hablar de tendencia. Esto es lo que ha cambiado, no una previsión' + (suben.length ? ': ' + (suben.length === 1 ? 'lo único que sube es ' : 'lo que sube es ') + suben.map(function (x) { return x.cat; }).join(' y ') + '.' : '.'),
+              refs: []
+            };
+          }
+        },
+        {
+          clave: 'hoy',
+          pistas: ['revisar', 'hoy', 'prioridad', 'urgente', 'qué hago', 'que hago', 'pendiente de mí'],
+          q: '¿Qué debería revisar hoy?',
+          a: function () {
+            var pendientes = [];
+            var refs = [];
+            emitidas().filter(function (f) { return diasDeRetraso(f) > 0 && pendienteDe(f) > 0; })
+              .sort(function (a, b) { return diasDeRetraso(b) - diasDeRetraso(a); })
+              .forEach(function (f) { pendientes.push(f.numero + ' (' + f.clienteNombre + '): ' + fmtEUR(pendienteDe(f)) + ' con ' + diasDeRetraso(f) + ' días de retraso.'); refs.push(refFactura(f)); });
+            FACTURAS.filter(function (f) { return f.estado === 'Borrador'; })
+              .forEach(function (f) { pendientes.push(f.numero + ': ' + fmtEUR(f.importe) + ' en borrador, sin enviar. No está reclamado a nadie.'); refs.push(refFactura(f)); });
+            var gastosPte = GASTOS.filter(function (g) { return g.estadoRevision === 'Pendiente revisión'; });
+            if (gastosPte.length) pendientes.push(gastosPte.length + ' gastos esperando revisión: ' + gastosPte.map(function (g) { return g.proveedor + ' (' + fmtEUR(g.importe) + ')'; }).join(', ') + '.');
+            PROYECTOS.filter(function (p) { return p.estado === 'En curso' && p.fechaEntregaPrevista; })
+              .forEach(function (p) {
+                var quedan = diasEntre(HOY, p.fechaEntregaPrevista);
+                if (quedan !== null && quedan <= 21) pendientes.push(p.nombre + ': entrega prevista el ' + fmtFecha(p.fechaEntregaPrevista) + ', quedan ' + quedan + ' días.');
+              });
+            return {
+              conclusion: pendientes.length ? 'Hay ' + pendientes.length + ' cosas que dependen de una decisión tuya hoy.' : 'No hay nada que requiera una decisión hoy.',
+              revisar: pendientes,
+              refs: refs
+            };
+          }
+        },
+        {
+          clave: 'resumen',
+          pistas: ['resumen', 'resume', 'cómo vamos', 'como vamos', 'situación', 'situacion', 'general', 'está pasando', 'esta pasando'],
+          q: 'Hazme un resumen financiero de hoy.',
+          a: function () {
+            var s = self.getDashboardSnapshot();
+            var margen = s.totalFacturado - s.totalGastos;
+            var cobradoPct = s.totalFacturado > 0 ? Math.round((s.totalCobrado / s.totalFacturado) * 100) : 0;
+            return {
+              conclusion: 'Has facturado ' + fmtEUR(s.totalFacturado) + ' y has cobrado ' + fmtEUR(s.totalCobrado) + '. Quedan ' + fmtEUR(s.totalPendiente) + ' por cobrar, de los que ' + fmtEUR(s.totalVencido) + ' están fuera de plazo.',
+              datos: [
+                { k: 'Facturado', v: fmtEUR(s.totalFacturado) },
+                { k: 'Cobrado', v: fmtEUR(s.totalCobrado), n: cobradoPct + '%' },
+                { k: 'Pendiente', v: fmtEUR(s.totalPendiente) },
+                { k: 'Fuera de plazo', v: fmtEUR(s.totalVencido) },
+                { k: 'Gastos', v: fmtEUR(s.totalGastos) },
+                { k: 'Vence en 30 días', v: fmtEUR(s.prevision30Dias) }
+              ],
+              significado: 'El problema no es el margen (' + fmtEUR(margen) + ' entre lo facturado y lo gastado): es que solo ha entrado el ' + cobradoPct + '% de lo que has facturado.',
+              revisar: ['Los ' + fmtEUR(s.totalVencido) + ' fuera de plazo, antes que cualquier otra cosa.'],
+              refs: []
+            };
+          }
+        },
+        {
+          clave: 'proyectos',
+          pistas: ['proyecto', 'rentab', 'margen', 'obra'],
           q: '¿Cuál es la rentabilidad de los proyectos activos?',
           a: function () {
             var activos = self.listProyectos().filter(function (p) { return p.estado === 'En curso'; });
-            if (!activos.length) return { text: 'No hay proyectos en curso ahora mismo.', refs: [] };
-            var text = activos.map(function (p) {
-              return p.nombre + ' (' + p.empresa + '): ' + fmtEUR(p.rentabilidad) + ' de rentabilidad sobre ' + fmtEUR(p.totalFacturado) + ' facturados.';
-            }).join(' ');
-            return { text: text, refs: activos.map(function (p) { return { type: 'proyectos', id: p.id, label: p.nombre }; }) };
-          }
-        },
-        {
-          q: '¿En qué categoría hemos gastado más este mes?',
-          a: function () {
-            var gastos = self.listGastos();
-            var porCategoria = {};
-            gastos.forEach(function (g) {
-              var cat = g.categoria || 'Sin categoría';
-              porCategoria[cat] = (porCategoria[cat] || 0) + g.importe;
-            });
-            var categorias = Object.keys(porCategoria).sort(function (a, b) { return porCategoria[b] - porCategoria[a]; });
-            var top = categorias[0];
-            var total = gastos.reduce(function (s, g) { return s + g.importe; }, 0);
-            var pct = total > 0 ? Math.round((porCategoria[top] / total) * 100) : 0;
+            if (!activos.length) return { conclusion: 'No hay proyectos en curso ahora mismo.', datos: [], refs: [] };
+            var mejor = activos.slice().sort(function (a, b) { return b.rentabilidad - a.rentabilidad; })[0];
             return {
-              text: 'La categoría con más gasto es "' + top + '", con ' + fmtEUR(porCategoria[top]) + ' (' + pct + '% del gasto total registrado).',
-              refs: []
+              conclusion: activos.length + ' proyectos en curso, ' + fmtEUR(suma(activos, function (p) { return p.rentabilidad; })) + ' de rentabilidad estimada.',
+              datos: activos.map(function (p) {
+                return { k: p.nombre + ' · ' + p.empresa, v: fmtEUR(p.rentabilidad), n: fmtEUR(p.totalFacturado) + ' facturados · ' + fmtEUR(p.totalCobrado) + ' cobrados · ' + fmtEUR(p.totalGastos) + ' de gasto' };
+              }),
+              significado: 'El que más deja es ' + mejor.nombre + ', y de él ' + (mejor.totalFacturado - mejor.totalCobrado > 0 ? 'todavía hay ' + fmtEUR(mejor.totalFacturado - mejor.totalCobrado) + ' sin cobrar.' : 'ya está todo cobrado.'),
+              refs: activos.map(function (p) { return { type: 'proyectos', id: p.id, label: p.nombre }; })
             };
           }
         }
       ];
-    }
+    },
+
+    // Busca la pregunta preparada que más se parece a lo que se ha escrito.
+    // No es comprensión de lenguaje: son palabras clave. Cuando no encuentra
+    // ninguna lo dice, en vez de inventarse una respuesta.
+    matchQuestion: function (texto) {
+      var t = (texto || '').toLowerCase();
+      var preguntas = this.askQuestions();
+      var mejor = null, mejorPuntos = 0;
+      preguntas.forEach(function (p) {
+        var puntos = 0;
+        p.pistas.forEach(function (pista) { if (t.indexOf(pista) !== -1) puntos++; });
+        if (puntos > mejorPuntos) { mejorPuntos = puntos; mejor = p; }
+      });
+      return mejorPuntos > 0 ? mejor : null;
+    },
+
+    hoy: HOY
+
   };
 
   global.FinanceStore = FinanceStore;
