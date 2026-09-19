@@ -581,13 +581,13 @@
         '<header class="fdemo-ask-head">' +
         '<p class="fdemo-ask-kicker">Financial intelligence</p>' +
         '<h1 class="fdemo-ask-title">Ask Finance</h1>' +
-        '<p class="fdemo-ask-sub">Ask the system what is going on in your company. It answers from your own data and shows where every figure came from.</p>' +
+        '<p class="fdemo-ask-sub">Ask the system what is going on in your company. <span class="fdemo-ask-sub-extra">It answers from your own data and shows where every figure came from.</span></p>' +
         '</header>' +
         '<div class="fdemo-ask-thread" data-role="ia-thread"><div class="fdemo-ia-msgs">' +
         state.ia.mensajes.map(mensajeHtml).join('') +
         '</div></div>' +
         '<form class="fdemo-ask-form" data-role="ia-form">' +
-        '<input class="fdemo-input" type="text" name="pregunta" aria-label="Type your question" placeholder="What is going on in my company?" autocomplete="off" maxlength="200">' +
+        '<input class="fdemo-input" type="text" name="pregunta" aria-label="Type your question" placeholder="What is going on?" autocomplete="off" maxlength="200">' +
         '<button type="submit" class="fdemo-btn variant-primary">Ask</button>' +
         '</form>' +
         (chips ? '<div class="fdemo-ask-chips"><p class="fdemo-ask-chips-t">Or try one of these:</p><div class="fdemo-ia-chips">' + chips + '</div></div>' : '') +

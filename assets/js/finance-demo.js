@@ -618,13 +618,13 @@
         '<header class="fdemo-ask-head">' +
         '<p class="fdemo-ask-kicker">Inteligencia financiera</p>' +
         '<h1 class="fdemo-ask-title">Pregunta a Finanzas</h1>' +
-        '<p class="fdemo-ask-sub">Pregúntale al sistema qué está pasando en tu empresa. Contesta con tus propios datos y enseña de dónde ha sacado cada cifra.</p>' +
+        '<p class="fdemo-ask-sub">Pregúntale al sistema qué está pasando en tu empresa. <span class="fdemo-ask-sub-extra">Contesta con tus propios datos y enseña de dónde ha sacado cada cifra.</span></p>' +
         '</header>' +
         '<div class="fdemo-ask-thread" data-role="ia-thread"><div class="fdemo-ia-msgs">' +
         state.ia.mensajes.map(mensajeHtml).join('') +
         '</div></div>' +
         '<form class="fdemo-ask-form" data-role="ia-form">' +
-        '<input class="fdemo-input" type="text" name="pregunta" aria-label="Escribe tu pregunta" placeholder="¿Qué está pasando en mi empresa?" autocomplete="off" maxlength="200">' +
+        '<input class="fdemo-input" type="text" name="pregunta" aria-label="Escribe tu pregunta" placeholder="¿Qué está pasando?" autocomplete="off" maxlength="200">' +
         '<button type="submit" class="fdemo-btn variant-primary">Preguntar</button>' +
         '</form>' +
         (chips ? '<div class="fdemo-ask-chips"><p class="fdemo-ask-chips-t">O prueba con una de estas:</p><div class="fdemo-ia-chips">' + chips + '</div></div>' : '') +

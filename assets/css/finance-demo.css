@@ -684,3 +684,67 @@
   .fdemo-app.is-embedded .fdemo-demo-banner{ order:3; }
   .fdemo-app.is-embedded .fdemo-main{ order:4; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LA VISTA DE PREGUNTAS, VESTIDA PARA UN TELÉFONO
+   ═══════════════════════════════════════════════════════════════════════
+   Con el scroll ya arreglado quedaba el aspecto, y el aspecto era el de un
+   formulario largo: cinco preguntas apiladas a todo el ancho, cada una en su
+   caja, ocupaban 280 px —más que la propia respuesta— y empujaban el pie
+   hasta el infinito. Nada de eso es información: son atajos.
+
+   En un teléfono los atajos van en una fila que se desliza de lado, como en
+   cualquier aplicación de mensajería. Ocupan 44 px en vez de 280, se ven
+   cuatro de un vistazo y el resto se alcanzan con el pulgar. Un deslizamiento
+   horizontal no atrapa el vertical: el navegador manda el gesto de bajar a la
+   página.                                                                  */
+@media (max-width:860px){
+  /* La respuesta es lo que importa: que respire. */
+  .fdemo-app.is-embedded .fdemo-ask{ gap:14px; }
+  .fdemo-ask-head{ gap:2px; }
+  .fdemo-ask-sub{ font-size:.875rem; line-height:1.5; }
+  .fdemo-ask-sub-extra{ display:none; }   /* la segunda frase sobra aquí */
+
+  /* Los atajos: una sola fila, deslizable, con parada en cada uno. */
+  .fdemo-ask-chips{ gap:6px; }
+  .fdemo-ask-chips .fdemo-ia-chips{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    scroll-snap-type:x proximity;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    /* El primero pegado al borde del contenido y el último con aire, para que
+       se vea que la fila sigue. */
+    padding:2px 16px 2px 0;
+    margin-right:-12px;
+  }
+  .fdemo-ask-chips .fdemo-ia-chips::-webkit-scrollbar{ display:none; }
+  .fdemo-ask-chips .fdemo-ia-chip{
+    flex:0 0 auto;
+    white-space:nowrap;
+    scroll-snap-align:start;
+    font-size:.8125rem;
+    padding:0 14px;
+    border-radius:999px;   /* pastilla, no caja de formulario */
+  }
+  .fdemo-ask-chips-t{ font-size:.75rem; }
+  .fdemo-ask-foot{ font-size:.75rem; }
+
+  /* La barra superior del marco se quedaba con un hueco vacío a la izquierda
+     desde que el botón del menú dejó de hacer falta. Con solo el enlace de
+     pantalla completa, más baja y alineada a la derecha, parece lo que es. */
+  .fdemo-app.is-embedded .fdemo-topbar{ height:48px; padding:0 12px; }
+  .fdemo-app.is-embedded .fdemo-topbar-avatar{ display:none; }
+}
+
+/* Por debajo de 560 px se aprieta un poco más todo lo que no es la respuesta. */
+@media (max-width:560px){
+  .fdemo-app.is-embedded .fdemo-main{ padding:14px 12px 16px; }
+  .fdemo-ask-title{ font-size:1.2rem; }
+  .fdemo-ans{ padding:14px; gap:12px; }
+  .fdemo-ans-datos{ gap:6px; }
+  .fdemo-dato{ padding:8px 10px; }
+  .fdemo-dato-v{ font-size:.95rem; }
+  .fdemo-ask-form .fdemo-input{ min-width:0; }
+}
