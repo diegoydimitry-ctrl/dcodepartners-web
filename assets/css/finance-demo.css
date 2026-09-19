@@ -614,5 +614,73 @@
   .fdemo-ia-ref{ min-height:44px; display:inline-flex; align-items:center; padding:3px 12px; }
   .fdemo-ask-title{ font-size:1.25rem; }
   .fdemo-ans-conclusion{ font-size:1rem; }
-  .fdemo-ans-datos{ grid-template-columns:1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LA DEMO EN UN TELÉFONO
+   ═══════════════════════════════════════════════════════════════════════
+   MEDIDO a 390×844 antes de esto: el marco ocupaba 560 px —el 66 % de la
+   pantalla— y dentro llevaba su propio scroll (.fdemo-main, 1.459 px de
+   contenido en una caja de 471). Con el dedo encima, la página NO avanzaba:
+   scrollY 7181 antes y 7181 después. Para pasar de la demo había que acertar
+   con el margen que queda a los lados. Eso en un móvil es una trampa, no una
+   ventana.
+
+   En un teléfono la demo deja de ser una ventana con scroll propio y pasa a
+   ser parte de la página: alto automático, sin scroll interno y el menú
+   lateral convertido en una tira horizontal. Así un solo gesto recorre la
+   demo y sigue con la página, que es lo que el dedo espera.               */
+@media (max-width:860px){
+  .fdemo-app.is-embedded{
+    height:auto;                 /* antes: min(760px, 82vh) */
+    flex-direction:column;
+  }
+  /* La tira va DEBAJO de la barra superior. El envoltorio es el último hijo
+     del marco (velo, cajón, envoltorio), así que el orden es estable. */
+  .fdemo-app.is-embedded > div:last-child{ order:1; }
+  .fdemo-app.is-embedded .fdemo-sidebar{
+    order:2;
+    position:static; transform:none; width:auto;
+    flex-direction:row; gap:6px; padding:10px 12px;
+    border-right:none; border-top:1px solid var(--dc-border);
+    overflow-x:auto; overflow-y:hidden;
+    /* Un scroll horizontal no atrapa el gesto vertical: el navegador manda
+       el deslizamiento hacia arriba a la página, que es lo que queremos. */
+    overscroll-behavior-x:contain;
+  }
+  .fdemo-app.is-embedded .fdemo-nav-item{ width:auto; flex:0 0 auto; white-space:nowrap; }
+  .fdemo-app.is-embedded .fdemo-brand{ display:none; }
+  /* Sin cajón no hace falta ni el botón que lo abre ni el velo que lo tapa. */
+  .fdemo-app.is-embedded .fdemo-topbar-menu-btn{ display:none; }
+  .fdemo-app.is-embedded .fdemo-sidebar-overlay{ display:none; }
+  /* Y sobre todo: ni una sola caja con scroll propio dentro del marco. */
+  .fdemo-app.is-embedded .fdemo-main{ overflow:visible; }
+  .fdemo-app.is-embedded .fdemo-ask-thread{ overflow:visible; }
+  .fdemo-app.is-embedded .fdemo-ask{ max-width:none; }
+
+  /* Seis cifras en una columna son 360 px de alto sin necesidad. En dos
+     columnas caben igual de legibles y la respuesta entra casi de una vez. */
+  .fdemo-ans-datos{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+@media (max-width:360px){
+  .fdemo-ans-datos{ grid-template-columns:minmax(0,1fr); }
+}
+
+/* En pantalla completa la aplicación SÍ es la ventana: ahí el scroll interno
+   es lo correcto, y lo único que hace falta es que el rebote no arrastre la
+   página de debajo. */
+.fdemo-app.is-fullpage .fdemo-main{ overscroll-behavior:contain; }
+
+/* El envoltorio de barra + banda + contenido. Era un `style=` en el JS; ahora
+   es una clase porque en móvil hay que poder desarmarlo: con `display:contents`
+   sus tres hijos pasan a ser hijos directos del marco y se pueden ordenar. */
+.fdemo-shell{ flex:1; min-width:0; display:flex; flex-direction:column; }
+@media (max-width:860px){
+  .fdemo-app.is-embedded .fdemo-shell{ display:contents; }
+  /* Barra arriba, tira de módulos justo debajo, aviso, y luego el contenido:
+     los módulos se ven al llegar, no al final del marco. */
+  .fdemo-app.is-embedded .fdemo-topbar{ order:1; }
+  .fdemo-app.is-embedded .fdemo-sidebar{ order:2; border-top:none; border-bottom:1px solid var(--dc-border); }
+  .fdemo-app.is-embedded .fdemo-demo-banner{ order:3; }
+  .fdemo-app.is-embedded .fdemo-main{ order:4; }
 }

@@ -709,14 +709,24 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .fdemo-home-stack .fdemo-app.is-embedded{ height:min(820px, 80vh); }
 }
 
-/* En un movil la aplicacion necesita alto util o no se puede recorrer: con
-   82vh se comia la pantalla entera y no se veia que hay pagina debajo. */
+/* EN UN MOVIL LA DEMO NO ES UNA VENTANA: ES PARTE DE LA PAGINA.
+   Esta regla daba antes un alto fijo (74vh, 72vh) al marco, y con el alto
+   fijo venia dentro un scroll propio. Medido a 390x844: el marco ocupaba
+   560 px —el 66% de la pantalla— con 1.386 px de contenido detras, y con el
+   dedo encima la pagina no avanzaba (scrollY 7181 antes y 7181 despues). Para
+   pasar de largo habia que acertar con el margen de los lados.
+   Ahora el alto lo decide el contenido y el gesto recorre demo y pagina
+   seguidas. El alto minimo se queda: es la reserva de hueco que evita el
+   salto mientras llegan los 96 KB de la demo. */
 @media (max-width:860px){
-  .fdemo-home-stack .fdemo-app.is-embedded{ height:min(620px, 74vh); }
+  .fdemo-home-stack .fdemo-app.is-embedded{ height:auto; }
 }
 @media (max-width:560px){
-  .fdemo-home-stack .fdemo-app.is-embedded{ height:min(560px, 72vh); border-radius:12px; }
-  .demo-aviso{ font-size:.82rem; }
+  .fdemo-home-stack .fdemo-app.is-embedded{ height:auto; border-radius:12px; }
+  /* 13,1 px medidos a 390. Es el aviso que dice que los importes son
+     inventados: si hay un texto de la pagina que tiene que leerse en un
+     telefono, es este. Sube a 14. */
+  .demo-aviso{ font-size:.875rem; }
 }
 
 

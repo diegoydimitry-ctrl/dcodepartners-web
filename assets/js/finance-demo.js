@@ -103,7 +103,7 @@
     root.innerHTML =
       '<div class="fdemo-sidebar-overlay" data-role="overlay"></div>' +
       '<nav class="fdemo-sidebar" data-role="sidebar"></nav>' +
-      '<div style="flex:1; min-width:0; display:flex; flex-direction:column;">' +
+      '<div class="fdemo-shell">' +
       '<div class="fdemo-topbar">' +
       '<button class="fdemo-topbar-menu-btn" type="button" data-role="menu-btn" aria-label="Abrir menu">' + MENU_ICON + '</button>' +
       '<div class="fdemo-topbar-right">' +
@@ -187,6 +187,15 @@
           navIndicatorEl.style.transform = 'translateY(' + el.offsetTop + 'px)';
           navIndicatorEl.style.height = el.offsetHeight + 'px';
           navIndicatorEl.style.opacity = '1';
+        }
+        // En un movil el menu es una tira horizontal: si el modulo activo se
+        // queda fuera de la tira, nadie sabe donde esta. Se acerca solo, y sin
+        // scrollIntoView, que arrastraria tambien la pagina.
+        if (active && sidebarEl.scrollWidth > sidebarEl.clientWidth + 4) {
+          var izq = el.offsetLeft - 12;
+          var der = el.offsetLeft + el.offsetWidth + 12 - sidebarEl.clientWidth;
+          if (izq < sidebarEl.scrollLeft) sidebarEl.scrollLeft = izq;
+          else if (der > sidebarEl.scrollLeft) sidebarEl.scrollLeft = der;
         }
       });
     }
