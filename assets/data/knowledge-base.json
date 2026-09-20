@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-20T21:34:57.697Z",
+  "generatedAt": "2026-09-20T23:20:04.143Z",
   "pageCount": 66,
-  "chunkCount": 598,
+  "chunkCount": 602,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -325,43 +325,53 @@
         },
         {
           "id": "/cambios-en-proceso#c1",
-          "heading": "D-Code OS",
-          "text": "Panel único para ver y dirigir los sistemas de una empresa. En construcción"
+          "heading": "D-Code Finance, más fuerte",
+          "text": "Estamos ampliando el sistema financiero: más pantallas, lectura de documentos que coloca cada factura en su sitio y un asistente que contesta con los números de la empresa. El objetivo es que deje de hacer falta teclear nada que ya venga escrito en un papel. En evoluci&#243;n"
         },
         {
           "id": "/cambios-en-proceso#c2",
-          "heading": "D-Code Finance",
-          "text": "Ampliación del circuito de cobros y del análisis financiero. En evolución Activo 5 sistemas"
+          "heading": "La base sobre la que corre todo",
+          "text": "Debajo de Finance estamos montando la capa común —permisos, aislamiento por empresa, registro de todo lo que se toca y una API única— para que cualquier sistema nuevo nazca ya con ella y no haya que rehacerla cada vez. En construcci&#243;n Activo 7 sistemas"
         },
         {
           "id": "/cambios-en-proceso#c3",
-          "heading": "De oportunidad a propuesta, sin escribirla a mano",
-          "text": "En cuanto una oportunidad cumple las condiciones, la propuesta se redacta sola y llega lista para revisar y enviar. En producción"
+          "heading": "D-Code OS",
+          "text": "El panel desde el que se ven y se dirigen todos los sistemas de la empresa: qué está corriendo, qué ha fallado y qué ha cambiado. Es el sitio por el que se entra. En producci&#243;n"
         },
         {
           "id": "/cambios-en-proceso#c4",
-          "heading": "Ningún correo sale de casa sin pasar un control",
-          "text": "Antes de cualquier envío a un cliente se comprueba destinatario, contenido y permiso. Si algo no cuadra, no sale. Activo"
+          "heading": "D-Code Finance",
+          "text": "El sistema financiero completo: veinticinco pantallas, registro fiscal VERI*FACTU, tesorería, radar de avisos y lectura de documentos. Corriendo sobre nuestros propios números todos los días. En producci&#243;n"
         },
         {
           "id": "/cambios-en-proceso#c5",
-          "heading": "Una sola ficha por cliente, aunque los datos vengan de cinco sitios",
-          "text": "Nombre, NIF, contactos y actividad se unifican y se sincronizan a diario: se deja de discutir cuál es el dato bueno. Activo"
+          "heading": "CRM y ficha única de cliente",
+          "text": "Nombre, NIF, contactos y actividad de cada cliente en una sola ficha, sincronizada a diario aunque los datos vengan de cinco sitios. Se deja de discutir cuál es el dato bueno. Activo"
         },
         {
           "id": "/cambios-en-proceso#c6",
+          "heading": "De oportunidad a propuesta, sin escribirla a mano",
+          "text": "En cuanto una oportunidad cumple las condiciones, la propuesta se redacta sola y llega lista para revisar y enviar. Activo"
+        },
+        {
+          "id": "/cambios-en-proceso#c7",
+          "heading": "Ningún correo sale sin pasar un control",
+          "text": "Antes de cualquier envío a un cliente se comprueba destinatario, contenido y permiso. Si algo no cuadra, no sale. Activo"
+        },
+        {
+          "id": "/cambios-en-proceso#c8",
           "heading": "Si una automatización falla, alguien se entera al momento",
           "text": "Cada proceso avisa cuando se rompe, y los datos se respaldan sin que nadie tenga que acordarse. Activo"
         },
         {
-          "id": "/cambios-en-proceso#c7",
+          "id": "/cambios-en-proceso#c9",
           "heading": "Cada petición con dueño, plazo y aviso antes de incumplirlo",
           "text": "Las peticiones se reparten por carga de trabajo, avisan cuando se acerca el plazo y escalan solas si nadie las coge. Activo"
         },
         {
-          "id": "/cambios-en-proceso#c8",
+          "id": "/cambios-en-proceso#c10",
           "heading": "¿Qué encaja en tu empresa?",
-          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar mi llamada Los cinco están funcionando en nuestra propia operación, no en la de un cliente: son sistemas que sabemos construir porque los usamos a diario. En tu empresa se montarían con tus herramientas y tus reglas."
+          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar mi llamada Los siete están funcionando en nuestra propia operación, no en la de un cliente: son sistemas que sabemos construir porque los usamos a diario. En tu empresa se montarían con tus herramientas y tus reglas."
         }
       ]
     },
@@ -1367,41 +1377,51 @@
         },
         {
           "id": "/en/cambios-en-proceso#c1",
-          "heading": "D-Code OS",
-          "text": "A single panel to see and run a company’s systems. Under construction"
+          "heading": "D-Code Finance, stronger",
+          "text": "We are extending the financial system: more screens, document reading that files each invoice where it belongs, and an assistant that answers with the company’s own numbers. The goal is that nothing already written on a piece of paper ever has to be typed again. Evolving"
         },
         {
           "id": "/en/cambios-en-proceso#c2",
-          "heading": "D-Code Finance",
-          "text": "Extending the collections circuit and financial analysis. Evolving Live 5 systems"
+          "heading": "The layer everything runs on",
+          "text": "Underneath Finance we are building the common layer — permissions, per-company isolation, a record of everything that gets touched and a single API — so that any new system is born with it instead of rebuilding it every time. Under construction Live 7 systems"
         },
         {
           "id": "/en/cambios-en-proceso#c3",
-          "heading": "From opportunity to proposal, without writing it by hand",
-          "text": "As soon as an opportunity meets the conditions, the proposal writes itself and arrives ready to review and send. In production"
+          "heading": "D-Code OS",
+          "text": "The panel from which every system in the company is seen and run: what is running, what has failed and what has changed. It is the way in. In production"
         },
         {
           "id": "/en/cambios-en-proceso#c4",
+          "heading": "D-Code Finance",
+          "text": "The complete financial system: twenty-five screens, VERI*FACTU tax register, cash forecasting, an alert radar and document reading. Running on our own numbers every day. In production"
+        },
+        {
+          "id": "/en/cambios-en-proceso#c5",
+          "heading": "CRM and a single client record",
+          "text": "Name, tax ID, contacts and activity for each client in one record, synced daily even when the data comes from five places. No more arguing about which figure is the right one. Live"
+        },
+        {
+          "id": "/en/cambios-en-proceso#c6",
+          "heading": "From opportunity to proposal, without writing it by hand",
+          "text": "As soon as an opportunity meets the conditions, the proposal writes itself and arrives ready to review and send. Live"
+        },
+        {
+          "id": "/en/cambios-en-proceso#c7",
           "heading": "No email leaves the building without a check",
           "text": "Before anything goes to a client we check recipient, content and permission. If something is off, it does not go out. Live"
         },
         {
-          "id": "/en/cambios-en-proceso#c5",
-          "heading": "One record per client, even when the data comes from five places",
-          "text": "Name, tax ID, contacts and activity are unified and synced daily: no more arguing about which figure is the right one. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c6",
-          "heading": "If an automation breaks, somebody knows straight away",
-          "text": "Every process reports when it fails, and the data is backed up without anyone having to remember. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c7",
-          "heading": "Every request with an owner, a deadline and a warning before it slips",
-          "text": "Requests are shared out by workload, warn as the deadline approaches, and escalate on their own if nobody picks them up. Live"
-        },
-        {
           "id": "/en/cambios-en-proceso#c8",
+          "heading": "If an automation breaks, somebody knows straight away",
+          "text": "Every process raises a flag when it breaks, and the data is backed up without anyone having to remember. Live"
+        },
+        {
+          "id": "/en/cambios-en-proceso#c9",
+          "heading": "Every request with an owner, a deadline and a warning before it slips",
+          "text": "Requests are distributed by workload, warn when the deadline approaches and escalate on their own if nobody picks them up. Live"
+        },
+        {
+          "id": "/en/cambios-en-proceso#c10",
           "heading": "What fits your company?",
           "text": "Thirty minutes, and you will know where we would start. Book my call All five run in our own operation, not in a client's: they are systems we know how to build because we use them daily. In your company they would be built with your tools and your rules."
         }
@@ -2275,13 +2295,13 @@
         },
         {
           "id": "/en/#c2",
-          "heading": "This is an ordinary week. What is underlined is not work.",
-          "text": "Monday: five orders copied by hand. Wednesday: a client asks and three programs have to be opened. Thursday: an invoice goes out and nobody knows if the last one was paid. Friday: something has to be decided and the number is asked for by message. What the underlines mean None of that is the work you are paid for. And all of it is fixed the same way: by putting a system where somebody's memory is now. Our own software · try it now"
+          "heading": "This is costing you a month of work a year. And it shows up on no invoice.",
+          "text": "Monday: five orders copied by hand. Wednesday: a client asks something and three programs have to be opened. Thursday: you invoice and nobody knows whether the last one was paid. Friday: a decision has to be made and the number is asked for over chat. Tap what is underlined None of those four things is the work you get paid for. All four are fixed the same way: by putting a system where somebody’s memory is now. What is below is not a promise — it is the system, running, with data in it. Our own software · try it right here"
         },
         {
           "id": "/en/#c3",
-          "heading": "Write what you need to know. It answers with your numbers.",
-          "text": "Invoices, collections, expenses, treasury and projects in the same place. You write to it in plain language —who owes me, what is overdue— and it answers with the figure and with the invoice it came from. And you hand it a document and it reads it. A supplier invoice, a delivery note, a receipt: it pulls out the fields, shows you which line of the PDF each one came from and leaves the expense ready for you to confirm. If it is a photo or a scan with no text, it says so and stores the document anyway. It is running below, under Documents. DEMO · made-up data It is running: leave it alone and it tours the modules on its own; move the mouse over it or touch it and you are driving. The clients, the amounts and the dates are made up; the screens, the calculations and the states are the ones in the real system. The application, at a glance"
+          "heading": "You drop in a PDF with twenty invoices. It files them for you, one by one.",
+          "text": "That is what D-Code Finance does, and no invoicing program you can buy today does it. It does not leave them in a tray for somebody to type: it puts them inside, each with its number, its net, its VAT and its supplier — and every field knows which page of the PDF it came from. And you ask it in plain language. Who owes me, what is overdue, what should I look at today. It answers with the figure and with the exact invoice it comes from. What it does not know, it says: it does not make it up. Below is the whole application, running. No sign-up, no demo request — you just touch it. DEMO · made-up data This is not a screenshot: it is the application. It is using itself right now — touch it and you take over. The names and the amounts are made up; everything else is the real system. The application, at a glance"
         },
         {
           "id": "/en/#c4",
@@ -2704,7 +2724,7 @@
         {
           "id": "/en/sistema-financiero#c0",
           "heading": "A financial system you can ask what is going on in your company.",
-          "text": "Invoices, collections, expenses and projects in one place — and on top, something that reads all of it and answers: who owes you, what is past due, what you should look at today. What you see below is the application, with made-up data. Try it. Try it right here Let us talk about putting it in DEMO · made-up data It is the application, not a screenshot: ask it something, open an invoice, look at the collections. The clients, the amounts and the dates are made up; the screens, the calculations and the statuses are the real system’s. All twenty-five modules work here, including the path of a document all the way to a filed invoice. The application, at a glance"
+          "text": "Invoices, collections, expenses and projects in one place — and on top, something that reads all of it and answers: who owes you, what is past due, what you should look at today. What you see below is the application, with made-up data. Try it. Try it right here Let us talk about putting it in DEMO · made-up data This is not a screenshot: it is the application, with its twenty-five screens. It is using itself right now — touch it and you take over. Ask it something, drop it a PDF with twenty invoices in it and watch where they end up. The names and the amounts are made up; everything else is the real system. The application, at a glance"
         },
         {
           "id": "/en/sistema-financiero#c1",
@@ -2723,8 +2743,8 @@
         },
         {
           "id": "/en/sistema-financiero#c4",
-          "heading": "The same system. What changes is how much of it works for you.",
-          "text": "We put it in place in a day: we bring in your earlier clients, invoices and expenses, your series and your taxes get set up, and you leave with the system running. You do not start empty. 01 Finance The finance system on your data, with its standard setup. €690 setup + €79 a month up to 3 people See what is included Day to day: invoices, collections, ready to invoice, expenses, payments, duplicates and documents. The business: quotes, orders, delivery notes, clients, suppliers and projects. Treasury at 30, 60 and 90 days, base or cautious scenario. Your invoice series, your taxes and your payment terms. VAT books as CSV, issued and received, for your accountant. Technical sheet Tax register VERI*FACTU. Every invoice is chained to the previous one with its own fingerprint, and there is a screen where you can check the chain is whole and what has been left out. Permissions Seven roles &#8212; Owner, Administrator, Management, Finance, Operations, Read only and Superadmin &#8212; with permission per module and per action. Isolation Each company in its own space, enforced in the same layer that reads the database: a query cannot leave it, not even through a programming mistake. Trace Who did what, when and on which record. You look at it from the invoice or the expense itself. Access There is no public sign-up: we create the account and each person is invited. A suspended account stops getting in immediately. Database PostgreSQL. The data is yours and comes out as CSV whenever you want. Does not include fields or flows specific to your business, or connections to other tools. 02 Finance with intelligence All of the above and, on top, something that reads your data and your documents and answers you. €1,200 setup + €169 a month up to 10 people See what is included You drop it a document and it files it. A PDF with twenty supplier invoices inside comes out as twenty invoices filed, each with its number, its net amount, its VAT and its supplier. Not into a tray for somebody to type up: inside the system, as drafts, ready to review. The shape does not matter: PDF, spreadsheet, CSV or a photo taken on a phone. A single invoice ends up in Expenses, a delivery note in Delivery notes, a bank statement gets reconciled against what you already have. Ask Finance: questions in plain language. Every answer brings the conclusion, the data that holds it up and what you would check, and every figure shows where it came from. Radar: overdue items, price rises above the threshold, duplicates and client concentration. Targets: a metric, a period and a minimum, and the system says whether you are on time. Technical sheet Formats it reads PDF with text, scanned PDF, JPG, PNG, WEBP, CSV and XLSX. How it files them It pulls out each record with its origin &#8212; which page, which line &#8212; and leaves it on the screen where it belongs, as a draft. You confirm. Nothing is saved until you do. What it does with the doubtful What it cannot read it does not make up: it flags it and sets it aside for you. A statement with three movements that do not match comes out with those three marked, not spread around by eye. Traceability Every answer cites its sources and the queries it was calculated with. No figure without an origin. Does not include custom development on top of the system. 03 Finance, made to measure The system, the intelligence, and what your company does that nobody else does the same way. from €2,900 setup + from €290 a month no limit on people See what is included Fields, states and flows specific to your operation. Connections to the tools you already use, built on the system API. Dashboards and reports made for your decisions, not generic ones. Evolution: when the company changes, the system changes with it. Half an hour a month to look together at what the system records and adjust it. Technical sheet API REST at /api/v1 , with a per-company key in the Authorization header. Invoices, expenses, documents, quotes, orders, targets and audit. It goes through the same permissions and the same isolation as the application: a key cannot do anything its role cannot do. VAT excluded and no lock-in. Setup is paid once: we bring in your earlier clients, invoices and expenses, your series and taxes get configured, and you leave with the system running in a day."
+          "heading": "The same system. What changes is how much of the work it does.",
+          "text": "We set it up in a day: we bring in your clients, your invoices and your past expenses, your series and taxes get configured, and you walk out with the system running. You do not start empty. What it costs to set this up on the market, in year one Holded€4,000 – 12,000subscription plus rollout Odoo€10,000 – 45,000licence plus rollout Sage 200€18,000 – 55,000licence plus rollout D-Code Finance€1,638 – 6,380depending on the plan, all in And there is nobody’s licence in there: the system is ours, so what you pay for is setting it up and keeping it running, not a toll. 01 Finance The financial system on your data, with its standard configuration. You stop asking what state each invoice is in: the screen says so. You stop finding out about an unpaid invoice two months late. You stop putting the VAT books together by hand every quarter. €690 setup + €79 a month up to 3 people See what is included Day to day: invoices, collections, to invoice, expenses, payments, duplicates and documents. The business: quotes, orders, delivery notes, clients, suppliers and projects. Cash week by week and at 30, 60 and 90 days, base or prudent scenario. Radar: seven rules with their threshold written down, so nothing is found out late. Your invoice series, your taxes and your payment methods. VAT books in CSV, issued and received, for your accountant. Rollout in a day with your previous data already inside. You do not start empty. Technical sheet Tax register VERI*FACTU. Every invoice is chained to the previous one with its own fingerprint, and there is a screen where you can check the chain is whole and what has been left out. Permissions Seven roles &#8212; Owner, Administrator, Management, Finance, Operations, Read only and Superadmin &#8212; with permission per module and per action. Isolation Each company in its own space, enforced in the same layer that reads the database: a query cannot leave it, not even through a programming mistake. Trace Who did what, when and on which record. You look at it from the invoice or the expense itself. Access There is no public sign-up: we create the account and each person is invited. A suspended account stops getting in immediately. Database PostgreSQL. The data is yours and comes out as CSV whenever you want. Does not include fields or flows specific to your business, nor connections to other tools. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. 02 Finance with intelligence All of the above and, on top, something that reads your documents and answers with your numbers. You stop typing supplier invoices: you drop them in and they file themselves. You stop opening three screens to answer “how much are we owed?”. You stop losing the receipt somebody photographed and never sent. €1,200 setup + €169 a month up to 10 people See what is included You drop a document and it files it. A PDF with twenty supplier invoices inside comes out as twenty filed invoices, each with its number, its net, its VAT and its supplier — in draft, ready to review, not in a tray for somebody to type. Every field carries where it came from. Which page of the PDF and which line, so it can be reviewed without opening the document. The shape does not matter: PDF, Excel, CSV or a photo taken on a phone. A single invoice ends up in Expenses, a delivery note in Delivery notes, a bank statement gets reconciled against what you already have. Ask Finance: you write to it in your own words — who owes me, what is overdue, what should I look at today — and it answers with the figure and with the exact invoice it comes from. What it does not know, it says. No invented answers: if the data is not there, it answers that it is not there. Everything in the previous plan, with its twenty-five screens. Technical sheet Formats it reads PDF with text, scanned PDF, JPG, PNG, WEBP, CSV and XLSX. How it files them It pulls out each record with its origin &#8212; which page, which line &#8212; and leaves it on the screen where it belongs, as a draft. You confirm. Nothing is saved until you do. What it does with the doubtful What it cannot read it does not make up: it flags it and sets it aside for you. A statement with three movements that do not match comes out with those three marked, not spread around by eye. Traceability Every answer cites its sources and the queries it was calculated with. No figure without an origin. Does not include fields or flows specific to your business. Connections go through the API, and building them is quoted separately. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. 03 Finance, made to measure The system, the intelligence and on top your fields, your flows and your connections. You stop bending how you work to what a program allows. You stop copying data from one tool into another. You stop waiting for somebody to pull the report you asked for. from €2,900 setup + from €290 a month no limit on people See what is included Fields, states and flows specific to how you operate. Connections to the tools you already use, built on the system’s API. Dashboards and reports made for your decisions, not generic ones. Evolution: when the company changes, the system changes with it. Half an hour a month to look together at what the system records and adjust it. Everything in the two previous plans. Technical sheet API REST at /api/v1 , with a per-company key in the Authorization header. Invoices, expenses, documents, quotes, orders, targets and audit. It goes through the same permissions and the same isolation as the application: a key cannot do anything its role cannot do. Does not include none of the above: this is the whole system. What is quoted separately is each new piece of development you ask for. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. VAT not included and no lock-in. The rollout is paid once: we bring in your clients, your invoices and your past expenses, your series and taxes get configured, and you walk out with the system running in a day."
         },
         {
           "id": "/en/sistema-financiero#c5",
@@ -2926,13 +2946,13 @@
         },
         {
           "id": "/#c2",
-          "heading": "Esta es una semana normal. Lo subrayado no es trabajo.",
-          "text": "Lunes: cinco pedidos copiados a mano. Miércoles: un cliente pregunta y hay que abrir tres programas. Jueves: se factura y nadie sabe si la anterior se cobró. Viernes: hay que decidir y el número se pide por mensaje. Lo subrayado, explicado Nada de eso es el trabajo por el que te pagan. Y todo se arregla igual: poniendo un sistema donde ahora está la memoria de alguien. Software propio · pruébalo ahora"
+          "heading": "Esto te está costando un mes de trabajo al año. Y no lo ves en ninguna factura.",
+          "text": "Lunes: cinco pedidos copiados a mano. Miércoles: un cliente pregunta y hay que abrir tres programas. Jueves: se factura y nadie sabe si la anterior se cobró. Viernes: hay que decidir y el número se pide por mensaje. Pincha en lo subrayado Ninguna de esas cuatro cosas es el trabajo por el que te pagan. Las cuatro se arreglan igual: poniendo un sistema donde ahora está la memoria de alguien. Lo de abajo no es una promesa — es el sistema, funcionando, con datos dentro. Software propio · pruébalo aquí mismo"
         },
         {
           "id": "/#c3",
-          "heading": "Escribe lo que necesitas saber. Te contesta con tus números.",
-          "text": "Facturas, cobros, gastos, tesorería y proyectos en el mismo sitio. Le escribes en tu idioma —quién me debe, qué está fuera de plazo— y te contesta con la cifra y con la factura de la que sale. Y le das un documento y lo lee. Una factura de proveedor, un albarán, un ticket: saca los campos, te enseña de qué línea del PDF ha salido cada uno y deja el gasto listo para que lo confirmes. Si es una foto o un escaneado sin texto, lo dice y guarda el documento igual. Está aquí abajo, en Documentos. DEMO · datos ficticios Está funcionando: si no la tocas, se recorre sola los módulos; en cuanto pasas el ratón por encima o la tocas, la llevas tú. Los clientes, los importes y las fechas son inventados; las pantallas, los cálculos y los estados son los del sistema de verdad. La aplicación, en un vistazo"
+          "heading": "Le sueltas un PDF con veinte facturas. Te las deja dadas de alta, una a una.",
+          "text": "Eso hace D-Code Finance, y no lo hace ningún programa de facturación que puedas contratar hoy. No las deja en una bandeja para que alguien las teclee: las mete dentro, cada una con su número, su base, su cuota y su proveedor — y cada campo sabe de qué página del PDF ha salido. Y le preguntas en tu idioma. Quién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura concreta de la que sale. Lo que no sabe, lo dice: no se lo inventa. Debajo está la aplicación entera, funcionando. No hay que registrarse ni pedir una demo — se toca y ya está. DEMO · datos ficticios Esto no es una captura: es la aplicación. Se está usando sola ahora mismo — tócala y la llevas tú. Los nombres y los importes son inventados; todo lo demás es el sistema de verdad. La aplicación, en un vistazo"
         },
         {
           "id": "/#c4",
@@ -3355,7 +3375,7 @@
         {
           "id": "/sistema-financiero#c0",
           "heading": "Un sistema financiero al que le preguntas qué está pasando en tu empresa.",
-          "text": "Facturas, cobros, gastos y proyectos en el mismo sitio, y encima algo que lee todo eso y te contesta: quién te debe, qué está fuera de plazo, qué deberías mirar hoy. Lo de aquí abajo es la aplicación, con datos inventados. Pruébala. Probarla aquí mismo Hablemos de implantarlo DEMO · datos ficticios Es la aplicación, no una captura: pregúntale, abre una factura, mira los cobros. Los clientes, los importes y las fechas son inventados; las pantallas, los cálculos y los estados son los del sistema de verdad. Aquí funcionan los veinticinco módulos del sistema, incluido el camino de un documento hasta una factura dada de alta. La aplicación, en un vistazo"
+          "text": "Facturas, cobros, gastos y proyectos en el mismo sitio, y encima algo que lee todo eso y te contesta: quién te debe, qué está fuera de plazo, qué deberías mirar hoy. Lo de aquí abajo es la aplicación, con datos inventados. Pruébala. Probarla aquí mismo Hablemos de implantarlo DEMO · datos ficticios Esto no es una captura: es la aplicación, con sus veinticinco pantallas. Se está usando sola — tócala y la llevas tú. Pregúntale algo, suéltale un PDF con veinte facturas y mira dónde acaban. Los nombres y los importes son inventados; todo lo demás es el sistema de verdad. La aplicación, en un vistazo"
         },
         {
           "id": "/sistema-financiero#c1",
@@ -3375,7 +3395,7 @@
         {
           "id": "/sistema-financiero#c4",
           "heading": "El mismo sistema. Cambia cuánto trabaja por ti.",
-          "text": "Te lo implantamos en un día: traemos tus clientes, tus facturas y tus gastos anteriores, se configuran tus series y tus impuestos, y sales con el sistema funcionando. No se empieza vacío. 01 Finance El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar. 690 € implantación + 79 € al mes hasta 3 personas Ver qu&#233; incluye El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos. El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos. Tesorería a 30, 60 y 90 días, con escenario base o prudente. Tus series de factura, tus impuestos y tus formas de pago. Libros de IVA en CSV, emitidas y recibidas, para tu gestoría. Ficha t&#233;cnica Registro fiscal VERI*FACTU. Cada factura queda encadenada a la anterior con su huella, y hay una pantalla donde se comprueba que la cadena est&#225; entera y qu&#233; ha quedado fuera. Permisos Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo y por acci&#243;n. Aislamiento Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n. Rastro Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde la propia factura o el propio gasto. Acceso No hay alta p&#250;blica: la cuenta la creamos nosotros y se invita a cada persona. Una cuenta suspendida deja de entrar en el momento. Base de datos PostgreSQL. Los datos son tuyos y salen en CSV cuando quieras. No incluye campos ni flujos propios de tu negocio, ni conexiones con otras herramientas. 02 Finance con inteligencia Todo lo anterior y, encima, algo que lee tus datos y tus documentos y te contesta. 1.200 € implantación + 169 € al mes hasta 10 personas Ver qu&#233; incluye Le sueltas un documento y lo coloca. Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas dadas de alta, cada una con su número, su base, su cuota y su proveedor. No en una bandeja para que alguien las teclee: dentro del sistema, en borrador, listas para revisar. Da igual la forma: PDF, Excel, CSV o una foto hecha con el móvil. Una factura suelta acaba en Gastos, un albarán en Albaranes, un extracto del banco se concilia contra lo que ya tienes. Pregunta a Finanzas: preguntas en lenguaje normal. Cada respuesta trae la conclusión, los datos que la sostienen y qué revisarías, y cada cifra enseña de dónde sale. Radar: vencidos, subidas de precio por encima del umbral, duplicados y concentración de cliente. Objetivos: una métrica, un periodo y un mínimo, y el sistema dice si vas a tiempo. Ficha t&#233;cnica Qu&#233; formatos lee PDF con texto, PDF escaneado, JPG, PNG, WEBP, CSV y XLSX. C&#243;mo lo coloca Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja en la pantalla que le toca, en borrador. T&#250; confirmas. Hasta que no confirmas no se guarda nada. Lo que hace con lo dudoso Lo que no consigue leer no se lo inventa: lo marca y lo deja aparte para que lo mires. Un extracto con tres movimientos que no cuadran sale con esos tres se&#241;alados, no repartidos a ojo. Trazabilidad Cada respuesta cita sus fuentes y las consultas con las que se ha calculado. No hay ninguna cifra sin origen. No incluye desarrollo a medida sobre el sistema. 03 Finance a medida El sistema, la inteligencia, y lo que tu empresa hace y nadie m&#225;s hace igual. desde 2.900 € implantación + desde 290 € al mes sin límite de personas Ver qu&#233; incluye Campos, estados y flujos propios de vuestra operación. Conexiones con las herramientas que ya usáis, construidas sobre la API del sistema. Paneles e informes hechos para vuestras decisiones, no genéricos. Evolución: cuando la empresa cambia, el sistema cambia con ella. Media hora al mes para mirar juntos lo que el sistema registra y ajustar. Ficha t&#233;cnica API REST en /api/v1 , con clave por empresa en la cabecera Authorization . Facturas, gastos, documentos, presupuestos, pedidos, objetivos y auditor&#237;a. Pasa por los mismos permisos y el mismo aislamiento que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol. IVA aparte y sin permanencia. La implantación se paga una vez: traemos tus clientes, tus facturas y tus gastos anteriores, se configuran tus series y tus impuestos, y sales con el sistema funcionando en un día."
+          "text": "Te lo implantamos en un día: traemos tus clientes, tus facturas y tus gastos anteriores, se configuran tus series y tus impuestos, y sales con el sistema funcionando. No se empieza vacío. Lo que cuesta montar esto en el mercado, el primer año Holded4.000 – 12.000 €suscripción más implantación Odoo10.000 – 45.000 €licencia más implantación Sage 20018.000 – 55.000 €licencia más implantación D-Code Finance1.638 – 6.380 €según el plan, todo incluido Y ahí dentro no hay licencia de nadie: el sistema es nuestro, así que lo que pagas es montarlo y mantenerlo, no un peaje. 01 Finance El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar. Dejas de preguntar en qué estado está cada factura: lo dice la pantalla. Dejas de descubrir un impagado dos meses tarde. Dejas de armar los libros del IVA a mano cada trimestre. 690 € implantación + 79 € al mes hasta 3 personas Ver qu&#233; incluye El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos. El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos. Tesorería semana a semana y a 30, 60 y 90 días, con escenario base o prudente. Radar: siete reglas con su umbral escrito, para que nada se descubra tarde. Tus series de factura, tus impuestos y tus formas de pago. Libros de IVA en CSV, emitidas y recibidas, para tu gestoría. Implantación en un día con tus datos anteriores dentro. No se empieza vacío. Ficha t&#233;cnica Registro fiscal VERI*FACTU. Cada factura queda encadenada a la anterior con su huella, y hay una pantalla donde se comprueba que la cadena est&#225; entera y qu&#233; ha quedado fuera. Permisos Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo y por acci&#243;n. Aislamiento Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n. Rastro Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde la propia factura o el propio gasto. Acceso No hay alta p&#250;blica: la cuenta la creamos nosotros y se invita a cada persona. Una cuenta suspendida deja de entrar en el momento. Base de datos PostgreSQL. Los datos son tuyos y salen en CSV cuando quieras. No incluye campos ni flujos propios de tu negocio, ni conexiones con otras herramientas. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. 02 Finance con inteligencia Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus n&#250;meros. Dejas de teclear facturas de proveedor: se las sueltas y entran solas. Dejas de abrir tres pantallas para responder «¿cuánto nos deben?». Dejas de perder el ticket que alguien fotografió y no envió nunca. 1.200 € implantación + 169 € al mes hasta 10 personas Ver qu&#233; incluye Le sueltas un documento y lo coloca. Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas dadas de alta, cada una con su número, su base, su cuota y su proveedor — en borrador, listas para revisar, no en una bandeja para teclear. Cada campo trae de dónde sale. De qué página del PDF y de qué línea, para que se pueda revisar sin abrir el documento. Da igual la forma: PDF, Excel, CSV o una foto hecha con el móvil. Una factura suelta acaba en Gastos, un albarán en Albaranes, un extracto del banco se concilia contra lo que ya tienes. Pregunta a Finanzas: le escribes en tu idioma —quién me debe, qué está fuera de plazo, qué debería mirar hoy— y contesta con la cifra y con la factura concreta de la que sale. Lo que no sabe, lo dice. No hay respuesta inventada: si el dato no está, contesta que no está. Todo lo del plan anterior, con sus veinticinco pantallas. Ficha t&#233;cnica Qu&#233; formatos lee PDF con texto, PDF escaneado, JPG, PNG, WEBP, CSV y XLSX. C&#243;mo lo coloca Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja en la pantalla que le toca, en borrador. T&#250; confirmas. Hasta que no confirmas no se guarda nada. Lo que hace con lo dudoso Lo que no consigue leer no se lo inventa: lo marca y lo deja aparte para que lo mires. Un extracto con tres movimientos que no cuadran sale con esos tres se&#241;alados, no repartidos a ojo. Trazabilidad Cada respuesta cita sus fuentes y las consultas con las que se ha calculado. No hay ninguna cifra sin origen. No incluye campos ni flujos propios de tu negocio. Las conexiones van por la API, y montarlas se presupuesta aparte. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. 03 Finance a medida El sistema, la inteligencia y adem&#225;s vuestros campos, vuestros flujos y vuestras conexiones. Dejas de adaptar cómo trabajáis a lo que permite un programa. Dejas de copiar datos de una herramienta a otra. Dejas de esperar a que alguien saque el informe que pediste. desde 2.900 € implantación + desde 290 € al mes sin límite de personas Ver qu&#233; incluye Campos, estados y flujos propios de vuestra operación. Conexiones con las herramientas que ya usáis, construidas sobre la API del sistema. Paneles e informes hechos para vuestras decisiones, no genéricos. Evolución: cuando la empresa cambia, el sistema cambia con ella. Media hora al mes para mirar juntos lo que el sistema registra y ajustar. Todo lo de los dos planes anteriores. Ficha t&#233;cnica API REST en /api/v1 , con clave por empresa en la cabecera Authorization . Facturas, gastos, documentos, presupuestos, pedidos, objetivos y auditor&#237;a. Pasa por los mismos permisos y el mismo aislamiento que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol. No incluye nada de lo anterior: esto es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pidáis. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. IVA aparte y sin permanencia. La implantación se paga una vez: traemos tus clientes, tus facturas y tus gastos anteriores, se configuran tus series y tus impuestos, y sales con el sistema funcionando en un día."
         },
         {
           "id": "/sistema-financiero#c5",

@@ -315,7 +315,12 @@
     { x: 0.722, y: 0.50,  w: 0.46, h: 0.80, d: 0.96 },  // 3 LUPA       analizamos
     { x: 0.700, y: 0.50,  w: 0.50, h: 0.88, d: 1.02 },  // 4 MENTE      diseñamos
     { x: 0.684, y: 0.50,  w: 0.56, h: 0.96, d: 1.06 },  // 5 SISTEMA    implantamos
-    { x: 0.706, y: 0.50,  w: 0.54, h: 0.72, d: 0.96 },  // 6 CURVA      medimos
+    /* MEDIDO mirando la pantalla entera: la gráfica ocupaba media ventana de
+       alto y se quedaba DEBAJO del texto de la sección siguiente mientras
+       esta subía. Una gráfica a pantalla completa detrás de un titular y
+       cuatro tarjetas no se lee como una gráfica: se lee como ruido de
+       fondo. Compacta y arriba, se lee como lo que es. */
+    { x: 0.718, y: 0.315, w: 0.44, h: 0.40, d: 0.96 },  // 6 CURVA      medimos
     { x: 0.880, y: 0.50,  w: 0.20, h: 0.90, d: 0.92 },  // 7 INVENTARIO tótem
     { x: 0.700, y: 0.50,  w: 0.52, h: 0.62, d: 0.92 },  // 8 CADENA     confianza
     { x: 0.500, y: 0.470, w: 1.04, h: 0.86, d: 1.06 }   // 9 CONVERGE   el cierre
@@ -838,60 +843,167 @@
 
      El reparto de partículas es proporcional a la longitud de cada trazo: si
      no, el trazo largo sale despoblado y el corto, apelmazado. */
+  /* ══════════════ LAS NUEVE FIGURAS ══════════════
+     La primera versión eran polilíneas de seis y siete puntos, y con seis
+     puntos no sale un camión: sale un polígono. Aquí cada figura se declara
+     con TRAZOS —rectas, arcos y curvas— y se muestrea a muchos puntos al
+     cargar, una sola vez. Lo que dibuja la materia después es exactamente lo
+     mismo que antes; lo que cambia es que ahora hay curva donde tiene que
+     haberla, y por eso se reconoce lo que es. */
+  function arco(cx, cy, rx, ry, a0, a1, n) {
+    var p = [], N = n || 30;
+    for (var i = 0; i <= N; i++) {
+      var a = a0 + (a1 - a0) * (i / N);
+      p.push([cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]);
+    }
+    return p;
+  }
+  function curva(p0, p1, p2, p3, n) {
+    var p = [], N = n || 22;
+    for (var i = 0; i <= N; i++) {
+      var t = i / N, u = 1 - t;
+      p.push([u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0],
+              u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1]]);
+    }
+    return p;
+  }
+  /* Une varios tramos en un trazo continuo, sin repetir el punto de unión. */
+  function une() {
+    var out = [];
+    for (var i = 0; i < arguments.length; i++) {
+      var t = arguments[i];
+      for (var j = (out.length ? 1 : 0); j < t.length; j++) out.push(t[j]);
+    }
+    return out;
+  }
+  function caja(x, y, w, h) {
+    return [[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];
+  }
+  function cajaRed(x, y, w, h, r) {
+    return une(
+      [[x+r,y]], [[x+r,y],[x+w-r,y]],
+      arco(x+w-r, y+r, r, r, -Math.PI/2, 0, 8),
+      [[x+w,y+r],[x+w,y+h-r]],
+      arco(x+w-r, y+h-r, r, r, 0, Math.PI/2, 8),
+      [[x+w-r,y+h],[x+r,y+h]],
+      arco(x+r, y+h-r, r, r, Math.PI/2, Math.PI, 8),
+      [[x,y+h-r],[x,y+r]],
+      arco(x+r, y+r, r, r, Math.PI, Math.PI*1.5, 8)
+    );
+  }
+  var TAU = Math.PI * 2;
+
   var OBJ = {
+    /* VENTAS: tres barras que suben y una flecha que las remata. Lo que se
+       reconoce de una venta no es un icono de dinero: es que sube. */
     ventas: { et: 'VENTAS', en: 'SALES', tr: [
-      [[0.10,0.16],[0.90,0.16],[0.58,0.52],[0.58,0.90],[0.42,0.82],[0.42,0.52],[0.10,0.16]],
-      [[0.30,0.30],[0.70,0.30]]
+      [[0.08,0.92],[0.94,0.92]],
+      caja(0.14, 0.66, 0.15, 0.26),
+      caja(0.36, 0.50, 0.15, 0.42),
+      caja(0.58, 0.30, 0.15, 0.62),
+      une([[0.14,0.58]], curva([0.14,0.58],[0.34,0.52],[0.48,0.34],[0.80,0.14])),
+      [[0.80,0.14],[0.62,0.16]],
+      [[0.80,0.14],[0.79,0.32]]
     ]},
+
+    /* PRESUPUESTOS: una hoja con la esquina doblada, sus renglones y un
+       importe subrayado abajo. La esquina doblada es lo que la hace papel. */
     presupuestos: { et: 'PRESUPUESTOS', en: 'QUOTES', tr: [
-      [[0.26,0.08],[0.74,0.08],[0.74,0.92],[0.26,0.92],[0.26,0.08]],
-      [[0.34,0.17],[0.66,0.17],[0.66,0.31],[0.34,0.31],[0.34,0.17]],
-      [[0.34,0.42],[0.44,0.42]],[[0.48,0.42],[0.58,0.42]],[[0.62,0.42],[0.66,0.42]],
-      [[0.34,0.56],[0.44,0.56]],[[0.48,0.56],[0.58,0.56]],[[0.62,0.56],[0.66,0.56]],
-      [[0.34,0.70],[0.44,0.70]],[[0.48,0.70],[0.58,0.70]],[[0.62,0.70],[0.66,0.82]]
-    ]},
-    proyectos: { et: 'PROYECTOS', en: 'PROJECTS', tr: [
-      [[0.08,0.16],[0.92,0.16],[0.92,0.92],[0.08,0.92],[0.08,0.16]],
-      [[0.08,0.32],[0.92,0.32]],
-      [[0.26,0.08],[0.26,0.24]],[[0.74,0.08],[0.74,0.24]],
-      [[0.18,0.46],[0.56,0.46]],[[0.30,0.62],[0.78,0.62]],[[0.22,0.78],[0.50,0.78]]
-    ]},
-    clientes: { et: 'CLIENTES', en: 'CLIENTS', tr: [
-      [[0.50,0.10],[0.62,0.16],[0.66,0.28],[0.62,0.40],[0.50,0.46],[0.38,0.40],[0.34,0.28],[0.38,0.16],[0.50,0.10]],
-      [[0.14,0.90],[0.16,0.74],[0.26,0.62],[0.40,0.55],[0.60,0.55],[0.74,0.62],[0.84,0.74],[0.86,0.90]]
-    ]},
-    empresa: { et: 'TU EMPRESA', en: 'YOUR COMPANY', tr: [
-      [[0.16,0.92],[0.16,0.26],[0.50,0.08],[0.84,0.26],[0.84,0.92],[0.16,0.92]],
-      [[0.28,0.38],[0.40,0.38],[0.40,0.50],[0.28,0.50],[0.28,0.38]],
-      [[0.60,0.38],[0.72,0.38],[0.72,0.50],[0.60,0.50],[0.60,0.38]],
-      [[0.28,0.60],[0.40,0.60],[0.40,0.72],[0.28,0.72],[0.28,0.60]],
-      [[0.44,0.92],[0.44,0.66],[0.56,0.66],[0.56,0.92]]
-    ]},
-    proveedores: { et: 'PROVEEDORES', en: 'SUPPLIERS', tr: [
-      [[0.06,0.26],[0.58,0.26],[0.58,0.70],[0.06,0.70],[0.06,0.26]],
-      [[0.58,0.40],[0.76,0.40],[0.92,0.54],[0.92,0.70],[0.58,0.70]],
-      [[0.06,0.70],[0.92,0.70]],
-      [[0.26,0.70],[0.30,0.78],[0.26,0.86],[0.18,0.86],[0.14,0.78],[0.18,0.70]],
-      [[0.78,0.70],[0.82,0.78],[0.78,0.86],[0.70,0.86],[0.66,0.78],[0.70,0.70]]
-    ]},
-    facturacion: { et: 'FACTURACIÓN', en: 'INVOICING', tr: [
       [[0.24,0.06],[0.62,0.06],[0.78,0.22],[0.78,0.94],[0.24,0.94],[0.24,0.06]],
       [[0.62,0.06],[0.62,0.22],[0.78,0.22]],
-      [[0.32,0.36],[0.62,0.36]],[[0.32,0.48],[0.62,0.48]],[[0.32,0.60],[0.52,0.60]],
-      [[0.32,0.76],[0.70,0.76]],[[0.32,0.82],[0.70,0.82]]
+      [[0.32,0.34],[0.68,0.34]],
+      [[0.32,0.44],[0.68,0.44]],
+      [[0.32,0.54],[0.56,0.54]],
+      [[0.32,0.72],[0.68,0.72]],
+      [[0.46,0.80],[0.68,0.80]],
+      une(arco(0.385, 0.805, 0.055, 0.055, Math.PI*0.35, Math.PI*1.65, 16))
     ]},
+
+    /* PROYECTOS: un tablero con tres carriles y sus tarjetas, que es como se
+       ve un proyecto cuando alguien lo está llevando. */
+    proyectos: { et: 'PROYECTOS', en: 'PROJECTS', tr: [
+      cajaRed(0.06, 0.16, 0.88, 0.76, 0.05),
+      [[0.06,0.30],[0.94,0.30]],
+      [[0.35,0.30],[0.35,0.92]],
+      [[0.65,0.30],[0.65,0.92]],
+      cajaRed(0.11, 0.38, 0.19, 0.13, 0.03),
+      cajaRed(0.11, 0.56, 0.19, 0.13, 0.03),
+      cajaRed(0.40, 0.38, 0.19, 0.13, 0.03),
+      cajaRed(0.69, 0.38, 0.19, 0.13, 0.03),
+      cajaRed(0.69, 0.56, 0.19, 0.13, 0.03)
+    ]},
+
+    /* CLIENTES: dos personas, una delante y otra detrás. Con una sola
+       cabeza y un arco no hay «clientes», hay «un usuario». */
+    clientes: { et: 'CLIENTES', en: 'CLIENTS', tr: [
+      arco(0.40, 0.30, 0.135, 0.135, 0, TAU, 34),
+      une(arco(0.40, 0.86, 0.26, 0.30, Math.PI, TAU, 28)),
+      arco(0.70, 0.26, 0.10, 0.10, -Math.PI*0.72, Math.PI*0.62, 24),
+      une(arco(0.72, 0.86, 0.20, 0.26, Math.PI*1.08, Math.PI*1.94, 20))
+    ]},
+
+    /* TU EMPRESA: un edificio con sus ventanas y su puerta. */
+    empresa: { et: 'TU EMPRESA', en: 'YOUR COMPANY', tr: [
+      [[0.14,0.94],[0.14,0.30],[0.50,0.08],[0.86,0.30],[0.86,0.94],[0.14,0.94]],
+      [[0.06,0.94],[0.94,0.94]],
+      caja(0.25, 0.40, 0.13, 0.13),
+      caja(0.62, 0.40, 0.13, 0.13),
+      caja(0.25, 0.60, 0.13, 0.13),
+      une([[0.44,0.94],[0.44,0.68]], arco(0.50, 0.68, 0.06, 0.06, Math.PI, TAU, 12), [[0.56,0.68],[0.56,0.94]])
+    ]},
+
+    /* PROVEEDORES: un camión de reparto. Caja, cabina, dos ruedas. */
+    proveedores: { et: 'PROVEEDORES', en: 'SUPPLIERS', tr: [
+      [[0.06,0.74],[0.06,0.30],[0.56,0.30],[0.56,0.74]],
+      [[0.56,0.44],[0.74,0.44],[0.88,0.58],[0.88,0.74],[0.56,0.74]],
+      [[0.04,0.74],[0.94,0.74]],
+      arco(0.22, 0.80, 0.075, 0.075, 0, TAU, 20),
+      arco(0.72, 0.80, 0.075, 0.075, 0, TAU, 20),
+      [[0.16,0.44],[0.46,0.44]],
+      [[0.16,0.56],[0.36,0.56]]
+    ]},
+
+    /* FACTURACIÓN: la hoja con su sello redondo y el importe. */
+    facturacion: { et: 'FACTURACIÓN', en: 'INVOICING', tr: [
+      [[0.20,0.06],[0.80,0.06],[0.80,0.86],[0.70,0.94],[0.60,0.86],[0.50,0.94],[0.40,0.86],[0.30,0.94],[0.20,0.86],[0.20,0.06]],
+      [[0.30,0.24],[0.70,0.24]],
+      [[0.30,0.36],[0.56,0.36]],
+      [[0.30,0.62],[0.70,0.62]],
+      arco(0.62, 0.48, 0.10, 0.10, 0, TAU, 24),
+      une(arco(0.62, 0.48, 0.05, 0.055, Math.PI*0.30, Math.PI*1.70, 14)),
+      [[0.555,0.455],[0.655,0.455]]
+    ]},
+
+    /* COBROS: un billete con su euro y una flecha que ENTRA. Lo que hay que
+       leer aquí es la dirección del dinero. */
     cobros: { et: 'COBROS', en: 'COLLECTIONS', tr: [
-      [[0.50,0.06],[0.70,0.12],[0.84,0.28],[0.88,0.50],[0.84,0.72],[0.70,0.88],[0.50,0.94],
-       [0.30,0.88],[0.16,0.72],[0.12,0.50],[0.16,0.28],[0.30,0.12],[0.50,0.06]],
-      [[0.64,0.30],[0.52,0.26],[0.42,0.32],[0.38,0.44],[0.38,0.56],[0.42,0.68],[0.52,0.74],[0.64,0.70]],
-      [[0.32,0.44],[0.60,0.44]],[[0.32,0.56],[0.60,0.56]]
+      cajaRed(0.10, 0.34, 0.80, 0.40, 0.05),
+      arco(0.50, 0.54, 0.105, 0.105, 0, TAU, 24),
+      une(arco(0.50, 0.54, 0.05, 0.055, Math.PI*0.30, Math.PI*1.70, 14)),
+      [[0.435,0.515],[0.535,0.515]],
+      [[0.435,0.565],[0.525,0.565]],
+      [[0.18,0.42],[0.24,0.42]],
+      [[0.76,0.66],[0.82,0.66]],
+      [[0.50,0.06],[0.50,0.26]],
+      [[0.50,0.26],[0.43,0.18]],
+      [[0.50,0.26],[0.57,0.18]]
     ]},
+
+    /* AVISOS: una campana. Un triángulo con una admiración es una señal de
+       tráfico; una campana es un aviso. */
     avisos: { et: 'AVISOS', en: 'ALERTS', tr: [
-      [[0.50,0.06],[0.50,0.14]],
-      [[0.50,0.14],[0.66,0.20],[0.74,0.36],[0.74,0.60],[0.84,0.74],[0.16,0.74],[0.26,0.60],[0.26,0.36],[0.34,0.20],[0.50,0.14]],
-      [[0.42,0.80],[0.44,0.88],[0.50,0.92],[0.56,0.88],[0.58,0.80]]
+      une(
+        [[0.24,0.70]],
+        curva([0.24,0.70],[0.24,0.44],[0.30,0.22],[0.50,0.20]),
+        curva([0.50,0.20],[0.70,0.22],[0.76,0.44],[0.76,0.70])
+      ),
+      [[0.16,0.70],[0.84,0.70]],
+      [[0.50,0.20],[0.50,0.10]],
+      arco(0.50, 0.085, 0.045, 0.045, 0, TAU, 14),
+      une(arco(0.50, 0.70, 0.085, 0.10, 0, Math.PI, 16))
     ]}
   };
+
   var OBJ_ORDEN = ['ventas','presupuestos','proyectos','clientes','empresa','proveedores','facturacion','cobros','avisos'];
 
   /* Qué caja está elegida y desde cuándo. Se vuelve sola a los siete
@@ -943,8 +1055,10 @@
   /* El objeto ocupa la figura entera, centrado y con un margen: es lo único
      que hay en pantalla mientras dura, así que no tiene por qué encogerse
      dentro de la caja de la que ha salido. */
+  var OBJ_G = 4;
   function F_OBJETO(i, u, g, G, o, tm, ins) {
-    var ar = (MARCO[g].h * H) / (MARCO[g].w * W);
+    var frO = MARCO[OBJ_G];
+    var ar = (frO.h * H) / (frO.w * W);
     var ob = OBJ[OBJ_ORDEN[SEL.k]];
     if (!ob) { o.a = 0; o.g = -1; return; }
     var vida = (tm - SEL.t0) / SEL_MS;
@@ -954,10 +1068,24 @@
     var esc = 0.66;
     o.nx = 0.5 + (p.x - 0.5) * esc * ar;
     o.ny = 0.5 + (p.y - 0.5) * esc;
-    o.a = entra * sale * (0.24 + 0.10 * Math.sin(tm * 0.0012 + u * 6));
+    o.a = entra * sale * (0.26 + 0.09 * Math.sin(tm * 0.0012 + u * 6));
     o.c = C_FLUJO;
-    o.g = 1200 + p.g;
-    o.r = 1.05;
+    /* EL CONTORNO, COMO TRAZO ANCHO Y NO COMO SEGMENTOS SUELTOS.
+       MEDIDO mirando una figura grande: unir particula con particula con la
+       linea fina de un pixel deja un peine. Cada particula esta en un
+       estrato distinto y cae a un radio distinto, asi que el segmento que va
+       de una a la siguiente cruza en diagonal y se lee como una pua. En una
+       nube da igual; en un contorno cerrado lo estropea entero.
+
+       El mecanismo de trazo ancho que ya usa la grafica encadena los
+       segmentos de un mismo grupo en UNA polilinea con su grosor y su color.
+       La figura pasa por ahi: las particulas siguen siendo las que la
+       dibujan, pero el contorno sale limpio. */
+    var gi = GRU_BASE + (p.g % GRU_N);
+    o.g = gi;
+    GRUW[p.g % GRU_N] = 2.1 * entra * sale * (narrow ? 0.8 : 1);
+    GRUC[p.g % GRU_N] = C_FLUJO;
+    o.r = 0.86;
   }
 
   /* ══════════════ LA DERIVA — materia sin figura ══════════════
@@ -1347,10 +1475,24 @@
        `marco()` proyecta después. */
     var ANCHO = PASO * 0.56, pxAncho = ANCHO * fr.w * W;
 
-    if (u < 0.13) {                                   // EJES Y REJILLA
-      var q = tramo(u, 0, 0.13, 6);
-      if (q.k === 0)      { o.nx = X0 - 0.02 + q.j * (XW + 0.05); o.ny = Y0; o.a = ejes * 0.26; }
-      else if (q.k === 1) { o.nx = X0 - 0.02; o.ny = Y0 - q.j * 0.80; o.a = ejes * 0.15; }
+    if (u < 0.13) {                                   // EJES, MARCO Y REJILLA
+      var q = tramo(u, 0, 0.13, 7);
+      if (q.k === 6) {
+        /* EL MARCO DEL ÁREA DE DIBUJO. Sin él, unas barras sueltas sobre el
+           fondo estrellado no se leen como una gráfica: se leen como unas
+           barras. Con él hay un dentro y un fuera, que es lo que convierte
+           un dibujo en una lectura. */
+        var pm = q.j * 4, lado = pm | 0, ff = pm - lado;
+        var x0 = X0 - 0.055, x1 = X0 + XW + 0.035, y0 = Y0 - 0.865, y1 = Y0 + 0.055;
+        if (lado === 0)      { o.nx = x0 + ff * (x1 - x0); o.ny = y0; }
+        else if (lado === 1) { o.nx = x1; o.ny = y0 + ff * (y1 - y0); }
+        else if (lado === 2) { o.nx = x1 - ff * (x1 - x0); o.ny = y1; }
+        else                 { o.nx = x0; o.ny = y1 - ff * (y1 - y0); }
+        o.a = ejes * 0.13; o.c = C_BRUMA; o.g = -1; o.r = 0.58;
+        return;
+      }
+      if (q.k === 0)      { o.nx = X0 - 0.02 + q.j * (XW + 0.05); o.ny = Y0; o.a = ejes * 0.30; }
+      else if (q.k === 1) { o.nx = X0 - 0.02; o.ny = Y0 - q.j * 0.80; o.a = ejes * 0.20; }
       else {
         /* Cuatro rejillas punteadas. Son la escala: se tienen que poder
            ignorar mientras se mira la forma, y estar cuando se mira un valor. */
@@ -1971,7 +2113,43 @@
        porque el marco de Finance es una banda de arriba y el suyo no. */
     var dom = tw >= 0.5 ? iB : iA;
     punteroEnMarco(MARCO[dom], MIR[dom], VOLTEA[dom], tm);
-    var parA = narrow ? 0 : PARAL[iA], parB = narrow ? 0 : PARAL[iB];
+    /* MEDIDO mirando una figura a tamano grande: salia «peluda», con una
+       pua por particula. No era vibracion ni ruido: es el PARALAJE. Cada
+       particula esta en un estrato distinto, asi que recibe un desplazamiento
+       distinto, y el trazo que une dos consecutivas cruza de un estrato al
+       otro. En una nube de puntos no se ve; en un contorno cerrado se ve
+       como un peine. Mientras hay una figura puesta, el paralaje se apaga:
+       la figura es una sola lamina, no un campo con profundidad. */
+    var figura = selViva(tm);
+    var parA = (narrow || figura) ? 0 : PARAL[iA], parB = (narrow || figura) ? 0 : PARAL[iB];
+    /* MEDIDO, y era esto: con la figura puesta EN MITAD de una transición,
+       el lado A y el lado B la calculaban cada uno con SU encuadre y su
+       proporción, y después se mezclaban con un retardo distinto por
+       partícula. Resultado: la mitad de la materia en un sitio y la otra
+       mitad cincuenta píxeles más allá, unidas por un trazo. Eso eran las
+       púas. Una figura no es una transición: es una lámina, y se calcula
+       con UN encuadre, el que manda. */
+    if (figura) {
+      OBJ_G = tw >= 0.5 ? iB : iA;
+      frA = frB = MARCO[OBJ_G]; mirA = mirB = MIR[OBJ_G]; volA = volB = VOLTEA[OBJ_G];
+      depA = depB = frA.d;
+      /* Y el MISMO REPARTO. Cada capítulo usa una fracción distinta de la
+         materia, así que el lado A colocaba la partícula en un punto del
+         recorrido y el lado B en otro: con el retardo por partícula, cada
+         una acababa en un sitio intermedio distinto. Con la figura puesta
+         los dos lados reparten igual, y entonces los dos dan el mismo punto
+         y da igual por dónde vaya la mezcla. */
+      usoA = usoB = USO[OBJ_G];
+      invA = invB = 1 / usoA;
+      /* Y UN SOLO LADO. Aunque los dos lados calculen lo mismo, la mezcla
+         los combina con un retardo distinto por particula, y el objeto
+         `ob` se queda con datos viejos cuando a una particula no le toca
+         el lado B. Con la figura puesta se resuelve un unico lado —el que
+         manda— y la mezcla deja de existir: la figura sale igual de limpia
+         tanto en reposo como a mitad de un cambio de capitulo. */
+      if (tw >= 0.5) { soloB = true; soloA = false; }
+      else { soloA = true; soloB = false; }
+    }
 
     /* La luz que recorre el campo y roza lo que tiene delante. */
     var lz = (tm * 0.00007) % 1.6 - 0.3;
@@ -2310,7 +2488,10 @@
         if (ob) {
           var vida = (tm - SEL.t0) / SEL_MS;
           var alO = ease(cl(vida / 0.10)) * (1 - ease(cl((vida - 0.88) / 0.12)));
-          var cO = aPantalla(0.5, 0.815, fr, mir, vol);
+          /* ARRIBA, NO DEBAJO. Debajo de la figura no hay sitio: ahí
+             empieza el título del capítulo siguiente, y el rótulo se le
+             montaba encima. Encima de la figura el lienzo está vacío. */
+          var cO = aPantalla(0.5, 0.095, fr, mir, vol);
           var tamO = Math.max(11, Math.round(esc * 0.040));
           var nomO = EN ? ob.en : ob.et;
           var pista = EN ? 'tap anywhere to go back' : 'pulsa fuera para volver al plano';
@@ -2321,7 +2502,7 @@
           var anchoO = Math.max(anO, anP);
           /* La plaquita cubre las DOS líneas de una vez: dos rectángulos
              pegados dejan una costura visible entre ellos. */
-          ctx.fillStyle = 'rgba(5,7,14,' + (quieto * alO * 0.82).toFixed(3) + ')';
+          ctx.fillStyle = 'rgba(5,7,14,' + (quieto * alO * 0.92).toFixed(3) + ')';
           ctx.fillRect(cO.x - anchoO / 2 - 10, cO.y - tamO * 0.85, anchoO + 20, tamO * 2.55);
           ctx.font = '500 ' + tamO + 'px "JetBrains Mono", ui-monospace, monospace';
           ctx.fillStyle = rgba(COL[C_LUZ], (quieto * alO * 0.92).toFixed(3));
@@ -2526,19 +2707,32 @@
     }
     return dist < 0.04 ? mejor : -1;
   }
+  /* El nombre de la figura elegida, legible desde fuera: lo usan las
+     pruebas automaticas para comprobar que cada caja abre la suya. */
   function pulsaPlano(px, py) {
     var dom = tw >= 0.5 ? iB : iA;
     if (dom !== S_MENTE) return;
-    var k = cajaEn(px, py);
-    if (k < 0) return;
     var tm = performance.now();
+    var k = cajaEn(px, py);
+    if (k < 0) {
+      /* MEDIDO en su navegador: al pulsar FUERA la figura se quedaba puesta
+         hasta que se cansaba de esperar. Pulsar fuera es la forma universal
+         de decir «ya está», y ahora vuelve al plano en el momento. */
+      if (selViva(tm)) { SEL = { k: -1, t0: -1e9 }; window.__figura = null; }
+      return;
+    }
     /* Pulsar la misma otra vez la cierra: es lo que espera cualquiera. */
     SEL = (SEL.k === k && selViva(tm)) ? { k: -1, t0: -1e9 } : { k: k, t0: tm };
+    window.__figura = SEL.k >= 0 ? OBJ_ORDEN[SEL.k] : null;
   }
   window.addEventListener('click', function (e) {
     if (reduced) return;
     if (e.target.closest && e.target.closest('a,button,input,select,textarea,summary,[role="button"]')) return;
     pulsaPlano(e.clientX, e.clientY);
+  }, { passive: true });
+  /* Y con el teclado, como cualquier otra cosa que se abre. */
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && selViva(performance.now())) SEL = { k: -1, t0: -1e9 };
   }, { passive: true });
 
   /* ------------------------------------------------------------- BUCLE */

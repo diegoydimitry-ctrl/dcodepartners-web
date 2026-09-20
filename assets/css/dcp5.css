@@ -1158,3 +1158,131 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
 }
 .conexion-e.es-lista{ color:var(--v-a); border-color:rgba(67,224,255,.28); background:rgba(67,224,255,.07); }
 .conexion-e.es-estudio{ color:var(--amber,#f5a524); border-color:rgba(245,165,36,.28); background:rgba(245,165,36,.07); }
+
+/* ══════════ LOS PLANES, SEGUNDA VERSIÓN ══════════
+   Antes el panel plegado enseñaba nombre y precio. Un precio sin decir qué
+   te quita de encima no se compara con nada: se mira y se pasa. Ahora, sin
+   abrir nada, se ve LO QUE DEJAS DE HACER, que es lo que se compra. */
+
+/* Lo que cuesta esto en el mercado. Va antes de los precios. */
+.mercado{
+  margin-top:clamp(22px,3vw,34px); padding:clamp(20px,2.6vw,28px);
+  border:1px solid var(--v-edge); border-radius:14px; background:var(--v-panel);
+}
+.mercado-t{
+  margin:0 0 16px; font-family:var(--mono); font-size:0.6875rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--v-ink-3);
+}
+.mercado-l{ list-style:none; margin:0; padding:0; display:grid; gap:10px;
+  grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr)); }
+.mercado-l li{
+  display:flex; flex-direction:column; gap:3px; padding:14px 16px;
+  border:1px solid var(--v-edge-2); border-radius:11px; background:var(--v-panel-2);
+}
+.mercado-l b{ font-size:.82rem; font-weight:600; color:var(--v-ink-2); }
+.mercado-l span{ font-family:var(--serif); font-size:clamp(1.02rem,1.8vw,1.22rem); font-weight:650;
+  color:var(--ink); letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.mercado-l i{ font-style:normal; font-size:.75rem; line-height:1.5; color:var(--v-ink-3); }
+.mercado-l .es-nuestro{ border-color:rgba(91,140,255,.4); background:rgba(91,140,255,.08); }
+.mercado-l .es-nuestro span{ color:var(--v-a); }
+.mercado-p{ margin:16px 0 0; font-size:.86rem; line-height:1.6; color:var(--v-ink-2); }
+
+/* Lo que te quita de encima, visible con el plan plegado. */
+.plan-quita{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px; }
+.plan-quita li{
+  position:relative; padding-left:20px; font-size:.84rem; line-height:1.5; color:var(--v-ink-2);
+}
+.plan-quita li::before{
+  content:""; position:absolute; left:0; top:.42em; width:11px; height:11px; border-radius:50%;
+  background:rgba(64,200,140,.16); box-shadow:inset 0 0 0 1.4px rgba(64,200,140,.72);
+}
+@media (max-width:760px){ .plan-quita{ display:none; } }
+
+/* El botón de hablar, dentro de cada plan. */
+.plan-cta{
+  grid-column:1/-1; display:flex; flex-wrap:wrap; align-items:center; gap:14px;
+  margin-top:clamp(8px,1.4vw,14px); padding-top:clamp(18px,2.2vw,24px);
+  border-top:1px solid var(--v-edge-2);
+}
+.plan-cta-n{ font-size:.8rem; line-height:1.5; color:var(--v-ink-3); }
+
+/* ── LA APERTURA, SUAVE ──
+   Un <details> abre de golpe: el navegador quita el display:none y la página
+   da un salto. Esto lo anima por altura desde main.js, que pone --alto y la
+   clase es-abriendo. Sin JavaScript sigue abriendo, solo que de golpe: no se
+   pierde nada, se pierde la suavidad. */
+.plan-body, .accordion-panel{ will-change:auto; }
+details.plan.es-animando > .plan-body{
+  overflow:hidden;
+  height:var(--alto,auto);
+  transition:height .34s var(--ease), opacity .26s var(--ease);
+}
+details.plan.es-cerrando > .plan-body{ opacity:.35; }
+@media (prefers-reduced-motion: reduce){
+  details.plan.es-animando > .plan-body{ transition:none; }
+}
+
+/* La rejilla del resumen, rehecha. Con `auto 1fr auto` y seis hijos, el
+   tercer plan repartía las columnas distinto que los dos primeros: el
+   título se partía en dos líneas y el precio caía donde podía. Ahora hay
+   áreas con nombre, y los tres planes se leen en la misma posición. */
+.plan > summary{
+  grid-template-columns:auto minmax(0,1.02fr) minmax(0,1.3fr);
+  grid-template-areas:
+    "n cab quita"
+    "n precio mas";
+  align-items:start; row-gap:14px;
+}
+.plan-n{ grid-area:n; padding-top:.35em; }
+.plan-head{ grid-area:cab; }
+.plan-quita{ grid-area:quita; margin:0; }
+.plan-precio{ grid-area:precio; margin:0; align-self:end; }
+.plan-gente{ grid-area:precio; align-self:end; margin:0; transform:translateY(22px); }
+.plan-mas{ grid-area:mas; align-self:end; justify-self:end; }
+@media (max-width:900px){
+  .plan > summary{
+    grid-template-columns:auto minmax(0,1fr);
+    grid-template-areas:
+      "n cab"
+      "n precio"
+      "n mas";
+    row-gap:12px;
+  }
+  .plan-gente{ transform:none; grid-area:auto; }
+  .plan-precio{ grid-area:auto; }
+  .plan-mas{ grid-area:auto; justify-self:start; }
+}
+
+/* Los recuadros de esta sección llevan texto que hay que leer y la cinta de
+   partículas les pasa por encima. Aquí el fondo deja de ser translúcido. */
+#planes .plan, #planes .mercado{
+  background:rgba(13,17,34,.94);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  position:relative; z-index:2; isolation:isolate;
+}
+#planes .plan[open]{ background:rgba(16,21,40,.96); }
+.form-desde-plan{
+  margin:0 0 10px; padding:8px 12px; border-radius:8px;
+  border:1px solid rgba(91,140,255,.32); background:rgba(91,140,255,.09);
+  font-family:var(--mono); font-size:0.6875rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--v-a);
+}
+
+/* ══════════ AIRE ENTRE LO QUE SE LEE Y LO QUE SE PULSA ══════════
+   MEDIDO en 36 páginas × 3 anchos: las filas de botones de las bandas de
+   llamada quedaban a 0–1 px del párrafo de encima. No es que se pisaran:
+   es que se leían como un bloque, y un botón pegado a una frase no parece
+   un botón, parece el final de la frase. Aquí se les da su propio aire, y
+   el mismo en las tres páginas donde aparecen. */
+.hero4-ctas{
+  display:flex; flex-wrap:wrap; gap:13px;
+  margin-top:clamp(26px,3.2vw,38px);
+}
+.cta-band .hero4-ctas, .cta-band .stage-ctas{ margin-top:clamp(28px,3.4vw,40px); }
+.metodo-cta{ margin-top:clamp(30px,3.6vw,44px); }
+/* Un botón suelto detrás de un párrafo, en cualquier sección. */
+main p + .btn, main .lead + .btn, main ul + .btn{ margin-top:clamp(22px,2.8vw,32px); }
+@media (max-width:560px){
+  .hero4-ctas{ width:100%; }
+  .hero4-ctas > .btn{ flex:1 1 100%; justify-content:center; }
+}

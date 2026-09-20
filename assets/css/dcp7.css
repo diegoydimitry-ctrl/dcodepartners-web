@@ -1291,3 +1291,5 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
   .demo-movil-l{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 30px; }
   .demo-movil-b{ width:auto; margin-top:26px; }
 }
+/* La tercera línea de la intro es una nota, no un argumento: pesa menos. */
+.v6-intro--tenue{ font-size:.92em; color:var(--v-ink-3); }

@@ -521,9 +521,95 @@
     if (!d || d.tagName !== 'DETAILS' || !d.open) return;
     if (d.closest('.fdemo-app')) return;
     document.querySelectorAll('details[open]').forEach(function (o) {
-      if (o !== d && !o.closest('.fdemo-app') && !o.contains(d) && !d.contains(o)) o.open = false;
+      if (o !== d && !o.closest('.fdemo-app') && !o.contains(d) && !d.contains(o)) cierraSuave(o);
     });
   }, true);
+
+  /* ---------- Los desplegables, abriendo y cerrando con suavidad ----------
+     Un <details> abre de golpe: el navegador le quita el display:none al
+     cuerpo y la pagina pega un salto de trescientos pixeles. Aqui se anima la
+     ALTURA, que es lo unico que se puede animar de verdad: al abrir, de cero
+     a lo que mida; al cerrar, de lo que mida a cero, y solo entonces se
+     quita el atributo `open`.
+
+     Si no hay JavaScript, o si alguien tiene el movimiento reducido, sigue
+     abriendo igual. Se pierde la suavidad, no la funcion. */
+  var suavePrefiere = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function cuerpoDe(d) { return d.querySelector(':scope > .plan-body, :scope > *:not(summary)'); }
+  function abreSuave(d) {
+    var c = cuerpoDe(d); if (!c || suavePrefiere.matches) { d.open = true; return; }
+    d.open = true;
+    var alto = c.scrollHeight;
+    d.classList.add('es-animando');
+    c.style.setProperty('--alto', '0px');
+    /* Dos fotogramas: uno para que el navegador acepte la altura cero como
+       punto de partida, y el siguiente para animar hacia la altura real. */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        c.style.setProperty('--alto', alto + 'px');
+        setTimeout(function () {
+          d.classList.remove('es-animando');
+          c.style.removeProperty('--alto');
+        }, 360);
+      });
+    });
+  }
+  function cierraSuave(d) {
+    var c = cuerpoDe(d); if (!c || suavePrefiere.matches) { d.open = false; return; }
+    var alto = c.scrollHeight;
+    d.classList.add('es-animando', 'es-cerrando');
+    c.style.setProperty('--alto', alto + 'px');
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        c.style.setProperty('--alto', '0px');
+        setTimeout(function () {
+          d.open = false;
+          d.classList.remove('es-animando', 'es-cerrando');
+          c.style.removeProperty('--alto');
+        }, 340);
+      });
+    });
+  }
+  document.querySelectorAll('details.plan').forEach(function (d) {
+    var sum = d.querySelector(':scope > summary'); if (!sum) return;
+    sum.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (d.open) cierraSuave(d);
+      else {
+        document.querySelectorAll('details[open]').forEach(function (o) {
+          if (o !== d && !o.closest('.fdemo-app') && !o.contains(d) && !d.contains(o)) cierraSuave(o);
+        });
+        abreSuave(d);
+      }
+    });
+  });
+
+  /* ---------- Llegar a contacto desde un plan ----------
+     El boton de cada plan trae ?plan=finance-ia. Sin esto, la persona llega
+     al formulario y tiene que volver a explicar de que venia hablando; con
+     esto, el mensaje ya trae escrito el plan por el que pregunta y lo unico
+     que hace falta anadir es lo suyo. */
+  (function () {
+    var plan = new URLSearchParams(location.search).get('plan');
+    if (!plan) return;
+    var NOMBRES = {
+      'finance': 'Finance',
+      'finance-ia': 'Finance con inteligencia',
+      'finance-medida': 'Finance a medida'
+    };
+    var nombre = NOMBRES[plan];
+    if (!nombre) return;
+    var caja = document.querySelector('textarea[name="mensaje"]');
+    if (!caja || caja.value.trim()) return;
+    var en = document.documentElement.lang === 'en';
+    caja.value = en
+      ? 'Hi — I am interested in the ' + nombre + ' plan. I would like to know whether it fits what we do.\n\n'
+      : 'Hola: me interesa el plan ' + nombre + '. Me gustaría saber si encaja con lo que hacemos.\n\n';
+    var aviso = document.createElement('p');
+    aviso.className = 'form-desde-plan';
+    aviso.textContent = en ? 'You arrived from the ' + nombre + ' plan.' : 'Vienes del plan ' + nombre + '.';
+    if (caja.parentNode) caja.parentNode.insertBefore(aviso, caja);
+  })();
 
   /* ---------- Generic accordion (Método, FAQ, Garantías) ---------- */
   document.querySelectorAll('[data-accordion]').forEach(function (list) {
