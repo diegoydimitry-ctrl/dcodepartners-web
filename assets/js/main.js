@@ -509,6 +509,22 @@
     });
   }
 
+
+  /* ---------- Desplegables <details>: abrir uno cierra el anterior ----------
+     Los planes de Finance son <details> nativos —sin JavaScript se abren, se
+     recorren con el teclado y el buscador del navegador encuentra dentro—.
+     Lo único que les falta es no acumularse: tres abiertos son tres metros de
+     página. Se cierran entre ellos con una línea, y el que vive dentro de la
+     demo financiera se queda fuera: allí manda su propio código. */
+  document.addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (!d || d.tagName !== 'DETAILS' || !d.open) return;
+    if (d.closest('.fdemo-app')) return;
+    document.querySelectorAll('details[open]').forEach(function (o) {
+      if (o !== d && !o.closest('.fdemo-app') && !o.contains(d) && !d.contains(o)) o.open = false;
+    });
+  }, true);
+
   /* ---------- Generic accordion (Método, FAQ, Garantías) ---------- */
   document.querySelectorAll('[data-accordion]').forEach(function (list) {
     var singleOpen = list.dataset.accordion !== 'multi';
@@ -518,7 +534,10 @@
       trigger.addEventListener('click', function () {
         var isOpen = item.classList.contains('open');
         if (singleOpen) {
-          list.querySelectorAll(':scope > .accordion-item').forEach(function (r) {
+          /* Contra la PÁGINA, no contra la lista. En las preguntas frecuentes
+             hay cinco categorías y cerrar solo dentro de la suya dejaba cinco
+             respuestas abiertas a la vez. */
+          document.querySelectorAll('.accordion-item.open').forEach(function (r) {
             r.classList.remove('open');
             var t = r.querySelector('.accordion-trigger');
             if (t) t.setAttribute('aria-expanded', 'false');

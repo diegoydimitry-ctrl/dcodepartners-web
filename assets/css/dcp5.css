@@ -816,6 +816,11 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .case5{ grid-template-columns:1fr; gap:18px; }
   .case5-side{ position:static; display:flex; align-items:center; gap:14px; }
   .case5-tag{ margin-top:0; }
+  /* `body.v7 .case5 > div` fija position:relative con más peso que el
+     position:static de arriba, así que el `top:110px` del modo pegajoso
+     seguía aplicándose y la ficha del caso caía 110 px encima del texto
+     del caso anterior. Aquí se anula el desplazamiento, no la posición. */
+  body.v7 .case5 > .case5-side{ position:relative; top:auto; }
 }
 
 /* ============================== 24. TRANSFORMACIÓN (antes → después) */
@@ -1115,3 +1120,41 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .plan-body{ grid-template-columns:1fr; }
   .plan-tec{ border-left:none; border-top:1px solid var(--v-edge); padding-left:0; padding-top:18px; }
 }
+
+/* ---- el precio dentro del plan plegado ---- */
+.plan-precio{
+  margin:10px 0 0; display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 8px;
+  font-size:.9rem; color:var(--v-ink-2);
+}
+.plan-precio b{
+  font-family:var(--serif); font-size:clamp(1.05rem,1.6vw,1.24rem);
+  font-weight:600; color:var(--ink); letter-spacing:-.01em;
+}
+.plan-precio span{ font-size:.82rem; color:var(--v-ink-3); }
+.plan-precio i{ font-style:normal; color:var(--v-ink-3); padding:0 2px; }
+.plan-gente{ margin:4px 0 0; font-family:var(--mono); font-size:0.6875rem; letter-spacing:.1em; text-transform:uppercase; color:var(--v-ink-3); }
+
+/* ---- CON QUÉ SE CONECTA ----
+   Seis tarjetas y una etiqueta de estado en cada una. La etiqueta es lo que
+   convierte una lista de logotipos en información: dice cuál está hecha y
+   cuál hay que mirar. */
+.conexiones{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));
+  gap:clamp(14px,1.8vw,20px); margin-top:clamp(26px,3.4vw,40px);
+}
+.conexion{
+  display:flex; flex-direction:column; gap:8px;
+  padding:clamp(18px,2.2vw,24px);
+  border:1px solid var(--v-edge); border-radius:14px; background:var(--v-panel);
+  transition:border-color .3s var(--ease);
+}
+.conexion:hover{ border-color:var(--v-edge); background:var(--v-panel-2); }
+.conexion b{ font-family:var(--serif); font-size:1rem; font-weight:600; color:var(--ink); letter-spacing:-.01em; }
+.conexion span{ font-size:.88rem; line-height:1.6; color:var(--v-ink-2); }
+.conexion-e{
+  align-self:flex-start; margin-top:4px; font-style:normal;
+  font-family:var(--mono); font-size:0.625rem; letter-spacing:.12em; text-transform:uppercase;
+  padding:4px 9px; border-radius:999px; border:1px solid transparent;
+}
+.conexion-e.es-lista{ color:var(--v-a); border-color:rgba(67,224,255,.28); background:rgba(67,224,255,.07); }
+.conexion-e.es-estudio{ color:var(--amber,#f5a524); border-color:rgba(245,165,36,.28); background:rgba(245,165,36,.07); }

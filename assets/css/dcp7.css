@@ -1233,3 +1233,61 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
 }
 .v7-planes-ya b{ color:var(--ink); font-weight:600; }
 .v7-planes-cta{ margin:22px 0 0; }
+
+/* ---- LA DEMO EN UN TELÉFONO ----
+   No se monta (ver dcp5.js): en 390 px un panel financiero enseña algo peor
+   de lo que es. Esto es lo que va en su sitio, y es lo contrario de un
+   cartel de «no disponible»: la misma información contada como se lee en un
+   móvil, y el botón para abrirla donde se puede usar. */
+.demo-movil{ display:none; }
+@media (max-width:900px){
+  .demo-host .fdemo-app{ display:none; }
+  .demo-movil{
+    display:block; padding:clamp(20px,5vw,28px);
+    border:1px solid var(--v-edge); border-radius:16px;
+    /* MEDIDO en tableta a 820 px: con el --v-panel normal (58 % de opacidad)
+       la cinta de partículas cruza por encima de las líneas y las parte.
+       En el resto del sitio da igual, aquí es la ficha que se lee. */
+    background:rgba(13,17,34,.94);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    position:relative; z-index:2; isolation:isolate;
+  }
+  .demo-movil-k{
+    margin:0; font-family:var(--mono); font-size:0.6875rem;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--v-ink-3);
+  }
+  .demo-movil-t{
+    margin:10px 0 0; font-family:var(--serif); font-size:clamp(1.18rem,5vw,1.42rem);
+    font-weight:600; letter-spacing:-.02em; line-height:1.22; color:var(--ink);
+  }
+  .demo-movil-p{ margin:12px 0 0; font-size:.94rem; line-height:1.65; color:var(--v-ink-2); }
+  .demo-movil-l{ list-style:none; margin:20px 0 0; padding:0; display:flex; flex-direction:column; gap:16px; }
+  .demo-movil-l li{ display:flex; flex-direction:column; gap:4px; padding-left:16px; position:relative; }
+  .demo-movil-l li::before{
+    content:""; position:absolute; left:0; top:.55em;
+    width:6px; height:6px; border-radius:50%; background:var(--v-a); opacity:.7;
+  }
+  .demo-movil-l b{ font-size:.95rem; font-weight:600; color:var(--ink); }
+  .demo-movil-l span{ font-size:.88rem; line-height:1.6; color:var(--v-ink-2); }
+  .demo-movil-b{ margin-top:22px; width:100%; justify-content:center; }
+  /* El aviso de la demo tampoco pinta nada si no hay demo. */
+  .demo-host[data-fdemo-movil] .demo-aviso{ display:none; }
+  /* MEDIDO en /sistema-financiero a 393 px: el hueco donde iba la demo
+     seguía midiendo 560 px de alto y quedaba una caja vacía entre el aviso
+     y el texto. Si no se monta nada, no ocupa nada. */
+  .demo-host[data-fdemo-movil] [data-fdemo-mount]{ display:none; }
+  .demo-host[data-fdemo-movil]{ min-height:0; padding:0; border:0; background:none; }
+}
+
+/* ── LA TABLETA NO ES UN MÓVIL GRANDE ──────────────────────────────────
+   Entre 620 y 900 px (iPad mini, Air y Pro en vertical) no se monta la
+   aplicación —son las mismas tablas de ocho columnas— pero la ficha de
+   lectura sí tiene sitio para respirar: dos columnas y una medida que no
+   deja líneas de 95 caracteres. */
+@media (min-width:620px) and (max-width:900px){
+  .demo-movil{ padding:clamp(26px,3.4vw,38px); }
+  .demo-movil-t{ font-size:clamp(1.34rem,2.7vw,1.66rem); }
+  .demo-movil-p{ max-width:62ch; font-size:1rem; }
+  .demo-movil-l{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 30px; }
+  .demo-movil-b{ width:auto; margin-top:26px; }
+}

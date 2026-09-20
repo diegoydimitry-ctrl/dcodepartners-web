@@ -467,6 +467,15 @@
     var hosts = Array.prototype.slice.call(document.querySelectorAll('[data-fdemo-lazy]'));
     if (!hosts.length) return;
 
+    /* EN UN TELÉFONO NO SE MONTA. Ver la nota larga de arriba: un panel
+       financiero apretado en 390 px enseña algo peor que no enseñar nada, y
+       además cuesta 228 KB de JavaScript en la peor conexión. El bloque de
+       sustitución ya está en el HTML; aquí solo se marca el anfitrión. */
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      hosts.forEach(function (h) { h.setAttribute('data-fdemo-movil', '1'); });
+      return;
+    }
+
     function cargar(host) {
       if (host.getAttribute('data-fdemo-listo')) return;
       host.setAttribute('data-fdemo-listo', '1');

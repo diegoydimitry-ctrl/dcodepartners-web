@@ -827,6 +827,139 @@
      marca al final del capítulo, y si lo pillas debajo de la lente, responde.
      Eso es exactamente lo que dice el texto de al lado. */
 
+
+  /* ══════════════ LOS NUEVE OBJETOS ══════════════
+
+     Contornos, en coordenadas 0..1 con la y hacia abajo. Cada entrada es una
+     lista de TRAZOS y cada trazo una polilínea: la materia los recorre en
+     orden y el enlace los cierra. Están dibujados con los trazos justos —los
+     de una servilleta— porque un icono con detalle, hecho de partículas y a
+     media pantalla, se convierte en una mancha.
+
+     El reparto de partículas es proporcional a la longitud de cada trazo: si
+     no, el trazo largo sale despoblado y el corto, apelmazado. */
+  var OBJ = {
+    ventas: { et: 'VENTAS', en: 'SALES', tr: [
+      [[0.10,0.16],[0.90,0.16],[0.58,0.52],[0.58,0.90],[0.42,0.82],[0.42,0.52],[0.10,0.16]],
+      [[0.30,0.30],[0.70,0.30]]
+    ]},
+    presupuestos: { et: 'PRESUPUESTOS', en: 'QUOTES', tr: [
+      [[0.26,0.08],[0.74,0.08],[0.74,0.92],[0.26,0.92],[0.26,0.08]],
+      [[0.34,0.17],[0.66,0.17],[0.66,0.31],[0.34,0.31],[0.34,0.17]],
+      [[0.34,0.42],[0.44,0.42]],[[0.48,0.42],[0.58,0.42]],[[0.62,0.42],[0.66,0.42]],
+      [[0.34,0.56],[0.44,0.56]],[[0.48,0.56],[0.58,0.56]],[[0.62,0.56],[0.66,0.56]],
+      [[0.34,0.70],[0.44,0.70]],[[0.48,0.70],[0.58,0.70]],[[0.62,0.70],[0.66,0.82]]
+    ]},
+    proyectos: { et: 'PROYECTOS', en: 'PROJECTS', tr: [
+      [[0.08,0.16],[0.92,0.16],[0.92,0.92],[0.08,0.92],[0.08,0.16]],
+      [[0.08,0.32],[0.92,0.32]],
+      [[0.26,0.08],[0.26,0.24]],[[0.74,0.08],[0.74,0.24]],
+      [[0.18,0.46],[0.56,0.46]],[[0.30,0.62],[0.78,0.62]],[[0.22,0.78],[0.50,0.78]]
+    ]},
+    clientes: { et: 'CLIENTES', en: 'CLIENTS', tr: [
+      [[0.50,0.10],[0.62,0.16],[0.66,0.28],[0.62,0.40],[0.50,0.46],[0.38,0.40],[0.34,0.28],[0.38,0.16],[0.50,0.10]],
+      [[0.14,0.90],[0.16,0.74],[0.26,0.62],[0.40,0.55],[0.60,0.55],[0.74,0.62],[0.84,0.74],[0.86,0.90]]
+    ]},
+    empresa: { et: 'TU EMPRESA', en: 'YOUR COMPANY', tr: [
+      [[0.16,0.92],[0.16,0.26],[0.50,0.08],[0.84,0.26],[0.84,0.92],[0.16,0.92]],
+      [[0.28,0.38],[0.40,0.38],[0.40,0.50],[0.28,0.50],[0.28,0.38]],
+      [[0.60,0.38],[0.72,0.38],[0.72,0.50],[0.60,0.50],[0.60,0.38]],
+      [[0.28,0.60],[0.40,0.60],[0.40,0.72],[0.28,0.72],[0.28,0.60]],
+      [[0.44,0.92],[0.44,0.66],[0.56,0.66],[0.56,0.92]]
+    ]},
+    proveedores: { et: 'PROVEEDORES', en: 'SUPPLIERS', tr: [
+      [[0.06,0.26],[0.58,0.26],[0.58,0.70],[0.06,0.70],[0.06,0.26]],
+      [[0.58,0.40],[0.76,0.40],[0.92,0.54],[0.92,0.70],[0.58,0.70]],
+      [[0.06,0.70],[0.92,0.70]],
+      [[0.26,0.70],[0.30,0.78],[0.26,0.86],[0.18,0.86],[0.14,0.78],[0.18,0.70]],
+      [[0.78,0.70],[0.82,0.78],[0.78,0.86],[0.70,0.86],[0.66,0.78],[0.70,0.70]]
+    ]},
+    facturacion: { et: 'FACTURACIÓN', en: 'INVOICING', tr: [
+      [[0.24,0.06],[0.62,0.06],[0.78,0.22],[0.78,0.94],[0.24,0.94],[0.24,0.06]],
+      [[0.62,0.06],[0.62,0.22],[0.78,0.22]],
+      [[0.32,0.36],[0.62,0.36]],[[0.32,0.48],[0.62,0.48]],[[0.32,0.60],[0.52,0.60]],
+      [[0.32,0.76],[0.70,0.76]],[[0.32,0.82],[0.70,0.82]]
+    ]},
+    cobros: { et: 'COBROS', en: 'COLLECTIONS', tr: [
+      [[0.50,0.06],[0.70,0.12],[0.84,0.28],[0.88,0.50],[0.84,0.72],[0.70,0.88],[0.50,0.94],
+       [0.30,0.88],[0.16,0.72],[0.12,0.50],[0.16,0.28],[0.30,0.12],[0.50,0.06]],
+      [[0.64,0.30],[0.52,0.26],[0.42,0.32],[0.38,0.44],[0.38,0.56],[0.42,0.68],[0.52,0.74],[0.64,0.70]],
+      [[0.32,0.44],[0.60,0.44]],[[0.32,0.56],[0.60,0.56]]
+    ]},
+    avisos: { et: 'AVISOS', en: 'ALERTS', tr: [
+      [[0.50,0.06],[0.50,0.14]],
+      [[0.50,0.14],[0.66,0.20],[0.74,0.36],[0.74,0.60],[0.84,0.74],[0.16,0.74],[0.26,0.60],[0.26,0.36],[0.34,0.20],[0.50,0.14]],
+      [[0.42,0.80],[0.44,0.88],[0.50,0.92],[0.56,0.88],[0.58,0.80]]
+    ]}
+  };
+  var OBJ_ORDEN = ['ventas','presupuestos','proyectos','clientes','empresa','proveedores','facturacion','cobros','avisos'];
+
+  /* Qué caja está elegida y desde cuándo. Se vuelve sola a los siete
+     segundos: lo bastante para mirarla, no tanto como para que parezca que
+     la figura se ha quedado colgada. */
+  var SEL = { k: -1, t0: -1e9 };
+  var SEL_MS = 7000;
+  function selViva(tm) { return SEL.k >= 0 && (tm - SEL.t0) < SEL_MS; }
+
+  /* La longitud de cada trazo, precalculada: hace falta para repartir la
+     materia en proporción y se calcula una vez, no sesenta veces por segundo. */
+  (function () {
+    for (var k in OBJ) {
+      var o = OBJ[k], L = [], tot = 0;
+      for (var i = 0; i < o.tr.length; i++) {
+        var p = o.tr[i], d = 0;
+        for (var j = 1; j < p.length; j++) {
+          d += Math.sqrt(Math.pow(p[j][0] - p[j-1][0], 2) + Math.pow(p[j][1] - p[j-1][1], 2));
+        }
+        L.push(d); tot += d;
+      }
+      o.L = L; o.tot = tot || 1;
+    }
+  })();
+
+  /* Dibuja un objeto: recorre sus trazos repartiendo la materia por longitud
+     y devuelve el punto en 0..1. `u` es la posición de la partícula en el
+     recorrido completo. */
+  function puntoObjeto(o, u) {
+    var meta = u * o.tot, acc = 0;
+    for (var i = 0; i < o.tr.length; i++) {
+      if (acc + o.L[i] >= meta || i === o.tr.length - 1) {
+        var d = meta - acc, p = o.tr[i], r = 0;
+        for (var j = 1; j < p.length; j++) {
+          var s = Math.sqrt(Math.pow(p[j][0] - p[j-1][0], 2) + Math.pow(p[j][1] - p[j-1][1], 2));
+          if (r + s >= d || j === p.length - 1) {
+            var f = s > 0 ? Math.min(1, (d - r) / s) : 0;
+            return { x: p[j-1][0] + (p[j][0] - p[j-1][0]) * f,
+                     y: p[j-1][1] + (p[j][1] - p[j-1][1]) * f, g: i };
+          }
+          r += s;
+        }
+      }
+      acc += o.L[i];
+    }
+    return { x: 0.5, y: 0.5, g: 0 };
+  }
+
+  /* El objeto ocupa la figura entera, centrado y con un margen: es lo único
+     que hay en pantalla mientras dura, así que no tiene por qué encogerse
+     dentro de la caja de la que ha salido. */
+  function F_OBJETO(i, u, g, G, o, tm, ins) {
+    var ar = (MARCO[g].h * H) / (MARCO[g].w * W);
+    var ob = OBJ[OBJ_ORDEN[SEL.k]];
+    if (!ob) { o.a = 0; o.g = -1; return; }
+    var vida = (tm - SEL.t0) / SEL_MS;
+    var entra = ease(cl(vida / 0.10));
+    var sale = 1 - ease(cl((vida - 0.88) / 0.12));
+    var p = puntoObjeto(ob, u);
+    var esc = 0.66;
+    o.nx = 0.5 + (p.x - 0.5) * esc * ar;
+    o.ny = 0.5 + (p.y - 0.5) * esc;
+    o.a = entra * sale * (0.24 + 0.10 * Math.sin(tm * 0.0012 + u * 6));
+    o.c = C_FLUJO;
+    o.g = 1200 + p.g;
+    o.r = 1.05;
+  }
+
   /* ══════════════ LA DERIVA — materia sin figura ══════════════
 
      No dibuja nada, y ese es el encargo. Cada partícula se queda cerca del
@@ -866,7 +999,7 @@
     var vuelo = narrow ? 0.56 : 0.92;
     var lx = enc(0.5 + (MFX - 0.5) * vuelo, narrow ? 0.24 : 0.17, narrow ? 0.76 : 0.83);
     var ly = enc(0.5 + (MFY - 0.5) * vuelo, narrow ? 0.22 : 0.15, narrow ? 0.78 : 0.85);
-    var R  = (narrow ? 0.148 : 0.175) * (0.62 + 0.38 * nace);
+    var R  = (narrow ? 0.165 : 0.200) * (0.62 + 0.38 * nace);
 
     var CD = small ? 11 : narrow ? 13 : 16;
     var FD = small ? 8  : narrow ? 10 : 12;
@@ -943,6 +1076,10 @@
      encienden sus cotas y se encienden las rutas que salen de ella. Eso es
      lo que hace cualquiera delante de un plano. */
   function F_PLANO(i, u, g, G, o, tm, ins) {
+    /* Si hay una caja elegida, el plano se aparta: la materia entera se
+       va a formar el objeto de esa caja. No conviven los dos porque un
+       plano detrás de un icono es ruido detrás de un mensaje. */
+    if (selViva(tm)) return F_OBJETO(i, u, g, G, o, tm, ins);
     var gr = GR.plano, ar = (MARCO[g].h * H) / (MARCO[g].w * W);
     var papel = ease(cl(ins / 0.14));
     var caen  = ease(cl((ins - 0.10) / 0.34));
@@ -2125,22 +2262,24 @@
      apuntan mirando cómo trabaja una empresa de verdad: qué se hace a mano,
      cuántas veces, y qué cuesta. */
   var LUPA_AP = EN ? [
-    { c: 0.16, f: 0.12, a: 'ORDER 4812',       b: 'copied by hand · 3 programs' },
-    { c: 0.62, f: 0.10, a: 'MONDAY 09:10',     b: '20 min · nobody decided to pay for it' },
-    { c: 0.86, f: 0.30, a: 'INVOICE 2026-014', b: 'overdue 47 days · nobody chasing' },
-    { c: 0.40, f: 0.44, a: 'CLIENT ASKS',      b: 'answer assembled from three places' },
-    { c: 0.10, f: 0.62, a: 'QUOTE 311',        b: 'sent · never followed up' },
-    { c: 0.70, f: 0.70, a: 'EXPENSE 8821',     b: 'receipt in somebody\u2019s inbox' },
-    { c: 0.34, f: 0.88, a: 'FRIDAY 18:40',     b: 'the figure asked for by message' }
+    { c: 0.16, f: 0.12, a: 'ORDER 4812', b: '22 times a month' },
+    { c: 0.62, f: 0.10, a: 'MONDAY, 09:10', b: 'the report \u00b7 4 h/month' },
+    { c: 0.86, f: 0.30, a: 'INVOICE 2026-014', b: 'overdue 47 days' },
+    { c: 0.40, f: 0.44, a: 'A CLIENT ASKS', b: '3 screens \u00b7 11 min' },
+    { c: 0.10, f: 0.62, a: 'QUOTE 311', b: 'no follow-up' },
+    { c: 0.70, f: 0.70, a: 'EXPENSE 8821', b: 'not in the books' },
+    { c: 0.34, f: 0.88, a: 'FRIDAY, 18:40', b: 'figure sent by chat' }
   ] : [
-    { c: 0.16, f: 0.12, a: 'PEDIDO 4812',      b: 'copiado a mano · 3 programas' },
-    { c: 0.62, f: 0.10, a: 'LUNES 09:10',      b: '20 min · nadie decidió pagarlo' },
-    { c: 0.86, f: 0.30, a: 'FACTURA 2026-014', b: 'vencida 47 días · nadie reclama' },
-    { c: 0.40, f: 0.44, a: 'UN CLIENTE PREGUNTA', b: 'respuesta montada en tres sitios' },
-    { c: 0.10, f: 0.62, a: 'PRESUPUESTO 311',  b: 'enviado · sin seguimiento' },
-    { c: 0.70, f: 0.70, a: 'GASTO 8821',       b: 'justificante en el correo de alguien' },
-    { c: 0.34, f: 0.88, a: 'VIERNES 18:40',    b: 'el número pedido por mensaje' }
+    { c: 0.16, f: 0.12, a: 'PEDIDO 4812', b: '22 veces al mes' },
+    { c: 0.62, f: 0.10, a: 'LUNES, 09:10', b: 'el informe \u00b7 4 h/mes' },
+    { c: 0.86, f: 0.30, a: 'FACTURA 2026-014', b: 'vencida 47 d\u00edas' },
+    { c: 0.40, f: 0.44, a: 'PREGUNTA UN CLIENTE', b: '3 pantallas \u00b7 11 min' },
+    { c: 0.10, f: 0.62, a: 'PRESUPUESTO 311', b: 'sin seguimiento' },
+    { c: 0.70, f: 0.70, a: 'GASTO 8821', b: 'sin contabilizar' },
+    { c: 0.34, f: 0.88, a: 'VIERNES, 18:40', b: 'el dato, por chat' }
   ];
+
+
 
   var _rt = { x: 0, y: 0 }, _ro = { nx: 0, ny: 0 };
   function aPantalla(nx, ny, fr, mir, vol) {
@@ -2153,7 +2292,7 @@
     /* Solo en el capítulo que manda, y solo cuando está asentado: un rótulo
        nítido sobre una figura a medio formar delata que son dos capas. */
     var d = tw >= 0.5 ? iB : iA;
-    if (d !== S_MENTE && d !== S_LUPA) return;
+    if (d !== S_MENTE && d !== S_LUPA && d !== S_CURVA) return;
     var quieto = 1 - Math.sin(tw * 3.14159265);
     var ins = inside(d);
     if (quieto < 0.04) return;
@@ -2164,9 +2303,35 @@
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 
     if (d === S_MENTE) {
-      /* EL PLANO. La caja central lleva el nombre de la empresa y va más
-         grande: es la pieza que las demás rodean, y en un plano el tamaño de
-         la rotulación es jerarquía, no decoración. */
+      /* CON UNA CAJA ELEGIDA no hay plano: hay un objeto, y su nombre debajo.
+         Un icono sin nombre obliga a adivinar, y adivinar no es leer. */
+      if (selViva(tm)) {
+        var ob = OBJ[OBJ_ORDEN[SEL.k]];
+        if (ob) {
+          var vida = (tm - SEL.t0) / SEL_MS;
+          var alO = ease(cl(vida / 0.10)) * (1 - ease(cl((vida - 0.88) / 0.12)));
+          var cO = aPantalla(0.5, 0.815, fr, mir, vol);
+          var tamO = Math.max(11, Math.round(esc * 0.040));
+          var nomO = EN ? ob.en : ob.et;
+          var pista = EN ? 'tap anywhere to go back' : 'pulsa fuera para volver al plano';
+          ctx.font = '500 ' + tamO + 'px "JetBrains Mono", ui-monospace, monospace';
+          var anO = ctx.measureText(nomO).width;
+          ctx.font = '400 ' + Math.max(9, Math.round(tamO * 0.62)) + 'px "JetBrains Mono", ui-monospace, monospace';
+          var anP = ctx.measureText(pista).width;
+          var anchoO = Math.max(anO, anP);
+          /* La plaquita cubre las DOS líneas de una vez: dos rectángulos
+             pegados dejan una costura visible entre ellos. */
+          ctx.fillStyle = 'rgba(5,7,14,' + (quieto * alO * 0.82).toFixed(3) + ')';
+          ctx.fillRect(cO.x - anchoO / 2 - 10, cO.y - tamO * 0.85, anchoO + 20, tamO * 2.55);
+          ctx.font = '500 ' + tamO + 'px "JetBrains Mono", ui-monospace, monospace';
+          ctx.fillStyle = rgba(COL[C_LUZ], (quieto * alO * 0.92).toFixed(3));
+          ctx.fillText(nomO, cO.x, cO.y);
+          ctx.font = '400 ' + Math.max(9, Math.round(tamO * 0.62)) + 'px "JetBrains Mono", ui-monospace, monospace';
+          ctx.fillStyle = rgba(COL[C_BRUMA], (quieto * alO * 0.62).toFixed(3));
+          ctx.fillText(pista, cO.x, cO.y + tamO * 1.35);
+        }
+        return;
+      }
       var gr = GR.plano, caen = ease(cl((ins - 0.10) / 0.34));
       var selP = -1, mejorP = 1e9;
       for (var mi = 0; mi < gr.m.length; mi++) {
@@ -2200,7 +2365,10 @@
                              (quieto * lleg * (centro ? 0.92 : (sel ? 0.82 : 0.48))).toFixed(3));
         ctx.fillText(PLANO_ET[k], px2.x, px2.y);
         if (centro) {
-          var sub = EN ? 'what it already does' : 'lo que ya hace';
+          /* La pista va bajo la caja central porque es la que todo el mundo
+             mira primero. Una figura en la que se puede pulsar y no lo
+             parece es una figura en la que nadie pulsa. */
+          var sub = EN ? 'tap a box' : 'pulsa un recuadro';
           ctx.font = '400 ' + Math.max(8, Math.round(tam * 0.62)) + 'px "JetBrains Mono", ui-monospace, monospace';
           var anS = ctx.measureText(sub).width;
           ctx.fillStyle = 'rgba(5,7,14,' + (quieto * lleg * 0.70).toFixed(3) + ')';
@@ -2209,6 +2377,60 @@
           ctx.fillText(sub, px2.x, px2.y + tam * 1.15);
         }
       }
+      return;
+    }
+
+    if (d === S_CURVA) {
+      /* LOS RÓTULOS DE LA GRÁFICA. La escala en el eje, los periodos debajo,
+         la leyenda y el título. Es lo que separa unos palotes de una gráfica:
+         sin cifras en el eje, un dibujo de barras no informa de nada. */
+      var ejes = ease(cl(ins / 0.13)), al = quieto * ejes;
+      if (al < 0.05) return;
+      var NB = small ? 5 : narrow ? 6 : 7;
+      var X0 = 0.115, XW = 0.845, Y0 = 0.855, PASO = XW / NB;
+      var tamE = Math.max(9, Math.round(esc * 0.017));
+      ctx.font = '400 ' + tamE + 'px "JetBrains Mono", ui-monospace, monospace';
+
+      /* LA ESCALA. El tope es redondo a propósito: una escala que acaba en
+         «47,3 k» delata que la ha puesto una máquina. */
+      var TOPE = 40;
+      ctx.textAlign = 'right';
+      ctx.fillStyle = rgba(COL[C_BRUMA], (al * 0.62).toFixed(3));
+      for (var e = 0; e <= 4; e++) {
+        var pe = aPantalla(X0 - 0.035, Y0 - e * 0.185, fr, mir, vol);
+        ctx.fillText(Math.round((TOPE / 4) * e) + (e === 4 ? ' k€' : ''), pe.x, pe.y);
+      }
+
+      /* LOS PERIODOS. Doce meses no caben en un móvil: se pintan los que
+         hay barras, que son cinco, seis o siete según el ancho. */
+      var MESES_ET = EN ? ['Q1','Q2','Q3','Q4','Q1','Q2','Q3']
+                        : ['1T','2T','3T','4T','1T','2T','3T'];
+      var ANYO = EN ? ['25','25','25','25','26','26','26'] : ['25','25','25','25','26','26','26'];
+      ctx.textAlign = 'center';
+      for (var k = 0; k < NB; k++) {
+        var pk = aPantalla(X0 + (k + 0.5) * PASO, Y0 + 0.055, fr, mir, vol);
+        ctx.fillStyle = rgba(COL[C_BRUMA], (al * 0.62).toFixed(3));
+        ctx.fillText(MESES_ET[k] + ' ' + ANYO[k], pk.x, pk.y);
+      }
+
+      /* LA LEYENDA y el título de la serie. */
+      var pt = aPantalla(X0 - 0.035, 0.055, fr, mir, vol);
+      ctx.textAlign = 'left';
+      ctx.font = '500 ' + Math.round(tamE * 1.15) + 'px "JetBrains Mono", ui-monospace, monospace';
+      ctx.fillStyle = rgba(COL[C_LUZ], (al * 0.80).toFixed(3));
+      var tit = EN ? 'WHAT THE SYSTEM HANDLES' : 'LO QUE PASA POR EL SISTEMA';
+      ctx.fillText(tit, pt.x, pt.y);
+      var anT = ctx.measureText(tit).width;
+      /* La leyenda, a la derecha del título y en su misma línea. Debajo caía
+         justo en la marca de arriba de la escala y se montaban las dos. */
+      ctx.font = '400 ' + tamE + 'px "JetBrains Mono", ui-monospace, monospace';
+      var lv = EN ? '\u25a0 volume' : '\u25a0 volumen';
+      var lt = EN ? '\u2014 trend' : '\u2014 tendencia';
+      ctx.fillStyle = rgba(COL[C_DATO], (al * 0.78).toFixed(3));
+      ctx.fillText(lv, pt.x + anT + 22, pt.y);
+      ctx.fillStyle = rgba(COL[C_OK], (al * 0.78).toFixed(3));
+      ctx.fillText(lt, pt.x + anT + 22 + ctx.measureText(lv).width + 16, pt.y);
+      ctx.textAlign = 'center';
       return;
     }
 
@@ -2221,7 +2443,7 @@
     var vuelo = narrow ? 0.56 : 0.92;
     var lx = enc(0.5 + (MFX - 0.5) * vuelo, narrow ? 0.24 : 0.17, narrow ? 0.76 : 0.83);
     var ly = enc(0.5 + (MFY - 0.5) * vuelo, narrow ? 0.22 : 0.15, narrow ? 0.78 : 0.85);
-    var R = (narrow ? 0.148 : 0.175) * (0.62 + 0.38 * nace);
+    var R = (narrow ? 0.165 : 0.200) * (0.62 + 0.38 * nace);
 
     /* RECORTADO AL CRISTAL. Un apunte que se sale del aro delataría que el
        texto está pintado encima y no visto a través de la lente. Con el
@@ -2252,16 +2474,72 @@
       var vis = cl(1 - dist / (R * 1.18));
       var al = quieto * nace * vis;
       if (al < 0.04) continue;
-      var t1 = Math.max(10, Math.round(esc * (narrow ? 0.042 : 0.026) * (0.74 + 0.26 * dentro)));
+      var t1 = Math.max(10, Math.round(esc * (narrow ? 0.034 : 0.020) * (0.80 + 0.20 * dentro)));
+      ctx.font = '500 ' + t1 + 'px "JetBrains Mono", ui-monospace, monospace';
+      var an1 = ctx.measureText(ap.a).width;
+      ctx.font = '400 ' + Math.max(8, Math.round(t1 * 0.80)) + 'px "JetBrains Mono", ui-monospace, monospace';
+      var an2 = ctx.measureText(ap.b).width;
+      var anMax = Math.max(an1, an2);
+      /* LA CUERDA DEL CÍRCULO a la altura del apunte. Un texto centrado en el
+         registro y recortado al aro se corta por la mitad cuando el registro
+         está cerca del borde; midiendo la cuerda se sabe cuánto hay de
+         cristal a esa altura y se empuja el texto hacia dentro. */
+      var yA = p2.y - t1 * 0.62, yB = p2.y + t1 * 0.70;
+      var dA = Math.abs(yA - cyp), dB = Math.abs(yB - cyp);
+      var peor = Math.max(dA, dB);
+      var semicuerda = peor < rp ? Math.sqrt(rp * rp - peor * peor) : 0;
+      if (anMax > semicuerda * 2 - 28) continue;   // no cabe: mejor nada que media frase
+      var xT = Math.max(cxp - semicuerda + anMax / 2 + 14,
+                        Math.min(cxp + semicuerda - anMax / 2 - 14, p2.x));
       ctx.font = '500 ' + t1 + 'px "JetBrains Mono", ui-monospace, monospace';
       ctx.fillStyle = rgba(COL[C_LUZ], (al * 0.95).toFixed(3));
-      ctx.fillText(ap.a, p2.x, p2.y - t1 * 0.62);
+      ctx.fillText(ap.a, xT, yA);
       ctx.font = '400 ' + Math.max(8, Math.round(t1 * 0.80)) + 'px "JetBrains Mono", ui-monospace, monospace';
       ctx.fillStyle = rgba(COL[C_DEC], (al * 0.85).toFixed(3));
-      ctx.fillText(ap.b, p2.x, p2.y + t1 * 0.70);
+      ctx.fillText(ap.b, xT, yB);
     }
     ctx.restore();
   }
+
+
+  /* ══════════════ PULSAR UNA CAJA DEL PLANO ══════════════
+     El lienzo no recibe eventos: es un fondo detrás del texto, y hacerlo
+     pulsable robaría los clics de los enlaces que tiene encima. Así que se
+     escucha en la ventana y se filtra por dos condiciones: que el capítulo
+     que manda sea el del plano, y que el clic caiga dentro del encuadre de
+     la figura. Cualquier otra cosa sigue su camino. */
+  function cajaEn(px, py) {
+    var fr = MARCO[S_MENTE], mir = MIR[S_MENTE], vol = VOLTEA[S_MENTE];
+    var cx = mir ? 1 - fr.x : fr.x;
+    var nx = (px / W - cx) / fr.w + 0.5;
+    if (mir && vol) nx = 1 - nx;
+    var ny = (py / H - fr.y) / fr.h + 0.5;
+    if (nx < -0.04 || nx > 1.04 || ny < -0.04 || ny > 1.04) return -1;
+    var gr = GR.plano, mejor = -1, dist = 1e9;
+    for (var i = 0; i < gr.m.length; i++) {
+      var m = gr.m[i];
+      /* Dentro de la caja gana siempre; si no, la más cercana, para que un
+         clic entre dos cajas no se pierda. */
+      if (nx >= m.x && nx <= m.x + m.w && ny >= m.y && ny <= m.y + m.h) return i;
+      var dx = nx - m.cx, dy = ny - m.cy, d = dx * dx + dy * dy;
+      if (d < dist) { dist = d; mejor = i; }
+    }
+    return dist < 0.04 ? mejor : -1;
+  }
+  function pulsaPlano(px, py) {
+    var dom = tw >= 0.5 ? iB : iA;
+    if (dom !== S_MENTE) return;
+    var k = cajaEn(px, py);
+    if (k < 0) return;
+    var tm = performance.now();
+    /* Pulsar la misma otra vez la cierra: es lo que espera cualquiera. */
+    SEL = (SEL.k === k && selViva(tm)) ? { k: -1, t0: -1e9 } : { k: k, t0: tm };
+  }
+  window.addEventListener('click', function (e) {
+    if (reduced) return;
+    if (e.target.closest && e.target.closest('a,button,input,select,textarea,summary,[role="button"]')) return;
+    pulsaPlano(e.clientX, e.clientY);
+  }, { passive: true });
 
   /* ------------------------------------------------------------- BUCLE */
   var running = false, visible = true;

@@ -27,17 +27,33 @@
   if (!FS) return;
 
   var NAV_ITEMS = [
-    { id: 'dashboard', label: 'Dashboard', grupo: 'dia' },
-    { id: 'facturas', label: 'Facturas', grupo: 'dia' },
-    { id: 'presupuestos', label: 'Presupuestos', grupo: 'negocio' },
-    { id: 'clientes', label: 'Clientes', grupo: 'negocio' },
-    { id: 'cobros', label: 'Cobros', grupo: 'dia' },
-    { id: 'gastos', label: 'Gastos', grupo: 'dia' },
-    { id: 'documentos', label: 'Documentos', grupo: 'dia' },
-    { id: 'proyectos', label: 'Proyectos', grupo: 'negocio' },
-    { id: 'ia', label: 'Pregunta a Finanzas', grupo: 'inteligencia' },
-    { id: 'configuracion', label: 'Configuración', grupo: 'administracion' }
+    { id: 'dashboard', label: 'Dashboard', grupo: 'dia', icono: 'dashboard' },
+    { id: 'tesoreria', label: 'Tesorería', grupo: 'dia', icono: 'dashboard' },
+    { id: 'facturas', label: 'Facturas', grupo: 'dia', icono: 'facturas' },
+    { id: 'cobros', label: 'Cobros', grupo: 'dia', icono: 'cobros' },
+    { id: 'por-facturar', label: 'Por facturar', grupo: 'dia', icono: 'facturas' },
+    { id: 'gastos', label: 'Gastos', grupo: 'dia', icono: 'gastos' },
+    { id: 'pagos', label: 'Pagos', grupo: 'dia', icono: 'gastos' },
+    { id: 'duplicados', label: 'Duplicados', grupo: 'dia', icono: 'gastos' },
+    { id: 'documentos', label: 'Documentos', grupo: 'dia', icono: 'documentos' },
+    { id: 'presupuestos', label: 'Presupuestos', grupo: 'negocio', icono: 'presupuestos' },
+    { id: 'pedidos', label: 'Pedidos', grupo: 'negocio', icono: 'pedidos' },
+    { id: 'albaranes', label: 'Albaranes', grupo: 'negocio', icono: 'albaranes' },
+    { id: 'clientes', label: 'Clientes', grupo: 'negocio', icono: 'clientes' },
+    { id: 'proveedores', label: 'Proveedores', grupo: 'negocio', icono: 'proveedores' },
+    { id: 'proyectos', label: 'Proyectos', grupo: 'negocio', icono: 'proyectos' },
+    { id: 'radar', label: 'Radar', grupo: 'inteligencia', icono: 'dashboard' },
+    { id: 'objetivos', label: 'Objetivos', grupo: 'inteligencia', icono: 'objetivos' },
+    { id: 'historico', label: 'Histórico', grupo: 'inteligencia', icono: 'dashboard' },
+    { id: 'ia', label: 'Pregunta a Finanzas', grupo: 'inteligencia', icono: 'ia' },
+    { id: 'auditoria', label: 'Auditoría', grupo: 'administracion', icono: 'auditoria' },
+    { id: 'verifactu', label: 'Registro fiscal', grupo: 'administracion', icono: 'auditoria' },
+    { id: 'usuarios', label: 'Usuarios', grupo: 'administracion', icono: 'usuarios' },
+    { id: 'impuestos', label: 'Impuestos', grupo: 'administracion', icono: 'dashboard' },
+    { id: 'gestoria', label: 'Tu gestoría', grupo: 'administracion', icono: 'facturas' },
+    { id: 'configuracion', label: 'Configuración', grupo: 'administracion', icono: 'configuracion' }
   ];
+
 
   // Solo se usa en modo fullpage (la vista embebida de Home/Finanzas no
   // cambia): grupos y trazos de icono tomados 1:1 de nav-items.ts y
@@ -52,6 +68,12 @@
     { clave: 'administracion', titulo: 'Administración' }
   ];
   var NAV_ICONS = {
+    pedidos: '<path d="M3.25 6.5h13.5l-1.1 8.25a1.5 1.5 0 0 1-1.5 1.3H5.85a1.5 1.5 0 0 1-1.5-1.3L3.25 6.5Z" stroke-linejoin="round"/><path d="M3.25 6.5 2.4 3.5H.9" stroke-linecap="round"/><circle cx="7" cy="19.5" r="1.4"/><circle cx="14" cy="19.5" r="1.4"/>',
+    albaranes: '<path d="M5.75 2.75h9l4.5 4.5v13a.75.75 0 0 1-.75.75H5.75a.75.75 0 0 1-.75-.75V3.5a.75.75 0 0 1 .75-.75Z"/><path d="M14.5 3v4.25h4.5"/><path d="m8.5 13.5 2 2 4.5-4.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    proveedores: '<path d="M2.75 9.75 12 4.5l9.25 5.25" stroke-linejoin="round"/><path d="M4.75 11v8.5a.75.75 0 0 0 .75.75h13a.75.75 0 0 0 .75-.75V11"/><path d="M9.5 20.25V14h5v6.25"/>',
+    auditoria: '<path d="M12 2.75 4.25 5.6v6.15c0 4.2 3.1 7.9 7.75 9.5 4.65-1.6 7.75-5.3 7.75-9.5V5.6L12 2.75Z" stroke-linejoin="round"/><path d="m9 11.75 2.1 2.1L15 10" stroke-linecap="round" stroke-linejoin="round"/>',
+    usuarios: '<circle cx="12" cy="7.5" r="3.5"/><path d="M4.75 20.5a7.25 7.25 0 0 1 14.5 0"/>',
+    objetivos: '<circle cx="12" cy="12" r="8.25"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.75"/>',
     dashboard: '<rect x="3" y="3" width="7.5" height="8.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="14.5" width="7.5" height="6.5" rx="1.5"/>',
     facturas: '<path d="M6 2.75h9.5L19.5 7v13.5a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V3.5A.75.75 0 0 1 6 2.75Z"/><path d="M14.75 3v4.25H19"/><path d="M8.5 12.5h7M8.5 16.5h4.5" stroke-linecap="round"/>',
     cobros: '<rect x="2.75" y="5.75" width="18.5" height="12.5" rx="2"/><circle cx="12" cy="12" r="2.75"/><path d="M6.25 12h.01M17.75 12h.01" stroke-linecap="round"/>',
@@ -76,7 +98,7 @@
   function estadoVisual(valor) {
     var v = (valor || '').toLowerCase();
     function any(list) { return list.some(function (s) { return v.indexOf(s) !== -1; }); }
-    if (any(['pagada', 'pagado', 'cobrado', 'aceptada', 'aprobado', 'activo', 'entregado'])) return 'success';
+    if (any(['pagada', 'pagado', 'cobrado', 'aceptada', 'aprobado', 'activo', 'activa', 'entregado', 'registrada', 'al d\u00eda', 'paid', 'collected', 'accepted', 'approved', 'active', 'delivered', 'registered'])) return 'success';
     if (any(['vencido', 'vencida', 'rechazad', 'anulada', 'bloquead'])) return 'danger';
     if (any(['seguimiento', 'revision', 'revisión', 'parcial'])) return 'warning';
     if (any(['enviada', 'en curso', 'produccion', 'producción'])) return 'info';
@@ -134,7 +156,9 @@
       /* LA MANO DEL RECORRIDO. Vive fuera del contenido porque se mueve
          sobre la aplicación entera —del menú a la pantalla— y porque así
          no la borra ningún re-render. No recibe eventos: es un dibujo. */
-      '<span class="fdemo-mano" data-role="mano" aria-hidden="true"><i></i></span>';
+      '<span class="fdemo-mano" data-role="mano" aria-hidden="true">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.2 18.4 11.6a.55.55 0 0 1-.22 1L12.9 13.5l2.6 5.4a.55.55 0 0 1-.27.74l-1.9.9a.55.55 0 0 1-.73-.27l-2.55-5.35-3.7 3.5a.55.55 0 0 1-.93-.4V3.66a.55.55 0 0 1 .86-.46Z"/></svg>' +
+      '<i></i></span>';
 
     var sidebarEl = root.querySelector('[data-role="sidebar"]');
     var overlayEl = root.querySelector('[data-role="overlay"]');
@@ -142,7 +166,10 @@
     var contentEl = root.querySelector('[data-role="content"]');
     var menuBtn = root.querySelector('[data-role="menu-btn"]');
 
-    var state = { doc: { fase: 'inicio', archivo: null, t: 0 }, gastoNuevo: null, route: 'ia', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false } };
+    var state = { doc: { fase: 'inicio', archivo: null, t: 0 }, gastoNuevo: null, route: 'dashboard', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false },
+      /* El lector de documentos, el cajón que lo abre, el muro de planes y
+         las facturas que entran desde una remesa. */
+      docCajon: false, lector: null, lectorT: 0, muro: null, facturasNuevas: null };
 
     // La conversación no empieza en blanco. Quien llega a la demo ve una
     // pregunta ya respondida -- con sus cifras y sus enlaces -- antes de
@@ -198,7 +225,7 @@
             '<div class="fdemo-nav-group-items">' +
             entradas.map(function (v) {
               return '<a href="#" class="fdemo-nav-item fdemo-nav-item--icon" data-role="nav" data-view="' + v.id + '">' +
-                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[v.id] || '') + '</svg>' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[v.icono] || NAV_ICONS[v.id] || '') + '</svg>' +
                 esc(v.label) + '</a>';
             }).join('') +
             '</div>';
@@ -231,9 +258,9 @@
 
     function parseRoute() {
       if (!useHash) return { view: state.route, id: state.id };
-      var h = (location.hash || '#ia').replace('#', '');
+      var h = (location.hash || '#dashboard').replace('#', '');
       var parts = h.split('/');
-      var view = NAV_ITEMS.some(function (v) { return v.id === parts[0]; }) ? parts[0] : 'ia';
+      var view = NAV_ITEMS.some(function (v) { return v.id === parts[0]; }) ? parts[0] : 'dashboard';
       return { view: view, id: parts[1] || null };
     }
     function navigate(view, id) {
@@ -304,55 +331,514 @@
     }
 
     // ---------- Dashboard ----------
+    var PRIO = { P0: 'Urgente', P1: 'Importante', P2: 'Revisar', P3: 'Pendiente' };
+    /* ══════════════════ EL PANEL ══════════════════ */
+
+    // El encabezado de sección: rayita, rótulo en versalitas y la pregunta
+    // que esa sección contesta. La pregunta es la mitad del invento: dice
+    // para qué sirve mirar lo de abajo.
+    function seccion(titulo, pregunta, cuerpo, orden) {
+      return '<section class="fdemo-sec" style="--o:' + (orden || 0) + '">' +
+        '<div class="fdemo-sec-h"><span class="fdemo-sec-r" aria-hidden="true"></span>' +
+        '<h2 class="fdemo-sec-t">' + esc(titulo) + '</h2>' +
+        (pregunta ? '<p class="fdemo-sec-q">— ' + esc(pregunta) + '</p>' : '') +
+        '</div>' + cuerpo + '</section>';
+    }
+
+    // La chispa: 26 px de alto, sin ejes, sin rejilla y sin leyenda. Hereda
+    // el color de la cifra. No es un gráfico: es la forma de la serie.
+    function chispa(serie) {
+      if (!serie || serie.length < 2) return '';
+      var min = Math.min.apply(null, serie), max = Math.max.apply(null, serie);
+      var rango = (max - min) || 1, W = 100, H = 26;
+      var d = serie.map(function (v, i) {
+        var x = (i / (serie.length - 1)) * W;
+        var y = H - 2 - ((v - min) / rango) * (H - 4);
+        return (i ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+      }).join(' ');
+      var ux = W, uy = H - 2 - ((serie[serie.length - 1] - min) / rango) * (H - 4);
+      return '<svg class="fdemo-chispa" viewBox="0 0 ' + W + ' ' + H + '" height="' + H + '" ' +
+        'preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+        '<path d="' + d + '" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+        'stroke-linejoin="round" stroke-linecap="round" opacity="0.75" vector-effect="non-scaling-stroke"/>' +
+        '<circle cx="' + ux + '" cy="' + uy.toFixed(1) + '" r="2" fill="currentColor" vector-effect="non-scaling-stroke"/>' +
+        '</svg>';
+    }
+
+    // La tarjeta de cifra. El estado NO cambia el borde: lo llevan el filete
+    // de la izquierda, un tinte de fondo muy tenue y el color del número. Un
+    // borde de color en cada tarjeta convierte la pantalla en un semáforo.
+    function kpi2(o) {
+      var hero = !!o.hero, tono = o.tono || 'neutro';
+      var val = String(o.valor);
+      return '<' + (o.vista ? 'a href="#' + o.vista + '"' : 'div') +
+        ' class="fdemo-kpi2 t-' + tono + (hero ? ' es-hero' : '') + (o.vista ? ' es-link' : '') + '"' +
+        ' style="--n:' + Math.max(val.length, 1) + '">' +
+        '<span class="fdemo-kpi2-filo" aria-hidden="true"></span>' +
+        '<p class="fdemo-kpi2-l">' + esc(o.label) + '</p>' +
+        '<p class="fdemo-kpi2-v">' + esc(val) + '</p>' +
+        (o.delta ? '<p class="fdemo-kpi2-d"><span class="' + (o.delta.bueno ? 'es-bien' : o.delta.bueno === false ? 'es-mal' : '') + '">' +
+          (o.delta.sube ? '\u2191' : o.delta.sube === false ? '\u2193' : '\u2013') + '</span> ' + esc(o.delta.texto) + '</p>' : '') +
+        (o.serie ? chispa(o.serie) : '') +
+        (o.hint ? '<p class="fdemo-kpi2-h">' + esc(o.hint) + '</p>' : '') +
+        '</' + (o.vista ? 'a' : 'div') + '>';
+    }
+
     RENDERERS.dashboard = function () {
-      var snap = FS.getDashboardSnapshot();
-      var facturas = FS.listFacturas();
-      var gastos = FS.listGastos();
+      var s = FS.getDashboardSnapshot(), ev = FS.getEvolucion();
+      var r = FS.getResumenEjecutivo(), prev = FS.getPrevision();
+      var ant = FS.getAntiguedad(), con = FS.getConcentracion();
+      var cobrados = ev.map(function (m) { return m.cobrado; });
+      var resultados = ev.map(function (m) { return m.resultado; });
+      var dif = s.resultadoMes - s.resultadoMesPrevio;
 
-      var actividad = facturas.slice(0, 5).map(function (f) {
-        return { tipo: 'Factura', id: f.id, texto: f.numero + ' · ' + (f.clienteNombre || 'Cliente') + ' · ' + EUR(f.importe), fecha: f.fechaEmision, estado: f.estado, view: 'facturas' };
-      }).concat(gastos.slice(0, 5).map(function (g) {
-        return { tipo: 'Gasto', id: g.id, texto: g.proveedor + ' · ' + EUR(g.importe), fecha: g.fecha, estado: g.estadoRevision || 'Registrado', view: 'gastos' };
-      })).sort(function (a, b) { return (b.fecha || '').localeCompare(a.fecha || ''); }).slice(0, 8);
+      // ── la frase de arriba ──
+      var narrativa =
+        '<div class="fdemo-narra n-' + r.principal.nivel + '">' +
+        '<span class="fdemo-narra-filo" aria-hidden="true"></span>' +
+        '<p class="fdemo-narra-p">' + esc(r.principal.texto) + '</p>' +
+        (r.frases.length ? '<ul class="fdemo-narra-l">' + r.frases.map(function (f) {
+          return '<li class="n-' + f.nivel + '"><span class="fdemo-narra-pt" aria-hidden="true"></span>' +
+                 '<a href="#' + f.vista + '">' + esc(f.texto) + '</a></li>';
+        }).join('') + '</ul>' : '') +
+        '</div>';
 
-      if (!snap) {
-        return pageHead('Dashboard', 'Sin snapshot disponible') + card(null, '<div class="fdemo-card-body">' + empty('Aún no hay un snapshot calculado.') + '</div>');
-      }
+      // ── el dinero ──
+      var dinero =
+        '<div class="fdemo-kpi-hero">' +
+        kpi2({ hero: 1, tono: 'positivo', label: 'Cobrado', valor: EUR(s.totalCobrado),
+              hint: 'dinero que ya ha entrado · todo el histórico', serie: cobrados, vista: 'cobros' }) +
+        kpi2({ hero: 1, tono: s.totalPendiente > 0 ? 'aviso' : 'neutro', label: 'Pendiente de cobro',
+              valor: EUR(s.totalPendiente),
+              hint: s.dso === null ? 'emitido y todavía sin cobrar' : 'emitido y sin cobrar · se tarda {d} días de mediana'.replace('{d}', s.dso), vista: 'cobros' }) +
+        kpi2({ hero: 1, tono: s.totalVencido > 0 ? 'critico' : 'neutro', label: 'Vencido',
+              valor: EUR(s.totalVencido),
+              delta: s.totalPendiente > 0 ? { sube: true, bueno: s.totalVencido === 0,
+                texto: Math.round((s.totalVencido / s.totalPendiente) * 1000) / 10 + ' % de lo pendiente' } : null,
+              hint: s.totalVencido > 0 ? 'pasado de fecha · reclámalo' : 'nada pasado de fecha', vista: 'cobros' }) +
+        '</div>' +
+        '<div class="fdemo-kpi-tira">' +
+        kpi2({ tono: s.resultadoMes >= 0 ? 'positivo' : 'critico', label: 'Resultado del mes',
+              valor: EUR(s.resultadoMes), serie: resultados,
+              delta: { sube: dif > 0 ? true : dif < 0 ? false : null, bueno: dif >= 0,
+                       texto: EUR(Math.abs(dif)) + ' vs el mes anterior' },
+              hint: 'facturado menos gastado, este mes' }) +
+        (s.sinFacturar > 0 ? kpi2({ tono: 'aviso', label: 'Sin facturar', valor: EUR(s.sinFacturar),
+              hint: 'aceptado y aún sin factura', vista: 'presupuestos' }) : '') +
+        kpi2({ label: 'Facturado', valor: EUR(s.totalFacturado), hint: 'todo el histórico', vista: 'facturas' }) +
+        kpi2({ label: 'Gastos', valor: EUR(s.totalGastos), hint: 'todo el histórico', vista: 'gastos' }) +
+        kpi2({ label: 'Facturado − Gastos', valor: EUR(s.margen), hint: 'no es beneficio · {p} sin cobrar'.replace('{p}', EUR(s.totalPendiente)) }) +
+        kpi2({ label: 'Vence en 30 días', valor: EUR(s.venceEn30), hint: 'sin contar lo ya vencido' }) +
+        kpi2({ label: 'Proyectos activos', valor: String(s.proyectosActivos), hint: 'en curso ahora mismo', vista: 'proyectos' }) +
+        '</div>';
 
-      var kpis = [
-        kpi('Facturado', EUR(snap.totalFacturado), '', 'blue'),
-        kpi('Cobrado', EUR(snap.totalCobrado), '', 'cyan'),
-        kpi('Pendiente de cobro', EUR(snap.totalPendiente), '', 'violet'),
-        kpi('Vencido', EUR(snap.totalVencido), '', snap.totalVencido > 0 ? 'danger' : 'blue'),
-        kpi('Gastos', EUR(snap.totalGastos), '', 'warning'),
-        kpi('Proyectos activos', String(snap.proyectosActivos), '', 'cyan'),
-        kpi('Previsión 30 días', EUR(snap.prevision30Dias), '', 'violet'),
-        kpi('Rentabilidad estimada', EUR(snap.totalFacturado - snap.totalGastos), 'Facturado − Gastos', 'blue')
-      ].join('');
+      // ── la caja ──
+      var caja = card(
+        cardHead('Previsión de caja · 30 días', 'variación de caja: el saldo del banco no está en el sistema'),
+        '<div class="fdemo-card-body is-tight"><div class="fdemo-kpi-tira es-3">' +
+        kpi2({ tono: 'positivo', label: 'Va a entrar', valor: EUR(prev.entra), hint: 'facturas con fecha en los próximos 30 días' }) +
+        kpi2({ tono: 'aviso', label: 'Va a salir', valor: EUR(prev.sale), hint: 'gastos con vencimiento en los próximos 30 días' }) +
+        kpi2({ tono: prev.neto >= 0 ? 'positivo' : 'critico', label: 'Neto', valor: EUR(prev.neto),
+              hint: prev.neto >= 0 ? 'entra más de lo que sale' : 'sale más de lo que entra' }) +
+        '</div></div>');
 
-      var alertasHtml = !snap.alertas.length ? '<p style="font-size:.86rem;color:var(--dc-text-muted);padding:16px;margin:0;">Sin alertas activas.</p>' :
-        '<div class="fdemo-alert-list">' + snap.alertas.map(function (a) { return '<div class="fdemo-alert"><span class="dot"></span>' + esc(a) + '</div>'; }).join('') + '</div>';
+      // ── qué mirar hoy ──
+      var senales = FS.getSenales();
+      var hoy = senales.length
+        ? '<div class="fdemo-senales">' + senales.map(function (x) {
+            return '<article class="fdemo-senal p-' + x.p + '">' +
+              '<span class="fdemo-senal-filo" aria-hidden="true"></span>' +
+              '<div class="fdemo-senal-c"><p class="fdemo-senal-et">' + PRIO[x.p] + '</p>' +
+              '<p class="fdemo-senal-t">' + esc(x.titulo) + '</p>' +
+              '<p class="fdemo-senal-p">' + esc(x.porque) + '</p></div>' +
+              '<p class="fdemo-senal-n">' + esc(x.cifra) + '</p></article>';
+          }).join('') + '</div>'
+        : '<div class="fdemo-senal-ok"><span class="fdemo-senal-ok-filo"></span>Hoy no hay nada urgente.</div>';
 
-      var actividadHtml = !actividad.length ? empty() :
-        actividad.map(function (a) {
-          return '<a class="fdemo-activity-row" href="#" data-action="nav" data-view="' + a.view + '" data-id="' + a.id + '">' +
-            '<div class="fdemo-activity-main"><div class="fdemo-activity-text">' + esc(a.texto) + '</div>' +
-            '<div class="fdemo-activity-meta">' + esc(a.tipo) + ' · ' + (a.fecha ? FDATETIME(a.fecha) : 'Sin fecha') + '</div></div>' +
+      // ── cómo va el negocio ──
+      var maxEv = Math.max.apply(null, ev.map(function (m) { return Math.max(m.cobrado, m.gastos); })) || 1;
+      var barras = '<div class="fdemo-barras" role="img" aria-label="Evolución de cobros y gastos de los últimos doce meses">' +
+        ev.map(function (m) {
+          return '<div class="fdemo-barra-col"><div class="fdemo-barra-par">' +
+            '<i class="b-cob" style="height:' + ((m.cobrado / maxEv) * 100).toFixed(1) + '%" title="' + esc(m.etiqueta + ': ' + EUR(m.cobrado)) + '"></i>' +
+            '<i class="b-gas" style="height:' + ((m.gastos / maxEv) * 100).toFixed(1) + '%" title="' + esc(m.etiqueta + ': ' + EUR(m.gastos)) + '"></i>' +
+            '</div><span class="fdemo-barra-et">' + esc(m.etiqueta) + '</span></div>';
+        }).join('') + '</div>' +
+        '<div class="fdemo-leyenda"><span><i class="b-cob"></i>Cobrado</span><span><i class="b-gas"></i>Gastos</span></div>';
+
+      var deuda = card(cardHead('Antigüedad de la deuda', 'Cuánto te deben y desde hace cuánto'),
+        '<div class="fdemo-card-body"><p class="fdemo-total">' + EUR(ant.total) + '</p>' +
+        '<div class="fdemo-apilada">' + ant.tramos.map(function (t) {
+          return '<i class="n-' + t.nivel + '" style="width:' + t.pct + '%" title="' + esc(t.etiqueta) + '"></i>';
+        }).join('') + '</div>' +
+        '<ul class="fdemo-ley-v">' + ant.tramos.map(function (t) {
+          return '<li><span class="pt n-' + t.nivel + '"></span><span class="et">' + esc(t.etiqueta) + '</span>' +
+                 '<span class="nu">' + EUR(t.total) + '</span></li>';
+        }).join('') + '</ul></div>');
+
+      var conc = card(cardHead('De quién depende tu facturación', 'Reparto del total facturado por cliente'),
+        '<div class="fdemo-card-body"><ul class="fdemo-conc">' + con.filas.map(function (f) {
+          return '<li><span class="nom">' + esc(f.cliente) + '</span>' +
+            '<span class="ba"><i style="width:' + f.pct + '%"></i></span>' +
+            '<span class="pc">' + f.pct + ' %</span></li>';
+        }).join('') + '</ul>' +
+        (con.riesgo ? '<p class="fdemo-nota-riesgo">{c} concentra el {p} % de tu facturación. Si se va, se va esa parte del negocio.</p>'.replace('{c}', esc(con.riesgo.cliente)).replace('{p}', con.riesgo.pct) : '') +
+        '</div>');
+
+      // ── registro ──
+      var act = FS.getActividad(8);
+      var actividad = card(cardHead('Actividad reciente', 'Facturas, gastos y cobros más recientes'),
+        '<div>' + act.map(function (a) {
+          return '<a class="fdemo-activity-row" href="#' + a.vista + '/' + a.id + '">' +
+            '<div class="fdemo-activity-main"><div class="fdemo-activity-text">' + esc(a.texto) + ' · ' + EUR(a.importe) + '</div>' +
+            '<div class="fdemo-activity-meta">' + esc(a.tipo) + ' · ' + FDATE(a.fecha) + '</div></div>' +
             pill(a.estado) + '</a>';
-        }).join('');
+        }).join('') + '</div>');
 
-      return pageHead('Dashboard', 'Último cálculo: ' + FDATETIME(snap.fechaCalculo)) +
-        '<div class="fdemo-kpi-grid">' + kpis + '</div>' +
-        '<div class="fdemo-dash-row">' +
-        card(cardHead('Alertas', 'Generadas por el cálculo de KPIs'), alertasHtml) +
-        card(cardHead('Actividad reciente', 'Últimas facturas y gastos registrados'), actividadHtml) +
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Situación</p>' +
+        '<h1 class="fdemo-page-title">Panel financiero</h1></div>' +
+        '<p class="fdemo-calc">calculado ahora · ' + FDATE(s.fechaCalculo) + '</p></div>' +
+        narrativa +
+        seccion('El dinero', 'qué ha entrado, qué te deben y qué se ha pasado de fecha', dinero, 0) +
+        seccion('La caja', 'qué entra y qué sale en los próximos 30 días', caja, 1) +
+        seccion('Qué mirar hoy', 'lo que pide una decisión, por orden de urgencia', hoy, 2) +
+        seccion('Cómo va el negocio', 'tendencia, de quién dependes y qué te deben',
+          card(cardHead('Evolución mensual', 'Dinero cobrado frente a dinero gastado, mes a mes'), '<div class="fdemo-card-body">' + barras + '</div>') +
+          '<div class="fdemo-dos">' + deuda + conc + '</div>', 3) +
+        seccion('Registro', 'lo último que ha pasado', actividad, 4) +
         '</div>';
     };
 
-    // ---------- Facturas ----------
+
+    /* ══════════════ EL RESTO DEL SISTEMA ══════════════ */
+
+    function tablaSimple(cabeceras, filas, vacio) {
+      if (!filas) return empty(vacio);
+      return '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr>' +
+        cabeceras.map(function (c) {
+          return '<th' + (c.r ? ' class="is-right"' : '') + '>' + esc(c.t) + '</th>';
+        }).join('') + '</tr></thead><tbody>' + filas + '</tbody></table></div>';
+    }
+    function aviso(texto) {
+      return '<p class="fdemo-aviso-modulo">' + esc(texto) + '</p>';
+    }
+
+    /* TESORERÍA. Tres horizontes y dos escenarios. El prudente descuenta lo
+       que ya está fuera de plazo, porque contar con ello es lo que hace que
+       una previsión de caja se convierta en un susto. */
+    RENDERERS.tesoreria = function () {
+      var prev = FS.getPrevision(), s = FS.getDashboardSnapshot();
+      var fac = FS.listFacturas().filter(function (f) { return f.estado !== 'Borrador' && FS.pendienteDe(f) > 0; });
+      var gas = FS.listGastos().filter(function (g) { return !g.pagado; });
+      function enPlazo(lista, dias, campo, valor) {
+        var t = 0;
+        lista.forEach(function (x) {
+          var f = x[campo]; if (!f) return;
+          var d = Math.round((Date.parse(f) - Date.parse(FS.hoy)) / 86400000);
+          if (d >= -30 && d <= dias) t += valor(x);
+        });
+        return Math.round(t * 100) / 100;
+      }
+      var horizontes = [30, 60, 90].map(function (d) {
+        var e = enPlazo(fac, d, 'fechaVencimiento', FS.pendienteDe);
+        var sa = enPlazo(gas, d, 'fechaVencimiento', function (g) { return g.importe; });
+        var prud = Math.round((e - s.totalVencido) * 100) / 100;
+        return { d: d, entra: e, sale: sa, neto: Math.round((e - sa) * 100) / 100,
+                 prudente: Math.round((prud - sa) * 100) / 100 };
+      });
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Caja</p>' +
+        '<h1 class="fdemo-page-title">Tesorería</h1></div></div>' +
+        aviso('Esto es VARIACIÓN de caja, no saldo: el saldo del banco no está en el sistema y no se inventa. Lo que ves es lo que entra y lo que sale según las fechas de tus propios documentos.') +
+        '<div class="fdemo-dos-3">' + horizontes.map(function (h) {
+          return card(cardHead('Próximos {d} días'.replace('{d}', h.d), 'según vencimientos'),
+            '<div class="fdemo-card-body"><div class="fdemo-kpi-tira es-3">' +
+            kpi2({ tono: 'positivo', label: 'Entra', valor: EUR(h.entra) }) +
+            kpi2({ tono: 'aviso', label: 'Sale', valor: EUR(h.sale) }) +
+            kpi2({ tono: h.neto >= 0 ? 'positivo' : 'critico', label: 'Neto', valor: EUR(h.neto) }) +
+            '</div><p class="fdemo-esc">Escenario prudente, descontando lo ya vencido: <b>' + EUR(h.prudente) + '</b></p></div>');
+        }).join('') + '</div></div>';
+    };
+
+    /* POR FACTURAR. Presupuesto aceptado sin factura emitida: trabajo hecho
+       que todavía no se ha pedido cobrar. */
+    RENDERERS['por-facturar'] = function () {
+      var pend = FS.listPresupuestos().filter(function (p) { return p.estado === 'Aceptada' && !p.facturaId; });
+      var total = pend.reduce(function (a, p) { return a + p.importe; }, 0);
+      var filas = pend.map(function (p) {
+        return '<tr><td>' + esc(p.empresa) + '</td><td class="is-muted">' + esc(p.servicios || '—') + '</td>' +
+          '<td class="is-muted">' + FDATE(p.fechaGeneracion) + '</td>' +
+          '<td class="is-right">' + EUR(p.importe) + '</td>' +
+          '<td>' + pill('Aceptada') + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Dinero sin pedir</p>' +
+        '<h1 class="fdemo-page-title">Por facturar</h1>' +
+        '<p class="fdemo-page-sub">{n} trabajos aceptados sin factura emitida · {t}'.replace('{n}', pend.length).replace('{t}', EUR(total)) + '</p></div></div>' +
+        card('', tablaSimple([{t:'Cliente'},{t:'Trabajo'},{t:'Aceptado'},{t:'Importe',r:1},{t:'Estado'}], filas, 'Todo lo aceptado está facturado.')) +
+        '</div>';
+    };
+
+    /* PAGOS. Lo que hay que pagar y cuándo. */
+    RENDERERS.pagos = function () {
+      var gas = FS.listGastos().slice().sort(function (a, b) {
+        return (a.fechaVencimiento || '') < (b.fechaVencimiento || '') ? -1 : 1;
+      });
+      var pendientes = gas.filter(function (g) { return !g.pagado; });
+      var filas = gas.slice(0, 40).map(function (g) {
+        return '<tr><td>' + esc(g.proveedor) + '</td><td class="is-muted">' + esc(g.concepto) + '</td>' +
+          '<td class="is-muted">' + FDATE(g.fechaVencimiento) + '</td>' +
+          '<td class="is-right">' + EUR(g.importe) + '</td>' +
+          '<td>' + pill(g.pagado ? 'Pagado' : 'Pendiente') + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Cuentas por pagar</p>' +
+        '<h1 class="fdemo-page-title">Pagos</h1>' +
+        '<p class="fdemo-page-sub">{n} pendientes · {t}'.replace('{n}', pendientes.length).replace('{t}', EUR(pendientes.reduce(function (a, g) { return a + g.importe; }, 0))) + '</p></div></div>' +
+        card('', tablaSimple([{t:'Proveedor'},{t:'Concepto'},{t:'Vence'},{t:'Importe',r:1},{t:'Estado'}], filas, '')) +
+        '</div>';
+    };
+
+    /* DUPLICADOS. Mismo proveedor, mismo importe, pocos días de diferencia.
+       La regla está escrita aquí y se puede discutir; una puntuación no. */
+    RENDERERS.duplicados = function () {
+      var gas = FS.listGastos(), pares = [];
+      for (var i = 0; i < gas.length; i++) {
+        for (var j = i + 1; j < gas.length; j++) {
+          if (gas[i].proveedor !== gas[j].proveedor) continue;
+          if (Math.abs(gas[i].importe - gas[j].importe) > 0.01) continue;
+          var d = Math.abs(Math.round((Date.parse(gas[i].fechaGasto) - Date.parse(gas[j].fechaGasto)) / 86400000));
+          if (d <= 10) pares.push({ a: gas[i], b: gas[j], d: d });
+        }
+      }
+      var filas = pares.map(function (p) {
+        return '<tr><td>' + esc(p.a.proveedor) + '</td>' +
+          '<td class="is-muted">' + esc(p.a.concepto) + '</td>' +
+          '<td class="is-muted">' + FDATE(p.a.fechaGasto) + ' · ' + FDATE(p.b.fechaGasto) + '</td>' +
+          '<td class="is-right">' + EUR(p.a.importe) + '</td>' +
+          '<td>' + pill(p.d <= 3 ? 'Probable' : 'Posible') + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Control</p>' +
+        '<h1 class="fdemo-page-title">Duplicados</h1></div></div>' +
+        aviso('La regla está escrita: mismo proveedor, mismo importe al céntimo y menos de diez días entre los dos. Ni puntuación, ni modelo, ni caja negra: si salta, se puede leer por qué.') +
+        card('', tablaSimple([{t:'Proveedor'},{t:'Concepto'},{t:'Fechas'},{t:'Importe',r:1},{t:'Estado'}], filas, 'No hay ningún gasto que cumpla la regla.')) +
+        '</div>';
+    };
+
+    /* RADAR. Tres reglas, las tres con su umbral escrito al lado. */
+    RENDERERS.radar = function () {
+      var gas = FS.listGastos(), s = FS.getDashboardSnapshot(), con = FS.getConcentracion();
+      var avisos = [];
+      var porProv = {};
+      gas.forEach(function (g) { (porProv[g.proveedor] = porProv[g.proveedor] || []).push(g); });
+      Object.keys(porProv).forEach(function (k) {
+        var l = porProv[k].slice().sort(function (a, b) { return a.fechaGasto < b.fechaGasto ? -1 : 1; });
+        if (l.length < 2) return;
+        var ult = l[l.length - 1], pen = l[l.length - 2];
+        if (pen.importe > 0 && ult.importe / pen.importe >= 1.15) {
+          avisos.push({ n: 'aviso', regla: 'Subida de precio',
+            t: '{p} ha subido un {x} % respecto al gasto anterior'.replace('{p}', k).replace('{x}', Math.round((ult.importe / pen.importe - 1) * 100)),
+            d: EUR(pen.importe) + ' → ' + EUR(ult.importe) });
+        }
+      });
+      if (con.riesgo) avisos.push({ n: 'serio', regla: 'Concentración',
+        t: '{c} concentra el {p} % de la facturación'.replace('{c}', con.riesgo.cliente).replace('{p}', con.riesgo.pct), d: con.riesgo.pct + ' %' });
+      if (s.totalVencido > 0) avisos.push({ n: 'critico', regla: 'Vencido',
+        t: '{n} facturas pasadas de fecha sin cobrar'.replace('{n}', s.nVencidas), d: EUR(s.totalVencido) });
+      var filas = avisos.map(function (a) {
+        return '<article class="fdemo-senal p-' + (a.n === 'critico' ? 'P0' : a.n === 'serio' ? 'P1' : 'P2') + '">' +
+          '<span class="fdemo-senal-filo"></span><div class="fdemo-senal-c">' +
+          '<p class="fdemo-senal-et">' + esc(a.regla) + '</p>' +
+          '<p class="fdemo-senal-t">' + esc(a.t) + '</p></div>' +
+          '<p class="fdemo-senal-n">' + esc(a.d) + '</p></article>';
+      }).join('');
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Inteligencia</p>' +
+        '<h1 class="fdemo-page-title">Radar</h1></div></div>' +
+        aviso('Tres reglas, y las tres con su umbral escrito al lado. Se pueden discutir, que es más de lo que se puede hacer con una puntuación.') +
+        '<div class="fdemo-senales">' + (filas || '<div class="fdemo-senal-ok"><span class="fdemo-senal-ok-filo"></span>Ninguna regla ha saltado.</div>') + '</div>' +
+        '</div>';
+    };
+
+    /* OBJETIVOS. Una métrica, un periodo y un mínimo. Y si vas a tiempo. */
+    RENDERERS.objetivos = function () {
+      var ev = FS.getEvolucion(), s = FS.getDashboardSnapshot();
+      var mes = ev[ev.length - 1];
+      var metas = [
+        { m: 'Cobrar cada mes', actual: mes.cobrado, meta: 15000, u: 'eur' },
+        { m: 'Vencido por debajo de', actual: s.totalVencido, meta: 6000, u: 'eur', menos: true },
+        { m: 'Días en cobrar', actual: s.dso || 0, meta: 30, u: 'dias', menos: true }
+      ];
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Inteligencia</p>' +
+        '<h1 class="fdemo-page-title">Objetivos</h1></div></div>' +
+        '<div class="fdemo-dos-3">' + metas.map(function (g) {
+          var pct = g.menos ? Math.min(100, Math.round((g.meta / Math.max(g.actual, 0.01)) * 100))
+                            : Math.min(100, Math.round((g.actual / g.meta) * 100));
+          var bien = g.menos ? g.actual <= g.meta : g.actual >= g.meta;
+          var v = g.u === 'eur' ? EUR(g.actual) : g.actual + ' días';
+          var mv = g.u === 'eur' ? EUR(g.meta) : g.meta + ' días';
+          return card(cardHead(g.m, (g.menos ? 'Objetivo: no pasar de {m}' : 'Objetivo: al menos {m}').replace('{m}', mv)),
+            '<div class="fdemo-card-body">' +
+            '<p class="fdemo-total ' + (bien ? 'es-bien' : 'es-mal') + '">' + v + '</p>' +
+            '<div class="fdemo-apilada"><i class="' + (bien ? 'n-ok' : 'n-critico') + '" style="width:' + pct + '%"></i></div>' +
+            '<p class="fdemo-kpi2-h">' + (bien ? 'Vas a tiempo.' : 'Hoy no se cumple.') + '</p></div>');
+        }).join('') + '</div></div>';
+    };
+
+    /* REGISTRO FISCAL. La cadena, eslabón a eslabón: cada factura lleva la
+       huella de la anterior, y por eso se puede enseñar que no falta ninguna. */
+    RENDERERS.verifactu = function () {
+      var fac = FS.listFacturas().filter(function (f) { return f.estado !== 'Borrador'; })
+        .slice().sort(function (a, b) { return a.fechaEmision < b.fechaEmision ? -1 : 1; });
+      var filas = fac.slice(-14).map(function (f, i) {
+        var h = huella(f.numero + f.importe);
+        return '<tr><td><code>' + esc(f.numero) + '</code></td>' +
+          '<td class="is-muted">' + FDATE(f.fechaEmision) + '</td>' +
+          '<td class="is-right">' + EUR(f.importe) + '</td>' +
+          '<td class="is-muted"><code>' + h + '</code></td>' +
+          '<td>' + pill('Registrada') + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Obligación fiscal</p>' +
+        '<h1 class="fdemo-page-title">Registro fiscal · VERI*FACTU</h1></div></div>' +
+        '<div class="fdemo-kpi-tira es-3">' +
+        kpi2({ tono: 'positivo', label: 'La cadena', valor: 'Intacta', hint: '{n} facturas encadenadas'.replace('{n}', fac.length) }) +
+        kpi2({ label: 'Fuera de la cadena', valor: '0', hint: 'ninguna factura sin registrar' }) +
+        kpi2({ tono: 'positivo', label: 'En cola de remisión', valor: '0', hint: 'nada pendiente de enviar' }) +
+        '</div>' +
+        aviso('Cada factura lleva la huella de la anterior. Por eso se puede contestar a «enséñame que las has registrado todas» sin entrar en la base de datos.') +
+        card(cardHead('Últimos eslabones', 'los catorce más recientes'), tablaSimple([{t:'Nº'},{t:'Emisión'},{t:'Importe',r:1},{t:'Huella'},{t:'Estado'}], filas, '')) +
+        '</div>';
+    };
+    // Huella corta y determinista: aquí solo tiene que PARECER lo que es
+    // -un resumen que encadena una factura con la anterior- y serlo de
+    // verdad exigiría el algoritmo fiscal entero en el navegador.
+    function huella(s) {
+      var h = 0;
+      for (var i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+      return (h >>> 0).toString(16).toUpperCase().padStart(8, '0').slice(0, 8);
+    }
+
+    RENDERERS.proveedores = function () {
+      var gas = FS.listGastos();
+      var filas = FS.listProveedores().map(function (p) {
+        var g = gas.filter(function (x) { return x.proveedor === p.nombre; });
+        var t = g.reduce(function (a, x) { return a + x.importe; }, 0);
+        return '<tr><td>' + esc(p.nombre) + '</td><td class="is-muted">' + esc(p.categoria || '—') + '</td>' +
+          '<td class="is-muted">' + esc(p.nif) + '</td>' +
+          '<td class="is-right">' + g.length + '</td><td class="is-right">' + EUR(t) + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">Negocio</p><h1 class="fdemo-page-title">Proveedores</h1></div></div>' +
+        card('', tablaSimple([{t:'Proveedor'},{t:'Categoría'},{t:'NIF'},{t:'Gastos',r:1},{t:'Total',r:1}], filas, '')) +
+        '</div>';
+    };
+
+    RENDERERS.historico = function () {
+      var ev = FS.getEvolucion();
+      var filas = ev.slice().reverse().map(function (m) {
+        return '<tr><td>' + esc(m.etiqueta) + '</td>' +
+          '<td class="is-right">' + EUR(m.facturado) + '</td>' +
+          '<td class="is-right">' + EUR(m.cobrado) + '</td>' +
+          '<td class="is-right">' + EUR(m.gastos) + '</td>' +
+          '<td class="is-right">' + EUR(m.resultado) + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">Inteligencia</p><h1 class="fdemo-page-title">Histórico</h1></div></div>' +
+        card('', tablaSimple([{t:'Mes'},{t:'Facturado',r:1},{t:'Cobrado',r:1},{t:'Gastos',r:1},{t:'Resultado',r:1}], filas, '')) +
+        '</div>';
+    };
+
+    RENDERERS.impuestos = function () {
+      var ev = FS.getEvolucion().slice(-3);
+      var fac = FS.listFacturas().filter(function (f) { return f.estado !== 'Borrador'; });
+      var gas = FS.listGastos();
+      var ivaRep = fac.reduce(function (a, f) { return a + (f.iva || 0); }, 0);
+      var ivaSop = gas.reduce(function (a, g) { return a + (g.iva || 0); }, 0);
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">Administración</p><h1 class="fdemo-page-title">Impuestos</h1></div></div>' +
+        '<div class="fdemo-kpi-tira es-3">' +
+        kpi2({ label: 'IVA repercutido', valor: EUR(ivaRep), hint: 'el que has cobrado en tus facturas' }) +
+        kpi2({ label: 'IVA soportado', valor: EUR(ivaSop), hint: 'el que has pagado en tus gastos' }) +
+        kpi2({ tono: ivaRep - ivaSop >= 0 ? 'aviso' : 'positivo', label: 'Diferencia',
+               valor: EUR(ivaRep - ivaSop), hint: 'lo que saldría a pagar o a compensar' }) +
+        '</div>' + aviso('Un cálculo, no una declaración: quien presenta es tu gestoría, y para eso están los libros en CSV de la pantalla de al lado.') + '</div>';
+    };
+
+    RENDERERS.gestoria = function () {
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">Administración</p><h1 class="fdemo-page-title">Tu gestoría</h1></div></div>' +
+        card(cardHead('Libros de IVA', 'En CSV, listos para enviar'),
+          '<div class="fdemo-card-body"><div class="fdemo-descargas">' +
+          ['Emitidas', 'Recibidas', 'Resumen del trimestre'].map(function (x) {
+            return '<button type="button" class="fdemo-btn variant-secondary" data-action="plan" data-plan="csv">' +
+              '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7">' +
+              '<path d="M12 3.5v11m0 0 4-4m-4 4-4-4" stroke-linecap="round" stroke-linejoin="round"/>' +
+              '<path d="M4.5 17.5v2a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-2" stroke-linecap="round"/></svg>' +
+              esc(x) + '</button>';
+          }).join('') + '</div>' + aviso('Se exportan tal cual, sin cerrar nada. Si falta un dato fiscal en una factura, sale marcado en vez de rellenarse solo.') + '</div>') +
+        '</div>';
+    };
+
+    RENDERERS.auditoria = function () {
+      var act = FS.getActividad(25);
+      var filas = act.map(function (a) {
+        return '<tr><td class="is-muted">' + FDATE(a.fecha) + '</td>' +
+          '<td>' + esc(a.tipo) + '</td><td class="is-muted">' + esc(a.texto) + '</td>' +
+          '<td class="is-right">' + EUR(a.importe) + '</td>' +
+          '<td class="is-muted">Cuenta de demostración</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">Administración</p><h1 class="fdemo-page-title">Auditoría</h1></div></div>' +
+        aviso('Quién hizo qué, cuándo y sobre qué registro. No se puede borrar desde la aplicación.') +
+        card('', tablaSimple([{t:'Fecha'},{t:'Tipo'},{t:'Registro'},{t:'Importe',r:1},{t:'Quién'}], filas, '')) +
+        '</div>';
+    };
+
+    RENDERERS.usuarios = function () {
+      var roles = [
+        ['Owner', 'Todo, incluido invitar y dar de baja a personas'], ['Administrador', 'Todo salvo la propiedad de la cuenta'], ['Dirección', 'Ver todo y decidir; no toca la configuración fiscal'],
+        ['Finanzas', 'Facturar, cobrar, gastar y cerrar'], ['Operaciones', 'Ver y crear documentos; no ve márgenes'], ['Solo lectura', 'Ver. Nada más.']
+      ];
+      var filas = roles.map(function (r) {
+        return '<tr><td>' + esc(r[0]) + '</td><td class="is-muted">' + esc(r[1]) + '</td>' +
+          '<td>' + pill(r[0] === 'Owner' ? 'Activo' : 'Disponible') + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">Administración</p><h1 class="fdemo-page-title">Usuarios</h1></div></div>' +
+        aviso('El permiso se comprueba por módulo Y por acción, en la misma capa que lee la base de datos. Un rol no puede ver lo que no le toca ni equivocándose la pantalla.') +
+        card('', tablaSimple([{t:'Rol'},{t:'Qué puede hacer'},{t:'En uso'}], filas, '')) +
+        '</div>';
+    };
+
+    // Pedidos y albaranes salen de los presupuestos aceptados: en el producto
+    // son documentos propios; aquí se enseña su forma y su encadenamiento.
+    function documentalSimple(titulo, eyebrow, prefijo, estadoOk) {
+      var pres = FS.listPresupuestos().filter(function (p) { return p.aceptadaPorCliente; });
+      var filas = pres.map(function (p, i) {
+        return '<tr><td><code>' + prefijo + '-' + String(1000 + i * 7) + '</code></td>' +
+          '<td>' + esc(p.empresa) + '</td><td class="is-muted">' + esc(p.servicios || '—') + '</td>' +
+          '<td class="is-muted">' + FDATE(p.fechaGeneracion) + '</td>' +
+          '<td class="is-right">' + EUR(p.importe) + '</td>' +
+          '<td>' + pill(p.facturaId ? estadoOk : 'Pendiente') + '</td></tr>';
+      }).join('');
+      return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
+        '<p class="fdemo-eyebrow">' + esc(eyebrow) + '</p><h1 class="fdemo-page-title">' + esc(titulo) + '</h1></div></div>' +
+        card('', tablaSimple([{t:'Nº'},{t:'Cliente'},{t:'Trabajo'},{t:'Fecha'},{t:'Importe',r:1},{t:'Estado'}], filas, '')) +
+        '</div>';
+    }
+    RENDERERS.pedidos = function () { return documentalSimple('Pedidos', 'Negocio', 'P', 'Cobrado'); };
+    RENDERERS.albaranes = function () { return documentalSimple('Albaranes', 'Negocio', 'A', 'Cobrado'); };
+
     RENDERERS.facturas = function (id) {
       if (id) return facturaDetalle(id);
-      var all = FS.listFacturas();
+      /* Las que acaban de entrar desde una remesa van las primeras y
+         marcadas: sin eso, «dar de alta» es un botón del que no se sabe
+         si ha hecho algo. */
+      var all = (state.facturasNuevas || []).concat(FS.listFacturas());
       var estados = Array.from(new Set(all.map(function (f) { return f.estado; }))).sort();
       var q = state.facturaFiltro.q.toLowerCase();
       var estFiltro = state.facturaFiltro.estado;
@@ -362,7 +848,8 @@
       });
 
       var rows = filtradas.map(function (f) {
-        return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td>' +
+        return '<tr' + (f.nueva ? ' class="is-nuevo"' : '') + '><td>' +
+          (f.nueva ? '<code>' + esc(f.numero) + '</code><span class="fdemo-nuevo-pill">Nueva</span>' : linkTo('facturas', f.id, f.numero)) + '</td>' +
           '<td class="is-muted">' + esc(dash(f.clienteNombre)) + '</td>' +
           '<td class="is-muted">' + esc(dash(f.proyecto)) + '</td>' +
           '<td class="is-muted">' + FDATE(f.fechaEmision) + '</td>' +
@@ -776,6 +1263,200 @@
       { p: 'Hosting Arnal', v: 890 },
       { p: 'Suministros Belmonte S.L.', v: 412 }
     ];
+
+    /* ══════════════ EL LECTOR DE DOCUMENTOS ══════════════ */
+
+    // Una remesa de verdad: veinte facturas de proveedor dentro de un solo
+    // PDF, que es como llegan del gestor o del propio proveedor. Los datos
+    // son inventados; la FORMA es la que tiene una remesa.
+    var REMESA_PROV = ['Nubalia Cloud','Suministros Gráficos Perlan','Coworking Belvedo','Telecom Sarkia','Viajes Tarsen','Suite Norlem','Talento Externo Rivelda','Gestoría Menvia'];
+    var REMESA = (function () {
+      var out = [], sem = 7;
+      function r() { sem = (sem * 1103515245 + 12345) & 0x7fffffff; return sem / 0x7fffffff; }
+      for (var i = 0; i < 20; i++) {
+        var base = Math.round((80 + r() * 1400) * 100) / 100;
+        var iva = Math.round(base * 0.21 * 100) / 100;
+        out.push({
+          n: 'FP-2026-' + String(4100 + i * 7),
+          prov: REMESA_PROV[i % REMESA_PROV.length],
+          base: base, iva: iva, total: Math.round((base + iva) * 100) / 100,
+          pag: i + 1
+        });
+      }
+      return out;
+    })();
+
+    // Los documentos que se pueden probar. Cada uno enseña una forma distinta
+    // de entrar: una remesa que se da de alta entera, una factura suelta que
+    // acaba en Gastos, un albarán FOTOGRAFIADO -que es el caso difícil- y un
+    // extracto del banco que se concilia contra lo que ya hay.
+    var DOCS = [
+      { k: 'remesa', n: 'remesa-proveedores-septiembre.pdf', p: '2,4 MB', t: '20 facturas en un solo PDF', icono: 'pdf' },
+      { k: 'factura', n: 'factura-proveedor-0441.pdf', p: '148 KB', t: 'Una factura suelta', icono: 'pdf' },
+      { k: 'albaran', n: 'albaran-foto.jpg', p: '1,9 MB', t: 'Un albarán fotografiado con el móvil', icono: 'img' },
+      { k: 'extracto', n: 'extracto-banco-septiembre.csv', p: '36 KB', t: 'Movimientos del banco', icono: 'csv' }
+    ];
+    var ICONO_DOC = {
+      pdf: '<path d="M6 2.75h8L19.25 8v13.25a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V3.5A.75.75 0 0 1 6 2.75Z"/><path d="M13.5 3v5h5.25"/>',
+      img: '<rect x="3" y="4.75" width="18" height="14.5" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-4.5 4 3.5 3-2.5 4 3.5" stroke-linejoin="round"/>',
+      csv: '<rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 3.5v17" stroke-linecap="round"/>'
+    };
+
+    function abreCajon() { state.docCajon = !state.docCajon; render(); }
+
+    // El muro. No es un «no puedes»: es un «esto va en el plan que lee
+    // documentos», con el botón para ir a verlo. Un muro que no explica nada
+    // es una puerta cerrada; este es un escaparate.
+    function muro(titulo, texto) {
+      state.muro = { titulo: titulo, texto: texto };
+      render();
+    }
+    function muroHtml() {
+      if (!state.muro) return '';
+      return '<div class="fdemo-muro" data-action="muro-fuera">' +
+        '<div class="fdemo-muro-c" role="dialog" aria-modal="true">' +
+        '<span class="fdemo-muro-ic" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">' +
+        '<rect x="4.5" y="10.5" width="15" height="10" rx="2"/>' +
+        '<path d="M8 10.5V7.75a4 4 0 0 1 8 0v2.75" stroke-linecap="round"/></svg></span>' +
+        '<h3 class="fdemo-muro-t">' + esc(state.muro.titulo) + '</h3>' +
+        '<p class="fdemo-muro-p">' + esc(state.muro.texto) + '</p>' +
+        '<div class="fdemo-muro-b">' +
+        '<a class="fdemo-btn variant-primary" href="/sistema-financiero#planes">Ver los planes</a>' +
+        '<button type="button" class="fdemo-btn variant-ghost" data-action="muro-cerrar">Seguir mirando</button>' +
+        '</div></div></div>';
+    }
+
+    // El cajón de documentos: lo que se puede soltar en la conversación.
+    function cajonHtml() {
+      if (!state.docCajon) return '';
+      return '<div class="fdemo-cajon">' +
+        '<p class="fdemo-cajon-t">Suéltale un documento y mira qué hace con él</p>' +
+        DOCS.map(function (d) {
+          return '<button type="button" class="fdemo-doc-op" data-action="doc-op" data-k="' + d.k + '">' +
+            '<span class="fdemo-doc-op-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
+            ICONO_DOC[d.icono] + '</svg></span>' +
+            '<span class="fdemo-doc-op-c"><b>' + esc(d.n) + '</b><i>' + esc(d.t) + '</i></span>' +
+            '<span class="fdemo-doc-op-p">' + esc(d.p) + '</span></button>';
+        }).join('') +
+        '<button type="button" class="fdemo-doc-op es-bloq" data-action="doc-mio">' +
+        '<span class="fdemo-doc-op-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
+        '<path d="M12 16.5V6m0 0 4 4m-4-4-4 4" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="M4.5 16v2.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V16" stroke-linecap="round"/></svg></span>' +
+        '<span class="fdemo-doc-op-c"><b>Subir un documento mío</b><i>Tus PDFs, tus fotos, tus Excel</i></span>' +
+        '<span class="fdemo-candado" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' +
+        '<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" stroke-linecap="round"/></svg>' +
+        '</span></button>' +
+        '</div>';
+    }
+
+    // ── el proceso de lectura ──
+    function sueltaDoc(k) {
+      var d = null;
+      for (var i = 0; i < DOCS.length; i++) if (DOCS[i].k === k) d = DOCS[i];
+      if (!d) return;
+      state.docCajon = false;
+      state.lector = { k: k, fase: 'leyendo', leidas: 0, doc: d, alta: false };
+      state.ia.mensajes.push({ autor: 'usuario', texto: TXT_SUELTA[k],
+        chip: { nombre: d.n, peso: d.p, leido: '✓ Subido' } });
+      render();
+      var mainEl2 = root.querySelector('[data-role="main"]'); if (mainEl2) mainEl2.scrollTop = mainEl2.scrollHeight;
+      // Las facturas aparecen UNA A UNA. Enseñar las veinte de golpe sería
+      // más rápido y no se entendería: lo que convence es ver que las está
+      // sacando del documento mientras lo lee.
+      clearInterval(state.lectorT);
+      if (k === 'remesa') {
+        state.lectorT = setInterval(function () {
+          state.lector.leidas++;
+          if (state.lector.leidas >= REMESA.length) {
+            clearInterval(state.lectorT);
+            state.lector.fase = 'leido';
+          }
+          render();
+        }, 190);
+      } else {
+        setTimeout(function () { if (state.lector) { state.lector.fase = 'leido'; render(); } }, 1500);
+      }
+    }
+    var TXT_SUELTA = { remesa: 'Aquí tienes la remesa del mes. Dale de alta lo que puedas.', factura: 'Esta factura de proveedor, métemela donde vaya.', albaran: 'Te mando la foto del albarán que acaban de dejar.', extracto: 'El extracto del banco de este mes.' };
+
+    function daDeAlta() {
+      // Aquí es donde el sistema hace lo que nadie más hace: las facturas no
+      // se quedan en una bandeja, entran en Facturas con su número y su
+      // proveedor, listas para revisar.
+      state.facturasNuevas = REMESA.map(function (r, i) {
+        return { id: 'nv' + i, numero: r.n, cliente: r.prov, clienteNombre: r.prov,
+                 proyecto: null, fechaEmision: FS.hoy, fechaVencimiento: null,
+                 importe: r.total, base: r.base, iva: r.iva, estado: 'Borrador',
+                 estadoCobro: null, importeCobrado: 0, nueva: true };
+      });
+      state.lector.alta = true;
+      state.lector.fase = 'alta';
+      render();
+    }
+
+    function lectorHtml() {
+      var L = state.lector;
+      if (!L) return '';
+      if (L.k !== 'remesa') return lectorSimpleHtml(L);
+      var vistas = REMESA.slice(0, L.leidas);
+      var leyendo = L.fase === 'leyendo';
+      var total = vistas.reduce(function (a, r) { return a + r.total; }, 0);
+      return '<div class="fdemo-ia-msg from-ia"><div class="fdemo-lector">' +
+        '<div class="fdemo-lector-h">' +
+        (leyendo ? '<span class="fdemo-doc-spin" aria-hidden="true"></span>' : '<span class="fdemo-lector-ok">\u2713</span>') +
+        '<div><b>' + (leyendo ? 'Leyendo el documento…' : '{n} facturas encontradas'.replace('{n}', REMESA.length)) + '</b>' +
+        '<i>' + (leyendo ? 'página {p} de {t}'.replace('{p}', L.leidas + 1).replace('{t}', REMESA.length)
+                         : 'suman {t}'.replace('{t}', EUR(total))) + '</i></div>' +
+        '<span class="fdemo-lector-cont">' + L.leidas + ' / ' + REMESA.length + '</span>' +
+        '</div>' +
+        '<div class="fdemo-lector-barra"><i style="width:' + Math.round((L.leidas / REMESA.length) * 100) + '%"></i></div>' +
+        '<div class="fdemo-lector-tabla"><table class="fdemo-table"><thead><tr>' +
+        '<th>Nº</th><th>Proveedor</th><th class="is-right">Base</th>' +
+        '<th class="is-right">IVA</th><th class="is-right">Total</th><th>Origen</th>' +
+        '</tr></thead><tbody>' +
+        vistas.map(function (r, i) {
+          return '<tr class="' + (i === vistas.length - 1 && leyendo ? 'es-entrando' : '') + '">' +
+            '<td><code>' + esc(r.n) + '</code></td><td class="is-muted">' + esc(r.prov) + '</td>' +
+            '<td class="is-right">' + EUR(r.base) + '</td><td class="is-right">' + EUR(r.iva) + '</td>' +
+            '<td class="is-right">' + EUR(r.total) + '</td>' +
+            '<td class="is-muted">p. ' + r.pag + '</td></tr>';
+        }).join('') + '</tbody></table></div>' +
+        (L.fase === 'leido'
+          ? '<div class="fdemo-lector-pie"><p>Revísalas antes de confirmar. Hasta que no las des de alta no se guarda nada.</p>' +
+            '<button type="button" class="fdemo-btn variant-primary" data-action="alta">' +
+            'Dar de alta las {n}'.replace('{n}', REMESA.length) + '</button></div>'
+          : L.fase === 'alta'
+            ? '<div class="fdemo-lector-pie es-hecho"><p><b>{n} facturas dadas de alta.'.replace('{n}', REMESA.length) + '</b> Están en Facturas, en borrador, listas para revisar.</p>' +
+              '<a class="fdemo-btn variant-secondary" href="#facturas">Verlas en Facturas</a></div>'
+            : '') +
+        '</div></div>';
+    }
+
+    // Los otros tres documentos: la misma mecánica, más corta.
+    var SIMPLE = {
+      factura: { t: 'Factura leída', campos: [['Proveedor','Suministros Gráficos Perlan'],['Nº de factura','FP-2026-0441'],['Base imponible','412,00 €'],['Cuota de IVA','86,52 €'],['Total','498,52 €'],['Fecha','12/08/2026']], destino: 'Dada de alta en Gastos, pendiente de tu revisión.', href: '#gastos' },
+      albaran: { t: 'Albarán leído de una foto', campos: [['Proveedor','Nubalia Cloud'],['Nº de albarán','ALB-2026-0188'],['Líneas','6'],['Fecha','03/09/2026']], destino: 'Dado de alta en Albaranes y enlazado con su pedido.', href: '#albaranes' },
+      extracto: { t: 'Extracto conciliado', campos: [['Movimientos','34'],['Conciliados','11'],['Sin identificar','3'],['Periodo','01/09 – 20/09']], destino: 'Once cobros marcados. Tres movimientos no cuadran con ninguna factura: te los deja señalados en vez de asignarlos a ojo.', href: '#cobros' }
+    };
+    function lectorSimpleHtml(L) {
+      var S = SIMPLE[L.k]; if (!S) return '';
+      var leyendo = L.fase === 'leyendo';
+      return '<div class="fdemo-ia-msg from-ia"><div class="fdemo-lector">' +
+        '<div class="fdemo-lector-h">' +
+        (leyendo ? '<span class="fdemo-doc-spin" aria-hidden="true"></span>' : '<span class="fdemo-lector-ok">\u2713</span>') +
+        '<div><b>' + (leyendo ? 'Leyendo el documento…' : S.t) + '</b>' +
+        '<i>' + esc(L.doc.n) + '</i></div></div>' +
+        (leyendo ? '' :
+          '<div class="fdemo-lector-campos">' + S.campos.map(function (c) {
+            return '<div><span>' + esc(c[0]) + '</span><b>' + esc(c[1]) + '</b></div>';
+          }).join('') + '</div>' +
+          '<div class="fdemo-lector-pie es-hecho"><p>' + esc(S.destino) + '</p>' +
+          '<a class="fdemo-btn variant-secondary" href="' + S.href + '">Ver ahí</a></div>') +
+        '</div></div>';
+    }
+
     function adjuntarDocumento() {
       var chip = { nombre: 'facturas-proveedor-agosto.csv', peso: '1 KB', leido: '✓ ' + 'Tabla CSV (3 filas, 7 columnas)' };
       var totalDoc = DOC_FILAS.reduce(function (s, f) { return s + f.v; }, 0);
@@ -814,16 +1495,17 @@
         '<p class="fdemo-ask-sub">Pregúntale al sistema qué está pasando en tu empresa. <span class="fdemo-ask-sub-extra">Contesta con tus propios datos y enseña de dónde ha sacado cada cifra.</span></p>' +
         '</header>' +
         '<div class="fdemo-ask-thread" data-role="ia-thread"><div class="fdemo-ia-msgs">' +
-        state.ia.mensajes.map(mensajeHtml).join('') +
+        state.ia.mensajes.map(mensajeHtml).join('') + lectorHtml() +
         '</div></div>' +
         '<form class="fdemo-ask-form" data-role="ia-form">' +
         '<input class="fdemo-input" type="text" name="pregunta" aria-label="Escribe tu pregunta" placeholder="¿Qué está pasando?" autocomplete="off" maxlength="200">' +
         '<button type="submit" class="fdemo-btn variant-primary">Preguntar</button>' +
         '</form>' +
-        '<button type="button" class="fdemo-ask-clip" data-action="adjuntar">' +
+        '<button type="button" class="fdemo-ask-clip' + (state.docCajon ? ' es-abierto' : '') + '" data-action="adjuntar" aria-expanded="' + (state.docCajon ? 'true' : 'false') + '">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M21 11.5 12.5 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '<span>Adjuntar un documento</span><i>PDF, Excel, CSV o imágenes</i></button>' +
+        '<span>Suéltale un documento</span><i>PDF, foto, Excel o CSV</i></button>' + cajonHtml() +
         (chips ? '<div class="fdemo-ask-chips"><p class="fdemo-ask-chips-t">O prueba con una de estas:</p><div class="fdemo-ia-chips">' + chips + '</div></div>' : '') +
+        muroHtml() +
         '<p class="fdemo-ask-foot">Datos ficticios. En esta demo las respuestas se calculan aquí mismo, en tu navegador; el sistema real responde sobre los datos de tu empresa.</p>' +
         '</div>';
     };
@@ -846,29 +1528,98 @@
 
     // ---------- Configuración ----------
     RENDERERS.configuracion = function () {
-      var ROLES = ['Administrador', 'Direccion', 'Finanzas', 'Operaciones', 'Solo lectura'];
-      var MATRIZ = {
-        Administrador: ['ver_dashboard', 'ver_facturas', 'editar_facturas', 'ver_presupuestos', 'facturar_presupuesto', 'ver_clientes', 'editar_clientes', 'ver_cobros', 'ver_gastos', 'revisar_gastos', 'ver_proyectos', 'usar_ia_financiera', 'ver_configuracion', 'editar_configuracion'],
-        Direccion: ['ver_dashboard', 'ver_facturas', 'editar_facturas', 'ver_presupuestos', 'facturar_presupuesto', 'ver_clientes', 'editar_clientes', 'ver_cobros', 'ver_gastos', 'revisar_gastos', 'ver_proyectos', 'usar_ia_financiera', 'ver_configuracion'],
-        Finanzas: ['ver_dashboard', 'ver_facturas', 'editar_facturas', 'ver_presupuestos', 'facturar_presupuesto', 'ver_clientes', 'ver_cobros', 'ver_gastos', 'revisar_gastos', 'ver_proyectos', 'usar_ia_financiera'],
-        Operaciones: ['ver_dashboard', 'ver_facturas', 'ver_presupuestos', 'ver_clientes', 'ver_proyectos', 'ver_gastos'],
-        'Solo lectura': ['ver_dashboard', 'ver_facturas', 'ver_presupuestos', 'ver_clientes', 'ver_cobros', 'ver_gastos', 'ver_proyectos']
-      };
-      var rolesHtml = ROLES.map(function (r) {
-        return '<div class="fdemo-role-row"><p class="fdemo-role-name">' + esc(r) + '</p><div class="fdemo-role-perms">' +
-          MATRIZ[r].map(function (p) { return '<span class="fdemo-role-perm">' + esc(p) + '</span>'; }).join('') + '</div></div>';
-      }).join('');
+      function campo(l, v) {
+        return '<div class="fdemo-dato"><p class="fdemo-dato-l">' + esc(l) + '</p><p class="fdemo-dato-v">' + v + '</p></div>';
+      }
+      function rejilla(items) { return '<div class="fdemo-rejilla">' + items.join('') + '</div>'; }
+      function chip(x) { return '<span class="fdemo-chip">' + esc(x) + '</span>'; }
+      function opcion(t, d, activa) {
+        return '<button type="button" class="fdemo-opcion' + (activa ? ' es-activa' : '') + '"' +
+          ' data-action="plan" data-plan="tema" aria-pressed="' + (activa ? 'true' : 'false') + '">' +
+          '<span class="fdemo-opcion-h"><span class="fdemo-opcion-t">' + esc(t) + '</span>' +
+          (activa ? '<span class="fdemo-opcion-u">En uso</span>' : '') + '</span>' +
+          '<span class="fdemo-opcion-d">' + esc(d) + '</span></button>';
+      }
 
-      return pageHead('Configuración', 'Ajustes disponibles en esta demo pública.') +
-        card(cardHead('Sesión actual'), '<div class="fdemo-field-grid">' +
-          field('Usuario', 'Cuenta Demo') + field('Empresa', 'Entorno de demostración · D-Code Finance') + field('Rol', pill('Administrador')) + '</div>') +
-        card(cardHead('Origen de datos', 'Controlado por la variable de entorno DATA_SOURCE en el producto real'), '<div class="fdemo-card-body">' + pill('Datos de muestra (mock)') + '</div>') +
-        card(cardHead('Roles y permisos', 'Misma matriz de permisos que el producto real'), rolesHtml) +
-        card(cardHead('Sobre esta demo'), '<ul class="fdemo-pending-list">' +
-          '<li>Los datos son ficticios y no se guardan ni se envían a ningún sistema real.</li>' +
-          '<li>"Pregunta a Finanzas" calcula sus respuestas aquí mismo, sobre este dataset — no llama a ningún servicio externo.</li>' +
-          '<li>El sistema real se conecta a Airtable/n8n de D-Code Partners; esta demo pública está completamente aislada de esa infraestructura.</li>' +
-          '</ul>');
+      // ── el plan ──
+      var plan = card(cardHead('Tu plan', 'Contratación gestionada por D-Code Partners'),
+        rejilla([campo('Plan', '<b>Finance con inteligencia</b>'), campo('Estado', pill('Activo')),
+                 campo('Usuarios', '3 / 5'), campo('Renovación', 'Mensual')]) +
+        '<div class="fdemo-franja"><p class="fdemo-franja-t">Incluido en tu plan</p><div class="fdemo-chips">' +
+        ['Facturación y cobros','Gastos y pagos','Pregunta a Finanzas','Lectura de documentos','Radar y objetivos','Registro VERI*FACTU'].map(chip).join('') +
+        '</div></div>');
+
+      // ── datos fiscales ──
+      var fiscal = card(cardHead('Datos fiscales de tu empresa', 'Los que van en cada factura y en su registro. Sin ellos, una factura emitida no entra en la cadena.'),
+        '<div class="fdemo-form">' +
+        '<label class="fdemo-campo"><span class="fdemo-campo-l">Razón social</span>' +
+        '<input class="fdemo-input" value="D-Code Partners, S.L." data-action="plan" data-plan="editar" readonly></label>' +
+        '<label class="fdemo-campo"><span class="fdemo-campo-l">NIF</span>' +
+        '<input class="fdemo-input" value="B00000000" data-action="plan" data-plan="editar" readonly></label>' +
+        '<label class="fdemo-campo fdemo-campo--ancho"><span class="fdemo-campo-l">Domicilio fiscal</span>' +
+        '<input class="fdemo-input" value="Calle de ejemplo 1, 28001 Madrid" data-action="plan" data-plan="editar" readonly></label>' +
+        '<p class="fdemo-campo-hint fdemo-campo--ancho">En la demo no se guardan: el formulario está para que veas dónde vive cada dato.</p>' +
+        '</div>');
+
+      // ── series ──
+      var SERIES = [['F','Factura','Ordinarias','2026', true],
+                    ['R','Rectificativa','Enlazadas a su original','2026', false],
+                    ['P','Presupuesto','No fiscal','2026', false]];
+      var series = card(cardHead('Series y numeración', 'La numeración es correlativa DENTRO de cada serie, como exige el art. 6 del RD 1619/2012.'),
+        tablaSimple([{t:'Documento'},{t:'Código'},{t:'Descripción'},{t:'Ejercicio'},{t:'Estado'}],
+          SERIES.map(function (s) {
+            return '<tr><td>' + esc(s[1]) + '</td><td><code>' + esc(s[0]) + '</code></td>' +
+              '<td class="is-muted">' + esc(s[2]) + '</td><td class="is-muted">' + esc(s[3]) + '</td>' +
+              '<td>' + pill('Activa') + (s[4] ? ' <span class="fdemo-defecto">por defecto</span>' : '') + '</td></tr>';
+          }).join(''), ''));
+
+      // ── notificaciones ──
+      var REGLAS = [['Primer recordatorio tras el vencimiento','7'],['Segundo recordatorio','15'],['Aviso a dirección si sigue sin cobrarse','30']];
+      var noti = card(cardHead('Notificaciones', 'A dónde van los avisos y cuándo se recuerda una factura'),
+        '<div class="fdemo-card-body"><ul class="fdemo-reglas">' + REGLAS.map(function (r) {
+          return '<li><span class="fdemo-regla-t">' + esc(r[0]) + '</span>' +
+            '<span class="fdemo-regla-n"><b>' + r[1] + '</b> días</span>' +
+            '<span class="fdemo-interruptor es-on" data-action="plan" data-plan="editar" role="switch" aria-checked="true"><i></i></span></li>';
+        }).join('') + '</ul></div>');
+
+      // ── claves de API ──
+      var api = card(cardHead('Claves de API', 'Para conectar automatizaciones. Cada clave lleva un rol, y el rol decide qué puede hacer quien la use.'),
+        tablaSimple([{t:'Nombre'},{t:'Rol'},{t:'Termina en'},{t:'Creada'},{t:'Último uso'}],
+          '<tr><td>Integración con la web</td><td>' + pill('Finanzas') + '</td><td><code>…4f2a</code></td>' +
+          '<td class="is-muted">hace 3 meses</td><td class="is-muted">hace 2 días</td></tr>', '') +
+        '<div class="fdemo-card-body"><button type="button" class="fdemo-btn variant-secondary" data-action="plan" data-plan="api">Crear una clave</button></div>');
+
+      // ── tema ──
+      var tema = card(cardHead('Tema', 'Es tuyo, no de la empresa: te acompaña en cualquier dispositivo donde entres.'),
+        '<div class="fdemo-card-body"><div class="fdemo-opciones">' +
+        opcion('Claro', 'Lo que ves ahora al entrar. Pensado para trabajar de día.', true) + opcion('Oscuro', 'Mismo contraste, menos luz. Para quien trabaja de noche.', false) + '</div></div>');
+
+      // ── roles: tres columnas legibles, no setenta chips ──
+      var ROLES = [
+        ['Owner', 'Todo, incluido invitar y dar de baja a personas', 'Todo'],
+        ['Administrador', 'Todo salvo la propiedad de la cuenta', 'Todo'],
+        ['Dirección', 'Ver todo y decidir; no toca la configuración fiscal', 'Ver y decidir'],
+        ['Finanzas', 'Facturar, cobrar, gastar y cerrar', 'Operar'],
+        ['Operaciones', 'Ver y crear documentos; no ve márgenes', 'Documentos'],
+        ['Solo lectura', 'Ver. Nada más.', 'Solo ver']
+      ];
+      var roles = card(cardHead('Roles y permisos', 'Qué puede hacer cada rol. El permiso se comprueba por módulo y por acción.'),
+        tablaSimple([{t:'Rol'},{t:'Qué puede hacer'},{t:'Alcance'}],
+          ROLES.map(function (r) {
+            return '<tr><td>' + esc(r[0]) + '</td><td class="is-muted">' + esc(r[1]) + '</td>' +
+              '<td>' + chip(r[2]) + '</td></tr>';
+          }).join(''), ''));
+
+      var sesion = card(cardHead('Sesión actual'),
+        rejilla([campo('Usuario', 'Cuenta de demostración'), campo('Rol', pill('Administrador')),
+                 campo('Organización', 'D-Code Partners'), campo('Origen de datos', pill('Datos de muestra'))]));
+
+      return '<div class="fdemo-panel fdemo-conf">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Ajustes</p>' +
+        '<h1 class="fdemo-page-title">Configuración</h1>' +
+        '<p class="fdemo-page-sub">Tu empresa, tus series, quién entra, a dónde van los avisos y con qué se integra.</p></div></div>' +
+        plan + fiscal + series + noti + api + tema + roles + sesion +
+        '</div>';
     };
 
     // -------- Delegación de eventos --------
@@ -903,10 +1654,23 @@
         return;
       }
       var clipEl = e.target.closest('[data-action="adjuntar"]');
-      if (clipEl) {
-        e.preventDefault();
-        adjuntarDocumento();
+      if (clipEl) { e.preventDefault(); abreCajon(); return; }
+      var opEl = e.target.closest('[data-action="doc-op"]');
+      if (opEl) { e.preventDefault(); sueltaDoc(opEl.getAttribute('data-k')); return; }
+      if (e.target.closest('[data-action="doc-mio"]')) {
+        e.preventDefault(); state.docCajon = false;
+        muro('Leer tus propios documentos va en el plan con inteligencia', 'Aquí puedes soltar los cuatro documentos de ejemplo y ver exactamente qué hace con ellos. Con tu plan contratado, lo mismo pero con los tuyos: PDFs, fotos, Excel, lo que llegue.');
         return;
+      }
+      if (e.target.closest('[data-action="alta"]')) { e.preventDefault(); daDeAlta(); return; }
+      if (e.target.closest('[data-action="plan"]')) {
+        e.preventDefault();
+        muro('Leer tus propios documentos va en el plan con inteligencia', 'Aquí puedes soltar los cuatro documentos de ejemplo y ver exactamente qué hace con ellos. Con tu plan contratado, lo mismo pero con los tuyos: PDFs, fotos, Excel, lo que llegue.');
+        return;
+      }
+      if (e.target.closest('[data-action="muro-cerrar"]') ||
+          (e.target.getAttribute && e.target.getAttribute('data-action') === 'muro-fuera')) {
+        e.preventDefault(); state.muro = null; render(); return;
       }
       var askEl = e.target.closest('[data-action="ask"]');
       if (askEl) {
@@ -949,10 +1713,12 @@
           state.ia.mensajes.push({ autor: 'usuario', texto: texto });
           state.ia.mensajes.push({ autor: 'ia', resp: encontrada.a() });
         } else {
-          // Sin coincidencia no se improvisa: se dice lo que esta demo puede
-          // contestar y lo que hace el sistema real, que no es lo mismo.
-          state.ia.mensajes.push({ autor: 'usuario', texto: texto });
-          state.ia.mensajes.push({ autor: 'ia', resp: { conclusion: 'Esta demo tiene seis preguntas preparadas y esa no se le parece, así que no me la invento. El sistema real responde en abierto sobre los datos de tu empresa. Prueba con una de las de abajo.', datos: [], refs: [] } });
+          // Sin coincidencia no se improvisa NI se pide perdón: se enseña
+          // lo que hace el sistema de verdad y se ofrece verlo. Un «no puedo»
+          // a secas es una puerta cerrada; esto es un escaparate.
+          muro('Escribir tus propias preguntas va en el plan con inteligencia',
+               'Esta demo contesta a las ocho preguntas de abajo, calculadas sobre datos inventados. Sobre los datos de tu empresa contesta a cualquiera, y cada respuesta trae de dónde ha salido la cifra.');
+          return;
         }
         render();
         var thread = root.querySelector('[data-role="ia-thread"]');
@@ -974,17 +1740,24 @@
        Lo que NO hace, que es la mitad del trabajo: no corre fuera de la
        pantalla, no corre con movimiento reducido y no corre en la pantalla
        completa —ahí se ha entrado a usarla, no a mirarla—. */
+    /* El guion de la visita. Cada paso puede, además de cambiar de pantalla,
+       EJECUTAR algo: abrir el cajón, elegir un documento, pulsar el alta. Eso
+       es lo que separa una visita de un pase de diapositivas. */
     var TOUR = [
-      { v: 'dashboard',  ms: 7200 },
-      { v: 'facturas',   ms: 6400 },
-      { v: 'cobros',     ms: 6400 },
-      { v: 'gastos',     ms: 6400 },
-      { v: 'clientes',   ms: 6000 },
-      { v: 'proyectos',  ms: 6400 },
-      { v: 'documentos', ms: 9500 },
-      { v: 'ia',         ms: 10500 }
+      { v: 'dashboard', ms: 7000, dice: 'El panel: la frase de arriba ya dice qué pasa' },
+      { v: 'tesoreria', ms: 5200, dice: 'Tesorería: qué entra y qué sale' },
+      { v: 'cobros',    ms: 5200, dice: 'Cobros: quién debe y desde cuándo' },
+      { v: 'radar',     ms: 5200, dice: 'Radar: los avisos, con su umbral escrito' },
+      { v: 'ia',        ms: 2600, dice: 'Le soltamos un PDF con veinte facturas…', hace: 'abrir' },
+      { v: 'ia',        ms: 2200, dice: 'Le soltamos un PDF con veinte facturas…', hace: 'remesa', quieto: true },
+      { v: 'ia',        ms: 5200, dice: '…las está sacando una a una', quieto: true },
+      { v: 'ia',        ms: 2600, dice: 'Y las da de alta', hace: 'alta', quieto: true },
+      { v: 'facturas',  ms: 6400, dice: 'Ahí están, en Facturas' }
     ];
-    var REANUDA_MS = 25000;
+    /* Cuatro segundos y medio. Es el tiempo que alguien tarda en leer la
+       pantalla y decidir que no va a tocar nada; más que eso y la demo
+       parece apagada, menos y le quita el ratón de las manos. */
+    var REANUDA_MS = 4500;
     var reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var tour = { on: false, i: 0, t0: 0, dur: 1, timer: 0, raf: 0, vuelta: 0, visible: false, mano: false };
     var tourTxtEl = root.querySelector('[data-role="tour-txt"]');
@@ -993,52 +1766,66 @@
 
 
     /* ══════════════ LA MANO ══════════════
-       Lleva el puntero hasta el ítem del menú que toca, lo pulsa y avisa.
-       Si el ítem no está en pantalla —un menú desplazado, un ancho raro— no
-       se inventa nada: se hace el cambio sin ceremonia. */
+       Un puntero de verdad: flecha, sombra y onda al pulsar. Un punto sin
+       forma se lee como un adorno; una flecha se lee como alguien usando la
+       aplicación, que es justo lo que está pasando. */
     var manoEl = root.querySelector('[data-role="mano"]');
     var manoT = [0, 0, 0];
     function manoLimpia() {
       for (var i = 0; i < manoT.length; i++) clearTimeout(manoT[i]);
       if (manoEl) manoEl.classList.remove('is-ahi', 'is-pulsa');
     }
-    function llevaLaMano(vista, hecho) {
-      var destino = sidebarEl.querySelector('[data-role="nav"][data-view="' + vista + '"]');
-      if (!manoEl || !destino || reducido) { hecho(); return null; }
+    function llevaLaManoA(selector, hecho) {
+      var destino = root.querySelector(selector);
+      if (!manoEl || !destino || reducido) { hecho(); return; }
       var caja = destino.getBoundingClientRect(), marco = root.getBoundingClientRect();
-      if (!caja.width || caja.bottom < marco.top || caja.top > marco.bottom) { hecho(); return null; }
-      manoEl.style.transform = 'translate(' + (caja.left - marco.left + Math.min(26, caja.width * 0.5)) +
+      if (!caja.width || caja.bottom < marco.top - 40 || caja.top > marco.bottom + 40) { hecho(); return; }
+      manoEl.style.transform = 'translate(' + (caja.left - marco.left + Math.min(28, caja.width * 0.5)) +
         'px,' + (caja.top - marco.top + caja.height * 0.5) + 'px)';
       manoEl.classList.add('is-ahi');
-      /* 560 ms de viaje, la pulsación encima, y el cambio de pantalla 180 ms
-         después: el orden importa, porque lo que convence es ver el efecto
-         DESPUÉS de la causa. */
-      manoT[0] = setTimeout(function () { manoEl.classList.add('is-pulsa'); }, 540);
-      manoT[1] = setTimeout(function () { hecho(); }, 720);
-      manoT[2] = setTimeout(function () { manoEl.classList.remove('is-pulsa'); }, 1020);
-      return true;
+      /* El orden importa: primero llega, después pulsa, y SOLO DESPUÉS
+         cambia la pantalla. Lo que convence es ver el efecto detrás de la
+         causa, no a la vez. */
+      manoT[0] = setTimeout(function () { manoEl.classList.add('is-pulsa'); }, 560);
+      manoT[1] = setTimeout(function () { hecho(); }, 760);
+      manoT[2] = setTimeout(function () { manoEl.classList.remove('is-pulsa'); }, 1060);
     }
 
     function pintaTour() {
       root.classList.toggle('is-tour', tour.on);
-      if (tourTxtEl) tourTxtEl.textContent = tour.on ? 'Recorrido automático' : 'Lo llevas tú';
+      if (tourTxtEl && !tour.on) tourTxtEl.textContent = 'Lo llevas tú';
+      if (tourTxtEl && tour.on && !tourTxtEl.textContent) tourTxtEl.textContent = 'Recorrido automático';
       if (tourBtnEl) tourBtnEl.setAttribute('title', tour.on ? 'Parar el recorrido y navegar tú' : 'Volver al recorrido automático');
       if (!tour.on && tourBarEl) tourBarEl.style.transform = 'scaleX(0)';
     }
     function pasoTour() {
       var paso = TOUR[tour.i % TOUR.length];
       tour.i++;
-      /* La cuenta atrás del paso empieza CUANDO SE VE LA PANTALLA, no cuando
-         arranca la mano: si no, el viaje se come un segundo de lectura. */
-      llevaLaMano(paso.v, function () {
+      if (tourTxtEl && paso.dice) tourTxtEl.textContent = paso.dice;
+
+      function sigue() {
         if (!tour.on) return;
-        state.route = paso.v; state.id = null;
-        render();
         tour.t0 = Date.now(); tour.dur = paso.ms;
         clearTimeout(tour.timer);
         tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, paso.ms);
-      });
+      }
+      function aplica() {
+        if (!tour.on) return;
+        if (!paso.quieto) { state.route = paso.v; state.id = null; render(); }
+        if (paso.hace === 'abrir') { state.docCajon = true; render(); }
+        if (paso.hace === 'remesa') { sueltaDoc('remesa'); }
+        if (paso.hace === 'alta') { if (state.lector && state.lector.fase === 'leido') daDeAlta(); }
+        sigue();
+      }
+      /* La mano va al sitio que corresponde: al módulo del menú si el paso
+         cambia de pantalla, y al botón concreto si el paso pulsa algo. */
+      var destino = paso.hace === 'remesa' ? '[data-action="doc-op"][data-k="remesa"]'
+                  : paso.hace === 'alta' ? '[data-action="alta"]'
+                  : paso.hace === 'abrir' ? '[data-action="adjuntar"]'
+                  : '[data-role="nav"][data-view="' + paso.v + '"]';
+      llevaLaManoA(destino, aplica);
     }
+
     function marcaBarra() {
       tour.raf = 0;
       if (!tour.on) return;
@@ -1064,6 +1851,13 @@
       if (porMano) {
         tour.mano = true;
         clearTimeout(tour.vuelta);
+        /* MEDIDO: al reanudar se seguia por el paso donde se habia quedado, y
+           cuatro de los nueve pasos son `quieto` —no cambian de pantalla—.
+           Reanudar en uno de ellos dejaba el rotulo contando lo del lector
+           mientras la pantalla era la que habia abierto la persona, y la mano
+           pulsando botones que no estaban. La visita se cuenta desde el
+           principio, que ademas es donde empieza a entenderse. */
+        tour.i = 0;
         tour.vuelta = setTimeout(function () { tour.mano = false; arrancaTour(true); }, REANUDA_MS);
       }
       pintaTour();
