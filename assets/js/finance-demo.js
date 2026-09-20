@@ -33,6 +33,7 @@
     { id: 'clientes', label: 'Clientes', grupo: 'negocio' },
     { id: 'cobros', label: 'Cobros', grupo: 'dia' },
     { id: 'gastos', label: 'Gastos', grupo: 'dia' },
+    { id: 'documentos', label: 'Documentos', grupo: 'dia' },
     { id: 'proyectos', label: 'Proyectos', grupo: 'negocio' },
     { id: 'ia', label: 'Pregunta a Finanzas', grupo: 'inteligencia' },
     { id: 'configuracion', label: 'Configuración', grupo: 'administracion' }
@@ -54,6 +55,7 @@
     dashboard: '<rect x="3" y="3" width="7.5" height="8.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5" rx="1.5"/><rect x="13.5" y="11" width="7.5" height="10" rx="1.5"/><rect x="3" y="14.5" width="7.5" height="6.5" rx="1.5"/>',
     facturas: '<path d="M6 2.75h9.5L19.5 7v13.5a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V3.5A.75.75 0 0 1 6 2.75Z"/><path d="M14.75 3v4.25H19"/><path d="M8.5 12.5h7M8.5 16.5h4.5" stroke-linecap="round"/>',
     cobros: '<rect x="2.75" y="5.75" width="18.5" height="12.5" rx="2"/><circle cx="12" cy="12" r="2.75"/><path d="M6.25 12h.01M17.75 12h.01" stroke-linecap="round"/>',
+    documentos: '<path d="M6 2.75h8L19.25 8v13.25a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V3.5A.75.75 0 0 1 6 2.75Z"/><path d="M13.5 3v5h5.25"/><path d="M9 13.5h6M9 17h3.5" stroke-linecap="round"/>',
     gastos: '<path d="M3.25 8.5h17.5v10a1.75 1.75 0 0 1-1.75 1.75H5a1.75 1.75 0 0 1-1.75-1.75v-10Z"/><path d="M3.25 8.5 5.6 4.4A1.5 1.5 0 0 1 6.9 3.65h10.2a1.5 1.5 0 0 1 1.3.75l2.35 4.1"/><path d="M9.5 13h5" stroke-linecap="round"/>',
     presupuestos: '<rect x="4.25" y="2.75" width="15.5" height="18.5" rx="2"/><path d="M8 7.5h8M8 11.5h8M8 15.5h4.5" stroke-linecap="round"/>',
     clientes: '<circle cx="9" cy="8" r="3.25"/><path d="M2.75 20.25a6.25 6.25 0 0 1 12.5 0"/><path d="M16.25 5.1a3.25 3.25 0 0 1 0 5.8M18 20.25a6.3 6.3 0 0 0-1.4-3.95" stroke-linecap="round"/>',
@@ -95,8 +97,6 @@
   // ---------------------------------------------------------------
   function initInstance(root) {
     var mode = root.getAttribute('data-mode') || 'embedded';
-    var exitHref = root.getAttribute('data-exit-href') || '/sistema-financiero';
-    var exitLabel = root.getAttribute('data-exit-label') || 'Salir de la demo';
     var useHash = mode === 'fullpage';
 
     root.classList.add('fdemo-app', useHash ? 'is-fullpage' : 'is-embedded');
@@ -107,10 +107,23 @@
       '<div class="fdemo-topbar">' +
       '<button class="fdemo-topbar-menu-btn" type="button" data-role="menu-btn" aria-label="Abrir menu">' + MENU_ICON + '</button>' +
       '<div class="fdemo-topbar-right">' +
-      '<div class="fdemo-topbar-user"><div class="fdemo-topbar-name">Cuenta Demo</div><div class="fdemo-topbar-role">Administrador</div></div>' +
+      /* EL RECORRIDO. Si no lo toca nadie, la demo se recorre sola los
+         módulos; en cuanto alguien interactúa, se para y manda el usuario.
+         El indicador está aquí y no escondido: quien ve moverse la pantalla
+         tiene que saber por qué se mueve y cómo pararlo. */
+      '<button type="button" class="fdemo-tour" data-role="tour" aria-live="polite">' +
+      '<span class="fdemo-tour-dot" aria-hidden="true"></span>' +
+      '<span class="fdemo-tour-txt" data-role="tour-txt">Recorrido automático</span>' +
+      '</button>' +
+      '<div class="fdemo-topbar-user"><div class="fdemo-topbar-name">D-Code Partners</div><div class="fdemo-topbar-role">Cuenta de demostración</div></div>' +
       '<div class="fdemo-topbar-avatar">D</div>' +
-      '<a class="fdemo-topbar-exit" href="' + exitHref + '">' + esc(exitLabel) + '</a>' +
-      '</div></div>' +
+      /* La salida vuelve, pero SOLO en pantalla completa. Ahí la aplicación
+         es la ventana entera y sin ella no hay manera de volver a la web.
+         Empotrada no hace falta: la demo ya está entera donde está. */
+      (useHash ? '<a class="fdemo-topbar-exit" href="' + (root.getAttribute('data-exit-href') || '/sistema-financiero') + '">' + esc(root.getAttribute('data-exit-label') || 'Salir') + '</a>' : '') +
+      '</div>' +
+      '<div class="fdemo-tour-bar" data-role="tour-bar" aria-hidden="true"><i></i></div>' +
+      '</div>' +
       // La marca DEMO va en las DOS modalidades. Antes solo la llevaba la
       // pantalla completa, así que la instancia empotrada en la Home enseñaba
       // importes, clientes y vencimientos sin que nada visible dijera que son
@@ -125,7 +138,7 @@
     var contentEl = root.querySelector('[data-role="content"]');
     var menuBtn = root.querySelector('[data-role="menu-btn"]');
 
-    var state = { route: 'ia', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false } };
+    var state = { doc: { fase: 'inicio', archivo: null, t: 0 }, gastoNuevo: null, route: 'ia', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false } };
 
     // La conversación no empieza en blanco. Quien llega a la demo ve una
     // pregunta ya respondida -- con sus cifras y sus enlaces -- antes de
@@ -143,8 +156,16 @@
     // modo fullpage (pantalla completa) adopta la marca real (mismo logo que
     // la web), la navegación agrupada con iconos y el indicador deslizante
     // del repositorio dcode-finance actual (rama finance-product-rebuild).
+    /* LA NAVEGACIÓN ES LA DEL PRODUCTO, EMPOTRADA O NO.
+
+       La versión empotrada usaba una lista plana sin iconos «para no tocar el
+       escaparate aprobado». El escaparate era el problema: alguien que entra
+       en la web tiene que ver la misma barra lateral que verá el día que
+       entre en el sistema, con sus grupos y sus iconos. En un teléfono el
+       CSS la aplana en una tira horizontal (display:contents), así que el
+       mismo HTML sirve para las dos. */
     var navIndicatorEl = null;
-    if (useHash) {
+    if (true) {
       sidebarEl.innerHTML =
         '<div class="fdemo-brand fdemo-brand--full">' +
         '<img src="/assets/logo/dcode-icon-sm.png" alt="" width="24" height="20" class="fdemo-brand-logo">' +
@@ -167,16 +188,6 @@
         }).join('') +
         '</div>';
       navIndicatorEl = sidebarEl.querySelector('[data-role="nav-indicator"]');
-    } else {
-      sidebarEl.innerHTML =
-        '<div class="fdemo-brand">' +
-        '<span class="fdemo-brand-mark">D</span>' +
-        '<div><div class="fdemo-brand-name">D-Code Finance</div>' +
-        '<div class="fdemo-brand-sub">D-Code Partners <span class="fdemo-brand-demo">DEMO</span></div></div>' +
-        '</div>' +
-        NAV_ITEMS.map(function (v) {
-          return '<a href="#" class="fdemo-nav-item" data-role="nav" data-view="' + v.id + '"><span class="fdemo-nav-dot"></span>' + esc(v.label) + '</a>';
-        }).join('');
     }
 
     function setActiveNav(viewId) {
@@ -521,10 +532,14 @@
     // ---------- Gastos ----------
     RENDERERS.gastos = function (id) {
       if (id) return gastoDetalle(id);
-      var all = FS.listGastos();
+      /* El gasto que acaba de salir de un PDF va el primero y marcado: sin
+         eso, «crear gasto» es un botón que no se sabe si ha hecho algo. */
+      var all = (state.gastoNuevo ? [state.gastoNuevo] : []).concat(FS.listGastos());
       var total = all.reduce(function (s, g) { return s + g.importe; }, 0);
       var rows = all.map(function (g) {
-        return '<tr><td>' + linkTo('gastos', g.id, g.proveedor) + '</td><td class="is-muted">' + esc(dash(g.concepto)) + '</td><td class="is-muted">' + esc(dash(g.categoria)) + '</td>' +
+        return '<tr' + (g.documento ? ' class="is-nuevo"' : '') + '><td>' + linkTo('gastos', g.id, g.proveedor) +
+          (g.documento ? '<span class="fdemo-nuevo-pill">Nuevo</span><span class="fdemo-doc-mini">' + esc(g.documento) + '</span>' : '') +
+          '</td><td class="is-muted">' + esc(dash(g.concepto)) + '</td><td class="is-muted">' + esc(dash(g.categoria)) + '</td>' +
           '<td class="is-muted">' + FDATE(g.fecha) + '</td><td class="is-right">' + EUR(g.importe) + '</td><td>' + pill(g.estadoRevision) + '</td></tr>';
       }).join('');
       var tableHtml = !all.length ? empty('Aún no hay gastos registrados.') :
@@ -546,6 +561,93 @@
         (g.notasRevision ? card(cardHead('Notas de revisión'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted);">' + esc(g.notasRevision) + '</p>') : '') +
         '</div>';
     }
+
+
+    /* ══════════════════ DOCUMENTOS · LO QUE HACE UN PDF ══════════════════
+
+       Comprobado en el sistema real antes de escribir esto: Gastos → «Desde
+       PDF» sube la factura del proveedor, detecta los campos y ENSEÑA EL
+       FRAGMENTO DEL DOCUMENTO DEL QUE HA SALIDO CADA UNO. Se revisa, se
+       corrige y se confirma; hasta entonces no se guarda nada. Si el PDF es
+       un escaneado, lo dice y guarda el documento igual.
+
+       Eso es lo que se reproduce aquí, con un documento de ejemplo y con sus
+       dos finales, porque los dos son reales. Lo que el sistema NO hace —dar
+       de alta varias facturas solas desde un PDF— no aparece. */
+    var DOC_CAMPOS = [
+      { k: 'Importe total', v: '498,52 €', frag: '…mponible: 412,00 EUR  IVA 21%: 86,52 EUR  TOTAL FACTURA: 498,52 EUR' },
+      { k: 'Fecha', v: '12 ago 2026', frag: '…de factura: FP-2026-0441  Fecha de emision: 12/08/2026  Fecha de vencimient…' },
+      { k: 'Nº de factura', v: 'FP-2026-0441', frag: '…Pradillo 42, 28002 Madrid  FACTURA  Numero de factura: FP-2026-0441…' },
+      { k: 'Base imponible', v: '412,00 €', frag: '…y consumibles de agosto  Base imponible: 412,00 EUR  IVA 21%: 86,52 E…' },
+      { k: 'Cuota de IVA', v: '86,52 €', frag: '…Base imponible: 412,00 EUR  IVA 21%: 86,52 EUR  TOTAL FACTURA: 4…' },
+      { k: 'NIF detectado (sin ficha de proveedor que coincida)', v: 'B84213977', frag: 'SUMINISTROS BELMONTE SL  CIF B84213977 - Calle Pradillo 42…' }
+    ];
+
+    function docPaso(fase) {
+      state.doc.fase = fase;
+      render();
+    }
+
+    RENDERERS.documentos = function () {
+      var f = state.doc.fase;
+      var cuerpo;
+
+      if (f === 'analizando') {
+        cuerpo = '<div class="fdemo-doc-run"><span class="fdemo-doc-spin" aria-hidden="true"></span>' +
+          '<p class="fdemo-doc-run-t">' + 'Subiendo y analizando' + ' <b>' + esc(state.doc.archivo) + '</b>…</p></div>';
+      } else if (f === 'detectado') {
+        cuerpo = '<div class="fdemo-doc-out">' +
+          '<p class="fdemo-doc-out-t">' + 'Detectado en' + ' «<b>' + esc(state.doc.archivo) + '</b>»</p>' +
+          '<p class="fdemo-doc-out-s">' + 'Cada valor enseña el fragmento del PDF del que salió. Revisa, corrige lo que haga falta y confirma: no se guarda nada hasta entonces.' + '</p>' +
+          '<ul class="fdemo-doc-campos">' + DOC_CAMPOS.map(function (c) {
+            return '<li><span class="fdemo-doc-k">' + esc(c.k) + '</span>' +
+              '<span class="fdemo-doc-v">' + esc(c.v) + '</span>' +
+              '<span class="fdemo-doc-frag">' + esc(c.frag) + '</span></li>';
+          }).join('') + '</ul>' +
+          '<div class="fdemo-doc-acts">' +
+          '<button type="button" class="fdemo-btn variant-primary" data-action="doc" data-doc="crear">' + 'Crear gasto' + '</button>' +
+          '<button type="button" class="fdemo-btn" data-action="doc" data-doc="inicio">' + 'Cancelar' + '</button>' +
+          '</div></div>';
+      } else if (f === 'escaneado') {
+        cuerpo = '<div class="fdemo-doc-out is-warn">' +
+          '<p class="fdemo-doc-out-t">«<b>' + esc(state.doc.archivo) + '</b>»</p>' +
+          '<p class="fdemo-doc-out-s">' + 'El PDF no contiene texto legible (probablemente es un escaneado o una foto). Puedes introducir los datos a mano: el documento ya queda guardado y se adjuntará al gasto.' + '</p>' +
+          '<div class="fdemo-doc-acts">' +
+          '<button type="button" class="fdemo-btn variant-primary" data-action="nav" data-view="gastos">' + 'Rellenar a mano' + '</button>' +
+          '<button type="button" class="fdemo-btn" data-action="doc" data-doc="inicio">' + 'Probar con otro documento' + '</button>' +
+          '</div></div>';
+      } else if (f === 'creado') {
+        cuerpo = '<div class="fdemo-doc-out is-ok">' +
+          '<p class="fdemo-doc-out-s">' + 'Gasto creado con el documento adjunto. Lo tienes arriba del todo en Gastos, pendiente de revisión.' + '</p>' +
+          '<div class="fdemo-doc-acts">' +
+          '<button type="button" class="fdemo-btn variant-primary" data-action="nav" data-view="gastos">' + 'Ver el gasto en Gastos' + '</button>' +
+          '<button type="button" class="fdemo-btn" data-action="doc" data-doc="inicio">' + 'Probar con otro documento' + '</button>' +
+          '</div></div>';
+      } else {
+        cuerpo = '<p class="fdemo-doc-explica">' + 'Sube la factura del proveedor en PDF. Si el PDF es digital, los campos se detectan solos y tú solo revisas. Si es un escaneado, el documento queda guardado y rellenas los datos a mano.' + '</p>' +
+          '<div class="fdemo-doc-acts">' +
+          '<button type="button" class="fdemo-btn variant-primary" data-action="doc" data-doc="digital">' + 'Probar con una factura digital' + '</button>' +
+          '<button type="button" class="fdemo-btn" data-action="doc" data-doc="escaneado">' + 'Probar con un escaneado' + '</button>' +
+          '</div>';
+      }
+
+      var archivo = [
+        { n: state.gastoNuevo ? 'FP-2026-0441-belmonte.pdf' : 'albaran-ALB-2026-0007.pdf', t: state.gastoNuevo ? 'Factura' : 'Albarán', o: state.gastoNuevo ? 'Gasto desde PDF' : 'Subida manual', d: state.gastoNuevo ? '12 ago 2026' : '02 ago 2026' },
+        { n: 'contrato-nortex-2026.pdf', t: 'Otro', o: 'Subida manual', d: '21 jul 2026' }
+      ];
+
+      return pageHead('Documentos', 'Cada archivo se guarda una vez y queda protegido: solo se descarga desde aquí, con tu sesión y tu permiso comprobados en cada intento.') +
+        card('<div class="fdemo-card-head"><div><h2 class="fdemo-card-title">' + 'Nuevo gasto desde PDF' + '</h2>' +
+             '<p class="fdemo-card-subtitle">' + 'También puedes crearlo a mano — este camino solo te ahorra teclear.' + '</p></div></div>',
+             '<div class="fdemo-doc-body">' + cuerpo +
+             '<p class="fdemo-doc-nota">' + 'Así funciona en el sistema real. Aquí lo ves con un documento de ejemplo: esta demo no sube ningún fichero tuyo ni guarda nada.' + '</p></div>') +
+        card(cardHead('Archivo', 'Los documentos subidos, con su tipo y su origen'),
+             '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>' + 'Documento' + '</th><th>' + 'Tipo' + '</th><th>' + 'Origen' + '</th><th>' + 'Fecha' + '</th></tr></thead><tbody>' +
+             archivo.map(function (a) {
+               return '<tr><td>' + esc(a.n) + '</td><td>' + pill(a.t) + '</td><td class="is-muted">' + esc(a.o) + '</td><td class="is-muted">' + esc(a.d) + '</td></tr>';
+             }).join('') + '</tbody></table></div>' +
+             '<p class="fdemo-doc-nota">' + 'Tipos que reconoce el sistema: presupuesto, pedido, albarán, factura, gasto, ticket, justificante y otro.' + '</p>');
+    };
 
     // ---------- Proyectos ----------
     RENDERERS.proyectos = function (id) {
@@ -601,6 +703,10 @@
 
     function respuestaHtml(r) {
       var partes = ['<div class="fdemo-ans">'];
+      /* Un documento leído se anuncia antes de la conclusión: lo primero que
+         quiere saber quien acaba de adjuntar algo es si se ha entendido. */
+      if (r.chip) partes.push(chipHtml(r.chip));
+      if (r.grupoT) partes.push('<p class="fdemo-ans-grupo-t">' + esc(r.grupoT) + '</p>');
       partes.push('<p class="fdemo-ans-conclusion">' + esc(r.conclusion) + '</p>');
       if (r.datos && r.datos.length) {
         partes.push('<div class="fdemo-ans-datos">' + r.datos.map(datoHtml).join('') + '</div>');
@@ -618,18 +724,62 @@
             return '<button type="button" class="fdemo-ia-ref" data-action="nav" data-view="' + ref.type + '" data-id="' + ref.id + '">' + esc(ref.label) + '</button>';
           }).join('') + '</div>');
       }
+      if (r.motor) partes.push('<p class="fdemo-ans-motor">' + esc(r.motor) + '</p>');
       partes.push('</div>');
       return partes.join('');
     }
 
+    function chipHtml(c) {
+      return '<span class="fdemo-doc-chip"><span class="fdemo-doc-chip-n">' + esc(c.nombre) + '</span>' +
+        '<span class="fdemo-doc-chip-k">' + esc(c.peso) + '</span>' +
+        '<span class="fdemo-doc-chip-ok">' + esc(c.leido) + '</span></span>';
+    }
+
     function mensajeHtml(m) {
       if (m.autor === 'usuario') {
-        return '<div class="fdemo-ia-msg from-user"><div class="fdemo-ia-bubble">' + esc(m.texto) + '</div></div>';
+        return '<div class="fdemo-ia-msg from-user">' + (m.chip ? chipHtml(m.chip) : '') +
+          '<div class="fdemo-ia-bubble">' + esc(m.texto) + '</div></div>';
       }
       if (m.resp) {
         return '<div class="fdemo-ia-msg from-ia">' + respuestaHtml(m.resp) + '</div>';
       }
       return '<div class="fdemo-ia-msg from-ia"><div class="fdemo-ia-bubble">' + esc(m.texto || '') + '</div></div>';
+    }
+
+
+    /* ══════════════ UN DOCUMENTO DENTRO DE LA CONVERSACIÓN ════════════════
+
+       Probado contra el sistema real con un CSV de tres líneas. Lo que hace
+       —y lo que se reproduce aquí— es: leerlo en local, decir qué estructura
+       tiene, sumarlo, agruparlo por la columna que identifica al proveedor y
+       contrastarlo con lo que ya hay registrado. Y decir lo que NO puede
+       concluir, que es lo que separa una herramienta de un adivino. */
+    var DOC_FILAS = [
+      { p: 'Transportes Ferrer', v: 1240 },
+      { p: 'Hosting Arnal', v: 890 },
+      { p: 'Suministros Belmonte S.L.', v: 412 }
+    ];
+    function adjuntarDocumento() {
+      var chip = { nombre: 'facturas-proveedor-agosto.csv', peso: '1 KB', leido: '✓ ' + 'Tabla CSV (3 filas, 7 columnas)' };
+      var totalDoc = DOC_FILAS.reduce(function (s, f) { return s + f.v; }, 0);
+      var registrado = FS.listGastos().reduce(function (s, g) { return s + g.importe; }, 0);
+      state.ia.mensajes.push({ autor: 'usuario', texto: '¿Qué contiene este fichero y cómo encaja con los datos de la empresa?', chip: chip });
+      state.ia.mensajes.push({ autor: 'ia', resp: {
+        chip: chip,
+        grupoT: 'Por «proveedor»' + ' · ' + 'facturas-proveedor-agosto.csv',
+        conclusion: 'El documento suma 2.542,00 €. Aquí hay registrados ' + EUR(registrado) + ' de gasto. Sus categorías no coinciden con las que usa Finance, así que no puedo cruzarlas línea a línea. Y no sé si ya está registrado o si es adicional: si es adicional, esos importes se sumarían al gasto; si es un extracto de lo que ya hay, sirve para contrastar.',
+        datos: DOC_FILAS.map(function (f) {
+          return { k: f.p, v: EUR(f.v), n: Math.round(f.v / totalDoc * 1000) / 10 + ' % · ' + '1 fila' };
+        }),
+        significado: 'El lector abre el fichero, entiende su estructura, suma, agrupa por la columna que identifica al proveedor y lo contrasta con lo registrado. Lo que no hace es dar de alta esas líneas: eso se hace en Documentos, factura a factura y con revisión.',
+        revisar: ['Si el documento es adicional, esos 2.542,00 € se sumarían al gasto registrado.'],
+        refs: [{ type: 'documentos', id: '', label: 'Documentos' }],
+        motor: 'Leído aquí mismo, en tu navegador'
+      } });
+      render();
+      var hilo = root.querySelector('[data-role="ia-thread"]');
+      if (hilo) hilo.scrollTop = hilo.scrollHeight;
+      mainEl.scrollTop = mainEl.scrollHeight;
     }
 
     RENDERERS.ia = function () {
@@ -653,6 +803,9 @@
         '<input class="fdemo-input" type="text" name="pregunta" aria-label="Escribe tu pregunta" placeholder="¿Qué está pasando?" autocomplete="off" maxlength="200">' +
         '<button type="submit" class="fdemo-btn variant-primary">Preguntar</button>' +
         '</form>' +
+        '<button type="button" class="fdemo-ask-clip" data-action="adjuntar">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M21 11.5 12.5 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '<span>Adjuntar un documento</span><i>PDF, Excel, CSV o imágenes</i></button>' +
         (chips ? '<div class="fdemo-ask-chips"><p class="fdemo-ask-chips-t">O prueba con una de estas:</p><div class="fdemo-ia-chips">' + chips + '</div></div>' : '') +
         '<p class="fdemo-ask-foot">Datos ficticios. En esta demo las respuestas se calculan aquí mismo, en tu navegador; el sistema real responde sobre los datos de tu empresa.</p>' +
         '</div>';
@@ -664,6 +817,9 @@
       render();
       var thread = root.querySelector('[data-role="ia-thread"]');
       if (thread) thread.scrollTop = thread.scrollHeight;
+      /* El hilo se mueve, pero la respuesta nueva puede quedar por debajo del
+         borde del marco: la aplicación también baja hasta el final. */
+      mainEl.scrollTop = mainEl.scrollHeight;
     }
 
     function askIndex(idx) {
@@ -704,6 +860,35 @@
       if (navEl) {
         e.preventDefault();
         navigate(navEl.getAttribute('data-view'), navEl.getAttribute('data-id'));
+        return;
+      }
+      var docEl = e.target.closest('[data-action="doc"]');
+      if (docEl) {
+        e.preventDefault();
+        var q = docEl.getAttribute('data-doc');
+        if (q === 'digital' || q === 'escaneado') {
+          state.doc.archivo = q === 'digital' ? 'FP-2026-0441-belmonte.pdf' : 'ticket-viajes-meridiano.pdf';
+          docPaso('analizando');
+          clearTimeout(state.doc.t);
+          state.doc.t = setTimeout(function () { docPaso(q === 'digital' ? 'detectado' : 'escaneado'); }, 1400);
+        } else if (q === 'crear') {
+          state.gastoNuevo = {
+            id: 'doc-gas-1', proveedor: 'Suministros Belmonte S.L.', importe: 498.52, iva: 86.52,
+            fecha: '2026-08-12', concepto: 'Material de oficina y consumibles', categoria: 'Material de oficina',
+            estadoRevision: 'Pendiente revisión', proyectoRecordId: null, notasRevision: null,
+            documento: 'FP-2026-0441-belmonte.pdf'
+          };
+          docPaso('creado');
+        } else {
+          clearTimeout(state.doc.t);
+          docPaso('inicio');
+        }
+        return;
+      }
+      var clipEl = e.target.closest('[data-action="adjuntar"]');
+      if (clipEl) {
+        e.preventDefault();
+        adjuntarDocumento();
         return;
       }
       var askEl = e.target.closest('[data-action="ask"]');
@@ -755,8 +940,114 @@
         render();
         var thread = root.querySelector('[data-role="ia-thread"]');
         if (thread) thread.scrollTop = thread.scrollHeight;
+      /* El hilo se mueve, pero la respuesta nueva puede quedar por debajo del
+         borde del marco: la aplicación también baja hasta el final. */
+      mainEl.scrollTop = mainEl.scrollHeight;
       }
     });
+
+
+    /* ════════════════════════ EL RECORRIDO AUTOMÁTICO ═══════════════════
+
+       Una aplicación parada en su pantalla de inicio no enseña que sea una
+       aplicación: enseña una captura. Si no la toca nadie, esta se recorre
+       sola los módulos, se para en cada uno el tiempo que cuesta leerlo y
+       vuelve a empezar. En cuanto alguien la toca, se calla y manda él.
+
+       Lo que NO hace, que es la mitad del trabajo: no corre fuera de la
+       pantalla, no corre con movimiento reducido y no corre en la pantalla
+       completa —ahí se ha entrado a usarla, no a mirarla—. */
+    var TOUR = [
+      { v: 'dashboard',  ms: 7200 },
+      { v: 'facturas',   ms: 6400 },
+      { v: 'cobros',     ms: 6400 },
+      { v: 'gastos',     ms: 6400 },
+      { v: 'clientes',   ms: 6000 },
+      { v: 'proyectos',  ms: 6400 },
+      { v: 'documentos', ms: 9500 },
+      { v: 'ia',         ms: 10500 }
+    ];
+    var REANUDA_MS = 25000;
+    var reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var tour = { on: false, i: 0, t0: 0, dur: 1, timer: 0, raf: 0, vuelta: 0, visible: false, mano: false };
+    var tourTxtEl = root.querySelector('[data-role="tour-txt"]');
+    var tourBtnEl = root.querySelector('[data-role="tour"]');
+    var tourBarEl = root.querySelector('[data-role="tour-bar"] i');
+
+    function pintaTour() {
+      root.classList.toggle('is-tour', tour.on);
+      if (tourTxtEl) tourTxtEl.textContent = tour.on ? 'Recorrido automático' : 'Lo llevas tú';
+      if (tourBtnEl) tourBtnEl.setAttribute('title', tour.on ? 'Parar el recorrido y navegar tú' : 'Volver al recorrido automático');
+      if (!tour.on && tourBarEl) tourBarEl.style.transform = 'scaleX(0)';
+    }
+    function pasoTour() {
+      var paso = TOUR[tour.i % TOUR.length];
+      tour.i++;
+      state.route = paso.v; state.id = null;
+      render();
+      tour.t0 = Date.now(); tour.dur = paso.ms;
+      clearTimeout(tour.timer);
+      tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, paso.ms);
+    }
+    function marcaBarra() {
+      tour.raf = 0;
+      if (!tour.on) return;
+      if (tourBarEl) {
+        var p = Math.min(1, (Date.now() - tour.t0) / (tour.dur || 1));
+        tourBarEl.style.transform = 'scaleX(' + p.toFixed(3) + ')';
+      }
+      tour.raf = requestAnimationFrame(marcaBarra);
+    }
+    function arrancaTour(inmediato) {
+      if (tour.on || reducido || useHash || !tour.visible || tour.mano) return;
+      tour.on = true;
+      pintaTour();
+      if (!tour.raf) tour.raf = requestAnimationFrame(marcaBarra);
+      if (inmediato) pasoTour();
+      else { tour.t0 = Date.now(); tour.dur = 2600; clearTimeout(tour.timer); tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, 2600); }
+    }
+    function paraTour(porMano) {
+      tour.on = false;
+      clearTimeout(tour.timer);
+      if (tour.raf) { cancelAnimationFrame(tour.raf); tour.raf = 0; }
+      if (porMano) {
+        tour.mano = true;
+        clearTimeout(tour.vuelta);
+        tour.vuelta = setTimeout(function () { tour.mano = false; arrancaTour(true); }, REANUDA_MS);
+      }
+      pintaTour();
+    }
+    /* Cualquier gesto sobre la aplicación se la entrega al usuario. El
+       movimiento del ratón entra con umbral: pasar por encima de camino a
+       otra cosa no debería contar, pero moverse DENTRO sí. */
+    var ratonX = -1, ratonY = -1;
+    function manoEncima() { if (tour.on) paraTour(true); else if (tour.mano) { clearTimeout(tour.vuelta); tour.vuelta = setTimeout(function () { tour.mano = false; arrancaTour(true); }, REANUDA_MS); } }
+    ['pointerdown', 'keydown', 'wheel', 'focusin', 'touchstart'].forEach(function (ev) {
+      root.addEventListener(ev, manoEncima, { passive: true });
+    });
+    root.addEventListener('pointermove', function (e) {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      if (ratonX < 0) { ratonX = e.clientX; ratonY = e.clientY; return; }
+      if (Math.abs(e.clientX - ratonX) + Math.abs(e.clientY - ratonY) > 24) { ratonX = e.clientX; ratonY = e.clientY; manoEncima(); }
+    }, { passive: true });
+    if (tourBtnEl) {
+      tourBtnEl.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (tour.on) { paraTour(true); }
+        else { tour.mano = false; clearTimeout(tour.vuelta); arrancaTour(true); }
+      });
+    }
+    if (!useHash && !reducido && window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          tour.visible = e.isIntersecting && e.intersectionRatio > 0.3;
+          if (tour.visible) arrancaTour(false);
+          else paraTour(false);
+        });
+      }, { threshold: [0, 0.3, 0.6] }).observe(root);
+    }
+    if (useHash || reducido) { if (tourBtnEl) tourBtnEl.hidden = true; }
+    pintaTour();
 
     render();
   }

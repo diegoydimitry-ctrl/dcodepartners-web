@@ -866,3 +866,142 @@
   .fdemo-ask-thread .fdemo-ia-msg{ max-width:880px; }
   .fdemo-ask-thread .fdemo-ans{ width:100%; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EL RECORRIDO AUTOMÁTICO
+   ═══════════════════════════════════════════════════════════════════════
+   Un indicador que se ve y se puede pulsar, no un adorno: quien ve la
+   pantalla cambiar sola tiene que saber por qué cambia y cómo pararla. La
+   barra de debajo mide cuánto queda para el módulo siguiente.            */
+.fdemo-tour{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:5px 11px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--dc-border); background:transparent;
+  /* 12 px: por debajo de ahí el centinela de tipografía lo marca como texto
+     diminuto, y un indicador que además es un botón tiene que leerse. */
+  font-family:inherit; font-size:.75rem; letter-spacing:.04em;
+  color:var(--dc-text-faint); transition:color .2s ease, border-color .2s ease;
+}
+.fdemo-tour:hover{ color:var(--dc-text); border-color:var(--dc-border-strong); }
+.fdemo-tour-dot{ width:6px; height:6px; border-radius:50%; background:var(--dc-text-faint); flex:0 0 auto; }
+.fdemo-app.is-tour .fdemo-tour{ color:#7fe7ff; border-color:rgba(67,224,255,.32); }
+.fdemo-app.is-tour .fdemo-tour-dot{ background:#43e0ff; box-shadow:0 0 0 3px rgba(67,224,255,.15); }
+.fdemo-tour-bar{ position:absolute; left:0; right:0; bottom:-1px; height:2px; overflow:hidden; pointer-events:none; }
+.fdemo-tour-bar i{
+  display:block; height:100%; width:100%; transform:scaleX(0); transform-origin:left;
+  background:linear-gradient(90deg, rgba(67,224,255,.55), rgba(91,140,255,.55));
+}
+.fdemo-topbar{ position:relative; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DOCUMENTOS · LO QUE SALE DE UN PDF
+   ═══════════════════════════════════════════════════════════════════════
+   La pieza que más pesa de toda la demo: cada campo detectado enseña el
+   fragmento del documento del que ha salido. Ese fragmento es el argumento
+   —se puede comprobar— así que se le da sitio y tipografía de código.    */
+.fdemo-doc-body{ padding:clamp(16px,2vw,22px); display:grid; gap:14px; }
+.fdemo-doc-explica{ margin:0; font-size:.86rem; line-height:1.6; color:var(--dc-text-muted); max-width:70ch; }
+.fdemo-doc-acts{ display:flex; flex-wrap:wrap; gap:10px; }
+.fdemo-doc-nota{
+  margin:0; font-size:.75rem; line-height:1.55; color:var(--dc-text-faint);
+  padding-left:11px; border-left:2px solid var(--dc-border-strong); max-width:74ch;
+}
+.fdemo-doc-run{ display:flex; align-items:center; gap:12px; padding:10px 0; }
+.fdemo-doc-run-t{ margin:0; font-size:.88rem; color:var(--dc-text-muted); }
+.fdemo-doc-spin{
+  width:18px; height:18px; flex:0 0 auto; border-radius:50%;
+  border:2px solid rgba(67,224,255,.22); border-top-color:#43e0ff;
+  animation:fdemo-gira .8s linear infinite;
+}
+@keyframes fdemo-gira{ to{ transform:rotate(360deg); } }
+.fdemo-doc-out{ display:grid; gap:12px; }
+.fdemo-doc-out-t{ margin:0; font-size:.9rem; color:var(--dc-text); }
+.fdemo-doc-out-s{ margin:0; font-size:.82rem; line-height:1.6; color:var(--dc-text-muted); max-width:72ch; }
+.fdemo-doc-out.is-warn .fdemo-doc-out-s{ color:#f5c06a; }
+.fdemo-doc-out.is-ok .fdemo-doc-out-s{ color:#6fe3bd; }
+.fdemo-doc-campos{ list-style:none; margin:0; padding:0; display:grid; gap:1px; background:var(--dc-border); border:1px solid var(--dc-border); border-radius:10px; overflow:hidden; }
+.fdemo-doc-campos li{
+  background:var(--dc-bg); padding:11px 14px;
+  display:grid; grid-template-columns:minmax(0,180px) minmax(0,110px) minmax(0,1fr); gap:4px 16px; align-items:baseline;
+}
+.fdemo-doc-k{ font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--dc-text-faint); }
+.fdemo-doc-v{ font-size:.92rem; font-weight:600; color:var(--dc-text); }
+.fdemo-doc-frag{
+  font-family:var(--mono, ui-monospace, Menlo, monospace); font-size:.7rem; line-height:1.5;
+  color:var(--dc-text-faint); background:rgba(255,255,255,.028);
+  padding:4px 8px; border-radius:5px; overflow-wrap:anywhere;
+}
+.fdemo-doc-chip{
+  display:inline-flex; align-items:center; gap:9px; flex-wrap:wrap;
+  padding:6px 11px; border-radius:8px; margin-bottom:9px;
+  border:1px solid var(--dc-border); background:rgba(255,255,255,.025);
+  font-size:.73rem; color:var(--dc-text-muted);
+}
+.fdemo-doc-chip-n{ color:var(--dc-text); }
+.fdemo-doc-chip-k{ color:var(--dc-text-faint); }
+.fdemo-doc-chip-ok{ color:#6fe3bd; }
+.fdemo-doc-mini{ display:block; font-size:.68rem; color:var(--dc-text-faint); margin-top:2px; }
+.fdemo-nuevo-pill{
+  display:inline-block; margin-left:8px; padding:1px 7px; border-radius:999px;
+  font-size:.6rem; letter-spacing:.07em; text-transform:uppercase;
+  background:rgba(52,224,198,.14); color:#6fe3bd; border:1px solid rgba(52,224,198,.28);
+}
+.fdemo-table tbody tr.is-nuevo{ background:rgba(52,224,198,.045); }
+
+/* El clip: adjuntar un documento a la conversación. */
+.fdemo-ask-clip{
+  display:inline-flex; align-items:center; gap:9px; margin-top:10px;
+  padding:9px 14px; border-radius:10px; cursor:pointer;
+  border:1px dashed var(--dc-border-strong); background:transparent;
+  font-family:inherit; font-size:.8rem; color:var(--dc-text-muted);
+  transition:border-color .2s ease, color .2s ease;
+}
+.fdemo-ask-clip:hover{ border-color:rgba(67,224,255,.45); color:var(--dc-text); }
+.fdemo-ask-clip svg{ width:16px; height:16px; flex:0 0 auto; }
+.fdemo-ask-clip i{ font-style:normal; font-size:.75rem; color:var(--dc-text-faint); }
+.fdemo-ans-motor{ margin:0; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--dc-text-faint); }
+.fdemo-ans-grupo-t{ margin:0 0 2px; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--dc-text-faint); }
+
+@media (max-width:720px){
+  .fdemo-doc-campos li{ grid-template-columns:minmax(0,1fr); gap:3px; }
+  .fdemo-doc-v{ font-size:.86rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LA NAVEGACIÓN AGRUPADA, APLANADA EN UN TELÉFONO
+   ═══════════════════════════════════════════════════════════════════════
+   La barra lateral pasa a ser la del producto —con grupos e iconos— también
+   en la versión empotrada. En un teléfono esa barra es una tira horizontal,
+   y una tira no tiene grupos: `display:contents` disuelve los envoltorios,
+   los títulos se esconden y los módulos vuelven a ser hijos directos de la
+   tira, que es lo que necesita `order` para ponerlos en el orden que se usa
+   en un móvil.                                                            */
+@media (max-width:860px){
+  .fdemo-app.is-embedded .fdemo-nav-groups,
+  .fdemo-app.is-embedded .fdemo-nav-group-items{ display:contents; }
+  .fdemo-app.is-embedded .fdemo-nav-group-title,
+  .fdemo-app.is-embedded .fdemo-nav-divider,
+  .fdemo-app.is-embedded .fdemo-nav-indicator{ display:none; }
+  .fdemo-app.is-embedded .fdemo-nav-item--icon{ padding:8px 12px; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="documentos"]{ order:5; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="gastos"]{ order:6; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="clientes"]{ order:7; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="proyectos"]{ order:8; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="presupuestos"]{ order:9; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="configuracion"]{ order:10; }
+  .fdemo-tour-txt{ display:none; }
+  .fdemo-tour{ padding:5px 8px; }
+}
+
+/* El documento adjunto viaja con el mensaje: si el mensaje va a la derecha,
+   su chip también. Alineado a la izquierda parecía de otra conversación. */
+.fdemo-ia-msg.from-user{ display:flex; flex-direction:column; align-items:flex-end; }
+.fdemo-ia-msg.from-user .fdemo-doc-chip{ align-self:flex-end; }
+
+/* Objetivos táctiles: en una pantalla que se toca, 44 px. El indicador del
+   recorrido y el clip de adjuntar son botones, y un botón de 19 px de alto
+   no se acierta con el pulgar. */
+@media (max-width:768px){
+  .fdemo-tour{ min-height:44px; padding-inline:12px; }
+  .fdemo-ask-clip{ min-height:44px; }
+}

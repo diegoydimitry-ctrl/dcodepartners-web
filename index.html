@@ -32,7 +32,7 @@
 <meta name="twitter:description" content="Analizamos tu empresa y construimos el sistema que necesita. No vendemos paquetes cerrados.">
 <meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png"> <link rel="stylesheet" href="/assets/css/styles.css?v=a4e2572177">
 <link rel="stylesheet" href="/assets/css/dcp5.css?v=110e1cab83">
-<link rel="stylesheet" href="/assets/css/dcp7.css?v=d8a20cfc00">
+<link rel="stylesheet" href="/assets/css/dcp7.css?v=52afeafc88">
 <link rel="stylesheet" href="/assets/css/dcp6.css?v=4306b1fe82">
 <script type="application/ld+json">
 { "@context": "https://schema.org", "@type": "Organization", "name": "D-Code Partners", "alternateName": "D-Code", "url": "https://dcodepartners.com/", "logo": "https://dcodepartners.com/assets/logo/dcode-icon-sm.png", "image": "https://dcodepartners.com/assets/og-image.png", "description": "Analizamos cómo funciona una empresa, detectamos dónde se pierde el tiempo y construimos el sistema que conecta su operación.", "email": "dcodedepartment@gmail.com", "address": { "@type": "PostalAddress", "addressLocality": "Madrid", "addressCountry": "ES" }
@@ -123,21 +123,21 @@
       <div class="v6-veil v6-veil--mid">
         <span class="v6-kicker">Software propio · pruébalo ahora</span>
         <h2 class="v6-title v6-title--wide">Escribe lo que necesitas saber. Te contesta con tus números.</h2>
-        <p class="v6-intro">D-Code Finance es nuestro sistema financiero. Las facturas, los cobros, los gastos y los proyectos viven en el mismo sitio, y encima hay algo a lo que le escribes en tu idioma: quién me debe, qué está fuera de plazo, qué debería mirar hoy. Te contesta con el número, te dice de dónde sale y te lleva hasta la factura. No hay que aprenderse treinta pantallas para saber una cosa.</p>
-        <p class="v6-intro">Los gastos se dan de alta desde el propio documento: subes la factura del proveedor, el sistema la lee y una persona la revisa antes de que quede registrada. Eso y la conexión con tus datos son cosas del sistema implantado; la demo de aquí abajo responde, abre facturas y te lleva al dato, que es lo que se puede enseñar sin tener delante tu empresa.</p>
+        <p class="v6-intro">D-Code Finance es nuestro sistema financiero. Facturas, cobros, gastos, tesorería, proyectos y documentos en el mismo sitio, y encima algo a lo que le escribes en tu idioma: quién me debe, qué está fuera de plazo, qué debería mirar hoy. Te contesta con el número, te enseña de dónde sale y te lleva hasta la factura. No hay que aprenderse treinta pantallas para saber una cosa.</p>
+        <p class="v6-intro">Y los documentos entran por ahí. Subes la factura del proveedor en PDF y los campos se detectan solos: <b>cada uno enseña el fragmento del documento del que ha salido</b>, tú revisas y confirmas, y hasta entonces no se guarda nada. Si el PDF es un escaneado, lo dice y guarda el documento igual. Lo tienes funcionando aquí abajo, en Documentos.</p>
       </div>
 
-      <!-- La demo de verdad, no una maqueta. Es la MISMA interfaz que
-           /sistema-financiero/app, montada en modo "embedded" sobre el mismo
-           conjunto de datos ficticios. Los ficheros se piden solos cuando la
-           sección se acerca (initFinanceLazy en dcp5.js): son 96 KB que no
-           tiene por qué pagar quien no llega hasta aquí. -->
-      <div class="demo-host fdemo-home-stack fdemo-scope"
+      <!-- La aplicación, a lo ancho de la pantalla y sin botones que pulsar
+           antes de verla. Si nadie la toca se recorre sola los módulos; al
+           primer gesto se para y manda el visitante. Los ficheros se piden
+           solos cuando la sección se acerca (initFinanceLazy en dcp5.js): son
+           96 KB que no tiene por qué pagar quien no llega hasta aquí. -->
+      <div class="demo-host fdemo-pantalla fdemo-home-stack fdemo-scope"
            data-fdemo-lazy
-           data-fdemo-css="/assets/css/finance-demo.css?v=b58ca5310c"
-           data-fdemo-js="/assets/js/finance-demo-data.js?v=09b862db21,/assets/js/finance-demo.js?v=13154eaccb">
-        <p class="demo-aviso"><span class="demo-tag">DEMO · datos ficticios</span> Es la aplicación, no una captura. Pregúntale, abre una factura, mira los cobros. Los clientes, los importes y las fechas son inventados; las pantallas, los cálculos y los estados son los del sistema de verdad.</p>
-        <div data-fdemo-mount data-mode="embedded" data-exit-href="/sistema-financiero/app" data-exit-label="Pantalla completa"></div>
+           data-fdemo-css="/assets/css/finance-demo.css?v=f5629b306c"
+           data-fdemo-js="/assets/js/finance-demo-data.js?v=09b862db21,/assets/js/finance-demo.js?v=f7ad40fb02">
+        <p class="demo-aviso"><span class="demo-tag">DEMO · datos ficticios</span> Está funcionando: si no la tocas, se recorre sola los módulos; en cuanto pasas el ratón por encima o la tocas, la llevas tú. Los clientes, los importes y las fechas son inventados; las pantallas, los cálculos y los estados son los del sistema de verdad.</p>
+        <div data-fdemo-mount data-mode="embedded"></div>
         <noscript><p class="demo-aviso">La demo necesita JavaScript. Sin él puedes ver qué hace el sistema en su ficha.</p></noscript>
       </div>
 
@@ -148,7 +148,7 @@
         <div class="v7-puerta rise">
           <span class="v7-puerta-k">La puerta</span>
           <b class="v7-puerta-t">Pregunta a Finanzas</b>
-          <span class="v7-puerta-d">Escribes lo que necesitas saber y entra por ti en cualquiera de las seis. No hace falta saber en qué pantalla está el dato.</span>
+          <span class="v7-puerta-d">Escribes lo que necesitas saber y te contesta con la cifra, te enseña de dónde sale y te lleva hasta la factura, el cliente o el proyecto de los que ha salido. Y si le adjuntas un documento, te dice qué contiene y cómo encaja con lo que ya tienes.</span>
         </div>
         <ul class="v7-flujo">
           <li class="rise-s"><b>Entra</b><span>Lo que ya se ha cobrado, de quién y cuándo.</span></li>
@@ -175,9 +175,69 @@
         <p class="v7-nota">Lo que no te vamos a vender: no tenemos un catálogo de integraciones de un clic. Lo que se puede conectar con lo que ya usas se mira caso por caso, y si algo no se puede, se dice antes de empezar y no después.</p>
       </div>
 
+      <!-- ══════════ TRES PLANES ══════════
+           Construidos SOLO con lo que el sistema hace hoy: cada línea se
+           corresponde con un módulo o un comportamiento comprobado en
+           demo.finance.dcodepartners.com. Sin precios y sin garantías: el
+           precio depende del tamaño de la operación y se cierra por escrito
+           antes de empezar. -->
+      <div class="v7-planes v7-velo">
+        <h3 class="v7-planes-t">Tres formas de tenerlo</h3>
+        <p class="v7-planes-s">Las tres son el mismo sistema. Lo que cambia es cuánto de él trabaja por ti y cuánto se adapta a cómo trabajáis vosotros.</p>
+        <div class="v7-planes-grid">
+
+          <article class="v7-plan rise-s">
+            <span class="v7-plan-n">01</span>
+            <h4 class="v7-plan-t">Finance</h4>
+            <p class="v7-plan-d">El sistema financiero funcionando sobre tus datos, con su configuración estándar.</p>
+            <ul class="v7-plan-l">
+              <li>El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos.</li>
+              <li>El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos.</li>
+              <li>Tesorería a 30, 60 y 90 días, con escenario base o prudente.</li>
+              <li>Importación de los clientes, las facturas y los gastos que ya tienes.</li>
+              <li>Tus series de factura, tus impuestos y tus formas de pago.</li>
+              <li>Libros de IVA en CSV, emitidas y recibidas, para tu gestoría.</li>
+              <li>Roles y permisos por persona.</li>
+            </ul>
+            <p class="v7-plan-no"><b>No incluye</b> campos ni flujos propios de tu negocio, ni conexiones con otras herramientas.</p>
+          </article>
+
+          <article class="v7-plan is-destacado rise-s">
+            <span class="v7-plan-n">02</span>
+            <h4 class="v7-plan-t">Finance con inteligencia</h4>
+            <p class="v7-plan-d">Todo lo anterior y, encima, algo que lee tus datos, te contesta y lee tus documentos.</p>
+            <ul class="v7-plan-l">
+              <li><b>Pregunta a Finanzas:</b> preguntas en lenguaje normal. Cada respuesta trae la conclusión, los datos que la sostienen y qué revisarías.</li>
+              <li>Cada cifra enseña de dónde sale y con qué consulta se ha calculado.</li>
+              <li><b>Documentos en la conversación:</b> adjuntas un PDF, un Excel, un CSV o una imagen y te dice qué contiene y cómo encaja con tus datos.</li>
+              <li><b>Gasto desde PDF:</b> subes la factura del proveedor, los campos se detectan y cada uno enseña el fragmento del que sale. Revisas y confirmas; hasta entonces no se guarda nada.</li>
+              <li><b>Radar:</b> vencidos, subidas de precio por encima del umbral y concentración de proveedor. Reglas escritas y reproducibles, no una puntuación opaca.</li>
+              <li><b>Objetivos:</b> una métrica, un periodo y un mínimo, y el sistema dice si vas a tiempo.</li>
+            </ul>
+            <p class="v7-plan-no"><b>No incluye</b> desarrollo a medida sobre el sistema.</p>
+          </article>
+
+          <article class="v7-plan rise-s">
+            <span class="v7-plan-n">03</span>
+            <h4 class="v7-plan-t">Finance a medida</h4>
+            <p class="v7-plan-d">El sistema, la inteligencia, y lo que tu empresa hace y nadie más hace igual.</p>
+            <ul class="v7-plan-l">
+              <li>Campos, estados y flujos propios de vuestra operación.</li>
+              <li>Automatizaciones construidas alrededor de Finance con las herramientas que ya usáis.</li>
+              <li>Paneles e informes hechos para vuestras decisiones, no genéricos.</li>
+              <li>Evolución: cuando la empresa cambia, el sistema cambia con ella.</li>
+              <li>Media hora al mes para mirar juntos lo que el sistema registra y ajustar.</li>
+            </ul>
+            <p class="v7-plan-no"><b>Lo que no vamos a prometerte:</b> qué se puede conectar con lo que ya usáis se mira caso por caso, y si algo no se puede, se dice antes de empezar.</p>
+          </article>
+
+        </div>
+        <p class="v7-nota">Los tres se implantan igual: se traen tus datos, se configura y se pone a funcionar. El precio depende del tamaño de tu operación y de lo que haya que construir, y se cierra por escrito antes de que empiece nada.</p>
+      </div>
+
       <div class="v6-acts">
-        <a href="/sistema-financiero/app" class="btn btn-primary">Abrirla a pantalla completa</a>
-        <a href="/sistema-financiero" class="btn btn-ghost">Qué más hace</a>
+        <a href="/sistema-financiero" class="btn btn-primary">Todo lo que hace</a>
+        <a href="/contacto" class="btn btn-ghost">Hablemos de implantarlo</a>
       </div>
     </div>
   </section>
@@ -358,6 +418,6 @@
 
 </main> <footer> <div class="container"> <div class="footer-top"> <div class="footer-brand"> <a href="/" class="footer-logo"> <svg class="logo-mark" width="30" height="26" viewBox="0 0 120 100" role="img" aria-label="D-Code Partners" focusable="false"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="#5b8cff"/></svg> <span>D-Code Partners</span> </a> <p>Analizamos cómo trabaja tu empresa y construimos el sistema que necesita. Madrid, España.</p> </div> <div class="footer-col"> <h2>Capacidades</h2> <ul> <li><a href="/departamentos/marketing">Marketing</a></li> <li><a href="/departamentos/comercial">Comercial</a></li> <li><a href="/departamentos/clientes">Clientes</a></li> <li><a href="/departamentos/produccion">Producción</a></li> <li><a href="/departamentos/finanzas">Finanzas</a></li> <li><a href="/departamentos/soporte">Soporte</a></li> <li><a href="/departamentos/administracion">Administración</a></li> <li><a href="/departamentos/direccion">Dirección</a></li> </ul> </div> <div class="footer-col"> <h2>Empresa</h2> <ul> <li><a href="/metodo">Método D-Code</a></li> <li><a href="/garantias">Garantías y Proceso</a></li><li><a href="/conocenos">Conócenos</a></li><li><a href="/casos-exito">Casos internos</a></li> <li><a href="/cambios-en-proceso">Cambios en proceso</a></li> <li><a href="/blog">Blog</a></li> </ul> </div> <div class="footer-col"> <h2>Recursos</h2> <ul> <li><a href="/faq">Preguntas frecuentes</a></li> <li><a href="/contacto">Contacto</a></li> </ul> </div> <div class="footer-col"> <h2>Legal</h2> <ul> <li><a href="/privacidad">Política de Privacidad</a></li> <li><a href="/aviso-legal">Aviso Legal</a></li> <li><a href="/cookies">Política de Cookies</a></li> <li><a href="/seguridad">Seguridad de la Información</a></li> <li><a href="/condiciones-contratacion">Condiciones de Contratación</a></li> <li><a href="/acuerdo-encargado-tratamiento">Acuerdo de Encargado de Tratamiento</a></li> </ul> </div> </div> <div class="footer-bottom"> <span>© 2026 D-Code Partners. Todos los derechos reservados.</span> <span>Confidencialidad y profesionalismo en cada proyecto.</span> </div> </div>
 </footer> <div class="chat-widget" id="chat-widget"> <div class="window chat-window" role="dialog" aria-label="Asistente D-Code Partners" aria-hidden="true"> <div class="window-bar"> <span class="window-dots"><span></span><span></span><span></span></span> <span class="window-title">asistente_dcode.chat</span> </div> <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"> <div class="chat-msg bot">Hola. Soy el asistente IA de D-Code Partners. Puedo ayudarte a entender cómo automatizamos procesos, cómo funcionan nuestros agentes de IA, resolver dudas sobre nuestros servicios o ayudarte a descubrir cómo podemos optimizar tu empresa. ¿Sobre qué te gustaría hablar?</div> </div> <div class="chat-quick-replies" id="chat-quick-replies"> <button type="button" class="chat-quick-question">Quiero automatizar mi empresa</button> <button type="button" class="chat-quick-question">Quiero un agente IA</button> <button type="button" class="chat-quick-question">Hablar con un especialista</button> </div> <form class="chat-input-row" id="chat-form"> <label for="chat-input" class="sr-only">Escribe tu mensaje</label> <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." autocomplete="off" maxlength="600"> <button type="submit" aria-label="Enviar mensaje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button> </form> </div> <button class="chat-bubble" id="chat-bubble" aria-expanded="false" aria-controls="chat-widget" aria-label="Abrir asistente D-Code Partners"> <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg> <span class="cb-dot"></span> </button>
-</div> <script src="/assets/js/main.js?v=3bea77c9ad" defer></script> <script src="/assets/js/dcp5.js?v=1f4342cbb7" defer></script><script src="/assets/js/dcp7.js?v=ab7a9e2a35" defer></script><script src="/assets/js/dcp6.js?v=a30c1eea48" defer></script>
+</div> <script src="/assets/js/main.js?v=3bea77c9ad" defer></script> <script src="/assets/js/dcp5.js?v=1f4342cbb7" defer></script><script src="/assets/js/dcp7.js?v=ab7a9e2a35" defer></script><script src="/assets/js/dcp6.js?v=969a23ac4e" defer></script>
 </body>
 </html>
