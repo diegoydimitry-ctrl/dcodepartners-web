@@ -218,11 +218,29 @@
       closeMobileMenu();
     }
 
+    /* En un telefono una tabla de seis columnas con min-width 640 es una tabla
+       que se lee de lado, y eso no lo hace nadie. Cada celda se lleva el
+       titulo de su columna en `data-col` y el CSS convierte cada fila en una
+       ficha por debajo de 720 px. Se hace aqui, despues de pintar, y no en
+       cada renderizador: son nueve modulos y el HTML de las tablas no cambia. */
+    function etiquetarTablas() {
+      contentEl.querySelectorAll('.fdemo-table').forEach(function (tabla) {
+        var cabeceras = [].map.call(tabla.querySelectorAll('thead th'), function (th) { return th.textContent.trim(); });
+        if (!cabeceras.length) return;
+        tabla.querySelectorAll('tbody tr').forEach(function (fila) {
+          [].forEach.call(fila.children, function (celda, i) {
+            if (cabeceras[i]) celda.setAttribute('data-col', cabeceras[i]);
+          });
+        });
+      });
+    }
+
     function render() {
       var r = parseRoute();
       setActiveNav(r.view);
       var renderer = RENDERERS[r.view] || RENDERERS.dashboard;
       contentEl.innerHTML = renderer(r.id);
+      etiquetarTablas();
       mainEl.scrollTop = 0;
     }
 
@@ -470,6 +488,14 @@
         cobrados: cobros.filter(function (c) { return c.estadoCobro === 'Cobrado'; })
       };
       var totalPendiente = grupos.vencidos.concat(grupos.seguimiento, grupos.pendientes).reduce(function (s, c) { return s + c.pendiente; }, 0);
+      /* El panel y «Pregunta a Finanzas» cuentan lo vencido por FECHA. Esta
+         pantalla lo contaba por ESTADO, y salían números distintos en la misma
+         demo: 2026-011 lleva 27 días de retraso y está marcada «En
+         seguimiento», así que no aparecía como vencida. Se cuenta por fecha,
+         que es lo que le importa a quien cobra, y las agrupaciones de abajo
+         siguen siendo las del estado, que es como trabaja el sistema. */
+      var hoy = FS.hoy || '';
+      var fueraDePlazo = cobros.filter(function (c) { return c.pendiente > 0 && c.fechaVencimiento && c.fechaVencimiento < hoy; });
 
       function grupoCard(titulo, lista) {
         var body = !lista.length ? empty() :
@@ -484,7 +510,7 @@
       return pageHead('Cobros', 'Seguimiento de cobro de facturas emitidas') +
         '<div class="fdemo-kpi-grid">' +
         kpi('Pendiente total', EUR(totalPendiente), '', 'blue') +
-        kpi('Vencidas', String(grupos.vencidos.length), '', 'danger') +
+        kpi('Fuera de plazo', String(fueraDePlazo.length), 'Por fecha de vencimiento', 'danger') +
         kpi('En seguimiento', String(grupos.seguimiento.length), '', 'warning') +
         kpi('Cobradas', String(grupos.cobrados.length), '', 'cyan') +
         '</div>' +

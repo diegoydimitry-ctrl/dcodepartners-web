@@ -186,11 +186,29 @@
       closeMobileMenu();
     }
 
+    /* En un telefono una tabla de seis columnas con min-width 640 es una tabla
+       que se lee de lado, y eso no lo hace nadie. Cada celda se lleva el
+       titulo de su columna en `data-col` y el CSS convierte cada fila en una
+       ficha por debajo de 720 px. Se hace aqui, despues de pintar, y no en
+       cada renderizador: son nueve modulos y el HTML de las tablas no cambia. */
+    function etiquetarTablas() {
+      contentEl.querySelectorAll('.fdemo-table').forEach(function (tabla) {
+        var cabeceras = [].map.call(tabla.querySelectorAll('thead th'), function (th) { return th.textContent.trim(); });
+        if (!cabeceras.length) return;
+        tabla.querySelectorAll('tbody tr').forEach(function (fila) {
+          [].forEach.call(fila.children, function (celda, i) {
+            if (cabeceras[i]) celda.setAttribute('data-col', cabeceras[i]);
+          });
+        });
+      });
+    }
+
     function render() {
       var r = parseRoute();
       setActiveNav(r.view);
       var renderer = RENDERERS[r.view] || RENDERERS.dashboard;
       contentEl.innerHTML = renderer(r.id);
+      etiquetarTablas();
       mainEl.scrollTop = 0;
     }
 
@@ -433,6 +451,14 @@
         cobrados: cobros.filter(function (c) { return c.estadoCobro === 'Collected'; })
       };
       var totalPendiente = grupos.vencidos.concat(grupos.seguimiento, grupos.pendientes).reduce(function (s, c) { return s + c.pendiente; }, 0);
+      /* The dashboard and Ask Finance count what is overdue BY DATE. This
+         screen counted it BY STATUS, so the same demo showed two different
+         numbers: 2026-011 is 27 days late and sits in "Following up", so it
+         never showed up as overdue. Counted by date, which is what matters to
+         whoever is chasing the money; the groups below stay by status, which
+         is how the system works. */
+      var hoy = FS.hoy || '';
+      var fueraDePlazo = cobros.filter(function (c) { return c.pendiente > 0 && c.fechaVencimiento && c.fechaVencimiento < hoy; });
 
       function grupoCard(titulo, lista) {
         var body = !lista.length ? empty() :
@@ -447,7 +473,7 @@
       return pageHead('Collections', 'Collection tracking for issued invoices') +
         '<div class="fdemo-kpi-grid">' +
         kpi('Total pending', EUR(totalPendiente), '', 'blue') +
-        kpi('Overdue', String(grupos.vencidos.length), '', 'danger') +
+        kpi('Past due', String(fueraDePlazo.length), 'By due date', 'danger') +
         kpi('Following up', String(grupos.seguimiento.length), '', 'warning') +
         kpi('Collected', String(grupos.cobrados.length), '', 'cyan') +
         '</div>' +

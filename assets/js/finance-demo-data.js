@@ -367,6 +367,60 @@
               refs: activos.map(function (p) { return { type: 'proyectos', id: p.id, label: p.nombre }; })
             };
           }
+        },
+        {
+          clave: 'deudor',
+          pistas: ['cliente', 'quien debe mas', 'quién debe más', 'mayor deuda', 'mas deuda', 'más deuda', 'peor pagador'],
+          q: '¿Qué cliente nos debe más?',
+          a: function () {
+            var lista = emitidas().filter(function (f) { return pendienteDe(f) > 0; });
+            if (!lista.length) return { conclusion: 'Ningún cliente tiene facturas pendientes.', datos: [], refs: [] };
+            var porCliente = {};
+            lista.forEach(function (f) {
+              var k = f.clienteNombre || 'Cliente sin resolver';
+              porCliente[k] = porCliente[k] || { total: 0, facturas: [] };
+              porCliente[k].total += pendienteDe(f);
+              porCliente[k].facturas.push(f);
+            });
+            var nombres = Object.keys(porCliente).sort(function (a, b) { return porCliente[b].total - porCliente[a].total; });
+            var top = nombres[0];
+            var suyas = porCliente[top].facturas.slice().sort(function (a, b) { return diasDeRetraso(b) - diasDeRetraso(a); });
+            var totalTodos = suma(lista, pendienteDe);
+            var cuota = Math.round((porCliente[top].total / totalTodos) * 100);
+            var ficha = self.listClientes().filter(function (c) { return c.empresa === top; })[0];
+            return {
+              conclusion: top + ' es quien más debe: ' + fmtEUR(porCliente[top].total) + ' en ' + suyas.length + ' factura(s), el ' + cuota + '% de todo lo pendiente.',
+              datos: suyas.map(function (f) {
+                return { k: f.numero, v: fmtEUR(pendienteDe(f)), n: (diasDeRetraso(f) > 0 ? diasDeRetraso(f) + ' días de retraso' : 'vence el ' + fmtFecha(f.fechaVencimiento)) + (f.importeCobrado ? ' · ya ha pagado ' + fmtEUR(f.importeCobrado) : '') };
+              }),
+              significado: (ficha && ficha.cuotaMensual ? 'Además tiene cuota mensual de ' + fmtEUR(ficha.cuotaMensual) + ', así que la deuda sigue creciendo cada mes que pasa sin cobrar.' : 'Concentrar la deuda en un solo cliente es el riesgo, no el importe.'),
+              refs: (ficha ? [{ type: 'clientes', id: ficha.id, label: top }] : []).concat(suyas.map(refFactura))
+            };
+          }
+        },
+        {
+          clave: 'caja',
+          pistas: ['caja', 'tesoreria', 'tesorería', 'liquidez', 'saldo', 'cuanto dinero hay', 'cuánto dinero hay'],
+          q: '¿Cómo está nuestra caja?',
+          a: function () {
+            var lista = emitidas();
+            var cobrado = suma(lista, function (f) { return f.importeCobrado; });
+            var gastado = suma(GASTOS, function (g) { return g.importe; });
+            var porEntrar = suma(lista.filter(function (f) { return pendienteDe(f) > 0; }), pendienteDe);
+            var s = self.getDashboardSnapshot();
+            return {
+              conclusion: 'Esta demo no trae el módulo de Tesorería, así que no te puedo dar un saldo bancario. Con lo que sí está registrado: han entrado ' + fmtEUR(cobrado) + ' y han salido ' + fmtEUR(gastado) + '.',
+              datos: [
+                { k: 'Cobrado', v: fmtEUR(cobrado) },
+                { k: 'Gastos registrados', v: fmtEUR(gastado) },
+                { k: 'Diferencia', v: fmtEUR(cobrado - gastado) },
+                { k: 'Por entrar', v: fmtEUR(porEntrar), n: fmtEUR(s.prevision30Dias) + ' vencen en 30 días' }
+              ],
+              significado: 'La diferencia entre lo que ha entrado y lo que ha salido no es el saldo de tu banco: no incluye nóminas, impuestos ni lo que ya estaba en la cuenta. Tesorería, que sí cruza cobros y pagos previstos, existe en el sistema real y no en esta demo.',
+              revisar: ['Lo que está por entrar (' + fmtEUR(porEntrar) + ') es más del doble de todo lo cobrado hasta ahora. Ahí está el dinero.'],
+              refs: []
+            };
+          }
         }
       ];
     },

@@ -352,6 +352,60 @@
               refs: activos.map(function (p) { return { type: 'proyectos', id: p.id, label: p.nombre }; })
             };
           }
+        },
+        {
+          clave: 'deudor',
+          pistas: ['client', 'customer', 'who owes most', 'biggest debt', 'largest debt', 'worst payer'],
+          q: 'Which client owes us most?',
+          a: function () {
+            var lista = emitidas().filter(function (f) { return pendienteDe(f) > 0; });
+            if (!lista.length) return { conclusion: 'No client has invoices outstanding.', datos: [], refs: [] };
+            var porCliente = {};
+            lista.forEach(function (f) {
+              var k = f.clienteNombre || 'Unresolved client';
+              porCliente[k] = porCliente[k] || { total: 0, facturas: [] };
+              porCliente[k].total += pendienteDe(f);
+              porCliente[k].facturas.push(f);
+            });
+            var nombres = Object.keys(porCliente).sort(function (a, b) { return porCliente[b].total - porCliente[a].total; });
+            var top = nombres[0];
+            var suyas = porCliente[top].facturas.slice().sort(function (a, b) { return diasDeRetraso(b) - diasDeRetraso(a); });
+            var totalTodos = suma(lista, pendienteDe);
+            var cuota = Math.round((porCliente[top].total / totalTodos) * 100);
+            var ficha = self.listClientes().filter(function (c) { return c.empresa === top; })[0];
+            return {
+              conclusion: top + ' owes the most: ' + fmtEUR(porCliente[top].total) + ' across ' + suyas.length + ' invoice(s), ' + cuota + '% of everything outstanding.',
+              datos: suyas.map(function (f) {
+                return { k: f.numero, v: fmtEUR(pendienteDe(f)), n: (diasDeRetraso(f) > 0 ? diasDeRetraso(f) + ' days late' : 'due ' + fmtFecha(f.fechaVencimiento)) + (f.importeCobrado ? ' · has already paid ' + fmtEUR(f.importeCobrado) : '') };
+              }),
+              significado: (ficha && ficha.cuotaMensual ? 'They are also on a ' + fmtEUR(ficha.cuotaMensual) + ' monthly fee, so the debt grows every month it goes uncollected.' : 'The risk is the concentration in a single client, not the amount.'),
+              refs: (ficha ? [{ type: 'clientes', id: ficha.id, label: top }] : []).concat(suyas.map(refFactura))
+            };
+          }
+        },
+        {
+          clave: 'caja',
+          pistas: ['cash', 'treasury', 'liquidity', 'balance', 'runway', 'how much money'],
+          q: 'How is our cash position?',
+          a: function () {
+            var lista = emitidas();
+            var cobrado = suma(lista, function (f) { return f.importeCobrado; });
+            var gastado = suma(GASTOS, function (g) { return g.importe; });
+            var porEntrar = suma(lista.filter(function (f) { return pendienteDe(f) > 0; }), pendienteDe);
+            var s = self.getDashboardSnapshot();
+            return {
+              conclusion: 'This demo does not include the Treasury module, so I cannot give you a bank balance. From what is on record: ' + fmtEUR(cobrado) + ' has come in and ' + fmtEUR(gastado) + ' has gone out.',
+              datos: [
+                { k: 'Collected', v: fmtEUR(cobrado) },
+                { k: 'Expenses on record', v: fmtEUR(gastado) },
+                { k: 'Difference', v: fmtEUR(cobrado - gastado) },
+                { k: 'Still to come in', v: fmtEUR(porEntrar), n: fmtEUR(s.prevision30Dias) + ' due within 30 days' }
+              ],
+              significado: 'The gap between what came in and what went out is not your bank balance: it leaves out payroll, tax and whatever was already in the account. Treasury, which does cross expected receipts with expected payments, exists in the real system and not in this demo.',
+              revisar: ['What is still to come in (' + fmtEUR(porEntrar) + ') is more than double everything collected so far. That is where the money is.'],
+              refs: []
+            };
+          }
         }
       ];
     },

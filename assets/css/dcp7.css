@@ -859,3 +859,12 @@ body.v7 .blog-grid .blog-card .blog-meta::after{
 }
 body.v7 .blog-grid .blog-card .blog-cat{ color:var(--v-ink-2); }
 body.v7 .blog-grid .blog-card .window-title{ color:var(--v-ink-3); }
+
+/* El índice de secciones vive pegado al borde derecho: a 1440 px sus rótulos
+   ocupan de 1.241 a 1.363. En la página de Finance la demo ahora mide 1.376
+   de ancho, así que el índice le caía encima justo sobre la columna de
+   preguntas. Donde la demo es la pantalla (`.fdemo-pantalla`), el índice
+   sobra: no se está recorriendo un relato, se está usando una aplicación. */
+body:has(.demo-host.fdemo-pantalla) .dcx,
+body:has(.demo-host.fdemo-pantalla) .dcx-bar,
+body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }

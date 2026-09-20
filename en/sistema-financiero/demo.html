@@ -3,15 +3,24 @@
 <head> <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Enter the demo — D-Code Finance</title>
-<meta name="description" content="Enter the interactive D-Code Finance demo. A demonstration environment with fictional data, no sign-up required.">
+<meta name="description" content="Enter the interactive D-Code Finance demo. Demo environment with made-up data, no sign-up.">
 <meta name="robots" content="noindex, follow">
+<meta http-equiv="refresh" content="0; url=/en/sistema-financiero/app">
 <link rel="canonical" href="https://dcodepartners.com/en/sistema-financiero/demo">
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-<link rel="manifest" href="/assets/site.webmanifest">
-<link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin> <link rel="stylesheet" href="/assets/css/styles.css?v=a4e2572177">
-<link rel="stylesheet" href="/assets/css/dcp5.css?v=110e1cab83">
-<link rel="stylesheet" href="/assets/css/finance-demo.css?v=d00428ac9a"> <!-- Consentimiento y analitica: SOLO en el dominio real.
+<style>
+  /* Esta pagina solo reenvia a la demo. No carga hojas de estilo, ni fuentes,
+     ni scripts del sitio: cualquier cosa que empiece a descargarse aqui se
+     queda a medias cuando el navegador se va, y eso aparece como peticion
+     abortada en la QA. Lo poco que se ve, se ve con esto. */
+  body{ margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+        background:#06080d; color:#c3cad8; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .r{ text-align:center; padding:24px; max-width:32rem; }
+  .r p{ font-size:1rem; line-height:1.6; margin:0 0 20px; }
+  .r a{ color:#7cb4ff; }
+</style>
+<!-- Consentimiento y analitica: SOLO en el dominio real.
      Fuera de el (Previews de Vercel, local) no se carga ninguno de los dos, y
      por dos razones distintas. CookieYes tiene registrado dcodepartners.com:
      en cualquier otro dominio no levanta el banner y avisa por consola de que
@@ -44,7 +53,7 @@
 })();
 </script>
 </head>
-<body style="margin:0;"> <div class="fdemo-scope"> <div class="fdemo-gate" style="min-height:100vh;"> <div class="fdemo-gate-card"> <div class="fdemo-gate-mark">D</div> <h1 class="fdemo-gate-title">D-Code Finance</h1> <span class="fdemo-gate-badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--dc-neutral);display:inline-block;"></span>Demo</span> <p class="fdemo-gate-text">An interactive replica of D-Code Finance with a fictional company and data. No sign-up, no connection to any real system, nothing you do is saved.</p> <a href="/en/sistema-financiero/app" class="fdemo-btn variant-primary" style="width:100%;">Enter the demo</a> <a href="/en/sistema-financiero" class="fdemo-gate-back">← Back to D-Code Finance</a> </div> </div>
-</div> <script src="/assets/js/dcp5.js?v=11a43dcde0" defer></script>
+<body> <div class="r"> <p>Opening the D-Code Finance demo…</p> <p><a href="/en/sistema-financiero/app">Enter now</a> · <a href="/en/sistema-financiero">Back to D-Code Finance</a></p> </div>
+<script>location.replace('/en/sistema-financiero/app');</script>
 </body>
 </html>

@@ -748,3 +748,121 @@
   .fdemo-dato-v{ font-size:.95rem; }
   .fdemo-ask-form .fdemo-input{ min-width:0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LAS TABLAS, EN UN TELÉFONO, SON FICHAS
+   ═══════════════════════════════════════════════════════════════════════
+   `.fdemo-table` tiene `min-width:640px` porque seis columnas de importes no
+   caben en menos. A 390 px eso significaba una tabla que hay que leer
+   moviéndola de lado, con la mitad de cada fila siempre fuera de la pantalla.
+   Nadie lee así una lista de facturas.
+
+   Por debajo de 720 px cada fila se convierte en una ficha: el primer campo
+   —el número de factura, el nombre del cliente, el proveedor— es el título, y
+   los demás se leen «etiqueta … valor», con la etiqueta puesta por el propio
+   encabezado de la columna (`data-col`, que pone el JS al pintar). Mismo
+   HTML, mismos datos, misma navegación al detalle.                        */
+@media (max-width:720px){
+  .fdemo-table-wrap{ overflow-x:visible; }
+  .fdemo-table{ min-width:0; width:100%; display:block; }
+  .fdemo-table thead{ display:none; }
+  .fdemo-table tbody{ display:block; }
+  .fdemo-table tbody tr{
+    display:block; padding:12px 14px;
+    border-bottom:1px solid var(--dc-border);
+  }
+  .fdemo-table tbody tr:last-child{ border-bottom:none; }
+  .fdemo-table td{
+    display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+    padding:3px 0; border:none; text-align:left; font-size:.82rem;
+  }
+  .fdemo-table td::before{
+    content:attr(data-col);
+    flex:0 0 auto; color:var(--dc-text-faint);
+    font-size:0.6875rem; letter-spacing:.03em; text-transform:uppercase;
+  }
+  .fdemo-table td > *{ text-align:right; }
+  /* El primer campo es el título de la ficha: sin etiqueta y con más peso. */
+  .fdemo-table td:first-child{
+    font-size:.95rem; font-weight:600; color:var(--dc-text);
+    padding-bottom:7px;
+  }
+  .fdemo-table td:first-child::before{ content:none; }
+  .fdemo-table td.is-right{ text-align:left; }
+  /* Una celda vacía en una ficha es una línea que no dice nada. */
+  .fdemo-table td:empty{ display:none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EL ORDEN DE LOS MÓDULOS EN UN TELÉFONO
+   ═══════════════════════════════════════════════════════════════════════
+   En la tira horizontal el orden del escritorio (Dashboard, Facturas,
+   Presupuestos, Clientes, Cobros, Gastos, Proyectos, Pregunta, Config) deja
+   lo que más se mira en un móvil al final. Se reordena con `order`, sin tocar
+   el HTML ni el escritorio: preguntar, ver el resumen, ver lo que hay que
+   cobrar, y después el resto.                                             */
+@media (max-width:860px){
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="ia"]{ order:1; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="dashboard"]{ order:2; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="cobros"]{ order:3; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="facturas"]{ order:4; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="gastos"]{ order:5; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="clientes"]{ order:6; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="proyectos"]{ order:7; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="presupuestos"]{ order:8; }
+  .fdemo-app.is-embedded .fdemo-sidebar [data-view="configuracion"]{ order:9; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LA DEMO A PANTALLA ENTERA EN LA PÁGINA DE FINANCE
+   ═══════════════════════════════════════════════════════════════════════
+   En un escritorio la demo tiene que parecer la aplicación, no una captura
+   dentro de una página. Se sale del ancho del texto y ocupa casi toda la
+   altura útil.                                                            */
+@media (min-width:861px){
+  .demo-host.fdemo-pantalla{
+    --demo-ancho:min(1560px, calc(100vw - 64px));
+    width:var(--demo-ancho);
+    max-width:none;
+    margin-inline:calc((100% - var(--demo-ancho)) / 2);
+  }
+  .demo-host.fdemo-pantalla .fdemo-app.is-embedded{ height:min(900px, 88vh); }
+  .demo-host.fdemo-pantalla [data-fdemo-mount]{ min-height:min(900px, 88vh); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EN UNA PANTALLA ANCHA, LA CONVERSACIÓN NO SE QUEDA SOLA
+   ═══════════════════════════════════════════════════════════════════════
+   Con la demo a 1.376 px de ancho, una columna de 900 dejaba medio marco
+   vacío a la derecha — y un hueco vacío en una aplicación no parece
+   minimalismo, parece que falta algo. A partir de 1.200 px los atajos se van
+   a una columna propia y se quedan siempre a la vista, que es donde sirven:
+   no hay que bajar hasta el final para encontrar la siguiente pregunta.     */
+@media (min-width:1200px){
+  .fdemo-app .fdemo-ask{
+    max-width:none;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 300px;
+    grid-template-areas:
+      "cabecera atajos"
+      "hilo     atajos"
+      "campo    atajos"
+      "pie      atajos";
+    grid-template-rows:auto minmax(0,1fr) auto auto;
+    column-gap:28px;
+  }
+  .fdemo-ask-head{ grid-area:cabecera; }
+  .fdemo-ask-thread{ grid-area:hilo; }
+  .fdemo-ask-form{ grid-area:campo; }
+  .fdemo-ask-foot{ grid-area:pie; }
+  .fdemo-ask-chips{
+    grid-area:atajos; align-self:start;
+    position:sticky; top:0;
+    border-left:1px solid var(--dc-border);
+    padding-left:22px;
+  }
+  .fdemo-ask-chips .fdemo-ia-chip{ width:100%; }
+  /* La respuesta se lee, así que no crece sin límite por mucho sitio que haya. */
+  .fdemo-ask-thread .fdemo-ia-msg{ max-width:880px; }
+  .fdemo-ask-thread .fdemo-ans{ width:100%; }
+}

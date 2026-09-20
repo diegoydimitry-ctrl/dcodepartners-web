@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-20T12:29:15.443Z",
+  "generatedAt": "2026-09-20T13:13:43.102Z",
   "pageCount": 66,
   "chunkCount": 586,
   "pages": [
@@ -2275,28 +2275,28 @@
         },
         {
           "id": "/en/#c2",
-          "heading": "It almost always starts the same way.",
-          "text": "&ldquo;I am always chasing payments.&rdquo; The money arrives late because chasing it depends on somebody remembering. &ldquo;Opportunities slip away.&rdquo; They come in through several channels and follow-up happens if there is time left. &ldquo;The same data, in three places.&rdquo; Information is duplicated, it does not reconcile, and the reports come out wrong. How we work"
+          "heading": "It almost always starts with one of these four lines.",
+          "text": "&ldquo;Every week we do the same thing by hand.&rdquo; Taking data out of one place and typing it into another is not work: it is time that gets paid for every month and shows up in no account anywhere. &ldquo;We sent the quote and that was that.&rdquo; Nobody decided not to follow up. There just was never a moment when it was somebody’s turn, and the client went elsewhere. &ldquo;I am always chasing payments.&rdquo; The money comes in late because chasing it depends on someone remembering, and that someone has fourteen other things on. &ldquo;Only Marta knows that.&rdquo; When a process lives in one person’s head, the company stops when that person goes on holiday. How we work"
         },
         {
           "id": "/en/#c3",
           "heading": "We analyse",
-          "text": "We look at how the company actually runs: where customers come in, what is done by hand, what gets dropped when everyone is busy. Out of that comes the list of where time, sales, information or money is being lost. You leave with that list, whether we build anything or not 02"
+          "text": "We follow the real path of a customer, an order and an invoice, end to end, and write down every point where a person has to bridge a gap. Out of that comes the list of where time, sales, information and money leak out — and how much of it repeats every week. You leave with that list, whether we build anything or not 02"
         },
         {
           "id": "/en/#c4",
           "heading": "We design",
-          "text": "We design the system around those problems, not the other way round. It fits the tools and the way of working you already have: what already works stays as it is. You see what you will have before it exists 03"
+          "text": "We take the heaviest problem on that list and turn it into a system that fits the way you work, not the way we do. We decide what can run on its own, what a person keeps deciding, and which of your tools it connects to. What already works stays as it is. You see what you will have before it exists 03"
         },
         {
           "id": "/en/#c5",
           "heading": "We roll it out",
-          "text": "We connect it to your tools, automate what can run on its own, and leave it working inside the daily job, with your people actually using it. It runs in your operation, not in a demo 04"
+          "text": "We build it, connect it to what you already use and leave it running inside the daily job, with your team using it. We do not hand over a manual for somebody to put into practice: we hand over something already in practice. It runs in your operation, not in a demo 04"
         },
         {
           "id": "/en/#c6",
           "heading": "We measure and improve",
-          "text": "From then on the system leaves data behind: how much ran on its own, what failed, and what is worth changing. That is what it gets tuned and extended with, without starting over. You can check it, not just believe it This is what we get asked to fix"
+          "text": "The system leaves a trace of everything it does: what ran on its own, what failed, and where a person is still bridging a gap. That is what it gets tuned with — and when the company changes, the system changes with it instead of going stale. You can check it, not just believe it This is what we get asked to fix"
         },
         {
           "id": "/en/#c7",
@@ -2688,8 +2688,8 @@
       "chunks": [
         {
           "id": "/en/sistema-financiero#c0",
-          "heading": "A complete financial system, built by us.",
-          "text": "Invoicing, collections, expenses, quotes and analytics in one place. It adapts to each company’s structure. Open the demo Talk to us DEMO Start by asking it something, or use the demo’s menu to open any invoice, client or project. The clients, the amounts and the dates are made up; the screens, the columns and the statuses are the ones in the real system. The demo covers nine modules; all fourteen are listed below."
+          "heading": "A financial system you can ask what is going on in your company.",
+          "text": "Invoices, collections, expenses and projects in one place — and on top, something that reads all of it and answers: who owes you, what is past due, what you should look at today. What you see below is the application, with made-up data. Try it. Try it right here Open it full screen DEMO · made-up data It is the application, not a screenshot: ask it something, open an invoice, look at the collections. The clients, the amounts and the dates are made up; the screens, the calculations and the statuses are the real system’s. Nine modules work here; all fourteen are listed below."
         },
         {
           "id": "/en/sistema-financiero#c1",
@@ -2703,8 +2703,8 @@
         },
         {
           "id": "/en/sistema-financiero#c3",
-          "heading": "Open the demo and explore it.",
-          "text": "Demo environment with example data. No sign-up. Open the demo Book a call"
+          "heading": "Go through all of it, with nobody walking you round.",
+          "text": "Demo environment with made-up data. No sign-up and no connection to any real system. Open the demo full screen Book a call"
         }
       ]
     },
@@ -2896,28 +2896,28 @@
         },
         {
           "id": "/#c2",
-          "heading": "Casi siempre empieza igual.",
-          "text": "«Persigo cobros.» El dinero llega tarde porque avisar depende de que alguien se acuerde. «Se me escapan oportunidades.» Entran por varios sitios y el seguimiento se hace si queda tiempo. «Lo mismo, en tres sitios.» La información se repite, no cuadra y los informes salen mal. Cómo trabajamos"
+          "heading": "Casi siempre empieza con una de estas cuatro frases.",
+          "text": "«Cada semana hacemos lo mismo a mano.» Sacar datos de un sitio y meterlos en otro no es trabajo: es tiempo que se paga igual todos los meses y que no aparece en ninguna cuenta. «Mandamos el presupuesto y ahí se quedó.» Nadie decidió no hacer seguimiento. Simplemente no había un momento en el que le tocara a alguien, y el cliente se fue con otro. «Persigo cobros.» El dinero entra tarde porque reclamarlo depende de que alguien se acuerde, y esa persona tiene otras catorce cosas encima. «Eso lo sabe Marta.» Cuando un proceso vive en la cabeza de una persona, la empresa se para cuando esa persona se va de vacaciones. Cómo trabajamos"
         },
         {
           "id": "/#c3",
           "heading": "Analizamos",
-          "text": "Miramos cómo funciona la empresa de verdad: por dónde entran los clientes, qué se hace a mano, qué se queda sin hacer cuando hay prisa. De ahí sale la lista de dónde se está perdiendo tiempo, ventas, información o dinero. Sales de aquí con esa lista, la construyamos o no 02"
+          "text": "Seguimos el recorrido real de un cliente, de un pedido y de una factura, de principio a fin, y anotamos cada punto en el que alguien tiene que hacer de puente. De ahí sale la lista de por dónde se escapan el tiempo, las ventas, la información y el dinero, y cuánto de eso se repite cada semana. Sales de aquí con esa lista, la construyamos o no 02"
         },
         {
           "id": "/#c4",
           "heading": "Diseñamos",
-          "text": "Diseñamos el sistema alrededor de esos problemas, no al revés. Encaja con las herramientas y la manera de trabajar que ya tenéis: lo que ya funciona se queda como está. Ves qué vas a tener antes de que exista 03"
+          "text": "Cogemos el problema que más pesa de esa lista y lo convertimos en un sistema que encaja con vuestra forma de trabajar, no con la nuestra. Decidimos qué puede ir solo, qué sigue decidiendo una persona y con cuáles de vuestras herramientas se conecta. Lo que ya funciona se queda como está. Ves qué vas a tener antes de que exista 03"
         },
         {
           "id": "/#c5",
           "heading": "Implantamos",
-          "text": "Lo conectamos con vuestras herramientas, automatizamos lo que puede ir solo y lo dejamos funcionando dentro del trabajo de cada día, con las personas usándolo de verdad. Funciona en tu operativa, no en una demo 04"
+          "text": "Lo construimos, lo conectamos con lo que ya usáis y lo dejamos funcionando dentro del trabajo de cada día, con vuestro equipo usándolo. No entregamos un manual para que alguien lo ponga en marcha: entregamos algo que ya está en marcha. Funciona en tu operativa, no en una demo 04"
         },
         {
           "id": "/#c6",
           "heading": "Medimos y mejoramos",
-          "text": "A partir de ahí el sistema deja datos: cuánto se ha hecho solo, qué ha fallado y qué conviene cambiar. Con eso se ajusta y se amplía, sin volver a empezar. Se puede comprobar, no solo creer Esto es lo que nos piden que arreglemos"
+          "text": "El sistema deja rastro de todo lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo una persona haciendo de puente. Con eso se ajusta, y cuando la empresa cambia, el sistema cambia con ella en vez de quedarse obsoleto. Se puede comprobar, no solo creer Esto es lo que nos piden que arreglemos"
         },
         {
           "id": "/#c7",
@@ -3309,8 +3309,8 @@
       "chunks": [
         {
           "id": "/sistema-financiero#c0",
-          "heading": "Un sistema financiero completo, construido por nosotros.",
-          "text": "Facturación, cobros, gastos, presupuestos y análisis en un mismo sitio. Se adapta a la estructura de cada empresa. Abrir la demo Hablar con nosotros DEMO Empieza preguntándole, o entra por el menú de la demo en cualquier factura, cliente o proyecto. Los clientes, los importes y las fechas son inventados; las pantallas, las columnas y los estados son los del sistema de verdad. La demo recorre nueve módulos; los catorce están abajo."
+          "heading": "Un sistema financiero al que le preguntas qué está pasando en tu empresa.",
+          "text": "Facturas, cobros, gastos y proyectos en el mismo sitio, y encima algo que lee todo eso y te contesta: quién te debe, qué está fuera de plazo, qué deberías mirar hoy. Lo de aquí abajo es la aplicación, con datos inventados. Pruébala. Probarla aquí mismo Abrirla a pantalla completa DEMO · datos ficticios Es la aplicación, no una captura: pregúntale, abre una factura, mira los cobros. Los clientes, los importes y las fechas son inventados; las pantallas, los cálculos y los estados son los del sistema de verdad. Aquí funcionan nueve módulos; los catorce están más abajo."
         },
         {
           "id": "/sistema-financiero#c1",
@@ -3324,8 +3324,8 @@
         },
         {
           "id": "/sistema-financiero#c3",
-          "heading": "Entra en la demo y recórrelo.",
-          "text": "Entorno de demostración con datos de ejemplo. Sin registro. Abrir la demo Reservar una llamada"
+          "heading": "Recórrelo entero, sin que nadie te lo enseñe.",
+          "text": "Entorno de demostración con datos inventados. Sin registro y sin conexión a ningún sistema real. Abrir la demo a pantalla completa Reservar una llamada"
         }
       ]
     }
