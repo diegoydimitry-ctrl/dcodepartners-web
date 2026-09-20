@@ -979,7 +979,10 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
 }
 .v7-pasos{
   list-style:none; margin:0; padding:0; position:relative;
-  display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:0 clamp(14px,1.6vw,22px);
+  /* auto-fit y no seis: cuántos pasos hay lo decide el contenido, no el
+     CSS. Con cuatro pasos en una rejilla de seis, media portada se
+     quedaba en blanco con la línea del tiempo cruzándola sola. */
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr)); gap:0 clamp(14px,1.6vw,22px);
 }
 .v7-pasos::before{
   content:""; position:absolute; left:12px; right:12px; top:12px; height:1px;
@@ -1220,3 +1223,13 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
     max-width:none; margin-inline:auto; text-align:left;
   }
 }
+
+/* Los planes ya no viven en la portada: viven en Finance. Aquí queda la
+   frase que dice que existen y el botón que lleva a ellos. Quien está
+   jugando con la aplicación no quiere leer tres columnas de qué incluye
+   cada nivel — quiere seguir tocándola. */
+.v7-planes-ya{
+  margin:14px 0 0; font-size:.94rem; line-height:1.6; color:var(--v-ink-2); max-width:62ch;
+}
+.v7-planes-ya b{ color:var(--ink); font-weight:600; }
+.v7-planes-cta{ margin:22px 0 0; }

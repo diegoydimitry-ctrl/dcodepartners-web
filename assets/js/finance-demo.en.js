@@ -100,7 +100,11 @@
       // dates with nothing visible saying they are made up.
       '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demo</span><span class="fdemo-demo-banner-text">fictional data, does not reflect real D-Code Partners information</span></div>' +
       '<div class="fdemo-main" data-role="main"><div class="fdemo-page" data-role="content"></div></div>' +
-      '</div>';
+      '</div>' +
+      /* LA MANO DEL RECORRIDO. Vive fuera del contenido porque se mueve
+         sobre la aplicación entera —del menú a la pantalla— y porque así
+         no la borra ningún re-render. No recibe eventos: es un dibujo. */
+      '<span class="fdemo-mano" data-role="mano" aria-hidden="true"><i></i></span>';
 
     var sidebarEl = root.querySelector('[data-role="sidebar"]');
     var overlayEl = root.querySelector('[data-role="overlay"]');
@@ -132,8 +136,21 @@
     var navIndicatorEl = null;
     if (true) {
       sidebarEl.innerHTML =
+        /* El trazado es el de MarcaFinance.tsx, literal. El píxel central
+           va en --dc-mark-accent: es IDENTIDAD, no acción ni estado. */
         '<div class="fdemo-brand fdemo-brand--full">' +
-        '<img src="/assets/logo/dcode-icon-sm.png" alt="" width="24" height="20" class="fdemo-brand-logo">' +
+        '<span class="fdemo-brand-mark">' +
+        '<svg viewBox="0 0 120 100" width="26" height="22" fill="none" aria-hidden="true" focusable="false">' +
+        '<g fill="currentColor">' +
+        '<rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/>' +
+        '<rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/>' +
+        '<rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/>' +
+        '<path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/>' +
+        '<rect x="102" y="43" width="16" height="16" rx="2"/>' +
+        '<path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/>' +
+        '</g>' +
+        '<rect x="16" y="45" width="15" height="15" rx="2" fill="var(--dc-mark-accent)"/>' +
+        '</svg></span>' +
         '<div class="fdemo-brand-word"><span class="fdemo-brand-d">D-Code</span><span class="fdemo-brand-suffix">FINANCE</span></div>' +
         '</div>' +
         '<div class="fdemo-nav-groups" data-role="nav-groups">' +
@@ -921,6 +938,34 @@
     var tourBtnEl = root.querySelector('[data-role="tour"]');
     var tourBarEl = root.querySelector('[data-role="tour-bar"] i');
 
+
+    /* ══════════════ LA MANO ══════════════
+       Lleva el puntero hasta el ítem del menú que toca, lo pulsa y avisa.
+       Si el ítem no está en pantalla —un menú desplazado, un ancho raro— no
+       se inventa nada: se hace el cambio sin ceremonia. */
+    var manoEl = root.querySelector('[data-role="mano"]');
+    var manoT = [0, 0, 0];
+    function manoLimpia() {
+      for (var i = 0; i < manoT.length; i++) clearTimeout(manoT[i]);
+      if (manoEl) manoEl.classList.remove('is-ahi', 'is-pulsa');
+    }
+    function llevaLaMano(vista, hecho) {
+      var destino = sidebarEl.querySelector('[data-role="nav"][data-view="' + vista + '"]');
+      if (!manoEl || !destino || reducido) { hecho(); return null; }
+      var caja = destino.getBoundingClientRect(), marco = root.getBoundingClientRect();
+      if (!caja.width || caja.bottom < marco.top || caja.top > marco.bottom) { hecho(); return null; }
+      manoEl.style.transform = 'translate(' + (caja.left - marco.left + Math.min(26, caja.width * 0.5)) +
+        'px,' + (caja.top - marco.top + caja.height * 0.5) + 'px)';
+      manoEl.classList.add('is-ahi');
+      /* 560 ms de viaje, la pulsación encima, y el cambio de pantalla 180 ms
+         después: el orden importa, porque lo que convence es ver el efecto
+         DESPUÉS de la causa. */
+      manoT[0] = setTimeout(function () { manoEl.classList.add('is-pulsa'); }, 540);
+      manoT[1] = setTimeout(function () { hecho(); }, 720);
+      manoT[2] = setTimeout(function () { manoEl.classList.remove('is-pulsa'); }, 1020);
+      return true;
+    }
+
     function pintaTour() {
       root.classList.toggle('is-tour', tour.on);
       if (tourTxtEl) tourTxtEl.textContent = tour.on ? 'Guided tour' : 'You are driving';
@@ -930,11 +975,16 @@
     function pasoTour() {
       var paso = TOUR[tour.i % TOUR.length];
       tour.i++;
-      state.route = paso.v; state.id = null;
-      render();
-      tour.t0 = Date.now(); tour.dur = paso.ms;
-      clearTimeout(tour.timer);
-      tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, paso.ms);
+      /* La cuenta atrás del paso empieza CUANDO SE VE LA PANTALLA, no cuando
+         arranca la mano: si no, el viaje se come un segundo de lectura. */
+      llevaLaMano(paso.v, function () {
+        if (!tour.on) return;
+        state.route = paso.v; state.id = null;
+        render();
+        tour.t0 = Date.now(); tour.dur = paso.ms;
+        clearTimeout(tour.timer);
+        tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, paso.ms);
+      });
     }
     function marcaBarra() {
       tour.raf = 0;
@@ -955,6 +1005,7 @@
     }
     function paraTour(porMano) {
       tour.on = false;
+      manoLimpia();
       clearTimeout(tour.timer);
       if (tour.raf) { cancelAnimationFrame(tour.raf); tour.raf = 0; }
       if (porMano) {

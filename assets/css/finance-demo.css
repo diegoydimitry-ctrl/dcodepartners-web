@@ -17,29 +17,63 @@
    tokens noche del D-Code Design System, los mismos que usan la Web, la
    Partners App y el OS. */
 .fdemo-scope{
-  --dc-bg:#06080d;           /* DS noche · bg */
-  --dc-surface:#0b0f17;      /* DS noche · surface-1 */
-  --dc-surface-2:#111623;    /* DS noche · surface-2 */
-  --dc-border:rgba(255,255,255,.08);       /* DS noche · line */
-  --dc-border-strong:rgba(255,255,255,.15);/* DS noche · line-strong */
-  --dc-text:#edf1f8;         /* DS noche · text */
-  --dc-text-muted:#a7b0c4;   /* DS noche · text-2 */
-  --dc-text-faint:#8c95aa;   /* DS noche · text-3 (antes #545e78: 2,8:1, no llegaba a AA) */
-  --dc-accent:#5b8cff;       /* DS · signal (un solo azul de acción) */
-  --dc-accent-cyan:#43e0ff;  /* DS · data */
-  --dc-accent-violet:#9b6bff;
-  --dc-success:#3ecf8e;      /* DS · ok */
-  --dc-success-bg:rgba(62,207,142,.13);
-  --dc-warning:#f5a524;      /* DS · warn */
-  --dc-warning-bg:rgba(245,165,36,.13);
-  --dc-danger:#ff6b62;       /* DS · bad */
-  --dc-danger-bg:rgba(255,107,98,.13);
-  --dc-info:#5b8cff;
-  --dc-info-bg:rgba(91,140,255,.14);
-  --dc-neutral-bg:rgba(140,149,170,.14);
-  --dc-neutral:#8c95aa;      /* DS · neutral: las etiquetas DEMO van en gris */
+  /* ── LOS TOKENS DEL PRODUCTO, TAL CUAL ──────────────────────────────
+     Copiados de dcode-finance/src/app/globals.css (:root). No son una
+     interpretación: son los mismos números que sirve la aplicación. Los
+     contrastes están medidos allí por contraste.test.ts, así que esta
+     demo hereda AA/AAA sin volver a medir nada.
+
+     La elevación en claro se lee al revés que en oscuro: el lienzo es un
+     gris cálido y la tarjeta es blanco puro. Ese salto de 1,10:1 es todo
+     lo que separa una pieza apoyada de su fondo. */
+  --dc-bg:#f4f4f1;           /* lienzo */
+  --dc-surface:#ffffff;      /* tarjeta, panel, barra lateral */
+  --dc-surface-2:#f0f0ec;    /* anidado: campos, filas activas, hover */
+  --dc-surface-3:#ffffff;    /* flotante: menús, diálogos */
+  --dc-border:#e4e4df;
+  --dc-border-strong:#d3d3cc;
+  --dc-border-input:#83868f;
+  --dc-text:#15161a;
+  --dc-text-muted:#4a4d57;   /* --dc-text-2 del producto */
+  --dc-text-faint:#646874;   /* --dc-text-3 del producto */
+  /* UN azul de acción. El degradado cian→violeta era la piel de la web,
+     no un botón: en una tabla de importes competía con la única señal que
+     debe destacar, que es el dinero. */
+  --dc-accent:#2f5fe0;
+  --dc-accent-cyan:#0a6e7a;
+  --dc-accent-violet:#6337c9;
+  --dc-brand-grad:linear-gradient(120deg,#2f5fe0,#244fc4);
+  --dc-success:#0f7a4f;
+  --dc-success-bg:rgba(15,122,79,.08);
+  --dc-warning:#9a5b00;
+  --dc-warning-bg:rgba(154,91,0,.09);
+  --dc-danger:#c0392f;
+  --dc-danger-bg:rgba(192,57,47,.08);
+  --dc-info:#2f5fe0;
+  --dc-info-bg:rgba(47,95,224,.08);
+  --dc-neutral-bg:rgba(100,104,116,.1);
+  --dc-neutral:#646874;
+  /* El píxel central de la marca D-Code es el acento de cada producto.
+     Finance es esmeralda. Es IDENTIDAD, nunca acción ni estado. */
+  --dc-mark-accent:#0f7a4f;
+  --dc-luz-alta:rgba(21,22,26,.06);
+  --dc-luz-baja:rgba(21,22,26,.03);
+  --dc-r-sm:6px; --dc-r-md:8px; --dc-r-lg:12px; --dc-r-xl:16px;
+  --dc-sombra-tarjeta:0 1px 2px rgba(16,24,40,.06);
+  --dc-sombra-flotante:0 12px 32px -12px rgba(16,24,40,.22), 0 0 0 1px var(--dc-border);
+  --dc-scrim:rgba(21,22,26,.42);
+  /* Las tres familias del producto, repartidas por función y no por gusto:
+     Inter lleva tabular de verdad (medido: «1111111111» y «8888888888» dan
+     420 px las dos), así que los importes van en Inter; Space Grotesk es la
+     voz de los títulos y JetBrains Mono la de las etiquetas técnicas. */
   --dc-font:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --dc-font-display:"Space Grotesk", "Inter", system-ui, sans-serif;
+  --dc-font-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
   font-family:var(--dc-font);
+  /* La 'l' de Inter con cola, para no confundir 1 / l / I en un número de
+     factura. Es el mismo ajuste que hace el producto en su <body>. */
+  font-feature-settings:"cv05" 1;
+  color-scheme:light;
 }
 
 .fdemo-app{
@@ -1004,4 +1038,229 @@
 @media (max-width:768px){
   .fdemo-tour{ min-height:44px; padding-inline:12px; }
   .fdemo-ask-clip{ min-height:44px; }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   LA LUZ — lo que no arreglan los tokens
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* LA VENTANA. En oscuro flotaba con una sombra enorme; en claro una pieza
+   apoyada se lee con un filete y una sombra de una sola capa. El anillo
+   exterior existe porque esta pantalla blanca vive sobre la página oscura
+   de la web: sin él, el blanco se derrama sobre el fondo. */
+.fdemo-app.is-embedded{
+  box-shadow:
+    0 1px 2px rgba(16,24,40,.06),
+    0 24px 60px -30px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,255,255,.10);
+}
+
+/* LA BARRA LATERAL Y LA SUPERIOR son superficie de tarjeta, como en el
+   producto: blanco sobre el lienzo gris, separados por un filete. */
+.fdemo-sidebar{ background:var(--dc-surface); }
+.fdemo-main{ background:var(--dc-bg); }
+.fdemo-topbar{ background:var(--dc-surface); backdrop-filter:none; }
+@media (min-width:861px){
+  .fdemo-app.is-fullpage .fdemo-sidebar{ background:var(--dc-surface); }
+}
+
+/* EL ÍTEM ACTIVO DEL MENÚ, copiado de Sidebar.tsx: un tinte del azul de
+   información y una marca corta de 2 px centrada en la fila. El filo
+   interior de borde a borde dibujaba una «C» curvada en las esquinas, que
+   se lee como un contorno mal hecho y no como un indicador. */
+.fdemo-nav-item.is-active{
+  background:var(--dc-info-bg);
+  color:var(--dc-text);
+  font-weight:600;
+  box-shadow:none;
+  position:relative;
+}
+.fdemo-nav-item.is-active::before{
+  content:''; position:absolute; top:50%; left:0;
+  width:2px; height:18px; transform:translateY(-50%);
+  border-radius:999px; background:var(--dc-accent);
+}
+.fdemo-nav-item:hover{ background:var(--dc-surface-2); }
+.fdemo-nav-item.is-active .fdemo-nav-dot,
+.fdemo-nav-item.is-active .fdemo-nav-icon{ background:var(--dc-accent); color:var(--dc-accent); }
+.fdemo-nav-item.is-active .fdemo-nav-icon{ background:none; }
+.fdemo-nav-indicator{ background:var(--dc-info-bg); }
+.fdemo-nav-indicator-notch{ background:var(--dc-accent); }
+.fdemo-nav-group-title{
+  font-family:var(--dc-font-mono);
+  font-weight:400; letter-spacing:.14em; color:var(--dc-text-faint);
+}
+
+/* LA MARCA. El cuadrado con degradado de tres paradas era el logotipo de
+   una plantilla. El de verdad es la marca D-Code con su píxel esmeralda,
+   que es lo que identifica a Finance dentro de la familia. */
+.fdemo-brand-mark{ background:none; color:var(--dc-text); }
+.fdemo-brand-mark svg{ width:26px; height:22px; display:block; }
+.fdemo-brand-d{ font-family:var(--dc-font-display); letter-spacing:-.01em; }
+.fdemo-brand-suffix{
+  font-family:var(--dc-font-mono); font-weight:500;
+  letter-spacing:.08em; color:var(--dc-mark-accent);
+}
+.fdemo-brand-demo{ color:var(--dc-text-faint); border-color:var(--dc-border-strong); }
+.fdemo-demo-banner{ border-bottom-color:var(--dc-border); }
+.fdemo-demo-banner-label{ color:var(--dc-text-faint); }
+
+/* TIPOGRAFÍA. El título de pantalla del producto es Space Grotesk a 22 px
+   (.dc-titulo); las etiquetas técnicas, mono en versales. Sin esto la demo
+   hablaba con una voz y el producto con otra. */
+.fdemo-page-title{
+  font-family:var(--dc-font-display);
+  font-size:1.375rem; letter-spacing:-.02em; line-height:1.2;
+}
+.fdemo-kpi-value, .fdemo-stat-value{
+  font-family:var(--dc-font-display); letter-spacing:-.02em;
+}
+.fdemo-table td.is-right, .fdemo-cifra{ font-family:var(--dc-font); letter-spacing:-.01em; }
+.fdemo-table th{
+  font-family:var(--dc-font-mono); font-weight:400; letter-spacing:.1em;
+  color:var(--dc-text-faint);
+}
+
+/* SUPERFICIES. El halo blanco al 2 % era el filo de luz del tema oscuro:
+   sobre blanco no existe. Lo que da canto a una superficie clara es un
+   filete de tinta y una sombra fina. */
+.fdemo-card, .fdemo-kpi, .fdemo-stat-card{
+  box-shadow:inset 0 1px 0 var(--dc-luz-alta), var(--dc-sombra-tarjeta);
+}
+/* El tinte de esquina de los KPI baja del 15 % al 6 %: en una tabla
+   financiera el color solo debe aparecer cuando hay un ESTADO. */
+.fdemo-kpi.accent-blue{ --kpi-accent:rgba(47,95,224,.06); }
+.fdemo-kpi.accent-cyan{ --kpi-accent:rgba(10,110,122,.06); }
+.fdemo-kpi.accent-violet{ --kpi-accent:rgba(99,55,201,.06); }
+.fdemo-kpi.accent-warning{ --kpi-accent:rgba(154,91,0,.07); }
+.fdemo-kpi.accent-danger{ --kpi-accent:rgba(192,57,47,.06); }
+
+/* ENLACES Y BOTONES. El enlace del producto es el azul de acción, no el
+   cian de datos; y el botón principal lleva un degradado de UNA familia
+   (azul → su propio hover), no un arcoíris. */
+.fdemo-link{ color:var(--dc-accent); }
+.fdemo-btn.variant-primary{ background:var(--dc-brand-grad); color:#fff; }
+.fdemo-btn.variant-primary:hover{ filter:brightness(.96); }
+.fdemo-btn.variant-secondary{ background:var(--dc-surface); }
+.fdemo-btn.variant-secondary:hover{ border-color:var(--dc-accent); color:var(--dc-accent); }
+.fdemo-input, .fdemo-select{ background:var(--dc-surface); border-color:var(--dc-border-input); }
+.fdemo-input:focus, .fdemo-select:focus{ box-shadow:0 0 0 3px var(--dc-info-bg); }
+
+/* ESTADOS. El borde de la pastilla se deriva de su propio color en vez de
+   ser un rgba de tema oscuro escrito a mano: así un estado nuevo no
+   necesita una línea más aquí. */
+.fdemo-pill{ border-color:color-mix(in srgb, currentColor 20%, transparent); }
+.fdemo-pill.st-draft, .fdemo-pill.st-neutral{ color:var(--dc-text-muted); border-color:var(--dc-border-strong); }
+.fdemo-alert{ border-color:color-mix(in srgb, var(--dc-warning) 20%, transparent); }
+
+/* LA CONVERSACIÓN. La burbuja de quien pregunta va en el azul de marca
+   plano; la referencia, en el tinte del azul de información. */
+.fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#fff; }
+.fdemo-ia-msg.from-ia .fdemo-ia-bubble{ background:var(--dc-surface); }
+.fdemo-ia-ref{
+  background:var(--dc-info-bg); color:var(--dc-accent);
+  border-color:color-mix(in srgb, var(--dc-accent) 22%, transparent);
+}
+.fdemo-ia-chip{ background:var(--dc-surface); }
+.fdemo-ia-chip:hover{ border-color:var(--dc-accent); color:var(--dc-accent); }
+
+/* EL VELO del cajón lateral en móvil: el del producto, no negro al 60 %. */
+.fdemo-sidebar-overlay{ background:var(--dc-scrim); }
+
+/* EL RECORRIDO. Iba en cian de tema oscuro; pasa al azul de acción. */
+.fdemo-app.is-tour .fdemo-tour{ color:var(--dc-accent); border-color:color-mix(in srgb, var(--dc-accent) 32%, transparent); }
+.fdemo-app.is-tour .fdemo-tour-dot{ background:var(--dc-accent); box-shadow:0 0 0 3px var(--dc-info-bg); }
+.fdemo-tour-bar i{ background:var(--dc-accent); }
+.fdemo-doc-spin{ border-color:var(--dc-info-bg); border-top-color:var(--dc-accent); }
+.fdemo-doc-out.is-warn .fdemo-doc-out-s{ color:var(--dc-warning); }
+.fdemo-doc-out.is-ok .fdemo-doc-out-s{ color:var(--dc-success); }
+.fdemo-doc-chip-ok{ color:var(--dc-success); }
+.fdemo-doc-frag{ background:var(--dc-surface-2); color:var(--dc-text-faint); }
+.fdemo-doc-chip{ background:var(--dc-surface-2); }
+.fdemo-nuevo-pill{
+  background:var(--dc-success-bg); color:var(--dc-success);
+  border-color:color-mix(in srgb, var(--dc-success) 28%, transparent);
+}
+.fdemo-ans-motor{ color:var(--dc-text-faint); }
+
+/* LA PUERTA de la pantalla completa: misma corrección de sombra y marca. */
+.fdemo-gate::before{ display:none; }
+.fdemo-gate-card{ box-shadow:var(--dc-sombra-flotante); }
+.fdemo-gate-mark{ background:var(--dc-brand-grad); }
+.fdemo-gate-list svg{ color:var(--dc-accent); }
+
+/* ══════════════════════════════════════════════════════════════════════
+   LA MANO DEL RECORRIDO
+   Un punto con su halo que viaja hasta el módulo siguiente y lo pulsa. No
+   recibe eventos —pointer-events:none— porque el ratón de verdad tiene que
+   poder atravesarlo para tomar el control en cualquier momento.
+   ══════════════════════════════════════════════════════════════════════ */
+.fdemo-mano{
+  position:absolute; top:0; left:0; z-index:35;
+  width:0; height:0; pointer-events:none;
+  opacity:0;
+  transition:transform .54s cubic-bezier(.34,.72,.26,1), opacity .22s ease;
+}
+.fdemo-mano.is-ahi{ opacity:1; }
+.fdemo-mano i{
+  position:absolute; left:-9px; top:-9px;
+  width:18px; height:18px; border-radius:50%;
+  background:color-mix(in srgb, var(--dc-accent) 22%, transparent);
+  border:1.5px solid var(--dc-accent);
+  box-shadow:0 2px 6px rgba(16,24,40,.18);
+  transition:transform .16s ease, background-color .16s ease;
+}
+/* La pulsación: el punto se encoge —como un dedo que aprieta— y de él sale
+   una onda que se expande y se apaga. Dos señales para un solo gesto. */
+.fdemo-mano.is-pulsa i{ transform:scale(.62); background:var(--dc-accent); }
+.fdemo-mano.is-pulsa::after{
+  content:''; position:absolute; left:-9px; top:-9px;
+  width:18px; height:18px; border-radius:50%;
+  border:2px solid var(--dc-accent);
+  animation:fdemo-onda .48s ease-out forwards;
+}
+@keyframes fdemo-onda{
+  from{ transform:scale(1); opacity:.55; }
+  to  { transform:scale(3.1); opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .fdemo-mano{ display:none; }
+}
+
+/* LA APLICACIÓN NO ES LA PÁGINA.
+   La portada da a sus titulares un halo oscuro para que se lean sobre el
+   campo de partículas (body.v6 h1 en dcp6.css). Dentro de la demo ese halo
+   es un borrón negro alrededor de texto negro sobre blanco: aquí no hay
+   campo que tapar, hay una aplicación. Se apaga en todo el árbol de la demo
+   de una vez, en lugar de ir contrarrestando selector a selector. */
+/* La clase se repite a propósito: `body.v6 h1` pesa una clase y dos
+   elementos, y `.fdemo-app *` solo una clase. Repetirla sube a dos clases
+   y gana sin recurrir a !important ni a tocar la regla de la portada,
+   que ahí hace falta. */
+.fdemo-app.fdemo-app, .fdemo-app.fdemo-app *{ text-shadow:none; }
+
+/* LA BARRA SUPERIOR EN UN TELÉFONO.
+   Medido a 390 px: el nombre de la cuenta estaba oculto, el avatar también y
+   al indicador del recorrido se le quitaba el texto. Quedaba una barra blanca
+   con un círculo suelto — que es exactamente lo que parecía, un fallo.
+   Aquí el indicador recupera su texto (es lo único que explica por qué la
+   pantalla se mueve sola, y en un teléfono eso importa MÁS, no menos) y la
+   cuenta de demostración vuelve como etiqueta. */
+@media (max-width:860px){
+  .fdemo-app.is-embedded .fdemo-tour-txt{ display:inline; }
+  .fdemo-app.is-embedded .fdemo-topbar-right{ width:100%; justify-content:space-between; gap:8px; }
+  .fdemo-app.is-embedded .fdemo-topbar-user{ display:block; text-align:right; }
+  .fdemo-app.is-embedded .fdemo-topbar-name{ display:none; }
+  .fdemo-app.is-embedded .fdemo-topbar-role{
+    margin:0; font-family:var(--dc-font-mono);
+    font-size:0.625rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--dc-text-faint); white-space:nowrap;
+  }
+  .fdemo-app.is-embedded .fdemo-tour{ margin-right:auto; }
+}
+@media (max-width:860px){
+  /* «Recorrido automático» partía en dos líneas y engordaba la barra. */
+  .fdemo-app.is-embedded .fdemo-tour-txt{ white-space:nowrap; font-size:0.75rem; }
+  .fdemo-app.is-embedded .fdemo-tour{ padding-inline:10px; }
 }

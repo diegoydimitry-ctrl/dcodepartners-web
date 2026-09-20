@@ -255,7 +255,7 @@
   }
 
   function build() {
-    N = small ? 620 : narrow ? 1080 : 1560;
+    N = small ? 660 : narrow ? 1180 : 2100;
     PT = []; ORD = [];
     for (var i = 0; i < N; i++) {
       var r = sd(i, 1), r2 = sd(i, 2), r3 = sd(i, 3);
@@ -272,7 +272,7 @@
            los nodos, luego las aristas, luego lo que circula—. Asi la
            estructura siguiente SE CONSTRUYE en el orden en que se lee, en
            vez de deslizarse entera de golpe. */
-        dl: (i / (small ? 620 : narrow ? 1080 : 1560)) * 0.52,
+        dl: (i / N) * 0.52,
         vx: 0, vy: 0, x: -1, y: 0,
         hx: sd(i, 4), hy: sd(i, 5)     // sitio en la bruma de fondo
       });
@@ -307,8 +307,11 @@
        ancho y 56% de alto— para que la marca entera y su anillo queden
        DENTRO de la ventana y a la derecha del titular. */
     { x: 0.848, y: 0.50,  w: 0.34, h: 0.56, d: 1.06 },  // 0 MARCA      el hero
-    { x: 0.720, y: 0.52,  w: 0.54, h: 1.02, d: 0.96 },  // 1 AISLADOS   el problema
-    { x: 0.745, y: 0.180, w: 0.46, h: 0.32, d: 0.90 },  // 2 SUPERVISA  Finance
+    /* Los dos capítulos anteriores al proceso no dibujan: derivan. Su
+       encuadre es la ventana entera porque la deriva no es una figura
+       dentro de un marco, es materia por toda la pantalla. */
+    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.88 },  // 1 DERIVA     el problema
+    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.82 },  // 2 DERIVA     Finance
     { x: 0.722, y: 0.50,  w: 0.46, h: 0.80, d: 0.96 },  // 3 LUPA       analizamos
     { x: 0.700, y: 0.50,  w: 0.50, h: 0.88, d: 1.02 },  // 4 MENTE      diseñamos
     { x: 0.684, y: 0.50,  w: 0.56, h: 0.96, d: 1.06 },  // 5 SISTEMA    implantamos
@@ -358,7 +361,10 @@
      y costaba entre 10 y 15 fps en los capítulos densos. Con esto, la
      portada tiene la marca rellena y el resto se dibuja exactamente con las
      mismas partículas que antes. */
-  var USO = [1, 0.68, 0.68, 0.72, 0.72, 0.74, 0.70, 0.68, 0.68, 0.68];
+  /* La deriva las usa TODAS: lo que se ve es la cantidad de materia, no una
+     estructura, así que reservar un tercio no ahorraría nada visible y
+     dejaría el campo medio vacío justo donde tiene que parecer lleno. */
+  var USO = [1, 1, 1, 0.72, 0.72, 0.80, 0.78, 0.68, 0.68, 0.68];
 
   /* RITMO. Un recorrido en el que todo suena igual de fuerte no tiene
      momentos. Estos son los que hay: el hero es un fenomeno, el problema es
@@ -377,7 +383,10 @@
      primer paso, la mente es el primer pico, el sistema conectado el
      segundo, y Finance el más apagado de todos a propósito —ahí el
      protagonista es la aplicación, y el campo no debe competir con ella—. */
-  var INT = [1.00, 0.82, 0.62, 0.88, 1.16, 1.08, 0.96, 0.92, 0.78, 1.34];
+  /* Los dos capítulos que derivan van MUY bajos: en el del problema manda el
+     texto subrayado y en el de Finance manda la aplicación. Un campo
+     brillante detrás de una pantalla blanca es ruido puro. */
+  var INT = [1.00, 0.58, 0.40, 0.88, 1.16, 1.10, 1.00, 0.92, 0.78, 1.34];
 
   /* ---------------------------------------------------------- EL GRAFO */
   /* EL LENGUAJE. Todo lo que se ve está hecho de tres cosas, y solo tres:
@@ -817,6 +826,35 @@
      Y hay algo que encontrar: uno de los registros no es como los demás. Se
      marca al final del capítulo, y si lo pillas debajo de la lente, responde.
      Eso es exactamente lo que dice el texto de al lado. */
+
+  /* ══════════════ LA DERIVA — materia sin figura ══════════════
+
+     No dibuja nada, y ese es el encargo. Cada partícula se queda cerca del
+     sitio que le tocó en la bruma de fondo y respira despacio, con dos senos
+     de periodos primos entre sí para que el conjunto no lata a la vez —si
+     late a la vez se lee como una figura, que es justo lo que no queremos—.
+
+     Lo único que responde es el puntero: la materia cercana se aviva un
+     poco. Basta para que el campo no parezca un fondo muerto, y no llega a
+     formar nada. */
+  function F_DERIVA(i, u, g, G, o, tm, ins) {
+    var p = PT[i];
+    var f1 = tm * 0.000085 + p.hx * 7.1;
+    var f2 = tm * 0.000061 + p.hy * 5.3;
+    var x = p.hx + Math.sin(f1) * 0.026 + Math.sin(f2 * 1.7) * 0.014;
+    var y = p.hy + Math.cos(f2) * 0.030 + Math.cos(f1 * 1.3) * 0.011;
+    o.nx = x; o.ny = y;
+    /* El puntero está en coordenadas del encuadre y el encuadre es la
+       ventana: se comparan directamente. */
+    var dx = (x - MFX) * 1.4, dy = y - MFY;
+    var d2 = dx * dx + dy * dy;
+    var cerca = d2 < 0.045 ? (1 - d2 / 0.045) : 0;
+    o.a = 0.16 + 0.10 * Math.sin(f1 * 2.3) + 0.42 * cerca * cerca;
+    o.c = cerca > 0.45 ? C_DATO : C_BRUMA;
+    o.g = -1;                       // sin enlace: enlazar es dibujar
+    o.r = 0.85 + 0.45 * cerca;
+  }
+
   function F_LUPA(i, u, g, G, o, tm, ins) {
     var ar = (MARCO[g].h * H) / (MARCO[g].w * W);
     var nace  = ease(cl(ins / 0.16));
@@ -1009,85 +1047,126 @@
 
      Señalar una pieza le da corriente: su conector se enciende y su tráfico
      acelera. Señalar el centro los enciende todos. */
-  function F_ACOPLE(i, u, g, G, o, tm, ins) {
-    var gr = GR.acople, ar = (MARCO[g].h * H) / (MARCO[g].w * W);
-    var nucleo = ease(cl(ins / 0.16));
-    var huecos = ease(cl((ins - 0.12) / 0.16));
-    var entran = ease(cl((ins - 0.26) / 0.38));
-    var conecta = ease(cl((ins - 0.46) / 0.30));
-    var arranca = ease(cl((ins - 0.68) / 0.26));
-    var lat = 0.5 + 0.5 * Math.sin(tm * 0.0013);
-    var centro = cercaDe(0.5, 0.5, ar);
+  /* Los tres ejes del tren, en unidades de altura y como desplazamientos
+     desde el centro del encuadre. Se calculan una vez: son constantes. */
+  var G_T = [16, 10, 8];                       // dientes
+  var G_R = [0.185, 0.185 * 10 / 16, 0.185 * 8 / 16];
+  var G_AB = -0.70, G_AC = 0.76;               // dónde se apoyan B y C sobre A
+  var G_CX = [-0.112, 0, 0], G_CY = [0.040, 0, 0];
+  G_CX[1] = G_CX[0] + Math.cos(G_AB) * (G_R[0] + G_R[1]);
+  G_CY[1] = G_CY[0] + Math.sin(G_AB) * (G_R[0] + G_R[1]);
+  G_CX[2] = G_CX[0] + Math.cos(G_AC) * (G_R[0] + G_R[2]);
+  G_CY[2] = G_CY[0] + Math.sin(G_AC) * (G_R[0] + G_R[2]);
 
-    if (u < 0.22) {                                   // EL NÚCLEO
-      var q = tramo(u, 0, 0.22, 2);
-      var th = q.j * TAU - 1.5708;
-      /* Hexágono, no círculo: lo que ya está montado tiene aristas. */
-      var lado = Math.floor(((th + 1.5708) / TAU) * 6);
-      var f = ((th + 1.5708) / TAU) * 6 - lado;
-      var a1 = (lado / 6) * TAU - 1.5708, a2 = ((lado + 1) / 6) * TAU - 1.5708;
-      var rr = 0.135 * (0.90 + 0.10 * nucleo) * (1 + 0.012 * lat) + q.k * 0.014;
-      var x1 = Math.cos(a1) * rr, y1 = Math.sin(a1) * rr;
-      var x2 = Math.cos(a2) * rr, y2 = Math.sin(a2) * rr;
-      o.nx = 0.5 + (x1 + (x2 - x1) * f) * ar;
-      o.ny = 0.5 + (y1 + (y2 - y1) * f);
-      o.a = nucleo * (0.26 + 0.16 * arranca + 0.36 * centro);
-      o.c = centro > 0.3 ? C_LUZ : C_FLUJO; o.g = 900 + q.k; o.r = 1;
+  /* El perfil de un diente, recorrido de 0 a 1: meseta, flanco de bajada,
+     valle y flanco de subida. Los flancos importan — con un escalón seco la
+     rueda parece una sierra circular y no un engranaje. */
+  function diente(u) {
+    /* Meseta larga, flanco corto, valle largo. Con el flanco largo la rueda
+       sale ondulada en vez de dentada, que es lo que pasaba antes. */
+    if (u < 0.36) return 1;
+    if (u < 0.44) return 1 - (u - 0.36) / 0.08;
+    if (u < 0.92) return 0;
+    return (u - 0.92) / 0.08;
+  }
+
+  function F_MOTOR(i, u, g, G, o, tm, ins) {
+    var ar = (MARCO[g].h * H) / (MARCO[g].w * W);
+    var monta  = ease(cl(ins / 0.20));            // aparecen las dos primeras
+    var llega  = ease(cl((ins - 0.26) / 0.30));   // la tercera entra
+    var gira   = ease(cl((ins - 0.54) / 0.28));   // el tren arranca
+    var pleno  = ease(cl((ins - 0.80) / 0.20));
+
+    /* La velocidad sube un poco con el puntero dentro: tocar una máquina y
+       que responda es la mitad de la sensación de que está viva. */
+    var dentro = cercaDe(0.5 + G_CX[0] * ar, 0.5 + G_CY[0], ar);
+    var faseA = tm * 0.00034 * gira * (1 + 0.55 * dentro);
+
+    /* La fase de las conducidas sale de la línea de centros. Es la cuenta
+       que hace que los dientes encajen en vez de cruzarse. */
+    function fase(k) {
+      if (k === 0) return faseA;
+      var al = k === 1 ? G_AB : G_AC;
+      return al + 3.14159265 + 3.14159265 / G_T[k] - (G_T[0] / G_T[k]) * (faseA - al);
+    }
+
+    /* Cuánto está puesta cada rueda. La tercera viaja desde fuera por la
+       prolongación de su propia línea de centros: entra por donde va a
+       quedarse, que es como se mete una pieza en una máquina. */
+    function puesta(k) { return k < 2 ? monta : llega; }
+    function cx(k) {
+      if (k < 2) return G_CX[k];
+      return G_CX[0] + Math.cos(G_AC) * ((G_R[0] + G_R[2]) + (1 - llega) * 0.62);
+    }
+    function cy(k) {
+      if (k < 2) return G_CY[k];
+      return G_CY[0] + Math.sin(G_AC) * ((G_R[0] + G_R[2]) + (1 - llega) * 0.62);
+    }
+
+    /* ── LAS TRES CORONAS ───────────────────────────────────────────── */
+    if (u < 0.62) {
+      var q = tramo(u, 0, 0.62, 3);
+      var k = q.k, r = G_R[k], T = G_T[k], ph = fase(k), pu = puesta(k);
+      var s = q.j, th = s * TAU + ph;
+      var rr = r * (0.775 + 0.225 * diente((s * T) % 1));
+      var X = cx(k) + Math.cos(th) * rr, Y = cy(k) + Math.sin(th) * rr;
+      o.nx = 0.5 + X * ar; o.ny = 0.5 + Y;
+      var cer = cercaDe(0.5 + cx(k) * ar, 0.5 + cy(k), ar);
+      /* La rueda que llega entra encendida y se calma al encajar: se ve
+         cuál es la pieza nueva sin que nadie lo diga. */
+      var nueva = k === 2 ? (1 - llega) : 0;
+      o.a = pu * (0.15 + 0.07 * pleno + 0.20 * cer + 0.20 * nueva);
+      o.c = cer > 0.34 ? C_LUZ : (nueva > 0.25 ? C_FLUJO : C_DATO);
+      o.g = 900 + k;                    // una corona, un solo trazo cerrado
+      o.r = 0.85 + 0.20 * cer;
       return;
     }
 
-    if (u < 0.62) {                                   // LOS HUECOS Y LAS PIEZAS
-      var q1 = tramo(u, 0.22, 0.62, gr.n.length * 2);
-      var idx = q1.k >> 1, esPieza = (q1.k & 1) === 1;
-      var n = gr.n[idx];
-      var llega = ease(cl((entran * (gr.n.length + 1.2) - idx) / 1.4));
-      var cerca = cercaDe(n.x, n.y, ar);
-      var cx0 = esPieza ? n.fx + (n.x - n.fx) * llega : n.x;
-      var cy0 = esPieza ? n.fy + (n.y - n.fy) * llega : n.y;
-      var per = 2 * (n.w + n.h), d = q1.j * per, x, y;
-      if (d < n.w) { x = cx0 - n.w / 2 + d; y = cy0 - n.h / 2; }
-      else if (d < n.w + n.h) { x = cx0 + n.w / 2; y = cy0 - n.h / 2 + (d - n.w); }
-      else if (d < 2 * n.w + n.h) { x = cx0 + n.w / 2 - (d - n.w - n.h); y = cy0 + n.h / 2; }
-      else { x = cx0 - n.w / 2; y = cy0 + n.h / 2 - (d - 2 * n.w - n.h); }
-      o.nx = x; o.ny = y;
-      if (esPieza) {
-        o.a = llega * (0.23 + 0.15 * arranca + 0.30 * cerca);
-        o.c = cerca > 0.35 ? C_LUZ : C_DATO;
-        o.g = 920 + idx; o.r = 0.95 + 0.22 * cerca;
-      } else {
-        /* El hueco: a trazos, y se apaga en cuanto su pieza lo ocupa. */
-        o.a = huecos * (1 - llega * 0.88) * (q1.j % 0.16 < 0.09 ? 0.20 : 0.02);
-        o.c = C_DEC; o.g = -1; o.r = 0.7;
-      }
+    /* ── EL CUBO Y LOS RADIOS ───────────────────────────────────────── */
+    if (u < 0.86) {
+      var q1 = tramo(u, 0.62, 0.86, 12);        // 3 ruedas × 4 radios
+      var k1 = (q1.k / 4) | 0, ra = q1.k % 4;
+      var r1 = G_R[k1], ph1 = fase(k1), pu1 = puesta(k1);
+      /* Cada radio va del cubo al arranque de la corona. Girando con su
+         rueda: sin radios visibles, un círculo dentado no parece rodar. */
+      var an = ph1 + (ra / 4) * TAU;
+      var d0 = r1 * 0.20, d1 = r1 * 0.80;
+      var dd = d0 + (d1 - d0) * q1.j;
+      var X1 = cx(k1) + Math.cos(an) * dd, Y1 = cy(k1) + Math.sin(an) * dd;
+      o.nx = 0.5 + X1 * ar; o.ny = 0.5 + Y1;
+      var cer1 = cercaDe(0.5 + cx(k1) * ar, 0.5 + cy(k1), ar);
+      o.a = pu1 * (0.11 + 0.07 * pleno + 0.20 * cer1);
+      o.c = cer1 > 0.34 ? C_LUZ : C_DATO;
+      o.g = 910 + q1.k; o.r = 0.8;
       return;
     }
 
-    if (u < 0.80) {                                   // LOS CONECTORES
-      var q2 = tramo(u, 0.62, 0.80, gr.n.length);
-      var n2 = gr.n[q2.k];
-      var listo = ease(cl((conecta * (gr.n.length + 1.2) - q2.k) / 1.4));
-      o.nx = n2.bx + (n2.x - n2.bx) * q2.j;
-      o.ny = n2.by + (n2.y - n2.by) * q2.j;
-      var cer2 = Math.max(cercaDe(n2.x, n2.y, ar), centro);
-      o.a = listo * (q2.j <= listo ? 1 : 0) * (0.12 + 0.14 * arranca + 0.34 * cer2);
-      o.c = cer2 > 0.3 ? C_FLUJO : C_DATO; o.g = 940 + q2.k; o.r = 0.85;
+    /* ── LOS EJES Y EL PUNTO DE ENGRANE ─────────────────────────────── */
+    var q2 = tramo(u, 0.86, 1.0, 6);
+    if (q2.k < 3) {                              // el eje de cada rueda
+      var k2 = q2.k, pu2 = puesta(k2);
+      var th2 = q2.j * TAU;
+      o.nx = 0.5 + (cx(k2) + Math.cos(th2) * G_R[k2] * 0.17) * ar;
+      o.ny = 0.5 + (cy(k2) + Math.sin(th2) * G_R[k2] * 0.17);
+      o.a = pu2 * (0.16 + 0.10 * pleno);
+      o.c = C_DATO; o.g = 930 + k2; o.r = 0.9;
       return;
     }
-
-    /* EL TRÁFICO. Sale de una pieza, entra al núcleo y vuelve a salir por
-       otra: el sistema funcionando, no seis cosas encendidas a la vez. */
-    var q3 = tramo(u, 0.80, 1.0, gr.n.length);
-    var n3 = gr.n[q3.k];
-    var cer3 = Math.max(cercaDe(n3.x, n3.y, ar), centro);
-    var vel = 0.00040 * (1 + 1.1 * cer3);
-    var t3 = (tm * vel + sd(q3.k, 71) + q3.j * 0.26) % 1;
-    var ida = t3 < 0.5 ? t3 * 2 : 1 - (t3 - 0.5) * 2;
-    var destino = gr.n[(q3.k + 2 + ((tm * 0.00008) | 0)) % gr.n.length];
-    var desde = t3 < 0.5 ? n3 : destino;
-    o.nx = desde.x + (0.5 - desde.x) * ida;
-    o.ny = desde.y + (0.5 - desde.y) * ida;
-    o.a = arranca * (0.14 + 0.58 * Math.sin(ida * 3.1416)) * (1 + 0.8 * cer3);
-    o.c = t3 < 0.5 ? C_FLUJO : C_LUZ; o.g = -1; o.r = 1;
+    /* Donde dos ruedas se tocan se enciende un destello al paso de cada
+       diente. Es el detalle que convence de que están engranando y no
+       simplemente girando una al lado de otra. */
+    var par = q2.k - 3;                          // 0: A-B · 1: A-C · 2: reposo
+    if (par > 1) { o.a = 0; o.g = -1; return; }
+    var alp = par === 0 ? G_AB : G_AC;
+    var px2 = G_CX[0] + Math.cos(alp) * G_R[0], py2 = G_CY[0] + Math.sin(alp) * G_R[0];
+    var ta = (faseA * G_T[0] / TAU) % 1;
+    var chispa = Math.pow(Math.max(0, Math.sin(ta * 3.14159265)), 6);
+    var sp = q2.j * TAU;
+    var rad = 0.014 * (0.4 + 0.6 * chispa);
+    o.nx = 0.5 + (px2 + Math.cos(sp) * rad) * ar;
+    o.ny = 0.5 + (py2 + Math.sin(sp) * rad);
+    o.a = (par === 1 ? llega : monta) * gira * (0.10 + 0.40 * chispa);
+    o.c = C_LUZ; o.g = -1; o.r = 1.1;
   }
 
   /* ═══════════ 04 · MEDIMOS Y MEJORAMOS — UNA GRÁFICA DE VERDAD ═════════
@@ -1116,95 +1195,93 @@
     return v;
   }
   function F_GRAFICA(i, u, g, G, o, tm, ins) {
-    var ar = (MARCO[g].h * H) / (MARCO[g].w * W);
-    /* SIETE barras y no doce. Con doce, cada una se lleva cuarenta
-       partículas y con cuarenta partículas no se rellena una columna de
-       cuatrocientos píxeles: salen tres rayitas separadas. Con siete hay de
-       sobra para trazar el contorno entero, y un contorno cerrado SÍ se lee
-       como una barra. */
+    var fr = MARCO[g], ar = (fr.h * H) / (fr.w * W);
     var NB = small ? 5 : narrow ? 6 : 7;
-    var X0 = 0.10, XW = 0.86, Y0 = 0.86, PASO = XW / NB;
-    var ejes = ease(cl(ins / 0.14));
-    var frente = ease(cl((ins - 0.08) / 0.62)) * 1.06;
-    var linea = ease(cl((ins - 0.42) / 0.40));
+    var X0 = 0.115, XW = 0.845, Y0 = 0.855, PASO = XW / NB;
+    var ejes  = ease(cl(ins / 0.13));
+    var sube  = ease(cl((ins - 0.08) / 0.52));
+    var linea = ease(cl((ins - 0.44) / 0.34));
     var pleno = ease(cl((ins - 0.80) / 0.20));
     var kSel = Math.max(0, Math.min(NB - 1, Math.round((MFX - X0) / PASO - 0.5)));
-    var hay = MFX > X0 - 0.06 && MFX < X0 + XW + 0.06;
+    var hay = MFX > X0 - 0.05 && MFX < X0 + XW + 0.05 && MFY > 0.04 && MFY < 0.98;
 
-    if (u < 0.20) {                                   // EJES Y REJILLA
-      var q = tramo(u, 0, 0.20, 6);
-      if (q.k === 0)      { o.nx = X0 + q.j * (XW + 0.04); o.ny = Y0; o.a = ejes * 0.22; o.r = 0.9; }
-      else if (q.k === 1) { o.nx = X0; o.ny = Y0 - q.j * 0.84; o.a = ejes * 0.13; }
+    /* El ancho de la barra en PÍXELES, que es lo que quiere el trazo. Una
+       unidad de `nx` vale `W * fr.w` píxeles: el mismo factor con el que
+       `marco()` proyecta después. */
+    var ANCHO = PASO * 0.56, pxAncho = ANCHO * fr.w * W;
+
+    if (u < 0.13) {                                   // EJES Y REJILLA
+      var q = tramo(u, 0, 0.13, 6);
+      if (q.k === 0)      { o.nx = X0 - 0.02 + q.j * (XW + 0.05); o.ny = Y0; o.a = ejes * 0.26; }
+      else if (q.k === 1) { o.nx = X0 - 0.02; o.ny = Y0 - q.j * 0.80; o.a = ejes * 0.15; }
       else {
-        /* Cuatro líneas de rejilla, punteadas: son la escala, no el dibujo. */
-        var yy = Y0 - (q.k - 1) * 0.185;
-        o.nx = X0 + q.j * (XW + 0.02); o.ny = yy;
-        o.a = ejes * (q.j % 0.055 < 0.030 ? 0.085 : 0);
+        /* Cuatro rejillas punteadas. Son la escala: se tienen que poder
+           ignorar mientras se mira la forma, y estar cuando se mira un valor. */
+        o.nx = X0 - 0.02 + q.j * (XW + 0.04);
+        o.ny = Y0 - (q.k - 1) * 0.185;
+        o.a = ejes * (q.j % 0.050 < 0.026 ? 0.075 : 0);
       }
-      o.c = C_BRUMA; o.g = -1; o.r = 0.65;
+      o.c = C_BRUMA; o.g = -1; o.r = 0.62;
       return;
     }
 
-    if (u < 0.62) {                                   // LAS BARRAS
-      var q1 = tramo(u, 0.20, 0.62, NB);
+    if (u < 0.70) {                                   // LAS BARRAS
+      var q1 = tramo(u, 0.13, 0.70, NB);
       var k = q1.k, hb = alturaBarra(k, NB);
       var cx = X0 + (k + 0.5) * PASO;
-      var sube = ease(cl((frente - k / NB) / 0.07));
-      var h = hb * sube;
-      /* LA COLUMNA, MACIZA. El contorno hueco no se leía: en una figura de
-         partículas, lo que da cuerpo no es el perímetro sino el TRAZO. Dos
-         hebras muy juntas, unidas por el enlace y con el destello ancho, se
-         funden en una barra sólida; el contorno repartía las mismas
-         partículas por cuatro veces más recorrido y salía un hilo. */
-      var hebra = q1.j < 0.5 ? 0 : 1, alto = (q1.j - hebra * 0.5) * 2;
-      o.nx = cx + (hebra - 0.5) * PASO * 0.13;
-      o.ny = Y0 - alto * h;
+      var ent = ease(cl((sube - k / NB) / 0.09));
+      var h = hb * ent;
+      /* UNA sola hebra vertical por barra, de la base al techo, pintada con
+         el ancho de la barra. El relleno lo pone el trazo; las partículas
+         solo le dan grano y marcan el borde superior. */
+      o.nx = cx; o.ny = Y0 - q1.j * h;
       var es = hay && k === kSel;
-      o.a = sube * (0.20 + 0.09 * pleno + (es ? 0.17 : 0));
+      o.g = 9000 + k;
+      GRUW[k] = pxAncho * ent;
+      GRUC[k] = es ? C_LUZ : C_DATO;
+      /* El punto se ve poco: el trazo ya es la barra. Arriba del todo sí,
+         para que el techo quede definido y no difuminado. */
+      var techo = q1.j > 0.965 ? 1 : 0;
+      o.a = ent * (0.055 + 0.05 * pleno + (es ? 0.05 : 0) + techo * 0.26);
       o.c = es ? C_LUZ : C_DATO;
-      o.g = 960 + k * 2 + hebra; o.r = 1.7 + (es ? 0.2 : 0);
+      o.r = 0.8;
       return;
     }
 
-    if (u < 0.86) {                                   // LA LÍNEA DE TENDENCIA
-      var q2 = tramo(u, 0.62, 0.86, 3);
+    if (u < 0.90) {                                   // LA TENDENCIA
+      /* UNA hebra, fina y de un color. Antes eran tres separadas y cambiando
+         de magenta a verde en cada bache: eso es lo que se leía como un
+         gusano. Los baches están en los datos y se ven en la forma. */
+      var q2 = tramo(u, 0.70, 0.90, 1);
       var tl = q2.j, kf = tl * (NB - 1), k0 = Math.min(NB - 2, kf | 0), fr2 = kf - k0;
       var h0 = alturaBarra(k0, NB), h1 = alturaBarra(k0 + 1, NB);
       var sm = fr2 * fr2 * (3 - 2 * fr2);
       o.nx = X0 + (0.5 + kf) * PASO;
-      o.ny = Y0 - (h0 + (h1 - h0) * sm) + (q2.k - 1) * 0.007;
-      var pas = cl((frente - tl) / 0.04);
-      var bache = Math.max(
-        Math.exp(-Math.pow((tl - 0.27) / 0.060, 2)),
-        Math.max(Math.exp(-Math.pow((tl - 0.55) / 0.055, 2)),
-                 Math.exp(-Math.pow((tl - 0.80) / 0.050, 2))));
-      var cen = 1 - Math.abs(q2.k - 1);
-      o.a = pas * (0.18 + 0.30 * cen);
-      o.c = bache > 0.45 ? (cl((frente - tl - 0.10) / 0.10) > 0.5 ? C_OK : C_DEC) : C_FLUJO;
-      o.g = 1000 + q2.k; o.r = 0.9 + 0.55 * cen;
+      o.ny = Y0 - (h0 + (h1 - h0) * sm) - 0.022;
+      var pas = cl((sube * 1.04 - tl) / 0.05);
+      o.a = pas * (0.42 + 0.14 * pleno);
+      o.c = C_OK; o.g = 1000; o.r = 0.72;
       return;
     }
 
-    if (u < 0.95) {                                   // LOS PUNTOS MEDIDOS
-      var q3 = tramo(u, 0.86, 0.95, NB);
+    if (u < 0.965) {                                  // LOS PUNTOS MEDIDOS
+      var q3 = tramo(u, 0.90, 0.965, NB);
       var k3 = q3.k, h3 = alturaBarra(k3, NB);
       var es3 = hay && k3 === kSel;
-      var vis = ease(cl((frente - k3 / NB) / 0.05));
-      ponNodo(o, X0 + (k3 + 0.5) * PASO, Y0 - h3, q3.j, (es3 ? 0.019 : 0.011) * vis, ar);
-      o.a = vis * (0.30 + (es3 ? 0.46 : 0));
-      o.c = es3 ? C_LUZ : C_OK; o.g = 1020 + k3; o.r = es3 ? 1.3 : 1;
+      var vis = ease(cl((sube * 1.04 - k3 / NB) / 0.05));
+      ponNodo(o, X0 + (k3 + 0.5) * PASO, Y0 - h3 - 0.022, q3.j, (es3 ? 0.016 : 0.0085) * vis, ar);
+      o.a = vis * (0.34 + (es3 ? 0.40 : 0));
+      o.c = es3 ? C_LUZ : C_OK; o.g = 1020 + k3; o.r = es3 ? 1.15 : 0.95;
       return;
     }
 
-    /* LA LECTURA SEÑALADA: la vertical de la columna hasta el eje y la
-       horizontal hasta la escala, que es lo que hace cualquiera con el dedo
-       encima de una gráfica. */
-    var q4 = tramo(u, 0.95, 1.0, 2);
+    /* LA LECTURA SEÑALADA: la horizontal desde la columna hasta la escala,
+       que es lo que hace cualquiera con el dedo encima de una gráfica. */
+    var q4 = tramo(u, 0.965, 1.0, 1);
     var xs = X0 + (kSel + 0.5) * PASO, hs = alturaBarra(kSel, NB);
-    if (q4.k === 0) { o.nx = xs; o.ny = Y0 - hs * (1 - q4.j); }
-    else            { o.nx = X0 + q4.j * (xs - X0); o.ny = Y0 - hs; }
-    o.a = (hay ? 1 : 0) * linea * (0.13 + 0.09 * Math.sin(tm * 0.003));
-    o.c = C_LUZ; o.g = 1040 + q4.k; o.r = 0.7;
+    o.nx = X0 - 0.02 + q4.j * (xs - X0 + 0.02); o.ny = Y0 - hs;
+    o.a = (hay ? 1 : 0) * linea * (0.16 + 0.07 * Math.sin(tm * 0.003));
+    o.c = C_LUZ; o.g = 1040; o.r = 0.65;
   }
 
   /* 5 · MEDIMOS — la cadena: entra algo, se procesa, se DECIDE por dónde
@@ -1437,7 +1514,7 @@
     o.c = dentro ? C_LUZ : C_FLUJO; o.g = -1;
   }
 
-  var FORM = [F0, F1, F7, F_LUPA, F_PLANO, F_ACOPLE, F_GRAFICA, F6, F5, F8];
+  var FORM = [F0, F_DERIVA, F_DERIVA, F_LUPA, F_PLANO, F_MOTOR, F_GRAFICA, F6, F5, F8];
 
   /* --------------------------------------------------- ESTADOS Y SCROLL */
   var STOPS = [], MIR = [];
@@ -1613,6 +1690,16 @@
      Y `pa` se ha ido: se escribia cada fotograma y no lo leia nadie.
      SEG son las cubetas del enlace, una por color (ver mas abajo). */
   var px, py, pg, pc, SEG = [], SEGN = new Int32Array(8);
+  /* EL TRAZO ANCHO. Dieciséis grupos reservados —9000 a 9015— que se pintan
+     con el grosor y el color que pida la formación en vez de con el hilo de
+     1 px de todos los demás. Existe porque una barra de una gráfica es un
+     trazo ancho y no hay forma honesta de fingir uno con puntos: con el
+     presupuesto de partículas de un capítulo, rellenar una columna a base de
+     hebras da un rayado, no una barra. */
+  var GRU_BASE = 9000, GRU_N = 16, GRU_CAP = 4 * 420;
+  var GRUW = new Float32Array(GRU_N), GRUC = new Int32Array(GRU_N);
+  var GRUS = [], GRUSN = new Int32Array(GRU_N);
+  for (var _gi = 0; _gi < GRU_N; _gi++) GRUS.push(new Float32Array(GRU_CAP));
   function buffers(n) {
     px = new Float32Array(n); py = new Float32Array(n);
     pg = new Int32Array(n);   pc = new Int32Array(n);
@@ -1632,6 +1719,15 @@
      sentido de lectura. En esas el encuadre se mueve al lado libre pero el
      contenido no se voltea. */
   var VOLTEA = [1, 1, 1, 1, 0, 1, 0, 1, 0, 1];
+  /* EL PARALAJE, POR CAPÍTULO.
+     Mover cada partícula en proporción a su profundidad da volumen a una
+     nebulosa y ARRUINA una recta: las partículas de una misma columna tienen
+     profundidades distintas, así que la columna se dobla en zigzag en cuanto
+     el ratón se mueve. Medido en la gráfica: con el ratón a media pantalla,
+     una barra recta salía con doce píxeles de serpenteo. Donde la figura es
+     un dibujo técnico —el plano, el motor, la gráfica— el paralaje baja casi
+     a cero; donde es materia, se queda entero. */
+  var PARAL = [1, 1, 1, 0.50, 0.26, 0.34, 0.16, 1, 0.9, 1];
   function marco(o, fr, mir, out, vol) {
     var cx = mir ? 1 - fr.x : fr.x;
     var nx = (mir && vol) ? 1 - o.nx : o.nx;
@@ -1738,7 +1834,7 @@
        porque el marco de Finance es una banda de arriba y el suyo no. */
     var dom = tw >= 0.5 ? iB : iA;
     punteroEnMarco(MARCO[dom], MIR[dom], VOLTEA[dom], tm);
-    var par = narrow ? 0 : 1;
+    var parA = narrow ? 0 : PARAL[iA], parB = narrow ? 0 : PARAL[iB];
 
     /* La luz que recorre el campo y roza lo que tiene delante. */
     var lz = (tm * 0.00007) % 1.6 - 0.3;
@@ -1821,9 +1917,9 @@
       p.x += p.vx; p.y += p.vy;
 
       /* Paralaje por estrato: lo cercano se mueve más que lo lejano. */
-      var pf = 0.30 + p.z * 1.10;
-      var dx = p.x + cmx * 34 * pf * par;
-      var dy = p.y + cmy * 22 * pf * par;
+      var pf = (0.30 + p.z * 1.10) * lerp(parA, parB, t);
+      var dx = p.x + cmx * 34 * pf;
+      var dy = p.y + cmy * 22 * pf;
 
       px[i] = dx; py[i] = dy;
       /* La caja tiene que cubrir TAMBIEN a las particulas descartadas por
@@ -1915,13 +2011,24 @@
        orden y con el mismo trazo. El dibujo resultante es identico. */
     ctx.globalAlpha = 1; ctx.lineWidth = 1;
     var afl = 0.5 - 0.42 * Math.abs(tw - 0.5) * 2;
-    var NC = COL.length, c2;
+    var NC = COL.length, c2, gg;
     for (c2 = 0; c2 < NC; c2++) SEGN[c2] = 0;
+    for (gg = 0; gg < GRU_N; gg++) GRUSN[gg] = 0;
     for (var k2 = 1; k2 < N; k2++) {
       var gk = pg[k2];
       if (gk < 0 || gk !== pg[k2 - 1]) continue;
       var ddx = px[k2] - px[k2 - 1], ddy = py[k2] - py[k2 - 1];
       if (ddx * ddx + ddy * ddy > 30000) continue;
+      if (gk >= GRU_BASE && gk < GRU_BASE + GRU_N) {
+        var gi2 = gk - GRU_BASE, ng = GRUSN[gi2];
+        if (ng < GRU_CAP - 4) {
+          var sgt = GRUS[gi2];
+          sgt[ng] = px[k2 - 1]; sgt[ng + 1] = py[k2 - 1];
+          sgt[ng + 2] = px[k2];  sgt[ng + 3] = py[k2];
+          GRUSN[gi2] = ng + 4;
+        }
+        continue;
+      }
       var cc = pc[k2] === C_MASA ? C_BRUMA : pc[k2];   // la bruma, una sola cubeta
       var sg2 = SEG[cc], n2 = SEGN[cc];
       sg2[n2] = px[k2 - 1]; sg2[n2 + 1] = py[k2 - 1];
@@ -1943,10 +2050,42 @@
       ctx.stroke();
     }
 
+    /* Y los trazos anchos, uno por grupo, con su propio grosor. Van
+       DESPUÉS de los finos para que la línea de tendencia no quede enterrada
+       bajo las barras: en una gráfica la tendencia va encima. */
+    /* Extremo a escuadra: una barra termina donde termina el dato, no medio
+       trazo más arriba. Las costuras que obligaban a redondear ya no están:
+       esto es una polilínea, no noventa segmentos sueltos. */
+    ctx.lineCap = 'butt'; ctx.lineJoin = 'round';
+    for (gg = 0; gg < GRU_N; gg++) {
+      var tg = GRUSN[gg];
+      if (!tg || GRUW[gg] <= 0) continue;
+      var sgg = GRUS[gg];
+      ctx.beginPath();
+      /* UNA polilínea, no noventa segmentos. Con el extremo a escuadra cada
+         junta dejaba una costura y la columna salía rayada en horizontal;
+         encadenando los que comparten extremo queda un solo trazo. */
+      var ax = NaN, ay = NaN;
+      for (var mg = 0; mg < tg; mg += 4) {
+        if (sgg[mg] !== ax || sgg[mg + 1] !== ay) ctx.moveTo(sgg[mg], sgg[mg + 1]);
+        ctx.lineTo(sgg[mg + 2], sgg[mg + 3]);
+        ax = sgg[mg + 2]; ay = sgg[mg + 3];
+      }
+      ctx.lineWidth = GRUW[gg];
+      ctx.strokeStyle = rgba(COL[GRUC[gg]], 0.150);
+      ctx.stroke();
+      GRUW[gg] = 0;                       // cada fotograma lo vuelve a pedir
+    }
+    ctx.lineWidth = 1; ctx.lineCap = 'butt'; ctx.lineJoin = 'miter';
+
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
+    rotulos(tm);
 
-    /* Los enlaces se dibujan entre particulas ya contabilizadas, asi que
+    /* Los rótulos se pintan DENTRO del encuadre de su figura, y el encuadre
+       está cubierto de sobra por la caja de las partículas que lo dibujan:
+       no hace falta ampliarla. Los enlaces, igual: van entre partículas ya
+       contabilizadas, asi que
        caben dentro de la misma caja. Se guarda en el anillo. */
     if (!noClear) {
       var o5 = SUC_P * 4;
@@ -1957,6 +2096,171 @@
          entero: si no, quedaria tinta vieja fuera de la union. */
       if (SUC_LLENO < SUC_N) { SUC_LLENO++; if (SUC_LLENO >= SUC_N) SUCIO_TODO = false; }
     }
+  }
+
+
+  /* ══════════════════════ LOS RÓTULOS ══════════════════════
+
+     Texto de verdad sobre el campo. Dos sitios y solo dos:
+
+       · el plano, donde cada caja lleva el nombre de lo que es;
+       · la lupa, donde hay apuntes escondidos que solo se leen ampliados.
+
+     Se dibujan aquí y no como partículas porque una palabra de veinte
+     partículas no es una palabra: es una mancha con forma de palabra. Y van
+     después del campo, en `source-over`, para que el texto salga limpio y no
+     sumado sobre lo que tenga detrás.
+
+     La página en inglés usa este mismo archivo, así que los textos van en
+     los dos idiomas y se elige por el `lang` del documento. */
+  var EN = (document.documentElement.getAttribute('lang') || 'es').slice(0, 2) === 'en';
+
+  /* Las ocho áreas y, en el centro, la empresa. El orden es el de PLANO_M. */
+  var PLANO_ET = EN
+    ? ['SALES', 'QUOTES', 'PROJECTS', 'CLIENTS', 'YOUR COMPANY', 'SUPPLIERS', 'INVOICING', 'PAYMENTS', 'ALERTS']
+    : ['VENTAS', 'PRESUPUESTOS', 'PROYECTOS', 'CLIENTES', 'TU EMPRESA', 'PROVEEDORES', 'FACTURACIÓN', 'COBROS', 'AVISOS'];
+
+  /* Lo que la lente encuentra. Cada apunte va en una celda concreta del
+     campo de registros —fila y columna— y dice una cosa de las que se
+     apuntan mirando cómo trabaja una empresa de verdad: qué se hace a mano,
+     cuántas veces, y qué cuesta. */
+  var LUPA_AP = EN ? [
+    { c: 0.16, f: 0.12, a: 'ORDER 4812',       b: 'copied by hand · 3 programs' },
+    { c: 0.62, f: 0.10, a: 'MONDAY 09:10',     b: '20 min · nobody decided to pay for it' },
+    { c: 0.86, f: 0.30, a: 'INVOICE 2026-014', b: 'overdue 47 days · nobody chasing' },
+    { c: 0.40, f: 0.44, a: 'CLIENT ASKS',      b: 'answer assembled from three places' },
+    { c: 0.10, f: 0.62, a: 'QUOTE 311',        b: 'sent · never followed up' },
+    { c: 0.70, f: 0.70, a: 'EXPENSE 8821',     b: 'receipt in somebody\u2019s inbox' },
+    { c: 0.34, f: 0.88, a: 'FRIDAY 18:40',     b: 'the figure asked for by message' }
+  ] : [
+    { c: 0.16, f: 0.12, a: 'PEDIDO 4812',      b: 'copiado a mano · 3 programas' },
+    { c: 0.62, f: 0.10, a: 'LUNES 09:10',      b: '20 min · nadie decidió pagarlo' },
+    { c: 0.86, f: 0.30, a: 'FACTURA 2026-014', b: 'vencida 47 días · nadie reclama' },
+    { c: 0.40, f: 0.44, a: 'UN CLIENTE PREGUNTA', b: 'respuesta montada en tres sitios' },
+    { c: 0.10, f: 0.62, a: 'PRESUPUESTO 311',  b: 'enviado · sin seguimiento' },
+    { c: 0.70, f: 0.70, a: 'GASTO 8821',       b: 'justificante en el correo de alguien' },
+    { c: 0.34, f: 0.88, a: 'VIERNES 18:40',    b: 'el número pedido por mensaje' }
+  ];
+
+  var _rt = { x: 0, y: 0 }, _ro = { nx: 0, ny: 0 };
+  function aPantalla(nx, ny, fr, mir, vol) {
+    _ro.nx = nx; _ro.ny = ny;
+    marco(_ro, fr, mir, _rt, vol);
+    return _rt;
+  }
+
+  function rotulos(tm) {
+    /* Solo en el capítulo que manda, y solo cuando está asentado: un rótulo
+       nítido sobre una figura a medio formar delata que son dos capas. */
+    var d = tw >= 0.5 ? iB : iA;
+    if (d !== S_MENTE && d !== S_LUPA) return;
+    var quieto = 1 - Math.sin(tw * 3.14159265);
+    var ins = inside(d);
+    if (quieto < 0.04) return;
+
+    var fr = MARCO[d], mir = MIR[d], vol = VOLTEA[d];
+    var ar = (fr.h * H) / (fr.w * W);
+    var esc = Math.min(fr.w * W, fr.h * H);     // los rótulos escalan con la figura
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+    if (d === S_MENTE) {
+      /* EL PLANO. La caja central lleva el nombre de la empresa y va más
+         grande: es la pieza que las demás rodean, y en un plano el tamaño de
+         la rotulación es jerarquía, no decoración. */
+      var gr = GR.plano, caen = ease(cl((ins - 0.10) / 0.34));
+      var selP = -1, mejorP = 1e9;
+      for (var mi = 0; mi < gr.m.length; mi++) {
+        var mm = gr.m[mi];
+        var ddx = (mm.cx - MFX) / ar, ddy = mm.cy - MFY;
+        var dd2 = ddx * ddx + ddy * ddy;
+        if (dd2 < mejorP) { mejorP = dd2; selP = mi; }
+      }
+      for (var k = 0; k < gr.m.length; k++) {
+        var m = gr.m[k];
+        var lleg = ease(cl((caen * (gr.m.length + 1.4) - k) / 1.6));
+        if (lleg < 0.05) continue;
+        var centro = k === 4;
+        if (narrow && !centro) continue;      // ver la nota de arriba
+        var sel = k === selP;
+        var px2 = aPantalla(m.cx, m.cy, fr, mir, vol);
+        var tam = Math.max(9, Math.round(esc * (centro ? (narrow ? 0.052 : 0.036) : 0.0225)));
+        /* Si el nombre no cabe dentro de su caja, no se escribe: un rótulo
+           que se sale de la pieza que nombra es peor que ninguno. */
+        ctx.font = (centro ? '600 ' : '400 ') + tam + 'px "JetBrains Mono", ui-monospace, monospace';
+        var anchoCaja = m.w * fr.w * W * 0.88;
+        if (ctx.measureText(PLANO_ET[k]).width > anchoCaja) continue;
+        /* Una plaquita del color del fondo debajo del texto. Las rutas del
+           plano pasan por el centro de cada caja —que es donde va el
+           nombre— y sin ella el rótulo sale tachado. En un plano de verdad
+           el texto también interrumpe la línea que cruza por debajo. */
+        var anT = ctx.measureText(PLANO_ET[k]).width;
+        ctx.fillStyle = 'rgba(5,7,14,' + (quieto * lleg * 0.80).toFixed(3) + ')';
+        ctx.fillRect(px2.x - anT / 2 - 5, px2.y - tam * 0.72, anT + 10, tam * 1.44);
+        ctx.fillStyle = rgba(COL[centro ? C_LUZ : (sel ? C_LUZ : C_BRUMA)],
+                             (quieto * lleg * (centro ? 0.92 : (sel ? 0.82 : 0.48))).toFixed(3));
+        ctx.fillText(PLANO_ET[k], px2.x, px2.y);
+        if (centro) {
+          var sub = EN ? 'what it already does' : 'lo que ya hace';
+          ctx.font = '400 ' + Math.max(8, Math.round(tam * 0.62)) + 'px "JetBrains Mono", ui-monospace, monospace';
+          var anS = ctx.measureText(sub).width;
+          ctx.fillStyle = 'rgba(5,7,14,' + (quieto * lleg * 0.70).toFixed(3) + ')';
+          ctx.fillRect(px2.x - anS / 2 - 4, px2.y + tam * 0.70, anS + 8, tam * 0.90);
+          ctx.fillStyle = rgba(COL[C_BRUMA], (quieto * lleg * 0.62).toFixed(3));
+          ctx.fillText(sub, px2.x, px2.y + tam * 1.15);
+        }
+      }
+      return;
+    }
+
+    /* LA LUPA. La lente se recalcula con la misma fórmula que la formación
+       —no se guarda en ningún sitio compartido: es una función pura del
+       puntero— y los apuntes se amplían igual que se amplían los registros,
+       con el mismo factor y alrededor del mismo centro. Si se ampliaran de
+       otra forma se notaría que el texto no pertenece al campo. */
+    var nace = ease(cl(ins / 0.16));
+    var vuelo = narrow ? 0.56 : 0.92;
+    var lx = enc(0.5 + (MFX - 0.5) * vuelo, narrow ? 0.24 : 0.17, narrow ? 0.76 : 0.83);
+    var ly = enc(0.5 + (MFY - 0.5) * vuelo, narrow ? 0.22 : 0.15, narrow ? 0.78 : 0.85);
+    var R = (narrow ? 0.148 : 0.175) * (0.62 + 0.38 * nace);
+
+    /* RECORTADO AL CRISTAL. Un apunte que se sale del aro delataría que el
+       texto está pintado encima y no visto a través de la lente. Con el
+       recorte, acercar la lente a un apunte lo va descubriendo por el borde,
+       que es lo que hace una lupa. */
+    var cen = aPantalla(lx, ly, fr, mir, vol);
+    var cxp = cen.x, cyp = cen.y, rp = R * fr.h * H;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cxp, cyp, rp * 0.97, 0, 6.2831853);
+    ctx.clip();
+
+    for (var j = 0; j < LUPA_AP.length; j++) {
+      var ap = LUPA_AP[j];
+      var ax = 0.055 + ap.c * 0.89, ay = 0.055 + ap.f * 0.89;
+      var dx = (ax - lx) / ar, dy = ay - ly;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > R * 1.35) continue;
+      /* La AMPLIACIÓN usa la misma fórmula que los registros —si no, el
+         texto viajaría distinto que las rayas que tiene al lado y se vería
+         que está pintado encima—. La VISIBILIDAD, en cambio, tiene un
+         alcance algo mayor: así el apunte ya asoma por el borde del cristal
+         cuando la lente se acerca, en vez de aparecer de golpe. El recorte
+         al aro se encarga de que nada se salga. */
+      var dentro = dist < R ? 1 - (dist / R) * (dist / R) : 0;
+      var mg = 1 + 0.86 * dentro;
+      var p2 = aPantalla(lx + dx * mg * ar, ly + dy * mg, fr, mir, vol);
+      var vis = cl(1 - dist / (R * 1.18));
+      var al = quieto * nace * vis;
+      if (al < 0.04) continue;
+      var t1 = Math.max(10, Math.round(esc * (narrow ? 0.042 : 0.026) * (0.74 + 0.26 * dentro)));
+      ctx.font = '500 ' + t1 + 'px "JetBrains Mono", ui-monospace, monospace';
+      ctx.fillStyle = rgba(COL[C_LUZ], (al * 0.95).toFixed(3));
+      ctx.fillText(ap.a, p2.x, p2.y - t1 * 0.62);
+      ctx.font = '400 ' + Math.max(8, Math.round(t1 * 0.80)) + 'px "JetBrains Mono", ui-monospace, monospace';
+      ctx.fillStyle = rgba(COL[C_DEC], (al * 0.85).toFixed(3));
+      ctx.fillText(ap.b, p2.x, p2.y + t1 * 0.70);
+    }
+    ctx.restore();
   }
 
   /* ------------------------------------------------------------- BUCLE */

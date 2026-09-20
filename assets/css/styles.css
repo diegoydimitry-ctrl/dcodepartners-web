@@ -571,7 +571,10 @@ h1,h2,h3,h4,p{ margin:0; }
 }
 
 /* ============ HEADER / NAV ============ */
-header{
+/* Por id y no por elemento: un <header> dentro del contenido -la
+   cabecera de un modulo de la demo, por ejemplo- no es la barra del
+   sitio y no debe heredar su fondo, su sticky ni su z-index 200. */
+#site-header{
   position:sticky;
   top:0;
   z-index:200;
@@ -581,7 +584,7 @@ header{
   border-bottom:1px solid transparent;
   transition:border-color .3s ease, box-shadow .3s ease, background .3s ease;
 }
-header.scrolled{
+#site-header.scrolled{
   border-bottom-color:var(--border);
   box-shadow:0 8px 30px -20px rgba(0,0,0,.7);
   background:rgba(6,8,13,0.92);

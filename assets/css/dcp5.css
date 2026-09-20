@@ -1023,3 +1023,95 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
   .faq-list{ display:grid; grid-template-columns:1fr 1fr; gap:22px 30px; align-items:start; }
   .faq-empty{ grid-column:1 / -1; }
 }
+
+/* ============================== 29. LOS TRES PLANES, PLEGADOS */
+/* Tres listas abiertas a la vez son tres metros de página que nadie compara.
+   Plegadas caben los tres nombres en una pantalla y se abre el que interese.
+   Va con <details>: es un desplegable de verdad —funciona sin JavaScript, se
+   abre con el teclado y el buscador del navegador encuentra dentro aunque
+   esté cerrado—, y no hay una sola línea de JS detrás de esto. */
+.planes{ display:flex; flex-direction:column; gap:12px; margin-top:clamp(26px,3.4vw,40px); }
+.plan{
+  border:1px solid var(--v-edge); border-radius:14px;
+  background:var(--v-panel);
+  transition:border-color .3s var(--ease), background .3s var(--ease);
+}
+.plan[open]{ border-color:var(--v-edge); background:var(--v-panel-2); }
+.plan--destacado{ border-color:rgba(91,140,255,.34); }
+.plan > summary{
+  display:grid; grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center; gap:clamp(14px,2vw,22px);
+  padding:clamp(18px,2.2vw,24px) clamp(18px,2.4vw,28px);
+  cursor:pointer; list-style:none;
+}
+.plan > summary::-webkit-details-marker{ display:none; }
+.plan > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:-3px; border-radius:14px; }
+.plan-n{
+  font-family:var(--mono); font-size:0.75rem; letter-spacing:.12em;
+  color:var(--v-ink-3);
+}
+.plan-head{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+.plan-t{ font-family:var(--serif); font-size:clamp(1.02rem,1.5vw,1.18rem); font-weight:600; color:var(--ink); letter-spacing:-.01em; }
+.plan-d{ font-size:.9rem; line-height:1.5; color:var(--v-ink-2); }
+/* La pista de que esto se abre: un texto corto con su signo, que cambia de
+   palabra al abrirse. Sin ella un panel plegado parece una tarjeta muerta. */
+.plan-mas{
+  display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+  font-family:var(--mono); font-size:0.6875rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--v-a); transition:color .2s;
+}
+.plan-mas::after{
+  content:""; width:8px; height:8px; flex:none;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translate(-1px,-1px);
+  transition:transform .28s var(--ease);
+}
+.plan[open] .plan-mas::after{ transform:rotate(-135deg) translate(-2px,-2px); }
+.plan[open] .plan-mas{ color:var(--v-ink-3); }
+.plan-body{
+  padding:0 clamp(18px,2.4vw,28px) clamp(22px,2.6vw,30px);
+  display:grid; gap:clamp(18px,2.2vw,26px);
+  grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  align-items:start;
+}
+.plan-l{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.plan-l li{ position:relative; padding-left:18px; font-size:.9rem; line-height:1.55; color:var(--v-ink-2); }
+.plan-l li::before{ content:""; position:absolute; left:0; top:.62em; width:6px; height:6px; border-radius:50%; background:var(--v-a); opacity:.6; }
+.plan-l b{ color:var(--ink); font-weight:600; }
+/* La ficha técnica se dibuja como una hoja de especificación, igual que
+   .specs de arriba: es la misma promesa —esto está construido, mira los
+   detalles— y por tanto tiene que leerse igual. */
+.plan-tec{ border-left:1px solid var(--v-edge); padding-left:clamp(16px,2vw,24px); }
+.plan-tec-t{
+  display:block; font-family:var(--mono); font-size:0.6875rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-ink-3); margin-bottom:12px;
+}
+.plan-tec dl{ margin:0; display:flex; flex-direction:column; gap:12px; }
+.plan-tec dt{
+  font-family:var(--mono); font-size:0.6875rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--v-a); margin-bottom:3px;
+}
+.plan-tec dd{ margin:0; font-size:.875rem; line-height:1.55; color:var(--v-ink-2); }
+.plan-tec code{
+  /* 0,82em daba 11,3 px y el mínimo legible del sistema son 12. Un
+     fragmento de código no es una nota al pie: es el dato. */
+  font-family:var(--mono); font-size:.92em; padding:1px 5px; border-radius:4px;
+  background:rgba(150,174,245,.10); color:var(--ink);
+}
+.plan-no{
+  grid-column:1/-1; margin:0; padding-top:14px; border-top:1px solid var(--v-edge-2);
+  font-size:.85rem; line-height:1.55; color:var(--v-ink-3);
+}
+.plan-no b{ color:var(--amber, #f5a524); font-weight:600; }
+.planes-pie{
+  margin:clamp(20px,2.4vw,28px) 0 0; font-size:.86rem; line-height:1.6;
+  color:var(--v-ink-3); max-width:70ch;
+}
+@media (max-width:860px){
+  .plan > summary{ grid-template-columns:auto minmax(0,1fr); grid-template-areas:"n head" ". mas"; row-gap:12px; }
+  .plan-n{ grid-area:n; }
+  .plan-head{ grid-area:head; }
+  .plan-mas{ grid-area:mas; }
+  .plan-body{ grid-template-columns:1fr; }
+  .plan-tec{ border-left:none; border-top:1px solid var(--v-edge); padding-left:0; padding-top:18px; }
+}
