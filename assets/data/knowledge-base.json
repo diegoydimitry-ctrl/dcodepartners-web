@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-20T13:13:43.102Z",
+  "generatedAt": "2026-09-20T15:05:24.099Z",
   "pageCount": 66,
-  "chunkCount": 586,
+  "chunkCount": 588,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -2266,55 +2266,60 @@
         {
           "id": "/en/#c0",
           "heading": "",
-          "text": "Business systems, built to fit"
+          "text": "Systems built to fit · our own software"
         },
         {
           "id": "/en/#c1",
-          "heading": "We read your company.We build its system.",
-          "text": "We look at how you actually work, find where the time goes and build the system that connects your operation. We do not sell closed packages. Talk about your operation How we work What you are looking at A company before anyone tidied it Why companies call us"
+          "heading": "What your team repeats every weeka system can do instead.",
+          "text": "We look at how you actually work, find where the time and the money leak out, and build the system that stops it. There is no catalogue to pick from. One of ours is running right below, so you can try it before you talk to anyone. Try our finance system Talk about your operation What you are looking at A company before anyone tidied it Before we talk about systems"
         },
         {
           "id": "/en/#c2",
-          "heading": "It almost always starts with one of these four lines.",
-          "text": "&ldquo;Every week we do the same thing by hand.&rdquo; Taking data out of one place and typing it into another is not work: it is time that gets paid for every month and shows up in no account anywhere. &ldquo;We sent the quote and that was that.&rdquo; Nobody decided not to follow up. There just was never a moment when it was somebody’s turn, and the client went elsewhere. &ldquo;I am always chasing payments.&rdquo; The money comes in late because chasing it depends on someone remembering, and that someone has fourteen other things on. &ldquo;Only Marta knows that.&rdquo; When a process lives in one person’s head, the company stops when that person goes on holiday. How we work"
+          "heading": "This is an ordinary week. What is underlined is not work.",
+          "text": "On Monday somebody opens the inbox and copies five orders into a spreadsheet. On Tuesday a quote comes in and sits there waiting for someone to remember. On Wednesday a client asks about their order and three programs have to be opened to answer. On Thursday an invoice goes out and nobody knows whether the last one was paid. On Friday something has to be decided and the number is asked for by message. The following Monday it all starts again exactly the same. What the underlines mean None of those six things is the work you are paid for. And all six are fixed the same way: by putting a system where somebody's memory is now. Our own software · try it now"
         },
         {
           "id": "/en/#c3",
-          "heading": "We analyse",
-          "text": "We follow the real path of a customer, an order and an invoice, end to end, and write down every point where a person has to bridge a gap. Out of that comes the list of where time, sales, information and money leak out — and how much of it repeats every week. You leave with that list, whether we build anything or not 02"
+          "heading": "Write what you need to know. It answers with your numbers.",
+          "text": "D-Code Finance is our finance system. Invoices, collections, expenses and projects live in the same place, and on top of them there is something you write to in plain language: who owes me, what is overdue, what should I look at today. It answers with the number, tells you where it came from and takes you to the invoice. You do not have to learn thirty screens to find one thing out. Expenses are entered from the document itself: you upload the supplier invoice, the system reads it and a person checks it before it is recorded. That, and the connection to your own data, belong to the installed system; the demo below answers, opens invoices and takes you to the figure, which is what can be shown without having your company in front of us. DEMO · made-up data This is the application, not a screenshot. Ask it something, open an invoice, look at the collections. The clients, the amounts and the dates are made up; the screens, the calculations and the states are the ones in the real system. <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can read what the system does on its own page.</p> The way in Ask Finance You write what you need to know and it goes into any of the six for you. You do not need to know which screen the number is on. Comes inWhat has already been collected, from whom and when. Goes outWhat has to be paid and the week it falls due. Is owedWhat is past its date, and how many days it has been past. Is invoicedFrom accepted quote to issued invoice, without typing it again. Is spentEvery expense with its supplier, its project and its receipt. Is readBy client, by project and by month, over your own data."
         },
         {
           "id": "/en/#c4",
-          "heading": "We design",
-          "text": "We take the heaviest problem on that list and turn it into a system that fits the way you work, not the way we do. We decide what can run on its own, what a person keeps deciding, and which of your tools it connects to. What already works stays as it is. You see what you will have before it exists 03"
+          "heading": "From what you have today to asking your own numbers",
+          "text": "01Your data todayWherever it is: spreadsheets, your invoicing program, PDFs in a folder. 02ImportThe clients, invoices and expenses you already have are brought in. You do not start empty. 03SetupYour invoice series, your taxes, your payment terms, your projects. This is where what each thing is called gets decided. 04RunningIt issues, records, flags what is falling due and keeps a trace of everything it does. 05Ask FinanceThe thing above, but over your data instead of made-up data. 06DecisionsWho to chase today, which project is not paying for itself, what can be paid this week. What we are not going to sell you: we do not have a catalogue of one-click integrations. What can be connected to what you already use is looked at case by case, and if something cannot be done we say so before we start, not after. Open it full screen What else it does How we work"
         },
         {
           "id": "/en/#c5",
-          "heading": "We roll it out",
-          "text": "We build it, connect it to what you already use and leave it running inside the daily job, with your team using it. We do not hand over a manual for somebody to put into practice: we hand over something already in practice. It runs in your operation, not in a demo 04"
+          "heading": "We analyse",
+          "text": "We follow the real path of a customer, an order and an invoice, end to end, and write down every point where a person has to bridge a gap. Out of that comes the list of where the time, the sales and the money leak out — and how many times a month each one happens. You leave with that list whether we build it or not 02"
         },
         {
           "id": "/en/#c6",
-          "heading": "We measure and improve",
-          "text": "The system leaves a trace of everything it does: what ran on its own, what failed, and where a person is still bridging a gap. That is what it gets tuned with — and when the company changes, the system changes with it instead of going stale. You can check it, not just believe it This is what we get asked to fix"
+          "heading": "We design",
+          "text": "We take the heaviest thing on that list and decide what goes with what: what can run on its own, what a person keeps deciding, and which of your tools it connects to. What already works stays as it is, and the rules of your business are set by you. You see what you will get before it exists 03"
         },
         {
           "id": "/en/#c7",
-          "heading": "If any of this sounds familiar, there is a system for it.",
-          "text": "Opportunities come in and nobody follows them up in time We roll out a system that collects contacts from the website, from email and from ads, ranks them by interest and starts the follow-up on its own, with an alert when one has been sitting for days. Getting paid depends on somebody remembering We roll out the invoicing, due-date and collections system: invoices go out when they should, reminders send themselves, and one screen says who owes what and since when. It is our own software and you can try it right below. Customers wait too long for someone to reply We roll out an agent that answers on the website and by email with your business's real information, sorts what comes in, and hands a person what needs a person. Projects slip and nobody sees it coming We roll out a system that, the moment the client says yes, sets the project up with its tasks, its owners and its dates, and warns before anything gets stuck. Everyone keeps the information somewhere different We roll out a single place where clients, documents, contracts and renewal dates live, each with its own reminder, visible to whoever needs it. Every morning the numbers have to be asked for We roll out a screen that says each day what happened yesterday and what has to be decided today, computed on your own operation's data. If your problem looks like one of these, we adapt the system. If it looks like none of them, we build the one that is missing: there is no catalogue to choose from. They are built with automations, AI agents and integrations. Where it already runs"
+          "heading": "We put it in",
+          "text": "We build it, connect it to what you already use and leave it running inside the daily job, piece by piece and with your team in it. We do not hand over a manual for somebody to put into practice: we hand over something already in practice. It runs in your operation, not in a demo 04"
         },
         {
           "id": "/en/#c8",
-          "heading": "We run it in our own company before proposing it to you.",
-          "text": "The cases we show are our own, and they are told in full: what worked, and one where we got it wrong. 01From spotted company to proposal sentEvery Monday the system turns the highest-scoring companies into opportunities and drafts the proposal. It goes out once a person has reviewed it. 02Splitting the work without deciding it every hourWhen a project closes it is created on its own, assigns tasks by real workload and warns about what is close to being due. It is the one we use most. 03A hypothesis the data did not confirmOur internal audit had been blaming one particular workflow for an error rate. It was not that one. That is written up too. And five more systems running in our own operation right now, not in a client’s. See the three cases · See what is under way Our own software"
+          "heading": "We measure and improve",
+          "text": "The system leaves a trace of everything it does: what ran on its own, what failed, and where a person is still bridging a gap. That is what it gets corrected with — and when the company changes, the system changes with it instead of going stale. It can be checked, not just believed This is what we get asked to fix"
         },
         {
           "id": "/en/#c9",
-          "heading": "D-Code Finance",
-          "text": "A financial system you can ask what is going on in your company, and it answers with your own numbers: who owes you, what is past due, what you should look at today. We built it ourselves. What you see below is not a screenshot: it is the application, and it answers. DEMO Ask it yourself. The first answer is already there, and you can keep asking or type your own. The clients, the amounts and the dates are made up; the calculations, the screens and the modules —invoices, collections, expenses, projects— are the ones in the real system, and they are in the demo’s own menu. <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can still read what the system does on its page.</p> Open it full screen What else it does Let us start"
+          "heading": "If any of this sounds familiar, there is a system for it.",
+          "text": "Opportunities come in and nobody follows them up in time We put in a system that collects contacts from the site, the inbox and your ads, ranks them by interest and starts the follow-up on its own, with a warning when one has been sitting for days. Getting paid depends on someone remembering We put in the invoices, due dates and collections system: invoices go out when they should, reminders send themselves and a panel says who owes what and since when. It is our own software and it is above for you to try. Clients wait too long for someone to reply We put in an agent that answers on the site and by email with the real information about your business, sorts what comes in and passes on to a person what needs a person. Projects slip and nobody sees it coming We put in a system that, as soon as the client says yes, sets the project up with its tasks, its owners and its dates, and warns before something gets stuck. Everyone keeps the information somewhere different We put in one single place where clients, documents, contracts and renewal dates live, each with its reminder and visible to whoever needs it. Every morning the numbers have to be asked for We put in a panel that says every day what happened yesterday and what has to be decided today, worked out from your own operation. If your problem looks like one of these, we adapt the system. If it looks like none of them, we build the one that is missing: there is no catalogue to choose from. They are built with automations, AI agents and integrations. No promises"
         },
         {
           "id": "/en/#c10",
+          "heading": "This is exactly what happens, from the first call.",
+          "text": "We have no guarantees to show you and no percentages to promise. What we can do is tell you the whole process and put the product in front of you: both can be checked before you sign anything. 01 The first call 30 minutes What happensYou tell us how you work. We ask about the path of a customer, an order and an invoice. What it takesHalf an hour of yours, with nothing prepared. What you keepIf we see nothing worth automating, we say so on that call. 02 The review What happensWe look at how you actually work: who does what, with which tool, and how many times a month. What it takesA couple of hours from the people who do that work, and real examples: an invoice, a quote, one of the usual emails. What you keepThe written list of where the time and the money leak out, with how often each one happens. It is yours whether we build it or not. 03 The proposal What happensWe pick the heaviest one and show you what would be built: what runs on its own, what a person keeps deciding, and what it connects to. What it takesThat you say what comes first. We do not invent the rules of your business. What you keepScope, timeline and price in writing before anything starts. 04 Putting it in What happensIt gets built and put to work piece by piece, inside the tools you already use. Nothing changes all at once. What it takesThe minimum access to what you already use, and one person on your side who checks it does what it should. What you keepThe system running with your team using it, not a manual for switching it on. 05 Control What happensIt is written down: what each piece does, where it runs, who can change it and what happens if it fails one day. What it takesNothing. What you keepThe access and the documentation in your name. If we stop working together one day, it keeps running. 06 The measure What happensThe system records what it does: what ran on its own, what failed and where somebody is still bridging a gap. What it takesHalf an hour a month to look at it together. What you keepNumbers out of your own system. You do not have to believe us: you check. And before any of that you can open the demo above and poke at it as long as you like: it is the same software we put in, with made-up data. You can also read how we work or what we are changing right now. Let us start"
+        },
+        {
+          "id": "/en/#c11",
           "heading": "Thirty minutes and you will know what can be automated.",
           "text": "Tell us how you work today and we will tell you where we would start. Book a call What people usually ask"
         }
@@ -2887,55 +2892,60 @@
         {
           "id": "/#c0",
           "heading": "",
-          "text": "Sistemas empresariales a medida"
+          "text": "Sistemas a medida · software propio"
         },
         {
           "id": "/#c1",
-          "heading": "Analizamos tu empresa.Construimos su sistema.",
-          "text": "Miramos cómo trabajas de verdad, encontramos dónde se pierde el tiempo y construimos el sistema que conecta tu operación. No vendemos paquetes cerrados. Hablemos de tu operación Cómo trabajamos Lo que estás viendo Una empresa antes de ordenarla Por qué nos llaman"
+          "heading": "Lo que tu equipo repite cada semanapuede hacerlo un sistema.",
+          "text": "Miramos cómo trabajáis de verdad, vemos por dónde se escapan el tiempo y el dinero, y construimos el sistema que lo corta. No hay catálogo del que elegir. Uno de los nuestros está aquí abajo, funcionando, para que lo pruebes antes de hablar con nadie. Probar nuestro sistema financiero Hablemos de tu operación Lo que estás viendo Una empresa antes de ordenarla Antes de hablar de sistemas"
         },
         {
           "id": "/#c2",
-          "heading": "Casi siempre empieza con una de estas cuatro frases.",
-          "text": "«Cada semana hacemos lo mismo a mano.» Sacar datos de un sitio y meterlos en otro no es trabajo: es tiempo que se paga igual todos los meses y que no aparece en ninguna cuenta. «Mandamos el presupuesto y ahí se quedó.» Nadie decidió no hacer seguimiento. Simplemente no había un momento en el que le tocara a alguien, y el cliente se fue con otro. «Persigo cobros.» El dinero entra tarde porque reclamarlo depende de que alguien se acuerde, y esa persona tiene otras catorce cosas encima. «Eso lo sabe Marta.» Cuando un proceso vive en la cabeza de una persona, la empresa se para cuando esa persona se va de vacaciones. Cómo trabajamos"
+          "heading": "Esta es una semana normal. Lo subrayado no es trabajo.",
+          "text": "El lunes alguien abre el correo y copia cinco pedidos a una hoja de cálculo. El martes entra un presupuesto y se queda esperando a que alguien se acuerde. El miércoles un cliente pregunta por su pedido y hay que abrir tres programas para contestarle. El jueves se emite una factura y nadie sabe si la anterior se cobró. El viernes hay que decidir algo y el número se pide por mensaje a quien lo tenga. El lunes siguiente vuelve a empezar exactamente igual. Lo subrayado, explicado Ninguna de esas seis cosas es el trabajo por el que te pagan. Y las seis se arreglan igual: poniendo un sistema donde ahora está la memoria de alguien. Software propio · pruébalo ahora"
         },
         {
           "id": "/#c3",
-          "heading": "Analizamos",
-          "text": "Seguimos el recorrido real de un cliente, de un pedido y de una factura, de principio a fin, y anotamos cada punto en el que alguien tiene que hacer de puente. De ahí sale la lista de por dónde se escapan el tiempo, las ventas, la información y el dinero, y cuánto de eso se repite cada semana. Sales de aquí con esa lista, la construyamos o no 02"
+          "heading": "Escribe lo que necesitas saber. Te contesta con tus números.",
+          "text": "D-Code Finance es nuestro sistema financiero. Las facturas, los cobros, los gastos y los proyectos viven en el mismo sitio, y encima hay algo a lo que le escribes en tu idioma: quién me debe, qué está fuera de plazo, qué debería mirar hoy. Te contesta con el número, te dice de dónde sale y te lleva hasta la factura. No hay que aprenderse treinta pantallas para saber una cosa. Los gastos se dan de alta desde el propio documento: subes la factura del proveedor, el sistema la lee y una persona la revisa antes de que quede registrada. Eso y la conexión con tus datos son cosas del sistema implantado; la demo de aquí abajo responde, abre facturas y te lleva al dato, que es lo que se puede enseñar sin tener delante tu empresa. DEMO · datos ficticios Es la aplicación, no una captura. Pregúntale, abre una factura, mira los cobros. Los clientes, los importes y las fechas son inventados; las pantallas, los cálculos y los estados son los del sistema de verdad. <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver qué hace el sistema en su ficha.</p> La puerta Pregunta a Finanzas Escribes lo que necesitas saber y entra por ti en cualquiera de las seis. No hace falta saber en qué pantalla está el dato. EntraLo que ya se ha cobrado, de quién y cuándo. SaleLo que hay que pagar y la semana en la que toca. Se debeLo que está fuera de plazo y desde hace cuántos días. Se facturaDe presupuesto aceptado a factura emitida, sin volver a escribirlo. Se gastaCada gasto con su proveedor, su proyecto y su justificante. Se analizaPor cliente, por proyecto y por mes, sobre tus propios datos."
         },
         {
           "id": "/#c4",
-          "heading": "Diseñamos",
-          "text": "Cogemos el problema que más pesa de esa lista y lo convertimos en un sistema que encaja con vuestra forma de trabajar, no con la nuestra. Decidimos qué puede ir solo, qué sigue decidiendo una persona y con cuáles de vuestras herramientas se conecta. Lo que ya funciona se queda como está. Ves qué vas a tener antes de que exista 03"
+          "heading": "De lo que tienes hoy a preguntarle a tus números",
+          "text": "01Tus datos de hoyDonde estén: hojas de cálculo, tu programa de facturación, PDFs en una carpeta. 02ImportaciónSe traen los clientes, las facturas y los gastos que ya tienes. No se empieza vacío. 03ConfiguraciónTus series de factura, tus impuestos, tus formas de pago, tus proyectos. Aquí se decide cómo se llama cada cosa. 04FuncionandoEmite, registra, avisa de los vencimientos y deja el rastro de todo lo que hace. 05Pregunta a FinanzasLo de aquí arriba, pero sobre tus datos en vez de sobre datos inventados. 06DecisionesA quién hay que reclamar hoy, qué proyecto no sale a cuenta, qué se puede pagar esta semana. Lo que no te vamos a vender: no tenemos un catálogo de integraciones de un clic. Lo que se puede conectar con lo que ya usas se mira caso por caso, y si algo no se puede, se dice antes de empezar y no después. Abrirla a pantalla completa Qué más hace Cómo trabajamos"
         },
         {
           "id": "/#c5",
-          "heading": "Implantamos",
-          "text": "Lo construimos, lo conectamos con lo que ya usáis y lo dejamos funcionando dentro del trabajo de cada día, con vuestro equipo usándolo. No entregamos un manual para que alguien lo ponga en marcha: entregamos algo que ya está en marcha. Funciona en tu operativa, no en una demo 04"
+          "heading": "Analizamos",
+          "text": "Seguimos el recorrido real de un cliente, de un pedido y de una factura, de principio a fin, y anotamos cada punto en el que una persona tiene que hacer de puente. De ahí sale la lista de por dónde se escapan el tiempo, las ventas y el dinero, y cuántas veces al mes pasa cada cosa. Sales de aquí con esa lista, la construyamos o no 02"
         },
         {
           "id": "/#c6",
-          "heading": "Medimos y mejoramos",
-          "text": "El sistema deja rastro de todo lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo una persona haciendo de puente. Con eso se ajusta, y cuando la empresa cambia, el sistema cambia con ella en vez de quedarse obsoleto. Se puede comprobar, no solo creer Esto es lo que nos piden que arreglemos"
+          "heading": "Diseñamos",
+          "text": "Cogemos lo que más pesa de esa lista y decidimos qué va con qué: qué puede ir solo, qué sigue decidiendo una persona y con cuáles de vuestras herramientas se conecta. Lo que ya funciona se queda como está, y las reglas de vuestro negocio las ponéis vosotros. Ves qué vas a tener antes de que exista 03"
         },
         {
           "id": "/#c7",
-          "heading": "Si algo de esto te suena, hay un sistema para ello.",
-          "text": "Entran oportunidades y nadie las sigue a tiempo Implantamos un sistema que recoge los contactos de la web, del correo y de los anuncios, los ordena por interés y activa el seguimiento solo, con aviso cuando uno lleva días parado. Cobrar depende de que alguien se acuerde Implantamos el sistema de facturas, vencimientos y cobros: se emiten cuando toca, los recordatorios salen solos y un panel dice quién debe qué y desde cuándo. Es software nuestro y lo tienes aquí abajo para probarlo. Los clientes esperan demasiado a que alguien conteste Implantamos un agente que responde en la web y por correo con la información real de tu negocio, clasifica lo que entra y pasa a una persona lo que necesita a una persona. Los proyectos se retrasan y nadie lo ve venir Implantamos un sistema que, en cuanto el cliente dice que sí, monta el proyecto con sus tareas, sus responsables y sus fechas, y avisa antes de que algo se bloquee. Cada persona guarda la información en un sitio distinto Implantamos un único sitio donde viven clientes, documentos, contratos y vencimientos, cada uno con su recordatorio y a la vista de quien lo necesita. Cada mañana hay que pedirle los números a alguien Implantamos un panel que cada día dice qué pasó ayer y qué hay que decidir hoy, calculado sobre los datos de tu propia operación. Si tu problema se parece a uno de estos, adaptamos el sistema. Si no se parece a ninguno, construimos el que falta: no hay un catálogo del que elegir. Se montan con automatizaciones, agentes de IA e integraciones. Dónde ya funciona"
+          "heading": "Implantamos",
+          "text": "Lo construimos, lo conectamos con lo que ya usáis y lo dejamos funcionando dentro del trabajo de cada día, por partes y con vuestro equipo dentro. No entregamos un manual para que alguien lo ponga en marcha: entregamos algo que ya está en marcha. Funciona en tu operativa, no en una demo 04"
         },
         {
           "id": "/#c8",
-          "heading": "Lo probamos en nuestra empresa antes de proponértelo.",
-          "text": "Los casos que enseñamos son los nuestros, y están contados enteros: lo que funcionó y uno en el que nos equivocamos. 01De empresa detectada a propuesta enviadaCada lunes el sistema convierte las empresas mejor puntuadas en oportunidades y redacta la propuesta. Sale cuando una persona la ha revisado. 02Repartir el trabajo sin decidirlo cada horaAl cerrar un proyecto se crea solo, reparte las tareas según la carga real de cada uno y avisa de lo que va a vencer. Es el que más usamos. 03Una hipótesis que los datos no confirmaronNuestra auditoría interna llevaba tiempo culpando a un flujo concreto de una tasa de errores. No era ese. También está contado. Y cinco sistemas más funcionando ahora mismo en nuestra operación, no en la de un cliente. Ver los tres casos · Ver lo que hay en marcha Software propio"
+          "heading": "Medimos y mejoramos",
+          "text": "El sistema deja rastro de todo lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo una persona haciendo de puente. Con eso se corrige, y cuando la empresa cambia, el sistema cambia con ella en vez de quedarse obsoleto. Se puede comprobar, no solo creer Esto es lo que nos piden que arreglemos"
         },
         {
           "id": "/#c9",
-          "heading": "D-Code Finance",
-          "text": "Un sistema financiero al que le preguntas qué está pasando en tu empresa y te contesta con tus propios números: quién te debe, qué está fuera de plazo, qué deberías mirar hoy. Lo hemos construido nosotros. Lo de aquí abajo no es una captura: es la aplicación, y responde. DEMO Pregúntale tú. La primera respuesta ya está puesta y puedes seguir preguntando, o escribir la tuya. Los clientes, los importes y las fechas son inventados; los cálculos, las pantallas y los módulos —facturas, cobros, gastos, proyectos— son los del sistema de verdad, y los tienes en el menú de la propia demo. <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver lo que hace el sistema en su ficha.</p> Abrirla a pantalla completa Qué más hace Empecemos"
+          "heading": "Si algo de esto te suena, hay un sistema para ello.",
+          "text": "Entran oportunidades y nadie las sigue a tiempo Implantamos un sistema que recoge los contactos de la web, del correo y de los anuncios, los ordena por interés y activa el seguimiento solo, con aviso cuando uno lleva días parado. Cobrar depende de que alguien se acuerde Implantamos el sistema de facturas, vencimientos y cobros: se emiten cuando toca, los recordatorios salen solos y un panel dice quién debe qué y desde cuándo. Es software nuestro y lo tienes más arriba para probarlo. Los clientes esperan demasiado a que alguien conteste Implantamos un agente que responde en la web y por correo con la información real de tu negocio, clasifica lo que entra y pasa a una persona lo que necesita a una persona. Los proyectos se retrasan y nadie lo ve venir Implantamos un sistema que, en cuanto el cliente dice que sí, monta el proyecto con sus tareas, sus responsables y sus fechas, y avisa antes de que algo se bloquee. Cada persona guarda la información en un sitio distinto Implantamos un único sitio donde viven clientes, documentos, contratos y vencimientos, cada uno con su recordatorio y a la vista de quien lo necesita. Cada mañana hay que pedirle los números a alguien Implantamos un panel que cada día dice qué pasó ayer y qué hay que decidir hoy, calculado sobre los datos de tu propia operación. Si tu problema se parece a uno de estos, adaptamos el sistema. Si no se parece a ninguno, construimos el que falta: no hay un catálogo del que elegir. Se montan con automatizaciones, agentes de IA e integraciones. Sin promesas"
         },
         {
           "id": "/#c10",
+          "heading": "Esto es exactamente lo que pasa, desde la primera llamada.",
+          "text": "No tenemos garantías que enseñarte ni porcentajes que prometerte. Lo que sí podemos es contarte el proceso entero y dejarte el producto delante: las dos cosas se comprueban antes de firmar nada. 01 La primera llamada 30 minutos Qué pasaNos cuentas cómo trabajáis. Preguntamos por el recorrido de un cliente, de un pedido y de una factura. Qué hace faltaMedia hora tuya, sin preparar nada. Con qué te quedasSi no vemos nada que valga la pena automatizar, te lo decimos en esa llamada. 02 La revisión Qué pasaMiramos cómo trabajáis de verdad: quién hace qué, con qué herramienta y cuántas veces al mes. Qué hace faltaUn par de horas de las personas que hacen ese trabajo, y ejemplos reales: una factura, un presupuesto, un correo de los de siempre. Con qué te quedasLa lista escrita de por dónde se escapan el tiempo y el dinero, con la frecuencia de cada cosa. Es tuya, la construyamos o no. 03 La propuesta Qué pasaElegimos lo que más pesa y te enseñamos qué se construiría: qué va solo, qué sigue decidiendo una persona y con qué se conecta. Qué hace faltaQue digas qué es prioritario. Las reglas de tu negocio no nos las inventamos nosotros. Con qué te quedasAlcance, plazo y precio por escrito antes de que empiece nada. 04 La implantación Qué pasaSe construye y se pone a funcionar por partes, dentro de las herramientas que ya usáis. Nada cambia de golpe. Qué hace faltaLos accesos mínimos a lo que ya usáis y una persona de vuestro lado que valide que hace lo que tiene que hacer. Con qué te quedasEl sistema funcionando con tu equipo usándolo, no un manual para ponerlo en marcha. 05 El control Qué pasaQueda escrito qué hace cada pieza, dónde se ejecuta, quién puede cambiarla y qué ocurre si un día falla. Qué hace faltaNada. Con qué te quedasLos accesos y la documentación a tu nombre. Si un día dejamos de trabajar juntos, sigue funcionando. 06 La medida Qué pasaEl sistema registra lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo alguien haciendo de puente. Qué hace faltaMedia hora al mes para mirarlo juntos. Con qué te quedasNúmeros salidos de tu propio sistema. No hay que creernos: se comprueba. Y antes de nada de esto puedes abrir la demo de aquí arriba y trastear con ella todo lo que quieras: es el mismo software que implantamos, con datos inventados. También puedes leer cómo trabajamos o qué estamos cambiando ahora mismo. Empecemos"
+        },
+        {
+          "id": "/#c11",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
           "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Lo que sueles preguntar"
         }

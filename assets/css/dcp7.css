@@ -868,3 +868,282 @@ body.v7 .blog-grid .blog-card .window-title{ color:var(--v-ink-3); }
 body:has(.demo-host.fdemo-pantalla) .dcx,
 body:has(.demo-host.fdemo-pantalla) .dcx-bar,
 body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA PORTADA, SEGUNDA VUELTA
+   ═══════════════════════════════════════════════════════════════════════════
+   Cuatro piezas nuevas, y ninguna es una rejilla de tarjetas:
+
+     .v7-semana     una semana escrita entera, con lo que no es trabajo
+                    subrayándose al leerla y explicándose al señalarlo
+     .v7-dinero     las seis cosas que hace el dinero, con una sola puerta
+     .v7-camino     de los datos que tienes hoy a preguntarle a tus números
+     .v7-exp        qué pasa exactamente, momento a momento, con lo que hace
+                    falta de tu parte y con lo que te quedas
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[id="dcode-finance"], [id="confianza"], [id="problema"]{ scroll-margin-top:88px; }
+
+/* ─────────────────────────── UNA SEMANA NORMAL ───────────────────────────
+   Esto sustituye a cuatro frases entrecomilladas en cuatro tarjetas. Una
+   tarjeta con una cita dentro es la forma más rápida de que algo se lea como
+   publicidad: la reconoces antes de leerla y ya sabes que va a ser un
+   problema inventado para vender la solución de al lado.
+
+   Aquí no hay citas ni cajas: hay un párrafo. Se lee como se lee un párrafo,
+   y mientras lo lees se va subrayando lo que no es trabajo. Cada subrayado
+   se explica al señalarlo, y la explicación aparece siempre en el MISMO
+   sitio, así que el texto nunca salta.                                     */
+.v7-semana{ margin-top:clamp(24px,3.2vh,38px); max-width:66ch; }
+.v7-semana-txt{
+  margin:0;
+  font-family:var(--serif);
+  font-size:clamp(1.10rem, .96rem + .92vw, 1.66rem);
+  line-height:1.56; letter-spacing:-.006em; color:#c3cfe8;
+}
+.v7-mk{
+  color:var(--ink);
+  background-image:linear-gradient(transparent 60%, rgba(255,107,98,.26) 60%);
+  background-repeat:no-repeat; background-size:100% 100%;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  border-radius:2px; padding:0 1px;
+  transition:background-size .55s var(--ease), background-image .25s var(--ease), color .25s var(--ease);
+}
+/* El subrayado se dibuja al entrar la sección, no está dibujado de antemano.
+   Sin JavaScript la clase `is-anim` no llega y todo se ve ya subrayado, que
+   es el estado correcto: la animación es el adorno, no el contenido. */
+.v7-semana.is-anim .v7-mk{ background-size:0% 100%; }
+.v7-semana.is-anim .v7-mk.on{ background-size:100% 100%; }
+.v7-semana.is-ready .v7-mk{ cursor:pointer; }
+.v7-mk:hover, .v7-mk:focus-visible, .v7-mk.is-sel{
+  background-image:linear-gradient(transparent 56%, rgba(255,107,98,.52) 56%);
+  color:#fff; outline:none;
+}
+.v7-mk:focus-visible{ box-shadow:0 0 0 2px rgba(255,107,98,.55); }
+.v7-semana-nota{
+  margin:clamp(18px,2.4vh,26px) 0 0; min-height:6.4em;
+  padding-left:16px; border-left:2px solid rgba(255,107,98,.42);
+  max-width:58ch; font-size:.93rem; line-height:1.62; color:var(--stone);
+}
+.v7-semana-et{
+  display:block; margin-bottom:7px;
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--stone-soft);
+}
+
+/* ───────────────────── EL DINERO, UNA SOLA EXPERIENCIA ───────────────────
+   Antes esto era un listado de catorce módulos. Catorce cajas no se leen: se
+   cuentan y se pasa de largo. El dinero de una empresa hace seis cosas, y
+   encima de las seis hay UNA puerta, que es de lo que va el producto.      */
+.v7-dinero{ margin-top:clamp(38px,5.4vh,68px); }
+.v7-puerta{
+  position:relative; display:grid; gap:7px;
+  padding:clamp(18px,2.4vw,26px) clamp(20px,2.6vw,32px);
+  border:1px solid rgba(91,140,255,.26); border-radius:14px;
+  background:linear-gradient(180deg, rgba(91,140,255,.10), rgba(91,140,255,.025));
+}
+.v7-puerta::after{
+  content:""; position:absolute; left:50%; bottom:-23px; width:1px; height:23px;
+  background:linear-gradient(rgba(67,224,255,.55), rgba(67,224,255,0));
+}
+.v7-puerta-k{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.10em;
+  text-transform:uppercase; color:var(--cyan);
+}
+.v7-puerta-t{ font-family:var(--serif); font-weight:600; font-size:clamp(1.15rem,1.7vw,1.52rem); color:var(--ink); }
+.v7-puerta-d{ font-size:.94rem; line-height:1.6; color:var(--stone); max-width:64ch; }
+
+.v7-flujo{
+  list-style:none; margin:23px 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:0 clamp(14px,1.6vw,22px);
+}
+.v7-flujo li{ display:grid; gap:5px; align-content:start; padding-top:13px; border-top:1px solid var(--border); }
+.v7-flujo li::before{ content:""; width:22px; height:2px; background:var(--k,var(--blue)); border-radius:2px; }
+.v7-flujo li:nth-child(1){ --k:var(--k-clientes); }
+.v7-flujo li:nth-child(2){ --k:var(--k-produccion); }
+.v7-flujo li:nth-child(3){ --k:#ff6b62; }
+.v7-flujo li:nth-child(4){ --k:var(--k-finanzas); }
+.v7-flujo li:nth-child(5){ --k:var(--violet); }
+.v7-flujo li:nth-child(6){ --k:var(--cyan); }
+.v7-flujo b{ font-family:var(--serif); font-weight:600; font-size:1rem; color:var(--ink); }
+.v7-flujo span{ font-size:.82rem; line-height:1.5; color:var(--stone-soft); }
+
+/* ──────────────── CÓMO LLEGA A UNA EMPRESA DE VERDAD ─────────────────────
+   La pregunta que aparece justo después de jugar con la demo. Seis pasos en
+   una línea: los datos que ya tienes, traerlos, configurarlos, el sistema
+   funcionando, preguntarle, y decidir con lo que conteste.                 */
+.v7-camino{ margin-top:clamp(38px,5.4vh,68px); }
+.v7-camino-t{
+  margin:0 0 20px; font-family:var(--serif); font-weight:600;
+  font-size:clamp(1.05rem,1.5vw,1.36rem); color:var(--ink);
+}
+.v7-pasos{
+  list-style:none; margin:0; padding:0; position:relative;
+  display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:0 clamp(14px,1.6vw,22px);
+}
+.v7-pasos::before{
+  content:""; position:absolute; left:12px; right:12px; top:12px; height:1px;
+  background:linear-gradient(90deg, rgba(91,140,255,.12), rgba(67,224,255,.50) 50%, rgba(91,140,255,.12));
+}
+.v7-pasos li{ display:grid; gap:5px; align-content:start; position:relative; }
+.v7-pasos-n{
+  /* 12 px y no 10: por debajo de doce el centinela de tipografía lo marca
+     como texto diminuto, y tiene razón —un ordinal también se lee—. */
+  width:25px; height:25px; display:grid; place-items:center; border-radius:50%;
+  border:1px solid rgba(67,224,255,.42); background:#080b12;
+  font-family:var(--mono); font-size:.75rem; color:var(--cyan);
+}
+.v7-pasos b{ margin-top:9px; font-family:var(--serif); font-weight:600; font-size:.98rem; color:var(--ink); }
+.v7-pasos li > span:not(.v7-pasos-n){ font-size:.82rem; line-height:1.5; color:var(--stone-soft); }
+.v7-nota{
+  margin:24px 0 0; max-width:76ch; padding-left:14px;
+  border-left:2px solid rgba(245,165,36,.45);
+  font-size:.86rem; line-height:1.62; color:var(--stone-soft);
+}
+
+/* ─────────────────────── QUÉ PASA EXACTAMENTE ────────────────────────────
+   Aquí había una promesa —«lo probamos en nuestra empresa antes de
+   proponértelo»— y una promesa se lee y se olvida. Lo que no se olvida es un
+   proceso escrito con lo que hace falta de tu parte y con lo que te queda al
+   terminar cada tramo: eso sí se puede comprobar.
+
+   El hilo de la izquierda se va llenando conforme entra cada momento. No hay
+   ni un oyente de scroll: cada pieza se enciende al entrar en pantalla con
+   el mismo observador que ya usa todo el sitio.                            */
+.v7-exp{ list-style:none; margin:clamp(30px,4.2vh,52px) 0 0; padding:0 0 0 30px; position:relative; }
+/* El hilo va en ::after y no en ::before porque ::before es de quien pone el
+   velo, y un solo pseudoelemento no puede ser las dos cosas: el `width:1px`
+   del hilo se imponía sobre el `left/right` del velo y lo dejaba en una raya
+   de un píxel. El velo estaba puesto y no tapaba nada. */
+/* z-index 0 y no 1: el hilo pasa justo por el centro de cada punto, y por
+   encima lo partía en dos mitades. Debajo de los puntos y encima del velo. */
+.v7-exp::after{ content:""; position:absolute; z-index:0; left:8px; top:14px; bottom:14px; width:1px; background:var(--border-soft); }
+.v7-exp-it{
+  position:relative; display:grid;
+  grid-template-columns:58px minmax(0,1fr); gap:0 clamp(16px,1.9vw,26px);
+  padding:clamp(20px,2.6vh,30px) 0; border-top:1px solid var(--border-soft);
+}
+.v7-exp-it:last-child{ border-bottom:1px solid var(--border-soft); }
+.v7-exp-it::before{
+  content:""; position:absolute; left:-26px; top:calc(clamp(20px,2.6vh,30px) + 4px);
+  width:9px; height:9px; border-radius:50%; background:#080b12;
+  border:1px solid rgba(67,224,255,.32);
+  transition:background .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.v7-exp-it::after{
+  content:""; position:absolute; left:-22px; top:calc(clamp(20px,2.6vh,30px) + 15px); bottom:0; width:1px;
+  background:linear-gradient(rgba(67,224,255,.42), rgba(67,224,255,.05));
+  transform:scaleY(0); transform-origin:top; transition:transform .9s var(--ease);
+}
+.v7-exp-it.in::before{ background:var(--cyan); border-color:var(--cyan); box-shadow:0 0 0 4px rgba(67,224,255,.10); }
+.v7-exp-it.in::after{ transform:scaleY(1); }
+.v7-exp-it:last-child::after{ display:none; }
+.v7-exp-n{ padding-top:3px; font-family:var(--mono); font-size:.75rem; letter-spacing:.06em; color:var(--cyan); }
+.v7-exp-t{
+  display:block; margin-bottom:15px; font-family:var(--serif); font-weight:600;
+  font-size:clamp(1.04rem,1.45vw,1.28rem); color:var(--ink);
+}
+.v7-exp-t i{
+  font-style:normal; margin-left:10px; vertical-align:middle;
+  font-family:var(--mono); font-size:.75rem; letter-spacing:.06em; color:var(--stone-soft);
+}
+/* dt y dd alternan en el HTML —que es como se escribe una lista de
+   definiciones— así que la rejilla se rellena POR COLUMNAS: cada par cae uno
+   encima del otro en vez de romperse por filas. */
+.v7-exp-d{
+  margin:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:auto auto; grid-auto-flow:column; gap:0 clamp(18px,2.2vw,34px);
+}
+.v7-exp-d dt{
+  font-family:var(--mono); font-size:.625rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--stone-soft); padding-bottom:8px; margin-bottom:11px;
+  border-bottom:1px solid var(--border-soft);
+}
+.v7-exp-d dd{ margin:0; font-size:.855rem; line-height:1.56; color:var(--stone); }
+
+/* ───────────────────────────── PANTALLAS ESTRECHAS ───────────────────── */
+@media (max-width:1080px){
+  .v7-flujo{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 18px; }
+  .v7-flujo li:nth-child(n+4){ margin-top:18px; }
+  .v7-pasos{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:26px 18px; }
+  .v7-pasos::before{ display:none; }
+}
+@media (max-width:860px){
+  .v7-exp-d{ grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:auto; grid-auto-flow:row; gap:0 22px; }
+  .v7-exp-d dt{ grid-column:1; margin-bottom:9px; }
+  .v7-exp-d dd{ grid-column:2; margin-bottom:13px; }
+  .v7-exp-d dd:last-child{ margin-bottom:0; }
+}
+@media (max-width:700px){
+  .v7-semana{ max-width:none; }
+  .v7-semana-txt{ line-height:1.5; }
+  .v7-semana-nota{ min-height:7.6em; font-size:.88rem; }
+  .v7-flujo{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 16px; }
+  .v7-flujo li:nth-child(n+3){ margin-top:16px; }
+  .v7-pasos{ grid-template-columns:1fr; gap:0; padding-left:36px; }
+  .v7-pasos::before{
+    display:block; left:12px; right:auto; top:6px; bottom:6px; width:1px; height:auto;
+    background:linear-gradient(rgba(67,224,255,.45), rgba(91,140,255,.10));
+  }
+  .v7-pasos li{ padding:0 0 18px; }
+  .v7-pasos li:last-child{ padding-bottom:0; }
+  .v7-pasos-n{ position:absolute; left:-36px; top:0; }
+  .v7-pasos b{ margin-top:0; }
+  .v7-puerta::after{ left:26px; }
+  .v7-exp{ padding-left:26px; }
+  .v7-exp::after{ left:5px; }
+  .v7-exp-it{ grid-template-columns:1fr; gap:0; }
+  .v7-exp-it::before{ left:-25px; }
+  .v7-exp-it::after{ left:-21px; }
+  .v7-exp-n{ padding:0 0 8px; }
+  .v7-exp-d{ grid-template-columns:1fr; }
+  .v7-exp-d dt{ margin-bottom:8px; }
+  .v7-exp-d dd{ grid-column:1; margin-bottom:15px; }
+}
+@media (max-width:420px){
+  .v7-flujo{ grid-template-columns:1fr; }
+  .v7-flujo li{ margin-top:0; }
+  .v7-flujo li:nth-child(n+2){ margin-top:14px; }
+}
+
+/* Con movimiento reducido no hay nada que dibujarse: todo llega puesto. */
+@media (prefers-reduced-motion:reduce){
+  .v7-semana.is-anim .v7-mk{ background-size:100% 100%; }
+  .v7-exp-it::after{ transform:scaleY(1); }
+  .v7-exp-it::before{ background:var(--cyan); border-color:var(--cyan); }
+}
+
+/* ───────────────────────── VELO PARA BLOQUES ALTOS ───────────────────────
+   Los velos de la portada están pensados para una columna de texto corta: un
+   radial centrado que se apaga por los bordes. Una lista de seis momentos o
+   una tira de seis módulos miden mil píxeles de alto, y ese radial deja el
+   final del bloque a merced del campo. Medido en un teléfono, donde el campo
+   se centra y ocupa el ancho entero: los números de los momentos 04 a 06 no
+   se distinguían del fondo.
+
+   Tres radiales superpuestos —arriba, en medio y abajo— cubren cualquier
+   altura y siguen sin tener un solo borde recto, que es la condición: el
+   velo tiene que notarse, no verse.                                       */
+/* `isolation` y no `z-index:-1`: el lienzo del campo está en `position:fixed`
+   con `z-index:0`, o sea que ES un contexto de apilado, y cualquier cosa en
+   -1 del contexto raíz se pinta POR DEBAJO de él. Medido: el velo estaba
+   puesto, tenía su degradado y no tapaba nada. Con un contexto propio el
+   velo queda encima del campo, y los hijos suben a 1 para quedar encima del
+   velo. */
+.v7-velo{ position:relative; isolation:isolate; }
+.v7-velo > *{ position:relative; z-index:1; }
+.v7-velo::before{
+  content:""; position:absolute; z-index:0; pointer-events:none;
+  inset:-26px -8%;
+  /* Un degradado vertical cubre cualquier altura sin dejar huecos, y la
+     máscara horizontal le quita los dos bordes rectos que delatarían una
+     caja. Tres radiales superpuestos no llegaban: entre un centro y el
+     siguiente la suma bajaba al 60% y el campo se colaba por ahí. */
+  background:linear-gradient(180deg, rgba(6,8,13,0), rgba(6,8,13,.94) 4%, rgba(6,8,13,.94) 96%, rgba(6,8,13,0));
+  -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,0), #000 11%, #000 89%, rgba(0,0,0,0));
+          mask-image:linear-gradient(90deg, rgba(0,0,0,0), #000 11%, #000 89%, rgba(0,0,0,0));
+}
+/* La puerta es un recuadro de verdad —es la única de la página— así que
+   necesita suelo propio: con solo el tinte azul se leía el campo a través
+   de su propio texto. */
+.v7-puerta{ background:linear-gradient(180deg, rgba(91,140,255,.12), rgba(91,140,255,.03)), rgba(7,10,17,.92); }

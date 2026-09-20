@@ -508,9 +508,76 @@
     hosts.forEach(function (h) { obs.observe(h); });
   }
 
+  /* ═══════════════════════ UNA SEMANA NORMAL ═══════════════════════════
+     El bloque del problema de la portada. El párrafo se lee entero y lo que
+     no es trabajo se va subrayando; al señalar un subrayado, su explicación
+     aparece SIEMPRE en el mismo hueco de debajo. Que el hueco sea fijo es lo
+     que permite que el texto no salte al cambiar de una explicación a otra,
+     y por eso la altura mínima está en el CSS y no aquí.
+
+     El primero llega ya seleccionado: si el hueco arranca vacío nadie
+     descubre que los subrayados responden. */
+  function initSemana() {
+    var cajas = document.querySelectorAll('[data-semana]');
+    if (!cajas.length) return;
+
+    cajas.forEach(function (caja) {
+      var marcas = [].slice.call(caja.querySelectorAll('.v7-mk'));
+      var hueco = caja.querySelector('[data-semana-nota]');
+      if (!marcas.length || !hueco) return;
+
+      function elegir(m) {
+        if (!m || m.classList.contains('is-sel')) return;
+        marcas.forEach(function (o) {
+          o.classList.remove('is-sel');
+          o.setAttribute('aria-expanded', 'false');
+        });
+        m.classList.add('is-sel');
+        m.setAttribute('aria-expanded', 'true');
+        hueco.textContent = m.getAttribute('data-nota') || '';
+      }
+
+      marcas.forEach(function (m) {
+        /* En el HTML son <span>: sin JavaScript no hay nada que pulsar y un
+           <button> muerto es peor que un texto subrayado. El papel de botón
+           se lo pone quien puede cumplirlo. */
+        m.setAttribute('role', 'button');
+        m.setAttribute('tabindex', '0');
+        m.setAttribute('aria-expanded', 'false');
+        m.addEventListener('mouseenter', function () { elegir(m); });
+        m.addEventListener('focus', function () { elegir(m); });
+        m.addEventListener('click', function () { elegir(m); });
+        m.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); elegir(m); }
+        });
+      });
+      caja.classList.add('is-ready');
+      elegir(marcas[0]);
+
+      if (reduced || !window.IntersectionObserver) {
+        marcas.forEach(function (m) { m.classList.add('on'); });
+        return;
+      }
+      /* Se subrayan de uno en uno y en el orden en que se lee la frase. Todos
+         a la vez sería un efecto; de uno en uno es alguien marcando el texto
+         mientras lo lee, que es lo que se quiere contar. */
+      caja.classList.add('is-anim');
+      var io2 = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          io2.unobserve(e.target);
+          marcas.forEach(function (m, k) {
+            setTimeout(function () { m.classList.add('on'); }, 240 + k * 300);
+          });
+        });
+      }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
+      io2.observe(caja);
+    });
+  }
+
   function boot() {
     initStage(); initAmbient(); initReveal(); initLift();
-    initTrack(); initVSteps(); initFinanceLazy();
+    initTrack(); initVSteps(); initFinanceLazy(); initSemana();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
