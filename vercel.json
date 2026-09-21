@@ -1,6 +1,18 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/como-funciona",
+      "destination": "/departamentos",
+      "permanent": true
+    },
+    {
+      "source": "/en/como-funciona",
+      "destination": "/en/departamentos",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

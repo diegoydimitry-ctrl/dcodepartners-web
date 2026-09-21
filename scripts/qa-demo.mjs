@@ -2,7 +2,8 @@
 /**
  * QA de la demo de D-Code Finance EN FUNCIONAMIENTO (check:demo solo mira
  * cómo se monta). Pulsa las 25 pantallas, en español y en inglés, dentro de
- * la portada y de /sistema-financiero (1440 y 1024 px) y en la aplicación a
+ * la portada (pestaña D-Code Finance de «Prueba los sistemas») y de
+ * /sistema-financiero (1440 y 1024 px) y en la aplicación a
  * pantalla completa en el móvil (390 y 320 px), y en cada una comprueba:
  *   · que tenga contenido de verdad (nada de pantallas vacías ni «Sin datos»);
  *   · que no haya texto pisado ni recortado dentro de la aplicación;
@@ -55,6 +56,8 @@ for (const [url, w] of CASOS) {
   const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', (e) => errs.push(e.message)); pg.on('console', (m) => { if (m.type() === 'error' && !/ERR_FAILED|ERR_BLOCKED/.test(m.text())) errs.push(m.text().slice(0, 140)); });
   await pg.goto(`http://127.0.0.1:${PORT}${url}`, { waitUntil: 'networkidle' });
+  // En la portada Finance es una pestaña de «Prueba los sistemas»: se abre antes.
+  if (await pg.locator('#gal-t-finance').count()) { await pg.locator('#gal-t-finance').scrollIntoViewIfNeeded(); await pg.locator('#gal-t-finance').click(); await pg.waitForTimeout(600); }
   await pg.locator('[data-fdemo-mount]').first().scrollIntoViewIfNeeded(); await pg.waitForTimeout(3000);
   await pg.mouse.move(w / 2, 500); await pg.mouse.wheel(0, 1); await pg.waitForTimeout(300);   // quien toca, manda: se para el recorrido
   const vistas = await pg.$$eval('[data-role="nav"][data-view]', (a) => [...new Set(a.map((x) => x.getAttribute('data-view')))]);

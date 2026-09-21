@@ -306,8 +306,13 @@
      significaba encontrarlos todos. Ahora la formación recibe su índice y lo
      usa para leer su encuadre, así que reordenar la portada es reordenar
      esta tabla. */
-  var S_MARCA = 0, S_PROBLEMA = 1, S_FINANCE = 2, S_LUPA = 3, S_MENTE = 4,
-      S_SISTEMA = 5, S_CURVA = 6, S_PIEZAS = 7, S_CONFIANZA = 8, S_CIERRE = 9;
+  /* 21-09-2026 · La portada se reordena: después del hero van «Qué hacemos»
+     (el esquema del sistema), el diagnóstico y la galería de sistemas. Los
+     tres derivan, porque encima hay una interfaz de verdad y el campo no debe
+     competir con ella. El tótem de las ocho capacidades se va con el
+     catálogo de departamentos que ilustraba. */
+  var S_MARCA = 0, S_QUE = 1, S_DIAG = 2, S_SISTEMAS = 3, S_LUPA = 4, S_MENTE = 5,
+      S_SISTEMA = 6, S_CURVA = 7, S_CONFIANZA = 8, S_CIERRE = 9;
   var MARCO = [
     /* El hero: el marco ES la caja de la identidad —banda derecha, 34% de
        ancho y 56% de alto— para que la marca entera y su anillo queden
@@ -316,18 +321,18 @@
     /* Los dos capítulos anteriores al proceso no dibujan: derivan. Su
        encuadre es la ventana entera porque la deriva no es una figura
        dentro de un marco, es materia por toda la pantalla. */
-    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.88 },  // 1 DERIVA     el problema
-    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.82 },  // 2 DERIVA     Finance
-    { x: 0.722, y: 0.50,  w: 0.46, h: 0.80, d: 0.96 },  // 3 LUPA       analizamos
-    { x: 0.700, y: 0.50,  w: 0.50, h: 0.88, d: 1.02 },  // 4 MENTE      diseñamos
-    { x: 0.684, y: 0.50,  w: 0.56, h: 0.96, d: 1.06 },  // 5 SISTEMA    implantamos
+    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.88 },  // 1 DERIVA     qué hacemos
+    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.85 },  // 2 DERIVA     el diagnóstico
+    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.82 },  // 3 DERIVA     los sistemas
+    { x: 0.722, y: 0.50,  w: 0.46, h: 0.80, d: 0.96 },  // 4 LUPA       analizamos
+    { x: 0.700, y: 0.50,  w: 0.50, h: 0.88, d: 1.02 },  // 5 MENTE      diseñamos
+    { x: 0.684, y: 0.50,  w: 0.56, h: 0.96, d: 1.06 },  // 6 SISTEMA    implantamos
     /* MEDIDO mirando la pantalla entera: la gráfica ocupaba media ventana de
        alto y se quedaba DEBAJO del texto de la sección siguiente mientras
        esta subía. Una gráfica a pantalla completa detrás de un titular y
        cuatro tarjetas no se lee como una gráfica: se lee como ruido de
        fondo. Compacta y arriba, se lee como lo que es. */
-    { x: 0.718, y: 0.315, w: 0.44, h: 0.40, d: 0.96 },  // 6 CURVA      medimos
-    { x: 0.880, y: 0.50,  w: 0.20, h: 0.90, d: 0.92 },  // 7 INVENTARIO tótem
+    { x: 0.718, y: 0.315, w: 0.44, h: 0.40, d: 0.96 },  // 7 CURVA      medimos
     { x: 0.700, y: 0.50,  w: 0.52, h: 0.62, d: 0.92 },  // 8 CADENA     confianza
     { x: 0.500, y: 0.470, w: 1.04, h: 0.86, d: 1.06 }   // 9 CONVERGE   el cierre
   ];
@@ -359,7 +364,7 @@
      diámetro es «alto × altura de ventana», así que se queda corto para no
      salirse por los lados; la gráfica quiere ser más ancha que alta, que es
      como se lee una gráfica. */
-  var ALTO_MOVIL = [0.62, 0, 0, 0.84, 0.62, 0.58, 0.54, 0, 0, 0];
+  var ALTO_MOVIL = [0.62, 0, 0, 0, 0.84, 0.62, 0.58, 0.54, 0, 0];
   /* USO vuelve, pero ARREGLADO. En su primera versión recortaba el rango de
      índices y eso AMPUTABA las últimas bandas de cada formación —el frente de
      lectura, el contador, el tráfico— que dejaban de dibujarse. Ahora no
@@ -375,7 +380,7 @@
   /* La deriva las usa TODAS: lo que se ve es la cantidad de materia, no una
      estructura, así que reservar un tercio no ahorraría nada visible y
      dejaría el campo medio vacío justo donde tiene que parecer lleno. */
-  var USO = [1, 1, 1, 0.72, 0.72, 0.80, 0.78, 0.68, 0.68, 0.68];
+  var USO = [1, 1, 1, 1, 0.72, 0.72, 0.80, 0.78, 0.68, 0.68];
 
   /* RITMO. Un recorrido en el que todo suena igual de fuerte no tiene
      momentos. Estos son los que hay: el hero es un fenomeno, el problema es
@@ -397,7 +402,7 @@
   /* Los dos capítulos que derivan van MUY bajos: en el del problema manda el
      texto subrayado y en el de Finance manda la aplicación. Un campo
      brillante detrás de una pantalla blanca es ruido puro. */
-  var INT = [1.00, 0.58, 0.40, 0.88, 1.16, 1.10, 1.00, 0.92, 0.78, 1.34];
+  var INT = [1.00, 0.52, 0.40, 0.36, 0.88, 1.16, 1.10, 1.00, 0.78, 1.34];
 
   /* ---------------------------------------------------------- EL GRAFO */
   /* EL LENGUAJE. Todo lo que se ve está hecho de tres cosas, y solo tres:
@@ -1061,7 +1066,7 @@
   /* El objeto ocupa la figura entera, centrado y con un margen: es lo único
      que hay en pantalla mientras dura, así que no tiene por qué encogerse
      dentro de la caja de la que ha salido. */
-  var OBJ_G = 4;
+  var OBJ_G = S_MENTE;
   function F_OBJETO(i, u, g, G, o, tm, ins) {
     var frO = MARCO[OBJ_G];
     var ar = (frO.h * H) / (frO.w * W);
@@ -1816,7 +1821,7 @@
     o.c = dentro ? C_LUZ : C_FLUJO; o.g = -1;
   }
 
-  var FORM = [F0, F_DERIVA, F_DERIVA, F_LUPA, F_PLANO, F_MOTOR, F_GRAFICA, F6, F5, F8];
+  var FORM = [F0, F_DERIVA, F_DERIVA, F_DERIVA, F_LUPA, F_PLANO, F_MOTOR, F_GRAFICA, F5, F8];
 
   /* --------------------------------------------------- ESTADOS Y SCROLL */
   var STOPS = [], MIR = [];
@@ -2020,7 +2025,7 @@
      otro, y la gráfica sube de izquierda a derecha. Reflejarlas invierte el
      sentido de lectura. En esas el encuadre se mueve al lado libre pero el
      contenido no se voltea. */
-  var VOLTEA = [1, 1, 1, 1, 0, 1, 0, 1, 0, 1];
+  var VOLTEA = [1, 1, 1, 1, 1, 0, 1, 0, 0, 1];
   /* EL PARALAJE, POR CAPÍTULO.
      Mover cada partícula en proporción a su profundidad da volumen a una
      nebulosa y ARRUINA una recta: las partículas de una misma columna tienen
@@ -2029,7 +2034,7 @@
      una barra recta salía con doce píxeles de serpenteo. Donde la figura es
      un dibujo técnico —el plano, el motor, la gráfica— el paralaje baja casi
      a cero; donde es materia, se queda entero. */
-  var PARAL = [1, 1, 1, 0.50, 0.26, 0.34, 0.16, 1, 0.9, 1];
+  var PARAL = [1, 1, 1, 1, 0.50, 0.26, 0.34, 0.16, 0.9, 1];
   function marco(o, fr, mir, out, vol) {
     var cx = mir ? 1 - fr.x : fr.x;
     var nx = (mir && vol) ? 1 - o.nx : o.nx;

@@ -1477,5 +1477,6 @@
 "02 ago 2026": "02 Aug 2026",
 "2,4 MB": "2.4 MB",
 "1,9 MB": "1.9 MB",
-"por-facturar": "por-facturar"
+"por-facturar": "por-facturar",
+"<select class=\"fdemo-select\" name=\"estado\" aria-label=\"Filtrar por estado\">": "<select class=\"fdemo-select\" name=\"estado\" aria-label=\"Filter by status\">"
 }

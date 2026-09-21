@@ -2,7 +2,7 @@
 /**
  * QA visual: lo que qa:ds no mira.
  *
- * En las 72 páginas y a 320, 360, 390, 393, 430, 768, 1024 y 1440 px:
+ * En las 72 páginas y a 320, 360, 390, 393, 430, 768, 834, 1024, 1280 y 1440 px:
  *   · SOLAPES de texto: dos líneas de elementos distintos que se pisan. Se
  *     mide la banda donde están los glifos (±0,42 em del centro de la línea),
  *     no la caja de la fuente, y se recorta a lo que un antepasado deja ver
@@ -26,7 +26,7 @@ import { chromium } from 'playwright';
 import { levanta, paginas, opcionesNavegador, soloLocal } from './qa/servidor.mjs';
 
 const PORT = 9212;
-const ANCHOS = (process.env.ANCHOS || '320,360,390,393,430,768,1024,1440').split(',').map(Number);
+const ANCHOS = (process.env.ANCHOS || '320,360,390,393,430,768,834,1024,1280,1440').split(',').map(Number);
 const META = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body><main>
 <section style="position:relative;height:300px"><p style="position:absolute;top:10px;left:10px;font-size:20px">Texto que se pisa con otro</p><p style="position:absolute;top:18px;left:40px;font-size:20px">Otro texto encima</p></section>
 <section><div style="width:120px;height:20px;overflow:hidden"><p style="width:400px;margin:0">Este texto no cabe en su caja y queda cortado</p></div></section>

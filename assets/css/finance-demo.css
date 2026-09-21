@@ -50,9 +50,9 @@
   --dc-success-bg:rgba(15,122,79,.08);
   --dc-warning:#8f5400;
   --dc-warning-bg:rgba(154,91,0,.09);
-  --dc-danger:#c0392f;
+  --dc-danger:#b0322a;
   --dc-danger-bg:rgba(192,57,47,.08);
-  --dc-info:#2f5fe0;
+  --dc-info:#2a56d0;
   --dc-info-bg:rgba(47,95,224,.08);
   --dc-neutral-bg:rgba(100,104,116,.1);
   --dc-neutral:#5d616c;
@@ -335,6 +335,8 @@
 .fdemo-table td.is-muted{ color:var(--dc-text-muted); }
 .fdemo-link{ color:var(--dc-accent-cyan); text-decoration:none; font-weight:500; cursor:pointer; background:none; border:none; padding:0; font:inherit; }
 .fdemo-link:hover{ text-decoration:underline; }
+/* Un enlace dentro de una frase no puede distinguirse solo por el color (WCAG 1.4.1). */
+.fdemo-page-sub .fdemo-link, p .fdemo-link{ text-decoration:underline; text-underline-offset:2px; }
 
 /* ---------- StatusPill ---------- */
 .fdemo-pill{

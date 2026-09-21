@@ -616,7 +616,34 @@
     var aviso = document.createElement('p');
     aviso.className = 'form-desde-plan';
     aviso.textContent = en ? 'You arrived from the \u201c' + nombre + '\u201d plan.' : 'Vienes del plan ' + nombre + '.';
-    if (caja.parentNode) caja.parentNode.insertBefore(aviso, caja);
+    // Arriba del formulario, no junto al mensaje: el mensaje está en el paso 3
+    // y el aviso tiene que verse al llegar.
+    var form = caja.closest('form'), primero = form && form.querySelector('.form-step');
+    if (primero) primero.parentNode.insertBefore(aviso, primero);
+    else if (caja.parentNode) caja.parentNode.insertBefore(aviso, caja);
+  })();
+
+  /* ---------- Llegar a contacto desde el diagnóstico ----------
+     El diagnóstico de la portada deja su resumen en sessionStorage (nunca en
+     la URL) y enlaza con ?desde=diagnostico. Si el mensaje está vacío, se
+     escribe con ese resumen: la persona solo tiene que añadir lo suyo. */
+  (function () {
+    if (new URLSearchParams(location.search).get('desde') !== 'diagnostico') return;
+    var texto = null;
+    try { texto = sessionStorage.getItem('dcp-diagnostico'); } catch (e) { return; }
+    if (!texto) return;
+    var caja = document.querySelector('textarea[name="mensaje"]');
+    if (!caja || caja.value.trim()) return;
+    caja.value = texto;
+    var en = document.documentElement.lang === 'en';
+    var aviso = document.createElement('p');
+    aviso.className = 'form-desde-plan';
+    aviso.textContent = en ? 'You arrived from the diagnostic: your estimate is already in the message.' : 'Vienes del diagnóstico: tu estimación ya está en el mensaje.';
+    // Arriba del formulario, no junto al mensaje: el mensaje está en el paso 3
+    // y el aviso tiene que verse al llegar.
+    var form = caja.closest('form'), primero = form && form.querySelector('.form-step');
+    if (primero) primero.parentNode.insertBefore(aviso, primero);
+    else if (caja.parentNode) caja.parentNode.insertBefore(aviso, caja);
   })();
 
   /* ---------- Al imprimir, los desplegables se imprimen abiertos ----------

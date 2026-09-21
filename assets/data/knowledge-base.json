@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-21T13:26:42.957Z",
-  "pageCount": 66,
-  "chunkCount": 610,
+  "generatedAt": "2026-09-21T21:26:45.776Z",
+  "pageCount": 64,
+  "chunkCount": 584,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -381,7 +381,7 @@
         {
           "id": "/cambios-en-proceso#c12",
           "heading": "¿Qué encaja en tu empresa?",
-          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar mi llamada Los siete están funcionando en nuestra propia operación, no en la de un cliente: son sistemas que sabemos construir porque los usamos a diario. En tu empresa se montarían con tus herramientas y tus reglas."
+          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar una llamada Los siete están funcionando en nuestra propia operación, no en la de un cliente: son sistemas que sabemos construir porque los usamos a diario. En tu empresa se montarían con tus herramientas y tus reglas."
         }
       ]
     },
@@ -402,7 +402,7 @@
         {
           "id": "/casos-exito#c2",
           "heading": "De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse de hacerlo",
-          "text": "Problema Detectar oportunidades comerciales por sector y convertirlas en propuestas dependía de que alguien revisara un listado a mano cada semana, con el riesgo de que se quedara sin hacer. Antes El radar de oportunidades existía, pero pasar de \"empresa interesante\" a \"propuesta enviada\" era un paso manual, sin fecha fija. Automatización Cada lunes, el sistema convierte automáticamente las empresas mejor puntuadas en leads y dispara la generación de una propuesta con IA — que pasa por revisión humana antes de salir. Qué aprendimos Automatizar la detección y la propuesta no cierra la venta sola: crea la oportunidad de conversación. Sigue haciendo falta que una persona la convierta en una llamada real. 02 Producción"
+          "text": "Problema Detectar oportunidades comerciales por sector y convertirlas en propuestas dependía de que alguien revisara un listado a mano cada semana, con el riesgo de que se quedara sin hacer. Antes El radar de oportunidades existía, pero pasar de \"empresa interesante\" a \"propuesta enviada\" era un paso manual, sin fecha fija. Automatización Cada lunes, el sistema convierte automáticamente las empresas mejor puntuadas en leads y dispara la generación de una propuesta con IA — que pasa por revisión humana antes de salir. Qué aprendimos Automatizar la detección y la propuesta no cierra la venta sola: crea la oportunidad de conversación. Sigue haciendo falta que una persona la convierta en una llamada real. 02 Operaciones"
         },
         {
           "id": "/casos-exito#c3",
@@ -417,38 +417,7 @@
         {
           "id": "/casos-exito#c5",
           "heading": "¿Empezamos a construir tu caso?",
-          "text": "Cuéntanos en qué punto está tu negocio y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver los compromisos"
-        }
-      ]
-    },
-    {
-      "url": "/como-funciona",
-      "title": "Qué es el Sistema Operativo Empresarial — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/como-funciona#c0",
-          "heading": "El sistema que hace que tus Departamentos trabajen juntos.",
-          "text": "No es una herramienta más. Es la capa que conecta a todos tus Departamentos Inteligentes entre sí, para que lo que pasa en uno lo sepan los demás — sin que nadie tenga que avisar a nadie. Un solo lugar para toda tu información Cada Departamento, coordinado Crece sin rediseñarse"
-        },
-        {
-          "id": "/como-funciona#c1",
-          "heading": "Un mismo dato, viajando solo por toda tu empresa.",
-          "text": "Del mismo modo que el sistema operativo de un ordenador coordina sus programas para que trabajen juntos, el Sistema Operativo Empresarial de D-Code Partners coordina los Departamentos Inteligentes de tu empresa: Comercial, Marketing, Clientes, Producción, Finanzas, Soporte, Administración y Dirección. Cada uno resuelve su función, pero ninguno trabaja aislado."
-        },
-        {
-          "id": "/como-funciona#c2",
-          "heading": "Las herramientas sueltas no se hablan entre sí. Un Sistema Operativo, sí.",
-          "text": "Herramientas sueltas Un CRM que nadie actualiza a tiempo. Una hoja de cálculo con los proyectos, aparte. Recordatorios de cobro en la cabeza de alguien. Cada área mirando solo su propio Excel. Un sistema operativo Toda la empresa lee y escribe en el mismo lugar. Ningún Departamento tiene que avisar a otro a mano. Nada se pierde porque alguien se olvidó de copiarlo a otro sitio."
-        },
-        {
-          "id": "/como-funciona#c3",
-          "heading": "Qué obtiene tu empresa.",
-          "text": "Un solo lugar para toda la información Ya no hace falta preguntar en qué archivo está algo. Nadie tiene que avisar a nadie Los Departamentos se conectan solos entre sí. Sigue funcionando aunque el equipo cambie No depende de que una persona concreta se acuerde. Crece sin rediseñarse Añadir un Departamento nuevo no rompe los que ya tienes."
-        },
-        {
-          "id": "/como-funciona#c4",
-          "heading": "Descubre qué Departamento necesita tu empresa primero.",
-          "text": "En una reunión de 30 minutos te decimos qué construiríamos y por dónde empezaríamos. Ver qué Departamento necesito Ver los Departamentos Inteligentes"
+          "text": "Cuéntanos en qué punto está tu negocio y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver las garantías"
         }
       ]
     },
@@ -509,7 +478,7 @@
         {
           "id": "/condiciones-contratacion#c10",
           "heading": "10. Garantías y soporte",
-          "text": "Las condiciones específicas de garantía sobre los desarrollos entregados (corrección de errores tras la entrega, periodo de soporte incluido) se detallan en la página de Garantías y Proceso y, en su caso, en la propuesta comercial de cada proyecto, que prevalecerá sobre las condiciones generales en caso de discrepancia."
+          "text": "Las condiciones específicas de garantía sobre los desarrollos entregados (corrección de errores tras la entrega, periodo de soporte incluido) se detallan en la página de Garantías y proceso y, en su caso, en la propuesta comercial de cada proyecto, que prevalecerá sobre las condiciones generales en caso de discrepancia."
         },
         {
           "id": "/condiciones-contratacion#c11",
@@ -529,13 +498,13 @@
       "chunks": [
         {
           "id": "/conocenos#c0",
-          "heading": "La empresa detrás del Sistema Operativo Empresarial.",
+          "heading": "Quién construye tu sistema, y cómo piensa.",
           "text": "Esto es lo que creemos, cómo trabajamos, y quién está detrás — en ese orden."
         },
         {
           "id": "/conocenos#c1",
           "heading": "La mayoría de las empresas siguen operando en manual, dentro de un mundo que ya es automático.",
-          "text": "Cada herramienta suelta —un CRM aquí, una automatización allá— resuelve una tarea y deja el resto igual: alguien tiene que seguir acordándose de conectar los puntos. Nosotros no construimos herramientas sueltas. Construimos Departamentos Inteligentes: procesos completos que se ejecutan solos y se coordinan entre sí, como partes de un mismo sistema operativo empresarial. Resultados antes que promesas Preferimos que hables tú, con datos en la mano, antes que nosotros con adjetivos. Confidencialidad como norma Tu información y la de tus clientes se tratan con el mismo cuidado que exigiríamos para las nuestras. Simplicidad técnica Si un sistema es demasiado complejo para explicártelo en cinco minutos, probablemente lo estemos complicando de más."
+          "text": "Cada herramienta suelta —un CRM aquí, una automatización allá— resuelve una tarea y deja el resto igual: alguien tiene que seguir acordándose de conectar los puntos. Nosotros no construimos herramientas sueltas. Construimos sistemas completos: procesos que se ejecutan solos y se coordinan entre sí, como partes de una misma empresa. Resultados antes que promesas Preferimos que hables tú, con datos en la mano, antes que nosotros con adjetivos. Confidencialidad como norma Tu información y la de tus clientes se tratan con el mismo cuidado que exigiríamos para las nuestras. Simplicidad técnica Si un sistema es demasiado complejo para explicártelo en cinco minutos, probablemente lo estemos complicando de más."
         },
         {
           "id": "/conocenos#c2",
@@ -550,7 +519,7 @@
         {
           "id": "/conocenos#c4",
           "heading": "Dimitry Sosenko",
-          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente: cómo se construye un sistema que funciona de verdad en producción. Cada Departamento que ves en este sitio pasa primero por nuestra propia empresa. Así lo probamos."
+          "text": "Co-Founder &amp; CEO Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente: cómo se construye un sistema que funciona de verdad en producción. Lo que usamos en nuestra propia empresa, con lo que salió bien y lo que no, está en Casos internos."
         },
         {
           "id": "/conocenos#c5",
@@ -618,82 +587,27 @@
     },
     {
       "url": "/departamentos",
-      "title": "Departamentos Inteligentes — D-Code Partners",
+      "title": "Qué construimos: el sistema de tu empresa — D-Code Partners",
       "chunks": [
         {
           "id": "/departamentos#c0",
-          "heading": "Lo que ya sabemos construir.",
-          "text": "Estas capacidades existen y funcionan. No son un catálogo del que elegir: son el punto de partida. Si tu problema encaja con alguna, la adaptamos; si necesita algo que no existe, lo construimos."
+          "heading": "No es un catálogo. Es el sistema de tu empresa.",
+          "text": "No vendemos herramientas sueltas ni instalamos un programa para después desaparecer. Construimos el sistema con el que trabaja tu empresa: conecta las áreas, automatiza lo que se repite, pone IA donde aporta y se mide."
         },
         {
           "id": "/departamentos#c1",
-          "heading": "Ocho piezas. Un mismo sistema.",
-          "text": "Abre cualquiera para ver qué hace y con qué otras encaja. No son piezas sueltas: son partes de un mismo sistema. No pierdas ventas por falta de seguimiento."
+          "heading": "De seis áreas que no se hablan a una empresa que funciona como una sola.",
+          "text": "Tu empresa El sistema Medido Comercial Excel Correo Seguimientos que se olvidan 9 al mes Marketing Web Anuncios Contactos sin clasificar 3 sitios Clientes WhatsApp Teléfono Las mismas preguntas 6 h/sem Operaciones Hojas Papel Datos copiados a mano 4 veces Finanzas Facturas Banco Cobros que se escapan 38 días Administración Carpetas Correo ¿Cuál es la última versión? 3 copias IA Lee, clasifica y propone. Lee el correo Clasifica Propone Decides tú Un solo dato El sistema de tu empresa Clientes Pedidos Trabajos Facturas Documentos Automatizaciones Presupuesto aceptado → trabajo Trabajo hecho → factura Factura vencida → aviso Panel de dirección Horas a mano↓ Tiempo de respuesta↓ Tareas sin dueño↓ Días hasta cobrar↓ Ajuste del mes: aviso de stock Esquema ilustrativo · sin datos de clientes 01 / 09 Tu empresa Seis áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 01Tu empresaSeis áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 02ProblemasEl trabajo se pierde entre un área y otra: datos copiados a mano, seguimientos olvidados, tres versiones del mismo cliente. 03AnálisisSeguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona hace de puente. 04DiseñoAntes de construir decidimos qué va con qué: qué hace el sistema solo y qué sigue decidiendo una persona. 05ConexiónUn solo dato para todas las áreas. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas. 06AutomatizaciónLo que termina un área dispara la siguiente: presupuesto aceptado, trabajo planificado, factura emitida. Sin teclear dos veces. 07IALa IA lee correos y documentos, clasifica lo que entra y propone la respuesta. Lo que importa lo decide una persona. 08MediciónTodo deja rastro: horas a mano, tiempos de respuesta, tareas sin dueño. Son cifras, no impresiones. 09Mejora continuaCada mes miramos los números y ajustamos. Cuando tu empresa cambia, el sistema cambia con ella. Lo que no hacemos Vender herramientas sueltas que luego nadie conecta. Instalar un programa y desaparecer. Entregar un informe y dejarte solo con él. Lo que hacemos Construimos el sistema a la medida de cómo trabajáis. Conectamos las áreas, automatizamos y ponemos IA donde aporta. Lo medimos y lo mejoramos contigo, mes a mes."
         },
         {
           "id": "/departamentos#c2",
-          "heading": "Comercial",
-          "text": "COM Qué haceProspecta y prioriza empresas automáticamente, centraliza tu pipeline con IA y redacta propuestas verificadas en minutos. Detectada En seguimiento Propuesta enviada Ganada Pasa el cursor por cada etapa para ver qué hace la IA. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Deja de captar clientes al azar."
+          "heading": "El mismo sistema, visto desde donde trabajas.",
+          "text": "Cada área es una puerta de entrada, no un producto aparte. Se empieza por la que más pesa y lo que se construye ahí se conecta con lo demás. ComercialQue ninguna venta se pierda por falta de seguimientoVer el área MarketingContactos que llegan ya clasificados, no en brutoVer el área ClientesClientes atendidos aunque falte quien siempre los atiendeVer el área OperacionesTrabajos que arrancan solos y avisan antes de retrasarseVer el área FinanzasFacturar y cobrar sin perseguir a nadieVer el área SoporteRespuesta rápida, también fuera de horarioVer el área AdministraciónLos papeles en su sitio, sin tener que buscarlosVer el área DirecciónUna decisión clara cada mañana, con datos realesVer el área"
         },
         {
           "id": "/departamentos#c3",
-          "heading": "Marketing",
-          "text": "MKT Qué haceCapta y cualifica cada lead de tu web en tiempo real, y audita tu presencia SEO con recomendaciones accionables. Visitas a la web Leads capturados Leads clasificados Pasa el cursor por cada etapa para ver qué hace la IA. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Comercial. Que ningún cliente se sienta abandonado tras la venta."
-        },
-        {
-          "id": "/departamentos#c4",
-          "heading": "Clientes",
-          "text": "CLI DISPONIBLE Qué haceDetecta cuándo se cierra una venta, da de alta al cliente y gestiona bienvenida, onboarding, renovaciones y satisfacción. 45% Bienvenida enviada Onboarding en curso Renovación en 12 días Pasa el cursor por cada paso para ver qué hace la IA. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Soporte o Producción. Que ningún proyecto se quede sin dueño ni sin plazo."
-        },
-        {
-          "id": "/departamentos#c5",
-          "heading": "Producción",
-          "text": "PRD Qué haceCrea el proyecto en cuanto se gana un cliente, reparte tareas según la carga real del equipo y vigila plazos de entrega. Por hacer En curso Entregado Pasa el cursor por cada columna para ver qué hace la IA. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Finanzas. Controla tu dinero sin perseguir facturas."
-        },
-        {
-          "id": "/departamentos#c6",
-          "heading": "Finanzas",
-          "text": "FIN EN VALIDACIÓN Qué haceYa genera facturas desde presupuestos aceptados, escala recordatorios de cobro y calcula el dashboard financiero cada día — construido y funcionando internamente; validando con la primera factura real antes de entrar al catálogo comercial. Cobros Gastos Próximo vencimiento: 5 días Pasa el cursor por cada fila para ver qué vigila el sistema. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Dirección. Que ningún ticket se pierda ni se demore."
-        },
-        {
-          "id": "/departamentos#c7",
-          "heading": "Soporte",
-          "text": "SPT CHAT EN REVISIÓN Qué haceConvierte cada email de soporte en un ticket priorizado con SLA, con respuesta incluso fuera de horario. #204 Prioridad alta Nuevo #205 Prioridad media En curso #203 Resuelto 4 min Pasa el cursor por cada ticket para ver qué hace la IA. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Clientes. Que un descuido no cueste una crisis."
-        },
-        {
-          "id": "/departamentos#c8",
-          "heading": "Administración",
-          "text": "ADM Qué haceVigila que el resto de Departamentos sigan funcionando, protege tus documentos y hace copias de seguridad semanales. Pasa el cursor por cada línea para ver qué vigila el sistema. Representación del sistema — no son datos de un cliente real. Ver Departamento Combina bien con: Cualquiera — es transversal. Decide con datos, no a ciegas."
-        },
-        {
-          "id": "/departamentos#c9",
-          "heading": "Dirección",
-          "text": "DIR Qué haceCentraliza tus indicadores, genera informes periódicos y propone una decisión ejecutiva cada día. Ingresos del mes ↑ Alertas activas ↓ Decisión sugerida: Hoy Pasa el cursor por cada indicador para ver qué hace el sistema. Representación del sistema — no son datos de un cliente real. Ver Departamento Punto de llegada: da más valor cuantos más Departamentos ya estén activos."
-        },
-        {
-          "id": "/departamentos#c10",
-          "heading": "Se empieza por Marketing o Comercial",
-          "text": "Captar más, o vender más sin perseguir a nadie. 02"
-        },
-        {
-          "id": "/departamentos#c11",
-          "heading": "Se añade Clientes — y Producción si hay proyectos",
-          "text": "En cuanto hay ventas que gestionar, entra en juego el ciclo de vida del cliente. 03"
-        },
-        {
-          "id": "/departamentos#c12",
-          "heading": "Finanzas y Soporte completan el ciclo",
-          "text": "Cobrar más rápido y atender sin saturarse, con clientes y proyectos ya en marcha. 04"
-        },
-        {
-          "id": "/departamentos#c13",
-          "heading": "Dirección se convierte en el paso natural",
-          "text": "Con 2 o 3 Departamentos ya activos, todo lo que producen los demás queda en un solo sitio. Administración puede sumarse en cualquier momento del camino."
-        },
-        {
-          "id": "/departamentos#c14",
           "heading": "¿Por dónde empezamos?",
-          "text": "Cuéntanos qué problema quieres resolver primero y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Hablemos de tu operación Ver cómo funciona el Sistema Operativo"
+          "text": "Haz el diagnóstico en treinta segundos o cuéntanos qué te pesa más. En una llamada de 30 minutos te decimos qué construiríamos primero. Hacer el diagnóstico Hablemos de tu operación"
         }
       ]
     },
@@ -703,8 +617,8 @@
       "chunks": [
         {
           "id": "/departamentos/administracion#c0",
-          "heading": "El Departamento que mantiene tu empresa protegida y ordenada, sin esfuerzo.",
-          "text": "Administración vigila que el resto del sistema siga funcionando, protege la estructura de los documentos y hace copias de seguridad periódicas de los datos críticos. Hoy es la infraestructura que usamos para vigilarnos a nosotros mismos; extenderla a los sistemas de un cliente es una configuración concreta, no algo que ya esté desplegado fuera de D-Code. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. Fallos detectados en horas Documentación siempre ordenada Copia de seguridad siempre reciente"
+          "heading": "Tu empresa vigilada, protegida y en orden.",
+          "text": "Administración vigila que el resto del sistema siga funcionando, protege la estructura de los documentos y hace copias de seguridad periódicas de los datos críticos. Hoy es la infraestructura que usamos para vigilarnos a nosotros mismos; extenderla a los sistemas de un cliente es una configuración concreta, no algo que ya esté desplegado fuera de D-Code. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Mira cuatro sistemas funcionando, con datos inventados Fallos detectados en horas Documentación siempre ordenada Copia de seguridad siempre reciente"
         },
         {
           "id": "/departamentos/administracion#c1",
@@ -734,12 +648,12 @@
         {
           "id": "/departamentos/administracion#c6",
           "heading": "Qué obtiene tu empresa.",
-          "text": "Los fallos internos se detectan en horas No en semanas — el propio sistema avisa en cuanto algo deja de funcionar. La documentación nunca se pierde ni se desordena Se mantiene organizada de forma constante, sin depender de nadie. Siempre hay una copia de seguridad reciente Un punto de recuperación de datos disponible en todo momento. El propio sistema se vigila a sí mismo Comprueba que el resto de Departamentos sigan funcionando con normalidad. Solo necesitas tu estructura de carpetas definida — nada más. En la primera reunión te decimos qué construiríamos y con qué alcance."
+          "text": "Los fallos internos se detectan en horas No en semanas — el propio sistema avisa en cuanto algo deja de funcionar. La documentación deja de perderse y de desordenarse Se mantiene organizada de forma constante, sin depender de nadie. Siempre hay una copia de seguridad reciente Un punto de recuperación de datos disponible en todo momento. El propio sistema se vigila a sí mismo Comprueba que el resto de áreas siga funcionando con normalidad. Solo necesitas tu estructura de carpetas definida — nada más. En la primera reunión te decimos qué construiríamos y con qué alcance."
         },
         {
           "id": "/departamentos/administracion#c7",
           "heading": "¿Empezamos por Administración?",
-          "text": "Cuéntanos cómo proteges hoy tus documentos y tus datos y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo proteges hoy tus documentos y tus datos y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -749,8 +663,8 @@
       "chunks": [
         {
           "id": "/departamentos/clientes#c0",
-          "heading": "El Departamento que hace que cada cliente se sienta cuidado, sin que dependa de nadie en concreto.",
-          "text": "Clientes da de alta, da la bienvenida y acompaña a cada cliente durante toda su vida contigo — con la misma calidad, sin importar quién del equipo esté ese día ni si alguien se acuerda de hacerlo. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. CAPACIDAD DISPONIBLE Bienvenida siempre igual Cero renovaciones olvidadas"
+          "heading": "Que cada cliente se sienta cuidado, sin depender de nadie en concreto.",
+          "text": "Clientes da de alta, da la bienvenida y acompaña a cada cliente durante toda su vida contigo — con la misma calidad, sin importar quién del equipo esté ese día ni si alguien se acuerda de hacerlo. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Pruébalo funcionando: Atención al cliente, con datos inventados Bienvenida siempre igual Renovaciones avisadas con tiempo"
         },
         {
           "id": "/departamentos/clientes#c1",
@@ -780,12 +694,12 @@
         {
           "id": "/departamentos/clientes#c6",
           "heading": "Qué obtiene tu empresa.",
-          "text": "Bienvenida siempre igual Todo cliente nuevo vive la misma experiencia, sin depender de quién del equipo esté ese día. Cero renovaciones olvidadas Las fechas de renovación se vigilan con antelación, no se descubren tarde. Satisfacción medida a tiempo Se mide de forma continua, no solo cuando ya es tarde para actuar. El cliente se siente acompañado Alguien está pendiente de él durante toda su vida contigo, sin que dependa de una sola persona. Solo necesitas un criterio claro de cuándo un cliente pasa a estar activo — hoy, en cuanto se acepta una propuesta — y sus datos de contacto. En la primera reunión te decimos qué construiríamos y con qué alcance."
+          "text": "Bienvenida siempre igual Todo cliente nuevo vive la misma experiencia, sin depender de quién del equipo esté ese día. Renovaciones avisadas con tiempo Las fechas de renovación se vigilan con antelación, no se descubren tarde. Satisfacción medida a tiempo Se mide de forma continua, no solo cuando ya es tarde para actuar. El cliente se siente acompañado Alguien está pendiente de él durante toda su vida contigo, sin que dependa de una sola persona. Solo necesitas un criterio claro de cuándo un cliente pasa a estar activo — hoy, en cuanto se acepta una propuesta — y sus datos de contacto. En la primera reunión te decimos qué construiríamos y con qué alcance."
         },
         {
           "id": "/departamentos/clientes#c7",
           "heading": "¿Empezamos por Clientes?",
-          "text": "Cuéntanos cómo acompañas hoy a tus clientes y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo acompañas hoy a tus clientes y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -795,8 +709,8 @@
       "chunks": [
         {
           "id": "/departamentos/comercial#c0",
-          "heading": "El Departamento que hace que ninguna venta se pierda por falta de seguimiento.",
-          "text": "Comercial centraliza cada oportunidad, genera propuestas en minutos y avisa cada mañana de lo que toca — para que el pipeline deje de vivir en la cabeza de una sola persona. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. Pipeline siempre centralizado Propuestas en minutos Nada se olvida"
+          "heading": "Que ninguna venta se pierda por falta de seguimiento.",
+          "text": "Comercial centraliza cada oportunidad, genera propuestas en minutos y avisa cada mañana de lo que toca — para que el pipeline deje de vivir en la cabeza de una sola persona. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Pruébalo funcionando: Comercial, con datos inventados Pipeline siempre centralizado Propuestas en minutos Nada se olvida"
         },
         {
           "id": "/departamentos/comercial#c1",
@@ -821,7 +735,7 @@
         {
           "id": "/departamentos/comercial#c5",
           "heading": "Cierra, y el dato sigue su camino solo",
-          "text": "En cuanto una propuesta se acepta, esa información no se vuelve a teclear: pone en marcha automáticamente a Clientes y Producción."
+          "text": "En cuanto una propuesta se acepta, esa información no se vuelve a teclear: pone en marcha automáticamente a Clientes y Operaciones."
         },
         {
           "id": "/departamentos/comercial#c6",
@@ -831,7 +745,7 @@
         {
           "id": "/departamentos/comercial#c7",
           "heading": "¿Empezamos por Comercial?",
-          "text": "Cuéntanos cómo gestionas hoy tus oportunidades y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo gestionas hoy tus oportunidades y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -841,8 +755,8 @@
       "chunks": [
         {
           "id": "/departamentos/direccion#c0",
-          "heading": "El Departamento que te da una decisión clara cada mañana, con datos reales.",
-          "text": "Dirección centraliza indicadores, genera informes periódicos y —en su forma completa— cruza señales externas del mercado con la salud interna del sistema, para proponer una única prioridad clara cada día. Hoy lo usamos para dirigir D-Code Partners; adaptarlo a los indicadores de un cliente es una configuración concreta, no algo ya desplegado fuera de D-Code. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. Panel siempre actualizado Informes automáticos Una prioridad clara al día"
+          "heading": "Una decisión clara cada mañana, con datos reales.",
+          "text": "Dirección centraliza indicadores, genera informes periódicos y —en su forma completa— cruza señales externas del mercado con la salud interna del sistema, para proponer una única prioridad clara cada día. Hoy lo usamos para dirigir D-Code Partners; adaptarlo a los indicadores de un cliente es una configuración concreta, no algo ya desplegado fuera de D-Code. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Mira cuatro sistemas funcionando, con datos inventados Panel siempre actualizado Informes automáticos Una prioridad clara al día"
         },
         {
           "id": "/departamentos/direccion#c1",
@@ -852,12 +766,12 @@
         {
           "id": "/departamentos/direccion#c2",
           "heading": "El estado de toda la operación, resumido en un vistazo — no seis paneles distintos que revisar.",
-          "text": "Representación simplificada del sistema — no son datos de un cliente real. Comercial Marketing Producción Finanzas Soporte Estado general — ejemplo 4 Departamentos dentro de rango. Soporte con un ticket de prioridad alta pendiente — requiere revisión hoy. Así resume Dirección las señales del resto de Departamentos. Ejemplo ilustrativo, no son datos reales."
+          "text": "Representación simplificada del sistema — no son datos de un cliente real. Comercial Marketing Operaciones Finanzas Soporte Estado general — ejemplo 4 áreas dentro de rango. Soporte con un ticket de prioridad alta pendiente — requiere revisión hoy. Así resume Dirección las señales del resto de áreas. Ejemplo ilustrativo, no son datos reales."
         },
         {
           "id": "/departamentos/direccion#c3",
           "heading": "Cada Departamento activo aporta sus propios datos",
-          "text": "Marketing, Comercial, Clientes, Producción, Finanzas... cada Departamento que tengas activo alimenta el mismo panel."
+          "text": "Marketing, Comercial, Clientes, Operaciones, Finanzas... cada Departamento que tengas activo alimenta el mismo panel."
         },
         {
           "id": "/departamentos/direccion#c4",
@@ -877,7 +791,7 @@
         {
           "id": "/departamentos/direccion#c7",
           "heading": "¿Empezamos por Dirección?",
-          "text": "Cuéntanos cómo tomas hoy tus decisiones y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo tomas hoy tus decisiones y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -887,8 +801,8 @@
       "chunks": [
         {
           "id": "/departamentos/finanzas#c0",
-          "heading": "El Departamento diseñado para que cobres antes y controles el gasto cada día, no al cierre de mes.",
-          "text": "Finanzas genera facturas desde presupuestos aceptados, escala los recordatorios de cobro hasta que se pagan, y vigila el gasto interno día a día — impulsado por D-Code Finance, el sistema financiero que D-Code Partners ya usa para gestionar sus propias cuentas. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. D-CODE FINANCE EN VALIDACIÓN Demo interactiva disponible"
+          "heading": "Cobrar antes y ver el gasto cada día, no al cierre de mes.",
+          "text": "Finanzas genera facturas desde presupuestos aceptados, escala los recordatorios de cobro hasta que se pagan, y vigila el gasto interno día a día — impulsado por D-Code Finance, el sistema financiero que D-Code Partners ya usa para gestionar sus propias cuentas. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Pruébalo funcionando: D-Code Finance, con datos inventados D-CODE FINANCE EN VALIDACIÓN Demo interactiva disponible"
         },
         {
           "id": "/departamentos/finanzas#c1",
@@ -903,7 +817,7 @@
         {
           "id": "/departamentos/finanzas#c3",
           "heading": "El proyecto o el cliente ya existe",
-          "text": "Producción y Clientes ponen en marcha el proyecto y dan de alta al cliente."
+          "text": "Operaciones y Clientes ponen en marcha el proyecto y dan de alta al cliente."
         },
         {
           "id": "/departamentos/finanzas#c4",
@@ -923,7 +837,7 @@
         {
           "id": "/departamentos/finanzas#c7",
           "heading": "¿Hablamos de tu circuito de cobro?",
-          "text": "Cuéntanos cómo facturas y cobras hoy y te decimos, en una reunión de 30 minutos, qué parte del circuito automatizaríamos primero. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo facturas y cobras hoy y te decimos, en una reunión de 30 minutos, qué parte del circuito automatizaríamos primero. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -933,8 +847,8 @@
       "chunks": [
         {
           "id": "/departamentos/marketing#c0",
-          "heading": "El Departamento que hace que tu web nunca deje de generar oportunidades.",
-          "text": "Marketing capta y cualifica cada contacto que llega a tu empresa, y audita tu presencia online con datos reales — para que tu equipo comercial siempre sepa a quién atender primero. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. Leads ya clasificados Auditoría SEO con datos reales Se complementa con Comercial"
+          "heading": "Que tu web no deje de traer oportunidades.",
+          "text": "Marketing capta y cualifica cada contacto que llega a tu empresa, y audita tu presencia online con datos reales — para que tu equipo comercial siempre sepa a quién atender primero. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Pruébalo funcionando: Comercial, con datos inventados Leads ya clasificados Auditoría SEO con datos reales Se complementa con Comercial"
         },
         {
           "id": "/departamentos/marketing#c1",
@@ -969,18 +883,18 @@
         {
           "id": "/departamentos/marketing#c7",
           "heading": "¿Empezamos por Marketing?",
-          "text": "Cuéntanos cómo captas clientes hoy y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo captas clientes hoy y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
     {
       "url": "/departamentos/produccion",
-      "title": "Producción — D-Code Partners",
+      "title": "Operaciones — D-Code Partners",
       "chunks": [
         {
           "id": "/departamentos/produccion#c0",
-          "heading": "El Departamento que hace que tus proyectos se pongan en marcha solos y cumplan sus plazos.",
-          "text": "Producción crea el proyecto en cuanto se gana un cliente, reparte las tareas según la carga real del equipo, y detecta los retrasos antes de que el cliente los note. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. Proyectos que se crean solos Reparto de carga equilibrado Retrasos detectados a tiempo"
+          "heading": "Que cada trabajo arranque solo y cumpla su plazo.",
+          "text": "Operaciones crea el proyecto en cuanto se gana un cliente, reparte las tareas según la carga real del equipo, y detecta los retrasos antes de que el cliente los note. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Pruébalo funcionando: Operaciones, con datos inventados Proyectos que se crean solos Reparto de carga equilibrado Retrasos detectados a tiempo"
         },
         {
           "id": "/departamentos/produccion#c1",
@@ -990,7 +904,7 @@
         {
           "id": "/departamentos/produccion#c2",
           "heading": "El caos se convierte en sistema. No en otra lista que revisar.",
-          "text": "Representación simplificada del sistema — no son datos de un cliente real. Sin Producción Con Producción Migración de datos Revisión de diseño Configuración inicial Preparar acceso al repositorio Pruebas de entorno Documentación técnica Por hacer Pruebas de entorno Documentación técnica En marcha Revisión de diseño Preparar acceso al repositorio Entregado Configuración inicial Migración de datos En cuanto se gana un cliente, el sistema ordena las tareas según la carga real del equipo — sin que nadie tenga que organizarlo a mano. En pantallas pequeñas se muestra directamente el tablero ya ordenado."
+          "text": "Representación simplificada del sistema — no son datos de un cliente real. Sin Operaciones Con Operaciones Migración de datos Revisión de diseño Configuración inicial Preparar acceso al repositorio Pruebas de entorno Documentación técnica Por hacer Pruebas de entorno Documentación técnica En marcha Revisión de diseño Preparar acceso al repositorio Entregado Configuración inicial Migración de datos En cuanto se gana un cliente, el sistema ordena las tareas según la carga real del equipo — sin que nadie tenga que organizarlo a mano. En pantallas pequeñas se muestra directamente el tablero ya ordenado."
         },
         {
           "id": "/departamentos/produccion#c3",
@@ -999,7 +913,7 @@
         },
         {
           "id": "/departamentos/produccion#c4",
-          "heading": "Producción reparte y vigila",
+          "heading": "Operaciones reparte y vigila",
           "text": "Las tareas se asignan según la carga real del equipo, y el avance se vigila día a día."
         },
         {
@@ -1014,8 +928,8 @@
         },
         {
           "id": "/departamentos/produccion#c7",
-          "heading": "¿Empezamos por Producción?",
-          "text": "Cuéntanos cómo gestionas hoy tus proyectos y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "heading": "¿Empezamos por Operaciones?",
+          "text": "Cuéntanos cómo gestionas hoy tus proyectos y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -1025,8 +939,8 @@
       "chunks": [
         {
           "id": "/departamentos/soporte#c0",
-          "heading": "El Departamento que responde rápido, incluso fuera de horario.",
-          "text": "Soporte convierte cada email de soporte en un ticket priorizado con SLA calculado automáticamente, y complementa con un chat disponible 24 horas — hoy en revisión de seguridad antes de ampliar su acceso a datos de cliente. Una de las capacidades que integramos cuando el problema de tu empresa lo requiere — adaptada a tus procesos, no un paquete cerrado. TICKETS IA — OPERATIVO CHAT IA — REVISIÓN DE SEGURIDAD PENDIENTE"
+          "heading": "Respuesta rápida, también fuera de horario.",
+          "text": "Soporte convierte cada email de soporte en un ticket priorizado con SLA calculado automáticamente, y complementa con un chat disponible 24 horas — hoy en revisión de seguridad antes de ampliar su acceso a datos de cliente. Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado. Pruébalo funcionando: Atención al cliente, con datos inventados TICKETS IA — OPERATIVO CHAT IA — REVISIÓN DE SEGURIDAD PENDIENTE"
         },
         {
           "id": "/departamentos/soporte#c1",
@@ -1061,7 +975,7 @@
         {
           "id": "/departamentos/soporte#c7",
           "heading": "¿Empezamos por Soporte?",
-          "text": "Cuéntanos cómo atiendes hoy a tus clientes y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todos los Departamentos"
+          "text": "Cuéntanos cómo atiendes hoy a tus clientes y te decimos, en una reunión de 30 minutos, qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver todas las áreas"
         }
       ]
     },
@@ -1219,7 +1133,7 @@
         {
           "id": "/en/blog/automatizacion-vs-agentes-ia#c4",
           "heading": "Why it's almost never \"one or the other\"",
-          "text": "In practice, the most effective projects combine both pieces. An AI agent handling a prospective customer is far more useful if it also logs that conversation automatically in your CRM — which is exactly where automation (and integrations between tools) comes in. That's why the starting point shouldn't be \"I want a chatbot\" or \"I want to automate X,\" but a diagnosis of which process, overall, has the most impact for your specific business. Want to know which of this applies to your business? Book My Free Call"
+          "text": "In practice, the most effective projects combine both pieces. An AI agent handling a prospective customer is far more useful if it also logs that conversation automatically in your CRM — which is exactly where automation (and integrations between tools) comes in. That's why the starting point shouldn't be \"I want a chatbot\" or \"I want to automate X,\" but a diagnosis of which process, overall, has the most impact for your specific business. Want to know which of this applies to your business? Book a call"
         },
         {
           "id": "/en/blog/automatizacion-vs-agentes-ia#c5",
@@ -1270,7 +1184,7 @@
         {
           "id": "/en/blog/#c5",
           "heading": "Tell us about your case on a 30-minute call.",
-          "text": "Book My Free Call"
+          "text": "Book a call"
         }
       ]
     },
@@ -1311,7 +1225,7 @@
         {
           "id": "/en/blog/procesos-que-puedes-automatizar-ya#c6",
           "heading": "How to take the next step",
-          "text": "If you recognized your business in two or more of these points, you don't have to decide alone where to start. An outside diagnosis usually turns up additional processes that, seen from the inside, no longer even register as \"a problem\" — they're just \"how it's always been done.\" Want to know which of this applies to your business? Book My Free Call"
+          "text": "If you recognized your business in two or more of these points, you don't have to decide alone where to start. An outside diagnosis usually turns up additional processes that, seen from the inside, no longer even register as \"a problem\" — they're just \"how it's always been done.\" Want to know which of this applies to your business? Book a call"
         },
         {
           "id": "/en/blog/procesos-que-puedes-automatizar-ya#c7",
@@ -1357,7 +1271,7 @@
         {
           "id": "/en/blog/que-es-la-automatizacion-con-ia#c4",
           "heading": "How to know if your company needs it",
-          "text": "One simple question helps a lot: is there a task your team repeats every day or every week, with relatively clear rules, that eats up time without adding value in itself? If the answer is yes, there's probably room to automate. What doesn't make sense is automating for the sake of automating. That's why any serious project starts with a diagnosis, not with installing tools. Want to know which of this applies to your business? Book My Free Call"
+          "text": "One simple question helps a lot: is there a task your team repeats every day or every week, with relatively clear rules, that eats up time without adding value in itself? If the answer is yes, there's probably room to automate. What doesn't make sense is automating for the sake of automating. That's why any serious project starts with a diagnosis, not with installing tools. Want to know which of this applies to your business? Book a call"
         },
         {
           "id": "/en/blog/que-es-la-automatizacion-con-ia#c5",
@@ -1443,7 +1357,7 @@
         {
           "id": "/en/cambios-en-proceso#c12",
           "heading": "What fits your company?",
-          "text": "Thirty minutes, and you will know where we would start. Book my call All five run in our own operation, not in a client's: they are systems we know how to build because we use them daily. In your company they would be built with your tools and your rules."
+          "text": "Thirty minutes, and you will know where we would start. Book a call All five run in our own operation, not in a client's: they are systems we know how to build because we use them daily. In your company they would be built with your tools and your rules."
         }
       ]
     },
@@ -1464,7 +1378,7 @@
         {
           "id": "/en/casos-exito#c2",
           "heading": "From detected company to proposal sent, without anyone having to remember to do it",
-          "text": "Problem Spotting sales opportunities by sector and turning them into proposals depended on someone manually reviewing a list every week — with the risk that it simply wouldn't get done. Before The opportunity radar existed, but moving from \"interesting company\" to \"proposal sent\" was a manual step with no fixed deadline. Automation Every Monday, the system automatically converts the highest-scoring companies into leads and triggers an AI-generated proposal — which goes through human review before it goes out. What We Learned Automating detection and the proposal doesn't close the sale by itself — it creates the opportunity for a conversation. It still takes a person to turn that into an actual call. 02 Delivery"
+          "text": "Problem Spotting sales opportunities by sector and turning them into proposals depended on someone manually reviewing a list every week — with the risk that it simply wouldn't get done. Before The opportunity radar existed, but moving from \"interesting company\" to \"proposal sent\" was a manual step with no fixed deadline. Automation Every Monday, the system automatically converts the highest-scoring companies into leads and triggers an AI-generated proposal — which goes through human review before it goes out. What We Learned Automating detection and the proposal doesn't close the sale by itself — it creates the opportunity for a conversation. It still takes a person to turn that into an actual call. 02 Operations"
         },
         {
           "id": "/en/casos-exito#c3",
@@ -1479,38 +1393,7 @@
         {
           "id": "/en/casos-exito#c5",
           "heading": "Shall we start building your case?",
-          "text": "Tell us where your business stands and, in a 30-minute meeting, we will tell you what we would build and where we would start. Book a call See our commitments"
-        }
-      ]
-    },
-    {
-      "url": "/en/como-funciona",
-      "title": "What Is the Business Operating System — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/en/como-funciona#c0",
-          "heading": "The system that makes your Departments work together.",
-          "text": "It's not just another tool. It's the layer that connects all your Smart Departments to each other, so what happens in one is instantly known by the rest — without anyone having to pass the word along. One single place for all your information Every Department, coordinated Grows without being redesigned"
-        },
-        {
-          "id": "/en/como-funciona#c1",
-          "heading": "One piece of data, traveling through your entire company on its own.",
-          "text": "Just as a computer's operating system coordinates its programs so they work together, D-Code Partners' Business Operating System coordinates your company's Smart Departments: Sales, Marketing, Customer, Delivery, Finance, Support, Operations, and Leadership. Each one handles its own function, but none of them works in isolation."
-        },
-        {
-          "id": "/en/como-funciona#c2",
-          "heading": "Standalone tools don't talk to each other. An Operating System does.",
-          "text": "Separate tools A CRM nobody updates on time. A separate spreadsheet for tracking projects. Payment reminders that only live in someone's head. Every team looking at nothing but its own spreadsheet. One operating system The whole company reads and writes to the same place. No Department has to notify another one by hand. Nothing gets lost because someone forgot to copy it somewhere else."
-        },
-        {
-          "id": "/en/como-funciona#c3",
-          "heading": "What your company gets.",
-          "text": "One single place for all your information No more asking which file something's in. Nobody has to tell anybody The Departments connect with each other on their own. Keeps running even when the team changes It doesn't depend on one specific person remembering. Grows without being redesigned Adding a new Department doesn't break the ones you already have."
-        },
-        {
-          "id": "/en/como-funciona#c4",
-          "heading": "Find out which Department your company needs first.",
-          "text": "In a 30-minute meeting we will tell you what we would build and where we would start. See Which Department I Need View the Smart Departments"
+          "text": "Tell us where your business stands and, in a 30-minute meeting, we will tell you what we would build and where we would start. Book a call See our guarantees"
         }
       ]
     },
@@ -1571,7 +1454,7 @@
         {
           "id": "/en/condiciones-contratacion#c10",
           "heading": "10. Guarantees and support",
-          "text": "The specific warranty terms applicable to delivered developments (bug fixes after delivery, included support period) are detailed on the Guarantees & Process page and, where applicable, in the commercial proposal for each project, which will prevail over the general terms in the event of any discrepancy."
+          "text": "The specific warranty terms applicable to delivered developments (bug fixes after delivery, included support period) are detailed on the Guarantees and process page and, where applicable, in the commercial proposal for each project, which will prevail over the general terms in the event of any discrepancy."
         },
         {
           "id": "/en/condiciones-contratacion#c11",
@@ -1591,13 +1474,13 @@
       "chunks": [
         {
           "id": "/en/conocenos#c0",
-          "heading": "The company behind the Business Operating System.",
+          "heading": "Who builds your system, and how they think.",
           "text": "Here's what we believe, how we work, and who's behind it — in that order."
         },
         {
           "id": "/en/conocenos#c1",
           "heading": "Most companies are still operating manually, in a world that has already gone automatic.",
-          "text": "Every standalone tool — a CRM here, an automation there — solves one task and leaves the rest unchanged: someone still has to remember to connect the dots. We don't build standalone tools. We build Smart Departments: complete processes that run themselves and coordinate with each other, as parts of one business operating system. Results before promises We'd rather let you speak, backed by data, than speak for ourselves in adjectives. Confidentiality as standard Your information and your clients' data are handled with the same care we'd demand for our own. Technical simplicity If a system is too complex to explain in five minutes, we're probably overcomplicating it."
+          "text": "Every standalone tool — a CRM here, an automation there — solves one task and leaves the rest unchanged: someone still has to remember to connect the dots. We don't build standalone tools. We build complete systems: processes that run themselves and coordinate with each other, as parts of one company. Results before promises We'd rather let you speak, backed by data, than speak for ourselves in adjectives. Confidentiality as standard Your information and your clients' data are handled with the same care we'd demand for our own. Technical simplicity If a system is too complex to explain in five minutes, we're probably overcomplicating it."
         },
         {
           "id": "/en/conocenos#c2",
@@ -1612,12 +1495,12 @@
         {
           "id": "/en/conocenos#c4",
           "heading": "Dimitry Sosenko",
-          "text": "Co-Founder &amp; CEO Leads the architecture behind our automation systems. Specialized in AI applied to operational processes and customer care: how to build a system that actually works in production. Every Department you see on this site runs inside our own company first. Here's how we test it."
+          "text": "Co-Founder &amp; CEO Leads the architecture behind our automation systems. Specialized in AI applied to operational processes and customer care: how to build a system that actually works in production. What we use in our own company, with what went well and what didn’t, is in Internal cases."
         },
         {
           "id": "/en/conocenos#c5",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know whether we can help you and what we would build and where we would start. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to know whether we can help you and what we would build and where we would start. Book a call See FAQ"
         }
       ]
     },
@@ -1627,7 +1510,7 @@
       "chunks": [
         {
           "id": "/en/contacto#c0",
-          "heading": "Let us start with the diagnosis.",
+          "heading": "Let’s start with a diagnosis.",
           "text": "Tell us where your business stands today. In a 30-minute meeting we will tell you what we would build, with what scope, and where we would start. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check Once you submit it, we will email you within 24h to schedule the 30-minute call."
         },
         {
@@ -1680,93 +1563,38 @@
     },
     {
       "url": "/en/departamentos",
-      "title": "Smart Departments — D-Code Partners",
+      "title": "What we build: your company’s system — D-Code Partners",
       "chunks": [
         {
           "id": "/en/departamentos#c0",
-          "heading": "What we already know how to build.",
-          "text": "These capabilities exist and they work. They are not a catalogue to choose from: they are the starting point. If your problem matches one, we adapt it; if it needs something that doesn’t exist, we build it."
+          "heading": "Not a catalogue. Your company’s system.",
+          "text": "We don’t sell standalone tools, and we don’t install some software and disappear. We build the system your company runs on: it connects every area, automates what repeats, adds AI where it helps and gets measured."
         },
         {
           "id": "/en/departamentos#c1",
-          "heading": "Eight pieces. One system.",
-          "text": "Pick a Department to see what it does and which others it pairs with — these aren't standalone pieces, they're processes in one operating system. Never lose a sale to poor follow-up."
+          "heading": "From six areas that don’t talk to a company that works as one.",
+          "text": "Your company The system Measured Sales Excel Email Follow-ups that slip 9 a month Marketing Web Ads Unsorted contacts 3 places Customer WhatsApp Phone The same questions 6 h/week Operations Sheets Paper Data retyped by hand 4 times Finance Invoices Bank Payments that slip 38 days Administration Folders Email Which one is the latest? 3 copies AI Reads, sorts and suggests. Reads the email Sorts Suggests You decide One source of truth Your company’s system Customers Orders Jobs Invoices Documents Automations Quote accepted → job Job done → invoice Invoice overdue → reminder Management dashboard Hours by hand↓ Response time↓ Tasks with no owner↓ Days to get paid↓ This month’s tweak: stock alert Illustrative diagram · no client data 01 / 09 Your company Six areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 01Your companySix areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 02ProblemsWork gets lost between one area and the next: data retyped by hand, forgotten follow-ups, three versions of the same customer. 03AnalysisWe follow a customer, an order and an invoice from start to finish, and measure how often a person has to bridge the gap. 04DesignBefore building anything we decide what goes with what: what the system does on its own and what a person still decides. 05ConnectionOne source of truth for every area. The customer who comes in through sales is the same one support helps and finance invoices. 06AutomationWhat one area finishes triggers the next: quote accepted, job scheduled, invoice issued. Nothing typed twice. 07AIAI reads emails and documents, sorts what comes in and drafts the reply. What matters is decided by a person. 08MeasurementEverything leaves a trail: hours by hand, response times, tasks with no owner. Figures, not impressions. 09Continuous improvementEvery month we look at the numbers and adjust. When your company changes, the system changes with it. What we don’t do Sell standalone tools that nobody ever connects. Install some software and disappear. Hand over a report and leave you alone with it. What we do We build the system around how you actually work. We connect the areas, automate, and add AI where it helps. We measure it and improve it with you, month after month."
         },
         {
           "id": "/en/departamentos#c2",
-          "heading": "Sales",
-          "text": "SLS What it doesAutomatically prospects and prioritizes companies, centralizes your pipeline with AI, and drafts verified proposals in minutes. Detected Following up Proposal sent Won Hover each stage to see what the AI does. A representation of the system — not a real client's data. See Department Pairs well with: Customer. Stop chasing leads at random."
+          "heading": "The same system, seen from where you work.",
+          "text": "Each area is a way in, not a separate product. You start with the one that weighs most, and whatever gets built there connects to the rest. SalesNo deal lost because nobody followed upSee the area MarketingContacts that arrive sorted, not rawSee the area CustomerCustomers looked after even when their usual contact is awaySee the area OperationsJobs that start themselves and flag a delay before it happensSee the area FinanceInvoice and get paid without chasing anyoneSee the area SupportFast replies, even out of hoursSee the area AdministrationPaperwork in its place, without having to look for itSee the area LeadershipOne clear decision every morning, on real numbersSee the area"
         },
         {
           "id": "/en/departamentos#c3",
-          "heading": "Marketing",
-          "text": "MKT What it doesCaptures and qualifies every lead from your website in real time, and audits your SEO presence with actionable recommendations. Website visits Leads captured Leads qualified Hover each stage to see what the AI does. A representation of the system — not a real client's data. See Department Pairs well with: Sales. Never let a customer feel abandoned after the sale."
-        },
-        {
-          "id": "/en/departamentos#c4",
-          "heading": "Customer",
-          "text": "CST AVAILABLE What it doesDetects when a sale closes, sets up the new client, and manages welcome, onboarding, renewals, and satisfaction. 45% Welcome message sent Onboarding in progress Renewal due in 12 days Hover each step to see what the AI does. A representation of the system — not a real client's data. See Department Pairs well with: Support or Delivery. Never let a project go without an owner or a deadline."
-        },
-        {
-          "id": "/en/departamentos#c5",
-          "heading": "Delivery",
-          "text": "DLV What it doesCreates the project as soon as a client is won, assigns tasks based on real team load, and tracks delivery dates. To do In progress Delivered Hover each column to see what the AI does. A representation of the system — not a real client's data. See Department Pairs well with: Finance. Control your money without chasing invoices."
-        },
-        {
-          "id": "/en/departamentos#c6",
-          "heading": "Finance",
-          "text": "FIN UNDER VALIDATION What it doesAlready generates invoices from accepted quotes, escalates payment reminders, and calculates the financial dashboard every day — built and running internally; validating with the first real invoice before entering the commercial catalog. Payments Expenses Next due date: 5 days Hover each row to see what the system is watching. A representation of the system — not a real client's data. See Department Pairs well with: Leadership. Never let a ticket get lost or delayed."
-        },
-        {
-          "id": "/en/departamentos#c7",
-          "heading": "Support",
-          "text": "SUP CHAT UNDER REVIEW What it doesTurns every support email into a prioritized ticket with an SLA, with response even after hours. #204 High priority New #205 Medium priority In progress #203 Resolved 4 min Hover each ticket to see what the AI does. A representation of the system — not a real client's data. See Department Pairs well with: Customer. Don't let one oversight become a crisis."
-        },
-        {
-          "id": "/en/departamentos#c8",
-          "heading": "Operations",
-          "text": "OPS What it doesMonitors that the rest of your Departments keep running, protects your documents, and runs weekly backups. Hover each line to see what the system is watching. A representation of the system — not a real client's data. See Department Pairs well with: Any of them — it's cross-cutting. Decide with data, not guesswork."
-        },
-        {
-          "id": "/en/departamentos#c9",
-          "heading": "Leadership",
-          "text": "LDR What it doesCentralizes your KPIs, generates periodic reports, and proposes one executive decision every day. Revenue this month ↑ Active alerts ↓ Suggested decision: Today Hover each indicator to see what the system does. A representation of the system — not a real client's data. See Department Natural endpoint: gives more value the more Departments are already active."
-        },
-        {
-          "id": "/en/departamentos#c10",
-          "heading": "It starts with Marketing or Sales",
-          "text": "Capture more leads, or sell more without chasing anyone. 02"
-        },
-        {
-          "id": "/en/departamentos#c11",
-          "heading": "Customer gets added — and Delivery if there are projects",
-          "text": "As soon as there are sales to manage, the client lifecycle comes into play. 03"
-        },
-        {
-          "id": "/en/departamentos#c12",
-          "heading": "Finance and Support complete the cycle",
-          "text": "Getting paid faster and providing support without getting overwhelmed, with clients and projects already underway. 04"
-        },
-        {
-          "id": "/en/departamentos#c13",
-          "heading": "Leadership becomes the natural next step",
-          "text": "With 2 or 3 Departments already active, everything the rest produce lands in one place. Operations can join in at any point along the way."
-        },
-        {
-          "id": "/en/departamentos#c14",
           "heading": "Where do we start?",
-          "text": "Tell us which problem you want solved first and, in a 30-minute meeting, we will tell you what we would build and where we would start. Find My Department See how the Operating System works"
+          "text": "Take the 30-second diagnostic or tell us what weighs most. In a 30-minute call we’ll tell you what we would build first. Take the diagnostic Talk about your operation"
         }
       ]
     },
     {
       "url": "/en/departamentos/administracion",
-      "title": "Operations — D-Code Partners",
+      "title": "Administration — D-Code Partners",
       "chunks": [
         {
           "id": "/en/departamentos/administracion#c0",
-          "heading": "The Department that keeps your company protected and organized, effortlessly.",
-          "text": "Operations watches over the rest of the system to keep it running, protects the structure of your documents, and runs periodic backups of critical data. Today it's the infrastructure we use to watch over ourselves; extending it to a client's own systems is a concrete configuration, not something already deployed outside D-Code. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. Failures caught within hours Documentation always organized Backups always up to date"
+          "heading": "Your company watched over, protected and in order.",
+          "text": "Administration watches over the rest of the system to keep it running, protects the structure of your documents, and runs periodic backups of critical data. Today it's the infrastructure we use to watch over ourselves; extending it to a client's own systems is a concrete configuration, not something already deployed outside D-Code. One part of the system we build when your company needs it: adapted to how you work, not a closed package. See four systems running, with made-up data Failures caught within hours Documentation always organized Backups always up to date"
         },
         {
           "id": "/en/departamentos/administracion#c1",
@@ -1786,7 +1614,7 @@
         {
           "id": "/en/departamentos/administracion#c4",
           "heading": "Watches over the rest in the background",
-          "text": "While Marketing, Sales, Customer, and the other Departments work, Operations checks that all of them keep running."
+          "text": "While Marketing, Sales, Customer, and the other areas work, Administration checks that all of them keep running."
         },
         {
           "id": "/en/departamentos/administracion#c5",
@@ -1796,12 +1624,12 @@
         {
           "id": "/en/departamentos/administracion#c6",
           "heading": "What your company gets.",
-          "text": "Internal failures caught within hours Not weeks — the system itself flags it as soon as something stops working. Documentation never gets lost or messy It stays consistently organized, without depending on any one person. There's always a recent backup A data recovery point available at all times. The system watches over itself It checks that the rest of the Departments keep running normally. All you need is your folder structure defined — nothing else. In the first meeting, we'll tell you what we would build and with what scope."
+          "text": "Internal failures caught within hours Not weeks — the system itself flags it as soon as something stops working. Documentation stops getting lost or messy It stays consistently organized, without depending on any one person. There's always a recent backup A data recovery point available at all times. The system watches over itself It checks that the other areas keep running normally. All you need is your folder structure defined — nothing else. In the first meeting, we'll tell you what we would build and with what scope."
         },
         {
           "id": "/en/departamentos/administracion#c7",
-          "heading": "Shall we start with Operations?",
-          "text": "Tell us how you protect your documents and data today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "heading": "Shall we start with Administration?",
+          "text": "Tell us how you protect your documents and data today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
@@ -1811,8 +1639,8 @@
       "chunks": [
         {
           "id": "/en/departamentos/clientes#c0",
-          "heading": "The Department that makes every client feel cared for, without it depending on any one person.",
-          "text": "Customer onboards, welcomes, and supports every client for the entire life of the relationship — with the same quality, no matter who on the team is on duty that day or whether anyone remembers to do it. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. CAPABILITY AVAILABLE Welcome always the same Zero forgotten renewals"
+          "heading": "Every client looked after, without depending on any one person.",
+          "text": "Customer onboards, welcomes, and supports every client for the entire life of the relationship — with the same quality, no matter who on the team is on duty that day or whether anyone remembers to do it. One part of the system we build when your company needs it: adapted to how you work, not a closed package. Try it running: Customer service, with made-up data Welcome always the same Renewals flagged in good time"
         },
         {
           "id": "/en/departamentos/clientes#c1",
@@ -1842,12 +1670,12 @@
         {
           "id": "/en/departamentos/clientes#c6",
           "heading": "What your company gets.",
-          "text": "Welcome always the same Every new client gets the same experience, regardless of who on the team is on duty that day. Zero forgotten renewals Renewal dates are tracked ahead of time, not discovered too late. Satisfaction measured on time It's tracked continuously, not only once it's already too late to act. The client feels supported Someone is looking out for them for the entire life of the relationship, without it depending on a single person. All you need is a clear rule for when a client becomes active — today, as soon as a proposal is accepted — and their contact details. In the first meeting, we'll tell you what we would build and with what scope."
+          "text": "Welcome always the same Every new client gets the same experience, regardless of who on the team is on duty that day. Renewals flagged in good time Renewal dates are tracked ahead of time, not discovered too late. Satisfaction measured on time It's tracked continuously, not only once it's already too late to act. The client feels supported Someone is looking out for them for the entire life of the relationship, without it depending on a single person. All you need is a clear rule for when a client becomes active — today, as soon as a proposal is accepted — and their contact details. In the first meeting, we'll tell you what we would build and with what scope."
         },
         {
           "id": "/en/departamentos/clientes#c7",
           "heading": "Shall we start with Customer?",
-          "text": "Tell us how you support your clients today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "text": "Tell us how you support your clients today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
@@ -1857,8 +1685,8 @@
       "chunks": [
         {
           "id": "/en/departamentos/comercial#c0",
-          "heading": "The Department that makes sure no sale is ever lost to poor follow-up.",
-          "text": "Sales centralizes every opportunity, generates proposals in minutes, and flags what needs attention each morning — so your pipeline stops living inside one person's head. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. Pipeline always centralized Proposals in minutes Nothing gets forgotten"
+          "heading": "No sale lost to poor follow-up.",
+          "text": "Sales centralizes every opportunity, generates proposals in minutes, and flags what needs attention each morning — so your pipeline stops living inside one person's head. One part of the system we build when your company needs it: adapted to how you work, not a closed package. Try it running: Sales, with made-up data Pipeline always centralized Proposals in minutes Nothing gets forgotten"
         },
         {
           "id": "/en/departamentos/comercial#c1",
@@ -1883,7 +1711,7 @@
         {
           "id": "/en/departamentos/comercial#c5",
           "heading": "It closes, and the data keeps moving on its own",
-          "text": "As soon as a proposal is accepted, that information is never re-typed: it automatically kicks off Customer and Delivery."
+          "text": "As soon as a proposal is accepted, that information is never re-typed: it automatically kicks off Customer and Operations."
         },
         {
           "id": "/en/departamentos/comercial#c6",
@@ -1893,7 +1721,7 @@
         {
           "id": "/en/departamentos/comercial#c7",
           "heading": "Shall we start with Sales?",
-          "text": "Tell us how you manage your opportunities today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "text": "Tell us how you manage your opportunities today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
@@ -1903,8 +1731,8 @@
       "chunks": [
         {
           "id": "/en/departamentos/direccion#c0",
-          "heading": "The Department that gives you one clear decision every morning, backed by real data.",
-          "text": "Leadership centralizes indicators, generates periodic reports, and — in its full form — cross-references external market signals with the internal health of the system, to propose a single clear priority every day. Today we use it to run D-Code Partners; adapting it to a client's own indicators is a concrete configuration, not something already deployed outside D-Code. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. Dashboard always up to date Automatic reports One clear priority a day"
+          "heading": "One clear decision every morning, backed by real data.",
+          "text": "Leadership centralizes indicators, generates periodic reports, and — in its full form — cross-references external market signals with the internal health of the system, to propose a single clear priority every day. Today we use it to run D-Code Partners; adapting it to a client's own indicators is a concrete configuration, not something already deployed outside D-Code. One part of the system we build when your company needs it: adapted to how you work, not a closed package. See four systems running, with made-up data Dashboard always up to date Automatic reports One clear priority a day"
         },
         {
           "id": "/en/departamentos/direccion#c1",
@@ -1914,12 +1742,12 @@
         {
           "id": "/en/departamentos/direccion#c2",
           "heading": "The state of the whole operation, summarized at a glance — not six different dashboards to check.",
-          "text": "A simplified view of the system — not data from a real client. Sales Marketing Delivery Finance Support Overall status — example 4 Departments within range. Support has one high-priority ticket pending — needs review today. This is how Leadership summarizes signals from the other Departments. Illustrative example, not real data."
+          "text": "A simplified view of the system — not data from a real client. Sales Marketing Operations Finance Support Overall status — example 4 areas within range. Support has one high-priority ticket pending — needs review today. This is how Leadership summarizes signals from the other areas. Illustrative example, not real data."
         },
         {
           "id": "/en/departamentos/direccion#c3",
           "heading": "Every active Department feeds in its own data",
-          "text": "Marketing, Sales, Customer, Delivery, Finance... every Department you have active feeds the same dashboard."
+          "text": "Marketing, Sales, Customer, Operations, Finance... every area you have connected feeds the same dashboard."
         },
         {
           "id": "/en/departamentos/direccion#c4",
@@ -1939,7 +1767,7 @@
         {
           "id": "/en/departamentos/direccion#c7",
           "heading": "Shall we start with Leadership?",
-          "text": "Tell us how you make decisions today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "text": "Tell us how you make decisions today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
@@ -1949,8 +1777,8 @@
       "chunks": [
         {
           "id": "/en/departamentos/finanzas#c0",
-          "heading": "The Department designed to help you get paid sooner and track spend every day, not just at month-end.",
-          "text": "Finance generates invoices from accepted quotes, escalates collection reminders until they're paid, and watches internal spend day by day — powered by D-Code Finance, the financial system D-Code Partners already uses to run its own accounts. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. D-CODE FINANCE UNDER VALIDATION Interactive demo available"
+          "heading": "Get paid sooner and see spend every day, not at month-end.",
+          "text": "Finance generates invoices from accepted quotes, escalates collection reminders until they're paid, and watches internal spend day by day — powered by D-Code Finance, the financial system D-Code Partners already uses to run its own accounts. One part of the system we build when your company needs it: adapted to how you work, not a closed package. Try it running: D-Code Finance, with made-up data D-CODE FINANCE UNDER VALIDATION Interactive demo available"
         },
         {
           "id": "/en/departamentos/finanzas#c1",
@@ -1965,7 +1793,7 @@
         {
           "id": "/en/departamentos/finanzas#c3",
           "heading": "The project or client already exists",
-          "text": "Delivery and Customer launch the project and set up the client."
+          "text": "Operations and Customer launch the project and set up the client."
         },
         {
           "id": "/en/departamentos/finanzas#c4",
@@ -1979,13 +1807,13 @@
         },
         {
           "id": "/en/departamentos/finanzas#c6",
-          "heading": "What your company will get once this is published.",
+          "heading": "What your company gets.",
           "text": "Invoices generated in minutes Generated and sent on their own in minutes, not days. Collections speed up Automatic reminders that escalate on their own until the invoice is paid. Prolonged unpaid invoices are never forgotten Detected and escalated on their own, without depending on someone remembering. Internal spend is tracked daily Spend is watched day by day, with an alert when a category goes over budget. If Finance interests you, tell us in the first meeting: you can walk through D-Code Finance in the demo, and together we decide which part of your invoicing and collections is worth automating first."
         },
         {
           "id": "/en/departamentos/finanzas#c7",
           "heading": "Shall we talk about your collections circuit?",
-          "text": "Tell us how you invoice and collect payments today, and in a 30-minute meeting we'll tell you exactly where Finance really stands, and which other, already operational Departments can help you in the meantime. Book My Free Call View all Departments"
+          "text": "Tell us how you invoice and collect payments today, and in a 30-minute meeting we'll tell you exactly where Finance really stands, and which other, already operational Departments can help you in the meantime. Book a call View all areas"
         }
       ]
     },
@@ -1995,8 +1823,8 @@
       "chunks": [
         {
           "id": "/en/departamentos/marketing#c0",
-          "heading": "The Department that makes sure your website never stops generating opportunities.",
-          "text": "Marketing captures and qualifies every contact that reaches your company, and audits your online presence with real data — so your sales team always knows who to reach out to first. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. Leads already classified SEO audit with real data Pairs with Sales"
+          "heading": "A website that keeps bringing in opportunities.",
+          "text": "Marketing captures and qualifies every contact that reaches your company, and audits your online presence with real data — so your sales team always knows who to reach out to first. One part of the system we build when your company needs it: adapted to how you work, not a closed package. Try it running: Sales, with made-up data Leads already classified SEO audit with real data Pairs with Sales"
         },
         {
           "id": "/en/departamentos/marketing#c1",
@@ -2031,18 +1859,18 @@
         {
           "id": "/en/departamentos/marketing#c7",
           "heading": "Shall we start with Marketing?",
-          "text": "Tell us how you attract clients today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "text": "Tell us how you attract clients today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
     {
       "url": "/en/departamentos/produccion",
-      "title": "Delivery — D-Code Partners",
+      "title": "Operations — D-Code Partners",
       "chunks": [
         {
           "id": "/en/departamentos/produccion#c0",
-          "heading": "The Department that gets your projects launched on their own and delivered on time.",
-          "text": "Delivery creates the project the moment you win a client, assigns tasks based on your team's real workload, and catches delays before the client ever notices. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. Projects that create themselves Balanced workload distribution Delays caught in time"
+          "heading": "Every job starts on its own and meets its deadline.",
+          "text": "Operations creates the project the moment you win a client, assigns tasks based on your team's real workload, and catches delays before the client ever notices. One part of the system we build when your company needs it: adapted to how you work, not a closed package. Try it running: Operations, with made-up data Projects that create themselves Balanced workload distribution Delays caught in time"
         },
         {
           "id": "/en/departamentos/produccion#c1",
@@ -2052,7 +1880,7 @@
         {
           "id": "/en/departamentos/produccion#c2",
           "heading": "Chaos becomes a system. Not another list to check.",
-          "text": "A simplified view of the system — not data from a real client. Without Delivery With Delivery Data migration Design review Initial setup Set up repository access Environment testing Technical documentation To do Environment testing Technical documentation In progress Design review Set up repository access Delivered Initial setup Data migration As soon as a client is won, the system sorts the tasks based on the team's real workload — with no one having to organize it by hand. On small screens, the board is shown already sorted."
+          "text": "A simplified view of the system — not data from a real client. Without Operations With Operations Data migration Design review Initial setup Set up repository access Environment testing Technical documentation To do Environment testing Technical documentation In progress Design review Set up repository access Delivered Initial setup Data migration As soon as a client is won, the system sorts the tasks based on the team's real workload — with no one having to organize it by hand. On small screens, the board is shown already sorted."
         },
         {
           "id": "/en/departamentos/produccion#c3",
@@ -2061,7 +1889,7 @@
         },
         {
           "id": "/en/departamentos/produccion#c4",
-          "heading": "Delivery assigns and tracks",
+          "heading": "Operations assigns and tracks",
           "text": "Tasks are assigned based on the team's real workload, and progress is tracked day by day."
         },
         {
@@ -2076,8 +1904,8 @@
         },
         {
           "id": "/en/departamentos/produccion#c7",
-          "heading": "Shall we start with Delivery?",
-          "text": "Tell us how you manage your projects today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "heading": "Shall we start with Operations?",
+          "text": "Tell us how you manage your projects today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
@@ -2087,8 +1915,8 @@
       "chunks": [
         {
           "id": "/en/departamentos/soporte#c0",
-          "heading": "The Department that responds fast, even after hours.",
-          "text": "Support turns every support email into a prioritized ticket with an automatically calculated SLA, complemented by a chat available 24 hours a day — today in security review before its access to client data is expanded. One of the capabilities we integrate when your company’s problem calls for it — adapted to your processes, not a closed package. TICKETS AI — LIVE CHAT AI — SECURITY REVIEW PENDING"
+          "heading": "Fast replies, even after hours.",
+          "text": "Support turns every support email into a prioritized ticket with an automatically calculated SLA, complemented by a chat available 24 hours a day — today in security review before its access to client data is expanded. One part of the system we build when your company needs it: adapted to how you work, not a closed package. Try it running: Customer service, with made-up data TICKETS AI — LIVE CHAT AI — SECURITY REVIEW PENDING"
         },
         {
           "id": "/en/departamentos/soporte#c1",
@@ -2123,7 +1951,7 @@
         {
           "id": "/en/departamentos/soporte#c7",
           "heading": "Shall we start with Support?",
-          "text": "Tell us how you handle client support today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book My Free Call View all Departments"
+          "text": "Tell us how you handle client support today, and in a 30-minute meeting we'll tell you what we would build and where we would start. Book a call View all areas"
         }
       ]
     },
@@ -2144,7 +1972,7 @@
         {
           "id": "/en/faq#c2",
           "heading": "What sets you apart from a traditional agency?",
-          "text": "Most agencies sell a closed project upfront. We read how your company works first, and agree the scope with you — what gets built and what gets measured — before we build anything. You can see the details in Guarantees & Process."
+          "text": "Most agencies sell a closed project upfront. We read how your company works first, and agree the scope with you — what gets built and what gets measured — before we build anything. You can see the details in Guarantees and process."
         },
         {
           "id": "/en/faq#c3",
@@ -2153,104 +1981,109 @@
         },
         {
           "id": "/en/faq#c4",
+          "heading": "Can I see something running before talking to you?",
+          "text": "Yes. On the home page there are four systems running with made-up data: Sales, Operations, Customer service and D-Code Finance. They run on their own, and as soon as you touch something you are in control. You can also take the diagnostic in thirty seconds to see where your time goes."
+        },
+        {
+          "id": "/en/faq#c5",
           "heading": "What processes can you automate?",
           "text": "Document management, reporting, sales follow-up, invoicing, client onboarding, and generally any repetitive task with clear rules. You'll find concrete examples in Automation AI."
         },
         {
-          "id": "/en/faq#c5",
+          "id": "/en/faq#c6",
           "heading": "Do I need technical knowledge to work with you?",
           "text": "No. We handle all the technical design and implementation. You just need to tell us how your business runs today."
         },
         {
-          "id": "/en/faq#c6",
+          "id": "/en/faq#c7",
           "heading": "Do I need to change my current software?",
           "text": "Usually not. We design our systems to integrate with the tools you already use — CRM, spreadsheets, ERP, or your website — instead of replacing them. You can see examples in Integrations."
         },
         {
-          "id": "/en/faq#c7",
+          "id": "/en/faq#c8",
           "heading": "What tools do you use?",
           "text": "We choose the most suitable technology for each specific case: it could be an automation platform, a direct API integration, or custom development. We don't force the same stack on every client."
         },
         {
-          "id": "/en/faq#c8",
+          "id": "/en/faq#c9",
           "heading": "Do you also build or improve websites?",
           "text": "Yes. If your company doesn't have a website, or the current one isn't up to par, we design or improve it ourselves, built from the ground up to connect with the rest of your system — CRM, automations, and AI agents included. We handle social media management and other channels the same way: through AI automation, not manual content creation."
         },
         {
-          "id": "/en/faq#c9",
+          "id": "/en/faq#c10",
           "heading": "What's the difference between an AI agent and a traditional chatbot?",
           "text": "A traditional chatbot follows a fixed script of predefined responses. An AI agent understands natural language, keeps track of the conversation's context, and knows when to hand it off to a person. We explain it in more detail in AI Agents."
         },
         {
-          "id": "/en/faq#c10",
+          "id": "/en/faq#c11",
           "heading": "Can you integrate AI with my CRM or ERP?",
           "text": "Yes. It's one of the most common combinations: an agent or automated process that logs every interaction directly into your CRM or ERP, with nothing copied by hand. More information in Integrations."
         },
         {
-          "id": "/en/faq#c11",
+          "id": "/en/faq#c12",
           "heading": "What does the process look like from the first meeting?",
           "text": "We start with a diagnosis of your operations, design the system and agree the scope. Then we build it, leave it running inside your tools and review the results together. The full details are in The D-Code Method."
         },
         {
-          "id": "/en/faq#c12",
+          "id": "/en/faq#c13",
           "heading": "How long does it take to implement an automation system?",
           "text": "The diagnosis happens in the first few days. Implementation is progressive and supervised, and how long it takes depends on the scope we agreed."
         },
         {
-          "id": "/en/faq#c13",
+          "id": "/en/faq#c14",
           "heading": "How do you measure results?",
           "text": "With concrete data: hours saved, processes automated, and response times, compared against your situation before we started. What gets measured is decided with you before anything is built."
         },
         {
-          "id": "/en/faq#c14",
+          "id": "/en/faq#c15",
           "heading": "What if the system does not deliver what we expected?",
           "text": "We review it with you against what we agreed to measure, and adjust it. And there is no lock-in forcing you to continue."
         },
         {
-          "id": "/en/faq#c15",
+          "id": "/en/faq#c16",
           "heading": "How much does it cost?",
-          "text": "It depends on the system and the scope. We agree it with you before we start building, not afterwards."
+          "text": "It depends on the system and the scope, and we agree it with you before we start building, not afterwards. D-Code Finance is the exception: its three plans have their prices published on its page."
         },
         {
-          "id": "/en/faq#c16",
+          "id": "/en/faq#c17",
           "heading": "Can I cancel at any time?",
           "text": "Yes. There is no minimum term and no cancellation penalty."
         },
         {
-          "id": "/en/faq#c17",
+          "id": "/en/faq#c18",
           "heading": "Who owns the automations?",
           "text": "You do. The systems we implement in your operations belong to you; our role is to design them, build them, and leave them running correctly."
         },
         {
-          "id": "/en/faq#c18",
+          "id": "/en/faq#c19",
           "heading": "What happens after the project is delivered?",
           "text": "We stay available for adjustments and system maintenance. Our model is designed as an ongoing relationship, not a one-off delivery that gets forgotten the next day."
         },
         {
-          "id": "/en/faq#c19",
+          "id": "/en/faq#c20",
           "heading": "Is my data, and my customers' data, secure?",
           "text": "Yes. We only access what's strictly necessary for the specific process we're automating, under absolute confidentiality. You can review the details in our Privacy Policy."
         },
         {
-          "id": "/en/faq#c20",
+          "id": "/en/faq#c21",
           "heading": "Do you sign non-disclosure agreements (NDAs)?",
           "text": "Yes, if your company requires it. It's common in projects that involve access to sensitive client data or internal processes."
         },
         {
-          "id": "/en/faq#c21",
+          "id": "/en/faq#c22",
           "heading": "Security & Confidentiality",
           "text": "We couldn't find any question that matches. Try another word, or write to us directly."
         },
         {
-          "id": "/en/faq#c22",
+          "id": "/en/faq#c23",
           "heading": "Let's talk directly.",
-          "text": "Book 30 minutes with us, or write to us and we'll reply in under 24h. Book My Free Call Send an email"
+          "text": "Book 30 minutes with us, or write to us and we'll reply in under 24h. Book a call Send an email"
         }
       ]
     },
     {
       "url": "/en/garantias",
-      "title": "Commitments & Process — D-Code Partners",
+      "title": "Guarantees and process — D-Code Partners",
       "chunks": [
         {
           "id": "/en/garantias#c0",
@@ -2301,75 +2134,85 @@
     },
     {
       "url": "/en/",
-      "title": "D-Code Partners — Business Operating System",
+      "title": "D-Code Partners — Made-to-measure systems for companies",
       "chunks": [
         {
           "id": "/en/#c0",
           "heading": "",
-          "text": "Systems built to fit · our own software"
+          "text": "Made-to-measure systems · our own software"
         },
         {
           "id": "/en/#c1",
           "heading": "What your team repeats every weeka system can do instead.",
-          "text": "We look at how you actually work, find where the time and the money leak out, and build the system that stops it. There is no catalogue to pick from. One of ours is running right below, so you can try it before you talk to anyone. Try our finance system Talk about your operation What you are looking at A company before anyone tidied it Before we talk about systems · do the maths"
+          "text": "We look at how you actually work, find where the time and the money leak out, and build the system that stops it. There is no catalogue to pick from. Four systems are running right below, so you can try them before you talk to anyone. Try the systems Take the diagnostic What you are looking at A company before anyone tidied it What we do"
         },
         {
           "id": "/en/#c2",
-          "heading": "Tick what gets done by hand in your company. The sum does itself.",
-          "text": "30 min 20 min 15 min 20 min 10 min 15 min per person per week Per year, all together 0 hours 0 € paid for work a system does on its own 0 full-time weeks of one person. A year has 52. Assumes 46 working weeks a year and 40-hour weeks. The minutes are an example: set your own for each task with − and +. See a system doing it &#8595; None of that is the work you get paid for, and all of it is fixed the same way: by putting a system where somebody’s memory is now. What is below is not a promise: it is the system, running, with data in it. Our own software · try it right here"
+          "heading": "We don’t install tools. We build the system your company runs on.",
+          "text": "Your company The system Measured Sales Excel Email Follow-ups that slip 9 a month Marketing Web Ads Unsorted contacts 3 places Customer WhatsApp Phone The same questions 6 h/week Operations Sheets Paper Data retyped by hand 4 times Finance Invoices Bank Payments that slip 38 days Administration Folders Email Which one is the latest? 3 copies AI Reads, sorts and suggests. Reads the email Sorts Suggests You decide One source of truth Your company’s system Customers Orders Jobs Invoices Documents Automations Quote accepted → job Job done → invoice Invoice overdue → reminder Management dashboard Hours by hand↓ Response time↓ Tasks with no owner↓ Days to get paid↓ This month’s tweak: stock alert Illustrative diagram · no client data 01 / 09 Your company Six areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 01Your companySix areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 02ProblemsWork gets lost between one area and the next: data retyped by hand, forgotten follow-ups, three versions of the same customer. 03AnalysisWe follow a customer, an order and an invoice from start to finish, and measure how often a person has to bridge the gap. 04DesignBefore building anything we decide what goes with what: what the system does on its own and what a person still decides. 05ConnectionOne source of truth for every area. The customer who comes in through sales is the same one support helps and finance invoices. 06AutomationWhat one area finishes triggers the next: quote accepted, job scheduled, invoice issued. Nothing typed twice. 07AIAI reads emails and documents, sorts what comes in and drafts the reply. What matters is decided by a person. 08MeasurementEverything leaves a trail: hours by hand, response times, tasks with no owner. Figures, not impressions. 09Continuous improvementEvery month we look at the numbers and adjust. When your company changes, the system changes with it. What we don’t do Sell standalone tools that nobody ever connects. Install some software and disappear. Hand over a report and leave you alone with it. What we do We build the system around how you actually work. We connect the areas, automate, and add AI where it helps. We measure it and improve it with you, month after month. Diagnostic · 30 seconds"
         },
         {
           "id": "/en/#c3",
-          "heading": "You drop in a PDF with twenty invoices. It files them for you, one by one.",
-          "text": "That is what D-Code Finance does. It does not leave them in a tray for somebody to type: it puts them inside, each with its number, its net, its VAT and its supplier — and every field knows which page of the PDF it came from. And you ask it in plain language. Who owes me, what is overdue, what should I look at today. It answers with the figure and with the exact invoice it comes from. What it does not know, it says: it does not make it up. Below is the whole application, running. No sign-up, no demo request — you just touch it. DEMO · made-up data This is not a screenshot: it is the application. It is using itself right now — touch it and you take over. The names and the amounts are made up; everything else is the real system. The application, at a glance"
+          "heading": "Where does your time go? Three taps and you’ll see.",
+          "text": "D-Code diagnostic Where How much Cost Result The diagnostic needs JavaScript. If you prefer, tell us about it in a 30-minute call."
         },
         {
           "id": "/en/#c4",
-          "heading": "Here you read it; to use it, a computer.",
-          "text": "A finance system is eight-column tables and a twenty-five screen menu. Squeezed into a phone it looks worse than it is, so we do not show it squeezed: we tell you about it, and you open it when you are at a keyboard. The dashboardIt starts with a sentence saying what is going on, and the figures that hold it up underneath. You drop it a document and it files itA PDF with twenty invoices inside comes out as twenty invoices filed, each with its number and its supplier. You ask it in plain languageWho owes me, what is overdue, what should I look at today. It answers with the figure and the invoice it came from. Twenty-five screensInvoices, collections, expenses, treasury, projects, radar, tax register and the rest. See everything it does <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can read what the system does on its own page.</p> The way in Ask Finance One way in, above everything else: you ask, and it answers with the figure and where it came from. Comes inCollected, from whom and when. Goes outWhat is paid, and which week. Is owedOverdue, and since when. Is invoicedFrom the quote to the invoice. Is spentWith supplier and receipt. Is readBy client, project and month. Tax register Ready for VERI*FACTU Every invoice, recorded and chained from the moment it is issued. Submission to the AEAT is the next step. Where it stands Bank reconciliation Coming soon Your bank statement, matched against your invoices and expenses. It is the next piece. How it will work"
+          "heading": "Where does most of your time go?",
+          "text": "Pick one or more areas. Wherever something is done by hand, repeated, or depends on someone remembering. None selected"
         },
         {
           "id": "/en/#c5",
-          "heading": "From what you have today to asking your own numbers",
-          "text": "01The formWe send it to you and you fill it in. 02ValidationWe check it before touching anything. 03Up in 1 dayWith your earlier clients, invoices and expenses inside. You do not start empty. 04RunningIt issues, records and flags what falls due."
+          "heading": "How much time goes on it each week, across the team?",
+          "text": "A rough guess is fine. Count the whole team together, not one person."
         },
         {
           "id": "/en/#c6",
-          "heading": "Three ways to have it",
-          "text": "The system as it is, the system that reads your documents and answers you, or the system built around what your company does and nobody else does the same way. We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the plans Let&#39;s talk about putting it in How we work"
+          "heading": "What does an hour of work cost your company?",
+          "text": "Including employer costs. If you’re not sure, leave €25. What does an hour of work cost your company? Try the systems"
         },
         {
           "id": "/en/#c7",
-          "heading": "We analyse",
-          "text": "We follow the real path of a customer, an order and an invoice, end to end, and write down every point where a person has to bridge a gap. Out of that comes the list of where the time, the sales and the money leak out — and how many times a month each one happens. You leave with that list whether we build it or not 02"
+          "heading": "We won’t tell you about it: try it.",
+          "text": "Four systems, running, with made-up data. They drive themselves; the moment you touch something, you take over. D-Code Finance is our own product. The other three are examples of what we build to measure, set up for an air-conditioning company that doesn’t exist. SalesFrom contact to saleSell OperationsFrom yes to job doneDeliver Customer serviceAnswers with your dataSupport D-Code FinanceYour money, in one placeGet paidOur product 01The problemContacts arrive through four channels and follow-up depends on someone remembering. 02What it doesOne inbox: AI reads every contact, sorts it and assigns it using your rules. 03What runs on its ownA reply with real slots, the visit in the schedule and follow-ups scheduled. 04The resultNobody has to remember anything, and the sale moves on to Operations and Finance by itself. Loading the system… <p class=\"demo-aviso\">This demo needs JavaScript.</p> Example system · fictional company · made-up data. This is how it would work with yours. 01The problemA customer’s yes ends up in a WhatsApp and a spreadsheet. 02What it doesIt creates the work order, checks the parts and proposes who and when. 03What runs on its ownSupplier order, customer update, and a reshuffled schedule if something slips. 04The resultThe signed job sheet becomes an invoice in Finance, with nothing typed twice. Loading the system… <p class=\"demo-aviso\">This demo needs JavaScript.</p> Example system · fictional company · made-up data. This is how it would work with yours. 01The problemThe phone interrupts the technicians and the same questions arrive through three channels. 02What it doesAn assistant answers with the company’s data: contracts, invoices and schedule. 03What runs on its ownVisits booked, invoices sent and a pre-visit note for the technician. 04The resultThe sensitive ones go to a person, with the history and a summary ready. Loading the system… <p class=\"demo-aviso\">This demo needs JavaScript.</p> Example system · fictional company · made-up data. This is how it would work with yours. 01The problemThe money lives in the bank, in the invoicing software and in someone’s head. 02What it doesYou drop in a PDF with twenty invoices and it files them for you, one by one. 03What runs on its ownIt issues, records and flags what falls due. 04The resultYou ask it in plain language and it answers with the figure and the invoice behind it. DEMO · made-up data This is not a screenshot: it is the application. It is using itself right now — touch it and you take over. The names and the amounts are made up; everything else is the real system. The application, at a glance"
         },
         {
           "id": "/en/#c8",
-          "heading": "We design",
-          "text": "We take the heaviest thing on that list and decide what goes with what: what can run on its own, what a person keeps deciding, and which of your tools it connects to. What already works stays as it is, and the rules of your business are set by you. You see what you will get before it exists 03"
+          "heading": "Here you read it; to use it, a computer.",
+          "text": "A finance system is eight-column tables and a twenty-five screen menu. Squeezed into a phone it looks worse than it is, so we do not show it squeezed: we tell you about it, and you open it when you are at a keyboard. The dashboardIt starts with a sentence saying what is going on, and the figures that hold it up underneath. You drop it a document and it files itA PDF with twenty invoices inside comes out as twenty invoices filed, each with its number and its supplier. You ask it in plain languageWho owes me, what is overdue, what should I look at today. It answers with the figure and the invoice it came from. Twenty-five screensInvoices, collections, expenses, treasury, projects, radar, tax register and the rest. See everything it does <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can read what the system does on its own page.</p> Tax register Ready for VERI*FACTU Every invoice, recorded and chained from the moment it is issued. Submission to the AEAT is the next step. Where it stands Bank reconciliation Coming soon Your bank statement, matched against your invoices and expenses. It is the next piece. How it will work"
         },
         {
           "id": "/en/#c9",
-          "heading": "We put it in",
-          "text": "We build it, connect it to what you already use and leave it running inside the daily job, piece by piece and with your team in it. We do not hand over a manual for somebody to put into practice: we hand over something already in practice. It runs in your operation, not in a demo 04"
+          "heading": "From what you have today to asking your own numbers",
+          "text": "01The formWe send it to you and you fill it in. 02ValidationWe check it before touching anything. 03Up in 1 dayWith your earlier clients, invoices and expenses inside. You do not start empty. 04RunningIt issues, records and flags what falls due. We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the Finance plans Let’s talk about putting it in How we build it"
         },
         {
           "id": "/en/#c10",
-          "heading": "We measure and improve",
-          "text": "The system leaves a trace of everything it does: what ran on its own, what failed, and where a person is still bridging a gap. That is what it gets corrected with — and when the company changes, the system changes with it instead of going stale. It can be checked, not just believed This is what we get asked to fix"
+          "heading": "We analyse",
+          "text": "It starts with a 30-minute call and continues with a review: we follow the real path of a customer, an order and an invoice, and note every point where a person has to bridge the gap. From you Half an hour, then a couple of hours from whoever does that work, with real examples. What you keep The written list of where the time and the money leak out. It’s yours whether we build it or not. If we see nothing worth doing, we tell you on that call 02"
         },
         {
           "id": "/en/#c11",
-          "heading": "If any of this sounds familiar, there is a system for it.",
-          "text": "Opportunities come in and nobody follows them up in time We put in a system that collects contacts from the site, the inbox and your ads, ranks them by interest and starts the follow-up on its own, with a warning when one has been sitting for days. Getting paid depends on someone remembering We put in the invoices, due dates and collections system: invoices go out when they should, reminders send themselves and a panel says who owes what and since when. It is our own software and it is above for you to try. Clients wait too long for someone to reply We put in an agent that answers on the site and by email with the real information about your business, sorts what comes in and passes on to a person what needs a person. Projects slip and nobody sees it coming We put in a system that, as soon as the client says yes, sets the project up with its tasks, its owners and its dates, and warns before something gets stuck. Everyone keeps the information somewhere different We put in one single place where clients, documents, contracts and renewal dates live, each with its reminder and visible to whoever needs it. Every morning the numbers have to be asked for We put in a panel that says every day what happened yesterday and what has to be decided today, worked out from your own operation. If your problem looks like one of these, we adapt the system. If it looks like none of them, we build the one that is missing: there is no catalogue to choose from. They are built with automations, AI agents and integrations. No promises"
+          "heading": "We design",
+          "text": "We take the heaviest item and decide what goes with what: what the system does on its own, what a person keeps deciding and which of your tools it connects to. From you Telling us what comes first. The rules of your business are yours to set. What you keep Scope, timeline and price in writing before anything starts. You see what you’ll get before it exists 03"
         },
         {
           "id": "/en/#c12",
-          "heading": "This is exactly what happens, from the first call.",
-          "text": "We have no guarantees to show you and no percentages to promise. What we can do is tell you the whole process and put the product in front of you: both can be checked before you sign anything. 01 The first call 30 minutes What happensYou tell us how you work. We ask about the path of a customer, an order and an invoice. What it takesHalf an hour of yours, with nothing prepared. What you keepIf we see nothing worth automating, we say so on that call. 02 The review What happensWe look at how you actually work: who does what, with which tool, and how many times a month. What it takesA couple of hours from the people who do that work, and real examples: an invoice, a quote, one of the usual emails. What you keepThe written list of where the time and the money leak out, with how often each one happens. It is yours whether we build it or not. 03 The proposal What happensWe pick the heaviest one and show you what would be built: what runs on its own, what a person keeps deciding, and what it connects to. What it takesThat you say what comes first. We do not invent the rules of your business. What you keepScope, timeline and price in writing before anything starts. 04 Putting it in What happensIt gets built and put to work piece by piece, inside the tools you already use. Nothing changes all at once. What it takesThe minimum access to what you already use, and one person on your side who checks it does what it should. What you keepThe system running with your team using it, not a manual for switching it on. 05 Control What happensIt is written down: what each piece does, where it runs, who can change it and what happens if it fails one day. What it takesNothing. What you keepThe access and the documentation in your name. If we stop working together one day, it keeps running. 06 The measure What happensThe system records what it does: what ran on its own, what failed and where somebody is still bridging a gap. What it takesHalf an hour a month to look at it together. What you keepNumbers out of your own system. You do not have to believe us: you check. And before any of that you can open the demo above and poke at it as long as you like: it is the same software we put in, with made-up data. You can also read how we work or what we are changing right now. Let us start"
+          "heading": "We put it in",
+          "text": "We build it and get it working piece by piece, inside the tools you already use and with your team involved. Nothing changes all at once. From you Minimal access and one person who checks it does what it should. What you keep The system running, with the documentation and access in your name. If we ever stop working together, it keeps running. It runs in your operation, not in a demo 04"
         },
         {
           "id": "/en/#c13",
+          "heading": "We measure and improve",
+          "text": "The system keeps a record of what it does: what ran on its own, what failed and where a person is still bridging a gap. That’s what it gets corrected with, every month. From you Half an hour a month to look at it together. What you keep Numbers from your own system, not from a slide deck. Every month, with your own numbers No promises"
+        },
+        {
+          "id": "/en/#c14",
+          "heading": "None of this needs taking on trust: you can check it.",
+          "text": "We won’t promise you percentages. This is what you can check before signing anything: The systems, running Four of them are above. Try them as much as you like. How we work, in writing The whole method, step by step, before the first call. What we use ourselves The systems we use in our own company, with what went well and what didn’t. What we are changing What is under way right now and where each piece stands. What stays in writing No lock-in, with the access and the documentation in your name. Let us start"
+        },
+        {
+          "id": "/en/#c15",
           "heading": "Thirty minutes and you will know what can be automated.",
           "text": "Tell us how you work today and we will tell you where we would start. Book a call What people usually ask"
         }
@@ -2386,7 +2229,7 @@
         },
         {
           "id": "/en/metodo#c1",
-          "heading": "Diagnosis",
+          "heading": "Analysis",
           "text": "We walk through your real operation: which processes eat the most hours, where opportunities are lost, and which repetitive tasks slow the team down. Not a questionnaire — a reading of how you work. 02"
         },
         {
@@ -2396,23 +2239,23 @@
         },
         {
           "id": "/en/metodo#c3",
-          "heading": "Build",
+          "heading": "Implementation",
           "text": "We adapt the pieces we already know how to build and develop whatever your case needs that does not exist yet. It is deployed into your real operation, not an isolated sandbox. 04"
         },
         {
           "id": "/en/metodo#c4",
-          "heading": "Measure and adjust",
+          "heading": "Measure and improve",
           "text": "We review with concrete data — hours, response times, processes automated — against your starting point. And we adjust whatever needs adjusting. Before anything is built, you will know exactly what we are going to build. The scope, the tools it connects to and what we will measure are agreed with you. It is the part of the work almost nobody shows, and it is the part that decides whether the rest goes well."
         },
         {
           "id": "/en/metodo#c5",
           "heading": "Three things we rule out from the start.",
-          "text": "We do not force you to change tools. We design to integrate with your CRM, your spreadsheets or your ERP, rather than replace them. We do not hand over a black box. If a system cannot be explained in five minutes, we are probably overcomplicating it. We do not sell a closed catalogue. The eight Departments are pieces we already know how to build. If your problem asks for something else, we build something else."
+          "text": "We do not force you to change tools. We design to integrate with your CRM, your spreadsheets or your ERP, rather than replace them. We do not hand over a black box. If a system cannot be explained in five minutes, we are probably overcomplicating it. We do not sell a closed catalogue. The eight areas in What we build are pieces we already know how to build. If your problem asks for something else, we build something else."
         },
         {
           "id": "/en/metodo#c6",
-          "heading": "Let us start with the diagnosis.",
-          "text": "A 30-minute call is enough to know whether we can help you and where we would start. Book a call See our commitments"
+          "heading": "Let’s start by looking at how you work.",
+          "text": "A 30-minute call is enough to know whether we can help you and where we would start. Book a call See our guarantees"
         }
       ]
     },
@@ -2565,7 +2408,7 @@
         {
           "id": "/en/servicios#c5",
           "heading": "Let’s start with your operation.",
-          "text": "Thirty minutes, and you will know where we would start. Book my call How we work"
+          "text": "Thirty minutes, and you will know where we would start. Book a call How we work"
         }
       ]
     },
@@ -2576,7 +2419,7 @@
         {
           "id": "/en/servicios/agentes-ia#c0",
           "heading": "Customer service and sales that make no one wait.",
-          "text": "Not a standalone chatbot: it's the conversation piece inside your Support or Sales Department, coordinated with the rest of the system. It responds in your website's chat and by email with your business's tone and information, and knows when to hand the conversation over to a person."
+          "text": "Not a standalone chatbot: it's the conversation piece inside your Support or Sales system, coordinated with the rest of the system. It responds in your website's chat and by email with your business's tone and information, and knows when to hand the conversation over to a person."
         },
         {
           "id": "/en/servicios/agentes-ia#c1",
@@ -2621,7 +2464,7 @@
         {
           "id": "/en/servicios/agentes-ia#c9",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book a call See FAQ"
         }
       ]
     },
@@ -2632,7 +2475,7 @@
         {
           "id": "/en/servicios/automatizacion-ia#c0",
           "heading": "Processes that run themselves, 24 hours a day.",
-          "text": "It's the engine that runs inside every Smart Department. We design systems that take on your business's repetitive operational tasks: the ones that eat up your team's hours but don't require their judgment at every step."
+          "text": "It's the engine that runs inside every part of the system. We design systems that take on your business's repetitive operational tasks: the ones that eat up your team's hours but don't require their judgment at every step."
         },
         {
           "id": "/en/servicios/automatizacion-ia#c1",
@@ -2677,7 +2520,7 @@
         {
           "id": "/en/servicios/automatizacion-ia#c9",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book a call See FAQ"
         }
       ]
     },
@@ -2688,7 +2531,7 @@
         {
           "id": "/en/servicios/integraciones#c0",
           "heading": "Your tools, actually connected to each other.",
-          "text": "It's what makes your Smart Departments share one data source instead of living in isolation. We link your CRM, your ERP, your website, and the spreadsheets you already use so information travels on its own, without exporting, copying, or pasting anything by hand."
+          "text": "It’s what makes every area of your company share one data source instead of living in isolation. We link your CRM, your ERP, your website, and the spreadsheets you already use so information travels on its own, without exporting, copying, or pasting anything by hand."
         },
         {
           "id": "/en/servicios/integraciones#c1",
@@ -2733,7 +2576,7 @@
         {
           "id": "/en/servicios/integraciones#c9",
           "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book My Free Call See FAQ"
+          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book a call See FAQ"
         }
       ]
     },
@@ -2805,7 +2648,7 @@
         {
           "id": "/faq#c2",
           "heading": "¿Qué os diferencia de una agencia tradicional?",
-          "text": "La mayoría de agencias vende un proyecto cerrado por adelantado. Nosotros analizamos primero cómo funciona tu empresa y acordamos contigo el alcance —qué se construye y qué se mide— antes de construir nada. Puedes ver el detalle en Garantías y Proceso."
+          "text": "La mayoría de agencias vende un proyecto cerrado por adelantado. Nosotros analizamos primero cómo funciona tu empresa y acordamos contigo el alcance —qué se construye y qué se mide— antes de construir nada. Puedes ver el detalle en Garantías y proceso."
         },
         {
           "id": "/faq#c3",
@@ -2814,96 +2657,101 @@
         },
         {
           "id": "/faq#c4",
+          "heading": "¿Puedo ver algo funcionando antes de hablar con vosotros?",
+          "text": "Sí. En la portada tienes cuatro sistemas funcionando con datos inventados: Comercial, Operaciones, Atención al cliente y D-Code Finance. Se usan solos y, en cuanto tocas algo, los llevas tú. También puedes hacer el diagnóstico en treinta segundos para ver dónde se os va el tiempo."
+        },
+        {
+          "id": "/faq#c5",
           "heading": "¿Qué procesos podéis automatizar?",
           "text": "Gestión documental, reporting, seguimiento comercial, facturación, onboarding de clientes y, en general, cualquier tarea repetitiva con reglas claras. Tienes ejemplos concretos en Automatización IA."
         },
         {
-          "id": "/faq#c5",
+          "id": "/faq#c6",
           "heading": "¿Necesito conocimientos técnicos para trabajar con vosotros?",
           "text": "No. Nos encargamos de todo el diseño e implementación técnica. Tú solo necesitas contarnos cómo funciona tu negocio hoy."
         },
         {
-          "id": "/faq#c6",
+          "id": "/faq#c7",
           "heading": "¿Necesito cambiar mi software actual?",
           "text": "Normalmente no. Diseñamos los sistemas para que se integren con las herramientas que ya usas — CRM, hojas de cálculo, ERP o web — en vez de sustituirlas. Puedes ver ejemplos en Integraciones."
         },
         {
-          "id": "/faq#c7",
+          "id": "/faq#c8",
           "heading": "¿Qué herramientas utilizáis?",
           "text": "Elegimos la tecnología más adecuada para cada caso concreto: puede ser una plataforma de automatización, una integración directa por API o un desarrollo a medida. No forzamos el mismo stack para todos los clientes."
         },
         {
-          "id": "/faq#c8",
+          "id": "/faq#c9",
           "heading": "¿También creáis o mejoráis páginas web?",
           "text": "Sí. Si tu empresa no tiene página web o la actual no está a la altura, la diseñamos o la mejoramos nosotros mismos, pensada desde el principio para conectarse con el resto de tu sistema — CRM, automatizaciones y agentes de IA incluidos. La gestión de redes sociales y otros canales la abordamos del mismo modo: mediante automatización con IA, no como creación de contenido manual."
         },
         {
-          "id": "/faq#c9",
+          "id": "/faq#c10",
           "heading": "¿Qué diferencia hay entre un agente de IA y un chatbot tradicional?",
           "text": "Un chatbot tradicional sigue un guion fijo de respuestas predefinidas. Un agente de IA entiende lenguaje natural, mantiene el contexto de la conversación y sabe cuándo derivarla a una persona. Lo explicamos con más detalle en Agentes de IA."
         },
         {
-          "id": "/faq#c10",
+          "id": "/faq#c11",
           "heading": "¿Podéis integrar la IA con mi CRM o ERP?",
           "text": "Sí. Es una de las combinaciones más habituales: un agente o proceso automatizado que registra cada interacción directamente en tu CRM o ERP, sin copiar nada a mano. Más información en Integraciones."
         },
         {
-          "id": "/faq#c11",
+          "id": "/faq#c12",
           "heading": "¿Cómo es el proceso desde la primera reunión?",
           "text": "Empezamos con un diagnóstico de tu operativa, diseñamos el sistema y acordamos el alcance. Después lo construimos, lo dejamos funcionando dentro de tus herramientas y revisamos juntos los resultados. El detalle completo está en el Método D-Code."
         },
         {
-          "id": "/faq#c12",
+          "id": "/faq#c13",
           "heading": "¿Cuánto tarda en implementarse un sistema de automatización?",
           "text": "El diagnóstico se hace en los primeros días. La implementación es progresiva y supervisada, y su duración depende del alcance acordado."
         },
         {
-          "id": "/faq#c13",
+          "id": "/faq#c14",
           "heading": "¿Cómo medís los resultados?",
           "text": "Con datos concretos: horas ahorradas, procesos automatizados y tiempos de respuesta, comparados con tu situación antes de empezar. Qué se mide se decide contigo antes de construir nada."
         },
         {
-          "id": "/faq#c14",
+          "id": "/faq#c15",
           "heading": "¿Y si el sistema no da el resultado esperado?",
           "text": "Lo revisamos contigo contra lo que acordamos medir y lo ajustamos. Y no hay permanencia que te obligue a continuar."
         },
         {
-          "id": "/faq#c15",
+          "id": "/faq#c16",
           "heading": "¿Cuánto cuesta?",
-          "text": "Depende del sistema y del alcance. Lo acordamos contigo antes de empezar a construir, no después."
+          "text": "Depende del sistema y del alcance, y lo acordamos contigo antes de empezar a construir, no después. D-Code Finance es la excepción: sus tres planes tienen el precio publicado en su página."
         },
         {
-          "id": "/faq#c16",
+          "id": "/faq#c17",
           "heading": "¿Puedo cancelar en cualquier momento?",
           "text": "Sí. No hay permanencia mínima ni penalización por cancelar."
         },
         {
-          "id": "/faq#c17",
+          "id": "/faq#c18",
           "heading": "¿Quién es el propietario de las automatizaciones?",
           "text": "Tú. Los sistemas que implementamos en tu operativa son tuyos; nuestro papel es diseñarlos, construirlos y dejarlos funcionando correctamente."
         },
         {
-          "id": "/faq#c18",
+          "id": "/faq#c19",
           "heading": "¿Qué ocurre después de entregar el proyecto?",
           "text": "Seguimos disponibles para ajustes y mantenimiento del sistema. Nuestro modelo está pensado como una relación continua, no como una entrega puntual que se olvida al día siguiente."
         },
         {
-          "id": "/faq#c19",
+          "id": "/faq#c20",
           "heading": "¿Mis datos y los de mis clientes están seguros?",
           "text": "Sí. Accedemos solo a lo estrictamente necesario para el proceso concreto que automatizamos, bajo confidencialidad absoluta. Puedes consultar el detalle en nuestra Política de Privacidad."
         },
         {
-          "id": "/faq#c20",
+          "id": "/faq#c21",
           "heading": "¿Firmáis acuerdo de confidencialidad (NDA)?",
           "text": "Sí, si tu empresa lo requiere. Es habitual en proyectos que implican acceso a datos sensibles de clientes o procesos internos."
         },
         {
-          "id": "/faq#c21",
+          "id": "/faq#c22",
           "heading": "Seguridad y Confidencialidad",
           "text": "No hemos encontrado ninguna pregunta que coincida. Prueba con otra palabra o escríbenos directamente."
         },
         {
-          "id": "/faq#c22",
+          "id": "/faq#c23",
           "heading": "Hablemos directamente.",
           "text": "Resérvate 30 minutos, o escríbenos y te respondemos en menos de 24h. Reservar una llamada Escribir un email"
         }
@@ -2911,7 +2759,7 @@
     },
     {
       "url": "/garantias",
-      "title": "Compromisos y Proceso — D-Code Partners",
+      "title": "Garantías y proceso — D-Code Partners",
       "chunks": [
         {
           "id": "/garantias#c0",
@@ -2962,7 +2810,7 @@
     },
     {
       "url": "/",
-      "title": "D-Code Partners — Sistema Operativo Empresarial",
+      "title": "D-Code Partners — Sistemas a medida para empresas",
       "chunks": [
         {
           "id": "/#c0",
@@ -2972,65 +2820,75 @@
         {
           "id": "/#c1",
           "heading": "Lo que tu equipo repite cada semanapuede hacerlo un sistema.",
-          "text": "Miramos cómo trabajáis de verdad, vemos por dónde se escapan el tiempo y el dinero, y construimos el sistema que lo corta. No hay catálogo del que elegir. Uno de los nuestros está aquí abajo, funcionando, para que lo pruebes antes de hablar con nadie. Probar nuestro sistema financiero Hablemos de tu operación Lo que estás viendo Una empresa antes de ordenarla Antes de hablar de sistemas · haz la cuenta"
+          "text": "Miramos cómo trabajáis de verdad, vemos por dónde se escapan el tiempo y el dinero, y construimos el sistema que lo corta. No hay catálogo del que elegir. Aquí abajo tienes cuatro sistemas funcionando para que los pruebes antes de hablar con nadie. Prueba los sistemas Haz el diagnóstico Lo que estás viendo Una empresa antes de ordenarla Qué hacemos"
         },
         {
           "id": "/#c2",
-          "heading": "Marca lo que en tu empresa se hace a mano. La cuenta sale sola.",
-          "text": "30 min 20 min 15 min 20 min 10 min 15 min por persona y semana Al año, entre todos 0 horas 0 € pagados por un trabajo que un sistema hace solo 0 semanas de una persona a jornada completa. El año tiene 52. Cuenta con 46 semanas de trabajo al año y jornadas de 40 horas. Los minutos son un ejemplo: ponle a cada tarea los tuyos con − y +. Mira un sistema haciéndolo &#8595; Nada de eso es el trabajo por el que te pagan, y todo se arregla igual: poniendo un sistema donde ahora está la memoria de alguien. Lo de abajo no es una promesa: es el sistema, funcionando, con datos dentro. Software propio · pruébalo aquí mismo"
+          "heading": "No instalamos herramientas. Construimos el sistema con el que funciona tu empresa.",
+          "text": "Tu empresa El sistema Medido Comercial Excel Correo Seguimientos que se olvidan 9 al mes Marketing Web Anuncios Contactos sin clasificar 3 sitios Clientes WhatsApp Teléfono Las mismas preguntas 6 h/sem Operaciones Hojas Papel Datos copiados a mano 4 veces Finanzas Facturas Banco Cobros que se escapan 38 días Administración Carpetas Correo ¿Cuál es la última versión? 3 copias IA Lee, clasifica y propone. Lee el correo Clasifica Propone Decides tú Un solo dato El sistema de tu empresa Clientes Pedidos Trabajos Facturas Documentos Automatizaciones Presupuesto aceptado → trabajo Trabajo hecho → factura Factura vencida → aviso Panel de dirección Horas a mano↓ Tiempo de respuesta↓ Tareas sin dueño↓ Días hasta cobrar↓ Ajuste del mes: aviso de stock Esquema ilustrativo · sin datos de clientes 01 / 09 Tu empresa Seis áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 01Tu empresaSeis áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 02ProblemasEl trabajo se pierde entre un área y otra: datos copiados a mano, seguimientos olvidados, tres versiones del mismo cliente. 03AnálisisSeguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona hace de puente. 04DiseñoAntes de construir decidimos qué va con qué: qué hace el sistema solo y qué sigue decidiendo una persona. 05ConexiónUn solo dato para todas las áreas. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas. 06AutomatizaciónLo que termina un área dispara la siguiente: presupuesto aceptado, trabajo planificado, factura emitida. Sin teclear dos veces. 07IALa IA lee correos y documentos, clasifica lo que entra y propone la respuesta. Lo que importa lo decide una persona. 08MediciónTodo deja rastro: horas a mano, tiempos de respuesta, tareas sin dueño. Son cifras, no impresiones. 09Mejora continuaCada mes miramos los números y ajustamos. Cuando tu empresa cambia, el sistema cambia con ella. Lo que no hacemos Vender herramientas sueltas que luego nadie conecta. Instalar un programa y desaparecer. Entregar un informe y dejarte solo con él. Lo que hacemos Construimos el sistema a la medida de cómo trabajáis. Conectamos las áreas, automatizamos y ponemos IA donde aporta. Lo medimos y lo mejoramos contigo, mes a mes. Diagnóstico · 30 segundos"
         },
         {
           "id": "/#c3",
-          "heading": "Le sueltas un PDF con veinte facturas. Te las deja dadas de alta, una a una.",
-          "text": "Eso hace D-Code Finance. No las deja en una bandeja para que alguien las teclee: las mete dentro, cada una con su número, su base, su cuota y su proveedor — y cada campo sabe de qué página del PDF ha salido. Y le preguntas en tu idioma. Quién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura concreta de la que sale. Lo que no sabe, lo dice: no se lo inventa. Debajo está la aplicación entera, funcionando. No hay que registrarse ni pedir una demo — se toca y ya está. DEMO · datos ficticios Esto no es una captura: es la aplicación. Se está usando sola ahora mismo — tócala y la llevas tú. Los nombres y los importes son inventados; todo lo demás es el sistema de verdad. La aplicación, en un vistazo"
+          "heading": "¿Dónde se os va el tiempo? Tres toques y lo ves.",
+          "text": "Diagnóstico D-Code Dónde Cuánto Coste Resultado El diagnóstico necesita JavaScript. Si prefieres, cuéntanoslo en una llamada de 30 minutos."
         },
         {
           "id": "/#c4",
-          "heading": "Aquí se lee; para tocarla, un ordenador.",
-          "text": "Un sistema financiero son tablas de ocho columnas y un menú de veinticinco pantallas. Apretado en un móvil se ve peor de lo que es, así que no te lo enseñamos apretado: te lo contamos, y lo abres cuando estés delante de un teclado. El panelEmpieza por una frase que dice qué está pasando, y debajo las cifras que la sostienen. Le sueltas un documento y lo colocaUn PDF con veinte facturas dentro sale convertido en veinte facturas dadas de alta, cada una con su número y su proveedor. Le preguntas en tu idiomaQuién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura de la que sale. Veinticinco pantallasFacturas, cobros, gastos, tesorería, proyectos, radar, registro fiscal y lo demás. Ver todo lo que hace <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver qué hace el sistema en su ficha.</p> La puerta Pregunta a Finanzas Una sola puerta encima de todo lo demás: preguntas, y te contesta con la cifra y con de dónde sale. EntraCobrado, de quién y cuándo. SaleQué se paga y en qué semana. Se debeVencido y desde cuándo. Se facturaDel presupuesto a la factura. Se gastaCon proveedor y justificante. Se analizaPor cliente, proyecto y mes. Registro fiscal Preparado para VERI*FACTU Cada factura, registrada y encadenada desde que se emite. La remisión a la AEAT es el siguiente paso. En qué punto está Conciliación bancaria Próximamente El extracto del banco, cruzado con tus facturas y tus gastos. Es la siguiente pieza. Cómo funcionará"
+          "heading": "¿Dónde se os va más tiempo?",
+          "text": "Elige una o varias áreas. Donde algo se hace a mano, se repite o depende de que alguien se acuerde. Ninguna elegida"
         },
         {
           "id": "/#c5",
-          "heading": "De lo que tienes hoy a preguntarle a tus números",
-          "text": "01FormularioTe lo enviamos y lo completas. 02ValidaciónLo revisamos antes de tocar nada. 03En marcha en 1 díaCon tus clientes, facturas y gastos anteriores dentro. No se empieza vacío. 04FuncionandoEmite, registra y avisa de los vencimientos."
+          "heading": "¿Cuánto tiempo se os va a la semana, entre todos?",
+          "text": "A ojo basta. Cuenta todo el equipo junto, no una persona."
         },
         {
           "id": "/#c6",
-          "heading": "Tres formas de tenerlo",
-          "text": "El sistema tal cual, el sistema que lee tus documentos y te contesta, o el sistema hecho a la medida de lo que tu empresa hace y nadie más hace igual. Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los planes Hablemos de implantarlo Cómo trabajamos"
+          "heading": "¿Cuánto cuesta una hora de trabajo en tu empresa?",
+          "text": "Con la seguridad social incluida. Si no lo sabes, deja 25 €. ¿Cuánto cuesta una hora de trabajo en tu empresa? Prueba los sistemas"
         },
         {
           "id": "/#c7",
-          "heading": "Analizamos",
-          "text": "Seguimos el recorrido real de un cliente, de un pedido y de una factura, de principio a fin, y anotamos cada punto en el que una persona tiene que hacer de puente. De ahí sale la lista de por dónde se escapan el tiempo, las ventas y el dinero, y cuántas veces al mes pasa cada cosa. Sales de aquí con esa lista, la construyamos o no 02"
+          "heading": "No te lo contamos: tócalo.",
+          "text": "Cuatro sistemas funcionando, con datos inventados. Se usan solos; en cuanto tocas algo, mandas tú. D-Code Finance es nuestro producto. Los otros tres son ejemplos de lo que construimos a medida, montados para una empresa de climatización que no existe. ComercialDel contacto a la ventaVender OperacionesDel sí al trabajo hechoHacer Atención al clienteContesta con tus datosAtender D-Code FinanceEl dinero, en un solo sitioCobrarProducto propio 01El problemaLos contactos llegan por cuatro sitios y el seguimiento depende de que alguien se acuerde. 02Qué haceUna sola bandeja: la IA lee cada contacto, lo clasifica y lo asigna con vuestras reglas. 03Qué pasa soloRespuesta con huecos reales, visita en la agenda y seguimientos programados. 04ResultadoNadie tiene que acordarse de nada, y la venta pasa sola a Operaciones y a Finance. Cargando el sistema… <p class=\"demo-aviso\">Esta demo necesita JavaScript.</p> Sistema de ejemplo · empresa ficticia · datos inventados. Así funcionaría con los vuestros. 01El problemaUn sí del cliente acaba en un WhatsApp y una hoja de cálculo. 02Qué haceCrea la orden de trabajo, revisa el material y propone quién y cuándo. 03Qué pasa soloPedido al proveedor, aviso al cliente y agenda reorganizada si algo se retrasa. 04ResultadoEl parte firmado sale como factura en Finance, sin volver a teclear nada. Cargando el sistema… <p class=\"demo-aviso\">Esta demo necesita JavaScript.</p> Sistema de ejemplo · empresa ficticia · datos inventados. Así funcionaría con los vuestros. 01El problemaEl teléfono interrumpe a los técnicos y las mismas preguntas llegan por tres canales. 02Qué haceUn asistente contesta con los datos de la empresa: contratos, facturas y agenda. 03Qué pasa soloCitas reservadas, facturas enviadas y un parte previo para el técnico. 04ResultadoLo delicado lo lleva una persona, con el historial y el resumen hechos. Cargando el sistema… <p class=\"demo-aviso\">Esta demo necesita JavaScript.</p> Sistema de ejemplo · empresa ficticia · datos inventados. Así funcionaría con los vuestros. 01El problemaEl dinero vive en el banco, en el programa de facturas y en la cabeza de alguien. 02Qué haceLe sueltas un PDF con veinte facturas y te las deja dadas de alta, una a una. 03Qué pasa soloEmite, registra y avisa de los vencimientos. 04ResultadoLe preguntas en tu idioma y contesta con la cifra y la factura de la que sale. DEMO · datos ficticios Esto no es una captura: es la aplicación. Se está usando sola ahora mismo — tócala y la llevas tú. Los nombres y los importes son inventados; todo lo demás es el sistema de verdad. La aplicación, en un vistazo"
         },
         {
           "id": "/#c8",
-          "heading": "Diseñamos",
-          "text": "Cogemos lo que más pesa de esa lista y decidimos qué va con qué: qué puede ir solo, qué sigue decidiendo una persona y con cuáles de vuestras herramientas se conecta. Lo que ya funciona se queda como está, y las reglas de vuestro negocio las ponéis vosotros. Ves qué vas a tener antes de que exista 03"
+          "heading": "Aquí se lee; para tocarla, un ordenador.",
+          "text": "Un sistema financiero son tablas de ocho columnas y un menú de veinticinco pantallas. Apretado en un móvil se ve peor de lo que es, así que no te lo enseñamos apretado: te lo contamos, y lo abres cuando estés delante de un teclado. El panelEmpieza por una frase que dice qué está pasando, y debajo las cifras que la sostienen. Le sueltas un documento y lo colocaUn PDF con veinte facturas dentro sale convertido en veinte facturas dadas de alta, cada una con su número y su proveedor. Le preguntas en tu idiomaQuién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura de la que sale. Veinticinco pantallasFacturas, cobros, gastos, tesorería, proyectos, radar, registro fiscal y lo demás. Ver todo lo que hace <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver qué hace el sistema en su ficha.</p> Registro fiscal Preparado para VERI*FACTU Cada factura, registrada y encadenada desde que se emite. La remisión a la AEAT es el siguiente paso. En qué punto está Conciliación bancaria Próximamente El extracto del banco, cruzado con tus facturas y tus gastos. Es la siguiente pieza. Cómo funcionará"
         },
         {
           "id": "/#c9",
-          "heading": "Implantamos",
-          "text": "Lo construimos, lo conectamos con lo que ya usáis y lo dejamos funcionando dentro del trabajo de cada día, por partes y con vuestro equipo dentro. No entregamos un manual para que alguien lo ponga en marcha: entregamos algo que ya está en marcha. Funciona en tu operativa, no en una demo 04"
+          "heading": "De lo que tienes hoy a preguntarle a tus números",
+          "text": "01FormularioTe lo enviamos y lo completas. 02ValidaciónLo revisamos antes de tocar nada. 03En marcha en 1 díaCon tus clientes, facturas y gastos anteriores dentro. No se empieza vacío. 04FuncionandoEmite, registra y avisa de los vencimientos. Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los planes de Finance Hablemos de implantarlo Cómo lo construimos"
         },
         {
           "id": "/#c10",
-          "heading": "Medimos y mejoramos",
-          "text": "El sistema deja rastro de todo lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo una persona haciendo de puente. Con eso se corrige, y cuando la empresa cambia, el sistema cambia con ella en vez de quedarse obsoleto. Se puede comprobar, no solo creer Esto es lo que nos piden que arreglemos"
+          "heading": "Analizamos",
+          "text": "Empieza con una llamada de 30 minutos y sigue con una revisión: seguimos el recorrido real de un cliente, un pedido y una factura, y anotamos cada punto en el que una persona hace de puente. De tu parte Media hora y, después, un par de horas de quien hace ese trabajo, con ejemplos reales. Con qué te quedas La lista escrita de por dónde se escapan el tiempo y el dinero. Es tuya, la construyamos o no. Si no vemos nada que valga la pena, te lo decimos en la llamada 02"
         },
         {
           "id": "/#c11",
-          "heading": "Si algo de esto te suena, hay un sistema para ello.",
-          "text": "Entran oportunidades y nadie las sigue a tiempo Implantamos un sistema que recoge los contactos de la web, del correo y de los anuncios, los ordena por interés y activa el seguimiento solo, con aviso cuando uno lleva días parado. Cobrar depende de que alguien se acuerde Implantamos el sistema de facturas, vencimientos y cobros: se emiten cuando toca, los recordatorios salen solos y un panel dice quién debe qué y desde cuándo. Es software nuestro y lo tienes más arriba para probarlo. Los clientes esperan demasiado a que alguien conteste Implantamos un agente que responde en la web y por correo con la información real de tu negocio, clasifica lo que entra y pasa a una persona lo que necesita a una persona. Los proyectos se retrasan y nadie lo ve venir Implantamos un sistema que, en cuanto el cliente dice que sí, monta el proyecto con sus tareas, sus responsables y sus fechas, y avisa antes de que algo se bloquee. Cada persona guarda la información en un sitio distinto Implantamos un único sitio donde viven clientes, documentos, contratos y vencimientos, cada uno con su recordatorio y a la vista de quien lo necesita. Cada mañana hay que pedirle los números a alguien Implantamos un panel que cada día dice qué pasó ayer y qué hay que decidir hoy, calculado sobre los datos de tu propia operación. Si tu problema se parece a uno de estos, adaptamos el sistema. Si no se parece a ninguno, construimos el que falta: no hay un catálogo del que elegir. Se montan con automatizaciones, agentes de IA e integraciones. Sin promesas"
+          "heading": "Diseñamos",
+          "text": "Cogemos lo que más pesa y decidimos qué va con qué: qué hace el sistema solo, qué sigue decidiendo una persona y con qué herramientas vuestras se conecta. De tu parte Decir qué es prioritario. Las reglas de tu negocio las pones tú. Con qué te quedas Alcance, plazo y precio por escrito antes de que empiece nada. Ves lo que vas a tener antes de que exista 03"
         },
         {
           "id": "/#c12",
-          "heading": "Esto es exactamente lo que pasa, desde la primera llamada.",
-          "text": "No tenemos garantías que enseñarte ni porcentajes que prometerte. Lo que sí podemos es contarte el proceso entero y dejarte el producto delante: las dos cosas se comprueban antes de firmar nada. 01 La primera llamada 30 minutos Qué pasaNos cuentas cómo trabajáis. Preguntamos por el recorrido de un cliente, de un pedido y de una factura. Qué hace faltaMedia hora tuya, sin preparar nada. Con qué te quedasSi no vemos nada que valga la pena automatizar, te lo decimos en esa llamada. 02 La revisión Qué pasaMiramos cómo trabajáis de verdad: quién hace qué, con qué herramienta y cuántas veces al mes. Qué hace faltaUn par de horas de las personas que hacen ese trabajo, y ejemplos reales: una factura, un presupuesto, un correo de los de siempre. Con qué te quedasLa lista escrita de por dónde se escapan el tiempo y el dinero, con la frecuencia de cada cosa. Es tuya, la construyamos o no. 03 La propuesta Qué pasaElegimos lo que más pesa y te enseñamos qué se construiría: qué va solo, qué sigue decidiendo una persona y con qué se conecta. Qué hace faltaQue digas qué es prioritario. Las reglas de tu negocio no nos las inventamos nosotros. Con qué te quedasAlcance, plazo y precio por escrito antes de que empiece nada. 04 La implantación Qué pasaSe construye y se pone a funcionar por partes, dentro de las herramientas que ya usáis. Nada cambia de golpe. Qué hace faltaLos accesos mínimos a lo que ya usáis y una persona de vuestro lado que valide que hace lo que tiene que hacer. Con qué te quedasEl sistema funcionando con tu equipo usándolo, no un manual para ponerlo en marcha. 05 El control Qué pasaQueda escrito qué hace cada pieza, dónde se ejecuta, quién puede cambiarla y qué ocurre si un día falla. Qué hace faltaNada. Con qué te quedasLos accesos y la documentación a tu nombre. Si un día dejamos de trabajar juntos, sigue funcionando. 06 La medida Qué pasaEl sistema registra lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo alguien haciendo de puente. Qué hace faltaMedia hora al mes para mirarlo juntos. Con qué te quedasNúmeros salidos de tu propio sistema. No hay que creernos: se comprueba. Y antes de nada de esto puedes abrir la demo de aquí arriba y trastear con ella todo lo que quieras: es el mismo software que implantamos, con datos inventados. También puedes leer cómo trabajamos o qué estamos cambiando ahora mismo. Empecemos"
+          "heading": "Implantamos",
+          "text": "Lo construimos y lo ponemos a funcionar por partes, dentro de las herramientas que ya usáis y con vuestro equipo dentro. Nada cambia de golpe. De tu parte Los accesos mínimos y una persona que valide que hace lo que tiene que hacer. Con qué te quedas El sistema funcionando, con la documentación y los accesos a tu nombre. Si un día dejamos de trabajar juntos, sigue funcionando. Funciona en tu operativa, no en una demo 04"
         },
         {
           "id": "/#c13",
+          "heading": "Medimos y mejoramos",
+          "text": "El sistema deja rastro de lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo una persona haciendo de puente. Con eso se corrige cada mes. De tu parte Media hora al mes para mirarlo juntos. Con qué te quedas Números salidos de tu propio sistema, no de una presentación. Cada mes, con tus propios números Sin promesas"
+        },
+        {
+          "id": "/#c14",
+          "heading": "Nada de esto hay que creérselo: se comprueba.",
+          "text": "No te vamos a prometer porcentajes. Esto es lo que puedes comprobar antes de firmar nada: Los sistemas, funcionando Arriba tienes cuatro. Tócalos todo lo que quieras. Cómo trabajamos, por escrito El método entero, paso a paso, antes de la primera llamada. Lo que usamos en casa Los sistemas que usamos en nuestra propia empresa, con lo que salió bien y lo que no. Lo que estamos cambiando Qué hay en marcha ahora mismo y en qué punto está cada cosa. Lo que queda por escrito Sin permanencia, con los accesos y la documentación a tu nombre. Empecemos"
+        },
+        {
+          "id": "/#c15",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
           "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Lo que sueles preguntar"
         }
@@ -3047,7 +2905,7 @@
         },
         {
           "id": "/metodo#c1",
-          "heading": "Diagnóstico",
+          "heading": "Análisis",
           "text": "Recorremos tu operación real: qué procesos consumen más horas, dónde se pierden oportunidades y qué tareas repetitivas frenan al equipo. No es un cuestionario, es una lectura de cómo trabajáis. 02"
         },
         {
@@ -3057,23 +2915,23 @@
         },
         {
           "id": "/metodo#c3",
-          "heading": "Construcción",
+          "heading": "Implantación",
           "text": "Adaptamos las piezas que ya sabemos construir y desarrollamos lo que tu caso necesite y no exista. Se despliega en tu operativa real, no en un entorno de pruebas aislado. 04"
         },
         {
           "id": "/metodo#c4",
-          "heading": "Medición y ajuste",
+          "heading": "Medición y mejora",
           "text": "Revisamos con datos concretos —horas, tiempos de respuesta, procesos automatizados— comparados con tu situación de partida. Y ajustamos lo que haga falta. Antes de construir nada, sabrás exactamente qué vamos a construir. El alcance, las herramientas con las que se conecta y lo que vamos a medir se acuerdan contigo. Es la parte del trabajo que casi nadie enseña, y es la que decide si el resto sale bien."
         },
         {
           "id": "/metodo#c5",
           "heading": "Tres cosas que descartamos de entrada.",
-          "text": "No te obligamos a cambiar de herramientas. Diseñamos para integrarnos con tu CRM, tus hojas de cálculo o tu ERP, en vez de sustituirlos. No entregamos una caja negra. Si un sistema no se puede explicar en cinco minutos, probablemente lo estemos complicando de más. No vendemos un catálogo cerrado. Los ocho Departamentos son piezas que ya sabemos construir. Si tu problema pide otra cosa, se construye otra cosa."
+          "text": "No te obligamos a cambiar de herramientas. Diseñamos para integrarnos con tu CRM, tus hojas de cálculo o tu ERP, en vez de sustituirlos. No entregamos una caja negra. Si un sistema no se puede explicar en cinco minutos, probablemente lo estemos complicando de más. No vendemos un catálogo cerrado. Las ocho áreas de Qué construimos son piezas que ya sabemos construir. Si tu problema pide otra cosa, se construye otra cosa."
         },
         {
           "id": "/metodo#c6",
-          "heading": "Empecemos por el diagnóstico.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y por dónde empezaríamos. Reservar una llamada Ver los compromisos"
+          "heading": "Empecemos por mirar cómo trabajáis.",
+          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y por dónde empezaríamos. Reservar una llamada Ver las garantías"
         }
       ]
     },
@@ -3226,7 +3084,7 @@
         {
           "id": "/servicios#c5",
           "heading": "Empecemos por tu operativa.",
-          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar mi llamada Cómo trabajamos"
+          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar una llamada Cómo trabajamos"
         }
       ]
     },
@@ -3237,7 +3095,7 @@
         {
           "id": "/servicios/agentes-ia#c0",
           "heading": "Atención al cliente y ventas que no hacen esperar a nadie.",
-          "text": "No es un chatbot aislado: es la pieza de conversación dentro de tu Departamento de Soporte o Comercial, coordinada con el resto del sistema. Responde en el chat de tu web y por email con el tono y la información de tu negocio, y sabe cuándo pasar la conversación a una persona."
+          "text": "No es un chatbot aislado: es la pieza de conversación dentro de tu sistema de Soporte o Comercial, coordinada con el resto del sistema. Responde en el chat de tu web y por email con el tono y la información de tu negocio, y sabe cuándo pasar la conversación a una persona."
         },
         {
           "id": "/servicios/agentes-ia#c1",
@@ -3293,7 +3151,7 @@
         {
           "id": "/servicios/automatizacion-ia#c0",
           "heading": "Procesos que se ejecutan solos, 24 horas al día.",
-          "text": "Es el motor que hace correr cada Departamento Inteligente por dentro. Diseñamos sistemas que se encargan de las tareas operativas repetitivas de tu negocio: las que consumen horas de tu equipo pero no requieren su criterio en cada paso."
+          "text": "Es el motor que hace funcionar por dentro cada parte del sistema. Diseñamos sistemas que se encargan de las tareas operativas repetitivas de tu negocio: las que consumen horas de tu equipo pero no requieren su criterio en cada paso."
         },
         {
           "id": "/servicios/automatizacion-ia#c1",
@@ -3349,7 +3207,7 @@
         {
           "id": "/servicios/integraciones#c0",
           "heading": "Tus herramientas, conectadas entre sí de verdad.",
-          "text": "Es lo que hace que tus Departamentos Inteligentes compartan un mismo dato en vez de vivir aislados. Unimos tu CRM, tu ERP, tu web y las hojas de cálculo que ya usas para que la información viaje sola, sin exportar, copiar ni pegar nada a mano."
+          "text": "Es lo que hace que todas las áreas de tu empresa compartan un mismo dato en vez de vivir aisladas. Unimos tu CRM, tu ERP, tu web y las hojas de cálculo que ya usas para que la información viaje sola, sin exportar, copiar ni pegar nada a mano."
         },
         {
           "id": "/servicios/integraciones#c1",

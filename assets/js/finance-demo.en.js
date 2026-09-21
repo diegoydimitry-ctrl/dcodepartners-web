@@ -1735,7 +1735,7 @@
         }).join('') + '</div>' +
         '<form class="fdemo-filter-row" data-role="factura-filter">' +
         '<input class="fdemo-input" type="search" name="q" placeholder="Search by number, client or project…" value="' + esc(state.facturaFiltro.q) + '" autocomplete="off">' +
-        '<select class="fdemo-select" name="estado">' + ['<option value="">All statuses</option>'].concat(estados.map(function (e) { return '<option value="' + esc(e) + '"' + (e === estFiltro ? ' selected' : '') + '>' + esc(e) + '</option>'; })).join('') + '</select>' +
+        '<select class="fdemo-select" name="estado" aria-label="Filter by status">' + ['<option value="">All statuses</option>'].concat(estados.map(function (e) { return '<option value="' + esc(e) + '"' + (e === estFiltro ? ' selected' : '') + '>' + esc(e) + '</option>'; })).join('') + '</select>' +
         '<button type="submit" class="fdemo-btn variant-secondary">Filter</button>' +
         '</form>' +
         card(null, tableHtml) +

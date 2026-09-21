@@ -64,12 +64,22 @@ const dcp9JsHash = hashFile('assets/js/dcp9.js');
 // La demo de Finance (/sistema-financiero/demo, /sistema-financiero/app y el
 // bloque de /departamentos/finanzas) llevaba ?v=2 escrito a mano: quedaba
 // fuera de este script y un cambio en su CSS/JS no invalidaba la caché.
+// dcp10 (arquitectura, diagnóstico y galería de la portada) y las demos de
+// «Prueba los sistemas»: el motor y cada demo se cargan bajo demanda desde
+// atributos data-css / data-js, que también llevan su ?v= y se reescriben aquí.
 const FINANCE_ASSETS = [
   'assets/css/finance-demo.css',
   'assets/js/finance-demo.js',
   'assets/js/finance-demo.en.js',
   'assets/js/finance-demo-data.js',
   'assets/js/finance-demo-data.en.js',
+  'assets/css/dcp10.css',
+  'assets/js/dcp10.js',
+  'assets/css/demo-sistemas.css',
+  'assets/js/demo-sistemas.js',
+  'assets/js/demo-comercial.js',
+  'assets/js/demo-operaciones.js',
+  'assets/js/demo-atencion.js',
 ].map((rel) => {
   const name = path.basename(rel);
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
