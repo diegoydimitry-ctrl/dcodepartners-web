@@ -69,3 +69,11 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Conformidad con el sistema de diseño
         run: npm run qa:ds
+      # Solapes de texto, texto cortado, botones pegados, scroll horizontal y
+      # errores de JavaScript en las 72 páginas a ocho anchos (320–1440).
+      - name: Nada pisado, cortado ni pegado
+        run: npm run qa:solapes
+      # La demo de Finance funcionando: 25 pantallas en ES y EN, sin vacíos,
+      # sin mezclar idiomas y sin errores.
+      - name: La demo de Finance, pantalla a pantalla
+        run: npm run qa:demo

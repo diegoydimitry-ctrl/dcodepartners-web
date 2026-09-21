@@ -35,7 +35,10 @@
   --dc-border-input:#83868f;
   --dc-text:#15161a;
   --dc-text-muted:#4a4d57;   /* --dc-text-2 del producto */
-  --dc-text-faint:#646874;   /* --dc-text-3 del producto */
+  /* Un punto más oscuros que en el producto: sobre las tarjetas tintadas
+     (aviso, positivo, la franja de DEMOSTRACIÓN) se quedaban en 4,37–4,48:1,
+     por debajo del 4,5:1 de WCAG AA. Medido con axe-core. */
+  --dc-text-faint:#5d616c;   /* --dc-text-3 del producto era #646874 */
   /* UN azul de acción. El degradado cian→violeta era la piel de la web,
      no un botón: en una tabla de importes competía con la única señal que
      debe destacar, que es el dinero. */
@@ -43,16 +46,16 @@
   --dc-accent-cyan:#0a6e7a;
   --dc-accent-violet:#6337c9;
   --dc-brand-grad:linear-gradient(120deg,#2f5fe0,#244fc4);
-  --dc-success:#0f7a4f;
+  --dc-success:#0d6f48;
   --dc-success-bg:rgba(15,122,79,.08);
-  --dc-warning:#9a5b00;
+  --dc-warning:#8f5400;
   --dc-warning-bg:rgba(154,91,0,.09);
   --dc-danger:#c0392f;
   --dc-danger-bg:rgba(192,57,47,.08);
   --dc-info:#2f5fe0;
   --dc-info-bg:rgba(47,95,224,.08);
   --dc-neutral-bg:rgba(100,104,116,.1);
-  --dc-neutral:#646874;
+  --dc-neutral:#5d616c;
   /* El píxel central de la marca D-Code es el acento de cada producto.
      Finance es esmeralda. Es IDENTIDAD, nunca acción ni estado. */
   --dc-mark-accent:#0f7a4f;
@@ -1737,7 +1740,13 @@
 }
 .fdemo-senal-lado{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex:none; }
 @media (max-width:700px){
-  .fdemo-senal-lado{ flex-direction:row; align-items:center; width:100%; justify-content:space-between; }
+  /* La cifra y el botón bajan a su propia fila. Sin el wrap, el lado ocupaba
+     el 100 % de la MISMA fila y dejaba el texto del aviso en una columna de
+     una palabra, con la cifra encima de la etiqueta (medido a 320–430 px). */
+  .fdemo-senal{ flex-wrap:wrap; row-gap:10px; }
+  .fdemo-senal-c{ flex:1 1 100%; }
+  .fdemo-senal-lado{ flex-direction:row; align-items:center; width:100%; justify-content:space-between; flex-wrap:wrap; gap:8px; min-width:0; }
+  .fdemo-senal-n{ min-width:0; overflow-wrap:anywhere; }
 }
 .fdemo-nohace.es-bien{ border-left-color:var(--dc-success); }
 .fdemo-pct{ display:block; margin-top:4px; font-size:0.6875rem; color:var(--dc-text-faint); font-variant-numeric:tabular-nums; }
@@ -2161,3 +2170,18 @@ tr.is-quieta td{ background:var(--dc-surface-2); font-size:.8125rem; }
 .fdemo-vf-estado[data-vf="2"]{ color:var(--dc-warning); background:var(--dc-warning-bg); border-color:rgba(245,165,36,.3); }
 .fdemo-vf-estado[data-vf="4"]{ color:var(--dc-success); background:var(--dc-success-bg); border-color:rgba(52,199,128,.3); }
 .fdemo-lector-pie.es-pronto{ background:var(--dc-warning-bg); }
+
+/* La demo a pantalla completa en un móvil estrecho: a 320 px la barra de
+   arriba medía 373 px y «Salir de la demo» quedaba cortado fuera de la
+   pantalla —justo el botón que no puede faltar—. Se quita el avatar (es
+   decorativo), se aprietan los huecos y, por debajo de 361 px, el indicador
+   del recorrido (el recorrido sigue funcionando: vuelve solo al dejar de
+   tocar). Medido: cabe entero a 320, 360 y 390. */
+@media (max-width:400px){
+  .fdemo-app.is-fullpage .fdemo-topbar-avatar{ display:none; }
+  .fdemo-app.is-fullpage .fdemo-topbar-right{ gap:8px; }
+  .fdemo-app.is-fullpage .fdemo-topbar-exit{ margin-left:0; padding:6px 10px; }
+}
+@media (max-width:360px){
+  .fdemo-app.is-fullpage .fdemo-tour{ display:none; }
+}

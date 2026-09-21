@@ -26,6 +26,7 @@ import path from 'node:path';
 
 import { fileURLToPath } from 'node:url';
 import { readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 9211;
@@ -62,7 +63,9 @@ async function todasLasPaginas(dir = ROOT, base = '') {
 
 const pages = process.argv.length > 2 ? process.argv.slice(2) : (await todasLasPaginas()).sort();
 const WIDTHS = [1440,1280,1024,768,390];
-const browser = await chromium.launch({ executablePath:'/opt/pw-browsers/chromium' });
+// En este entorno Chromium vive en /opt/pw-browsers; en CI, donde lo deja
+// `npx playwright install` (con la ruta fija, el trabajo de CI no arrancaba).
+const browser = await chromium.launch(existsSync('/opt/pw-browsers/chromium') ? { executablePath:'/opt/pw-browsers/chromium' } : {});
 const issues = [];
 for (const w of WIDTHS) {
   const ctx = await browser.newContext({ viewport:{width:w,height:w<=768?844:900}, hasTouch:w<=768, isMobile:w<=768, deviceScaleFactor:1 });

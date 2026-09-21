@@ -97,6 +97,17 @@ cambia("function estadoVisual(valor) {\n    var v = (valor || '').toLowerCase();
        "    if (/^(outstanding|pending)$/.test(v)) return 'pending';\n" +
        "    if (/^(booked|dismissed|fulfilled|invoiced|converted)$/.test(v)) return 'success';");
 
+// Importes y fechas en formato inglés (finance-demo-data.en.js formatea con
+// en-GB: «€10,315.50», «02 Aug 2026»). Todo lo que LEE esos textos —ordenar
+// columnas, quitar los céntimos de un eje, leer lo que se teclea— cambia con él.
+cambia("esc(EUR(total).replace(/,\\d\\d(?=\\s?€)/, ''))", "esc(EUR(total).replace(/\\.\\d\\d$/, ''))");
+cambia("esc(EUR(v).replace(/,00(?=\\s?€)/, ''))", "esc(EUR(v).replace(/\\.00$/, ''))");
+cambia("var m = /^(−?-?[\\d.]+,\\d{2})\\s?€/.exec(t);\n      if (m) return parseFloat(m[1].replace('−', '-').replace(/\\./g, '').replace(',', '.'));",
+       "var m = /^(−|-)?€([\\d,]+\\.\\d{2})/.exec(t);\n      if (m) return (m[1] ? -1 : 1) * parseFloat(m[2].replace(/,/g, ''));");
+cambia("if (/,/.test(s)) s = s.replace(/\\./g, '').replace(',', '.');\n      else if (/^-?\\d{1,3}(\\.\\d{3})+$/.test(s)) s = s.replace(/\\./g, '');",
+       "s = s.replace(/,/g, '');   // en inglés la coma separa miles y el punto, decimales");
+cambia("(l.precio ? esc(String(l.precio).replace('.', ',')) : '')", "(l.precio ? esc(String(l.precio)) : '')");
+
 // Palabras sueltas en minúscula que se ENSEÑAN (las demás minúsculas son claves
 // y rutas, y no se tocan).
 cambia("(minC.f === FS.hoy ? 'hoy' : fechaCorta(minC.f))", "(minC.f === FS.hoy ? 'today' : fechaCorta(minC.f))");

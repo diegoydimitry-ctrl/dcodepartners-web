@@ -250,6 +250,9 @@ export function concBloque(cfg, lang) {
           <span class="eyebrow">${futuro(cfg) ? T(lang, 'La siguiente pieza', 'The next piece') : T(lang, 'Conciliación bancaria', 'Bank reconciliation')}</span>
           <p class="vf-sello" data-conc="${concN(cfg)}"><i aria-hidden="true"></i><span>${futuro(cfg) ? T(lang, 'Conciliación bancaria · ', 'Bank reconciliation · ') : ''}${concLabel(cfg, lang)}</span></p>
           <h2 class="h-title" id="conc-t">${T(lang, 'El extracto del banco, cruzado con lo que ya tienes.', 'Your bank statement, matched against what you already have.')}</h2>
+          <p class="lead">${futuro(cfg)
+            ? T(lang, 'Hoy, saber qué ha entrado de verdad en el banco obliga a repasar el extracto línea a línea contra las facturas. La conciliación hará ese cruce dentro de D-Code Finance, con los clientes, las facturas y los gastos que ya tiene, y dejará a la vista solo lo que no cuadre.', 'Today, knowing what has really reached the bank means going through the statement line by line against the invoices. Reconciliation will do that matching inside D-Code Finance, with the clients, invoices and expenses it already holds, and leave in view only what does not match.')
+            : T(lang, 'Saber qué ha entrado de verdad en el banco ya no obliga a repasar el extracto línea a línea: D-Code Finance hace ese cruce con los clientes, las facturas y los gastos que ya tiene, y deja a la vista solo lo que no cuadra.', 'Knowing what has really reached the bank no longer means going through the statement line by line: D-Code Finance does the matching with the clients, invoices and expenses it already holds, and leaves in view only what does not match.')}</p>
           <ul class="conc-l">
             ${concPuntos(cfg, lang).map((x) => `<li>${x}</li>`).join('\n            ')}
           </ul>
@@ -296,7 +299,7 @@ const NO = (lang) => `<span class="cmp-no" role="img" aria-label="${T(lang, 'No 
 
 // En móvil la tabla se convierte en filas de tres casillas y cada casilla
 // dice de qué plan es (data-p): así no hay que desplazarse de lado.
-const CORTO = { es: ['Finance', 'Con inteligencia', 'A medida'], en: ['Finance', 'With intelligence', 'Made to measure'] };
+const CORTO = { es: ['Finance', 'Finance con inteligencia', 'Finance a medida'], en: ['Finance', 'Finance with intelligence', 'Finance, made to measure'] };
 const td = (lang, desde, n, html, extra = '') => {
   const p = CORTO[lang === 'en' ? 'en' : 'es'].slice(desde, desde + n).join(' · ');
   return `<td data-p="${n === 3 ? T(lang, 'Los tres planes', 'All three plans') : p}"${n > 1 ? ` colspan="${n}" class="c${n}${extra ? ' ' + extra : ''}"` : extra ? ` class="${extra}"` : ''}>${html}</td>`;

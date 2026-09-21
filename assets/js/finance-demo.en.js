@@ -624,7 +624,7 @@
       return '<div class="fdemo-donut">' +
         '<svg viewBox="0 0 160 160" role="img" aria-label="' + esc(opc.titulo || 'Breakdown') + '">' + arcos +
         '<text x="80" y="76" text-anchor="middle" class="fdemo-donut-k">' + esc(opc.centro || 'Total') + '</text>' +
-        '<text x="80" y="94" text-anchor="middle" class="fdemo-donut-v">' + esc(EUR(total).replace(/,\d\d(?=\s?€)/, '')) + '</text></svg>' +
+        '<text x="80" y="94" text-anchor="middle" class="fdemo-donut-v">' + esc(EUR(total).replace(/\.\d\d$/, '')) + '</text></svg>' +
         '<ul class="fdemo-donut-l">' + leyenda + '</ul></div>';
     }
 
@@ -761,7 +761,7 @@
         var y0 = Y(0), rejilla = '';
         for (var v = lo; v <= hi + 0.001; v += paso) {
           rejilla += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '" class="' + (Math.abs(v) < 0.001 ? 'es-cero' : '') + '"/>' +
-            '<text x="' + (L - 8) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + esc(EUR(v).replace(/,00(?=\s?€)/, '')) + '</text>';
+            '<text x="' + (L - 8) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + esc(EUR(v).replace(/\.00$/, '')) + '</text>';
         }
         var cada = HZ <= 30 ? 7 : 15, ejeX = '';
         for (var i = 0; i < serieC.length; i += cada) {
@@ -1013,7 +1013,7 @@
       }
       var REGLAS = [
         ['Same supplier', 'It compares the registered supplier, not the description text.'],
-        ['Same amount to the cent', 'No tolerance: 412,00 € and 412,01 € are not the same expense.'],
+        ['Same amount to the cent', 'No tolerance: €412.00 and €412.01 are not the same expense.'],
         ['Fewer than ten days', 'Beyond that it is usually a recurring charge, not a duplicate.'],
         ['Stopped at the door', 'Anything that matches stays out of the numbers until someone decides. There is nothing to undo.']
       ];
@@ -1309,7 +1309,7 @@
           }).join('') + '</ol></div>'), 2) +
         '</div>' +
         seccion('All suppliers', 'with their trend over the last six months',
-          card('', tablaSimple([{t:'Supplier'},{t:'Category'},{t:'Tax ID'},{t:'Last expense'},{t:'Expenses',r:1},{t:'6 meses'},{t:'Total',r:1},{t:'To pay',r:1},{t:'Share'}], filas, '')), 3) +
+          card('', tablaSimple([{t:'Supplier'},{t:'Category'},{t:'Tax ID'},{t:'Last expense'},{t:'Expenses',r:1},{t:'6 months'},{t:'Total',r:1},{t:'To pay',r:1},{t:'Share'}], filas, '')), 3) +
         aviso('A supplier that raises its prices shows up in the Radar by itself. You don’t have to go looking for it here: you’re notified when it happens.') +
         '</div>';
     };
@@ -1413,7 +1413,7 @@
         ['Form 303', 'Quarterly VAT', '1st to 20th of the month after the quarter'],
         ['Form 390', 'Annual VAT summary', '1st to 30th of January'],
         ['Form 111', 'IRPF withholdings', '1st to 20th of the month after the quarter'],
-        ['Form 347', 'Third-party transactions', 'during February, above 3.005,06 €']
+        ['Form 347', 'Third-party transactions', 'during February, above €3,005.06']
       ];
       var filasCal = CAL.map(function (c) {
         return '<tr><td><b>' + esc(c[0]) + '</b></td><td class="is-muted">' + esc(c[1]) + '</td>' +
@@ -2077,7 +2077,7 @@
         return '<div class="fdemo-bf-linea" data-i="' + i + '">' +
           '<label class="fdemo-bf-c"><span>Description</span><input class="fdemo-input" data-bf="c" data-i="' + i + '" value="' + esc(l.c) + '" placeholder="What you’re invoicing" autocomplete="off"></label>' +
           '<label class="fdemo-bf-n"><span>Qty</span><input class="fdemo-input" data-bf="cant" data-i="' + i + '" value="' + esc(String(l.cant)) + '" inputmode="decimal"></label>' +
-          '<label class="fdemo-bf-p"><span>Price</span><input class="fdemo-input" data-bf="precio" data-i="' + i + '" value="' + (l.precio ? esc(String(l.precio).replace('.', ',')) : '') + '" placeholder="0,00" inputmode="decimal"></label>' +
+          '<label class="fdemo-bf-p"><span>Price</span><input class="fdemo-input" data-bf="precio" data-i="' + i + '" value="' + (l.precio ? esc(String(l.precio)) : '') + '" placeholder="0,00" inputmode="decimal"></label>' +
           '<label class="fdemo-bf-n"><span>Disc. %</span><input class="fdemo-input" data-bf="dto" data-i="' + i + '" value="' + esc(String(l.dto || 0)) + '" inputmode="decimal"></label>' +
           (b.lineas.length > 1 ? '<button type="button" class="fdemo-bf-x" data-action="bf-quita" data-i="' + i + '" aria-label="Remove line ' + (i + 1) + '">×</button>' : '<span class="fdemo-bf-x" aria-hidden="true"></span>') +
           '</div>';
@@ -2132,8 +2132,7 @@
        veinticuatro; «1.250,50» lleva los dos separadores. */
     function numeroDe(txt) {
       var s = String(txt || '').trim().replace(/[\s€]/g, '');
-      if (/,/.test(s)) s = s.replace(/\./g, '').replace(',', '.');
-      else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+      s = s.replace(/,/g, '');   // en inglés la coma separa miles y el punto, decimales
       var n = parseFloat(s);
       return isFinite(n) ? n : 0;
     }
@@ -2546,11 +2545,11 @@
        dos finales, porque los dos son reales. Lo que el sistema NO hace —dar
        de alta varias facturas solas desde un PDF— no aparece. */
     var DOC_CAMPOS = [
-      { k: 'Total amount', v: '498,52 €', frag: '…xable base: 412,00 EUR  VAT 21%: 86,52 EUR  INVOICE TOTAL: 498,52 EUR' },
-      { k: 'Date', v: '12 ago 2026', frag: '…ice number: FP-2026-0441  Issue date: 12/08/2026  Due dat…' },
+      { k: 'Total amount', v: '€498.52', frag: '…xable base: 412.00 EUR  VAT 21%: 86.52 EUR  INVOICE TOTAL: 498.52 EUR' },
+      { k: 'Date', v: '12 Aug 2026', frag: '…ice number: FP-2026-0441  Issue date: 12/08/2026  Due dat…' },
       { k: 'Invoice no.', v: 'FP-2026-0441', frag: '…Pradillo 42, 28002 Madrid  INVOICE  Invoice number: FP-2026-0441…' },
-      { k: 'Taxable base', v: '412,00 €', frag: '…and consumables, August  Taxable base: 412,00 EUR  VAT 21%: 86,52 E…' },
-      { k: 'VAT amount', v: '86,52 €', frag: '…Taxable base: 412,00 EUR  VAT 21%: 86,52 EUR  INVOICE TOTAL: 4…' },
+      { k: 'Taxable base', v: '€412.00', frag: '…and consumables, August  Taxable base: 412.00 EUR  VAT 21%: 86.52 E…' },
+      { k: 'VAT amount', v: '€86.52', frag: '…Taxable base: 412.00 EUR  VAT 21%: 86.52 EUR  INVOICE TOTAL: 4…' },
       { k: 'Tax ID detected (no matching supplier record)', v: 'B84213977', frag: 'SUMINISTROS BELMONTE SL  Tax ID B84213977 - Calle Pradillo 42…' }
     ];
 
@@ -2610,15 +2609,15 @@
       var TIPOS = ['Invoice', 'Receipt', 'Delivery note', 'Proof of payment', 'Quote', 'Other'];
       var ORIGEN = ['Read by the assistant', 'Expense from PDF', 'Manual upload', 'Photo from phone', 'Received by email'];
       var archivo = [
-        { n: 'remesa-proveedores-septiembre.pdf', t: 'Invoice', o: 'Read by the assistant', d: FDATE(FS.hoy), pes: '2,4 MB', li: '20 facturas' },
+        { n: 'remesa-proveedores-septiembre.pdf', t: 'Invoice', o: 'Read by the assistant', d: FDATE(FS.hoy), pes: '2.4 MB', li: '20 invoices' },
         { n: state.gastoNuevo ? 'FP-2026-0441-perlan.pdf' : 'albaran-ALB-2026-0007.pdf',
           t: state.gastoNuevo ? 'Invoice' : 'Delivery note',
           o: state.gastoNuevo ? 'Expense from PDF' : 'Manual upload',
-          d: state.gastoNuevo ? '12 ago 2026' : '02 ago 2026', pes: '184 KB', li: '1 documento' }
+          d: state.gastoNuevo ? '12 Aug 2026' : '02 Aug 2026', pes: '184 KB', li: '1 document' }
       ].concat(gas.map(function (g, i) {
         return { n: slug(g.proveedor) + '-' + (2400 + i * 13) + '.pdf',
                  t: TIPOS[i % TIPOS.length], o: ORIGEN[i % ORIGEN.length], d: FDATE(g.fechaGasto),
-                 pes: (90 + i * 37) + ' KB', li: '1 documento', quien: g.proveedor, imp: g.importe };
+                 pes: (90 + i * 37) + ' KB', li: '1 document', quien: g.proveedor, imp: g.importe };
       }));
       var porTipo = {};
       archivo.forEach(function (a) { porTipo[a.t] = (porTipo[a.t] || 0) + 1; });
@@ -2848,9 +2847,9 @@
     // es la conciliación bancaria, y eso solo se enseña hecho cuando el
     // estado de producto dice que existe (ESTADO_PRODUCTO.conciliacion).
     var DOCS = [
-      { k: 'remesa', n: 'remesa-proveedores-septiembre.pdf', p: '2,4 MB', t: '20 invoices in a single PDF', icono: 'pdf' },
+      { k: 'remesa', n: 'remesa-proveedores-septiembre.pdf', p: '2.4 MB', t: '20 invoices in a single PDF', icono: 'pdf' },
       { k: 'factura', n: 'factura-proveedor-0441.pdf', p: '148 KB', t: 'A single invoice', icono: 'pdf' },
-      { k: 'albaran', n: 'albaran-foto.jpg', p: '1,9 MB', t: 'A delivery note photographed on a phone', icono: 'img' },
+      { k: 'albaran', n: 'albaran-foto.jpg', p: '1.9 MB', t: 'A delivery note photographed on a phone', icono: 'img' },
       { k: 'extracto', n: 'extracto-banco-septiembre.csv', p: '36 KB', t: 'Bank transactions', icono: 'csv' }
     ];
     var ICONO_DOC = {
@@ -3000,7 +2999,7 @@
 
     // Los otros tres documentos: la misma mecánica, más corta.
     var SIMPLE = {
-      factura: { t: 'Invoice read', campos: [['Supplier','Suministros Gráficos Perlan'],['Invoice no.','FP-2026-0441'],['Taxable base','412,00 €'],['VAT amount','86,52 €'],['Total','498,52 €'],['Date','12/08/2026']], destino: 'Booked into Expenses, pending your review.', vista: 'gastos' },
+      factura: { t: 'Invoice read', campos: [['Supplier','Suministros Gráficos Perlan'],['Invoice no.','FP-2026-0441'],['Taxable base','€412.00'],['VAT amount','€86.52'],['Total','€498.52'],['Date','12/08/2026']], destino: 'Booked into Expenses, pending your review.', vista: 'gastos' },
       albaran: { t: 'Delivery note read from a photo', campos: [['Supplier','Nubalia Cloud'],['Delivery note no.','ALB-2026-0188'],['Lines','6'],['Date','03/09/2026']], destino: 'Booked into Delivery notes and linked to its order.', vista: 'albaranes' },
       extracto: CONC_LISTA
         ? { t: 'Statement reconciled', campos: [['Transactions','34'],['Reconciled','11'],['Unidentified','3'],['Period','01/09 – 20/09']], destino: 'Eleven payments matched. Three transactions don’t match any invoice: it flags them for you instead of assigning them by guesswork.', vista: 'cobros' }
@@ -3031,12 +3030,12 @@
       state.ia.mensajes.push({ autor: 'ia', resp: {
         chip: chip,
         grupoT: 'By “supplier”' + ' · ' + 'facturas-proveedor-agosto.csv',
-        conclusion: 'The document totals 2.542,00 €. There are ' + EUR(registrado) + ' of expenses on record here. Its categories don’t match the ones Finance uses, so I can’t cross-check them line by line. And I don’t know whether it’s already recorded or additional: if it’s additional, those amounts would be added to expenses; if it’s an extract of what’s already here, it’s useful for cross-checking.',
+        conclusion: 'The document totals €2,542.00. There are ' + EUR(registrado) + ' of expenses on record here. Its categories don’t match the ones Finance uses, so I can’t cross-check them line by line. And I don’t know whether it’s already recorded or additional: if it’s additional, those amounts would be added to expenses; if it’s an extract of what’s already here, it’s useful for cross-checking.',
         datos: DOC_FILAS.map(function (f) {
-          return { k: f.p, v: EUR(f.v), n: Math.round(f.v / totalDoc * 1000) / 10 + ' % · ' + '1 fila' };
+          return { k: f.p, v: EUR(f.v), n: Math.round(f.v / totalDoc * 1000) / 10 + ' % · ' + '1 row' };
         }),
         significado: 'The reader opens the file, understands its structure, totals it, groups it by the column that identifies the supplier and checks it against what’s on record. What it doesn’t do is book those lines in: that’s done in Documents, invoice by invoice and with a review.',
-        revisar: ['If the document is additional, those 2.542,00 € would be added to recorded expenses.'],
+        revisar: ['If the document is additional, those €2,542.00 would be added to recorded expenses.'],
         refs: [{ type: 'documentos', id: '', label: 'Documents' }],
         motor: 'Read right here, in your browser'
       } });
@@ -3316,8 +3315,8 @@
     function claveOrden() { var r = parseRoute(); return r.view + '/' + (r.id || '') + '/' + JSON.stringify(state.tabs); }
     function valorCelda(td) {
       var t = (td.getAttribute('data-orden') || td.textContent || '').trim();
-      var m = /^(−?-?[\d.]+,\d{2})\s?€/.exec(t);
-      if (m) return parseFloat(m[1].replace('−', '-').replace(/\./g, '').replace(',', '.'));
+      var m = /^(−|-)?€([\d,]+\.\d{2})/.exec(t);
+      if (m) return (m[1] ? -1 : 1) * parseFloat(m[2].replace(/,/g, ''));
       var d = /^(\d{2})\/(\d{2})\/(\d{4})/.exec(t);
       if (d) return Date.parse(d[3] + '-' + d[2] + '-' + d[1]);
       var d2 = /^(\d{1,2}) (jan|feb|mar|apr|may|jun|jul|aug|sept?|oct|nov|dec)\w* (\d{4})/i.exec(t);

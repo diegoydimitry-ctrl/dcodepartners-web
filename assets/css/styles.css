@@ -1633,7 +1633,13 @@ nav.main-nav > ul{ position:relative; }
    elemento visible -- main.js hace scroll suave hasta él al elegir, en
    vez de vivir fijo al lado como en escritorio. */
 @media (max-width:760px){
-  .dept-console-body{ grid-template-columns:1fr; }
+  /* minmax(0,1fr) y no 1fr: con 1fr la columna no baja de lo que mide su
+     contenido más ancho (las etiquetas del embudo), y a 320 px el panel
+     entero se salía de su ventana y cortaba la cuarta columna. */
+  .dept-console-body{ grid-template-columns:minmax(0,1fr); }
+  .dept-console-list{ min-width:0; }
+  .dept-console-item{ min-width:0; }
+
   .dept-console-list{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -2343,6 +2349,12 @@ nav.main-nav > ul{ position:relative; }
 .faq-list .accordion-item.open .accordion-panel{ max-height:400px; }
 .faq-list .accordion-item{ scroll-margin-top:100px; }
 .faq-list .accordion-item.open .faq-plus{ transform:rotate(45deg); }
+/* La respuesta va FUERA del botón (antes iba dentro, y un enlace dentro de un
+   <button> no se puede usar con el teclado y hace que el lector de pantalla
+   lea la respuesta entera como nombre del botón). Se alinea bajo la
+   pregunta: 16 px del signo + 16 px de hueco. */
+.faq-list .accordion-item > .accordion-panel{ padding-left:32px; }
+.faq-list .accordion-item.open > .accordion-panel{ margin-top:-8px; }
 
 .faq-search{ position:relative; max-width:480px; margin:0 auto 56px; }
 .faq-search input{
@@ -2801,6 +2813,10 @@ nav.main-nav > ul{ position:relative; }
 .form-note.err{ color:var(--red); }
 
 .contact-card .window-body{ padding:0; }
+/* El correo es una sola «palabra» de 25 caracteres: a 320 px se salía de la
+   tarjeta y quedaba cortado. Se parte donde haga falta, nunca se corta. */
+.contact-row .value, .contact-row .value a{ overflow-wrap:anywhere; min-width:0; }
+.contact-row > div{ min-width:0; }
 /* Microinteracción (DIR-049 1D): la fila entera responde al hover, no
    solo el enlace de texto — un tinte de fondo muy sutil + el icono se
    ilumina, para que la tarjeta "dialogue" con el formulario en vez de
@@ -3974,4 +3990,83 @@ footer{
   font-size:0.9rem;
   line-height:1.66;
   color:var(--stone-soft);
+}
+
+/* El embudo comercial, en pantallas estrechas: cuatro columnas de ~48 px no
+   caben «EN SEGUIMIENTO» ni «PROPUESTA ENVIADA» sin partir la palabra por la
+   mitad. Por debajo de 420 px pasa a dos filas de dos, con la misma altura
+   relativa de cada barra. */
+@media (max-width:420px){
+  .dcv-pipeline{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); height:auto; gap:14px 10px; }
+  .dcv-pipe-col{ height:78px; }
+}
+
+
+/* Destino de un salto dentro de la página: recibe el foco (para el teclado)
+   pero no se pinta un marco alrededor de media página. */
+main[tabindex="-1"]:focus, section[tabindex="-1"]:focus, [id][tabindex="-1"]:focus{ outline:none; }
+
+/* Un enlace dentro de un párrafo se distingue por el subrayado, no solo por
+   el color: sobre el gris del texto, el azul se quedaba en 1,45:1 (axe-core,
+   páginas de servicios). Los enlaces con clase —botones, tarjetas— no. */
+main p a:not([class]), main li a:not([class]){ text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
+.rail:focus-visible{ outline:2px solid var(--blue); outline-offset:4px; border-radius:10px; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   IMPRESIÓN
+   ══════════════════════════════════════════════════════════════════════
+   El sitio es oscuro y el navegador no imprime fondos: sin esto, un texto
+   casi blanco salía sobre papel blanco —ilegible— junto a medio folio negro
+   del lienzo de partículas, la cabecera fija en cada hoja y las secciones de
+   una pantalla de alto dejando páginas vacías. Aquí se imprime lo que se
+   lee: tinta oscura, sin decorados, sin navegación y sin lo que solo tiene
+   sentido en pantalla (la demo se sustituye por su resumen escrito). */
+@media print{
+  @page{ margin:16mm 14mm; }
+  html, body{ background:#fff !important; }
+  body, body *{
+    color:#16181d !important; background:transparent !important;
+    text-shadow:none !important; box-shadow:none !important; filter:none !important;
+    -webkit-backdrop-filter:none !important; backdrop-filter:none !important;
+    animation:none !important; transition:none !important;
+  }
+  body *::before, body *::after{ background:none !important; box-shadow:none !important; animation:none !important; }
+  /* Lo que no se imprime */
+  .field, canvas, .glow-orb, .chat-widget, #site-header, .skip-link, .breadcrumbs,
+  .cta-band, .hero4-ctas, .v6-acts, .stage-ctas, .menu-toggle, .main-nav,
+  footer .footer-social, .cookie-banner, #cookieyes, .cky-consent-container, .cky-btn-revisit-wrapper,
+  [data-fdemo-mount], .demo-aviso, .v6-veil::before, .v7-velo::before, [data-idx-nav], .scroll-index,
+  noscript, video, iframe, .dcx, .dcx-now, .dcx-bar, .dcx-rail, .dcx-idx{ display:none !important; }
+  /* La demo, por su resumen */
+  .demo-movil{ display:block !important; padding:0 !important; border:0 !important; }
+  .demo-movil-b{ display:none !important; }
+  /* Lo que aparece al hacer scroll, ya aparecido */
+  .rise, .rise-l, .rise-s, .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-up, .reveal-blur{
+    opacity:1 !important; transform:none !important; filter:none !important;
+  }
+  /* Nada de secciones de una pantalla de alto ni cosas pegadas al borde */
+  main section, main [class*="v6-block"], .page-hero, .v6-hero, .stage{ min-height:0 !important; height:auto !important; padding-top:10mm !important; padding-bottom:6mm !important; }
+  [style*="position:sticky"], .is-sticky, .sticky{ position:static !important; }
+  /* Lectura */
+  body{ font-size:10.5pt; line-height:1.5; }
+  h1, .h-title, h2, h3{ break-after:avoid; page-break-after:avoid; }
+  p, li{ orphans:3; widows:3; }
+  a{ text-decoration:underline; }
+  .plan, .spec, .conexion, .vf-col, .vf-paso, .vf-cadena, .conc-fig, .cmp, table, tr, .board-row,
+  .out, .v7-fiscal-i, figure, .window, .faq-category, .accordion-item, .case-card{ break-inside:avoid; page-break-inside:avoid; }
+  .window, .plan, .vf-col, .vf-track, .cmp, .conc-fig, .vf-cadena, .board, .conexion, .mercado{ border:1px solid #c9ccd4 !important; }
+  .estado-chip, .vf-sello, .conexion-e, .board-tag, .tag{ border:1px solid #6b7280 !important; }
+  details > .plan-body, details > .accordion-panel{ height:auto !important; overflow:visible !important; opacity:1 !important; }
+  /* Las respuestas de las preguntas frecuentes, abiertas */
+  .accordion-panel{ max-height:none !important; opacity:1 !important; overflow:visible !important; margin-top:6px !important; padding-bottom:12px !important; }
+  /* Las ilustraciones que aparecen al llegar a ellas (departamentos): en
+     papel no se llega, se imprimen ya aparecidas y el detalle de cada casilla
+     —que en pantalla sale al pasar por encima— a la vista. */
+  main [class*="reveal"]{ opacity:1 !important; transform:none !important; }
+  /* (main.js les pone su estado final, .is-settled, al imprimir.) */
+  .opsgrid-tile-detail{ max-height:none !important; opacity:1 !important; margin-top:6px !important; }
+  .plan-mas{ display:none !important; }
+  .cmp-scroll{ overflow:visible !important; }
+  .cmp-tabla{ min-width:0 !important; }
+  img, svg{ max-width:100% !important; }
 }

@@ -375,8 +375,8 @@
        los enteros de CUATRO cifras, y media demo lo es. Sin esto salia
        «8079,27 €» en la frase de arriba y «28.442,50 €» en la tabla de
        abajo, que es la misma cifra leida de dos maneras. */
-    return (Math.round((v || 0) * 100) / 100)
-      .toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: 'always' }) + '\u00a0€';
+    // En inglés, el formato inglés: «€10,315.50», no «10.315,50 €».
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR' }).format(Math.round((v || 0) * 100) / 100);
   }
 
   // ── formato, igual que src/lib/format.ts del producto ───────────────────
@@ -385,19 +385,19 @@
     // useGrouping 'always': es-ES no agrupa los enteros de CUATRO cifras, y
     // muchos importes de esta demo lo son. Sin esto se enseñaba «1200,00 €»
     // al lado de «28.442,50 €» en la misma columna.
-    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', useGrouping: 'always' }).format(value);
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR' }).format(value);
   }
   function fmtFecha(value) {
     if (!value) return '—';
     var d = new Date(value);
     if (isNaN(d.getTime())) return '—';
-    return new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
   }
   function fmtFechaHora(value) {
     if (!value) return '—';
     var d = new Date(value);
     if (isNaN(d.getTime())) return '—';
-    return new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
+    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
   }
   function clienteById(id) { return byId(CLIENTES, id); }
   function facturaById(id) { return byId(FACTURAS, id); }

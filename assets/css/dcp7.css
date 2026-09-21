@@ -705,6 +705,14 @@ body.v7 .blog-grid .blog-card{
 body.v7 .blog-grid .blog-card:first-child{ border-top:0; }
 body.v7 .blog-grid .blog-card .window-bar{ background:none; border:0; padding:0; }
 body.v7 .blog-grid .blog-card .window-body{ padding:0; }
+/* styles.css le da height:100% al cuerpo de la tarjeta para la versión con
+   caja. Sin caja, y con la barra del nombre del fichero encima, el cuerpo
+   medía lo mismo que la tarjeta entera y la última línea —fecha y minutos
+   de lectura— quedaba 19 px por debajo, recortada. Medido a 320–768 px. */
+body.v7 .blog-grid .blog-card .window-body{ height:auto; }
+body.v7 .blog-grid .blog-card .blog-meta{ flex-wrap:wrap; row-gap:2px; }
+body.v7 .blog-grid .blog-card .blog-meta span{ white-space:nowrap; }
+@media (max-width:899px){ body.v7 .blog-grid .blog-card{ padding-bottom:22px; } }
 /* El nodo del artículo, colgado de la línea, en el lenguaje del resto. */
 body.v7 .blog-grid .blog-card::before{
   content:""; position:absolute; left:0; top:-4px; width:7px; height:7px; border-radius:50%;
@@ -1271,12 +1279,17 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
   .demo-movil-l span{ font-size:.88rem; line-height:1.6; color:var(--v-ink-2); }
   .demo-movil-b{ margin-top:22px; width:100%; justify-content:center; }
   /* El aviso de la demo tampoco pinta nada si no hay demo. */
-  .demo-host[data-fdemo-movil] .demo-aviso{ display:none; }
+  /* Con [data-fdemo-lazy] y no solo con [data-fdemo-movil]: esa marca la
+     pone dcp5.js al cargar, y hasta entonces la caja medía lo de escritorio
+     y luego encogía. MEDIDO: un salto de maquetación de 0,080 en
+     /sistema-financiero a 390 px, el único de la página. El punto de corte
+     es el mismo (900 px) que usa dcp5.js para no montar la demo. */
+  .demo-host[data-fdemo-movil] .demo-aviso, .demo-host[data-fdemo-lazy] .demo-aviso{ display:none; }
   /* MEDIDO en /sistema-financiero a 393 px: el hueco donde iba la demo
      seguía midiendo 560 px de alto y quedaba una caja vacía entre el aviso
      y el texto. Si no se monta nada, no ocupa nada. */
-  .demo-host[data-fdemo-movil] [data-fdemo-mount]{ display:none; }
-  .demo-host[data-fdemo-movil]{ min-height:0; padding:0; border:0; background:none; }
+  .demo-host[data-fdemo-movil] [data-fdemo-mount], .demo-host[data-fdemo-lazy] [data-fdemo-mount]{ display:none; }
+  .demo-host[data-fdemo-movil], .demo-host[data-fdemo-lazy]{ min-height:0; padding:0; border:0; background:none; }
 }
 
 /* ── LA TABLETA NO ES UN MÓVIL GRANDE ──────────────────────────────────

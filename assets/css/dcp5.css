@@ -1248,9 +1248,14 @@ details.plan.es-cerrando > .plan-body{ opacity:.35; }
       "n mas";
     row-gap:12px;
   }
-  .plan-gente{ transform:none; grid-area:auto; }
-  .plan-precio{ grid-area:auto; }
-  .plan-mas{ grid-area:auto; justify-self:start; }
+  /* Todo lo que no es el número va en la SEGUNDA columna. Con grid-area:auto
+     el «Ver qué incluye» caía en la primera, la columna del número se
+     ensanchaba hasta medir lo que la etiqueta, y a 320 px el nombre y la
+     descripción del plan se quedaban en 95 px: una palabra por línea. */
+  .plan-n{ grid-area:auto; grid-column:1; grid-row:1 / span 5; }
+  .plan-head, .plan-quita, .plan-precio, .plan-gente, .plan-mas{ grid-area:auto; grid-column:2; }
+  .plan-gente{ transform:none; }
+  .plan-mas{ justify-self:start; }
 }
 
 /* Los recuadros de esta sección llevan texto que hay que leer y la cinta de
@@ -1427,7 +1432,9 @@ main p + .btn, main .lead + .btn, main ul + .btn{ margin-top:clamp(22px,2.8vw,32
 .vf-paso.es-actual .vf-paso-n{ color:var(--tono-track); }
 .vf-paso.es-actual .vf-paso-e{ border-style:solid; color:var(--tono-track); border-color:color-mix(in srgb, var(--tono-track) 40%, transparent); background:color-mix(in srgb, var(--tono-track) 9%, transparent); }
 .vf-paso.es-hecho .vf-paso-e{ border-style:solid; color:var(--v-ink-2); }
-.vf-paso.es-despues{ opacity:.72; }
+/* «Después» se distingue por el trazo discontinuo y el título apagado, no
+   por opacidad: con opacidad el texto bajaba a 3,9:1 (axe-core). */
+.vf-paso.es-despues .vf-paso-t{ color:var(--v-ink-3); }
 
 .vf-dos{
   margin-top:clamp(34px,4.4vw,52px);
@@ -1478,6 +1485,7 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
 .conc-intro{ grid-area:intro; }
 .conc-fig{ grid-area:fig; }
 .conc .conc-intro .h-title{ margin-top:22px; }
+.conc .conc-intro .lead{ margin-top:16px; max-width:58ch; }
 .conc-l{ list-style:none; margin:20px 0 0; padding:0; display:grid; gap:10px; }
 .conc-l li{ position:relative; padding-left:24px; font-size:.95rem; line-height:1.6; color:var(--v-ink-2); }
 .conc-l li::before{ content:"→"; position:absolute; left:0; color:var(--tono,#b89cff); font-family:var(--mono); }
@@ -1507,7 +1515,7 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
 .conc-mov-c{ grid-area:c; font-size:.86rem; color:var(--v-ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .conc-mov-i{ grid-area:i; font-family:var(--mono); font-size:.84rem; font-weight:500; color:var(--v-ink); font-variant-numeric:tabular-nums; }
 .conc-mov-x{ grid-area:x; font-family:var(--mono); font-size:.78rem; color:var(--v-ink-2); }
-.conc-mov-e{ grid-area:e; justify-self:end; font-family:var(--mono); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; color:var(--est); }
+.conc-mov-e{ grid-area:e; justify-self:end; white-space:nowrap; font-family:var(--mono); font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; color:var(--est); }
 .conc-mov.es-suelto .conc-mov-x{ color:#f7c46c; }
 .conc-fig figcaption{ margin-top:14px; font-size:.8125rem; line-height:1.55; color:var(--v-ink-3); }
 
@@ -1596,6 +1604,14 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
   .vf-e-h{ display:grid; grid-template-columns:minmax(64px,auto) minmax(0,1fr); gap:10px; }
   .vf-sello{ font-size:.98rem; }
   .conc-mov-c{ white-space:normal; overflow:visible; }
+}
+/* A 320–420 px el concepto no cabe entre la fecha y el importe («Transferencia»
+   se montaba sobre la cifra). Pasa a su propia línea: fecha e importe arriba,
+   el concepto debajo a lo ancho, y el cruce con su estado al final. */
+@media (max-width:420px){
+  .conc-mov{ grid-template-columns:auto minmax(0,1fr); grid-template-areas:"f i" "c c" "x e"; }
+  .conc-mov-i{ justify-self:end; }
+  .conc-mov-c{ overflow-wrap:anywhere; }
 }
 @media (prefers-reduced-motion: reduce){
   .vf-sello i::after, .vf-eslabon, .vf-e-ok{ animation:none; }

@@ -16,6 +16,8 @@
     "check:kb": "node scripts/check-knowledge-base.mjs",
     "check:consentimiento": "node scripts/check-consentimiento.mjs",
     "qa:ds": "node scripts/qa-ds-responsive.mjs",
+    "qa:solapes": "node scripts/qa-solapes.mjs",
+    "qa:demo": "node scripts/qa-demo.mjs",
     "check:demo": "node scripts/check-demo-finance.mjs",
     "check:estado": "node scripts/check-estado.mjs",
     "test:estado": "node scripts/test-estado.mjs"

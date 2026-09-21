@@ -44,6 +44,11 @@
       e.preventDefault();
       target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
       if (history.pushState) history.pushState(null, '', '#' + id);
+      /* El foco va con el salto. Sin esto, «Saltar al contenido» movía la
+         vista pero dejaba el foco en el propio enlace, y el siguiente Tab
+         volvía a la cabecera: el salto no saltaba para quien usa teclado. */
+      if (!/^(A|BUTTON|INPUT|SELECT|TEXTAREA|SUMMARY)$/.test(target.tagName) && !target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      try { target.focus({ preventScroll: true }); } catch (err) { target.focus(); }
     });
   });
 
@@ -519,6 +524,7 @@
   document.addEventListener('toggle', function (e) {
     var d = e.target;
     if (!d || d.tagName !== 'DETAILS' || !d.open) return;
+    if (window.__dcpImprimiendo) return;   // al imprimir se abren todos a la vez
     if (d.closest('.fdemo-app')) return;
     document.querySelectorAll('details[open]').forEach(function (o) {
       if (o !== d && !o.closest('.fdemo-app') && !o.contains(d) && !d.contains(o)) cierraSuave(o);
@@ -597,18 +603,41 @@
       'finance-ia': 'Finance con inteligencia',
       'finance-medida': 'Finance a medida'
     };
+    var en = document.documentElement.lang === 'en';
+    // En inglés, el nombre con el que el plan aparece en /en/sistema-financiero.
+    if (en) NOMBRES = { 'finance': 'Finance', 'finance-ia': 'Finance with intelligence', 'finance-medida': 'Finance, made to measure' };
     var nombre = NOMBRES[plan];
     if (!nombre) return;
     var caja = document.querySelector('textarea[name="mensaje"]');
     if (!caja || caja.value.trim()) return;
-    var en = document.documentElement.lang === 'en';
     caja.value = en
-      ? 'Hi — I am interested in the ' + nombre + ' plan. I would like to know whether it fits what we do.\n\n'
+      ? 'Hi — I am interested in the \u201c' + nombre + '\u201d plan. I would like to know whether it fits what we do.\n\n'
       : 'Hola: me interesa el plan ' + nombre + '. Me gustaría saber si encaja con lo que hacemos.\n\n';
     var aviso = document.createElement('p');
     aviso.className = 'form-desde-plan';
-    aviso.textContent = en ? 'You arrived from the ' + nombre + ' plan.' : 'Vienes del plan ' + nombre + '.';
+    aviso.textContent = en ? 'You arrived from the \u201c' + nombre + '\u201d plan.' : 'Vienes del plan ' + nombre + '.';
     if (caja.parentNode) caja.parentNode.insertBefore(aviso, caja);
+  })();
+
+  /* ---------- Al imprimir, los desplegables se imprimen abiertos ----------
+     Un <details> cerrado no imprime su contenido aunque el CSS lo intente:
+     los planes saldrían en el papel sin decir qué incluyen. Se abren al
+     imprimir y se devuelven como estaban al terminar. */
+  (function () {
+    var abiertos = [];
+    window.addEventListener('beforeprint', function () {
+      window.__dcpImprimiendo = true;
+      abiertos = [];
+      document.querySelectorAll('details:not([open])').forEach(function (d) { d.setAttribute('open', ''); abiertos.push(d); });
+      // Las ilustraciones animadas, en su estado final (el mismo que ve quien
+      // tiene el movimiento reducido).
+      document.querySelectorAll('.motion-journey').forEach(function (m) { m.classList.add('is-settled'); });
+    });
+    window.addEventListener('afterprint', function () {
+      abiertos.forEach(function (d) { d.removeAttribute('open'); });
+      abiertos = [];
+      setTimeout(function () { window.__dcpImprimiendo = false; }, 0);
+    });
   })();
 
   /* ---------- Generic accordion (Método, FAQ, Garantías) ---------- */
