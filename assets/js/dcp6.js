@@ -244,7 +244,13 @@
       MARCO[mi].h = narrow
         ? (ALTO_MOVIL[mi] !== 0 ? ALTO_MOVIL[mi] : Math.min(1.02, MARCO_ANCHO[mi].h * 1.12))
         : MARCO_ANCHO[mi].h;
+      MARCO[mi].y = MARCO_ANCHO[mi].y;
     }
+    /* LA GRÁFICA EN UN TELÉFONO VA DEBAJO DEL TEXTO, NO DETRÁS. Con barras
+       sólidas, en 3D, detrás de un párrafo, el párrafo se lee peor y la
+       gráfica tampoco se ve: medido a 390, la columna de texto anclada acaba
+       hacia el 60 % de la pantalla, y de ahí para abajo está libre. */
+    if (narrow) { MARCO[S_CURVA].y = 0.80; MARCO[S_CURVA].h = 0.34; }
     encuadreMarca();
     sucioReset();                      // el lienzo cambia de tamano: se borra entero
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
@@ -333,7 +339,7 @@
      La variación de densidad la da el encuadre, que para eso está. */
   /* Copia de los valores de escritorio: measure() reescribe MARCO en vertical
      y sin este original no habría a qué volver al girar el aparato. */
-  var MARCO_ANCHO = MARCO.map(function (m) { return { x: m.x, w: m.w, h: m.h }; });
+  var MARCO_ANCHO = MARCO.map(function (m) { return { x: m.x, y: m.y, w: m.w, h: m.h }; });
 
   /* ALTURA EN VERTICAL, FIGURA POR FIGURA.
 
@@ -1450,22 +1456,34 @@
   function alturaBarra(k, n) {
     var t = n > 1 ? k / (n - 1) : 0;
     var s = t * t * (3 - 2 * t);
-    var v = 0.12 + s * 0.70;
+    /* Hasta 0,70 del alto: la escala llega a 0,74 (40 k€) y ninguna barra
+       puede salirse por encima de la pared de fondo. */
+    var v = 0.10 + s * 0.60;
     /* Tres periodos flojos. No son ruido: son los que después se corrigen. */
     var a = (t - 0.27) / 0.055, b = (t - 0.55) / 0.050, c = (t - 0.80) / 0.045;
     /* Tres periodos flojos y ni uno más. El temblor aleatorio que había aquí
        antes es justo lo que hacía que la línea de tendencia se leyera como
        una culebra en vez de como una tendencia. */
-    v -= 0.075 * Math.exp(-a * a) + 0.062 * Math.exp(-b * b) + 0.046 * Math.exp(-c * c);
+    v -= 0.064 * Math.exp(-a * a) + 0.053 * Math.exp(-b * b) + 0.040 * Math.exp(-c * c);
     return v;
   }
+  /* LA GRÁFICA SE CONSTRUYE CON EL RELOJ, NO SOLO CON EL SCROLL. Antes las
+     barras subían a medida que se bajaba por la sección: quien se paraba a
+     leer el texto veía una gráfica a medio hacer, con dos barras y un suelo
+     vacío. Ahora, en cuanto la sección manda, la gráfica se levanta sola en
+     un par de segundos (y si se sigue bajando, el scroll la adelanta). */
+  var G3 = { t0: -1 };
+  function g3Reloj(tm) { return G3.t0 < 0 ? 0 : (tm - G3.t0) / 1000; }
+  function g3Ejes(ins, tm)  { return Math.max(ease(cl(ins / 0.13)), ease(cl(g3Reloj(tm) / 0.5))); }
+  function g3Sube(ins, tm)  { return Math.max(ease(cl((ins - 0.08) / 0.52)), ease(cl((g3Reloj(tm) - 0.25) / 1.7))); }
+  function g3Linea(ins, tm) { return Math.max(ease(cl((ins - 0.44) / 0.34)), ease(cl((g3Reloj(tm) - 1.5) / 1.3))); }
   function F_GRAFICA(i, u, g, G, o, tm, ins) {
     var fr = MARCO[g], ar = (fr.h * H) / (fr.w * W);
     var NB = small ? 5 : narrow ? 6 : 7;
     var X0 = 0.115, XW = 0.845, Y0 = 0.855, PASO = XW / NB;
-    var ejes  = ease(cl(ins / 0.13));
-    var sube  = ease(cl((ins - 0.08) / 0.52));
-    var linea = ease(cl((ins - 0.44) / 0.34));
+    var ejes  = g3Ejes(ins, tm);
+    var sube  = g3Sube(ins, tm);
+    var linea = g3Linea(ins, tm);
     var pleno = ease(cl((ins - 0.80) / 0.20));
     var kSel = Math.max(0, Math.min(NB - 1, Math.round((MFX - X0) / PASO - 0.5)));
     var hay = MFX > X0 - 0.05 && MFX < X0 + XW + 0.05 && MFY > 0.04 && MFY < 0.98;
@@ -1488,7 +1506,11 @@
         else if (lado === 1) { o.nx = x1; o.ny = y0 + ff * (y1 - y0); }
         else if (lado === 2) { o.nx = x1 - ff * (x1 - x0); o.ny = y1; }
         else                 { o.nx = x0; o.ny = y1 - ff * (y1 - y0); }
-        o.a = ejes * 0.13; o.c = C_BRUMA; o.g = -1; o.r = 0.58;
+        /* El marco plano sobra: la gráfica tiene ahora suelo y pared de
+           fondo de verdad (grafica3D). Las partículas siguen aquí, sin
+           tinta, porque son las que marcan la zona que se borra cada
+           fotograma. */
+        o.a = 0; o.c = C_BRUMA; o.g = -1; o.r = 0.58;
         return;
       }
       if (q.k === 0)      { o.nx = X0 - 0.02 + q.j * (XW + 0.05); o.ny = Y0; o.a = ejes * 0.30; }
@@ -1500,6 +1522,7 @@
         o.ny = Y0 - (q.k - 1) * 0.185;
         o.a = ejes * (q.j % 0.050 < 0.026 ? 0.075 : 0);
       }
+      o.a *= 0.0;                                   // ejes y rejilla: los pinta grafica3D, en perspectiva
       o.c = C_BRUMA; o.g = -1; o.r = 0.62;
       return;
     }
@@ -1513,15 +1536,15 @@
       /* UNA sola hebra vertical por barra, de la base al techo, pintada con
          el ancho de la barra. El relleno lo pone el trazo; las partículas
          solo le dan grano y marcan el borde superior. */
-      o.nx = cx; o.ny = Y0 - q1.j * h;
+      /* LA BARRA LA DIBUJA grafica3D, con sus tres caras. Las partículas se
+         quedan en la arista delantera derecha, como grano de luz que sube por
+         el filo: es lo que hace que la barra sea de la misma materia que el
+         resto de la portada y no una pegatina encima. */
+      o.nx = cx + ANCHO * 0.5; o.ny = Y0 - q1.j * h;
       var es = hay && k === kSel;
-      o.g = 9000 + k;
-      GRUW[k] = pxAncho * ent;
-      GRUC[k] = es ? C_LUZ : C_DATO;
-      /* El punto se ve poco: el trazo ya es la barra. Arriba del todo sí,
-         para que el techo quede definido y no difuminado. */
+      o.g = -1;
       var techo = q1.j > 0.965 ? 1 : 0;
-      o.a = ent * (0.055 + 0.05 * pleno + (es ? 0.05 : 0) + techo * 0.26);
+      o.a = ent * (0.05 + 0.05 * pleno + (es ? 0.08 : 0) + techo * 0.18);
       o.c = es ? C_LUZ : C_DATO;
       o.r = 0.8;
       return;
@@ -1538,8 +1561,8 @@
       o.nx = X0 + (0.5 + kf) * PASO;
       o.ny = Y0 - (h0 + (h1 - h0) * sm) - 0.022;
       var pas = cl((sube * 1.04 - tl) / 0.05);
-      o.a = pas * (0.42 + 0.14 * pleno);
-      o.c = C_OK; o.g = 1000; o.r = 0.72;
+      o.a = 0 * pas;                                 // la línea va en 3D, sobre los techos
+      o.c = C_OK; o.g = -1; o.r = 0.72;
       return;
     }
 
@@ -1549,8 +1572,8 @@
       var es3 = hay && k3 === kSel;
       var vis = ease(cl((sube * 1.04 - k3 / NB) / 0.05));
       ponNodo(o, X0 + (k3 + 0.5) * PASO, Y0 - h3 - 0.022, q3.j, (es3 ? 0.016 : 0.0085) * vis, ar);
-      o.a = vis * (0.34 + (es3 ? 0.40 : 0));
-      o.c = es3 ? C_LUZ : C_OK; o.g = 1020 + k3; o.r = es3 ? 1.15 : 0.95;
+      o.a = 0 * vis;
+      o.c = es3 ? C_LUZ : C_OK; o.g = -1; o.r = es3 ? 1.15 : 0.95;
       return;
     }
 
@@ -1559,8 +1582,8 @@
     var q4 = tramo(u, 0.965, 1.0, 1);
     var xs = X0 + (kSel + 0.5) * PASO, hs = alturaBarra(kSel, NB);
     o.nx = X0 - 0.02 + q4.j * (xs - X0 + 0.02); o.ny = Y0 - hs;
-    o.a = (hay ? 1 : 0) * linea * (0.16 + 0.07 * Math.sin(tm * 0.003));
-    o.c = C_LUZ; o.g = 1040; o.r = 0.65;
+    o.a = 0 * linea;
+    o.c = C_LUZ; o.g = -1; o.r = 0.65;
   }
 
   /* 5 · MEDIMOS — la cadena: entra algo, se procesa, se DECIDE por dónde
@@ -2395,6 +2418,11 @@
 
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
+    var caja3 = grafica3D(tm);
+    if (caja3) {
+      if (caja3[0] < bx0) bx0 = caja3[0]; if (caja3[1] < by0) by0 = caja3[1];
+      if (caja3[2] > bx1) bx1 = caja3[2]; if (caja3[3] > by1) by1 = caja3[3];
+    }
     rotulos(tm);
 
     /* Los rótulos se pintan DENTRO del encuadre de su figura, y el encuadre
@@ -2464,6 +2492,194 @@
     _ro.nx = nx; _ro.ny = ny;
     marco(_ro, fr, mir, _rt, vol);
     return _rt;
+  }
+
+
+  /* ═════════════════ LA GRÁFICA, EN TRES DIMENSIONES ═════════════════
+
+     «Tiene que parecer una gráfica real en 3D». Con partículas no se puede:
+     una barra hecha de puntos es un dibujo de una barra. Así que la gráfica
+     se construye como se construye una de verdad —suelo, pared de fondo con
+     su escala, y barras con cara delantera, lateral y techo, cada una con
+     su luz— y las partículas se quedan como grano en las aristas.
+
+     Proyección oblicua: la profundidad va hacia arriba a la derecha, que es
+     como se lee una gráfica 3D de toda la vida. Las caras se sombrean con
+     una sola fuente de luz arriba a la izquierda —techo claro, frente medio,
+     lateral oscuro— y así el volumen se entiende sin pensar.
+
+     La línea de tendencia pasa por el CENTRO de cada techo, no por el borde
+     de delante: si pasara por delante flotaría por fuera de las barras.
+     Señalar una columna la ilumina y dice su valor. Devuelve la caja que ha
+     pintado, para que el borrado por región la cubra. */
+  var G3_VAL = EN ? ' k' : ' k';
+  function grafica3D(tm) {
+    var d = tw >= 0.5 ? iB : iA;
+    if (d !== S_CURVA) { G3.t0 = -1; return null; }
+    if (G3.t0 < 0) G3.t0 = tm;
+    var quieto = 1 - Math.sin(tw * 3.14159265);
+    if (quieto < 0.04) return null;
+    var ins = inside(d);
+    var fr = MARCO[d], mir = MIR[d], vol = VOLTEA[d];
+    var NB = small ? 5 : narrow ? 6 : 7;
+    var X0 = 0.115, XW = 0.845, Y0 = 0.855, PASO = XW / NB, TOPE_NY = 0.74, TOPE = 40;
+    var ejes = g3Ejes(ins, tm), sube = g3Sube(ins, tm), linea = g3Linea(ins, tm);
+    var al = quieto * ejes;
+    if (al < 0.03) return null;
+    var kSel = Math.max(0, Math.min(NB - 1, Math.round((MFX - X0) / PASO - 0.5)));
+    var hay = MFX > X0 - 0.05 && MFX < X0 + XW + 0.05 && MFY > 0.04 && MFY < 0.98;
+
+    function P(nx, ny) { var q = aPantalla(nx, ny, fr, mir, vol); return { x: q.x, y: q.y }; }
+    var sgn = (mir && !vol) ? -1 : 1;
+    var wpx = PASO * 0.56 * fr.w * W;
+    var DX = sgn * wpx * 0.60, DY = -wpx * 0.42;
+    var esc = Math.min(fr.w * W, fr.h * H);
+    var A = P(X0 - 0.02, Y0), B = P(X0 + XW + 0.02, Y0);
+    var yTop = P(X0, Y0 - TOPE_NY - 0.02).y;
+    var bx0 = Math.min(A.x, B.x) - 60, bx1 = Math.max(A.x, B.x) + Math.abs(DX) + 40;
+    var by0 = yTop + DY - 40, by1 = A.y + 40;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    function poly(pts) { ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); for (var z = 1; z < pts.length; z++) ctx.lineTo(pts[z].x, pts[z].y); ctx.closePath(); }
+    function mas(p, f) { return { x: p.x + DX * (f == null ? 1 : f), y: p.y + DY * (f == null ? 1 : f) }; }
+
+    /* ── la pared de fondo y el suelo ── */
+    var TL = { x: A.x, y: yTop }, TR = { x: B.x, y: yTop };
+    poly([mas(A), mas(B), mas(TR), mas(TL)]);
+    var gp = ctx.createLinearGradient(0, yTop + DY, 0, A.y + DY);
+    gp.addColorStop(0, 'rgba(30,44,92,' + (0.20 * al).toFixed(3) + ')');
+    gp.addColorStop(1, 'rgba(18,26,58,' + (0.34 * al).toFixed(3) + ')');
+    ctx.fillStyle = gp; ctx.fill();
+    // pared izquierda
+    poly([A, mas(A), mas(TL), TL]);
+    ctx.fillStyle = 'rgba(14,20,44,' + (0.34 * al).toFixed(3) + ')'; ctx.fill();
+    // suelo
+    poly([A, B, mas(B), mas(A)]);
+    var gs = ctx.createLinearGradient(0, A.y, 0, A.y + DY);
+    gs.addColorStop(0, 'rgba(60,92,190,' + (0.30 * al).toFixed(3) + ')');
+    gs.addColorStop(1, 'rgba(40,60,130,' + (0.14 * al).toFixed(3) + ')');
+    ctx.fillStyle = gs; ctx.fill();
+    // la escala: líneas en la pared de fondo y su pliegue por la izquierda
+    ctx.lineWidth = 1;
+    for (var e = 0; e <= 4; e++) {
+      var yy = P(X0, Y0 - e * (TOPE_NY / 4)).y;
+      var a0 = { x: A.x, y: yy }, a1 = { x: B.x, y: yy };
+      ctx.strokeStyle = 'rgba(150,174,245,' + ((e === 0 ? 0.40 : 0.16) * al).toFixed(3) + ')';
+      ctx.beginPath(); ctx.moveTo(a0.x, a0.y); ctx.lineTo(mas(a0).x, mas(a0).y); ctx.lineTo(mas(a1).x, mas(a1).y); ctx.stroke();
+    }
+    // divisiones del suelo por periodo
+    for (var kk = 0; kk <= NB; kk++) {
+      var fx = P(X0 + kk * PASO, Y0);
+      ctx.strokeStyle = 'rgba(150,174,245,' + (0.12 * al).toFixed(3) + ')';
+      ctx.beginPath(); ctx.moveTo(fx.x, fx.y); ctx.lineTo(mas(fx).x, mas(fx).y); ctx.stroke();
+    }
+    // el filo del suelo, delante
+    ctx.strokeStyle = 'rgba(190,206,255,' + (0.46 * al).toFixed(3) + ')';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+
+    /* ── las barras ── */
+    var tops = [];
+    var tamV = Math.max(10, Math.round(esc * 0.026));
+    for (var k = 0; k < NB; k++) {
+      var hb = alturaBarra(k, NB);
+      var ent = ease(cl((sube - k / NB) / 0.09));
+      if (ent <= 0.001) { tops.push(null); continue; }
+      var cx = X0 + (k + 0.5) * PASO;
+      var L = P(cx - PASO * 0.28, Y0), R = P(cx + PASO * 0.28, Y0);
+      var yt = P(cx, Y0 - hb * ent).y;
+      var Lt = { x: L.x, y: yt }, Rt = { x: R.x, y: yt };
+      var es = hay && k === kSel, ult = k === NB - 1;
+      var c = es ? [70, 226, 250] : ult ? [118, 150, 255] : [78, 128, 255];
+      var o2 = al * (0.92 + 0.08 * ent);
+      function tono(m, a) { return 'rgba(' + Math.round(Math.min(255, c[0] * m)) + ',' + Math.round(Math.min(255, c[1] * m)) + ',' + Math.round(Math.min(255, c[2] * m)) + ',' + (a * o2).toFixed(3) + ')'; }
+      // sombra en el suelo, hacia atrás
+      poly([R, mas(R, 1), { x: mas(R, 1).x + wpx * 0.35, y: mas(R, 1).y }, { x: R.x + wpx * 0.35, y: R.y }]);
+      ctx.fillStyle = 'rgba(0,0,0,' + (0.22 * al * ent).toFixed(3) + ')'; ctx.fill();
+      // cara lateral
+      poly([R, mas(R), mas(Rt), Rt]);
+      var gl = ctx.createLinearGradient(R.x, 0, R.x + DX, 0);
+      gl.addColorStop(0, tono(0.46, 0.96)); gl.addColorStop(1, tono(0.30, 0.96));
+      ctx.fillStyle = gl; ctx.fill();
+      // cara delantera
+      poly([L, R, Rt, Lt]);
+      var gf = ctx.createLinearGradient(0, yt, 0, L.y);
+      gf.addColorStop(0, tono(1.10, 0.97)); gf.addColorStop(1, tono(0.62, 0.95));
+      ctx.fillStyle = gf; ctx.fill();
+      // brillo vertical, como en un material satinado
+      poly([{ x: L.x + wpx * 0.10, y: yt + 3 }, { x: L.x + wpx * 0.22, y: yt + 3 }, { x: L.x + wpx * 0.22, y: L.y - 2 }, { x: L.x + wpx * 0.10, y: L.y - 2 }]);
+      var gb = ctx.createLinearGradient(0, yt, 0, L.y);
+      gb.addColorStop(0, 'rgba(255,255,255,' + (0.20 * o2).toFixed(3) + ')'); gb.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = gb; ctx.fill();
+      // techo
+      poly([Lt, Rt, mas(Rt), mas(Lt)]);
+      ctx.fillStyle = tono(1.45, 0.98); ctx.fill();
+      // aristas
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(235,242,255,' + (0.55 * o2).toFixed(3) + ')';
+      ctx.beginPath(); ctx.moveTo(Lt.x, Lt.y); ctx.lineTo(Rt.x, Rt.y); ctx.lineTo(mas(Rt).x, mas(Rt).y); ctx.stroke();
+      ctx.strokeStyle = 'rgba(235,242,255,' + (0.18 * o2).toFixed(3) + ')';
+      ctx.beginPath(); ctx.moveTo(Rt.x, Rt.y); ctx.lineTo(R.x, R.y); ctx.stroke();
+      if (es) {
+        ctx.shadowColor = 'rgba(70,226,250,0.55)'; ctx.shadowBlur = 24;
+        poly([L, R, Rt, Lt]); ctx.strokeStyle = 'rgba(160,240,255,' + (0.8 * al).toFixed(3) + ')'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+      // el valor, encima del techo
+      var val = Math.round(hb * TOPE / TOPE_NY * 10) / 10;
+      var cT = mas({ x: (Lt.x + Rt.x) / 2, y: yt }, 0.5);
+      tops.push({ x: cT.x, y: cT.y, v: val, k: k });
+      var alV = al * cl((ent - 0.85) / 0.15) * (es ? 1 : 0.78);
+      if (alV > 0.02 && !(narrow && !es && !ult && k % 2)) {
+        ctx.font = (es ? '600 ' : '500 ') + tamV + 'px "JetBrains Mono", ui-monospace, monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        var txt = String(val).replace('.', EN ? '.' : ',') + G3_VAL;
+        ctx.fillStyle = 'rgba(5,7,14,' + (0.7 * alV).toFixed(3) + ')';
+        var anV = ctx.measureText(txt).width;
+        var yL = Math.min(cT.y, Lt.y) - 16;
+        ctx.fillRect(cT.x - anV / 2 - 5, yL - tamV - 3, anV + 10, tamV + 8);
+        ctx.fillStyle = es ? 'rgba(160,240,255,' + alV.toFixed(3) + ')' : 'rgba(226,234,255,' + alV.toFixed(3) + ')';
+        ctx.fillText(txt, cT.x, yL);
+      }
+    }
+
+    /* ── la tendencia: una línea que se dibuja sobre los techos ── */
+    var pts = tops.filter(function (t) { return t; });
+    if (pts.length > 1 && linea > 0.01) {
+      var nT = (pts.length - 1) * linea, lleno = Math.floor(nT), frac = nT - lleno;
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y - 3);
+      for (var t = 1; t <= lleno && t < pts.length; t++) ctx.lineTo(pts[t].x, pts[t].y - 3);
+      if (lleno + 1 < pts.length && frac > 0) {
+        var pa = pts[lleno], pb = pts[lleno + 1];
+        ctx.lineTo(pa.x + (pb.x - pa.x) * frac, pa.y - 3 + (pb.y - pa.y) * frac);
+      }
+      ctx.strokeStyle = 'rgba(52,224,198,' + (0.20 * al).toFixed(3) + ')'; ctx.lineWidth = 7; ctx.stroke();
+      ctx.strokeStyle = 'rgba(92,245,214,' + (0.95 * al).toFixed(3) + ')'; ctx.lineWidth = 2.2; ctx.stroke();
+      for (var n = 0; n <= lleno && n < pts.length; n++) {
+        var pn = pts[n], pul = 0.5 + 0.5 * Math.sin(tm * 0.004 + n);
+        var rg = ctx.createRadialGradient(pn.x, pn.y - 3, 0, pn.x, pn.y - 3, 14);
+        rg.addColorStop(0, 'rgba(92,245,214,' + (0.55 * al * (0.6 + 0.4 * pul)).toFixed(3) + ')');
+        rg.addColorStop(1, 'rgba(92,245,214,0)');
+        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(pn.x, pn.y - 3, 14, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'rgba(236,255,250,' + al.toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(pn.x, pn.y - 3, 3.4, 0, 6.2832); ctx.fill();
+      }
+    }
+
+    /* ── la lectura señalada: del techo a la escala ── */
+    if (hay && tops[kSel]) {
+      var ts = tops[kSel];
+      var yv = ts.y - DY * 0.5;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = 'rgba(160,240,255,' + (0.55 * al).toFixed(3) + ')'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ts.x - DX * 0.5, yv); ctx.lineTo(A.x, yv); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.restore();
+    return [bx0, by0, bx1, by1];
   }
 
   function rotulos(tm) {
@@ -2545,18 +2761,7 @@
         ctx.fillStyle = rgba(COL[centro ? C_LUZ : (sel ? C_LUZ : C_BRUMA)],
                              (quieto * lleg * (centro ? 0.92 : (sel ? 0.82 : 0.48))).toFixed(3));
         ctx.fillText(PLANO_ET[k], px2.x, px2.y);
-        if (centro) {
-          /* La pista va bajo la caja central porque es la que todo el mundo
-             mira primero. Una figura en la que se puede pulsar y no lo
-             parece es una figura en la que nadie pulsa. */
-          var sub = EN ? 'tap a box' : 'pulsa un recuadro';
-          ctx.font = '400 ' + Math.max(8, Math.round(tam * 0.62)) + 'px "JetBrains Mono", ui-monospace, monospace';
-          var anS = ctx.measureText(sub).width;
-          ctx.fillStyle = 'rgba(5,7,14,' + (quieto * lleg * 0.70).toFixed(3) + ')';
-          ctx.fillRect(px2.x - anS / 2 - 4, px2.y + tam * 0.70, anS + 8, tam * 0.90);
-          ctx.fillStyle = rgba(COL[C_BRUMA], (quieto * lleg * 0.62).toFixed(3));
-          ctx.fillText(sub, px2.x, px2.y + tam * 1.15);
-        }
+        /* Sin pista de «pulsa un recuadro»: pulsar ya no abre nada. */
       }
       return;
     }
@@ -2565,7 +2770,7 @@
       /* LOS RÓTULOS DE LA GRÁFICA. La escala en el eje, los periodos debajo,
          la leyenda y el título. Es lo que separa unos palotes de una gráfica:
          sin cifras en el eje, un dibujo de barras no informa de nada. */
-      var ejes = ease(cl(ins / 0.13)), al = quieto * ejes;
+      var ejes = g3Ejes(ins, tm), al = quieto * ejes;
       if (al < 0.05) return;
       var NB = small ? 5 : narrow ? 6 : 7;
       var X0 = 0.115, XW = 0.845, Y0 = 0.855, PASO = XW / NB;
@@ -2725,11 +2930,13 @@
     SEL = (SEL.k === k && selViva(tm)) ? { k: -1, t0: -1e9 } : { k: k, t0: tm };
     window.__figura = SEL.k >= 0 ? OBJ_ORDEN[SEL.k] : null;
   }
-  window.addEventListener('click', function (e) {
-    if (reduced) return;
-    if (e.target.closest && e.target.closest('a,button,input,select,textarea,summary,[role="button"]')) return;
-    pulsaPlano(e.clientX, e.clientY);
-  }, { passive: true });
+  /* PULSAR YA NO ABRE NADA. Cada caja del plano abría una figura nueva a
+     pantalla de la sección, y eso es lo que se ha pedido quitar: el plano se
+     queda interactivo —la caja que tienes debajo del puntero se enciende y
+     su nombre se aclara, y el resto sigue al ratón— pero no cambia de
+     dibujo al pulsar. `pulsaPlano` se conserva por si se quiere volver a
+     encender; no está conectado a nada. */
+  window.__figura = null;
   /* Y con el teclado, como cualquier otra cosa que se abre. */
   window.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && selViva(performance.now())) SEL = { k: -1, t0: -1e9 };

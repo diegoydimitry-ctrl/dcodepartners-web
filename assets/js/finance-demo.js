@@ -133,6 +133,12 @@
          módulos; en cuanto alguien interactúa, se para y manda el usuario.
          El indicador está aquí y no escondido: quien ve moverse la pantalla
          tiene que saber por qué se mueve y cómo pararlo. */
+      '<button type="button" class="fdemo-buscar" data-action="paleta" aria-label="Buscar en todo (Ctrl o ⌘ + K)">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>' +
+      '<span>Buscar</span><kbd>⌘K</kbd></button>' +
+      '<button type="button" class="fdemo-campana" data-action="avisos" aria-label="Avisos">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2H4.5l1.5-2Z" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" stroke-linecap="round"/></svg>' +
+      '<b data-role="campana-n" hidden></b></button>' +
       '<button type="button" class="fdemo-tour" data-role="tour" aria-live="polite">' +
       '<span class="fdemo-tour-dot" aria-hidden="true"></span>' +
       '<span class="fdemo-tour-txt" data-role="tour-txt">Recorrido automático</span>' +
@@ -152,6 +158,8 @@
       // inventados. Quien cae en la Home la ve igual que quien abre la demo.
       '<div class="fdemo-demo-banner" role="status"><span class="fdemo-demo-banner-dot" aria-hidden="true"></span><span class="fdemo-demo-banner-label">Demostración</span><span class="fdemo-demo-banner-text">datos ficticios, no reflejan información real de D-Code Partners</span></div>' +
       '<div class="fdemo-main" data-role="main"><div class="fdemo-page" data-role="content"></div></div>' +
+      '<div class="fdemo-toast" data-role="toast" role="status" aria-live="polite"><i aria-hidden="true"></i><span></span></div>' +
+      '<div class="fdemo-capa" data-role="capa"></div>' +
       '</div>' +
       /* LA MANO DEL RECORRIDO. Vive fuera del contenido porque se mueve
          sobre la aplicación entera —del menú a la pantalla— y porque así
@@ -166,7 +174,9 @@
     var contentEl = root.querySelector('[data-role="content"]');
     var menuBtn = root.querySelector('[data-role="menu-btn"]');
 
-    var state = { doc: { fase: 'inicio', archivo: null, t: 0 }, gastoNuevo: null, route: 'dashboard', id: null, facturaFiltro: { q: '', estado: '' }, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false },
+    var state = { doc: { fase: 'inicio', archivo: null, t: 0 }, gastoNuevo: null, route: 'dashboard', id: null, facturaFiltro: { q: '', estado: '', chip: 'todas' },
+      tabs: {}, cobrados: {}, enviados: {}, eventos: {}, te: { h: 60, e: 'base', saldo: '' }, orden: {}, capa: null,
+      paleta: { q: '', sel: 0, rs: [] }, leidos: {}, vistaRapida: null, borrador: null, clienteFiltro: { q: '' }, ia: { mensajes: [], enviando: false },
       /* El lector de documentos, el cajón que lo abre, el muro de planes y
          las facturas que entran desde una remesa. */
       docCajon: false, lector: null, lectorT: 0, muro: null, facturasNuevas: null };
@@ -264,6 +274,8 @@
       return { view: view, id: parts[1] || null };
     }
     function navigate(view, id) {
+      state.vistaRapida = null;
+      if (state.capa) { state.capa = null; pintaCapa(); }
       if (useHash) {
         location.hash = '#' + view + (id ? '/' + id : '');
       } else {
@@ -281,6 +293,9 @@
     function etiquetarTablas() {
       contentEl.querySelectorAll('.fdemo-table').forEach(function (tabla) {
         var cabeceras = [].map.call(tabla.querySelectorAll('thead th'), function (th) { return th.textContent.trim(); });
+        tabla.querySelectorAll('thead th').forEach(function (th) {
+          if (th.textContent.trim() && tabla.querySelectorAll('tbody tr').length > 1) { th.classList.add('es-ordenable'); th.tabIndex = 0; }
+        });
         if (!cabeceras.length) return;
         tabla.querySelectorAll('tbody tr').forEach(function (fila) {
           [].forEach.call(fila.children, function (celda, i) {
@@ -290,13 +305,33 @@
       });
     }
 
-    function render() {
+    function render(quieto) {
       var r = parseRoute();
       setActiveNav(r.view);
       var renderer = RENDERERS[r.view] || RENDERERS.dashboard;
+      /* Una accion DENTRO de una pantalla —cambiar de pestaña, conciliar un
+         movimiento, reclamar una factura— repinta, pero no puede devolver a
+         la persona arriba del todo: pierde el sitio y parece que la pagina
+         se ha recargado. Solo el cambio de pantalla vuelve arriba. */
+      var y = mainEl.scrollTop;
       contentEl.innerHTML = renderer(r.id);
       etiquetarTablas();
-      mainEl.scrollTop = 0;
+      ordenaTablas();
+      pintaCampana();
+      mainEl.scrollTop = quieto ? y : 0;
+    }
+    function repinta() { render(true); }
+
+    /* LOS AVISOS. Cada accion que no navega tiene que contestar algo: un
+       boton que no dice nada al pulsarlo es un boton roto. */
+    var toastT = 0;
+    function toast(texto, tono) {
+      var t = root.querySelector('[data-role="toast"]');
+      if (!t) return;
+      t.className = 'fdemo-toast is-on t-' + (tono || 'ok');
+      t.querySelector('span').textContent = texto;
+      clearTimeout(toastT);
+      toastT = setTimeout(function () { t.className = 'fdemo-toast'; }, 2600);
     }
 
     if (useHash) window.addEventListener('hashchange', render);
@@ -523,6 +558,50 @@
 
     /* ══════════════ EL RESTO DEL SISTEMA ══════════════ */
 
+    /* EL DONUT. Parte de un todo, así que es un donut y no unas barras;
+       seis porciones como mucho y el resto en «Otras» —un séptimo color
+       inventado no se distingue de nada—. Paleta validada con el comprobador
+       de daltonismo (pasa; el par más justo, 6,9, va con huecos de 2 px
+       entre porciones y cada una con su nombre y su cifra en la leyenda,
+       así que nunca depende solo del color). */
+    /* Nombre de archivo a partir de un nombre con tildes: «Gestoría» tiene
+       que dar «gestoria», no «gestor-a». */
+    function slug(t) {
+      return String(t || 'documento').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+    var DONUT_COL = ['#2f5fe0', '#eb6834', '#1a9aa6', '#d55181', '#6337c9', '#e0a100'];
+    function donut(datos, opc) {
+      opc = opc || {};
+      var orden = datos.slice().sort(function (a, b) { return b.v - a.v; });
+      var top = orden.slice(0, 6), resto = orden.slice(6);
+      if (resto.length) top.push({ k: 'Otras', v: resto.reduce(function (a, d) { return a + d.v; }, 0), otras: true });
+      var total = top.reduce(function (a, d) { return a + d.v; }, 0) || 1;
+      var R = 62, r = 40, C = 80, a0 = -Math.PI / 2, GAP = 0.018;
+      var arcos = top.map(function (d, i) {
+        var ang = (d.v / total) * Math.PI * 2;
+        var ini = a0 + GAP / 2, fin = a0 + ang - GAP / 2;
+        a0 += ang;
+        if (fin <= ini) return '';
+        var g = fin - ini > Math.PI ? 1 : 0;
+        var p = function (rad, t) { return (C + Math.cos(t) * rad).toFixed(2) + ' ' + (C + Math.sin(t) * rad).toFixed(2); };
+        var col = d.otras ? '#a3a6ad' : DONUT_COL[i % DONUT_COL.length];
+        return '<path class="fdemo-donut-s" d="M ' + p(R, ini) + ' A ' + R + ' ' + R + ' 0 ' + g + ' 1 ' + p(R, fin) +
+          ' L ' + p(r, fin) + ' A ' + r + ' ' + r + ' 0 ' + g + ' 0 ' + p(r, ini) + ' Z" fill="' + col + '">' +
+          '<title>' + esc(d.k) + ': ' + EUR(d.v) + ' · ' + Math.round(d.v / total * 100) + ' %</title></path>';
+      }).join('');
+      var leyenda = top.map(function (d, i) {
+        var col = d.otras ? '#a3a6ad' : DONUT_COL[i % DONUT_COL.length];
+        return '<li><span class="pt" style="background:' + col + '"></span><span class="et">' + esc(d.k) + '</span>' +
+          '<b>' + EUR(d.v) + '</b><i>' + Math.round(d.v / total * 100) + ' %</i></li>';
+      }).join('');
+      return '<div class="fdemo-donut">' +
+        '<svg viewBox="0 0 160 160" role="img" aria-label="' + esc(opc.titulo || 'Reparto') + '">' + arcos +
+        '<text x="80" y="76" text-anchor="middle" class="fdemo-donut-k">' + esc(opc.centro || 'Total') + '</text>' +
+        '<text x="80" y="94" text-anchor="middle" class="fdemo-donut-v">' + esc(EUR(total).replace(/,\d\d(?=\s?€)/, '')) + '</text></svg>' +
+        '<ul class="fdemo-donut-l">' + leyenda + '</ul></div>';
+    }
+
     function tablaSimple(cabeceras, filas, vacio) {
       if (!filas) return empty(vacio);
       return '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr>' +
@@ -560,64 +639,200 @@
 
       /* El calendario: la misma cuenta, pero semana a semana y con nombre y
          apellidos. Un neto a treinta dias no sirve para decidir; saber que la
-         semana que viene salen 4.200 y no entra nada, si. */
+         semana que viene salen 4.200 y no entra nada, si.
+
+         MEDIDO: con solo los documentos ya emitidos, tres de cada seis
+         semanas salian a 0,00 €, porque lo que se cobra y se paga cada mes
+         todavia no tiene factura. Eso es exactamente lo que hace una
+         prevision de tesoreria de verdad: proyectar lo RECURRENTE —las cuotas
+         mensuales de los clientes y los gastos fijos— a partir de su propio
+         historial. Va marcado como «previsto» para que no se confunda con lo
+         que ya esta emitido. */
+      var DIA = 86400000, H0 = Date.parse(FS.hoy);
+      var previstos = [];
+      var cuotasCli = FS.listClientes().filter(function (c) { return c.cuotaMensual > 0 && c.estado === 'cliente'; });
+      var totalCuotas = cuotasCli.reduce(function (a, c) { return a + c.cuotaMensual; }, 0);
+      var ultimaCuota = FS.listFacturas().filter(function (x) { return x.fechaEmision; })
+        .map(function (x) { return x.fechaVencimiento; }).sort().pop() || FS.hoy;
+      [1, 2, 3].forEach(function (k) {
+        var d = new Date(H0); d.setUTCMonth(d.getUTCMonth() + k); d.setUTCDate(2);
+        var iso = d.toISOString().slice(0, 10);
+        if (iso > ultimaCuota) previstos.push({ fecha: iso, importe: totalCuotas, tipo: 'entra', n: cuotasCli.length, q: cuotasCli.length + ' cuotas mensuales' });
+      });
+      var fijos = {};
+      FS.listGastos().filter(function (g) { return /cuota mensual/.test(g.concepto || ''); }).forEach(function (g) {
+        var k = g.proveedor;
+        if (!fijos[k] || g.fechaGasto > fijos[k].fechaGasto) fijos[k] = g;
+      });
+      Object.keys(fijos).forEach(function (k) {
+        var g = fijos[k], plazo = Math.round((Date.parse(g.fechaVencimiento) - Date.parse(g.fechaGasto)) / DIA);
+        for (var m = 1; m <= 3; m++) {
+          var d = new Date(Date.parse(g.fechaGasto)); d.setUTCMonth(d.getUTCMonth() + m);
+          var v = new Date(d.getTime() + plazo * DIA).toISOString().slice(0, 10);
+          if (v > FS.hoy) previstos.push({ fecha: v, importe: g.importe, tipo: 'sale', q: k });
+        }
+      });
+
+      /* LA CURVA DE CAJA. Es la pantalla del producto: 30, 60 o 90 días;
+         escenario base (cada compromiso el día que dice su documento) o
+         prudente (cada cliente cobra con el retraso que se le ha medido); y
+         el saldo del banco SOLO si lo declara quien lo sabe. Sin saldo, la
+         curva es VARIACIÓN de caja y lo dice: fabricar un saldo en un sistema
+         financiero es inaceptable, y el producto se niega a hacerlo. */
+      var TE = state.te;
+      var retCache = {};
+      function retCli(cid) { if (!(cid in retCache)) retCache[cid] = retrasoMedido(cid); return retCache[cid]; }
+      var retsCuota = cuotasCli.map(function (c) { return retCli(c.id); }).filter(function (x) { return x != null; }).sort(function (a, b) { return a - b; });
+      var retGlobal = retsCuota.length ? retsCuota[Math.floor(retsCuota.length / 2)] : 0;
+      var eventos = [], sinFecha = [];
+      fac.forEach(function (x) {
+        if (state.cobrados[x.id]) return;
+        var p = FS.pendienteDe(x); if (p <= 0) return;
+        var r = retCli(x.clienteIds[0]);
+        var ya = x.fechaVencimiento < FS.hoy;
+        var fecha = x.fechaVencimiento;
+        if ((ya || TE.e === 'prudente') && r) fecha = masDias(x.fechaVencimiento, r);
+        if (ya && (!r || fecha < FS.hoy)) { sinFecha.push(x); return; }
+        eventos.push({ f: fecha, v: p, q: x.numero });
+      });
+      gas.forEach(function (g) {
+        var fecha = g.fechaVencimiento || g.fechaGasto;
+        if (fecha <= FS.hoy) fecha = masDias(FS.hoy, 1);
+        eventos.push({ f: fecha, v: -g.importe, q: g.proveedor });
+      });
+      previstos.forEach(function (p) {
+        var fecha = p.tipo === 'entra' && TE.e === 'prudente' && retGlobal ? masDias(p.fecha, retGlobal) : p.fecha;
+        eventos.push({ f: fecha, v: p.tipo === 'entra' ? p.importe : -p.importe, q: p.q, previsto: true });
+      });
+      var HZ = TE.h, saldo0 = String(TE.saldo || '').trim() === '' ? null : numeroDe(TE.saldo);
+      var serieC = [], accC = saldo0 || 0, entraC = 0, saleC = 0, nEC = 0, nSC = 0;
+      for (var dd = 0; dd <= HZ; dd++) {
+        var isoD = masDias(FS.hoy, dd);
+        eventos.forEach(function (e) {
+          if (e.f !== isoD) return;
+          accC += e.v;
+          if (e.v > 0) { entraC += e.v; nEC++; } else { saleC -= e.v; nSC++; }
+        });
+        serieC.push({ f: isoD, v: r2(accC) });
+      }
+      var minC = serieC.reduce(function (a, x) { return x.v < a.v ? x : a; }, serieC[0]);
+      var finC = serieC[serieC.length - 1].v;
+      var tSinFecha = sinFecha.reduce(function (a, x) { return a + FS.pendienteDe(x); }, 0);
+
+      function curvaSvg() {
+        /* El ancho del dibujo es el del hueco donde se pinta: con un
+           viewBox fijo, el texto de los ejes crecía con la pantalla. */
+        var W = Math.max(520, Math.min(1400, (contentEl.clientWidth || 900) - 70)), Hh = 250, L = 70, R = 20, T = 24, B = 32;
+        var vals = serieC.map(function (x) { return x.v; });
+        var lo = Math.min.apply(null, vals.concat(saldo0 == null ? [0] : [])), hi = Math.max.apply(null, vals.concat(saldo0 == null ? [0] : []));
+        var paso = Math.pow(10, Math.floor(Math.log10(Math.max(1, (hi - lo) / 4))));
+        [1, 2, 2.5, 5, 10].some(function (m) { if ((hi - lo) / (paso * m) <= 4) { paso = paso * m; return true; } return false; });
+        lo = Math.floor(lo / paso) * paso; hi = Math.ceil(hi / paso) * paso; if (hi === lo) hi = lo + paso;
+        function X(i) { return L + i / (serieC.length - 1) * (W - L - R); }
+        function Y(v) { return T + (1 - (v - lo) / (hi - lo)) * (Hh - T - B); }
+        var linea = serieC.map(function (x, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(x.v).toFixed(1); }).join(' ');
+        var area = linea + ' L' + X(serieC.length - 1).toFixed(1) + ' ' + (Hh - B) + ' L' + L + ' ' + (Hh - B) + ' Z';
+        var y0 = Y(0), rejilla = '';
+        for (var v = lo; v <= hi + 0.001; v += paso) {
+          rejilla += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '" class="' + (Math.abs(v) < 0.001 ? 'es-cero' : '') + '"/>' +
+            '<text x="' + (L - 8) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + esc(EUR(v).replace(/,00(?=\s?€)/, '')) + '</text>';
+        }
+        var cada = HZ <= 30 ? 7 : 15, ejeX = '';
+        for (var i = 0; i < serieC.length; i += cada) {
+          ejeX += '<text x="' + X(i).toFixed(1) + '" y="' + (Hh - 9) + '" text-anchor="' + (i === 0 ? 'start' : 'middle') + '">' + (i === 0 ? 'Hoy' : fechaCorta(serieC[i].f)) + '</text>';
+        }
+        var iMin = serieC.indexOf(minC), xm = X(iMin), ym = Y(minC.v);
+        var etiq = 'Punto más bajo · ' + EUR(minC.v) + ' · ' + (minC.f === FS.hoy ? 'hoy' : fechaCorta(minC.f));
+        var anch = xm > W * 0.72 ? 'end' : xm < W * 0.28 ? 'start' : 'middle';
+        var neg = y0 >= T && y0 <= Hh - B;
+        return '<svg class="fdemo-curva-svg" viewBox="0 0 ' + W + ' ' + Hh + '" role="img" aria-label="' + esc((saldo0 == null ? 'Variación de caja' : 'Saldo de caja') + ' día a día durante ' + HZ + ' días; ' + etiq) + '"' +
+          ' data-serie="' + esc(JSON.stringify(serieC.map(function (x) { return x.v; }))) + '" data-f0="' + FS.hoy + '" data-l="' + L + '" data-r="' + R + '" data-t="' + T + '" data-b="' + B + '" data-lo="' + lo + '" data-hi="' + hi + '">' +
+          '<defs><linearGradient id="fdemoCurvaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f5fe0" stop-opacity=".22"/><stop offset="1" stop-color="#2f5fe0" stop-opacity="0"/></linearGradient>' +
+          (neg ? '<clipPath id="fdemoSobre"><rect x="0" y="0" width="' + W + '" height="' + y0.toFixed(1) + '"/></clipPath><clipPath id="fdemoBajo"><rect x="0" y="' + y0.toFixed(1) + '" width="' + W + '" height="' + (Hh - y0).toFixed(1) + '"/></clipPath>' : '') +
+          '</defs>' +
+          '<g class="fdemo-curva-rej">' + rejilla + '</g>' +
+          '<path d="' + area + '" fill="url(#fdemoCurvaG)"/>' +
+          (neg ? '<path d="' + linea + '" class="fdemo-curva-l" clip-path="url(#fdemoSobre)"/><path d="' + linea + '" class="fdemo-curva-l es-neg" clip-path="url(#fdemoBajo)"/>'
+               : '<path d="' + linea + '" class="fdemo-curva-l' + (hi <= 0 ? ' es-neg' : '') + '"/>') +
+          '<g class="fdemo-curva-x">' + ejeX + '</g>' +
+          '<circle cx="' + xm.toFixed(1) + '" cy="' + ym.toFixed(1) + '" r="5" class="fdemo-curva-min"/>' +
+          '<text x="' + xm.toFixed(1) + '" y="' + (ym > T + 26 ? ym - 12 : ym + 20).toFixed(1) + '" text-anchor="' + anch + '" class="fdemo-curva-et">' + esc(etiq) + '</text>' +
+          '<g class="fdemo-curva-hover" data-role="curva-hover" style="display:none"><line y1="' + T + '" y2="' + (Hh - B) + '"/><circle r="5"/>' +
+          '<rect rx="6" height="40" width="150"/><text class="a"></text><text class="b"></text></g>' +
+          '<rect class="fdemo-curva-hit" x="' + L + '" y="' + T + '" width="' + (W - L - R) + '" height="' + (Hh - T - B) + '" fill="transparent"/>' +
+          '</svg>';
+      }
+      var curvaHtml =
+        '<div class="fdemo-te-ctrl">' +
+        '<div class="fdemo-seg" role="group" aria-label="Horizonte">' + [30, 60, 90].map(function (h) {
+          return '<button type="button" class="' + (h === HZ ? 'is-on' : '') + '" aria-pressed="' + (h === HZ) + '" data-action="te-h" data-h="' + h + '">' + h + ' días</button>';
+        }).join('') + '</div>' +
+        '<div class="fdemo-seg" role="group" aria-label="Escenario">' + [['base', 'Base'], ['prudente', 'Prudente']].map(function (e) {
+          return '<button type="button" class="' + (e[0] === TE.e ? 'is-on' : '') + '" aria-pressed="' + (e[0] === TE.e) + '" data-action="te-e" data-e="' + e[0] + '">' + e[1] + '</button>';
+        }).join('') + '</div>' +
+        '<label class="fdemo-te-saldo"><span>Saldo en banco hoy</span><input class="fdemo-input" data-role="te-saldo" inputmode="decimal" autocomplete="off" placeholder="Escríbelo tú, si quieres" value="' + esc(TE.saldo || '') + '"></label>' +
+        '</div>' +
+        '<div class="fdemo-kpi-tira es-4">' +
+        kpi2({ hero: true, tono: finC >= 0 ? 'positivo' : 'critico', label: saldo0 == null ? 'Variación de caja a ' + HZ + ' días' : 'Saldo dentro de ' + HZ + ' días', valor: EUR(finC), hint: saldo0 == null ? 'lo que entra menos lo que sale' : 'saldo declarado más lo que se mueve' }) +
+        kpi2({ tono: minC.v < 0 ? 'critico' : 'neutro', label: 'Punto más bajo', valor: EUR(minC.v), hint: minC.f === FS.hoy ? 'hoy' : 'el ' + FDATE(minC.f) }) +
+        kpi2({ tono: 'positivo', label: 'Entra', valor: EUR(r2(entraC)), hint: nEC + ' cobros con fecha', vista: 'cobros' }) +
+        kpi2({ tono: 'aviso', label: 'Sale', valor: EUR(r2(saleC)), hint: nSC + ' pagos con fecha', vista: 'pagos' }) +
+        '</div>' +
+        card(cardHead(saldo0 == null ? 'Variación de caja, día a día' : 'Saldo de caja, día a día', 'Pasa el ratón por la curva para ver cada día'),
+          '<div class="fdemo-curva" data-role="curva">' + curvaSvg() + '</div>') +
+        '<ul class="fdemo-supuestos">' +
+        '<li>' + (saldo0 == null ? 'No hay saldo declarado: la curva es la <b>variación</b> de caja, no el dinero que habrá en el banco. Escríbelo arriba y la curva pasa a ser saldo.' : 'Saldo declarado por ti: ' + EUR(saldo0) + '. No está verificado con el banco y va rotulado como tal.') + '</li>' +
+        '<li>' + (TE.e === 'prudente' ? 'Escenario prudente: cada cliente con historial cobra con el retraso que se le ha medido, no el día del vencimiento.' : 'Escenario base: cada compromiso entra o sale el día que le corresponde por documento.') + '</li>' +
+        (sinFecha.length ? '<li>' + sinFecha.length + ' factura' + (sinFecha.length > 1 ? 's vencidas no aparecen' : ' vencida no aparece') + ' en la curva (' + EUR(tSinFecha) + '): llevan vencidas más de lo que ese cliente tarda nunca. Se siguen reclamando, pero contarlas como caja sería una previsión optimista.</li>' : '') +
+        '<li>Las cuotas mensuales de los clientes y los gastos fijos se proyectan desde su propio historial y cuentan como previstos.</li>' +
+        '</ul>';
+
       var semanas = [];
-      for (var w = 0; w < 6; w++) {
-        var ini2 = Date.parse(FS.hoy) + w * 7 * 86400000;
-        var fin2 = ini2 + 7 * 86400000;
-        var entra = [], sale = [];
+      for (var w = 0; w < 8; w++) {
+        var ini2 = H0 + w * 7 * DIA, fin2 = ini2 + 7 * DIA;
+        var entra = 0, sale = 0, nE = 0, nS = 0, nP = 0;
         fac.forEach(function (x) {
           var t = Date.parse(x.fechaVencimiento);
-          if (t >= ini2 && t < fin2) entra.push({ q: x.clienteNombre, v: FS.pendienteDe(x), id: x.id, tipo: 'facturas' });
+          if (t >= ini2 && t < fin2) { entra += FS.pendienteDe(x); nE++; }
         });
         gas.forEach(function (g) {
           var t = Date.parse(g.fechaVencimiento);
-          if (t >= ini2 && t < fin2) sale.push({ q: g.proveedor, v: g.importe, tipo: 'pagos' });
+          if (t >= ini2 && t < fin2) { sale += g.importe; nS++; }
         });
-        var e = entra.reduce(function (a, x) { return a + x.v; }, 0);
-        var sl = sale.reduce(function (a, x) { return a + x.v; }, 0);
-        semanas.push({ w: w, ini: new Date(ini2).toISOString().slice(0, 10), entra: e, sale: sl,
-                       neto: Math.round((e - sl) * 100) / 100, nE: entra.length, nS: sale.length,
-                       quien: (entra[0] || sale[0] || {}).q || null });
+        previstos.forEach(function (p) {
+          var t = Date.parse(p.fecha);
+          if (t >= ini2 && t < fin2) { if (p.tipo === 'entra') { entra += p.importe; nE += p.n || 1; } else { sale += p.importe; nS++; } nP++; }
+        });
+        semanas.push({ w: w, ini: new Date(ini2).toISOString().slice(0, 10), entra: Math.round(entra * 100) / 100,
+                       sale: Math.round(sale * 100) / 100, neto: Math.round((entra - sale) * 100) / 100, nE: nE, nS: nS, nP: nP });
       }
+      var acum = 0;
+      semanas.forEach(function (x) { acum += x.neto; x.acum = Math.round(acum * 100) / 100; });
       var maxSem = Math.max.apply(null, semanas.map(function (x) { return Math.max(x.entra, x.sale); }).concat([1]));
       var filasSem = semanas.map(function (x) {
-        return '<tr><td><b>' + (x.w === 0 ? 'Esta semana' : 'En ' + x.w + ' semana' + (x.w > 1 ? 's' : '')) + '</b>' +
-          '<span class="fdemo-pct">desde el ' + FDATE(x.ini) + '</span></td>' +
-          '<td class="is-right">' + EUR(x.entra) + '<span class="fdemo-pct">' + x.nE + ' cobro(s)</span></td>' +
-          '<td class="is-right">' + EUR(x.sale) + '<span class="fdemo-pct">' + x.nS + ' pago(s)</span></td>' +
-          '<td class="is-right ' + (x.neto < 0 ? 'es-mal' : '') + '"><b>' + EUR(x.neto) + '</b></td>' +
-          '<td style="min-width:150px;"><div class="fdemo-apilada">' +
-          '<i class="n-ok" style="width:' + Math.round((x.entra / maxSem) * 100) + '%"></i>' +
-          '<i class="n-serio" style="width:' + Math.round((x.sale / maxSem) * 100) + '%"></i></div></td></tr>';
+        var quieta = !x.nE && !x.nS;
+        return '<tr' + (quieta ? ' class="is-quieta"' : '') + '><td><b>' + (x.w === 0 ? 'Esta semana' : 'En ' + x.w + ' semana' + (x.w > 1 ? 's' : '')) + '</b>' +
+          '<span class="fdemo-pct">desde el ' + FDATE(x.ini) + (x.nP ? ' · ' + x.nP + ' previsto' + (x.nP > 1 ? 's' : '') : '') + '</span></td>' +
+          (quieta
+            ? '<td colspan="4" class="is-muted">Semana sin vencimientos: ni cobros ni pagos con fecha en estos siete días.</td>'
+            : '<td class="is-right">' + (x.nE ? EUR(x.entra) + '<span class="fdemo-pct">' + x.nE + ' cobro' + (x.nE === 1 ? '' : 's') + '</span>' : '<span class="fdemo-pct">sin cobros</span>') + '</td>' +
+              '<td class="is-right">' + (x.nS ? EUR(x.sale) + '<span class="fdemo-pct">' + x.nS + ' pago' + (x.nS === 1 ? '' : 's') + '</span>' : '<span class="fdemo-pct">sin pagos</span>') + '</td>' +
+              '<td class="is-right ' + (x.neto < 0 ? 'es-mal' : '') + '"><b>' + EUR(x.neto) + '</b></td>' +
+              '<td style="min-width:150px;"><div class="fdemo-apilada">' +
+              '<i class="n-ok" style="width:' + Math.round((x.entra / maxSem) * 100) + '%"></i>' +
+              '<i class="n-serio" style="width:' + Math.round((x.sale / maxSem) * 100) + '%"></i></div></td>') +
+          '<td class="is-right ' + (x.acum < 0 ? 'es-mal' : '') + '">' + EUR(x.acum) + '</td></tr>';
       }).join('');
-
       var negativas = semanas.filter(function (x) { return x.neto < 0; });
 
       return '<div class="fdemo-panel">' +
         '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Caja</p>' +
         '<h1 class="fdemo-page-title">Tesorería</h1>' +
-        '<p class="fdemo-page-sub">Lo que entra y lo que sale según las fechas de tus propios documentos.</p></div></div>' +
-        '<div class="fdemo-kpi-tira es-4">' +
-        kpi2({ hero: true, tono: prev.neto >= 0 ? 'positivo' : 'critico', label: 'Neto a 30 días', valor: EUR(prev.neto),
-               hint: 'lo que entra menos lo que sale' }) +
-        kpi2({ tono: 'positivo', label: 'Por entrar', valor: EUR(prev.entra), hint: 'facturas que vencen', vista: 'cobros' }) +
-        kpi2({ tono: 'aviso', label: 'Por salir', valor: EUR(prev.sale), hint: 'gastos que vencen', vista: 'pagos' }) +
-        kpi2({ tono: negativas.length ? 'critico' : 'positivo', label: 'Semanas en rojo', valor: String(negativas.length),
-               hint: 'de las seis próximas' }) +
-        '</div>' +
-        seccion('Semana a semana', 'porque un neto a treinta días no sirve para decidir nada',
-          card('', tablaSimple([{t:'Semana'},{t:'Entra',r:1},{t:'Sale',r:1},{t:'Neto',r:1},{t:''}], filasSem, '')), 1) +
-        seccion('A treinta, sesenta y noventa días', 'con el escenario prudente al lado',
-          '<div class="fdemo-dos-3">' + horizontes.map(function (h) {
-            return card(cardHead('Próximos {d} días'.replace('{d}', h.d), 'según vencimientos'),
-              '<div class="fdemo-card-body"><div class="fdemo-kpi-tira es-3">' +
-              kpi2({ tono: 'positivo', label: 'Entra', valor: EUR(h.entra) }) +
-              kpi2({ tono: 'aviso', label: 'Sale', valor: EUR(h.sale) }) +
-              kpi2({ tono: h.neto >= 0 ? 'positivo' : 'critico', label: 'Neto', valor: EUR(h.neto) }) +
-              '</div><p class="fdemo-esc">Escenario prudente, descontando lo ya vencido: <b>' + EUR(h.prudente) + '</b></p></div>');
-          }).join('') + '</div>', 2) +
-        aviso('Esto es VARIACIÓN de caja, no saldo: el saldo del banco no está en el sistema y no se inventa. El escenario prudente descuenta lo que ya está fuera de plazo, porque contar con ello es lo que convierte una previsión en un susto.') +
+        '<p class="fdemo-page-sub">Lo que entra y lo que sale según las fechas de tus propios documentos. Elige el horizonte, el escenario y, si quieres, el saldo.</p></div></div>' +
+        curvaHtml +
+        seccion('Ocho semanas, una a una', 'lo emitido más lo recurrente previsto, con el acumulado al lado',
+          card('', tablaSimple([{t:'Semana'},{t:'Entra',r:1},{t:'Sale',r:1},{t:'Neto',r:1},{t:''},{t:'Acumulado',r:1}], filasSem, '')), 1) +
+        aviso('El saldo del banco no se inventa: o lo declaras tú, o la curva es variación de caja y lo dice. El escenario prudente usa lo que cada cliente tarda de verdad en pagar, porque contar con el día del vencimiento es lo que convierte una previsión en un susto.') +
         '</div>';
     };
 
@@ -710,59 +925,90 @@
     /* DUPLICADOS. La regla esta escrita y se puede discutir, que es mas de lo
        que se puede hacer con una puntuacion. Arriba, el dinero en juego: eso
        es lo que convierte una lista en una decision. */
-    RENDERERS.duplicados = function () {
-      var gas = FS.listGastos(), pares = [];
-      for (var i = 0; i < gas.length; i++) {
-        for (var j = i + 1; j < gas.length; j++) {
-          if (gas[i].proveedor !== gas[j].proveedor) continue;
-          if (Math.abs(gas[i].importe - gas[j].importe) > 0.01) continue;
-          var d = Math.abs(Math.round((Date.parse(gas[i].fechaGasto) - Date.parse(gas[j].fechaGasto)) / 86400000));
-          if (d <= 10) pares.push({ a: gas[i], b: gas[j], d: d });
-        }
+    /* DUPLICADOS. La regla era correcta y la pantalla salia vacia: en los
+       gastos YA CONTABILIZADOS no hay ningun duplicado, porque el sistema los
+       para antes. Ese es justo el punto. Lo que se enseña aqui es la puerta:
+       los documentos que han LLEGADO —por el buzon de correo, por una foto,
+       dentro de una remesa— y que coinciden con un gasto que ya esta dentro.
+       Se quedan retenidos y no entran en los numeros hasta que alguien
+       decide. Por eso los totales del resto de la demo no cambian. */
+    function sospechosos() {
+      if (state.sospechas) return state.sospechas;
+      var gas = FS.listGastos().slice().sort(function (a, b) { return a.fechaGasto < b.fechaGasto ? 1 : -1; });
+      var CANAL = [
+        { c: 'correo', t: 'Buzón de gastos', i: '✉' },
+        { c: 'foto', t: 'Foto desde el móvil', i: '◉' },
+        { c: 'remesa', t: 'Dentro de una remesa PDF', i: '▤' },
+        { c: 'correo', t: 'Buzón de gastos', i: '✉' },
+        { c: 'foto', t: 'Foto desde el móvil', i: '◉' }
+      ];
+      var vistos = {}, out = [];
+      for (var i = 0; i < gas.length && out.length < 5; i++) {
+        var g = gas[i];
+        if (vistos[g.proveedor] || g.importe < 40) continue;
+        vistos[g.proveedor] = 1;
+        var k = out.length, prob = k < 3;
+        var dias = prob ? (1 + k) : (k === 3 ? 6 : 8);
+        var llega = new Date(Date.parse(g.fechaGasto) + dias * 86400000).toISOString().slice(0, 10);
+        out.push({
+          id: 'dup' + k, gasto: g, canal: CANAL[k], dias: dias, llega: llega,
+          archivo: slug(g.proveedor) + '-' + (prob ? 'factura' : 'ticket') + '.pdf',
+          importe: g.importe, prob: prob,
+          motivos: prob ? ['mismo proveedor', 'mismo importe al céntimo', dias + ' día' + (dias > 1 ? 's' : '') + ' después']
+                        : ['mismo proveedor', 'mismo importe', dias + ' días después'],
+          estado: 'Retenido'
+        });
       }
-      var seguros = pares.filter(function (p) { return p.d <= 3; });
-      var posibles = pares.filter(function (p) { return p.d > 3; });
-      var enJuego = pares.reduce(function (a, p) { return a + p.a.importe; }, 0);
-
-      function filas(lista) {
-        return lista.map(function (p) {
-          return '<tr><td>' + esc(p.a.proveedor) + '</td>' +
-            '<td class="is-muted">' + esc(p.a.concepto) + '</td>' +
-            '<td class="is-muted">' + FDATE(p.a.fechaGasto) + ' · ' + FDATE(p.b.fechaGasto) + '</td>' +
-            '<td class="is-muted is-right">' + p.d + ' día(s)</td>' +
-            '<td class="is-right">' + EUR(p.a.importe) + '</td>' +
-            '<td>' + pill(p.d <= 3 ? 'Probable' : 'Posible') + '</td>' +
-            '<td class="is-right"><button type="button" class="fdemo-btn-mini" data-action="plan">Marcar revisado</button></td></tr>';
-        }).join('');
+      state.sospechas = out;
+      return out;
+    }
+    RENDERERS.duplicados = function () {
+      var lista = sospechosos();
+      var abiertos = lista.filter(function (d) { return d.estado === 'Retenido'; });
+      var descartados = lista.filter(function (d) { return d.estado === 'Descartado'; });
+      var enJuego = lista.filter(function (d) { return d.estado !== 'Dado de alta'; })
+        .reduce(function (a, d) { return a + d.importe; }, 0);
+      function fila(d) {
+        var abierto = d.estado === 'Retenido';
+        return '<tr class="' + (abierto ? '' : 'is-resuelta') + '">' +
+          '<td><div class="fdemo-doc-en"><span class="fdemo-canal c-' + d.canal.c + '" aria-hidden="true">' + d.canal.i + '</span>' +
+          '<div><b>' + esc(d.archivo) + '</b><i>' + esc(d.canal.t) + ' · llegó el ' + FDATE(d.llega) + '</i></div></div></td>' +
+          '<td><span class="fdemo-coincide">' + esc(d.gasto.concepto) + '</span><span class="fdemo-pct">ya registrado el ' + FDATE(d.gasto.fechaGasto) + '</span></td>' +
+          '<td class="is-muted">' + esc(d.gasto.proveedor) + '</td>' +
+          '<td class="is-right"><b>' + EUR(d.importe) + '</b></td>' +
+          '<td><div class="fdemo-chips">' + d.motivos.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div></td>' +
+          '<td>' + pill(abierto ? (d.prob ? 'Probable' : 'Posible') : d.estado) + '</td>' +
+          '<td class="is-right">' + (abierto
+            ? '<div class="fdemo-acts-mini">' +
+              '<button type="button" class="fdemo-btn-mini es-accion" data-action="dup-descarta" data-id="' + d.id + '">Es el mismo</button>' +
+              '<button type="button" class="fdemo-btn-mini" data-action="dup-alta" data-id="' + d.id + '">Es otro</button></div>'
+            : '<span class="fdemo-hecho">' + (d.estado === 'Descartado' ? 'No se paga dos veces' : 'Dado de alta') + '</span>') +
+          '</td></tr>';
       }
       var REGLAS = [
         ['Mismo proveedor', 'Se compara el proveedor dado de alta, no el texto del concepto.'],
-        ['Mismo importe al céntimo', 'Sin margen de tolerancia: 412,00 € y 412,01 € no son el mismo gasto.'],
-        ['Menos de diez días entre los dos', 'Por encima de eso suele ser una cuota recurrente, no un duplicado.'],
-        ['Probable o posible', 'Tres días o menos, probable. Entre cuatro y diez, posible: merece una mirada, no una alarma.']
+        ['Mismo importe al céntimo', 'Sin tolerancia: 412,00 € y 412,01 € no son el mismo gasto.'],
+        ['Menos de diez días', 'Por encima de eso suele ser una cuota recurrente, no un duplicado.'],
+        ['Se para en la puerta', 'Lo que coincide no entra en los números hasta que alguien decide. No hay que ir a deshacer nada.']
       ];
-
       return '<div class="fdemo-panel">' +
         '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Control</p>' +
         '<h1 class="fdemo-page-title">Duplicados</h1>' +
-        '<p class="fdemo-page-sub">Gastos que se parecen demasiado entre sí como para no mirarlos.</p></div></div>' +
-        '<div class="fdemo-kpi-tira es-3">' +
-        kpi2({ hero: true, tono: enJuego > 0 ? 'aviso' : 'positivo', label: 'Dinero en juego', valor: EUR(enJuego),
-               hint: 'lo que costaría pagarlos dos veces' }) +
-        kpi2({ tono: seguros.length ? 'critico' : 'neutro', label: 'Probables', valor: String(seguros.length), hint: 'tres días o menos de diferencia' }) +
-        kpi2({ label: 'Posibles', valor: String(posibles.length), hint: 'entre cuatro y diez días' }) +
+        '<p class="fdemo-page-sub">Documentos que han llegado y se parecen demasiado a un gasto que ya está dentro. Se quedan en la puerta.</p></div></div>' +
+        '<div class="fdemo-kpi-tira es-4">' +
+        kpi2({ hero: true, tono: 'aviso', label: 'Dinero retenido en la puerta', valor: EUR(enJuego), hint: 'lo que costaría pagarlo dos veces' }) +
+        kpi2({ tono: abiertos.length ? 'critico' : 'positivo', label: 'Por decidir', valor: String(abiertos.length), hint: 'retenidos hasta que alguien mire' }) +
+        kpi2({ label: 'Probables', valor: String(lista.filter(function (d) { return d.prob; }).length), hint: 'tres días o menos' }) +
+        kpi2({ tono: 'positivo', label: 'Canales vigilados', valor: '3', hint: descartados.length ? descartados.length + ' ya descartados' : 'correo, fotos y remesas' }) +
         '</div>' +
-        seccion('Probables', 'coinciden en proveedor, importe y fecha casi exacta',
-          card('', tablaSimple([{t:'Proveedor'},{t:'Concepto'},{t:'Fechas'},{t:'Distancia',r:1},{t:'Importe',r:1},{t:'Estado'},{t:'',r:1}],
-            filas(seguros), 'Ningún gasto coincide tanto como para sospechar.')), 1) +
-        seccion('Posibles', 'coinciden en varias cosas; merecen una mirada, no una alarma',
-          card('', tablaSimple([{t:'Proveedor'},{t:'Concepto'},{t:'Fechas'},{t:'Distancia',r:1},{t:'Importe',r:1},{t:'Estado'},{t:'',r:1}],
-            filas(posibles), 'Nada más se parece lo suficiente.')), 2) +
+        seccion('Retenidos en la puerta', 'cada uno con el gasto con el que coincide y por qué',
+          card('', tablaSimple([{t:'Documento que ha llegado'},{t:'Coincide con'},{t:'Proveedor'},{t:'Importe',r:1},{t:'Por qué'},{t:'Estado'},{t:'',r:1}],
+            lista.map(fila).join(''), '')), 1) +
         seccion('La regla, escrita', 'para que se pueda discutir en vez de creer',
-          card('', '<div class="fdemo-card-body"><ul class="fdemo-hace">' +
-            REGLAS.map(function (r) { return '<li><b>' + esc(r[0]) + '.</b> ' + esc(r[1]) + '</li>'; }).join('') +
-            '</ul></div>'), 3) +
-        aviso('Ni puntuación, ni modelo, ni caja negra: si un gasto salta, se puede leer exactamente por qué. Y si la regla no encaja con cómo trabajáis, se cambia.') +
+          '<div class="fdemo-nohace-rej">' + REGLAS.map(function (r) {
+            return '<article class="fdemo-nohace es-bien"><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></article>';
+          }).join('') + '</div>', 2) +
+        aviso('Ni puntuación, ni modelo, ni caja negra: si un documento se queda retenido, se puede leer exactamente por qué. Y si la regla no encaja con cómo trabajáis, se cambia.') +
         '</div>';
     };
 
@@ -919,27 +1165,55 @@
 
     /* REGISTRO FISCAL. La cadena, eslabón a eslabón: cada factura lleva la
        huella de la anterior, y por eso se puede enseñar que no falta ninguna. */
+    /* VERI*FACTU. Dos tarjetas decian «0» —fuera de la cadena, en cola— y un
+       cero se lee como vacio aunque sea la mejor noticia de la pantalla. Se
+       cuenta al derecho: cuantas estan registradas de cuantas, y un boton que
+       COMPRUEBA la cadena delante de quien mira, eslabon a eslabon. */
     RENDERERS.verifactu = function () {
       var fac = FS.listFacturas().filter(function (f) { return f.estado !== 'Borrador'; })
         .slice().sort(function (a, b) { return a.fechaEmision < b.fechaEmision ? -1 : 1; });
-      var filas = fac.slice(-14).map(function (f, i) {
-        var h = huella(f.numero + f.importe);
-        return '<tr><td><code>' + esc(f.numero) + '</code></td>' +
+      var ult = fac.slice(-12);
+      var comp = state.vfComprobado || 0;            // cuántos eslabones lleva comprobados
+      var hecho = comp >= ult.length;
+      var prev = null;
+      var filas = ult.map(function (f, i) {
+        var h = huella(f.numero + f.importe), ha = prev || huella('inicio' + f.serie);
+        prev = h;
+        var ok = i < comp;
+        return '<tr class="' + (ok ? 'is-ok' : '') + '"><td><code>' + esc(f.numero) + '</code></td>' +
           '<td class="is-muted">' + FDATE(f.fechaEmision) + '</td>' +
           '<td class="is-right">' + EUR(f.importe) + '</td>' +
-          '<td class="is-muted"><code>' + h + '</code></td>' +
-          '<td>' + pill('Registrada') + '</td></tr>';
+          '<td class="is-muted"><code>' + ha + '</code></td>' +
+          '<td><code class="fdemo-hash">' + h + '</code></td>' +
+          '<td>' + (ok ? '<span class="fdemo-hecho">✓ Enlaza</span>' : pill('Registrada')) + '</td></tr>';
       }).join('');
+      var u = fac[fac.length - 1];
+      var REG = [
+        ['NIF del emisor', 'B00000000'], ['Número y serie', u.numero + ' · serie ' + u.serie],
+        ['Fecha de expedición', FDATE(u.fechaEmision)], ['Tipo de factura', 'F1 · completa'],
+        ['Cuota total', EUR(u.iva)], ['Importe total', EUR(u.importe)],
+        ['Huella anterior', huella(fac[fac.length - 2].numero + fac[fac.length - 2].importe)],
+        ['Huella de este registro', huella(u.numero + u.importe)]
+      ];
       return '<div class="fdemo-panel">' +
         '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Obligación fiscal</p>' +
-        '<h1 class="fdemo-page-title">Registro fiscal · VERI*FACTU</h1></div></div>' +
-        '<div class="fdemo-kpi-tira es-3">' +
-        kpi2({ tono: 'positivo', label: 'La cadena', valor: 'Intacta', hint: '{n} facturas encadenadas'.replace('{n}', fac.length) }) +
-        kpi2({ label: 'Fuera de la cadena', valor: '0', hint: 'ninguna factura sin registrar' }) +
-        kpi2({ tono: 'positivo', label: 'En cola de remisión', valor: '0', hint: 'nada pendiente de enviar' }) +
+        '<h1 class="fdemo-page-title">Registro fiscal · VERI*FACTU</h1>' +
+        '<p class="fdemo-page-sub">Cada factura queda encadenada a la anterior con su huella. Se puede comprobar aquí, delante de quien lo pregunte.</p></div>' +
+        '<button type="button" class="fdemo-btn variant-primary" data-action="vf-comprobar">' + (hecho ? 'Volver a comprobar' : 'Comprobar la cadena') + '</button></div>' +
+        '<div class="fdemo-kpi-tira es-4">' +
+        kpi2({ hero: true, tono: 'positivo', label: 'Registradas', valor: fac.length + ' de ' + fac.length, hint: 'todas las emitidas, sin excepción' }) +
+        kpi2({ tono: 'positivo', label: 'La cadena', valor: hecho ? 'Comprobada' : 'Intacta', hint: hecho ? ult.length + ' eslabones revisados ahora' : 'cada huella apunta a la anterior' }) +
+        kpi2({ tono: 'positivo', label: 'Cola de remisión', valor: 'Al día', hint: 'nada pendiente de enviar' }) +
+        kpi2({ label: 'Series', valor: 'F · R', hint: 'ordinarias y rectificativas' }) +
         '</div>' +
-        aviso('Cada factura lleva la huella de la anterior. Por eso se puede contestar a «enséñame que las has registrado todas» sin entrar en la base de datos.') +
-        card(cardHead('Últimos eslabones', 'los catorce más recientes'), tablaSimple([{t:'Nº'},{t:'Emisión'},{t:'Importe',r:1},{t:'Huella'},{t:'Estado'}], filas, '')) +
+        (comp > 0 && !hecho ? '<div class="fdemo-progreso"><i style="width:' + Math.round(comp / ult.length * 100) + '%"></i><span>Comprobando eslabón ' + comp + ' de ' + ult.length + '…</span></div>' : '') +
+        (hecho ? '<div class="fdemo-ok-banda">✓ ' + ult.length + ' eslabones comprobados · ninguna huella rota · ninguna factura fuera de la cadena</div>' : '') +
+        seccion('Los últimos eslabones', 'la huella de cada una apunta a la de la anterior',
+          card('', tablaSimple([{t:'Nº'},{t:'Emisión'},{t:'Importe',r:1},{t:'Huella anterior'},{t:'Huella'},{t:'Estado'}], filas, '')), 1) +
+        seccion('Un registro por dentro', 'lo que queda guardado de ' + u.numero,
+          card(cardHead(u.numero, u.clienteNombre), '<div class="fdemo-field-grid">' +
+            REG.map(function (r) { return field(r[0], '<code>' + esc(r[1]) + '</code>'); }).join('') + '</div>'), 2) +
+        aviso('Cada factura lleva la huella de la anterior. Por eso se puede contestar a «enséñame que las has registrado todas» sin entrar en la base de datos: si alguien borrara o cambiara una, la cadena se rompe en ese punto y se ve.') +
         '</div>';
     };
     // Huella corta y determinista: aquí solo tiene que PARECER lo que es
@@ -958,8 +1232,13 @@
         var t = g.reduce(function (a, x) { return a + x.importe; }, 0);
         var sinPagar = g.filter(function (x) { return !x.pagado; });
         var ult = g.slice().sort(function (a, b) { return a.fechaGasto < b.fechaGasto ? 1 : -1; })[0];
+        var serie = [];
+        var ev = FS.getEvolucion();
+        ev.slice(-6).forEach(function (m) {
+          serie.push(g.filter(function (x) { return (x.fechaGasto || '').slice(0, 7) === m.mes; }).reduce(function (a, x) { return a + x.importe; }, 0));
+        });
         return { p: p, n: g.length, total: t, sinPagar: sinPagar.reduce(function (a, x) { return a + x.importe; }, 0),
-                 ult: ult ? ult.fechaGasto : null };
+                 ult: ult ? ult.fechaGasto : null, serie: serie };
       }).sort(function (a, b) { return b.total - a.total; });
       var gTotal = provs.reduce(function (a, x) { return a + x.total; }, 0);
       var debiendo = provs.reduce(function (a, x) { return a + x.sinPagar; }, 0);
@@ -967,13 +1246,14 @@
 
       var filas = provs.map(function (x) {
         var pct = gTotal > 0 ? Math.round((x.total / gTotal) * 100) : 0;
-        return '<tr><td><b>' + esc(x.p.nombre) + '</b></td>' +
-          '<td class="is-muted">' + esc(x.p.categoria || '—') + '</td>' +
+        return '<tr><td><b>' + esc(x.p.nombre) + '</b><span class="fdemo-pct">' + esc(x.p.email) + '</span></td>' +
+          '<td>' + pill(x.p.categoria || 'Sin categoría') + '</td>' +
           '<td class="is-muted">' + esc(x.p.nif) + '</td>' +
-          '<td class="is-muted">' + FDATE(x.ult) + '</td>' +
-          '<td class="is-right">' + x.n + '</td>' +
-          '<td class="is-right">' + EUR(x.total) + '</td>' +
-          '<td class="is-right ' + (x.sinPagar > 0 ? 'es-mal' : '') + '">' + EUR(x.sinPagar) + '</td>' +
+          '<td class="is-muted">' + (x.ult ? FDATE(x.ult) : '<span class="fdemo-pendiente">Recién dado de alta</span>') + '</td>' +
+          '<td class="is-right">' + (x.n || '—') + '</td>' +
+          '<td style="min-width:90px;">' + (x.n ? chispa(x.serie) : '<span class="fdemo-pct">sin compras aún</span>') + '</td>' +
+          '<td class="is-right"><b>' + (x.n ? EUR(x.total) : '—') + '</b></td>' +
+          '<td class="is-right">' + (!x.n ? '—' : x.sinPagar > 0 ? '<span class="es-mal">' + EUR(x.sinPagar) + '</span>' : '<span class="fdemo-hecho">Al día</span>') + '</td>' +
           '<td style="min-width:110px;"><div class="fdemo-apilada"><i class="n-serio" style="width:' + pct + '%"></i></div>' +
           '<span class="fdemo-pct">' + pct + ' %</span></td></tr>';
       }).join('');
@@ -981,27 +1261,28 @@
       var porCat = {};
       gas.forEach(function (g) { porCat[g.categoria || 'Sin categoría'] = (porCat[g.categoria || 'Sin categoría'] || 0) + g.importe; });
       var cats = Object.keys(porCat).sort(function (a, b) { return porCat[b] - porCat[a]; });
-      var filasCat = cats.map(function (c) {
-        var pct = gTotal > 0 ? Math.round((porCat[c] / gTotal) * 100) : 0;
-        return '<tr><td>' + esc(c) + '</td><td class="is-right">' + EUR(porCat[c]) + '</td>' +
-          '<td style="min-width:150px;"><div class="fdemo-apilada"><i class="n-serio" style="width:' + pct + '%"></i></div></td>' +
-          '<td class="is-right is-muted">' + pct + ' %</td></tr>';
-      }).join('');
 
       return '<div class="fdemo-panel"><div class="fdemo-panel-h"><div>' +
         '<p class="fdemo-eyebrow">Negocio</p><h1 class="fdemo-page-title">Proveedores</h1>' +
-        '<p class="fdemo-page-sub">A quién le compras, cuánto y qué le debes todavía.</p></div></div>' +
+        '<p class="fdemo-page-sub">A quién le compras, cuánto, cómo evoluciona y qué le debes todavía.</p></div>' +
+        '<button type="button" class="fdemo-btn variant-secondary" data-action="plan">Nuevo proveedor</button></div>' +
         '<div class="fdemo-kpi-tira es-4">' +
         kpi2({ hero: true, label: 'Gastado en total', valor: EUR(gTotal), hint: gas.length + ' gastos registrados', vista: 'gastos' }) +
-        kpi2({ label: 'Proveedores', valor: String(provs.length), hint: 'dados de alta' }) +
-        kpi2({ tono: debiendo > 0 ? 'aviso' : 'positivo', label: 'Sin pagar', valor: EUR(debiendo), hint: 'facturas de proveedor pendientes', vista: 'pagos' }) +
-        kpi2({ label: 'Mayor proveedor', valor: top ? (gTotal > 0 ? Math.round((top.total / gTotal) * 100) + ' %' : '0 %') : '—',
+        kpi2({ label: 'Proveedores activos', valor: String(provs.length), hint: 'dados de alta con su NIF' }) +
+        kpi2({ tono: debiendo > 0 ? 'aviso' : 'positivo', label: 'Por pagar', valor: EUR(debiendo), hint: 'facturas de proveedor pendientes', vista: 'pagos' }) +
+        kpi2({ label: 'Mayor proveedor', valor: top ? (gTotal > 0 ? Math.round((top.total / gTotal) * 100) + ' %' : '—') : '—',
                hint: top ? top.p.nombre : '' }) +
         '</div>' +
-        seccion('Quién se lleva el gasto', 'ordenados por lo que les has pagado',
-          card('', tablaSimple([{t:'Proveedor'},{t:'Categoría'},{t:'NIF'},{t:'Último gasto'},{t:'Gastos',r:1},{t:'Total',r:1},{t:'Sin pagar',r:1},{t:'Peso'}], filas, '')), 1) +
-        seccion('Por categoría', 'en qué se va el dinero, no solo a quién',
-          card('', tablaSimple([{t:'Categoría'},{t:'Total',r:1},{t:''},{t:'Peso',r:1}], filasCat, '')), 2) +
+        '<div class="fdemo-dos">' +
+        seccion('En qué se va el dinero', 'por categoría, de todo el histórico', card('', donut(cats.map(function (c) { return { k: c, v: porCat[c] }; }))), 1) +
+        seccion('Quién más pesa', 'los cinco primeros', card('', '<div class="fdemo-card-body"><ol class="fdemo-top">' +
+          provs.slice(0, 5).map(function (x) {
+            var pct = gTotal > 0 ? Math.round((x.total / gTotal) * 100) : 0;
+            return '<li><span>' + esc(x.p.nombre) + '</span><div class="fdemo-apilada"><i class="n-serio" style="width:' + pct + '%"></i></div><b>' + EUR(x.total) + '</b></li>';
+          }).join('') + '</ol></div>'), 2) +
+        '</div>' +
+        seccion('Todos los proveedores', 'con su tendencia de los últimos seis meses',
+          card('', tablaSimple([{t:'Proveedor'},{t:'Categoría'},{t:'NIF'},{t:'Último gasto'},{t:'Gastos',r:1},{t:'6 meses'},{t:'Total',r:1},{t:'Por pagar',r:1},{t:'Peso'}], filas, '')), 3) +
         aviso('Un proveedor que sube de precio aparece solo en el Radar. Aquí no hay que ir a buscarlo: se avisa cuando pasa.') +
         '</div>';
     };
@@ -1177,7 +1458,7 @@
         '<div class="fdemo-kpi-tira es-3">' +
         kpi2({ label: 'Emitidas en el libro', valor: String(fac.length), hint: 'facturas con numeración correlativa', vista: 'facturas' }) +
         kpi2({ label: 'Recibidas en el libro', valor: String(gas.length), hint: 'gastos con proveedor y cuota', vista: 'gastos' }) +
-        kpi2({ label: 'Huecos en la numeración', valor: '0', tono: 'positivo', hint: 'ninguna serie salta un número' }) +
+        kpi2({ label: 'Numeración', valor: 'Sin huecos', tono: 'positivo', hint: 'ninguna serie salta un número' }) +
         '</div>' +
         seccion('Los libros', 'en CSV, listos para enviar, sin cerrar nada',
           card('', tablaSimple([{t:'Libro'},{t:'Qué lleva'},{t:'Tamaño',r:1},{t:'',r:1}], filasLibros, '')), 1) +
@@ -1355,77 +1636,491 @@
 
     RENDERERS.facturas = function (id) {
       if (id) return facturaDetalle(id);
-      /* Las que acaban de entrar desde una remesa van las primeras y
-         marcadas: sin eso, «dar de alta» es un botón del que no se sabe
-         si ha hecho algo. */
-      var all = (state.facturasNuevas || []).concat(FS.listFacturas());
-      var estados = Array.from(new Set(all.map(function (f) { return f.estado; }))).sort();
+      /* Las que acaban de entrar —desde una remesa o desde el editor— van
+         las primeras y marcadas: sin eso, «dar de alta» es un botón del que
+         no se sabe si ha hecho algo. */
+      var all = todasLasFacturas();
+      var estados = Array.from(new Set(all.map(function (f) { return vivaDe(f).estado; }))).sort();
       var q = state.facturaFiltro.q.toLowerCase();
       var estFiltro = state.facturaFiltro.estado;
+      var chip = state.facturaFiltro.chip || 'todas';
+      var hoy = FS.hoy;
+      function grupo(f) {
+        var v = vivaDe(f);
+        if (v.estado === 'Borrador') return 'borrador';
+        if (v.pend <= 0) return 'cobradas';
+        if (f.fechaVencimiento && f.fechaVencimiento < hoy) return 'fuera';
+        return 'pendientes';
+      }
+      var cuenta = { todas: all.length, pendientes: 0, fuera: 0, cobradas: 0, borrador: 0 };
+      all.forEach(function (f) { cuenta[grupo(f)]++; });
       var filtradas = all.filter(function (f) {
         var texto = (f.numero + ' ' + (f.clienteNombre || '') + ' ' + (f.proyecto || '')).toLowerCase();
-        return (!q || texto.indexOf(q) !== -1) && (!estFiltro || f.estado === estFiltro);
+        return (!q || texto.indexOf(q) !== -1) && (!estFiltro || vivaDe(f).estado === estFiltro) && (chip === 'todas' || grupo(f) === chip);
       });
+      var anio = hoy.slice(0, 4), mes = hoy.slice(0, 7);
+      var emitidas = all.filter(function (f) { return vivaDe(f).estado !== 'Borrador'; });
+      var facturadoAnio = emitidas.filter(function (f) { return (f.fechaEmision || '').slice(0, 4) === anio; }).reduce(function (a, f) { return a + f.importe; }, 0);
+      var pendiente = emitidas.reduce(function (a, f) { return a + vivaDe(f).pend; }, 0);
+      var fuera = emitidas.filter(function (f) { return grupo(f) === 'fuera'; }).reduce(function (a, f) { return a + vivaDe(f).pend; }, 0);
+      var cobradoMes = FS.listCobros().filter(function (c) { return (c.fecha || '').slice(0, 7) === mes; }).reduce(function (a, c) { return a + c.importe; }, 0) +
+        Object.keys(state.cobrados).reduce(function (a, k) { return a + state.cobrados[k]; }, 0);
 
       var rows = filtradas.map(function (f) {
-        return '<tr' + (f.nueva ? ' class="is-nuevo"' : '') + '><td>' +
+        var v = vivaDe(f);
+        return '<tr class="' + (f.nueva ? 'is-nuevo ' : '') + 'es-abrible" data-fid="' + f.id + '"><td>' +
           linkTo('facturas', f.id, f.numero) + (f.nueva ? '<span class="fdemo-nuevo-pill">Nueva</span>' : '') + '</td>' +
           '<td class="is-muted">' + esc(dash(f.clienteNombre)) + '</td>' +
           '<td class="is-muted">' + esc(dash(f.proyecto)) + '</td>' +
           '<td class="is-muted">' + FDATE(f.fechaEmision) + '</td>' +
           '<td class="is-muted">' + FDATE(f.fechaVencimiento) + '</td>' +
           '<td class="is-right">' + EUR(f.importe) + '</td>' +
-          '<td>' + pill(f.estado) + '</td>' +
-          '<td>' + pill(f.estadoCobro) + '</td></tr>';
+          '<td>' + pill(v.estado) + '</td>' +
+          '<td>' + pill(v.cobro) + '</td></tr>';
       }).join('');
 
-      var tableHtml = !filtradas.length ? empty(all.length === 0 ? 'Aún no hay facturas registradas.' : 'Ningún resultado con estos filtros.') :
+      var tableHtml = !filtradas.length ? '<div class="fdemo-explica"><p><b>Ninguna factura con estos filtros.</b> Prueba con otro nombre o quita el filtro.</p>' +
+          '<button type="button" class="fdemo-btn variant-secondary" data-action="fa-limpia">Quitar filtros</button></div>' :
         '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr>' +
         '<th>Nº Factura</th><th>Cliente</th><th>Proyecto</th><th>Emisión</th><th>Vencimiento</th><th class="is-right">Importe</th><th>Estado</th><th>Cobro</th>' +
         '</tr></thead><tbody>' + rows + '</tbody></table></div>';
 
-      return pageHead('Facturas', all.length + ' factura(s) en total') +
+      var CHIPS = [['todas', 'Todas'], ['pendientes', 'En plazo'], ['fuera', 'Fuera de plazo'], ['cobradas', 'Cobradas'], ['borrador', 'Borradores']];
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Ventas</p><h1 class="fdemo-page-title">Facturas</h1>' +
+        '<p class="fdemo-page-sub">' + all.length + ' facturas. Pulsa una fila para verla sin salir de la lista; el número abre la ficha entera.</p></div>' +
+        '<button type="button" class="fdemo-btn variant-primary" data-action="fa-nueva">+ Nueva factura</button></div>' +
+        '<div class="fdemo-kpi-tira es-4">' +
+        kpi2({ hero: true, label: 'Facturado en ' + anio, valor: EUR(facturadoAnio), hint: emitidas.filter(function (f) { return (f.fechaEmision || '').slice(0, 4) === anio; }).length + ' facturas emitidas' }) +
+        kpi2({ tono: 'aviso', label: 'Pendiente de cobro', valor: EUR(pendiente), hint: (cuenta.pendientes + cuenta.fuera) + ' facturas', vista: 'cobros' }) +
+        kpi2({ tono: fuera > 0 ? 'critico' : 'positivo', label: 'Fuera de plazo', valor: fuera > 0 ? EUR(fuera) : 'Nada', hint: cuenta.fuera + ' facturas vencidas' }) +
+        kpi2({ tono: 'positivo', label: 'Cobrado en ' + MESES[Number(mes.slice(5, 7)) - 1], valor: EUR(cobradoMes), hint: 'entradas registradas' }) +
+        '</div>' +
+        '<div class="fdemo-filtros-chip" role="group" aria-label="Filtrar por situación">' + CHIPS.map(function (c) {
+          return '<button type="button" class="fdemo-chip-f' + (chip === c[0] ? ' is-on' : '') + '" data-action="fa-chip" data-k="' + c[0] + '" aria-pressed="' + (chip === c[0]) + '">' +
+            esc(c[1]) + '<span>' + cuenta[c[0]] + '</span></button>';
+        }).join('') + '</div>' +
         '<form class="fdemo-filter-row" data-role="factura-filter">' +
-        '<input class="fdemo-input" type="text" name="q" placeholder="Buscar por número, cliente o proyecto…" value="' + esc(state.facturaFiltro.q) + '">' +
+        '<input class="fdemo-input" type="search" name="q" placeholder="Buscar por número, cliente o proyecto…" value="' + esc(state.facturaFiltro.q) + '" autocomplete="off">' +
         '<select class="fdemo-select" name="estado">' + ['<option value="">Todos los estados</option>'].concat(estados.map(function (e) { return '<option value="' + esc(e) + '"' + (e === estFiltro ? ' selected' : '') + '>' + esc(e) + '</option>'; })).join('') + '</select>' +
         '<button type="submit" class="fdemo-btn variant-secondary">Filtrar</button>' +
         '</form>' +
-        card(null, tableHtml);
+        card(null, tableHtml) +
+        (state.vistaRapida ? vistaRapida(state.vistaRapida) : '') +
+        '</div>';
     };
 
-    function facturaDetalle(id) {
-      /* Las que acaban de entrar desde un documento no estan en el almacen:
-         estan en la sesion. Y su ficha ensena lo que ninguna otra ensena, que
-         es DE DONDE ha salido cada campo -que pagina del PDF-, que es justo
-         lo que hay que poder ensenar cuando alguien pregunta si se fia. */
-      var nueva = (state.facturasNuevas || []).filter(function (x) { return x.id === id; })[0];
-      if (nueva) return facturaNuevaDetalle(nueva);
-      var f = FS.getFactura(id);
-      if (!f) return empty('Factura no encontrada en la demo.');
-      var cliente = f.clienteIds && f.clienteIds[0] ? FS.getCliente(f.clienteIds[0]) : null;
+    /* LA VISTA RÁPIDA. Pulsar una fila abre la factura en un panel lateral,
+       encima de la lista, y se cierra con la X, con Escape o pulsando fuera:
+       mirar una factura no debería costar perder la búsqueda. */
+    function vistaRapida(id) {
+      var f = facturaPorId(id);
+      if (!f) return '';
+      var v = vivaDe(f), cli = clienteDeFactura(f);
+      var ret = state.cobrados[f.id] ? 0 : FS.diasDeRetraso(f);
+      return '<div class="fdemo-rapida-velo" data-action="vr-cierra"></div>' +
+        '<aside class="fdemo-rapida" role="dialog" aria-label="Factura ' + esc(f.numero) + '">' +
+        '<div class="fdemo-rapida-h"><div><p class="fdemo-eyebrow">Vista rápida</p><p class="fdemo-rapida-t">' + esc(f.numero) + ' · ' + EUR(f.importe) + '</p>' +
+        '<p class="fdemo-page-sub">' + esc(cli ? cli.empresa : f.clienteNombre) + '</p></div>' +
+        '<button type="button" class="fdemo-rapida-x" data-action="vr-cierra" aria-label="Cerrar la vista rápida">×</button></div>' +
+        '<div class="fdemo-rapida-pills">' + pill(v.estado) + (v.cobro ? pill(v.cobro) : '') +
+        (ret > 0 ? '<span class="fdemo-rapida-ret">' + ret + ' días de retraso</span>' : '') + '</div>' +
+        '<div class="fdemo-rapida-doc">' + documentoFactura(f) + '</div>' +
+        '<div class="fdemo-ficha-acts">' +
+        '<button type="button" class="fdemo-btn variant-primary" data-action="nav" data-view="facturas" data-id="' + f.id + '">Abrir la ficha</button>' +
+        (v.pend > 0 && v.estado !== 'Borrador' ? '<button type="button" class="fdemo-btn variant-secondary" data-action="fa-cobro" data-id="' + f.id + '">Registrar cobro</button>' : '') +
+        (v.estado !== 'Borrador' ? '<button type="button" class="fdemo-btn variant-secondary" data-action="fa-enviar" data-id="' + f.id + '">' + (ret > 0 ? 'Recordatorio' : 'Enviar') + '</button>' : '') +
+        '</div></aside>';
+    }
 
-      var origenHtml = '';
-      if (f.presupuestoOrigenId || f.proyectoOrigenId) {
-        var links = [];
-        if (f.presupuestoOrigenId) links.push('<div>' + linkTo('presupuestos', f.presupuestoOrigenId, 'Ver presupuesto de origen') + '</div>');
-        if (f.proyectoOrigenId) links.push('<div>' + linkTo('proyectos', f.proyectoOrigenId, 'Ver proyecto de origen') + '</div>');
-        origenHtml = card(cardHead('Origen', 'Trazabilidad hacia el presupuesto o proyecto que generó esta factura'), '<div class="fdemo-card-body" style="display:flex; flex-direction:column; gap:8px;">' + links.join('') + '</div>');
+    /* ═══════════════════════ LAS FICHAS, POR DENTRO ═══════════════════════
+
+       Una ficha con todo en una columna obliga a bajar hasta dar con lo que
+       se busca. Las pestañas son las del producto: la misma factura, cinco
+       preguntas —qué es, cómo es el documento, qué se ha cobrado, cómo quedó
+       registrada y qué ha pasado con ella—, y la pestaña abierta se recuerda
+       mientras dura la visita. */
+    function pestanas(clave, lista, activa) {
+      return '<div class="fdemo-tabs" role="tablist" aria-label="Secciones de la ficha">' + lista.map(function (t) {
+        var on = t.k === activa;
+        return '<button type="button" role="tab" aria-selected="' + on + '" class="fdemo-tab' + (on ? ' is-on' : '') +
+          '" data-action="tab" data-clave="' + esc(clave) + '" data-tab="' + t.k + '">' + esc(t.l) +
+          (t.n ? '<span class="fdemo-tab-n">' + t.n + '</span>' : '') + '</button>';
+      }).join('') + '</div>';
+    }
+    function tabDe(clave, def) { return state.tabs[clave] || def; }
+
+    var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    function mesDe(iso) { var d = new Date(iso + 'T00:00:00Z'); return MESES[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+    function fechaCorta(iso) { var d = new Date(iso + 'T00:00:00Z'); return d.getUTCDate() + ' ' + ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'][d.getUTCMonth()]; }
+    function masDias(iso, n) { return new Date(Date.parse(iso) + n * 86400000).toISOString().slice(0, 10); }
+    function diasEntreIso(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 86400000); }
+    function r2(n) { return Math.round(n * 100) / 100; }
+
+    /* Lo que la visita ha hecho con cada factura —un cobro registrado, un
+       envío, una rectificativa— vive en la sesión y se ve en la ficha, en la
+       lista y en la actividad. Un botón que no cambia nada visible es un
+       botón roto. */
+    function vivaDe(f) {
+      if (state.cobrados[f.id]) return { estado: f.estado === 'Borrador' ? 'Borrador' : 'Pagada', cobro: 'Cobrado', cobrado: f.importe, pend: 0 };
+      var p = FS.pendienteDe(f);
+      return { estado: f.estado, cobro: f.estadoCobro, cobrado: r2(f.importe - p), pend: p };
+    }
+    function anota(id, texto, tono) {
+      (state.eventos[id] = state.eventos[id] || []).unshift({ t: texto, tono: tono || 'info', f: FS.hoy, ahora: true });
+    }
+    function todasLasFacturas() { return (state.facturasNuevas || []).concat(FS.listFacturas()); }
+    function facturaPorId(id) {
+      return (state.facturasNuevas || []).filter(function (x) { return x.id === id; })[0] || FS.getFactura(id);
+    }
+    function clienteDeFactura(f) { return f.clienteIds && f.clienteIds[0] ? FS.getCliente(f.clienteIds[0]) : null; }
+
+    /* Cuánto tarda de verdad este cliente en pagar: la mediana de los días
+       entre emisión y cobro de lo que ya ha pagado. Es la cifra que el
+       producto enseña en la ficha del cliente y la que usa el escenario
+       prudente de tesorería. */
+    function tardaEnPagar(cid) {
+      var d = FS.listFacturas().filter(function (f) { return f.clienteIds.indexOf(cid) !== -1 && f.fechaPago && f.fechaEmision; })
+        .map(function (f) { return diasEntreIso(f.fechaEmision, f.fechaPago); }).sort(function (a, b) { return a - b; });
+      if (d.length < 2) return null;
+      return d[Math.floor(d.length / 2)];
+    }
+    function retrasoMedido(cid) {
+      var d = FS.listFacturas().filter(function (f) { return f.clienteIds.indexOf(cid) !== -1 && f.fechaPago && f.fechaVencimiento; })
+        .map(function (f) { return Math.max(0, diasEntreIso(f.fechaVencimiento, f.fechaPago)); }).sort(function (a, b) { return a - b; });
+      if (d.length < 2) return null;
+      return d[Math.floor(d.length / 2)];
+    }
+
+    /* Las líneas del documento. Las que se crean en el editor traen las
+       suyas; las del histórico se reconstruyen de su proyecto o de la cuota
+       del cliente, y la última línea absorbe el redondeo para que la suma
+       cuadre al céntimo con la base. */
+    function lineasFactura(f) {
+      if (f.lineas) return f.lineas;
+      var base = f.base != null ? f.base : r2(f.importe / 1.21);
+      var cli = clienteDeFactura(f);
+      var proy = f.proyectoId ? FS.getProyecto(f.proyectoId) : null;
+      var mes = mesDe(f.fechaEmision || FS.hoy);
+      var cs;
+      if (proy && (proy.serviciosContratados || proy.servicios)) {
+        cs = String(proy.serviciosContratados || proy.servicios).split(/\s*[+,]\s*/).filter(Boolean).slice(0, 3)
+          .map(function (x) { return { c: x.charAt(0).toUpperCase() + x.slice(1), d: 'Proyecto «' + proy.nombre + '»' }; });
+      } else if (cli && cli.cuotaMensual && Math.abs(cli.cuotaMensual - base) < 1) {
+        cs = [{ c: 'Cuota mensual de servicio', d: 'Periodo: ' + mes }];
+      } else {
+        cs = [{ c: 'Servicios profesionales', d: 'Periodo: ' + mes }];
       }
-      var clienteHtml = cliente ? card(cardHead('Cliente'), '<div class="fdemo-field-grid">' +
-        field('Empresa', linkTo('clientes', cliente.id, cliente.empresa)) + field('NIF/CIF', esc(dash(cliente.nif))) + field('Email', esc(dash(cliente.email))) + '</div>') : '';
-      var obsHtml = f.observaciones ? card(cardHead('Observaciones'), '<p style="padding:20px; margin:0; font-size:.86rem; color:var(--dc-text-muted);">' + esc(f.observaciones) + '</p>') : '';
+      var pesos = cs.length === 3 ? [0.5, 0.3, 0.2] : cs.length === 2 ? [0.6, 0.4] : [1];
+      var acum = 0;
+      return cs.map(function (x, i) {
+        var imp = i === cs.length - 1 ? r2(base - acum) : r2(base * pesos[i]);
+        acum = r2(acum + imp);
+        return { c: x.c, d: x.d, cant: 1, precio: imp, dto: 0, iva: 21 };
+      });
+    }
+    function totalesDe(lineas, iva, irpf) {
+      var base = r2(lineas.reduce(function (a, l) { return a + (Number(l.cant) || 0) * (Number(l.precio) || 0) * (1 - (Number(l.dto) || 0) / 100); }, 0));
+      var cuota = r2(base * iva / 100);
+      var ret = irpf ? r2(base * 0.15) : 0;
+      return { base: base, cuota: cuota, ret: ret, total: r2(base + cuota - ret) };
+    }
 
-      return '<div class="fdemo-page is-narrow" style="gap:20px;">' +
-        crumb('Facturas', 'facturas', f.numero) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><div><h1 class="fdemo-page-title">Factura ' + esc(f.numero) + '</h1><p class="fdemo-page-sub">' + esc(dash(f.clienteNombre)) + '</p></div>' +
-        '<div style="display:flex; gap:8px;">' + pill(f.estado) + (f.estadoCobro ? pill(f.estadoCobro) : '') + '</div></div>' +
-        card(cardHead('Datos de la factura'), '<div class="fdemo-field-grid">' +
-          field('Importe', EUR(f.importe)) + field('Importe cobrado', EUR(f.importeCobrado)) + field('Pendiente', EUR(f.importe - (f.importeCobrado || 0))) +
-          field('Fecha emisión', FDATE(f.fechaEmision)) + field('Fecha vencimiento', FDATE(f.fechaVencimiento)) + field('Fecha de pago', FDATE(f.fechaPago)) +
-          field('Método de pago', esc(dash(f.metodoPago))) + field('Proyecto', esc(dash(f.proyecto))) + field('Recordatorios enviados', String(f.recordatoriosEnviados || 0)) +
-          '</div>') +
-        origenHtml + clienteHtml + obsHtml +
+    /* EL DOCUMENTO, tal y como sale. Misma estructura que DocumentoFiscal.tsx
+       del producto: emisor, número y fechas; destinatario; tabla con
+       Concepto · Cant. · Precio · Dto. · IVA · Importe; base, desglose de
+       IVA, retención si la hay y total. Sin QR ni leyenda de cotejo: el
+       producto solo los imprime cuando de verdad remite, y aquí no se
+       remite nada. */
+    function documentoFactura(f, extra) {
+      extra = extra || {};
+      var cli = extra.cliente || clienteDeFactura(f);
+      var ls = extra.lineas || lineasFactura(f);
+      var ivaT = extra.iva != null ? extra.iva : (ls[0] && ls[0].iva != null ? ls[0].iva : 21);
+      var t = extra.tot || { base: f.base != null ? f.base : r2(f.importe / 1.21), cuota: f.iva != null ? f.iva : r2(f.importe - (f.base || f.importe / 1.21)), ret: f.irpf ? r2((f.base || 0) * 0.15) : 0, total: f.importe };
+      var rect = f.tipo === 'rectificativa';
+      return '<div class="fdemo-hoja' + (extra.vivo ? ' es-vivo' : '') + '">' +
+        '<div class="fdemo-hoja-cab"><div>' +
+        '<p class="fdemo-hoja-emisor">D-Code Partners, S.L.</p>' +
+        '<p class="fdemo-hoja-peq">NIF: B00000000</p><p class="fdemo-hoja-peq">Calle de ejemplo 1, 28001 Madrid</p></div>' +
+        '<div class="fdemo-hoja-der"><p class="fdemo-hoja-tipo">' + (rect ? 'FACTURA RECTIFICATIVA' : 'FACTURA') + '</p>' +
+        '<p class="fdemo-hoja-emisor">' + esc(f.numero) + '</p>' +
+        '<p class="fdemo-hoja-peq">Fecha: ' + FDATE(f.fechaEmision) + '</p>' +
+        '<p class="fdemo-hoja-peq">Vencimiento: ' + FDATE(f.fechaVencimiento) + '</p></div></div>' +
+        '<div class="fdemo-hoja-sec"><p class="fdemo-hoja-eti">Destinatario</p>' +
+        '<p class="fdemo-hoja-nom">' + esc(cli ? cli.empresa : (f.clienteNombre || 'Elige un cliente')) + '</p>' +
+        (cli && cli.nif ? '<p class="fdemo-hoja-peq">NIF: ' + esc(cli.nif) + '</p>' : '') +
+        (cli && cli.direccionFiscal ? '<p class="fdemo-hoja-peq">' + esc(cli.direccionFiscal) + '</p>' : '') + '</div>' +
+        (rect && f.motivo ? '<div class="fdemo-hoja-rect"><p class="fdemo-hoja-nom">Rectificación</p><p>' + esc(f.motivo) + '</p></div>' : '') +
+        '<div class="fdemo-hoja-tabla"><table><thead><tr><th>Concepto</th><th class="n">Cant.</th><th class="n">Precio</th><th class="n">Dto.</th><th class="n">IVA</th><th class="n">Importe</th></tr></thead><tbody>' +
+        ls.map(function (l) {
+          var imp = r2((Number(l.cant) || 0) * (Number(l.precio) || 0) * (1 - (Number(l.dto) || 0) / 100));
+          return '<tr><td>' + esc(l.c || 'Concepto sin escribir') + (l.d ? '<span class="fdemo-hoja-desc">' + esc(l.d) + '</span>' : '') + '</td>' +
+            '<td class="n">' + esc(String(l.cant)) + '</td><td class="n">' + EUR(Number(l.precio) || 0) + '</td>' +
+            '<td class="n">' + (Number(l.dto) > 0 ? l.dto + ' %' : '—') + '</td><td class="n">' + (l.iva != null ? l.iva : ivaT) + ' %</td>' +
+            '<td class="n">' + EUR(imp) + '</td></tr>';
+        }).join('') + '</tbody></table></div>' +
+        '<div class="fdemo-hoja-tot" data-role="bf-tot">' +
+        '<div><span>Base imponible</span><b>' + EUR(t.base) + '</b></div>' +
+        '<div><span>IVA ' + ivaT + ' % sobre ' + EUR(t.base) + '</span><b>' + EUR(t.cuota) + '</b></div>' +
+        (t.ret ? '<div><span>Retención IRPF 15 %</span><b>−' + EUR(t.ret) + '</b></div>' : '') +
+        '<div class="es-final"><span>Total</span><b>' + EUR(t.total) + '</b></div></div>' +
+        '<p class="fdemo-hoja-peq fdemo-hoja-pago">Forma de pago: ' + esc(f.metodoPago || 'Transferencia bancaria') + '</p>' +
+        '<div class="fdemo-hoja-pie"><span>' + (f.estado === 'Borrador' || extra.vivo ? 'Borrador: no entra en la cadena de registro hasta que se emite' : 'Registro ' + huella(f.numero + f.importe) + ' · encadenado al anterior') + '</span>' +
+        '<span>Página 1 de 1</span></div></div>';
+    }
+
+    /* La actividad sale de las propias fechas del documento —emisión,
+       envío, vencimiento, recordatorios, cobros— más lo que la visita acaba
+       de hacer, que va arriba y marcado. */
+    function actividadFactura(f) {
+      var ev = [];
+      var cli = clienteDeFactura(f);
+      var email = cli && cli.email ? cli.email : 'el cliente';
+      if (f.fechaEmision) {
+        ev.push({ f: f.fechaEmision, t: f.estado === 'Borrador' ? 'Borrador creado' : 'Emitida y registrada con huella ' + huella(f.numero + f.importe), tono: 'info' });
+        if (f.estado !== 'Borrador') ev.push({ f: f.fechaEmision, t: 'Enviada por correo a ' + email, tono: 'info', o: 1 });
+      }
+      var n = f.recordatoriosEnviados || 0;
+      for (var k = 1; k <= n; k++) {
+        var fr = masDias(f.fechaVencimiento, 3 + (k - 1) * 7);
+        if (fr <= FS.hoy) ev.push({ f: fr, t: 'Recordatorio ' + k + ' enviado automáticamente', tono: 'aviso' });
+      }
+      if (f.fechaVencimiento && f.fechaVencimiento < FS.hoy && FS.pendienteDe(f) > 0 && !state.cobrados[f.id]) {
+        ev.push({ f: f.fechaVencimiento, t: 'Vencida sin cobrar · ' + FS.diasDeRetraso(f) + ' días de retraso hoy', tono: 'mal' });
+      }
+      FS.listCobros().filter(function (c) { return c.facturaId === f.id; }).forEach(function (c) {
+        ev.push({ f: c.fecha, t: 'Cobro de ' + EUR(c.importe) + ' por ' + (c.metodo || 'transferencia').toLowerCase() + (c.referencia ? ' · ' + c.referencia : ''), tono: 'bien' });
+      });
+      if (f.fechaPago && f.pagada) ev.push({ f: f.fechaPago, t: 'Cobrada por completo en ' + diasEntreIso(f.fechaEmision, f.fechaPago) + ' días', tono: 'bien', o: 1 });
+      ev.sort(function (a, b) { return a.f === b.f ? (b.o || 0) - (a.o || 0) : (a.f < b.f ? 1 : -1); });
+      return (state.eventos[f.id] || []).concat(ev);
+    }
+    function lineaDeTiempo(ev) {
+      return '<ol class="fdemo-linea">' + ev.map(function (e) {
+        return '<li class="t-' + e.tono + (e.ahora ? ' es-ahora' : '') + '"><span class="fdemo-linea-p" aria-hidden="true"></span>' +
+          '<div><p>' + esc(e.t) + '</p><span>' + (e.ahora ? 'Ahora mismo, en esta visita' : FDATE(e.f)) + '</span></div></li>';
+      }).join('') + '</ol>';
+    }
+
+    function facturaDetalle(id) {
+      if (id === 'nueva') return facturaEditor();
+      var nueva = (state.facturasNuevas || []).filter(function (x) { return x.id === id; })[0];
+      if (nueva && !nueva.manual) return facturaNuevaDetalle(nueva);
+      var f = nueva || FS.getFactura(id);
+      if (!f) return empty('Factura no encontrada en la demo.');
+      return facturaFicha(f);
+    }
+
+    function facturaFicha(f) {
+      var v = vivaDe(f);
+      var cli = clienteDeFactura(f);
+      var ret = state.cobrados[f.id] ? 0 : FS.diasDeRetraso(f);
+      var cobros = FS.listCobros().filter(function (c) { return c.facturaId === f.id; });
+      if (state.cobrados[f.id]) cobros = [{ fecha: FS.hoy, importe: state.cobrados[f.id], metodo: 'Transferencia', referencia: 'Registrado en esta visita', nuevo: true }].concat(cobros);
+      var act = actividadFactura(f);
+      var clave = 'factura:' + f.id;
+      var tab = tabDe(clave, 'resumen');
+      var borrador = f.estado === 'Borrador';
+
+      var acciones = '<div class="fdemo-ficha-acts">' +
+        (borrador ? '<button type="button" class="fdemo-btn variant-primary" data-action="fa-emitir" data-id="' + f.id + '">Emitir y registrar</button>' : '') +
+        (!borrador && v.pend > 0 ? '<button type="button" class="fdemo-btn variant-primary" data-action="fa-cobro" data-id="' + f.id + '">Registrar cobro</button>' : '') +
+        (!borrador ? '<button type="button" class="fdemo-btn variant-secondary" data-action="fa-enviar" data-id="' + f.id + '">' + (v.pend > 0 && ret > 0 ? 'Enviar recordatorio' : 'Enviar por correo') + '</button>' : '') +
+        '<button type="button" class="fdemo-btn variant-secondary" data-action="tab" data-clave="' + clave + '" data-tab="documento">Ver el PDF</button>' +
+        (!borrador && f.tipo !== 'rectificativa' ? '<button type="button" class="fdemo-btn variant-ghost" data-action="fa-rect" data-id="' + f.id + '">Rectificar</button>' : '') +
         '</div>';
+
+      var pct = f.importe ? Math.round(v.cobrado / f.importe * 100) : 0;
+      var cuerpo = '';
+      if (tab === 'resumen') {
+        var tarda = cli ? tardaEnPagar(cli.id) : null;
+        cuerpo =
+          '<div class="fdemo-cobro-barra"><div class="fdemo-cobro-barra-h"><span>Cobrado <b>' + EUR(v.cobrado) + '</b></span><span>' +
+          (v.pend > 0 ? 'Pendiente <b>' + EUR(v.pend) + '</b>' : '<b>Cobrada entera</b>') + '</span></div>' +
+          '<div class="fdemo-cobro-barra-t" role="img" aria-label="Cobrado el ' + pct + ' %"><i style="width:' + pct + '%"></i></div></div>' +
+          '<div class="fdemo-kpi-tira es-4">' +
+          kpi2({ hero: true, tono: v.pend > 0 ? (ret > 0 ? 'critico' : 'aviso') : 'positivo', label: v.pend > 0 ? 'Pendiente' : 'Total cobrado', valor: EUR(v.pend > 0 ? v.pend : f.importe), hint: v.pend > 0 ? 'de ' + EUR(f.importe) : 'sin nada pendiente' }) +
+          kpi2({ label: 'Base imponible', valor: EUR(f.base != null ? f.base : r2(f.importe / 1.21)), hint: 'IVA ' + EUR(f.iva != null ? f.iva : 0) }) +
+          kpi2({ tono: ret > 0 ? 'critico' : 'neutro', label: ret > 0 ? 'Retraso' : borrador ? 'Estado' : v.pend > 0 ? 'Vence' : 'Cobrada en', valor: ret > 0 ? ret + ' días' : borrador ? 'Borrador' : v.pend > 0 ? FDATE(f.fechaVencimiento) : (f.fechaPago ? diasEntreIso(f.fechaEmision, f.fechaPago) + ' días' : 'Hoy'), hint: ret > 0 ? 'desde el ' + FDATE(f.fechaVencimiento) : borrador ? 'no entra en los números' : v.pend > 0 ? 'en ' + Math.max(0, diasEntreIso(FS.hoy, f.fechaVencimiento)) + ' días' : 'desde la emisión' }) +
+          kpi2({ label: 'Recordatorios', valor: String((f.recordatoriosEnviados || 0) + (state.enviados[f.id] || 0)), hint: (f.recordatoriosEnviados || state.enviados[f.id]) ? 'enviados solos, sin que nadie escriba' : 'no ha hecho falta ninguno' }) +
+          '</div>' +
+          card(cardHead('Datos de la factura'), '<div class="fdemo-field-grid">' +
+            field('Serie', esc(f.serie || 'F') + ' · ' + (f.tipo === 'rectificativa' ? 'rectificativa' : 'ordinaria')) + field('Fecha emisión', FDATE(f.fechaEmision)) + field('Fecha vencimiento', FDATE(f.fechaVencimiento)) +
+            field('Método de pago', esc(f.metodoPago || 'Transferencia')) + field('Proyecto', f.proyectoId ? linkTo('proyectos', f.proyectoId, f.proyecto || 'Ver proyecto') : esc(dash(f.proyecto))) + field('Fecha de pago', state.cobrados[f.id] ? FDATE(FS.hoy) : FDATE(f.fechaPago)) +
+            '</div>') +
+          (cli ? card(cardHead('Cliente', 'Lo que dice su historial, no una impresión'), '<div class="fdemo-field-grid">' +
+            field('Empresa', linkTo('clientes', cli.id, cli.empresa)) + field('NIF/CIF', esc(dash(cli.nif))) + field('Email de facturación', esc(dash(cli.email))) +
+            field('Tarda en pagar', tarda != null ? tarda + ' días de mediana' : 'Sin historial suficiente') + field('Facturas suyas', String(cli.facturaIds.length)) + field('Cuota mensual', cli.cuotaMensual ? EUR(cli.cuotaMensual) : 'Sin cuota recurrente') +
+            '</div>') : '') +
+          (f.presupuestoOrigenId || f.proyectoOrigenId ? card(cardHead('Origen', 'De dónde ha salido esta factura'), '<div class="fdemo-card-body" style="display:flex; flex-direction:column; gap:8px;">' +
+            (f.presupuestoOrigenId ? '<div>' + linkTo('presupuestos', f.presupuestoOrigenId, 'Ver presupuesto de origen') + '</div>' : '') +
+            (f.proyectoOrigenId ? '<div>' + linkTo('proyectos', f.proyectoOrigenId, 'Ver proyecto de origen') + '</div>' : '') + '</div>') : '');
+      } else if (tab === 'documento') {
+        cuerpo = '<div class="fdemo-hoja-marco">' + documentoFactura(f) + '</div>' +
+          '<p class="fdemo-nota-doc">Es el documento que recibe el cliente. En la demo no se descarga ni se envía nada: con tu cuenta, el mismo botón genera el PDF y lo manda desde tu dominio.</p>';
+      } else if (tab === 'cobros') {
+        cuerpo = (v.pend > 0 && !borrador ? '<div class="fdemo-pend-banda"><div><p class="fdemo-pend-l">Falta por cobrar</p><p class="fdemo-pend-v">' + EUR(v.pend) + '</p>' +
+            '<p class="fdemo-pend-h">' + (ret > 0 ? 'vencida hace ' + ret + ' días' : 'vence el ' + FDATE(f.fechaVencimiento)) + '</p></div>' +
+            '<div class="fdemo-ficha-acts"><button type="button" class="fdemo-btn variant-primary" data-action="fa-cobro" data-id="' + f.id + '">Registrar cobro</button>' +
+            '<button type="button" class="fdemo-btn variant-secondary" data-action="fa-enviar" data-id="' + f.id + '">' + (ret > 0 ? 'Enviar recordatorio' : 'Enviar por correo') + '</button></div></div>' : '') +
+          (cobros.length ? card(cardHead('Cobros de esta factura', cobros.length === 1 ? 'Un cobro' : cobros.length + ' cobros'),
+            tablaSimple([{ t: 'Fecha' }, { t: 'Importe', r: 1 }, { t: 'Método' }, { t: 'Referencia' }],
+              cobros.map(function (c) {
+                return '<tr' + (c.nuevo ? ' class="is-nuevo"' : '') + '><td>' + FDATE(c.fecha) + (c.nuevo ? '<span class="fdemo-nuevo-pill">Ahora</span>' : '') + '</td><td class="is-right">' + EUR(c.importe) + '</td>' +
+                  '<td class="is-muted">' + esc(c.metodo || 'Transferencia') + '</td><td class="is-muted"><code>' + esc(c.referencia || '—') + '</code></td></tr>';
+              }).join(''), '')) :
+            '<div class="fdemo-explica"><p><b>' + (borrador ? 'Un borrador no se cobra.' : 'Todavía no ha entrado ningún pago.') + '</b> ' +
+            (borrador ? 'Cuando la emitas, aquí aparecerá cada cobro con su fecha, su método y su referencia bancaria.' : 'Cuando entre, se registra aquí con su referencia y la factura cambia de estado sola, en la lista, en Cobros y en el panel.') + '</p></div>') +
+          card(cardHead('Cómo se reclama', 'Lo hace el sistema; tú decides el tono y el calendario'),
+            '<ul class="fdemo-pasos-rec">' +
+            '<li><b>Día 0</b><span>Se envía la factura con el enlace al PDF.</span></li>' +
+            '<li><b>Vencimiento + 3</b><span>Primer recordatorio, amable.</span></li>' +
+            '<li><b>Vencimiento + 10</b><span>Segundo recordatorio, con el importe y los días.</span></li>' +
+            '<li><b>Vencimiento + 20</b><span>Aviso a ti para llamar: ya no es cosa de correos.</span></li></ul>');
+      } else if (tab === 'registro') {
+        var ord = FS.listFacturas().filter(function (x) { return x.estado !== 'Borrador'; }).sort(function (a, b) { return a.fechaEmision < b.fechaEmision ? -1 : 1; });
+        var ix = ord.indexOf(f), ant = ix > 0 ? ord[ix - 1] : ix === -1 ? ord[ord.length - 1] : null;
+        var hA = ant ? huella(ant.numero + ant.importe) : huella('inicio' + (f.serie || 'F'));
+        var h = huella(f.numero + f.importe);
+        var tipo = f.tipo === 'rectificativa' ? 'R1' : 'F1';
+        var fe = (f.fechaEmision || FS.hoy).split('-').reverse().join('-');
+        cuerpo = borrador ?
+          '<div class="fdemo-explica"><p><b>Un borrador no se registra.</b> Entra en la cadena en el momento en que se emite: se le calcula la huella con la de la factura anterior y desde ese instante no se puede cambiar sin una rectificativa.</p>' +
+          '<button type="button" class="fdemo-btn variant-primary" data-action="fa-emitir" data-id="' + f.id + '">Emitir y registrar</button></div>' :
+          card(cardHead('Registro de alta', 'Lo que queda guardado de ' + f.numero + ' y cómo se engancha con la anterior'), '<div class="fdemo-field-grid">' +
+            field('NIF del emisor', '<code>B00000000</code>') + field('Número y serie', '<code>' + esc(f.numero) + '</code>') + field('Tipo de factura', '<code>' + tipo + '</code> · ' + (tipo === 'R1' ? 'rectificativa' : 'completa')) +
+            field('Cuota total', EUR(f.iva != null ? f.iva : 0)) + field('Importe total', EUR(f.importe)) + field('Anterior en la cadena', ant ? '<code>' + esc(ant.numero) + '</code>' : 'Primera de la serie') +
+            field('Huella anterior', '<code>' + hA + '</code>') + field('Huella de este registro', '<code class="fdemo-hash">' + h + '</code>') + field('Remisión', pill('Al día')) +
+            '</div>') +
+          card(cardHead('El registro, tal cual', 'Formato del registro de alta'),
+            '<pre class="fdemo-xml">' + esc('<RegistroAlta>\n  <IDFactura>\n    <IDEmisorFactura>B00000000</IDEmisorFactura>\n    <NumSerieFactura>' + f.numero + '</NumSerieFactura>\n    <FechaExpedicionFactura>' + fe + '</FechaExpedicionFactura>\n  </IDFactura>\n  <TipoFactura>' + tipo + '</TipoFactura>\n  <CuotaTotal>' + (f.iva != null ? f.iva : 0).toFixed(2) + '</CuotaTotal>\n  <ImporteTotal>' + f.importe.toFixed(2) + '</ImporteTotal>\n  <Encadenamiento>\n    <RegistroAnterior>\n      <NumSerieFactura>' + (ant ? ant.numero : '—') + '</NumSerieFactura>\n      <Huella>' + hA + '…</Huella>\n    </RegistroAnterior>\n  </Encadenamiento>\n  <Huella>' + h + '…</Huella>\n</RegistroAlta>') + '</pre>');
+      } else {
+        cuerpo = card(cardHead('Todo lo que ha pasado con ' + f.numero, act.length + ' momentos, del más reciente al primero'), '<div class="fdemo-card-body">' + lineaDeTiempo(act) + '</div>');
+      }
+
+      return '<div class="fdemo-page fdemo-ficha" style="gap:18px; max-width:1060px;">' +
+        crumb('Facturas', 'facturas', f.numero) +
+        '<div class="fdemo-ficha-h"><div><p class="fdemo-eyebrow">' + (f.tipo === 'rectificativa' ? 'Factura rectificativa' : 'Factura') + '</p>' +
+        '<h1 class="fdemo-page-title">' + esc(f.numero) + ' <span class="fdemo-ficha-imp">' + EUR(f.importe) + '</span></h1>' +
+        '<p class="fdemo-page-sub">' + (cli ? linkTo('clientes', cli.id, cli.empresa) : esc(dash(f.clienteNombre))) + ' · emitida el ' + FDATE(f.fechaEmision) + '</p></div>' +
+        '<div class="fdemo-ficha-pills">' + pill(v.estado) + (v.cobro ? pill(v.cobro) : '') + '</div></div>' +
+        acciones +
+        pestanas(clave, [
+          { k: 'resumen', l: 'Resumen' }, { k: 'documento', l: 'Documento' },
+          { k: 'cobros', l: 'Cobros', n: cobros.length }, { k: 'registro', l: 'Registro fiscal' },
+          { k: 'actividad', l: 'Actividad', n: act.length }], tab) +
+        '<div class="fdemo-tab-cuerpo" role="tabpanel">' + cuerpo + '</div>' +
+        '</div>';
+    }
+
+    /* ══════════════ NUEVA FACTURA ══════════════
+       El editor del producto (facturas/nuevo): cliente, líneas con
+       cantidad, precio y descuento, IVA, retención y vencimiento, y el
+       documento al lado cambiando con cada tecla. Guardar crea el borrador
+       de verdad —aparece en la lista, en la ficha y en la actividad—, y
+       emitirlo le da número, huella y sitio en la cadena. */
+    function borradorNuevo(cid) {
+      var cli = FS.listClientes().filter(function (c) { return c.estado === 'cliente'; });
+      return { clienteId: cid || (cli[0] && cli[0].id), vence: 30, iva: 21, irpf: false,
+               lineas: [{ c: '', d: '', cant: 1, precio: 0, dto: 0 }] };
+    }
+    function siguienteNumero() {
+      var max = 0;
+      todasLasFacturas().forEach(function (f) {
+        var m = /^F-(\d{4})-(\d{4})$/.exec(f.numero || '');
+        if (m && Number(m[1]) === 2026) max = Math.max(max, Number(m[2]));
+      });
+      return 'F-2026-' + String(max + 1).padStart(4, '0');
+    }
+    function facturaEditor() {
+      var b = state.borrador || (state.borrador = borradorNuevo());
+      var cli = FS.getCliente(b.clienteId);
+      var t = totalesDe(b.lineas, b.iva, b.irpf);
+      var numero = siguienteNumero();
+      var clientes = FS.listClientes().filter(function (c) { return c.estado === 'cliente'; });
+      var f = { numero: numero, fechaEmision: FS.hoy, fechaVencimiento: masDias(FS.hoy, b.vence), clienteNombre: cli && cli.empresa, estado: 'Borrador', importe: t.total };
+      var filas = b.lineas.map(function (l, i) {
+        return '<div class="fdemo-bf-linea" data-i="' + i + '">' +
+          '<label class="fdemo-bf-c"><span>Concepto</span><input class="fdemo-input" data-bf="c" data-i="' + i + '" value="' + esc(l.c) + '" placeholder="Qué facturas" autocomplete="off"></label>' +
+          '<label class="fdemo-bf-n"><span>Cant.</span><input class="fdemo-input" data-bf="cant" data-i="' + i + '" value="' + esc(String(l.cant)) + '" inputmode="decimal"></label>' +
+          '<label class="fdemo-bf-p"><span>Precio</span><input class="fdemo-input" data-bf="precio" data-i="' + i + '" value="' + (l.precio ? esc(String(l.precio).replace('.', ',')) : '') + '" placeholder="0,00" inputmode="decimal"></label>' +
+          '<label class="fdemo-bf-n"><span>Dto. %</span><input class="fdemo-input" data-bf="dto" data-i="' + i + '" value="' + esc(String(l.dto || 0)) + '" inputmode="decimal"></label>' +
+          (b.lineas.length > 1 ? '<button type="button" class="fdemo-bf-x" data-action="bf-quita" data-i="' + i + '" aria-label="Quitar la línea ' + (i + 1) + '">×</button>' : '<span class="fdemo-bf-x" aria-hidden="true"></span>') +
+          '</div>';
+      }).join('');
+      return '<div class="fdemo-page fdemo-bf">' +
+        crumb('Facturas', 'facturas', 'Nueva factura') +
+        '<div class="fdemo-ficha-h"><div><p class="fdemo-eyebrow">Nueva factura</p><h1 class="fdemo-page-title">' + numero + '</h1>' +
+        '<p class="fdemo-page-sub">El número lo pone la serie: no se salta ninguno y no se repite ninguno.</p></div></div>' +
+        '<div class="fdemo-bf-rejilla">' +
+        '<div class="fdemo-card fdemo-bf-form"><div class="fdemo-card-body">' +
+        '<div class="fdemo-bf-fila">' +
+        '<label class="fdemo-campo"><span class="fdemo-campo-l">Cliente</span><select class="fdemo-select" data-bf="cliente">' +
+        clientes.map(function (c) { return '<option value="' + c.id + '"' + (c.id === b.clienteId ? ' selected' : '') + '>' + esc(c.empresa) + '</option>'; }).join('') + '</select></label>' +
+        '<label class="fdemo-campo"><span class="fdemo-campo-l">Vence a</span><select class="fdemo-select" data-bf="vence">' +
+        [15, 30, 45, 60].map(function (d) { return '<option value="' + d + '"' + (d === b.vence ? ' selected' : '') + '>' + d + ' días</option>'; }).join('') + '</select></label></div>' +
+        '<p class="fdemo-bf-t">Líneas</p>' + filas +
+        '<button type="button" class="fdemo-btn variant-ghost fdemo-bf-mas" data-action="bf-linea">+ Añadir línea</button>' +
+        '<div class="fdemo-bf-fila">' +
+        '<label class="fdemo-campo"><span class="fdemo-campo-l">IVA</span><select class="fdemo-select" data-bf="iva">' +
+        [21, 10, 4, 0].map(function (x) { return '<option value="' + x + '"' + (x === b.iva ? ' selected' : '') + '>' + x + ' %</option>'; }).join('') + '</select></label>' +
+        '<label class="fdemo-bf-check"><input type="checkbox" data-bf="irpf"' + (b.irpf ? ' checked' : '') + '><span>Retención IRPF del 15 %<i>si facturas como profesional</i></span></label></div>' +
+        '<div class="fdemo-bf-tot" data-role="bf-resumen">' + resumenBorrador(t) + '</div>' +
+        '<div class="fdemo-ficha-acts">' +
+        '<button type="button" class="fdemo-btn variant-primary" data-action="bf-guardar" data-emitir="1">Emitir y registrar</button>' +
+        '<button type="button" class="fdemo-btn variant-secondary" data-action="bf-guardar">Guardar borrador</button>' +
+        '<button type="button" class="fdemo-btn variant-ghost" data-action="nav" data-view="facturas">Cancelar</button></div>' +
+        '</div></div>' +
+        '<div class="fdemo-bf-prev"><p class="fdemo-bf-t">Así la recibe el cliente <span class="fdemo-vivo-dot" aria-hidden="true"></span></p><div data-role="bf-prev">' +
+        documentoFactura(f, { cliente: cli, lineas: b.lineas, iva: b.iva, tot: t, vivo: true }) + '</div></div>' +
+        '</div></div>';
+    }
+    function resumenBorrador(t) {
+      return '<div><span>Base imponible</span><b>' + EUR(t.base) + '</b></div>' +
+        '<div><span>IVA</span><b>' + EUR(t.cuota) + '</b></div>' +
+        (t.ret ? '<div><span>Retención IRPF</span><b>−' + EUR(t.ret) + '</b></div>' : '') +
+        '<div class="es-final"><span>Total</span><b>' + EUR(t.total) + '</b></div>';
+    }
+    /* Cada tecla cambia el documento, sin repintar el formulario: repintarlo
+       le quitaría el foco a quien está escribiendo. */
+    function refrescaBorrador() {
+      var b = state.borrador; if (!b) return;
+      var cli = FS.getCliente(b.clienteId);
+      var t = totalesDe(b.lineas, b.iva, b.irpf);
+      var numero = siguienteNumero();
+      var f = { numero: numero, fechaEmision: FS.hoy, fechaVencimiento: masDias(FS.hoy, b.vence), clienteNombre: cli && cli.empresa, estado: 'Borrador', importe: t.total };
+      var prev = contentEl.querySelector('[data-role="bf-prev"]');
+      if (prev) prev.innerHTML = documentoFactura(f, { cliente: cli, lineas: b.lineas, iva: b.iva, tot: t, vivo: true });
+      var res = contentEl.querySelector('[data-role="bf-resumen"]');
+      if (res) res.innerHTML = resumenBorrador(t);
+    }
+    /* Un número escrito en España: «24.000» son veinticuatro mil, no
+       veinticuatro; «1.250,50» lleva los dos separadores. */
+    function numeroDe(txt) {
+      var s = String(txt || '').trim().replace(/[\s€]/g, '');
+      if (/,/.test(s)) s = s.replace(/\./g, '').replace(',', '.');
+      else if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+      var n = parseFloat(s);
+      return isFinite(n) ? n : 0;
+    }
+    function guardaBorrador(emitir) {
+      var b = state.borrador; if (!b) return null;
+      var cli = FS.getCliente(b.clienteId);
+      var lineas = b.lineas.filter(function (l) { return (l.c || '').trim() || l.precio; })
+        .map(function (l) { return { c: (l.c || '').trim() || 'Servicios profesionales', d: '', cant: l.cant, precio: l.precio, dto: l.dto, iva: b.iva }; });
+      if (!lineas.length) return null;
+      var t = totalesDe(lineas, b.iva, b.irpf);
+      if (t.total <= 0) return null;
+      var numero = siguienteNumero();
+      var f = { id: 'nm' + Date.now().toString(36), numero: numero, manual: true, nueva: true, lineas: lineas, irpf: b.irpf,
+        clienteIds: [cli.id], clienteNombre: cli.empresa, fechaEmision: FS.hoy, fechaVencimiento: masDias(FS.hoy, b.vence),
+        base: t.base, iva: t.cuota, importe: t.total, importeCobrado: 0, recordatoriosEnviados: 0, serie: 'F',
+        metodoPago: 'Transferencia', estado: emitir ? 'Enviada' : 'Borrador', estadoCobro: emitir ? 'Pendiente' : null, proyecto: null };
+      state.facturasNuevas = [f].concat(state.facturasNuevas || []);
+      anota(f.id, emitir ? 'Emitida y registrada en esta visita · huella ' + huella(f.numero + f.importe) : 'Borrador guardado en esta visita', emitir ? 'bien' : 'info');
+      state.borrador = null;
+      return f;
     }
 
 
@@ -1569,72 +2264,207 @@
         card(null, tableHtml);
     };
 
+    /* LA FICHA DEL CLIENTE. La del producto abre con «Comportamiento de este
+       cliente» —facturado histórico, lo que debe ahora, lo que tarda en
+       pagar y su tendencia— porque es lo que se quiere saber antes de
+       llamarle. Aquí, igual, y con pestañas para lo demás. */
     function clienteDetalle(id) {
       var c = FS.getCliente(id);
       if (!c) return empty('Cliente no encontrado en la demo.');
-      var facturasCliente = FS.listFacturas().filter(function (f) { return f.clienteIds.indexOf(id) !== -1; });
-      var proyectosCliente = FS.listProyectos().filter(function (p) { return p.empresa === c.empresa; });
+      var fac = todasLasFacturas().filter(function (f) { return f.clienteIds && f.clienteIds.indexOf(id) !== -1; })
+        .sort(function (a, b) { return a.fechaEmision < b.fechaEmision ? 1 : -1; });
+      var emit = fac.filter(function (f) { return vivaDe(f).estado !== 'Borrador'; });
+      var proy = FS.listProyectos().filter(function (p) { return p.empresa === c.empresa; });
+      var hist = emit.reduce(function (a, f) { return a + f.importe; }, 0);
+      var debe = emit.reduce(function (a, f) { return a + vivaDe(f).pend; }, 0);
+      var vencido = emit.filter(function (f) { return vivaDe(f).pend > 0 && f.fechaVencimiento < FS.hoy; });
+      var tarda = tardaEnPagar(id), retr = retrasoMedido(id);
+      // Doce meses, de más antiguo a más reciente, y la tendencia: los tres
+      // últimos contra los tres anteriores.
+      var meses = [];
+      for (var k = 11; k >= 0; k--) {
+        var d = new Date(Date.parse(FS.hoy)); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() - k);
+        meses.push(d.toISOString().slice(0, 7));
+      }
+      var serie = meses.map(function (m) { return r2(emit.filter(function (f) { return (f.fechaEmision || '').slice(0, 7) === m; }).reduce(function (a, f) { return a + f.importe; }, 0)); });
+      var ult3 = serie.slice(-3).reduce(function (a, x) { return a + x; }, 0), ant3 = serie.slice(-6, -3).reduce(function (a, x) { return a + x; }, 0);
+      var tend = ant3 ? Math.round((ult3 - ant3) / ant3 * 100) : null;
+      var maxS = Math.max.apply(null, serie.concat([1]));
+      var clave = 'cliente:' + id;
+      var tab = tabDe(clave, 'resumen');
+      var ev = [];
+      emit.forEach(function (f) {
+        ev.push({ f: f.fechaEmision, t: 'Factura ' + f.numero + ' emitida · ' + EUR(f.importe), tono: 'info' });
+        if (state.cobrados[f.id]) ev.push({ f: FS.hoy, t: 'Cobro de ' + f.numero + ' registrado', tono: 'bien' });
+        else if (f.fechaPago) ev.push({ f: f.fechaPago, t: 'Pagó ' + f.numero + ' en ' + diasEntreIso(f.fechaEmision, f.fechaPago) + ' días', tono: 'bien' });
+        for (var r = 1; r <= (f.recordatoriosEnviados || 0); r++) {
+          var fr = masDias(f.fechaVencimiento, 3 + (r - 1) * 7);
+          if (fr <= FS.hoy) ev.push({ f: fr, t: 'Recordatorio ' + r + ' de ' + f.numero, tono: 'aviso' });
+        }
+      });
+      proy.forEach(function (p) {
+        if (p.fechaInicio) ev.push({ f: p.fechaInicio, t: 'Arranca el proyecto «' + p.nombre + '»', tono: 'info' });
+        if (p.fechaEntregaReal) ev.push({ f: p.fechaEntregaReal, t: 'Entregado «' + p.nombre + '»', tono: 'bien' });
+      });
+      ev.sort(function (a, b) { return a.f < b.f ? 1 : -1; });
+      ev = (state.eventos[id] || []).concat(ev).slice(0, 18);
 
-      var facturasHtml = !facturasCliente.length ? empty() :
-        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Nº</th><th>Estado</th><th class="is-right">Importe</th></tr></thead><tbody>' +
-        facturasCliente.map(function (f) { return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td><td>' + pill(f.estado) + '</td><td class="is-right">' + EUR(f.importe) + '</td></tr>'; }).join('') +
-        '</tbody></table></div>';
-      var proyectosHtml = !proyectosCliente.length ? empty() :
-        '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Nombre</th><th>Estado</th><th class="is-right">Rentabilidad</th></tr></thead><tbody>' +
-        proyectosCliente.map(function (p) { return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '</td><td>' + pill(p.estado) + '</td><td class="is-right">' + EUR(p.rentabilidad) + '</td></tr>'; }).join('') +
-        '</tbody></table></div>';
-
-      return '<div class="fdemo-page" style="gap:20px; max-width:900px;">' +
-        crumb('Clientes', 'clientes', c.empresa) +
-        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;"><h1 class="fdemo-page-title">' + esc(c.empresa) + '</h1>' + pill(c.estado) + '</div>' +
-        card(cardHead('Información fiscal y contacto'), '<div class="fdemo-field-grid">' +
+      var cuerpo = '';
+      if (tab === 'resumen') {
+        cuerpo = '<div class="fdemo-kpi-tira es-4">' +
+          kpi2({ hero: true, label: 'Facturado histórico', valor: EUR(hist), hint: emit.length + ' facturas emitidas' }) +
+          kpi2({ tono: debe > 0 ? (vencido.length ? 'critico' : 'aviso') : 'positivo', label: 'Te debe ahora', valor: debe > 0 ? EUR(debe) : 'Nada', hint: debe > 0 ? (vencido.length ? vencido.length + ' fuera de plazo' : 'todo dentro de plazo') : 'está al día' }) +
+          kpi2({ tono: retr != null && retr > 7 ? 'aviso' : 'neutro', label: 'Tarda en pagar', valor: tarda != null ? tarda + ' días' : 'Sin historial', hint: retr != null ? (retr > 0 ? retr + ' días más allá del vencimiento' : 'paga dentro de plazo') : 'hacen falta dos cobros' }) +
+          kpi2({ tono: tend == null ? 'neutro' : tend >= 0 ? 'positivo' : 'aviso', label: 'Tendencia 12 meses', valor: tend == null ? 'Nuevo' : (tend > 0 ? '+' : '') + tend + ' %', hint: 'últimos 3 meses contra los 3 anteriores', serie: serie }) +
+          '</div>' +
+          card(cardHead('Lo que te ha facturado, mes a mes', 'Los últimos doce meses'),
+            '<div class="fdemo-card-body"><div class="fdemo-barras-mes" role="img" aria-label="Facturación mensual de ' + esc(c.empresa) + '">' +
+            serie.map(function (x, i) {
+              return '<div class="fdemo-barra-mes' + (i === 11 ? ' es-actual' : '') + '"><i style="height:' + Math.max(2, Math.round(x / maxS * 100)) + '%" title="' + esc(MESES[Number(meses[i].slice(5, 7)) - 1] + ': ' + EUR(x)) + '"></i>' +
+                '<span>' + MESES[Number(meses[i].slice(5, 7)) - 1].slice(0, 3) + '</span></div>';
+            }).join('') + '</div></div>') +
+          (vencido.length ? card(cardHead('Lo que tiene fuera de plazo', 'Para la próxima llamada'),
+            tablaSimple([{ t: 'Factura' }, { t: 'Venció' }, { t: 'Días', r: 1 }, { t: 'Pendiente', r: 1 }, { t: '', r: 1 }],
+              vencido.map(function (f) {
+                return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td><td class="is-muted">' + FDATE(f.fechaVencimiento) + '</td>' +
+                  '<td class="is-right">' + FS.diasDeRetraso(f) + '</td><td class="is-right">' + EUR(vivaDe(f).pend) + '</td>' +
+                  '<td class="is-right"><button type="button" class="fdemo-btn-mini es-accion" data-action="fa-enviar" data-id="' + f.id + '">Recordatorio</button></td></tr>';
+              }).join(''), '')) : '');
+      } else if (tab === 'facturas') {
+        cuerpo = card(cardHead('Sus facturas', fac.length + ' en total, de la más reciente a la primera'),
+          tablaSimple([{ t: 'Nº' }, { t: 'Emisión' }, { t: 'Vencimiento' }, { t: 'Importe', r: 1 }, { t: 'Pendiente', r: 1 }, { t: 'Estado' }],
+            fac.map(function (f) {
+              var v = vivaDe(f);
+              return '<tr class="es-abrible" data-fid="' + f.id + '"><td>' + linkTo('facturas', f.id, f.numero) + '</td><td class="is-muted">' + FDATE(f.fechaEmision) + '</td>' +
+                '<td class="is-muted">' + FDATE(f.fechaVencimiento) + '</td><td class="is-right">' + EUR(f.importe) + '</td>' +
+                '<td class="is-right">' + (v.pend > 0 ? EUR(v.pend) : '<span class="fdemo-pct">al día</span>') + '</td><td>' + pill(v.cobro || v.estado) + '</td></tr>';
+            }).join(''), ''));
+      } else if (tab === 'proyectos') {
+        cuerpo = card(cardHead('Sus proyectos', proy.length + ' con este cliente'),
+          tablaSimple([{ t: 'Proyecto' }, { t: 'Estado' }, { t: 'Facturado', r: 1 }, { t: 'Gastos', r: 1 }, { t: 'Rentabilidad', r: 1 }],
+            proy.map(function (p) {
+              return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '</td><td>' + pill(p.estado) + '</td>' +
+                '<td class="is-right">' + EUR(p.totalFacturado || 0) + '</td><td class="is-right">' + EUR(p.totalGastos || 0) + '</td>' +
+                '<td class="is-right ' + ((p.rentabilidad || 0) < 0 ? 'es-mal' : '') + '">' + EUR(p.rentabilidad || 0) + '</td></tr>';
+            }).join(''), ''));
+      } else if (tab === 'actividad') {
+        cuerpo = card(cardHead('Toda la relación, en orden', 'Facturas, cobros, recordatorios y proyectos'), '<div class="fdemo-card-body">' + lineaDeTiempo(ev) + '</div>');
+      } else {
+        cuerpo = card(cardHead('Información fiscal y contacto'), '<div class="fdemo-field-grid">' +
           field('NIF/CIF', esc(dash(c.nif))) + field('Dirección fiscal', esc(dash(c.direccionFiscal))) + field('Sector', esc(dash(c.sector))) +
-          field('Email', esc(dash(c.email))) + field('Teléfono', esc(dash(c.telefono))) + field('Web', c.web ? '<a class="fdemo-link" href="' + esc(c.web) + '" target="_blank" rel="noopener noreferrer">' + esc(c.web) + '</a>' : '—') +
-          field('Cuota mensual', c.cuotaMensual !== null ? EUR(c.cuotaMensual) : 'Sin cuota recurrente') + field('Facturación activa', c.facturacionActiva ? 'Sí' : 'No') +
-          '</div>') +
-        card(cardHead('Facturas', facturasCliente.length + ' factura(s)'), facturasHtml) +
-        card(cardHead('Proyectos', proyectosCliente.length + ' proyecto(s)'), proyectosHtml) +
+          field('Email', esc(dash(c.email))) + field('Teléfono', esc(dash(c.telefono))) + field('Web', c.web ? esc(c.web) : '—') +
+          field('Cuota mensual', c.cuotaMensual ? EUR(c.cuotaMensual) : 'Sin cuota recurrente') + field('Facturación activa', c.facturacionActiva === false ? 'No' : 'Sí') + field('Condiciones de pago', '30 días, transferencia') +
+          '</div>');
+      }
+      var tabs = [{ k: 'resumen', l: 'Comportamiento' }, { k: 'facturas', l: 'Facturas', n: fac.length }];
+      if (proy.length) tabs.push({ k: 'proyectos', l: 'Proyectos', n: proy.length });
+      tabs.push({ k: 'actividad', l: 'Actividad' }, { k: 'datos', l: 'Datos fiscales' });
+
+      return '<div class="fdemo-page fdemo-ficha" style="gap:18px; max-width:980px;">' +
+        crumb('Clientes', 'clientes', c.empresa) +
+        '<div class="fdemo-ficha-h"><div><p class="fdemo-eyebrow">Cliente · ' + esc(dash(c.sector)) + '</p>' +
+        '<h1 class="fdemo-page-title">' + esc(c.empresa) + '</h1>' +
+        '<p class="fdemo-page-sub">' + esc(dash(c.email)) + ' · ' + esc(dash(c.telefono)) + '</p></div>' +
+        '<div class="fdemo-ficha-pills">' + pill(c.estado === 'cliente' ? 'Activo' : c.estado) + '</div></div>' +
+        '<div class="fdemo-ficha-acts">' +
+        '<button type="button" class="fdemo-btn variant-primary" data-action="fa-nueva" data-cliente="' + id + '">+ Factura para este cliente</button>' +
+        (vencido.length ? '<button type="button" class="fdemo-btn variant-secondary" data-action="cl-reclama" data-id="' + id + '">Reclamar lo vencido</button>' : '') +
+        '</div>' +
+        pestanas(clave, tabs, tab) +
+        '<div class="fdemo-tab-cuerpo" role="tabpanel">' + cuerpo + '</div>' +
         '</div>';
     }
 
     // ---------- Cobros ----------
+    /* COBROS. La version anterior leia `listCobros()` —los PAGOS recibidos—
+       y los filtraba por un `estadoCobro` que los pagos no tienen: salia
+       todo a cero y cuatro tarjetas de «Sin datos suficientes». Lo que se
+       cobra son FACTURAS, y cada una sabe cuanto le falta y desde cuando. */
     RENDERERS.cobros = function () {
-      var cobros = FS.listCobros();
-      var grupos = {
-        vencidos: cobros.filter(function (c) { return c.estadoCobro === 'Vencido'; }),
-        seguimiento: cobros.filter(function (c) { return c.estadoCobro === 'En seguimiento'; }),
-        pendientes: cobros.filter(function (c) { return c.estadoCobro === 'Pendiente' || c.estadoCobro === 'Parcial'; }),
-        cobrados: cobros.filter(function (c) { return c.estadoCobro === 'Cobrado'; })
-      };
-      var totalPendiente = grupos.vencidos.concat(grupos.seguimiento, grupos.pendientes).reduce(function (s, c) { return s + c.pendiente; }, 0);
-      /* El panel y «Pregunta a Finanzas» cuentan lo vencido por FECHA. Esta
-         pantalla lo contaba por ESTADO, y salían números distintos en la misma
-         demo: 2026-011 lleva 27 días de retraso y está marcada «En
-         seguimiento», así que no aparecía como vencida. Se cuenta por fecha,
-         que es lo que le importa a quien cobra, y las agrupaciones de abajo
-         siguen siendo las del estado, que es como trabaja el sistema. */
-      var hoy = FS.hoy || '';
-      var fueraDePlazo = cobros.filter(function (c) { return c.pendiente > 0 && c.fechaVencimiento && c.fechaVencimiento < hoy; });
+      var hoy = FS.hoy;
+      var fac = FS.listFacturas().filter(function (f) { return f.estado !== 'Borrador'; });
+      var pend = fac.filter(function (f) { return FS.pendienteDe(f) > 0; });
+      var venc = pend.filter(function (f) { return f.fechaVencimiento && f.fechaVencimiento < hoy; })
+        .sort(function (a, b) { return FS.diasDeRetraso(b) - FS.diasDeRetraso(a); });
+      var enPlazo = pend.filter(function (f) { return venc.indexOf(f) < 0; })
+        .sort(function (a, b) { return a.fechaVencimiento < b.fechaVencimiento ? -1 : 1; });
+      var pagos = FS.listCobros().slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; });
+      var mesActual = hoy.slice(0, 7);
+      var cobradoMes = pagos.filter(function (c) { return (c.fecha || '').slice(0, 7) === mesActual; })
+        .reduce(function (a, c) { return a + c.importe; }, 0);
+      var tPend = pend.reduce(function (a, f) { return a + FS.pendienteDe(f); }, 0);
+      var tVenc = venc.reduce(function (a, f) { return a + FS.pendienteDe(f); }, 0);
+      var s = FS.getDashboardSnapshot();
+      var ant = FS.getAntiguedad();
+      var rec = state.reclamados || {};
 
-      function grupoCard(titulo, lista) {
-        var body = !lista.length ? empty() :
-          '<div class="fdemo-table-wrap"><table class="fdemo-table"><thead><tr><th>Factura</th><th>Cliente</th><th>Vencimiento</th><th class="is-right">Importe</th><th class="is-right">Cobrado</th><th class="is-right">Pendiente</th></tr></thead><tbody>' +
-          lista.map(function (c) {
-            return '<tr><td>' + linkTo('facturas', c.facturaId, c.numeroFactura) + '</td><td class="is-muted">' + esc(dash(c.clienteNombre)) + '</td><td class="is-muted">' + FDATE(c.fechaVencimiento) + '</td>' +
-              '<td class="is-right">' + EUR(c.importe) + '</td><td class="is-right">' + EUR(c.importeCobrado) + '</td><td class="is-right">' + EUR(c.pendiente) + '</td></tr>';
-          }).join('') + '</tbody></table></div>';
-        return card(cardHead(titulo, lista.length + ' factura(s)'), body);
+      function dias(f) {
+        var d = FS.diasDeRetraso(f);
+        var t = d > 60 ? 'Más de 60 días' : d > 30 ? '31 a 60 días' : '1 a 30 días';
+        return '<span class="fdemo-dias ' + (d > 60 ? 'd-3' : d > 30 ? 'd-2' : 'd-1') + '">' + d + ' días</span>' +
+          '<span class="fdemo-pct">' + t + '</span>';
       }
+      var filasV = venc.map(function (f) {
+        var r = rec[f.id];
+        return '<tr' + (r ? ' class="is-reclamada"' : '') + '><td>' + linkTo('facturas', f.id, f.numero) + '</td>' +
+          '<td>' + linkTo('clientes', (f.clienteIds || [])[0] || '', f.clienteNombre) + '</td>' +
+          '<td class="is-muted">' + FDATE(f.fechaVencimiento) + '</td>' +
+          '<td>' + dias(f) + '</td>' +
+          '<td class="is-right is-muted">' + ((f.recordatoriosEnviados || 0) + (r ? 1 : 0)) + '</td>' +
+          '<td class="is-right"><b>' + EUR(FS.pendienteDe(f)) + '</b></td>' +
+          '<td class="is-right">' + (r
+            ? '<span class="fdemo-hecho">Reclamada hoy</span>'
+            : '<button type="button" class="fdemo-btn-mini es-accion" data-action="reclamar" data-id="' + f.id + '">Reclamar</button>') +
+          '</td></tr>';
+      }).join('');
+      var filasP = enPlazo.map(function (f) {
+        var dd = Math.round((Date.parse(f.fechaVencimiento) - Date.parse(hoy)) / 86400000);
+        return '<tr><td>' + linkTo('facturas', f.id, f.numero) + '</td>' +
+          '<td class="is-muted">' + esc(f.clienteNombre) + '</td>' +
+          '<td class="is-muted">' + FDATE(f.fechaVencimiento) + '</td>' +
+          '<td><span class="fdemo-dias d-0">en ' + dd + ' días</span></td>' +
+          '<td class="is-right">' + EUR(FS.pendienteDe(f)) + '</td>' +
+          '<td>' + pill(f.estadoCobro === 'En seguimiento' ? 'En seguimiento' : 'Pendiente') + '</td></tr>';
+      }).join('');
+      var filasC = pagos.slice(0, 10).map(function (c) {
+        return '<tr><td class="is-muted">' + FDATE(c.fecha) + '</td>' +
+          '<td>' + linkTo('facturas', c.facturaId, c.numero) + '</td>' +
+          '<td class="is-muted">' + esc(c.cliente) + '</td>' +
+          '<td class="is-muted">' + esc(c.metodo) + '</td>' +
+          '<td class="is-muted"><code>' + esc(c.referencia) + '</code></td>' +
+          '<td class="is-right"><b>' + EUR(c.importe) + '</b></td>' +
+          '<td>' + pill('Conciliado') + '</td></tr>';
+      }).join('');
+      var tramos = ant.tramos || [];
 
-      return pageHead('Cobros', 'Seguimiento de cobro de facturas emitidas') +
-        '<div class="fdemo-kpi-grid">' +
-        kpi('Pendiente total', EUR(totalPendiente), '', 'blue') +
-        kpi('Fuera de plazo', String(fueraDePlazo.length), 'Por fecha de vencimiento', 'danger') +
-        kpi('En seguimiento', String(grupos.seguimiento.length), '', 'warning') +
-        kpi('Cobradas', String(grupos.cobrados.length), '', 'cyan') +
+      return '<div class="fdemo-panel">' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Día a día</p>' +
+        '<h1 class="fdemo-page-title">Cobros</h1>' +
+        '<p class="fdemo-page-sub">Quién te debe, desde cuándo y qué hay que hacer hoy con cada factura.</p></div>' +
+        '<button type="button" class="fdemo-btn variant-primary" data-action="reclamar-todo">Reclamar todo lo vencido</button></div>' +
+        '<div class="fdemo-kpi-tira es-4">' +
+        kpi2({ hero: true, tono: 'aviso', label: 'Pendiente de cobro', valor: EUR(tPend), hint: pend.length + ' facturas emitidas sin cobrar' }) +
+        kpi2({ tono: 'critico', label: 'Fuera de plazo', valor: EUR(tVenc), hint: venc.length + ' facturas · reclamar primero' }) +
+        kpi2({ label: 'Vence en 30 días', valor: EUR(s.venceEn30), hint: s.nVence30 + ' facturas' }) +
+        kpi2({ tono: 'positivo', label: 'Cobrado este mes', valor: EUR(cobradoMes), hint: 'se tarda ' + s.dso + ' días de mediana' }) +
         '</div>' +
-        grupoCard('Vencidas', grupos.vencidos) + grupoCard('En seguimiento', grupos.seguimiento) +
-        grupoCard('Pendientes / parciales', grupos.pendientes) + grupoCard('Cobradas', grupos.cobrados);
+        seccion('Antigüedad de la deuda', 'cuánto te deben y desde hace cuánto',
+          card('', '<div class="fdemo-card-body">' +
+            '<div class="fdemo-apilada es-alta">' + tramos.map(function (t) {
+              return '<i class="n-' + t.nivel + '" style="width:' + t.pct + '%" title="' + esc(t.etiqueta) + '"></i>';
+            }).join('') + '</div>' +
+            '<ul class="fdemo-ley-h">' + tramos.map(function (t) {
+              return '<li><span class="pt n-' + t.nivel + '"></span><span class="et">' + esc(t.etiqueta) + '</span>' +
+                '<b>' + EUR(t.total) + '</b><i>' + t.n + ' fact. · ' + t.pct + ' %</i></li>';
+            }).join('') + '</ul></div>'), 1) +
+        seccion('Fuera de plazo', 'ordenadas por lo que cuesta no reclamarlas',
+          card('', tablaSimple([{t:'Factura'},{t:'Cliente'},{t:'Venció'},{t:'Retraso'},{t:'Recordat.',r:1},{t:'Pendiente',r:1},{t:'',r:1}], filasV, '')), 2) +
+        seccion('Vence pronto', 'lo que está dentro de plazo, por fecha',
+          card('', tablaSimple([{t:'Factura'},{t:'Cliente'},{t:'Vence'},{t:'Cuándo'},{t:'Pendiente',r:1},{t:'Estado'}], filasP, '')), 3) +
+        seccion('Últimos cobros', 'lo que ha entrado, con su referencia bancaria',
+          card('', tablaSimple([{t:'Fecha'},{t:'Factura'},{t:'Cliente'},{t:'Método'},{t:'Referencia'},{t:'Importe',r:1},{t:'Banco'}], filasC, '')), 4) +
+        aviso('Un recordatorio no sale solo: se prepara y lo envías tú. Aquí queda contado cuántos lleva cada factura, porque a partir del tercero ya no es un recordatorio, es una conversación.') +
+        '</div>';
     };
 
     // ---------- Gastos ----------
@@ -1753,7 +2583,7 @@
           o: state.gastoNuevo ? 'Gasto desde PDF' : 'Subida manual',
           d: state.gastoNuevo ? '12 ago 2026' : '02 ago 2026', pes: '184 KB', li: '1 documento' }
       ].concat(gas.map(function (g, i) {
-        return { n: (g.proveedor || 'documento').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + (2400 + i * 13) + '.pdf',
+        return { n: slug(g.proveedor) + '-' + (2400 + i * 13) + '.pdf',
                  t: TIPOS[i % TIPOS.length], o: ORIGEN[i % ORIGEN.length], d: FDATE(g.fechaGasto),
                  pes: (90 + i * 37) + ' KB', li: '1 documento', quien: g.proveedor, imp: g.importe };
       }));
@@ -1774,7 +2604,7 @@
         kpi2({ label: 'Leídos por el asistente', valor: String(archivo.filter(function (a) { return /asistente|PDF|Foto/.test(a.o); }).length),
                hint: 'sin que nadie teclee los campos', vista: 'ia' }) +
         kpi2({ label: 'Tipos reconocidos', valor: '8', hint: 'presupuesto, pedido, albarán, factura, gasto, ticket, justificante y otro' }) +
-        kpi2({ label: 'Descargas sin permiso', valor: '0', tono: 'positivo', hint: 'ningún archivo tiene URL pública' }) +
+        kpi2({ label: 'Enlaces públicos', valor: 'Ninguno', tono: 'positivo', hint: 'cada descarga comprueba tu permiso' }) +
         '</div>' +
         card('<div class="fdemo-card-head"><div><h2 class="fdemo-card-title">' + 'Nuevo gasto desde PDF' + '</h2>' +
              '<p class="fdemo-card-subtitle">' + 'También puedes crearlo a mano — este camino solo te ahorra teclear.' + '</p></div></div>',
@@ -1809,22 +2639,31 @@
       var tRent = tFac - tGas;
       var maxAbs = Math.max.apply(null, all.map(function (p) { return Math.abs(p.rentabilidad || 0); }).concat([1]));
 
+      /* El avance del plazo: de la fecha de inicio a la de entrega prevista,
+         cuánto se ha consumido. Es lo que dice si un proyecto que todavía no
+         factura va a tiempo o se está comiendo el margen esperando. */
+      function avance(p) {
+        var tot = (p.inicio || 0) - (p.prevista || 0);
+        if (tot <= 0) return 100;
+        var hecho = p.estado === 'Entregado' ? tot : (p.inicio || 0);
+        return Math.max(0, Math.min(100, Math.round(hecho / tot * 100)));
+      }
       var rows = all.slice().sort(function (a, b) { return (a.rentabilidad || 0) - (b.rentabilidad || 0); }).map(function (p) {
-        var r = p.rentabilidad || 0, pct = Math.round((Math.abs(r) / maxAbs) * 100);
-        return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '</td>' +
+        var r = p.rentabilidad || 0, pct = Math.round((Math.abs(r) / maxAbs) * 100), av = avance(p);
+        return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '<span class="fdemo-pct">' + esc(dash(p.serviciosContratados || p.servicios)) + '</span></td>' +
           '<td class="is-muted">' + esc(dash(p.empresa)) + '</td><td>' + pill(p.estado) + '</td>' +
-          '<td class="is-muted">' + esc(dash(p.responsable)) + '</td>' +
-          '<td class="is-muted">' + FDATE(p.fechaInicio) + '</td>' +
-          '<td class="is-right">' + EUR(p.totalFacturado) + '</td>' +
+          '<td style="min-width:120px;"><div class="fdemo-apilada"><i class="' + (av > 100 ? 'n-critico' : av > 85 ? 'n-aviso' : 'n-ok') + '" style="width:' + av + '%"></i></div>' +
+          '<span class="fdemo-pct">' + (p.estado === 'Entregado' ? 'entregado ' + FDATE(p.fechaEntregaReal) : av + ' % del plazo · entrega ' + FDATE(p.fechaEntregaPrevista)) + '</span></td>' +
+          '<td class="is-right">' + (p.totalFacturado > 0 ? EUR(p.totalFacturado) : '<span class="fdemo-pendiente">Sin facturar aún</span>') + '</td>' +
           '<td class="is-right">' + EUR(p.totalGastos) + '</td>' +
-          '<td class="is-right ' + (r < 0 ? 'es-mal' : '') + '">' + EUR(r) + '</td>' +
-          '<td style="min-width:120px;"><div class="fdemo-apilada"><i class="' + (r < 0 ? 'n-critico' : 'n-ok') + '" style="width:' + pct + '%"></i></div></td></tr>';
+          '<td class="is-right ' + (r < 0 ? 'es-mal' : '') + '"><b>' + EUR(r) + '</b></td>' +
+          '<td style="min-width:110px;"><div class="fdemo-apilada"><i class="' + (r < 0 ? 'n-critico' : 'n-ok') + '" style="width:' + pct + '%"></i></div></td></tr>';
       }).join('');
 
       var filasRiesgo = pierden.map(function (p) {
         return '<tr><td>' + linkTo('proyectos', p.id, p.nombre) + '</td>' +
           '<td class="is-muted">' + esc(dash(p.empresa)) + '</td>' +
-          '<td class="is-right">' + EUR(p.totalFacturado) + '</td>' +
+          '<td class="is-right">' + (p.totalFacturado > 0 ? EUR(p.totalFacturado) : '<span class="fdemo-pendiente">Sin facturar aún</span>') + '</td>' +
           '<td class="is-right">' + EUR(p.totalGastos) + '</td>' +
           '<td class="is-right es-mal">' + EUR(p.rentabilidad) + '</td>' +
           '<td class="is-right"><button type="button" class="fdemo-btn-mini" data-action="plan">Revisar</button></td></tr>';
@@ -1844,7 +2683,7 @@
         (pierden.length ? seccion('Los que pierden dinero', 'primero esto, que es lo que cuesta caro no mirar',
           card('', tablaSimple([{t:'Proyecto'},{t:'Cliente'},{t:'Facturado',r:1},{t:'Gastos',r:1},{t:'Rentabilidad',r:1},{t:'',r:1}], filasRiesgo, '')), 1) : '') +
         seccion('Todos los proyectos', 'ordenados por lo que dejan, de peor a mejor',
-          card('', tablaSimple([{t:'Proyecto'},{t:'Cliente'},{t:'Estado'},{t:'Responsable'},{t:'Inicio'},{t:'Facturado',r:1},{t:'Gastos',r:1},{t:'Rentabilidad',r:1},{t:''}], rows, 'Aún no hay proyectos registrados.')), 2) +
+          card('', tablaSimple([{t:'Proyecto'},{t:'Cliente'},{t:'Estado'},{t:'Plazo'},{t:'Facturado',r:1},{t:'Gastos',r:1},{t:'Rentabilidad',r:1},{t:''}], rows, 'Aún no hay proyectos registrados.')), 2) +
         aviso('La rentabilidad sale de los gastos que alguien ha imputado al proyecto. Un gasto sin imputar no aparece aquí: no se reparte a ojo entre todos.') +
         '</div>';
     };
@@ -2312,6 +3151,167 @@
         '</div>';
     };
 
+    /* ═══════════════ BUSCAR EN TODO Y LOS AVISOS ═══════════════
+       Dos cosas que tiene cualquier aplicación que se usa a diario y que
+       una demo de escaparate se ahorra: un buscador que encuentra una
+       factura, un cliente, un módulo o una pregunta desde cualquier
+       pantalla (Ctrl/⌘ K), y una campana con lo que ha pasado sin que
+       nadie lo mire. Cada aviso lleva al sitio donde se resuelve. */
+    function resultadosPaleta(q) {
+      q = (q || '').toLowerCase().trim();
+      var out = [];
+      if (!q) {
+        out.push({ tipo: 'Acción', t: 'Nueva factura', s: 'con el documento al lado', accion: 'fa-nueva' });
+        out.push({ tipo: 'Acción', t: 'Preguntar a Finanzas', s: 'en lenguaje normal', v: 'ia' });
+        out.push({ tipo: 'Acción', t: 'Reclamar todo lo vencido', s: 'un recordatorio a cada uno', v: 'cobros' });
+        out.push({ tipo: 'Acción', t: 'Comprobar la cadena fiscal', s: 'eslabón a eslabón', v: 'verifactu' });
+        ['dashboard', 'tesoreria', 'facturas', 'cobros', 'clientes'].forEach(function (id) {
+          var m = NAV_ITEMS.filter(function (x) { return x.id === id; })[0];
+          if (m) out.push({ tipo: 'Módulo', t: m.label, v: m.id });
+        });
+        return out;
+      }
+      var grupos = { c: [], f: [], p: [], m: [], q: [] };
+      FS.listClientes().forEach(function (c) {
+        if ((c.empresa + ' ' + (c.sector || '')).toLowerCase().indexOf(q) !== -1)
+          grupos.c.push({ tipo: 'Cliente', t: c.empresa, s: c.sector || '', v: 'clientes', id: c.id });
+      });
+      todasLasFacturas().forEach(function (f) {
+        if ((f.numero + ' ' + (f.clienteNombre || '')).toLowerCase().indexOf(q) !== -1)
+          grupos.f.push({ tipo: 'Factura', t: f.numero + ' · ' + (f.clienteNombre || ''), s: EUR(f.importe), v: 'facturas', id: f.id });
+      });
+      FS.listProyectos().forEach(function (p) {
+        if ((p.nombre + ' ' + p.empresa).toLowerCase().indexOf(q) !== -1)
+          grupos.p.push({ tipo: 'Proyecto', t: p.nombre, s: p.empresa, v: 'proyectos', id: p.id });
+      });
+      NAV_ITEMS.forEach(function (m) {
+        if (m.label.toLowerCase().indexOf(q) !== -1) grupos.m.push({ tipo: 'Módulo', t: m.label, v: m.id });
+      });
+      FS.askQuestions().forEach(function (p, i) {
+        var hit = p.q.toLowerCase().indexOf(q) !== -1 || p.pistas.some(function (x) { return x.indexOf(q) !== -1 || q.indexOf(x) !== -1; });
+        if (hit) grupos.q.push({ tipo: 'Pregunta a Finanzas', t: p.q, v: 'ia', ask: i });
+      });
+      return grupos.c.slice(0, 3).concat(grupos.f.slice(0, 4), grupos.p.slice(0, 2), grupos.m.slice(0, 3), grupos.q.slice(0, 2)).slice(0, 10);
+    }
+    function listaPaleta() {
+      var rs = state.paleta.rs = resultadosPaleta(state.paleta.q);
+      if (state.paleta.sel >= rs.length) state.paleta.sel = Math.max(0, rs.length - 1);
+      if (!rs.length) return '<li class="fdemo-paleta-nada">Nada con «' + esc(state.paleta.q) + '». Prueba con un cliente, un número de factura o una palabra como «cobros».</li>';
+      var ult = '';
+      return rs.map(function (r, i) {
+        var cab = r.tipo !== ult ? '<li class="fdemo-paleta-g" role="presentation">' + esc(r.tipo) + '</li>' : '';
+        ult = r.tipo;
+        return cab + '<li role="option" aria-selected="' + (i === state.paleta.sel) + '" class="fdemo-paleta-r' + (i === state.paleta.sel ? ' is-sel' : '') + '" data-action="paleta-ir" data-i="' + i + '">' +
+          '<span class="t">' + esc(r.t) + '</span>' + (r.s ? '<span class="s">' + esc(r.s) + '</span>' : '') + '</li>';
+      }).join('');
+    }
+    function avisosDe() {
+      var hoy = FS.hoy, lista = [];
+      var emit = FS.listFacturas().filter(function (f) { return f.estado !== 'Borrador' && vivaDe(f).pend > 0; });
+      var venc = emit.filter(function (f) { return f.fechaVencimiento < hoy; });
+      if (venc.length) {
+        var maxD = Math.max.apply(null, venc.map(function (f) { return FS.diasDeRetraso(f); }));
+        lista.push({ k: 'venc', tono: 'mal', t: venc.length + ' facturas fuera de plazo', d: EUR(venc.reduce(function (a, f) { return a + vivaDe(f).pend; }, 0)) + ' sin cobrar · la más antigua lleva ' + maxD + ' días', v: 'cobros', cuando: 'Hoy, 08:00' });
+      }
+      var semana = emit.filter(function (f) { return f.fechaVencimiento >= hoy && f.fechaVencimiento <= masDias(hoy, 7); });
+      if (semana.length) lista.push({ k: 'semana', tono: 'aviso', t: semana.length === 1 ? 'Vence esta semana una factura' : 'Vencen esta semana ' + semana.length + ' facturas', d: semana[0].numero + ' de ' + semana[0].clienteNombre + ' · ' + EUR(vivaDe(semana[0]).pend), v: 'facturas', id: semana[0].id, cuando: 'Hoy, 08:00' });
+      var sos = sospechosos().filter(function (s) { return s.estado === 'Retenido'; });
+      if (sos.length) lista.push({ k: 'dup', tono: 'aviso', t: 'Retenida una posible factura duplicada', d: sos[0].gasto.proveedor + ' · ' + EUR(sos[0].importe) + ' · llegó por ' + sos[0].canal.t.toLowerCase(), v: 'duplicados', cuando: 'Ayer, 17:42' });
+      var rev = FS.listGastos().filter(function (g) { return g.estadoRevision === 'Pendiente revisión'; });
+      if (rev.length) lista.push({ k: 'rev', tono: 'info', t: rev.length + ' gastos leídos esperan tu visto bueno', d: 'Nada cuenta como coste cerrado hasta que alguien lo mira', v: 'gastos', cuando: 'Ayer, 09:15' });
+      var ultCobro = FS.listCobros().slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; })[0];
+      if (ultCobro) lista.push({ k: 'cobro', tono: 'bien', t: 'Cobro recibido: ' + EUR(ultCobro.importe), d: ultCobro.cliente + ' · ' + ultCobro.numero + ' queda cobrada', v: 'facturas', id: ultCobro.facturaId, cuando: FDATE(ultCobro.fecha) });
+      lista.push({ k: 'vf', tono: 'bien', t: 'Registro fiscal al día', d: 'Todas las facturas emitidas, encadenadas · ninguna huella rota', v: 'verifactu', cuando: 'Cada noche' });
+      return lista;
+    }
+    function sinLeer() { return avisosDe().filter(function (a) { return !state.leidos[a.k]; }).length; }
+    function pintaCampana() {
+      var n = sinLeer(), b = root.querySelector('[data-role="campana-n"]');
+      if (b) { b.textContent = n; b.hidden = !n; }
+    }
+    function pintaCapa() {
+      var capa = root.querySelector('[data-role="capa"]');
+      if (!capa) return;
+      if (state.capa === 'paleta') {
+        capa.innerHTML = '<div class="fdemo-capa-velo" data-action="capa-cierra"></div>' +
+          '<div class="fdemo-paleta" role="dialog" aria-label="Buscar en todo">' +
+          '<div class="fdemo-paleta-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/></svg>' +
+          '<input data-role="paleta-q" type="text" autocomplete="off" spellcheck="false" aria-label="Buscar" placeholder="Una factura, un cliente, un módulo o una pregunta…" value="' + esc(state.paleta.q) + '"><kbd>Esc</kbd></div>' +
+          '<ul class="fdemo-paleta-l" role="listbox" data-role="paleta-l">' + listaPaleta() + '</ul>' +
+          '<p class="fdemo-paleta-pie"><span>↑ ↓ para moverte</span><span>Enter para abrir</span><span>Ctrl/⌘ K desde cualquier pantalla</span></p></div>';
+        capa.className = 'fdemo-capa is-on';
+      } else if (state.capa === 'avisos') {
+        var av = avisosDe();
+        capa.innerHTML = '<div class="fdemo-capa-velo es-claro" data-action="capa-cierra"></div>' +
+          '<div class="fdemo-avisos" role="dialog" aria-label="Avisos">' +
+          '<div class="fdemo-avisos-h"><p>Avisos</p><button type="button" class="fdemo-link" data-action="avisos-leidos">Marcar todo como leído</button></div>' +
+          '<ul>' + av.map(function (a) {
+            return '<li class="t-' + a.tono + (state.leidos[a.k] ? ' es-leido' : '') + '"><button type="button" data-action="aviso-ir" data-k="' + a.k + '">' +
+              '<span class="fdemo-avisos-p" aria-hidden="true"></span><span class="fdemo-avisos-c"><b>' + esc(a.t) + '</b><i>' + esc(a.d) + '</i></span>' +
+              '<span class="fdemo-avisos-w">' + esc(a.cuando) + '</span></button></li>';
+          }).join('') + '</ul>' +
+          '<p class="fdemo-avisos-pie">Los mismos avisos llegan por correo o a tu canal, con el umbral que elijas.</p></div>';
+        capa.className = 'fdemo-capa is-on es-avisos';
+      } else {
+        capa.innerHTML = '';
+        capa.className = 'fdemo-capa';
+      }
+      pintaCampana();
+    }
+    function abrePaleta(q) {
+      state.capa = 'paleta'; state.paleta = { q: q || '', sel: 0, rs: [] };
+      pintaCapa();
+      var inp = root.querySelector('[data-role="paleta-q"]');
+      if (inp) actuaElRecorrido(function () { inp.focus({ preventScroll: true }); });
+    }
+    function cierraCapa() { state.capa = null; pintaCapa(); }
+    function irAResultado(r) {
+      cierraCapa();
+      if (!r) return;
+      if (r.accion === 'fa-nueva') { state.borrador = borradorNuevo(); navigate('facturas', 'nueva'); return; }
+      if (r.ask != null) { navigate('ia'); askIndex(r.ask); return; }
+      navigate(r.v, r.id || null);
+    }
+
+    /* ORDENAR POR CUALQUIER COLUMNA. Todas las tablas de la aplicación se
+       ordenan pulsando su cabecera —importe, fecha, días, texto— y el orden
+       se recuerda en esa pantalla mientras dura la visita. */
+    function claveOrden() { var r = parseRoute(); return r.view + '/' + (r.id || '') + '/' + JSON.stringify(state.tabs); }
+    function valorCelda(td) {
+      var t = (td.getAttribute('data-orden') || td.textContent || '').trim();
+      var m = /^(−?-?[\d.]+,\d{2})\s?€/.exec(t);
+      if (m) return parseFloat(m[1].replace('−', '-').replace(/\./g, '').replace(',', '.'));
+      var d = /^(\d{2})\/(\d{2})\/(\d{4})/.exec(t);
+      if (d) return Date.parse(d[3] + '-' + d[2] + '-' + d[1]);
+      var d2 = /^(\d{1,2}) (ene|feb|mar|abr|may|jun|jul|ago|sept?|oct|nov|dic)\w* (\d{4})/.exec(t);
+      if (d2) return Date.UTC(+d2[3], ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].indexOf(d2[2].slice(0, 3)), +d2[1]);
+      var n = /^-?\d+(?:[.,]\d+)?(?=\s|$|%)/.exec(t);
+      if (n) return parseFloat(n[0].replace(',', '.'));
+      return t.toLowerCase();
+    }
+    function ordenaTablas() {
+      var o = state.orden[claveOrden()];
+      var tablas = contentEl.querySelectorAll('.fdemo-table');
+      contentEl.querySelectorAll('.fdemo-table th.es-ordenable').forEach(function (th) {
+        th.removeAttribute('aria-sort'); th.classList.remove('ord-asc', 'ord-desc');
+      });
+      if (!o || !tablas[o.t]) return;
+      var tabla = tablas[o.t], th = tabla.querySelectorAll('thead th')[o.c];
+      if (!th) return;
+      th.setAttribute('aria-sort', o.d > 0 ? 'ascending' : 'descending');
+      th.classList.add(o.d > 0 ? 'ord-asc' : 'ord-desc');
+      var tbody = tabla.querySelector('tbody');
+      var filas = [].slice.call(tbody.children);
+      filas.sort(function (a, b) {
+        var ca = a.children[o.c], cb = b.children[o.c];
+        if (!ca || !cb || a.children.length !== b.children.length) return 0;
+        var va = valorCelda(ca), vb = valorCelda(cb);
+        if (typeof va === typeof vb) return (va < vb ? -1 : va > vb ? 1 : 0) * o.d;
+        return typeof va === 'number' ? -1 : 1;
+      });
+      filas.forEach(function (f) { tbody.appendChild(f); });
+    }
+
     // -------- Delegación de eventos --------
     root.addEventListener('click', function (e) {
       var navEl = e.target.closest('[data-action="nav"]');
@@ -2341,6 +3341,206 @@
           clearTimeout(state.doc.t);
           docPaso('inicio');
         }
+        return;
+      }
+      var accEl = e.target.closest('[data-action]');
+      var acc = accEl ? accEl.getAttribute('data-action') : '';
+      /* ── Pestañas, fichas, editor, tesorería, buscador y avisos ── */
+      if (acc === 'tab') {
+        e.preventDefault();
+        state.tabs[accEl.getAttribute('data-clave')] = accEl.getAttribute('data-tab');
+        repinta();
+        var tabsEl = contentEl.querySelector('.fdemo-tabs');
+        if (tabsEl && tabsEl.getBoundingClientRect().top < mainEl.getBoundingClientRect().top) mainEl.scrollTop += tabsEl.getBoundingClientRect().top - mainEl.getBoundingClientRect().top - 12;
+        return;
+      }
+      if (acc === 'fa-cobro') {
+        e.preventDefault();
+        var fc = facturaPorId(accEl.getAttribute('data-id'));
+        if (fc) {
+          var pc = vivaDe(fc).pend;
+          state.cobrados[fc.id] = pc;
+          anota(fc.id, 'Cobro de ' + EUR(pc) + ' registrado · la factura queda cobrada', 'bien');
+          if (fc.clienteIds && fc.clienteIds[0]) anota(fc.clienteIds[0], 'Cobro de ' + fc.numero + ' registrado · ' + EUR(pc), 'bien');
+          repinta();
+          toast('Cobro registrado: ' + EUR(pc) + ' · ' + fc.numero + ' pasa a cobrada en todo el sistema');
+        }
+        return;
+      }
+      if (acc === 'fa-enviar') {
+        e.preventDefault();
+        var fe = facturaPorId(accEl.getAttribute('data-id'));
+        if (fe) {
+          var retE = FS.diasDeRetraso(fe) > 0 && !state.cobrados[fe.id];
+          var cliE = clienteDeFactura(fe);
+          state.enviados[fe.id] = (state.enviados[fe.id] || 0) + (retE ? 1 : 0);
+          state.reclamados = state.reclamados || {}; if (retE) state.reclamados[fe.id] = true;
+          anota(fe.id, (retE ? 'Recordatorio enviado' : 'Factura enviada') + ' a ' + (cliE && cliE.email ? cliE.email : 'el cliente'), retE ? 'aviso' : 'info');
+          repinta();
+          toast((retE ? 'Recordatorio preparado para ' : 'Factura preparada para ') + (cliE ? cliE.empresa : 'el cliente') + ' · en la demo no sale ningún correo', 'info');
+        }
+        return;
+      }
+      if (acc === 'fa-rect') {
+        e.preventDefault();
+        var fo = facturaPorId(accEl.getAttribute('data-id'));
+        if (fo) {
+          var nR = (state.facturasNuevas || []).filter(function (x) { return x.tipo === 'rectificativa'; }).length + 1;
+          var rf = { id: 'rc' + nR + fo.id, numero: 'R-2026-' + String(nR).padStart(4, '0'), manual: true, nueva: true, tipo: 'rectificativa', serie: 'R',
+            motivo: 'Rectifica la factura ' + fo.numero + ' de ' + FDATE(fo.fechaEmision) + ': anulación total por error en el importe facturado.',
+            lineas: lineasFactura(fo).map(function (l) { return { c: l.c, d: 'Rectifica ' + fo.numero, cant: -1, precio: l.precio, dto: l.dto, iva: l.iva != null ? l.iva : 21 }; }),
+            clienteIds: fo.clienteIds, clienteNombre: fo.clienteNombre, fechaEmision: FS.hoy, fechaVencimiento: FS.hoy,
+            base: -(fo.base != null ? fo.base : r2(fo.importe / 1.21)), iva: -(fo.iva != null ? fo.iva : 0), importe: -fo.importe, importeCobrado: -fo.importe,
+            recordatoriosEnviados: 0, metodoPago: fo.metodoPago, estado: 'Borrador', estadoCobro: null, proyecto: fo.proyecto };
+          state.facturasNuevas = [rf].concat(state.facturasNuevas || []);
+          anota(rf.id, 'Rectificativa preparada en borrador desde ' + fo.numero, 'info');
+          anota(fo.id, 'Rectificativa ' + rf.numero + ' preparada en borrador', 'aviso');
+          navigate('facturas', rf.id);
+          toast('Rectificativa ' + rf.numero + ' en borrador: lleva el motivo y las líneas en negativo', 'info');
+        }
+        return;
+      }
+      if (acc === 'fa-emitir') {
+        e.preventDefault();
+        var fb = facturaPorId(accEl.getAttribute('data-id'));
+        if (fb && fb.manual) {
+          fb.estado = 'Enviada'; fb.estadoCobro = fb.tipo === 'rectificativa' ? null : 'Pendiente';
+          anota(fb.id, 'Emitida y registrada · huella ' + huella(fb.numero + fb.importe), 'bien');
+          repinta();
+          toast(fb.numero + ' emitida y encadenada en el registro fiscal');
+        }
+        return;
+      }
+      if (acc === 'fa-nueva') {
+        e.preventDefault();
+        state.borrador = borradorNuevo(accEl.getAttribute('data-cliente'));
+        state.vistaRapida = null;
+        navigate('facturas', 'nueva');
+        return;
+      }
+      if (acc === 'fa-chip') {
+        e.preventDefault();
+        state.facturaFiltro.chip = accEl.getAttribute('data-k');
+        repinta();
+        return;
+      }
+      if (acc === 'fa-limpia') {
+        e.preventDefault();
+        state.facturaFiltro = { q: '', estado: '', chip: 'todas' };
+        repinta();
+        return;
+      }
+      if (acc === 'vr-cierra') { e.preventDefault(); state.vistaRapida = null; repinta(); return; }
+      if (acc === 'bf-linea') {
+        e.preventDefault();
+        state.borrador.lineas.push({ c: '', d: '', cant: 1, precio: 0, dto: 0 });
+        repinta();
+        var nuevos = contentEl.querySelectorAll('[data-bf="c"]');
+        if (nuevos.length) nuevos[nuevos.length - 1].focus({ preventScroll: true });
+        return;
+      }
+      if (acc === 'bf-quita') {
+        e.preventDefault();
+        state.borrador.lineas.splice(Number(accEl.getAttribute('data-i')), 1);
+        repinta();
+        return;
+      }
+      if (acc === 'bf-guardar') {
+        e.preventDefault();
+        var emite = accEl.getAttribute('data-emitir') === '1';
+        var nf = guardaBorrador(emite);
+        if (!nf) { toast('Falta algo: una línea con concepto y precio', 'aviso'); return; }
+        navigate('facturas', nf.id);
+        toast(emite ? nf.numero + ' emitida por ' + EUR(nf.importe) + ' · registrada con su huella' : 'Borrador ' + nf.numero + ' guardado · ' + EUR(nf.importe));
+        return;
+      }
+      if (acc === 'cl-reclama') {
+        e.preventDefault();
+        var cidR = accEl.getAttribute('data-id'), nRc = 0, tRc = 0;
+        state.reclamados = state.reclamados || {};
+        FS.listFacturas().forEach(function (x) {
+          if (x.clienteIds.indexOf(cidR) !== -1 && vivaDe(x).pend > 0 && x.fechaVencimiento < FS.hoy && x.estado !== 'Borrador') {
+            state.reclamados[x.id] = true; state.enviados[x.id] = (state.enviados[x.id] || 0) + 1;
+            anota(x.id, 'Recordatorio enviado desde la ficha del cliente', 'aviso'); nRc++; tRc += vivaDe(x).pend;
+          }
+        });
+        anota(cidR, nRc + ' recordatorios enviados · ' + EUR(tRc), 'aviso');
+        repinta();
+        toast(nRc + ' recordatorio' + (nRc === 1 ? '' : 's') + ' preparado' + (nRc === 1 ? '' : 's') + ' · ' + EUR(tRc) + ' por reclamar', 'info');
+        return;
+      }
+      if (acc === 'te-h') { e.preventDefault(); state.te.h = Number(accEl.getAttribute('data-h')); repinta(); return; }
+      if (acc === 'te-e') { e.preventDefault(); state.te.e = accEl.getAttribute('data-e'); repinta(); return; }
+      if (acc === 'paleta') { e.preventDefault(); abrePaleta(''); return; }
+      if (acc === 'avisos') { e.preventDefault(); state.capa = state.capa === 'avisos' ? null : 'avisos'; pintaCapa(); return; }
+      if (acc === 'capa-cierra') { e.preventDefault(); cierraCapa(); return; }
+      if (acc === 'paleta-ir') { e.preventDefault(); irAResultado(state.paleta.rs[Number(accEl.getAttribute('data-i'))]); return; }
+      if (acc === 'avisos-leidos') { e.preventDefault(); avisosDe().forEach(function (a) { state.leidos[a.k] = true; }); pintaCapa(); return; }
+      if (acc === 'aviso-ir') {
+        e.preventDefault();
+        var av = avisosDe().filter(function (a) { return a.k === accEl.getAttribute('data-k'); })[0];
+        if (av) { state.leidos[av.k] = true; cierraCapa(); navigate(av.v, av.id || null); }
+        return;
+      }
+      /* Una fila de factura, pulsada fuera de su número, abre la vista
+         rápida; el número sigue llevando a la ficha entera. */
+      var filaF = e.target.closest('tr.es-abrible[data-fid]');
+      if (filaF && !e.target.closest('a, button, input, select')) {
+        e.preventDefault();
+        state.vistaRapida = filaF.getAttribute('data-fid');
+        if (parseRoute().view !== 'facturas') { navigate('facturas', filaF.getAttribute('data-fid')); state.vistaRapida = null; return; }
+        repinta();
+        return;
+      }
+      /* Ordenar cualquier tabla pulsando su cabecera. */
+      var thO = e.target.closest('.fdemo-table th.es-ordenable');
+      if (thO) {
+        e.preventDefault();
+        var tablaO = thO.closest('table'), idxT = [].indexOf.call(contentEl.querySelectorAll('.fdemo-table'), tablaO);
+        var col = [].indexOf.call(thO.parentNode.children, thO);
+        var clvO = claveOrden();
+        var prevO = state.orden[clvO];
+        state.orden[clvO] = { t: idxT, c: col, d: prevO && prevO.t === idxT && prevO.c === col ? -prevO.d : (thO.classList.contains('is-right') ? -1 : 1) };
+        ordenaTablas();
+        return;
+      }
+      if (acc === 'reclamar') {
+        e.preventDefault();
+        state.reclamados = state.reclamados || {};
+        state.reclamados[accEl.getAttribute('data-id')] = true;
+        var fr = FS.listFacturas().filter(function (x) { return x.id === accEl.getAttribute('data-id'); })[0];
+        repinta();
+        toast('Recordatorio preparado para ' + (fr ? fr.clienteNombre : 'el cliente') + ' · ' + (fr ? EUR(FS.pendienteDe(fr)) : ''));
+        return;
+      }
+      if (acc === 'reclamar-todo') {
+        e.preventDefault();
+        state.reclamados = state.reclamados || {};
+        var nV = 0, tV = 0;
+        FS.listFacturas().forEach(function (x) {
+          if (x.estado !== 'Borrador' && FS.pendienteDe(x) > 0 && x.fechaVencimiento < FS.hoy) { state.reclamados[x.id] = true; nV++; tV += FS.pendienteDe(x); }
+        });
+        repinta();
+        toast(nV + ' recordatorios preparados · ' + EUR(tV) + ' por reclamar');
+        return;
+      }
+      if (acc === 'dup-descarta' || acc === 'dup-alta') {
+        e.preventDefault();
+        var dd = (state.sospechas || []).filter(function (x) { return x.id === accEl.getAttribute('data-id'); })[0];
+        if (dd) dd.estado = acc === 'dup-descarta' ? 'Descartado' : 'Dado de alta';
+        repinta();
+        toast(acc === 'dup-descarta' ? 'Descartado: ' + EUR(dd.importe) + ' que no se pagan dos veces' : 'Dado de alta como gasto nuevo', acc === 'dup-descarta' ? 'ok' : 'info');
+        return;
+      }
+      if (acc === 'vf-comprobar') {
+        e.preventDefault();
+        state.vfComprobado = 0;
+        clearInterval(state.vfT);
+        state.vfT = setInterval(function () {
+          state.vfComprobado++;
+          if (state.vfComprobado >= 12) { clearInterval(state.vfT); toast('Cadena comprobada: 12 eslabones, ninguna huella rota'); }
+          repinta();
+        }, 170);
         return;
       }
       var clipEl = e.target.closest('[data-action="adjuntar"]');
@@ -2376,6 +3576,9 @@
         e.preventDefault();
         var destino = document.getElementById('planes');
         if (destino) destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        /* En la portada no hay planes: el botón no puede quedarse mudo, lleva
+           a la página de Finance, a sus planes. */
+        else location.href = ((document.documentElement.getAttribute('lang') || 'es').slice(0, 2) === 'en' ? '/en' : '') + '/sistema-financiero#planes';
         return;
       }
       var navItem = e.target.closest('[data-role="nav"]');
@@ -2389,6 +3592,109 @@
     menuBtn.addEventListener('click', function () {
       sidebarEl.classList.add('is-open');
       overlayEl.classList.add('is-open');
+    });
+
+    /* Escribir en un campo que filtra no puede obligar a pulsar «Filtrar»:
+       la lista responde a cada letra. El foco y el cursor se devuelven al
+       campo, porque repintar se los quitaría. */
+    function devuelveFoco(sel, pos) {
+      var inp = contentEl.querySelector(sel);
+      if (!inp) return;
+      actuaElRecorrido(function () { inp.focus({ preventScroll: true }); });
+      try { inp.setSelectionRange(pos, pos); } catch (err) { /* type=search en algunos navegadores */ }
+    }
+    root.addEventListener('input', function (e) {
+      var t = e.target;
+      if (t.matches('[data-role="factura-filter"] input[name="q"]')) {
+        state.facturaFiltro.q = t.value;
+        var p1 = t.selectionStart;
+        repinta(); devuelveFoco('[data-role="factura-filter"] input[name="q"]', p1);
+      } else if (t.matches('[data-role="cliente-filter"] input[name="q"]')) {
+        state.clienteFiltro.q = t.value;
+        var p2 = t.selectionStart;
+        repinta(); devuelveFoco('[data-role="cliente-filter"] input[name="q"]', p2);
+      } else if (t.matches('[data-role="te-saldo"]')) {
+        state.te.saldo = t.value;
+        var p3 = t.selectionStart;
+        repinta(); devuelveFoco('[data-role="te-saldo"]', p3);
+      } else if (t.matches('[data-role="paleta-q"]')) {
+        state.paleta.q = t.value; state.paleta.sel = 0;
+        var l = root.querySelector('[data-role="paleta-l"]');
+        if (l) l.innerHTML = listaPaleta();
+      } else if (t.matches('[data-bf]')) {
+        var b = state.borrador; if (!b) return;
+        var k = t.getAttribute('data-bf'), i = Number(t.getAttribute('data-i'));
+        if (k === 'c') b.lineas[i].c = t.value;
+        else if (k === 'cant' || k === 'precio' || k === 'dto') b.lineas[i][k] = numeroDe(t.value);
+        refrescaBorrador();
+      }
+    });
+    root.addEventListener('change', function (e) {
+      var t = e.target;
+      if (!t.matches('[data-bf]') || !state.borrador) return;
+      var k = t.getAttribute('data-bf');
+      if (k === 'cliente') state.borrador.clienteId = t.value;
+      else if (k === 'vence') state.borrador.vence = Number(t.value);
+      else if (k === 'iva') state.borrador.iva = Number(t.value);
+      else if (k === 'irpf') state.borrador.irpf = t.checked;
+      else return;
+      refrescaBorrador();
+    });
+    root.addEventListener('keydown', function (e) {
+      if (state.capa === 'paleta' && e.target.matches('[data-role="paleta-q"]')) {
+        var rs = state.paleta.rs || [];
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          state.paleta.sel = (state.paleta.sel + (e.key === 'ArrowDown' ? 1 : -1) + rs.length) % Math.max(1, rs.length);
+          var l = root.querySelector('[data-role="paleta-l"]');
+          if (l) { l.innerHTML = listaPaleta(); var s = l.querySelector('.is-sel'); if (s) s.scrollIntoView({ block: 'nearest' }); }
+        } else if (e.key === 'Enter') { e.preventDefault(); irAResultado(rs[state.paleta.sel]); }
+      }
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('th.es-ordenable')) { e.preventDefault(); e.target.click(); return; }
+      if (e.key === 'Escape') {
+        if (state.capa) { cierraCapa(); return; }
+        if (state.vistaRapida) { state.vistaRapida = null; repinta(); }
+      }
+    });
+    /* Ctrl/⌘ K abre el buscador cuando la demo es donde está la persona:
+       con el foco dentro o el ratón encima. Fuera, el atajo es del
+       navegador y no se toca. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !root.contains(document.activeElement) && (state.capa || state.vistaRapida)) {
+        if (state.capa) cierraCapa(); else { state.vistaRapida = null; repinta(); }
+        return;
+      }
+      if (!(e.metaKey || e.ctrlKey) || String(e.key).toLowerCase() !== 'k') return;
+      if (!(root.contains(document.activeElement) || root.matches(':hover'))) return;
+      e.preventDefault();
+      if (state.capa === 'paleta') cierraCapa(); else abrePaleta('');
+    });
+    /* La curva se lee con el ratón: una línea vertical sigue al puntero y
+       dice la fecha y el saldo de ese día. */
+    root.addEventListener('pointermove', function (e) {
+      var svg = e.target.closest && e.target.closest('.fdemo-curva-svg');
+      var g = svg && svg.querySelector('[data-role="curva-hover"]');
+      if (!g) return;
+      var serie = JSON.parse(svg.getAttribute('data-serie'));
+      var box = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+      var L = +svg.getAttribute('data-l'), R = +svg.getAttribute('data-r'), T = +svg.getAttribute('data-t'), B = +svg.getAttribute('data-b');
+      var lo = +svg.getAttribute('data-lo'), hi = +svg.getAttribute('data-hi');
+      var x = (e.clientX - box.left) / box.width * vb.width;
+      var i = Math.round((x - L) / (vb.width - L - R) * (serie.length - 1));
+      if (i < 0 || i >= serie.length) { g.style.display = 'none'; return; }
+      var X = L + i / (serie.length - 1) * (vb.width - L - R), Y = T + (1 - (serie[i] - lo) / (hi - lo)) * (vb.height - T - B);
+      g.style.display = '';
+      var ln = g.querySelector('line'); ln.setAttribute('x1', X); ln.setAttribute('x2', X);
+      var c = g.querySelector('circle'); c.setAttribute('cx', X); c.setAttribute('cy', Y);
+      var izq = X > vb.width - 180, rx = izq ? X - 160 : X + 10, ry = Math.max(T, Math.min(Y - 20, vb.height - B - 40));
+      var rc = g.querySelector('rect'); rc.setAttribute('x', rx); rc.setAttribute('y', ry);
+      var ta = g.querySelector('text.a'), tb = g.querySelector('text.b');
+      ta.setAttribute('x', rx + 10); ta.setAttribute('y', ry + 16); ta.textContent = i === 0 ? 'Hoy' : FDATE(masDias(svg.getAttribute('data-f0'), i));
+      tb.setAttribute('x', rx + 10); tb.setAttribute('y', ry + 32); tb.textContent = EUR(serie[i]);
+    });
+    root.addEventListener('pointerleave', function () {
+      var g = root.querySelector('[data-role="curva-hover"]');
+      if (g) g.style.display = 'none';
     });
 
     root.addEventListener('submit', function (e) {
@@ -2452,41 +3758,115 @@
 
        `sel` manda a la mano a un sitio concreto; sin `sel` va al modulo del
        menu. `quieto` significa que ese paso no cambia de pantalla. */
+    /* EL GUION. Una aplicación no se demuestra cambiando de pantalla: se
+       demuestra USÁNDOLA. La mano va al sitio exacto, llega, pulsa o
+       escribe letra a letra, y SOLO DESPUÉS pasa lo que tiene que pasar. Se
+       empieza por lo más llamativo —preguntarle a Finanzas en
+       lenguaje normal— y se sigue por donde lleva la respuesta: la factura,
+       sus pestañas, un recordatorio, el cobro, la lista, una factura nueva
+       escrita delante, la caja, los duplicados, el registro fiscal, los
+       avisos, el buscador y el lector de documentos.
+
+       `sel` es a dónde va la mano; sin `sel`, al módulo del menú. `quieto`
+       significa que el paso no cambia de pantalla por su cuenta. */
     var TOUR = [
-      { v: 'dashboard', ms: 6000, dice: 'El panel: la frase de arriba ya dice qué pasa' },
-      { v: 'dashboard', ms: 2400, dice: 'Y cada cifra lleva a de dónde sale', quieto: true,
-        sel: '.fdemo-kpi2.t-critico', hace: 'pulsa' },
-      { v: 'cobros',    ms: 5000, dice: 'Cobros: quién debe, desde cuándo y cuánto', quieto: true },
+      { v: 'ia', ms: 1500, dice: 'Le preguntamos a Finanzas, como a una persona' },
+      { v: 'ia', ms: 700, dice: 'Escribimos la pregunta…', quieto: true,
+        sel: '[data-role="ia-form"] input', hace: 'escribe', texto: '¿Quién nos debe dinero ahora mismo?' },
+      { v: 'ia', ms: 5600, dice: '…y contesta con las cifras y de dónde sale cada una', quieto: true,
+        sel: '[data-role="ia-form"] button[type="submit"]', hace: 'pulsa' },
+      { v: 'ia', ms: 2600, dice: 'Cada respuesta lleva a su factura', quieto: true,
+        sel: '.fdemo-ia-msgs > .fdemo-ia-msg:last-child .fdemo-ia-ref', hace: 'pulsa' },
+      { v: 'facturas', ms: 3400, dice: 'Así la recibe el cliente', quieto: true,
+        sel: '.fdemo-tab[data-tab="documento"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 3200, dice: 'Todo lo que ha pasado con ella', quieto: true,
+        sel: '.fdemo-tab[data-tab="actividad"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 3000, dice: 'Un recordatorio, sin escribir ningún correo', quieto: true,
+        sel: '.fdemo-ficha-acts [data-action="fa-enviar"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 1500, dice: 'Y el día que paga…', quieto: true,
+        sel: '.fdemo-tab[data-tab="resumen"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 3600, dice: '…se registra y cambia en todo el sistema', quieto: true,
+        sel: '.fdemo-ficha-acts [data-action="fa-cobro"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 1800, dice: 'Volvemos a la lista', quieto: true,
+        sel: '.fdemo-crumb a', hace: 'pulsa' },
+      { v: 'facturas', ms: 2600, dice: 'Solo lo que está fuera de plazo', quieto: true,
+        sel: '.fdemo-chip-f[data-k="fuera"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 2400, dice: 'Ordenado por importe', quieto: true,
+        sel: '.fdemo-table th:nth-child(6)', hace: 'pulsa' },
+      { v: 'facturas', ms: 3800, dice: 'Una fila se abre sin salir de la lista…', quieto: true,
+        sel: '.fdemo-table tbody tr:first-child td:nth-child(2)', hace: 'pulsa' },
+      { v: 'facturas', ms: 1500, dice: '…y se cierra', quieto: true,
+        sel: '.fdemo-rapida-x', hace: 'pulsa' },
+      { v: 'facturas', ms: 1400, dice: 'Una factura nueva', quieto: true,
+        sel: '.fdemo-panel-h [data-action="fa-nueva"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 400, dice: 'Se escribe el concepto…', quieto: true,
+        sel: '[data-bf="c"]', hace: 'escribe', texto: 'Mantenimiento web · octubre' },
+      { v: 'facturas', ms: 2600, dice: '…el precio, y el documento cambia con cada tecla', quieto: true,
+        sel: '[data-bf="precio"]', hace: 'escribe', texto: '1250' },
+      { v: 'facturas', ms: 2600, dice: 'Emitida: con su número y su registro', quieto: true,
+        sel: '[data-action="bf-guardar"][data-emitir="1"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 3600, dice: 'Encadenada a la anterior con su huella', quieto: true,
+        sel: '.fdemo-tab[data-tab="registro"]', hace: 'pulsa' },
 
-      { v: 'facturas',  ms: 2600, dice: 'Las facturas, las ciento doce' },
-      { v: 'facturas',  ms: 3400, dice: 'Buscamos un cliente…', quieto: true,
-        sel: '[data-role="factura-filter"] input', hace: 'escribe', texto: 'Vandria' },
-      { v: 'facturas',  ms: 2800, dice: '…y la tabla se queda con lo suyo', quieto: true },
-      { v: 'facturas',  ms: 2600, dice: 'Abrimos una', quieto: true,
-        sel: 'tbody tr:first-child .fdemo-link', hace: 'pulsa' },
-      { v: 'facturas',  ms: 4200, dice: 'Con su cliente, su proyecto y su cobro', quieto: true },
-      { v: 'facturas',  ms: 2000, dice: 'Y se vuelve', quieto: true, hace: 'limpia' },
+      { v: 'tesoreria', ms: 2400, dice: 'Tesorería: la caja de los próximos días' },
+      { v: 'tesoreria', ms: 2200, dice: 'A noventa días…', quieto: true,
+        sel: '[data-action="te-h"][data-h="90"]', hace: 'pulsa' },
+      { v: 'tesoreria', ms: 3000, dice: '…con lo que tarda de verdad cada cliente', quieto: true,
+        sel: '[data-action="te-e"][data-e="prudente"]', hace: 'pulsa' },
+      { v: 'tesoreria', ms: 3400, dice: 'Y con tu saldo, si quieres darlo', quieto: true,
+        sel: '[data-role="te-saldo"]', hace: 'escribe', texto: '24.000' },
 
-      { v: 'radar',     ms: 4600, dice: 'Radar: cada aviso con el umbral que lo dispara' },
-      { v: 'objetivos', ms: 4600, dice: 'Objetivos: seis metas y la regla de cada una' },
-      { v: 'tesoreria', ms: 4600, dice: 'Tesorería: semana a semana, no un número a 30 días' },
-      { v: 'gastos',    ms: 3600, dice: 'Los gastos, con su proveedor y su categoría' },
+      { v: 'duplicados', ms: 2400, dice: 'Duplicados: retenidos antes de pagarse' },
+      { v: 'duplicados', ms: 3000, dice: 'Es el mismo: no se paga dos veces', quieto: true,
+        sel: '[data-action="dup-descarta"]', hace: 'pulsa' },
+      { v: 'verifactu', ms: 1600, dice: 'El registro fiscal, comprobable delante de quien sea' },
+      { v: 'verifactu', ms: 3600, dice: 'Eslabón a eslabón', quieto: true,
+        sel: '[data-action="vf-comprobar"]', hace: 'pulsa' },
+      { v: 'verifactu', ms: 3000, dice: 'Los avisos de lo que ha pasado sin mirar', quieto: true,
+        sel: '[data-action="avisos"]', hace: 'pulsa' },
+      { v: 'verifactu', ms: 2400, dice: 'Cada aviso lleva a donde se resuelve', quieto: true,
+        sel: '.fdemo-avisos li:first-child button', hace: 'pulsa' },
+      { v: 'cobros', ms: 700, dice: 'Y todo se encuentra desde cualquier pantalla', quieto: true,
+        sel: '[data-action="paleta"]', hace: 'pulsa' },
+      { v: 'cobros', ms: 1300, dice: 'Y todo se encuentra desde cualquier pantalla', quieto: true,
+        sel: '[data-role="paleta-q"]', hace: 'escribe', texto: 'vandria' },
+      { v: 'cobros', ms: 2400, dice: 'Un cliente, al momento', quieto: true,
+        sel: '.fdemo-paleta-r.is-sel', hace: 'paleta-ir' },
+      { v: 'clientes', ms: 3400, dice: 'Toda la relación con él, en orden', quieto: true,
+        sel: '.fdemo-tab[data-tab="actividad"]', hace: 'pulsa' },
 
-      { v: 'ia',        ms: 2600, dice: 'Y esto es lo que no hace nadie más', hace: 'abrir' },
-      { v: 'ia',        ms: 2200, dice: 'Le soltamos un PDF con veinte facturas dentro…', hace: 'remesa', quieto: true },
-      { v: 'ia',        ms: 5400, dice: '…y las va sacando una a una', quieto: true },
-      { v: 'ia',        ms: 2600, dice: 'Las da de alta todas', hace: 'alta', quieto: true },
-      { v: 'facturas',  ms: 3000, dice: 'Ahí están, en Facturas' },
-      { v: 'facturas',  ms: 3600, dice: 'Y cada una sabe de qué página del PDF ha salido', quieto: true,
-        sel: 'tbody tr.is-nuevo:first-child .fdemo-link', hace: 'pulsa' },
-      { v: 'facturas',  ms: 4800, dice: 'Eso es lo que se puede revisar sin abrir el documento', quieto: true }
+      { v: 'ia', ms: 2400, dice: 'Y ahora, un documento de verdad', hace: 'abrir' },
+      { v: 'ia', ms: 2200, dice: 'Le soltamos un PDF con veinte facturas dentro…', hace: 'remesa', quieto: true },
+      { v: 'ia', ms: 5400, dice: '…y las va sacando una a una', quieto: true },
+      { v: 'ia', ms: 2600, dice: 'Las da de alta todas', hace: 'alta', quieto: true },
+      { v: 'facturas', ms: 2600, dice: 'Ahí están, en Facturas' },
+      { v: 'facturas', ms: 3600, dice: 'Y cada una sabe de qué página del PDF ha salido', quieto: true,
+        sel: 'tbody tr.is-nuevo .fdemo-link[data-id^="nv"]', hace: 'pulsa' },
+      { v: 'facturas', ms: 4400, dice: 'Eso se revisa sin abrir el documento', quieto: true },
+      { v: 'dashboard', ms: 6000, dice: 'Y todo acaba aquí: el panel dice qué pasa hoy' }
     ];
     var REANUDA_MS = 4500;
     var reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var tour = { on: false, i: 0, t0: 0, dur: 1, timer: 0, raf: 0, vuelta: 0, visible: false, mano: false, yo: false, yoT: 0 };
+    var tour = { on: false, i: 0, t0: 0, dur: 1, timer: 0, raf: 0, vuelta: 0, visible: false, mano: false, yo: false, yoT: 0, vueltas: 0 };
     var tourTxtEl = root.querySelector('[data-role="tour-txt"]');
     var tourBtnEl = root.querySelector('[data-role="tour"]');
     var tourBarEl = root.querySelector('[data-role="tour-bar"] i');
+
+    /* Al empezar una vuelta completa se deja la demo como estaba: lo que
+       hizo la vuelta anterior —el cobro, la factura nueva, el duplicado
+       descartado— no puede seguir ahí, o la segunda vuelta enseñaría una
+       aplicación distinta de la primera. Lo que ha hecho una PERSONA no se
+       toca: solo se limpia cuando el propio recorrido da la vuelta. */
+    function limpiaLaVisita() {
+      state.cobrados = {}; state.enviados = {}; state.eventos = {}; state.reclamados = {};
+      state.facturasNuevas = null; state.sospechas = null; state.vfComprobado = 0; clearInterval(state.vfT);
+      state.tabs = {}; state.orden = {}; state.te = { h: 60, e: 'base', saldo: '' };
+      state.borrador = null; state.vistaRapida = null; state.leidos = {}; state.capa = null;
+      state.facturaFiltro = { q: '', estado: '', chip: 'todas' }; state.clienteFiltro = { q: '' };
+      state.docCajon = false; state.lector = null; clearTimeout(state.lectorT);
+      state.ia.mensajes = state.ia.mensajes.slice(0, 2);
+      pintaCapa();
+    }
 
 
     /* ══════════════ LA MANO ══════════════
@@ -2494,25 +3874,48 @@
        forma se lee como un adorno; una flecha se lee como alguien usando la
        aplicación, que es justo lo que está pasando. */
     var manoEl = root.querySelector('[data-role="mano"]');
-    var manoT = [0, 0, 0];
+    var manoT = [0, 0, 0, 0];
     function manoLimpia() {
       for (var i = 0; i < manoT.length; i++) clearTimeout(manoT[i]);
       if (manoEl) manoEl.classList.remove('is-ahi', 'is-pulsa');
     }
+    /* Si el sitio al que va la mano está fuera de la vista —debajo de la
+       tabla, al fondo del hilo—, primero se desplaza el contenedor que lo
+       tiene, y solo el contenedor: nunca la página que envuelve la demo. */
+    function asoma(el) {
+      var movio = false, p = el.parentElement;
+      while (p && p !== root) {
+        var st = getComputedStyle(p);
+        if (/(auto|scroll)/.test(st.overflowY) && p.scrollHeight > p.clientHeight + 2) {
+          var c = p.getBoundingClientRect(), e = el.getBoundingClientRect();
+          if (e.top < c.top + 8 || e.bottom > c.bottom - 8) {
+            var destino = p.scrollTop + (e.top - c.top) - Math.max(24, (c.height - e.height) * 0.4);
+            p.scrollTo({ top: Math.max(0, destino), behavior: 'smooth' });
+            movio = true;
+          }
+        }
+        p = p.parentElement;
+      }
+      return movio;
+    }
     function llevaLaManoA(selector, hecho) {
       var destino = root.querySelector(selector);
       if (!manoEl || !destino || reducido) { hecho(); return; }
-      var caja = destino.getBoundingClientRect(), marco = root.getBoundingClientRect();
-      if (!caja.width || caja.bottom < marco.top - 40 || caja.top > marco.bottom + 40) { hecho(); return; }
-      manoEl.style.transform = 'translate(' + (caja.left - marco.left + Math.min(28, caja.width * 0.5)) +
-        'px,' + (caja.top - marco.top + caja.height * 0.5) + 'px)';
-      manoEl.classList.add('is-ahi');
-      /* El orden importa: primero llega, después pulsa, y SOLO DESPUÉS
-         cambia la pantalla. Lo que convence es ver el efecto detrás de la
-         causa, no a la vez. */
-      manoT[0] = setTimeout(function () { manoEl.classList.add('is-pulsa'); }, 560);
-      manoT[1] = setTimeout(function () { hecho(); }, 760);
-      manoT[2] = setTimeout(function () { manoEl.classList.remove('is-pulsa'); }, 1060);
+      var espera = asoma(destino) ? 520 : 0;
+      manoT[3] = setTimeout(function () {
+        if (!tour.on) return;
+        var caja = destino.getBoundingClientRect(), marco = root.getBoundingClientRect();
+        if (!caja.width || caja.bottom < marco.top - 40 || caja.top > marco.bottom + 40) { hecho(); return; }
+        manoEl.style.transform = 'translate(' + (caja.left - marco.left + Math.min(28, caja.width * 0.5)) +
+          'px,' + (caja.top - marco.top + caja.height * 0.5) + 'px)';
+        manoEl.classList.add('is-ahi');
+        /* El orden importa: primero llega, después pulsa, y SOLO DESPUÉS
+           cambia la pantalla. Lo que convence es ver el efecto detrás de la
+           causa, no a la vez. */
+        manoT[0] = setTimeout(function () { manoEl.classList.add('is-pulsa'); }, 560);
+        manoT[1] = setTimeout(function () { hecho(); }, 760);
+        manoT[2] = setTimeout(function () { manoEl.classList.remove('is-pulsa'); }, 1060);
+      }, espera);
     }
 
     function pintaTour() {
@@ -2522,12 +3925,13 @@
       if (tourBtnEl) tourBtnEl.setAttribute('title', tour.on ? 'Parar el recorrido y navegar tú' : 'Volver al recorrido automático');
       if (!tour.on && tourBarEl) tourBarEl.style.transform = 'scaleX(0)';
     }
-    /* Escribir de verdad, letra a letra. Rellenar el campo de golpe no se
-       lee como alguien escribiendo: se lee como un pegado. 55 ms por letra
-       es la velocidad a la que se reconoce que hay alguien tecleando. */
+    /* Escribir de verdad, letra a letra, y con los mismos eventos que una
+       persona: cada letra dispara `input`, así que el buscador filtra, el
+       documento se rehace y la curva se mueve mientras se escribe. 55 ms por
+       letra es la velocidad a la que se reconoce que hay alguien tecleando.
+       El campo se vuelve a buscar en cada letra porque algunos repintan la
+       pantalla y el campo de antes ya no existe. */
     var escribeT = 0;
-    /* Todo lo que hace el propio recorrido pasa por aqui. Mientras dura, los
-       eventos que salgan del marco no cuentan como «alguien ha llegado». */
     function actuaElRecorrido(fn) {
       tour.yo = true;
       clearTimeout(tour.yoT);
@@ -2538,26 +3942,25 @@
     function escribeEn(selector, texto, hecho) {
       var campo = root.querySelector(selector);
       if (!campo) { hecho(); return; }
-      actuaElRecorrido(function () { campo.focus({ preventScroll: true }); });
-      campo.value = '';
+      actuaElRecorrido(function () { campo.focus({ preventScroll: true }); campo.value = ''; campo.dispatchEvent(new Event('input', { bubbles: true })); });
       var i = 0;
       clearInterval(escribeT);
       escribeT = setInterval(function () {
         if (!tour.on) { clearInterval(escribeT); return; }
-        actuaElRecorrido(function () { campo.value = texto.slice(0, ++i); });
-        if (i >= texto.length) {
-          clearInterval(escribeT);
-          /* El filtro de facturas se envía; el estado vive en `state`, así
-             que se escribe ahí y se repinta, que es lo que hace el submit. */
-          state.facturaFiltro.q = texto;
-          render();
-          hecho();
-        }
+        var c = root.querySelector(selector);
+        if (!c) { clearInterval(escribeT); hecho(); return; }
+        actuaElRecorrido(function () {
+          c.value = texto.slice(0, ++i);
+          c.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        if (i >= texto.length) { clearInterval(escribeT); hecho(); }
       }, 55);
     }
 
     function pasoTour() {
+      if (tour.i > 0 && tour.i % TOUR.length === 0) { tour.vueltas++; tour.limpiar = true; }
       var paso = TOUR[tour.i % TOUR.length];
+      var primero = tour.i % TOUR.length === 0;
       tour.i++;
       if (tourTxtEl && paso.dice) tourTxtEl.textContent = paso.dice;
 
@@ -2569,24 +3972,29 @@
       }
       function aplica() {
         if (!tour.on) return;
-        if (!paso.quieto) {
-          state.route = paso.v; state.id = null;
-          /* Al empezar una vuelta nueva se limpia lo que dejó la anterior:
-             el filtro escrito, la ficha abierta y el cajón de documentos. */
-          if (tour.i === 1) { state.facturaFiltro.q = ''; state.facturaFiltro.estado = ''; state.docCajon = false; }
-          render();
-        }
-        if (paso.hace === 'abrir') { state.docCajon = true; render(); }
-        if (paso.hace === 'remesa') { sueltaDoc('remesa'); }
-        if (paso.hace === 'alta') { if (state.lector && state.lector.fase === 'leido') daDeAlta(); }
-        if (paso.hace === 'limpia') { state.id = null; state.facturaFiltro.q = ''; render(); }
-        if (paso.hace === 'pulsa') {
-          /* Pulsar DE VERDAD el elemento al que ha ido la mano. Simular el
-             efecto sin pulsar el botón es exactamente lo que hace que una
-             demo se note falsa. */
-          var el = root.querySelector(paso.sel);
-          if (el) actuaElRecorrido(function () { el.click(); });
-        }
+        actuaElRecorrido(function () {
+          if (!paso.quieto) {
+            state.route = paso.v; state.id = null;
+            if (primero && tour.limpiar) { limpiaLaVisita(); tour.limpiar = false; }
+            if (state.capa) { state.capa = null; pintaCapa(); }
+            state.vistaRapida = null;
+            /* Cada vez que el recorrido ENTRA en una pantalla, la encuentra
+               limpia: sin el filtro ni el orden que dejó un paso anterior. */
+            if (paso.v === 'facturas') { state.facturaFiltro = { q: '', estado: '', chip: 'todas' }; state.orden = {}; }
+            render();
+          }
+          if (paso.hace === 'abrir') { state.docCajon = true; render(); }
+          if (paso.hace === 'remesa') { sueltaDoc('remesa'); }
+          if (paso.hace === 'alta') { if (state.lector && state.lector.fase === 'leido') daDeAlta(); }
+          if (paso.hace === 'pulsa') {
+            /* Pulsar DE VERDAD el elemento al que ha ido la mano. Simular el
+               efecto sin pulsar el botón es exactamente lo que hace que una
+               demo se note falsa. */
+            var el = root.querySelector(paso.sel);
+            if (el) el.click();
+          }
+          if (paso.hace === 'paleta-ir') { irAResultado((state.paleta.rs || [])[state.paleta.sel]); }
+        });
         if (paso.hace === 'escribe') { escribeEn(paso.sel, paso.texto, sigue); return; }
         sigue();
       }
@@ -2634,6 +4042,7 @@
            pulsando botones que no estaban. La visita se cuenta desde el
            principio, que ademas es donde empieza a entenderse. */
         tour.i = 0;
+        tour.limpiar = false;
         tour.vuelta = setTimeout(function () { tour.mano = false; arrancaTour(true); }, REANUDA_MS);
       }
       pintaTour();

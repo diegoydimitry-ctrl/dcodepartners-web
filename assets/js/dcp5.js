@@ -584,9 +584,124 @@
     });
   }
 
+
+  /* ═══════════════════════════ LA CUENTA ═══════════════════════════════
+     El bloque del problema de la portada. Antes era una semana escrita para
+     leerla, y en una portada nadie se para a leer: se para a TOCAR. Ahora
+     el visitante marca lo que en su empresa se hace a mano, dice cuántas
+     personas y cuánto cuesta una hora, y la cuenta sale sola: en horas, en
+     euros y en semanas del año, con el año dibujado en 52 cuadros.
+
+     Las cifras son las suyas. Los minutos de cada tarea vienen puestos como
+     ejemplo, se pueden cambiar con − y +, y lo que se da por supuesto (46
+     semanas de trabajo, jornadas de 40 horas) va escrito debajo del
+     resultado: una cuenta que esconde sus supuestos es un anuncio. */
+  function initCuenta() {
+    var cajas = document.querySelectorAll('[data-cuenta]');
+    if (!cajas.length) return;
+    cajas.forEach(function (caja) {
+      var en = caja.getAttribute('data-lang') === 'en';
+      var tareas = [].slice.call(caja.querySelectorAll('.v7-tarea'));
+      var rP = caja.querySelector('[data-r="personas"]'), rH = caja.querySelector('[data-r="hora"]');
+      var oP = caja.querySelector('[data-o="personas"]'), oH = caja.querySelector('[data-o="hora"]');
+      var eH = caja.querySelector('[data-horas]'), eE = caja.querySelector('[data-euros]'), eS = caja.querySelector('[data-semanas]');
+      var cuadros = [].slice.call(caja.querySelectorAll('.v7-cuenta-sem i'));
+      var semEl = caja.querySelector('.v7-cuenta-sem');
+      var visto = false, actual = { h: 0, e: 0, s: 0 }, raf = 0;
+
+      /* Siempre con separador de miles, también en «8.146»: el formato
+         español del navegador lo quita en los números de cuatro cifras y un
+         importe sin él se lee mal. */
+      function miles(n) {
+        var t = String(Math.round(n));
+        return t.replace(/\B(?=(\d{3})+(?!\d))/g, en ? ',' : '.');
+      }
+      function euros(n) { return en ? '€' + miles(n) : miles(n) + ' €'; }
+      function semanas(n) { return n < 10 ? (Math.round(n * 10) / 10).toString().replace('.', en ? '.' : ',') : miles(n); }
+
+      function calcula() {
+        var min = 0;
+        tareas.forEach(function (t) { if (t.classList.contains('is-on')) min += Number(t.getAttribute('data-min')); });
+        var p = Number(rP.value), h = Number(rH.value);
+        var horas = p * min / 60 * 46;
+        return { h: horas, e: horas * h, s: horas / 40, p: p, hora: h };
+      }
+      function pinta(v) {
+        eH.textContent = miles(v.h);
+        eE.textContent = euros(v.e);
+        eS.textContent = semanas(v.s);
+      }
+      function cuadrosDe(s) {
+        var llenos = Math.min(52, Math.round(s));
+        cuadros.forEach(function (c, i) {
+          c.classList.toggle('on', i < llenos);
+          c.style.transitionDelay = (reduced ? 0 : Math.abs(i - llenos) < 26 ? i * 12 : 0) + 'ms';
+        });
+        semEl.classList.toggle('es-lleno', s > 52);
+        semEl.setAttribute('data-mas', s > 52 ? '×' + (Math.round(s / 52 * 10) / 10).toString().replace('.', en ? '.' : ',') : '');
+      }
+      function actualiza() {
+        var v = calcula();
+        oP.textContent = v.p;
+        oH.textContent = euros(v.hora);
+        if (!visto) return;
+        cuadrosDe(v.s);
+        if (reduced) { actual = v; pinta(v); return; }
+        var de = { h: actual.h, e: actual.e, s: actual.s }, t0 = performance.now(), D = 620;
+        cancelAnimationFrame(raf);
+        (function paso(t) {
+          var k = Math.min(1, (t - t0) / D), q = 1 - Math.pow(1 - k, 3);
+          actual = { h: de.h + (v.h - de.h) * q, e: de.e + (v.e - de.e) * q, s: de.s + (v.s - de.s) * q };
+          pinta(actual);
+          if (k < 1) raf = requestAnimationFrame(paso);
+        })(t0);
+      }
+
+      tareas.forEach(function (t) {
+        var sw = t.querySelector('.v7-tarea-sw'), b = t.querySelector('.v7-tarea-m b');
+        sw.addEventListener('click', function () {
+          var on = !t.classList.contains('is-on');
+          t.classList.toggle('is-on', on);
+          sw.setAttribute('aria-pressed', on ? 'true' : 'false');
+          actualiza();
+        });
+        [].forEach.call(t.querySelectorAll('.v7-tarea-m button'), function (btn) {
+          btn.addEventListener('click', function () {
+            var m = Math.max(5, Math.min(240, Number(t.getAttribute('data-min')) + Number(btn.getAttribute('data-d'))));
+            t.setAttribute('data-min', m); b.textContent = m;
+            /* Cambiar los minutos de una tarea es decir que se hace: se marca. */
+            if (!t.classList.contains('is-on')) { t.classList.add('is-on'); sw.setAttribute('aria-pressed', 'true'); }
+            actualiza();
+          });
+        });
+      });
+      [rP, rH].forEach(function (r) {
+        r.addEventListener('input', function () {
+          r.style.setProperty('--p', ((r.value - r.min) / (r.max - r.min) * 100) + '%');
+          actualiza();
+        });
+        r.style.setProperty('--p', ((r.value - r.min) / (r.max - r.min) * 100) + '%');
+      });
+      actualiza();
+
+      /* La cuenta arranca cuando se ve: el número sube desde cero delante de
+         quien mira, que es lo que hace que se pare. */
+      if (!window.IntersectionObserver) { visto = true; actualiza(); return; }
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          visto = true;
+          setTimeout(actualiza, 250);
+        });
+      }, { threshold: 0.25 });
+      io.observe(caja);
+    });
+  }
+
   function boot() {
     initStage(); initAmbient(); initReveal(); initLift();
-    initTrack(); initVSteps(); initFinanceLazy(); initSemana();
+    initTrack(); initVSteps(); initFinanceLazy(); initSemana(); initCuenta();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

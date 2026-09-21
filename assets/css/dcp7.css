@@ -1293,3 +1293,92 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
 }
 /* La tercera línea de la intro es una nota, no un argumento: pesa menos. */
 .v6-intro--tenue{ font-size:.92em; color:var(--v-ink-3); }
+
+/* ─────────────────────────────── LA CUENTA ───────────────────────────────
+   Sustituye a la semana escrita. Seis tareas que se marcan, dos mandos y un
+   resultado grande: horas, euros y el año dibujado en 52 cuadros. Nada de
+   leer: se toca y responde. El color de lo marcado es el coral del
+   subrayado de antes —lo que no es trabajo—, así que el hilo se conserva. */
+.v7-cuenta{
+  margin-top:clamp(26px,3.4vh,40px);
+  display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:clamp(18px,2.6vw,36px);
+  align-items:start; max-width:1120px;
+}
+.v7-cuenta-tareas{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.v7-tarea{
+  position:relative; display:flex; flex-direction:column; gap:10px;
+  padding:14px 14px 12px; border-radius:14px;
+  border:1px solid rgba(150,174,245,.16); background:rgba(13,18,36,.86);
+  transition:border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.v7-tarea:hover{ border-color:rgba(150,174,245,.34); transform:translateY(-2px); }
+.v7-tarea.is-on{ border-color:rgba(255,107,98,.62); background:linear-gradient(160deg, rgba(58,22,30,.92), rgba(18,14,30,.92));
+  box-shadow:0 18px 40px -26px rgba(255,107,98,.55); }
+.v7-tarea-sw{
+  display:grid; grid-template-columns:34px minmax(0,1fr) 20px; gap:12px; align-items:center;
+  width:100%; margin:0; padding:0; border:0; background:none; text-align:left; cursor:pointer; color:var(--ink);
+  font:500 .95rem/1.35 var(--sans, "Inter", sans-serif);
+}
+.v7-tarea-sw:focus-visible{ outline:2px solid #ff8f88; outline-offset:6px; border-radius:8px; }
+.v7-tarea-i{ width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:rgba(150,174,245,.10); color:#b9c6e6; transition:background .25s, color .25s; }
+.v7-tarea-i svg{ width:20px; height:20px; }
+.v7-tarea.is-on .v7-tarea-i{ background:rgba(255,107,98,.18); color:#ffb1ab; }
+.v7-tarea-ok{ width:20px; height:20px; border-radius:6px; border:1.5px solid rgba(150,174,245,.4); position:relative; transition:background .2s, border-color .2s; }
+.v7-tarea.is-on .v7-tarea-ok{ background:#ff6b62; border-color:#ff6b62; }
+.v7-tarea.is-on .v7-tarea-ok::after{ content:""; position:absolute; left:6px; top:2.5px; width:5px; height:10px; border:solid #1a0c10; border-width:0 2px 2px 0; transform:rotate(45deg); }
+.v7-tarea-m{ display:inline-flex; align-items:center; gap:8px; align-self:flex-start; margin-left:46px;
+  font:500 .8125rem/1 var(--mono); color:var(--stone); }
+.v7-tarea-m b{ min-width:2ch; text-align:center; color:var(--ink); font-weight:600; }
+.v7-tarea-m button{ width:26px; height:26px; border-radius:8px; border:1px solid rgba(150,174,245,.24); background:rgba(150,174,245,.06);
+  color:var(--ink); font:500 1rem/1 var(--sans, "Inter", sans-serif); cursor:pointer; transition:border-color .2s, background .2s; }
+.v7-tarea-m button:hover{ border-color:rgba(150,174,245,.5); background:rgba(150,174,245,.14); }
+.v7-tarea-m button:focus-visible{ outline:2px solid #ff8f88; outline-offset:2px; }
+.v7-cuenta-porsem{ margin:10px 0 0; font:.75rem/1.4 var(--mono); letter-spacing:.06em; color:var(--stone-soft); }
+.v7-cuenta-mandos{ margin-top:18px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 22px; }
+.v7-mando{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 12px; align-items:center; font-size:.9rem; color:var(--stone); }
+.v7-mando output{ font:600 1.05rem/1 var(--serif); color:var(--ink); font-variant-numeric:tabular-nums; }
+.v7-mando input{ grid-column:1/-1; width:100%; height:28px; margin:0; background:none; cursor:pointer; -webkit-appearance:none; appearance:none; }
+.v7-mando input::-webkit-slider-runnable-track{ height:6px; border-radius:999px; background:linear-gradient(90deg,#ff6b62 0 var(--p,50%), rgba(150,174,245,.2) var(--p,50%) 100%); }
+.v7-mando input::-moz-range-track{ height:6px; border-radius:999px; background:rgba(150,174,245,.2); }
+.v7-mando input::-moz-range-progress{ height:6px; border-radius:999px; background:#ff6b62; }
+.v7-mando input::-webkit-slider-thumb{ -webkit-appearance:none; width:20px; height:20px; margin-top:-7px; border-radius:50%; background:#fff; border:0; box-shadow:0 0 0 4px rgba(255,107,98,.35), 0 4px 10px rgba(0,0,0,.5); }
+.v7-mando input::-moz-range-thumb{ width:20px; height:20px; border-radius:50%; background:#fff; border:0; box-shadow:0 0 0 4px rgba(255,107,98,.35); }
+.v7-mando input:focus-visible{ outline:2px solid #ff8f88; outline-offset:4px; border-radius:6px; }
+
+.v7-cuenta-res{
+  position:sticky; top:96px;
+  padding:clamp(20px,2.4vw,30px); border-radius:18px;
+  border:1px solid rgba(255,107,98,.28);
+  background:radial-gradient(120% 90% at 0% 0%, rgba(255,107,98,.14), rgba(255,107,98,0) 60%), rgba(10,13,26,.94);
+  box-shadow:0 40px 90px -50px rgba(0,0,0,.9);
+}
+.v7-cuenta-k{ margin:0; font:.75rem/1.2 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:#ffb1ab; }
+.v7-cuenta-n{ margin:10px 0 0; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.v7-cuenta-n b{ font:700 clamp(3rem, 2rem + 3.6vw, 5.2rem)/0.95 var(--serif); letter-spacing:-.03em; color:#fff; font-variant-numeric:tabular-nums; }
+.v7-cuenta-n span{ font:500 clamp(1.1rem,.9rem + .7vw,1.5rem)/1 var(--serif); color:var(--stone); }
+.v7-cuenta-e{ margin:12px 0 0; font-size:1rem; line-height:1.5; color:var(--stone); }
+.v7-cuenta-e b{ display:block; font:700 clamp(1.6rem,1.2rem + 1.4vw,2.3rem)/1.1 var(--serif); color:#ff8f88; font-variant-numeric:tabular-nums; }
+.v7-cuenta-sem{ position:relative; margin-top:20px; display:grid; grid-template-columns:repeat(13,minmax(0,1fr)); gap:4px; }
+.v7-cuenta-sem i{ aspect-ratio:1; border-radius:3px; background:rgba(150,174,245,.12); transition:background .35s var(--ease), transform .35s var(--ease); }
+.v7-cuenta-sem i.on{ background:#ff6b62; transform:scale(1.04); box-shadow:0 0 12px -2px rgba(255,107,98,.6); }
+.v7-cuenta-sem.es-lleno::after{ content:attr(data-mas); position:absolute; right:-6px; top:-12px; padding:3px 8px; border-radius:999px;
+  background:#fff; color:#1a0c10; font:700 .8125rem/1 var(--serif); }
+.v7-cuenta-st{ margin:12px 0 0; font-size:.95rem; line-height:1.5; color:var(--stone); }
+.v7-cuenta-st b{ color:var(--ink); font-variant-numeric:tabular-nums; }
+.v7-cuenta-sup{ margin:18px 0 0; padding-top:14px; border-top:1px solid rgba(150,174,245,.14); font-size:.8125rem; line-height:1.55; color:var(--stone-soft); }
+.v7-cuenta-cta{ display:inline-flex; align-items:center; gap:8px; margin-top:18px; padding:11px 18px; border-radius:999px;
+  background:#fff; color:#0b0f1c; font-weight:600; font-size:.95rem; text-decoration:none; transition:transform .2s var(--ease), box-shadow .2s var(--ease); }
+.v7-cuenta-cta:hover{ transform:translateY(-2px); box-shadow:0 12px 30px -12px rgba(255,255,255,.5); }
+.v7-cuenta-cta:focus-visible{ outline:2px solid #ff8f88; outline-offset:3px; }
+@media (max-width:980px){
+  .v7-cuenta{ grid-template-columns:minmax(0,1fr); }
+  .v7-cuenta-res{ position:relative; top:auto; }
+}
+@media (max-width:560px){
+  .v7-cuenta-tareas{ grid-template-columns:minmax(0,1fr); }
+  .v7-cuenta-mandos{ grid-template-columns:minmax(0,1fr); }
+  .v7-tarea-m{ margin-left:46px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .v7-tarea, .v7-cuenta-sem i, .v7-cuenta-cta{ transition:none; }
+}

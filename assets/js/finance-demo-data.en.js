@@ -58,7 +58,7 @@
     p.fechaEntregaPrevista = fecha(p.prevista);
     p.fechaEntregaReal = fecha(p.real);
     p.serviciosContratados = p.servicios;
-    p.estado = p.estado === 'entregado' ? 'Delivered' : p.estado === 'en_curso' ? 'In progress' : cap(p.estado);
+    p.estado = (p.estado === 'entregado' || p.estado === 'delivered') ? 'Delivered' : (p.estado === 'en_curso' || p.estado === 'in_progress') ? 'In progress' : cap(p.estado);
     return p;
   });
 
@@ -74,7 +74,10 @@
     f.importeCobrado = f.cobrado;
     f.estadoBruto = f.estado;
     f.estado = EST_FAC[f.estado] || cap(f.estado);
-    f.pagada = f.estadoBruto === 'pagada';
+    /* Los estados en bruto de los datos ingleses están traducidos («paid»):
+       comparar solo con la clave española dejaba TODAS las facturas como no
+       pagadas y todos los gastos como pendientes de revisión. */
+    f.pagada = f.estadoBruto === 'pagada' || f.estadoBruto === 'paid';
     f.recordatoriosEnviados = f.recordatorios;
     f.observaciones = null;
     return f;
@@ -90,7 +93,7 @@
     g.fechaGasto = fecha(g.fecha);
     g.fechaVencimiento = fecha(g.vencimiento);
     g.fechaPago = fecha(g.pago);
-    g.estadoRevision = g.revision === 'aprobado' ? 'Approved' : 'Pending review';
+    g.estadoRevision = (g.revision === 'aprobado' || g.revision === 'approved') ? 'Approved' : 'Pending review';
     g.proyectoRecordId = g.proyectoId;
     g.notasRevision = g.notas;
     return g;

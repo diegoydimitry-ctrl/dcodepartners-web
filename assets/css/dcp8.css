@@ -546,3 +546,74 @@ body.v7 .section-air.lit .head::before{
   background:radial-gradient(78% 78% at 34% 50%,
     rgba(6,8,13,.995), rgba(6,8,13,.965) 46%, rgba(6,8,13,.60) 72%, rgba(6,8,13,0) 92%);
 }
+
+/* ==========================================================================
+   LOS VELOS, SIEMPRE POR DEBAJO DEL CONTENIDO. EN TODO EL SITIO.
+
+   El defecto que se veía —una mancha oscura tapando la parte de arriba de
+   un titular, o la primera tarjeta de los planes a medio cubrir— no era de
+   una sección: era de cómo se apilaban los velos de legibilidad, y por eso
+   salía en todas.
+
+   Causa, medida en el navegador:
+   1. `.reveal.is-visible` acababa en `transform:translateY(0)`. Cualquier
+      transform distinto de `none` crea un contexto de apilamiento, así que
+      cada bloque que había «entrado» se quedaba para siempre en su propia
+      capa, y el velo de un bloque (que sobresale un 11–40 % por arriba y por
+      abajo) se pintaba ENCIMA de todo lo que no estaba en una capa igual o
+      posterior.
+   2. Para tapar un síntoma de eso, `.head` y `.section-head` se subieron a
+      `z-index:1`. Eso los puso por encima de todo lo demás… y con ellos a su
+      velo, que baja un 34 % por debajo del titular: justo encima de las
+      tarjetas de planes o de los botones de la sección.
+
+   Arreglo de raíz: al terminar de entrar, un bloque vuelve a `transform:
+   none` (y `filter:none`), así que deja de ser una capa; y los titulares
+   dejan de subir de nivel. Con eso todos los velos caen a la misma capa, la
+   −1 de #main-content: por encima del lienzo de partículas —que es lo que
+   tienen que oscurecer— y por debajo de TODO el contenido, que es donde no
+   pueden tapar nada. Comprobado píxel a píxel con _velo (velos puestos
+   contra velos quitados, con el lienzo apagado): ningún texto cambia. */
+.reveal.is-visible,
+.reveal-left.is-visible, .reveal-right.is-visible,
+.reveal-scale.is-visible, .reveal-up.is-visible{ transform:none; }
+.reveal-blur.is-visible{ transform:none; filter:none; }
+body.v7 .section-head, body.v7 .head{ z-index:auto; }
+/* Lo mismo para la entrada de página: estaba aislada (`isolation:isolate`),
+   así que su velo se pintaba en la capa de la sección y cubría la miga de
+   pan que va justo encima (medido en /contacto: la tinta de «/ Contacto»
+   bajaba de 81 a 55 de luminancia). Sin aislar, su velo cae con los demás,
+   detrás de todo. El lienzo sigue debajo: #main-content es capa 1. */
+body.v7 .page-hero{ isolation:auto; }
+/* Y las manchas de las etiquetas dentro de las tarjetas del blog: sangraban
+   9 px hacia arriba y, en un teléfono, la etiqueta va pegada bajo la barra de
+   la ventana, así que la mancha cortaba por la mitad el nombre del archivo
+   («que-es-la-automati.md»). Solo sangran hacia los lados; la tarjeta ya es
+   casi opaca por detrás. */
+body.v7 .blog-grid .blog-card .window-bar::after,
+body.v7 .blog-grid .blog-card .blog-cat::after,
+body.v7 .blog-grid .blog-card .blog-meta::after{ inset:0 -16px; }
+/* Y el aislamiento de las secciones con «luz local» (.lit): en v6 y v7 su
+   luz (::before) está apagada, así que `isolation:isolate` ya no aislaba
+   nada propio... y convertía la sección en una capa encima de la anterior.
+   Medido en /como-funciona a 390: el velo del titular de la sección
+   siguiente oscurecía la tercera etiqueta de la entrada («Crece sin
+   rediseñarse»). Sin aislar, ese velo cae detrás de todo, como los demás. */
+body.v6 .lit, body.v7 .lit{ isolation:auto; }
+
+/* ==========================================================================
+   SOBRE UNA SUPERFICIE OPACA NO HAY VELO NI HALO
+   El recuadro oscuro detrás de «Siguiente paso» en la banda de cierre (la
+   captura 6) era esto: la banda tiene fondo propio y opaco (--bg-elev, más
+   claro que el velo), y la cejilla le llevaba igual su mancha de legibilidad
+   —pensada para ir sobre el lienzo de partículas— y el titular su halo de
+   28 px. Sobre un fondo más claro que ellos, las dos cosas se ven como una
+   caja oscura detrás del texto, cortando por arriba el titular. En la banda
+   de cierre y en el pie no hay lienzo detrás: sobran las dos. */
+body.v6 .cta-band .eyebrow::after, body.v7 .cta-band .eyebrow::after{ display:none; }
+body.v6 .cta-band h2, body.v7 .cta-band h2,
+body.v6 .cta-band .h-title, body.v7 .cta-band .h-title,
+body.v6 footer h2, body.v7 footer h2{ text-shadow:none; }
+body.v6 .cta-band .pre-cta::before, body.v7 .cta-band .pre-cta::before,
+body.v6 .cta-band .head::before, body.v7 .cta-band .head::before,
+body.v6 .cta-band .section-head::before, body.v7 .cta-band .section-head::before{ display:none; }

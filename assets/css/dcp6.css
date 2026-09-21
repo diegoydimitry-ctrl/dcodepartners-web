@@ -670,3 +670,32 @@ body.v6 .v6-status, body.v6 .v6-cap{
   .v6-cap{ position:relative; }
   .v6-cap::before{ content:""; position:absolute; inset:-3px 0; }
 }
+
+/* ============================ LOS VELOS NO SALEN DE SU CAPÍTULO
+   MEDIDO en la portada a 390 px: los dos botones de la entrada y la línea
+   «Lo que estás viendo» quedaban a media luz. No era su velo: era el del
+   capítulo SIGUIENTE. La columna de lectura de cada capítulo es
+   `position:sticky` (se queda mientras dura su capítulo) y un elemento
+   sticky crea siempre su propia capa; como va después en el documento, su
+   velo —que sangraba un 16 % de su altura hacia arriba— se pintaba ENCIMA
+   de lo que había al final del capítulo anterior. Con una columna alta, ese
+   16 % eran 272 px: toda la parte de abajo de la entrada.
+
+   El sangrado se mide ahora con tope en píxeles, no solo en porcentaje: el
+   velo sigue sin bordes, pero nunca llega a la columna del capítulo de al
+   lado, que está siempre más lejos que ese tope (padding de un capítulo más
+   el del siguiente). Comprobado con _velo: ningún texto de la portada cambia
+   al quitar los velos. */
+.v6-veil::before{ top:max(-26%, -88px); bottom:max(-26%, -88px); }
+@media (max-width:820px){
+  .v6-veil::before, .v6-veil--right::before, .v6-veil--mid::before{ top:max(-16%, -64px); bottom:max(-16%, -64px); }
+}
+
+/* LA GRÁFICA EN VERTICAL NECESITA SITIO. En un teléfono la columna de texto
+   ocupa casi toda la pantalla y el capítulo «Medimos» se acababa antes de
+   que la gráfica —que va debajo del texto— tuviera dónde verse: el capítulo
+   siguiente le subía encima. Este capítulo es más largo en vertical: el
+   texto se queda anclado arriba y la gráfica se levanta debajo, entera. */
+@media (max-width:899px){
+  .v6-step[aria-labelledby="paso-04"]{ min-height:165svh; }
+}

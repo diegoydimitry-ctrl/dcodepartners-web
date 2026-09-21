@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "sync-content": "npm run update-asset-versions && npm run generate-kb",
+    "sync-content": "npm run build:demo-en && npm run update-asset-versions && npm run generate-kb",
+    "build:demo-en": "node scripts/build-demo-en.mjs",
     "generate-kb": "node scripts/build-knowledge-base.js",
     "update-asset-versions": "node scripts/update-asset-versions.js",
     "qa:check": "node scripts/qa-preview-check.js",
