@@ -1163,8 +1163,12 @@
    plano; la referencia, en el tinte del azul de información. */
 .fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#fff; }
 .fdemo-ia-msg.from-ia .fdemo-ia-bubble{ background:var(--dc-surface); }
+/* El texto va en el azul de información (--dc-info), no en el de acción:
+   sobre el tinte de la referencia encima de la tarjeta de respuesta
+   (#e1e4eb) el azul de acción daba 4,3:1 a 11 px, por debajo del 4,5:1 de
+   WCAG AA. El fondo y el borde siguen siendo los mismos. */
 .fdemo-ia-ref{
-  background:var(--dc-info-bg); color:var(--dc-accent);
+  background:var(--dc-info-bg); color:var(--dc-info);
   border-color:color-mix(in srgb, var(--dc-accent) 22%, transparent);
 }
 .fdemo-ia-chip{ background:var(--dc-surface); }

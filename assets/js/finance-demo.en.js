@@ -3144,7 +3144,7 @@
         '<div class="fdemo-card-body"><ul class="fdemo-reglas">' + REGLAS.map(function (r) {
           return '<li><span class="fdemo-regla-t">' + esc(r[0]) + '</span>' +
             '<span class="fdemo-regla-n"><b>' + r[1] + '</b> days</span>' +
-            '<span class="fdemo-interruptor es-on" data-action="plan" data-plan="editar" role="switch" aria-checked="true"><i></i></span></li>';
+            '<span class="fdemo-interruptor es-on" data-action="plan" data-plan="editar" role="switch" aria-checked="true" aria-label="' + esc(r[0]) + '"><i></i></span></li>';
         }).join('') + '</ul></div>');
 
       // ── claves de API ──
