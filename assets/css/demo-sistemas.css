@@ -383,6 +383,9 @@
 /* Lista y detalle: en escritorio, lado a lado; en móvil el detalle es una
    hoja que tapa la lista y se cierra con «volver». */
 .sd-split{ display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr); gap:12px; align-items:start; }
+/* En escritorio la lista se queda a la vista mientras el detalle baja (si no,
+   al enseñar el móvil del técnico la columna izquierda quedaba en blanco). */
+@media (min-width:901px){ .sd-split > .sd-card:first-child{ position:sticky; top:0; z-index:1; } }
 .sd-volver{ display:none; }
 .sd-solo-esc{ }
 
