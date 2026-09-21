@@ -26,6 +26,24 @@
   var FDATETIME = window.FinanceFmt.fechaHora;
   if (!FS) return;
 
+  // Lo que el producto puede decir HOY de VERI*FACTU y de la conciliación.
+  // Lo escribe scripts/build-estado.mjs a partir de estado-producto.json y
+  // check:estado falla si alguien lo toca a mano: el estado no se redacta,
+  // se demuestra.
+  /*estado:constante*/var ESTADO_PRODUCTO = {"verifactu":"preparado","conciliacion":"planificada","qr":false};/*/estado:constante*/
+  var VF_N = { "preparado": 1, "en-validacion": 2, "integrado": 3, "operativo": 4 }[ESTADO_PRODUCTO.verifactu] || 1;
+  var VF_ETIQUETA = ['Preparado para VERI*FACTU', 'Integración VERI*FACTU en validación', 'VERI*FACTU integrado', 'VERI*FACTU operativo'][VF_N - 1];
+  var CONC_LISTA = ESTADO_PRODUCTO.conciliacion === "disponible";
+  var CONC_CUANDO = { "planificada": 'llega próximamente', "en-desarrollo": 'se está construyendo', "en-pruebas": 'está en pruebas', "disponible": 'ya está' }[ESTADO_PRODUCTO.conciliacion];
+  var CONC_ETIQUETA = { "planificada": 'Próximamente', "en-desarrollo": 'En desarrollo', "en-pruebas": 'En pruebas', "disponible": 'Disponible' }[ESTADO_PRODUCTO.conciliacion];
+  // La remisión a la AEAT, contada según el estado: nunca «al día» si no se remite.
+  var REMISION = [
+    { tono: '', valor: 'Siguiente paso', hint: 'todavía no se envía nada a la AEAT', pill: 'Aún no se remite' },
+    { tono: '', valor: 'En pruebas', hint: 'solo al entorno de pruebas de la AEAT', pill: 'Solo en pruebas' },
+    { tono: 'positivo', valor: 'Validada', hint: 'falta el paso a producción', pill: 'Pendiente de producción' },
+    { tono: 'positivo', valor: 'Al día', hint: 'nada pendiente de enviar', pill: 'Remitida' }
+  ][VF_N - 1];
+
   var NAV_ITEMS = [
     { id: 'dashboard', label: 'Dashboard', grupo: 'dia', icono: 'dashboard' },
     { id: 'tesoreria', label: 'Tesorería', grupo: 'dia', icono: 'dashboard' },
@@ -1198,12 +1216,13 @@
       return '<div class="fdemo-panel">' +
         '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Obligación fiscal</p>' +
         '<h1 class="fdemo-page-title">Registro fiscal · VERI*FACTU</h1>' +
+        '<p class="fdemo-vf-estado" data-vf="' + VF_N + '"><span aria-hidden="true"></span>' + esc(VF_ETIQUETA) + '</p>' +
         '<p class="fdemo-page-sub">Cada factura queda encadenada a la anterior con su huella. Se puede comprobar aquí, delante de quien lo pregunte.</p></div>' +
         '<button type="button" class="fdemo-btn variant-primary" data-action="vf-comprobar">' + (hecho ? 'Volver a comprobar' : 'Comprobar la cadena') + '</button></div>' +
         '<div class="fdemo-kpi-tira es-4">' +
         kpi2({ hero: true, tono: 'positivo', label: 'Registradas', valor: fac.length + ' de ' + fac.length, hint: 'todas las emitidas, sin excepción' }) +
         kpi2({ tono: 'positivo', label: 'La cadena', valor: hecho ? 'Comprobada' : 'Intacta', hint: hecho ? ult.length + ' eslabones revisados ahora' : 'cada huella apunta a la anterior' }) +
-        kpi2({ tono: 'positivo', label: 'Cola de remisión', valor: 'Al día', hint: 'nada pendiente de enviar' }) +
+        kpi2({ tono: REMISION.tono, label: 'Remisión a la AEAT', valor: REMISION.valor, hint: REMISION.hint }) +
         kpi2({ label: 'Series', valor: 'F · R', hint: 'ordinarias y rectificativas' }) +
         '</div>' +
         (comp > 0 && !hecho ? '<div class="fdemo-progreso"><i style="width:' + Math.round(comp / ult.length * 100) + '%"></i><span>Comprobando eslabón ' + comp + ' de ' + ult.length + '…</span></div>' : '') +
@@ -1441,13 +1460,19 @@
         'Separar lo que está cobrado de lo que solo está emitido.'
       ];
       var NOHACE = [
-        ['No presenta modelos ante la AEAT', 'Eso lo hace tu gestoría, con estos datos.'],
-        ['No remite tus registros a la AEAT', 'El envío en tiempo real es otra cosa y no está aquí.'],
-        ['No genera el código QR de cotejo', 'Va con lo anterior.'],
-        ['No está conectado a ningún banco', 'Los cobros entran por conciliación de extracto, no por API bancaria.'],
-        ['No hace factura electrónica B2B', 'El formato Facturae con firma no está implementado.'],
-        ['No está certificado, porque eso no existe', 'No hay certificación oficial de software de facturación: quien te diga que la tiene, te está vendiendo humo.']
+        ['No presenta modelos ante la AEAT', 'Eso lo hace tu gestoría, con estos datos.']
       ];
+      if (VF_N < 4) NOHACE.push([
+        ['Todavía no remite tus registros a la AEAT', 'Es el siguiente paso de VERI*FACTU: el registro ya se genera y se encadena.'],
+        ['Solo remite al entorno de pruebas de la AEAT', 'La remisión real llega cuando esté validada.'],
+        ['Todavía no remite en producción', 'La remisión está validada; falta el paso a producción.']
+      ][VF_N - 1]);
+      if (!ESTADO_PRODUCTO.qr) NOHACE.push(['Todavía no imprime el código QR de cotejo', 'Depende de la especificación oficial de la AEAT.']);
+      NOHACE.push(CONC_LISTA
+        ? ['No se conecta a tu banco por API', 'El extracto entra como fichero y se concilia contra tus facturas y tus gastos.']
+        : ['No está conectado a ningún banco', 'Los cobros se registran en la aplicación. La conciliación bancaria ' + CONC_CUANDO + '.']);
+      NOHACE.push(['No hace factura electrónica B2B', 'El formato Facturae con firma no está implementado.']);
+      if (VF_N < 4) NOHACE.push(['La declaración responsable, todavía sin firmar', 'Es lo que el fabricante firma sobre su propio sistema, y llega con la remisión real.']);
       var filasNo = NOHACE.map(function (x) {
         return '<article class="fdemo-nohace"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span></article>';
       }).join('');
@@ -1991,9 +2016,9 @@
           card(cardHead('Registro de alta', 'Lo que queda guardado de ' + f.numero + ' y cómo se engancha con la anterior'), '<div class="fdemo-field-grid">' +
             field('NIF del emisor', '<code>B00000000</code>') + field('Número y serie', '<code>' + esc(f.numero) + '</code>') + field('Tipo de factura', '<code>' + tipo + '</code> · ' + (tipo === 'R1' ? 'rectificativa' : 'completa')) +
             field('Cuota total', EUR(f.iva != null ? f.iva : 0)) + field('Importe total', EUR(f.importe)) + field('Anterior en la cadena', ant ? '<code>' + esc(ant.numero) + '</code>' : 'Primera de la serie') +
-            field('Huella anterior', '<code>' + hA + '</code>') + field('Huella de este registro', '<code class="fdemo-hash">' + h + '</code>') + field('Remisión', pill('Al día')) +
+            field('Huella anterior', '<code>' + hA + '</code>') + field('Huella de este registro', '<code class="fdemo-hash">' + h + '</code>') + field('Remisión a la AEAT', pill(REMISION.pill)) +
             '</div>') +
-          card(cardHead('El registro, tal cual', 'Formato del registro de alta'),
+          card(cardHead('El registro, tal cual', VF_N < 3 ? 'Borrador del formato de remisión, pendiente de contrastar con los esquemas oficiales' : 'Formato del registro de alta'),
             '<pre class="fdemo-xml">' + esc('<RegistroAlta>\n  <IDFactura>\n    <IDEmisorFactura>B00000000</IDEmisorFactura>\n    <NumSerieFactura>' + f.numero + '</NumSerieFactura>\n    <FechaExpedicionFactura>' + fe + '</FechaExpedicionFactura>\n  </IDFactura>\n  <TipoFactura>' + tipo + '</TipoFactura>\n  <CuotaTotal>' + (f.iva != null ? f.iva : 0).toFixed(2) + '</CuotaTotal>\n  <ImporteTotal>' + f.importe.toFixed(2) + '</ImporteTotal>\n  <Encadenamiento>\n    <RegistroAnterior>\n      <NumSerieFactura>' + (ant ? ant.numero : '—') + '</NumSerieFactura>\n      <Huella>' + hA + '…</Huella>\n    </RegistroAnterior>\n  </Encadenamiento>\n  <Huella>' + h + '…</Huella>\n</RegistroAlta>') + '</pre>');
       } else {
         cuerpo = card(cardHead('Todo lo que ha pasado con ' + f.numero, act.length + ' momentos, del más reciente al primero'), '<div class="fdemo-card-body">' + lineaDeTiempo(act) + '</div>');
@@ -2433,7 +2458,7 @@
           '<td class="is-muted">' + esc(c.metodo) + '</td>' +
           '<td class="is-muted"><code>' + esc(c.referencia) + '</code></td>' +
           '<td class="is-right"><b>' + EUR(c.importe) + '</b></td>' +
-          '<td>' + pill('Conciliado') + '</td></tr>';
+          '<td>' + pill('Cobrado') + '</td></tr>';
       }).join('');
       var tramos = ant.tramos || [];
 
@@ -2811,7 +2836,9 @@
     // Los documentos que se pueden probar. Cada uno enseña una forma distinta
     // de entrar: una remesa que se da de alta entera, una factura suelta que
     // acaba en Gastos, un albarán FOTOGRAFIADO -que es el caso difícil- y un
-    // extracto del banco que se concilia contra lo que ya hay.
+    // extracto del banco. El extracto se lee, pero cruzarlo con las facturas
+    // es la conciliación bancaria, y eso solo se enseña hecho cuando el
+    // estado de producto dice que existe (ESTADO_PRODUCTO.conciliacion).
     var DOCS = [
       { k: 'remesa', n: 'remesa-proveedores-septiembre.pdf', p: '2,4 MB', t: '20 facturas en un solo PDF', icono: 'pdf' },
       { k: 'factura', n: 'factura-proveedor-0441.pdf', p: '148 KB', t: 'Una factura suelta', icono: 'pdf' },
@@ -2967,7 +2994,9 @@
     var SIMPLE = {
       factura: { t: 'Factura leída', campos: [['Proveedor','Suministros Gráficos Perlan'],['Nº de factura','FP-2026-0441'],['Base imponible','412,00 €'],['Cuota de IVA','86,52 €'],['Total','498,52 €'],['Fecha','12/08/2026']], destino: 'Dada de alta en Gastos, pendiente de tu revisión.', vista: 'gastos' },
       albaran: { t: 'Albarán leído de una foto', campos: [['Proveedor','Nubalia Cloud'],['Nº de albarán','ALB-2026-0188'],['Líneas','6'],['Fecha','03/09/2026']], destino: 'Dado de alta en Albaranes y enlazado con su pedido.', vista: 'albaranes' },
-      extracto: { t: 'Extracto conciliado', campos: [['Movimientos','34'],['Conciliados','11'],['Sin identificar','3'],['Periodo','01/09 – 20/09']], destino: 'Once cobros marcados. Tres movimientos no cuadran con ninguna factura: te los deja señalados en vez de asignarlos a ojo.', vista: 'cobros' }
+      extracto: CONC_LISTA
+        ? { t: 'Extracto conciliado', campos: [['Movimientos','34'],['Conciliados','11'],['Sin identificar','3'],['Periodo','01/09 – 20/09']], destino: 'Once cobros marcados. Tres movimientos no cuadran con ninguna factura: te los deja señalados en vez de asignarlos a ojo.', vista: 'cobros' }
+        : { t: 'Extracto del banco reconocido', campos: [['Movimientos','34'],['Periodo','01/09 – 20/09'],['Conciliación bancaria', CONC_ETIQUETA]], destino: 'Cruzar cada movimiento con su factura es la conciliación bancaria, y ' + CONC_CUANDO + '. Hasta entonces no lo reparto a ojo: no asigno ningún movimiento.', vista: null, pronto: true }
     };
     function lectorSimpleHtml(L) {
       var S = SIMPLE[L.k]; if (!S) return '';
@@ -2981,8 +3010,8 @@
           '<div class="fdemo-lector-campos">' + S.campos.map(function (c) {
             return '<div><span>' + esc(c[0]) + '</span><b>' + esc(c[1]) + '</b></div>';
           }).join('') + '</div>' +
-          '<div class="fdemo-lector-pie es-hecho"><p>' + esc(S.destino) + '</p>' +
-          '<button type="button" class="fdemo-btn variant-secondary" data-action="nav" data-view="' + S.vista + '">Ver ahí</button></div>') +
+          '<div class="fdemo-lector-pie ' + (S.pronto ? 'es-pronto' : 'es-hecho') + '"><p>' + esc(S.destino) + '</p>' +
+          (S.vista ? '<button type="button" class="fdemo-btn variant-secondary" data-action="nav" data-view="' + S.vista + '">Ver ahí</button>' : '') + '</div>') +
         '</div></div>';
     }
 
@@ -3221,7 +3250,7 @@
       if (rev.length) lista.push({ k: 'rev', tono: 'info', t: rev.length + ' gastos leídos esperan tu visto bueno', d: 'Nada cuenta como coste cerrado hasta que alguien lo mira', v: 'gastos', cuando: 'Ayer, 09:15' });
       var ultCobro = FS.listCobros().slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; })[0];
       if (ultCobro) lista.push({ k: 'cobro', tono: 'bien', t: 'Cobro recibido: ' + EUR(ultCobro.importe), d: ultCobro.cliente + ' · ' + ultCobro.numero + ' queda cobrada', v: 'facturas', id: ultCobro.facturaId, cuando: FDATE(ultCobro.fecha) });
-      lista.push({ k: 'vf', tono: 'bien', t: 'Registro fiscal al día', d: 'Todas las facturas emitidas, encadenadas · ninguna huella rota', v: 'verifactu', cuando: 'Cada noche' });
+      lista.push({ k: 'vf', tono: 'bien', t: 'La cadena del registro fiscal, entera', d: 'Todas las facturas emitidas, encadenadas · ninguna huella rota', v: 'verifactu', cuando: 'Cada noche' });
       return lista;
     }
     function sinLeer() { return avisosDe().filter(function (a) { return !state.leidos[a.k]; }).length; }

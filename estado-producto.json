@@ -1,0 +1,62 @@
+{
+  "$lee_esto": [
+    "FUENTE ÚNICA del estado de VERI*FACTU y de la conciliación bancaria en la web.",
+    "Nada de lo que la web dice sobre estos dos temas se escribe a mano: lo genera",
+    "`npm run build:estado` (dentro de `npm run sync-content`) a partir de este fichero,",
+    "y `npm run check:estado` falla si la web no coincide con él, si un estado no trae",
+    "la prueba que exige o si aparece en cualquier sitio una afirmación prohibida.",
+    "",
+    "Para subir de estado NO basta con cambiar `estado`: hay que rellenar la evidencia",
+    "que ese estado exige (ver scripts/estado/modelo.mjs · EXIGE). La decide y la aporta",
+    "el equipo de D-Code Finance; este fichero no se toca sin esa prueba.",
+    "",
+    "Estados VERI*FACTU:  preparado → en-validacion → integrado → operativo",
+    "Estados conciliación: planificada → en-desarrollo → en-pruebas → disponible"
+  ],
+  "revisado": "2026-09-21",
+
+  "verifactu": {
+    "estado": "preparado",
+    "fuente": {
+      "repositorio": "dcode-finance",
+      "rama": "diseno/dcode-design-system",
+      "commit": "c30e2c8",
+      "fichero": "src/lib/verifactu/estadoDelSistema.ts",
+      "dato": "puedeRemitir: false (incondicional). Registro encadenado desde la emisión; docs/verifactu/VERIFACTU.md revisado el 15/09/2026."
+    },
+    "evidencia": {
+      "remisionPruebas": null,
+      "validacion": null,
+      "remisionProduccion": null,
+      "declaracionResponsable": null
+    },
+    "qrEnFactura": null
+  },
+
+  "conciliacion": {
+    "estado": "planificada",
+    "incluidaEn": ["finance-ia", "finance-medida"],
+    "$incluidaEn": "DECISIÓN DE NEGOCIO PENDIENTE. Se conserva donde la web ya la situaba (plan 02 y, por arrastre, plan 03). Cambiarla aquí la mueve en planes, comparativa y demo a la vez.",
+    "fuente": {
+      "repositorio": "dcode-finance",
+      "rama": "diseno/dcode-design-system",
+      "commit": "c30e2c8",
+      "fichero": "src/lib/billing/cuenta.ts",
+      "dato": "No existe: sin tabla de cuentas bancarias, movimientos ni conciliación (AUD-FIN-FORENSE-20260824-006; docs/product/DEVOLUCIONES-Y-BANCA.md)."
+    },
+    "evidencia": {
+      "decision": { "fecha": "2026-09-21", "quien": "Dirección de D-Code Partners", "que": "Incorporar la conciliación bancaria a D-Code Finance." },
+      "desarrollo": null,
+      "pruebas": null,
+      "disponible": null
+    }
+  },
+
+  "calendario": {
+    "sociedades": "2027-01-01",
+    "resto": "2027-07-01",
+    "norma": "Real Decreto-ley 15/2025, de 2 de diciembre",
+    "url": "https://sede.agenciatributaria.gob.es/Sede/iva/sistemas-informaticos-facturacion-verifactu/nota-informativa-ampliacion-plazo-adaptacion-facturacion.html",
+    "consultado": "2026-09-21"
+  }
+}

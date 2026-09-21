@@ -41,6 +41,15 @@ jobs:
       - name: Comprobar el montaje de la demo de D-Code Finance
         run: npm run check:demo
 
+      # Lo que la web dice de VERI*FACTU y de la conciliación bancaria sale de
+      # estado-producto.json y de nada más. Falla si un estado no trae su
+      # prueba, si una región generada se ha retocado a mano o si en algún
+      # sitio aparece «implantado», «certificado», «homologado» o equivalente.
+      - name: Comprobar el estado de producto (VERI*FACTU y conciliación)
+        run: npm run check:estado
+      - name: Probar que el estado no se puede adelantar sin prueba
+        run: npm run test:estado
+
   diseno:
     # Las reglas del D-Code Design System en las 72 páginas y a los cinco
     # anchos de referencia: sin scroll horizontal, un solo fondo, el cian

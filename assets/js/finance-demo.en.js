@@ -28,6 +28,24 @@
   var FDATETIME = window.FinanceFmt.fechaHora;
   if (!FS) return;
 
+  // Lo que el producto puede decir HOY de VERI*FACTU y de la conciliación.
+  // Lo escribe scripts/build-estado.mjs a partir de estado-producto.json y
+  // check:estado falla si alguien lo toca a mano: el estado no se redacta,
+  // se demuestra.
+  /*estado:constante*/var ESTADO_PRODUCTO = {"verifactu":"preparado","conciliacion":"planificada","qr":false};/*/estado:constante*/
+  var VF_N = { "preparado": 1, "en-validacion": 2, "integrado": 3, "operativo": 4 }[ESTADO_PRODUCTO.verifactu] || 1;
+  var VF_ETIQUETA = ['Ready for VERI*FACTU', 'VERI*FACTU integration in validation', 'VERI*FACTU integrated', 'VERI*FACTU operational'][VF_N - 1];
+  var CONC_LISTA = ESTADO_PRODUCTO.conciliacion === "disponible";
+  var CONC_CUANDO = { "planificada": 'is coming soon', "en-desarrollo": 'is being built', "en-pruebas": 'is in testing', "disponible": 'is already here' }[ESTADO_PRODUCTO.conciliacion];
+  var CONC_ETIQUETA = { "planificada": 'Coming soon', "en-desarrollo": 'In development', "en-pruebas": 'In testing', "disponible": 'Available' }[ESTADO_PRODUCTO.conciliacion];
+  // La remisión a la AEAT, contada según el estado: nunca «al día» si no se remite.
+  var REMISION = [
+    { tono: '', valor: 'Next step', hint: 'nothing is sent to the AEAT yet', pill: 'Not submitted yet' },
+    { tono: '', valor: 'In testing', hint: 'only to the AEAT test environment', pill: 'Test environment only' },
+    { tono: 'positivo', valor: 'Validated', hint: 'the move to production remains', pill: 'Pending production' },
+    { tono: 'positivo', valor: 'Up to date', hint: 'nothing waiting to be sent', pill: 'Submitted' }
+  ][VF_N - 1];
+
   var NAV_ITEMS = [
     { id: 'dashboard', label: 'Dashboard', grupo: 'dia', icono: 'dashboard' },
     { id: 'tesoreria', label: 'Treasury', grupo: 'dia', icono: 'dashboard' },
@@ -1206,12 +1224,13 @@
       return '<div class="fdemo-panel">' +
         '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Tax obligation</p>' +
         '<h1 class="fdemo-page-title">Tax register · VERI*FACTU</h1>' +
+        '<p class="fdemo-vf-estado" data-vf="' + VF_N + '"><span aria-hidden="true"></span>' + esc(VF_ETIQUETA) + '</p>' +
         '<p class="fdemo-page-sub">Each invoice is chained to the previous one by its hash. It can be checked here, in front of anyone who asks.</p></div>' +
         '<button type="button" class="fdemo-btn variant-primary" data-action="vf-comprobar">' + (hecho ? 'Check again' : 'Check the chain') + '</button></div>' +
         '<div class="fdemo-kpi-tira es-4">' +
         kpi2({ hero: true, tono: 'positivo', label: 'Registered', valor: fac.length + ' of ' + fac.length, hint: 'every issued invoice, without exception' }) +
         kpi2({ tono: 'positivo', label: 'The chain', valor: hecho ? 'Verified' : 'Intact', hint: hecho ? ult.length + ' links checked just now' : 'each hash points to the previous one' }) +
-        kpi2({ tono: 'positivo', label: 'Submission queue', valor: 'Up to date', hint: 'nothing waiting to be sent' }) +
+        kpi2({ tono: REMISION.tono, label: 'Submission to the AEAT', valor: REMISION.valor, hint: REMISION.hint }) +
         kpi2({ label: 'Series', valor: 'F · R', hint: 'standard and corrective' }) +
         '</div>' +
         (comp > 0 && !hecho ? '<div class="fdemo-progreso"><i style="width:' + Math.round(comp / ult.length * 100) + '%"></i><span>Checking link ' + comp + ' of ' + ult.length + '…</span></div>' : '') +
@@ -1449,13 +1468,19 @@
         'Separates what has been collected from what has only been issued.'
       ];
       var NOHACE = [
-        ['Doesn’t file tax forms with the AEAT', 'Your accountant does that, with this data.'],
-        ['Doesn’t submit your records to the AEAT', 'Real-time submission is a separate matter and isn’t included here.'],
-        ['Doesn’t generate the verification QR code', 'That goes with the above.'],
-        ['Isn’t connected to any bank', 'Payments come in through statement reconciliation, not through a banking API.'],
-        ['Doesn’t do B2B e-invoicing', 'The signed Facturae format isn’t implemented.'],
-        ['Isn’t certified, because no such thing exists', 'There is no official certification for invoicing software: anyone who tells you they have it is selling you snake oil.']
+        ['Doesn’t file tax forms with the AEAT', 'Your accountant does that, with this data.']
       ];
+      if (VF_N < 4) NOHACE.push([
+        ['Doesn’t submit your records to the AEAT yet', 'It’s the next VERI*FACTU step: the record is already produced and chained.'],
+        ['Only submits to the AEAT test environment', 'Live submission comes once it’s validated.'],
+        ['Doesn’t submit in production yet', 'Submission is validated; the move to production remains.']
+      ][VF_N - 1]);
+      if (!ESTADO_PRODUCTO.qr) NOHACE.push(['Doesn’t print the verification QR code yet', 'It depends on the AEAT’s official specification.']);
+      NOHACE.push(CONC_LISTA
+        ? ['Doesn’t connect to your bank through an API', 'The statement comes in as a file and is reconciled against your invoices and expenses.']
+        : ['Isn’t connected to any bank', 'Payments are recorded in the application. Bank reconciliation ' + CONC_CUANDO + '.']);
+      NOHACE.push(['Doesn’t do B2B e-invoicing', 'The signed Facturae format isn’t implemented.']);
+      if (VF_N < 4) NOHACE.push(['The responsible declaration, not signed yet', 'It’s what the maker signs about its own system, and it comes with live submission.']);
       var filasNo = NOHACE.map(function (x) {
         return '<article class="fdemo-nohace"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span></article>';
       }).join('');
@@ -1999,9 +2024,9 @@
           card(cardHead('Registration record', 'What is stored for ' + f.numero + ' and how it links to the previous one'), '<div class="fdemo-field-grid">' +
             field('Issuer tax ID', '<code>B00000000</code>') + field('Number and series', '<code>' + esc(f.numero) + '</code>') + field('Invoice type', '<code>' + tipo + '</code> · ' + (tipo === 'R1' ? 'corrective' : 'complete')) +
             field('Total tax amount', EUR(f.iva != null ? f.iva : 0)) + field('Total amount', EUR(f.importe)) + field('Previous in the chain', ant ? '<code>' + esc(ant.numero) + '</code>' : 'First in the series') +
-            field('Previous hash', '<code>' + hA + '</code>') + field('Hash of this record', '<code class="fdemo-hash">' + h + '</code>') + field('Submission', pill('Up to date')) +
+            field('Previous hash', '<code>' + hA + '</code>') + field('Hash of this record', '<code class="fdemo-hash">' + h + '</code>') + field('Submission to the AEAT', pill(REMISION.pill)) +
             '</div>') +
-          card(cardHead('The record, as is', 'Registration record format'),
+          card(cardHead('The record, as is', VF_N < 3 ? 'Draft of the submission format, still to be checked against the official schemas' : 'Registration record format'),
             '<pre class="fdemo-xml">' + esc('<RegistroAlta>\n  <IDFactura>\n    <IDEmisorFactura>B00000000</IDEmisorFactura>\n    <NumSerieFactura>' + f.numero + '</NumSerieFactura>\n    <FechaExpedicionFactura>' + fe + '</FechaExpedicionFactura>\n  </IDFactura>\n  <TipoFactura>' + tipo + '</TipoFactura>\n  <CuotaTotal>' + (f.iva != null ? f.iva : 0).toFixed(2) + '</CuotaTotal>\n  <ImporteTotal>' + f.importe.toFixed(2) + '</ImporteTotal>\n  <Encadenamiento>\n    <RegistroAnterior>\n      <NumSerieFactura>' + (ant ? ant.numero : '—') + '</NumSerieFactura>\n      <Huella>' + hA + '…</Huella>\n    </RegistroAnterior>\n  </Encadenamiento>\n  <Huella>' + h + '…</Huella>\n</RegistroAlta>') + '</pre>');
       } else {
         cuerpo = card(cardHead('Everything that has happened with ' + f.numero, act.length + ' events, newest first'), '<div class="fdemo-card-body">' + lineaDeTiempo(act) + '</div>');
@@ -2441,7 +2466,7 @@
           '<td class="is-muted">' + esc(c.metodo) + '</td>' +
           '<td class="is-muted"><code>' + esc(c.referencia) + '</code></td>' +
           '<td class="is-right"><b>' + EUR(c.importe) + '</b></td>' +
-          '<td>' + pill('Reconciled') + '</td></tr>';
+          '<td>' + pill('Collected') + '</td></tr>';
       }).join('');
       var tramos = ant.tramos || [];
 
@@ -2819,7 +2844,9 @@
     // Los documentos que se pueden probar. Cada uno enseña una forma distinta
     // de entrar: una remesa que se da de alta entera, una factura suelta que
     // acaba en Gastos, un albarán FOTOGRAFIADO -que es el caso difícil- y un
-    // extracto del banco que se concilia contra lo que ya hay.
+    // extracto del banco. El extracto se lee, pero cruzarlo con las facturas
+    // es la conciliación bancaria, y eso solo se enseña hecho cuando el
+    // estado de producto dice que existe (ESTADO_PRODUCTO.conciliacion).
     var DOCS = [
       { k: 'remesa', n: 'remesa-proveedores-septiembre.pdf', p: '2,4 MB', t: '20 invoices in a single PDF', icono: 'pdf' },
       { k: 'factura', n: 'factura-proveedor-0441.pdf', p: '148 KB', t: 'A single invoice', icono: 'pdf' },
@@ -2975,7 +3002,9 @@
     var SIMPLE = {
       factura: { t: 'Invoice read', campos: [['Supplier','Suministros Gráficos Perlan'],['Invoice no.','FP-2026-0441'],['Taxable base','412,00 €'],['VAT amount','86,52 €'],['Total','498,52 €'],['Date','12/08/2026']], destino: 'Booked into Expenses, pending your review.', vista: 'gastos' },
       albaran: { t: 'Delivery note read from a photo', campos: [['Supplier','Nubalia Cloud'],['Delivery note no.','ALB-2026-0188'],['Lines','6'],['Date','03/09/2026']], destino: 'Booked into Delivery notes and linked to its order.', vista: 'albaranes' },
-      extracto: { t: 'Statement reconciled', campos: [['Transactions','34'],['Reconciled','11'],['Unidentified','3'],['Period','01/09 – 20/09']], destino: 'Eleven payments matched. Three transactions don’t match any invoice: it flags them for you instead of assigning them by guesswork.', vista: 'cobros' }
+      extracto: CONC_LISTA
+        ? { t: 'Statement reconciled', campos: [['Transactions','34'],['Reconciled','11'],['Unidentified','3'],['Period','01/09 – 20/09']], destino: 'Eleven payments matched. Three transactions don’t match any invoice: it flags them for you instead of assigning them by guesswork.', vista: 'cobros' }
+        : { t: 'Bank statement recognised', campos: [['Transactions','34'],['Period','01/09 – 20/09'],['Bank reconciliation', CONC_ETIQUETA]], destino: 'Matching each transaction to its invoice is bank reconciliation, and it ' + CONC_CUANDO + '. Until then I don’t spread it around by eye: I assign no transaction.', vista: null, pronto: true }
     };
     function lectorSimpleHtml(L) {
       var S = SIMPLE[L.k]; if (!S) return '';
@@ -2989,8 +3018,8 @@
           '<div class="fdemo-lector-campos">' + S.campos.map(function (c) {
             return '<div><span>' + esc(c[0]) + '</span><b>' + esc(c[1]) + '</b></div>';
           }).join('') + '</div>' +
-          '<div class="fdemo-lector-pie es-hecho"><p>' + esc(S.destino) + '</p>' +
-          '<button type="button" class="fdemo-btn variant-secondary" data-action="nav" data-view="' + S.vista + '">See it there</button></div>') +
+          '<div class="fdemo-lector-pie ' + (S.pronto ? 'es-pronto' : 'es-hecho') + '"><p>' + esc(S.destino) + '</p>' +
+          (S.vista ? '<button type="button" class="fdemo-btn variant-secondary" data-action="nav" data-view="' + S.vista + '">See it there</button>' : '') + '</div>') +
         '</div></div>';
     }
 
@@ -3229,7 +3258,7 @@
       if (rev.length) lista.push({ k: 'rev', tono: 'info', t: rev.length + ' expenses read and awaiting your approval', d: 'Nothing counts as a final cost until someone has looked at it', v: 'gastos', cuando: 'Yesterday, 09:15' });
       var ultCobro = FS.listCobros().slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; })[0];
       if (ultCobro) lista.push({ k: 'cobro', tono: 'bien', t: 'Payment received: ' + EUR(ultCobro.importe), d: ultCobro.cliente + ' · ' + ultCobro.numero + ' is now collected', v: 'facturas', id: ultCobro.facturaId, cuando: FDATE(ultCobro.fecha) });
-      lista.push({ k: 'vf', tono: 'bien', t: 'Tax register up to date', d: 'All issued invoices chained · no broken hashes', v: 'verifactu', cuando: 'Every night' });
+      lista.push({ k: 'vf', tono: 'bien', t: 'The tax register chain, whole', d: 'All issued invoices chained · no broken hashes', v: 'verifactu', cuando: 'Every night' });
       return lista;
     }
     function sinLeer() { return avisosDe().filter(function (a) { return !state.leidos[a.k]; }).length; }

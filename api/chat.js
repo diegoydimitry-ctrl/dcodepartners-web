@@ -28,6 +28,11 @@
  * error crudo, salvo que fallen TODOS los proveedores configurados.
  */
 const { getProviderChain, MAX_STREAM_MS } = require('./_lib/providers');
+// Lo que se puede afirmar de VERI*FACTU y de la conciliación bancaria. Se
+// GENERA desde estado-producto.json (npm run build:estado): el modelo sabe
+// de VERI*FACTU por su cuenta, y sin esto podría dar por hecho lo que no está
+// hecho, con toda la naturalidad del mundo.
+const ESTADO_PRODUCTO = require('./_lib/estado-producto');
 
 const MAX_MESSAGE_LENGTH = 600;
 const MAX_HISTORY_TURNS = 6;
@@ -139,6 +144,9 @@ function buildSystemPrompt(siteContext, onDemandContext) {
 - Sobre tecnología y negocio en general (qué es un agente de IA, automatización vs. chatbot, n8n, Make, Zapier, HubSpot y otros CRM, WhatsApp Business API, RAG, MCP, LLMs, APIs, cómo reducir costes con IA, cómo automatizar un despacho o una clínica, y cualquier tema similar): responde con tu propio conocimiento igual que haría un consultor experto del sector — NO te limites al contexto de abajo para esto, ese contexto es solo sobre D-Code Partners. Combínalo con lo de D-Code cuando tenga sentido (p. ej. mencionar cómo lo abordaría D-Code).
 - El contexto de abajo es una ayuda, no una orden ciega: si no encaja con lo que se pregunta en este momento de la conversación, ignóralo y responde según el hilo real de la charla en vez de forzar una respuesta que no viene a cuento.
 - Fuera de negocio, automatización, IA y tecnología (trivia, cultura general sin relación, temas personales ajenos a ti): dilo en una frase breve y amable, sin forzar una conexión artificial con el contexto, y redirige hacia en qué sí puedes ayudar.
+
+## Estado verificado de D-Code Finance (esto manda sobre lo que sepas por tu cuenta)
+${ESTADO_PRODUCTO}
 
 ## Cómo conducir la conversación
 - Si el usuario describe un problema concreto ("pierdo tiempo con WhatsApp", "se me acumulan los leads"), propón primero una solución realista y luego haz una pregunta de seguimiento — no le devuelvas un folleto.

@@ -2147,3 +2147,17 @@ tr.is-quieta td{ background:var(--dc-surface-2); font-size:.8125rem; }
    lado se salía de la tarjeta en un teléfono. */
 .fdemo-bf .fdemo-input, .fdemo-bf .fdemo-select, .fdemo-te-saldo .fdemo-input{ box-sizing:border-box; max-width:100%; }
 .fdemo-bf-fila .fdemo-select{ width:100%; }
+
+/* ── Estado de producto dentro de la demo ───────────────────────────────
+   El sello del registro fiscal y el aviso de «esto todavía no» los decide
+   ESTADO_PRODUCTO (estado-producto.json), no el texto de la pantalla. */
+.fdemo-vf-estado{
+  display:inline-flex; align-items:center; gap:8px; margin:8px 0 2px;
+  padding:3px 11px 3px 9px; border-radius:999px;
+  font-size:.75rem; font-weight:600; letter-spacing:.01em;
+  color:var(--dc-info); background:var(--dc-info-bg); border:1px solid rgba(91,140,255,.3);
+}
+.fdemo-vf-estado span{ width:7px; height:7px; border-radius:50%; background:currentColor; }
+.fdemo-vf-estado[data-vf="2"]{ color:var(--dc-warning); background:var(--dc-warning-bg); border-color:rgba(245,165,36,.3); }
+.fdemo-vf-estado[data-vf="4"]{ color:var(--dc-success); background:var(--dc-success-bg); border-color:rgba(52,199,128,.3); }
+.fdemo-lector-pie.es-pronto{ background:var(--dc-warning-bg); }
