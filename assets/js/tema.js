@@ -201,12 +201,18 @@
   (function () {
     var gx = D.querySelector('.gx');
     if (!gx || gx.querySelector('.gx-t')) return;
-    var n = W.innerWidth <= 768 ? 7 : 13, sem = 7, frag = D.createDocumentFragment();
+    var ligero = R.classList.contains('gx-ligero');
+    var n = ligero ? 8 : (W.innerWidth <= 768 ? 14 : 30), sem = 7, frag = D.createDocumentFragment();
     var rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
     for (var i = 0; i < n; i++) {
       var b = D.createElement('b');
-      b.className = 'gx-t' + (i % 4 === 1 ? ' is-c' : '');
-      b.style.cssText = 'left:' + (4 + rnd() * 92).toFixed(1) + '%;top:' + (4 + rnd() * 90).toFixed(1) + '%;--d:' + (3.2 + rnd() * 4).toFixed(1) + 's;--dl:-' + (rnd() * 6).toFixed(1) + 's';
+      /* Tres de cada diez sacan rayos: las que hacen que el cielo brille de
+         verdad. El resto son puntos que respiran. */
+      b.className = 'gx-t' + (i % 4 === 1 ? ' is-c' : '') + (i % 10 === 3 || i % 10 === 7 ? ' is-x' : '');
+      var t = (1.8 + Math.pow(rnd(), 2) * 3.4).toFixed(1);
+      b.style.cssText = 'left:' + (3 + rnd() * 94).toFixed(1) + '%;top:' + (3 + rnd() * 92).toFixed(1) + '%;' +
+        '--t:' + t + 'px;--r:' + (8 + rnd() * 12).toFixed(0) + 'px;' +
+        '--d:' + (2.6 + rnd() * 4.5).toFixed(1) + 's;--dl:-' + (rnd() * 7).toFixed(1) + 's';
       frag.appendChild(b);
     }
     gx.appendChild(frag);

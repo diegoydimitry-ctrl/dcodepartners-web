@@ -1198,44 +1198,66 @@ html:not([data-theme="dark"]) .fdemo-app.is-embedded{
    poder atravesarlo para tomar el control en cualquier momento.
    ══════════════════════════════════════════════════════════════════════ */
 .fdemo-mano{
-  position:absolute; top:0; left:0; z-index:35;
+  position:absolute; top:0; left:0; z-index:36;
   width:0; height:0; pointer-events:none;
   opacity:0;
-  transition:transform .54s cubic-bezier(.34,.72,.26,1), opacity .22s ease;
+  transition:transform .52s cubic-bezier(.34,.72,.26,1), opacity .22s ease;
 }
 .fdemo-mano.is-ahi{ opacity:1; }
-/* La flecha. Va con relleno blanco y contorno de tinta para que se vea
-   sobre una tarjeta clara y sobre una pastilla de color. */
-.fdemo-mano svg{
-  position:absolute; left:-2px; top:-2px; width:22px; height:22px;
-  fill:#fff; stroke:var(--dc-text); stroke-width:1.1;
-  filter:drop-shadow(0 2px 4px rgba(16,24,40,.30));
-  transition:transform .16s ease;
+/* El núcleo: una chispa de luz, no un puntero prestado. */
+.fdemo-mano-nucleo{
+  position:absolute; left:-6px; top:-6px; width:12px; height:12px; border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, #fff 0 22%, var(--dc-accent) 48%, transparent 72%);
+  box-shadow:0 0 0 1px color-mix(in srgb, var(--dc-text) 22%, transparent),
+             0 0 10px 2px color-mix(in srgb, var(--dc-accent) 55%, transparent),
+             0 0 22px 6px color-mix(in srgb, var(--dc-accent) 22%, transparent);
+  transition:transform .18s ease;
 }
-.fdemo-mano.is-pulsa svg{ transform:scale(.88) translate(1px,1px); }
-/* Y la onda, que sale de la punta. */
-.fdemo-mano i{
-  position:absolute; left:-9px; top:-9px;
-  width:18px; height:18px; border-radius:50%;
-  background:color-mix(in srgb, var(--dc-accent) 20%, transparent);
-  opacity:0; transition:opacity .16s ease;
+/* Los cuatro rayos de la chispa: aparecen al pulsar. */
+.fdemo-mano-nucleo::before, .fdemo-mano-nucleo::after{
+  content:''; position:absolute; left:50%; top:50%; border-radius:2px;
+  background:linear-gradient(90deg, transparent, #fff 45% 55%, transparent);
+  opacity:0; transition:opacity .16s ease, width .28s ease, height .28s ease;
 }
-.fdemo-mano.is-pulsa i{ opacity:1; }
-/* La pulsación: el punto se encoge —como un dedo que aprieta— y de él sale
-   una onda que se expande y se apaga. Dos señales para un solo gesto. */
-.fdemo-mano.is-pulsa i{ transform:scale(.62); background:var(--dc-accent); }
+.fdemo-mano-nucleo::before{ width:22px; height:1.5px; margin:-0.75px 0 0 -11px; }
+.fdemo-mano-nucleo::after{ width:1.5px; height:22px; margin:-11px 0 0 -0.75px; }
+/* La estela: se orienta con el viaje (--ang) y se alarga con la distancia
+   (--len). Solo existe mientras la luz se mueve. */
+.fdemo-mano-estela{
+  position:absolute; right:0; top:-1.5px; height:3px; width:var(--len, 0px);
+  transform-origin:100% 50%; transform:rotate(var(--ang, 0deg));
+  border-radius:3px; opacity:0;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--dc-accent) 60%, transparent) 72%, color-mix(in srgb, var(--dc-accent) 85%, transparent));
+  transition:opacity .2s ease;
+}
+.fdemo-mano.is-viaja .fdemo-mano-estela{ opacity:.85; }
+.fdemo-mano.is-viaja .fdemo-mano-nucleo{ transform:scale(.82); }
+/* Al pulsar: la chispa se encoge, saca los rayos y suelta un anillo. */
+.fdemo-mano.is-pulsa .fdemo-mano-nucleo{ transform:scale(.7); }
+.fdemo-mano.is-pulsa .fdemo-mano-nucleo::before{ opacity:.95; width:30px; margin-left:-15px; }
+.fdemo-mano.is-pulsa .fdemo-mano-nucleo::after{ opacity:.95; height:30px; margin-top:-15px; }
 .fdemo-mano.is-pulsa::after{
   content:''; position:absolute; left:-9px; top:-9px;
   width:18px; height:18px; border-radius:50%;
   border:2px solid var(--dc-accent);
-  animation:fdemo-onda .48s ease-out forwards;
+  animation:fdemo-onda .52s ease-out forwards;
 }
 @keyframes fdemo-onda{
-  from{ transform:scale(1); opacity:.55; }
-  to  { transform:scale(3.1); opacity:0; }
+  from{ transform:scale(.7); opacity:.6; }
+  to  { transform:scale(3.4); opacity:0; }
 }
+/* El foco: el marco que se posa sobre lo que el recorrido va a usar. Se ve
+   QUÉ toca antes de tocarlo, que es lo que una demo tiene que contar. */
+.fdemo-foco{
+  position:absolute; left:0; top:0; z-index:34; width:0; height:0;
+  pointer-events:none; opacity:0;
+  border:1.5px solid color-mix(in srgb, var(--dc-accent) 62%, transparent);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--dc-accent) 12%, transparent);
+  transition:transform .52s cubic-bezier(.34,.72,.26,1), width .52s cubic-bezier(.34,.72,.26,1), height .52s cubic-bezier(.34,.72,.26,1), opacity .24s ease;
+}
+.fdemo-foco.is-ahi{ opacity:1; }
 @media (prefers-reduced-motion: reduce){
-  .fdemo-mano{ display:none; }
+  .fdemo-mano, .fdemo-foco{ display:none; }
 }
 
 /* LA APLICACIÓN NO ES LA PÁGINA.

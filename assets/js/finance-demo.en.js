@@ -190,9 +190,9 @@
       /* LA MANO DEL RECORRIDO. Vive fuera del contenido porque se mueve
          sobre la aplicación entera —del menú a la pantalla— y porque así
          no la borra ningún re-render. No recibe eventos: es un dibujo. */
+      '<span class="fdemo-foco" data-role="foco" aria-hidden="true"></span>' +
       '<span class="fdemo-mano" data-role="mano" aria-hidden="true">' +
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.2 18.4 11.6a.55.55 0 0 1-.22 1L12.9 13.5l2.6 5.4a.55.55 0 0 1-.27.74l-1.9.9a.55.55 0 0 1-.73-.27l-2.55-5.35-3.7 3.5a.55.55 0 0 1-.93-.4V3.66a.55.55 0 0 1 .86-.46Z"/></svg>' +
-      '<i></i></span>';
+      '<i class="fdemo-mano-estela"></i><i class="fdemo-mano-nucleo"></i></span>';
 
     var sidebarEl = root.querySelector('[data-role="sidebar"]');
     var overlayEl = root.querySelector('[data-role="overlay"]');
@@ -3881,9 +3881,9 @@
       { v: 'facturas', ms: 4400, dice: 'You can check that without opening the document', quieto: true },
       { v: 'dashboard', ms: 6000, dice: 'And it all ends here: the dashboard tells you what’s happening today' }
     ];
-    var REANUDA_MS = 4500;
+    var REANUDA_MS = 6000;   // seis segundos sin tocar nada y el recorrido vuelve solo
     var reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var tour = { on: false, i: 0, t0: 0, dur: 1, timer: 0, raf: 0, vuelta: 0, visible: false, mano: false, yo: false, yoT: 0, vueltas: 0 };
+    var tour = { on: false, i: 0, t0: 0, dur: 1, timer: 0, raf: 0, vuelta: 0, visible: false, mano: false, yo: false, yoT: 0, vueltas: 0, perdidos: 0 };
     var tourTxtEl = root.querySelector('[data-role="tour-txt"]');
     var tourBtnEl = root.querySelector('[data-role="tour"]');
     var tourBarEl = root.querySelector('[data-role="tour-bar"] i');
@@ -3910,10 +3910,14 @@
        forma se lee como un adorno; una flecha se lee como alguien usando la
        aplicación, que es justo lo que está pasando. */
     var manoEl = root.querySelector('[data-role="mano"]');
-    var manoT = [0, 0, 0, 0];
+    var focoEl = root.querySelector('[data-role="foco"]');
+    var manoT = [0, 0, 0, 0, 0];
+    var manoP = null;   // dónde está ahora la luz, para saber de dónde viene
     function manoLimpia() {
       for (var i = 0; i < manoT.length; i++) clearTimeout(manoT[i]);
-      if (manoEl) manoEl.classList.remove('is-ahi', 'is-pulsa');
+      if (manoEl) manoEl.classList.remove('is-ahi', 'is-pulsa', 'is-viaja');
+      if (focoEl) focoEl.classList.remove('is-ahi');
+      manoP = null;
     }
     /* Si el sitio al que va la mano está fuera de la vista —debajo de la
        tabla, al fondo del hilo—, primero se desplaza el contenedor que lo
@@ -3942,15 +3946,40 @@
         if (!tour.on) return;
         var caja = destino.getBoundingClientRect(), marco = root.getBoundingClientRect();
         if (!caja.width || caja.bottom < marco.top - 40 || caja.top > marco.bottom + 40) { hecho(); return; }
-        manoEl.style.transform = 'translate(' + (caja.left - marco.left + Math.min(28, caja.width * 0.5)) +
-          'px,' + (caja.top - marco.top + caja.height * 0.5) + 'px)';
+        var dx0 = caja.left - marco.left + Math.min(34, caja.width * 0.5);
+        var dy0 = caja.top - marco.top + caja.height * 0.5;
+        /* La luz deja estela: se orienta según de dónde viene y se alarga con
+           la distancia recorrida. No es un puntero de ratón prestado; es el
+           propio sistema encendiendo lo que va a usar. */
+        if (manoP) {
+          var vx = dx0 - manoP[0], vy = dy0 - manoP[1], dist = Math.hypot(vx, vy);
+          if (dist > 14) {
+            manoEl.style.setProperty('--ang', (Math.atan2(vy, vx) * 180 / Math.PI).toFixed(1) + 'deg');
+            manoEl.style.setProperty('--len', Math.round(Math.min(150, 26 + dist * 0.42)) + 'px');
+            manoEl.classList.add('is-viaja');
+            manoT[4] = setTimeout(function () { manoEl.classList.remove('is-viaja'); }, 620);
+          }
+        }
+        manoP = [dx0, dy0];
+        manoEl.style.transform = 'translate(' + dx0 + 'px,' + dy0 + 'px)';
         manoEl.classList.add('is-ahi');
+        /* Y el destino se enmarca: se ve QUÉ va a tocar antes de tocarlo. */
+        if (focoEl) {
+          focoEl.style.transform = 'translate(' + (caja.left - marco.left) + 'px,' + (caja.top - marco.top) + 'px)';
+          focoEl.style.width = Math.round(caja.width) + 'px';
+          focoEl.style.height = Math.round(caja.height) + 'px';
+          focoEl.style.borderRadius = getComputedStyle(destino).borderRadius || '10px';
+          focoEl.classList.add('is-ahi');
+        }
         /* El orden importa: primero llega, después pulsa, y SOLO DESPUÉS
            cambia la pantalla. Lo que convence es ver el efecto detrás de la
            causa, no a la vez. */
         manoT[0] = setTimeout(function () { manoEl.classList.add('is-pulsa'); }, 560);
         manoT[1] = setTimeout(function () { hecho(); }, 760);
-        manoT[2] = setTimeout(function () { manoEl.classList.remove('is-pulsa'); }, 1060);
+        manoT[2] = setTimeout(function () {
+          manoEl.classList.remove('is-pulsa');
+          if (focoEl) focoEl.classList.remove('is-ahi');
+        }, 1060);
       }, espera);
     }
 
@@ -3993,21 +4022,45 @@
       }, 55);
     }
 
+    /* MEDIDO: el fallo que se veía en la demo. Casi todos los pasos son
+       `quieto`: no cambian de pantalla, pulsan algo de la pantalla en la que
+       ya están. Si un paso anterior no pudo pulsar —porque la persona había
+       dejado la aplicación en otro sitio—, los siguientes seguían corriendo
+       sobre una pantalla que no era la suya: la barra avanzaba y el rótulo
+       contaba cosas, pero no pasaba nada. Ahora, en cuanto un paso no
+       encuentra su sitio, la visita empieza de nuevo desde el principio, que
+       es el único estado que el recorrido sabe reconstruir. */
+    function reengancha() {
+      if (!tour.on) return;
+      if (tour.perdidos++ > 2) {
+        /* Tres intentos perdidos: la aplicación se deja como recién abierta
+           —sin fichas, sin filtros, sin capas— y la visita arranca de ahí. */
+        tour.perdidos = 0;
+        actuaElRecorrido(function () { limpiaLaVisita(); state.route = 'dashboard'; state.id = null; render(); });
+      }
+      tour.i = 0; tour.limpiar = true;
+      clearTimeout(tour.timer);
+      tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, 420);
+    }
     function pasoTour() {
       if (tour.i > 0 && tour.i % TOUR.length === 0) { tour.vueltas++; tour.limpiar = true; }
       var paso = TOUR[tour.i % TOUR.length];
       var primero = tour.i % TOUR.length === 0;
+      /* Un paso quieto que va a pulsar algo tiene que tener ese algo delante. */
+      if (paso.quieto && paso.sel && paso.hace === 'pulsa' && !root.querySelector(paso.sel)) { reengancha(); return; }
       tour.i++;
       if (tourTxtEl && paso.dice) tourTxtEl.textContent = paso.dice;
 
       function sigue() {
         if (!tour.on) return;
+        if (tour.i > 3) tour.perdidos = 0;   // la visita va por buen camino
         tour.t0 = Date.now(); tour.dur = paso.ms;
         clearTimeout(tour.timer);
         tour.timer = setTimeout(function () { if (tour.on) pasoTour(); }, paso.ms);
       }
       function aplica() {
         if (!tour.on) return;
+        var perdido = false;
         actuaElRecorrido(function () {
           if (!paso.quieto) {
             state.route = paso.v; state.id = null;
@@ -4027,10 +4080,11 @@
                efecto sin pulsar el botón es exactamente lo que hace que una
                demo se note falsa. */
             var el = root.querySelector(paso.sel);
-            if (el) el.click();
+            if (el) el.click(); else perdido = true;
           }
           if (paso.hace === 'paleta-ir') { irAResultado((state.paleta.rs || [])[state.paleta.sel]); }
         });
+        if (perdido) { reengancha(); return; }
         if (paso.hace === 'escribe') { escribeEn(paso.sel, paso.texto, sigue); return; }
         sigue();
       }
@@ -4078,7 +4132,9 @@
            pulsando botones que no estaban. La visita se cuenta desde el
            principio, que ademas es donde empieza a entenderse. */
         tour.i = 0;
-        tour.limpiar = false;
+        /* Y empieza LIMPIA: lo que dejó abierto la persona (una ficha, un
+           filtro, una capa) no puede quedarse debajo del recorrido nuevo. */
+        tour.limpiar = true;
         tour.vuelta = setTimeout(function () { tour.mano = false; arrancaTour(true); }, REANUDA_MS);
       }
       pintaTour();

@@ -46,7 +46,7 @@
 
     root.classList.add('is-vivo');
     var N = botones.length;
-    var DUR = [4200, 4600, 5000, 4400, 4400, 5600, 5200, 5000, 6400];
+    var DUR = [2700, 3000, 3200, 2800, 2800, 3600, 3300, 3200, 4200];   // el recorrido va más ligero: cada etapa se lee y pasa
     var etapa = 1, enPantalla = false, pausaUsuario = REDUCIDO, encima = false;
     var t0 = 0, acumulado = 0, raf = 0, pulsos = [], rutas = [], reglaI = 0, reglaT = 0;
     var NS = 'http://www.w3.org/2000/svg';

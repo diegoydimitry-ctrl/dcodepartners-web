@@ -291,6 +291,30 @@ function opacos(m, superficie) {
     return [k, r ? `color-mix(in srgb, rgb(${r[1]},${r[2]},${r[3]}) ${Math.round(+r[4] * 100)}%, ${base})` : v];
   }));
 }
+/* CONFORT: ni blanco de folio en una pantalla oscura, ni negro de tinta en
+   una clara. Las superficies que llegan al extremo se acercan un paso al
+   centro; el texto no se toca, así que el contraste sigue donde estaba. */
+function aColor(v) {
+  const t = v.trim();
+  let m = t.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (m) { const h = m[1].length === 3 ? m[1].split('').map((c) => c + c).join('') : m[1];
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16), 1]; }
+  m = t.match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*([\d.]+)\s*)?\)$/i);
+  if (m) return [+m[1], +m[2], +m[3], m[4] === undefined ? 1 : +m[4]];
+  return null;
+}
+const lumS = (c) => (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;
+const hacia = (c, d, k) => [0, 1, 2].map((i) => Math.round(c[i] + (d[i] - c[i]) * k)).concat(c[3]);
+const cssColor = (c) => (c[3] === 1 ? `rgb(${c[0]},${c[1]},${c[2]})` : `rgba(${c[0]},${c[1]},${c[2]},${c[3]})`);
+function suaviza(m, cual) {
+  return new Map([...m].map(([k, v]) => {
+    const c = aColor(v); if (!c || c[3] < 0.9) return [k, v];
+    const L = lumS(c);
+    if (cual === 'dark' && L > 0.88) return [k, cssColor(hacia(c, [222, 229, 243], Math.min(1, (L - 0.88) * 5.2)))];
+    if (cual === 'light' && L < 0.10) return [k, cssColor(hacia(c, [28, 36, 62], Math.min(1, (0.10 - L) * 7)))];
+    return [k, v];
+  }));
+}
 const IS = `:is(${CAJAS.join(', ')})`;
 function sinRaiz(s) { return s.replace(/^((html|body)(\.[\w-]+|\[[^\]]+\])*|\.v[0-9]+)\s+/, ''); }
 function escopar(sel) {
@@ -344,12 +368,12 @@ let sup = `/* ==================================================================
    Oscuro: fondo oscuro + cajas claras. Claro: fondo claro + cajas oscuras.
    ========================================================================= */
 /* Las cajas de la web */
-html[data-theme="dark"] ${IS}{ ${decl(claroVars)}; color:#0d1324; background-color:#eef2fb !important; background-image:linear-gradient(180deg, #fafbff 0%, #eef2fb 55%, #e6ecf9 100%) !important; border-color:rgba(160,184,255,.55); box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(120,150,255,.18), 0 18px 44px -26px rgba(91,140,255,.55), 0 2px 10px -4px rgba(0,0,0,.45); }
-html[data-theme="light"] ${IS}{ ${decl(oscuroVars)}; color:#edf1f8; background-color:#0e1428 !important; background-image:linear-gradient(180deg, #18213f 0%, #0f1630 50%, #0a0f22 100%) !important; border-color:rgba(110,140,240,.32); box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(20,34,110,.12), 0 20px 44px -26px rgba(20,34,110,.6), 0 2px 8px -4px rgba(20,30,64,.3); }
+html[data-theme="dark"] ${IS}{ ${decl(suaviza(claroVars, 'dark'))}; color:#121a2c; background-color:#e9eef8 !important; background-image:linear-gradient(180deg, #f3f6fd 0%, #e9eef8 55%, #dfe6f4 100%) !important; border-color:rgba(160,184,255,.55); box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(120,150,255,.18), 0 18px 44px -26px rgba(91,140,255,.55), 0 2px 10px -4px rgba(0,0,0,.45); }
+html[data-theme="light"] ${IS}{ ${decl(suaviza(oscuroVars, 'light'))}; color:#e9eefb; background-color:#141c35 !important; background-image:linear-gradient(180deg, #1d2749 0%, #151d38 50%, #10162c 100%) !important; border-color:rgba(110,140,240,.32); box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(20,34,110,.12), 0 20px 44px -26px rgba(20,34,110,.6), 0 2px 8px -4px rgba(20,30,64,.3); }
 `;
 for (const a of APPS) {
   const css = fs.readFileSync(path.join(RAIZ, 'assets/css', a.hoja), 'utf8');
-  const dia = opacos(vars(css, a.dia), a.sup), noche = opacos(vars(css, a.noche), a.sup), is = `:is(${a.cajas.join(', ')})`;
+  const dia = suaviza(opacos(vars(css, a.dia), a.sup), 'dark'), noche = suaviza(opacos(vars(css, a.noche), a.sup), 'light'), is = `:is(${a.cajas.join(', ')})`;
   sup += `/* ${a.hoja}: la demo entera con la paleta del otro tema */\n`;
   sup += `html[data-theme="dark"] body ${is}{ ${decl(dia)}; color:${a.color}; color-scheme:light; }\n`;
   sup += `html[data-theme="dark"] body ${a.cajas[0]}{ box-shadow:0 0 0 1px rgba(120,150,255,.22), 0 30px 70px -34px rgba(91,140,255,.55); }\nhtml[data-theme="light"] body ${a.cajas[0]}{ box-shadow:0 0 0 1px rgba(20,34,110,.14), 0 30px 70px -34px rgba(20,34,110,.6); }\n`;

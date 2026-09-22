@@ -80,13 +80,20 @@ function mosaico(T, n, radio, colores, grupos, opts = {}) {
 }
 
 /* ---------------------------------------------------------------- capas */
-const LEJOS_T = 520, MEDIO_T = 860, BRILLO_A_T = 1400, BRILLO_B_T = 1700;
+const POLVO_T = 380, LEJOS_T = 520, MEDIO_T = 860, BRILLO_A_T = 1400, BRILLO_B_T = 1700;
 
-const lejos = mosaico(LEJOS_T, 78, [0.7, 1.15],
+/* Polvo fino: muchísimas estrellas diminutas, quietas y al fondo. Es lo que
+   convierte un cielo con estrellas en una galaxia: la sensación de que hay
+   más de las que se pueden contar. Se pinta a 2x y no se mueve. */
+const polvo = mosaico(POLVO_T, 210, [0.4, 0.78],
+  ['--gx-w3', '--gx-w3', '--gx-w3', '--gx-w2', '--gx-c2', '--gx-v2', '--gx-p2'],
+  [{ x: 120, y: 260, s: 78, p: 0.7 }, { x: 300, y: 90, s: 64, p: 0.6 }]);
+
+const lejos = mosaico(LEJOS_T, 265, [0.62, 1.15],
   ['--gx-w3', '--gx-w3', '--gx-w3', '--gx-w2', '--gx-c2', '--gx-v2'],
   [{ x: 90, y: 140, s: 90, p: 1.1 }, { x: 380, y: 330, s: 70, p: 0.9 }, { x: 250, y: 470, s: 60, p: -0.25 }]);
 
-const medio = mosaico(MEDIO_T, 56, [0.95, 1.65],
+const medio = mosaico(MEDIO_T, 175, [0.9, 1.7],
   ['--gx-w2', '--gx-w2', '--gx-w1', '--gx-c2', '--gx-v2', '--gx-c1', '--gx-p2'],
   [{ x: 180, y: 620, s: 95, p: 1.6 }, { x: 640, y: 210, s: 120, p: 1.1 }, { x: 470, y: 470, s: 80, p: -0.3 }]);
 
@@ -95,14 +102,14 @@ function brillantes(T, n, gruposVacios) {
   const est = mosaico(T, n, [1.1, 1.9], ['--gx-w1', '--gx-w1', '--gx-c1', '--gx-v1'], gruposVacios, { vacios: true, sep: T / 5 });
   return est.map((e, i) => ({ ...e, halo: { r: Math.round(9 + rnd() * 11), c: pick(['--gx-h1', '--gx-h1', '--gx-h2', '--gx-h3']) } }));
 }
-const brilloA = brillantes(BRILLO_A_T, 9, [{ x: 300, y: 900, s: 220, p: 1.2 }, { x: 1100, y: 350, s: 260, p: 0.9 }]);
-const brilloB = brillantes(BRILLO_B_T, 8, [{ x: 800, y: 700, s: 300, p: 1.0 }, { x: 200, y: 200, s: 240, p: 0.8 }]);
+const brilloA = brillantes(BRILLO_A_T, 14, [{ x: 300, y: 900, s: 220, p: 1.2 }, { x: 1100, y: 350, s: 260, p: 0.9 }]);
+const brilloB = brillantes(BRILLO_B_T, 12, [{ x: 800, y: 700, s: 300, p: 1.0 }, { x: 200, y: 200, s: 240, p: 0.8 }]);
 
 /* La banda: diagonal que baja de derecha a izquierda, en % del viewport, así
    se adapta sola a cualquier pantalla. */
 const banda = [];
 const eje = (t) => ({ x: -6 + t * 112, y: 84 - t * 70 });   // de (-6,84) a (106,14)
-for (let i = 0; i < 104; i++) {
+for (let i = 0; i < 280; i++) {
   const t = rnd();
   const p = eje(t);
   // perpendicular a la banda (dirección (70,112) normalizada)
@@ -115,7 +122,7 @@ for (let i = 0; i < 104; i++) {
 // nudos: cúmulos pequeños y densos en tres puntos de la banda
 for (const t of [0.22, 0.57, 0.83]) {
   const p = eje(t);
-  for (let k = 0; k < 7; k++) {
+  for (let k = 0; k < 12; k++) {
     const x = p.x + gauss() * 1.1, y = p.y + gauss() * 1.4;
     banda.push({ x, y, r: 0.7 + rnd() * 0.7, c: pick(['--gx-w1', '--gx-w2', '--gx-c1']) });
   }
@@ -202,6 +209,7 @@ function mosaicoPNG(nombre, T, estrellas, alto = T, esc = 2) {
 /* La banda estaba en % del viewport: se pinta en un lienzo de 1600×1000 y se
    dibuja con cover (sin deformar). */
 const BANDA_W = 1600, BANDA_H = 1000;
+mosaicoPNG('polvo', POLVO_T, polvo);
 mosaicoPNG('lejos', LEJOS_T, lejos);
 mosaicoPNG('medio', MEDIO_T, medio);
 mosaicoPNG('brillo-a', BRILLO_A_T, brilloA, BRILLO_A_T, 1);
@@ -235,6 +243,9 @@ const css = `/* ================================================================
    lo ponen unas pocas estrellas pequeñas (.gx-t), casi gratis. */
 .gx-lejos, .gx-medio{ z-index:1; will-change:transform; backface-visibility:hidden; }
 
+/* Polvo fino: quieto, al fondo del todo */
+.gx-polvo{ inset:-30px; background-size:${POLVO_T}px ${POLVO_T}px; opacity:.9;
+${capa('polvo')} }
 /* El disco: estrellas a lo largo de la banda (la neblina va en .gx) */
 .gx-banda{ inset:0; background-repeat:no-repeat; background-size:cover; background-position:50% 50%;
 ${capa('banda')} }
@@ -258,6 +269,7 @@ ${capa('medio')}
 ${capa('brillo-a')} }
 .gx-brillo-b{ background-size:${BRILLO_B_T}px ${BRILLO_B_T}px; background-position:37% 61%;
 ${capa('brillo-b')} }
+${claro('.gx-polvo', 'polvo')}
 ${claro('.gx-banda', 'banda')}
 ${claro('.gx-lejos', 'lejos')}
 ${claro('.gx-medio', 'medio')}
@@ -266,11 +278,21 @@ ${claro('.gx-brillo-b', 'brillo-b')}
 @keyframes gx-deriva-1{ from{ translate:-14px 10px; } to{ translate:14px -10px; } }
 @keyframes gx-deriva-2{ from{ translate:22px -16px; } to{ translate:-22px 16px; } }
 /* Estrellas que titilan: pocas, diminutas, cada una en su capa mínima. */
-.gx-t{ position:absolute; z-index:2; width:3px; height:3px; margin:-1.5px 0 0 -1.5px; border-radius:50%;
+.gx-t{ position:absolute; z-index:2; width:var(--t, 3px); height:var(--t, 3px);
+  margin:calc(var(--t, 3px) / -2) 0 0 calc(var(--t, 3px) / -2); border-radius:50%;
   background:var(--gx-w1); box-shadow:0 0 6px 2px var(--gx-h1), 0 0 14px 4px var(--gx-h3);
   opacity:.25; animation:gx-titila var(--d, 5s) ease-in-out var(--dl, 0s) infinite alternate; will-change:opacity; }
 .gx-t.is-c{ background:var(--gx-c1); box-shadow:0 0 6px 2px var(--gx-h2), 0 0 14px 4px var(--gx-h2); }
-@keyframes gx-titila{ 0%, 35%{ opacity:.2; } 100%{ opacity:1; } }
+/* Unas pocas sacan rayos: son las que hacen que el cielo parezca vivo. */
+.gx-t.is-x::before, .gx-t.is-x::after{
+  content:''; position:absolute; left:50%; top:50%; border-radius:2px; background:var(--gx-w1);
+  opacity:.7;
+}
+.gx-t.is-x::before{ width:var(--r, 13px); height:1px; margin:-0.5px 0 0 calc(var(--r, 13px) / -2);
+  background:linear-gradient(90deg, transparent, var(--gx-w1) 45% 55%, transparent); }
+.gx-t.is-x::after{ height:var(--r, 13px); width:1px; margin:calc(var(--r, 13px) / -2) 0 0 -0.5px;
+  background:linear-gradient(180deg, transparent, var(--gx-w1) 45% 55%, transparent); }
+@keyframes gx-titila{ 0%, 30%{ opacity:.16; } 100%{ opacity:1; } }
 
 /* Móvil: menos capas y menos trabajo. El cielo sigue ahí; la segunda capa de
    brillo, no. */
@@ -280,6 +302,7 @@ ${claro('.gx-brillo-b', 'brillo-b')}
 }
 @media (max-width:420px){
   .gx-lejos{ opacity:.8; }
+  .gx-polvo{ opacity:.7; }
 }
 /* Movimiento reducido: el mismo cielo, quieto. */
 @media (prefers-reduced-motion: reduce){

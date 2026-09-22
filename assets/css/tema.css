@@ -13,7 +13,7 @@
 /* ================================================================ 1. CIELO */
 :root{
   color-scheme:dark;
-  --gx-base:#04060c;
+  --gx-base:#070b15;
   --gx-fondo-1:rgba(38,58,140,.30);
   --gx-fondo-2:rgba(84,42,150,.24);
   --gx-fondo-3:rgba(40,140,200,.08);
@@ -62,12 +62,12 @@ html[data-theme="light"]{
   --gx-fondo-1:rgba(150,178,255,.26);
   --gx-fondo-2:rgba(196,166,255,.22);
   --gx-fondo-3:rgba(110,214,255,.16);
-  --gx-w1:rgba(34,54,128,.52);
-  --gx-w2:rgba(48,70,146,.30);
-  --gx-w3:rgba(66,88,158,.18);
-  --gx-c1:rgba(0,132,184,.46);
+  --gx-w1:rgba(28,48,120,.66);
+  --gx-w2:rgba(44,66,142,.40);
+  --gx-w3:rgba(62,84,154,.26);
+  --gx-c1:rgba(0,126,178,.58);
   --gx-c2:rgba(0,146,196,.24);
-  --gx-v1:rgba(104,64,214,.46);
+  --gx-v1:rgba(100,60,210,.58);
   --gx-v2:rgba(104,64,214,.22);
   --gx-p2:rgba(206,58,128,.20);
   --gx-h1:rgba(91,140,255,.24);
@@ -144,6 +144,9 @@ html[data-theme="light"] .chat-input-row button{ color:#fff; }
 html.gx-ligero .gx > i{ animation:none !important; transform:none !important; will-change:auto; }
 html.gx-ligero .gx-brillo-b{ display:none; }
 html.gx-ligero .gx-t{ animation:none; opacity:.7; }
+/* En equipo justo, la mitad de las estrellas que titilan y sin rayos. */
+html.gx-ligero .gx-t:nth-of-type(2n){ display:none; }
+html.gx-ligero .gx-t::before, html.gx-ligero .gx-t::after{ display:none; }
 html.gx-ligero[data-theme="light"] body:has(> .gx) .field,
 html.gx-ligero[data-theme="light"] body:has(> .gx) .field--inst{ filter:invert(1) hue-rotate(180deg); }
 
