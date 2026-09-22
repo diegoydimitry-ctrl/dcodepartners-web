@@ -264,7 +264,7 @@ for (const f of ORIGENES) {
    ========================================================================= */
 const DESTINO_SUP = path.join(RAIZ, 'assets/css/superficies.css');
 const CAJAS = ['.rcard', '.arq-area', 'a.area', '.conexion', '.gal-tab', '.gal-historia > li', '.arq-mod', '.arq-btn', '.board',
-  'details.plan', '.window', '.chaos-order', '.vf-cadena', '.vf-col', '.vf-pie', '.vf-sello', '.conc-fig', '.mercado', '.cmp',
+  'details.plan', '.window', '.chaos-order', '.vf-cadena', '.vf-col', '.vf-sello', '.conc-fig', '.mercado', '.cmp',
   '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost', '.v7-fiscal-i', '.vf-track'];
 // Piezas que cuelgan de una caja pero se pintan fuera de ella, sobre el fondo
 const FUERA = /\.arq-area-p\b/;
@@ -344,14 +344,15 @@ let sup = `/* ==================================================================
    Oscuro: fondo oscuro + cajas claras. Claro: fondo claro + cajas oscuras.
    ========================================================================= */
 /* Las cajas de la web */
-html[data-theme="dark"] ${IS}{ ${decl(claroVars)}; color:#0d1324; background-color:#f4f6fb !important; background-image:none !important; }
-html[data-theme="light"] ${IS}{ ${decl(oscuroVars)}; color:#edf1f8; background-color:#0c1120 !important; background-image:none !important; }
+html[data-theme="dark"] ${IS}{ ${decl(claroVars)}; color:#0d1324; background-color:#eef2fb !important; background-image:linear-gradient(180deg, #fafbff 0%, #eef2fb 55%, #e6ecf9 100%) !important; border-color:rgba(160,184,255,.55); box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(120,150,255,.18), 0 18px 44px -26px rgba(91,140,255,.55), 0 2px 10px -4px rgba(0,0,0,.45); }
+html[data-theme="light"] ${IS}{ ${decl(oscuroVars)}; color:#edf1f8; background-color:#0e1428 !important; background-image:linear-gradient(180deg, #18213f 0%, #0f1630 50%, #0a0f22 100%) !important; border-color:rgba(110,140,240,.32); box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(20,34,110,.12), 0 20px 44px -26px rgba(20,34,110,.6), 0 2px 8px -4px rgba(20,30,64,.3); }
 `;
 for (const a of APPS) {
   const css = fs.readFileSync(path.join(RAIZ, 'assets/css', a.hoja), 'utf8');
   const dia = opacos(vars(css, a.dia), a.sup), noche = opacos(vars(css, a.noche), a.sup), is = `:is(${a.cajas.join(', ')})`;
   sup += `/* ${a.hoja}: la demo entera con la paleta del otro tema */\n`;
   sup += `html[data-theme="dark"] body ${is}{ ${decl(dia)}; color:${a.color}; color-scheme:light; }\n`;
+  sup += `html[data-theme="dark"] body ${a.cajas[0]}{ box-shadow:0 0 0 1px rgba(120,150,255,.22), 0 30px 70px -34px rgba(91,140,255,.55); }\nhtml[data-theme="light"] body ${a.cajas[0]}{ box-shadow:0 0 0 1px rgba(20,34,110,.14), 0 30px 70px -34px rgba(20,34,110,.6); }\n`;
   sup += `html[data-theme="light"] body ${is}{ ${decl(noche)}; color:${a.color}; color-scheme:dark; }\n`;
 }
 sup += '\n/* Lo que la web escribe con colores fijos, dentro de las cajas (CSS anidado) */\n';
