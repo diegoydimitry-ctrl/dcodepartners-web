@@ -20,7 +20,7 @@ const paginas = execSync('git ls-files "*.html"', { cwd: RAIZ }).toString().spli
   .filter((f) => fs.readFileSync(path.join(RAIZ, f), 'utf8').includes('id="site-header"'));
 
 export const HEAD = `<script>(function(){var t;try{t=localStorage.getItem('dcp-tema')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')})();</script>`;
-export const CSS = '<link rel="stylesheet" href="/assets/css/galaxia.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema-claro.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema.css?v=0">';
+export const CSS = '<link rel="stylesheet" href="/assets/css/galaxia.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema-claro.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema.css?v=0">\n<link rel="stylesheet" href="/assets/css/superficies.css?v=0">';
 export const CIELO = '<div class="gx" aria-hidden="true"><i class="gx-banda"></i><i class="gx-lejos"></i><i class="gx-medio"></i><i class="gx-brillo gx-brillo-a"></i><i class="gx-brillo gx-brillo-b"></i></div>';
 const LUNA = '<svg class="t-luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.4 14.6A8.6 8.6 0 0 1 9.4 3.6a.5.5 0 0 0-.66-.6A9.4 9.4 0 1 0 21 15.26a.5.5 0 0 0-.6-.66Z" fill="currentColor"/><circle cx="17.2" cy="5.6" r="1.1" fill="currentColor" opacity=".7"/><circle cx="20.2" cy="9.4" r=".7" fill="currentColor" opacity=".55"/></svg>';
 const SOL = '<svg class="t-sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.6v2.3M12 19.1v2.3M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M2.6 12h2.3M19.1 12h2.3M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" fill="none"/></svg>';

@@ -37,7 +37,7 @@ for (const f of paginas) {
   const [a, b] = en ? ['Light mode', 'Dark mode'] : ['Modo claro', 'Modo oscuro'];
   if (!h.includes(`<span class="t-a-claro">${a}</span>`) || !h.includes(`<span class="t-a-oscuro">${b}</span>`)) errores.push(`${f}: etiquetas del botón que no son de su idioma`);
   const hojas = [...h.slice(0, h.indexOf('</head>')).matchAll(/<link rel="stylesheet" href="([^"?]+)/g)].map((m) => m[1]);
-  if (hojas[hojas.length - 1] !== '/assets/css/tema.css') errores.push(`${f}: tema.css no es la última hoja`);
+  if (hojas[hojas.length - 1] !== '/assets/css/superficies.css' || hojas[hojas.length - 2] !== '/assets/css/tema.css') errores.push(`${f}: tema.css y superficies.css tienen que ser las dos últimas hojas`);
   for (const c of ['/assets/css/galaxia.css', '/assets/css/tema-claro.css']) if (!hojas.includes(c)) errores.push(`${f}: falta ${c}`);
   if (!h.includes('/assets/js/tema.js?v=')) errores.push(`${f}: falta tema.js`);
 }

@@ -84,6 +84,7 @@ const FINANCE_ASSETS = [
   'assets/css/galaxia.css',
   'assets/css/tema-claro.css',
   'assets/css/tema.css',
+  'assets/css/superficies.css',
   'assets/js/tema.js',
   'assets/css/dcode-os.css',
   'assets/js/dcode-os.js',

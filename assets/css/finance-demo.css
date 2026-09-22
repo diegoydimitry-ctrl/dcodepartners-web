@@ -1134,17 +1134,11 @@ html:not([data-theme="dark"]) .fdemo-app.is-embedded{
 }
 /* El tinte de esquina de los KPI baja del 15 % al 6 %: en una tabla
    financiera el color solo debe aparecer cuando hay un ESTADO. */
-html:not([data-theme="dark"]) .fdemo-kpi.accent-blue{ --kpi-accent:rgba(47,95,224,.06); }
-html:not([data-theme="dark"]) .fdemo-kpi.accent-cyan{ --kpi-accent:rgba(10,110,122,.06); }
-html:not([data-theme="dark"]) .fdemo-kpi.accent-violet{ --kpi-accent:rgba(99,55,201,.06); }
-html:not([data-theme="dark"]) .fdemo-kpi.accent-warning{ --kpi-accent:rgba(154,91,0,.07); }
-html:not([data-theme="dark"]) .fdemo-kpi.accent-danger{ --kpi-accent:rgba(192,57,47,.06); }
 
 /* ENLACES Y BOTONES. El enlace del producto es el azul de acción, no el
    cian de datos; y el botón principal lleva un degradado de UNA familia
    (azul → su propio hover), no un arcoíris. */
 .fdemo-link{ color:var(--dc-accent); }
-html:not([data-theme="dark"]) .fdemo-btn.variant-primary{ background:var(--dc-brand-grad); color:#fff; }
 .fdemo-btn.variant-primary:hover{ filter:brightness(.96); }
 .fdemo-btn.variant-secondary{ background:var(--dc-surface); }
 .fdemo-btn.variant-secondary:hover{ border-color:var(--dc-accent); color:var(--dc-accent); }
@@ -1160,7 +1154,6 @@ html:not([data-theme="dark"]) .fdemo-btn.variant-primary{ background:var(--dc-br
 
 /* LA CONVERSACIÓN. La burbuja de quien pregunta va en el azul de marca
    plano; la referencia, en el tinte del azul de información. */
-html:not([data-theme="dark"]) .fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#fff; }
 .fdemo-ia-msg.from-ia .fdemo-ia-bubble{ background:var(--dc-surface); }
 /* El texto va en el azul de información (--dc-info), no en el de acción:
    sobre el tinte de la referencia encima de la tarjeta de respuesta
@@ -2217,10 +2210,32 @@ html[data-theme="dark"] .fdemo-scope{
   color-scheme:dark;
 }
 html[data-theme="dark"] .fdemo-app.is-embedded{ box-shadow:0 30px 80px -34px rgba(0,0,0,.8), 0 0 0 1px rgba(150,174,245,.16); }
-html[data-theme="dark"] .fdemo-btn.variant-primary,
-html[data-theme="dark"] .fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#0a0f1e; }
-html[data-theme="dark"] .fdemo-toast{ background:#edf1f8; color:#0a0f1e; }
-html[data-theme="dark"] .fdemo-dias.d-2{ background:rgba(243,160,90,.15); color:#f7b77c; }
-html[data-theme="dark"] .fdemo-canal.c-foto{ color:#c7b3ff; }
-html[data-theme="dark"] .fdemo-canal.c-remesa{ color:#f7a66b; }
-html[data-theme="dark"] .fdemo-hoja-marco{ background:repeating-linear-gradient(135deg, #131a2e 0 10px, #111728 10px 20px); }
+/* Lo que cambia entre paletas, en variables: una tarjeta puede llevar la
+   paleta contraria a la de su fondo (superficies.css). */
+.fdemo-scope{
+  --dc-tint-blue:rgba(47,95,224,.06); --dc-tint-cyan:rgba(10,110,122,.06); --dc-tint-violet:rgba(99,55,201,.06);
+  --dc-tint-warning:rgba(154,91,0,.07); --dc-tint-danger:rgba(192,57,47,.06);
+  --dc-btn-bg:var(--dc-brand-grad); --dc-on-acc:#fff; --dc-bur-bg:var(--dc-accent);
+  --dc-toast-bg:#15161a; --dc-toast-fg:#fff; --dc-dias-bg:rgba(180,82,13,.12); --dc-dias-fg:#9a4309;
+  --dc-canal-foto:#6337c9; --dc-canal-remesa:#b4520d; --dc-hoja-a:#e9e9e4; --dc-hoja-b:#e5e5df;
+}
+html[data-theme="dark"] .fdemo-scope{
+  --dc-tint-blue:rgba(91,140,255,.15); --dc-tint-cyan:rgba(34,211,238,.15); --dc-tint-violet:rgba(155,107,255,.15);
+  --dc-tint-warning:rgba(245,165,36,.15); --dc-tint-danger:rgba(239,68,68,.15);
+  --dc-btn-bg:var(--dc-accent); --dc-on-acc:#0a0f1e; --dc-bur-bg:var(--dc-accent);
+  --dc-toast-bg:#edf1f8; --dc-toast-fg:#0a0f1e; --dc-dias-bg:rgba(243,160,90,.15); --dc-dias-fg:#f7b77c;
+  --dc-canal-foto:#c7b3ff; --dc-canal-remesa:#f7a66b; --dc-hoja-a:#131a2e; --dc-hoja-b:#111728;
+}
+.fdemo-scope .fdemo-kpi.accent-blue{ --kpi-accent:var(--dc-tint-blue); }
+.fdemo-scope .fdemo-kpi.accent-cyan{ --kpi-accent:var(--dc-tint-cyan); }
+.fdemo-scope .fdemo-kpi.accent-violet{ --kpi-accent:var(--dc-tint-violet); }
+.fdemo-scope .fdemo-kpi.accent-warning{ --kpi-accent:var(--dc-tint-warning); }
+.fdemo-scope .fdemo-kpi.accent-danger{ --kpi-accent:var(--dc-tint-danger); }
+.fdemo-scope .fdemo-btn.variant-primary{ background:var(--dc-btn-bg); color:var(--dc-on-acc); }
+.fdemo-scope .fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-bur-bg); color:var(--dc-on-acc); }
+.fdemo-scope .fdemo-toast{ background:var(--dc-toast-bg); color:var(--dc-toast-fg); }
+.fdemo-scope .fdemo-dias.d-2{ background:var(--dc-dias-bg); color:var(--dc-dias-fg); }
+.fdemo-scope .fdemo-canal.c-foto{ color:var(--dc-canal-foto); }
+.fdemo-scope .fdemo-canal.c-remesa{ color:var(--dc-canal-remesa); }
+.fdemo-scope .fdemo-hoja-marco{ background:repeating-linear-gradient(135deg, var(--dc-hoja-a) 0 10px, var(--dc-hoja-b) 10px 20px); }
+.fdemo-scope .fdemo-topbar, .fdemo-scope .fdemo-sidebar{ background:var(--dc-surface); -webkit-backdrop-filter:none; backdrop-filter:none; }

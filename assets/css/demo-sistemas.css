@@ -504,24 +504,44 @@ html[data-theme="dark"] .sd{
   --sd-auto:#5fdcec; --sd-autobg:rgba(67,216,234,.13);
   color-scheme:dark;
 }
-html[data-theme="dark"] .sd-logo{ background:#edf1f8; }
-html[data-theme="dark"] .sd-logo svg{ color:#0a0e19; }
-html[data-theme="dark"] .sd-busca kbd{ background:var(--sd-s2); }
-html[data-theme="dark"] .sd-btn--pri, html[data-theme="dark"] .sd-btn--ok,
-html[data-theme="dark"] .sd-bur--yo{ color:#0a0f1e; }
-html[data-theme="dark"] .sd-btn--pri:hover{ background:#9ab8ff; }
-html[data-theme="dark"] .sd-btn--ia{ border-color:rgba(185,160,255,.35); }
-html[data-theme="dark"] .sd-campo:not(.is-lleno) .sd-campo-v{ background:linear-gradient(90deg, var(--sd-s2), #202a46, var(--sd-s2)); }
-html[data-theme="dark"] .sd-regla b{ color:#6fe3ee; }
-html[data-theme="dark"] .sd-ia{ border-color:rgba(185,160,255,.28); background:linear-gradient(180deg, rgba(155,107,255,.10), rgba(155,107,255,.04)); }
-html[data-theme="dark"] .sd-ia-h{ border-bottom-color:rgba(185,160,255,.2); }
-html[data-theme="dark"] .sd-mark.is-on{ background:rgba(155,107,255,.2); box-shadow:inset 0 -2px 0 rgba(185,160,255,.7); }
-html[data-theme="dark"] .sd-bur--ia{ background:rgba(155,107,255,.2); color:#ece5ff; }
-html[data-theme="dark"] .sd-bur-k{ color:#cdbcff; }
-html[data-theme="dark"] .sd-bloque{ color:#c9d8ff; }
-html[data-theme="dark"] .sd-bloque--mant{ color:#a6f0d0; }
-html[data-theme="dark"] .sd-bloque--aviso{ color:#ffd9a3; }
-html[data-theme="dark"] .sd-tar{ box-shadow:0 1px 2px rgba(0,0,0,.35); }
-html[data-theme="dark"] .sd-barras i{ background:rgba(122,162,255,.35); }
-html[data-theme="dark"] .sd-barras i.is-a{ background:rgba(255,143,134,.45); }
+/* Lo que cambia de un tema a otro, en variables: así una tarjeta puede
+   llevar la paleta contraria a la de su fondo (superficies.css). */
+.sd{
+  --sd-logo-bg:#15161a; --sd-logo-fg:#fff; --sd-kbd:#fff; --sd-on-acc:#fff; --sd-acc-h:#244fc4;
+  --sd-ia-b:rgba(99,55,201,.3); --sd-shim:#e9e9e4; --sd-regla:#0b5963;
+  --sd-ia-caja-b:rgba(99,55,201,.22); --sd-ia-g1:rgba(99,55,201,.05); --sd-ia-g2:rgba(99,55,201,.02); --sd-ia-hb:rgba(99,55,201,.14);
+  --sd-mark:rgba(99,55,201,.12); --sd-mark-l:rgba(99,55,201,.55);
+  --sd-bur-ia:#ede7fb; --sd-bur-ia-t:#2d1a66; --sd-bur-k:#5a4a88;
+  --sd-bl:#1f3f99; --sd-bl-mant:#0a4f34; --sd-bl-aviso:#6b3f00;
+  --sd-tar-sombra:0 1px 2px rgba(16,24,40,.05); --sd-barra:rgba(47,95,224,.22); --sd-barra-a:rgba(192,57,47,.35);
+}
+html[data-theme="dark"] .sd{
+  --sd-logo-bg:#edf1f8; --sd-logo-fg:#0a0e19; --sd-kbd:var(--sd-s2); --sd-on-acc:#0a0f1e; --sd-acc-h:#9ab8ff;
+  --sd-ia-b:rgba(185,160,255,.35); --sd-shim:#202a46; --sd-regla:#6fe3ee;
+  --sd-ia-caja-b:rgba(185,160,255,.28); --sd-ia-g1:rgba(155,107,255,.10); --sd-ia-g2:rgba(155,107,255,.04); --sd-ia-hb:rgba(185,160,255,.2);
+  --sd-mark:rgba(155,107,255,.2); --sd-mark-l:rgba(185,160,255,.7);
+  --sd-bur-ia:rgba(155,107,255,.2); --sd-bur-ia-t:#ece5ff; --sd-bur-k:#cdbcff;
+  --sd-bl:#c9d8ff; --sd-bl-mant:#a6f0d0; --sd-bl-aviso:#ffd9a3;
+  --sd-tar-sombra:0 1px 2px rgba(0,0,0,.35); --sd-barra:rgba(122,162,255,.35); --sd-barra-a:rgba(255,143,134,.45);
+}
+.sd .sd-logo{ background:var(--sd-logo-bg); }
+.sd .sd-logo svg{ color:var(--sd-logo-fg); }
+.sd .sd-busca kbd{ background:var(--sd-kbd); }
+.sd .sd-btn--pri, .sd .sd-btn--ok, .sd .sd-bur--yo{ color:var(--sd-on-acc); }
+.sd .sd-btn--pri:hover{ background:var(--sd-acc-h); }
+.sd .sd-btn--ia{ border-color:var(--sd-ia-b); }
+.sd .sd-campo:not(.is-lleno) .sd-campo-v{ background:linear-gradient(90deg, var(--sd-s2), var(--sd-shim), var(--sd-s2)); }
+.sd .sd-regla b{ color:var(--sd-regla); }
+.sd .sd-ia{ border-color:var(--sd-ia-caja-b); background:linear-gradient(180deg, var(--sd-ia-g1), var(--sd-ia-g2)); }
+.sd .sd-ia-h{ border-bottom-color:var(--sd-ia-hb); }
+.sd .sd-mark.is-on{ background:var(--sd-mark); box-shadow:inset 0 -2px 0 var(--sd-mark-l); }
+.sd .sd-bur--ia{ background:var(--sd-bur-ia); color:var(--sd-bur-ia-t); }
+.sd .sd-bur-k{ color:var(--sd-bur-k); }
+.sd .sd-bloque{ color:var(--sd-bl); }
+.sd .sd-bloque--mant{ color:var(--sd-bl-mant); }
+.sd .sd-bloque--aviso{ color:var(--sd-bl-aviso); }
+.sd .sd-tar{ box-shadow:var(--sd-tar-sombra); }
+.sd .sd-barras i{ background:var(--sd-barra); }
+.sd .sd-barras i.is-a{ background:var(--sd-barra-a); }
 html[data-theme="dark"] .sd-tel, html[data-theme="dark"] .sd-movil{ box-shadow:0 20px 50px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(150,174,245,.2); }
+.sd .sd-bloque--prop{ color:var(--sd-ia); }

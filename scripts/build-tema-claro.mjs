@@ -250,10 +250,120 @@ for (const f of ORIGENES) {
   const css = sinComentarios(fs.readFileSync(path.join(RAIZ, 'assets/css', f), 'utf8'));
   salida += `\n/* ---- ${f} ---- */\n` + procesar(css);
 }
+
+/* ============================================================================
+   SUPERFICIES — el fondo y las cajas llevan paletas CONTRARIAS.
+   Oscuro: espacio oscuro + módulos claros. Claro: espacio claro + módulos
+   oscuros. Se genera aquí porque reutiliza el mismo mapeo de colores:
+   · en oscuro, dentro de una caja, las reglas de la web se traducen como en
+     el modo claro (texto oscuro sobre blanco roto);
+   · en claro, dentro de una caja, se restauran los valores originales (los
+     del diseño oscuro).
+   Las demos (.sd, D-Code Finance) y D-Code OS ya funcionan con variables: a
+   sus cajas se les da la paleta del otro tema.
+   ========================================================================= */
+const DESTINO_SUP = path.join(RAIZ, 'assets/css/superficies.css');
+const CAJAS = ['.rcard', '.arq-area', 'a.area', '.conexion', '.gal-tab', '.gal-historia > li', '.arq-mod', '.arq-btn', '.board',
+  'details.plan', '.window', '.chaos-order', '.vf-cadena', '.vf-col', '.vf-pie', '.vf-sello', '.conc-fig', '.mercado', '.cmp',
+  '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost'];
+const APPS = [
+  // la demo ENTERA lleva la paleta contraria al fondo de la página
+  { sup: '--sd-s', cajas: ['.sd'], hoja: 'demo-sistemas.css', dia: '.sd', noche: 'html[data-theme="dark"] .sd', color: 'var(--sd-t)' },
+  { sup: '--dc-surface', cajas: ['.fdemo-scope'], hoja: 'finance-demo.css', dia: '.fdemo-scope', noche: 'html[data-theme="dark"] .fdemo-scope', color: 'var(--dc-text)' },
+  { sup: '--os-s', cajas: ['.os-app', '.oss', '.os-capa'], hoja: 'dcode-os.css', dia: 'html[data-theme="light"] .os', noche: '.os', color: 'var(--os-t1)' },
+];
+function vars(css, selector) {
+  const out = new Map();
+  for (const b of bloques(sinComentarios(css))) if (b.sel.split(',').map((x) => x.trim()).includes(selector))
+    for (const d of declaraciones(b.cuerpo)) if (d.prop.startsWith('--')) out.set(d.prop, d.valor);
+  return out;
+}
+const decl = (m) => [...m].map(([k, v]) => `${k}:${v}`).join('; ');
+// En una caja que lleva la paleta contraria, los tintes translúcidos (…-bg)
+// no pueden transparentar el fondo del otro tema: se vuelven opacos,
+// mezclados sobre la superficie de su propia paleta.
+function opacos(m, superficie) {
+  const base = m.get(superficie); if (!base) return m;
+  return new Map([...m].map(([k, v]) => {
+    const r = /bg$/.test(k) && v.match(/^rgba\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/);
+    return [k, r ? `color-mix(in srgb, rgb(${r[1]},${r[2]},${r[3]}) ${Math.round(+r[4] * 100)}%, ${base})` : v];
+  }));
+}
+const IS = `:is(${CAJAS.join(', ')})`;
+function sinRaiz(s) { return s.replace(/^((html|body)(\.[\w-]+|\[[^\]]+\])*|\.v[0-9]+)\s+/, ''); }
+function escopar(sel) {
+  // relativo a la caja (CSS anidado): «& s» = dentro de la caja; «&:is(s)» = la propia caja
+  return sel.split(/,(?![^(]*\))/).map((s) => {
+    s = s.trim();
+    if (!s || /view-transition/.test(s) || s.includes('*/') || /[—]/.test(s) || /^:root\b/.test(s) || /^html$/.test(s) || /^body$/.test(s)) return null;
+    if (/^(html|body)\b/.test(s) && !/\s/.test(s)) return null;
+    // «& :is(s)»: un descendiente de la caja que cumple s en la página entera
+    // (sus antepasados pueden estar fuera de la caja); «&:is(s)»: la propia caja
+    const m = s.match(/(::?(before|after|placeholder|marker|selection|first-line|first-letter|-webkit-[\w-]+))+$/);
+    const base = m ? s.slice(0, m.index) : s, pseudo = m ? m[0] : '';
+    if (!base) return `& ${pseudo}`;
+    return `& :is(${base})${pseudo}, &:is(${base})${pseudo}`;
+  }).filter(Boolean).join(', ');
+}
+const statsS = { reglas: 0 };
+function procesarSup(css, cual, sangria = '  ') {
+  let out = '';
+  for (const b of bloques(css)) {
+    if (/^@(media|supports|container|layer)/.test(b.sel)) {
+      const dentro = procesarSup(b.cuerpo, cual, sangria + '  ');
+      if (dentro.trim()) out += `${sangria}${b.sel}{\n${dentro}${sangria}}\n`;
+      continue;
+    }
+    if (b.sel.startsWith('@')) continue;
+    const decl = [];
+    for (const d of declaraciones(b.cuerpo)) {
+      if (d.prop.startsWith('--')) continue;
+      const imp = /!important\s*$/.test(d.valor);
+      const v = d.valor.replace(/\s*!important\s*$/, '');
+      const m = mapear(d.prop, v);
+      if (m) decl.push(`${d.prop}:${cual === 'dark' ? m : v}${imp ? ' !important' : ''}`);
+    }
+    if (!decl.length) continue;
+    const sel = escopar(b.sel); if (!sel) continue;
+    if (cual === 'dark') statsS.reglas++;
+    out += `${sangria}${sel}{ ${decl.join('; ')}; }\n`;
+  }
+  return out;
+}
+// variables de la web: las del claro (tema.css) y sus valores originales
+const temaCss = fs.readFileSync(path.join(RAIZ, 'assets/css/tema.css'), 'utf8');
+const claroVars = new Map([...vars(temaCss, 'html[data-theme="light"]')].filter(([k]) => !k.startsWith('--gx-')));
+const oscuroVars = new Map();
+for (const f of ORIGENES) { const m = vars(fs.readFileSync(path.join(RAIZ, 'assets/css', f), 'utf8'), ':root'); for (const [k, v] of m) if (claroVars.has(k)) oscuroVars.set(k, v); }
+let sup = `/* ============================================================================
+   SUPERFICIES — GENERADO por scripts/build-tema-claro.mjs. No editar a mano.
+   Oscuro: fondo oscuro + cajas claras. Claro: fondo claro + cajas oscuras.
+   ========================================================================= */
+/* Las cajas de la web */
+html[data-theme="dark"] ${IS}{ ${decl(claroVars)}; color:#0d1324; background-color:#f4f6fb !important; background-image:none !important; }
+html[data-theme="light"] ${IS}{ ${decl(oscuroVars)}; color:#edf1f8; background-color:#0c1120 !important; background-image:none !important; }
+`;
+for (const a of APPS) {
+  const css = fs.readFileSync(path.join(RAIZ, 'assets/css', a.hoja), 'utf8');
+  const dia = opacos(vars(css, a.dia), a.sup), noche = opacos(vars(css, a.noche), a.sup), is = `:is(${a.cajas.join(', ')})`;
+  sup += `/* ${a.hoja}: la demo entera con la paleta del otro tema */\n`;
+  sup += `html[data-theme="dark"] body ${is}{ ${decl(dia)}; color:${a.color}; color-scheme:light; }\n`;
+  sup += `html[data-theme="light"] body ${is}{ ${decl(noche)}; color:${a.color}; color-scheme:dark; }\n`;
+}
+sup += '\n/* Lo que la web escribe con colores fijos, dentro de las cajas (CSS anidado) */\n';
+for (const cual of ['dark', 'light']) {
+  sup += `html[data-theme="${cual}"] ${IS}{\n`;
+  for (const f of ORIGENES) sup += `  /* ${f} */\n` + procesarSup(sinComentarios(fs.readFileSync(path.join(RAIZ, 'assets/css', f), 'utf8')), cual);
+  sup += '}\n';
+}
+
 if (process.argv.includes('--check')) {
   const actual = fs.existsSync(DESTINO) ? fs.readFileSync(DESTINO, 'utf8') : '';
   if (actual !== salida) { console.error('✗ tema-claro.css no está al día: ejecuta node scripts/build-tema-claro.mjs'); process.exit(1); }
+  if ((fs.existsSync(DESTINO_SUP) ? fs.readFileSync(DESTINO_SUP, 'utf8') : '') !== sup) { console.error('✗ superficies.css no está al día: ejecuta node scripts/build-tema-claro.mjs'); process.exit(1); }
   console.log('✓ tema-claro.css al día con ' + ORIGENES.length + ' hojas'); process.exit(0);
 }
 fs.writeFileSync(DESTINO, salida);
+fs.writeFileSync(DESTINO_SUP, sup);
+console.log(`superficies.css: ${statsS.reglas} reglas · ${(sup.length / 1024).toFixed(1)} KB`);
 console.log(`tema-claro.css: ${stats.reglas} reglas · ${stats.decl} declaraciones · ${(salida.length / 1024).toFixed(1)} KB`);
