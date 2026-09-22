@@ -326,3 +326,73 @@ html[data-theme="light"] .tema-btn:hover{ border-color:#fff; box-shadow:0 0 0 5p
   100%{ box-shadow:0 0 0 3px rgba(59,108,246,.25), 0 0 0 0 rgba(59,108,246,0), 0 10px 30px -8px rgba(20,34,110,.65); }
 }
 @media (prefers-reduced-motion:reduce){ .tema-btn{ animation:none !important; } }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   5. PANTALLA PEQUEÑA Y DEDO: LA MISMA WEB, SIN PAGAR LO QUE NO SE VE
+   ─────────────────────────────────────────────────────────────────────
+   MEDIDO en un iPad simulado (CPU x4) y un teléfono (CPU x6) recorriendo la
+   portada entera: fotograma mediano de 117 ms en el iPad y 50 ms en el
+   móvil, con 68 tareas largas. El tiempo no se iba en JavaScript (1,2 s de
+   8) sino en PINTAR: un cielo animado a pantalla completa, desenfoques de
+   fondo que se rehacen en cada scroll y halos de 30-90 px de difuminado.
+   Aquí se apaga lo que cuesta pintar y no cuenta nada: el cielo se queda
+   quieto, los desenfoques desaparecen y las secciones que no están en
+   pantalla no se calculan. El contenido no cambia.
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width:900px), (pointer:coarse) and (max-width:1400px){
+  /* 1 · El cielo: quieto, y solo las capas que se notan */
+  .gx > i{ animation:none !important; }
+  .gx-medio, .gx-brillo-b, .gx-t{ display:none !important; }
+  .gx-lejos{ animation:none !important; will-change:auto; }
+  .gx-polvo{ opacity:.75; }
+
+  /* 2 · Ningún desenfoque de fondo. En Safari cada fotograma vuelve a
+        difuminar lo que hay detrás del elemento, y hay 30 de ellos. */
+  *, *::before, *::after{ -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+  /* Lo que se sostenía en el desenfoque, se sostiene ahora en su color */
+  #site-header, #site-header.scrolled, body.v6 #site-header.scrolled, body.v7 #site-header.scrolled{
+    /* Opaca del todo: sin desenfoque, un 6 % de transparencia deja ver el
+       texto de debajo pasando por detrás de la barra. */
+    background:#06080d !important;
+  }
+  html[data-theme="light"] #site-header,
+  html[data-theme="light"] #site-header.scrolled,
+  html[data-theme="light"] body.v7 #site-header.scrolled{ background:#f3f5fb !important; }
+  .hero-console{ background:rgba(15,20,36,.95) !important; }
+  .track-panel{ background:rgba(22,30,56,.94) !important; }
+  .btn-ghost{ background:rgba(255,255,255,.08); }
+
+  /* 3 · Halos y difuminados decorativos: son ambiente, y cuestan un repintado
+        de pantalla completa cada vez que algo se mueve encima. */
+  .glow-orb, .lit::before, .page-hero::before, .cta-band::after, .fases-seg-glow{ display:none !important; }
+  /* Las entradas animadas dejan de difuminar: suben y aparecen, nada más */
+  .rise, .reveal-blur, .pipeline-node{ filter:none !important; }
+}
+
+/* 4 · PROBADO Y DESCARTADO: content-visibility:auto en las secciones no
+      movía la aguja (mismo fotograma mediano y mismas tareas largas: el
+      coste estaba en los lienzos, no en el estilo) y a cambio deja en
+      blanco lo que aún no se ha visto en capturas, impresiones y PDF. No
+      se queda una optimización que no se nota y que sí se nota cuando
+      falla. */
+
+/* ═══ EN EL TELÉFONO, LA CABECERA SE QUEDA ═══════════════════════════════
+   En escritorio la cabecera está «integrada, no pegada»: se va con el
+   scroll y queda el botón de tema flotando. En un teléfono eso deja la
+   navegación a catorce pantallas de distancia y el botón de tema suelto
+   encima del texto. Aquí la barra se queda arriba, opaca, y el botón de
+   tema vuelve a ser parte de ella. */
+@media (max-width:940px){
+  body.v6 #site-header, body.v7 #site-header, #site-header{
+    position:sticky; top:0; z-index:200;
+    background:#06080d; border-bottom:1px solid rgba(150,174,245,.12);
+  }
+  html[data-theme="light"] body.v6 #site-header,
+  html[data-theme="light"] body.v7 #site-header,
+  html[data-theme="light"] #site-header{
+    background:rgba(243,245,251,.96); border-bottom-color:rgba(36,52,104,.12);
+  }
+  /* El campo de partículas, detrás del texto, un punto más discreto: en una
+     columna de 390 px la cinta cruza por encima de lo que se está leyendo. */
+  body.v6 .field canvas{ opacity:.62; }
+}

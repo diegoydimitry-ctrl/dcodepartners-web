@@ -24,6 +24,8 @@
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  var GRUESO = window.matchMedia('(pointer: coarse)').matches;
+
   /* La misma paleta y los mismos significados que la portada y que dcp8. */
   var C = {
     cian:   [ 46, 216, 240],
@@ -515,7 +517,7 @@
       var r = host.getBoundingClientRect();
       if (!r.width || !r.height) return false;
       W = r.width; H = r.height;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, GRUESO ? 1 : 2);
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -528,9 +530,12 @@
       comp.dibujar(ctx, W, H, tm, host, est);
     }
 
+    var ultimoF = 0;
     function bucle(tm) {
       if (!vivo) return;
-      pintar(tm);
+      /* En táctil, 30 fotogramas: lo que se gana en fluidez de scroll no se
+         pierde en el dibujo, que es lento por naturaleza. */
+      if (!GRUESO || tm - ultimoF >= 33) { ultimoF = tm; pintar(tm); }
       rafId = requestAnimationFrame(bucle);
     }
 

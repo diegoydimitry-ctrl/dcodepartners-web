@@ -837,3 +837,33 @@
    la galería por debajo de la cabecera fija. */
 .gal-anclas{ display:block; height:0; overflow:hidden; }
 .gal-anclas span{ display:block; height:0; scroll-margin-top:96px; }
+
+/* ───────────────────────────────────────────────────────────────────────
+   LA FICHA QUE SUSTITUYE A LA APLICACIÓN EN PANTALLA PEQUEÑA O TÁCTIL
+   No es un cartel de «no disponible»: es el mismo contenido contado como
+   se lee con el pulgar, y un botón para abrir la aplicación igualmente.
+   ─────────────────────────────────────────────────────────────────────── */
+.gal-panel.es-sin-app .gal-app{ display:none; }
+.gal-movil{
+  margin-top:clamp(16px,3vw,22px);
+  padding:clamp(18px,4.6vw,26px);
+  border:1px solid rgba(150,174,245,.16); border-radius:16px;
+  background:rgba(13,17,34,.94);
+  position:relative; z-index:2;
+}
+.gal-movil-k{
+  margin:0; font-family:var(--mono); font-size:.6875rem; letter-spacing:.14em;
+  text-transform:uppercase; color:#8c95aa;
+}
+.gal-movil-t{ margin:8px 0 0; font-size:1.125rem; line-height:1.25; color:#f1f4fb; font-weight:600; }
+.gal-movil-p{ margin:10px 0 0; font-size:.9375rem; line-height:1.6; color:#a7b0c4; max-width:62ch; }
+.gal-movil-b{
+  margin-top:18px; min-height:46px; width:100%;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:0 18px; border-radius:999px; border:1px solid rgba(150,174,245,.28);
+  background:rgba(150,174,245,.08); color:#e6ebf6;
+  font:600 .9375rem/1 var(--sans, "Inter", sans-serif); cursor:pointer;
+  transition:background .2s var(--ease), border-color .2s var(--ease);
+}
+.gal-movil-b:hover{ background:rgba(150,174,245,.14); border-color:rgba(150,174,245,.45); }
+.gal-movil-b:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }

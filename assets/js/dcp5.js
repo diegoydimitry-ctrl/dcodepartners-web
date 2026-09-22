@@ -471,8 +471,29 @@
        financiero apretado en 390 px enseña algo peor que no enseñar nada, y
        además cuesta 228 KB de JavaScript en la peor conexión. El bloque de
        sustitución ya está en el HTML; aquí solo se marca el anfitrión. */
-    if (window.matchMedia('(max-width: 900px)').matches) {
-      hosts.forEach(function (h) { h.setAttribute('data-fdemo-movil', '1'); });
+    /* MEDIDO (iPad simulado, CPU x4): con la aplicación montada, el
+       recorrido y sus animaciones dejaban el fotograma mediano en 117 ms.
+       La regla ya no es solo el ancho: es el DEDO. Esta demo está hecha
+       para un ratón —tablas de ocho columnas, menú de veinticinco
+       pantallas—, así que en cualquier pantalla táctil (y en cualquier
+       ventana por debajo de 900 px) se enseña la ficha que sí se lee.
+       Quien quiera la aplicación igualmente, tiene el botón. */
+    if (window.matchMedia('(max-width: 900px), (pointer: coarse)').matches) {
+      hosts.forEach(function (h) {
+        h.setAttribute('data-fdemo-movil', '1');
+        var caja = h.querySelector('.demo-movil');
+        if (!caja || caja.querySelector('[data-fdemo-forzar]')) return;
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'btn btn-ghost demo-movil-b2'; b.setAttribute('data-fdemo-forzar', '1');
+        b.textContent = document.documentElement.lang === 'en' ? 'Open it here anyway' : 'Abrirla aquí igualmente';
+        b.addEventListener('click', function () {
+          h.removeAttribute('data-fdemo-movil');
+          h.classList.add('is-forzada');
+          b.remove();
+          cargar(h);
+        });
+        caja.appendChild(b);
+      });
       return;
     }
 

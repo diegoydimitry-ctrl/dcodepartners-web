@@ -376,7 +376,9 @@ html[data-theme="light"] .v7-puerta{ background:linear-gradient(180deg, rgba(91,
 html[data-theme="light"] .v7-plan{ background:linear-gradient(180deg, rgba(22,32,70,0.019), rgba(255,255,255,0)); }
 html[data-theme="light"] .v7-plan.is-destacado{ border-color:rgba(43,60,98,0.3); }
 html[data-theme="light"] .v7-plan.is-destacado .v7-plan-n{ color:#44588e; }
-@media (max-width:900px){
+@media (max-width:900px), (pointer:coarse) and (max-width:1400px){
+  html[data-theme="light"] .demo-movil-b2{ border:1px solid rgba(46,59,98,0.3) !important; }
+  html[data-theme="light"] .demo-movil-b2:hover{ border-color:rgba(46,59,98,0.3) !important; }
   html[data-theme="light"] .demo-movil{ background:rgba(244,247,253,0.94); }
 }
 html[data-theme="light"] .v7-tarea{ border:1px solid rgba(46,59,98,0.196); background:rgba(244,248,253,0.86); }
@@ -647,3 +649,9 @@ html[data-theme="light"] .gal-sig-b{ color:#0a101b; border:1px solid rgba(43,60,
 html[data-theme="light"] .gal-sig-b:hover{ color:#090f1a; }
 html[data-theme="light"] .v6-step-dl dt{ color:#48505e; }
 html[data-theme="light"] .v6-step-dl dd{ color:#181f2b; text-shadow:none; }
+html[data-theme="light"] .gal-movil{ border:1px solid rgba(46,59,98,0.196); background:rgba(244,247,253,0.94); }
+html[data-theme="light"] .gal-movil-k{ color:#48505e; }
+html[data-theme="light"] .gal-movil-t{ color:#090f1a; }
+html[data-theme="light"] .gal-movil-p{ color:#323946; }
+html[data-theme="light"] .gal-movil-b{ border:1px solid rgba(46,59,98,0.3); color:#090f1a; }
+html[data-theme="light"] .gal-movil-b:hover{ border-color:rgba(46,59,98,0.3); }

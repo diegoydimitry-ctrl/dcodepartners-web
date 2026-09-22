@@ -19,6 +19,10 @@
   if (!sec) return;
   var D = document, W = window;
   var reducido = W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* En táctil, los paquetes que recorren los cables SIN PARAR se apagan: son
+     diez animaciones infinitas a la vez, y en un iPad se pagan en cada
+     fotograma de scroll. Lo que se pulsa sigue viajando y llegando. */
+  var tactil = W.matchMedia('(pointer:coarse)').matches;
   var $ = function (s, c) { return (c || sec).querySelector(s); };
   var $$ = function (s, c) { return [].slice.call((c || sec).querySelectorAll(s)); };
 
@@ -72,7 +76,7 @@
       try { L = p.getTotalLength(); } catch (e) {}
       for (var k = 0; k <= 10; k++) { var q = p.getPointAtLength(L * k / 10); pts.push([q.x, q.y]); }
       rutas[s.getAttribute('data-oss')] = { pts: pts, c: c };
-      if (!reducido) anims.push(paquete(pts, c, 2600, i * 650, Infinity, 0.9));
+      if (!reducido && !tactil) anims.push(paquete(pts, c, 2600, i * 650, Infinity, 0.9));
     });
     if (!visible || pausa) anims.forEach(function (a) { a.pause(); });
   }

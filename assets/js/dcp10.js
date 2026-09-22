@@ -437,15 +437,49 @@
     });
     return cargados[src];
   }
+  /* EN PANTALLA TÁCTIL O PEQUEÑA, LA APLICACIÓN NO SE MONTA.
+     Estas demos son aplicaciones de escritorio: bandeja, menú lateral,
+     fichas de ocho columnas. Apretadas en 390 px enseñan algo peor que no
+     enseñar nada, y montarlas cuesta lo que más se nota en un móvil —un
+     árbol grande, sus animaciones y su recorrido— justo mientras se está
+     desplazando. En su lugar se lee la ficha: qué problema resuelve, qué
+     hace y qué pasa solo. Quien quiera la aplicación, la abre con el botón. */
+  var SIN_APP = window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
   function galeria(root) {
     var tabs = $$('.gal-tab', root), paneles = $$('.gal-panel', root);
     var motorCss = root.getAttribute('data-css'), motorJs = root.getAttribute('data-js');
-    var cerca = false, actual = null;
+    var cerca = false, actual = null, forzados = {};
     function panel(id) { for (var i = 0; i < paneles.length; i++) if (paneles[i].getAttribute('data-demo') === id) return paneles[i]; return null; }
+    function ficha(p, id) {
+      p.classList.add('es-sin-app');
+      if ($('.gal-movil', p)) return;
+      var nombre = '', tab = null;
+      for (var i = 0; i < tabs.length; i++) if (tabs[i].getAttribute('data-demo') === id) tab = tabs[i];
+      if (tab) { var n = $('.gal-tab-n', tab); nombre = n ? n.textContent.trim() : ''; }
+      var caja = document.createElement('div');
+      caja.className = 'gal-movil';
+      caja.innerHTML =
+        '<p class="gal-movil-k">' + (EN ? 'On a small screen' : 'En pantalla pequeña') + '</p>' +
+        '<h4 class="gal-movil-t">' + (EN
+          ? 'Here you read it; to use it, a computer.'
+          : 'Aquí se lee; para usarlo, un ordenador.') + '</h4>' +
+        '<p class="gal-movil-p">' + (EN
+          ? (nombre || 'This system') + ' is a working application: an inbox, a side menu and records with a dozen fields. Squeezed into a phone it looks worse than it is, so we tell it instead — the four steps above are what it does, in order.'
+          : (nombre || 'Este sistema') + ' es una aplicación de trabajo: una bandeja, un menú lateral y fichas de doce campos. Apretada en un teléfono se ve peor de lo que es, así que te la contamos: los cuatro pasos de arriba son lo que hace, en orden.') + '</p>' +
+        '<button type="button" class="gal-movil-b" data-gal-forzar>' +
+          (EN ? 'Open it here anyway' : 'Abrirlo aquí igualmente') + '</button>';
+      caja.querySelector('[data-gal-forzar]').addEventListener('click', function () {
+        forzados[id] = 1; p.classList.remove('es-sin-app'); caja.remove(); preparar(id);
+      });
+      var app = $('.gal-app', p);
+      if (app && app.parentNode) app.parentNode.insertBefore(caja, app);
+      else p.appendChild(caja);
+    }
     function preparar(id) {
       var p = panel(id); if (!p || !cerca) return;
       var host = $('.sd-host', p), js = p.getAttribute('data-js');
       if (!host || !js) return;                 // Finance: lo carga dcp5
+      if (SIN_APP && !forzados[id]) { ficha(p, id); return; }
       cargarCss(motorCss);
       cargarJs(motorJs).then(function () { return cargarJs(js); }).then(function () {
         if (window.SD && window.SD.montar) window.SD.montar(host);

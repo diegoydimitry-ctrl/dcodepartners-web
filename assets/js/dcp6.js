@@ -53,6 +53,14 @@
   if (!root) return;
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* MEDIDO (iPad simulado, CPU x4, recorriendo la portada): este lienzo se
+     llevaba 534 ms de JavaScript y, sobre todo, era el que disparaba el
+     «Commit» del compositor a 3,3 s — una textura de 2048x2732 subida a la
+     GPU en cada fotograma. En un dedo no se nota la diferencia entre 2.100
+     partículas a 1,75x y 900 a 1,25x, y sí se nota que la página vaya
+     fluida: en táctil se baja la resolución, el número de partículas y el
+     ritmo a 30 fotogramas. */
+  var tactil = window.matchMedia('(pointer:coarse)').matches;
   var coarse  = window.matchMedia('(pointer: coarse)').matches;
 
   /* ---------------------------------------------------------- LA PALETA */
@@ -228,7 +236,7 @@
   }
 
   function measure() {
-    dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    dpr = Math.min(window.devicePixelRatio || 1, tactil ? 1 : 1.75);
     W = root.clientWidth; H = root.clientHeight;
     narrow = W < 900; small = W < 620;
     /* ENCUADRE PARA VERTICAL. Los marcos están pensados para el reparto de
@@ -264,7 +272,7 @@
   }
 
   function build() {
-    N = small ? 660 : narrow ? 1180 : 2100;
+    N = small ? (tactil ? 460 : 660) : narrow ? (tactil ? 820 : 1180) : (tactil ? 1100 : 2100);
     PT = []; ORD = [];
     for (var i = 0; i < N; i++) {
       var r = sd(i, 1), r2 = sd(i, 2), r3 = sd(i, 3);
@@ -2063,7 +2071,7 @@
        con la velocidad de scroll: cuando estás mirando, está; cuando pasas
        de largo, sobra. */
     VEL += (Math.abs(P - Pv) - VEL) * 0.20;
-    var flor = 1 - cl(VEL * 30);
+    var flor = tactil ? 0 : 1 - cl(VEL * 30);   // la floración, solo con ratón
     cmx += (mx - cmx) * 0.045; cmy += (my - cmy) * 0.045;
 
     /* ================= BORRADO POR REGION SUCIA =========================
@@ -2953,10 +2961,14 @@
 
   /* ------------------------------------------------------------- BUCLE */
   var running = false, visible = true;
+  var ultimo = 0, MIN_MS = tactil ? 33 : 0;   // en táctil, 30 fotogramas bastan
   function loop(tm) {
     if (!running) return;
-    Pv += (P - Pv) * 0.075;
-    draw(tm);
+    if (tm - ultimo >= MIN_MS) {
+      ultimo = tm;
+      Pv += (P - Pv) * (tactil ? 0.15 : 0.075);
+      draw(tm);
+    }
     if (visible) requestAnimationFrame(loop); else running = false;
   }
   function start() { if (!running && !reduced) { running = true; requestAnimationFrame(loop); } }

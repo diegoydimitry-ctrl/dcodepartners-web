@@ -107,7 +107,7 @@
   }
 
   function measure() {
-    dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.75);   // táctil: la mitad de píxeles que subir a la GPU
     FW = host.clientWidth; FH = host.clientHeight;
     canvas.width = Math.round(FW * dpr); canvas.height = Math.round(FH * dpr);
     canvas.style.width = FW + 'px'; canvas.style.height = FH + 'px';
@@ -1345,10 +1345,12 @@
     ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(6120); ctx.restore();
   }
 
-  var running = false, visible = true;
+  var running = false, visible = true, ultimoF = 0, MIN_F = coarse ? 33 : 0;
   function loop(tm) {
     if (!running) return;
-    Pv += (P - Pv) * 0.08;
+    if (tm - ultimoF < MIN_F) { if (visible) requestAnimationFrame(loop); else running = false; return; }
+    ultimoF = tm;
+    Pv += (P - Pv) * (coarse ? 0.16 : 0.08);
     cmx += (mx - cmx) * 0.08; cmy += (my - cmy) * 0.08;
     ctx.save(); ctx.translate(OFFX, OFFY);
     inst.draw(tm);

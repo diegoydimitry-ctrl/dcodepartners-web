@@ -1248,8 +1248,19 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
    cartel de «no disponible»: la misma información contada como se lee en un
    móvil, y el botón para abrirla donde se puede usar. */
 .demo-movil{ display:none; }
-@media (max-width:900px){
+/* También en tableta: lo que decide es el dedo, no el ancho (ver dcp5.js). */
+@media (max-width:900px), (pointer:coarse) and (max-width:1400px){
   .demo-host .fdemo-app{ display:none; }
+  .demo-host.is-forzada .fdemo-app{ display:block; }
+  .demo-host.is-forzada .demo-movil{ display:none; }
+  /* Secundario de verdad: el botón principal de esta ficha es «Ver todo lo
+     que hace»; abrir la aplicación aquí es la salida para quien insista. */
+  .demo-movil-b2{
+    margin-top:14px; width:100%; justify-content:center; min-height:46px;
+    background:rgba(150,174,245,.08) !important; border:1px solid rgba(150,174,245,.26) !important;
+    color:var(--v-ink-2) !important; font-weight:600; border-radius:999px;
+  }
+  .demo-movil-b2:hover{ background:rgba(150,174,245,.14) !important; border-color:rgba(150,174,245,.42) !important; }
   .demo-movil{
     display:block; padding:clamp(20px,5vw,28px);
     border:1px solid var(--v-edge); border-radius:16px;
