@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-22T07:09:19.888Z",
+  "generatedAt": "2026-09-22T10:55:47.697Z",
   "pageCount": 64,
-  "chunkCount": 604,
+  "chunkCount": 610,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -2184,85 +2184,100 @@
         {
           "id": "/en/#c9",
           "heading": "From what you have today to asking your own numbers",
-          "text": "01The formWe send it to you and you fill it in. 02ValidationWe check it before touching anything. 03Up in 1 dayWith your earlier clients, invoices and expenses inside. You do not start empty. 04RunningIt issues, records and flags what falls due. We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the Finance plans Let’s talk about putting it in When they connect Sales· Arvena ClimatizaciónInbox3PipelineScheduleDashboardOne inboxInboxPaula SerranoGrupo Delvia · warehouse in GetafeSortedOficinas Tavira LegalQuote for two officesSortedAcademia LindeAnnual service of the unitsSortedOpen the demo Operations· Arvena ClimatizaciónJobs1CalendarResourcesDashboardJobsNew installationSite visitDoneMaterialsIn progressInstallationPendingFinal checkPendingOpen the demo Customer service· Arvena ClimatizaciónConversationsCustomersKnowledgeDashboardCustomerPaula SerranoHi, we need air conditioning for a warehouse of about 800 m² in Getafe before June. Could you come and see it this week?Of course, Paula. I have a slot on Tuesday at 10:00. Does that work for you?Open the demo D-Code Finance· Arvena ClimatizaciónInvoices6PaymentsExpensesDashboardSummaryRevenue€24,800+12% on last monthJanFebMarAprMayJunOpen the demo"
+          "text": "01The formWe send it to you and you fill it in. 02ValidationWe check it before touching anything. 03Up in 1 dayWith your earlier clients, invoices and expenses inside. You do not start empty. 04RunningIt issues, records and flags what falls due. We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the Finance plans Let’s talk about putting it in D-Code OS · the operating layer"
         },
         {
           "id": "/en/#c10",
-          "heading": "Four areas. One system.",
-          "text": "Connected data. AI across the flow. Everything in view. D-CODE OS Your whole business, connected Search D-Code OS… Demo · made-up data AC Arvena Climatización Demo company Home Sales Operations Customer service Finance Analytics Settings New contacts12+33% Jobs in progress8+2 Open tickets3−40% Collected this month€24,800+12%"
+          "heading": "Systems change. D-Code OS connects them.",
+          "text": "D-Code OS is not a bundle of apps. It is the layer that connects and coordinates your company’s systems: data comes in once, automations move the work, AI analyses and suggests, and everything stays visible and traceable. Call assistantIndependent system01Incoming call+34 6•• ••• 218 · 09:02Transcribes and understands“the unit has stopped”ClassifiesBreakdown · urgentExtracts the dataHostal Rúa Verde · unit 2Creates the actionVisit tomorrow at 9:00Updates the systemCustomer and schedule up to datecall.urgentSend to the OS Lead captureIndependent system02A lead comes inWeb form · Nexo LogísticaAI analyses itCompany · 40 peopleClassifies itHigh value · score 86Assigns itLaura M. · central areaSchedules follow-upReminder in 48 hLogs itWith its full historylead.qualifiedSend to the OS OperationsIndependent system03A job comes inOT-2431 · installationCreates the tasks4 tasks, materials includedAssigns ownersIván R. and Marta G.Changes the statusIn progress · 60%Orders materialsOrder sent to supplierCloses the job sheetSigned on the phonejob.closedSend to the OS AI supportIndependent system04A query comes inWhatsApp · Academia LindeAI analyses itAsks about an invoiceChecks the contextContract, history and invoicesRepliesIn 2 min, with their dataEscalates if neededTask for a personResolvedCustomer notifiedquery.resolvedSend to the OS D-CODE OS Your company’s operating layer Data Automations AI Interfaces Monitoring Continuous improvement And any other system Examples of what can also connect: D-Code Finance Your ERP Website and forms Email Spreadsheets Warehouse People and shifts Whatever your company needs Your whole business, connected. These systems are examples. Any system your company needs can become part of D-Code OS: it connects to the layer, it does not define it. D-CODE OS Operations centre Search D-Code OS… 7 systems connected All good Demo · made-up data AC Arvena Climatización Demo company Operations centre Systems Automations AI Traceability Alerts Analytics Events today1,284+18% vs. yesterday Active automations235 running now AI decisions31241 reviewed by people Hours saved38 hthis week"
         },
         {
           "id": "/en/#c11",
-          "heading": "Recent activity",
-          "text": "New contact from the websitePaula Serrano · Getafe5 min ago Job assignedWarehouse installation · Getafe12 min ago Query resolvedAcademia Linde28 min ago Invoice paidF-2026-0418 · €8,4501 h ago"
+          "heading": "System mapEvents crossing from one system to another",
+          "text": "OS Calls Leads Operations Support Finance Web"
         },
         {
           "id": "/en/#c12",
-          "heading": "Business flow",
-          "text": "Contact Opportunity Job Support Invoice Payment Paula Serrano · Grupo DelviaComes in through the website and gets sorted."
+          "heading": "LiveSimulated activity",
+          "text": "Call classified: urgent breakdownvisit created in OperationsAI Qualified lead · score 86assigned to Laura M.AI OT-2431: 3 of 4 tasks donestatus updatedAuto Query resolved in 2 minAcademia Linde · invoice sentAI"
         },
         {
           "id": "/en/#c13",
-          "heading": "Next actions",
-          "text": "Site visit · GetafeTomorrow, 10:00 Send quoteOficinas Tavira Legal Review pending payments2 invoices Customer follow-upHostal Rúa Verde"
+          "heading": "Automations",
+          "text": "Urgent call → visit and technician alertRunning Qualified lead → sales rep and follow-upOK · 09:14 Signed job sheet → invoice in FinanceOK · 08:52 Query unresolved for 2 h → personAwaiting approval"
         },
         {
           "id": "/en/#c14",
-          "heading": "Sales",
-          "text": "One inbox: website, email, ads and phone Incoming 12 Opportunities 5 Won this month 3 Paula Serrano · Grupo DelviaWarehouse in Getafe · €18,400Accepted Oficinas Tavira LegalTwo offices · €3,800–5,200Quote Academia LindeAnnual serviceVisit on Monday Quote accepted → the job is created in Operations on its own"
+          "heading": "AI is analysing",
+          "text": "3 quotes have had no reply for more than 48 h.Suggestion: a personalised reminder to each customer. Confidence 92%"
         },
         {
           "id": "/en/#c15",
-          "heading": "Operations",
-          "text": "Jobs, materials and the team’s schedule In progress 8 This week 5 Late 0 Warehouse installation · GetafeTuesday 10:00 · Laura M.Scheduled Annual service · Academia LindeMonday 9:00 · Iván R.In progress Repair · Hostal Rúa VerdeJob sheet signedDone Job sheet signed → the invoice is prepared in Finance on its own"
+          "heading": "Alerts",
+          "text": "Low stock · F7 filterOperations · order before Thursday Invoice due in 3 daysFinance · F-2026-0409 All integrations respondingChecked 1 min ago"
         },
         {
           "id": "/en/#c16",
-          "heading": "Customer service",
-          "text": "Website, email and phone in one inbox Open 3 Solved by the assistant 71% First reply 2 min Paula Serrano · websiteCould you come this week?Answered Academia Linde · emailI need the March invoiceSent Hostal Rúa Verde · phoneThe unit is noisyWith a person Sensitive cases go to a person, with the history and the summary ready"
+          "heading": "One case, end to end",
+          "text": "Call AI Visit Notice Job sheet Payment Hostal Rúa Verde · breakdown09:02 · The call comes in and the assistant answers."
         },
         {
           "id": "/en/#c17",
-          "heading": "Finance · D-Code Finance",
-          "text": "Invoices, payments and cash flow Revenue this month €24,800 Pending payments €6,300 Overdue invoices 2 Jan Feb Mar Apr May Jun F-2026-0418 · Hostal Rúa Verde€8,450Paid F-2026-0421 · Academia Linde€1,180Sent F-2026-0409 · Grupo Delvia€5,120Due in 3 days Every figure comes from a specific invoice, and you can open it"
+          "heading": "Connected systems",
+          "text": "Each one works on its own; the OS coordinates them Call assistant46 calls todayConnected Lead capture12 leads todayConnected Operations8 jobs in progressConnected AI support71% solved on its ownConnected D-Code FinanceInvoices and paymentsConnected Website and forms3 formsConnected EmailShared inboxConnected Connect another systemERP, warehouse, shifts… whatever you need (example)"
         },
         {
           "id": "/en/#c18",
-          "heading": "Analytics",
-          "text": "Before and after, with sample data Hours of manual work per weekBefore38 hWith the system14 h First reply to the customerBefore4 hWith the system2 min Days to get paidBefore38With the system21"
+          "heading": "Automations",
+          "text": "When this happens, the system does that Urgent call → Create a visit and alert the technician14 todayOK Lead scoring over 80 → Assign a rep and schedule follow-up9 todayOK Job sheet signed → Prepare the invoice in D-Code Finance6 todayOK Query unresolved after 2 h → Hand it to a person with the summary2 todayReview Overdue invoice → Friendly reminder to the customer3 todayOK"
         },
         {
           "id": "/en/#c19",
-          "heading": "Settings",
-          "text": "What connects to what, and what a person decides Sales → OperationsAn accepted quote creates the jobActive Operations → FinanceA signed job sheet prepares the invoiceActive Support ↔ all four areasAnswers with each area’s dataActive AIReads, sorts and suggestsActive Important decisionsAlways made by a personFixed rule Click a module or a step in the flow: the demo stops and you take over. D-CODE OS Connect. Automate. Measure. This is what it looks like when the four areas work together. What comes in through Sales reaches Operations with its data, Customer service answers with information from all of them and Finance invoices and collects without retyping anything. AI can step in anywhere along the way; the important calls are still made by a person. Let’s talk about your system Take the diagnostic Illustrative demo · fictional company · made-up data. This is how it would look with yours. How we build it"
+          "heading": "AI",
+          "text": "Reads, classifies, replies and suggests. The important calls are made by a person. Calls transcribed and classified 46 Leads analysed 128 Queries answered 212 Suggestions to review 9 Fixed rule: payments, prices and cancellations are always approved by a person."
         },
         {
           "id": "/en/#c20",
+          "heading": "Traceability",
+          "text": "What happened, when, in which system and who did it 09:02Call receivedCall assistant 09:03Classified as urgent breakdownAI · 94% 09:03Visit booked · tomorrow 9:00Automation 09:04Confirmation sent on WhatsAppAI support 16:40Job sheet signed by Iván R.Person 16:41Invoice prepared in D-Code FinanceAutomation"
+        },
+        {
+          "id": "/en/#c21",
+          "heading": "Alerts",
+          "text": "What needs someone, and nothing else Low stock · F7 filterOperations · 2 unitsWarning Invoice due in 3 daysD-Code Finance · F-2026-0409Info Query with a personSupport · Hostal Rúa VerdeIn progress IntegrationsAll 7 respondingOK"
+        },
+        {
+          "id": "/en/#c22",
+          "heading": "Analytics",
+          "text": "Before and after, with sample data Hours of manual work per weekBefore38 hWith D-Code OS14 h First reply to the customerBefore4 hWith D-Code OS2 min Days to get paidBefore38With D-Code OS21 Click a module, a system on the map or a step in the case: the demo stops and you take over. Let’s talk about your system Take the diagnostic Illustrative demo · fictional company · made-up data. No real system is connected to this page. How we build it"
+        },
+        {
+          "id": "/en/#c23",
           "heading": "We analyse",
           "text": "It starts with a 30-minute call and continues with a review: we follow the real path of a customer, an order and an invoice, and note every point where a person has to bridge the gap. From you Half an hour, then a couple of hours from whoever does that work, with real examples. What you keep The written list of where the time and the money leak out. It’s yours whether we build it or not. If we see nothing worth doing, we tell you on that call 02"
         },
         {
-          "id": "/en/#c21",
+          "id": "/en/#c24",
           "heading": "We design",
           "text": "We take the heaviest item and decide what goes with what: what the system does on its own, what a person keeps deciding and which of your tools it connects to. From you Telling us what comes first. The rules of your business are yours to set. What you keep Scope, timeline and price in writing before anything starts. You see what you’ll get before it exists 03"
         },
         {
-          "id": "/en/#c22",
+          "id": "/en/#c25",
           "heading": "We put it in",
           "text": "We build it and get it working piece by piece, inside the tools you already use and with your team involved. Nothing changes all at once. From you Minimal access and one person who checks it does what it should. What you keep The system running, with the documentation and access in your name. If we ever stop working together, it keeps running. It runs in your operation, not in a demo 04"
         },
         {
-          "id": "/en/#c23",
+          "id": "/en/#c26",
           "heading": "We measure and improve",
           "text": "The system keeps a record of what it does: what ran on its own, what failed and where a person is still bridging a gap. That’s what it gets corrected with, every month. From you Half an hour a month to look at it together. What you keep Numbers from your own system, not from a slide deck. Every month, with your own numbers No promises"
         },
         {
-          "id": "/en/#c24",
+          "id": "/en/#c27",
           "heading": "None of this needs taking on trust: you can check it.",
           "text": "We won’t promise you percentages. This is what you can check before signing anything: The systems, running Four of them are above. Try them as much as you like. How we work, in writing The whole method, step by step, before the first call. What we use ourselves The systems we use in our own company, with what went well and what didn’t. What we are changing What is under way right now and where each piece stands. What stays in writing No lock-in, with the access and the documentation in your name. Let us start"
         },
         {
-          "id": "/en/#c25",
+          "id": "/en/#c28",
           "heading": "Thirty minutes and you will know what can be automated.",
           "text": "Tell us how you work today and we will tell you where we would start. Book a call What people usually ask"
         }
@@ -2910,85 +2925,100 @@
         {
           "id": "/#c9",
           "heading": "De lo que tienes hoy a preguntarle a tus números",
-          "text": "01FormularioTe lo enviamos y lo completas. 02ValidaciónLo revisamos antes de tocar nada. 03En marcha en 1 díaCon tus clientes, facturas y gastos anteriores dentro. No se empieza vacío. 04FuncionandoEmite, registra y avisa de los vencimientos. Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los planes de Finance Hablemos de implantarlo Cuando se conectan Comercial· Arvena ClimatizaciónEntradas3OportunidadesAgendaPanelBandeja únicaEntradasPaula SerranoGrupo Delvia · nave en GetafeClasificadoOficinas Tavira LegalPresupuesto dos despachosClasificadoAcademia LindeRevisión anual de equiposClasificadoAbrir la demo Operaciones· Arvena ClimatizaciónTrabajos1CalendarioRecursosPanelTrabajosInstalación nuevaVisita técnicaHechaMaterialesEn cursoInstalaciónPendienteRevisión finalPendienteAbrir la demo Atención al cliente· Arvena ClimatizaciónConversacionesClientesConocimientoPanelClientePaula SerranoHola, necesitamos climatizar una nave de unos 800 m² en Getafe antes de junio. ¿Podéis venir a verla esta semana?Claro, Paula. Tengo hueco el martes a las 10:00. ¿Te viene bien?Abrir la demo D-Code Finance· Arvena ClimatizaciónFacturas6CobrosGastosPanelResumenIngresos24.800 €+12 % respecto al mes anteriorEneFebMarAbrMayJunAbrir la demo"
+          "text": "01FormularioTe lo enviamos y lo completas. 02ValidaciónLo revisamos antes de tocar nada. 03En marcha en 1 díaCon tus clientes, facturas y gastos anteriores dentro. No se empieza vacío. 04FuncionandoEmite, registra y avisa de los vencimientos. Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los planes de Finance Hablemos de implantarlo D-Code OS · la capa operativa"
         },
         {
           "id": "/#c10",
-          "heading": "Cuatro áreas. Un mismo sistema.",
-          "text": "Datos conectados. IA en todo el flujo. Todo a la vista. D-CODE OS Todo tu negocio, conectado Buscar en D-Code OS… Demo · datos ficticios AC Arvena Climatización Empresa demo Inicio Comercial Operaciones Atención al cliente Finanzas Analítica Configuración Nuevos contactos12+33 % Trabajos en curso8+2 Tickets abiertos3−40 % Cobros del mes24.800 €+12 %"
+          "heading": "Los sistemas cambian. D-Code OS los conecta.",
+          "text": "D-Code OS no es una suma de aplicaciones. Es la capa que conecta y coordina los sistemas de tu empresa: los datos entran una vez, las automatizaciones mueven el trabajo, la IA analiza y propone, y todo queda a la vista y trazado. Asistente de llamadasSistema independiente01Llamada entrante+34 6•• ••• 218 · 09:02Transcribe y entiende«se ha parado la máquina»ClasificaAvería · urgenteExtrae los datosHostal Rúa Verde · equipo 2Crea la acciónVisita mañana a las 9:00Actualiza el sistemaCliente y agenda al díallamada.urgenteEnviar al OS Captación de leadsSistema independiente02Entra un leadFormulario web · Nexo LogísticaLa IA lo analizaEmpresa · 40 personasLo clasificaAlto valor · 86 puntosLo asignaLaura M. · zona centroPrograma el seguimientoRecordatorio en 48 hQueda registradoCon todo su historiallead.cualificadoEnviar al OS OperacionesSistema independiente03Entra un trabajoOT-2431 · instalaciónCrea las tareas4 tareas, material incluidoAsigna responsablesIván R. y Marta G.Cambia el estadoEn curso · 60 %Pide el materialPedido al proveedorCierra el parteFirmado en el móviltrabajo.cerradoEnviar al OS Soporte con IASistema independiente04Entra una consultaWhatsApp · Academia LindeLa IA la analizaPregunta por su facturaConsulta el contextoContrato, historial y facturasRespondeEn 2 min, con sus datosEscala si hace faltaTarea para una personaQueda resueltaCliente avisadoconsulta.resueltaEnviar al OS D-CODE OS La capa operativa de tu empresa Datos Automatizaciones IA Interfaces Monitorización Mejora continua Y cualquier otro sistema Ejemplos de lo que también se conecta: D-Code Finance Tu ERP Web y formularios Correo Hojas de cálculo Almacén Personas y turnos Lo que tu empresa necesite Todo tu negocio, conectado. Estos sistemas son ejemplos. Cualquier sistema que necesite tu empresa puede formar parte de D-Code OS: se conecta a la capa, no la define. D-CODE OS Centro operativo Buscar en D-Code OS… 7 sistemas conectados Todo en orden Demo · datos ficticios AC Arvena Climatización Empresa demo Centro operativo Sistemas Automatizaciones IA Trazabilidad Alertas Analítica Eventos hoy1.284+18 % vs. ayer Automatizaciones activas235 en marcha ahora Decisiones de la IA31241 revisadas por personas Horas ahorradas38 hesta semana"
         },
         {
           "id": "/#c11",
-          "heading": "Actividad reciente",
-          "text": "Nuevo contacto de la webPaula Serrano · Getafehace 5 min Trabajo asignadoInstalación nave · Getafehace 12 min Consulta resueltaAcademia Lindehace 28 min Factura cobradaF-2026-0418 · 8.450 €hace 1 h"
+          "heading": "Mapa del sistemaEventos que cruzan de un sistema a otro",
+          "text": "OS Llamadas Leads Operaciones Soporte Finance Web"
         },
         {
           "id": "/#c12",
-          "heading": "Flujo del negocio",
-          "text": "Contacto Oportunidad Trabajo Atención Factura Cobro Paula Serrano · Grupo DelviaEntra por la web y queda clasificada."
+          "heading": "En tiempo realActividad simulada",
+          "text": "Llamada clasificada: avería urgentevisita creada en OperacionesIA Lead cualificado · 86 puntosasignado a Laura M.IA OT-2431: 3 de 4 tareas hechasestado actualizadoAuto Consulta resuelta en 2 minAcademia Linde · factura enviadaIA"
         },
         {
           "id": "/#c13",
-          "heading": "Próximas acciones",
-          "text": "Visita técnica · GetafeMañana, 10:00 Enviar presupuestoOficinas Tavira Legal Revisar cobros pendientes2 facturas Seguimiento de clienteHostal Rúa Verde"
+          "heading": "Automatizaciones",
+          "text": "Llamada urgente → visita y aviso al técnicoEjecutándose Lead cualificado → comercial y seguimientoCorrecta · 09:14 Parte firmado → factura en FinanceCorrecta · 08:52 Consulta sin resolver 2 h → personaEspera aprobación"
         },
         {
           "id": "/#c14",
-          "heading": "Comercial",
-          "text": "Bandeja única: web, correo, anuncios y teléfono Entradas 12 Oportunidades 5 Ganadas este mes 3 Paula Serrano · Grupo DelviaNave en Getafe · 18.400 €Aceptado Oficinas Tavira LegalDos despachos · 3.800–5.200 €Presupuesto Academia LindeRevisión anualVisita el lunes Presupuesto aceptado → el trabajo se crea solo en Operaciones"
+          "heading": "La IA está analizando",
+          "text": "3 presupuestos llevan más de 48 h sin respuesta.Propuesta: un recordatorio personalizado a cada cliente. Confianza 92 %"
         },
         {
           "id": "/#c15",
-          "heading": "Operaciones",
-          "text": "Trabajos, material y agenda del equipo En curso 8 Esta semana 5 Retrasados 0 Instalación nave · GetafeMartes 10:00 · Laura M.Planificado Revisión anual · Academia LindeLunes 9:00 · Iván R.En curso Reparación · Hostal Rúa VerdeParte firmadoTerminado Parte firmado → la factura se prepara sola en Finance"
+          "heading": "Alertas",
+          "text": "Stock bajo · filtro F7Operaciones · pedir antes del jueves Factura vence en 3 díasFinance · F-2026-0409 Todas las integraciones respondenRevisado hace 1 min"
         },
         {
           "id": "/#c16",
-          "heading": "Atención al cliente",
-          "text": "Web, correo y teléfono en una sola bandeja Abiertas 3 Resueltas por el asistente 71 % Primera respuesta 2 min Paula Serrano · web¿Podéis venir esta semana?Respondida Academia Linde · correoNecesito la factura de marzoEnviada Hostal Rúa Verde · teléfonoEl aparato hace ruidoCon una persona Lo delicado lo lleva una persona, con el historial y el resumen hechos"
+          "heading": "Un caso, de punta a punta",
+          "text": "Llamada IA Visita Aviso Parte Cobro Hostal Rúa Verde · avería09:02 · Entra la llamada y el asistente la atiende."
         },
         {
           "id": "/#c17",
-          "heading": "Finanzas · D-Code Finance",
-          "text": "Facturas, cobros y tesorería Ingresos del mes 24.800 € Pendiente de cobro 6.300 € Facturas vencidas 2 Ene Feb Mar Abr May Jun F-2026-0418 · Hostal Rúa Verde8.450 €Cobrada F-2026-0421 · Academia Linde1.180 €Enviada F-2026-0409 · Grupo Delvia5.120 €Vence en 3 días Cada cifra sale de una factura concreta, y se puede abrir"
+          "heading": "Sistemas conectados",
+          "text": "Cada uno funciona por su cuenta; el OS los coordina Asistente de llamadas46 llamadas hoyConectado Captación de leads12 leads hoyConectado Operaciones8 trabajos en cursoConectado Soporte con IA71 % resuelto soloConectado D-Code FinanceFacturas y cobrosConectado Web y formularios3 formulariosConectado CorreoBandeja compartidaConectado Conectar otro sistemaERP, almacén, turnos… lo que haga falta (ejemplo)"
         },
         {
           "id": "/#c18",
-          "heading": "Analítica",
-          "text": "Antes y después, con datos de ejemplo Horas a mano por semanaAntes38 hCon el sistema14 h Primera respuesta al clienteAntes4 hCon el sistema2 min Días hasta cobrarAntes38Con el sistema21"
+          "heading": "Automatizaciones",
+          "text": "Cuando pasa esto, el sistema hace aquello Llamada urgente → Crear visita y avisar al técnico14 hoyOK Lead con más de 80 puntos → Asignar comercial y programar seguimiento9 hoyOK Parte firmado → Preparar la factura en D-Code Finance6 hoyOK Consulta sin resolver en 2 h → Pasarla a una persona con el resumen2 hoyRevisar Factura vencida → Recordatorio amable al cliente3 hoyOK"
         },
         {
           "id": "/#c19",
-          "heading": "Configuración",
-          "text": "Qué se conecta con qué, y qué decide una persona Comercial → OperacionesUn presupuesto aceptado crea el trabajoActiva Operaciones → FinanceUn parte firmado prepara la facturaActiva Atención ↔ las cuatro áreasContesta con los datos de cada unaActiva IALee, clasifica y proponeActiva Decisiones importantesLas toma siempre una personaRegla fija Pulsa un módulo o un paso del flujo: la demo se para y mandas tú. D-CODE OS Conecta. Automatiza. Mide. Así se ve cuando las cuatro áreas trabajan juntas. Lo que entra por Comercial llega a Operaciones con sus datos, Atención contesta con la información de todas y Finance factura y cobra sin volver a teclear. La IA puede intervenir en cualquier punto del recorrido; lo importante lo sigue decidiendo una persona. Hablemos de tu sistema Haz el diagnóstico Demo ilustrativa · empresa ficticia · datos inventados. Así se vería con los vuestros. Cómo lo construimos"
+          "heading": "IA",
+          "text": "Lee, clasifica, responde y propone. Lo importante lo decide una persona. Llamadas transcritas y clasificadas 46 Leads analizados 128 Consultas respondidas 212 Propuestas para revisar 9 Regla fija: pagos, precios y bajas los aprueba siempre una persona."
         },
         {
           "id": "/#c20",
+          "heading": "Trazabilidad",
+          "text": "Qué pasó, cuándo, en qué sistema y quién lo hizo 09:02Llamada recibidaAsistente de llamadas 09:03Clasificada como avería urgenteIA · 94 % 09:03Visita creada · mañana 9:00Automatización 09:04Confirmación enviada por WhatsAppSoporte con IA 16:40Parte firmado por Iván R.Persona 16:41Factura preparada en D-Code FinanceAutomatización"
+        },
+        {
+          "id": "/#c21",
+          "heading": "Alertas",
+          "text": "Lo que necesita a alguien, y nada más Stock bajo · filtro F7Operaciones · 2 unidadesAviso Factura vence en 3 díasD-Code Finance · F-2026-0409Info Consulta con una personaSoporte · Hostal Rúa VerdeEn curso IntegracionesLas 7 respondenCorrecto"
+        },
+        {
+          "id": "/#c22",
+          "heading": "Analítica",
+          "text": "Antes y después, con datos de ejemplo Horas a mano por semanaAntes38 hCon D-Code OS14 h Primera respuesta al clienteAntes4 hCon D-Code OS2 min Días hasta cobrarAntes38Con D-Code OS21 Pulsa un módulo, un sistema del mapa o un paso del caso: la demo se para y mandas tú. Hablemos de tu sistema Haz el diagnóstico Demo ilustrativa · empresa ficticia · datos inventados. Ningún sistema real está conectado a esta página. Cómo lo construimos"
+        },
+        {
+          "id": "/#c23",
           "heading": "Analizamos",
           "text": "Empieza con una llamada de 30 minutos y sigue con una revisión: seguimos el recorrido real de un cliente, un pedido y una factura, y anotamos cada punto en el que una persona hace de puente. De tu parte Media hora y, después, un par de horas de quien hace ese trabajo, con ejemplos reales. Con qué te quedas La lista escrita de por dónde se escapan el tiempo y el dinero. Es tuya, la construyamos o no. Si no vemos nada que valga la pena, te lo decimos en la llamada 02"
         },
         {
-          "id": "/#c21",
+          "id": "/#c24",
           "heading": "Diseñamos",
           "text": "Cogemos lo que más pesa y decidimos qué va con qué: qué hace el sistema solo, qué sigue decidiendo una persona y con qué herramientas vuestras se conecta. De tu parte Decir qué es prioritario. Las reglas de tu negocio las pones tú. Con qué te quedas Alcance, plazo y precio por escrito antes de que empiece nada. Ves lo que vas a tener antes de que exista 03"
         },
         {
-          "id": "/#c22",
+          "id": "/#c25",
           "heading": "Implantamos",
           "text": "Lo construimos y lo ponemos a funcionar por partes, dentro de las herramientas que ya usáis y con vuestro equipo dentro. Nada cambia de golpe. De tu parte Los accesos mínimos y una persona que valide que hace lo que tiene que hacer. Con qué te quedas El sistema funcionando, con la documentación y los accesos a tu nombre. Si un día dejamos de trabajar juntos, sigue funcionando. Funciona en tu operativa, no en una demo 04"
         },
         {
-          "id": "/#c23",
+          "id": "/#c26",
           "heading": "Medimos y mejoramos",
           "text": "El sistema deja rastro de lo que hace: qué ha salido solo, qué ha fallado y dónde sigue habiendo una persona haciendo de puente. Con eso se corrige cada mes. De tu parte Media hora al mes para mirarlo juntos. Con qué te quedas Números salidos de tu propio sistema, no de una presentación. Cada mes, con tus propios números Sin promesas"
         },
         {
-          "id": "/#c24",
+          "id": "/#c27",
           "heading": "Nada de esto hay que creérselo: se comprueba.",
           "text": "No te vamos a prometer porcentajes. Esto es lo que puedes comprobar antes de firmar nada: Los sistemas, funcionando Arriba tienes cuatro. Tócalos todo lo que quieras. Cómo trabajamos, por escrito El método entero, paso a paso, antes de la primera llamada. Lo que usamos en casa Los sistemas que usamos en nuestra propia empresa, con lo que salió bien y lo que no. Lo que estamos cambiando Qué hay en marcha ahora mismo y en qué punto está cada cosa. Lo que queda por escrito Sin permanencia, con los accesos y la documentación a tu nombre. Empecemos"
         },
         {
-          "id": "/#c25",
+          "id": "/#c28",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
           "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Lo que sueles preguntar"
         }

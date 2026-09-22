@@ -39,10 +39,10 @@ html{ background:var(--gx-base); }
    la galaxia ya hace ese trabajo. */
 body:has(> .gx), body.v6:has(> .gx), body.v7:has(> .gx){ background:transparent !important; }
 body:has(> .gx)::before, body:has(> .gx)::after{ display:none !important; }
-/* Los campos de partículas de cada página pintan su propio fondo oscuro.
-   En pantalla (screen) ese fondo desaparece sobre el cielo y solo quedan
-   las partículas encima. */
-body:has(> .gx) .field, body:has(> .gx) .field--inst{ background:transparent !important; mix-blend-mode:screen; margin:0 !important; }
+/* Los campos de partículas pintan sobre un lienzo transparente (dcp6/dcp8):
+   se componen encima del cielo sin mix-blend-mode. La mezcla con un cielo
+   animado era el mayor coste por fotograma de la web. */
+body:has(> .gx) .field, body:has(> .gx) .field--inst{ background:transparent !important; margin:0 !important; }
 /* (styles.css da a .field —la clase de los campos de formulario— un
    margin-bottom de 24 px que también recortaba el lienzo fijo por abajo.) */
 /* La cabecera sin fondo no necesita desenfocar lo que tiene detrás: sobre el
@@ -111,11 +111,11 @@ html[data-theme="light"]{
   --x-glass:rgba(255,255,255,.80); --x-glass-2:rgba(255,255,255,.92);
 }
 /* Las partículas de cada página: en claro no pueden ser luz sobre blanco.
-   Se invierten conservando el tono y se multiplican: pasan a ser tinta de
-   color sobre el cielo claro. */
+   Se invierten conservando el tono: pasan a ser tinta de color. Sin mezcla:
+   el lienzo es transparente, así que solo cambian las partículas. */
 html[data-theme="light"] body:has(> .gx) .field,
 html[data-theme="light"] body:has(> .gx) .field--inst{
-  mix-blend-mode:multiply; filter:invert(1) hue-rotate(180deg) saturate(2.4) brightness(1.3); opacity:.7;
+  filter:invert(1) hue-rotate(180deg) saturate(1.8); opacity:.82;
 }
 /* El titular con degradado: en claro, los mismos cuatro tonos, más hondos. */
 html[data-theme="light"] .v6-grad{ background:linear-gradient(96deg, #0a86a6 0%, #2f5fe0 34%, #6a42dc 62%, #c2245f 100%); -webkit-background-clip:text; background-clip:text; }
@@ -139,18 +139,13 @@ html[data-theme="light"] .chat-input-row button{ color:#fff; }
 /* ------------------------------------------------------- CIELO LIGERO
    tema.js activa html.gx-ligero si el equipo no sostiene el cielo animado
    (uno de cada cuatro fotogramas o más por encima de 22 ms al cargar).
-   - Las estrellas se quedan quietas y se pintan una sola vez.
-   - Donde la página tiene su propio campo de partículas (opaco y a pantalla
-     completa), el campo vuelve a pintarse como antes del cielo, sin mezcla,
-     y el cielo —que quedaría tapado— no se dibuja: es la mezcla del campo
-     con el cielo lo que cuesta en un equipo sin aceleración gráfica.
-   Va aquí, después del modo claro, para ganarle a sus reglas del campo. */
+   Las mismas estrellas, quietas y pintadas una sola vez; sin parallax. En
+   claro el campo pierde la saturación extra del filtro. */
 html.gx-ligero .gx > i{ animation:none !important; transform:none !important; will-change:auto; }
-html.gx-ligero .gx-banda, html.gx-ligero .gx-brillo-b{ display:none; }
-html.gx-ligero body:has(> .gx) .field,
-html.gx-ligero body:has(> .gx) .field--inst{ mix-blend-mode:normal; }
-html.gx-ligero body:has(> .field) > .gx,
-html.gx-ligero body:has(> .field--inst) > .gx{ display:none; }
+html.gx-ligero .gx-brillo-b{ display:none; }
+html.gx-ligero .gx-t{ animation:none; opacity:.7; }
+html.gx-ligero[data-theme="light"] body:has(> .gx) .field,
+html.gx-ligero[data-theme="light"] body:has(> .gx) .field--inst{ filter:invert(1) hue-rotate(180deg); }
 
 /* ================================================== 3. EL BOTÓN DE TEMA */
 .tema-btn{
@@ -217,36 +212,46 @@ html[data-theme="light"] .tema-btn:focus-visible{ outline-color:#2f5fe0; }
 
 /* ================================================= 4. CAMBIO DE DIMENSIÓN */
 html.tema-cambiando *, html.tema-cambiando *::before, html.tema-cambiando *::after{ transition:none !important; }
-/* La página actual se va absorbida hacia la izquierda: se estrecha, gira
-   hacia el fondo y se apaga en el borde. La nueva entra desde la derecha,
-   precedida por una costura de luz. Entre las dos, un instante de espacio. */
+/* EL CAMBIO DE SISTEMA VISUAL (tema.js):
+   1. La página se rompe. Las piezas visibles (titulares palabra a palabra,
+      párrafos, botones, tarjetas, paneles) reciben un nombre de transición
+      propio: se desprenden, caen un poco y son aspiradas hacia la IZQUIERDA,
+      primero las que están más cerca del borde.
+   2. Lo que queda (el fondo, lo que no es pieza) se va detrás, girando
+      hacia el mismo borde.
+   3. La versión nueva entra por la DERECHA detrás de una costura de luz y
+      sus piezas se montan en su sitio, a destiempo.
+   Todo son capturas que el navegador compone en la GPU: solo transform y
+   opacity, sin filtros ni recortes animados, sin tocar el DOM real. */
 html.tema-vt::view-transition{ background:
-  radial-gradient(55% 90% at 0% 50%, rgba(120,165,255,.55), transparent 70%),
-  radial-gradient(50% 80% at 100% 50%, rgba(160,120,255,.32), transparent 72%),
+  radial-gradient(55% 90% at 0% 50%, rgba(120,165,255,.5), transparent 70%),
+  radial-gradient(50% 80% at 100% 50%, rgba(160,120,255,.3), transparent 72%),
   #050814; }
 html.tema-vt::view-transition-group(root){ animation:none; }
 html.tema-vt::view-transition-image-pair(root){ isolation:auto; }
 html.tema-vt::view-transition-old(root),
 html.tema-vt::view-transition-new(root){ mix-blend-mode:normal; animation-fill-mode:both; }
-/* Coreografía (≈ 0,86 s): la actual empieza a irse ya; la nueva sale 0,14 s
-   después desde fuera de la pantalla, así que durante medio gesto se ven las
-   dos, con el espacio entre medias. */
 html.tema-vt::view-transition-old(root){
-  animation-name:tema-absorbe; animation-duration:.7s; animation-timing-function:cubic-bezier(.45,0,.75,.35);
+  animation-name:tema-absorbe; animation-duration:.62s; animation-delay:.06s; animation-timing-function:cubic-bezier(.5,0,.8,.3);
   transform-origin:0% 50%;
 }
 html.tema-vt::view-transition-new(root){
-  animation-name:tema-llega; animation-duration:.72s; animation-delay:.14s; animation-timing-function:cubic-bezier(.2,.75,.25,1);
+  animation-name:tema-llega; animation-duration:.6s; animation-delay:.2s; animation-timing-function:cubic-bezier(.16,.8,.24,1);
   transform-origin:100% 50%;
 }
+/* Las piezas: el grupo no se mueve (la pieza está en el mismo sitio en los
+   dos temas); lo que se anima son sus dos capturas, desde tema.js. */
+html.tema-vt::view-transition-group(*){ animation-duration:0s; }
+html.tema-vt::view-transition-image-pair(*){ isolation:auto; }
+html.tema-vt::view-transition-old(*), html.tema-vt::view-transition-new(*){ mix-blend-mode:normal; }
 @keyframes tema-absorbe{
-  0%  { transform:none; filter:none; clip-path:inset(0 0 0 0 round 0); opacity:1; }
-  55% { opacity:.95; }
-  100%{ transform:perspective(1600px) translateX(-70%) rotateY(38deg) scale(.3,.62); filter:blur(6px) brightness(1.4) saturate(1.4); clip-path:inset(14% 0 14% 0 round 64px); opacity:0; }
+  0%  { transform:none; opacity:1; }
+  100%{ transform:perspective(1400px) translateX(-72%) rotateY(40deg) scale(.32,.6); opacity:0; }
 }
 @keyframes tema-llega{
-  0%  { transform:perspective(1600px) translateX(100%) rotateY(-26deg) scale(.86); filter:blur(8px) brightness(1.3); clip-path:inset(8% 0 8% 0 round 48px); }
-  100%{ transform:none; filter:none; clip-path:inset(0 0 0 0 round 0); }
+  0%  { transform:perspective(1400px) translateX(92%) rotateY(-24deg) scale(.9); opacity:.2; }
+  35% { opacity:1; }
+  100%{ transform:none; opacity:1; }
 }
 /* La costura de luz va delante de la página nueva: mismo tiempo, misma
    curva, y se apaga al llegar al borde izquierdo. Su sitio final está fuera
@@ -256,23 +261,12 @@ html.tema-vt::view-transition-new(root){
   view-transition-name:tema-portal;
   background:linear-gradient(90deg, rgba(91,140,255,0), rgba(120,170,255,.55) 38%, #f4f8ff 50%, rgba(170,130,255,.55) 62%, rgba(155,107,255,0));
 }
-html.tema-vt::view-transition-group(tema-portal){ animation:tema-costura .72s cubic-bezier(.2,.75,.25,1) .14s both; }
+html.tema-vt::view-transition-group(tema-portal){ animation:tema-costura .6s cubic-bezier(.16,.8,.24,1) .2s both; }
 html.tema-vt::view-transition-new(tema-portal){ animation:none; }
 @keyframes tema-costura{
   0%  { transform:translateX(-70px); opacity:1; }
   85% { opacity:.85; }
   100%{ transform:translateX(calc(-100vw - 70px)); opacity:0; }
-}
-/* En pantallas pequeñas, sin desenfoque: el mismo gesto, más ligero. */
-@media (max-width:768px){
-  @keyframes tema-absorbe{
-    0%  { transform:none; clip-path:inset(0 0 0 0 round 0); opacity:1; }
-    100%{ transform:perspective(1000px) translateX(-75%) rotateY(34deg) scale(.34,.66); clip-path:inset(14% 0 14% 0 round 40px); opacity:0; }
-  }
-  @keyframes tema-llega{
-    0%  { transform:perspective(1000px) translateX(100%) rotateY(-22deg) scale(.88); clip-path:inset(8% 0 8% 0 round 30px); }
-    100%{ transform:none; clip-path:inset(0 0 0 0 round 0); }
-  }
 }
 /* Plan B (sin View Transitions): el barrido. */
 .tema-barrido{

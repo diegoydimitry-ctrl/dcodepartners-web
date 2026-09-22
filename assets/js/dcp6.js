@@ -95,7 +95,10 @@
   var canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
   root.appendChild(canvas);
-  var ctx = canvas.getContext('2d', { alpha: false });
+  /* Lienzo TRANSPARENTE: el campo se compone sobre el cielo sin mezcla
+     (mix-blend-mode sobre un cielo animado costaba medio fotograma). El
+     rastro se apaga con destination-out en vez de pintar fondo oscuro. */
+  var ctx = canvas.getContext('2d');
 
   var W = 0, H = 0, dpr = 1, narrow = false, small = false;
 
@@ -256,7 +259,7 @@
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = '#05070e'; ctx.fillRect(0, 0, W, H);
+    ctx.clearRect(0, 0, W, H);
     build();
   }
 
@@ -2077,10 +2080,10 @@
 
        No es una aproximacion visible: es no repintar lo que ya es fondo. Si
        la union cubre casi todo, se borra entero y se ahorra la contabilidad. */
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'destination-out';
     var trans = Math.sin(tw * 3.1416);
-    ctx.fillStyle = noClear ? 'rgba(5,7,14,0.10)'
-                            : 'rgba(5,7,14,' + (0.30 - 0.13 * trans).toFixed(3) + ')';
+    ctx.fillStyle = noClear ? 'rgba(0,0,0,0.10)'
+                            : 'rgba(0,0,0,' + (0.30 - 0.13 * trans).toFixed(3) + ')';
     /* Seguro barato: un borrado completo cada 2 segundos. El fundido a
        rgba(5,7,14,a) sobre un lienzo de 8 bits se ESTANCA —un pixel a 15 con
        fondo 14 y alfa 0,17 baja 0,17, que redondea a cero y ya no se mueve—,
@@ -2117,6 +2120,7 @@
         ctx.restore();
       }
     }
+    ctx.globalCompositeOperation = 'source-over';
     /* La caja de este fotograma se va llenando mientras se dibuja. */
     var bx0 = 1e9, by0 = 1e9, bx1 = -1e9, by1 = -1e9;
 

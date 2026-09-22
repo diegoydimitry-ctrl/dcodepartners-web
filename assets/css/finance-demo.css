@@ -1054,7 +1054,7 @@
    apoyada se lee con un filete y una sombra de una sola capa. El anillo
    exterior existe porque esta pantalla blanca vive sobre la página oscura
    de la web: sin él, el blanco se derrama sobre el fondo. */
-.fdemo-app.is-embedded{
+html:not([data-theme="dark"]) .fdemo-app.is-embedded{
   box-shadow:
     0 1px 2px rgba(16,24,40,.06),
     0 24px 60px -30px rgba(0,0,0,.55),
@@ -1087,8 +1087,7 @@
   border-radius:999px; background:var(--dc-accent);
 }
 .fdemo-nav-item:hover{ background:var(--dc-surface-2); }
-.fdemo-nav-item.is-active .fdemo-nav-dot,
-.fdemo-nav-item.is-active .fdemo-nav-icon{ background:var(--dc-accent); color:var(--dc-accent); }
+.fdemo-nav-item.is-active .fdemo-nav-dot, .fdemo-nav-item.is-active .fdemo-nav-icon{ background:var(--dc-accent); color:var(--dc-accent); }
 .fdemo-nav-item.is-active .fdemo-nav-icon{ background:none; }
 .fdemo-nav-indicator{ background:var(--dc-info-bg); }
 .fdemo-nav-indicator-notch{ background:var(--dc-accent); }
@@ -1135,17 +1134,17 @@
 }
 /* El tinte de esquina de los KPI baja del 15 % al 6 %: en una tabla
    financiera el color solo debe aparecer cuando hay un ESTADO. */
-.fdemo-kpi.accent-blue{ --kpi-accent:rgba(47,95,224,.06); }
-.fdemo-kpi.accent-cyan{ --kpi-accent:rgba(10,110,122,.06); }
-.fdemo-kpi.accent-violet{ --kpi-accent:rgba(99,55,201,.06); }
-.fdemo-kpi.accent-warning{ --kpi-accent:rgba(154,91,0,.07); }
-.fdemo-kpi.accent-danger{ --kpi-accent:rgba(192,57,47,.06); }
+html:not([data-theme="dark"]) .fdemo-kpi.accent-blue{ --kpi-accent:rgba(47,95,224,.06); }
+html:not([data-theme="dark"]) .fdemo-kpi.accent-cyan{ --kpi-accent:rgba(10,110,122,.06); }
+html:not([data-theme="dark"]) .fdemo-kpi.accent-violet{ --kpi-accent:rgba(99,55,201,.06); }
+html:not([data-theme="dark"]) .fdemo-kpi.accent-warning{ --kpi-accent:rgba(154,91,0,.07); }
+html:not([data-theme="dark"]) .fdemo-kpi.accent-danger{ --kpi-accent:rgba(192,57,47,.06); }
 
 /* ENLACES Y BOTONES. El enlace del producto es el azul de acción, no el
    cian de datos; y el botón principal lleva un degradado de UNA familia
    (azul → su propio hover), no un arcoíris. */
 .fdemo-link{ color:var(--dc-accent); }
-.fdemo-btn.variant-primary{ background:var(--dc-brand-grad); color:#fff; }
+html:not([data-theme="dark"]) .fdemo-btn.variant-primary{ background:var(--dc-brand-grad); color:#fff; }
 .fdemo-btn.variant-primary:hover{ filter:brightness(.96); }
 .fdemo-btn.variant-secondary{ background:var(--dc-surface); }
 .fdemo-btn.variant-secondary:hover{ border-color:var(--dc-accent); color:var(--dc-accent); }
@@ -1161,7 +1160,7 @@
 
 /* LA CONVERSACIÓN. La burbuja de quien pregunta va en el azul de marca
    plano; la referencia, en el tinte del azul de información. */
-.fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#fff; }
+html:not([data-theme="dark"]) .fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#fff; }
 .fdemo-ia-msg.from-ia .fdemo-ia-bubble{ background:var(--dc-surface); }
 /* El texto va en el azul de información (--dc-info), no en el de acción:
    sobre el tinte de la referencia encima de la tarjeta de respuesta
@@ -2191,3 +2190,37 @@ tr.is-quieta td{ background:var(--dc-surface-2); font-size:.8125rem; }
 @media (max-width:360px){
   .fdemo-app.is-fullpage .fdemo-tour{ display:none; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   LA NOCHE — la demo en el tema oscuro de la web
+   Tokens noche del D-Code Design System (los mismos que la web y el OS). La
+   sección «LA LUZ» de arriba solo se aplica fuera del modo oscuro. Las
+   páginas de la demo a pantalla completa no llevan tema: siguen en claro.
+   ══════════════════════════════════════════════════════════════════════ */
+html[data-theme="dark"] .fdemo-scope{
+  --dc-bg:#0a0e19; --dc-surface:#10162a; --dc-surface-2:#161e35; --dc-surface-3:#141b31;
+  --dc-border:#243052; --dc-border-strong:#33406a; --dc-border-input:#6b7697;
+  --dc-text:#edf1f8; --dc-text-muted:#b6c0d6; --dc-text-faint:#9aa6c0;
+  --dc-accent:#7aa2ff; --dc-accent-cyan:#5fdcec; --dc-accent-violet:#b9a0ff;
+  --dc-brand-grad:linear-gradient(120deg,#6f98ff,#8f7dff);
+  --dc-success:#4fd6a0; --dc-success-bg:rgba(52,211,153,.13);
+  --dc-warning:#f3b862; --dc-warning-bg:rgba(245,180,84,.13);
+  --dc-danger:#ff8f86; --dc-danger-bg:rgba(255,120,110,.13);
+  --dc-info:#8fb0ff; --dc-info-bg:rgba(91,140,255,.15);
+  --dc-neutral-bg:rgba(150,160,190,.14); --dc-neutral:#aab4ca;
+  --dc-mark-accent:#34d399;
+  --dc-luz-alta:rgba(255,255,255,.06); --dc-luz-baja:rgba(255,255,255,.03);
+  --dc-sombra-tarjeta:0 1px 2px rgba(0,0,0,.4);
+  --dc-sombra-flotante:0 16px 40px -12px rgba(0,0,0,.65), 0 0 0 1px var(--dc-border);
+  --dc-scrim:rgba(2,4,10,.62);
+  color-scheme:dark;
+}
+html[data-theme="dark"] .fdemo-app.is-embedded{ box-shadow:0 30px 80px -34px rgba(0,0,0,.8), 0 0 0 1px rgba(150,174,245,.16); }
+html[data-theme="dark"] .fdemo-btn.variant-primary,
+html[data-theme="dark"] .fdemo-ia-msg.from-user .fdemo-ia-bubble{ background:var(--dc-accent); color:#0a0f1e; }
+html[data-theme="dark"] .fdemo-toast{ background:#edf1f8; color:#0a0f1e; }
+html[data-theme="dark"] .fdemo-dias.d-2{ background:rgba(243,160,90,.15); color:#f7b77c; }
+html[data-theme="dark"] .fdemo-canal.c-foto{ color:#c7b3ff; }
+html[data-theme="dark"] .fdemo-canal.c-remesa{ color:#f7a66b; }
+html[data-theme="dark"] .fdemo-hoja-marco{ background:repeating-linear-gradient(135deg, #131a2e 0 10px, #111728 10px 20px); }

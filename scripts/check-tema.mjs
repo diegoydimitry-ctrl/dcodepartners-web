@@ -71,11 +71,17 @@ for (const f of ['index.html', 'en/index.html']) {
   const i = h.indexOf('id="dcode-os"');
   if (i < 0) { errores.push(`${f}: falta la sección D-Code OS`); continue; }
   const s = h.slice(i, h.indexOf('</section>', h.indexOf('os-nota', i)));
-  est[f] = { mods: cuenta(s, /class="os-mod" href="#sistemas-(comercial|operaciones|atencion|finance)"/g), nav: cuenta(s, /class="os-nav-b"/g), pasos: cuenta(s, /class="os-paso"/g), vistas: cuenta(s, /data-os-vista="/g), kpis: cuenta(s, /class="os-kpi"/g) };
+  const sis = s.slice(s.indexOf('class="os-sis"'), s.indexOf('class="os-cables"'));
+  est[f] = { sistemas: cuenta(sis, /class="oss" /g), nav: cuenta(s, /class="os-nav-b"/g), pasos: cuenta(s, /class="os-paso"/g), vistas: cuenta(s, /data-os-vista="/g), kpis: cuenta(s, /class="os-kpi"/g) };
+  // La narrativa: D-Code Finance NO es uno de los sistemas que «construyen»
+  // D-Code OS; aparece entre los que también se conectan, bajo la capa.
+  if (/Finance/.test(sis)) errores.push(`${f}: D-Code Finance no puede estar entre los sistemas que convergen en D-Code OS`);
+  if (!/class="oss oss--mas os-otros"[\s\S]*D-Code Finance/.test(s)) errores.push(`${f}: falta «cualquier otro sistema» con D-Code Finance bajo la capa`);
+  if (!/data-os-capa/.test(s)) errores.push(`${f}: falta la capa D-Code OS`);
   if (!h.includes('/assets/css/dcode-os.css?v=') || !h.includes('/assets/js/dcode-os.js?v=')) errores.push(`${f}: faltan dcode-os.css o dcode-os.js`);
   if (h.indexOf('id="dcode-os"') < h.indexOf('id="sistemas"')) errores.push(`${f}: D-Code OS tiene que ir DESPUÉS de las cuatro demos`);
   const e = est[f];
-  if (e.mods !== 4 || e.nav !== 7 || e.pasos !== 6 || e.vistas !== 7 || e.kpis !== 4) errores.push(`${f}: estructura de D-Code OS inesperada ${JSON.stringify(e)}`);
+  if (e.sistemas !== 4 || e.nav !== 7 || e.pasos !== 6 || e.vistas !== 7 || e.kpis !== 4) errores.push(`${f}: estructura de D-Code OS inesperada ${JSON.stringify(e)}`);
 }
 if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html']) !== JSON.stringify(est['en/index.html'])) errores.push('D-Code OS: ES y EN no tienen la misma estructura');
 
@@ -88,7 +94,8 @@ if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html'
   const iLig = css.indexOf('html.gx-ligero .gx > i{'), iClaro = css.indexOf('html[data-theme="light"] body:has(> .gx) .field');
   if (iLig < 0) errores.push('tema.css: falta el modo cielo ligero');
   else if (iClaro < 0 || iLig < iClaro) errores.push('tema.css: el modo cielo ligero tiene que ir después de las reglas del campo en claro');
-  if (!/html\.gx-ligero body:has\(> \.field\) > \.gx\{ display:none; \}/.test(css.replace(/,\s*html\.gx-ligero body:has\(> \.field--inst\) > \.gx/, ''))) errores.push('tema.css: en modo ligero el cielo tapado por el campo tiene que dejar de dibujarse');
+  if (/body:has\(> \.gx\) \.field[^{]*\{[^}]*mix-blend-mode:(screen|multiply)/.test(css)) errores.push('tema.css: el campo de partículas no puede volver a mezclarse con el cielo (mix-blend-mode): es el coste principal por fotograma');
+  for (const j of ['assets/js/dcp6.js', 'assets/js/dcp8.js']) if (/alpha:\s*false/.test(leer(j))) errores.push(`${j}: el lienzo del campo tiene que ser transparente (sin alpha:false)`);
 }
 
 if (errores.length) { console.error(errores.map((e) => '✗ ' + e).join('\n')); console.error(`\n${errores.length} problema(s).`); process.exit(1); }

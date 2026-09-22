@@ -46,7 +46,7 @@
   var canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
   host.appendChild(canvas);
-  var ctx = canvas.getContext('2d', { alpha: false });
+  var ctx = canvas.getContext('2d'); // transparente: sin mezcla con el cielo
 
   var W = 0, H = 0, dpr = 1, narrow = false, small = false;
   var FW = 0, FH = 0, OFFX = 0, OFFY = 0;
@@ -301,9 +301,12 @@
     // Se limpia el lienzo ENTERO aunque el instrumento trabaje en su banda:
     // si no, la estela quedaría recortada en un rectángulo visible.
     ctx.save(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = reduced ? '#05070e' : 'rgba(5,7,14,' + (alpha || 0.24) + ')';
-    ctx.fillRect(0, 0, FW, FH);
+    if (reduced) ctx.clearRect(0, 0, FW, FH);
+    else {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0,0,0,' + (alpha || 0.24) + ')';
+      ctx.fillRect(0, 0, FW, FH);
+    }
     ctx.restore();
     ctx.globalCompositeOperation = 'lighter';
   }

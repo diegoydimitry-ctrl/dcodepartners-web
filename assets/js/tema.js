@@ -82,19 +82,92 @@
       setTimeout(function () { b.remove(); fin(); }, 460);
     }, 380);
   }
+  /* LAS PIEZAS. Lo que se ve en pantalla se parte en piezas (bloques
+     medianos: párrafos, botones, tarjetas, paneles; y los titulares, línea
+     a línea). Cada una recibe un view-transition-name y el navegador hace
+     dos fotos suyas —antes y después—; se animan con la Web Animations API,
+     solo transform y opacity. Nada del DOM real se mueve. */
+  var NO = /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|BR|WBR)$/;
+  function partir() {
+    var vw = W.innerWidth, vh = W.innerHeight, max = vw < 768 ? 26 : 44, maxArea = vw * vh * (vw < 768 ? 0.42 : 0.3);
+    var piezas = [], palabras = [];
+    function visible(r) { return r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw && r.width > 3 && r.height > 3; }
+    function titular(h) {
+      // Un titular se parte por sus líneas (los span que ya tiene): sin tocar
+      // el DOM, así que su maquetación no cambia. Si mezcla texto suelto con
+      // spans, o una línea ocupa dos renglones, va entero.
+      var hijos = [].slice.call(h.children), suelto = false;
+      for (var n = h.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && n.nodeValue.trim()) suelto = true;
+      if (!suelto && hijos.length > 1 && hijos.every(function (x) { return x.getClientRects().length === 1 && getComputedStyle(x).display !== 'inline'; })) {
+        hijos.forEach(function (x) { palabras.push(x); });
+      } else piezas.push(h);
+    }
+    function recorrer(e) {
+      for (var c = e.firstElementChild; c; c = c.nextElementSibling) {
+        if (NO.test(c.tagName) || c.classList.contains('gx') || c.classList.contains('field') || c.classList.contains('tema-portal')) continue;
+        var cs = getComputedStyle(c);
+        if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity < 0.05) continue;
+        if (cs.display === 'contents') { recorrer(c); continue; }
+        var r = c.getBoundingClientRect();
+        if (!visible(r)) { if (!r.width || !r.height) recorrer(c); continue; }
+        var area = r.width * r.height;
+        if (/^H[12]$/.test(c.tagName) && area < maxArea && (c.textContent || '').split(/\s+/).length <= 14) { titular(c); continue; }
+        if (area > maxArea || (cs.display === 'inline' && c.getClientRects().length > 1)) { recorrer(c); continue; }
+        if (cs.display === 'inline') continue;
+        if (area >= 240) piezas.push(c);
+      }
+    }
+    recorrer(D.body);
+    var todas = palabras.map(function (w) { return { el: w, r: w.getBoundingClientRect() }; })
+      .concat(piezas.map(function (p) { return { el: p, r: p.getBoundingClientRect() }; }));
+    if (todas.length > max) {
+      // se quedan las palabras y las piezas más grandes; el resto viaja con el fondo
+      var pal = todas.slice(0, palabras.length).slice(0, Math.min(palabras.length, 16));
+      var res = todas.slice(palabras.length).sort(function (a, b) { return b.r.width * b.r.height - a.r.width * a.r.height; }).slice(0, max - pal.length);
+      todas = pal.concat(res);
+    }
+    todas.forEach(function (p, k) { p.el.style.viewTransitionName = 'tp-' + k; p.n = 'tp-' + k; });
+    return { piezas: todas, palabras: palabras, vw: vw, vh: vh };
+  }
+  function recomponer(P) {
+    P.piezas.forEach(function (p) { p.el.style.viewTransitionName = ''; });
+  }
+  function animarPiezas(P) {
+    var vw = P.vw, vh = P.vh, sem = 11;
+    var rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
+    var el = D.documentElement;
+    P.piezas.forEach(function (p) {
+      var r = p.r, cx = r.left + r.width / 2, cy = r.top + r.height / 2, fx = Math.max(0, Math.min(1, r.left / vw));
+      var giro = (rnd() - 0.5) * 50, caida = 18 + rnd() * 26;
+      // la vieja: se desprende (cae y gira un poco) y es aspirada a la izquierda
+      el.animate([
+        { transform: 'none', opacity: 1, offset: 0 },
+        { transform: 'translate(' + (-6 - rnd() * 10).toFixed(0) + 'px,' + caida.toFixed(0) + 'px) rotate(' + (giro * 0.25).toFixed(1) + 'deg)', opacity: 1, offset: 0.22 },
+        { transform: 'translate(' + (-(cx + r.width / 2 + 60 + rnd() * 140)).toFixed(0) + 'px,' + ((vh / 2 - cy) * 0.55 + caida * 2).toFixed(0) + 'px) rotate(' + giro.toFixed(1) + 'deg) scale(.3)', opacity: 0, offset: 1 }
+      ], { pseudoElement: '::view-transition-old(' + p.n + ')', duration: 560, delay: fx * 170 + rnd() * 70, easing: 'cubic-bezier(.5,0,.85,.4)', fill: 'both' });
+      // la nueva: llega desde la derecha y se monta en su sitio
+      el.animate([
+        { transform: 'translate(' + (vw - r.left + 40 + rnd() * 160).toFixed(0) + 'px,' + ((rnd() - 0.5) * 70).toFixed(0) + 'px) rotate(' + (-giro * 0.4).toFixed(1) + 'deg) scale(.86)', opacity: 0 },
+        { opacity: 1, offset: 0.35 },
+        { transform: 'none', opacity: 1 }
+      ], { pseudoElement: '::view-transition-new(' + p.n + ')', duration: 520, delay: 230 + fx * 150 + rnd() * 60, easing: 'cubic-bezier(.16,.8,.24,1)', fill: 'both' });
+    });
+  }
   function cambiar() {
     if (enCurso) return;
     var nuevo = actual() === 'dark' ? 'light' : 'dark';
     if (mqReducido.matches) { aplicar(nuevo); return; }
     enCurso = true;
-    var terminar = function () { enCurso = false; R.classList.remove('tema-vt', 'tema-cambiando', 'tema-a-claro', 'tema-a-oscuro'); };
+    var P = null;
+    var terminar = function () { enCurso = false; if (P) recomponer(P); R.classList.remove('tema-vt', 'tema-cambiando', 'tema-a-claro', 'tema-a-oscuro'); };
     if (typeof D.startViewTransition !== 'function') { barrido(nuevo, terminar); return; }
     R.classList.add('tema-vt', 'tema-cambiando', nuevo === 'light' ? 'tema-a-claro' : 'tema-a-oscuro');
-    var p = null;
-    var vt;
+    try { P = partir(); } catch (e) { P = null; }
+    var p = null, vt;
     try {
       vt = D.startViewTransition(function () { aplicar(nuevo); p = portal(); });
     } catch (e) { aplicar(nuevo); terminar(); return; }
+    if (P && vt.ready) vt.ready.then(function () { try { animarPiezas(P); } catch (e) {} }, function () {});
     vt.finished.then(function () { if (p) p.remove(); terminar(); }, function () { if (p) p.remove(); terminar(); });
   }
   if (boton) {
@@ -108,6 +181,36 @@
       R.setAttribute('data-theme', e.newValue); pintarBoton(); metaColor();
     }
   });
+
+  /* El cielo del otro tema, precargado cuando la página ya está quieta: así
+     el cambio de tema no espera a descargar sus estrellas (5 PNG, ~65 KB). */
+  function precargarCielo() {
+    try {
+      [].forEach.call(D.styleSheets, function (h) {
+        if (!h.href || h.href.indexOf('galaxia.css') < 0) return;
+        [].forEach.call(h.cssRules, function (r) {
+          var m = (r.cssText || '').match(/url\("?([^")]+)"?\)/);
+          if (m) { var im = new Image(); im.decoding = 'async'; im.src = m[1]; }
+        });
+      });
+    } catch (e) {}
+  }
+  W.addEventListener('load', function () { (W.requestIdleCallback || function (f) { W.setTimeout(f, 2500); })(precargarCielo, { timeout: 4000 }); });
+
+  /* ------------------------------------- estrellas que titilan (.gx-t) */
+  (function () {
+    var gx = D.querySelector('.gx');
+    if (!gx || gx.querySelector('.gx-t')) return;
+    var n = W.innerWidth <= 768 ? 7 : 13, sem = 7, frag = D.createDocumentFragment();
+    var rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
+    for (var i = 0; i < n; i++) {
+      var b = D.createElement('b');
+      b.className = 'gx-t' + (i % 4 === 1 ? ' is-c' : '');
+      b.style.cssText = 'left:' + (4 + rnd() * 92).toFixed(1) + '%;top:' + (4 + rnd() * 90).toFixed(1) + '%;--d:' + (3.2 + rnd() * 4).toFixed(1) + 's;--dl:-' + (rnd() * 6).toFixed(1) + 's';
+      frag.appendChild(b);
+    }
+    gx.appendChild(frag);
+  })();
 
   /* ------------------------------------------------ parallax del cielo */
   var capas = [
