@@ -1546,7 +1546,11 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
 .cmp-no{ color:var(--v-ink-3); }
 .cmp-txt{ font-size:.8125rem; line-height:1.45; color:var(--v-ink-2); }
 
+/* En el teléfono la tabla no se enseña (como hacen las apps de gestión): se avisa */
+.cmp-movil{ display:none; }
 @media (max-width:640px){
+  .cmp{ display:none; }
+  .cmp-movil{ display:block; margin:clamp(22px,3vw,34px) 0 0; padding:14px 16px; border:1px dashed var(--v-edge); border-radius:12px; font-size:.875rem; line-height:1.5; color:var(--v-ink-2); }
   .cmp-scroll{ overflow:visible; }
   .cmp-tabla{ min-width:0; table-layout:auto; }
   .cmp-tabla colgroup, .cmp-tabla thead{ display:none; }

@@ -565,10 +565,13 @@
 .dx-fila{
   margin:0; padding:12px 14px; border-radius:12px; border:1px solid rgba(150,174,245,.14);
   background:rgba(150,174,245,.03);
-  display:grid; grid-template-columns:minmax(150px,210px) minmax(0,1fr); gap:10px 18px; align-items:center;
+  display:block; min-width:0;
 }
-.dx-fila legend{ float:left; padding:0; display:flex; align-items:center; gap:10px; font-weight:600; font-size:.9375rem; color:#eef2fb; }
-.dx-fila legend i{ width:9px; height:9px; border-radius:50%; background:var(--c); flex:none; }
+/* Safari/iPad no respeta el legend flotante dentro de un fieldset en grid:
+   la rejilla va en un div propio y el legend queda solo para lectores. */
+.dx-fila-in{ display:grid; grid-template-columns:minmax(130px,200px) minmax(0,1fr); gap:10px 18px; align-items:center; }
+.dx-fila-l{ display:flex; align-items:center; gap:10px; font-weight:600; font-size:.9375rem; color:#eef2fb; min-width:0; }
+.dx-fila-l i{ width:9px; height:9px; border-radius:50%; background:var(--c); flex:none; }
 .dx-opts{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
 .dx-opt{ position:relative; display:block; cursor:pointer; }
 .dx-opt input{ position:absolute; opacity:0; inset:0; margin:0; cursor:pointer; }
@@ -660,7 +663,7 @@
   .dx-pasos li{ font-size:0; gap:0; padding:4px; }
   .dx-pasos li::before{ font-size:.75rem; }
   .dx-pasos li.is-on{ font-size:.75rem; gap:7px; padding:6px 10px 6px 7px; }
-  .dx-fila{ grid-template-columns:minmax(0,1fr); }
+  .dx-fila-in{ grid-template-columns:minmax(0,1fr); }
   .dx-tarifas{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media (max-width:560px){

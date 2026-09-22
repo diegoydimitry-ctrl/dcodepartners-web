@@ -319,10 +319,10 @@
     function pintarFilas() {
       filas.innerHTML = sel.map(function (k) {
         var a = D.areas[k], v = horas[k] || D.niveles[0][2];
-        return '<fieldset class="dx-fila" style="--c:var(' + a.c + ')"><legend><i aria-hidden="true"></i>' + esc(a.n) + '</legend><div class="dx-opts">' +
+        return '<fieldset class="dx-fila" style="--c:var(' + a.c + ')"><legend class="sr-only">' + esc(a.n) + '</legend><div class="dx-fila-in"><span class="dx-fila-l" aria-hidden="true"><i></i>' + esc(a.n) + '</span><div class="dx-opts">' +
           D.niveles.map(function (nv) {
             return '<label class="dx-opt"><input type="radio" name="dx-h-' + k + '" value="' + nv[2] + '"' + (nv[2] === v ? ' checked' : '') + '><span>' + esc(nv[0]) + ' <small>' + esc(nv[1]) + '</small></span></label>';
-          }).join('') + '</div></fieldset>';
+          }).join('') + '</div></div></fieldset>';
       }).join('');
       sel.forEach(function (k) { if (!horas[k]) horas[k] = D.niveles[0][2]; });
       $$('input', filas).forEach(function (i) {
