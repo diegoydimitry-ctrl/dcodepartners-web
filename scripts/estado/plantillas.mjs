@@ -330,6 +330,7 @@ export function comparativa(cfg, lang) {
     fila(T(lang, 'Puesta en marcha', 'Getting started'), td(lang, 0, 2, `<span class="cmp-txt">${T(lang, 'En 1 día, una vez validado el formulario', 'In 1 day, once the form is validated')}</span>`) + td(lang, 2, 1, `<span class="cmp-txt">${T(lang, 'Primero el diseño, que apruebas; después la implantación', 'Design first, for your approval; then the rollout')}</span>`)),
   ].join('\n            ');
   return `
+      <p class="cmp-movil">${T(lang, 'La comparativa fila a fila es una tabla grande: se ve en un ordenador o una tableta. Arriba tienes lo esencial de cada plan.', 'The row-by-row comparison is a large table: open it on a computer or tablet. The essentials of each plan are above.')}</p>
       <div class="cmp rise">
         <p class="cmp-t">${T(lang, 'Los tres planes, fila a fila', 'The three plans, row by row')}</p>
         <div class="cmp-scroll" tabindex="0" role="region" aria-label="${T(lang, 'Comparativa de los tres planes', 'Comparison of the three plans')}">

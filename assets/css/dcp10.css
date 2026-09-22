@@ -510,7 +510,7 @@
 @keyframes dxEntra{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
 .dx-q{ margin:0; font-family:var(--serif); font-weight:700; font-size:clamp(1.3rem,1.1rem + .8vw,1.7rem); line-height:1.15; letter-spacing:-.02em; color:#f4f7ff; }
 .dx-q:focus{ outline:none; }
-.dx-h{ margin:8px 0 0; font-size:.9375rem; line-height:1.5; color:#a7b0c4; }
+.dx-h{ margin:8px 0 0; font-size:.9375rem; line-height:1.5; color:#a7b0c4; max-width:74ch; }
 
 /* Paso 1 · las seis áreas */
 .dx-areas{ margin-top:20px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
@@ -747,7 +747,7 @@
 .gal-historia b{ display:flex; align-items:center; gap:8px; font-family:var(--mono); font-weight:500; font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase; color:#8c95aa; }
 .gal-historia b i{ font-style:normal; color:#a9c2ff; }
 .gal-historia span{ display:block; margin-top:6px; font-size:.875rem; line-height:1.45; color:#dfe6f5; }
-.gal-nota{ margin:10px 0 0; font-size:.8125rem; color:#8c95aa; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.gal-nota{ margin:10px 0 0; font-size:.8125rem; color:#8c95aa; display:flex; align-items:center; gap:8px; flex-wrap:wrap; max-width:86ch; }
 .gal-nota i{ width:6px; height:6px; border-radius:50%; background:var(--x-warn); flex:none; }
 /* El sistema, a lo ancho de la pantalla (como Finance) */
 .gal-app{ position:relative; min-height:620px; }

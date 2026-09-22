@@ -1862,9 +1862,25 @@
     /* EL DOCUMENTO, tal y como sale. Misma estructura que DocumentoFiscal.tsx
        del producto: emisor, número y fechas; destinatario; tabla con
        Concepto · Cant. · Precio · Dto. · IVA · Importe; base, desglose de
-       IVA, retención si la hay y total. Sin QR ni leyenda de cotejo: el
-       producto solo los imprime cuando de verdad remite, y aquí no se
-       remite nada. */
+       IVA, retención si la hay y total.
+
+       EL QR. Una factura expedida por un sistema VERI*FACTU lleva un QR
+       arriba y la leyenda «Factura verificable en la sede electrónica de la
+       AEAT» (Orden HAC/1177/2024, que desarrolla el artículo 7 del RD
+       1007/2023). El QR de verdad es de COTEJO: lleva el NIF del emisor, el
+       número de factura, la fecha y el importe a la sede de la AEAT, que
+       responde si esa factura le consta. Aquí los datos son inventados y no
+       se remite nada, así que un QR de cotejo mentiría: el de la demo lleva
+       a la página oficial de VERI*FACTU, donde está la normativa. Se dice
+       debajo del documento, no se deja adivinar. */
+    var VF_URL = 'https://sede.agenciatributaria.gob.es/Sede/iva/sistemas-informaticos-facturacion-verifactu.html';
+    function selloVerifactu() {
+      return '<a class="fdemo-hoja-qr" href="' + VF_URL + '" target="_blank" rel="noopener noreferrer">' +
+        '<img src="/assets/img/verifactu-qr.svg" width="108" height="108" loading="lazy" decoding="async" alt="' +
+        'QR code linking to the Spanish tax agency’s official VERI*FACTU page' + '">' +
+        '<span class="fdemo-hoja-qr-t"><b>VERI*FACTU</b>' +
+        '<i>' + 'Invoice verifiable at the AEAT’s electronic office (Spain)' + '</i></span></a>';
+    }
     function documentoFactura(f, extra) {
       extra = extra || {};
       var cli = extra.cliente || clienteDeFactura(f);
@@ -1873,9 +1889,9 @@
       var t = extra.tot || { base: f.base != null ? f.base : r2(f.importe / 1.21), cuota: f.iva != null ? f.iva : r2(f.importe - (f.base || f.importe / 1.21)), ret: f.irpf ? r2((f.base || 0) * 0.15) : 0, total: f.importe };
       var rect = f.tipo === 'rectificativa';
       return '<div class="fdemo-hoja' + (extra.vivo ? ' es-vivo' : '') + '">' +
-        '<div class="fdemo-hoja-cab"><div>' +
+        '<div class="fdemo-hoja-cab"><div class="fdemo-hoja-emi">' + selloVerifactu() + '<div>' +
         '<p class="fdemo-hoja-emisor">D-Code Partners, S.L.</p>' +
-        '<p class="fdemo-hoja-peq">Tax ID: B00000000</p><p class="fdemo-hoja-peq">Calle de ejemplo 1, 28001 Madrid</p></div>' +
+        '<p class="fdemo-hoja-peq">Tax ID: B00000000</p><p class="fdemo-hoja-peq">Calle de ejemplo 1, 28001 Madrid</p></div></div>' +
         '<div class="fdemo-hoja-der"><p class="fdemo-hoja-tipo">' + (rect ? 'CORRECTIVE INVOICE' : 'INVOICE') + '</p>' +
         '<p class="fdemo-hoja-emisor">' + esc(f.numero) + '</p>' +
         '<p class="fdemo-hoja-peq">Date: ' + FDATE(f.fechaEmision) + '</p>' +
@@ -1991,7 +2007,8 @@
             (f.proyectoOrigenId ? '<div>' + linkTo('proyectos', f.proyectoOrigenId, 'View source project') + '</div>' : '') + '</div>') : '');
       } else if (tab === 'documento') {
         cuerpo = '<div class="fdemo-hoja-marco">' + documentoFactura(f) + '</div>' +
-          '<p class="fdemo-nota-doc">This is the document the client receives. Nothing is downloaded or sent in the demo: with your account, the same button generates the PDF and sends it from your domain.</p>';
+          '<p class="fdemo-nota-doc">This is the document the client receives. Nothing is downloaded or sent in the demo: with your account, the same button generates the PDF and sends it from your own domain. ' +
+          'This QR opens the AEAT’s official VERI*FACTU page, because these figures are made up; the verification QR —the one carrying your invoice’s tax ID, number, date and total— is printed once the system is really reporting.</p>';
       } else if (tab === 'cobros') {
         cuerpo = (v.pend > 0 && !borrador ? '<div class="fdemo-pend-banda"><div><p class="fdemo-pend-l">Still to collect</p><p class="fdemo-pend-v">' + EUR(v.pend) + '</p>' +
             '<p class="fdemo-pend-h">' + (ret > 0 ? 'overdue by ' + ret + ' days' : 'due on ' + FDATE(f.fechaVencimiento)) + '</p></div>' +

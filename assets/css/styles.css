@@ -225,6 +225,18 @@ h1,h2,h3,h4,p{ margin:0; }
 }
 ::selection{ background:rgba(91,140,255,.35); color:#fff; }
 
+/* ANCLAS BAJO LA CABECERA. Un enlace a #algo dejaba el destino pegado al
+   borde y la cabecera fija le comía los primeros 76 px: se aterrizaba en
+   mitad del titular. Se reserva su alto más un respiro. Las demos quedan
+   fuera: dentro de ellas el desplazamiento lo manda su propio contenedor. */
+:where(body [id]:not(.fdemo-scope *):not(.sd *):not(.os *)){
+  scroll-margin-top:calc(var(--header-h, 76px) + 18px);
+}
+
+/* Los párrafos no terminan en una palabra suelta cuando el navegador sabe
+   evitarlo (text-wrap:pretty); donde no lo sabe, no pasa nada. */
+p, li, dd, figcaption, .lead{ text-wrap:pretty; }
+
 /* ============ ACCESSIBILITY ============ */
 .skip-link{
   position:absolute;
@@ -791,8 +803,9 @@ nav.main-nav > ul{ position:relative; }
 }
 .lang-switch a:hover{ color:var(--ink); }
 /* Táctil: la píldora mide 28 px; el área pulsable llega a 44 px de alto sin
-   cambiar el aspecto (DS: objetivos de 44 px en móvil). */
-@media (max-width:940px){
+   cambiar el aspecto (DS: objetivos de 44 px en móvil). También en tabletas
+   grandes: lo que manda es el dedo, no el ancho de la pantalla. */
+@media (max-width:940px), (pointer:coarse){
   .lang-switch a{ position:relative; }
   .lang-switch a::after{ content:""; position:absolute; inset:-8px -2px; }
 }
@@ -2428,7 +2441,8 @@ nav.main-nav > ul{ position:relative; }
   font-family:var(--mono); font-size:0.75rem; color:var(--stone-soft); letter-spacing:0.03em;
 }
 
-.prose{ max-width:720px; margin:0 auto; color:var(--stone); font-size:1.02rem; line-height:1.8; }
+/* La medida: 72 caracteres. Un párrafo más ancho se lee peor aunque quepa. */
+.prose{ max-width:min(720px, 72ch); margin:0 auto; color:var(--stone); font-size:1.02rem; line-height:1.8; }
 .prose h2{ font-family:var(--serif); color:var(--ink); font-size:1.5rem; font-weight:600; margin:44px 0 18px; }
 .prose h3{ font-family:var(--serif); color:var(--ink); font-size:1.2rem; font-weight:600; margin:32px 0 14px; }
 .prose p{ margin-bottom:18px; }
@@ -3340,7 +3354,7 @@ footer{
 }
 .radar-stage:hover,.radar-stage.is-active,.radar-stage:focus-visible{ border-color:rgba(67,224,255,.5); background:rgba(67,224,255,.06); color:var(--ink); }
 .radar-stage-num{ font-family:var(--mono); font-size:0.75rem; color:var(--cyan); }
-.radar-note{ flex-basis:100%; color:var(--stone-soft); font-size:0.85rem; margin-top:6px; }
+.radar-note{ flex-basis:100%; color:var(--stone-soft); font-size:0.85rem; margin-top:6px; max-width:74ch; }
 @media (prefers-reduced-motion: reduce){ .radar-sweep{ animation:none; opacity:.3; } }
 @media (max-width:640px){ .radar-window .window-body{ flex-direction:column; align-items:stretch; } .radar-scope{ width:180px; height:180px; margin:0 auto; } }
 
@@ -3449,7 +3463,7 @@ footer{
 .order-col-label{ display:block; font-family:var(--mono); font-size:0.6875rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--stone-soft); margin-bottom:10px; }
 .order-card{ background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:0.82rem; color:var(--stone); margin-bottom:8px; opacity:0; }
 .order-card:last-child{ margin-bottom:0; }
-.chaos-order-note{ margin-top:18px; font-size:0.85rem; color:var(--stone-soft); }
+.chaos-order-note{ margin-top:18px; font-size:0.85rem; color:var(--stone-soft); max-width:74ch; }
 @media (max-width:640px){
   .chaos-chip{ display:none; }
   .order-board{ grid-template-columns:minmax(0,1fr); }
@@ -3489,7 +3503,7 @@ footer{
 .ticket-rail{ display:flex; align-items:center; gap:6px; }
 .ticket-step{ flex:1; height:3px; border-radius:2px; background:var(--border); transition:background .3s ease; }
 .ticket-step.active{ background:var(--cyan); }
-.ticket-demo-note{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:16px; }
+.ticket-demo-note{ text-align:center; color:var(--stone-soft); font-size:0.78rem; margin-top:16px; max-width:74ch; margin-inline:auto; }
 
 /* ---------- Administración: panel operativo ---------- */
 .opsgrid-window .window-body{ }
@@ -3523,7 +3537,7 @@ footer{
   padding:20px 24px; background:rgba(67,224,255,.05);
 }
 .command-decision-label{ font-family:var(--mono); font-size:0.6875rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--cyan); }
-.command-decision-text{ color:var(--ink); font-size:1rem; margin-top:8px; }
+.command-decision-text{ color:var(--ink); font-size:1rem; margin-top:8px; max-width:70ch; }
 @media (prefers-reduced-motion: reduce){ .command-feed .command-dot,.command-arrow svg{ animation:none; } }
 
 /* ============ MOVILIDAD POR DEPARTAMENTO — entrada repetible (DIR-019) ============

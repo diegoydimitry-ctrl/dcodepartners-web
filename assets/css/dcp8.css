@@ -435,13 +435,13 @@ body.v7 .duo--corte{
   display:grid; grid-template-columns:1fr 1fr;
   gap:clamp(30px,4.4vw,74px); align-items:start;
 }
-body.v7 .duo-lado h3{
+body.v7 .duo-lado h3, body.v7 .duo-lado .h-sub{
   font-size:13px; letter-spacing:.13em; text-transform:uppercase;
   font-family:var(--font-mono,ui-monospace,monospace);
   margin:0 0 20px; font-weight:600;
 }
-body.v7 .duo-lado--suelto h3{ color:var(--txt-3,#8ea0c4); }
-body.v7 .duo-lado--junto  h3{ color:#4bd6ea; }
+body.v7 .duo-lado--suelto h3, body.v7 .duo-lado--suelto .h-sub{ color:var(--txt-3,#8ea0c4); }
+body.v7 .duo-lado--junto h3, body.v7 .duo-lado--junto .h-sub{ color:#4bd6ea; }
 
 /* Las tres sueltas: sin viñeta, cada una con su raiz corta y su desplazamiento
    propio. Nada las une, y ese es el punto. */
