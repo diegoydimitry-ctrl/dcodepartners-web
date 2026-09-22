@@ -1,0 +1,274 @@
+/* ============================================================================
+   D-CODE PARTNERS — TEMA  ·  oscuro (por defecto) y claro
+   ----------------------------------------------------------------------------
+   Esta hoja va la ÚLTIMA y manda. Tiene cuatro partes:
+     1. El cielo (galaxia.css) y sus colores en cada tema.
+     2. Los tokens del modo claro: la misma marca en otra luz. Los colores
+        escritos a mano en el resto de hojas los traduce tema-claro.css
+        (generado); lo que necesita criterio de diseño se afina aquí.
+     3. El botón de tema: fijo arriba a la izquierda, grande donde cabe.
+     4. El cambio de dimensión (View Transitions) y su plan B.
+   ========================================================================= */
+
+/* ================================================================ 1. CIELO */
+:root{
+  color-scheme:dark;
+  --gx-base:#04060c;
+  --gx-fondo-1:rgba(38,58,140,.30);
+  --gx-fondo-2:rgba(84,42,150,.24);
+  --gx-fondo-3:rgba(40,140,200,.08);
+  --gx-w1:rgba(242,247,255,.95);
+  --gx-w2:rgba(214,226,255,.62);
+  --gx-w3:rgba(190,206,255,.34);
+  --gx-c1:rgba(130,228,255,.9);
+  --gx-c2:rgba(130,228,255,.44);
+  --gx-v1:rgba(200,176,255,.85);
+  --gx-v2:rgba(190,166,255,.42);
+  --gx-p2:rgba(255,172,210,.42);
+  --gx-h1:rgba(110,150,255,.26);
+  --gx-h2:rgba(80,220,255,.22);
+  --gx-h3:rgba(165,125,255,.24);
+  --gx-n1:rgba(120,80,255,.12);
+  --gx-n2:rgba(70,120,255,.11);
+  --gx-n3:rgba(60,200,255,.08);
+  --gx-n4:rgba(255,120,180,.05);
+}
+html{ background:var(--gx-base); }
+/* El cielo está detrás de todo; el cuerpo deja de pintar su propio fondo
+   para que se vea, y las atmósferas antiguas (aurora y malla) se retiran:
+   la galaxia ya hace ese trabajo. */
+body:has(> .gx), body.v6:has(> .gx), body.v7:has(> .gx){ background:transparent !important; }
+body:has(> .gx)::before, body:has(> .gx)::after{ display:none !important; }
+/* Los campos de partículas de cada página pintan su propio fondo oscuro.
+   En pantalla (screen) ese fondo desaparece sobre el cielo y solo quedan
+   las partículas encima. */
+body:has(> .gx) .field, body:has(> .gx) .field--inst{ background:transparent !important; mix-blend-mode:screen; margin:0 !important; }
+/* (styles.css da a .field —la clase de los campos de formulario— un
+   margin-bottom de 24 px que también recortaba el lienzo fijo por abajo.) */
+/* La cabecera sin fondo no necesita desenfocar lo que tiene detrás: sobre el
+   cielo, el saturate() dibujaba una franja. Al hacer scroll vuelve. */
+body:has(> .gx) #site-header:not(.scrolled){ -webkit-backdrop-filter:none; backdrop-filter:none; }
+/* Los velos del titular se desvanecen arriba y abajo: sobre un fondo que ya
+   no es liso, su borde recto se veía. */
+body:has(> .gx) .v6-hero::before{
+  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 12%, #000 72%, transparent 100%);
+  mask-image:linear-gradient(180deg, transparent 0, #000 12%, #000 72%, transparent 100%);
+}
+
+/* ======================================================= 2. MODO CLARO */
+html[data-theme="light"]{
+  color-scheme:light;
+  --gx-base:#f3f5fb;
+  --gx-fondo-1:rgba(150,178,255,.26);
+  --gx-fondo-2:rgba(196,166,255,.22);
+  --gx-fondo-3:rgba(110,214,255,.16);
+  --gx-w1:rgba(34,54,128,.52);
+  --gx-w2:rgba(48,70,146,.30);
+  --gx-w3:rgba(66,88,158,.18);
+  --gx-c1:rgba(0,132,184,.46);
+  --gx-c2:rgba(0,146,196,.24);
+  --gx-v1:rgba(104,64,214,.46);
+  --gx-v2:rgba(104,64,214,.22);
+  --gx-p2:rgba(206,58,128,.20);
+  --gx-h1:rgba(91,140,255,.24);
+  --gx-h2:rgba(40,196,240,.22);
+  --gx-h3:rgba(150,110,255,.22);
+  --gx-n1:rgba(155,107,255,.13);
+  --gx-n2:rgba(91,140,255,.13);
+  --gx-n3:rgba(67,224,255,.15);
+  --gx-n4:rgba(255,107,157,.08);
+
+  /* styles.css */
+  --bg:#f3f5fb; --bg-soft:#eef1f8; --bg-elev:#ffffff;
+  --panel:#ffffff; --panel-2:#f5f7fc;
+  --border:#d8dde9; --border-soft:#e3e7f0;
+  --surface-top:#ffffff;
+  --surface-border:rgba(36,52,104,.14);
+  --surface-highlight:rgba(255,255,255,.95);
+  --surface-bar-top:#f7f8fc;
+  --surface-ring-top:rgba(255,255,255,.98);
+  --surface-ring-mid:rgba(36,52,104,.10);
+  --surface-ring-bottom:rgba(47,95,224,.26);
+  --surface-sheen:rgba(255,255,255,.95);
+  --ink:#0d1324; --stone:#3c465c; --stone-soft:#535d74; --line:#dde2ec;
+  --blue:#2f5fe0; --cyan:#066a82; --violet:#6a42dc; --green:#0b7a52;
+  --amber:#9a5a00; --red:#c2372d; --signal-text:#2f5fe0;
+  --grad-brand:linear-gradient(120deg, #0a7a99, #2f5fe0 55%, #6a42dc);
+  --glow-blue:0 0 0 1px rgba(47,95,224,.16), 0 20px 50px -26px rgba(47,95,224,.35);
+  /* dcp5.css */
+  --v-bg:#f3f5fb; --v-bg-2:#e9edf6;
+  --v-panel:rgba(255,255,255,.76); --v-panel-2:rgba(255,255,255,.92);
+  --v-edge:rgba(36,52,104,.14); --v-edge-2:rgba(36,52,104,.08);
+  --v-ink:#0d1324; --v-ink-2:#3c465c; --v-ink-3:#535d74;
+  --v-a:#066a82; --v-b:#6a42dc; --v-c:#c0245e;
+  --v-grad:linear-gradient(102deg, #0a7a99, #2f5fe0 54%, #6a42dc);
+  --k-direccion:#6d4fd8; --k-comercial:#066a82; --k-marketing:#c0245e;
+  --k-clientes:#0b7a52;  --k-produccion:#9a5a00; --k-finanzas:#2f5fe0;
+  --k-soporte:#0b766e;   --k-administracion:#4f56d8;
+  /* dcp10.css */
+  --x-ok:#0b7a52; --x-bad:#c2372d; --x-warn:#9a5a00;
+  --x-line:rgba(36,52,104,.14); --x-line-2:rgba(36,52,104,.07);
+  --x-glass:rgba(255,255,255,.80); --x-glass-2:rgba(255,255,255,.92);
+}
+/* Las partículas de cada página: en claro no pueden ser luz sobre blanco.
+   Se invierten conservando el tono y se multiplican: pasan a ser tinta de
+   color sobre el cielo claro. */
+html[data-theme="light"] body:has(> .gx) .field,
+html[data-theme="light"] body:has(> .gx) .field--inst{
+  mix-blend-mode:multiply; filter:invert(1) hue-rotate(180deg) saturate(2.4) brightness(1.3); opacity:.7;
+}
+/* El titular con degradado: en claro, los mismos cuatro tonos, más hondos. */
+html[data-theme="light"] .v6-grad{ background:linear-gradient(96deg, #0a86a6 0%, #2f5fe0 34%, #6a42dc 62%, #c2245f 100%); -webkit-background-clip:text; background-clip:text; }
+/* Estados "todavía no" (conciliación: próximamente) en violeta legible. */
+html[data-theme="light"] [data-conc="1"], html[data-theme="light"] .conc-l{ --tono:#6a42dc; }
+html[data-theme="light"] .v7-fiscal-i:has([data-conc]){ --tono-i:#6a42dc; }
+/* El botón principal: en oscuro, azul claro con letra oscura; en claro,
+   el azul de acción del DS con letra blanca. */
+html[data-theme="light"] .btn-primary{ color:#fff; }
+html[data-theme="light"] .btn-primary:hover{ background:#244fc4; }
+html[data-theme="light"] ::selection{ background:rgba(47,95,224,.18); }
+/* Lo que en oscuro es letra oscura sobre azul claro pasa a letra blanca
+   sobre el azul de acción. */
+html[data-theme="light"] .lang-switch a[aria-current="true"],
+html[data-theme="light"] .main-nav .nav-cta-mobile > a.btn.btn-primary,
+html[data-theme="light"] .btn-invert,
+html[data-theme="light"] .chat-bubble,
+html[data-theme="light"] .chat-msg.user,
+html[data-theme="light"] .chat-input-row button{ color:#fff; }
+
+/* ================================================== 3. EL BOTÓN DE TEMA */
+.tema-btn{
+  --tb-fondo:rgba(12,17,32,.74);
+  --tb-borde:rgba(150,174,245,.24);
+  --tb-tinta:#edf1f8;
+  --tb-ico:linear-gradient(145deg, #1b2a5c, #0d1433);
+  --tb-luz:rgba(120,160,255,.45);
+  position:fixed; z-index:260; left:12px; top:calc((var(--header-h, 76px) - 46px) / 2);
+  height:46px; min-width:46px; padding:0 15px 0 5px; margin:0;
+  display:inline-flex; align-items:center; gap:10px;
+  border:1px solid var(--tb-borde); border-radius:999px;
+  background:var(--tb-fondo); color:var(--tb-tinta);
+  -webkit-backdrop-filter:blur(16px) saturate(1.5); backdrop-filter:blur(16px) saturate(1.5);
+  box-shadow:0 10px 30px -14px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 0 var(--tb-luz);
+  font:600 .875rem/1 var(--sans, "Inter", sans-serif); letter-spacing:.005em; white-space:nowrap;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+  transition:box-shadow .3s ease, border-color .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.tema-btn:hover{ border-color:rgba(150,174,245,.45); box-shadow:0 14px 36px -14px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.1), 0 0 0 6px rgba(91,140,255,.12); transform:translateY(-1px); }
+.tema-btn:focus-visible{ outline:2px solid #5b8cff; outline-offset:3px; }
+.tema-btn-i{
+  flex:none; width:34px; height:34px; border-radius:50%; display:grid; place-items:center;
+  background:var(--tb-ico); box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 0 18px -2px var(--tb-luz);
+}
+.tema-btn-i svg{ width:20px; height:20px; display:block; }
+.tema-btn .t-luna{ color:#dfe8ff; }
+.tema-btn .t-sol{ color:#8a4b00; }
+.tema-btn .t-sol, .tema-btn .t-a-oscuro{ display:none; }
+html[data-theme="light"] .tema-btn .t-luna, html[data-theme="light"] .tema-btn .t-a-claro{ display:none; }
+html[data-theme="light"] .tema-btn .t-sol{ display:block; }
+html[data-theme="light"] .tema-btn .t-a-oscuro{ display:inline; }
+html[data-theme="light"] .tema-btn{
+  --tb-fondo:rgba(255,255,255,.82);
+  --tb-borde:rgba(36,52,104,.16);
+  --tb-tinta:#0d1324;
+  --tb-ico:radial-gradient(circle at 35% 30%, #fff6d8, #ffd66b 55%, #f5a524);
+  --tb-luz:rgba(245,165,36,.45);
+  box-shadow:0 10px 26px -16px rgba(20,30,64,.35), inset 0 1px 0 #fff;
+}
+html[data-theme="light"] .tema-btn:hover{ border-color:rgba(47,95,224,.35); box-shadow:0 14px 30px -16px rgba(20,30,64,.4), inset 0 1px 0 #fff, 0 0 0 6px rgba(47,95,224,.10); }
+html[data-theme="light"] .tema-btn:focus-visible{ outline-color:#2f5fe0; }
+
+/* Por debajo de 1440 px el hueco a la izquierda del logo no da para la
+   etiqueta: queda el círculo, y la etiqueta aparece al pasar o enfocar. */
+@media (max-width:1439px){
+  .tema-btn{ padding:0 5px; gap:0; }
+  .tema-btn-t{ max-width:0; overflow:hidden; opacity:0; transition:max-width .32s cubic-bezier(.2,.8,.2,1), opacity .2s ease, margin .32s cubic-bezier(.2,.8,.2,1); }
+  .tema-btn:hover .tema-btn-t, .tema-btn:focus-visible .tema-btn-t{ max-width:160px; opacity:1; margin:0 13px 0 10px; }
+}
+/* La cabecera deja sitio al botón donde el logo quedaría debajo. */
+@media (min-width:941px) and (max-width:1279px){
+  #site-header .nav-wrap{ padding-left:74px; }
+}
+@media (max-width:940px){
+  .tema-btn{ height:44px; min-width:44px; top:calc((var(--header-h, 76px) - 44px) / 2); padding:0 3px; }
+  .tema-btn-i{ width:36px; height:36px; }
+  #site-header .nav-wrap{ padding-left:66px; }
+}
+@media (hover:none){
+  .tema-btn:hover .tema-btn-t{ max-width:0; opacity:0; margin:0; }
+}
+@media print{ .tema-btn, .gx{ display:none !important; } }
+
+/* ================================================= 4. CAMBIO DE DIMENSIÓN */
+html.tema-cambiando *, html.tema-cambiando *::before, html.tema-cambiando *::after{ transition:none !important; }
+/* La página actual se va absorbida hacia la izquierda: se estrecha, gira
+   hacia el fondo y se apaga en el borde. La nueva entra desde la derecha,
+   precedida por una costura de luz. Entre las dos, un instante de espacio. */
+html.tema-vt::view-transition{ background:
+  radial-gradient(55% 90% at 0% 50%, rgba(120,165,255,.55), transparent 70%),
+  radial-gradient(50% 80% at 100% 50%, rgba(160,120,255,.32), transparent 72%),
+  #050814; }
+html.tema-vt::view-transition-group(root){ animation:none; }
+html.tema-vt::view-transition-image-pair(root){ isolation:auto; }
+html.tema-vt::view-transition-old(root),
+html.tema-vt::view-transition-new(root){ mix-blend-mode:normal; animation-fill-mode:both; }
+/* Coreografía (≈ 0,86 s): la actual empieza a irse ya; la nueva sale 0,14 s
+   después desde fuera de la pantalla, así que durante medio gesto se ven las
+   dos, con el espacio entre medias. */
+html.tema-vt::view-transition-old(root){
+  animation-name:tema-absorbe; animation-duration:.7s; animation-timing-function:cubic-bezier(.45,0,.75,.35);
+  transform-origin:0% 50%;
+}
+html.tema-vt::view-transition-new(root){
+  animation-name:tema-llega; animation-duration:.72s; animation-delay:.14s; animation-timing-function:cubic-bezier(.2,.75,.25,1);
+  transform-origin:100% 50%;
+}
+@keyframes tema-absorbe{
+  0%  { transform:none; filter:none; clip-path:inset(0 0 0 0 round 0); opacity:1; }
+  55% { opacity:.95; }
+  100%{ transform:perspective(1600px) translateX(-70%) rotateY(38deg) scale(.3,.62); filter:blur(6px) brightness(1.4) saturate(1.4); clip-path:inset(14% 0 14% 0 round 64px); opacity:0; }
+}
+@keyframes tema-llega{
+  0%  { transform:perspective(1600px) translateX(100%) rotateY(-26deg) scale(.86); filter:blur(8px) brightness(1.3); clip-path:inset(8% 0 8% 0 round 48px); }
+  100%{ transform:none; filter:none; clip-path:inset(0 0 0 0 round 0); }
+}
+/* La costura de luz va delante de la página nueva: mismo tiempo, misma
+   curva, y se apaga al llegar al borde izquierdo. Su sitio final está fuera
+   de la pantalla, a la derecha. */
+.tema-portal{
+  position:fixed; top:0; bottom:0; left:100%; width:140px; pointer-events:none; z-index:2147483000;
+  view-transition-name:tema-portal;
+  background:linear-gradient(90deg, rgba(91,140,255,0), rgba(120,170,255,.55) 38%, #f4f8ff 50%, rgba(170,130,255,.55) 62%, rgba(155,107,255,0));
+}
+html.tema-vt::view-transition-group(tema-portal){ animation:tema-costura .72s cubic-bezier(.2,.75,.25,1) .14s both; }
+html.tema-vt::view-transition-new(tema-portal){ animation:none; }
+@keyframes tema-costura{
+  0%  { transform:translateX(-70px); opacity:1; }
+  85% { opacity:.85; }
+  100%{ transform:translateX(calc(-100vw - 70px)); opacity:0; }
+}
+/* En pantallas pequeñas, sin desenfoque: el mismo gesto, más ligero. */
+@media (max-width:768px){
+  @keyframes tema-absorbe{
+    0%  { transform:none; clip-path:inset(0 0 0 0 round 0); opacity:1; }
+    100%{ transform:perspective(1000px) translateX(-75%) rotateY(34deg) scale(.34,.66); clip-path:inset(14% 0 14% 0 round 40px); opacity:0; }
+  }
+  @keyframes tema-llega{
+    0%  { transform:perspective(1000px) translateX(100%) rotateY(-22deg) scale(.88); clip-path:inset(8% 0 8% 0 round 30px); }
+    100%{ transform:none; clip-path:inset(0 0 0 0 round 0); }
+  }
+}
+/* Plan B (sin View Transitions): el barrido. */
+.tema-barrido{
+  position:fixed; inset:0 -30vw 0 auto; width:160vw; z-index:2147483000; pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(5,8,20,0) 0%, #050814 18%, #050814 82%, rgba(5,8,20,0) 100%);
+  transform:translateX(100%);
+  transition:transform .38s cubic-bezier(.5,0,.75,0);
+}
+.tema-barrido::before{ content:""; position:absolute; top:0; bottom:0; left:14%; width:6px; background:#dfe8ff; box-shadow:0 0 30px 10px rgba(120,165,255,.6); }
+.tema-barrido.is-entra{ transform:translateX(0); }
+.tema-barrido.is-sale{ transform:translateX(-120%); transition:transform .46s cubic-bezier(.25,1,.5,1); }
+@media (prefers-reduced-motion: reduce){
+  .tema-btn, .tema-btn-t{ transition:none; }
+}

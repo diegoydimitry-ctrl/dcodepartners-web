@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "sync-content": "npm run build:estado && npm run build:demo-en && npm run update-asset-versions && npm run generate-kb",
+    "sync-content": "npm run build:estado && npm run build:demo-en && npm run build:tema && npm run update-asset-versions && npm run generate-kb",
     "build:estado": "node scripts/build-estado.mjs",
     "build:demo-en": "node scripts/build-demo-en.mjs",
     "generate-kb": "node scripts/build-knowledge-base.js",
@@ -20,7 +20,9 @@
     "qa:demo": "node scripts/qa-demo.mjs",
     "check:demo": "node scripts/check-demo-finance.mjs",
     "check:estado": "node scripts/check-estado.mjs",
-    "test:estado": "node scripts/test-estado.mjs"
+    "test:estado": "node scripts/test-estado.mjs",
+    "build:tema": "node scripts/build-galaxia.mjs && node scripts/build-tema-claro.mjs",
+    "check:tema": "node scripts/check-tema.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"

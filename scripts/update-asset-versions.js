@@ -80,7 +80,14 @@ const FINANCE_ASSETS = [
   'assets/js/demo-comercial.js',
   'assets/js/demo-operaciones.js',
   'assets/js/demo-atencion.js',
-].map((rel) => {
+  // El tema (oscuro/claro), el cielo y D-Code OS (portada).
+  'assets/css/galaxia.css',
+  'assets/css/tema-claro.css',
+  'assets/css/tema.css',
+  'assets/js/tema.js',
+  'assets/css/dcode-os.css',
+  'assets/js/dcode-os.js',
+].filter((rel) => fs.existsSync(path.join(ROOT, rel))).map((rel) => {
   const name = path.basename(rel);
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   // (?<![\w-]) evita que "finance-demo.js" coincida dentro de otro nombre.
