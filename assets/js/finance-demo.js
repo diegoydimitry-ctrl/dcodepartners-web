@@ -4097,15 +4097,9 @@
       if (tour.on) paraTour(true);
       else if (tour.mano) { clearTimeout(tour.vuelta); tour.vuelta = setTimeout(function () { tour.mano = false; arrancaTour(true); }, REANUDA_MS); }
     }
-    ['pointerdown', 'keydown', 'wheel', 'focusin', 'touchstart'].forEach(function (ev) {
+    ['pointerdown', 'keydown', 'focusin'].forEach(function (ev) {
       root.addEventListener(ev, manoEncima, { passive: true });
     });
-    root.addEventListener('pointermove', function (e) {
-      if (e.isTrusted === false) return;
-      if (e.pointerType && e.pointerType !== 'mouse') return;
-      if (ratonX < 0) { ratonX = e.clientX; ratonY = e.clientY; return; }
-      if (Math.abs(e.clientX - ratonX) + Math.abs(e.clientY - ratonY) > 24) { ratonX = e.clientX; ratonY = e.clientY; manoEncima(); }
-    }, { passive: true });
     if (tourBtnEl) {
       tourBtnEl.addEventListener('click', function (e) {
         e.stopPropagation();

@@ -265,7 +265,9 @@ for (const f of ORIGENES) {
 const DESTINO_SUP = path.join(RAIZ, 'assets/css/superficies.css');
 const CAJAS = ['.rcard', '.arq-area', 'a.area', '.conexion', '.gal-tab', '.gal-historia > li', '.arq-mod', '.arq-btn', '.board',
   'details.plan', '.window', '.chaos-order', '.vf-cadena', '.vf-col', '.vf-pie', '.vf-sello', '.conc-fig', '.mercado', '.cmp',
-  '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost'];
+  '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost', '.v7-fiscal-i', '.vf-track'];
+// Piezas que cuelgan de una caja pero se pintan fuera de ella, sobre el fondo
+const FUERA = /\.arq-area-p\b/;
 const APPS = [
   // la demo ENTERA lleva la paleta contraria al fondo de la página
   { sup: '--sd-s', cajas: ['.sd'], hoja: 'demo-sistemas.css', dia: '.sd', noche: 'html[data-theme="dark"] .sd', color: 'var(--sd-t)' },
@@ -297,6 +299,8 @@ function escopar(sel) {
     s = s.trim();
     if (!s || /view-transition/.test(s) || s.includes('*/') || /[—]/.test(s) || /^:root\b/.test(s) || /^html$/.test(s) || /^body$/.test(s)) return null;
     if (/^(html|body)\b/.test(s) && !/\s/.test(s)) return null;
+    // lo que se dibuja FUERA de la caja (sobre el fondo de la página) conserva su tema
+    if (FUERA.test(s)) return null;
     // «& :is(s)»: un descendiente de la caja que cumple s en la página entera
     // (sus antepasados pueden estar fuera de la caja); «&:is(s)»: la propia caja
     const m = s.match(/(::?(before|after|placeholder|marker|selection|first-line|first-letter|-webkit-[\w-]+))+$/);
@@ -356,6 +360,21 @@ for (const cual of ['dark', 'light']) {
   for (const f of ORIGENES) sup += `  /* ${f} */\n` + procesarSup(sinComentarios(fs.readFileSync(path.join(RAIZ, 'assets/css', f), 'utf8')), cual);
   sup += '}\n';
 }
+
+/* Estados que el fondo forzado de la caja taparía: lo elegido tiene que verse */
+sup += `
+/* Estados visibles en las dos paletas */
+html[data-theme] body .gal-tab[aria-selected="true"]{ border-color:var(--c, #3b6cf6) !important; box-shadow:0 0 0 2px var(--c, #3b6cf6), 0 18px 40px -22px var(--c, #3b6cf6) !important; }
+html[data-theme] body .dx-opt input:checked + span{ border-color:#d6453c !important; box-shadow:inset 0 0 0 1px #d6453c; }
+html[data-theme="dark"] body .dx-opt input:checked + span{ background:#fde6e4 !important; }
+html[data-theme="light"] body .dx-opt input:checked + span{ background:#3a1614 !important; }
+html[data-theme="dark"] body .conc-mov.es-cuadra{ --est:#0b7a52; }
+html[data-theme="dark"] body .conc-mov.es-suelto{ --est:#8a5400; }
+html[data-theme="dark"] body ${IS} [data-conc="1"], html[data-theme="dark"] body ${IS}[data-conc="1"]{ --tono:#6a42dc; }
+html[data-theme="light"] body ${IS} [data-conc="1"], html[data-theme="light"] body ${IS}[data-conc="1"]{ --tono:#b89cff; }
+html[data-theme="dark"] body .v7-fiscal-i:has([data-conc]){ --tono-i:#6a42dc; }
+html[data-theme="light"] body .v7-fiscal-i:has([data-conc]){ --tono-i:#b89cff; }
+`;
 
 if (process.argv.includes('--check')) {
   const actual = fs.existsSync(DESTINO) ? fs.readFileSync(DESTINO, 'utf8') : '';

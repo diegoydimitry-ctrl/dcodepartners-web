@@ -235,10 +235,8 @@
     if (btnSig) btnSig.addEventListener('click', function () {
       pausaUsuario = true; pintarPlay(); poner(etapa >= N ? 1 : etapa + 1, true);
     });
-    // Leer no es interactuar, pero mientras el puntero está encima el
-    // recorrido espera: nadie lee bien algo que se le cambia debajo.
-    root.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { encima = true; } });
-    root.addEventListener('pointerleave', function () { encima = false; despertar(); });
+    // Pasar el ratón por encima NO para el recorrido; solo pulsar (o el foco
+    // de teclado) lo detiene.
     root.addEventListener('focusin', function () { encima = true; });
     root.addEventListener('focusout', function () { encima = false; despertar(); });
     document.addEventListener('visibilitychange', function () { if (!document.hidden) despertar(); });

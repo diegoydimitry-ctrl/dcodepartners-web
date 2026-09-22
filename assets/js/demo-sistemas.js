@@ -162,7 +162,6 @@
     };
     h.addEventListener('pointerdown', toque);
     h.addEventListener('keydown', toque);
-    this.main.addEventListener('wheel', toque, { passive: true });
     // Acciones de la pantalla (delegadas): data-a="nombre" [data-v="valor"]
     this.main.addEventListener('click', function (e) {
       var b = e.target.closest('[data-a]');
