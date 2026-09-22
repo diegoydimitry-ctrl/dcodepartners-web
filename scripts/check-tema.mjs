@@ -79,5 +79,17 @@ for (const f of ['index.html', 'en/index.html']) {
 }
 if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html']) !== JSON.stringify(est['en/index.html'])) errores.push('D-Code OS: ES y EN no tienen la misma estructura');
 
+/* Cielo ligero: la salvaguarda de rendimiento tiene que seguir en su sitio.
+   tema.js mide los fotogramas y marca html.gx-ligero; tema.css, DESPUÉS del
+   modo claro, deja el cielo quieto y el campo sin mezcla. */
+{
+  const js = leer('assets/js/tema.js');
+  if (!/classList\.add\('gx-ligero'\)/.test(js) || !/requestAnimationFrame\(paso\)/.test(js)) errores.push('tema.js: falta la medida de fotogramas del cielo ligero');
+  const iLig = css.indexOf('html.gx-ligero .gx > i{'), iClaro = css.indexOf('html[data-theme="light"] body:has(> .gx) .field');
+  if (iLig < 0) errores.push('tema.css: falta el modo cielo ligero');
+  else if (iClaro < 0 || iLig < iClaro) errores.push('tema.css: el modo cielo ligero tiene que ir después de las reglas del campo en claro');
+  if (!/html\.gx-ligero body:has\(> \.field\) > \.gx\{ display:none; \}/.test(css.replace(/,\s*html\.gx-ligero body:has\(> \.field--inst\) > \.gx/, ''))) errores.push('tema.css: en modo ligero el cielo tapado por el campo tiene que dejar de dibujarse');
+}
+
 if (errores.length) { console.error(errores.map((e) => '✗ ' + e).join('\n')); console.error(`\n${errores.length} problema(s).`); process.exit(1); }
-console.log(`✓ check:tema — ${paginas.length} páginas con tema, cielo y botón; derivados al día; ${medidos} contrastes de texto claro ≥ 4,5:1; D-Code OS ES/EN ${JSON.stringify(est['index.html'])}`);
+console.log(`✓ check:tema — ${paginas.length} páginas con tema, cielo y botón; derivados al día; ${medidos} contrastes de texto claro ≥ 4,5:1; cielo ligero en su sitio; D-Code OS ES/EN ${JSON.stringify(est['index.html'])}`);

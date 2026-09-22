@@ -136,6 +136,22 @@ html[data-theme="light"] .chat-bubble,
 html[data-theme="light"] .chat-msg.user,
 html[data-theme="light"] .chat-input-row button{ color:#fff; }
 
+/* ------------------------------------------------------- CIELO LIGERO
+   tema.js activa html.gx-ligero si el equipo no sostiene el cielo animado
+   (uno de cada cuatro fotogramas o más por encima de 22 ms al cargar).
+   - Las estrellas se quedan quietas y se pintan una sola vez.
+   - Donde la página tiene su propio campo de partículas (opaco y a pantalla
+     completa), el campo vuelve a pintarse como antes del cielo, sin mezcla,
+     y el cielo —que quedaría tapado— no se dibuja: es la mezcla del campo
+     con el cielo lo que cuesta en un equipo sin aceleración gráfica.
+   Va aquí, después del modo claro, para ganarle a sus reglas del campo. */
+html.gx-ligero .gx > i{ animation:none !important; transform:none !important; will-change:auto; }
+html.gx-ligero .gx-banda, html.gx-ligero .gx-brillo-b{ display:none; }
+html.gx-ligero body:has(> .gx) .field,
+html.gx-ligero body:has(> .gx) .field--inst{ mix-blend-mode:normal; }
+html.gx-ligero body:has(> .field) > .gx,
+html.gx-ligero body:has(> .field--inst) > .gx{ display:none; }
+
 /* ================================================== 3. EL BOTÓN DE TEMA */
 .tema-btn{
   --tb-fondo:rgba(12,17,32,.74);

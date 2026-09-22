@@ -16,6 +16,12 @@
    4. Parallax del cielo (galaxia.css): cada capa se desplaza con el scroll a
       su propia velocidad. Solo transform, en un rAF, y nada si el usuario
       pide movimiento reducido.
+   5. Cielo ligero: tras la carga se miden ~1,2 s de fotogramas con la página
+      a la vista. Si el equipo no sostiene el cielo animado (uno de cada
+      cuatro fotogramas o más tarda más de 22 ms: típico sin aceleración
+      gráfica), el cielo se queda quieto (html.gx-ligero): mismas estrellas,
+      sin deriva ni parallax, y en claro el campo de partículas deja de
+      multiplicarse con el cielo. Medidas en el informe de rendimiento.
    ========================================================================= */
 (function () {
   'use strict';
@@ -112,6 +118,7 @@
     var pendiente = false;
     var mover = function () {
       pendiente = false;
+      if (R.classList.contains('gx-ligero')) return;
       var y = W.scrollY || W.pageYOffset || 0;
       for (var i = 0; i < capas.length; i++) {
         var c = capas[i];
@@ -122,4 +129,29 @@
     W.addEventListener('scroll', function () { if (!pendiente) { pendiente = true; W.requestAnimationFrame(mover); } }, { passive: true });
     mover();
   }
+
+  /* --------------------------------------- cielo ligero si no da para más */
+  var medido = false, forzado = null;
+  try { forzado = W.localStorage.getItem('dcp-cielo'); } catch (e) {}
+  // Para pruebas y revisión visual: 'completo' nunca aligera, 'ligero' siempre.
+  if (forzado === 'ligero') R.classList.add('gx-ligero');
+  function medirCielo() {
+    if (medido || forzado === 'completo' || forzado === 'ligero' || !D.querySelector('.gx') || mqReducido.matches) return;
+    if (D.visibilityState !== 'visible') return; // se mide al volver a la vista
+    medido = true;
+    var t = [];
+    var paso = function (ts) {
+      t.push(ts);
+      if (ts - t[0] < 1200 && D.visibilityState === 'visible') { W.requestAnimationFrame(paso); return; }
+      if (D.visibilityState !== 'visible' || t.length < 8) { medido = false; return; }
+      var d = [];
+      for (var i = 1; i < t.length; i++) d.push(t[i] - t[i - 1]);
+      d.sort(function (a, b) { return a - b; });
+      if (d[Math.floor(d.length * 0.75)] > 22) R.classList.add('gx-ligero');
+    };
+    W.requestAnimationFrame(paso);
+  }
+  var alCargar = function () { W.setTimeout(medirCielo, 1500); };
+  if (D.readyState === 'complete') alCargar(); else W.addEventListener('load', alCargar);
+  D.addEventListener('visibilitychange', function () { if (D.visibilityState === 'visible') W.setTimeout(medirCielo, 600); });
 })();
