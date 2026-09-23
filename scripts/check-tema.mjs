@@ -128,7 +128,18 @@ if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html'
     if (n !== 4) errores.push(`${f}: hay ${n} formaciones de paso y tienen que ser 4`);
   }
   const css7 = leer('assets/css/dcp7.css');
-  if (!/html\.cielo-quieto \.field\{\s*display:none/.test(css7)) errores.push('dcp7.css: falta «html.cielo-quieto .field{display:none}»');
+  if (!/html\.cielo-quieto \.field\[data-field\]/.test(css7) || !/html\.cielo-quieto \.field--inst\{\s*display:none/.test(css7)) {
+    errores.push('dcp7.css: falta apagar el campo en táctil («html.cielo-quieto .field[data-field], html.cielo-quieto .field--inst{display:none}»)');
+  }
+  /* El campo de partículas y el campo de un formulario se llaman igual. Una
+     regla sobre «.field» a secas apaga todos los formularios de la web: pasó,
+     y en un iPad no se podía escribir en el de contacto. Aquí se cierra esa
+     puerta también en dcp7.css, no solo en tema.css. */
+  for (const linea of css7.split('\n')) {
+    if (/(^|[\s,>])\.field\s*(,|\{)/.test(linea) && !/data-field|--inst|form |\.fdemo|paso-forma/.test(linea)) {
+      errores.push('dcp7.css: hay una regla sobre «.field» a secas («' + linea.trim().slice(0, 70) + '»); el campo de partículas es «.field[data-field]» o «.field--inst» (si no, se apagan los formularios)');
+    }
+  }
   if (!/html\.cielo-quieto \.gx-t\{/.test(css7)) errores.push('dcp7.css: falta dejar quieto el cielo de la galaxia en táctil');
 }
 

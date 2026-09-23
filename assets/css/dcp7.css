@@ -96,8 +96,14 @@
    por debajo de 1180 px esta pastilla se queda encima de una linea del texto
    del cuerpo, y ahi se queda mientras alguien lee. */
 @media (max-width:1179px){
-  .dcx-now{ opacity:0; transition:opacity .22s ease; }
-  .dcx-now.is-moviendo{ opacity:1; }
+  /* Apagada con `visibility` además de con `opacity`. Solo con opacidad, la
+     pastilla sigue existiendo para quien no la ve: axe-core la cazó en
+     /en/servicios a 390 px con un contraste de 1,22:1 —su texto mezclado con
+     el fondo— y un lector de pantalla la seguiría leyendo. La visibilidad
+     cambia al final del fundido al ocultarse y al principio al aparecer, así
+     que el fundido se ve igual. */
+  .dcx-now{ opacity:0; visibility:hidden; transition:opacity .22s ease, visibility 0s linear .22s; }
+  .dcx-now.is-moviendo{ opacity:1; visibility:visible; transition:opacity .22s ease, visibility 0s; }
 }
 @media (max-width:560px){ .dcx-now{ max-width:calc(100vw - 130px); } }
 
@@ -1459,7 +1465,15 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
    grueso. UN RATÓN NUNCA ENTRA AQUÍ: en PC, Mac y pantallas grandes no cambia
    absolutamente nada.
    ========================================================================= */
-html.cielo-quieto .field{ display:none !important; }
+/* OJO CON EL NOMBRE: «.field» es el campo de PARTÍCULAS (.field[data-field] en
+   la portada, .field--inst en el resto) y TAMBIÉN el campo de un formulario
+   (<div class="field"><label><input>). Una regla sobre «.field» a secas apaga
+   todos los formularios de la web en cuanto el puntero es grueso: se escribió
+   así y en un iPad no se podía rellenar el de contacto. Los dos selectores de
+   abajo son la única forma correcta de nombrar el campo de partículas, y
+   check:tema falla si alguien vuelve a escribir «.field» a secas aquí. */
+html.cielo-quieto .field[data-field],
+html.cielo-quieto .field--inst{ display:none !important; }
 /* El rótulo «Lo que estás viendo» nombra la formación del campo: sin campo,
    no tiene nada que nombrar. */
 html.cielo-quieto .v6-status{ display:none; }

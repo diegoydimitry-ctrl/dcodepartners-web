@@ -17,6 +17,8 @@
     "check:consentimiento": "node scripts/check-consentimiento.mjs",
     "qa:ds": "node scripts/qa-ds-responsive.mjs",
     "qa:solapes": "node scripts/qa-solapes.mjs",
+    "qa:dispositivos": "node scripts/qa-dispositivos.mjs",
+    "qa:formulario": "node scripts/qa-formulario.mjs",
     "qa:demo": "node scripts/qa-demo.mjs",
     "check:demo": "node scripts/check-demo-finance.mjs",
     "check:estado": "node scripts/check-estado.mjs",
