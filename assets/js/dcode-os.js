@@ -26,6 +26,49 @@
   var $ = function (s, c) { return (c || sec).querySelector(s); };
   var $$ = function (s, c) { return [].slice.call((c || sec).querySelectorAll(s)); };
 
+  /* ────────────────────────────────────────────────────────────────
+     EN UN TELÉFONO, EL CENTRO OPERATIVO NO SE MONTA
+     ────────────────────────────────────────────────────────────────
+     Es un panel de trabajo: menú, KPIs, mapa, actividad en vivo y una
+     decisión de la IA esperando aprobación. En 390 px eso no se lee, se
+     adivina — y esta sección existe precisamente para enseñar que el
+     sistema se entiende de un vistazo. Así que aquí va lo mismo contado
+     como se lee en un móvil, con una foto de verdad del panel (la ficha
+     ya está en el HTML) y el botón para abrirlo donde se puede usar.
+     El panel lo esconde el CSS; aquí se ahorra además TODO su trabajo:
+     los cables, el reloj de 1,4 s y las animaciones no llegan a existir.
+     En tableta y en escritorio no cambia nada. */
+  var forzado = false;
+  try { forzado = W.sessionStorage.getItem('dcp-os-forzar') === '1'; } catch (e) {}
+  if (forzado) sec.classList.add('is-forzada');
+  if (!forzado && W.matchMedia('(max-width: 900px)').matches) {
+    var ficha = sec.querySelector('.os-movil');
+    if (ficha && !ficha.querySelector('.demo-movil-foto')) {
+      var en = (D.documentElement.lang || 'es').slice(0, 2) === 'en';
+      var fig = D.createElement('span');
+      fig.className = 'demo-movil-foto';
+      fig.innerHTML =
+        '<img class="es-oscuro" src="/assets/img/demos/os-dark-700.webp" srcset="/assets/img/demos/os-dark-700.webp 700w, /assets/img/demos/os-dark.webp 1400w" sizes="190vw" width="1400" height="874" loading="lazy" decoding="async" alt="' +
+        (en ? 'The D-Code OS operations centre on a computer' : 'El centro operativo de D-Code OS en un ordenador') + '">' +
+        '<img class="es-claro" src="/assets/img/demos/os-light-700.webp" srcset="/assets/img/demos/os-light-700.webp 700w, /assets/img/demos/os-light.webp 1400w" sizes="190vw" width="1400" height="874" loading="lazy" decoding="async" alt="">';
+      var tras = ficha.querySelector('.demo-movil-t');
+      if (tras && tras.parentNode) tras.parentNode.insertBefore(fig, tras.nextSibling);
+      else ficha.insertBefore(fig, ficha.firstChild);
+      var b = D.createElement('button');
+      b.type = 'button'; b.className = 'btn btn-ghost demo-movil-b2';
+      b.textContent = en ? 'Open it here anyway' : 'Abrirlo aquí igualmente';
+      /* Quien insista abre el panel: se recuerda para esta visita y la
+         página vuelve a cargar con la consola montada. */
+      b.addEventListener('click', function () {
+        try { W.sessionStorage.setItem('dcp-os-forzar', '1'); } catch (e) {}
+        sec.classList.add('is-forzada');
+        location.reload();
+      });
+      ficha.appendChild(b);
+    }
+    return;
+  }
+
   var datos = { pasos: [], feed: [] }, iconos = {};
   try { datos = JSON.parse($('[data-os-datos]').textContent); } catch (e) {}
   try { iconos = JSON.parse($('[data-os-iconos]').textContent); } catch (e) {}

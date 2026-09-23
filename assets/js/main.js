@@ -104,10 +104,10 @@
      malas seguidas bajan un escalón; tres buenas seguidas suben uno. La
      histéresis evita el vaivén, y nunca baja del suelo del perfil ni sube
      por encima de 1. */
+  var ESCALONES = [1, 0.75, 0.55, 0.4, 0.3];
+  var objetivo = P.msMin || 16.7;
+  var muestras = [], malas = 0, buenas = 0, ultimo = 0, activo = true, ultimoCambio = -1e9;
   if (!reducido) {
-    var ESCALONES = [1, 0.75, 0.55, 0.4, 0.3];
-    var objetivo = P.msMin || 16.7;
-    var muestras = [], malas = 0, buenas = 0, ultimo = 0, activo = true, ultimoCambio = -1e9;
     var mide = function (t) {
       if (!activo) return;
       if (ultimo) {
@@ -156,6 +156,31 @@
 
   /* Una marca en <html> para que el CSS también pueda aligerar. */
   D.documentElement.setAttribute('data-dispositivo', clase);
+
+  /* LA CLASE SE VUELVE A MIRAR. Se decidía una vez al cargar, y eso deja dos
+     casos mal: un portátil con pantalla táctil al que se le conecta un ratón,
+     y —sobre todo— las herramientas de desarrollo, que al activar el modo
+     teléfono cambian el puntero y el tamaño SIN recargar; la página seguía
+     creyéndose un PC y lo que se veía allí no era lo que ve un teléfono. */
+  function revisarClase() {
+    var g = W.matchMedia('(pointer:coarse)').matches;
+    var l = 0;
+    try { l = Math.max(W.screen.width || 0, W.screen.height || 0); } catch (e) {}
+    if (!l) l = Math.max(W.innerWidth || 0, W.innerHeight || 0);
+    var nueva = !g ? 'pc' : (l >= 1000 ? 'tableta' : 'telefono');
+    if (nueva === clase) return;
+    clase = nueva; P = PERFIL[clase]; grueso = g;
+    objetivo = P.msMin || 16.7;
+    nivel = 1; muestras.length = 0; malas = 0; buenas = 0; ultimoCambio = -1e9;
+    DCP.clase = clase; DCP.grueso = g;
+    D.documentElement.setAttribute('data-dispositivo', clase);
+    avisar();
+  }
+  var mqPuntero = W.matchMedia('(pointer:coarse)');
+  if (mqPuntero.addEventListener) mqPuntero.addEventListener('change', revisarClase);
+  else if (mqPuntero.addListener) mqPuntero.addListener(revisarClase);
+  var tRev;
+  W.addEventListener('resize', function () { clearTimeout(tRev); tRev = setTimeout(revisarClase, 250); }, { passive: true });
 })();
 
 (function () {

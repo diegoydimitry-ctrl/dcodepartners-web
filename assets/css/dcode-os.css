@@ -316,7 +316,13 @@ html[data-theme="light"] .os-app{ box-shadow:0 30px 80px -36px rgba(20,30,64,.35
 .os-panel--ia{ background:linear-gradient(180deg, color-mix(in srgb, var(--os-ia) 9%, var(--os-s)), var(--os-s)); border-color:color-mix(in srgb, var(--os-ia) 30%, transparent); }
 .os-ia-i{ display:grid; place-items:center; color:var(--os-ia); }
 .os-ia-i svg{ width:16px; height:16px; }
-.os-ia-txt{ margin:0 0 10px; display:flex; flex-direction:column; gap:4px; font-size:.8125rem; line-height:1.45; }
+/* Esta caja lleva la paleta CONTRARIA a la de la página (superficies.css), y
+   un <p> dentro suyo no hereda la tinta de la caja: se la pisa la regla
+   global «p{color:…}», que es del tema de la página. Resultado medido en
+   píxeles: la frase en negrita daba 1,65:1 en oscuro y 1,61:1 en claro —es
+   decir, no se leía—. La tinta se nombra aquí, con los tokens de la caja. */
+.os-ia-txt{ margin:0 0 10px; display:flex; flex-direction:column; gap:4px; font-size:.8125rem; line-height:1.45; color:var(--os-t1); }
+.os-ia-txt b{ color:var(--os-t1); }
 .os-ia-txt span{ color:var(--os-t2); }
 .os-ia-conf{ display:flex; align-items:center; gap:10px; margin:0 0 12px; font-size:.75rem; color:var(--os-t2); }
 .os-ia-conf i{ flex:1; height:6px; border-radius:6px; background:var(--os-s2); position:relative; overflow:hidden; }

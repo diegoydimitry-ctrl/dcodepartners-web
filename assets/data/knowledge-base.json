@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-23T14:08:50.717Z",
+  "generatedAt": "2026-09-23T15:06:52.833Z",
   "pageCount": 64,
-  "chunkCount": 614,
+  "chunkCount": 616,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -2249,40 +2249,45 @@
         {
           "id": "/en/#c22",
           "heading": "Analytics",
-          "text": "Before and after, with sample data Hours of manual work per weekBefore38 hWith D-Code OS14 h First reply to the customerBefore4 hWith D-Code OS2 min Days to get paidBefore38With D-Code OS21 Click a module, a system on the map or a step in the case: the demo stops and you take over. Let’s talk about your system Take the diagnostic Illustrative demo · fictional company · made-up data. No real system is connected to this page. How we build it"
+          "text": "Before and after, with sample data Hours of manual work per weekBefore38 hWith D-Code OS14 h First reply to the customerBefore4 hWith D-Code OS2 min Days to get paidBefore38With D-Code OS21 Click a module, a system on the map or a step in the case: the demo stops and you take over. The operations centre, at a glance"
         },
         {
           "id": "/en/#c23",
+          "heading": "You read it here; to touch it, a computer.",
+          "text": "A panel with the map of your systems, activity as it happens and the AI's decisions. Squeezed onto a phone it looks worse than it is. The system mapWhich system talks to which, and where each piece of data goes. Activity, as it happensCalls classified, job sheets signed, invoices prepared. The AI proposes, you approveWhat it does on its own is recorded; what matters waits for a person. Let’s talk about your system Take the diagnostic Illustrative demo · fictional company · made-up data. No real system is connected to this page. How we build it"
+        },
+        {
+          "id": "/en/#c24",
           "heading": "We analyse",
           "text": "We follow the real path of a customer, an order and an invoice, and note every point where someone is bridging a gap. From you Half an hour, then a couple of hours from whoever does that work, with real examples. What you keep The written list of where the time and the money leak out. It’s yours whether we build it or not. If we see nothing worth doing, we tell you on that call 02"
         },
         {
-          "id": "/en/#c24",
+          "id": "/en/#c25",
           "heading": "We design",
           "text": "What the system does on its own, what a person keeps deciding and which of your tools it connects to. From you Telling us what comes first. The rules of your business are yours to set. What you keep Scope, timeline and price in writing before anything starts. You see what you’ll get before it exists 03"
         },
         {
-          "id": "/en/#c25",
+          "id": "/en/#c26",
           "heading": "We put it in",
           "text": "Piece by piece, inside the tools you already use. Nothing changes all at once. From you Minimal access and one person who checks it does what it should. What you keep The system running, with the documentation and access in your name. If we ever stop working together, it keeps running. It runs in your operation, not in a demo 04"
         },
         {
-          "id": "/en/#c26",
+          "id": "/en/#c27",
           "heading": "We measure and improve",
           "text": "The system keeps a record of what runs on its own and what fails. That is what gets corrected every month. From you Half an hour a month to look at it together. What you keep Numbers from your own system, not from a slide deck. Every month, with your own numbers No promises"
         },
         {
-          "id": "/en/#c27",
+          "id": "/en/#c28",
           "heading": "None of this needs taking on trust: you can check it.",
           "text": "We won’t promise you percentages. This is what you can check before signing anything: The systems, running Four of them are above. Try them as much as you like. How we work, in writing The whole method, step by step, before the first call. What we use ourselves The systems we use in our own company, with what went well and what didn’t. What we are changing What is under way right now and where each piece stands. What stays in writing No lock-in, with the access and the documentation in your name. What you can have"
         },
         {
-          "id": "/en/#c28",
+          "id": "/en/#c29",
           "heading": "Three ways to start.",
           "text": "D-Code Finance → Our own product The money in one place: invoices, payments, expenses and the tax register up to date. From €29/month plus €390 setup A system made to measure → What your team repeats every week —sales, operations, service— done by the system. From €1,500 depending on scope Agents and integrations → They answer with your data and connect what you already use, with minimum permissions. From €750 depending on scope Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts. Let us start"
         },
         {
-          "id": "/en/#c29",
+          "id": "/en/#c30",
           "heading": "Thirty minutes and you will know what can be automated.",
           "text": "Tell us how you work today and we will tell you where we would start. Book a call What people usually ask"
         }
@@ -3000,40 +3005,45 @@
         {
           "id": "/#c22",
           "heading": "Analítica",
-          "text": "Antes y después, con datos de ejemplo Horas a mano por semanaAntes38 hCon D-Code OS14 h Primera respuesta al clienteAntes4 hCon D-Code OS2 min Días hasta cobrarAntes38Con D-Code OS21 Pulsa un módulo, un sistema del mapa o un paso del caso: la demo se para y mandas tú. Hablemos de tu sistema Haz el diagnóstico Demo ilustrativa · empresa ficticia · datos inventados. Ningún sistema real está conectado a esta página. Cómo lo construimos"
+          "text": "Antes y después, con datos de ejemplo Horas a mano por semanaAntes38 hCon D-Code OS14 h Primera respuesta al clienteAntes4 hCon D-Code OS2 min Días hasta cobrarAntes38Con D-Code OS21 Pulsa un módulo, un sistema del mapa o un paso del caso: la demo se para y mandas tú. El centro operativo, en un vistazo"
         },
         {
           "id": "/#c23",
+          "heading": "Aquí se lee; para tocarlo, un ordenador.",
+          "text": "Un panel con el mapa de los sistemas, la actividad según ocurre y las decisiones de la IA. Apretado en un móvil se ve peor de lo que es. El mapa del sistemaQué sistema habla con cuál y por dónde pasa cada dato. La actividad, según pasaLlamadas clasificadas, partes firmados, facturas preparadas. La IA propone, tú apruebasLo que hace sola queda registrado; lo que importa espera a una persona. Hablemos de tu sistema Haz el diagnóstico Demo ilustrativa · empresa ficticia · datos inventados. Ningún sistema real está conectado a esta página. Cómo lo construimos"
+        },
+        {
+          "id": "/#c24",
           "heading": "Analizamos",
           "text": "Seguimos el recorrido real de un cliente, un pedido y una factura, y anotamos cada punto en el que alguien hace de puente. De tu parte Media hora y, después, un par de horas de quien hace ese trabajo, con ejemplos reales. Con qué te quedas La lista escrita de por dónde se escapan el tiempo y el dinero. Es tuya, la construyamos o no. Si no vemos nada que valga la pena, te lo decimos en la llamada 02"
         },
         {
-          "id": "/#c24",
+          "id": "/#c25",
           "heading": "Diseñamos",
           "text": "Qué hace el sistema solo, qué sigue decidiendo una persona y con qué herramientas vuestras se conecta. De tu parte Decir qué es prioritario. Las reglas de tu negocio las pones tú. Con qué te quedas Alcance, plazo y precio por escrito antes de que empiece nada. Ves lo que vas a tener antes de que exista 03"
         },
         {
-          "id": "/#c25",
+          "id": "/#c26",
           "heading": "Implantamos",
           "text": "Por partes, dentro de las herramientas que ya usáis. Nada cambia de golpe. De tu parte Los accesos mínimos y una persona que valide que hace lo que tiene que hacer. Con qué te quedas El sistema funcionando, con la documentación y los accesos a tu nombre. Si un día dejamos de trabajar juntos, sigue funcionando. Funciona en tu operativa, no en una demo 04"
         },
         {
-          "id": "/#c26",
+          "id": "/#c27",
           "heading": "Medimos y mejoramos",
           "text": "El sistema deja rastro de lo que sale solo y de lo que falla. Con eso se corrige cada mes. De tu parte Media hora al mes para mirarlo juntos. Con qué te quedas Números salidos de tu propio sistema, no de una presentación. Cada mes, con tus propios números Sin promesas"
         },
         {
-          "id": "/#c27",
+          "id": "/#c28",
           "heading": "Nada de esto hay que creérselo: se comprueba.",
           "text": "No te vamos a prometer porcentajes. Esto es lo que puedes comprobar antes de firmar nada: Los sistemas, funcionando Arriba tienes cuatro. Tócalos todo lo que quieras. Cómo trabajamos, por escrito El método entero, paso a paso, antes de la primera llamada. Lo que usamos en casa Los sistemas que usamos en nuestra propia empresa, con lo que salió bien y lo que no. Lo que estamos cambiando Qué hay en marcha ahora mismo y en qué punto está cada cosa. Lo que queda por escrito Sin permanencia, con los accesos y la documentación a tu nombre. Qué puedes tener"
         },
         {
-          "id": "/#c28",
+          "id": "/#c29",
           "heading": "Tres formas de empezar.",
           "text": "D-Code Finance → Producto propio El dinero en un sitio: facturas, cobros, gastos y el registro fiscal al día. Desde 29 €/mes más 390 € de puesta en marcha Un sistema a medida → Lo que tu equipo repite cada semana —comercial, operaciones, atención— hecho por el sistema. Desde 1.500 € según el alcance Agentes e integraciones → Contestan con tus datos y conectan lo que ya usáis, con los permisos mínimos. Desde 750 € según el alcance Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. Empecemos"
         },
         {
-          "id": "/#c29",
+          "id": "/#c30",
           "heading": "Treinta minutos y sabrás qué se puede automatizar.",
           "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Lo que sueles preguntar"
         }

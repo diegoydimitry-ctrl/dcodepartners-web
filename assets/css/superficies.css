@@ -343,6 +343,8 @@ html[data-theme="dark"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal
     & :is(.demo-movil-b2), &:is(.demo-movil-b2){ border:1px solid rgba(46,59,98,0.3) !important; }
     & :is(.demo-movil-b2:hover), &:is(.demo-movil-b2:hover){ border-color:rgba(46,59,98,0.3) !important; }
     & :is(.demo-movil), &:is(.demo-movil){ background:rgba(244,247,253,0.94); }
+    & :is(.demo-movil-foto), &:is(.demo-movil-foto){ border:1px solid rgba(46,59,98,0.218); background:rgba(240,243,249,0.5); box-shadow:0 18px 44px -28px rgba(20,30,64,0.27); }
+    & :is(html[data-theme="light"] .demo-movil-foto), &:is(html[data-theme="light"] .demo-movil-foto){ border-color:rgba(205,210,218,0.16); box-shadow:0 18px 44px -30px rgba(20,30,64,0.15); }
   }
   & :is(.v7-tarea), &:is(.v7-tarea){ border:1px solid rgba(46,59,98,0.196); background:rgba(244,248,253,0.86); }
   & :is(.v7-tarea:hover), &:is(.v7-tarea:hover){ border-color:rgba(46,59,98,0.3); }
@@ -541,8 +543,8 @@ html[data-theme="dark"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal
   & :is(.gal-movil-p), &:is(.gal-movil-p){ color:#323946; }
   & :is(.gal-movil-b), &:is(.gal-movil-b){ border:1px solid rgba(46,59,98,0.3); color:#090f1a; }
   & :is(.gal-movil-b:hover), &:is(.gal-movil-b:hover){ border-color:rgba(46,59,98,0.3); }
-  & :is(.gal-movil-foto), &:is(.gal-movil-foto), & :is(.demo-movil-foto), &:is(.demo-movil-foto){ border:1px solid rgba(46,59,98,0.218); background:rgba(240,243,249,0.5); box-shadow:0 18px 44px -28px rgba(20,30,64,0.27); }
-  & :is(html[data-theme="light"] .gal-movil-foto), &:is(html[data-theme="light"] .gal-movil-foto), & :is(html[data-theme="light"] .demo-movil-foto), &:is(html[data-theme="light"] .demo-movil-foto){ border-color:rgba(205,210,218,0.16); box-shadow:0 18px 44px -30px rgba(20,30,64,0.15); }
+  & :is(.gal-movil-foto), &:is(.gal-movil-foto){ border:1px solid rgba(46,59,98,0.218); background:rgba(240,243,249,0.5); box-shadow:0 18px 44px -28px rgba(20,30,64,0.27); }
+  & :is(html[data-theme="light"] .gal-movil-foto), &:is(html[data-theme="light"] .gal-movil-foto){ border-color:rgba(205,210,218,0.16); box-shadow:0 18px 44px -30px rgba(20,30,64,0.15); }
 }
 html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .mercado, .cmp, .mega-menu, .gal-carga, .gal-sig-b, .dx, .btn-ghost, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){
   /* styles.css */
@@ -865,6 +867,8 @@ html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .ga
     & :is(.demo-movil-b2), &:is(.demo-movil-b2){ border:1px solid rgba(150,174,245,.26) !important; }
     & :is(.demo-movil-b2:hover), &:is(.demo-movil-b2:hover){ border-color:rgba(150,174,245,.42) !important; }
     & :is(.demo-movil), &:is(.demo-movil){ background:rgba(13,17,34,.94); }
+    & :is(.demo-movil-foto), &:is(.demo-movil-foto){ border:1px solid rgba(150,174,245,.18); background:rgba(6,8,13,.5); box-shadow:0 18px 44px -28px rgba(0,0,0,.9); }
+    & :is(html[data-theme="light"] .demo-movil-foto), &:is(html[data-theme="light"] .demo-movil-foto){ border-color:rgba(36,52,104,.16); box-shadow:0 18px 44px -30px rgba(20,30,64,.5); }
   }
   & :is(.v7-tarea), &:is(.v7-tarea){ border:1px solid rgba(150,174,245,.16); background:rgba(13,18,36,.86); }
   & :is(.v7-tarea:hover), &:is(.v7-tarea:hover){ border-color:rgba(150,174,245,.34); }
@@ -1063,8 +1067,8 @@ html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .ga
   & :is(.gal-movil-p), &:is(.gal-movil-p){ color:#a7b0c4; }
   & :is(.gal-movil-b), &:is(.gal-movil-b){ border:1px solid rgba(150,174,245,.28); color:#e6ebf6; }
   & :is(.gal-movil-b:hover), &:is(.gal-movil-b:hover){ border-color:rgba(150,174,245,.45); }
-  & :is(.gal-movil-foto), &:is(.gal-movil-foto), & :is(.demo-movil-foto), &:is(.demo-movil-foto){ border:1px solid rgba(150,174,245,.18); background:rgba(6,8,13,.5); box-shadow:0 18px 44px -28px rgba(0,0,0,.9); }
-  & :is(html[data-theme="light"] .gal-movil-foto), &:is(html[data-theme="light"] .gal-movil-foto), & :is(html[data-theme="light"] .demo-movil-foto), &:is(html[data-theme="light"] .demo-movil-foto){ border-color:rgba(36,52,104,.16); box-shadow:0 18px 44px -30px rgba(20,30,64,.5); }
+  & :is(.gal-movil-foto), &:is(.gal-movil-foto){ border:1px solid rgba(150,174,245,.18); background:rgba(6,8,13,.5); box-shadow:0 18px 44px -28px rgba(0,0,0,.9); }
+  & :is(html[data-theme="light"] .gal-movil-foto), &:is(html[data-theme="light"] .gal-movil-foto){ border-color:rgba(36,52,104,.16); box-shadow:0 18px 44px -30px rgba(20,30,64,.5); }
 }
 
 /* Estados visibles en las dos paletas */

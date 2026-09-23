@@ -1253,6 +1253,12 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
   .demo-host .fdemo-app{ display:none; }
   .demo-host.is-forzada .fdemo-app{ display:block; }
   .demo-host.is-forzada .demo-movil{ display:none; }
+  /* Lo mismo con el centro operativo de D-Code OS: en un teléfono no se
+     monta. La regla es de CSS y no de JavaScript para que, sin JS, tampoco
+     aparezca el panel apretado. */
+  .os .os-app{ display:none; }
+  .os.is-forzada .os-app{ display:block; }
+  .os.is-forzada .os-movil{ display:none; }
   /* Secundario de verdad: el botón principal de esta ficha es «Ver todo lo
      que hace»; abrir la aplicación aquí es la salida para quien insista. */
   .demo-movil-b2{
@@ -1289,6 +1295,34 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
   .demo-movil-l b{ font-size:.95rem; font-weight:600; color:var(--ink); }
   .demo-movil-l span{ font-size:.88rem; line-height:1.6; color:var(--v-ink-2); }
   .demo-movil-b{ margin-top:22px; width:100%; justify-content:center; }
+  /* LA FOTO DE LA APLICACIÓN DENTRO DE LA FICHA.
+     Vivía en dcp10.css, que solo cargan la portada y Departamentos: en
+     /sistema-financiero —donde esta ficha es lo único que ve un teléfono—
+     no había estilo ninguno, así que se veían LAS DOS fotos (la del tema
+     oscuro y la del claro), enteras, una debajo de otra y a 350 px de
+     ancho, donde no se distingue nada. Aquí las ve cualquier página.
+     Es un DETALLE, no una miniatura: se amplía y se recorta por arriba a la
+     izquierda —menú, cabecera y primeras cifras—, que es lo que deja claro
+     qué es esto. */
+  .demo-movil-foto{
+    display:block; margin:16px 0; border-radius:12px; overflow:hidden;
+    border:1px solid rgba(150,174,245,.18);
+    background:rgba(6,8,13,.5);
+    box-shadow:0 18px 44px -28px rgba(0,0,0,.9);
+    aspect-ratio:16 / 10;
+  }
+  .demo-movil-foto img{ display:block; width:190%; max-width:none; height:auto; }
+  .demo-movil-foto .es-claro{ display:none; }
+  html[data-theme="light"] .demo-movil-foto .es-oscuro{ display:none; }
+  html[data-theme="light"] .demo-movil-foto .es-claro{ display:block; }
+  html[data-theme="light"] .demo-movil-foto{
+    border-color:rgba(36,52,104,.16); background:rgba(244,246,251,.6);
+    box-shadow:0 18px 44px -30px rgba(20,30,64,.5);
+  }
+  @media (min-width:560px){
+    .demo-movil-foto{ aspect-ratio:16 / 8.5; }
+    .demo-movil-foto img{ width:140%; }
+  }
   /* El aviso de la demo tampoco pinta nada si no hay demo. */
   /* Con [data-fdemo-lazy] y no solo con [data-fdemo-movil]: esa marca la
      pone dcp5.js al cargar, y hasta entonces la caja medía lo de escritorio

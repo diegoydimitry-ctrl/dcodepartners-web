@@ -134,6 +134,13 @@ html[data-theme="light"] .v7-fiscal-i:has([data-conc]){ --tono-i:#6a42dc; }
 html[data-theme="light"] .btn-primary{ color:#fff; }
 html[data-theme="light"] .btn-primary:hover{ background:#244fc4; }
 html[data-theme="light"] ::selection{ background:rgba(47,95,224,.18); }
+/* Los números huecos de los pasos (.v6-step-n) son un trazo de 1 px al 66 %
+   del color del área. Sobre el fondo oscuro se leen; sobre el claro, medido
+   en píxeles, se quedaban en 1,6:1 —un número grande que parece a medio
+   pintar—. En claro el trazo sube a 1,5 px y al 88 %. */
+html[data-theme="light"] .v6-step-n{
+  -webkit-text-stroke:1.5px color-mix(in srgb, var(--k) 88%, transparent);
+}
 /* Las dos mitades del eje de «Conócenos» llevan su tono como tripleta suelta
    (--tono:46,216,240), que el derivado del tema claro no sabe leer: en claro
    la etiqueta salia cian sobre blanco, 1,4:1 medido en pixeles. Aqui van los

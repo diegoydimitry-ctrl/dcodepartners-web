@@ -136,3 +136,41 @@ Operaciones de lienzo en un recorrido de la portada: **121.826 → 7.177** (−9
   ningún bucle de fondo en táctil, sin invalidar el estilo del documento
   entero), así que deberían notarse más aún en un aparato real, pero la cifra
   hay que verla allí.
+
+## En un teléfono, las aplicaciones no se montan
+
+Lo que se ve en 390 px no es lo mismo que lo que se ve en un iPad, y no por
+rendimiento: por **tamaño**. Una aplicación de gestión apretada en un teléfono
+enseña algo peor de lo que es, que es justo lo contrario de lo que estas
+secciones quieren demostrar. Así que por debajo de 900 px:
+
+| | en un teléfono |
+|---|---|
+| D-Code Finance | ficha de lectura con foto real del panel + «Abrirla aquí igualmente» |
+| Comercial, Operaciones, Atención | ficha de lectura con foto real de cada demo |
+| **Centro operativo de D-Code OS** | ficha de lectura con foto real + «Abrirlo aquí igualmente» |
+
+La del centro operativo es nueva: hasta ahora el panel —menú, KPIs, mapa,
+actividad en vivo y una decisión de la IA esperando aprobación— se montaba
+entero en el teléfono. Lo esconde el CSS (para que sin JavaScript tampoco
+aparezca) y `dcode-os.js` se ahorra además todo su trabajo: los cables, el
+reloj de 1,4 s y las animaciones no llegan a existir.
+
+Tres cosas más que se encontraron mirando la web a 393 px:
+
+1. **La foto de la ficha no tenía estilo en `/sistema-financiero`.** Sus
+   reglas vivían en `dcp10.css`, que solo cargan la portada y Departamentos:
+   en la página de Finance se veían LAS DOS fotos —la del tema oscuro y la
+   del claro—, enteras, una debajo de otra y a 350 px de ancho. Ahora viven
+   en `dcp7.css`, que carga toda la web.
+2. **La tira de «hoy / con el sistema» quedaba cortada.** Con cuatro pasos
+   era una tira que se desliza; con dos, media caja cortada en el filo
+   derecho parece un fallo. En teléfono se apilan.
+3. **Una frase de la consola de OS no se leía**: 1,65:1 en oscuro y 1,61:1
+   en claro, medido en píxeles. La caja lleva la paleta contraria a la de la
+   página y un `<p>` dentro suyo no hereda su tinta —se la pisa la regla
+   global `p{color:…}`—. Ahora la tinta se nombra con los tokens de la caja.
+
+Y la clase de dispositivo **se vuelve a mirar** cuando cambia el puntero o el
+tamaño: se decidía una sola vez al cargar, así que al activar el modo teléfono
+de las herramientas de desarrollo la página seguía creyéndose un PC.
