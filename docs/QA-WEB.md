@@ -27,3 +27,27 @@ cualquier commit que toque contenido.
 Fuera del repositorio, en la entrega de cada ronda, se pasan además
 accesibilidad con axe-core (WCAG 2.2 AA), impresión de las 68 páginas en A4,
 navegación y formulario de contacto sin envío, y rendimiento de laboratorio.
+
+## Contraste y velos: medir píxeles, no CSS
+
+Un auditor que deduce el contraste del CSS se rinde en cuanto un antepasado
+tiene degradado —y aquí casi todas las tarjetas lo tienen—, y no ve nada de
+lo que se pinta ENCIMA del texto: los velos llevan `pointer-events:none`, así
+que tampoco los encuentra el hit-testing. Dos fallos reales se colaron por
+ahí (el velo del esquema sobre el titular de la portada y el filtro de
+`.field` sobre los formularios en claro), y los dos se encontraron igual:
+comparando píxeles.
+
+El procedimiento, cuando se sospeche de una zona:
+
+1. Se cine el texto con `Range.getClientRects()` (la caja del elemento sobra
+   por los lados y falsea la medida).
+2. Dentro de esa caja: mediana = fondo, extremo 12 % = tinta, y de ahí el
+   contraste real.
+3. Para saber si algo se pinta encima, se apaga SOLO ese velo
+   (`[data-velo="…"]::before{background:none}`) y se mira si los glifos
+   recuperan luz.
+
+`npm run check:tema` deja cerrada la puerta del segundo fallo: falla si vuelve
+una regla sobre `.field` a secas, porque `.field` es a la vez el campo de
+partículas y el campo de un formulario.

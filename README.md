@@ -19,12 +19,24 @@ scripts/
   build-knowledge-base.js  → Regenera knowledge-base.json a partir del HTML publicado
   build-precios.mjs        → Escribe los precios «desde» de precios.json en la web (--check verifica)
   build-og.mjs             → Genera assets/og-image*.png (lo que se ve al compartir el enlace)
-precios.json               → FUENTE ÚNICA de los precios «desde» que publica la web
+precios.json               → FUENTE ÚNICA de los precios «desde» y de la escalera de planes
 estado-producto.json       → FUENTE ÚNICA del estado de VERI*FACTU y de la conciliación
 automation/
   n8n/lead-ia-360/  → Workflow de n8n que procesa el formulario de contacto (ver su propio README)
   n8n/linkedin-auto-post/  → Workflow de n8n que publica el calendario de contenido en LinkedIn (ver su propio README)
 ```
+
+## Cambiar de sección
+
+La navegación entre páginas usa la transición del propio navegador
+(`@view-transition` en styles.css) con la coreografía del cambio de tema: la
+página que se va se rompe en piezas y es aspirada a la izquierda, la que
+llega entra por la derecha. Vive en `assets/js/tema.js` (pageswap/pagereveal)
+y en el bloque `html.nav-vt` de `assets/css/tema.css`. El aviso lo recoge el
+script de tres líneas del `<head>` de cada página, porque `tema.js` va con
+`defer` y llega después del evento. En móvil, táctil y movimiento reducido no
+se rompe en piezas: queda el barrido de la página entera, que es una sola
+capa en la GPU.
 
 ## Ver la web en local
 
