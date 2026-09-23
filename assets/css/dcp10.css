@@ -45,8 +45,15 @@
 .arq-lienzo{ grid-area:lienzo; position:relative; min-width:0; }
 /* Velo propio: el esquema tiene que leerse pase lo que pase detrás (el campo
    de la portada o el instrumento de cada página). Sin borde ni caja. */
+/* EL VELO NO SALE DE SU CAJA. Medido en la portada a 1.440 px: el velo
+   sangraba un 10 % de la altura del lienzo hacia arriba —59 px con el
+   esquema alto— y se pintaba ENCIMA de la ultima linea del titular de la
+   seccion, que quedaba gris a media altura («la tabla tapa las letras»).
+   El sangrado se mide ahora con tope en pixeles: sigue sin bordes, pero no
+   llega al titular, que esta siempre mas lejos que ese tope. */
 .arq-lienzo::before{
-  content:""; position:absolute; inset:-10% -8%; z-index:-1; pointer-events:none;
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  left:-8%; right:-8%; top:max(-10%, -22px); bottom:max(-10%, -22px);
   background:radial-gradient(64% 62% at 50% 50%, rgba(6,8,13,.94), rgba(6,8,13,.82) 52%, rgba(6,8,13,.4) 76%, rgba(6,8,13,0) 94%);
 }
 .arq-texto{ grid-area:texto; min-width:0; }
@@ -297,7 +304,17 @@
 .arq[data-e="9"] .arq-mas{ opacity:1; transform:none; }
 
 /* ---- el texto de la etapa ----------------------------------------------- */
+/* El texto de la etapa vive ENCIMA del campo de particulas, y justo en esta
+   zona el campo se vuelve un fogonazo: «Tu empresa» y su descripcion se
+   leian sobre blanco y cian. Mismo velo que los titulares de la portada
+   (.v6-veil): del color del fondo, sin borde, y a cero antes de acabar, asi
+   que no es una caja pegada —lo que pasa detras se sigue viendo. */
 .arq-texto{ position:relative; }
+.arq-texto::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  inset:-30px -26px -24px -30px;
+  background:radial-gradient(76% 82% at 38% 48%, rgba(6,8,13,.92), rgba(6,8,13,.82) 36%, rgba(6,8,13,.52) 60%, rgba(6,8,13,.18) 80%, rgba(6,8,13,0) 96%);
+}
 .arq-num{
   font-family:var(--mono); font-size:.75rem; letter-spacing:.14em; color:#8c95aa; margin:0;
 }
@@ -743,6 +760,10 @@
   list-style:none; margin:0 0 16px; padding:0;
   display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px;
 }
+/* Dos lineas, no cuatro. Cuatro pasos delante de cada demo eran cuatro
+   parrafos que nadie lee teniendo el sistema funcionando justo debajo:
+   basta el antes y el despues, y la demo hace el resto. */
+.gal-historia--corta{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 .gal-historia li{ padding:12px 14px; border-radius:12px; background:rgba(13,18,32,.55); border:1px solid rgba(150,174,245,.1); }
 .gal-historia b{ display:flex; align-items:center; gap:8px; font-family:var(--mono); font-weight:500; font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase; color:#8c95aa; }
 .gal-historia b i{ font-style:normal; color:#a9c2ff; }

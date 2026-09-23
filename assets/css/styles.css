@@ -53,7 +53,11 @@
   --surface-sheen:    rgba(214,226,255,.55);
   --ink:       #edf1f8;
   --stone:     #a7b0c4;
-  --stone-soft:#8c95aa;
+  /* MEDIDO en pixeles sobre las tarjetas: a 11 px, en mono y en versales,
+     este tono se renderizaba con tan poca tinta que las etiquetas de los
+     campos daban 2,3:1 de contraste real. Un escalon mas claro y 12 px en
+     las micro-etiquetas lo dejan por encima de 4,5:1 medido. */
+  --stone-soft:#a6afc4;
   --line:      #1e2536;
 
   --blue:      #5b8cff;
@@ -2680,7 +2684,7 @@ nav.main-nav > ul{ position:relative; }
 @media (prefers-reduced-motion:reduce){ .form-progress-dot{ transition:background .3s ease; } }
 .form-step-count{
   font-family:var(--mono);
-  font-size:0.6875rem;
+  font-size:0.75rem;
   letter-spacing:0.08em;
   text-transform:uppercase;
   color:var(--stone-soft);
@@ -2793,7 +2797,7 @@ nav.main-nav > ul{ position:relative; }
 .field label{
   display:block;
   font-family:var(--mono);
-  font-size:0.6875rem;
+  font-size:0.75rem;
   letter-spacing:0.08em;
   text-transform:uppercase;
   color:var(--stone-soft);
@@ -2865,7 +2869,7 @@ nav.main-nav > ul{ position:relative; }
 .contact-row .c-icon svg{ width:16px; height:16px; }
 .contact-row .label{
   font-family:var(--mono);
-  font-size:0.6875rem;
+  font-size:0.75rem;
   letter-spacing:0.1em;
   text-transform:uppercase;
   color:var(--stone-soft);

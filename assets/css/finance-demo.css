@@ -886,13 +886,15 @@
       "cabecera atajos"
       "hilo     atajos"
       "campo    atajos"
+      "adjunto  atajos"
       "pie      atajos";
-    grid-template-rows:auto minmax(0,1fr) auto auto;
+    grid-template-rows:auto minmax(0,1fr) auto auto auto;
     column-gap:28px;
   }
   .fdemo-ask-head{ grid-area:cabecera; }
   .fdemo-ask-thread{ grid-area:hilo; }
   .fdemo-ask-form{ grid-area:campo; }
+  .fdemo-ask-sube{ grid-area:adjunto; }
   .fdemo-ask-foot{ grid-area:pie; }
   .fdemo-ask-chips{
     grid-area:atajos; align-self:start;
@@ -988,16 +990,32 @@
 .fdemo-table tbody tr.is-nuevo{ background:rgba(52,224,198,.045); }
 
 /* El clip: adjuntar un documento a la conversación. */
+/* Subir fotos y archivos. Antes era un boton en linea sin sitio propio en la
+   rejilla de la pantalla: a partir de 1.200 px la rejilla lo colocaba en una
+   celda suya y el boton se estiraba hasta ocupar un rectangulo punteado vacio
+   —y el cajon se iba encima de los atajos. Ahora subir es una pieza con su
+   area, y el cajon vive dentro de ella. */
+.fdemo-ask-sube{ display:block; }
 .fdemo-ask-clip{
-  display:inline-flex; align-items:center; gap:9px; margin-top:10px;
-  padding:9px 14px; border-radius:10px; cursor:pointer;
-  border:1px dashed var(--dc-border-strong); background:transparent;
-  font-family:inherit; font-size:.8rem; color:var(--dc-text-muted);
-  transition:border-color .2s ease, color .2s ease;
+  display:flex; align-items:center; gap:12px; width:100%;
+  padding:11px 14px; border-radius:var(--dc-r-md); cursor:pointer;
+  border:1px solid var(--dc-border); background:var(--dc-surface-2);
+  font-family:inherit; text-align:left;
+  transition:border-color .2s ease, background-color .2s ease;
 }
-.fdemo-ask-clip:hover{ border-color:rgba(67,224,255,.45); color:var(--dc-text); }
-.fdemo-ask-clip svg{ width:16px; height:16px; flex:0 0 auto; }
-.fdemo-ask-clip i{ font-style:normal; font-size:.75rem; color:var(--dc-text-faint); }
+.fdemo-ask-clip:hover{ border-color:rgba(67,224,255,.45); background:var(--dc-surface-3, var(--dc-surface-2)); }
+.fdemo-ask-clip-i{
+  width:34px; height:34px; flex:0 0 auto; border-radius:var(--dc-r-md);
+  display:flex; align-items:center; justify-content:center;
+  background:var(--dc-info-bg); color:var(--dc-accent);
+}
+.fdemo-ask-clip-i svg{ width:18px; height:18px; }
+.fdemo-ask-clip-c{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.fdemo-ask-clip-c b{ font-size:.8125rem; font-weight:600; color:var(--dc-text); }
+.fdemo-ask-clip-c i{ font-style:normal; font-size:.75rem; color:var(--dc-text-faint); }
+.fdemo-ask-clip-x{ flex:0 0 auto; color:var(--dc-text-faint); transition:transform .2s ease; }
+.fdemo-ask-clip-x svg{ width:18px; height:18px; display:block; }
+.fdemo-ask-clip.es-abierto .fdemo-ask-clip-x{ transform:rotate(180deg); }
 .fdemo-ans-motor{ margin:0; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--dc-text-faint); }
 .fdemo-ans-grupo-t{ margin:0 0 2px; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--dc-text-faint); }
 
@@ -1587,9 +1605,13 @@ html:not([data-theme="dark"]) .fdemo-app.is-embedded{
   animation:fdemo-sube .18s cubic-bezier(.2,.8,.2,1) both;
 }
 .fdemo-cajon-t{
-  margin:2px 4px 10px; font-family:var(--dc-font-mono); font-size:0.6875rem;
+  margin:2px 4px 4px; font-family:var(--dc-font-mono); font-size:0.6875rem;
   letter-spacing:.14em; text-transform:uppercase; color:var(--dc-text-faint);
 }
+.fdemo-cajon-p{ margin:0 4px 10px; font-size:.75rem; line-height:1.5; color:var(--dc-text-muted); }
+.fdemo-cajon-rej{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px; }
+@media (max-width:720px){ .fdemo-cajon-rej{ grid-template-columns:minmax(0,1fr); } }
+.fdemo-cajon-rej .fdemo-doc-op + .fdemo-doc-op{ margin-top:0; }
 .fdemo-doc-op{
   display:flex; align-items:center; gap:12px; width:100%; text-align:left; cursor:pointer;
   padding:10px 12px; border-radius:var(--dc-r-md);

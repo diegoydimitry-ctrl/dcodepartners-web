@@ -2897,14 +2897,16 @@
     function cajonHtml() {
       if (!state.docCajon) return '';
       return '<div class="fdemo-cajon">' +
-        '<p class="fdemo-cajon-t">Suéltale un documento y mira qué hace con él</p>' +
+        '<p class="fdemo-cajon-t">Prueba con uno de estos</p>' +
+        '<p class="fdemo-cajon-p">Del PDF digital saca los datos y te los deja revisables. De una foto o un escaneado guarda el documento y lo deja listo para rellenar.</p>' +
+        '<div class="fdemo-cajon-rej">' +
         DOCS.map(function (d) {
           return '<button type="button" class="fdemo-doc-op" data-action="doc-op" data-k="' + d.k + '">' +
             '<span class="fdemo-doc-op-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
             ICONO_DOC[d.icono] + '</svg></span>' +
             '<span class="fdemo-doc-op-c"><b>' + esc(d.n) + '</b><i>' + esc(d.t) + '</i></span>' +
             '<span class="fdemo-doc-op-p">' + esc(d.p) + '</span></button>';
-        }).join('') +
+        }).join('') + '</div>' +
         '<button type="button" class="fdemo-doc-op es-bloq" data-action="doc-mio">' +
         '<span class="fdemo-doc-op-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
         '<path d="M12 16.5V6m0 0 4 4m-4-4-4 4" stroke-linecap="round" stroke-linejoin="round"/>' +
@@ -3076,9 +3078,17 @@
         '<input class="fdemo-input" type="text" name="pregunta" aria-label="Escribe tu pregunta" placeholder="¿Qué está pasando?" autocomplete="off" maxlength="200">' +
         '<button type="submit" class="fdemo-btn variant-primary">Preguntar</button>' +
         '</form>' +
+        '<div class="fdemo-ask-sube">' +
         '<button type="button" class="fdemo-ask-clip' + (state.docCajon ? ' es-abierto' : '') + '" data-action="adjuntar" aria-expanded="' + (state.docCajon ? 'true' : 'false') + '">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M21 11.5 12.5 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '<span>Suéltale un documento</span><i>PDF, foto, Excel o CSV</i></button>' + cajonHtml() +
+        '<span class="fdemo-ask-clip-i" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' +
+        '<rect x="3.5" y="4.5" width="17" height="13.5" rx="2.5"/><circle cx="8.8" cy="10" r="1.7"/>' +
+        '<path d="m4.5 16.5 4.6-4 3.6 3 2.7-2.3 4.1 3.3" stroke-linejoin="round"/></svg></span>' +
+        '<span class="fdemo-ask-clip-c"><b>Sube fotos y archivos</b>' +
+        '<i>Foto del móvil, PDF, Excel o CSV \u00b7 hasta 10 MB</i></span>' +
+        '<span class="fdemo-ask-clip-x" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="m7 10 5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        '</span></button>' + cajonHtml() + '</div>' +
         (chips ? '<div class="fdemo-ask-chips"><p class="fdemo-ask-chips-t">O prueba con una de estas:</p><div class="fdemo-ia-chips">' + chips + '</div></div>' : '') +
         muroHtml() +
         '<p class="fdemo-ask-foot">Datos ficticios. En esta demo las respuestas se calculan aquí mismo, en tu navegador; el sistema real responde sobre los datos de tu empresa.</p>' +

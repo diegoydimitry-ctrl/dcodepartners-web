@@ -7,7 +7,11 @@
     "Son precios DESDE, de referencia: el precio final depende del alcance.",
     "Esa advertencia se escribe siempre junto a ellos (campo `aviso`).",
     "",
-    "Cambiar un importe aquí lo cambia en toda la web a la vez."
+    "Cambiar un importe aquí lo cambia en toda la web a la vez.",
+    "",
+    "LOS PLANES de /sistema-financiero son la escalera completa y tienen que",
+    "cuadrar con esto (`planes`), igual que la comparativa de mercado que los",
+    "precede: el primer año va de 738 € (390 + 29×12) a 3.780 € (1.500 + 190×12)."
   ],
   "revisado": "2026-09-23",
   "aviso": {
@@ -16,10 +20,10 @@
   },
   "desde": {
     "finance": {
-      "es": "Desde 79 €/mes",
-      "en": "From €79/month",
-      "detalle_es": "más 690 € de implantación",
-      "detalle_en": "plus €690 setup"
+      "es": "Desde 29 €/mes",
+      "en": "From €29/month",
+      "detalle_es": "más 390 € de puesta en marcha",
+      "detalle_en": "plus €390 setup"
     },
     "medida": {
       "es": "Desde 1.500 €",
@@ -34,14 +38,10 @@
       "detalle_en": "depending on scope"
     }
   },
-  "$pendiente_humano": [
-    "23/09/2026 — Se dio como precio de referencia «D-Code Finance: desde 29 €/mes».",
-    "El plan publicado en /sistema-financiero es 690 € de implantación + 79 €/mes (plan 01),",
-    "y los tres planes son la base de la comparativa con Holded, Odoo y Sage.",
-    "Publicar 29 €/mes en la portada dejaría la web contradiciéndose a un clic de distancia,",
-    "así que aquí está el precio real y la decisión queda pendiente:",
-    "  a) crear un plan de 29 €/mes y rehacer la página de planes, o",
-    "  b) mantener 79 €/mes como precio de entrada.",
-    "Cuando se decida, se cambia `desde.finance` en este fichero y se ejecuta build:precios."
-  ]
+  "planes": {
+    "$nota": "Escalera de /sistema-financiero. Referencia de mercado (septiembre 2026): Holded 15/29/59/99/199 €/mes, Quipu 17/30/59 €/mes. La entrada se queda en el mismo escalón que la de ellos; lo que cambia es que aquí el sistema es propio y se implanta.",
+    "finance": { "implantacion": "390 €", "mes": "29 €", "gente": "hasta 3 personas" },
+    "inteligencia": { "implantacion": "690 €", "mes": "79 €", "gente": "hasta 10 personas" },
+    "medida": { "implantacion": "desde 1.500 €", "mes": "desde 190 €", "gente": "sin límite de personas" }
+  }
 }

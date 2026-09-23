@@ -175,6 +175,132 @@
     pintarBoton();
   }
   metaColor();
+
+  /* ===================================================================
+     CAMBIAR DE SECCIÓN = EL MISMO CAMBIO DE DIMENSIÓN
+     ===================================================================
+     Pulsar «Método» o cualquier botón que lleve a otra página no debe ser
+     un corte: la página actual se rompe y es aspirada hacia la IZQUIERDA y
+     la nueva llega desde la DERECHA, exactamente como al invertir el tema.
+     Se hace con la transición de navegación del propio navegador
+     (@view-transition en styles.css, ya activa): aquí solo se le da la
+     coreografía.
+
+     Dos documentos, un solo baile:
+     · en el que se va (pageswap) se nombran sus piezas visibles y se
+       guardan sus rectángulos — el navegador fotografía cada una;
+     · en el que llega (pagereveal) se nombran las suyas y, con las dos
+       tandas de fotos ya hechas, se animan aquí: las viejas salen, las
+       nuevas entran. Los nombres no se repiten entre documentos (tv-o-* y
+       tv-n-*) para que el navegador no intente emparejar una pieza de una
+       página con otra de la siguiente, que no son la misma cosa.
+
+     Dónde NO se rompe en piezas: móvil, táctil y movimiento reducido. Ahí
+     queda el barrido de la página entera, que es una sola capa en la GPU:
+     el mismo gesto, sin coste por elemento. */
+  var CLAVE_NAV = 'dcp-nav-vt';
+  function piezasPermitidas() {
+    return !mqReducido.matches && W.innerWidth >= 1000 &&
+      !W.matchMedia('(pointer:coarse)').matches;
+  }
+  function navegacionInterna(url) {
+    try {
+      var u = new URL(url, location.href);
+      if (u.origin !== location.origin) return false;
+      return !/\.(pdf|zip|csv|xml|png|jpe?g|webp|svg|ico|txt)$/i.test(u.pathname);
+    } catch (e) { return false; }
+  }
+  /* La curva y los tiempos son los del cambio de tema: el gesto tiene que
+     reconocerse como el mismo. */
+  function animaViejas(lista, vw, vh) {
+    var sem = 11, rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
+    lista.forEach(function (p) {
+      var cx = p.x + p.w / 2, cy = p.y + p.h / 2, fx = Math.max(0, Math.min(1, p.x / vw));
+      var giro = (rnd() - 0.5) * 50, caida = 18 + rnd() * 26;
+      R.animate([
+        { transform: 'none', opacity: 1, offset: 0 },
+        { transform: 'translate(' + (-6 - rnd() * 10).toFixed(0) + 'px,' + caida.toFixed(0) + 'px) rotate(' + (giro * 0.25).toFixed(1) + 'deg)', opacity: 1, offset: 0.22 },
+        { transform: 'translate(' + (-(cx + p.w / 2 + 60 + rnd() * 140)).toFixed(0) + 'px,' + ((vh / 2 - cy) * 0.55 + caida * 2).toFixed(0) + 'px) rotate(' + giro.toFixed(1) + 'deg) scale(.3)', opacity: 0, offset: 1 }
+      ], { pseudoElement: '::view-transition-old(' + p.n + ')', duration: 400, delay: fx * 110, easing: 'cubic-bezier(.5,0,.85,.4)', fill: 'both' });
+    });
+  }
+  function animaNuevas(P) {
+    var vw = P.vw, sem = 23, rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
+    P.piezas.forEach(function (p) {
+      var r = p.r, fx = Math.max(0, Math.min(1, r.left / vw));
+      var giro = (rnd() - 0.5) * 50;
+      R.animate([
+        { transform: 'translate(' + (vw - r.left + 40 + rnd() * 160).toFixed(0) + 'px,' + ((rnd() - 0.5) * 70).toFixed(0) + 'px) rotate(' + (-giro * 0.4).toFixed(1) + 'deg) scale(.86)', opacity: 0 },
+        { opacity: 1, offset: 0.35 },
+        { transform: 'none', opacity: 1 }
+      ], { pseudoElement: '::view-transition-new(' + p.n + ')', duration: 380, delay: 140 + fx * 90 + rnd() * 40, easing: 'cubic-bezier(.16,.8,.24,1)', fill: 'both' });
+    });
+  }
+
+  W.addEventListener('pageswap', function (e) {
+    if (!e.viewTransition) return;
+    var destino = e.activation && e.activation.entry && e.activation.entry.url;
+    if (destino && !navegacionInterna(destino)) return;
+    try { W.sessionStorage.removeItem(CLAVE_NAV); } catch (err) {}
+    if (!piezasPermitidas()) return;
+    try {
+      var P = partir();
+      var lista = P.piezas.map(function (p, k) {
+        p.el.style.viewTransitionName = 'tv-o-' + k;
+        return { n: 'tv-o-' + k, x: Math.round(p.r.left), y: Math.round(p.r.top), w: Math.round(p.r.width), h: Math.round(p.r.height) };
+      });
+      W.sessionStorage.setItem(CLAVE_NAV, JSON.stringify({ vw: P.vw, vh: P.vh, p: lista }));
+    } catch (err) { /* si algo falla, queda el barrido de la página entera */ }
+  });
+
+  /* El documento que llega dispara «pagereveal» ANTES de que corran los
+     scripts con defer —este fichero, entre ellos—, así que el aviso lo
+     recoge el script de tres líneas del <head> (el mismo que fija el tema
+     sin destello) y lo deja en window.__dcpRevelado. Aquí se atiende en
+     cuanto se puede: si aún no ha llegado, por el evento; si ya pasó, por
+     la nota que dejó el <head>. */
+  function alRevelar(e) {
+    if (!e || !e.viewTransition || e.__dcpHecho) return;
+    e.__dcpHecho = true;
+    R.classList.add('nav-vt');
+    var viejas = null;
+    try {
+      var crudo = W.sessionStorage.getItem(CLAVE_NAV);
+      W.sessionStorage.removeItem(CLAVE_NAV);
+      if (crudo) viejas = JSON.parse(crudo);
+    } catch (err) { viejas = null; }
+    var P = null, portalEl = null;
+    if (piezasPermitidas()) {
+      try {
+        P = partir();
+        P.piezas.forEach(function (p, k) { p.el.style.viewTransitionName = 'tv-n-' + k; p.n = 'tv-n-' + k; });
+      } catch (err) { P = null; }
+    }
+    try { portalEl = portal(); } catch (err) { portalEl = null; }
+    var limpio = false;
+    var limpiar = function () {
+      if (limpio) return;
+      limpio = true;
+      if (portalEl) portalEl.remove();
+      if (P) recomponer(P);
+      R.classList.remove('nav-vt');
+    };
+    /* Red de seguridad. MEDIDO: con las piezas animadas a mano, «finished»
+       puede quedarse pendiente (las animaciones con fill:both sobre las
+       fotos de la pagina anterior no siempre la cierran) y la pagina se
+       quedaba con la clase nav-vt puesta. El baile dura 0,8 s: a 1,6 s ya
+       no queda nada que esperar. */
+    W.setTimeout(limpiar, 1200);
+    if (e.viewTransition.ready) e.viewTransition.ready.then(function () {
+      try { if (viejas && viejas.p) animaViejas(viejas.p, viejas.vw, viejas.vh); } catch (err) {}
+      try { if (P) animaNuevas(P); } catch (err) {}
+    }, function () {});
+    e.viewTransition.finished.then(limpiar, limpiar);
+  }
+  W.__dcpNav = alRevelar;
+  W.addEventListener('pagereveal', alRevelar);
+  if (W.__dcpRevelado) alRevelar(W.__dcpRevelado);
+
   // Otra pestaña cambió el tema: esta se pone igual, sin animación.
   W.addEventListener('storage', function (e) {
     if (e.key === CLAVE && (e.newValue === 'light' || e.newValue === 'dark') && e.newValue !== actual()) {

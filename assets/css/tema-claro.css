@@ -570,6 +570,7 @@ html[data-theme="light"] .arq[data-e="8"] .arq-ia,
 html[data-theme="light"] .arq[data-e="9"] .arq-ia{ border-color:rgba(64,53,94,0.3); }
 html[data-theme="light"] .arq[data-e="8"] .arq-panel,
 html[data-theme="light"] .arq[data-e="9"] .arq-panel{ border-color:rgba(45,59,98,0.3); }
+html[data-theme="light"] .arq-texto::before{ background:radial-gradient(76% 82% at 38% 48%, rgba(240,243,249,0.92), rgba(240,243,249,0.82) 36%, rgba(240,243,249,0.52) 60%, rgba(240,243,249,0.18) 80%, rgba(6,8,13,0) 96%); }
 html[data-theme="light"] .arq-num{ color:#48505e; }
 html[data-theme="light"] .arq-num b{ color:#44588e; }
 html[data-theme="light"] .arq-t{ color:#090f1a; }

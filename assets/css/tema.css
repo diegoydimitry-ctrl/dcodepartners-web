@@ -113,8 +113,15 @@ html[data-theme="light"]{
 /* Las partículas de cada página: en claro no pueden ser luz sobre blanco.
    Se invierten conservando el tono: pasan a ser tinta de color. Sin mezcla:
    el lienzo es transparente, así que solo cambian las partículas. */
-html[data-theme="light"] body:has(> .gx) .field,
-html[data-theme="light"] body:has(> .gx) .field--inst{
+/* OJO CON EL NOMBRE: «.field» es el campo de particulas (body > .field
+   [data-field]) y TAMBIEN el campo de un formulario (.field con su label y
+   su input). Esta regla decia solo «.field», asi que en claro invertia y
+   apagaba todos los formularios de la web: las etiquetas «NOMBRE COMPLETO»
+   y «EMPRESA» quedaban en tinta oscura sobre la tarjeta oscura, a 1,8:1
+   medido en pixeles. Ahora se nombra el campo de particulas, que es el que
+   tiene data-field o es --inst. */
+html[data-theme="light"] body:has(> .gx) > .field[data-field],
+html[data-theme="light"] body:has(> .gx) > .field--inst{
   filter:invert(1) hue-rotate(180deg) saturate(1.8); opacity:.82;
 }
 /* El titular con degradado: en claro, los mismos cuatro tonos, más hondos. */
@@ -127,6 +134,12 @@ html[data-theme="light"] .v7-fiscal-i:has([data-conc]){ --tono-i:#6a42dc; }
 html[data-theme="light"] .btn-primary{ color:#fff; }
 html[data-theme="light"] .btn-primary:hover{ background:#244fc4; }
 html[data-theme="light"] ::selection{ background:rgba(47,95,224,.18); }
+/* Las dos mitades del eje de «Conócenos» llevan su tono como tripleta suelta
+   (--tono:46,216,240), que el derivado del tema claro no sabe leer: en claro
+   la etiqueta salia cian sobre blanco, 1,4:1 medido en pixeles. Aqui van los
+   dos tonos hondos del tema claro, y con ellos el degradado del eje. */
+html[data-theme="light"] body.v7 .eje-mitad--a{ --tono:6,106,130; }
+html[data-theme="light"] body.v7 .eje-mitad--b{ --tono:106,66,220; }
 /* Lo que en oscuro es letra oscura sobre azul claro pasa a letra blanca
    sobre el azul de acción. */
 html[data-theme="light"] .lang-switch a[aria-current="true"],
@@ -147,8 +160,8 @@ html.gx-ligero .gx-t{ animation:none; opacity:.7; }
 /* En equipo justo, la mitad de las estrellas que titilan y sin rayos. */
 html.gx-ligero .gx-t:nth-of-type(2n){ display:none; }
 html.gx-ligero .gx-t::before, html.gx-ligero .gx-t::after{ display:none; }
-html.gx-ligero[data-theme="light"] body:has(> .gx) .field,
-html.gx-ligero[data-theme="light"] body:has(> .gx) .field--inst{ filter:invert(1) hue-rotate(180deg); }
+html.gx-ligero[data-theme="light"] body:has(> .gx) > .field[data-field],
+html.gx-ligero[data-theme="light"] body:has(> .gx) > .field--inst{ filter:invert(1) hue-rotate(180deg); }
 
 /* ================================================== 3. EL BOTÓN DE TEMA */
 .tema-btn{
@@ -271,6 +284,59 @@ html.tema-vt::view-transition-new(tema-portal){ animation:none; }
   85% { opacity:.85; }
   100%{ transform:translateX(calc(-100vw - 70px)); opacity:0; }
 }
+
+/* ---- EL MISMO CAMBIO, PERO ENTRE SECCIONES (tema.js: pageswap/pagereveal)
+   La navegación entre páginas usa la coreografía de arriba tal cual: la
+   página que se va es aspirada a la izquierda, la que llega entra por la
+   derecha detrás de la costura de luz. Donde no hay piezas (móvil, táctil,
+   movimiento reducido) queda solo el barrido de la página entera, que es
+   una única capa compuesta en la GPU. */
+html.nav-vt::view-transition{ background:
+  radial-gradient(55% 90% at 0% 50%, rgba(120,165,255,.5), transparent 70%),
+  radial-gradient(50% 80% at 100% 50%, rgba(160,120,255,.3), transparent 72%),
+  #050814; }
+html.nav-vt::view-transition-group(root){ animation:none; }
+html.nav-vt::view-transition-image-pair(root){ isolation:auto; }
+html.nav-vt::view-transition-old(root),
+html.nav-vt::view-transition-new(root){ mix-blend-mode:normal; animation-fill-mode:both; }
+html.nav-vt::view-transition-old(root){
+  animation-name:tema-absorbe; animation-duration:.44s; animation-delay:.04s; animation-timing-function:cubic-bezier(.5,0,.8,.3);
+  transform-origin:0% 50%;
+}
+html.nav-vt::view-transition-new(root){
+  animation-name:tema-llega; animation-duration:.42s; animation-delay:.14s; animation-timing-function:cubic-bezier(.16,.8,.24,1);
+  transform-origin:100% 50%;
+}
+/* Las piezas: el grupo no se mueve (la pieza está en el mismo sitio en los
+   dos temas); lo que se anima son sus dos capturas, desde tema.js. */
+html.nav-vt::view-transition-group(*){ animation-duration:0s; }
+html.nav-vt::view-transition-image-pair(*){ isolation:auto; }
+html.nav-vt::view-transition-old(*), html.nav-vt::view-transition-new(*){ mix-blend-mode:normal; }
+@keyframes tema-absorbe{
+  0%  { transform:none; opacity:1; }
+  100%{ transform:perspective(1400px) translateX(-72%) rotateY(40deg) scale(.32,.6); opacity:0; }
+}
+@keyframes tema-llega{
+  0%  { transform:perspective(1400px) translateX(92%) rotateY(-24deg) scale(.9); opacity:.2; }
+  35% { opacity:1; }
+  100%{ transform:none; opacity:1; }
+}
+/* La costura de luz va delante de la página nueva: mismo tiempo, misma
+   curva, y se apaga al llegar al borde izquierdo. Su sitio final está fuera
+   de la pantalla, a la derecha. */
+.tema-portal{
+  position:fixed; top:0; bottom:0; left:100%; width:140px; pointer-events:none; z-index:2147483000;
+  view-transition-name:tema-portal;
+  background:linear-gradient(90deg, rgba(91,140,255,0), rgba(120,170,255,.55) 38%, #f4f8ff 50%, rgba(170,130,255,.55) 62%, rgba(155,107,255,0));
+}
+html.nav-vt::view-transition-group(tema-portal){ animation:tema-costura .42s cubic-bezier(.16,.8,.24,1) .14s both; }
+html.nav-vt::view-transition-new(tema-portal){ animation:none; }
+@keyframes tema-costura{
+  0%  { transform:translateX(-70px); opacity:1; }
+  85% { opacity:.85; }
+  100%{ transform:translateX(calc(-100vw - 70px)); opacity:0; }
+}
+
 /* Plan B (sin View Transitions): el barrido. */
 .tema-barrido{
   position:fixed; inset:0 -30vw 0 auto; width:160vw; z-index:2147483000; pointer-events:none;

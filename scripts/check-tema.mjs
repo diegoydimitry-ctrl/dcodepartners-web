@@ -91,7 +91,16 @@ if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html'
 {
   const js = leer('assets/js/tema.js');
   if (!/classList\.add\('gx-ligero'\)/.test(js) || !/requestAnimationFrame\(paso\)/.test(js)) errores.push('tema.js: falta la medida de fotogramas del cielo ligero');
-  const iLig = css.indexOf('html.gx-ligero .gx > i{'), iClaro = css.indexOf('html[data-theme="light"] body:has(> .gx) .field');
+  // OJO: el selector nombra el campo de PARTICULAS (> .field[data-field]), no
+  // «.field» a secas, que tambien es el campo de un formulario.
+  const iLig = css.indexOf('html.gx-ligero .gx > i{'), iClaro = css.indexOf('html[data-theme="light"] body:has(> .gx) > .field[data-field]');
+  /* El campo de particulas y el campo de un formulario se llaman igual
+     (.field). Una regla que invierta «.field» a secas apaga todos los
+     formularios de la web en claro: aqui se cierra esa puerta. */
+  const invierteSuelto = /(^|[,{}])\s*[^,{}]*[\s>]\.field\s*(,|\{)/m.test(
+    css.split('\n').filter((l) => /filter:\s*invert/.test(l) || /\.field(\s*,|\s*\{)/.test(l)).join('\n')
+      .split('\n').filter((l) => /\.field\s*(,|\{)/.test(l) && !/data-field|--inst/.test(l)).join('\n'));
+  if (invierteSuelto) errores.push('tema.css: hay una regla sobre «.field» a secas; el campo de particulas es «.field[data-field]» o «.field--inst» (si no, se invierten los formularios)');
   if (iLig < 0) errores.push('tema.css: falta el modo cielo ligero');
   else if (iClaro < 0 || iLig < iClaro) errores.push('tema.css: el modo cielo ligero tiene que ir después de las reglas del campo en claro');
   if (/body:has\(> \.gx\) \.field[^{]*\{[^}]*mix-blend-mode:(screen|multiply)/.test(css)) errores.push('tema.css: el campo de partículas no puede volver a mezclarse con el cielo (mix-blend-mode): es el coste principal por fotograma');
