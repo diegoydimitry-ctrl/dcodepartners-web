@@ -914,17 +914,65 @@
     var formSuccessBookBtn = document.getElementById('form-success-book-btn');
     var currentStep = 1;
 
+    /* EL ERROR SE DICE EN LA PÁGINA Y EN SU IDIOMA.
+       `reportValidity()` enseña el globo del navegador: en inglés aunque la
+       página esté en español («Please include an '@'…»), encima del campo
+       siguiente, y desaparece al desplazarse. Aquí el mensaje se escribe
+       debajo del campo, en el idioma de la página, el campo queda marcado
+       como inválido para quien usa lector de pantalla, y se borra en cuanto
+       se corrige. La validación del navegador sigue siendo la fuente: solo
+       cambia cómo se cuenta. */
+    var EN_FORM = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
+    var MENSAJES = {
+      vacio:   EN_FORM ? 'Please fill in this field.' : 'Rellena este campo.',
+      email:   EN_FORM ? 'Enter an email address, like name@company.com.' : 'Escribe un email, como nombre@empresa.com.',
+      tel:     EN_FORM ? 'Enter a valid phone number.' : 'Escribe un teléfono válido.',
+      casilla: EN_FORM ? 'You have to accept the privacy policy to continue.' : 'Tienes que aceptar la política de privacidad para continuar.',
+      otro:    EN_FORM ? 'Check this field.' : 'Revisa este campo.'
+    };
+    var textoError = function (campo) {
+      var v = campo.validity;
+      if (campo.type === 'checkbox') return MENSAJES.casilla;
+      if (v.valueMissing) return MENSAJES.vacio;
+      if (v.typeMismatch && campo.type === 'email') return MENSAJES.email;
+      if (v.typeMismatch && campo.type === 'tel') return MENSAJES.tel;
+      return MENSAJES.otro;
+    };
+    var limpiaError = function (campo) {
+      campo.removeAttribute('aria-invalid');
+      var id = campo.id + '-error', el = document.getElementById(id);
+      if (el) el.remove();
+      var d = (campo.getAttribute('aria-describedby') || '').split(/\s+/).filter(function (x) { return x && x !== id; });
+      if (d.length) campo.setAttribute('aria-describedby', d.join(' ')); else campo.removeAttribute('aria-describedby');
+    };
+    var pintaError = function (campo) {
+      limpiaError(campo);
+      var id = campo.id + '-error';
+      var p = document.createElement('p');
+      p.className = 'field-error'; p.id = id; p.setAttribute('role', 'alert');
+      p.textContent = textoError(campo);
+      (campo.closest('.field') || campo.parentNode).appendChild(p);
+      campo.setAttribute('aria-invalid', 'true');
+      var d = (campo.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+      d.push(id); campo.setAttribute('aria-describedby', d.join(' '));
+      if (!campo.dataset.errorEscuchado) {
+        campo.dataset.errorEscuchado = '1';
+        var revisa = function () { if (campo.checkValidity()) limpiaError(campo); };
+        campo.addEventListener('input', revisa);
+        campo.addEventListener('change', revisa);
+        campo.addEventListener('blur', function () { if (!campo.checkValidity()) pintaError(campo); });
+      }
+    };
     var validateStep = function (n) {
       var stepEl = stepEls[n - 1];
       if (!stepEl) return true;
-      var fields = stepEl.querySelectorAll('input[required], textarea[required]');
+      var fields = stepEl.querySelectorAll('input[required], textarea[required], select[required]');
+      var primero = null;
       for (var i = 0; i < fields.length; i++) {
-        if (!fields[i].checkValidity()) {
-          fields[i].reportValidity();
-          fields[i].focus();
-          return false;
-        }
+        if (fields[i].checkValidity()) limpiaError(fields[i]);
+        else { pintaError(fields[i]); if (!primero) primero = fields[i]; }
       }
+      if (primero) { primero.focus(); return false; }
       return true;
     };
 

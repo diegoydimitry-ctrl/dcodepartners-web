@@ -1,6 +1,8 @@
 # D-Code Partners — Sitio Web
 
-Sitio corporativo multipágina de **D-Code Partners**, Growth Partners & especialistas en automatización con Inteligencia Artificial.
+Sitio corporativo multipágina de **D-Code Partners**: sistemas a medida y software propio
+para empresas —automatización, agentes de IA e integraciones—, con D-Code Finance como
+producto propio y cuatro demos que se pueden usar desde la web.
 
 ## Contenido del repositorio
 
@@ -15,6 +17,10 @@ assets/
   data/knowledge-base.json  → Contenido real del sitio, usado como contexto del asistente de IA
 scripts/
   build-knowledge-base.js  → Regenera knowledge-base.json a partir del HTML publicado
+  build-precios.mjs        → Escribe los precios «desde» de precios.json en la web (--check verifica)
+  build-og.mjs             → Genera assets/og-image*.png (lo que se ve al compartir el enlace)
+precios.json               → FUENTE ÚNICA de los precios «desde» que publica la web
+estado-producto.json       → FUENTE ÚNICA del estado de VERI*FACTU y de la conciliación
 automation/
   n8n/lead-ia-360/  → Workflow de n8n que procesa el formulario de contacto (ver su propio README)
   n8n/linkedin-auto-post/  → Workflow de n8n que publica el calendario de contenido en LinkedIn (ver su propio README)

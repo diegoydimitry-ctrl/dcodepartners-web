@@ -9,6 +9,8 @@ sitio como lo sirve Vercel y bloquean cualquier petición a terceros.
 | `npm run test:estado` | Que el estado no se puede adelantar sin prueba (10 casos sobre copia temporal) | 3 s |
 | `npm run check:superficie` | Que nada interno llega al despliegue | 1 s |
 | `npm run check:enlaces` | Enlaces internos, pares ES/EN, sitemap y JSON-LD | 2 s |
+| `npm run check:precios` | Que los precios «desde» de la web coinciden con `precios.json` | 1 s |
+| `npm run check:og` | Que existen las imágenes para compartir (`assets/og-image*.png`) | 1 s |
 | `npm run check:kb` | Que el asistente sabe exactamente lo que dice la web | 1 s |
 | `npm run check:consentimiento` | Consentimiento y analítica solo en el dominio real y en orden | 1 s |
 | `npm run check:demo` | Cómo se monta la demo de Finance en cada página | 1 s |
@@ -18,7 +20,8 @@ sitio como lo sirve Vercel y bloquean cualquier petición a terceros.
 | `npm run qa:demo` | Las 25 pantallas de la demo en ES y EN (1440, 1024, 390, 320): contenido, idioma, solapes, errores. `-- --recorrido` añade una vuelta entera del recorrido automático | 3 min (+3 min) |
 
 `npm run sync-content` regenera lo derivado (estado de producto, demo en
-inglés, `?v=` de los estáticos y base de conocimiento) y va antes de
+inglés, precios, imágenes para compartir, `?v=` de los estáticos y base de
+conocimiento) y va antes de
 cualquier commit que toque contenido.
 
 Fuera del repositorio, en la entrega de cada ronda, se pasan además

@@ -4123,3 +4123,28 @@ html[data-theme="light"] .foto-app{
   .cap .foto-app img{ width:190%; max-width:none; }
   .cap-pie .btn{ width:100%; justify-content:center; }
 }
+
+/* El error del formulario, debajo de su campo y en el idioma de la página
+   (ver main.js · validateStep). Rojo del sistema, no el del navegador. */
+.field-error{
+  display:flex; align-items:flex-start; gap:7px;
+  margin:7px 0 12px; font-size:.8125rem; line-height:1.45;
+  color:var(--x-bad, #ff6b62);
+}
+.field-error::before{
+  content:""; flex:none; width:6px; height:6px; margin-top:.42em; border-radius:50%;
+  background:currentColor; box-shadow:0 0 8px -1px currentColor;
+}
+.field input[aria-invalid="true"], .field textarea[aria-invalid="true"]{
+  border-color:var(--x-bad, #ff6b62) !important;
+  box-shadow:0 0 0 3px rgba(255,107,98,.14);
+}
+/* Qué pieza de las tres hay dentro de cada sistema: es lo que conecta las
+   capturas con lo que se vende arriba en esta misma página. */
+.cap-piezas{
+  display:inline-block; margin-top:8px;
+  font-family:var(--mono); font-style:normal; font-size:.6875rem;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--stone-soft);
+  border:1px solid var(--surface-border, rgba(150,174,245,.18));
+  border-radius:999px; padding:4px 10px;
+}

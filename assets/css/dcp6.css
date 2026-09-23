@@ -792,3 +792,16 @@ body.v6 .v6-status, body.v6 .v6-cap{
 @media (max-width:900px){
   .v6-oferta{ grid-template-columns:minmax(0,1fr); gap:12px; }
 }
+
+/* El precio «desde» dentro de cada tarjeta de oferta. Va al final, separado
+   por una línea: primero qué es, después cuánto cuesta. */
+.v6-of-precio{
+  display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+  margin-top:auto; padding-top:12px; border-top:1px solid rgba(150,174,245,.14);
+}
+.v6-of-precio b{ font-size:.9375rem; font-weight:600; color:#e8eeff; }
+.v6-of-precio i{ font-style:normal; font-size:.8125rem; color:var(--txt-3,#8ea0c4); }
+.v6-of-aviso{
+  margin:clamp(14px,1.6vw,18px) 0 0; font-size:.8125rem; line-height:1.55;
+  color:var(--txt-3,#8ea0c4); max-width:74ch;
+}

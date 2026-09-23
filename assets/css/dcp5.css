@@ -1621,3 +1621,16 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
   .vf-sello i::after, .vf-eslabon, .vf-e-ok{ animation:none; }
   .vf-e-ok{ opacity:1; }
 }
+
+/* El precio «desde» de cada pieza de /servicios, y el aviso de que es una
+   referencia y no una tarifa cerrada. */
+.out-precio{
+  display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+  margin-top:12px; padding-top:10px; border-top:1px solid var(--v-edge-2);
+}
+.out-precio b{ font-size:.9375rem; font-weight:600; color:var(--v-ink); }
+.out-precio i{ font-style:normal; font-size:.8125rem; color:var(--v-ink-3); }
+.out-aviso{
+  margin:clamp(16px,2vw,22px) 0 0; font-size:.8125rem; line-height:1.55;
+  color:var(--v-ink-3); max-width:74ch;
+}
