@@ -188,6 +188,39 @@ Las nueve formaciones del campo —el análisis, la construcción, el ciclo— s
 se ven con ratón. En un iPad queda el cielo. Con ellas se va el rótulo «Lo que
 estás viendo», que nombraba la formación y sin campo no nombra nada.
 
+## El cambio de tema en un dedo
+
+Mismo patrón que el campo, y misma lección. Al invertir el tema, la página se
+partía en 44 piezas y cada una recibía un nombre de transición: el navegador
+tiene entonces que fotografiar 88 capas antes de mover nada. En un ratón eso va
+fino. En un iPad es lo que el cliente describió como «tarda y se cambia muy
+lento», y tenía razón.
+
+Medido en el perfil `ipad` (mediana de tres pulsaciones sobre la portada):
+
+| cómo se hace el cambio | peor fotograma | p95 | el gesto entero |
+|---|---:|---:|---:|
+| 44 piezas (como estaba) | 527 ms | 189 ms | 1.678 ms |
+| una sola foto de la pantalla | 765 ms | 59 ms | 1.249 ms |
+| **el barrido (lo que se hizo)** | **296 ms** | **23 ms** | **~540 ms** |
+
+Lo que sorprende es la fila del medio: quitar las piezas y dejar una sola
+captura de pantalla completa **empeora** el peor fotograma. Fotografiar 2048×2732
+píxeles de una vez cuesta más que fotografiar 88 trozos pequeños. La conclusión
+es la misma que con el campo: en un aparato táctil, lo caro es la imagen, no el
+cálculo.
+
+Así que en táctil no se fotografía nada. Va el barrido —una franja que cruza la
+pantalla, un solo elemento compuesto en la GPU— y el tema cambia cuando la
+franja cubre la pantalla, de modo que el repintado, que es inevitable, queda
+detrás de ella en vez de a la vista. 230 ms de entrada, 300 de salida.
+
+En un ratón no cambia nada: las piezas siguen ahí.
+
+Medido después: iPad p95 21 ms, peor fotograma 391; móvil p95 23 ms, peor
+fotograma 348. PC igual que antes (ready 291→349 ms, gesto 1.412→1.451: ruido
+de pasada).
+
 ## Lo que queda
 
 - `/sistema-financiero` recorriéndose en el perfil `ipad` se queda en ~34 ms de

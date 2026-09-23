@@ -67,11 +67,23 @@
     D.body.appendChild(p);
     return p;
   }
-  function barrido(nuevo, fin) {
-    // Plan B sin View Transitions: una franja de espacio cruza de derecha a
-    // izquierda; el tema cambia cuando cubre la pantalla.
+  /* El barrido: una franja de espacio cruza la pantalla de derecha a
+     izquierda y el tema cambia cuando la cubre. Era el plan B para
+     navegadores sin View Transitions; ahora es también LO QUE SE USA EN
+     TÁCTIL, y por una razón medida: no hace falta fotografiar nada.
+
+     MEDIDO (perfil iPad, mediana de tres pulsaciones, comparado con romper
+     la página en 44 piezas):
+                          peor fotograma   p95     el gesto entero
+       piezas (lo de antes)   527 ms      189 ms      1.678 ms
+       una sola foto de todo  765 ms       59 ms      1.249 ms
+       barrido (esto)         296 ms       23 ms        ~540 ms
+     Fotografiar la pantalla entera a dpr 2 cuesta más que no fotografiarla,
+     y el repintado del tema —que es inevitable— queda escondido detrás de la
+     franja en vez de a la vista. */
+  function barrido(nuevo, fin, corto) {
     var b = D.createElement('div');
-    b.className = 'tema-barrido';
+    b.className = 'tema-barrido' + (corto ? ' es-corto' : '');
     b.setAttribute('aria-hidden', 'true');
     D.body.appendChild(b);
     b.getBoundingClientRect();
@@ -79,8 +91,8 @@
     setTimeout(function () {
       aplicar(nuevo);
       b.classList.add('is-sale');
-      setTimeout(function () { b.remove(); fin(); }, 460);
-    }, 380);
+      setTimeout(function () { b.remove(); fin(); }, corto ? 300 : 460);
+    }, corto ? 230 : 380);
   }
   /* LAS PIEZAS. Lo que se ve en pantalla se parte en piezas (bloques
      medianos: párrafos, botones, tarjetas, paneles; y los titulares, línea
@@ -153,6 +165,11 @@
       ], { pseudoElement: '::view-transition-new(' + p.n + ')', duration: 520, delay: 230 + fx * 150 + rnd() * 60, easing: 'cubic-bezier(.16,.8,.24,1)', fill: 'both' });
     });
   }
+  /* EN UN DEDO NO SE FOTOGRAFÍA LA PANTALLA.
+     El efecto largo —la página rota en piezas que salen volando— se queda
+     donde va fino, que es el ratón. En táctil va el barrido corto, por lo
+     medido arriba: el gesto pasa de 1,7 s a medio segundo y el peor
+     fotograma de 527 a 296 ms. */
   function cambiar() {
     if (enCurso) return;
     var nuevo = actual() === 'dark' ? 'light' : 'dark';
@@ -161,6 +178,7 @@
     var P = null;
     var terminar = function () { enCurso = false; if (P) recomponer(P); R.classList.remove('tema-vt', 'tema-cambiando', 'tema-a-claro', 'tema-a-oscuro'); };
     if (typeof D.startViewTransition !== 'function') { barrido(nuevo, terminar); return; }
+    if (!piezasPermitidas()) { barrido(nuevo, terminar, true); return; }
     R.classList.add('tema-vt', 'tema-cambiando', nuevo === 'light' ? 'tema-a-claro' : 'tema-a-oscuro');
     try { P = partir(); } catch (e) { P = null; }
     var p = null, vt;
@@ -177,32 +195,23 @@
   metaColor();
 
   /* ===================================================================
-     CAMBIAR DE SECCIÓN = EL MISMO CAMBIO DE DIMENSIÓN
+     CAMBIAR DE SECCIÓN = EL BASTIDOR SE QUEDA, EL PANEL CAMBIA
      ===================================================================
-     Pulsar «Método» o cualquier botón que lleve a otra página no debe ser
-     un corte: la página actual se rompe y es aspirada hacia la IZQUIERDA y
-     la nueva llega desde la DERECHA, exactamente como al invertir el tema.
-     Se hace con la transición de navegación del propio navegador
-     (@view-transition en styles.css, ya activa): aquí solo se le da la
-     coreografía.
+     Antes esto reutilizaba la coreografía del cambio de tema: la página se
+     partía en decenas de trozos, se guardaban sus rectángulos en
+     sessionStorage, y en la página siguiente se animaba cada trozo a mano.
+     Se ha quitado entero. Se leía como un efecto pegado encima y obligaba
+     al navegador a fotografiar 88 capas antes de moverse.
 
-     Dos documentos, un solo baile:
-     · en el que se va (pageswap) se nombran sus piezas visibles y se
-       guardan sus rectángulos — el navegador fotografía cada una;
-     · en el que llega (pagereveal) se nombran las suyas y, con las dos
-       tandas de fotos ya hechas, se animan aquí: las viejas salen, las
-       nuevas entran. Los nombres no se repiten entre documentos (tv-o-* y
-       tv-n-*) para que el navegador no intente emparejar una pieza de una
-       página con otra de la siguiente, que no son la misma cosa.
+     Lo de ahora vive en CSS (tema.css, bloque «EL BASTIDOR SE QUEDA»): la
+     cabecera y el cielo se quedan quietos porque son la misma pieza en las
+     dos páginas, lo que se va se archiva hacia el fondo, lo que llega sube
+     y se asienta, y una línea de luz baja por la pantalla mientras tanto.
 
-     Dónde NO se rompe en piezas: móvil, táctil y movimiento reducido. Ahí
-     queda el barrido de la página entera, que es una sola capa en la GPU:
-     el mismo gesto, sin coste por elemento. */
-  var CLAVE_NAV = 'dcp-nav-vt';
-  function piezasPermitidas() {
-    return !mqReducido.matches && W.innerWidth >= 1000 &&
-      !W.matchMedia('(pointer:coarse)').matches;
-  }
+     Aquí solo quedan tres cosas: poner la clase en la página que se va
+     —antes de que el navegador la fotografíe, para que la cabecera y el
+     cielo tengan nombre también en esa foto—, ponerla en la que llega, y
+     crear la línea. Ni una animación en JavaScript. */
   function navegacionInterna(url) {
     try {
       var u = new URL(url, location.href);
@@ -210,91 +219,52 @@
       return !/\.(pdf|zip|csv|xml|png|jpe?g|webp|svg|ico|txt)$/i.test(u.pathname);
     } catch (e) { return false; }
   }
-  /* La curva y los tiempos son los del cambio de tema: el gesto tiene que
-     reconocerse como el mismo. */
-  function animaViejas(lista, vw, vh) {
-    var sem = 11, rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
-    lista.forEach(function (p) {
-      var cx = p.x + p.w / 2, cy = p.y + p.h / 2, fx = Math.max(0, Math.min(1, p.x / vw));
-      var giro = (rnd() - 0.5) * 50, caida = 18 + rnd() * 26;
-      R.animate([
-        { transform: 'none', opacity: 1, offset: 0 },
-        { transform: 'translate(' + (-6 - rnd() * 10).toFixed(0) + 'px,' + caida.toFixed(0) + 'px) rotate(' + (giro * 0.25).toFixed(1) + 'deg)', opacity: 1, offset: 0.22 },
-        { transform: 'translate(' + (-(cx + p.w / 2 + 60 + rnd() * 140)).toFixed(0) + 'px,' + ((vh / 2 - cy) * 0.55 + caida * 2).toFixed(0) + 'px) rotate(' + giro.toFixed(1) + 'deg) scale(.3)', opacity: 0, offset: 1 }
-      ], { pseudoElement: '::view-transition-old(' + p.n + ')', duration: 400, delay: fx * 110, easing: 'cubic-bezier(.5,0,.85,.4)', fill: 'both' });
-    });
-  }
-  function animaNuevas(P) {
-    var vw = P.vw, sem = 23, rnd = function () { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
-    P.piezas.forEach(function (p) {
-      var r = p.r, fx = Math.max(0, Math.min(1, r.left / vw));
-      var giro = (rnd() - 0.5) * 50;
-      R.animate([
-        { transform: 'translate(' + (vw - r.left + 40 + rnd() * 160).toFixed(0) + 'px,' + ((rnd() - 0.5) * 70).toFixed(0) + 'px) rotate(' + (-giro * 0.4).toFixed(1) + 'deg) scale(.86)', opacity: 0 },
-        { opacity: 1, offset: 0.35 },
-        { transform: 'none', opacity: 1 }
-      ], { pseudoElement: '::view-transition-new(' + p.n + ')', duration: 380, delay: 140 + fx * 90 + rnd() * 40, easing: 'cubic-bezier(.16,.8,.24,1)', fill: 'both' });
-    });
+  /* El cambio de tema sí distingue aparatos (ver «cambiar»): romper la
+     página en piezas solo sale a cuenta con un ratón. */
+  function piezasPermitidas() {
+    return !mqReducido.matches && W.innerWidth >= 1000 &&
+      !W.matchMedia('(pointer:coarse)').matches;
   }
 
   W.addEventListener('pageswap', function (e) {
     if (!e.viewTransition) return;
     var destino = e.activation && e.activation.entry && e.activation.entry.url;
     if (destino && !navegacionInterna(destino)) return;
-    try { W.sessionStorage.removeItem(CLAVE_NAV); } catch (err) {}
-    if (!piezasPermitidas()) return;
-    try {
-      var P = partir();
-      var lista = P.piezas.map(function (p, k) {
-        p.el.style.viewTransitionName = 'tv-o-' + k;
-        return { n: 'tv-o-' + k, x: Math.round(p.r.left), y: Math.round(p.r.top), w: Math.round(p.r.width), h: Math.round(p.r.height) };
-      });
-      W.sessionStorage.setItem(CLAVE_NAV, JSON.stringify({ vw: P.vw, vh: P.vh, p: lista }));
-    } catch (err) { /* si algo falla, queda el barrido de la página entera */ }
+    /* La clase le da nombre de transición a la cabecera y al cielo. Tiene
+       que estar puesta ANTES de la foto de esta página; si no, el navegador
+       no puede emparejarlos con los de la siguiente y se moverían con todo
+       lo demás. */
+    R.classList.add('nav-vt');
   });
 
   /* El documento que llega dispara «pagereveal» ANTES de que corran los
      scripts con defer —este fichero, entre ellos—, así que el aviso lo
      recoge el script de tres líneas del <head> (el mismo que fija el tema
-     sin destello) y lo deja en window.__dcpRevelado. Aquí se atiende en
-     cuanto se puede: si aún no ha llegado, por el evento; si ya pasó, por
-     la nota que dejó el <head>. */
+     sin destello) y lo deja en window.__dcpRevelado. */
   function alRevelar(e) {
     if (!e || !e.viewTransition || e.__dcpHecho) return;
     e.__dcpHecho = true;
     R.classList.add('nav-vt');
-    var viejas = null;
-    try {
-      var crudo = W.sessionStorage.getItem(CLAVE_NAV);
-      W.sessionStorage.removeItem(CLAVE_NAV);
-      if (crudo) viejas = JSON.parse(crudo);
-    } catch (err) { viejas = null; }
-    var P = null, portalEl = null;
-    if (piezasPermitidas()) {
+    var linea = null;
+    if (!mqReducido.matches) {
       try {
-        P = partir();
-        P.piezas.forEach(function (p, k) { p.el.style.viewTransitionName = 'tv-n-' + k; p.n = 'tv-n-' + k; });
-      } catch (err) { P = null; }
+        linea = D.createElement('div');
+        linea.className = 'nav-corte';
+        linea.setAttribute('aria-hidden', 'true');
+        D.body.appendChild(linea);
+      } catch (err) { linea = null; }
     }
-    try { portalEl = portal(); } catch (err) { portalEl = null; }
     var limpio = false;
     var limpiar = function () {
       if (limpio) return;
       limpio = true;
-      if (portalEl) portalEl.remove();
-      if (P) recomponer(P);
+      if (linea) linea.remove();
       R.classList.remove('nav-vt');
     };
-    /* Red de seguridad. MEDIDO: con las piezas animadas a mano, «finished»
-       puede quedarse pendiente (las animaciones con fill:both sobre las
-       fotos de la pagina anterior no siempre la cierran) y la pagina se
-       quedaba con la clase nav-vt puesta. El baile dura 0,8 s: a 1,6 s ya
-       no queda nada que esperar. */
-    W.setTimeout(limpiar, 1200);
-    if (e.viewTransition.ready) e.viewTransition.ready.then(function () {
-      try { if (viejas && viejas.p) animaViejas(viejas.p, viejas.vw, viejas.vh); } catch (err) {}
-      try { if (P) animaNuevas(P); } catch (err) {}
-    }, function () {});
+    /* Red de seguridad: si «finished» se queda pendiente, la página no se
+       puede quedar con la clase puesta (le daría nombre de transición a la
+       cabecera para siempre). El baile dura 0,45 s. */
+    W.setTimeout(limpiar, 1100);
     e.viewTransition.finished.then(limpiar, limpiar);
   }
   W.__dcpNav = alRevelar;

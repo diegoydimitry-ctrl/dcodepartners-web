@@ -115,6 +115,18 @@ if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html'
       errores.push(`${j}: falta la puerta de táctil (DCP.campoVivo + html.cielo-quieto): el campo no puede montarse en un iPad`);
     }
   }
+  /* Las cuatro formaciones de los pasos: si falta el fichero o la referencia,
+     el iPad se queda con media pantalla vacía y no lo ve ninguna otra prueba. */
+  for (const n of ['analizamos', 'disenamos', 'implantamos', 'medimos']) {
+    if (!fs.existsSync(path.join(RAIZ, 'assets/img/pasos/paso-' + n + '.webp'))) {
+      errores.push('falta assets/img/pasos/paso-' + n + '.webp (se genera con scripts/build-pasos.mjs)');
+    }
+  }
+  for (const f of ['index.html', 'en/index.html']) {
+    const h = leer(f);
+    const n = (h.match(/class="paso-forma"/g) || []).length;
+    if (n !== 4) errores.push(`${f}: hay ${n} formaciones de paso y tienen que ser 4`);
+  }
   const css7 = leer('assets/css/dcp7.css');
   if (!/html\.cielo-quieto \.field\{\s*display:none/.test(css7)) errores.push('dcp7.css: falta «html.cielo-quieto .field{display:none}»');
   if (!/html\.cielo-quieto \.gx-t\{/.test(css7)) errores.push('dcp7.css: falta dejar quieto el cielo de la galaxia en táctil');

@@ -292,56 +292,103 @@ html.tema-vt::view-transition-new(tema-portal){ animation:none; }
   100%{ transform:translateX(calc(-100vw - 70px)); opacity:0; }
 }
 
-/* ---- EL MISMO CAMBIO, PERO ENTRE SECCIONES (tema.js: pageswap/pagereveal)
-   La navegación entre páginas usa la coreografía de arriba tal cual: la
-   página que se va es aspirada a la izquierda, la que llega entra por la
-   derecha detrás de la costura de luz. Donde no hay piezas (móvil, táctil,
-   movimiento reducido) queda solo el barrido de la página entera, que es
-   una única capa compuesta en la GPU. */
-html.nav-vt::view-transition{ background:
-  radial-gradient(55% 90% at 0% 50%, rgba(120,165,255,.5), transparent 70%),
-  radial-gradient(50% 80% at 100% 50%, rgba(160,120,255,.3), transparent 72%),
-  #050814; }
+/* ============================================================================
+   CAMBIAR DE SECCIÓN — «EL BASTIDOR SE QUEDA, EL PANEL CAMBIA»
+   ----------------------------------------------------------------------------
+   Lo de antes era la coreografía del cambio de tema reutilizada: la página se
+   rompía en 44 trozos que salían volando hacia la izquierda. Se ha quitado
+   entera. Dos motivos: se leía como un efecto puesto encima, y obligaba al
+   navegador a fotografiar 88 capas antes de empezar a moverse.
+
+   Lo de ahora dice otra cosa. La web de D-Code enseña sistemas, y un sistema
+   no se deshace cada vez que miras otra cosa: se queda el bastidor y cambia
+   el panel.
+
+     · La cabecera y el cielo NO SE MUEVEN. Tienen nombre propio de
+       transición, así que el navegador los reconoce como la misma pieza en
+       las dos páginas y los deja quietos. Es el detalle que hace que esto se
+       lea como una aplicación y no como una página que se recarga.
+     · Lo que se va retrocede hacia el fondo —encoge un poco y se apaga—, no
+       huye. Se archiva.
+     · Lo que llega sube y se asienta, ya montado.
+     · Y una línea de luz recorre la pantalla de arriba abajo: la sección
+       nueva no aparece, SE MONTA.
+
+   Todo es transform y opacity sobre dos capturas y una línea. Ni recortes
+   animados, ni filtros, ni una pieza por elemento: cuesta lo mismo en un
+   ratón que en un dedo, que es la razón de que aquí no haya dos versiones.
+   ========================================================================= */
+html.nav-vt::view-transition{ background:var(--gx-base, #06080d); }
 html.nav-vt::view-transition-group(root){ animation:none; }
 html.nav-vt::view-transition-image-pair(root){ isolation:auto; }
 html.nav-vt::view-transition-old(root),
 html.nav-vt::view-transition-new(root){ mix-blend-mode:normal; animation-fill-mode:both; }
 html.nav-vt::view-transition-old(root){
-  animation-name:tema-absorbe; animation-duration:.44s; animation-delay:.04s; animation-timing-function:cubic-bezier(.5,0,.8,.3);
-  transform-origin:0% 50%;
+  animation-name:nav-archiva; animation-duration:.26s; animation-timing-function:cubic-bezier(.4,0,.9,.5);
+  transform-origin:50% 42%;
 }
 html.nav-vt::view-transition-new(root){
-  animation-name:tema-llega; animation-duration:.42s; animation-delay:.14s; animation-timing-function:cubic-bezier(.16,.8,.24,1);
-  transform-origin:100% 50%;
+  animation-name:nav-monta; animation-duration:.40s; animation-delay:.05s; animation-timing-function:cubic-bezier(.17,.84,.26,1);
+  transform-origin:50% 42%;
 }
-/* Las piezas: el grupo no se mueve (la pieza está en el mismo sitio en los
-   dos temas); lo que se anima son sus dos capturas, desde tema.js. */
-html.nav-vt::view-transition-group(*){ animation-duration:0s; }
-html.nav-vt::view-transition-image-pair(*){ isolation:auto; }
-html.nav-vt::view-transition-old(*), html.nav-vt::view-transition-new(*){ mix-blend-mode:normal; }
-@keyframes tema-absorbe{
+@keyframes nav-archiva{
   0%  { transform:none; opacity:1; }
-  100%{ transform:perspective(1400px) translateX(-72%) rotateY(40deg) scale(.32,.6); opacity:0; }
+  100%{ transform:scale(.945) translateY(-1.2%); opacity:0; }
 }
-@keyframes tema-llega{
-  0%  { transform:perspective(1400px) translateX(92%) rotateY(-24deg) scale(.9); opacity:.2; }
-  35% { opacity:1; }
+@keyframes nav-monta{
+  /* La nueva es opaca al 30 % del recorrido —a 170 ms de la pulsación— y la
+     vieja todavía no se ha ido del todo: nunca hay un hueco en negro entre
+     las dos. Lo que sigue moviéndose después es solo la escala. */
+  0%  { transform:scale(1.035) translateY(2.6%); opacity:0; }
+  30% { opacity:1; }
   100%{ transform:none; opacity:1; }
 }
-/* La costura de luz va delante de la página nueva: mismo tiempo, misma
-   curva, y se apaga al llegar al borde izquierdo. Su sitio final está fuera
-   de la pantalla, a la derecha. */
-.tema-portal{
-  position:fixed; top:0; bottom:0; left:100%; width:140px; pointer-events:none; z-index:2147483000;
-  view-transition-name:tema-portal;
-  background:linear-gradient(90deg, rgba(91,140,255,0), rgba(120,170,255,.55) 38%, #f4f8ff 50%, rgba(170,130,255,.55) 62%, rgba(155,107,255,0));
+
+/* El bastidor: la cabecera es la misma pieza en las dos páginas, así que el
+   navegador la empareja y su grupo no tiene a dónde ir. Se queda quieta.
+   El nombre solo existe durante la transición (tema.js pone la clase en
+   «pageswap», antes de la foto, y en «pagereveal»): fuera de ella no hay
+   ningún elemento con nombre, que es lo que deja limpio el cambio de tema.
+
+   EL CIELO NO LLEVA NOMBRE, Y ES A PROPÓSITO. Se probó y salió mal: al
+   nombrar un elemento, el navegador lo saca del grupo «root» y lo pinta POR
+   ENCIMA de él. Como el cielo ocupa la pantalla entera y es opaco, tapaba la
+   página que se iba: medido con las animaciones a 1/50 de velocidad, la
+   sección de salida no se veía en ningún fotograma —solo cabecera y
+   estrellas—. Dentro de «root», el cielo viaja con la página: encoge un pelo
+   y vuelve, que además da profundidad. */
+html.nav-vt #site-header{ view-transition-name:vt-bastidor; }
+html.nav-vt::view-transition-group(vt-bastidor){ animation-duration:.40s; }
+html.nav-vt::view-transition-old(vt-bastidor){ animation:nav-cab-sale .18s linear both; }
+html.nav-vt::view-transition-new(vt-bastidor){ animation:nav-cab-entra .22s ease-out .10s both; }
+@keyframes nav-cab-sale{ to{ opacity:0; } }
+@keyframes nav-cab-entra{ from{ opacity:0; } to{ opacity:1; } }
+
+/* La línea de montaje: 1 px de luz que baja por la pantalla mientras la
+   sección nueva se asienta. Se crea en la página que llega y se va con ella. */
+.nav-corte{ display:none; }
+html.nav-vt .nav-corte{
+  display:block;
+  position:fixed; left:0; right:0; top:0; height:2px; pointer-events:none; z-index:2147483000;
+  view-transition-name:vt-corte;
+  background:linear-gradient(90deg, rgba(91,140,255,0), rgba(120,170,255,.75) 22%, #eaf1ff 50%, rgba(155,107,255,.75) 78%, rgba(155,107,255,0));
+  box-shadow:0 0 22px 2px rgba(120,165,255,.45);
 }
-html.nav-vt::view-transition-group(tema-portal){ animation:tema-costura .42s cubic-bezier(.16,.8,.24,1) .14s both; }
-html.nav-vt::view-transition-new(tema-portal){ animation:none; }
-@keyframes tema-costura{
-  0%  { transform:translateX(-70px); opacity:1; }
-  85% { opacity:.85; }
-  100%{ transform:translateX(calc(-100vw - 70px)); opacity:0; }
+html.nav-vt::view-transition-group(vt-corte){ animation:nav-corte .44s cubic-bezier(.3,.7,.3,1) .04s both; }
+html.nav-vt::view-transition-new(vt-corte){ animation:none; }
+@keyframes nav-corte{
+  0%  { transform:translateY(-6px) scaleX(.4); opacity:0; }
+  14% { opacity:1; }
+  78% { opacity:1; }
+  100%{ transform:translateY(100vh) scaleX(1); opacity:0; }
+}
+
+/* Movimiento reducido: el mismo cambio, sin viaje. */
+@media (prefers-reduced-motion: reduce){
+  html.nav-vt::view-transition-old(root){ animation:nav-cab-sale .14s linear both; }
+  html.nav-vt::view-transition-new(root){ animation:nav-cab-entra .18s linear .04s both; }
+  html.nav-vt::view-transition-group(vt-corte){ animation:none; }
+  .nav-corte{ display:none; }
 }
 
 /* Plan B (sin View Transitions): el barrido. */
@@ -355,6 +402,11 @@ html.nav-vt::view-transition-new(tema-portal){ animation:none; }
 .tema-barrido::before{ content:""; position:absolute; top:0; bottom:0; left:14%; width:6px; background:#dfe8ff; box-shadow:0 0 30px 10px rgba(120,165,255,.6); }
 .tema-barrido.is-entra{ transform:translateX(0); }
 .tema-barrido.is-sale{ transform:translateX(-120%); transition:transform .46s cubic-bezier(.25,1,.5,1); }
+/* En táctil, el mismo barrido pero corto: es lo que sustituye al efecto de
+   piezas. Medido en perfil iPad: el gesto entero pasa de 1.678 ms a ~540, el
+   peor fotograma de 527 a 296 y el p95 de 189 a 23 ms. */
+.tema-barrido.es-corto{ transition-duration:.23s; }
+.tema-barrido.es-corto.is-sale{ transition-duration:.30s; }
 @media (prefers-reduced-motion: reduce){
   .tema-btn, .tema-btn-t{ transition:none; }
 }

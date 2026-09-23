@@ -1473,3 +1473,53 @@ html.cielo-quieto .v6-status{ display:none; }
 html.cielo-quieto .gx > i,
 html.cielo-quieto .gx-t{ animation:none !important; will-change:auto; }
 html.cielo-quieto .gx-t{ opacity:.7; }
+
+/* ============================================================================
+   LOS CUATRO PASOS, CON SU FORMACIÓN AL LADO (solo en táctil)
+   ----------------------------------------------------------------------------
+   En un ratón, cada paso del método tiene al lado la formación que le toca
+   del campo de partículas: la lupa para Analizamos, el plano para Diseñamos,
+   el motor para Implantamos y la gráfica para Medimos. Al apagar el campo en
+   táctil, esos cuatro pasos se quedaban con media pantalla vacía.
+
+   La imagen no viene de fuera: la saca del propio motor
+   scripts/build-pasos.mjs, que abre la portada con ratón, para en cada paso,
+   espera a que la formación termine de montarse y guarda el lienzo con su
+   transparencia. Lo que se ve en un iPad es lo que dibuja la web en un
+   ordenador, congelado — mismo dibujo, mismo color, mismo sitio.
+
+   Pesan 33–152 KB, van con loading="lazy" y son decorativas (aria-hidden y
+   alt vacío): lo que cuentan ya está escrito al lado.
+   ========================================================================= */
+.paso-forma{ display:none; }
+html.cielo-quieto .v6-step > .container{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:clamp(16px, 4vw, 56px);
+}
+html.cielo-quieto .v6-step--r > .container{ flex-direction:row-reverse; }
+html.cielo-quieto .v6-step .v6-step-in{ flex:1 1 52%; max-width:min(460px, 100%); }
+html.cielo-quieto .paso-forma{
+  display:block; margin:0; flex:0 1 44%; min-width:0;
+  max-height:min(56vh, 460px);
+}
+html.cielo-quieto .paso-forma img{
+  display:block; width:100%; height:auto; max-height:min(56vh, 460px);
+  object-fit:contain; object-position:center;
+  opacity:.94;
+}
+/* En claro, el mismo tratamiento que llevaba el campo: la formación está
+   dibujada en luz sobre transparencia, así que se invierte. */
+html[data-theme="light"].cielo-quieto .paso-forma img{
+  filter:invert(1) hue-rotate(180deg) saturate(1.75); opacity:.80;
+}
+/* En vertical estrecho no caben dos columnas: la formación va debajo, más
+   pequeña, como un apunte al margen. */
+@media (max-width:760px){
+  html.cielo-quieto .v6-step > .container,
+  html.cielo-quieto .v6-step--r > .container{
+    flex-direction:column; align-items:flex-start; gap:clamp(14px,3vh,24px);
+  }
+  html.cielo-quieto .v6-step .v6-step-in{ flex:0 0 auto; max-width:100%; }
+  html.cielo-quieto .paso-forma{ flex:0 0 auto; max-width:min(300px, 72%); max-height:240px; }
+  html.cielo-quieto .paso-forma img{ max-height:240px; }
+}
