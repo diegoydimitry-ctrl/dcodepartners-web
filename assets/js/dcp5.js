@@ -488,9 +488,9 @@
         if (!caja.querySelector('.demo-movil-foto')) {
           var fig = document.createElement('span');
           fig.className = 'demo-movil-foto';
-          fig.innerHTML = '<img class="es-oscuro" src="/assets/img/demos/finance-dark.webp" width="1400" height="813" loading="lazy" decoding="async" alt="' +
+          fig.innerHTML = '<img class="es-oscuro" src="/assets/img/demos/finance-dark-700.webp" srcset="/assets/img/demos/finance-dark-700.webp 700w, /assets/img/demos/finance-dark.webp 1400w" sizes="190vw" width="1400" height="813" loading="lazy" decoding="async" alt="' +
             (document.documentElement.lang === 'en' ? 'D-Code Finance on a computer' : 'D-Code Finance en un ordenador') + '">' +
-            '<img class="es-claro" src="/assets/img/demos/finance-light.webp" width="1400" height="813" loading="lazy" decoding="async" alt="">';
+            '<img class="es-claro" src="/assets/img/demos/finance-light-700.webp" srcset="/assets/img/demos/finance-light-700.webp 700w, /assets/img/demos/finance-light.webp 1400w" sizes="190vw" width="1400" height="813" loading="lazy" decoding="async" alt="">';
           var tras = caja.querySelector('.demo-movil-t');
           if (tras && tras.parentNode) tras.parentNode.insertBefore(fig, tras.nextSibling);
           else caja.insertBefore(fig, caja.firstChild);

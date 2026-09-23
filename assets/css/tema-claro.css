@@ -310,6 +310,12 @@ html[data-theme="light"] body.v6 .v6-status,
 html[data-theme="light"] body.v6 .v6-cap{ text-shadow:none; }
 html[data-theme="light"] .v6-prueba li{ color:var(--txt-3,#4b5b7b); }
 html[data-theme="light"] .v6-prueba li::before{ box-shadow:0 0 10px -1px var(--v-a,rgba(91,140,255,0.55)); }
+html[data-theme="light"] .v6-of{ border:1px solid rgba(46,59,98,0.196); background:rgba(244,247,253,0.92); }
+html[data-theme="light"] .v6-of:hover{ border-color:rgba(43,60,98,0.3); background:rgba(248,251,255,0.96); }
+html[data-theme="light"] .v6-of b{ color:#090f1a; }
+html[data-theme="light"] .v6-of em{ color:#106a53; border:1px solid rgba(15,72,50,0.3); }
+html[data-theme="light"] .v6-of span{ color:var(--txt-2,#29303d); }
+html[data-theme="light"] .v6-of i{ color:var(--v-a,#2650bd); }
 
 /* ---- dcp7.css ---- */
 html[data-theme="light"] .dcx::before{ background:radial-gradient(120% 66% at 100% 50%,

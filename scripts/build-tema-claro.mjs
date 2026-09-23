@@ -265,7 +265,7 @@ for (const f of ORIGENES) {
 const DESTINO_SUP = path.join(RAIZ, 'assets/css/superficies.css');
 const CAJAS = ['.rcard', '.arq-area', 'a.area', '.conexion', '.gal-tab', '.gal-historia > li', '.arq-mod', '.arq-btn', '.board',
   'details.plan', '.window', '.chaos-order', '.vf-cadena', '.vf-col', '.vf-sello', '.conc-fig', '.mercado', '.cmp',
-  '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost', '.v7-fiscal-i', '.vf-track'];
+  '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost', '.v7-fiscal-i', '.vf-track', '.v6-of', '.gal-movil'];
 // Piezas que cuelgan de una caja pero se pintan fuera de ella, sobre el fondo
 const FUERA = /\.arq-area-p\b/;
 const APPS = [

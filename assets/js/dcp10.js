@@ -464,9 +464,9 @@
          cuando hacen falta. */
       var foto = /^(finance|comercial|operaciones|atencion)$/.test(id)
         ? '<span class="gal-movil-foto">' +
-            '<img class="es-oscuro" src="/assets/img/demos/' + id + '-dark.webp" width="1400" height="793" loading="lazy" decoding="async" alt="' +
+            '<img class="es-oscuro" src="/assets/img/demos/' + id + '-dark-700.webp" srcset="/assets/img/demos/' + id + '-dark-700.webp 700w, /assets/img/demos/' + id + '-dark.webp 1400w" sizes="190vw" width="1400" height="793" loading="lazy" decoding="async" alt="' +
               (EN ? 'The ' : 'La aplicación de ') + esc(nombre) + (EN ? ' application, on a computer' : ', en un ordenador') + '">' +
-            '<img class="es-claro" src="/assets/img/demos/' + id + '-light.webp" width="1400" height="793" loading="lazy" decoding="async" alt="">' +
+            '<img class="es-claro" src="/assets/img/demos/' + id + '-light-700.webp" srcset="/assets/img/demos/' + id + '-light-700.webp 700w, /assets/img/demos/' + id + '-light.webp 1400w" sizes="190vw" width="1400" height="793" loading="lazy" decoding="async" alt="">' +
           '</span>'
         : '';
       caja.innerHTML =

@@ -746,6 +746,49 @@ body.v6 .v6-status, body.v6 .v6-cap{
   background:var(--v-a,#5b8cff); box-shadow:0 0 10px -1px var(--v-a,#5b8cff);
 }
 @media (max-width:900px){
-  .v6-prueba{ gap:6px 0; flex-direction:column; margin-top:18px; }
+  .v6-prueba{ gap:6px 0; flex-direction:column; margin-top:18px; padding-right:60px; }
   .v6-prueba li{ font-size:.8125rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   QUÉ PUEDES TENER · tres formas de empezar
+   La portada cuenta muy bien CÓMO trabajamos y deja ver los sistemas, pero
+   no dice en una sola pantalla QUÉ se puede contratar. Va justo antes del
+   contacto, en el momento en que alguien ya ha visto de qué va esto y lo
+   único que le falta es saber por dónde entra. Tres líneas, sin catálogo.
+   ══════════════════════════════════════════════════════════════════════ */
+.v6-oferta{
+  margin-top:clamp(22px,3vw,34px);
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:clamp(14px,1.6vw,20px);
+}
+.v6-of{
+  position:relative; display:flex; flex-direction:column; gap:8px;
+  padding:clamp(18px,2vw,24px);
+  border:1px solid rgba(150,174,245,.16); border-radius:16px;
+  background:rgba(13,17,34,.92);
+  text-decoration:none; color:inherit;
+  transition:border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease);
+}
+.v6-of:hover{ border-color:rgba(91,140,255,.5); background:rgba(19,26,50,.96); transform:translateY(-2px); }
+.v6-of:focus-visible{ outline:2px solid var(--v-a,#5b8cff); outline-offset:3px; }
+.v6-of b{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  font-size:1.0625rem; font-weight:600; color:#f1f4fb; line-height:1.25;
+}
+.v6-of em{
+  font-style:normal; font-family:var(--font-mono,ui-monospace,monospace);
+  font-size:.625rem; letter-spacing:.12em; text-transform:uppercase;
+  color:#7fe7c4; border:1px solid rgba(53,224,161,.34); border-radius:999px; padding:3px 8px;
+}
+.v6-of span{ font-size:.9375rem; line-height:1.55; color:var(--txt-2,#aebbd6); max-width:42ch; }
+/* La flecha va pegada al nombre, no suelta en una esquina: es parte del
+   enlace, no un adorno en el pie de la tarjeta. */
+.v6-of i{
+  font-style:normal; color:var(--v-a,#5b8cff); font-size:1rem;
+  display:inline-block; margin-left:2px; transition:transform .25s var(--ease);
+}
+.v6-of:hover i{ transform:translateX(4px); }
+@media (max-width:900px){
+  .v6-oferta{ grid-template-columns:minmax(0,1fr); gap:12px; }
 }
