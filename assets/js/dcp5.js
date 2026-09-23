@@ -79,7 +79,9 @@
     var pulses = LINKS.map(function (_, i) { return { i: i, p: -(i * 0.14) - 0.2 }; });
 
     function size() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      /* Este lienzo no tenía tope en táctil: en un iPad se creaba a 2x, que
+         son 5,6 millones de píxeles que suben a la GPU en cada fotograma. */
+      dpr = window.DCP ? window.DCP.dpr(2) : Math.min(window.devicePixelRatio || 1, 2);
       W = host.clientWidth; H = host.clientHeight;
       var L = W < 760 ? NARROW : WIDE;
       if (L !== LAYOUT) {
@@ -211,15 +213,28 @@
   function initAmbient() {
     var zones = document.querySelectorAll('[data-amb]');
     if (!zones.length || !window.IntersectionObserver) return;
-    var root = document.documentElement;
+    /* Las tres variables se escriben en la CAPA, no en <html>. Escribirlas
+       en la raíz invalidaba el estilo de todo el documento en cada cambio de
+       sección: medido en iPad, 95 ms de tirón por sección en una página con
+       la aplicación de Finance dentro. En la capa, el recálculo es de un
+       elemento. */
+    var capa = document.createElement('div');
+    capa.className = 'amb-aurora';
+    capa.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(capa);
+    document.body.classList.add('amb-propia');
+    var ultimo = '';
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        var k = AMB[e.target.getAttribute('data-amb')];
+        var nombre = e.target.getAttribute('data-amb');
+        if (nombre === ultimo) return;            // la misma temperatura no se reescribe
+        var k = AMB[nombre];
         if (!k) return;
-        root.style.setProperty('--amb-1', k[0]);
-        root.style.setProperty('--amb-2', k[1]);
-        root.style.setProperty('--amb-3', k[2]);
+        ultimo = nombre;
+        capa.style.setProperty('--amb-1', k[0]);
+        capa.style.setProperty('--amb-2', k[1]);
+        capa.style.setProperty('--amb-3', k[2]);
       });
     }, { rootMargin: '-45% 0px -45% 0px' });
     zones.forEach(function (z) { io.observe(z); });

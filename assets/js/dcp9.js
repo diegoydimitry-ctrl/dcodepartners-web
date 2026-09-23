@@ -517,7 +517,8 @@
       var r = host.getBoundingClientRect();
       if (!r.width || !r.height) return false;
       W = r.width; H = r.height;
-      dpr = Math.min(window.devicePixelRatio || 1, GRUESO ? (window.innerWidth < 900 ? 1 : 1.5) : 2);
+      dpr = window.DCP ? window.DCP.dpr(2)
+          : Math.min(window.devicePixelRatio || 1, GRUESO ? (window.innerWidth < 900 ? 1 : 1.5) : 2);
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -531,18 +532,29 @@
     }
 
     var ultimoF = 0;
+    /* En táctil esta composición tampoco anima en bucle: se queda quieta
+       mientras el dedo baja y, cuando para, dibuja unos fotogramas y se
+       detiene. Medido en un iPad simulado, en /sistema-financiero este
+       bucle era el 2,2 % del tiempo de CPU con el scroll en marcha, y cada
+       dibujo mueve un lienzo del ancho de la página. */
+    var animada = window.DCP ? window.DCP.ambienteVivo() : true;
+    var sobran = 0;
     function bucle(tm) {
       if (!vivo) return;
-      /* En táctil, 30 fotogramas: lo que se gana en fluidez de scroll no se
-         pierde en el dibujo, que es lento por naturaleza. */
-      var MIN = GRUESO ? (window.innerWidth < 900 ? 33 : 20) : 0;
-      if (tm - ultimoF >= MIN) { ultimoF = tm; pintar(tm); }
+      var pausa = window.DCP ? window.DCP.pausaScroll() : 0;
+      if (pausa && tm - (window.__dcpScroll || 0) < pausa) { rafId = requestAnimationFrame(bucle); return; }
+      var MIN = window.DCP ? window.DCP.msMin() : (GRUESO ? (window.innerWidth < 900 ? 33 : 20) : 0);
+      if (tm - ultimoF >= MIN) {
+        ultimoF = tm; pintar(tm);
+        /* Sin bucle: veinte fotogramas para que la idea se arme, y quieta. */
+        if (!animada && ++sobran > 20) { vivo = false; rafId = 0; return; }
+      }
       rafId = requestAnimationFrame(bucle);
     }
 
     function arrancar() {
       if (vivo || !W) return;
-      vivo = true; rafId = requestAnimationFrame(bucle);
+      sobran = 0; vivo = true; rafId = requestAnimationFrame(bucle);
     }
     function parar() { vivo = false; if (rafId) cancelAnimationFrame(rafId); rafId = 0; }
 
@@ -572,6 +584,12 @@
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) parar(); else if (W) arrancar();
     });
+    /* Quieta no es muerta: el scroll, el tema y el gobernador la despiertan. */
+    window.addEventListener('scroll', function () { if (!animada && W && !vivo) arrancar(); }, { passive: true });
+    document.addEventListener('dcp:tema', function () { if (medir() || W) { sobran = 0; arrancar(); } });
+    if (window.DCP && window.DCP.suscribir) {
+      window.DCP.suscribir(function () { animada = window.DCP.ambienteVivo(); if (medir() || W) { sobran = 0; arrancar(); } });
+    }
   }
 
   for (var i = 0; i < nodos.length; i++) montar(nodos[i]);

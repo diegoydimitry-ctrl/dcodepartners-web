@@ -109,8 +109,9 @@
   function measure() {
     /* Teléfono 1x, tableta 1,5x, ratón 1,75x: en un iPad este dibujo se
        mira de cerca y a 1x se ve sucio. */
-    dpr = Math.min(window.devicePixelRatio || 1, coarse ? (W < 900 ? 1 : 1.5) : 1.75);
-    MIN_F = coarse ? 33 : 0;
+    dpr = window.DCP ? window.DCP.dpr(1.75)
+        : Math.min(window.devicePixelRatio || 1, coarse ? (W < 900 ? 1 : 1.5) : 1.75);
+    MIN_F = window.DCP ? window.DCP.msMin() : (coarse ? 33 : 0);
     FW = host.clientWidth; FH = host.clientHeight;
     canvas.width = Math.round(FW * dpr); canvas.height = Math.round(FH * dpr);
     canvas.style.width = FW + 'px'; canvas.style.height = FH + 'px';
@@ -1327,7 +1328,7 @@
   window.addEventListener('scroll', function () {
     window.__dcpScroll = performance.now();
     if (ticking) return; ticking = true;
-    requestAnimationFrame(function () { readScroll(); ticking = false; if (reduced) still(); });
+    requestAnimationFrame(function () { readScroll(); ticking = false; if (reduced) still(); else start(); });
   }, { passive: true });
 
   if (!coarse) {
@@ -1349,19 +1350,46 @@
     ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(6120); ctx.restore();
   }
 
+  /* ─────────────────────────────────────────────────────────────────
+     EL FONDO NO ANIMA EN BUCLE EN TÁCTIL
+     ─────────────────────────────────────────────────────────────────
+     MEDIDO en un iPad simulado, leyendo /servicios quieto: con este
+     instrumento animando, 48 ms por fotograma y 43 fotogramas por encima
+     de 50 ms en cuatro segundos; sin él, 18 ms y uno. Y bajarle los
+     fotogramas por segundo NO servía —a 15 y a 8 seguía en 53 ms—, porque
+     lo caro es CADA dibujo: son unas 5.000 operaciones de lienzo a
+     pantalla completa.
+
+     Así que en táctil el instrumento deja de ser una animación continua y
+     pasa a ser lo que de verdad aporta: una imagen que RESPONDE. Se queda
+     quieto mientras el dedo baja, y cuando el dedo se levanta se mueve
+     hasta alcanzar el punto del scroll y se para ahí. En escritorio no
+     cambia nada: sigue vivo.                                            */
   var running = false, visible = true, ultimoF = 0, MIN_F = 0;   // MIN_F lo fija measure()
+  var vivo = window.DCP ? window.DCP.ambienteVivo() : true;
   function loop(tm) {
     if (!running) return;
     var minF = MIN_F;
-    if (coarse && tm - (window.__dcpScroll || 0) < 260) minF = 80;   // mientras se desplaza, menos
+    var pausa = window.DCP ? window.DCP.pausaScroll() : (coarse ? 260 : 0);
+    if (pausa && tm - (window.__dcpScroll || 0) < pausa) {
+      /* Quieto mientras se desplaza: ni se dibuja ni se calcula. */
+      if (visible) requestAnimationFrame(loop); else running = false;
+      return;
+    }
     if (tm - ultimoF < minF) { if (visible) requestAnimationFrame(loop); else running = false; return; }
     ultimoF = tm;
-    Pv += (P - Pv) * (coarse ? 0.12 : 0.08);
+    /* En táctil alcanza el punto del scroll deprisa, porque cada fotograma
+       de esa carrera cuesta: cuanto antes llegue, antes se para. */
+    Pv += (P - Pv) * (vivo ? (coarse ? 0.12 : 0.08) : 0.3);
     cmx += (mx - cmx) * 0.08; cmy += (my - cmy) * 0.08;
     ctx.save(); ctx.translate(OFFX, OFFY);
     inst.draw(tm);
     ctx.restore();
-    if (visible) requestAnimationFrame(loop); else running = false;
+    if (!visible) { running = false; return; }
+    /* Sin bucle: en cuanto ha alcanzado el punto del scroll, se para. Lo
+       despierta el siguiente scroll, un cambio de tamaño o de tema. */
+    if (!vivo && Math.abs(P - Pv) < 0.004) { running = false; return; }
+    requestAnimationFrame(loop);
   }
   function start() { if (!running && !reduced) { running = true; requestAnimationFrame(loop); } }
   if (reduced) still(); else start();
@@ -1369,8 +1397,14 @@
   var rt;
   window.addEventListener('resize', function () {
     clearTimeout(rt);
-    rt = setTimeout(function () { measure(); readScroll(); if (reduced) still(); }, 180);
+    rt = setTimeout(function () { measure(); readScroll(); if (reduced) still(); else start(); }, 180);
   }, { passive: true });
+  /* El tema invierte los colores del instrumento: hay que repintarlo aunque
+     esté parado. Lo mismo cuando el gobernador cambia de escalón. */
+  document.addEventListener('dcp:tema', function () { measure(); readScroll(); if (reduced) still(); else start(); });
+  if (window.DCP && window.DCP.suscribir) {
+    window.DCP.suscribir(function () { vivo = window.DCP.ambienteVivo(); measure(); readScroll(); if (reduced) still(); else start(); });
+  }
   document.addEventListener('visibilitychange', function () {
     visible = !document.hidden; if (visible) start();
   });

@@ -3,6 +3,161 @@
    Cada bloque comprueba que sus elementos existen antes de actuar,
    así este mismo archivo es seguro de incluir en cualquier página.
    ================================================================== */
+/* ══════════════════════════════════════════════════════════════════
+   EL PRESUPUESTO DE FOTOGRAMA  ·  window.DCP
+   ══════════════════════════════════════════════════════════════════
+   Un PC dibuja esta web sin despeinarse; un iPad, no. Y no por lo mismo
+   que un teléfono: el iPad tiene pantalla grande (lienzos enormes),
+   pantalla de 2x, y un navegador que compone esos lienzos a mano. Lo que
+   MEDIMOS en un iPad simulado (1024×1366, dpr 2, CPU ×4) antes de esto:
+
+     · portada, leyendo quieto ....... 42 ms por fotograma, 27 por encima de 50
+     · portada, bajando .............. 40 ms, 47 por encima de 50
+     · servicios, leyendo quieto ..... 48 ms, 43 por encima de 50
+
+   Y de dónde salía, apagando cada capa por separado:
+
+     · el campo de partículas de la portada (2.100 puntos, 8,3 ms de
+       JavaScript por fotograma) → quitándolo, 40 ms pasan a 18
+     · el instrumento de fondo de las páginas interiores (unas 5.000
+       operaciones de lienzo por dibujo, a pantalla completa) → quitándolo,
+       48 ms pasan a 18. Bajarle los fotogramas por segundo NO servía: el
+       coste está en cada dibujo, no en cuántos haya.
+     · el cielo y los orbes no aparecen en la medida: no son el problema.
+
+   Así que cada dispositivo tiene su experiencia, y no por el ancho de la
+   ventana —que es lo que se hacía y por eso un iPad recibía la carga de un
+   escritorio— sino por lo que el dispositivo es y por lo que aguanta:
+
+     pc ......... todo como está: densidad entera, lienzo a 1,75x, sin tope
+                  de fotogramas, fondo animado siempre.
+     tableta .... lienzo a 1x, densidad al 55 %, 30 fotogramas, el fondo
+                  ambiente NO anima en bucle (se redibuja cuando cambia
+                  algo) y el campo se queda quieto mientras el dedo baja.
+     telefono ... como la tableta, con densidad al 50 %.
+
+   Encima va un GOBERNADOR: mide los fotogramas de verdad y, si no se
+   llega al presupuesto, baja un escalón de calidad (y sube otra vez si
+   sobra holgura). Un iPad viejo acaba en menos densidad que uno nuevo sin
+   que nadie tenga que decidirlo aquí.
+
+   Todo esto es un objeto y nada más: si este fichero no cargara, cada
+   módulo sigue con sus valores de siempre. */
+(function () {
+  'use strict';
+  var W = window, D = document;
+  var reducido = W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var grueso = W.matchMedia('(pointer:coarse)').matches;
+  /* Tableta o teléfono NO se decide por el ancho de la ventana: un iPad en
+     vertical mide 834 px y se llevaría el trato de un móvil, y al girarlo
+     cambiaría de clase a mitad de visita. Se decide por el lado mayor de la
+     PANTALLA, que no cambia al girar: un iPhone grande llega a 932 y un iPad
+     pequeño empieza en 1.133. */
+  var lado = 0;
+  try { lado = Math.max(W.screen.width || 0, W.screen.height || 0); } catch (e) {}
+  if (!lado) lado = Math.max(W.innerWidth || 0, W.innerHeight || 0);
+  var clase = !grueso ? 'pc' : (lado >= 1000 ? 'tableta' : 'telefono');
+
+  var PERFIL = {
+    pc:       { dpr: 1.75, densidad: 1,    msMin: 0,  ambienteVivo: true,  pausaScroll: 0,   suelo: 0.6 },
+    tableta:  { dpr: 1,    densidad: 0.55, msMin: 33, ambienteVivo: false, pausaScroll: 700, suelo: 0.35 },
+    telefono: { dpr: 1,    densidad: 0.5,  msMin: 33, ambienteVivo: false, pausaScroll: 700, suelo: 0.3 }
+  };
+  var P = PERFIL[clase];
+  var nivel = 1;                    // lo mueve el gobernador
+  var oyentes = [];
+
+  var DCP = {
+    clase: clase,
+    grueso: grueso,
+    reducido: reducido,
+    /* El dpr que toca. El techo que pasa cada módulo es el suyo de siempre:
+       en «pc» manda ese, en táctil manda el del perfil. */
+    dpr: function (techo) {
+      var d = W.devicePixelRatio || 1;
+      var tope = Math.min(techo == null ? 2 : techo, P.dpr);
+      /* Con el gobernador bajo, también baja la resolución del lienzo: es
+         lo que más alivia al compositor sin tocar lo que se ve. */
+      if (nivel < 1) tope = Math.max(0.75, tope * (0.85 + nivel * 0.15));
+      return Math.min(d, tope);
+    },
+    /* Cuántas partículas de las que pediría un escritorio. */
+    densidad: function () { return P.densidad * nivel; },
+    /* Milisegundos mínimos entre fotogramas (0 = los que dé el navegador). */
+    msMin: function () { return P.msMin; },
+    /* ¿El fondo ambiente anima en bucle, o se redibuja cuando cambia algo? */
+    ambienteVivo: function () { return P.ambienteVivo && !reducido; },
+    /* Mientras el dedo baja, el campo se queda quieto este rato. */
+    pausaScroll: function () { return P.pausaScroll; },
+    nivel: function () { return nivel; },
+    /* Avisa cuando cambia el escalón de calidad: cada módulo se reconstruye. */
+    suscribir: function (fn) { if (typeof fn === 'function') oyentes.push(fn); },
+    info: function () { return { clase: clase, nivel: nivel, dpr: DCP.dpr(1.75), densidad: DCP.densidad() }; }
+  };
+  W.DCP = DCP;
+
+  function avisar() { for (var i = 0; i < oyentes.length; i++) { try { oyentes[i](nivel); } catch (e) {} } }
+
+  /* ---------------------------------------------------- el gobernador
+     Mide de verdad, en ventanas de 90 fotogramas, y compara el percentil 90
+     con el presupuesto (33 ms en táctil, 16,7 en escritorio). Dos ventanas
+     malas seguidas bajan un escalón; tres buenas seguidas suben uno. La
+     histéresis evita el vaivén, y nunca baja del suelo del perfil ni sube
+     por encima de 1. */
+  if (!reducido) {
+    var ESCALONES = [1, 0.75, 0.55, 0.4, 0.3];
+    var objetivo = P.msMin || 16.7;
+    var muestras = [], malas = 0, buenas = 0, ultimo = 0, activo = true, ultimoCambio = -1e9;
+    var mide = function (t) {
+      if (!activo) return;
+      if (ultimo) {
+        var dt = t - ultimo;
+        /* Un salto enorme es la pestaña volviendo del fondo, no un fallo
+           de pintado: no cuenta. */
+        if (dt < 900) muestras.push(dt);
+      }
+      ultimo = t;
+      /* Ventanas cortas: con 90 fotogramas a 25 por segundo, el primer
+         ajuste tardaba ocho segundos y esos ocho segundos son justo los que
+         alguien pasa mirando la portada por primera vez. */
+      if (muestras.length >= 45) {
+        var orden = muestras.slice().sort(function (a, b) { return a - b; });
+        var p90 = orden[Math.floor(orden.length * 0.9)];
+        muestras.length = 0;
+        /* Una ventana catastrófica (más del doble del presupuesto) no espera
+           a la segunda: se baja ya. */
+        if (p90 > objetivo * 2.2) { malas += 2; buenas = 0; }
+        else if (p90 > objetivo * 1.6) { malas++; buenas = 0; }
+        else if (p90 < objetivo * 1.05) { buenas++; malas = 0; }
+        else { malas = 0; buenas = 0; }
+        var i = ESCALONES.indexOf(nivel);
+        /* Un cambio de escalón reconstruye el campo: como mucho uno cada ocho
+           segundos, para que un equipo en el límite no se pase la visita
+           reconstruyéndose. */
+        var puede = (t - ultimoCambio) > 8000;
+        if (puede && malas >= 2 && i < ESCALONES.length - 1 && ESCALONES[i + 1] >= P.suelo) {
+          nivel = ESCALONES[i + 1]; malas = 0; ultimoCambio = t; avisar();
+        } else if (puede && buenas >= 4 && i > 0) {
+          nivel = ESCALONES[i - 1]; buenas = 0; ultimoCambio = t; avisar();
+        }
+      }
+      W.requestAnimationFrame(mide);
+    };
+    W.requestAnimationFrame(mide);
+    D.addEventListener('visibilitychange', function () { ultimo = 0; muestras.length = 0; });
+  }
+
+  /* La hora del último scroll, en un solo sitio. Cada lienzo la consulta
+     para quedarse quieto mientras el dedo baja; antes solo la escribía el
+     campo de la portada, así que en las páginas interiores esa pausa no
+     llegaba a aplicarse nunca. */
+  W.__dcpScroll = 0;
+  W.addEventListener('scroll', function () { W.__dcpScroll = performance.now(); }, { passive: true });
+
+  /* Una marca en <html> para que el CSS también pueda aligerar. */
+  D.documentElement.setAttribute('data-dispositivo', clase);
+})();
+
 (function () {
   'use strict';
 

@@ -83,6 +83,24 @@ body{
 /* Capa A — aurora. Difusa, lenta, y cambia de temperatura al pasar de una
    sección a otra. Es lo que hace que el fondo deje de estar muerto. */
 .glow-orb{ display:none !important; }
+/* LA AURORA VIVE EN SU PROPIO ELEMENTO, NO EN body::before.
+   Las tres variables de atmósfera las mueve el scroll. Escritas en <html>,
+   cada cambio invalidaba el estilo del documento ENTERO: medido en un iPad
+   simulado, /sistema-financiero gastaba 1.184 ms recalculando estilo en un
+   recorrido de cinco segundos, y 760 de esos milisegundos eran esto —unos
+   95 ms de tirón cada vez que se cruza una sección—. Escritas en el
+   elemento que las usa, el recálculo se queda en ese elemento.
+   body::before sigue existiendo para quien no tenga JavaScript: dcp5.js
+   crea .amb-aurora y marca el body para apagar el de reserva. */
+.amb-aurora{
+  position:fixed; inset:-30vmax; z-index:-3; pointer-events:none;
+  transition: background 1.1s ease-out;
+  background:
+    radial-gradient(42vmax 34vmax at 10% -2%,  rgba(var(--amb-1), calc(.26 * var(--amb-i))), transparent 58%),
+    radial-gradient(38vmax 30vmax at 94% 10%,  rgba(var(--amb-2), calc(.17 * var(--amb-i))), transparent 56%),
+    radial-gradient(48vmax 40vmax at 46% 104%, rgba(var(--amb-3), calc(.12 * var(--amb-i))), transparent 60%);
+}
+body.amb-propia::before{ display:none; }
 body::before{
   content:""; position:fixed; inset:-30vmax; z-index:-3; pointer-events:none;
   background:

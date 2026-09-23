@@ -245,8 +245,10 @@
        fotograma (el «Commit», 3 s). Así que en táctil se paga densidad, que
        es lo que se ve, y no resolución de lienzo, que a 2x apenas se nota
        en unos puntos de luz difusos. */
-    dpr = Math.min(window.devicePixelRatio || 1, tactil ? 1 : 1.75);
-    MIN_MS = tactil ? 33 : 0;   // en táctil, 30 fotogramas
+    /* El presupuesto lo fija window.DCP (main.js), que conoce el
+       dispositivo y mide los fotogramas de verdad. Sin DCP, lo de antes. */
+    dpr = window.DCP ? window.DCP.dpr(1.75) : Math.min(window.devicePixelRatio || 1, tactil ? 1 : 1.75);
+    MIN_MS = window.DCP ? window.DCP.msMin() : (tactil ? 33 : 0);
     W = root.clientWidth; H = root.clientHeight;
     narrow = W < 900; small = W < 620;
     /* ENCUADRE PARA VERTICAL. Los marcos están pensados para el reparto de
@@ -282,7 +284,12 @@
   }
 
   function build() {
-    N = small ? (tactil ? 560 : 660) : narrow ? (tactil ? 980 : 1180) : (tactil ? 1900 : 2100);
+    /* MEDIDO en iPad (1024×1366, dpr 2, CPU ×4), leyendo quieto: con 1.900
+       partículas el fotograma tardaba 42 ms —24 por segundo, a tirones—; con
+       la densidad del perfil táctil (55 %) y el lienzo a 1x, 25 ms y cuatro
+       fotogramas lentos en cuatro segundos. En escritorio no cambia nada. */
+    var base = small ? 660 : narrow ? 1180 : 2100;
+    N = Math.max(240, Math.round(base * (window.DCP ? window.DCP.densidad() : (tactil ? 0.9 : 1))));
     PT = []; ORD = [];
     for (var i = 0; i < N; i++) {
       var r = sd(i, 1), r2 = sd(i, 2), r3 = sd(i, 3);
@@ -2988,7 +2995,22 @@
        dedo o no. En cuanto para, vuelve al ritmo normal. Medido en iPad:
        de 22 fotogramas por encima de 100 ms a ninguno. */
     var min = MIN_MS;
-    if (tactil && tm - (window.__dcpScroll || 0) < 260) min = 80;
+    /* MIENTRAS EL DEDO BAJA, EL CAMPO SE QUEDA QUIETO. Antes bajaba a 12
+       fotogramas; medido en iPad, quieto del todo es lo que arregla el
+       desplazamiento: 40 ms por fotograma pasan a 17, y los fotogramas por
+       encima de 50 ms de 47 a 7. Nadie contempla el campo mientras arrastra
+       la página; lo que se nota es si la página va pegada al dedo. */
+    var pausa = window.DCP ? window.DCP.pausaScroll() : (tactil ? 260 : 0);
+    if (pausa && tm - (window.__dcpScroll || 0) < pausa) min = 1e9;
+    /* LEYENDO, EN UN APARATO QUE VA JUSTO. Si el gobernador ya ha tenido que
+       bajar de escalón y hace rato que nadie toca la pantalla, el campo pasa
+       a 16 fotogramas: en reposo lo que hace es derivar despacio, y una
+       deriva a 16 se ve mejor que una a 30 que se atasca. Medido en el perfil
+       iPad: el fotograma mediano baja de 35 a 23 ms. Al primer roce del dedo
+       vuelve al ritmo normal. */
+    if (pausa && window.DCP && window.DCP.nivel() < 1 && tm - (window.__dcpScroll || 0) > 1800) {
+      min = Math.max(min, 62);
+    }
     if (tm - ultimo >= min) {
       ultimo = tm;
       Pv += (P - Pv) * (movil ? 0.15 : tactil ? 0.11 : 0.075);
@@ -3014,6 +3036,11 @@
     rt = setTimeout(function () { measure(); measureStops(); readScroll(); if (reduced) drawStill(); }, 180);
   }, { passive: true });
   window.addEventListener('load', function () { encuadreMarca(); measureStops(); readScroll(); });
+  /* El gobernador ha cambiado de escalón: el campo se reconstruye con la
+     densidad nueva por el mismo camino que un cambio de tamaño. */
+  if (window.DCP && window.DCP.suscribir) {
+    window.DCP.suscribir(function () { measure(); measureStops(); readScroll(); if (reduced) drawStill(); });
+  }
   /* El corredor se mide sobre el texto PINTADO, asi que hasta que la fuente
      real no esta cargada el borde del titular es el de la fuente de reserva
      y la marca quedaria colocada sobre una medida que ya no es la buena. */
