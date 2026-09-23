@@ -1440,3 +1440,36 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
 @media (prefers-reduced-motion:reduce){
   .v7-tarea, .v7-cuenta-sem i, .v7-cuenta-cta{ transition:none; }
 }
+
+/* ============================================================================
+   EN TÁCTIL, EL CIELO LO PONE LA GALAXIA
+   ----------------------------------------------------------------------------
+   MEDIDO (perfil iPad 1024×1366 dpr 2, CPU ×4, bajando por los pasos de la
+   portada): el lienzo fijo a pantalla completa se llevaba 1.414 ms de
+   compositor; el mismo lienzo DIBUJANDO pero oculto, 311 ms. Lo caro no era
+   calcular las partículas, sino volver a subir una textura del tamaño de la
+   pantalla a la GPU en cada fotograma. Por eso bajar densidad y congelar el
+   bucle —lo de la iteración anterior— no arreglaba un iPad de verdad.
+
+   Debajo del campo ya vivía la galaxia: mosaicos de estrellas pre-pintados y
+   unos degradados, con sus colores por tema. Se compone una vez y no se
+   vuelve a tocar. Quitando el lienzo, el cielo sigue ahí.
+
+   La clase la pone el JS (dcp6/dcp8) solo cuando DCP dice que el puntero es
+   grueso. UN RATÓN NUNCA ENTRA AQUÍ: en PC, Mac y pantallas grandes no cambia
+   absolutamente nada.
+   ========================================================================= */
+html.cielo-quieto .field{ display:none !important; }
+/* El rótulo «Lo que estás viendo» nombra la formación del campo: sin campo,
+   no tiene nada que nombrar. */
+html.cielo-quieto .v6-status{ display:none; }
+/* Y el cielo que queda, quieto. Las dos capas de polvo derivan en bucle y las
+   estrellas titilan, cada una en su capa con will-change; en un ratón eso es
+   gratis, en un dedo son capas vivas que el compositor no puede olvidarse.
+   MEDIDO (perfil iPad, bajando por los pasos, dos pares de pasadas): los
+   fotogramas por encima de 50 ms pasan de 4 y 6 a 1 y 1, y el p95 de 40 y 37
+   a 32 y 30 ms. Es el mismo tratamiento que ya tenía «movimiento reducido»:
+   el mismo cielo, sin bucles. */
+html.cielo-quieto .gx > i,
+html.cielo-quieto .gx-t{ animation:none !important; will-change:auto; }
+html.cielo-quieto .gx-t{ opacity:.7; }

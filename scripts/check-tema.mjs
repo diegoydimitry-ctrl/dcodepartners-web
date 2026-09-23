@@ -105,6 +105,19 @@ if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html'
   else if (iClaro < 0 || iLig < iClaro) errores.push('tema.css: el modo cielo ligero tiene que ir después de las reglas del campo en claro');
   if (/body:has\(> \.gx\) \.field[^{]*\{[^}]*mix-blend-mode:(screen|multiply)/.test(css)) errores.push('tema.css: el campo de partículas no puede volver a mezclarse con el cielo (mix-blend-mode): es el coste principal por fotograma');
   for (const j of ['assets/js/dcp6.js', 'assets/js/dcp8.js']) if (/alpha:\s*false/.test(leer(j))) errores.push(`${j}: el lienzo del campo tiene que ser transparente (sin alpha:false)`);
+  /* EN TÁCTIL NO HAY CAMPO. Medido: un lienzo fijo a pantalla completa cuesta
+     lo mismo esté congelado o no, porque lo caro es subir la textura a la GPU
+     en cada fotograma. Si alguien quita esta puerta, el iPad vuelve a ir a
+     tirones y no se nota en ninguna prueba de las otras. */
+  for (const j of ['assets/js/dcp6.js', 'assets/js/dcp8.js']) {
+    const c = leer(j);
+    if (!/DCP\.campoVivo\(\)/.test(c) || !/cielo-quieto/.test(c)) {
+      errores.push(`${j}: falta la puerta de táctil (DCP.campoVivo + html.cielo-quieto): el campo no puede montarse en un iPad`);
+    }
+  }
+  const css7 = leer('assets/css/dcp7.css');
+  if (!/html\.cielo-quieto \.field\{\s*display:none/.test(css7)) errores.push('dcp7.css: falta «html.cielo-quieto .field{display:none}»');
+  if (!/html\.cielo-quieto \.gx-t\{/.test(css7)) errores.push('dcp7.css: falta dejar quieto el cielo de la galaxia en táctil');
 }
 
 if (errores.length) { console.error(errores.map((e) => '✗ ' + e).join('\n')); console.error(`\n${errores.length} problema(s).`); process.exit(1); }

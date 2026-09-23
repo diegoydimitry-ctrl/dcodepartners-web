@@ -52,6 +52,21 @@
   var root = document.querySelector('[data-field]');
   if (!root) return;
 
+  /* ================== EN TÁCTIL, EL CIELO NO SE DIBUJA ==================
+     MEDIDO (perfil iPad 1024x1366 dpr 2, CPU x4, bajando por los pasos de la
+     portada): con el lienzo visible el compositor se llevaba 1.414 ms del
+     recorrido; con el mismo lienzo DIBUJANDO pero oculto, 311 ms. Lo caro no
+     es calcular las particulas: es que una capa fija del tamano de la
+     pantalla se vuelva a subir a la GPU en cada fotograma. Por eso bajar
+     particulas o congelar el bucle no arreglaba un iPad de verdad.
+     En tactil el campo no se monta y el cielo lo pone la galaxia: mosaicos ya
+     pintados y degradados, que se componen una vez. En raton no cambia nada.
+  */
+  if (window.DCP && window.DCP.campoVivo && !window.DCP.campoVivo()) {
+    document.documentElement.classList.add('cielo-quieto');
+    return;
+  }
+
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* MEDIDO (iPad simulado, CPU x4, recorriendo la portada): este lienzo se
      llevaba 534 ms de JavaScript y, sobre todo, era el que disparaba el

@@ -124,6 +124,70 @@ Operaciones de lienzo en un recorrido de la portada: **121.826 → 7.177** (−9
 
 **PC (1440×900, sin freno)** — sin cambios: 22 → 21 ms bajando, 17 → 17 leyendo.
 
+## El iPad de verdad: no era dibujar, era componer
+
+Todo lo anterior —menos partículas, menos resolución, el campo congelado
+mientras el dedo baja— se midió en el perfil `ipad` y mejoró los números. En un
+iPad **real** no arregló nada: la portada seguía yendo a tirones, sobre todo en
+la zona de los cuatro pasos (Analizamos, Diseñamos, Implantamos, Medimos).
+
+Volviendo a medir, esta vez aislando el lienzo en vez de su contenido, sale por
+qué. Recorriendo los estados 4 a 7 de la portada en el perfil `ipad`:
+
+| qué se prueba | llamadas de lienzo | script | compositor |
+|---|---:|---:|---:|
+| como estaba | 7.319 | 7.674 ms | **1.304 ms** |
+| el bucle congelado (no dibuja nada) | 0 | 8.436 ms | **1.282 ms** |
+| dibujando igual, pero el lienzo oculto | 27.368 | 8.212 ms | **311 ms** |
+| el lienzo fuera del documento | 0 | 7.214 ms | **426 ms** |
+
+Congelar el bucle no quitaba nada. Ocultar el lienzo —dejándolo dibujar— quitaba
+el 76 %. Es decir: **lo caro nunca fue calcular las partículas, sino que una capa
+fija del tamaño de la pantalla se volviera a subir a la GPU en cada fotograma.**
+A dpr 2 en un iPad eso es una textura de 2048×2732 por fotograma. Por eso bajar
+densidad no se notaba: la textura pesa lo mismo con 600 partículas que con 2.100.
+
+### Lo que se hizo
+
+En táctil el campo no se monta. `DCP.campoVivo()` es cierto solo en la clase
+`pc`, y `dcp6.js` (portada) y `dcp8.js` (el resto) se paran en la primera línea
+y marcan `<html class="cielo-quieto">`.
+
+El hueco no queda vacío: debajo del campo ya vivía **la galaxia** (`galaxia.css`),
+que es el cielo del resto del sitio —mosaicos de estrellas ya pintados, unos
+degradados y sus colores por tema—. Se compone una vez y no se vuelve a tocar.
+Quitando el lienzo, el cielo sigue ahí, en oscuro y en claro, sin un solo byte
+nuevo. Con él se apagan también las dos derivas del polvo y el titileo de las
+estrellas, que es el mismo trato que ya tenía «movimiento reducido»: el mismo
+cielo, sin bucles.
+
+**Un ratón no entra aquí.** La clase la decide el puntero primario, no el ancho:
+en PC, Mac y pantallas grandes no cambia absolutamente nada.
+
+### Antes y después (mismas pasadas, mismo banco)
+
+| perfil · recorrido | fotogramas > 50 ms | > 100 ms | p95 | compositor |
+|---|---:|---:|---:|---:|
+| iPad · pasos de la portada | 11 → **9** | 2 → **0** | 48 → **40** ms | 1.304 → **391** ms |
+| iPad · portada entera | 17 → **11** | 1 → 2 | 59 → **52** ms | 879 → **196** ms |
+| iPad · /servicios | 11 → **6** | 7 → **0** | 64 → **43** ms | 825 → **493** ms |
+| Móvil · portada | 3 → **1** | 0 → 0 | 30 → **25** ms | 755 → **216** ms |
+| PC · portada | 6 → 4 | 2 → 1 | 36 → 35 ms | 1.721 → 1.863 ms |
+
+La fila del PC es la que importa al revés: el camino no cambia, y las
+diferencias son el ruido de pasada a pasada de una máquina de dos núcleos.
+Operaciones de lienzo al recorrer la portada en iPad: 11.066 → **0**.
+
+Apagando además las derivas de la galaxia, en dos pares de pasadas por la zona
+de los pasos: fotogramas por encima de 50 ms de 4 y 6 a **1 y 1**, p95 de 40 y
+37 a **32 y 30** ms.
+
+### Lo que se pierde
+
+Las nueve formaciones del campo —el análisis, la construcción, el ciclo— solo
+se ven con ratón. En un iPad queda el cielo. Con ellas se va el rótulo «Lo que
+estás viendo», que nombraba la formación y sin campo no nombra nada.
+
 ## Lo que queda
 
 - `/sistema-financiero` recorriéndose en el perfil `ipad` se queda en ~34 ms de
@@ -131,7 +195,12 @@ Operaciones de lienzo en un recorrido de la portada: **121.826 → 7.177** (−9
   para el bucle más caro): manda pintar y componer una página con la aplicación
   de Finance dentro. Quitarle las sombras a la demo bajaba de 35 a 27 ms, pero
   eso cambia cómo se ve el producto y no se ha tocado sin decidirlo.
-- **NO MEDIDO**: nada de esto está medido en un iPad real con Safari. Las
+- **NO MEDIDO**: los números de arriba salen del perfil simulado, no de un iPad
+  real con Safari. La primera tanda de mejoras ya enseñó que eso no basta: el
+  banco daba mejoras que en el aparato no se notaron, y hizo falta volver a
+  medir aislando la capa. Lo de ahora es estructural —en táctil no hay ningún
+  lienzo a pantalla completa— pero la cifra hay que verla allí.
+- **NO MEDIDO (anterior)**: nada de la primera tanda está medido en un iPad real con Safari. Las
   mejoras son estructurales (94 % menos operaciones de lienzo al desplazarse,
   ningún bucle de fondo en táctil, sin invalidar el estilo del documento
   entero), así que deberían notarse más aún en un aparato real, pero la cifra

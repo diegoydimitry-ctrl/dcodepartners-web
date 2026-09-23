@@ -58,10 +58,18 @@
   if (!lado) lado = Math.max(W.innerWidth || 0, W.innerHeight || 0);
   var clase = !grueso ? 'pc' : (lado >= 1000 ? 'tableta' : 'telefono');
 
+  /* EL CAMPO DE PARTÍCULAS, SOLO CON RATÓN. Medido en el perfil iPad bajando
+     por los pasos de la portada: el lienzo fijo a pantalla completa costaba
+     1.414 ms de compositor en el recorrido; con el MISMO lienzo dibujando
+     pero oculto, 311. Es decir, lo caro no era calcular las partículas sino
+     subir una textura del tamaño de la pantalla a la GPU en cada fotograma,
+     y por eso congelarlo no arreglaba nada en un iPad de verdad. En táctil
+     el campo se apaga entero y el cielo lo pone la galaxia, que son mosaicos
+     ya pintados y degradados: se compone una vez y no se vuelve a tocar. */
   var PERFIL = {
-    pc:       { dpr: 1.75, densidad: 1,    msMin: 0,  ambienteVivo: true,  pausaScroll: 0,   suelo: 0.6 },
-    tableta:  { dpr: 1,    densidad: 0.55, msMin: 33, ambienteVivo: false, pausaScroll: 700, suelo: 0.35 },
-    telefono: { dpr: 1,    densidad: 0.5,  msMin: 33, ambienteVivo: false, pausaScroll: 700, suelo: 0.3 }
+    pc:       { dpr: 1.75, densidad: 1,    msMin: 0,  ambienteVivo: true,  pausaScroll: 0,   suelo: 0.6,  campoVivo: true },
+    tableta:  { dpr: 1,    densidad: 0.55, msMin: 33, ambienteVivo: false, pausaScroll: 700, suelo: 0.35, campoVivo: false },
+    telefono: { dpr: 1,    densidad: 0.5,  msMin: 33, ambienteVivo: false, pausaScroll: 700, suelo: 0.3,  campoVivo: false }
   };
   var P = PERFIL[clase];
   var nivel = 1;                    // lo mueve el gobernador
@@ -87,6 +95,9 @@
     msMin: function () { return P.msMin; },
     /* ¿El fondo ambiente anima en bucle, o se redibuja cuando cambia algo? */
     ambienteVivo: function () { return P.ambienteVivo && !reducido; },
+    /* ¿Se monta el campo de partículas a pantalla completa? En táctil no: su
+       sitio lo ocupa la galaxia, que no cuesta nada por fotograma. */
+    campoVivo: function () { return P.campoVivo; },
     /* Mientras el dedo baja, el campo se queda quieto este rato. */
     pausaScroll: function () { return P.pausaScroll; },
     nivel: function () { return nivel; },
