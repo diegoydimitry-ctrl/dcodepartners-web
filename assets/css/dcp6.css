@@ -724,3 +724,28 @@ body.v6 .v6-status, body.v6 .v6-cap{
   /* El rótulo de sección y su capítulo se leen juntos, no a dos pantallas */
   body.v6 .v6-block--rotulo{ padding-bottom:clamp(8px,2vw,16px); }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   LA FILA DE PRUEBA DE LA PORTADA
+   Tres hechos, no tres adjetivos. Van debajo de los botones porque lo que
+   frena a quien entra no es no entender qué hacemos: es no saber si esto es
+   serio. Se leen en una línea cada uno y no piden nada a cambio.
+   ══════════════════════════════════════════════════════════════════════ */
+.v6-prueba{
+  list-style:none; margin:clamp(18px,2.4vw,26px) 0 0; padding:0;
+  display:flex; flex-wrap:wrap; gap:8px 22px; max-width:56ch;
+}
+.v6-prueba li{
+  position:relative; padding-left:16px;
+  font-size:.8125rem; line-height:1.45; color:var(--txt-3,#8ea0c4);
+  letter-spacing:.005em;
+}
+.v6-prueba li::before{
+  content:""; position:absolute; left:0; top:.52em;
+  width:6px; height:6px; border-radius:50%;
+  background:var(--v-a,#5b8cff); box-shadow:0 0 10px -1px var(--v-a,#5b8cff);
+}
+@media (max-width:900px){
+  .v6-prueba{ gap:6px 0; flex-direction:column; margin-top:18px; }
+  .v6-prueba li{ font-size:.8125rem; }
+}

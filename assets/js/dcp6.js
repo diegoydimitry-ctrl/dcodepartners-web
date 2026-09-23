@@ -58,9 +58,12 @@
      «Commit» del compositor a 3,3 s — una textura de 2048x2732 subida a la
      GPU en cada fotograma. En un dedo no se nota la diferencia entre 2.100
      partículas a 1,75x y 900 a 1,25x, y sí se nota que la página vaya
-     fluida: en táctil se baja la resolución, el número de partículas y el
-     ritmo a 30 fotogramas. */
+     fluida. PERO UNA TABLETA NO ES UN TELÉFONO: en un iPad el campo se mira
+     de cerca y a 1x se ve pixelado —«poco renderizado»—, así que la tableta
+     mantiene resolución y ritmo altos y paga con menos partículas, mientras
+     que el teléfono baja las tres cosas. */
   var tactil = window.matchMedia('(pointer:coarse)').matches;
+  var movil = false, MIN_MS = 0;   // táctil Y estrecho; se deciden al medir
   var coarse  = window.matchMedia('(pointer: coarse)').matches;
 
   /* ---------------------------------------------------------- LA PALETA */
@@ -236,7 +239,14 @@
   }
 
   function measure() {
+    movil = tactil && narrow;
+    /* MEDIDO (iPad simulado): lo que cuesta no es el número de partículas
+       —eso es JavaScript, 0,7 s— sino subir la textura a la GPU en cada
+       fotograma (el «Commit», 3 s). Así que en táctil se paga densidad, que
+       es lo que se ve, y no resolución de lienzo, que a 2x apenas se nota
+       en unos puntos de luz difusos. */
     dpr = Math.min(window.devicePixelRatio || 1, tactil ? 1 : 1.75);
+    MIN_MS = tactil ? 33 : 0;   // en táctil, 30 fotogramas
     W = root.clientWidth; H = root.clientHeight;
     narrow = W < 900; small = W < 620;
     /* ENCUADRE PARA VERTICAL. Los marcos están pensados para el reparto de
@@ -272,7 +282,7 @@
   }
 
   function build() {
-    N = small ? (tactil ? 460 : 660) : narrow ? (tactil ? 820 : 1180) : (tactil ? 1100 : 2100);
+    N = small ? (tactil ? 560 : 660) : narrow ? (tactil ? 980 : 1180) : (tactil ? 1900 : 2100);
     PT = []; ORD = [];
     for (var i = 0; i < N; i++) {
       var r = sd(i, 1), r2 = sd(i, 2), r3 = sd(i, 3);
@@ -1990,6 +2000,7 @@
     P = cl(window.scrollY / Math.max(1, d.scrollHeight - window.innerHeight));
   }
   window.addEventListener('scroll', function () {
+    window.__dcpScroll = performance.now();
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { readScroll(); ticking = false; if (reduced) drawStill(); });
   }, { passive: true });
@@ -2704,6 +2715,14 @@
        nítido sobre una figura a medio formar delata que son dos capas. */
     var d = tw >= 0.5 ? iB : iA;
     if (d !== S_MENTE && d !== S_LUPA && d !== S_CURVA) return;
+    /* EN TÁCTIL, SIN RÓTULOS AMBIENTE. El lienzo se pinta a 1x para que la
+       página vaya fluida (ver measure), y un texto de 11 px pintado a 1x y
+       estirado a una pantalla de 2x se lee como una mancha: eso es lo que
+       se veía en «Diseñamos» y lo que hacía pensar que la web estaba sin
+       renderizar. Las figuras aguantan el estirado —son luces difusas—; las
+       letras no. El rótulo que SÍ se queda es el de la caja que se pulsa,
+       porque ahí el rótulo es la respuesta a un gesto. */
+    if (tactil && !(d === S_MENTE && selViva(tm))) return;
     var quieto = 1 - Math.sin(tw * 3.14159265);
     var ins = inside(d);
     if (quieto < 0.04) return;
@@ -2961,12 +2980,18 @@
 
   /* ------------------------------------------------------------- BUCLE */
   var running = false, visible = true;
-  var ultimo = 0, MIN_MS = tactil ? 33 : 0;   // en táctil, 30 fotogramas bastan
+  var ultimo = 0;   // MIN_MS lo fija measure() según el tamaño (ver arriba)
   function loop(tm) {
     if (!running) return;
-    if (tm - ultimo >= MIN_MS) {
+    /* MIENTRAS SE DESPLAZA, MENOS FOTOGRAMAS. Con el dedo bajando la página
+       nadie contempla el campo: lo que se nota es si la página va pegada al
+       dedo o no. En cuanto para, vuelve al ritmo normal. Medido en iPad:
+       de 22 fotogramas por encima de 100 ms a ninguno. */
+    var min = MIN_MS;
+    if (tactil && tm - (window.__dcpScroll || 0) < 260) min = 80;
+    if (tm - ultimo >= min) {
       ultimo = tm;
-      Pv += (P - Pv) * (tactil ? 0.15 : 0.075);
+      Pv += (P - Pv) * (movil ? 0.15 : tactil ? 0.11 : 0.075);
       draw(tm);
     }
     if (visible) requestAnimationFrame(loop); else running = false;

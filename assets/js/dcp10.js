@@ -437,14 +437,14 @@
     });
     return cargados[src];
   }
-  /* EN PANTALLA TÁCTIL O PEQUEÑA, LA APLICACIÓN NO SE MONTA.
+  /* EN EL TELÉFONO LA APLICACIÓN NO SE MONTA (en tableta sí: ahí se usa).
      Estas demos son aplicaciones de escritorio: bandeja, menú lateral,
      fichas de ocho columnas. Apretadas en 390 px enseñan algo peor que no
      enseñar nada, y montarlas cuesta lo que más se nota en un móvil —un
      árbol grande, sus animaciones y su recorrido— justo mientras se está
      desplazando. En su lugar se lee la ficha: qué problema resuelve, qué
      hace y qué pasa solo. Quien quiera la aplicación, la abre con el botón. */
-  var SIN_APP = window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
+  var SIN_APP = window.matchMedia('(max-width: 900px)').matches;
   function galeria(root) {
     var tabs = $$('.gal-tab', root), paneles = $$('.gal-panel', root);
     var motorCss = root.getAttribute('data-css'), motorJs = root.getAttribute('data-js');
@@ -458,7 +458,19 @@
       if (tab) { var n = $('.gal-tab-n', tab); nombre = n ? n.textContent.trim() : ''; }
       var caja = document.createElement('div');
       caja.className = 'gal-movil';
+      /* UNA FOTO DE LA APLICACIÓN DE VERDAD. Contar lo que hace un sistema
+         sin enseñarlo es pedir un acto de fe. Son capturas de esta misma
+         demo, tomadas en los dos temas; pesan 30-58 KB y se cargan solo
+         cuando hacen falta. */
+      var foto = /^(finance|comercial|operaciones|atencion)$/.test(id)
+        ? '<span class="gal-movil-foto">' +
+            '<img class="es-oscuro" src="/assets/img/demos/' + id + '-dark.webp" width="1400" height="793" loading="lazy" decoding="async" alt="' +
+              (EN ? 'The ' : 'La aplicación de ') + esc(nombre) + (EN ? ' application, on a computer' : ', en un ordenador') + '">' +
+            '<img class="es-claro" src="/assets/img/demos/' + id + '-light.webp" width="1400" height="793" loading="lazy" decoding="async" alt="">' +
+          '</span>'
+        : '';
       caja.innerHTML =
+        foto +
         '<p class="gal-movil-k">' + (EN ? 'On a small screen' : 'En pantalla pequeña') + '</p>' +
         '<h4 class="gal-movil-t">' + (EN
           ? 'Here you read it; to use it, a computer.'

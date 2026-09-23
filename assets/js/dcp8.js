@@ -107,7 +107,10 @@
   }
 
   function measure() {
-    dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.75);   // táctil: la mitad de píxeles que subir a la GPU
+    /* Teléfono 1x, tableta 1,5x, ratón 1,75x: en un iPad este dibujo se
+       mira de cerca y a 1x se ve sucio. */
+    dpr = Math.min(window.devicePixelRatio || 1, coarse ? (W < 900 ? 1 : 1.5) : 1.75);
+    MIN_F = coarse ? 33 : 0;
     FW = host.clientWidth; FH = host.clientHeight;
     canvas.width = Math.round(FW * dpr); canvas.height = Math.round(FH * dpr);
     canvas.style.width = FW + 'px'; canvas.style.height = FH + 'px';
@@ -1322,6 +1325,7 @@
   }
   var ticking = false;
   window.addEventListener('scroll', function () {
+    window.__dcpScroll = performance.now();
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { readScroll(); ticking = false; if (reduced) still(); });
   }, { passive: true });
@@ -1345,12 +1349,14 @@
     ctx.save(); ctx.translate(OFFX, OFFY); inst.draw(6120); ctx.restore();
   }
 
-  var running = false, visible = true, ultimoF = 0, MIN_F = coarse ? 33 : 0;
+  var running = false, visible = true, ultimoF = 0, MIN_F = 0;   // MIN_F lo fija measure()
   function loop(tm) {
     if (!running) return;
-    if (tm - ultimoF < MIN_F) { if (visible) requestAnimationFrame(loop); else running = false; return; }
+    var minF = MIN_F;
+    if (coarse && tm - (window.__dcpScroll || 0) < 260) minF = 80;   // mientras se desplaza, menos
+    if (tm - ultimoF < minF) { if (visible) requestAnimationFrame(loop); else running = false; return; }
     ultimoF = tm;
-    Pv += (P - Pv) * (coarse ? 0.16 : 0.08);
+    Pv += (P - Pv) * (coarse ? 0.12 : 0.08);
     cmx += (mx - cmx) * 0.08; cmy += (my - cmy) * 0.08;
     ctx.save(); ctx.translate(OFFX, OFFY);
     inst.draw(tm);

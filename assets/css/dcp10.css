@@ -867,3 +867,35 @@
 }
 .gal-movil-b:hover{ background:rgba(150,174,245,.14); border-color:rgba(150,174,245,.45); }
 .gal-movil-b:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+
+/* La foto de la aplicación dentro de la ficha: marco fino, esquinas suaves y
+   un recorte que deja ver la cabecera y las primeras cifras, que es lo que
+   cuenta qué es esto. Se carga la del tema activo y nada más. */
+.gal-movil-foto, .demo-movil-foto{
+  display:block; margin:0 0 16px; border-radius:12px; overflow:hidden;
+  border:1px solid rgba(150,174,245,.18);
+  background:rgba(6,8,13,.5);
+  box-shadow:0 18px 44px -28px rgba(0,0,0,.9);
+}
+/* Un DETALLE, no una miniatura: la aplicación entera a 350 px es un mosaico
+   de píxeles donde no se distingue nada. Se amplía y se recorta por arriba a
+   la izquierda —menú, cabecera y las primeras cifras—, que es justo lo que
+   deja claro qué es esto. */
+.gal-movil-foto, .demo-movil-foto{ aspect-ratio:16 / 10; }
+.gal-movil-foto img, .demo-movil-foto img{
+  display:block; width:190%; max-width:none; height:auto;
+}
+@media (min-width:560px){
+  .gal-movil-foto, .demo-movil-foto{ aspect-ratio:16 / 8.5; }
+  .gal-movil-foto img, .demo-movil-foto img{ width:140%; }
+}
+.gal-movil-foto .es-claro, .demo-movil-foto .es-claro{ display:none; }
+html[data-theme="light"] .gal-movil-foto .es-oscuro,
+html[data-theme="light"] .demo-movil-foto .es-oscuro{ display:none; }
+html[data-theme="light"] .gal-movil-foto .es-claro,
+html[data-theme="light"] .demo-movil-foto .es-claro{ display:block; }
+html[data-theme="light"] .gal-movil-foto, html[data-theme="light"] .demo-movil-foto{
+  border-color:rgba(36,52,104,.16); background:rgba(244,246,251,.6);
+  box-shadow:0 18px 44px -30px rgba(20,30,64,.5);
+}
+.demo-movil-foto{ margin-top:16px; }

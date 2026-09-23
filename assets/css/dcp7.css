@@ -1248,8 +1248,8 @@ body:has(.demo-host.fdemo-pantalla) .dcx-now{ display:none; }
    cartel de «no disponible»: la misma información contada como se lee en un
    móvil, y el botón para abrirla donde se puede usar. */
 .demo-movil{ display:none; }
-/* También en tableta: lo que decide es el dedo, no el ancho (ver dcp5.js). */
-@media (max-width:900px), (pointer:coarse) and (max-width:1400px){
+/* Solo en el teléfono: en tableta la aplicación se monta y se usa. */
+@media (max-width:900px){
   .demo-host .fdemo-app{ display:none; }
   .demo-host.is-forzada .fdemo-app{ display:block; }
   .demo-host.is-forzada .demo-movil{ display:none; }

@@ -286,44 +286,52 @@ html.tema-vt::view-transition-new(tema-portal){ animation:none; }
   .tema-btn, .tema-btn-t{ transition:none; }
 }
 
-/* ================================================ 3b. BOTÓN DE TEMA, LLAMATIVO
-   El botón tiene que invitar a probar el otro modo: se pinta con el color
-   del modo al que lleva (oscuro → pastilla de sol; claro → pastilla de
-   noche) y late unas veces al cargar. Con movimiento reducido, sin latido. */
+/* ============================================ 3b. EL BOTÓN DE TEMA, JUSTO
+   Tiene que encontrarse sin buscarlo y no competir con la marca. Antes era
+   una pastilla amarilla maciza: lo más brillante de la pantalla, al lado del
+   logo, gritando más que la llamada a la acción. Ahora es cristal con el
+   icono en color —sol o luna, según a dónde lleva—, un anillo tenue y un
+   latido corto al cargar que dice «esto se puede tocar» y se calla. */
 .tema-btn{
-  --tb-fondo:linear-gradient(135deg, #fff1b8 0%, #ffc94a 55%, #ff9f1c 100%);
-  --tb-borde:rgba(255,214,107,.95);
-  --tb-tinta:#1b1204;
-  --tb-luz:rgba(255,190,60,.55);
+  --tb-fondo:rgba(12,17,32,.72);
+  --tb-borde:rgba(150,174,245,.30);
+  --tb-tinta:#e8eeff;
+  --tb-luz:rgba(255,196,84,.55);
   background:var(--tb-fondo);
-  font-weight:700;
-  box-shadow:0 0 0 3px rgba(255,201,74,.28), 0 10px 32px -8px rgba(255,170,40,.75);
-  animation:tb-late 2.2s ease-out .8s 4;
+  font-weight:600;
+  box-shadow:0 0 0 1px rgba(255,196,84,.16), 0 10px 26px -14px rgba(0,0,0,.8);
+  animation:tb-late 2.6s ease-out 1s 3;
 }
-.tema-btn-i{ background:#10193b; box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 0 0 2px rgba(255,255,255,.55); }
-.tema-btn .t-luna{ color:#ffe28a; }
-.tema-btn:hover{ border-color:#fff; box-shadow:0 0 0 5px rgba(255,201,74,.4), 0 14px 38px -8px rgba(255,170,40,.85); transform:translateY(-1px) scale(1.04); }
+.tema-btn-i{
+  background:radial-gradient(circle at 34% 30%, #2a3a76, #131c3f 70%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 0 14px -2px rgba(255,196,84,.45);
+}
+.tema-btn .t-luna{ color:#ffd98a; }
+.tema-btn:hover{ border-color:rgba(255,196,84,.55); box-shadow:0 0 0 1px rgba(255,196,84,.3), 0 14px 30px -14px rgba(0,0,0,.85); transform:translateY(-1px); }
 html[data-theme="light"] .tema-btn{
-  --tb-fondo:linear-gradient(135deg, #2b3f95 0%, #172259 55%, #0a0f2a 100%);
-  --tb-borde:rgba(120,150,255,.9);
-  --tb-tinta:#ffffff;
-  --tb-luz:rgba(70,110,255,.5);
+  --tb-fondo:rgba(255,255,255,.86);
+  --tb-borde:rgba(47,95,224,.28);
+  --tb-tinta:#0d1324;
+  --tb-luz:rgba(47,95,224,.4);
   background:var(--tb-fondo);
-  box-shadow:0 0 0 3px rgba(59,108,246,.25), 0 10px 30px -8px rgba(20,34,110,.65);
+  box-shadow:0 0 0 1px rgba(47,95,224,.12), 0 10px 24px -16px rgba(20,30,64,.5);
   animation-name:tb-late-n;
 }
-html[data-theme="light"] .tema-btn-i{ background:radial-gradient(circle at 35% 30%, #fff6d8, #ffd66b 55%, #f5a524); box-shadow:0 0 0 2px rgba(255,255,255,.6); }
-html[data-theme="light"] .tema-btn .t-sol{ color:#6b3a00; }
-html[data-theme="light"] .tema-btn:hover{ border-color:#fff; box-shadow:0 0 0 5px rgba(59,108,246,.35), 0 14px 34px -8px rgba(20,34,110,.75); }
+html[data-theme="light"] .tema-btn-i{
+  background:radial-gradient(circle at 34% 30%, #fff6d8, #ffd66b 58%, #f5a524);
+  box-shadow:0 0 0 1px rgba(255,255,255,.7), 0 0 12px -2px rgba(245,165,36,.6);
+}
+html[data-theme="light"] .tema-btn .t-sol{ color:#7a4300; }
+html[data-theme="light"] .tema-btn:hover{ border-color:rgba(47,95,224,.5); }
 @keyframes tb-late{
-  0%{ box-shadow:0 0 0 3px rgba(255,201,74,.28), 0 0 0 0 rgba(255,190,60,.7), 0 10px 32px -8px rgba(255,170,40,.75); }
-  70%{ box-shadow:0 0 0 3px rgba(255,201,74,.28), 0 0 0 16px rgba(255,190,60,0), 0 10px 32px -8px rgba(255,170,40,.75); }
-  100%{ box-shadow:0 0 0 3px rgba(255,201,74,.28), 0 0 0 0 rgba(255,190,60,0), 0 10px 32px -8px rgba(255,170,40,.75); }
+  0%{ box-shadow:0 0 0 1px rgba(255,196,84,.16), 0 0 0 0 rgba(255,196,84,.5), 0 10px 26px -14px rgba(0,0,0,.8); }
+  70%{ box-shadow:0 0 0 1px rgba(255,196,84,.16), 0 0 0 14px rgba(255,196,84,0), 0 10px 26px -14px rgba(0,0,0,.8); }
+  100%{ box-shadow:0 0 0 1px rgba(255,196,84,.16), 0 0 0 0 rgba(255,196,84,0), 0 10px 26px -14px rgba(0,0,0,.8); }
 }
 @keyframes tb-late-n{
-  0%{ box-shadow:0 0 0 3px rgba(59,108,246,.25), 0 0 0 0 rgba(59,108,246,.6), 0 10px 30px -8px rgba(20,34,110,.65); }
-  70%{ box-shadow:0 0 0 3px rgba(59,108,246,.25), 0 0 0 16px rgba(59,108,246,0), 0 10px 30px -8px rgba(20,34,110,.65); }
-  100%{ box-shadow:0 0 0 3px rgba(59,108,246,.25), 0 0 0 0 rgba(59,108,246,0), 0 10px 30px -8px rgba(20,34,110,.65); }
+  0%{ box-shadow:0 0 0 1px rgba(47,95,224,.12), 0 0 0 0 rgba(47,95,224,.45), 0 10px 24px -16px rgba(20,30,64,.5); }
+  70%{ box-shadow:0 0 0 1px rgba(47,95,224,.12), 0 0 0 14px rgba(47,95,224,0), 0 10px 24px -16px rgba(20,30,64,.5); }
+  100%{ box-shadow:0 0 0 1px rgba(47,95,224,.12), 0 0 0 0 rgba(47,95,224,0), 0 10px 24px -16px rgba(20,30,64,.5); }
 }
 @media (prefers-reduced-motion:reduce){ .tema-btn{ animation:none !important; } }
 
@@ -340,11 +348,11 @@ html[data-theme="light"] .tema-btn:hover{ border-color:#fff; box-shadow:0 0 0 5p
    pantalla no se calculan. El contenido no cambia.
    ═══════════════════════════════════════════════════════════════════════ */
 @media (max-width:900px), (pointer:coarse) and (max-width:1400px){
-  /* 1 · El cielo: quieto, y solo las capas que se notan */
+  /* 1 · El cielo deja de moverse: la deriva y el parallax obligan a
+        recomponer la pantalla entera en cada fotograma. Las estrellas se
+        quedan todas. */
   .gx > i{ animation:none !important; }
-  .gx-medio, .gx-brillo-b, .gx-t{ display:none !important; }
   .gx-lejos{ animation:none !important; will-change:auto; }
-  .gx-polvo{ opacity:.75; }
 
   /* 2 · Ningún desenfoque de fondo. En Safari cada fotograma vuelve a
         difuminar lo que hay detrás del elemento, y hay 30 de ellos. */
@@ -367,6 +375,16 @@ html[data-theme="light"] .tema-btn:hover{ border-color:#fff; box-shadow:0 0 0 5p
   .glow-orb, .lit::before, .page-hero::before, .cta-band::after, .fases-seg-glow{ display:none !important; }
   /* Las entradas animadas dejan de difuminar: suben y aparecen, nada más */
   .rise, .reveal-blur, .pipeline-node{ filter:none !important; }
+}
+
+/* 3b · EL TELÉFONO, ADEMÁS, SE QUEDA CON MENOS CAPAS DE CIELO.
+      En una tableta el cielo entero se sostiene sin despeinarse; en un
+      teléfono, con la CPU que tiene y la pantalla que tiene, la capa media
+      y la segunda de brillo no se echan de menos y se notan en el scroll. */
+@media (max-width:900px){
+  .gx-medio, .gx-brillo-b{ display:none !important; }
+  .gx-t{ display:none !important; }
+  .gx-polvo{ opacity:.75; }
 }
 
 /* 4 · PROBADO Y DESCARTADO: content-visibility:auto en las secciones no

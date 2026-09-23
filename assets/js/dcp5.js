@@ -473,16 +473,28 @@
        sustitución ya está en el HTML; aquí solo se marca el anfitrión. */
     /* MEDIDO (iPad simulado, CPU x4): con la aplicación montada, el
        recorrido y sus animaciones dejaban el fotograma mediano en 117 ms.
-       La regla ya no es solo el ancho: es el DEDO. Esta demo está hecha
-       para un ratón —tablas de ocho columnas, menú de veinticinco
-       pantallas—, así que en cualquier pantalla táctil (y en cualquier
-       ventana por debajo de 900 px) se enseña la ficha que sí se lee.
+       La regla es el ANCHO, no el dedo: en un iPad la aplicación se usa y
+       se lee perfectamente, y quitarla era quitar lo mejor que tiene esta
+       página. Por debajo de 900 px —el teléfono— se enseña la ficha, que es
+       lo que hacen las aplicaciones de gestión con su propia web.
        Quien quiera la aplicación igualmente, tiene el botón. */
-    if (window.matchMedia('(max-width: 900px), (pointer: coarse)').matches) {
+    if (window.matchMedia('(max-width: 900px)').matches) {
       hosts.forEach(function (h) {
         h.setAttribute('data-fdemo-movil', '1');
         var caja = h.querySelector('.demo-movil');
         if (!caja || caja.querySelector('[data-fdemo-forzar]')) return;
+        /* La aplicación, en una foto de verdad: en el teléfono no se monta,
+           pero se ve qué es antes de decidir si merece un ordenador. */
+        if (!caja.querySelector('.demo-movil-foto')) {
+          var fig = document.createElement('span');
+          fig.className = 'demo-movil-foto';
+          fig.innerHTML = '<img class="es-oscuro" src="/assets/img/demos/finance-dark.webp" width="1400" height="813" loading="lazy" decoding="async" alt="' +
+            (document.documentElement.lang === 'en' ? 'D-Code Finance on a computer' : 'D-Code Finance en un ordenador') + '">' +
+            '<img class="es-claro" src="/assets/img/demos/finance-light.webp" width="1400" height="813" loading="lazy" decoding="async" alt="">';
+          var tras = caja.querySelector('.demo-movil-t');
+          if (tras && tras.parentNode) tras.parentNode.insertBefore(fig, tras.nextSibling);
+          else caja.insertBefore(fig, caja.firstChild);
+        }
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'btn btn-ghost demo-movil-b2'; b.setAttribute('data-fdemo-forzar', '1');
         b.textContent = document.documentElement.lang === 'en' ? 'Open it here anyway' : 'Abrirla aquí igualmente';
