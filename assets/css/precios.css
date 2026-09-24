@@ -534,3 +534,28 @@
   to  { opacity:1; transform:none; }
 }
 @media (prefers-reduced-motion:reduce){ .cfg-animo.es-pone{ animation:none; } }
+
+/* Los otros dos rastros. El polvo ya estaba; la chispa sale disparada hacia
+   un lado y la estela se estira por detrás y se apaga. */
+.cfg-polvo.es-chispa{
+  width:5px; height:5px; border-radius:50%;
+  background:radial-gradient(circle, var(--v-a, #43e0ff), transparent 70%);
+  box-shadow:0 0 10px 2px color-mix(in srgb, var(--v-a, #43e0ff) 60%, transparent);
+  animation:cfg-chispa .8s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes cfg-chispa{
+  from{ opacity:1; transform:translate(0,0) scale(1); }
+  to  { opacity:0; transform:translate(var(--dx,0), var(--dy,24px)) scale(.3); }
+}
+.cfg-polvo.es-estela{
+  width:26px; height:3px; border-radius:2px; margin-left:-13px;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--v-b, #9b6bff) 75%, transparent), transparent);
+  animation:cfg-estela .8s ease-out forwards;
+}
+@keyframes cfg-estela{
+  from{ opacity:.9; transform:rotate(var(--gir,0deg)) scaleX(1); }
+  to  { opacity:0; transform:rotate(var(--gir,0deg)) scaleX(.2); }
+}
+@media (prefers-reduced-motion:reduce){
+  .cfg-polvo.es-chispa, .cfg-polvo.es-estela{ animation:none; display:none; }
+}

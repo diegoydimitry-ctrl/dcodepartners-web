@@ -211,30 +211,97 @@
     return c;
   }
 
-  function polvo(x, y) {
-    var p = el('i', 'cfg-polvo');
+  /* Tres rastros: la mota de polvo de siempre, una chispa que sale
+     disparada y una estela que se estira y se apaga. Cada andar lleva el
+     suyo, así que por lo que deja detrás ya se sabe qué ha pasado. */
+  function polvo(x, y, tipo) {
+    var p = el('i', 'cfg-polvo' + (tipo && tipo !== 'polvo' ? ' es-' + tipo : ''));
     p.style.left = x + 'px'; p.style.top = y + 'px';
+    if (tipo === 'chispa') {
+      p.style.setProperty('--dx', (Math.random() * 44 - 22).toFixed(0) + 'px');
+      p.style.setProperty('--dy', (18 + Math.random() * 30).toFixed(0) + 'px');
+    }
+    if (tipo === 'estela') p.style.setProperty('--gir', (Math.random() * 40 - 20).toFixed(0) + 'deg');
     capa().appendChild(p);
-    window.setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 700);
+    window.setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 820);
   }
 
   /* El recorrido: cuatro o cinco tramos que rebotan entre los bordes y
      cambian de altura. No es una línea recta de lado a lado porque una línea
      recta se mira una vez; esto se sigue con la vista. */
-  function ruta(x0, y0) {
+  /* CADA BICHO, SU RECORRIDO.
+     Antes todos salían y rebotaban igual: la segunda vez ya no sorprendía a
+     nadie. Ahora la forma del recorrido la decide el propio icono, así que
+     el del dinero siempre va como el dinero y el del reloj como el reloj, y
+     cambiar de respuesta cambia lo que cruza la pantalla. */
+  var ANDARES = {
+    /* de rebote, tocando arriba y abajo */
+    saltos: function (x0, y0, W, H) {
+      var p = [], x = x0, arriba = true;
+      for (var i = 0; i < 4; i++) {
+        x = Math.min(W - 70, x + 200 + Math.random() * 190);
+        p.push({ x: x, y: arriba ? 110 + Math.random() * 60 : H - 170 - Math.random() * 60, dir: 1 });
+        arriba = !arriba;
+      }
+      return p;
+    },
+    /* una curva larga y limpia, de lado a lado */
+    curva: function (x0, y0, W, H) {
+      var p = [], d = x0 < W / 2 ? 1 : -1;
+      for (var i = 1; i <= 4; i++) {
+        p.push({ x: x0 + d * (W * 0.26) * i, y: y0 - Math.sin(i / 4 * Math.PI) * 230, dir: d });
+      }
+      return p;
+    },
+    /* zigzag corto y nervioso */
+    nervio: function (x0, y0, W, H) {
+      var p = [], x = x0, y = y0, d = 1;
+      for (var i = 0; i < 6; i++) {
+        d = i % 2 ? -1 : 1;
+        x = Math.max(50, Math.min(W - 70, x + d * (130 + Math.random() * 120)));
+        y = Math.max(100, Math.min(H - 150, y - 55 - Math.random() * 60));
+        p.push({ x: x, y: y, dir: d });
+      }
+      return p;
+    },
+    /* da la vuelta entera a la pantalla */
+    vuelta: function (x0, y0, W, H) {
+      return [{ x: W - 90, y: y0, dir: 1 },
+              { x: W - 90, y: 130, dir: 1 },
+              { x: 70, y: 130, dir: -1 },
+              { x: 70, y: H - 170, dir: -1 },
+              { x: W * 0.5, y: H - 170, dir: 1 }];
+    },
+    /* se deja caer y sube de golpe */
+    caida: function (x0, y0, W, H) {
+      var d = x0 < W / 2 ? 1 : -1;
+      return [{ x: x0 + d * 170, y: H - 160, dir: d },
+              { x: x0 + d * 380, y: y0 - 60, dir: d },
+              { x: x0 + d * 560, y: H - 190, dir: d },
+              { x: x0 + d * 760, y: 150, dir: d }];
+    },
+  };
+  /* Qué anda cómo. Lo que no esté aquí, curva. */
+  var ANDA = {
+    dinero: 'saltos', carro: 'saltos', caja: 'saltos',
+    chispa: 'nervio', enchufe: 'nervio', engranaje: 'nervio',
+    reloj: 'vuelta', calendario: 'vuelta',
+    grafica: 'caida', papel: 'caida', estrella: 'caida',
+    lupa: 'curva', chat: 'curva', gente: 'curva', pantalla: 'curva', llave: 'curva',
+  };
+  /* Y qué va dejando detrás: polvo, chispas o una estela. */
+  var RASTRO = { saltos: 'polvo', nervio: 'chispa', vuelta: 'estela', caida: 'estela', curva: 'polvo' };
+
+  function ruta(x0, y0, id) {
     var W = window.innerWidth, H = window.innerHeight;
-    var pasos = [];
-    var x = x0, y = y0;
-    var n = 3 + Math.floor(Math.random() * 2);
-    for (var i = 0; i < n; i++) {
-      var haciaDerecha = i % 2 === 0 ? x < W * 0.55 : x > W * 0.45;
-      x = haciaDerecha ? Math.min(W - 70, x + 220 + Math.random() * 420)
-                       : Math.max(40, x - (220 + Math.random() * 420));
-      y = Math.max(90, Math.min(H - 130, y + (Math.random() * 2 - 1) * 170));
-      pasos.push({ x: x, y: y, dir: haciaDerecha ? 1 : -1 });
-    }
+    var andar = ANDA[id] || 'curva';
+    var pasos = ANDARES[andar](x0, y0, W, H).map(function (p) {
+      return { x: Math.max(40, Math.min(W - 70, p.x)), y: Math.max(90, Math.min(H - 130, p.y)), dir: p.dir };
+    });
+    var u = pasos[pasos.length - 1];
     /* y se larga por arriba */
-    pasos.push({ x: x + (Math.random() > .5 ? 260 : -260), y: -140, dir: x > W / 2 ? 1 : -1, salto: true });
+    pasos.push({ x: u.x + (u.dir > 0 ? 260 : -260), y: -140, dir: u.dir, salto: true });
+    pasos.rastro = RASTRO[andar];
     return pasos;
   }
 
@@ -304,7 +371,8 @@
       bicho.classList.add('es-suelto', 'es-corriendo');
       capa().appendChild(bicho);
 
-      var pasos = ruta(cx, cy);
+      var pasos = ruta(cx, cy, id);
+      var rastro = pasos.rastro;
       var x = cx, y = cy;
       var cadena = Promise.resolve();
       pasos.forEach(function (p) {
@@ -315,8 +383,8 @@
           /* migas de polvo por donde pisa */
           var pisadas = window.setInterval(function () {
             var b = bicho.getBoundingClientRect();
-            polvo(b.left + b.width / 2, b.top + b.height - 4);
-          }, 130);
+            polvo(b.left + b.width / 2, b.top + b.height - 4, rastro);
+          }, rastro === 'estela' ? 70 : 120);
           var a = bicho.animate([
             { transform: 'translate(0,0) scaleX(' + p.dir + ')' },
             { transform: 'translate(' + dx + 'px,' + (dy - (p.salto ? 0 : 26)) + 'px) scaleX(' + p.dir + ')', offset: .5 },

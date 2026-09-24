@@ -420,6 +420,10 @@ html[data-theme="light"] .v7-cuenta-n b{ color:#090f1a; }
 html[data-theme="light"] .v7-cuenta-e b{ color:#993332; }
 html[data-theme="light"] .v7-cuenta-sem i.on{ box-shadow:0 0 12px -2px rgba(255,107,98,0.33); }
 html[data-theme="light"] .v7-cuenta-sup{ border-top:1px solid rgba(46,59,98,0.174); }
+html[data-theme="light"] .chat-aviso{ color:var(--ink, #090f1a); background:linear-gradient(168deg, rgba(250,252,255,0.97), rgba(243,246,251,0.97)); border:1px solid rgba(46,59,98,0.262); box-shadow:0 18px 44px -22px rgba(20,30,64,0.27), 0 0 0 1px rgba(91,140,255,0.055); }
+html[data-theme="light"] .chat-aviso::after{ background:rgba(243,246,251,0.97); border-right:1px solid rgba(46,59,98,0.262); border-bottom:1px solid rgba(46,59,98,0.262); }
+html[data-theme="light"][data-theme="light"] .chat-aviso{ border-color:rgba(205,210,218,0.16); }
+html[data-theme="light"][data-theme="light"] .chat-aviso::after{ border-color:rgba(205,210,218,0.16); }
 
 /* ---- dcp8.css ---- */
 html[data-theme="light"] .field--inst{ background:#f0f3f9; }
@@ -529,6 +533,8 @@ html[data-theme="light"] body.v7 .section-air.lit .head::before{ background:radi
 html[data-theme="light"] .page-hero .ph-prueba a{ color:var(--blue, #2650bd); }
 html[data-theme="light"] body.v7 .page-hero--split .page-hero-meta::before{ background:radial-gradient(78% 76% at 50% 50%,
     rgba(240,243,249,0.975), rgba(240,243,249,0.92) 52%, rgba(240,243,249,0.5) 78%, rgba(6,8,13,0) 95%); }
+html[data-theme="light"] body.v6 :is(.eyebrow, .lead, .h-sec, .h-title, .section-head h2, .head h2, .head p),
+html[data-theme="light"] body.v7 :is(.eyebrow, .lead, .h-sec, .h-title, .section-head h2, .head h2, .head p){ text-shadow:none; }
 
 /* ---- dcp10.css ---- */
 html[data-theme="light"] .arq-lienzo::before{ background:radial-gradient(64% 62% at 50% 50%, rgba(240,243,249,0.94), rgba(240,243,249,0.82) 52%, rgba(240,243,249,0.4) 76%, rgba(6,8,13,0) 94%); }

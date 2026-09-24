@@ -644,3 +644,46 @@ body.v7 .page-hero--split .page-hero-meta::before{
   background:radial-gradient(78% 76% at 50% 50%,
     rgba(6,8,13,.975), rgba(6,8,13,.92) 52%, rgba(6,8,13,.5) 78%, rgba(6,8,13,0) 95%);
 }
+
+/* ═══════════════ FUERA LOS VELOS ═══════════════
+   Todo lo de arriba pintaba un óvalo oscuro DETRÁS del texto para que se
+   leyera sobre el cielo. Y se veía: un recuadro difuminado detrás de cada
+   titular y de cada cejilla, en toda la web. El de .page-hero, además,
+   cruzaba el 72 % del ancho y caía encima de la pantalla de Finance de la
+   portada: esos rectángulos negros sobre el panel eran esto.
+
+   No hay velo que valga. La legibilidad pasa al propio texto: un halo del
+   color del fondo de la página —var(--v-bg), que cambia solo con el tema—.
+   Un halo no tiene borde, así que no se ve como caja: el texto flota. */
+body.v6 .eyebrow::after, body.v7 .eyebrow::after,
+body.v7 .head::before, body.v7 .figure::before, body.v7 .section-head::before,
+body.v7 .page-hero::before,
+body.v7 .timeline::before, body.v7 .outs::before, body.v7 .chain::before,
+body.v7 .shift::before, body.v7 .split-list::before, body.v7 .specs::before,
+body.v7 .split::before, body.v7 .cases::before, body.v7 .rail::before,
+body.v7 .rail-hint::before, body.v7 .metodo-copy::before,
+body.v7 .duo::before, body.v7 .board::before, body.v7 .spec::before,
+body.v7 .pacts::before, body.v7 .track::before, body.v7 .pre-cta::before,
+body.v7 .vsteps::after{
+  display:none !important;
+}
+
+/* El halo. Va en el texto, no en una capa: tres sombras cortas del color
+   del fondo bastan para despegarlo del cielo sin ensuciar nada. */
+body.v6 :is(.eyebrow, .lead, .h-sec, .h-title, .section-head h2, .head h2, .head p),
+body.v7 :is(.eyebrow, .lead, .h-sec, .h-title, .section-head h2, .head h2, .head p){
+  text-shadow:
+    0 0 7px color-mix(in srgb, var(--v-bg, #06080d) 92%, transparent),
+    0 0 18px color-mix(in srgb, var(--v-bg, #06080d) 78%, transparent),
+    0 0 38px color-mix(in srgb, var(--v-bg, #06080d) 58%, transparent);
+}
+/* El texto en degradado se recorta sobre su propio fondo: una sombra ahí no
+   queda detrás de las letras, queda detrás de la caja, y se ve como una
+   mancha. Ese no lleva halo; es grande y brillante y se lee solo. */
+body.v6 :is(.grad, .v6-grad), body.v7 :is(.grad, .v6-grad){ text-shadow:none; }
+/* Dentro de una caja con fondo propio el halo sobra y puede ser del color
+   contrario, porque ahí --v-bg está invertido. */
+body.v6 :is(.window, .qh-pieza, .fi-puntos, .fi-otro, .fi-demo-c, .form-card, .cfg-tarjeta, .rcard, .board) :is(.eyebrow, .lead, .h-sec, .h-title, h2, p),
+body.v7 :is(.window, .qh-pieza, .fi-puntos, .fi-otro, .fi-demo-c, .form-card, .cfg-tarjeta, .rcard, .board) :is(.eyebrow, .lead, .h-sec, .h-title, h2, p){
+  text-shadow:none;
+}

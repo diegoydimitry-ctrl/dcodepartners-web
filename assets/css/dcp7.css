@@ -1545,3 +1545,37 @@ html[data-theme="light"].cielo-quieto .paso-forma img{
   html.cielo-quieto .paso-forma{ flex:0 0 auto; max-width:min(300px, 72%); max-height:240px; }
   html.cielo-quieto .paso-forma img{ max-height:240px; }
 }
+
+/* El globo del asistente: lo que dice la burbuja cuando está cerrada. */
+.chat-aviso{
+  position:absolute; right:calc(100% + 12px); bottom:12px;
+  width:max-content; max-width:min(16rem, 58vw); padding:10px 15px;
+  font:inherit; font-size:.85rem; line-height:1.35; text-align:left;
+  color:var(--ink, #edf1f8); cursor:pointer;
+  background:linear-gradient(168deg, rgba(22,30,58,.97), rgba(10,14,28,.97));
+  border:1px solid rgba(150,174,245,.22); border-radius:14px 14px 4px 14px;
+  box-shadow:0 18px 44px -22px rgba(0,0,0,.9), 0 0 0 1px rgba(91,140,255,.1);
+  opacity:0; transform:translateY(8px) scale(.94); transform-origin:100% 100%;
+  pointer-events:none; white-space:normal;
+  transition:opacity .34s ease, transform .34s cubic-bezier(.22,1.2,.36,1);
+}
+.chat-aviso.es-visto{ opacity:1; transform:none; pointer-events:auto; }
+/* La puntita, hacia la burbuja. */
+.chat-aviso::after{
+  content:''; position:absolute; right:-5px; bottom:9px; width:10px; height:10px;
+  background:rgba(10,14,28,.97); border-right:1px solid rgba(150,174,245,.22);
+  border-bottom:1px solid rgba(150,174,245,.22); transform:rotate(-45deg); border-radius:0 0 3px 0;
+}
+html[data-theme="light"] .chat-aviso{
+  background:linear-gradient(168deg, rgba(255,255,255,.98), rgba(238,242,250,.98));
+  border-color:rgba(36,52,104,.16); color:#0d1324;
+}
+html[data-theme="light"] .chat-aviso::after{
+  background:rgba(240,244,251,.98); border-color:rgba(36,52,104,.16);
+}
+@media (max-width:520px){
+  .chat-aviso{ right:auto; left:0; bottom:calc(100% + 10px); border-radius:14px 14px 14px 4px;
+    transform-origin:0 100%; }
+  .chat-aviso::after{ right:auto; left:12px; bottom:-5px; }
+}
+@media (prefers-reduced-motion:reduce){ .chat-aviso{ display:none; } }

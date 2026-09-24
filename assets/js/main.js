@@ -1208,3 +1208,60 @@
   }
 
 })();
+
+/* ── EL ASISTENTE SE HACE NOTAR ──────────────────────────────────────────
+   La burbuja de la esquina no la ve nadie: es un círculo más. Cada cierto
+   rato, con el asistente cerrado, saca un globo corto al lado —y va
+   cambiando, para que quien se quede leyendo no vea diez veces lo mismo—.
+   Se calla mientras el asistente está abierto y al pulsarlo lo abre. */
+(function () {
+  'use strict';
+  var burbuja = document.getElementById('chat-bubble');
+  var widget = document.getElementById('chat-widget');
+  if (!burbuja || !widget) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
+  var FRASES = EN ? [
+    '¿Need a hand?', 'What are you looking for?', 'Ask me anything about this page',
+    'Want a price for your case?', 'Not sure where to start?', 'I can explain this in plain words',
+    'Shall I tell you what it would cost?', 'Want to see a demo?', 'Tell me what your company does'
+  ] : [
+    '¿En qué te ayudo?', '¿Qué estás buscando?', 'Pregúntame lo que quieras de esta página',
+    '¿Te digo cuánto costaría lo tuyo?', '¿No sabes por dónde empezar?', 'Te lo explico en cristiano',
+    '¿Quieres ver una demo?', 'Cuéntame a qué se dedica tu empresa', '¿Te busco el precio?',
+    '¿Dudas con algo?'
+  ];
+
+  var globo = document.createElement('button');
+  globo.type = 'button';
+  globo.className = 'chat-aviso';
+  globo.setAttribute('aria-hidden', 'true');
+  globo.tabIndex = -1;
+  widget.appendChild(globo);
+  globo.addEventListener('click', function () { esconde(); burbuja.click(); });
+
+  /* Sin repetir la anterior: con diez frases, salir dos veces la misma
+     seguida se nota más que si hubiera dos. */
+  var ultima = -1;
+  function siguiente() {
+    var i = ultima;
+    while (i === ultima) i = Math.floor(Math.random() * FRASES.length);
+    ultima = i;
+    return FRASES[i];
+  }
+  var visible = false;
+  function esconde() { visible = false; globo.classList.remove('es-visto'); }
+  function asoma() {
+    if (widget.classList.contains('open') || document.hidden) return;
+    globo.textContent = siguiente();
+    visible = true;
+    globo.classList.add('es-visto');
+    setTimeout(function () { if (visible) esconde(); }, 6500);
+  }
+
+  burbuja.addEventListener('click', esconde);
+  /* El primero pronto, para que se vea que está ahí; luego cada 22 s. */
+  setTimeout(asoma, 4500);
+  setInterval(asoma, 22000);
+})();
