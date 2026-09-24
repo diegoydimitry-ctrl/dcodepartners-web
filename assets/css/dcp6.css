@@ -960,3 +960,105 @@ body.v6 :is(.v6-grad, .grad){ text-shadow:none; }
 body.v6 :is(.btn, .v6-acts, .v6-acts *, .v6-prueba, .v6-prueba li, .cfg-op, .chip){
   text-shadow:none;
 }
+
+/* ═══════════ LA ESCENA DEL PANEL ═══════════
+   Una captura sola, por bien girada que esté, se lee como una captura. Lo
+   que la convierte en escena es que haya MÁS COSAS en el mismo espacio: una
+   gráfica con volumen apoyada delante y la cifra del mes flotando al otro
+   lado, las dos en la misma perspectiva que la pantalla pero con su propio
+   giro, para que se lean como objetos distintos y no como pegatinas sobre
+   la misma imagen.
+
+   Las dos van DELANTE en Z, así que la pantalla queda al fondo y hay
+   profundidad de verdad entre las tres. Y las dos flotan a su ritmo: si se
+   movieran igual, volverían a parecer una sola imagen. */
+/* El contenedor NO lleva preserve-3d a propósito: con él el navegador
+   ordena por la Z de cada pieza y la plaquita del dinero acababa detrás de
+   la pantalla pese a estar más cerca. Plano y con z-index, la perspectiva
+   la sigue poniendo el `perspective` del padre y el orden lo decidimos
+   nosotros. */
+.v6-panel-f{ z-index:1; }
+.v6-pieza{
+  position:absolute; pointer-events:none; z-index:2;
+  will-change:transform;
+  filter:drop-shadow(0 26px 34px rgba(3,7,22,.6));
+}
+/* La gráfica: apoyada delante, abajo a la izquierda, y saliendo del canto
+   de la pantalla, que es lo que ata las dos piezas. */
+.v6-pieza--graf{
+  left:-19%; bottom:-19%; width:min(16vw, 232px);
+  transform:rotateY(-17deg) rotateX(9deg) translateZ(78px);
+  animation:v6-pz-a 13s ease-in-out infinite alternate;
+}
+.v6-pieza--graf svg{ display:block; width:100%; height:auto; }
+/* La cifra: una plaquita de cristal arriba a la derecha, la más cercana. */
+.v6-pieza--dinero{
+  right:2%; top:-18%; width:min(13.5vw, 196px); z-index:3;
+  padding:14px 16px 12px; border-radius:14px;
+  transform:rotateY(-21deg) rotateX(5deg) translateZ(112px);
+  animation:v6-pz-b 11s ease-in-out infinite alternate;
+  background:linear-gradient(162deg, rgba(26,34,60,.93), rgba(12,17,32,.95));
+  border:1px solid rgba(150,174,245,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 30px 60px -30px rgba(3,7,22,.95);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+}
+html[data-theme="light"] .v6-pieza--dinero{
+  background:linear-gradient(162deg, rgba(255,255,255,.97), rgba(236,241,250,.97));
+  border-color:rgba(36,52,104,.14);
+}
+.v6-pieza-et{
+  display:block; font-family:var(--mono); font-size:.5625rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-a, #43e0ff);
+}
+.v6-pieza--graf .v6-pieza-et{ margin-bottom:6px; padding-left:8px; }
+.v6-pieza-n{
+  display:block; margin-top:5px; font-size:clamp(1rem,1.35vw,1.28rem);
+  font-weight:700; letter-spacing:-.03em; color:var(--ink, #edf1f8);
+  font-variant-numeric:tabular-nums;
+}
+.v6-pieza-spark{ display:block; width:100%; height:auto; margin-top:6px; }
+.v6-pieza-d{
+  display:block; margin-top:4px; font-size:.625rem; color:#35e0a1; letter-spacing:.01em;
+}
+/* Cada una con su vaivén: distinto periodo y distinto recorrido. */
+@keyframes v6-pz-a{
+  from{ transform:rotateY(-17deg) rotateX(9deg) translateZ(78px) translateY(0); }
+  to  { transform:rotateY(-14deg) rotateX(7deg) translateZ(78px) translateY(-16px); }
+}
+@keyframes v6-pz-b{
+  from{ transform:rotateY(-21deg) rotateX(5deg) translateZ(112px) translateY(0); }
+  to  { transform:rotateY(-18deg) rotateX(3.5deg) translateZ(112px) translateY(-22px); }
+}
+/* La luz que la escena derrama sobre la página: es lo que hace que no
+   parezca pegada encima, sino encendida DENTRO del fondo. */
+.v6-panel::after{
+  content:''; position:absolute; inset:-18% -12% -30%;
+  pointer-events:none; z-index:-1; border-radius:50%;
+  background:radial-gradient(52% 46% at 46% 52%,
+    color-mix(in srgb, var(--blue, #5b8cff) 20%, transparent),
+    color-mix(in srgb, var(--violet, #9b6bff) 9%, transparent) 46%, transparent 74%);
+  filter:blur(28px);
+}
+/* EL PANEL SE MUEVE CON LA PÁGINA. Un objeto que no se entera de que estás
+   bajando es un objeto pegado al cristal. Al bajar, la escena se hunde un
+   poco y se endereza; la gráfica y la cifra van a otro ritmo, que es lo que
+   hace que se vea que hay distancia entre ellas. El recorrido lo pone el
+   guion en --sc, de 0 a 1, y aquí solo se reparte. */
+.v6-panel-f{
+  transform:rotateY(calc(-26deg + var(--sc, 0) * 5deg))
+            rotateX(calc(6deg - var(--sc, 0) * 4deg))
+            rotateZ(-2deg)
+            translateY(calc(var(--sc, 0) * 26px));
+}
+.v6-pieza--graf{ transform:rotateY(-17deg) rotateX(9deg) translateZ(78px) translateY(calc(var(--sc, 0) * -34px)); }
+.v6-pieza--dinero{ transform:rotateY(-21deg) rotateX(5deg) translateZ(112px) translateY(calc(var(--sc, 0) * 44px)); }
+/* Con scroll la animación de flotar estorba —se pelean por el transform—,
+   así que mientras se baja manda el scroll y al parar vuelve a flotar. */
+.v6-panel.es-scroll .v6-panel-f,
+.v6-panel.es-scroll .v6-pieza{ animation-play-state:paused; }
+
+@media (max-width:1100px){ .v6-pieza{ display:none; } }
+@media (prefers-reduced-motion:reduce){
+  .v6-pieza{ animation:none; }
+  .v6-panel-f{ transform:rotateY(-26deg) rotateX(6deg) rotateZ(-2deg); }
+}

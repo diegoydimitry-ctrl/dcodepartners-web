@@ -40,6 +40,10 @@ const fallos = [];
                         el coste de UNA HORA DE TU GENTE, que lo pone quien
                         entra; no es una tarifa de D-Code.
      · data-os-datos  — los datos de la demo de D-Code OS, inventados.
+     · data-demo-panel — la cifra que flota junto a la pantalla de Finance
+                        en la portada. Es el mismo dato ficticio que ya sale
+                        DENTRO de la captura; que aquí sea texto y no píxeles
+                        no lo convierte en un precio.
      · la demo de Finance (empresa ficticia) y lo que escribe build:precios.
 
      Los dos primeros no se reconocen por la línea suelta —«<span>18 €»no
@@ -49,7 +53,7 @@ const fallos = [];
      comodín. */
   const sinZonas = (h) => {
     let s = h;
-    for (const marca of ['data-dx', 'data-os-datos']) {
+    for (const marca of ['data-dx', 'data-os-datos', 'data-demo-panel']) {
       for (;;) {
         const re = new RegExp('<([a-z]+)\\b[^>]*\\b' + marca + '\\b[^>]*>');
         const m = re.exec(s);
@@ -220,7 +224,26 @@ for (const [aparato, op] of APARATOS) {
     await elegir('.cfg-chip', 0); await elegir('.cfg-chip', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 0); await elegir('.cfg-op', 2); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
-    await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(400);
+    await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(300);
+
+    /* Paso 6: quién lo pregunta. Dos campos, y hasta que no estén los dos
+       —con un contacto que valga— no se puede seguir. Se comprueba el
+       freno antes de rellenarlos, que es lo que evita que lleguen fichas
+       sin manera de contestar. */
+    const datos = await pg.evaluate(() => ({
+      campos: document.querySelectorAll('.cfg-input').length,
+      frenado: document.querySelector('.cfg-seguir').disabled,
+    }));
+    if (datos.campos !== 2) fallos.push(`${donde}: el paso 6 tiene ${datos.campos} campos y tiene que tener 2`);
+    if (!datos.frenado) fallos.push(`${donde}: el paso 6 deja seguir sin datos`);
+    await pg.fill('.cfg-input >> nth=0', 'Vandria Hogar');
+    await pg.fill('.cfg-input >> nth=1', 'mal');
+    await pg.waitForTimeout(140);
+    if (!(await pg.evaluate(() => document.querySelector('.cfg-seguir').disabled)))
+      fallos.push(`${donde}: el paso 6 da por bueno un contacto que no lo es`);
+    await pg.fill('.cfg-input >> nth=1', 'hola@vandria.es');
+    await pg.waitForTimeout(140);
+    await pg.click('.cfg-seguir'); await pg.waitForTimeout(400);
 
     const fin = await pg.evaluate(() => {
       const est = document.querySelector('.cfg-est-n b');
@@ -246,6 +269,8 @@ for (const [aparato, op] of APARATOS) {
       oculto: !!document.querySelector('input[name="configuracion"]'),
       aviso: !!document.getElementById('cfg-listo'),
       campos: ['nombre', 'empresa', 'email'].every((id) => !!document.getElementById(id)),
+      empresa: (document.getElementById('empresa') || {}).value || '',
+      email: (document.getElementById('email') || {}).value || '',
       visible: !!document.querySelector('.form-card') && !document.querySelector('.form-card.es-espera'),
     }));
     if (volcado.mensaje.length < 60) fallos.push(`${donde}: la configuración no llegó al formulario`);
@@ -253,6 +278,11 @@ for (const [aparato, op] of APARATOS) {
     if (!volcado.aviso) fallos.push(`${donde}: no se avisa de que ya está en el formulario`);
     if (!volcado.campos) fallos.push(`${donde}: el formulario de contacto perdió sus campos`);
     if (!volcado.visible) fallos.push(`${donde}: el formulario no aparece al terminar de configurar`);
+    /* Y lo escrito en el paso 6 tiene que bajar al formulario de verdad: si
+       no, se le pide dos veces lo mismo, que es la manera más rápida de que
+       alguien cierre la pestaña. */
+    if (volcado.empresa !== 'Vandria Hogar') fallos.push(`${donde}: la empresa del paso 6 no llega al formulario («${volcado.empresa}»)`);
+    if (volcado.email !== 'hola@vandria.es') fallos.push(`${donde}: el contacto del paso 6 no llega al formulario («${volcado.email}»)`);
     pasos++;
 
     const graves = errores.filter((e) => !/net::ERR|turnstile|cal\.com/i.test(e));

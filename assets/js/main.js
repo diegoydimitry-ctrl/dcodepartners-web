@@ -1265,3 +1265,38 @@
   setTimeout(asoma, 4500);
   setInterval(asoma, 22000);
 })();
+
+/* ── LA ESCENA DE LA PORTADA SE MUEVE CON LA PÁGINA ─────────────────────
+   Una pantalla que se queda exactamente igual mientras bajas delata que es
+   una imagen pegada. Aquí la escena se hunde un poco y se endereza según
+   avanza el scroll, y la gráfica y la cifra van a otro ritmo: eso es lo que
+   hace que se lea que hay distancia entre las tres.
+
+   Se publica el avance en --sc (0 a 1) y del reparto se encarga la hoja de
+   estilo. Todo dentro de un requestAnimationFrame y con el escuchador
+   pasivo: el scroll no se toca. */
+(function () {
+  'use strict';
+  var panel = document.querySelector('.v6-panel');
+  if (!panel) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var pedido = false, quieto = null;
+  function pinta() {
+    pedido = false;
+    var h = window.innerHeight || 1;
+    /* De 0 a 1 mientras el hero cruza la pantalla; a partir de ahí no hay
+       nada que mover porque el panel ya no se ve. */
+    var v = Math.min(1, Math.max(0, window.pageYOffset / (h * 0.9)));
+    panel.style.setProperty('--sc', v.toFixed(3));
+  }
+  function alBajar() {
+    if (!pedido) { pedido = true; requestAnimationFrame(pinta); }
+    panel.classList.add('es-scroll');
+    window.clearTimeout(quieto);
+    quieto = window.setTimeout(function () { panel.classList.remove('es-scroll'); }, 160);
+  }
+  window.addEventListener('scroll', alBajar, { passive: true });
+  window.addEventListener('resize', alBajar, { passive: true });
+  pinta();
+})();

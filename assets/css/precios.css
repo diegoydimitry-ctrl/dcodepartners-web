@@ -444,3 +444,32 @@
 @media (prefers-reduced-motion:reduce){
   .cfg-esc, .cfg-brillo{ display:none; }
 }
+
+/* ═══════════ EL ÚLTIMO PASO: TUS DATOS ═══════════
+   Dos campos y nada más. Mismo tamaño de toque que las opciones, misma
+   tipografía y mismo foco que el resto del formulario: es un paso más, no
+   otro formulario pegado al final. */
+.cfg-datos{
+  display:grid; gap:clamp(14px,2vw,18px);
+  grid-template-columns:1fr; margin-top:clamp(16px,2.2vw,22px);
+}
+@media (min-width:720px){ .cfg-datos{ grid-template-columns:1fr 1fr; } }
+.cfg-campo{ display:flex; flex-direction:column; gap:7px; }
+.cfg-campo-t{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--v-ink-3);
+}
+.cfg-input{
+  width:100%; min-height:52px; padding:13px 15px;
+  font-family:var(--sans); font-size:1rem; color:var(--v-ink);
+  background:color-mix(in srgb, var(--v-bg) 70%, transparent);
+  border:1px solid var(--v-edge); border-radius:12px;
+  outline:none; transition:border-color .18s ease, box-shadow .18s ease;
+}
+.cfg-input::placeholder{ color:var(--v-ink-3); opacity:.75; }
+.cfg-input:hover{ border-color:color-mix(in srgb, var(--v-a) 40%, var(--v-edge)); }
+.cfg-input:focus-visible{
+  border-color:var(--v-a);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--v-a) 28%, transparent);
+}
+.cfg-campo-a{ font-size:.8125rem; line-height:1.45; color:var(--v-ink-3); }

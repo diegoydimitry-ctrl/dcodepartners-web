@@ -333,6 +333,12 @@ html[data-theme="light"] .v6-panel-f::before{ background:linear-gradient(115deg,
 html[data-theme="light"] body.v6 :is(.v6-lede, .v6-kicker, .v6-status, .v6-say, .v6-sys, .v6-cap,
             .v6-river-note, .v6-step-in, .v6-pacto, .v6-panel-pie, .v6-prueba li){ text-shadow:none; }
 html[data-theme="light"] .v6-marca{ color:var(--ink, #090f1a); }
+html[data-theme="light"] .v6-pieza{ filter:drop-shadow(0 26px 34px rgba(20,30,64,0.18)); }
+html[data-theme="light"] .v6-pieza--dinero{ background:linear-gradient(162deg, rgba(252,253,255,0.93), rgba(244,247,252,0.95)); border:1px solid rgba(46,59,98,0.24); box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 30px 60px -30px rgba(20,30,64,0.285); }
+html[data-theme="light"][data-theme="light"] .v6-pieza--dinero{ border-color:rgba(205,210,218,0.14); }
+html[data-theme="light"] .v6-pieza-et{ color:var(--v-a, #0b6676); }
+html[data-theme="light"] .v6-pieza-n{ color:var(--ink, #090f1a); }
+html[data-theme="light"] .v6-pieza-d{ color:#0d6b4a; }
 
 /* ---- dcp7.css ---- */
 html[data-theme="light"] .dcx::before{ background:radial-gradient(120% 66% at 100% 50%,

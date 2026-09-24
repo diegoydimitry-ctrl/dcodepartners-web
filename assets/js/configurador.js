@@ -33,7 +33,7 @@
   /* ------------------------------------------------------------ palabras */
   var L = EN ? {
     kicker: 'Configurator', titulo: 'Let’s design your system.',
-    sub: 'Five questions, no typing. At the end you get what you would need and roughly what it would cost.',
+    sub: 'Five questions without typing, and your details at the end. You get what you would need and roughly what it would cost.',
     de: 'of', atras: 'Back', seguir: 'Continue', empezar: 'Start again',
     saltar: 'I’d rather just write to you',
     resumen: 'Your configuration', estimacion: 'Initial estimate',
@@ -42,13 +42,18 @@
     enviar: 'Send this configuration', enviarSub: 'We read it, and we answer with what we would build and what it would cost — in writing.',
     aviso: 'Initial estimate, not a quote. The final price depends on the scope; we agree it in writing before anything starts.',
     listo: 'Your configuration is in the form. Now just your details.',
-    pasos: ['Your company', 'What you want to improve', 'How many people', 'What to build', 'How much tailoring'],
+    pasos: ['Your company', 'What you want to improve', 'How many people', 'What to build', 'How much tailoring', 'Your details'],
     animos: ['', 'Good. Now, where does it hurt?', 'Noted. This changes what you need.',
-             'Halfway there.', 'Last one, and we are done.'],
+             'Halfway there.', 'Nearly there.', 'That is everything. Who shall we answer to?'],
+    datosT: 'Who is asking?',
+    datosS: 'Two lines and we send you the answer. Nothing else.',
+    empresaL: 'Company name', empresaP: 'e.g. Vandria Homes',
+    contactoL: 'Email or phone', contactoP: 'you@yourcompany.com',
+    contactoE: 'An email or a phone number, so we can reply.',
     animoFin: 'Done. This is what we would build.'
   } : {
     kicker: 'Configurador', titulo: 'Vamos a diseñar tu sistema.',
-    sub: 'Cinco preguntas, sin escribir. Al final sale qué te haría falta y cuánto costaría, aproximadamente.',
+    sub: 'Cinco preguntas sin escribir, y al final tus datos. Sale qué te haría falta y cuánto costaría, aproximadamente.',
     de: 'de', atras: 'Atrás', seguir: 'Continuar', empezar: 'Empezar de nuevo',
     saltar: 'Prefiero escribiros directamente',
     resumen: 'Tu configuración', estimacion: 'Estimación inicial',
@@ -57,9 +62,14 @@
     enviar: 'Enviar esta configuración', enviarSub: 'La leemos y te contestamos con qué construiríamos y qué costaría, por escrito.',
     aviso: 'Estimación inicial, no un presupuesto. El precio final depende del alcance; lo cerramos por escrito antes de empezar.',
     listo: 'Tu configuración ya está en el formulario. Ahora solo faltan tus datos.',
-    pasos: ['Tu empresa', 'Qué quieres mejorar', 'Cuánta gente', 'Qué montamos', 'Cuánto hay que adaptarlo'],
+    pasos: ['Tu empresa', 'Qué quieres mejorar', 'Cuánta gente', 'Qué montamos', 'Cuánto hay que adaptarlo', 'Tus datos'],
     animos: ['', 'Bien. Ahora, ¿dónde duele?', 'Anotado. Esto cambia lo que te hace falta.',
-             'Vas por la mitad.', 'La última, y ya está.'],
+             'Vas por la mitad.', 'Casi está.', 'Ya está todo. ¿A quién contestamos?'],
+    datosT: '¿Quién lo pregunta?',
+    datosS: 'Dos líneas y te mandamos la respuesta. Nada más.',
+    empresaL: 'Nombre de la empresa', empresaP: 'p. ej. Vandria Hogar',
+    contactoL: 'Correo o teléfono', contactoP: 'tu@tuempresa.com',
+    contactoE: 'Un correo o un teléfono, para poder contestarte.',
     animoFin: 'Listo. Esto es lo que construiríamos.'
   };
 
@@ -286,9 +296,9 @@
   var tx = function (o) { return EN ? (o.en || o[1]) : (o.es || o[0]); };
 
   /* ------------------------------------------------------------- estado */
-  var S = { sector: '', mejoras: [], gente: '', piezas: [], nivel: '' };
+  var S = { sector: '', mejoras: [], gente: '', piezas: [], nivel: '', empresa: '', contacto: '' };
   var paso = 0;
-  var TOTAL = 5;
+  var TOTAL = 6;
 
   /* ---------------------------------------------------------- estructura */
   host.innerHTML = '';
@@ -440,6 +450,37 @@
         rej.appendChild(b);
       });
       fs.appendChild(rej);
+    } else if (paso === 5) {
+      /* EL ÚLTIMO PASO: QUIÉN PREGUNTA.
+         Dos campos y ni uno más. Antes los datos de contacto vivían en un
+         formulario aparte debajo, y quien terminaba el configurador tenía
+         que encontrarlo y volver a empezar; ahora la última pregunta es
+         esa, y al acabarla ya está todo. */
+      fs = pregunta(L.datosT, L.datosS);
+      var caja2 = el('div', 'cfg-datos');
+
+      var l1 = el('label', 'cfg-campo');
+      var t1 = el('span', 'cfg-campo-t', L.empresaL);
+      var i1 = D.createElement('input');
+      i1.type = 'text'; i1.className = 'cfg-input'; i1.value = S.empresa;
+      i1.placeholder = L.empresaP; i1.autocomplete = 'organization';
+      i1.setAttribute('maxlength', '80');
+      i1.addEventListener('input', function () { S.empresa = i1.value.trim(); bSeguir.disabled = !puedeSeguir(); });
+      l1.appendChild(t1); l1.appendChild(i1);
+
+      var l2 = el('label', 'cfg-campo');
+      var t2 = el('span', 'cfg-campo-t', L.contactoL);
+      var i2 = D.createElement('input');
+      i2.type = 'text'; i2.className = 'cfg-input'; i2.value = S.contacto;
+      i2.placeholder = L.contactoP; i2.autocomplete = 'email';
+      i2.setAttribute('maxlength', '120');
+      i2.addEventListener('input', function () { S.contacto = i2.value.trim(); bSeguir.disabled = !puedeSeguir(); });
+      var ay = el('span', 'cfg-campo-a', L.contactoE);
+      l2.appendChild(t2); l2.appendChild(i2); l2.appendChild(ay);
+
+      caja2.appendChild(l1); caja2.appendChild(l2);
+      fs.appendChild(caja2);
+      window.setTimeout(function () { try { (S.empresa ? i2 : i1).focus({ preventScroll: true }); } catch (e) {} }, 60);
     } else {
       pintaResumen();
       return;
@@ -464,6 +505,14 @@
     if (paso === 2) return !!S.gente;
     if (paso === 3) return S.piezas.length > 0;
     if (paso === 4) return !!S.nivel;
+    /* Con un correo o un teléfono basta: pedir los dos es pedir de más. Se
+       da por bueno un correo con arroba y punto, o algo con seis cifras o
+       más, que es lo mínimo que tiene un teléfono. */
+    if (paso === 5) {
+      if (!S.empresa) return false;
+      var c = S.contacto || '';
+      return /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(c) || (c.replace(/\D/g, '').length >= 6);
+    }
     return true;
   }
 
@@ -616,6 +665,8 @@
     lineas.push('· ' + (EN ? 'People' : 'Personas') + ': ' + (g ? tx(g) : '—'));
     if (e) lineas.push('· ' + (EN ? 'Pieces' : 'Piezas') + ': ' + e.elegidas.map(function (p) { return EN ? p.en.nombre : p.es.nombre; }).join(', '));
     lineas.push('· ' + (EN ? 'Tailoring' : 'Adaptación') + ': ' + (n ? tx(n) : '—'));
+    if (S.empresa) lineas.push('· ' + (EN ? 'Company' : 'Empresa') + ': ' + S.empresa);
+    if (S.contacto) lineas.push('· ' + (EN ? 'Contact' : 'Contacto') + ': ' + S.contacto);
     if (e) lineas.push('· ' + L.estimacion + ': ' + L.entre + ' ' + euros(e.bajo) + ' – ' + euros(e.alto) + ' ' + L.setup + (e.mes ? ' · ' + (EN ? 'from €' : 'desde ') + e.mes + (EN ? '' : ' €') + ' ' + L.mes : ''));
     if (txtArea) {
       txtArea.value = lineas.join('\n');
@@ -629,6 +680,19 @@
     }
     var oc = form && form.querySelector('input[name="configuracion"]');
     if (oc) oc.value = JSON.stringify(S);
+
+    /* Y se copian al formulario de verdad: lo ha escrito una vez, no se le
+       vuelve a preguntar. Si el contacto es un correo va al campo de
+       correo; si son cifras, al del teléfono. */
+    var pon = function (id, v) {
+      var c = D.getElementById(id);
+      if (!c || !v || c.value) return;
+      c.value = v;
+      try { c.dispatchEvent(new Event('input', { bubbles: true })); } catch (err) {}
+    };
+    pon('empresa', S.empresa);
+    if (/@/.test(S.contacto)) pon('email', S.contacto);
+    else if (S.contacto) pon('telefono', S.contacto);
 
     var aviso = D.getElementById('cfg-listo');
     if (!aviso && form) {

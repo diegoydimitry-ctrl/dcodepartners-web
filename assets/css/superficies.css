@@ -293,6 +293,12 @@ html[data-theme="dark"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal
             .v6-river-note, .v6-step-in, .v6-pacto, .v6-panel-pie, .v6-prueba li)), &:is(body.v6 :is(.v6-lede, .v6-kicker, .v6-status, .v6-say, .v6-sys, .v6-cap,
             .v6-river-note, .v6-step-in, .v6-pacto, .v6-panel-pie, .v6-prueba li)){ text-shadow:none; }
   & :is(.v6-marca), &:is(.v6-marca){ color:var(--ink, #090f1a); }
+  & :is(.v6-pieza), &:is(.v6-pieza){ filter:drop-shadow(0 26px 34px rgba(20,30,64,0.18)); }
+  & :is(.v6-pieza--dinero), &:is(.v6-pieza--dinero){ background:linear-gradient(162deg, rgba(252,253,255,0.93), rgba(244,247,252,0.95)); border:1px solid rgba(46,59,98,0.24); box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 30px 60px -30px rgba(20,30,64,0.285); }
+  & :is(html[data-theme="light"] .v6-pieza--dinero), &:is(html[data-theme="light"] .v6-pieza--dinero){ border-color:rgba(205,210,218,0.14); }
+  & :is(.v6-pieza-et), &:is(.v6-pieza-et){ color:var(--v-a, #0b6676); }
+  & :is(.v6-pieza-n), &:is(.v6-pieza-n){ color:var(--ink, #090f1a); }
+  & :is(.v6-pieza-d), &:is(.v6-pieza-d){ color:#0d6b4a; }
   /* dcp7.css */
   & :is(.dcx)::before, &:is(.dcx)::before{ background:radial-gradient(120% 66% at 100% 50%,
     rgba(240,243,249,0.98), rgba(240,243,249,0.92) 34%, rgba(240,243,249,0.58) 58%,
@@ -833,6 +839,12 @@ html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .ga
     0 0 12px rgba(3,5,12,.9),
     0 0 30px rgba(3,5,12,.75); }
   & :is(.v6-marca), &:is(.v6-marca){ color:var(--ink, #edf1f8); }
+  & :is(.v6-pieza), &:is(.v6-pieza){ filter:drop-shadow(0 26px 34px rgba(3,7,22,.6)); }
+  & :is(.v6-pieza--dinero), &:is(.v6-pieza--dinero){ background:linear-gradient(162deg, rgba(26,34,60,.93), rgba(12,17,32,.95)); border:1px solid rgba(150,174,245,.2); box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 30px 60px -30px rgba(3,7,22,.95); }
+  & :is(html[data-theme="light"] .v6-pieza--dinero), &:is(html[data-theme="light"] .v6-pieza--dinero){ border-color:rgba(36,52,104,.14); }
+  & :is(.v6-pieza-et), &:is(.v6-pieza-et){ color:var(--v-a, #43e0ff); }
+  & :is(.v6-pieza-n), &:is(.v6-pieza-n){ color:var(--ink, #edf1f8); }
+  & :is(.v6-pieza-d), &:is(.v6-pieza-d){ color:#35e0a1; }
   /* dcp7.css */
   & :is(.dcx)::before, &:is(.dcx)::before{ background:radial-gradient(120% 66% at 100% 50%,
     rgba(6,8,13,.98), rgba(6,8,13,.92) 34%, rgba(6,8,13,.58) 58%,
