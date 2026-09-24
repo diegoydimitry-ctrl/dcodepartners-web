@@ -18,6 +18,7 @@ sitio como lo sirve Vercel y bloquean cualquier petición a terceros.
 | `npm run qa:ds` | Reglas del Design System en 72 páginas × 5 anchos | 3 min |
 | `npm run qa:solapes` | Texto pisado, cortado, botones pegados, secciones vacías, scroll horizontal y errores JS en 72 páginas × 8 anchos (320–1440), con meta-prueba | 8 min |
 | `npm run qa:demo` | Las 25 pantallas de la demo en ES y EN (1440, 1024, 390, 320): contenido, idioma, solapes, errores. `-- --recorrido` añade una vuelta entera del recorrido automático | 3 min (+3 min) |
+| `npm run qa:carga` | Qué ficheros se piden en cada aparato y cuándo: el campo de partículas solo con ratón, lo de más abajo en un hueco y siempre, y la página entera en los tres | 1 min |
 | `npm run qa:dispositivos` | 13 páginas × 5 aparatos × 2 temas: desborde, texto visible, campos de formulario apagados, imágenes rotas, el cielo quieto donde toca y errores JS | 4 min |
 | `npm run qa:formulario` | Los cuatro pasos del formulario de contacto rellenados de verdad en 6 aparatos × 2 temas × ES/EN. No envía nada | 2 min |
 

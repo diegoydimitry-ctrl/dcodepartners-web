@@ -68,6 +68,8 @@ const dcp9JsHash = hashFile('assets/js/dcp9.js');
 // «Prueba los sistemas»: el motor y cada demo se cargan bajo demanda desde
 // atributos data-css / data-js, que también llevan su ?v= y se reescriben aquí.
 const FINANCE_ASSETS = [
+  // main-b.js: lo de main.js que no hace falta al entrar (ver su cabecera).
+  'assets/js/main-b.js',
   'assets/css/finance-demo.css',
   'assets/js/finance-demo.js',
   'assets/js/finance-demo.en.js',

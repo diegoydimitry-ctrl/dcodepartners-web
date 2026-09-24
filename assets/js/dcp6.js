@@ -61,11 +61,13 @@
      particulas o congelar el bucle no arreglaba un iPad de verdad.
      En tactil el campo no se monta y el cielo lo pone la galaxia: mosaicos ya
      pintados y degradados, que se componen una vez. En raton no cambia nada.
+
+     La clase html.cielo-quieto —la que esconde este lienzo y saca la
+     galaxia— la pone el script del <head>, ANTES de pintar. Este fichero ya
+     ni siquiera se descarga en tactil (ver «CARGA A SU DEBIDO TIEMPO» en
+     main.js), asi que si dependiera de el, no llegaria nunca.
   */
-  if (window.DCP && window.DCP.campoVivo && !window.DCP.campoVivo()) {
-    document.documentElement.classList.add('cielo-quieto');
-    return;
-  }
+  if (window.DCP && window.DCP.campoVivo && !window.DCP.campoVivo()) return;
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* MEDIDO (iPad simulado, CPU x4, recorriendo la portada): este lienzo se

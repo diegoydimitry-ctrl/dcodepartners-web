@@ -19,7 +19,14 @@ const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const paginas = execSync('git ls-files "*.html"', { cwd: RAIZ }).toString().split('\n').filter(Boolean)
   .filter((f) => fs.readFileSync(path.join(RAIZ, f), 'utf8').includes('id="site-header"'));
 
-export const HEAD = `<script>(function(){var t;try{t=localStorage.getItem('dcp-tema')}catch(e){}document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')})();</script>`;
+/* Dos decisiones que tienen que estar tomadas ANTES de pintar:
+   · el tema, para que no haya destello;
+   · si el puntero es grueso, porque entonces el campo de partículas no se
+     monta y su hueco lo ocupa la galaxia (html.cielo-quieto). Antes lo ponía
+     dcp6.js/dcp8.js, pero esos ficheros ya no se descargan en táctil, así que
+     la clase no llegaba nunca y quedaba un rectángulo opaco tapando el cielo.
+     Aquí llega siempre y llega a tiempo. */
+export const HEAD = `<script>(function(){var r=document.documentElement,t;try{t=localStorage.getItem('dcp-tema')}catch(e){}r.setAttribute('data-theme',t==='light'?'light':'dark');try{if(matchMedia('(pointer:coarse)').matches)r.classList.add('cielo-quieto')}catch(e){}})();</script>`;
 export const CSS = '<link rel="stylesheet" href="/assets/css/galaxia.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema-claro.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema.css?v=0">\n<link rel="stylesheet" href="/assets/css/superficies.css?v=0">';
 /* La línea de montaje del cambio de sección. Tiene que estar en el HTML, no
    crearla al vuelo: «pagereveal» avisa antes de que corran los scripts con
@@ -41,6 +48,9 @@ for (const f of paginas) {
   const antes = h;
   const en = f.startsWith('en/');
   if (!h.includes("getItem('dcp-tema')")) h = h.replace(/(<meta name="viewport"[^>]*>)/, `$1\n${HEAD}`);
+  else if (!h.includes('cielo-quieto')) {
+    h = h.replace(/<script>\(function\(\)\{var [^<]*getItem\('dcp-tema'\)[^<]*<\/script>/, HEAD.replace(/^`|`$/g, ''));
+  }
   if (!h.includes('/assets/css/tema.css')) {
     const cierre = h.indexOf('</head>');
     const cab = h.slice(0, cierre);

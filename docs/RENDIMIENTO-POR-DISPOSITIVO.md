@@ -221,6 +221,117 @@ Medido después: iPad p95 21 ms, peor fotograma 391; móvil p95 23 ms, peor
 fotograma 348. PC igual que antes (ready 291→349 ms, gesto 1.412→1.451: ruido
 de pasada).
 
+## Los tirones al entrar: quién pide qué y cuándo
+
+Hasta aquí todo iba de lo que cuesta **mantener** la página en pantalla. Esto
+va de lo que cuesta **montarla**, que es otra cosa y se mide distinto: tareas
+largas (más de 50 ms con el hilo principal bloqueado) desde que se pide la
+página hasta que responde.
+
+Medido en el perfil `ipad` (1024×1366, dpr 2, CPU ×4, red de 12 Mb) y en el de
+móvil (390×844, dpr 3, CPU ×6, 8 Mb), mediana de seis cargas:
+
+| | tareas largas al entrar | la peor | durante el recorrido |
+|---|---:|---:|---:|
+| iPad, como estaba | 961 ms | 372 ms | 339 ms |
+| Móvil, como estaba | 998 ms | 445 ms | 92 ms |
+
+### Lo que se encontró
+
+El HTML pedía **siete ficheros con `defer`** —unos 330 KB de JavaScript— que el
+navegador compila y ejecuta uno detrás de otro en cuanto termina de leer el
+HTML. De esos 330 KB, en un aparato táctil:
+
+- **154 KB (`dcp6.js`) y 64 KB (`dcp8.js`) no hacen nada.** Son el campo de
+  partículas, que en táctil no se monta. Se descargaban, se compilaban y se
+  ejecutaban para salir en la primera línea.
+- **`dcp10.js`** (el sistema, el diagnóstico y la galería) y **`dcode-os.js`**
+  viven muy por debajo del primer pantallazo. No hay ninguna razón para
+  pagarlos antes de que el hilo esté libre.
+- **`main.js` pesaba 81 KB** y compilarlo costaba 200–270 ms en un teléfono.
+  Un tercio de él —el formulario de contacto, su envío, la movilidad por
+  departamento y el asistente— tampoco hace falta en el primer segundo.
+
+Y durante el recorrido, la demo de Finance (287 KB de motor más 129 de datos)
+se montaba al acercarse: una tarea de 274–312 ms **justo mientras el dedo
+bajaba**, que es cuando más se nota.
+
+### Lo que se hizo
+
+El HTML ya no pide esos ficheros con `defer`: los **marca**, y main.js decide.
+
+| marca | cuándo |
+|---|---|
+| `type="dcp/raton"` | solo si el puntero es fino. En táctil no se descarga ni un byte. El `<link rel=preload media="(pointer:fine)">` que va al lado hace que en un ratón la descarga empiece igual de pronto que antes. |
+| `type="dcp/cerca"` | en el primer hueco libre después de montar el HTML, uno por hueco; y de inmediato si su sección ya se ve. |
+
+Tres detalles que costaron una medida cada uno:
+
+1. **La puerta no se abre al primer roce del dedo.** Se probó: el momento en
+   que alguien empieza a bajar es el peor para ponerse a compilar. El
+   recorrido pasaba de 339 a 485 ms.
+2. **La puerta no espera a `load`.** En un teléfono `load` llega tarde —espera
+   a todas las imágenes— y para entonces el dedo ya baja. Se abre con el HTML
+   montado y el primer hueco.
+3. **Al abrir entra todo lo que quede, aunque su sección esté al final.** Si
+   cada uno esperase a acercarse, su compilación caería en mitad del
+   recorrido: medido, `dcode-os.js` se pedía bajando.
+
+Y la demo de Finance se monta en ese mismo hueco, no al acercarse: cuando se
+llega, ya está puesta. Si el aparato pide ahorrar datos (`saveData`), se
+respeta y se espera a que haga falta.
+
+### Antes y después
+
+| | tareas largas al entrar | la peor | durante el recorrido |
+|---|---:|---:|---:|
+| iPad | 961 → **860 ms** | 372 → **323 ms** | 339 → **62 ms** |
+| Móvil | 998 → **983 ms** | 445 → **345 ms** | 92 → 173 ms |
+| PC | 206 → **178 ms** | 123 → **119 ms** | 73 → **0 ms** |
+
+El recorrido del iPad baja un **82 %**. El del móvil parece subir, y conviene
+mirarlo de cerca antes de creérselo: bajando la portada entera quedan **dos o
+tres tareas de 50 a 73 ms**, todas al final de la página, todas de pintado
+—atribución «window», sin función de por medio— y **ninguna petición de
+JavaScript**. Antes las tareas eran del mismo tamaño; lo que cambia es cuántas
+cruzan el listón de los 50 ms, que es de dónde sale la diferencia entre 92 y
+173. Es jitter alrededor del umbral, no una regresión: lo que sí desapareció
+del recorrido es la compilación de ficheros, que era lo que se notaba.
+
+### Dónde está el suelo, y por qué no se ha bajado más
+
+Lo que queda al entrar **no es JavaScript**. Medido apagando cosas enteras en
+el perfil iPad:
+
+| | tareas largas al entrar |
+|---|---:|
+| la página entera | 753 ms |
+| **sin ninguna hoja de estilo** | **191 ms** |
+| sin nada de JavaScript | 464 ms |
+
+El CSS es dos tercios del coste. La portada trae **693 KB de CSS que bloquean
+el pintado**, y dos ficheros generados —`superficies.css` (128 KB) y
+`tema-claro.css` (51 KB)— se llevan solos unos 295 ms: son miles de reglas con
+listas de `:is(...)` que hay que emparejar contra un DOM grande.
+
+Se probaron los atajos y **ninguno vale**, medido:
+
+- Cargarlos sin bloquear (`media="print"` y `onload`): el primer pintado llega
+  antes (796 → 468 ms) pero el total bloqueado **sube** (705 → 990 ms), porque
+  el navegador pasa dos veces por el estilo. La queja es de tirones, no de
+  pantalla en blanco.
+- `content-visibility:auto` en las secciones de abajo: 703 → 658 ms, y cambia
+  la altura de la página de 16.444 a 13.375 px, que rompe el recorrido del
+  campo. No compensa.
+- Quitar la galaxia entera: no mejora nada (1.051 ms frente a 992).
+
+Bajar de ahí pide dos cosas que no son de una tarde: **CSS crítico** (separar
+lo que necesita el primer pantallazo del resto) y **minificar** el CSS y el JS
+al desplegar —los ficheros van con sus comentarios, que son entre el 13 % y el
+43 % del peso, y ahí vive la documentación del proyecto, así que tendría que
+hacerse en el despliegue, no en el repositorio—. Las dos están **PENDIENTES**
+y las dos tocan el pipeline de Vercel, que desde aquí no se puede probar.
+
 ## Lo que queda
 
 - `/sistema-financiero` recorriéndose en el perfil `ipad` se queda en ~34 ms de

@@ -563,6 +563,34 @@
       });
     }, { rootMargin: '100% 0px' });
     hosts.forEach(function (h) { obs.observe(h); });
+
+    /* LA DEMO, MONTADA ANTES DE QUE HAGA FALTA.
+       MEDIDO (perfil iPad, bajando la portada entera): montarla al acercarse
+       costaba una tarea de 274–312 ms —son 287 KB de motor más 129 de datos—
+       y caía justo mientras el dedo bajaba, que es cuando más se nota. El
+       hueco libre que queda después de cargar la página no lo está usando
+       nadie: ahí no se nota, y cuando se llega ya está puesta.
+       Si el aparato pide ahorrar datos, se respeta y se espera a que haga
+       falta de verdad. */
+    var ahorro = false;
+    try { ahorro = !!(navigator.connection && navigator.connection.saveData); } catch (e) {}
+    if (!ahorro) {
+      var enHueco = function () {
+        hosts.forEach(function (h) {
+          if (h.getAttribute('data-fdemo-listo') || h.getAttribute('data-fdemo-movil')) return;
+          obs.unobserve(h);
+          cargar(h);
+        });
+      };
+      var arranca = function () {
+        window.setTimeout(function () {
+          if (window.requestIdleCallback) window.requestIdleCallback(enHueco, { timeout: 5000 });
+          else window.setTimeout(enHueco, 1200);
+        }, 900);
+      };
+      if (document.readyState === 'complete') arranca();
+      else window.addEventListener('load', arranca);
+    }
   }
 
   /* ═══════════════════════ UNA SEMANA NORMAL ═══════════════════════════

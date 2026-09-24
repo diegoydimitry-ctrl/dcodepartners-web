@@ -110,9 +110,18 @@ if (est['index.html'] && est['en/index.html'] && JSON.stringify(est['index.html'
      en cada fotograma. Si alguien quita esta puerta, el iPad vuelve a ir a
      tirones y no se nota en ninguna prueba de las otras. */
   for (const j of ['assets/js/dcp6.js', 'assets/js/dcp8.js']) {
-    const c = leer(j);
-    if (!/DCP\.campoVivo\(\)/.test(c) || !/cielo-quieto/.test(c)) {
-      errores.push(`${j}: falta la puerta de táctil (DCP.campoVivo + html.cielo-quieto): el campo no puede montarse en un iPad`);
+    if (!/DCP\.campoVivo\(\)/.test(leer(j))) {
+      errores.push(`${j}: falta la puerta de táctil (DCP.campoVivo): el campo no puede montarse en un iPad`);
+    }
+  }
+  /* La clase del cielo quieto la pone el script del <head>, antes de pintar:
+     dcp6/dcp8 ya no se descargan en táctil, así que si dependiera de ellos no
+     llegaría nunca y quedaría un rectángulo opaco tapando la galaxia. */
+  for (const f of paginas) {
+    const h = leer(f);
+    if (!/matchMedia\('\(pointer:coarse\)'\)\.matches\)r\.classList\.add\('cielo-quieto'\)/.test(h)) {
+      errores.push(`${f}: el script del <head> no pone html.cielo-quieto en táctil`);
+      break;
     }
   }
   /* Las cuatro formaciones de los pasos: si falta el fichero o la referencia,
