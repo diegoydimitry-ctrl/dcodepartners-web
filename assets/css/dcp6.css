@@ -808,3 +808,72 @@ body.v6 .v6-status, body.v6 .v6-cap{
   margin:clamp(14px,1.6vw,18px) 0 0; font-size:.8125rem; line-height:1.55;
   color:var(--txt-3,#8ea0c4); max-width:74ch;
 }
+
+/* ═══════════ EL PANEL DE FINANCE EN LA PORTADA ═══════════
+   Donde había una D de partículas hay ahora una pantalla de verdad: el
+   panel del sistema financiero, girado en perspectiva y flotando. La D
+   decía «D-Code»; esto dice qué hacemos, que es la pregunta con la que
+   entra quien llega. La imagen es la misma captura de la demo, así que no
+   hay una segunda versión del producto que mantener.
+
+   Va detrás del texto en z, no al lado: el titular manda y el panel es el
+   fondo del que asoma. En cuanto la ventana se estrecha, se retira. */
+.v6-panel{
+  position:absolute; right:-5vw; top:56%; width:min(50vw, 760px);
+  transform:translateY(-38%); z-index:0; pointer-events:none;
+  perspective:1500px; perspective-origin:24% 50%;
+}
+.v6-panel-f{
+  margin:0; transform:rotateY(-19deg) rotateX(7deg) rotateZ(-2deg) scale(.98);
+  transform-origin:left center; will-change:transform;
+  animation:v6-flota 13s ease-in-out infinite alternate;
+}
+/* Una por tema: la captura clara sobre fondo claro y la oscura sobre
+   oscuro, igual que en la galería de sistemas. */
+.v6-panel .es-claro{ display:none; }
+html[data-theme="light"] .v6-panel .es-oscuro{ display:none; }
+html[data-theme="light"] .v6-panel .es-claro{ display:block; }
+.v6-panel img{
+  display:block; width:100%; height:auto; border-radius:14px;
+  border:1px solid rgba(150,174,245,.22);
+  box-shadow:0 60px 120px -50px rgba(4,10,30,.95),
+             0 0 0 1px rgba(150,174,245,.08),
+             0 24px 60px -40px rgba(91,140,255,.5);
+}
+/* Un velo del color del fondo por el borde izquierdo: el panel no termina,
+   se funde con la página, y el titular queda leyéndose encima sin caja. */
+.v6-panel::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  /* El velo se hace con el fondo de la página, no con un gris escrito a
+     mano: en tema claro un rgba oscuro dejaba una mancha encima del panel. */
+  background:linear-gradient(100deg,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--bg) 94%, transparent) 14%,
+    color-mix(in srgb, var(--bg) 42%, transparent) 38%,
+    transparent 64%);
+}
+.v6-panel figcaption{
+  position:absolute; left:12%; bottom:-40px; display:flex; flex-direction:column; gap:3px;
+  font-size:.74rem; line-height:1.4; color:var(--stone-soft, #8c95aa);
+}
+.v6-panel-k{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--cyan, #43e0ff);
+}
+@keyframes v6-flota{
+  from{ transform:rotateY(-19deg) rotateX(7deg) rotateZ(-2deg) scale(.98) translateY(0); }
+  to  { transform:rotateY(-16deg) rotateX(5deg) rotateZ(-1deg) scale(.995) translateY(-14px); }
+}
+
+/* El texto va por delante del panel, siempre. */
+.v6-hero > .container{ position:relative; z-index:2; }
+
+/* Estrecho: el panel se va. Compite con el titular y no hay sitio para los
+   dos; quien entra por un teléfono ya ve el sistema cuatro pantallas más
+   abajo, funcionando de verdad. */
+@media (max-width:1100px){
+  .v6-panel{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){
+  .v6-panel-f{ animation:none; }
+}

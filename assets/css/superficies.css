@@ -280,6 +280,11 @@ html[data-theme="dark"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal
   & :is(.v6-of-precio b), &:is(.v6-of-precio b){ color:#090f1a; }
   & :is(.v6-of-precio i), &:is(.v6-of-precio i){ color:var(--txt-3,#4b5b7b); }
   & :is(.v6-of-aviso), &:is(.v6-of-aviso){ color:var(--txt-3,#4b5b7b); }
+  & :is(.v6-panel img), &:is(.v6-panel img){ border:1px solid rgba(46,59,98,0.262); box-shadow:0 60px 120px -50px rgba(20,30,64,0.285),
+             0 0 0 1px rgba(150,174,245,0.044),
+             0 24px 60px -40px rgba(91,140,255,0.275); }
+  & :is(.v6-panel figcaption), &:is(.v6-panel figcaption){ color:var(--stone-soft, #48505e); }
+  & :is(.v6-panel-k), &:is(.v6-panel-k){ color:var(--cyan, #0b6676); }
   /* dcp7.css */
   & :is(.dcx)::before, &:is(.dcx)::before{ background:radial-gradient(120% 66% at 100% 50%,
     rgba(240,243,249,0.98), rgba(240,243,249,0.92) 34%, rgba(240,243,249,0.58) 58%,
@@ -803,6 +808,11 @@ html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .ga
   & :is(.v6-of-precio b), &:is(.v6-of-precio b){ color:#e8eeff; }
   & :is(.v6-of-precio i), &:is(.v6-of-precio i){ color:var(--txt-3,#8ea0c4); }
   & :is(.v6-of-aviso), &:is(.v6-of-aviso){ color:var(--txt-3,#8ea0c4); }
+  & :is(.v6-panel img), &:is(.v6-panel img){ border:1px solid rgba(150,174,245,.22); box-shadow:0 60px 120px -50px rgba(4,10,30,.95),
+             0 0 0 1px rgba(150,174,245,.08),
+             0 24px 60px -40px rgba(91,140,255,.5); }
+  & :is(.v6-panel figcaption), &:is(.v6-panel figcaption){ color:var(--stone-soft, #8c95aa); }
+  & :is(.v6-panel-k), &:is(.v6-panel-k){ color:var(--cyan, #43e0ff); }
   /* dcp7.css */
   & :is(.dcx)::before, &:is(.dcx)::before{ background:radial-gradient(120% 66% at 100% 50%,
     rgba(6,8,13,.98), rgba(6,8,13,.92) 34%, rgba(6,8,13,.58) 58%,

@@ -35,7 +35,7 @@ const br = await chromium.launch(opcionesNavegador());
 const fallos = [];
 
 for (const [nombre, op, conRaton] of APARATOS) {
-  for (const ruta of ['/', '/servicios']) {
+  for (const ruta of ['/', '/que-hacemos']) {
     const donde = `${nombre} · ${ruta}`;
     const ctx = await br.newContext(op);
     await ctx.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());

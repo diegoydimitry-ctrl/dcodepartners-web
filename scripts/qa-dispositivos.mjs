@@ -27,7 +27,7 @@ const APARATOS=[
   ['movil',{viewport:{width:393,height:852},deviceScaleFactor:3,isMobile:true,hasTouch:true}],
   ['movil320',{viewport:{width:320,height:680},deviceScaleFactor:2,isMobile:true,hasTouch:true}],
 ];
-const RUTAS=['/','/metodo','/servicios','/departamentos','/sistema-financiero','/contacto','/faq','/conocenos','/blog','/garantias','/en/','/en/servicios','/en/contacto'];
+const RUTAS=['/','/metodo','/que-hacemos','/precios','/sistema-financiero','/contacto','/faq','/conocenos','/blog','/garantias','/en/','/en/que-hacemos','/en/contacto'];
 const br=await chromium.launch(opcionesNavegador());
 const malos=[];
 let n=0;
@@ -44,6 +44,17 @@ for(const [nom,op] of APARATOS){
       const resp=await p.goto('http://127.0.0.1:'+PORT+ruta,{waitUntil:'networkidle'}).catch(()=>null);
       if(!resp||!resp.ok()){ malos.push(`${nom}/${tema}${ruta}: no carga`); await p.close(); continue; }
       await p.waitForTimeout(900);
+
+      /* En /contacto el formulario ya no se ve al entrar: lo abre el
+         configurador, o el enlace de «prefiero escribiros». Se abre aquí
+         igual que lo abre quien entra, porque lo que esta prueba vigila es
+         que los campos SE VEAN cuando toca —fue una prueba de este archivo
+         la que cazó aquel «.field{display:none}» que apagó el formulario
+         entero— y no que estén puestos antes de tiempo. */
+      await p.evaluate(()=>{ const a=document.querySelector('.cfg-saltar a'); if(a) a.click();
+        const d=document.querySelector('.form-extra'); if(d) d.open=true; });
+      await p.waitForTimeout(340);
+
       await p.evaluate(async()=>{const h=document.documentElement.scrollHeight;
         for(let y=0;y<h;y+=700){scrollTo(0,y);await new Promise(r=>setTimeout(r,45));} scrollTo(0,0);});
       await p.waitForTimeout(500);

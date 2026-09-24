@@ -359,10 +359,10 @@
   var S_MARCA = 0, S_QUE = 1, S_DIAG = 2, S_SISTEMAS = 3, S_LUPA = 4, S_MENTE = 5,
       S_SISTEMA = 6, S_CURVA = 7, S_CONFIANZA = 8, S_CIERRE = 9;
   var MARCO = [
-    /* El hero: el marco ES la caja de la identidad —banda derecha, 34% de
-       ancho y 56% de alto— para que la marca entera y su anillo queden
-       DENTRO de la ventana y a la derecha del titular. */
-    { x: 0.848, y: 0.50,  w: 0.34, h: 0.56, d: 1.06 },  // 0 MARCA      el hero
+    /* El hero deriva por toda la ventana: ya no hay una figura que encuadrar
+       —el panel de Finance ocupa la banda derecha— y la materia solo tiene
+       que estar, no dibujar. */
+    { x: 0.500, y: 0.50,  w: 1.00, h: 1.00, d: 0.92 },  // 0 DERIVA     el hero
     /* Los dos capítulos anteriores al proceso no dibujan: derivan. Su
        encuadre es la ventana entera porque la deriva no es una figura
        dentro de un marco, es materia por toda la pantalla. */
@@ -447,7 +447,10 @@
   /* Los dos capítulos que derivan van MUY bajos: en el del problema manda el
      texto subrayado y en el de Finance manda la aplicación. Un campo
      brillante detrás de una pantalla blanca es ruido puro. */
-  var INT = [1.00, 0.52, 0.40, 0.36, 0.88, 1.16, 1.10, 1.00, 0.78, 1.34];
+  /* El hero baja al nivel de los capítulos con interfaz encima: detrás del
+     panel de Finance, un campo brillante es ruido, igual que lo era detrás
+     de la pantalla blanca de Finance. */
+  var INT = [0.46, 0.52, 0.40, 0.36, 0.88, 1.16, 1.10, 1.00, 0.78, 1.34];
 
   /* ---------------------------------------------------------- EL GRAFO */
   /* EL LENGUAJE. Todo lo que se ve está hecho de tres cosas, y solo tres:
@@ -1866,7 +1869,13 @@
     o.c = dentro ? C_LUZ : C_FLUJO; o.g = -1;
   }
 
-  var FORM = [F0, F_DERIVA, F_DERIVA, F_DERIVA, F_LUPA, F_PLANO, F_MOTOR, F_GRAFICA, F5, F8];
+  /* El hero ya NO dibuja la marca. En su sitio hay una pantalla de verdad
+     —el panel de Finance, girado— y dos figuras compitiendo por el mismo
+     lado de la portada es una de más: la D de partículas le robaba la
+     atención al producto. El capítulo deriva, como los otros tres que tienen
+     una interfaz encima, y F0 se queda escrita por si algún día vuelve.
+     De propina, derivar cuesta menos que rellenar una silueta. */
+  var FORM = [F_DERIVA, F_DERIVA, F_DERIVA, F_DERIVA, F_LUPA, F_PLANO, F_MOTOR, F_GRAFICA, F5, F8];
 
   /* --------------------------------------------------- ESTADOS Y SCROLL */
   var STOPS = [], MIR = [];

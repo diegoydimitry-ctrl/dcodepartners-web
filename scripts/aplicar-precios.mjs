@@ -29,9 +29,11 @@ for (const f of paginas) {
   const li = `<li><a href="${href}"${esta ? ' aria-current="page"' : ''}>${texto}</a></li>`;
 
   if (!h.includes(`href="${href}"`)) {
-    /* En la barra, detrás de Servicios: es donde lo busca quien ya sabe qué
-       hacemos y quiere saber cuánto cuesta. */
-    const re = new RegExp(`(<li><a href="${en ? '/en/servicios' : '/servicios'}"[^>]*>[^<]*</a></li>)`);
+    /* En la barra, detrás de «Qué hacemos»: es donde lo busca quien ya sabe
+       qué hacemos y quiere saber cuánto cuesta. Esa entrada es el desplegable
+       de áreas, así que el ancla es el cierre de su <li>, no un enlace suelto
+       —lo era hasta que Servicios y Qué construimos se juntaron—. */
+    const re = new RegExp(`(<a href="${en ? '/en' : ''}/que-hacemos" class="nav-link-btn mega-trigger"[\\s\\S]*?</div> </li>)`);
     if (re.test(h)) h = h.replace(re, `$1 ${li}`);
   } else if (esta && !h.includes(`href="${href}" aria-current`)) {
     h = h.replace(new RegExp(`<li><a href="${href}">`), `<li><a href="${href}" aria-current="page">`);
