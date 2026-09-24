@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-24T08:39:42.644Z",
-  "pageCount": 66,
-  "chunkCount": 672,
+  "generatedAt": "2026-09-24T09:42:01.989Z",
+  "pageCount": 64,
+  "chunkCount": 676,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -582,32 +582,6 @@
           "id": "/cookies#c5",
           "heading": "5. Más información",
           "text": "Para cualquier duda sobre esta Política de Cookies, o sobre el tratamiento de datos personales asociado, puedes escribirnos a dcodedepartment@gmail.com. Para información sobre el tratamiento de datos personales, consulta nuestra Política de Privacidad. ← Volver a la web"
-        }
-      ]
-    },
-    {
-      "url": "/departamentos",
-      "title": "Qué construimos: el sistema de tu empresa — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/departamentos#c0",
-          "heading": "No es un catálogo. Es el sistema de tu empresa.",
-          "text": "No vendemos herramientas sueltas ni instalamos un programa para después desaparecer. Construimos el sistema con el que trabaja tu empresa: conecta las áreas, automatiza lo que se repite, pone IA donde aporta y se mide."
-        },
-        {
-          "id": "/departamentos#c1",
-          "heading": "De seis áreas que no se hablan a una empresa que funciona como una sola.",
-          "text": "Tu empresa El sistema Medido Comercial Excel Correo Seguimientos que se olvidan 9 al mes Marketing Web Anuncios Contactos sin clasificar 3 sitios Clientes WhatsApp Teléfono Las mismas preguntas 6 h/sem Operaciones Hojas Papel Datos copiados a mano 4 veces Finanzas Facturas Banco Cobros que se escapan 38 días Administración Carpetas Correo ¿Cuál es la última versión? 3 copias IA Lee, clasifica y propone. Lee el correo Clasifica Propone Decides tú Un solo dato El sistema de tu empresa Clientes Pedidos Trabajos Facturas Documentos Automatizaciones Presupuesto aceptado → trabajo Trabajo hecho → factura Factura vencida → aviso Panel de dirección Horas a mano↓ Tiempo de respuesta↓ Tareas sin dueño↓ Días hasta cobrar↓ Ajuste del mes: aviso de stock Esquema ilustrativo · sin datos de clientes 01 / 09 Tu empresa Seis áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 01Tu empresaSeis áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 02ProblemasEl trabajo se pierde entre un área y otra: datos copiados a mano, seguimientos olvidados, tres versiones del mismo cliente. 03AnálisisSeguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona hace de puente. 04DiseñoAntes de construir decidimos qué va con qué: qué hace el sistema solo y qué sigue decidiendo una persona. 05ConexiónUn solo dato para todas las áreas. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas. 06AutomatizaciónLo que termina un área dispara la siguiente: presupuesto aceptado, trabajo planificado, factura emitida. Sin teclear dos veces. 07IALa IA lee correos y documentos, clasifica lo que entra y propone la respuesta. Lo que importa lo decide una persona. 08MediciónTodo deja rastro: horas a mano, tiempos de respuesta, tareas sin dueño. Son cifras, no impresiones. 09Mejora continuaCada mes miramos los números y ajustamos. Cuando tu empresa cambia, el sistema cambia con ella. Lo que no hacemos Vender herramientas sueltas que luego nadie conecta. Instalar un programa y desaparecer. Entregar un informe y dejarte solo con él. Lo que hacemos Construimos el sistema a la medida de cómo trabajáis. Conectamos las áreas, automatizamos y ponemos IA donde aporta. Lo medimos y lo mejoramos contigo, mes a mes."
-        },
-        {
-          "id": "/departamentos#c2",
-          "heading": "El mismo sistema, visto desde donde trabajas.",
-          "text": "Cada área es una puerta de entrada, no un producto aparte. Se empieza por la que más pesa y lo que se construye ahí se conecta con lo demás. ComercialQue ninguna venta se pierda por falta de seguimientoVer el área MarketingContactos que llegan ya clasificados, no en brutoVer el área ClientesClientes atendidos aunque falte quien siempre los atiendeVer el área OperacionesTrabajos que arrancan solos y avisan antes de retrasarseVer el área FinanzasFacturar y cobrar sin perseguir a nadieVer el área SoporteRespuesta rápida, también fuera de horarioVer el área AdministraciónLos papeles en su sitio, sin tener que buscarlosVer el área DirecciónUna decisión clara cada mañana, con datos realesVer el área"
-        },
-        {
-          "id": "/departamentos#c3",
-          "heading": "¿Por dónde empezamos?",
-          "text": "Haz el diagnóstico en treinta segundos o cuéntanos qué te pesa más. En una llamada de 30 minutos te decimos qué construiríamos primero. Hacer el diagnóstico Hablemos de tu operación"
         }
       ]
     },
@@ -1562,32 +1536,6 @@
       ]
     },
     {
-      "url": "/en/departamentos",
-      "title": "What we build: your company’s system — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/en/departamentos#c0",
-          "heading": "Not a catalogue. Your company’s system.",
-          "text": "We don’t sell standalone tools, and we don’t install some software and disappear. We build the system your company runs on: it connects every area, automates what repeats, adds AI where it helps and gets measured."
-        },
-        {
-          "id": "/en/departamentos#c1",
-          "heading": "From six areas that don’t talk to a company that works as one.",
-          "text": "Your company The system Measured Sales Excel Email Follow-ups that slip 9 a month Marketing Web Ads Unsorted contacts 3 places Customer WhatsApp Phone The same questions 6 h/week Operations Sheets Paper Data retyped by hand 4 times Finance Invoices Bank Payments that slip 38 days Administration Folders Email Which one is the latest? 3 copies AI Reads, sorts and suggests. Reads the email Sorts Suggests You decide One source of truth Your company’s system Customers Orders Jobs Invoices Documents Automations Quote accepted → job Job done → invoice Invoice overdue → reminder Management dashboard Hours by hand↓ Response time↓ Tasks with no owner↓ Days to get paid↓ This month’s tweak: stock alert Illustrative diagram · no client data 01 / 09 Your company Six areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 01Your companySix areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 02ProblemsWork gets lost between one area and the next: data retyped by hand, forgotten follow-ups, three versions of the same customer. 03AnalysisWe follow a customer, an order and an invoice from start to finish, and measure how often a person has to bridge the gap. 04DesignBefore building anything we decide what goes with what: what the system does on its own and what a person still decides. 05ConnectionOne source of truth for every area. The customer who comes in through sales is the same one support helps and finance invoices. 06AutomationWhat one area finishes triggers the next: quote accepted, job scheduled, invoice issued. Nothing typed twice. 07AIAI reads emails and documents, sorts what comes in and drafts the reply. What matters is decided by a person. 08MeasurementEverything leaves a trail: hours by hand, response times, tasks with no owner. Figures, not impressions. 09Continuous improvementEvery month we look at the numbers and adjust. When your company changes, the system changes with it. What we don’t do Sell standalone tools that nobody ever connects. Install some software and disappear. Hand over a report and leave you alone with it. What we do We build the system around how you actually work. We connect the areas, automate, and add AI where it helps. We measure it and improve it with you, month after month."
-        },
-        {
-          "id": "/en/departamentos#c2",
-          "heading": "The same system, seen from where you work.",
-          "text": "Each area is a way in, not a separate product. You start with the one that weighs most, and whatever gets built there connects to the rest. SalesNo deal lost because nobody followed upSee the area MarketingContacts that arrive sorted, not rawSee the area CustomerCustomers looked after even when their usual contact is awaySee the area OperationsJobs that start themselves and flag a delay before it happensSee the area FinanceInvoice and get paid without chasing anyoneSee the area SupportFast replies, even out of hoursSee the area AdministrationPaperwork in its place, without having to look for itSee the area LeadershipOne clear decision every morning, on real numbersSee the area"
-        },
-        {
-          "id": "/en/departamentos#c3",
-          "heading": "Where do we start?",
-          "text": "Take the 30-second diagnostic or tell us what weighs most. In a 30-minute call we’ll tell you what we would build first. Take the diagnostic Talk about your operation"
-        }
-      ]
-    },
-    {
       "url": "/en/departamentos/administracion",
       "title": "Administration — D-Code Partners",
       "chunks": [
@@ -2341,7 +2289,7 @@
         {
           "id": "/en/precios#c0",
           "heading": "This is what we do. And this is what it costs.",
-          "text": "No hidden rates and no \"ask us\" on everything. What has a price shows it; what depends on your company says so. Prices exclude VAT. Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts. 1You choose 2You request it 3We configure it with you 4We roll it out 1You choose 2You pay 3It activates 4It configures 5Up and running There is no online checkout yet. You ask for it, we configure it with you and we roll it out. Direct purchase is coming; when it does, it will say so here. Where this sits in the market 7 published rates Holded€15 – €199per month, per company · users included per planAssisted implementation from €99/monthSee the published rate Quipu€8.50 – €29.50per month, per company · 1 to 3 usersSetup: not publishedSee the published rate Sage 50€45 – €152per month, per company · annual contract onlyNot sold online: “contact us”See the published rate Sage 200From €50 – €235per month · depends on users and modulesThe final price is agreed with SageSee the published rate Odoo$24.90 – $49per user per month, billed annuallyRollout is separate, not included in the priceSee the published rate Dynamics 365 Business Central€69.30 – €95.30per user per month, paid yearlyRollout through a partner: not publishedSee the published rate D-Code Finance€29 – €79per month, per company · up to 3 or up to 10 peopleSetup €390 – €690, one paymentOurs List prices published by each vendor and checked on 24 September 2026, excluding VAT. Odoo publishes its own in dollars. What is not public is stated as such. No third-party licences: the system is ours, so you pay to have it set up and maintained, not to resell someone else's software."
+          "text": "No hidden rates and no \"ask us\" on everything. What has a price shows it; what depends on your company says so. Prices exclude VAT. Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts. 1You choose 2You request it 3We configure it with you 4We roll it out 1You choose 2You pay 3It activates 4It configures 5Up and running There is no online checkout yet. You ask for it, we configure it with you and we roll it out. Direct purchase is coming; when it does, it will say so here."
         },
         {
           "id": "/en/precios#c1",
@@ -2445,36 +2393,56 @@
         },
         {
           "id": "/en/precios#c21",
+          "heading": "Websites",
+          "text": "Your site built, rebuilt or connected to what you already use. Available today"
+        },
+        {
+          "id": "/en/precios#c22",
+          "heading": "A new website",
+          "text": "Anyone with no site, or with one they would rather not show Design, copy, speed and looking right on a phone. Yours, not a template with your logo on it. From €1,200 one-off, depending on how many pages What it includes Its own design, not a bought template Copy written with you, not filler Genuinely fast and right on a phone Analytics and a cookie notice that follows the law Access and the domain, in your name Not included: Content you would write yourself and never send us. Photography and video production. Request activation Available today"
+        },
+        {
+          "id": "/en/precios#c23",
+          "heading": "Fix the one you have",
+          "text": "Anyone with a site who does not want to start over What gets in the way is rebuilt and what is broken is fixed, without throwing away what works. From €690 one-off, depending on what is there What it includes A review of speed, mobile and accessibility A redesign of the pages that work worst Copy revised where it needs it Whatever already worked stays Request activation Available today"
+        },
+        {
+          "id": "/en/precios#c24",
+          "heading": "Connect your site",
+          "text": "Anyone whose site receives something a person then copies by hand The form lands in your CRM, the booking in the diary and stock comes from the warehouse. With a chatbot if you want one. From €890 one-off, depending on what it connects to What it includes The form lands where it should, already sorted Appointments, bookings or orders against your real system A chatbot answering from your data, if you want one Error handling: if something fails, you know Not included: The site itself, if it has to be built. Request activation"
+        },
+        {
+          "id": "/en/precios#c25",
           "heading": "Integrations",
           "text": "Your tools talking to each other, with minimum permissions. Available today"
         },
         {
-          "id": "/en/precios#c22",
+          "id": "/en/precios#c26",
           "heading": "Connect two tools",
           "text": "When the same data is typed twice Your two tools talking in whichever direction is needed, with minimum permissions. From €490 one-off What it includes Data is entered once and shows up where it should Minimum necessary permissions Error handling and retries Documentation Request activation Available today"
         },
         {
-          "id": "/en/precios#c23",
+          "id": "/en/precios#c27",
           "heading": "Connect your ERP or in-house system",
           "text": "Companies with a system that must not be touched Your ERP, your CRM or your long-standing system connected to the rest, without touching its insides. From €1,200 one-off, depending on the system What it includes Read and write through whatever your system supports Without modifying the existing system Error handling, retries and traceability Documentation and handover Request activation"
         },
         {
-          "id": "/en/precios#c24",
+          "id": "/en/precios#c28",
           "heading": "Custom systems",
           "text": "The system your company needs and cannot buy off the shelf. Available today"
         },
         {
-          "id": "/en/precios#c25",
+          "id": "/en/precios#c29",
           "heading": "Diagnosis",
           "text": "Any company that doesn't know where to start We follow the real path of a customer, an order and an invoice, and note every point where someone is acting as a bridge. Free and the list is yours, whether we build it or not What it includes Half an hour of call and a couple of hours from whoever does that work The written list of where time and money leak out What we would build, with what scope and where we would start Request activation Scoped and quoted"
         },
         {
-          "id": "/en/precios#c26",
+          "id": "/en/precios#c30",
           "heading": "Custom system",
           "text": "When what you need cannot be bought ready-made We build the system your company needs: analysis, design, development, automations, integrations and AI where it adds judgement. From €1,500 depending on scope + From €190 per month of maintenance, optional What it includes Analysis of the real path and where time leaks out Scope, deadline and price in writing before anything starts Development in parts, inside the tools you already use The system running, with documentation and access in your name Talk about this"
         },
         {
-          "id": "/en/precios#c27",
+          "id": "/en/precios#c31",
           "heading": "Five questions and we tell you what you would need and roughly what it would cost.",
           "text": "Open the configurator Questions before deciding? FAQ"
         }
@@ -2542,6 +2510,57 @@
       ]
     },
     {
+      "url": "/en/que-hacemos",
+      "title": "What we do · D-Code Partners",
+      "chunks": [
+        {
+          "id": "/en/que-hacemos#c0",
+          "heading": "We do not sell loose tools. We build the system.",
+          "text": "We look at where your time and money leak out, and build what stops it. Five pieces, combined as needed."
+        },
+        {
+          "id": "/en/que-hacemos#c1",
+          "heading": "Custom systems",
+          "text": "The system your company runs on, built to fit the way you actually work. What it includes We follow a customer, an order and an invoice end to end and measure where a person is acting as a bridge. Scope, deadline and price in writing before anything starts. Built in parts, inside the tools you already use. It ends up running, with documentation and access in your name. See the price"
+        },
+        {
+          "id": "/en/que-hacemos#c2",
+          "heading": "Automations",
+          "text": "What is done by hand every week runs on its own, and tells you if something fails. What it includes One task, a whole process, or an AI flow that reads and classifies. Error handling and an alert when something goes wrong. Maintenance is separate and optional: with nobody behind it, it breaks the day someone changes their API. See the price"
+        },
+        {
+          "id": "/en/que-hacemos#c3",
+          "heading": "AI agents",
+          "text": "They answer with your business data and escalate to a person when it matters. What it includes Web, WhatsApp or phone; one channel or several at once. They answer from your data, not from what they make up. Everything they say is logged and reviewable. Flat fee: you do not pay per conversation. See the price"
+        },
+        {
+          "id": "/en/que-hacemos#c4",
+          "heading": "Integrations",
+          "text": "Your CRM, ERP, site and spreadsheets talking to each other, with minimum permissions. What it includes Data is entered once and shows up where it should. Also with your long-standing system, without touching its insides. Error handling, retries and a trail of what happened. See the price"
+        },
+        {
+          "id": "/en/que-hacemos#c5",
+          "heading": "Websites",
+          "text": "We build your site, rebuild the one you have and connect it to your systems. What it includes A new site: design, copy, speed and looking right on a phone. The one you already have: rebuilt or repaired, without starting over if there is no need. Connected: the form lands in your CRM, stock comes from the warehouse, the booking enters the diary. With a chatbot if you want one, answering from your data. See the price"
+        },
+        {
+          "id": "/en/que-hacemos#c6",
+          "heading": "Four examples of what comes out.",
+          "text": "Our own mock-ups, made-up companies. A site is not a brochure: it connects to what you already use. Real estate Listings come straight from the CRM: what is published is what exists, and the form qualifies the viewing before you give it. Restaurant The booking lands straight in the floor diary and the guest gets the reminder without anyone typing a thing. Clinic The slots you see are the real ones: the site reads the diary and writes back into it. Online shop Stock comes from the warehouse, not a spreadsheet: sold out cannot be bought and new arrivals publish themselves."
+        },
+        {
+          "id": "/en/que-hacemos#c7",
+          "heading": "The same system, seen from where you work.",
+          "text": "Each area is a way in, not a separate product. You start with the one that weighs most. SalesNo deal lost because nobody followed upSee the area MarketingLeads that arrive sorted, not rawSee the area CustomerCustomers looked after even when their usual contact is awaySee the area OperationsJobs that start themselves and flag a delay before it happensSee the area FinanceInvoice and get paid without chasing anyoneSee the area SupportFast replies, even out of hoursSee the area AdministrationPaperwork in its place, without having to look for itSee the area LeadershipOne clear decision every morning, on real numbersSee the area The method, in nine steps 01Your companySeveral areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other. 02ProblemsWork gets lost between areas: data copied by hand, forgotten follow-ups, three versions of the same customer. 03AnalysisWe follow a customer, an order and an invoice end to end, and measure how often a person acts as a bridge. 04DesignBefore building we decide what goes with what: what the system does alone and what a person still decides. 05ConnectionOne piece of data for every area. The customer sales bring in is the one support looks after and finance invoices. 06AutomationWhat one area finishes triggers the next: quote accepted, job scheduled, invoice issued. Without typing anything twice. 07AIAI reads emails and documents, sorts what comes in and proposes the reply. What matters is decided by a person. 08MeasurementEverything leaves a trail: hours by hand, response times, tasks with no owner. Figures, not impressions. 09Continuous improvementEvery month we look at the numbers and adjust. When your company changes, the system changes with it."
+        },
+        {
+          "id": "/en/que-hacemos#c8",
+          "heading": "Let us start with how you operate.",
+          "text": "Thirty minutes, and you will know where we would start. Book a call See pricing"
+        }
+      ]
+    },
+    {
       "url": "/en/seguridad",
       "title": "Information Security Policy — D-Code Partners",
       "chunks": [
@@ -2594,47 +2613,6 @@
           "id": "/en/seguridad#c9",
           "heading": "9. Contact",
           "text": "Any question or communication relating to information security, including notification of a detected vulnerability, may be addressed to dcodedepartment@gmail.com. ← Back to the website"
-        }
-      ]
-    },
-    {
-      "url": "/en/servicios",
-      "title": "AI Automation Services — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/en/servicios#c0",
-          "heading": "Three disciplines. One system.",
-          "text": "They are not sold separately. They combine according to what your operation needs."
-        },
-        {
-          "id": "/en/servicios#c1",
-          "heading": "The problem",
-          "text": "Tools that don't talk to each other Tasks repeated every week Decisions waiting for someone to pull the data by hand"
-        },
-        {
-          "id": "/en/servicios#c2",
-          "heading": "What we do",
-          "text": "We automate repetitive work, put AI where judgement is needed and connect your tools so information moves on its own."
-        },
-        {
-          "id": "/en/servicios#c3",
-          "heading": "Three pieces assembled to measure.",
-          "text": "Process automation → What is done by hand every week starts running on its own, with control and traceability. From €1,500 depending on scope AI agents → They serve, qualify and answer with your business data; they escalate to a person when needed. From €750 depending on scope Integrations → Your CRM, ERP, website and spreadsheets, connected with the minimum permissions needed. From €750 depending on scope Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts."
-        },
-        {
-          "id": "/en/servicios#c4",
-          "heading": "Not a deck: four systems already running.",
-          "text": "Screenshots of the demos you can open right now. Fictional company, made-up data; the system is the real one. D-Code Finance Invoices, payments and expenses in one place, with the tax register. Our own product · integrations Sales A single inbox: the AI reads each contact and assigns it. Automation · AI agents Operations From the yes to the job done, with materials and deadlines watched. Automation · integrations Customer service Answers with your data and escalates to a person when it should. AI agents Try them now"
-        },
-        {
-          "id": "/en/servicios#c5",
-          "heading": "That you stop doing the work that can do itself.",
-          "text": "Fewer repeated tasks, less lost information and decisions made on data that is already there. Fewer repeated tasks What is done by hand every week stops being done by hand. Less information lost Data is written once and reaches wherever it needs to reach. Decisions with data Using the numbers that are already there, not the ones somebody would have to gather."
-        },
-        {
-          "id": "/en/servicios#c6",
-          "heading": "Let’s start with your operation.",
-          "text": "Thirty minutes, and you will know where we would start. Book a call How we work"
         }
       ]
     },
@@ -2843,7 +2821,7 @@
         {
           "id": "/en/sistema-financiero#c6",
           "heading": "The same system. What changes is how much of the work it does.",
-          "text": "We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. How this compares with the market, with each vendor’s published rates → 01 Finance The financial system on your data, with its standard configuration. You stop asking what state each invoice is in: the screen says so. You stop finding out about an unpaid invoice two months late. You stop putting the VAT books together by hand every quarter. See the price in Pricing up to 3 people See what is included The price, in Pricing → Day to day: invoices, collections, to invoice, expenses, payments, duplicates and documents. The business: quotes, orders, delivery notes, clients, suppliers and projects. Cash week by week and at 30, 60 and 90 days, base or prudent scenario. Radar: seven rules with their threshold written down, so nothing is found out late. Your invoice series, your taxes and your payment methods. VAT books in CSV, issued and received, for your accountant. Running in 1 day once the form is validated, with your previous data already inside. You do not start empty. Technical sheet Tax register Ready for VERI*FACTU A chained, unalterable invoicing record from the moment of issue: every invoice is linked to the previous one with its fingerprint, and a screen checks the chain is whole. Submission to the AEAT is the next step. Where it stands Permissions Seven roles &#8212; Owner, Administrator, Management, Finance, Operations, Read only and Superadmin &#8212; with permission per module and per action. Isolation Each company in its own space, enforced in the same layer that reads the database: a query cannot leave it, not even through a programming mistake. Trace Who did what, when and on which record. You look at it from the invoice or the expense itself. Access There is no public sign-up: we create the account and each person is invited. A suspended account stops getting in immediately. Database PostgreSQL. The data is yours and comes out as CSV whenever you want. Does not include fields or flows specific to your business, nor connections to other tools. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. 02 Finance with intelligence All of the above and, on top, something that reads your documents and answers with your numbers. You stop typing supplier invoices: you drop them in and they file themselves. You stop opening three screens to answer “how much are we owed?”. You stop losing the receipt somebody photographed and never sent. See the price in Pricing up to 10 people See what is included The price, in Pricing → You drop a document and it files it. A PDF with twenty supplier invoices inside comes out as twenty filed invoices, each with its number, its net, its VAT and its supplier — in draft, ready to review, not in a tray for somebody to type. Every field carries where it came from. Which page of the PDF and which line, so it can be reviewed without opening the document. The shape does not matter: PDF, Excel, CSV or a photo taken on a phone. A single invoice ends up in Expenses and a delivery note in Delivery notes. Ask Finance: you write to it in your own words — who owes me, what is overdue, what should I look at today — and it answers with the figure and with the exact invoice it comes from. What it does not know, it says. No invented answers: if the data is not there, it answers that it is not there. Everything in the previous plan, with its twenty-five screens. Bank reconciliation Coming soon It will match your bank statement against your invoices and expenses, and flag whatever does not match. How it will work Technical sheet Formats it reads PDF with text, scanned PDF, JPG, PNG, WEBP, CSV and XLSX. How it files them It pulls out each record with its origin &#8212; which page, which line &#8212; and leaves it on the screen where it belongs, as a draft. You confirm. Nothing is saved until you do. What it does with the doubtful What it cannot read it does not make up: it flags it and sets it aside for you. Traceability Every answer cites its sources and the queries it was calculated with. No figure without an origin. Does not include fields or flows specific to your business. Connections go through the API, and building them is quoted separately. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. 03 Finance, made to measure The system, the intelligence and on top your fields, your flows and your connections. You stop bending how you work to what a program allows. You stop copying data from one tool into another. You stop waiting for somebody to pull the report you asked for. See the price in Pricing no limit on people See what is included The price, in Pricing → Design first. We design the solution with you and, once you approve it, we do the rollout. Fields, states and flows specific to how you operate. Connections to the tools you already use, built on the system’s API. Dashboards and reports made for your decisions, not generic ones. Evolution: when the company changes, the system changes with it. Half an hour a month to look together at what the system records and adjust it. Everything in the two previous plans. Technical sheet API REST at /api/v1 , with a per-company key in the Authorization header. Invoices, expenses, documents, quotes, orders, targets and audit. It goes through the same permissions and the same isolation as the application: a key cannot do anything its role cannot do. Does not include none of the above: this is the whole system. What is quoted separately is each new piece of development you ask for. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. The row-by-row comparison is a large table: open it on a computer or tablet. The essentials of each plan are above. The three plans, row by row What it includes Finance Finance with intelligence Finance, made to measure Invoices, collections, expenses and payments Quotes, orders, delivery notes and projects Cash forecast at 30, 60 and 90 days and alert radar VAT books in CSV for your accountant Tax register Ready for VERI*FACTU What it means Document reading: PDF, photo, Excel or CSV — Ask Finance — Bank reconciliation — Coming soon Your own fields, flows and dashboards — — Connections with your tools — Quoted separately People Up to 3 Up to 10 No limit Getting started In 1 day, once the form is validated Design first, for your approval; then the rollout VAT not included and no lock-in. The rollout is paid once: you fill in the form, we validate it and in 1 day you have the system running, with your clients, your invoices and your past expenses inside and your series and taxes configured. With Finance, made to measure, the design you approve comes first."
+          "text": "We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the three plans and their price → 01 Finance The financial system on your data, with its standard configuration. You stop asking what state each invoice is in: the screen says so. You stop finding out about an unpaid invoice two months late. You stop putting the VAT books together by hand every quarter. See the price in Pricing up to 3 people See what is included The price, in Pricing → Day to day: invoices, collections, to invoice, expenses, payments, duplicates and documents. The business: quotes, orders, delivery notes, clients, suppliers and projects. Cash week by week and at 30, 60 and 90 days, base or prudent scenario. Radar: seven rules with their threshold written down, so nothing is found out late. Your invoice series, your taxes and your payment methods. VAT books in CSV, issued and received, for your accountant. Running in 1 day once the form is validated, with your previous data already inside. You do not start empty. Technical sheet Tax register Ready for VERI*FACTU A chained, unalterable invoicing record from the moment of issue: every invoice is linked to the previous one with its fingerprint, and a screen checks the chain is whole. Submission to the AEAT is the next step. Where it stands Permissions Seven roles &#8212; Owner, Administrator, Management, Finance, Operations, Read only and Superadmin &#8212; with permission per module and per action. Isolation Each company in its own space, enforced in the same layer that reads the database: a query cannot leave it, not even through a programming mistake. Trace Who did what, when and on which record. You look at it from the invoice or the expense itself. Access There is no public sign-up: we create the account and each person is invited. A suspended account stops getting in immediately. Database PostgreSQL. The data is yours and comes out as CSV whenever you want. Does not include fields or flows specific to your business, nor connections to other tools. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. 02 Finance with intelligence All of the above and, on top, something that reads your documents and answers with your numbers. You stop typing supplier invoices: you drop them in and they file themselves. You stop opening three screens to answer “how much are we owed?”. You stop losing the receipt somebody photographed and never sent. See the price in Pricing up to 10 people See what is included The price, in Pricing → You drop a document and it files it. A PDF with twenty supplier invoices inside comes out as twenty filed invoices, each with its number, its net, its VAT and its supplier — in draft, ready to review, not in a tray for somebody to type. Every field carries where it came from. Which page of the PDF and which line, so it can be reviewed without opening the document. The shape does not matter: PDF, Excel, CSV or a photo taken on a phone. A single invoice ends up in Expenses and a delivery note in Delivery notes. Ask Finance: you write to it in your own words — who owes me, what is overdue, what should I look at today — and it answers with the figure and with the exact invoice it comes from. What it does not know, it says. No invented answers: if the data is not there, it answers that it is not there. Everything in the previous plan, with its twenty-five screens. Bank reconciliation Coming soon It will match your bank statement against your invoices and expenses, and flag whatever does not match. How it will work Technical sheet Formats it reads PDF with text, scanned PDF, JPG, PNG, WEBP, CSV and XLSX. How it files them It pulls out each record with its origin &#8212; which page, which line &#8212; and leaves it on the screen where it belongs, as a draft. You confirm. Nothing is saved until you do. What it does with the doubtful What it cannot read it does not make up: it flags it and sets it aside for you. Traceability Every answer cites its sources and the queries it was calculated with. No figure without an origin. Does not include fields or flows specific to your business. Connections go through the API, and building them is quoted separately. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. 03 Finance, made to measure The system, the intelligence and on top your fields, your flows and your connections. You stop bending how you work to what a program allows. You stop copying data from one tool into another. You stop waiting for somebody to pull the report you asked for. See the price in Pricing no limit on people See what is included The price, in Pricing → Design first. We design the solution with you and, once you approve it, we do the rollout. Fields, states and flows specific to how you operate. Connections to the tools you already use, built on the system’s API. Dashboards and reports made for your decisions, not generic ones. Evolution: when the company changes, the system changes with it. Half an hour a month to look together at what the system records and adjust it. Everything in the two previous plans. Technical sheet API REST at /api/v1 , with a per-company key in the Authorization header. Invoices, expenses, documents, quotes, orders, targets and audit. It goes through the same permissions and the same isolation as the application: a key cannot do anything its role cannot do. Does not include none of the above: this is the whole system. What is quoted separately is each new piece of development you ask for. Talk about this plan Half an hour, no strings. We tell you whether it fits you or not. The row-by-row comparison is a large table: open it on a computer or tablet. The essentials of each plan are above. The three plans, row by row What it includes Finance Finance with intelligence Finance, made to measure Invoices, collections, expenses and payments Quotes, orders, delivery notes and projects Cash forecast at 30, 60 and 90 days and alert radar VAT books in CSV for your accountant Tax register Ready for VERI*FACTU What it means Document reading: PDF, photo, Excel or CSV — Ask Finance — Bank reconciliation — Coming soon Your own fields, flows and dashboards — — Connections with your tools — Quoted separately People Up to 3 Up to 10 No limit Getting started In 1 day, once the form is validated Design first, for your approval; then the rollout VAT not included and no lock-in. The rollout is paid once: you fill in the form, we validate it and in 1 day you have the system running, with your clients, your invoices and your past expenses inside and your series and taxes configured. With Finance, made to measure, the design you approve comes first."
         },
         {
           "id": "/en/sistema-financiero#c7",
@@ -3243,7 +3221,7 @@
         {
           "id": "/precios#c0",
           "heading": "Esto es lo que hacemos. Y esto es lo que cuesta.",
-          "text": "Sin tarifas escondidas ni «consulta precio» en todo. Lo que tiene precio, lo lleva puesto; lo que depende de tu empresa, lo dice. Precios sin IVA. Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. 1Eliges 2Lo solicitas 3Lo configuramos contigo 4Lo implantamos 1Eliges 2Pagas 3Se activa 4Se configura 5Funcionando Hoy no se paga en la web. Nos lo pides, lo configuramos contigo y lo implantamos nosotros. La compra directa llegará; cuando llegue, lo dirá aquí. Dónde queda esto en el mercado 7 tarifas publicadas Holded15 – 199 €al mes, por empresa · usuarios incluidos por planImplementación asistida desde 99 €/mesVer la tarifa publicada Quipu8,50 – 29,50 €al mes, por empresa · de 1 a 3 usuariosPuesta en marcha: no la publicaVer la tarifa publicada Sage 5045 – 152 €al mes, por empresa · solo contrato anualNo se compra online: «contáctanos»Ver la tarifa publicada Sage 200Desde 50 – 235 €al mes · depende de usuarios y módulosEl precio final se cierra con SageVer la tarifa publicada Odoo24,90 – 49 $al mes y por usuario, facturación anualImplantación aparte, no incluida en la tarifaVer la tarifa publicada Dynamics 365 Business Central69,30 – 95,30 €al mes y por usuario, pago anualImplantación vía partner: no publicadaVer la tarifa publicada D-Code Finance29 – 79 €al mes, por empresa · hasta 3 o hasta 10 personasImplantación 390 – 690 €, un pagoNosotros Tarifas de lista publicadas por cada fabricante y consultadas el 24 de septiembre de 2026, sin IVA. Odoo publica la suya en dólares. Lo que no es público, aquí lo dice. Sin licencias de terceros: el sistema es nuestro, así que pagas montarlo y mantenerlo, no revender un programa de otro."
+          "text": "Sin tarifas escondidas ni «consulta precio» en todo. Lo que tiene precio, lo lleva puesto; lo que depende de tu empresa, lo dice. Precios sin IVA. Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. 1Eliges 2Lo solicitas 3Lo configuramos contigo 4Lo implantamos 1Eliges 2Pagas 3Se activa 4Se configura 5Funcionando Hoy no se paga en la web. Nos lo pides, lo configuramos contigo y lo implantamos nosotros. La compra directa llegará; cuando llegue, lo dirá aquí."
         },
         {
           "id": "/precios#c1",
@@ -3347,36 +3325,56 @@
         },
         {
           "id": "/precios#c21",
+          "heading": "Páginas web",
+          "text": "Tu web hecha, rehecha o conectada con lo que ya usas. Se contrata hoy"
+        },
+        {
+          "id": "/precios#c22",
+          "heading": "Web nueva",
+          "text": "Quien no tiene web, o la que tiene no la enseña a nadie Diseño, textos, velocidad y que se vea bien en un teléfono. Tuya, no una plantilla con tu logo encima. Desde 1.200 € pago único, según cuántas páginas Qué incluye Diseño propio, no una plantilla comprada Textos escritos contigo, no rellenos Rápida de verdad y bien en el teléfono Analítica y aviso de cookies según la ley Los accesos y el dominio, a tu nombre No incluye: Contenido que tengas que escribir tú y no nos des. Fotografía y vídeo de producción. Solicitar activación Se contrata hoy"
+        },
+        {
+          "id": "/precios#c23",
+          "heading": "Arreglar la que tienes",
+          "text": "Quien ya tiene web y no quiere empezar de cero Se rehace lo que estorba y se arregla lo que falla, sin tirar lo que ya funciona. Desde 690 € pago único, según lo que haya Qué incluye Repaso de velocidad, móvil y accesibilidad Rediseño de las páginas que peor funcionan Textos revisados donde hagan falta Lo que ya iba bien se queda Solicitar activación Se contrata hoy"
+        },
+        {
+          "id": "/precios#c24",
+          "heading": "Conectar tu web",
+          "text": "Quien recibe por la web algo que luego alguien copia a mano El formulario entra en tu CRM, la cita en la agenda y el stock sale del almacén. Con chatbot si lo quieres. Desde 890 € pago único, según con qué se conecte Qué incluye El formulario entra donde tiene que entrar, ya clasificado Citas, reservas o pedidos contra tu sistema de verdad Chatbot que responde con tus datos, si lo quieres Control de errores: si algo falla, lo sabes No incluye: La web en sí, si hay que hacerla. Solicitar activación"
+        },
+        {
+          "id": "/precios#c25",
           "heading": "Integraciones",
           "text": "Tus herramientas hablándose, con los permisos mínimos. Se contrata hoy"
         },
         {
-          "id": "/precios#c22",
+          "id": "/precios#c26",
           "heading": "Conectar dos herramientas",
           "text": "Cuando el mismo dato se teclea dos veces Tus dos herramientas hablándose en la dirección que haga falta, con los permisos mínimos. Desde 490 € pago único Qué incluye El dato entra una vez y aparece donde tiene que aparecer Permisos mínimos necesarios Control de errores y reintentos Documentación Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c23",
+          "id": "/precios#c27",
           "heading": "Conectar con tu ERP o sistema propio",
           "text": "Empresas con un sistema que no se toca Tu ERP, tu CRM o tu sistema de siempre conectado con el resto, sin tocarlo por dentro. Desde 1.200 € pago único, según el sistema Qué incluye Lectura y escritura por la vía que admita tu sistema Sin modificar el sistema existente Control de errores, reintentos y trazabilidad Documentación y traspaso Solicitar activación"
         },
         {
-          "id": "/precios#c24",
+          "id": "/precios#c28",
           "heading": "Sistemas a medida",
           "text": "El sistema que tu empresa necesita y no existe comprado. Se contrata hoy"
         },
         {
-          "id": "/precios#c25",
+          "id": "/precios#c29",
           "heading": "Diagnóstico",
           "text": "Cualquier empresa que no sepa por dónde empezar Seguimos el recorrido real de un cliente, un pedido y una factura, y anotamos cada punto en el que alguien hace de puente. Gratis y la lista es tuya, la construyamos o no Qué incluye Media hora de llamada y un par de horas de quien hace ese trabajo La lista escrita de por dónde se escapan el tiempo y el dinero Qué construiríamos, con qué alcance y por dónde empezaríamos Solicitar activación Se valora el alcance"
         },
         {
-          "id": "/precios#c26",
+          "id": "/precios#c30",
           "heading": "Sistema a medida",
           "text": "Cuando lo que necesitas no se compra hecho Construimos el sistema que tu empresa necesita: análisis, diseño, desarrollo, automatizaciones, integraciones e IA donde aporte criterio. Desde 1.500 € según el alcance + Desde 190 € al mes de mantenimiento, opcional Qué incluye Análisis del recorrido real y de dónde se escapa el tiempo Alcance, plazo y precio por escrito antes de empezar Desarrollo por partes, dentro de las herramientas que ya usáis El sistema funcionando, con documentación y accesos a tu nombre Hablar de esto"
         },
         {
-          "id": "/precios#c27",
+          "id": "/precios#c31",
           "heading": "Cinco preguntas y te decimos qué te haría falta y cuánto costaría, aproximadamente.",
           "text": "Abrir el configurador ¿Dudas antes de decidir? Preguntas frecuentes"
         }
@@ -3444,6 +3442,57 @@
       ]
     },
     {
+      "url": "/que-hacemos",
+      "title": "Qué hacemos · D-Code Partners",
+      "chunks": [
+        {
+          "id": "/que-hacemos#c0",
+          "heading": "No vendemos herramientas sueltas. Construimos el sistema.",
+          "text": "Miramos por dónde se os escapan el tiempo y el dinero, y construimos lo que lo corta. Cinco piezas que se combinan según lo que haga falta."
+        },
+        {
+          "id": "/que-hacemos#c1",
+          "heading": "Sistemas a medida",
+          "text": "El sistema con el que trabaja tu empresa, construido a la medida de cómo trabajáis. Qué incluye Seguimos un cliente, un pedido y una factura de principio a fin y medimos dónde una persona hace de puente. Alcance, plazo y precio por escrito antes de empezar. Se construye por partes, dentro de las herramientas que ya usáis. Queda funcionando, con documentación y los accesos a tu nombre. Ver el precio"
+        },
+        {
+          "id": "/que-hacemos#c2",
+          "heading": "Automatizaciones",
+          "text": "Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, y avisa si algo falla. Qué incluye Una tarea suelta, un proceso entero o un flujo con IA que lee y clasifica. Control de errores y aviso cuando algo no sale. Mantenimiento aparte y opcional: sin nadie detrás, se rompe el día que otro cambia su API. Ver el precio"
+        },
+        {
+          "id": "/que-hacemos#c3",
+          "heading": "Agentes de IA",
+          "text": "Atienden y responden con los datos de tu negocio, y escalan a una persona cuando toca. Qué incluye Web, WhatsApp o teléfono; uno o varios canales a la vez. Responden con tus datos, no con lo que se inventen. Todo lo que contestan queda registrado y es revisable. Cuota fija: no se paga por conversación. Ver el precio"
+        },
+        {
+          "id": "/que-hacemos#c4",
+          "heading": "Integraciones",
+          "text": "Tu CRM, tu ERP, tu web y tus hojas hablándose, con los permisos mínimos. Qué incluye El dato se escribe una vez y aparece donde tiene que aparecer. También con el sistema de siempre, sin tocarlo por dentro. Control de errores, reintentos y rastro de lo que pasó. Ver el precio"
+        },
+        {
+          "id": "/que-hacemos#c5",
+          "heading": "Páginas web",
+          "text": "Hacemos tu web, rehacemos la que tienes y la conectamos con tus sistemas. Qué incluye Web nueva: diseño, textos, velocidad y que se vea bien en un teléfono. La que ya tienes: se rehace o se arregla, sin empezar de cero si no hace falta. Conectada: el formulario entra en tu CRM, el stock sale del almacén, la cita entra en la agenda. Con chatbot si lo quieres, respondiendo con tus datos. Ver el precio"
+        },
+        {
+          "id": "/que-hacemos#c6",
+          "heading": "Cuatro ejemplos de lo que sale.",
+          "text": "Maquetas nuestras, empresas inventadas. La web no es un folleto: se conecta con lo que ya usas. Inmobiliaria Las fichas salen del CRM: lo que se publica es lo que hay, y el formulario califica la visita antes de darla. Restaurante La reserva entra sola en la agenda de sala y el cliente recibe el recordatorio sin que nadie escriba nada. Clínica Los huecos que se ven son los de verdad: la web lee la agenda y escribe en ella. Tienda online El stock sale del almacén, no de una hoja: lo agotado no se vende y lo que entra se publica solo."
+        },
+        {
+          "id": "/que-hacemos#c7",
+          "heading": "El mismo sistema, visto desde donde trabajas.",
+          "text": "Cada área es una puerta de entrada, no un producto aparte. Se empieza por la que más pesa. ComercialQue ninguna venta se pierda por falta de seguimientoVer el área MarketingContactos que llegan ya clasificados, no en brutoVer el área ClientesClientes atendidos aunque falte quien siempre los atiendeVer el área OperacionesTrabajos que arrancan solos y avisan antes de retrasarseVer el área FinanzasFacturar y cobrar sin perseguir a nadieVer el área SoporteRespuesta rápida, también fuera de horarioVer el área AdministraciónLos papeles en su sitio, sin tener que buscarlosVer el área DirecciónUna decisión clara cada mañana, con datos realesVer el área El método, en nueve pasos 01Tu empresaVarias áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás. 02ProblemasEl trabajo se pierde entre un área y otra: datos copiados a mano, seguimientos olvidados, tres versiones del mismo cliente. 03AnálisisSeguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona hace de puente. 04DiseñoAntes de construir decidimos qué va con qué: qué hace el sistema solo y qué sigue decidiendo una persona. 05ConexiónUn solo dato para todas las áreas. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas. 06AutomatizaciónLo que termina un área dispara la siguiente: presupuesto aceptado, trabajo planificado, factura emitida. Sin teclear dos veces. 07IALa IA lee correos y documentos, clasifica lo que entra y propone la respuesta. Lo que importa lo decide una persona. 08MediciónTodo deja rastro: horas a mano, tiempos de respuesta, tareas sin dueño. Son cifras, no impresiones. 09Mejora continuaCada mes miramos los números y ajustamos. Cuando tu empresa cambia, el sistema cambia con ella."
+        },
+        {
+          "id": "/que-hacemos#c8",
+          "heading": "Empecemos por tu operativa.",
+          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar una llamada Ver precios"
+        }
+      ]
+    },
+    {
       "url": "/seguridad",
       "title": "Política de Seguridad de la Información — D-Code Partners",
       "chunks": [
@@ -3496,47 +3545,6 @@
           "id": "/seguridad#c9",
           "heading": "9. Contacto",
           "text": "Cualquier duda o comunicación relativa a la seguridad de la información, incluyendo la notificación de una vulnerabilidad detectada, puede dirigirse a dcodedepartment@gmail.com. ← Volver a la web"
-        }
-      ]
-    },
-    {
-      "url": "/servicios",
-      "title": "Servicios de automatización con IA — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/servicios#c0",
-          "heading": "Tres disciplinas. Un sistema.",
-          "text": "No se venden por separado. Se combinan según lo que tu operación necesita."
-        },
-        {
-          "id": "/servicios#c1",
-          "heading": "El problema",
-          "text": "Herramientas que no se hablan Tareas repetidas cada semana Decisiones que esperan a que alguien reúna los datos a mano"
-        },
-        {
-          "id": "/servicios#c2",
-          "heading": "Lo que hacemos",
-          "text": "Automatizamos el trabajo repetitivo, ponemos IA donde aporta criterio y conectamos tus herramientas para que la información circule sola."
-        },
-        {
-          "id": "/servicios#c3",
-          "heading": "Tres piezas que se montan a medida.",
-          "text": "Automatización de procesos → Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, con control y trazabilidad. Desde 1.500 € según el alcance Agentes de IA → Atienden, cualifican y responden con los datos de tu negocio; escalan a una persona cuando toca. Desde 750 € según el alcance Integraciones → Tu CRM, tu ERP, tu web y tus hojas, conectados con los permisos mínimos necesarios. Desde 750 € según el alcance Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar."
-        },
-        {
-          "id": "/servicios#c4",
-          "heading": "No es una presentación: son cuatro sistemas en marcha.",
-          "text": "Capturas de las demos que puedes abrir ahora mismo. Empresa ficticia, datos inventados; el sistema es el de verdad. D-Code Finance Facturas, cobros y gastos en un sitio, con registro fiscal. Producto propio · integraciones Comercial Una sola bandeja: la IA lee cada contacto y lo asigna. Automatización · agentes de IA Operaciones Del sí al trabajo hecho, con material y plazos vigilados. Automatización · integraciones Atención al cliente Contesta con tus datos y escala a una persona cuando toca. Agentes de IA Probarlos ahora"
-        },
-        {
-          "id": "/servicios#c5",
-          "heading": "Que dejes de hacer el trabajo que puede hacerse solo.",
-          "text": "Menos tareas repetidas, menos información perdida y decisiones con datos que ya están ahí. Menos tareas repetidas Lo que hoy se hace a mano cada semana deja de hacerse a mano. Menos información perdida El dato se escribe una vez y llega a donde tiene que llegar. Decisiones con datos Con los números que ya están ahí, no con los que habría que reunir."
-        },
-        {
-          "id": "/servicios#c6",
-          "heading": "Empecemos por tu operativa.",
-          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar una llamada Cómo trabajamos"
         }
       ]
     },
@@ -3745,7 +3753,7 @@
         {
           "id": "/sistema-financiero#c6",
           "heading": "El mismo sistema. Cambia cuánto trabaja por ti.",
-          "text": "Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Cómo queda esto frente al mercado, con las tarifas publicadas de cada uno → 01 Finance El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar. Dejas de preguntar en qué estado está cada factura: lo dice la pantalla. Dejas de descubrir un impagado dos meses tarde. Dejas de armar los libros del IVA a mano cada trimestre. Ver precio en Precios hasta 3 personas Ver qu&#233; incluye El precio, en Precios → El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos. El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos. Tesorería semana a semana y a 30, 60 y 90 días, con escenario base o prudente. Radar: siete reglas con su umbral escrito, para que nada se descubra tarde. Tus series de factura, tus impuestos y tus formas de pago. Libros de IVA en CSV, emitidas y recibidas, para tu gestoría. En marcha en 1 día, una vez validado el formulario, con tus datos anteriores dentro. No se empieza vacío. Ficha t&#233;cnica Registro fiscal Preparado para VERI*FACTU Registro de facturación encadenado e inalterable desde la emisión: cada factura queda enlazada a la anterior con su huella, y una pantalla comprueba que la cadena está entera. La remisión a la AEAT es el siguiente paso. En qué punto está Permisos Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo y por acci&#243;n. Aislamiento Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n. Rastro Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde la propia factura o el propio gasto. Acceso No hay alta p&#250;blica: la cuenta la creamos nosotros y se invita a cada persona. Una cuenta suspendida deja de entrar en el momento. Base de datos PostgreSQL. Los datos son tuyos y salen en CSV cuando quieras. No incluye campos ni flujos propios de tu negocio, ni conexiones con otras herramientas. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. 02 Finance con inteligencia Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus n&#250;meros. Dejas de teclear facturas de proveedor: se las sueltas y entran solas. Dejas de abrir tres pantallas para responder «¿cuánto nos deben?». Dejas de perder el ticket que alguien fotografió y no envió nunca. Ver precio en Precios hasta 10 personas Ver qu&#233; incluye El precio, en Precios → Le sueltas un documento y lo coloca. Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas dadas de alta, cada una con su número, su base, su cuota y su proveedor — en borrador, listas para revisar, no en una bandeja para teclear. Cada campo trae de dónde sale. De qué página del PDF y de qué línea, para que se pueda revisar sin abrir el documento. Da igual la forma: PDF, Excel, CSV o una foto hecha con el móvil. Una factura suelta acaba en Gastos y un albarán, en Albaranes. Pregunta a Finanzas: le escribes en tu idioma —quién me debe, qué está fuera de plazo, qué debería mirar hoy— y contesta con la cifra y con la factura concreta de la que sale. Lo que no sabe, lo dice. No hay respuesta inventada: si el dato no está, contesta que no está. Todo lo del plan anterior, con sus veinticinco pantallas. Conciliación bancaria Próximamente Cruzará el extracto del banco con tus facturas y tus gastos, y dejará señalado lo que no cuadre. Cómo funcionará Ficha t&#233;cnica Qu&#233; formatos lee PDF con texto, PDF escaneado, JPG, PNG, WEBP, CSV y XLSX. C&#243;mo lo coloca Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja en la pantalla que le toca, en borrador. T&#250; confirmas. Hasta que no confirmas no se guarda nada. Lo que hace con lo dudoso Lo que no consigue leer no se lo inventa: lo marca y lo deja aparte para que lo mires. Trazabilidad Cada respuesta cita sus fuentes y las consultas con las que se ha calculado. No hay ninguna cifra sin origen. No incluye campos ni flujos propios de tu negocio. Las conexiones van por la API, y montarlas se presupuesta aparte. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. 03 Finance a medida El sistema, la inteligencia y adem&#225;s vuestros campos, vuestros flujos y vuestras conexiones. Dejas de adaptar cómo trabajáis a lo que permite un programa. Dejas de copiar datos de una herramienta a otra. Dejas de esperar a que alguien saque el informe que pediste. Ver precio en Precios sin límite de personas Ver qu&#233; incluye El precio, en Precios → Primero, el diseño. Diseñamos contigo la solución y, cuando la apruebas, hacemos la implantación. Campos, estados y flujos propios de vuestra operación. Conexiones con las herramientas que ya usáis, construidas sobre la API del sistema. Paneles e informes hechos para vuestras decisiones, no genéricos. Evolución: cuando la empresa cambia, el sistema cambia con ella. Media hora al mes para mirar juntos lo que el sistema registra y ajustar. Todo lo de los dos planes anteriores. Ficha t&#233;cnica API REST en /api/v1 , con clave por empresa en la cabecera Authorization . Facturas, gastos, documentos, presupuestos, pedidos, objetivos y auditor&#237;a. Pasa por los mismos permisos y el mismo aislamiento que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol. No incluye nada de lo anterior: esto es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pidáis. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. La comparativa fila a fila es una tabla grande: se ve en un ordenador o una tableta. Arriba tienes lo esencial de cada plan. Los tres planes, fila a fila Qué incluye Finance Finance con inteligencia Finance a medida Facturas, cobros, gastos y pagos Presupuestos, pedidos, albaranes y proyectos Tesorería a 30, 60 y 90 días y radar de avisos Libros de IVA en CSV para tu gestoría Registro fiscal Preparado para VERI*FACTU Qué significa Lectura de documentos: PDF, foto, Excel o CSV — Pregunta a Finanzas — Conciliación bancaria — Próximamente Campos, flujos y paneles propios — — Conexiones con tus herramientas — Se presupuestan aparte Personas Hasta 3 Hasta 10 Sin límite Puesta en marcha En 1 día, una vez validado el formulario Primero el diseño, que apruebas; después la implantación IVA aparte y sin permanencia. La implantación se paga una vez: completas el formulario, lo validamos y en 1 día tienes el sistema funcionando, con tus clientes, tus facturas y tus gastos anteriores dentro y tus series y tus impuestos configurados. En Finance a medida, antes va el diseño que apruebas."
+          "text": "Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los tres planes y su precio → 01 Finance El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar. Dejas de preguntar en qué estado está cada factura: lo dice la pantalla. Dejas de descubrir un impagado dos meses tarde. Dejas de armar los libros del IVA a mano cada trimestre. Ver precio en Precios hasta 3 personas Ver qu&#233; incluye El precio, en Precios → El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos. El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos. Tesorería semana a semana y a 30, 60 y 90 días, con escenario base o prudente. Radar: siete reglas con su umbral escrito, para que nada se descubra tarde. Tus series de factura, tus impuestos y tus formas de pago. Libros de IVA en CSV, emitidas y recibidas, para tu gestoría. En marcha en 1 día, una vez validado el formulario, con tus datos anteriores dentro. No se empieza vacío. Ficha t&#233;cnica Registro fiscal Preparado para VERI*FACTU Registro de facturación encadenado e inalterable desde la emisión: cada factura queda enlazada a la anterior con su huella, y una pantalla comprueba que la cadena está entera. La remisión a la AEAT es el siguiente paso. En qué punto está Permisos Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo y por acci&#243;n. Aislamiento Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n. Rastro Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde la propia factura o el propio gasto. Acceso No hay alta p&#250;blica: la cuenta la creamos nosotros y se invita a cada persona. Una cuenta suspendida deja de entrar en el momento. Base de datos PostgreSQL. Los datos son tuyos y salen en CSV cuando quieras. No incluye campos ni flujos propios de tu negocio, ni conexiones con otras herramientas. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. 02 Finance con inteligencia Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus n&#250;meros. Dejas de teclear facturas de proveedor: se las sueltas y entran solas. Dejas de abrir tres pantallas para responder «¿cuánto nos deben?». Dejas de perder el ticket que alguien fotografió y no envió nunca. Ver precio en Precios hasta 10 personas Ver qu&#233; incluye El precio, en Precios → Le sueltas un documento y lo coloca. Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas dadas de alta, cada una con su número, su base, su cuota y su proveedor — en borrador, listas para revisar, no en una bandeja para teclear. Cada campo trae de dónde sale. De qué página del PDF y de qué línea, para que se pueda revisar sin abrir el documento. Da igual la forma: PDF, Excel, CSV o una foto hecha con el móvil. Una factura suelta acaba en Gastos y un albarán, en Albaranes. Pregunta a Finanzas: le escribes en tu idioma —quién me debe, qué está fuera de plazo, qué debería mirar hoy— y contesta con la cifra y con la factura concreta de la que sale. Lo que no sabe, lo dice. No hay respuesta inventada: si el dato no está, contesta que no está. Todo lo del plan anterior, con sus veinticinco pantallas. Conciliación bancaria Próximamente Cruzará el extracto del banco con tus facturas y tus gastos, y dejará señalado lo que no cuadre. Cómo funcionará Ficha t&#233;cnica Qu&#233; formatos lee PDF con texto, PDF escaneado, JPG, PNG, WEBP, CSV y XLSX. C&#243;mo lo coloca Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja en la pantalla que le toca, en borrador. T&#250; confirmas. Hasta que no confirmas no se guarda nada. Lo que hace con lo dudoso Lo que no consigue leer no se lo inventa: lo marca y lo deja aparte para que lo mires. Trazabilidad Cada respuesta cita sus fuentes y las consultas con las que se ha calculado. No hay ninguna cifra sin origen. No incluye campos ni flujos propios de tu negocio. Las conexiones van por la API, y montarlas se presupuesta aparte. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. 03 Finance a medida El sistema, la inteligencia y adem&#225;s vuestros campos, vuestros flujos y vuestras conexiones. Dejas de adaptar cómo trabajáis a lo que permite un programa. Dejas de copiar datos de una herramienta a otra. Dejas de esperar a que alguien saque el informe que pediste. Ver precio en Precios sin límite de personas Ver qu&#233; incluye El precio, en Precios → Primero, el diseño. Diseñamos contigo la solución y, cuando la apruebas, hacemos la implantación. Campos, estados y flujos propios de vuestra operación. Conexiones con las herramientas que ya usáis, construidas sobre la API del sistema. Paneles e informes hechos para vuestras decisiones, no genéricos. Evolución: cuando la empresa cambia, el sistema cambia con ella. Media hora al mes para mirar juntos lo que el sistema registra y ajustar. Todo lo de los dos planes anteriores. Ficha t&#233;cnica API REST en /api/v1 , con clave por empresa en la cabecera Authorization . Facturas, gastos, documentos, presupuestos, pedidos, objetivos y auditor&#237;a. Pasa por los mismos permisos y el mismo aislamiento que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol. No incluye nada de lo anterior: esto es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pidáis. Hablar de este plan Media hora, sin compromiso. Te decimos si te encaja o si no. La comparativa fila a fila es una tabla grande: se ve en un ordenador o una tableta. Arriba tienes lo esencial de cada plan. Los tres planes, fila a fila Qué incluye Finance Finance con inteligencia Finance a medida Facturas, cobros, gastos y pagos Presupuestos, pedidos, albaranes y proyectos Tesorería a 30, 60 y 90 días y radar de avisos Libros de IVA en CSV para tu gestoría Registro fiscal Preparado para VERI*FACTU Qué significa Lectura de documentos: PDF, foto, Excel o CSV — Pregunta a Finanzas — Conciliación bancaria — Próximamente Campos, flujos y paneles propios — — Conexiones con tus herramientas — Se presupuestan aparte Personas Hasta 3 Hasta 10 Sin límite Puesta en marcha En 1 día, una vez validado el formulario Primero el diseño, que apruebas; después la implantación IVA aparte y sin permanencia. La implantación se paga una vez: completas el formulario, lo validamos y en 1 día tienes el sistema funcionando, con tus clientes, tus facturas y tus gastos anteriores dentro y tus series y tus impuestos configurados. En Finance a medida, antes va el diseño que apruebas."
         },
         {
           "id": "/sistema-financiero#c7",

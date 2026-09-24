@@ -96,8 +96,8 @@ for (const f of paginas(RAIZ)) {
     if (!fs.existsSync(ruta)) { errores.push(`falta ${pagina} (se genera con npm run build:catalogo)`); continue; }
     const h = fs.readFileSync(ruta, 'utf8');
     /* El precio tiene que estar EN LA FICHA DE ESE PRODUCTO, no en cualquier
-       sitio de la página: «390 €» suelto lo cumpliría también la tabla de
-       mercado, y entonces el aviso no avisa de nada. */
+       sitio de la página: «390 €» suelto lo cumpliría cualquier otro texto
+       que lleve esa cifra, y entonces el aviso no avisa de nada. */
     for (const prod of CAT.productos.concat(CAT.packs)) {
       const i = h.indexOf(`data-id="${prod.id}"`);
       if (i < 0) { errores.push(`${pagina}: no aparece la ficha de ${prod.id}`); continue; }
@@ -109,19 +109,6 @@ for (const f of paginas(RAIZ)) {
       }
     }
     if (!h.includes(esc(CAT.aviso[lang]))) errores.push(`${pagina}: falta el aviso de precios de referencia`);
-    /* La comparativa de mercado: cada fila ajena tiene que traer la tarifa
-       pública de donde salió. Una comparativa sin fuente es una opinión, y
-       aquí se está comparando con el precio de otro. */
-    for (const fila of CAT.mercado.filas) {
-      if (!h.includes(esc(fila.mes[lang]))) errores.push(`${pagina}: la comparativa no lleva «${fila.mes[lang]}» de ${fila.quien}`);
-    }
-    if (!h.includes(esc(CAT.mercado.sub[lang]))) errores.push(`${pagina}: falta la fecha y el criterio de la comparativa de mercado`);
-  }
-
-  for (const fila of CAT.mercado.filas) {
-    if (!fila.nuestro && !/^https:\/\//.test(fila.url || '')) {
-      errores.push(`catalogo.json: la fila de mercado «${fila.quien}» no trae la URL de la tarifa publicada`);
-    }
   }
 }
 

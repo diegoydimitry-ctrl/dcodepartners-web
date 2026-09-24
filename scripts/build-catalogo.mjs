@@ -46,7 +46,7 @@ const T = {
     catalogo: 'El catálogo', catalogoSub: 'Cada cosa, qué es y cuánto cuesta.',
     dudas: '¿Dudas antes de decidir?', dudasCta: 'Preguntas frecuentes',
     mes: 'al mes',
-    mkFuente: 'Ver la tarifa publicada', mkNuestro: 'Nosotros', mkCuantas: 'tarifas publicadas',
+   
   },
   en: {
     titulo: 'Pricing', rutaInicio: 'Home',
@@ -68,7 +68,7 @@ const T = {
     catalogo: 'The catalogue', catalogoSub: 'Each thing, what it is and what it costs.',
     dudas: 'Questions before deciding?', dudasCta: 'FAQ',
     mes: 'per month',
-    mkFuente: 'See the published rate', mkNuestro: 'Ours', mkCuantas: 'published rates',
+   
   },
 };
 
@@ -131,19 +131,6 @@ function cuerpo(lang) {
   const hoy = cat.contratacion.hoy[lang].map((p, i) => `<li><span class="pr-paso-n">${i + 1}</span>${esc(p)}</li>`).join('');
   const manana = cat.contratacion.manana[lang].map((p, i) => `<li><span class="pr-paso-n">${i + 1}</span>${esc(p)}</li>`).join('');
 
-  /* ── DÓNDE QUEDA ESTO EN EL MERCADO ─────────────────────────────────────
-     Un precio sin referencia no es caro ni barato: es un número suelto. Esta
-     tabla sale de catalogo.json, con la URL de la tarifa pública de cada uno
-     y la fecha en que se miró, porque una comparativa sin fuente es una
-     opinión. Lo que el fabricante no publica, aquí dice que no lo publica.  */
-  const mk = cat.mercado;
-  const mkFilas = mk.filas.map((f) => {
-    const fuente = f.url
-      ? `<a class="mercado-f" href="${esc(f.url)}" target="_blank" rel="noopener nofollow">${esc(t.mkFuente)}</a>`
-      : `<span class="mercado-f mercado-f--no">${esc(t.mkNuestro)}</span>`;
-    return `<li${f.nuestro ? ' class="es-nuestro"' : ''}><b>${esc(f.quien)}</b><span>${esc(f.mes[lang])}</span><i class="mercado-u">${esc(f.unidad[lang])}</i><i>${esc(f.setup[lang])}</i>${fuente}</li>`;
-  }).join('\n');
-
   return `<div class="container"> <nav class="breadcrumbs" aria-label="${lang === 'en' ? 'Breadcrumb' : 'Ruta de navegación'}"> <ol><li><a href="${base}/">${esc(t.rutaInicio)}</a></li><li class="sep">/</li><li aria-current="page">${esc(t.titulo)}</li></ol> </nav> </div>
 <section class="page-hero" data-amb="cian"> <div class="container">
 <span class="eyebrow">${esc(t.kicker)}</span>
@@ -158,15 +145,6 @@ function cuerpo(lang) {
   <div class="pr-como-c pr-como-c--futuro"><span class="eyebrow">${esc(t.comoManana)}</span><ol class="pr-pasos pr-pasos--futuro">${manana}</ol></div>
 </div>
 <p class="pr-nota-grande" id="pr-como">${esc(cat.contratacion.nota[lang])}</p>
-</div></section>
-
-<section class="section-sm" data-amb="cian" aria-label="${esc(mk.titulo[lang])}"><div class="container">
-<details class="mercado mercado--plegado rise" id="pr-mk-t">
-  <summary class="mercado-t"><span>${esc(mk.titulo[lang])}</span><i class="mercado-cuantas">${mk.filas.length} ${esc(t.mkCuantas)}</i></summary>
-  <ul class="mercado-l mercado-l--fuentes">${mkFilas}</ul>
-  <p class="mercado-p">${esc(mk.sub[lang])}</p>
-  <p class="mercado-p mercado-p--cierre">${esc(mk.cierre[lang])}</p>
-</details>
 </div></section>
 
 <section class="section-sm" data-amb="cian" aria-labelledby="pr-packs-t"><div class="container">
@@ -201,7 +179,7 @@ ${grupos}
 /* La cáscara sale de una página que ya existe: mismo head, misma cabecera,
    mismo pie. Así no hay una segunda versión del sistema visual que mantener. */
 function generar(lang) {
-  const molde = lang === 'en' ? 'en/servicios.html' : 'servicios.html';
+  const molde = lang === 'en' ? 'en/metodo.html' : 'metodo.html';
   const destino = lang === 'en' ? 'en/precios.html' : 'precios.html';
   const t = T[lang];
   let h = fs.readFileSync(path.join(RAIZ, molde), 'utf8');

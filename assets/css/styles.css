@@ -4072,7 +4072,7 @@ main p a:not([class]), main li a:not([class]){ text-decoration:underline; text-u
   a{ text-decoration:underline; }
   .plan, .spec, .conexion, .vf-col, .vf-paso, .vf-cadena, .conc-fig, .cmp, table, tr, .board-row,
   .out, .v7-fiscal-i, figure, .window, .faq-category, .accordion-item, .case-card{ break-inside:avoid; page-break-inside:avoid; }
-  .window, .plan, .vf-col, .vf-track, .cmp, .conc-fig, .vf-cadena, .board, .conexion, .mercado{ border:1px solid #c9ccd4 !important; }
+  .window, .plan, .vf-col, .vf-track, .cmp, .conc-fig, .vf-cadena, .board, .conexion{ border:1px solid #c9ccd4 !important; }
   .estado-chip, .vf-sello, .conexion-e, .board-tag, .tag{ border:1px solid #6b7280 !important; }
   details > .plan-body, details > .accordion-panel{ height:auto !important; overflow:visible !important; opacity:1 !important; }
   /* Las respuestas de las preguntas frecuentes, abiertas */

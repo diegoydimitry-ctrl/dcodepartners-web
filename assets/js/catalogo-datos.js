@@ -305,6 +305,81 @@ window.DCP_CATALOGO = {
    }
   },
   {
+   "id": "web-1",
+   "cat": "webs",
+   "estado": "disponible",
+   "setup": 1200,
+   "mes": 0,
+   "sectores": [
+    "todos"
+   ],
+   "necesidad": [
+    "web",
+    "conectar"
+   ],
+   "extra": false,
+   "es": {
+    "nombre": "Web nueva",
+    "precio": "Desde 1.200 €",
+    "precio_mes": ""
+   },
+   "en": {
+    "nombre": "A new website",
+    "precio": "From €1,200",
+    "precio_mes": ""
+   }
+  },
+  {
+   "id": "web-2",
+   "cat": "webs",
+   "estado": "disponible",
+   "setup": 690,
+   "mes": 0,
+   "sectores": [
+    "todos"
+   ],
+   "necesidad": [
+    "web"
+   ],
+   "extra": false,
+   "es": {
+    "nombre": "Arreglar la que tienes",
+    "precio": "Desde 690 €",
+    "precio_mes": ""
+   },
+   "en": {
+    "nombre": "Fix the one you have",
+    "precio": "From €690",
+    "precio_mes": ""
+   }
+  },
+  {
+   "id": "web-3",
+   "cat": "webs",
+   "estado": "disponible",
+   "setup": 890,
+   "mes": 0,
+   "sectores": [
+    "todos"
+   ],
+   "necesidad": [
+    "web",
+    "conectar",
+    "atender"
+   ],
+   "extra": false,
+   "es": {
+    "nombre": "Conectar tu web",
+    "precio": "Desde 890 €",
+    "precio_mes": ""
+   },
+   "en": {
+    "nombre": "Connect your site",
+    "precio": "From €890",
+    "precio_mes": ""
+   }
+  },
+  {
    "id": "integra-1",
    "cat": "integra",
    "estado": "disponible",

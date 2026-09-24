@@ -1,0 +1,135 @@
+/* Lo que dice «Qué hacemos», en los dos idiomas. Una sola página en lugar de
+   dos —Servicios y Qué construimos decían casi lo mismo con otras palabras— y
+   con lo justo a la vista: cada pieza cabe en una línea y lo demás está en su
+   desplegable, para quien quiera saber más. */
+
+export const AREAS = [
+  ['comercial', 'k-comercial', 'Comercial', 'Sales',
+   'Que ninguna venta se pierda por falta de seguimiento', 'No deal lost because nobody followed up'],
+  ['marketing', 'k-marketing', 'Marketing', 'Marketing',
+   'Contactos que llegan ya clasificados, no en bruto', 'Leads that arrive sorted, not raw'],
+  ['clientes', 'k-clientes', 'Clientes', 'Customer',
+   'Clientes atendidos aunque falte quien siempre los atiende', 'Customers looked after even when their usual contact is away'],
+  ['produccion', 'k-produccion', 'Operaciones', 'Operations',
+   'Trabajos que arrancan solos y avisan antes de retrasarse', 'Jobs that start themselves and flag a delay before it happens'],
+  ['finanzas', 'k-finanzas', 'Finanzas', 'Finance',
+   'Facturar y cobrar sin perseguir a nadie', 'Invoice and get paid without chasing anyone'],
+  ['soporte', 'k-soporte', 'Soporte', 'Support',
+   'Respuesta rápida, también fuera de horario', 'Fast replies, even out of hours'],
+  ['administracion', 'k-administracion', 'Administración', 'Administration',
+   'Los papeles en su sitio, sin tener que buscarlos', 'Paperwork in its place, without having to look for it'],
+  ['direccion', 'k-direccion', 'Dirección', 'Leadership',
+   'Una decisión clara cada mañana, con datos reales', 'One clear decision every morning, on real numbers'],
+];
+
+/* Las cinco cosas que construimos. Una línea fuera, el detalle dentro. */
+export const PIEZAS = [
+  {
+    id: 'sistemas', href: { es: '/precios#g-medida', en: '/en/precios#g-medida' },
+    t: { es: 'Sistemas a medida', en: 'Custom systems' },
+    una: { es: 'El sistema con el que trabaja tu empresa, construido a la medida de cómo trabajáis.',
+           en: 'The system your company runs on, built to fit the way you actually work.' },
+    mas: {
+      es: ['Seguimos un cliente, un pedido y una factura de principio a fin y medimos dónde una persona hace de puente.',
+           'Alcance, plazo y precio por escrito antes de empezar.',
+           'Se construye por partes, dentro de las herramientas que ya usáis.',
+           'Queda funcionando, con documentación y los accesos a tu nombre.'],
+      en: ['We follow a customer, an order and an invoice end to end and measure where a person is acting as a bridge.',
+           'Scope, deadline and price in writing before anything starts.',
+           'Built in parts, inside the tools you already use.',
+           'It ends up running, with documentation and access in your name.'],
+    },
+  },
+  {
+    id: 'automatizaciones', href: { es: '/precios#g-automatiza', en: '/en/precios#g-automatiza' },
+    t: { es: 'Automatizaciones', en: 'Automations' },
+    una: { es: 'Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, y avisa si algo falla.',
+           en: 'What is done by hand every week runs on its own, and tells you if something fails.' },
+    mas: {
+      es: ['Una tarea suelta, un proceso entero o un flujo con IA que lee y clasifica.',
+           'Control de errores y aviso cuando algo no sale.',
+           'Mantenimiento aparte y opcional: sin nadie detrás, se rompe el día que otro cambia su API.'],
+      en: ['One task, a whole process, or an AI flow that reads and classifies.',
+           'Error handling and an alert when something goes wrong.',
+           'Maintenance is separate and optional: with nobody behind it, it breaks the day someone changes their API.'],
+    },
+  },
+  {
+    id: 'agentes', href: { es: '/precios#g-agentes', en: '/en/precios#g-agentes' },
+    t: { es: 'Agentes de IA', en: 'AI agents' },
+    una: { es: 'Atienden y responden con los datos de tu negocio, y escalan a una persona cuando toca.',
+           en: 'They answer with your business data and escalate to a person when it matters.' },
+    mas: {
+      es: ['Web, WhatsApp o teléfono; uno o varios canales a la vez.',
+           'Responden con tus datos, no con lo que se inventen.',
+           'Todo lo que contestan queda registrado y es revisable.',
+           'Cuota fija: no se paga por conversación.'],
+      en: ['Web, WhatsApp or phone; one channel or several at once.',
+           'They answer from your data, not from what they make up.',
+           'Everything they say is logged and reviewable.',
+           'Flat fee: you do not pay per conversation.'],
+    },
+  },
+  {
+    id: 'integraciones', href: { es: '/precios#g-integra', en: '/en/precios#g-integra' },
+    t: { es: 'Integraciones', en: 'Integrations' },
+    una: { es: 'Tu CRM, tu ERP, tu web y tus hojas hablándose, con los permisos mínimos.',
+           en: 'Your CRM, ERP, site and spreadsheets talking to each other, with minimum permissions.' },
+    mas: {
+      es: ['El dato se escribe una vez y aparece donde tiene que aparecer.',
+           'También con el sistema de siempre, sin tocarlo por dentro.',
+           'Control de errores, reintentos y rastro de lo que pasó.'],
+      en: ['Data is entered once and shows up where it should.',
+           'Also with your long-standing system, without touching its insides.',
+           'Error handling, retries and a trail of what happened.'],
+    },
+  },
+  {
+    id: 'webs', href: { es: '/precios#g-webs', en: '/en/precios#g-webs' },
+    t: { es: 'Páginas web', en: 'Websites' },
+    una: { es: 'Hacemos tu web, rehacemos la que tienes y la conectamos con tus sistemas.',
+           en: 'We build your site, rebuild the one you have and connect it to your systems.' },
+    mas: {
+      es: ['Web nueva: diseño, textos, velocidad y que se vea bien en un teléfono.',
+           'La que ya tienes: se rehace o se arregla, sin empezar de cero si no hace falta.',
+           'Conectada: el formulario entra en tu CRM, el stock sale del almacén, la cita entra en la agenda.',
+           'Con chatbot si lo quieres, respondiendo con tus datos.'],
+      en: ['A new site: design, copy, speed and looking right on a phone.',
+           'The one you already have: rebuilt or repaired, without starting over if there is no need.',
+           'Connected: the form lands in your CRM, stock comes from the warehouse, the booking enters the diary.',
+           'With a chatbot if you want one, answering from your data.'],
+    },
+  },
+];
+
+/* Cómo se hace, en nueve pasos. Plegado: quien solo quiere saber qué hacemos
+   no tiene que leerse el método entero para llegar al precio. */
+export const PASOS = [
+  ['Tu empresa', 'Your company',
+   'Varias áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás.',
+   'Several areas, each with its own software, spreadsheets and WhatsApp. They all work. None of them talk to each other.'],
+  ['Problemas', 'Problems',
+   'El trabajo se pierde entre un área y otra: datos copiados a mano, seguimientos olvidados, tres versiones del mismo cliente.',
+   'Work gets lost between areas: data copied by hand, forgotten follow-ups, three versions of the same customer.'],
+  ['Análisis', 'Analysis',
+   'Seguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona hace de puente.',
+   'We follow a customer, an order and an invoice end to end, and measure how often a person acts as a bridge.'],
+  ['Diseño', 'Design',
+   'Antes de construir decidimos qué va con qué: qué hace el sistema solo y qué sigue decidiendo una persona.',
+   'Before building we decide what goes with what: what the system does alone and what a person still decides.'],
+  ['Conexión', 'Connection',
+   'Un solo dato para todas las áreas. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas.',
+   'One piece of data for every area. The customer sales bring in is the one support looks after and finance invoices.'],
+  ['Automatización', 'Automation',
+   'Lo que termina un área dispara la siguiente: presupuesto aceptado, trabajo planificado, factura emitida. Sin teclear dos veces.',
+   'What one area finishes triggers the next: quote accepted, job scheduled, invoice issued. Without typing anything twice.'],
+  ['IA', 'AI',
+   'La IA lee correos y documentos, clasifica lo que entra y propone la respuesta. Lo que importa lo decide una persona.',
+   'AI reads emails and documents, sorts what comes in and proposes the reply. What matters is decided by a person.'],
+  ['Medición', 'Measurement',
+   'Todo deja rastro: horas a mano, tiempos de respuesta, tareas sin dueño. Son cifras, no impresiones.',
+   'Everything leaves a trail: hours by hand, response times, tasks with no owner. Figures, not impressions.'],
+  ['Mejora continua', 'Continuous improvement',
+   'Cada mes miramos los números y ajustamos. Cuando tu empresa cambia, el sistema cambia con ella.',
+   'Every month we look at the numbers and adjust. When your company changes, the system changes with it.'],
+];

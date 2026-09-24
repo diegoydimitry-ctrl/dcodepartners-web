@@ -4,12 +4,32 @@
   "redirects": [
     {
       "source": "/como-funciona",
-      "destination": "/departamentos",
+      "destination": "/que-hacemos",
       "permanent": true
     },
     {
       "source": "/en/como-funciona",
-      "destination": "/en/departamentos",
+      "destination": "/en/que-hacemos",
+      "permanent": true
+    },
+    {
+      "source": "/servicios",
+      "destination": "/que-hacemos",
+      "permanent": true
+    },
+    {
+      "source": "/en/servicios",
+      "destination": "/en/que-hacemos",
+      "permanent": true
+    },
+    {
+      "source": "/departamentos",
+      "destination": "/que-hacemos",
+      "permanent": true
+    },
+    {
+      "source": "/en/departamentos",
+      "destination": "/en/que-hacemos",
       "permanent": true
     }
   ],

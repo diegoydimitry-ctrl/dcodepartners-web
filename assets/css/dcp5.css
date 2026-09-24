@@ -1205,29 +1205,6 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
    te quita de encima no se compara con nada: se mira y se pasa. Ahora, sin
    abrir nada, se ve LO QUE DEJAS DE HACER, que es lo que se compra. */
 
-/* Lo que cuesta esto en el mercado. Va antes de los precios. */
-.mercado{
-  margin-top:clamp(22px,3vw,34px); padding:clamp(20px,2.6vw,28px);
-  border:1px solid var(--v-edge); border-radius:14px; background:var(--v-panel);
-}
-.mercado-t{
-  margin:0 0 16px; font-family:var(--mono); font-size:0.6875rem;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--v-ink-3);
-}
-.mercado-l{ list-style:none; margin:0; padding:0; display:grid; gap:10px;
-  grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr)); }
-.mercado-l li{
-  display:flex; flex-direction:column; gap:3px; padding:14px 16px;
-  border:1px solid var(--v-edge-2); border-radius:11px; background:var(--v-panel-2);
-}
-.mercado-l b{ font-size:.82rem; font-weight:600; color:var(--v-ink-2); }
-.mercado-l span{ font-family:var(--serif); font-size:clamp(1.02rem,1.8vw,1.22rem); font-weight:650;
-  color:var(--ink); letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
-.mercado-l i{ font-style:normal; font-size:.75rem; line-height:1.5; color:var(--v-ink-3); }
-.mercado-l .es-nuestro{ border-color:rgba(91,140,255,.4); background:rgba(91,140,255,.08); }
-.mercado-l .es-nuestro span{ color:var(--v-a); }
-.mercado-p{ margin:16px 0 0; font-size:.86rem; line-height:1.6; color:var(--v-ink-2); max-width:74ch; }
-
 /* Lo que te quita de encima, visible con el plan plegado. */
 .plan-quita{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px; }
 .plan-quita li{
@@ -1301,7 +1278,7 @@ details.plan.es-cerrando > .plan-body{ opacity:.35; }
 
 /* Los recuadros de esta sección llevan texto que hay que leer y la cinta de
    partículas les pasa por encima. Aquí el fondo deja de ser translúcido. */
-#planes .plan, #planes .mercado{
+#planes .plan{
   background:rgba(13,17,34,.94);
   -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
   position:relative; z-index:2; isolation:isolate;
@@ -1677,7 +1654,7 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
 }
 
 /* Los precios viven en /precios y solo ahí. Desde Finance se enlaza. */
-.mercado-ref{ margin:clamp(20px,2.6vw,30px) 0 0; font-size:.9rem; }
-.mercado-ref a{ color:var(--v-a); text-decoration:underline; text-underline-offset:4px;
+.precio-ref{ margin:clamp(20px,2.6vw,30px) 0 0; font-size:.9rem; }
+.precio-ref a{ color:var(--v-a); text-decoration:underline; text-underline-offset:4px;
   text-decoration-color:color-mix(in srgb, currentColor 40%, transparent); }
-.mercado-ref a:hover, .mercado-ref a:focus-visible{ text-decoration-color:currentColor; }
+.precio-ref a:hover, .precio-ref a:focus-visible{ text-decoration-color:currentColor; }

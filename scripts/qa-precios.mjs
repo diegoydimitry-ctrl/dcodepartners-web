@@ -119,24 +119,6 @@ for (const [aparato, op] of APARATOS) {
       if (!href || !href.includes('/contacto?quiero=')) fallos.push(`${donde}: un botón no lleva al contacto (${href})`);
     }
 
-    /* ---- la comparativa de mercado ----
-       Se compara con el precio de otro: cada fila ajena tiene que llevar la
-       tarifa de donde salió, abrirse fuera y no filtrar el referer. Y el
-       recuadro va plegado, que son siete pantallas de móvil abierto. */
-    const mk = await pg.evaluate(() => {
-      const d = document.querySelector('.mercado--plegado');
-      if (!d) return null;
-      const filas = [...d.querySelectorAll('.mercado-l > li')];
-      return {
-        plegado: !d.open,
-        filas: filas.length,
-        sinFuente: filas.filter((li) => !li.querySelector('.mercado-f')).map((li) => li.querySelector('b').textContent),
-        malEnlace: [...d.querySelectorAll('a.mercado-f')]
-          .filter((a) => !/^https:\/\//.test(a.href) || a.target !== '_blank' || !/noopener/.test(a.rel))
-          .map((a) => a.closest('li').querySelector('b').textContent),
-        nuestras: d.querySelectorAll('.mercado-l .es-nuestro').length,
-      };
-    });
     /* Donde el generador pega una etiqueta a un dato, el dato no puede
        traer la etiqueta dentro: «Suelto sería 1.170 € sueltos» salía de
        eso. Se mira solo ahí —etiqueta + dato—, no en la prosa, donde
@@ -162,28 +144,6 @@ for (const [aparato, op] of APARATOS) {
     const aqui = await pg.evaluate(() => [...document.querySelectorAll('.main-nav a[aria-current="page"]')].map((a) => a.getAttribute('href')));
     if (aqui.length !== 1 || !/\/precios$/.test(aqui[0] || '')) {
       fallos.push(`${donde}: el menú marca como página actual ${aqui.join(', ') || '(ninguna)'} en vez de /precios`);
-    }
-
-    if (!mk) fallos.push(`${donde}: no está la comparativa de mercado`);
-    else {
-      if (!mk.plegado) fallos.push(`${donde}: la comparativa de mercado viene desplegada`);
-      if (mk.filas !== CAT.mercado.filas.length) fallos.push(`${donde}: la comparativa tiene ${mk.filas} filas y el catálogo ${CAT.mercado.filas.length}`);
-      if (mk.sinFuente.length) fallos.push(`${donde}: sin fuente en la comparativa — ${mk.sinFuente.join(', ')}`);
-      if (mk.malEnlace.length) fallos.push(`${donde}: enlace de tarifa mal puesto (https, _blank, noopener) — ${mk.malEnlace.join(', ')}`);
-      if (mk.nuestras !== 1) fallos.push(`${donde}: la comparativa marca ${mk.nuestras} filas como nuestras, tiene que ser 1`);
-      await pg.locator('.mercado--plegado > summary').click();
-      await pg.waitForTimeout(250);
-      const abre = await pg.evaluate(() => {
-        const d = document.querySelector('.mercado--plegado');
-        const li = [...d.querySelectorAll('.mercado-l > li')];
-        return { abierto: d.open, cortadas: li.filter((x) => x.scrollWidth > x.clientWidth + 1).length,
-                 ancho: document.documentElement.scrollWidth > document.documentElement.clientWidth };
-      });
-      if (!abre.abierto) fallos.push(`${donde}: la comparativa no se abre al pulsarla`);
-      if (abre.cortadas) fallos.push(`${donde}: ${abre.cortadas} fila(s) de la comparativa se cortan`);
-      if (abre.ancho) fallos.push(`${donde}: la comparativa abierta desborda a lo ancho`);
-      await pg.locator('.mercado--plegado > summary').click();
-      await pg.waitForTimeout(150);
     }
 
     /* Filtrar por una categoría deja solo esa; volver a pulsar lo deshace. */

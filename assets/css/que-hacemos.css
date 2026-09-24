@@ -1,0 +1,125 @@
+/* ═══════════════════════ QUÉ HACEMOS ═══════════════════════
+   Una página donde había dos. La regla de aquí es la que pidió el encargo:
+   lo mínimo a la vista, y lo demás en su desplegable. Cada pieza es un
+   titular, una línea y un «Qué incluye» que se abre si de verdad interesa;
+   el método entero cabe en un solo <details>. */
+
+/* ── Las cinco piezas ─────────────────────────────────────── */
+.qh-rej{
+  display:grid; gap:clamp(14px,1.6vw,18px);
+  grid-template-columns:repeat(auto-fit, minmax(min(268px,100%), 1fr));
+}
+.qh-pieza{
+  display:flex; flex-direction:column; gap:10px;
+  padding:clamp(20px,2.4vw,26px);
+  border:1px solid var(--v-edge); border-radius:16px;
+  background-color:var(--v-bg);
+  background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
+  position:relative; z-index:2; isolation:isolate;
+}
+.qh-pieza h3{
+  margin:0; font-family:var(--display, var(--serif)); font-size:clamp(1.06rem,1.7vw,1.2rem);
+  font-weight:650; letter-spacing:-.022em; color:var(--v-ink);
+}
+.qh-una{ margin:0; font-size:.9rem; line-height:1.6; color:var(--v-ink-2); }
+
+.qh-mas{ margin-top:auto; }
+.qh-mas > summary{
+  cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--v-ink-3); padding:4px 0;
+}
+.qh-mas > summary::-webkit-details-marker{ display:none; }
+.qh-mas > summary::after{
+  content:''; width:7px; height:7px; border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-2px);
+  transition:transform .18s ease;
+}
+.qh-mas[open] > summary::after{ transform:rotate(225deg) translateY(-2px); }
+.qh-mas > summary:hover, .qh-mas[open] > summary{ color:var(--v-a); }
+.qh-mas > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; border-radius:5px; }
+.qh-mas ul{ list-style:none; margin:10px 0 0; padding:0; display:grid; gap:7px; }
+.qh-mas li{
+  position:relative; padding-left:17px; font-size:.83rem; line-height:1.55; color:var(--v-ink-2);
+}
+.qh-mas li::before{
+  content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%;
+  background:var(--v-a); opacity:.75;
+}
+.qh-precio{
+  display:inline-flex; align-items:center; gap:7px; margin-top:4px;
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--v-a); text-decoration:none;
+}
+.qh-precio svg{ width:14px; height:14px; transition:transform .18s ease; }
+.qh-precio:hover svg, .qh-precio:focus-visible svg{ transform:translateX(3px); }
+.qh-precio:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; border-radius:5px; }
+
+/* ── Las cuatro webs ──────────────────────────────────────── */
+/* Dos y dos. En «auto-fit» a 1440 salían tres arriba y una abajo sola, que
+   se lee como si la cuarta sobrase. */
+.qh-webs{
+  display:grid; gap:clamp(16px,2vw,24px); grid-template-columns:1fr;
+  margin-top:clamp(22px,3vw,30px);
+}
+@media (min-width:720px){ .qh-webs{ grid-template-columns:1fr 1fr; } }
+.qh-web{ margin:0; }
+.qh-web img{
+  display:block; width:100%; height:auto; border-radius:14px;
+  border:1px solid var(--v-edge); background:var(--v-bg-2);
+  box-shadow:0 22px 48px -30px rgba(10,16,38,.8);
+}
+.qh-web figcaption{
+  margin-top:11px; font-size:.83rem; line-height:1.55; color:var(--v-ink-3);
+}
+.qh-web figcaption b{
+  display:block; font-family:var(--mono); font-size:.6875rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--v-ink-2); margin-bottom:4px;
+}
+
+/* ── El método, plegado ───────────────────────────────────── */
+.qh-metodo{
+  border:1px solid var(--v-edge); border-radius:16px;
+  padding:clamp(18px,2.2vw,24px);
+  background-color:var(--v-bg);
+  background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
+  position:relative; z-index:2; isolation:isolate;
+}
+.qh-metodo > summary{
+  cursor:pointer; list-style:none; display:flex; flex-direction:column; gap:6px;
+  position:relative; padding-right:30px;
+}
+.qh-metodo > summary::-webkit-details-marker{ display:none; }
+.qh-metodo > summary::after{
+  content:''; position:absolute; right:4px; top:1.15em; width:9px; height:9px;
+  border-right:1.5px solid var(--v-ink-3); border-bottom:1.5px solid var(--v-ink-3);
+  transform:rotate(45deg); transition:transform .18s ease;
+}
+.qh-metodo[open] > summary::after{ transform:rotate(225deg); }
+.qh-metodo > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:5px; border-radius:8px; }
+.qh-metodo-h{
+  font-family:var(--display, var(--serif)); font-size:clamp(1.2rem,2.2vw,1.55rem);
+  font-weight:650; letter-spacing:-.025em; color:var(--v-ink);
+}
+.qh-pasos{
+  list-style:none; margin:clamp(18px,2.4vw,24px) 0 0; padding:0;
+  display:grid; gap:clamp(12px,1.5vw,16px);
+  grid-template-columns:repeat(auto-fit, minmax(min(250px,100%), 1fr));
+}
+.qh-pasos li{
+  display:flex; flex-direction:column; gap:6px;
+  padding-top:13px; border-top:1px solid var(--v-edge-2);
+}
+.qh-pasos b{
+  display:flex; align-items:baseline; gap:9px;
+  font-size:.92rem; font-weight:600; letter-spacing:-.012em; color:var(--v-ink);
+}
+.qh-pasos b span{
+  font-family:var(--mono); font-size:.6875rem; font-weight:500; letter-spacing:.08em;
+  color:var(--v-a); font-variant-numeric:tabular-nums;
+}
+.qh-pasos li > span{ font-size:.82rem; line-height:1.55; color:var(--v-ink-2); }
+
+@media (prefers-reduced-motion:reduce){
+  .qh-mas > summary::after, .qh-metodo > summary::after, .qh-precio svg{ transition:none; }
+}

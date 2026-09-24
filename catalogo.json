@@ -94,6 +94,13 @@
       "resumen_en": "They answer, qualify and reply with your business data."
     },
     {
+      "id": "webs",
+      "es": "Páginas web",
+      "en": "Websites",
+      "resumen_es": "Tu web hecha, rehecha o conectada con lo que ya usas.",
+      "resumen_en": "Your site built, rebuilt or connected to what you already use."
+    },
+    {
       "id": "integra",
       "es": "Integraciones",
       "en": "Integrations",
@@ -661,6 +668,145 @@
       ]
     },
     {
+      "id": "web-1",
+      "cat": "webs",
+      "estado": "disponible",
+      "destacado": true,
+      "sectores": [
+        "todos"
+      ],
+      "necesidad": [
+        "web",
+        "conectar"
+      ],
+      "setup": 1200,
+      "mes": 0,
+      "es": {
+        "nombre": "Web nueva",
+        "para": "Quien no tiene web, o la que tiene no la enseña a nadie",
+        "que": "Diseño, textos, velocidad y que se vea bien en un teléfono. Tuya, no una plantilla con tu logo encima.",
+        "incluye": [
+          "Diseño propio, no una plantilla comprada",
+          "Textos escritos contigo, no rellenos",
+          "Rápida de verdad y bien en el teléfono",
+          "Analítica y aviso de cookies según la ley",
+          "Los accesos y el dominio, a tu nombre"
+        ],
+        "no_incluye": [
+          "Contenido que tengas que escribir tú y no nos des",
+          "Fotografía y vídeo de producción"
+        ],
+        "precio": "Desde 1.200 €",
+        "precio_detalle": "pago único, según cuántas páginas"
+      },
+      "en": {
+        "nombre": "A new website",
+        "para": "Anyone with no site, or with one they would rather not show",
+        "que": "Design, copy, speed and looking right on a phone. Yours, not a template with your logo on it.",
+        "incluye": [
+          "Its own design, not a bought template",
+          "Copy written with you, not filler",
+          "Genuinely fast and right on a phone",
+          "Analytics and a cookie notice that follows the law",
+          "Access and the domain, in your name"
+        ],
+        "no_incluye": [
+          "Content you would write yourself and never send us",
+          "Photography and video production"
+        ],
+        "precio": "From €1,200",
+        "precio_detalle": "one-off, depending on how many pages"
+      }
+    },
+    {
+      "id": "web-2",
+      "cat": "webs",
+      "estado": "disponible",
+      "destacado": false,
+      "sectores": [
+        "todos"
+      ],
+      "necesidad": [
+        "web"
+      ],
+      "setup": 690,
+      "mes": 0,
+      "es": {
+        "nombre": "Arreglar la que tienes",
+        "para": "Quien ya tiene web y no quiere empezar de cero",
+        "que": "Se rehace lo que estorba y se arregla lo que falla, sin tirar lo que ya funciona.",
+        "incluye": [
+          "Repaso de velocidad, móvil y accesibilidad",
+          "Rediseño de las páginas que peor funcionan",
+          "Textos revisados donde hagan falta",
+          "Lo que ya iba bien se queda"
+        ],
+        "precio": "Desde 690 €",
+        "precio_detalle": "pago único, según lo que haya"
+      },
+      "en": {
+        "nombre": "Fix the one you have",
+        "para": "Anyone with a site who does not want to start over",
+        "que": "What gets in the way is rebuilt and what is broken is fixed, without throwing away what works.",
+        "incluye": [
+          "A review of speed, mobile and accessibility",
+          "A redesign of the pages that work worst",
+          "Copy revised where it needs it",
+          "Whatever already worked stays"
+        ],
+        "precio": "From €690",
+        "precio_detalle": "one-off, depending on what is there"
+      }
+    },
+    {
+      "id": "web-3",
+      "cat": "webs",
+      "estado": "disponible",
+      "destacado": false,
+      "sectores": [
+        "todos"
+      ],
+      "necesidad": [
+        "web",
+        "conectar",
+        "atender"
+      ],
+      "setup": 890,
+      "mes": 0,
+      "es": {
+        "nombre": "Conectar tu web",
+        "para": "Quien recibe por la web algo que luego alguien copia a mano",
+        "que": "El formulario entra en tu CRM, la cita en la agenda y el stock sale del almacén. Con chatbot si lo quieres.",
+        "incluye": [
+          "El formulario entra donde tiene que entrar, ya clasificado",
+          "Citas, reservas o pedidos contra tu sistema de verdad",
+          "Chatbot que responde con tus datos, si lo quieres",
+          "Control de errores: si algo falla, lo sabes"
+        ],
+        "no_incluye": [
+          "La web en sí, si hay que hacerla"
+        ],
+        "precio": "Desde 890 €",
+        "precio_detalle": "pago único, según con qué se conecte"
+      },
+      "en": {
+        "nombre": "Connect your site",
+        "para": "Anyone whose site receives something a person then copies by hand",
+        "que": "The form lands in your CRM, the booking in the diary and stock comes from the warehouse. With a chatbot if you want one.",
+        "incluye": [
+          "The form lands where it should, already sorted",
+          "Appointments, bookings or orders against your real system",
+          "A chatbot answering from your data, if you want one",
+          "Error handling: if something fails, you know"
+        ],
+        "no_incluye": [
+          "The site itself, if it has to be built"
+        ],
+        "precio": "From €890",
+        "precio_detalle": "one-off, depending on what it connects to"
+      }
+    },
+    {
       "id": "integra-1",
       "cat": "integra",
       "estado": "disponible",
@@ -1033,136 +1179,5 @@
         "en": "Something tailored to me"
       }
     ]
-  },
-  "mercado": {
-    "$nota": "Tarifas de lista PÚBLICAS del propio fabricante, consultadas el 24/09/2026 en su página oficial. Ni estimaciones nuestras ni rangos de blogs o comparadores. Lo que el fabricante no publica, aquí dice que no lo publica. Sirven para situar el precio, no para comparar funcionalidad. Al revisarlas hay que volver a abrir cada URL y cambiar la fecha.",
-    "consultado": "2026-09-24",
-    "titulo": {
-      "es": "Dónde queda esto en el mercado",
-      "en": "Where this sits in the market"
-    },
-    "sub": {
-      "es": "Tarifas de lista publicadas por cada fabricante y consultadas el 24 de septiembre de 2026, sin IVA. Odoo publica la suya en dólares. Lo que no es público, aquí lo dice.",
-      "en": "List prices published by each vendor and checked on 24 September 2026, excluding VAT. Odoo publishes its own in dollars. What is not public is stated as such."
-    },
-    "filas": [
-      {
-        "quien": "Holded",
-        "mes": {
-          "es": "15 – 199 €",
-          "en": "€15 – €199"
-        },
-        "unidad": {
-          "es": "al mes, por empresa · usuarios incluidos por plan",
-          "en": "per month, per company · users included per plan"
-        },
-        "setup": {
-          "es": "Implementación asistida desde 99 €/mes",
-          "en": "Assisted implementation from €99/month"
-        },
-        "url": "https://www.holded.com/es/precios"
-      },
-      {
-        "quien": "Quipu",
-        "mes": {
-          "es": "8,50 – 29,50 €",
-          "en": "€8.50 – €29.50"
-        },
-        "unidad": {
-          "es": "al mes, por empresa · de 1 a 3 usuarios",
-          "en": "per month, per company · 1 to 3 users"
-        },
-        "setup": {
-          "es": "Puesta en marcha: no la publica",
-          "en": "Setup: not published"
-        },
-        "url": "https://getquipu.com/en/pricing-plans"
-      },
-      {
-        "quien": "Sage 50",
-        "mes": {
-          "es": "45 – 152 €",
-          "en": "€45 – €152"
-        },
-        "unidad": {
-          "es": "al mes, por empresa · solo contrato anual",
-          "en": "per month, per company · annual contract only"
-        },
-        "setup": {
-          "es": "No se compra online: «contáctanos»",
-          "en": "Not sold online: “contact us”"
-        },
-        "url": "https://www.sage.com/es-es/productos/sage-50cloud/precios/"
-      },
-      {
-        "quien": "Sage 200",
-        "mes": {
-          "es": "Desde 50 – 235 €",
-          "en": "From €50 – €235"
-        },
-        "unidad": {
-          "es": "al mes · depende de usuarios y módulos",
-          "en": "per month · depends on users and modules"
-        },
-        "setup": {
-          "es": "El precio final se cierra con Sage",
-          "en": "The final price is agreed with Sage"
-        },
-        "url": "https://www.sage.com/es-es/productos/sage-200/"
-      },
-      {
-        "quien": "Odoo",
-        "mes": {
-          "es": "24,90 – 49 $",
-          "en": "$24.90 – $49"
-        },
-        "unidad": {
-          "es": "al mes y por usuario, facturación anual",
-          "en": "per user per month, billed annually"
-        },
-        "setup": {
-          "es": "Implantación aparte, no incluida en la tarifa",
-          "en": "Rollout is separate, not included in the price"
-        },
-        "url": "https://www.odoo.com/es_ES/pricing"
-      },
-      {
-        "quien": "Dynamics 365 Business Central",
-        "mes": {
-          "es": "69,30 – 95,30 €",
-          "en": "€69.30 – €95.30"
-        },
-        "unidad": {
-          "es": "al mes y por usuario, pago anual",
-          "en": "per user per month, paid yearly"
-        },
-        "setup": {
-          "es": "Implantación vía partner: no publicada",
-          "en": "Rollout through a partner: not published"
-        },
-        "url": "https://www.microsoft.com/es-es/dynamics-365/products/business-central/pricing"
-      },
-      {
-        "quien": "D-Code Finance",
-        "nuestro": true,
-        "mes": {
-          "es": "29 – 79 €",
-          "en": "€29 – €79"
-        },
-        "unidad": {
-          "es": "al mes, por empresa · hasta 3 o hasta 10 personas",
-          "en": "per month, per company · up to 3 or up to 10 people"
-        },
-        "setup": {
-          "es": "Implantación 390 – 690 €, un pago",
-          "en": "Setup €390 – €690, one payment"
-        },
-        "url": ""
-      }
-    ],
-    "cierre": {
-      "es": "Sin licencias de terceros: el sistema es nuestro, así que pagas montarlo y mantenerlo, no revender un programa de otro.",
-      "en": "No third-party licences: the system is ours, so you pay to have it set up and maintained, not to resell someone else's software."
-    }
   }
 }
