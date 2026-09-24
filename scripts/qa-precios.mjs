@@ -170,9 +170,31 @@ for (const [aparato, op] of APARATOS) {
     const hay = await pg.evaluate(() => !!document.querySelector('#configurador .cfg-op'));
     if (!hay) { fallos.push(`${donde}: el configurador no se monta`); await ctx.close(); continue; }
 
+    /* Antes de empezar: el formulario de contacto NO está a la vista. Pedir
+       los datos antes de saber qué quiere nadie es lo que esta ronda vino a
+       quitar. Y tiene que estar escondido por el guion, no por la hoja: si el
+       guion no corre, el formulario se queda visible y funcionando. */
+    const antes = await pg.evaluate(() => ({
+      escondido: !!document.querySelector('.form-card.es-espera'),
+      pasos: document.querySelectorAll('#contact-form > .form-step').length,
+      puntos: document.querySelectorAll('.form-progress-dot').length,
+      extra: !!document.querySelector('.form-extra'),
+      campos: ['nombre', 'empresa', 'email', 'telefono'].every((id) => !!document.getElementById(id)),
+    }));
+    if (!antes.escondido) fallos.push(`${donde}: el formulario de contacto se ve antes de configurar nada`);
+    if (antes.pasos !== 2) fallos.push(`${donde}: el formulario tiene ${antes.pasos} pasos y tiene que tener 2`);
+    if (antes.puntos !== antes.pasos) fallos.push(`${donde}: ${antes.puntos} puntos de progreso para ${antes.pasos} pasos`);
+    if (!antes.extra) fallos.push(`${donde}: el mensaje libre no está plegado en «añadir algo más»`);
+    if (!antes.campos) fallos.push(`${donde}: al formulario le faltan campos tras juntar los pasos`);
+
     /* Recorrido completo: sector → objetivos → gente → piezas → adaptación */
     const elegir = async (sel, n) => { await pg.click(`#configurador ${sel} >> nth=${n}`); };
-    await elegir('.cfg-op', 2); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
+    await elegir('.cfg-op', 2);
+    /* Elegir tiene que NOTARSE: saltan piezas. Es lo que pidió el encargo y
+       es lo primero que se pierde sin querer al tocar el guion. */
+    const chispas = await pg.evaluate(() => document.querySelectorAll('.cfg-chispa').length);
+    if (!chispas) fallos.push(`${donde}: al elegir no salta nada`);
+    await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-chip', 0); await elegir('.cfg-chip', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 0); await elegir('.cfg-op', 2); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
@@ -202,11 +224,13 @@ for (const [aparato, op] of APARATOS) {
       oculto: !!document.querySelector('input[name="configuracion"]'),
       aviso: !!document.getElementById('cfg-listo'),
       campos: ['nombre', 'empresa', 'email'].every((id) => !!document.getElementById(id)),
+      visible: !!document.querySelector('.form-card') && !document.querySelector('.form-card.es-espera'),
     }));
     if (volcado.mensaje.length < 60) fallos.push(`${donde}: la configuración no llegó al formulario`);
     if (!volcado.oculto) fallos.push(`${donde}: falta el campo oculto con la configuración`);
     if (!volcado.aviso) fallos.push(`${donde}: no se avisa de que ya está en el formulario`);
     if (!volcado.campos) fallos.push(`${donde}: el formulario de contacto perdió sus campos`);
+    if (!volcado.visible) fallos.push(`${donde}: el formulario no aparece al terminar de configurar`);
     pasos++;
 
     const graves = errores.filter((e) => !/net::ERR|turnstile|cal\.com/i.test(e));

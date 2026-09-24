@@ -18,7 +18,7 @@ const require = createRequire(import.meta.url);
 const sharp = require('sharp');
 const { chromium } = require('playwright');
 const { opcionesNavegador } = await import('./qa/servidor.mjs');
-const { MAQUETAS } = await import('./webs/maquetas.mjs');
+const { MAQUETAS } = await import('./contenido/maquetas.mjs');
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SALIDA = path.join(RAIZ, 'assets/img/webs');

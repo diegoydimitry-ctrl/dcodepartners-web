@@ -8,7 +8,7 @@
  * escribir nada, y no lo cazó ninguna prueba: ni los solapes (miran anchos,
  * no dedos) ni axe (un campo oculto no incumple nada).
  *
- * Esto recorre los cuatro pasos en ES y EN, con ratón y con dedo, en los dos
+ * Esto recorre los dos pasos en ES y EN, con ratón y con dedo, en los dos
  * temas: comprueba que cada campo se ve, se puede enfocar, acepta texto y que
  * los botones llevan de un paso al siguiente. No envía nada.
  *
@@ -26,10 +26,14 @@ const APARATOS = [
   ['Móvil 320',      { viewport:{width:320,height:680},   deviceScaleFactor:2, isMobile:true, hasTouch:true }],
 ];
 const RUTAS = ['/contacto', '/en/contacto'];
+/* Dos pasos, no cuatro: los datos de contacto van juntos y el mensaje libre
+   vive plegado dentro de «añadir algo más». El formulario, además, ya no se
+   ve al entrar —lo abre el configurador, o el enlace de «prefiero
+   escribiros»—, así que aquí se abre por ese enlace antes de escribir. */
 const PASOS = [
-  [['#nombre','Dimitry Sosenko'], ['#empresa','D-Code Partners']],
-  [['#email','prueba@dcodepartners.com'], ['#telefono','600 00 00 00']],
-  [['#mensaje','Facturas y avisos, ahora mismo a mano.']],
+  [['#nombre','Dimitry Sosenko'], ['#empresa','D-Code Partners'],
+   ['#email','prueba@dcodepartners.com'], ['#telefono','600 00 00 00'],
+   ['#mensaje','Facturas y avisos, ahora mismo a mano.']],
   [],
 ];
 
@@ -48,6 +52,21 @@ for (const [nombre, op] of APARATOS) {
       const pg = await ctx.newPage();
       await pg.goto(`http://127.0.0.1:${PORT}${ruta}`, { waitUntil:'domcontentloaded' });
       await pg.waitForTimeout(700);
+
+      /* Abrir el formulario como lo abre quien entra y no quiere configurar
+         nada. Si el enlace no está, se sigue igual: puede que el guion del
+         configurador no haya corrido, y entonces el formulario ya se ve. */
+      const atajo = pg.locator('.cfg-saltar a');
+      if (await atajo.count()) {
+        await atajo.first().click().catch(() => {});
+        await pg.waitForTimeout(320);
+      }
+      const escondido = await pg.evaluate(() => !!document.querySelector('.form-card.es-espera'));
+      if (escondido) fallos.push(`${donde}: el formulario sigue escondido después de pulsar «prefiero escribiros»`);
+
+      /* El mensaje vive dentro de un <details>; hay que abrirlo para escribir. */
+      await pg.evaluate(() => { const d = document.querySelector('.form-extra'); if (d) d.open = true; });
+
       for (let i = 0; i < PASOS.length; i++) {
         for (const [sel, texto] of PASOS[i]) {
           const campo = pg.locator(sel);
@@ -90,5 +109,5 @@ for (const [nombre, op] of APARATOS) {
 }
 await br.close();
 if (fallos.length) { console.error(fallos.map((f) => '✗ ' + f).join('\n')); console.error(`\n${fallos.length} problema(s).`); process.exit(1); }
-console.log(`✓ qa:formulario — ${comprobados} campos rellenados en ${APARATOS.length} aparatos × 2 temas × ${RUTAS.length} idiomas; los cuatro pasos avanzan y el cierre se ve`);
+console.log(`✓ qa:formulario — ${comprobados} campos rellenados en ${APARATOS.length} aparatos × 2 temas × ${RUTAS.length} idiomas; los dos pasos avanzan y el cierre se ve`);
 process.exit(0);

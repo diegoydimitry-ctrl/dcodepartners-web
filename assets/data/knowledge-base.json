@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-24T09:42:01.989Z",
-  "pageCount": 64,
-  "chunkCount": 676,
+  "generatedAt": "2026-09-24T10:17:49.069Z",
+  "pageCount": 62,
+  "chunkCount": 650,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -315,77 +315,6 @@
       ]
     },
     {
-      "url": "/cambios-en-proceso",
-      "title": "Cambios en proceso — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/cambios-en-proceso#c0",
-          "heading": "Cambios en proceso",
-          "text": "Qué estamos construyendo ahora y qué está operativo. En proceso 4 frentes"
-        },
-        {
-          "id": "/cambios-en-proceso#c1",
-          "heading": "D-Code Finance, más fuerte",
-          "text": "Estamos ampliando el sistema financiero: más pantallas, lectura de documentos que coloca cada factura en su sitio y un asistente que contesta con los números de la empresa. El objetivo es que deje de hacer falta teclear nada que ya venga escrito en un papel. En evoluci&#243;n"
-        },
-        {
-          "id": "/cambios-en-proceso#c2",
-          "heading": "La base sobre la que corre todo",
-          "text": "Debajo de Finance estamos montando la capa común —permisos, aislamiento por empresa, registro de todo lo que se toca y una API única— para que cualquier sistema nuevo nazca ya con ella y no haya que rehacerla cada vez. En construcci&#243;n"
-        },
-        {
-          "id": "/cambios-en-proceso#c3",
-          "heading": "VERI*FACTU: la remisión a la AEAT",
-          "text": "El registro de cada factura ya se genera y se encadena desde que se emite. El siguiente paso es la remisión a la AEAT, y este tablero cambia cuando haya prueba de cada paso. Preparado"
-        },
-        {
-          "id": "/cambios-en-proceso#c4",
-          "heading": "Conciliación bancaria en Finance",
-          "text": "El extracto del banco, cruzado con facturas y gastos, para que lo cobrado y lo pagado cuadren sin repasarlo a mano. Todavía no está en el sistema: es la siguiente pieza de D-Code Finance. Próximamente Activo 7 sistemas"
-        },
-        {
-          "id": "/cambios-en-proceso#c5",
-          "heading": "D-Code OS",
-          "text": "El panel desde el que se ven y se dirigen todos los sistemas de la empresa: qué está corriendo, qué ha fallado y qué ha cambiado. Es el sitio por el que se entra. En producci&#243;n"
-        },
-        {
-          "id": "/cambios-en-proceso#c6",
-          "heading": "D-Code Finance",
-          "text": "El sistema financiero completo: veinticinco pantallas, registro fiscal preparado para VERI*FACTU, tesorería, radar de avisos y lectura de documentos. Corriendo sobre nuestros propios números todos los días. En producci&#243;n"
-        },
-        {
-          "id": "/cambios-en-proceso#c7",
-          "heading": "CRM y ficha única de cliente",
-          "text": "Nombre, NIF, contactos y actividad de cada cliente en una sola ficha, sincronizada a diario aunque los datos vengan de cinco sitios. Se deja de discutir cuál es el dato bueno. Activo"
-        },
-        {
-          "id": "/cambios-en-proceso#c8",
-          "heading": "De oportunidad a propuesta, sin escribirla a mano",
-          "text": "En cuanto una oportunidad cumple las condiciones, la propuesta se redacta sola y llega lista para revisar y enviar. Activo"
-        },
-        {
-          "id": "/cambios-en-proceso#c9",
-          "heading": "Ningún correo sale sin pasar un control",
-          "text": "Antes de cualquier envío a un cliente se comprueba destinatario, contenido y permiso. Si algo no cuadra, no sale. Activo"
-        },
-        {
-          "id": "/cambios-en-proceso#c10",
-          "heading": "Si una automatización falla, alguien se entera al momento",
-          "text": "Cada proceso avisa cuando se rompe, y los datos se respaldan sin que nadie tenga que acordarse. Activo"
-        },
-        {
-          "id": "/cambios-en-proceso#c11",
-          "heading": "Cada petición con dueño, plazo y aviso antes de incumplirlo",
-          "text": "Las peticiones se reparten por carga de trabajo, avisan cuando se acerca el plazo y escalan solas si nadie las coge. Activo"
-        },
-        {
-          "id": "/cambios-en-proceso#c12",
-          "heading": "¿Qué encaja en tu empresa?",
-          "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar una llamada Los siete están funcionando en nuestra propia operación, no en la de un cliente: son sistemas que sabemos construir porque los usamos a diario. En tu empresa se montarían con tus herramientas y tus reglas."
-        }
-      ]
-    },
-    {
       "url": "/casos-exito",
       "title": "Casos internos — D-Code Partners",
       "chunks": [
@@ -535,7 +464,7 @@
         {
           "id": "/contacto#c0",
           "heading": "Empecemos por el diagnóstico.",
-          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué construiríamos, con qué alcance y por dónde empezaríamos. Paso 1 de 4 Empecemos por lo básico ¿Cómo te contactamos? Cuéntanos sobre tu negocio Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos."
+          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué construiríamos, con qué alcance y por dónde empezaríamos. Paso 1 de 2 Dónde te escribimos Añadir algo más (opcional) Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos."
         },
         {
           "id": "/contacto#c1",
@@ -1265,77 +1194,6 @@
       ]
     },
     {
-      "url": "/en/cambios-en-proceso",
-      "title": "Changes in Progress — D-Code Partners",
-      "chunks": [
-        {
-          "id": "/en/cambios-en-proceso#c0",
-          "heading": "Changes in Progress",
-          "text": "What we are building now and what is operational. In progress 4 fronts"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c1",
-          "heading": "D-Code Finance, stronger",
-          "text": "We are extending the financial system: more screens, document reading that files each invoice where it belongs, and an assistant that answers with the company’s own numbers. The goal is that nothing already written on a piece of paper ever has to be typed again. Evolving"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c2",
-          "heading": "The layer everything runs on",
-          "text": "Underneath Finance we are building the common layer — permissions, per-company isolation, a record of everything that gets touched and a single API — so that any new system is born with it instead of rebuilding it every time. Under construction"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c3",
-          "heading": "VERI*FACTU: submission to the AEAT",
-          "text": "Every invoice record is already produced and chained from the moment of issue. The next step is submission to the AEAT, and this board changes when there is proof of each step. Ready"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c4",
-          "heading": "Bank reconciliation in Finance",
-          "text": "The bank statement, matched against invoices and expenses, so that what has been collected and paid adds up without checking it by hand. It is not in the system yet: it is the next piece of D-Code Finance. Coming soon Live 7 systems"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c5",
-          "heading": "D-Code OS",
-          "text": "The panel from which every system in the company is seen and run: what is running, what has failed and what has changed. It is the way in. In production"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c6",
-          "heading": "D-Code Finance",
-          "text": "The complete financial system: twenty-five screens, a tax register ready for VERI*FACTU, cash forecasting, an alert radar and document reading. Running on our own numbers every day. In production"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c7",
-          "heading": "CRM and a single client record",
-          "text": "Name, tax ID, contacts and activity for each client in one record, synced daily even when the data comes from five places. No more arguing about which figure is the right one. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c8",
-          "heading": "From opportunity to proposal, without writing it by hand",
-          "text": "As soon as an opportunity meets the conditions, the proposal writes itself and arrives ready to review and send. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c9",
-          "heading": "No email leaves the building without a check",
-          "text": "Before anything goes to a client we check recipient, content and permission. If something is off, it does not go out. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c10",
-          "heading": "If an automation breaks, somebody knows straight away",
-          "text": "Every process raises a flag when it breaks, and the data is backed up without anyone having to remember. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c11",
-          "heading": "Every request with an owner, a deadline and a warning before it slips",
-          "text": "Requests are distributed by workload, warn when the deadline approaches and escalate on their own if nobody picks them up. Live"
-        },
-        {
-          "id": "/en/cambios-en-proceso#c12",
-          "heading": "What fits your company?",
-          "text": "Thirty minutes, and you will know where we would start. Book a call All five run in our own operation, not in a client's: they are systems we know how to build because we use them daily. In your company they would be built with your tools and your rules."
-        }
-      ]
-    },
-    {
       "url": "/en/casos-exito",
       "title": "Internal Cases — D-Code Partners",
       "chunks": [
@@ -1485,7 +1343,7 @@
         {
           "id": "/en/contacto#c0",
           "heading": "Let’s start with a diagnosis.",
-          "text": "Tell us where your business stands today. In a 30-minute meeting we will tell you what we would build, with what scope, and where we would start. Step 1 of 4 Let's start with the basics How can we reach you? Tell us about your business Last step Security check Once you submit it, we will email you within 24h to schedule the 30-minute call."
+          "text": "Tell us where your business stands today. In a 30-minute meeting we will tell you what we would build, with what scope, and where we would start. Step 1 of 2 Where we write to you Add anything else (optional) Last step Security check Once you submit it, we will email you within 24h to schedule the 30-minute call."
         },
         {
           "id": "/en/contacto#c1",

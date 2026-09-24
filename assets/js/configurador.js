@@ -42,7 +42,10 @@
     enviar: 'Send this configuration', enviarSub: 'We read it, and we answer with what we would build and what it would cost — in writing.',
     aviso: 'Initial estimate, not a quote. The final price depends on the scope; we agree it in writing before anything starts.',
     listo: 'Your configuration is in the form. Now just your details.',
-    pasos: ['Your company', 'What you want to improve', 'How many people', 'What to build', 'How much tailoring']
+    pasos: ['Your company', 'What you want to improve', 'How many people', 'What to build', 'How much tailoring'],
+    animos: ['', 'Good. Now, where does it hurt?', 'Noted. This changes what you need.',
+             'Halfway there.', 'Last one, and we are done.'],
+    animoFin: 'Done. This is what we would build.'
   } : {
     kicker: 'Configurador', titulo: 'Vamos a diseñar tu sistema.',
     sub: 'Cinco preguntas, sin escribir. Al final sale qué te haría falta y cuánto costaría, aproximadamente.',
@@ -54,7 +57,10 @@
     enviar: 'Enviar esta configuración', enviarSub: 'La leemos y te contestamos con qué construiríamos y qué costaría, por escrito.',
     aviso: 'Estimación inicial, no un presupuesto. El precio final depende del alcance; lo cerramos por escrito antes de empezar.',
     listo: 'Tu configuración ya está en el formulario. Ahora solo faltan tus datos.',
-    pasos: ['Tu empresa', 'Qué quieres mejorar', 'Cuánta gente', 'Qué montamos', 'Cuánto hay que adaptarlo']
+    pasos: ['Tu empresa', 'Qué quieres mejorar', 'Cuánta gente', 'Qué montamos', 'Cuánto hay que adaptarlo'],
+    animos: ['', 'Bien. Ahora, ¿dónde duele?', 'Anotado. Esto cambia lo que te hace falta.',
+             'Vas por la mitad.', 'La última, y ya está.'],
+    animoFin: 'Listo. Esto es lo que construiríamos.'
   };
 
   /* ------------------------------------------------------------- sectores */
@@ -108,6 +114,60 @@
   ];
 
   var el = function (t, c, x) { var e = D.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+
+  /* ─────────────────────────── QUE APETEZCA PULSAR ───────────────────────
+     Elegir algo tiene que notarse. Al pulsar una tarjeta salen disparadas
+     unas cuantas piezas —los cuadrados del logo, no confeti de cumpleaños—
+     que saltan y caen. Es puro CSS con transform y opacity: ni layout ni
+     pintura de fondo, así que no cuesta fotogramas donde ya medimos que
+     duele (docs/RENDIMIENTO-POR-DISPOSITIVO.md).
+
+     Dos frenos: quien pide menos movimiento no ve ninguna, y en un aparato
+     táctil salen la mitad, que es donde el compositor va más justo. */
+  var QUIETO = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var TACTIL = window.matchMedia('(pointer:coarse)').matches;
+  var CUANTAS = TACTIL ? 8 : 16;
+  var TONOS = ['var(--v-a)', 'var(--v-b)', 'var(--blue, #5b8cff)', 'var(--x-ok, #35e0a1)'];
+  var enVuelo = 0;
+
+  function saltan(desde) {
+    if (QUIETO.matches || enVuelo > 40 || !desde) return;
+    var r = desde.getBoundingClientRect();
+    var capa = D.getElementById('cfg-chispas');
+    if (!capa) {
+      capa = el('div', 'cfg-chispas'); capa.id = 'cfg-chispas';
+      capa.setAttribute('aria-hidden', 'true');
+      D.body.appendChild(capa);
+    }
+    for (var i = 0; i < CUANTAS; i++) {
+      var p = el('i', 'cfg-chispa');
+      var giro = (Math.random() * 2 - 1) * 240;
+      var dx = (Math.random() * 2 - 1) * (r.width * 0.55);
+      var dy = -(75 + Math.random() * 115);
+      var lado = 7 + Math.random() * 10;
+      p.style.cssText =
+        'left:' + (r.left + r.width / 2) + 'px;top:' + (r.top + r.height / 2) + 'px;' +
+        'width:' + lado + 'px;height:' + lado + 'px;' +
+        'background:' + TONOS[i % TONOS.length] + ';' +
+        'border-radius:' + (i % 3 === 0 ? '50%' : '2px') + ';' +
+        '--dx:' + dx.toFixed(1) + 'px;--dy:' + dy.toFixed(1) + 'px;--giro:' + giro.toFixed(0) + 'deg;' +
+        'animation-delay:' + (i * 14) + 'ms';
+      capa.appendChild(p); enVuelo++;
+      /* animationend no siempre llega si la pestaña se va al fondo. */
+      (function (nodo) {
+        var fuera = function () { if (nodo.parentNode) { nodo.parentNode.removeChild(nodo); enVuelo--; } };
+        nodo.addEventListener('animationend', fuera, { once: true });
+        window.setTimeout(fuera, 1400);
+      }(p));
+    }
+  }
+
+  function late(nodo) {
+    if (QUIETO.matches || !nodo) return;
+    nodo.classList.remove('es-late');
+    void nodo.offsetWidth;
+    nodo.classList.add('es-late');
+  }
   var tx = function (o) { return EN ? (o.en || o[1]) : (o.es || o[0]); };
 
   /* ------------------------------------------------------------- estado */
@@ -127,7 +187,20 @@
   var barraIn = el('i'); barra.appendChild(barraIn);
   var cuenta = el('p', 'cfg-cuenta');
   cuenta.setAttribute('aria-live', 'polite');
-  host.appendChild(barra); host.appendChild(cuenta);
+  /* Un empujón por paso. No es adorno: quien va por el tercero de cinco se
+     merece saber que va bien y cuánto queda. Se anuncia con aria-live para
+     quien no lo está viendo. */
+  var animo = el('p', 'cfg-animo');
+  animo.setAttribute('aria-live', 'polite');
+  host.appendChild(barra); host.appendChild(cuenta); host.appendChild(animo);
+
+  function di(txt) {
+    if (!txt) { animo.textContent = ''; animo.classList.remove('es-pone'); return; }
+    animo.textContent = txt;
+    animo.classList.remove('es-pone');
+    void animo.offsetWidth;
+    animo.classList.add('es-pone');
+  }
 
   var caja = el('div', 'cfg-caja');
   host.appendChild(caja);
@@ -143,6 +216,24 @@
   saltar.appendChild(aSalta);
   host.appendChild(saltar);
 
+  /* ──────────────────── EL FORMULARIO ESPERA SU TURNO ────────────────────
+     Antes debajo del configurador había otro formulario pidiendo lo mismo de
+     la manera aburrida. Ahora solo hay uno: el configurador pregunta, y los
+     datos de contacto aparecen cuando ya hay algo que enviar.
+
+     Se esconde desde AQUÍ y no desde la hoja de estilos a propósito: si este
+     guion no llega a ejecutarse —falla, no carga, el navegador es viejo— el
+     formulario se queda visible y funcionando, que es lo único que no puede
+     romperse en esta página. */
+  var tarjeta = D.querySelector('.form-card');
+  if (tarjeta) tarjeta.classList.add('es-espera');
+  function abreFormulario() {
+    if (!tarjeta) return;
+    tarjeta.classList.remove('es-espera');
+    tarjeta.classList.add('es-llega');
+  }
+  aSalta.addEventListener('click', abreFormulario);
+
   /* ------------------------------------------------------------ pintar */
   function opcion(txt, sub, puesto) {
     var b = el('button', 'cfg-op' + (puesto ? ' is-on' : ''));
@@ -150,6 +241,12 @@
     b.setAttribute('aria-pressed', puesto ? 'true' : 'false');
     b.appendChild(el('b', null, txt));
     if (sub) b.appendChild(el('span', null, sub));
+    /* El salto va en captura y antes que la lógica: si repintamos el paso,
+       el botón ya no existe cuando llega el click normal. */
+    b.addEventListener('click', function () {
+      if (b.getAttribute('aria-pressed') !== 'true') saltan(b);
+      late(b);
+    }, true);
     return b;
   }
 
@@ -231,6 +328,7 @@
     if (resumenVivo()) caja.appendChild(resumenVivo());
     barraIn.style.width = Math.round(((paso) / TOTAL) * 100) + '%';
     cuenta.textContent = (paso + 1) + ' ' + L.de + ' ' + TOTAL + ' · ' + L.pasos[paso];
+    di(L.animos[paso]);
     bAtras.hidden = paso === 0;
     bSeguir.disabled = !puedeSeguir();
     bSeguir.textContent = paso === TOTAL - 1 ? (EN ? 'See my configuration' : 'Ver mi configuración') : L.seguir;
@@ -320,6 +418,7 @@
     caja.innerHTML = '';
     barraIn.style.width = '100%';
     cuenta.textContent = TOTAL + ' ' + L.de + ' ' + TOTAL + ' · ' + L.resumen;
+    di(L.animoFin);
     var e = estimar();
     var box = el('div', 'cfg-res');
     box.appendChild(el('span', 'eyebrow', L.resumen));
@@ -418,6 +517,9 @@
       aviso.setAttribute('role', 'status');
       form.insertBefore(aviso, form.firstChild);
     }
+    abreFormulario();
+    saltan(bSeguir);
+
     var destino = D.getElementById('contact-form');
     if (destino) {
       destino.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });

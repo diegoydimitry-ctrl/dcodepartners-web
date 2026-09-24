@@ -16,8 +16,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const { AREAS, PIEZAS, PASOS } = await import('./webs/contenido.mjs');
-const { MAQUETAS } = await import('./webs/maquetas.mjs');
+const { AREAS, PIEZAS, PASOS } = await import('./contenido/paginas.mjs');
+const { MAQUETAS } = await import('./contenido/maquetas.mjs');
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -164,4 +164,9 @@ for (const lang of ['es', 'en']) {
   fs.writeFileSync(path.join(RAIZ, destino), h);
   hechas.push(destino);
 }
+/* Las páginas recién escritas también necesitan el menú unido y su «estás
+   aquí». Llamarlo desde aquí evita que generar sin aplicar deje la web a
+   medias: pasó una vez y lo cazó check:que-hacemos. */
+await import('./aplicar-que-hacemos.mjs');
+
 console.log(`✓ build:que-hacemos — ${hechas.join(', ')} (${PIEZAS.length} piezas, ${MAQUETAS.length} webs, ${AREAS.length} áreas, ${PASOS.length} pasos)`);

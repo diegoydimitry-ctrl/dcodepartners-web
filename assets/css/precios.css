@@ -364,3 +364,107 @@
   .cfg-barra i, .cfg-op, .cfg-chip{ transition:none; }
 }
 
+
+/* ═════════════════ QUE APETEZCA RELLENARLO ═════════════════
+   El encargo pedía que completar esto entretuviera. Lo que hay:
+   · las tarjetas se hunden y rebotan al pulsarlas,
+   · salen disparadas unas piezas que saltan y caen,
+   · las opciones entran escalonadas al cambiar de paso,
+   · la barra de progreso avanza con un empujón, no lineal.
+   Todo con transform y opacity, que es lo único que no cuesta fotogramas,
+   y todo apagado para quien pide menos movimiento. */
+
+/* Las piezas que saltan. Viven en <body>, sobre todo y sin capturar nada. */
+.cfg-chispas{
+  position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden;
+  contain:strict;
+}
+.cfg-chispa{
+  position:absolute; display:block; will-change:transform, opacity;
+  animation:cfg-salta .78s cubic-bezier(.2,.75,.3,1) forwards;
+}
+@keyframes cfg-salta{
+  0%   { transform:translate(-50%,-50%) scale(.4) rotate(0deg); opacity:0; }
+  18%  { opacity:1; }
+  55%  { transform:translate(calc(-50% + var(--dx)*.72), calc(-50% + var(--dy))) scale(1) rotate(calc(var(--giro)*.6)); opacity:1; }
+  100% { transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)*-.28)) scale(.55) rotate(var(--giro)); opacity:0; }
+}
+
+/* El latido de la tarjeta recién elegida. */
+.cfg-op.es-late, .cfg-chip.es-late{ animation:cfg-late .42s cubic-bezier(.3,1.4,.4,1); }
+@keyframes cfg-late{
+  0%   { transform:scale(1); }
+  32%  { transform:scale(.955); }
+  100% { transform:scale(1); }
+}
+
+/* Las opciones entran una detrás de otra, no todas de golpe. Vale tanto
+   para las tarjetas grandes como para los chips del segundo paso. */
+.cfg-caja .cfg-op, .cfg-caja .cfg-chip{ animation:cfg-entra .34s cubic-bezier(.2,.8,.3,1) both; }
+.cfg-caja .cfg-op:nth-child(1), .cfg-caja .cfg-chip:nth-child(1){ animation-delay:0ms; }
+.cfg-caja .cfg-op:nth-child(2), .cfg-caja .cfg-chip:nth-child(2){ animation-delay:34ms; }
+.cfg-caja .cfg-op:nth-child(3), .cfg-caja .cfg-chip:nth-child(3){ animation-delay:68ms; }
+.cfg-caja .cfg-op:nth-child(4), .cfg-caja .cfg-chip:nth-child(4){ animation-delay:102ms; }
+.cfg-caja .cfg-op:nth-child(5), .cfg-caja .cfg-chip:nth-child(5){ animation-delay:136ms; }
+.cfg-caja .cfg-op:nth-child(6), .cfg-caja .cfg-chip:nth-child(6){ animation-delay:170ms; }
+.cfg-caja .cfg-op:nth-child(7), .cfg-caja .cfg-chip:nth-child(7){ animation-delay:204ms; }
+.cfg-caja .cfg-op:nth-child(8), .cfg-caja .cfg-chip:nth-child(8){ animation-delay:238ms; }
+.cfg-caja .cfg-op:nth-child(n+9), .cfg-caja .cfg-chip:nth-child(n+9){ animation-delay:272ms; }
+@keyframes cfg-entra{
+  from{ opacity:0; transform:translateY(9px) scale(.985); }
+  to  { opacity:1; transform:none; }
+}
+
+/* La pregunta y el resumen, igual pero antes. */
+.cfg-caja .cfg-preg, .cfg-caja .cfg-ayuda, .cfg-vivo{
+  animation:cfg-entra .3s cubic-bezier(.2,.8,.3,1) both;
+}
+
+/* La barra empuja al avanzar. */
+.cfg-barra > i{ transition:width .46s cubic-bezier(.25,1.2,.35,1); }
+
+/* Y el formulario, cuando por fin le toca, llega desde abajo. */
+.form-card.es-espera{ display:none; }
+.form-card.es-llega{ animation:cfg-llega .5s cubic-bezier(.2,.85,.3,1) both; }
+@keyframes cfg-llega{
+  from{ opacity:0; transform:translateY(18px); }
+  to  { opacity:1; transform:none; }
+}
+
+/* Lo que se añade sin querer verlo: plegado y discreto. */
+.form-extra{ margin-top:4px; }
+.form-extra > summary{
+  cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--v-ink-3); padding:6px 0;
+}
+.form-extra > summary::-webkit-details-marker{ display:none; }
+.form-extra > summary::after{
+  content:''; width:7px; height:7px; border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-2px);
+  transition:transform .18s ease;
+}
+.form-extra[open] > summary::after{ transform:rotate(225deg) translateY(-2px); }
+.form-extra > summary:hover, .form-extra[open] > summary{ color:var(--v-a); }
+.form-extra > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; border-radius:5px; }
+
+@media (prefers-reduced-motion:reduce){
+  .cfg-chispas{ display:none; }
+  .cfg-op.es-late, .cfg-chip.es-late, .cfg-caja .cfg-op, .cfg-caja .cfg-chip,
+  .cfg-caja .cfg-preg, .cfg-caja .cfg-ayuda,
+  .cfg-vivo, .form-card.es-llega{ animation:none; }
+  .cfg-barra > i{ transition:none; }
+  .form-extra > summary::after{ transition:none; }
+}
+
+/* El empujón de cada paso. Entra desde abajo y se queda. */
+.cfg-animo{
+  margin:6px 0 0; min-height:1.15em;
+  font-size:.83rem; line-height:1.4; color:var(--v-a);
+}
+.cfg-animo.es-pone{ animation:cfg-animo .36s cubic-bezier(.2,.9,.3,1) both; }
+@keyframes cfg-animo{
+  from{ opacity:0; transform:translateY(6px); }
+  to  { opacity:1; transform:none; }
+}
+@media (prefers-reduced-motion:reduce){ .cfg-animo.es-pone{ animation:none; } }
