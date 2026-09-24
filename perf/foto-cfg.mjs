@@ -9,7 +9,7 @@ await pg.goto(BASE+'/contacto',{waitUntil:'networkidle'});
 await pg.waitForTimeout(600);
 await pg.screenshot({path:'/tmp/cfg-1.png'});
 await pg.click('#configurador .cfg-op >> nth=2');
-await pg.waitForTimeout(110);
+await pg.waitForTimeout(620);
 await pg.screenshot({path:'/tmp/cfg-2.png'});   // con las piezas en el aire
 await pg.click('.cfg-seguir'); await pg.waitForTimeout(250);
 await pg.click('#configurador .cfg-chip >> nth=0'); await pg.click('#configurador .cfg-chip >> nth=2');

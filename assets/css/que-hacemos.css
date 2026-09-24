@@ -5,18 +5,51 @@
    el método entero cabe en un solo <details>. */
 
 /* ── Las cinco piezas ─────────────────────────────────────── */
+/* Seis huecos para cinco piezas: la primera ocupa dos y manda. Cinco cajas
+   iguales se leen como un índice; una grande y cuatro pequeñas se leen como
+   una idea principal con sus variantes, que es lo que son. */
 .qh-rej{
   display:grid; gap:clamp(14px,1.6vw,18px);
   grid-template-columns:repeat(auto-fit, minmax(min(268px,100%), 1fr));
 }
+@media (min-width:900px){
+  .qh-rej{ grid-template-columns:repeat(6, 1fr); }
+  .qh-pieza{ grid-column:span 2; }
+  .qh-pieza.es-ancha{ grid-column:span 3; }
+  .qh-pieza:nth-child(2){ grid-column:span 3; }
+}
 .qh-pieza{
   display:flex; flex-direction:column; gap:10px;
-  padding:clamp(20px,2.4vw,26px);
-  border:1px solid var(--v-edge); border-radius:16px;
+  padding:clamp(22px,2.6vw,30px);
+  border:1px solid var(--v-edge); border-radius:18px;
   background-color:var(--v-bg);
   background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
-  position:relative; z-index:2; isolation:isolate;
+  position:relative; z-index:2; isolation:isolate; overflow:hidden;
+  transition:border-color .22s ease, transform .22s ease;
 }
+/* Un resplandor propio en la esquina, del color de la casa, para que la
+   rejilla no sea una cuadrícula gris. */
+.qh-pieza::before{
+  content:''; position:absolute; right:-30%; top:-60%;
+  width:70%; aspect-ratio:1; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, color-mix(in srgb, var(--v-a) 26%, transparent), transparent 68%);
+  opacity:.5; transition:opacity .28s ease, transform .28s ease;
+}
+.qh-pieza:nth-child(2n)::before{ background:radial-gradient(circle, color-mix(in srgb, var(--v-b) 26%, transparent), transparent 68%); }
+.qh-pieza:hover{ border-color:color-mix(in srgb, var(--v-a) 45%, var(--v-edge)); transform:translateY(-2px); }
+.qh-pieza:hover::before{ opacity:.85; transform:scale(1.12); }
+
+/* La figura de cada pieza: la misma familia que cruza la pantalla en el
+   configurador, para que la web y el formulario hablen el mismo idioma. */
+.qh-fig{
+  display:block; width:clamp(38px,4vw,46px); height:clamp(38px,4vw,46px);
+  color:var(--v-a); margin-bottom:2px;
+}
+.qh-pieza:nth-child(2n) .qh-fig{ color:var(--v-b); }
+.qh-fig svg{ width:100%; height:100%; display:block; }
+.qh-pieza.es-ancha .qh-fig{ width:clamp(46px,5vw,58px); height:clamp(46px,5vw,58px); }
+.qh-pieza.es-ancha h3{ font-size:clamp(1.24rem,2.2vw,1.55rem); }
+.qh-pieza.es-ancha .qh-una{ font-size:.98rem; }
 .qh-pieza h3{
   margin:0; font-family:var(--display, var(--serif)); font-size:clamp(1.06rem,1.7vw,1.2rem);
   font-weight:650; letter-spacing:-.022em; color:var(--v-ink);
@@ -122,4 +155,6 @@
 
 @media (prefers-reduced-motion:reduce){
   .qh-mas > summary::after, .qh-metodo > summary::after, .qh-precio svg{ transition:none; }
+  .qh-pieza, .qh-pieza::before{ transition:none; }
+  .qh-pieza:hover{ transform:none; }
 }

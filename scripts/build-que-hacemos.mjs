@@ -65,11 +65,25 @@ const T = {
 
 const FLECHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
+/* Las mismas figuras que cruzan la pantalla en el configurador. Una página
+   de cinco cajas con solo texto dentro se lee como un índice; con su figura
+   se lee como cinco cosas distintas. */
+const T2 = 'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"';
+const FIG = {
+  sistemas:        `<circle cx="17" cy="31" r="8" ${T2}/><path d="M23 25L40 8M34 14l4 4M30 18l4 4" ${T2}/>`,
+  automatizaciones:`<circle cx="24" cy="24" r="7" ${T2}/><path d="M24 5v6M24 37v6M43 24h-6M11 24H5M37.4 10.6l-4.2 4.2M14.8 33.2l-4.2 4.2M37.4 37.4l-4.2-4.2M14.8 14.8l-4.2-4.2" ${T2}/>`,
+  agentes:         `<path d="M40 24c0 7.7-7.2 14-16 14-2.3 0-4.5-.4-6.4-1.2L8 40l3.4-8.3C9.2 29.5 8 26.9 8 24c0-7.7 7.2-14 16-14s16 6.3 16 14z" ${T2}/><circle cx="18" cy="24" r="1.8" fill="currentColor"/><circle cx="24" cy="24" r="1.8" fill="currentColor"/><circle cx="30" cy="24" r="1.8" fill="currentColor"/>`,
+  integraciones:   `<path d="M18 6v10M30 6v10M12 16h24v6a12 12 0 0 1-24 0z" ${T2}/><path d="M24 34v8" ${T2}/>`,
+  webs:            `<rect x="6" y="10" width="36" height="24" rx="3" ${T2}/><path d="M6 18h36M18 40h12M24 34v6" ${T2}/><circle cx="12" cy="14" r="1.4" fill="currentColor"/><circle cx="17" cy="14" r="1.4" fill="currentColor"/>`,
+};
+const fig = (id) => `<span class="qh-fig" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false">${FIG[id] || ''}</svg></span>`;
+
 function cuerpo(lang) {
   const t = T[lang];
   const base = lang === 'en' ? '/en' : '';
 
-  const piezas = PIEZAS.map((p) => `<article class="qh-pieza">
+  const piezas = PIEZAS.map((p, i) => `<article class="qh-pieza${i === 0 ? ' es-ancha' : ''}" data-p="${p.id}">
+${fig(p.id)}
 <h3>${esc(p.t[lang])}</h3>
 <p class="qh-una">${esc(p.una[lang])}</p>
 <details class="qh-mas"><summary>${esc(t.mas)}</summary><ul>${p.mas[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>

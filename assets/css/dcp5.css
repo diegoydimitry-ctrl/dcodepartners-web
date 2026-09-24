@@ -192,13 +192,14 @@ p{ color:var(--v-ink-2); }
 .main-nav > ul > li > a[aria-current="page"]{ color:var(--v-ink); }
 /* Ningún ::after por enlace, a propósito. El único subrayado es
    .nav-indicator, que se desliza. Dos a la vez son las "dos barras". */
+/* Opaco, sí; negro, no: el color sale del tema. Lo mismo que en dcp7. */
 .mega-menu{
-  background:rgba(9,13,26,.97); backdrop-filter:blur(26px);
+  background:var(--v-bg); backdrop-filter:blur(26px);
   border:1px solid var(--v-edge); border-radius:var(--rad);
-  box-shadow:0 44px 110px -46px rgba(0,0,0,.96);
+  box-shadow:0 44px 110px -46px rgba(0,0,0,.5);
 }
 .mega-item{ border-radius:12px; transition:background .18s, transform .18s; }
-.mega-item:hover{ background:rgba(255,255,255,.05); transform:translateX(3px); }
+.mega-item:hover{ background:color-mix(in srgb, var(--v-ink) 6%, transparent); transform:translateX(3px); }
 
 /* =============================================================== 4. BOTONES */
 .btn{ border-radius:999px; font-weight:600; letter-spacing:-.01em; position:relative; overflow:hidden;

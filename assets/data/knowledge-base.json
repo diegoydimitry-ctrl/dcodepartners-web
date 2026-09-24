@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T10:27:34.356Z",
+  "generatedAt": "2026-09-24T11:59:39.853Z",
   "pageCount": 62,
   "chunkCount": 650,
   "pages": [
@@ -464,7 +464,7 @@
         {
           "id": "/contacto#c0",
           "heading": "Empecemos por el diagnóstico.",
-          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué construiríamos, con qué alcance y por dónde empezaríamos. Paso 1 de 2 Dónde te escribimos Añadir algo más (opcional) Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos."
+          "text": "Cuéntanos en qué punto está tu negocio. En una reunión de 30 minutos te decimos qué construiríamos, con qué alcance y por dónde empezaríamos. Paso 1 de 2 Quién lo pide Añadir teléfono o algo más (opcional) Último paso Verificación de seguridad Al enviarlo, te escribimos por email en menos de 24h para agendar la llamada de 30 minutos."
         },
         {
           "id": "/contacto#c1",
@@ -1343,7 +1343,7 @@
         {
           "id": "/en/contacto#c0",
           "heading": "Let’s start with a diagnosis.",
-          "text": "Tell us where your business stands today. In a 30-minute meeting we will tell you what we would build, with what scope, and where we would start. Step 1 of 2 Where we write to you Add anything else (optional) Last step Security check Once you submit it, we will email you within 24h to schedule the 30-minute call."
+          "text": "Tell us where your business stands today. In a 30-minute meeting we will tell you what we would build, with what scope, and where we would start. Step 1 of 2 Who is asking Add a phone number or anything else (optional) Last step Security check Once you submit it, we will email you within 24h to schedule the 30-minute call."
         },
         {
           "id": "/en/contacto#c1",
@@ -2882,7 +2882,7 @@
         {
           "id": "/#c1",
           "heading": "Lo que tu equipo repite cada semanapuede hacerlo un sistema.",
-          "text": "Vemos por dónde se os escapan el tiempo y el dinero, y construimos el sistema que lo corta. Abajo hay cuatro funcionando. Prueba los sistemas Haz el diagnóstico Software propio, no reventa de licencias Los sistemas que enseñamos los usamos dentro Alcance, plazo y precio por escrito antes de empezar Lo que estás viendo Una empresa antes de ordenarla Qué hacemos"
+          "text": "Vemos por dónde se os escapan el tiempo y el dinero, y construimos el sistema que lo corta. Abajo hay cuatro funcionando. Prueba los sistemas Haz el diagnóstico Software propio, no reventa de licencias Los sistemas que enseñamos los usamos dentro Alcance, plazo y precio por escrito antes de empezar Lo que estás viendo Una empresa antes de ordenarla El sistema, funcionando D-Code Finance · datos de demostración Qué hacemos"
         },
         {
           "id": "/#c2",

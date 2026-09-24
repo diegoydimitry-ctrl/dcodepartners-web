@@ -211,17 +211,25 @@ body.v6 .dcx.dcx--fuera a:focus-visible .dcx-lab{ opacity:1; }
    jerarquía de capas) y era translúcido sobre un lienzo en movimiento, así
    que el texto competía con las partículas de detrás. Aquí se vuelve opaco
    y sólido: un desplegable se lee, no se contempla. */
+/* El panel tiene que ser OPACO —debajo pasa la galaxia y un menú translúcido
+   sobre estrellas no se lee— pero opaco NO quiere decir negro: escrito con
+   colores fijos, en tema claro quedaba una caja negra encima de una página
+   blanca. Ahora el fondo se hace con las variables del tema, que es de donde
+   sale el color de todas las demás superficies. */
 .mega-menu{
-  background:linear-gradient(180deg, #101731 0%, #0a0f22 55%, #070b18 100%) !important;
-  border:1px solid rgba(150,174,245,.18) !important;
-  box-shadow:0 40px 90px -34px rgba(0,0,0,.94), 0 0 0 1px rgba(91,140,255,.10) !important;
+  background-color:var(--v-bg) !important;
+  background-image:linear-gradient(180deg,
+    color-mix(in srgb, var(--v-panel-2) 88%, transparent) 0%,
+    color-mix(in srgb, var(--v-bg-2) 92%, transparent) 100%) !important;
+  border:1px solid var(--v-edge) !important;
+  box-shadow:0 40px 90px -34px rgba(0,0,0,.42), 0 0 0 1px rgba(91,140,255,.10) !important;
   backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
 }
 .mega-item{ position:relative; }
-.mega-item strong{ color:#eef3ff; }
-.mega-item span span{ color:#93a1c1; }
-.mega-item:hover, .mega-item:focus-visible{ background:rgba(91,140,255,.12); }
-.mega-item:hover strong, .mega-item:focus-visible strong{ color:#fff; }
+.mega-item strong{ color:var(--v-ink); }
+.mega-item span span{ color:var(--v-ink-3); }
+.mega-item:hover, .mega-item:focus-visible{ background:color-mix(in srgb, var(--v-a) 12%, transparent); }
+.mega-item:hover strong, .mega-item:focus-visible strong{ color:var(--v-a); }
 .mega-item:focus-visible{ outline:2px solid var(--blue,#5b8cff); outline-offset:-2px; }
 /* Una zona-puente invisible entre el enlace y el panel: al bajar el ratón en
    diagonal ya no se cierra a mitad de camino. */

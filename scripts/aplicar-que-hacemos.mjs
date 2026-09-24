@@ -15,6 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+const { MENU } = await import('./contenido/paginas.mjs');
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
@@ -46,20 +47,30 @@ for (const f of paginas(RAIZ)) {
     new RegExp(`<a href="${base}/departamentos" class="nav-link-btn mega-trigger"([^>]*)>[^<]*`),
     `<a href="${base}/que-hacemos" class="nav-link-btn mega-trigger"$1>${rotulo} `);
 
-  /* 2 · el último del desplegable ya no lleva al índice viejo */
+  /* 2 · el desplegable lista LO QUE HACEMOS, no cómo lo ordenamos por
+     dentro. Quien lo abre buscando «¿hacéis webs?» tiene que ver la
+     palabra «web»; los departamentos siguen a un clic, dentro. */
+  const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const items = MENU.map((m) =>
+    `<a class="mega-item" href="${m.href[en ? 'en' : 'es']}" role="menuitem"><span><strong>${esc(m.q[en ? 1 : 0])}</strong><span>${esc(m.n[en ? 1 : 0])}</span></span></a>`
+  ).join(' ');
+  s = s.replace(/(<div class="mega-menu" role="menu"> )[\s\S]*?( <a class="mega-item wide")/,
+    `$1${items}$2`);
+
+  /* 3 · el último del desplegable ya no lleva al índice viejo */
   s = s.replace(
     new RegExp(`<a class="mega-item wide" href="${base}/departamentos"([^>]*)>[^<]*`),
     `<a class="mega-item wide" href="${base}/que-hacemos"$1>${verTodo}`);
 
-  /* 3 · fuera la entrada suelta de Servicios: ya está dentro */
+  /* 4 · fuera la entrada suelta de Servicios: ya está dentro */
   s = s.replace(new RegExp(`\\s*<li><a href="${base}/servicios"[^>]*>[^<]*</a></li>`), '');
 
-  /* 4 · en el pie, la columna de áreas encabeza con la página unida */
+  /* 5 · en el pie, la columna de áreas encabeza con la página unida */
   s = s.replace(
     new RegExp(`(<h2>)(Qué construimos|What we build)(</h2> <ul> )(?!<li><a href="${base}/que-hacemos")`),
     `$1${rotulo}$3<li><a href="${base}/que-hacemos">${en ? 'Everything we do' : 'Todo lo que hacemos'}</a></li> `);
 
-  /* 5 · «estás aquí»: lo llevan la propia página y sus hijas */
+  /* 6 · «estás aquí»: lo llevan la propia página y sus hijas */
   const ruta = '/' + path.relative(RAIZ, f).replace(/\\/g, '/').replace(/\.html$/, '').replace(/\/index$/, '');
   const suyo = new RegExp(`^${base}/(que-hacemos|servicios|departamentos)(/|$)`).test(ruta);
   s = s.replace(new RegExp(`(<a href="${base}/que-hacemos" class="nav-link-btn mega-trigger")\\s+aria-current="page"`), '$1');

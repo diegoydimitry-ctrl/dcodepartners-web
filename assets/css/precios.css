@@ -374,21 +374,71 @@
    Todo con transform y opacity, que es lo único que no cuesta fotogramas,
    y todo apagado para quien pide menos movimiento. */
 
-/* Las piezas que saltan. Viven en <body>, sobre todo y sin capturar nada. */
-.cfg-chispas{
+/* La pista por donde cruzan las figuras. Vive en <body>, por encima de todo
+   y sin capturar ni un clic. */
+.cfg-pista{
   position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden;
   contain:strict;
 }
-.cfg-chispa{
-  position:absolute; display:block; will-change:transform, opacity;
-  animation:cfg-salta .78s cubic-bezier(.2,.75,.3,1) forwards;
+.cfg-figura{
+  position:absolute; left:0; display:block; width:76px; height:76px;
+  color:var(--v-a); will-change:transform; opacity:0;
+  filter:drop-shadow(0 8px 26px color-mix(in srgb, var(--v-a) 60%, transparent));
 }
-@keyframes cfg-salta{
-  0%   { transform:translate(-50%,-50%) scale(.4) rotate(0deg); opacity:0; }
-  18%  { opacity:1; }
-  55%  { transform:translate(calc(-50% + var(--dx)*.72), calc(-50% + var(--dy))) scale(1) rotate(calc(var(--giro)*.6)); opacity:1; }
-  100% { transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)*-.28)) scale(.55) rotate(var(--giro)); opacity:0; }
+.cfg-figura svg{ width:100%; height:100%; display:block; stroke-width:1.6; }
+
+/* Cuatro maneras de cruzar. Todas recorren la pantalla de izquierda a
+   derecha; lo que cambia es CÓMO, que es lo que hace que una caja se
+   distinga de una estrella sin mirarla fijamente. */
+.cfg-figura.es-corre{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
+.cfg-figura.es-corre svg{ animation:cfg-trote .34s ease-in-out infinite; }
+.cfg-figura.es-salta{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
+.cfg-figura.es-salta svg{ animation:cfg-brinco .52s cubic-bezier(.3,.1,.4,1) infinite; }
+.cfg-figura.es-rueda{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
+.cfg-figura.es-rueda svg{ animation:cfg-vuelta .8s linear infinite; }
+.cfg-figura.es-gira{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
+.cfg-figura.es-gira svg{ animation:cfg-tumbo 1.1s ease-in-out infinite; }
+.cfg-figura.es-vuela{ animation:cfg-planea var(--d,1.85s) ease-in-out forwards; }
+.cfg-figura.es-vuela svg{ animation:cfg-aleteo .42s ease-in-out infinite; }
+
+@keyframes cfg-cruza{
+  0%   { transform:translateX(-90px); opacity:0; }
+  8%   { opacity:1; }
+  92%  { opacity:1; }
+  100% { transform:translateX(calc(100vw + 90px)); opacity:0; }
 }
+@keyframes cfg-planea{
+  0%   { transform:translate(-90px, 0) rotate(-8deg); opacity:0; }
+  10%  { opacity:1; }
+  50%  { transform:translate(50vw, -54px) rotate(6deg); }
+  90%  { opacity:1; }
+  100% { transform:translate(calc(100vw + 90px), 10px) rotate(-6deg); opacity:0; }
+}
+/* El trote: sube, baja y aplasta un poco al caer. Las dos piernas del SVG
+   alternan con el mismo compás. */
+@keyframes cfg-trote{
+  0%,100%{ transform:translateY(0) scaleY(1); }
+  40%    { transform:translateY(-7px) scaleY(1.04); }
+  70%    { transform:translateY(0) scaleY(.94); }
+}
+@keyframes cfg-brinco{
+  0%,100%{ transform:translateY(0) scale(1); }
+  35%    { transform:translateY(-16px) scale(1.04); }
+  60%    { transform:translateY(0) scale(.92, 1.06); }
+}
+@keyframes cfg-vuelta{ to{ transform:rotate(360deg); } }
+@keyframes cfg-tumbo{
+  0%,100%{ transform:rotate(-14deg) scale(1); }
+  50%    { transform:rotate(14deg) scale(1.08); }
+}
+@keyframes cfg-aleteo{
+  0%,100%{ transform:rotate(-6deg); }
+  50%    { transform:rotate(6deg); }
+}
+/* Las piernas solo las tiene quien corre. */
+.cfg-figura:not(.es-corre) .cfg-pies{ display:none; }
+.cfg-figura.es-corre .cfg-pies{ animation:cfg-zancada .34s steps(2, jump-none) infinite; transform-origin:24px 40px; }
+@keyframes cfg-zancada{ 0%{ transform:skewX(-16deg); } 100%{ transform:skewX(16deg); } }
 
 /* El latido de la tarjeta recién elegida. */
 .cfg-op.es-late, .cfg-chip.es-late{ animation:cfg-late .42s cubic-bezier(.3,1.4,.4,1); }
@@ -449,7 +499,7 @@
 .form-extra > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; border-radius:5px; }
 
 @media (prefers-reduced-motion:reduce){
-  .cfg-chispas{ display:none; }
+  .cfg-pista{ display:none; }
   .cfg-op.es-late, .cfg-chip.es-late, .cfg-caja .cfg-op, .cfg-caja .cfg-chip,
   .cfg-caja .cfg-preg, .cfg-caja .cfg-ayuda,
   .cfg-vivo, .form-card.es-llega{ animation:none; }

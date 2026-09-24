@@ -133,3 +133,43 @@ export const PASOS = [
    'Cada mes miramos los números y ajustamos. Cuando tu empresa cambia, el sistema cambia con ella.',
    'Every month we look at the numbers and adjust. When your company changes, the system changes with it.'],
 ];
+
+/* ─────────────────────── EL DESPLEGABLE DEL MENÚ ───────────────────────
+   Listaba los ocho departamentos, que es una manera de ordenar lo que
+   hacemos, pero no es lo que hacemos: quien abre el menú buscando «¿hacéis
+   webs?» no encuentra la palabra «web» por ninguna parte. Ahora están las
+   ocho cosas, con su nombre, y las áreas siguen a un clic en la página. */
+export const MENU = [
+  { href: { es: '/sistema-financiero', en: '/en/sistema-financiero' },
+    n: ['Software financiero', 'Financial software'],
+    q: ['Facturar, cobrar y saber lo que hay, sin hojas de cálculo',
+        'Invoice, get paid and know where you stand, without spreadsheets'] },
+  { href: { es: '/que-hacemos#qh-webs', en: '/en/que-hacemos#qh-webs' },
+    n: ['Páginas web', 'Websites'],
+    q: ['Tu web hecha o rehecha, y hablando con tus sistemas',
+        'Your site built or rebuilt, and talking to your systems'] },
+  { href: { es: '/precios#g-automatiza', en: '/en/precios#g-automatiza' },
+    n: ['Automatizaciones', 'Automations'],
+    q: ['Lo que se repite cada semana deja de hacerse a mano',
+        'What repeats every week stops being done by hand'] },
+  { href: { es: '/precios#g-agentes', en: '/en/precios#g-agentes' },
+    n: ['Chatbots y agentes de IA', 'Chatbots and AI agents'],
+    q: ['Atienden por web y WhatsApp con los datos de tu negocio',
+        'They answer on the web and WhatsApp with your business data'] },
+  { href: { es: '/departamentos/comercial', en: '/en/departamentos/comercial' },
+    n: ['CRM y ficha de cliente', 'CRM and customer records'],
+    q: ['Un solo cliente, un solo dato, y ninguna venta olvidada',
+        'One customer, one record, and no deal forgotten'] },
+  { href: { es: '/precios#g-medida', en: '/en/precios#g-medida' },
+    n: ['Aplicaciones a medida', 'Custom applications'],
+    q: ['Lo que ninguna herramienta comprada hace como tú lo necesitas',
+        'What no bought tool does the way you need it'] },
+  { href: { es: '/precios#g-integra', en: '/en/precios#g-integra' },
+    n: ['Integraciones', 'Integrations'],
+    q: ['Tus herramientas hablándose, con los permisos mínimos',
+        'Your tools talking to each other, with minimum permissions'] },
+  { href: { es: '/precios#g-os', en: '/en/precios#g-os' },
+    n: ['D-Code OS', 'D-Code OS'],
+    q: ['El panel desde el que se ve y se dirige todo lo demás',
+        'The panel from which everything else is seen and steered'] },
+];

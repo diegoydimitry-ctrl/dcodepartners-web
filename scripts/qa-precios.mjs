@@ -180,20 +180,28 @@ for (const [aparato, op] of APARATOS) {
       puntos: document.querySelectorAll('.form-progress-dot').length,
       extra: !!document.querySelector('.form-extra'),
       campos: ['nombre', 'empresa', 'email', 'telefono'].every((id) => !!document.getElementById(id)),
+      visibles: document.querySelectorAll('#contact-form > .form-step[data-step="1"] > .field').length,
+      plegados: [...document.querySelectorAll('.form-extra [id]')].map((e) => e.id),
     }));
     if (!antes.escondido) fallos.push(`${donde}: el formulario de contacto se ve antes de configurar nada`);
     if (antes.pasos !== 2) fallos.push(`${donde}: el formulario tiene ${antes.pasos} pasos y tiene que tener 2`);
     if (antes.puntos !== antes.pasos) fallos.push(`${donde}: ${antes.puntos} puntos de progreso para ${antes.pasos} pasos`);
     if (!antes.extra) fallos.push(`${donde}: el mensaje libre no está plegado en «añadir algo más»`);
     if (!antes.campos) fallos.push(`${donde}: al formulario le faltan campos tras juntar los pasos`);
+    /* Tres campos a la vista y no uno más: quién lo pide, de qué empresa y
+       por dónde le escribimos. El teléfono y el mensaje, plegados. */
+    if (antes.visibles !== 3) fallos.push(`${donde}: el primer paso enseña ${antes.visibles} campos y tienen que ser 3`);
+    if (!antes.plegados.includes('telefono') || !antes.plegados.includes('mensaje')) {
+      fallos.push(`${donde}: el teléfono y el mensaje tienen que estar plegados, y hay ${antes.plegados.join(', ') || 'nada'}`);
+    }
 
     /* Recorrido completo: sector → objetivos → gente → piezas → adaptación */
     const elegir = async (sel, n) => { await pg.click(`#configurador ${sel} >> nth=${n}`); };
     await elegir('.cfg-op', 2);
-    /* Elegir tiene que NOTARSE: saltan piezas. Es lo que pidió el encargo y
+    /* Elegir tiene que NOTARSE: cruza una figura. Es lo que pidió el encargo y
        es lo primero que se pierde sin querer al tocar el guion. */
-    const chispas = await pg.evaluate(() => document.querySelectorAll('.cfg-chispa').length);
-    if (!chispas) fallos.push(`${donde}: al elegir no salta nada`);
+    const chispas = await pg.evaluate(() => document.querySelectorAll('.cfg-figura').length);
+    if (!chispas) fallos.push(`${donde}: al elegir no cruza ninguna figura`);
     await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-chip', 0); await elegir('.cfg-chip', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);

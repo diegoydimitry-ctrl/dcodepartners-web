@@ -155,8 +155,7 @@ html[data-theme="light"] .cap-piezas{ border:1px solid var(--surface-border, rgb
 
 /* ---- dcp5.css ---- */
 html[data-theme="light"] #site-header.scrolled{ background:rgba(240,243,249,0.72); }
-html[data-theme="light"] .mega-menu{ background:rgba(242,245,251,0.97); box-shadow:0 44px 110px -46px rgba(20,30,64,0.288); }
-html[data-theme="light"] .mega-item:hover{ background:rgba(22,32,70,0.043); }
+html[data-theme="light"] .mega-menu{ box-shadow:0 44px 110px -46px rgba(20,30,64,0.15); }
 html[data-theme="light"] .btn-primary{ box-shadow:0 12px 38px -14px rgba(91,140,255,0.413); }
 html[data-theme="light"] .btn-primary:hover{ box-shadow:0 22px 56px -14px rgba(91,140,255,0.44); }
 html[data-theme="light"] .btn-ghost{ background:rgba(22,32,70,0.034); }
@@ -341,11 +340,7 @@ html[data-theme="light"] body.v6 .dcx.dcx--fuera a.on .dcx-dot{ box-shadow:0 0 1
 html[data-theme="light"] .chat-bubble{ box-shadow:0 18px 46px -18px rgba(91,140,255,0.413), 0 0 0 1px rgba(150,174,245,0.077); }
 html[data-theme="light"] .chat-bubble::after{ border:1px solid rgba(35,62,97,0.262); }
 html[data-theme="light"] .chat-window{ background:rgba(242,245,251,0.94); border:1px solid rgba(46,59,98,0.196); box-shadow:0 50px 120px -50px rgba(20,30,64,0.288); }
-html[data-theme="light"] .mega-menu{ background:linear-gradient(180deg, #f7faff 0%, #f3f6fc 55%, #f2f5fa 100%) !important; border:1px solid rgba(46,59,98,0.218) !important; box-shadow:0 40px 90px -34px rgba(20,30,64,0.282), 0 0 0 1px rgba(91,140,255,0.055) !important; }
-html[data-theme="light"] .mega-item strong{ color:#090f1a; }
-html[data-theme="light"] .mega-item span span{ color:#3e4653; }
-html[data-theme="light"] .mega-item:hover strong,
-html[data-theme="light"] .mega-item:focus-visible strong{ color:#090f1a; }
+html[data-theme="light"] .mega-menu{ box-shadow:0 40px 90px -34px rgba(20,30,64,0.126), 0 0 0 1px rgba(91,140,255,0.055) !important; }
 html[data-theme="light"] .out:hover::after,
 html[data-theme="light"] .out:focus-within::after{ box-shadow:0 0 0 5px color-mix(in srgb, var(--k, var(--nodo,rgba(67,224,255,0.55))) 16%, transparent); }
 html[data-theme="light"] .out:hover b{ color:#090f1a; }

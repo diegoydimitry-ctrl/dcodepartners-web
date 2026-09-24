@@ -265,7 +265,11 @@ for (const f of ORIGENES) {
 const DESTINO_SUP = path.join(RAIZ, 'assets/css/superficies.css');
 const CAJAS = ['.rcard', '.arq-area', 'a.area', '.conexion', '.gal-tab', '.gal-historia > li', '.arq-mod', '.arq-btn', '.board',
   'details.plan', '.window', '.chaos-order', '.vf-cadena', '.vf-col', '.vf-sello', '.conc-fig', '.cmp',
-  '.mega-menu', '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost', '.v7-fiscal-i', '.vf-track', '.v6-of', '.gal-movil'];
+  /* .mega-menu salió de aquí: estas cajas llevan la superficie CONTRARIA a
+     la de la página, y en una página clara el menú quedaba como una losa
+     negra encima de tarjetas blancas. Un menú desplegable no es una pieza
+     de contraste, es parte de la barra: ahora usa el tema de la página. */
+  '.gal-carga', '.gal-sig-b', '.dx', '.btn-ghost', '.v7-fiscal-i', '.vf-track', '.v6-of', '.gal-movil'];
 // Piezas que cuelgan de una caja pero se pintan fuera de ella, sobre el fondo
 const FUERA = /\.arq-area-p\b/;
 const APPS = [

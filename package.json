@@ -32,6 +32,7 @@
     "build:en-curso": "node scripts/build-en-curso.mjs",
     "build:chat": "node scripts/build-chat.mjs",
     "check:chat": "node scripts/build-chat.mjs --check",
+    "check:portada": "node scripts/check-portada.mjs",
     "check:en-curso": "node scripts/build-en-curso.mjs --check",
     "build:webs": "node scripts/build-webs-ejemplo.mjs",
     "check:webs": "node scripts/build-webs-ejemplo.mjs --check",

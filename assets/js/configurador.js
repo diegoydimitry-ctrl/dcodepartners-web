@@ -115,51 +115,94 @@
 
   var el = function (t, c, x) { var e = D.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
 
-  /* ─────────────────────────── QUE APETEZCA PULSAR ───────────────────────
-     Elegir algo tiene que notarse. Al pulsar una tarjeta salen disparadas
-     unas cuantas piezas —los cuadrados del logo, no confeti de cumpleaños—
-     que saltan y caen. Es puro CSS con transform y opacity: ni layout ni
-     pintura de fondo, así que no cuesta fotogramas donde ya medimos que
-     duele (docs/RENDIMIENTO-POR-DISPOSITIVO.md).
+  /* ─────────────────── LAS FIGURAS QUE CRUZAN LA PANTALLA ───────────────────
+     Elegir «Cobros y facturación» hace que un billete con piernas salga
+     corriendo de lado a lado. Cada opción tiene la suya: el calendario da
+     saltos, el engranaje rueda, la caja da tumbos, la estrella gira.
 
-     Dos frenos: quien pide menos movimiento no ve ninguna, y en un aparato
-     táctil salen la mitad, que es donde el compositor va más justo. */
+     Por qué esto y no confeti: el confeti dice «has pulsado algo»; una
+     figura que cruza dice QUÉ has pulsado, y engancha lo suficiente como
+     para querer ver la siguiente. Que es exactamente lo que se le pide a un
+     formulario que nadie tiene ganas de rellenar.
+
+     Son SVG de 2 KB dibujados aquí, no imágenes: pesan nada, heredan el
+     color del tema y se animan con transform, que es lo único que no cuesta
+     fotogramas. */
+  var TRAZO = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+  function svg(cuerpo, piernas) {
+    return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">' + cuerpo +
+      (piernas === false ? '' :
+        '<g class="cfg-pies"><path d="M19 40v4" ' + TRAZO + '/><path d="M29 40v4" ' + TRAZO + '/></g>') +
+      '</svg>';
+  }
+  var ICONOS = {
+    /* dinero: el billete con piernas, que es el que pidió el encargo */
+    dinero:   { paso: 'corre', svg: svg('<rect x="7" y="12" width="34" height="21" rx="3" ' + TRAZO + '/><circle cx="24" cy="22.5" r="5.5" ' + TRAZO + '/><path d="M13 18v9M35 18v9" ' + TRAZO + '/>') },
+    calendario:{ paso: 'salta', svg: svg('<rect x="8" y="11" width="32" height="28" rx="4" ' + TRAZO + '/><path d="M8 20h32M17 7v8M31 7v8" ' + TRAZO + '/><circle cx="18" cy="28" r="2" fill="currentColor"/><circle cx="27" cy="28" r="2" fill="currentColor"/>', false) },
+    estrella: { paso: 'gira',  svg: svg('<path d="M24 8l4.9 9.9 10.9 1.6-7.9 7.7 1.9 10.9-9.8-5.2-9.8 5.2 1.9-10.9-7.9-7.7 10.9-1.6z" ' + TRAZO + '/>', false) },
+    chat:     { paso: 'salta', svg: svg('<path d="M40 24c0 7.7-7.2 14-16 14-2.3 0-4.5-.4-6.4-1.2L8 40l3.4-8.3C9.2 29.5 8 26.9 8 24c0-7.7 7.2-14 16-14s16 6.3 16 14z" ' + TRAZO + '/><circle cx="18" cy="24" r="1.8" fill="currentColor"/><circle cx="24" cy="24" r="1.8" fill="currentColor"/><circle cx="30" cy="24" r="1.8" fill="currentColor"/>', false) },
+    papel:    { paso: 'vuela', svg: svg('<path d="M13 6h14l9 9v27H13z" ' + TRAZO + '/><path d="M27 6v9h9M19 26h12M19 33h9" ' + TRAZO + '/>', false) },
+    caja:     { paso: 'rueda', svg: svg('<path d="M24 7l17 8v18l-17 8-17-8V15z" ' + TRAZO + '/><path d="M7 15l17 8 17-8M24 23v18" ' + TRAZO + '/>', false) },
+    reloj:    { paso: 'salta', svg: svg('<circle cx="24" cy="24" r="16" ' + TRAZO + '/><path d="M24 14v10l7 4" ' + TRAZO + '/>', false) },
+    engranaje:{ paso: 'rueda', svg: svg('<circle cx="24" cy="24" r="7" ' + TRAZO + '/><path d="M24 5v6M24 37v6M43 24h-6M11 24H5M37.4 10.6l-4.2 4.2M14.8 33.2l-4.2 4.2M37.4 37.4l-4.2-4.2M14.8 14.8l-4.2-4.2" ' + TRAZO + '/>', false) },
+    chispa:   { paso: 'vuela', svg: svg('<path d="M26 5L12 27h10l-2 16 16-23H26z" ' + TRAZO + '/>', false) },
+    enchufe:  { paso: 'corre', svg: svg('<path d="M18 6v10M30 6v10M12 16h24v6a12 12 0 0 1-24 0z" ' + TRAZO + '/><path d="M24 34v8" ' + TRAZO + '/>', false) },
+    lupa:     { paso: 'salta', svg: svg('<circle cx="21" cy="21" r="12" ' + TRAZO + '/><path d="M30 30l11 11" ' + TRAZO + '/>', false) },
+    gente:    { paso: 'corre', svg: svg('<circle cx="24" cy="15" r="6" ' + TRAZO + '/><path d="M12 38c0-6.6 5.4-11 12-11s12 4.4 12 11" ' + TRAZO + '/>', false) },
+    pantalla: { paso: 'salta', svg: svg('<rect x="6" y="10" width="36" height="24" rx="3" ' + TRAZO + '/><path d="M18 40h12M24 34v6" ' + TRAZO + '/>', false) },
+    llave:    { paso: 'gira',  svg: svg('<circle cx="17" cy="31" r="8" ' + TRAZO + '/><path d="M23 25L40 8M34 14l4 4M30 18l4 4" ' + TRAZO + '/>', false) },
+    carro:    { paso: 'rueda', svg: svg('<path d="M7 9h5l5 21h19l4-14H14" ' + TRAZO + '/><circle cx="20" cy="38" r="3" ' + TRAZO + '/><circle cx="34" cy="38" r="3" ' + TRAZO + '/>', false) },
+    grafica:  { paso: 'salta', svg: svg('<path d="M8 38V10M8 38h32" ' + TRAZO + '/><path d="M15 31l7-8 6 5 9-12" ' + TRAZO + '/>', false) },
+  };
+
+  /* Qué figura le toca a cada opción. Las que no estén aquí salen con la de
+     su paso, que nunca es ninguna. */
+  var DE = {
+    /* sectores */
+    inmobiliaria:'llave', restaurante:'calendario', clinica:'reloj', asesoria:'papel',
+    gimnasio:'gente', ecommerce:'carro', agencia:'grafica', industria:'caja', otro:'lupa',
+    /* lo que se quiere mejorar */
+    leads:'lupa', visitas:'calendario', docs:'papel', portales:'pantalla', cobros:'dinero',
+    fuera:'chat', reservas:'calendario', resenas:'estrella', proveedores:'caja',
+    whatsapp:'chat', fideliza:'estrella', citas:'reloj', seguros:'papel',
+    impuestos:'papel', recordar:'reloj', repetidas:'chat', altas:'gente', cuotas:'dinero',
+    recuperar:'gente', pedidos:'caja', devoluciones:'caja', atencion:'chat',
+    conectar:'enchufe', propuestas:'papel', horas:'reloj', clientes:'gente', informes:'grafica',
+    partes:'papel', avisos:'chispa', albaranes:'papel', compras:'caja', planifica:'calendario',
+    repetido:'engranaje', datos:'grafica',
+    /* piezas */
+    finance:'dinero', auto:'engranaje', agente:'chat', integra:'enchufe',
+    os:'pantalla', medida:'llave', web:'pantalla',
+    /* tamaño y nivel */
+    '1-3':'gente', '4-10':'gente', '11-25':'gente', '25+':'gente',
+    estandar:'engranaje', ajustes:'engranaje', 'a-medida':'llave',
+  };
+  var POR_PASO = ['lupa', 'chispa', 'gente', 'engranaje', 'llave'];
+
   var QUIETO = window.matchMedia('(prefers-reduced-motion: reduce)');
   var TACTIL = window.matchMedia('(pointer:coarse)').matches;
-  var CUANTAS = TACTIL ? 8 : 16;
-  var TONOS = ['var(--v-a)', 'var(--v-b)', 'var(--blue, #5b8cff)', 'var(--x-ok, #35e0a1)'];
   var enVuelo = 0;
 
-  function saltan(desde) {
-    if (QUIETO.matches || enVuelo > 40 || !desde) return;
-    var r = desde.getBoundingClientRect();
-    var capa = D.getElementById('cfg-chispas');
+  function corre(id, paso) {
+    if (QUIETO.matches || enVuelo > 2) return;
+    var ico = ICONOS[id] || ICONOS[POR_PASO[paso] || 'lupa'];
+    if (!ico) return;
+    var capa = D.getElementById('cfg-pista');
     if (!capa) {
-      capa = el('div', 'cfg-chispas'); capa.id = 'cfg-chispas';
+      capa = el('div', 'cfg-pista'); capa.id = 'cfg-pista';
       capa.setAttribute('aria-hidden', 'true');
       D.body.appendChild(capa);
     }
-    for (var i = 0; i < CUANTAS; i++) {
-      var p = el('i', 'cfg-chispa');
-      var giro = (Math.random() * 2 - 1) * 240;
-      var dx = (Math.random() * 2 - 1) * (r.width * 0.55);
-      var dy = -(75 + Math.random() * 115);
-      var lado = 7 + Math.random() * 10;
-      p.style.cssText =
-        'left:' + (r.left + r.width / 2) + 'px;top:' + (r.top + r.height / 2) + 'px;' +
-        'width:' + lado + 'px;height:' + lado + 'px;' +
-        'background:' + TONOS[i % TONOS.length] + ';' +
-        'border-radius:' + (i % 3 === 0 ? '50%' : '2px') + ';' +
-        '--dx:' + dx.toFixed(1) + 'px;--dy:' + dy.toFixed(1) + 'px;--giro:' + giro.toFixed(0) + 'deg;' +
-        'animation-delay:' + (i * 14) + 'ms';
-      capa.appendChild(p); enVuelo++;
-      /* animationend no siempre llega si la pestaña se va al fondo. */
-      (function (nodo) {
-        var fuera = function () { if (nodo.parentNode) { nodo.parentNode.removeChild(nodo); enVuelo--; } };
-        nodo.addEventListener('animationend', fuera, { once: true });
-        window.setTimeout(fuera, 1400);
-      }(p));
-    }
+    var f = el('i', 'cfg-figura es-' + ico.paso);
+    f.innerHTML = ico.svg;
+    /* La banda vertical cambia cada vez: dos seguidas por el mismo carril se
+       leen como una repetición, y tres como un error. */
+    f.style.top = (14 + Math.random() * 58) + 'vh';
+    f.style.animationDuration = (TACTIL ? 1.5 : 1.85) + 's';
+    capa.appendChild(f); enVuelo++;
+    var fuera = function () { if (f.parentNode) { f.parentNode.removeChild(f); enVuelo--; } };
+    f.addEventListener('animationend', fuera, { once: true });
+    window.setTimeout(fuera, 2600);
   }
 
   function late(nodo) {
@@ -235,7 +278,7 @@
   aSalta.addEventListener('click', abreFormulario);
 
   /* ------------------------------------------------------------ pintar */
-  function opcion(txt, sub, puesto) {
+  function opcion(txt, sub, puesto, id) {
     var b = el('button', 'cfg-op' + (puesto ? ' is-on' : ''));
     b.type = 'button';
     b.setAttribute('aria-pressed', puesto ? 'true' : 'false');
@@ -244,7 +287,7 @@
     /* El salto va en captura y antes que la lógica: si repintamos el paso,
        el botón ya no existe cuando llega el click normal. */
     b.addEventListener('click', function () {
-      if (b.getAttribute('aria-pressed') !== 'true') saltan(b);
+      if (b.getAttribute('aria-pressed') !== 'true') corre(DE[id], paso);
       late(b);
     }, true);
     return b;
@@ -265,7 +308,7 @@
       fs = pregunta(EN ? 'What kind of company do you have?' : '¿Qué tipo de empresa tienes?');
       rej = el('div', 'cfg-rej cfg-rej--sector');
       SECTORES.forEach(function (s) {
-        var b = opcion(tx(s), null, S.sector === s.id);
+        var b = opcion(tx(s), null, S.sector === s.id, s.id);
         b.addEventListener('click', function () { S.sector = s.id; S.mejoras = []; pinta(); });
         rej.appendChild(b);
       });
@@ -277,7 +320,7 @@
       rej = el('div', 'cfg-rej cfg-rej--chips');
       lista.forEach(function (m) {
         var puesto = S.mejoras.indexOf(m[0]) >= 0;
-        var b = opcion(EN ? m[2] : m[1], null, puesto);
+        var b = opcion(EN ? m[2] : m[1], null, puesto, m[0]);
         b.className = 'cfg-chip' + (puesto ? ' is-on' : '');
         b.addEventListener('click', function () {
           var k = S.mejoras.indexOf(m[0]);
@@ -291,7 +334,7 @@
       fs = pregunta(EN ? 'How many people will use it?' : '¿Cuánta gente lo va a usar?');
       rej = el('div', 'cfg-rej cfg-rej--gente');
       GENTE.forEach(function (g) {
-        var b = opcion(tx(g), null, S.gente === g.id);
+        var b = opcion(tx(g), null, S.gente === g.id, g.id);
         b.addEventListener('click', function () { S.gente = g.id; pinta(); });
         rej.appendChild(b);
       });
@@ -302,7 +345,7 @@
       rej = el('div', 'cfg-rej');
       PIEZAS.forEach(function (p) {
         var puesto = S.piezas.indexOf(p.id) >= 0;
-        var b = opcion(tx(p), EN ? p.d_en : p.d_es, puesto);
+        var b = opcion(tx(p), EN ? p.d_en : p.d_es, puesto, p.id);
         b.addEventListener('click', function () {
           var k = S.piezas.indexOf(p.id);
           if (k >= 0) S.piezas.splice(k, 1); else S.piezas.push(p.id);
@@ -315,7 +358,7 @@
       fs = pregunta(EN ? 'How much does it need to fit your business?' : '¿Cuánto hay que adaptarlo a tu negocio?');
       rej = el('div', 'cfg-rej');
       NIVEL.forEach(function (n) {
-        var b = opcion(tx(n), EN ? n.d_en : n.d_es, S.nivel === n.id);
+        var b = opcion(tx(n), EN ? n.d_en : n.d_es, S.nivel === n.id, n.id);
         b.addEventListener('click', function () { S.nivel = n.id; pinta(); });
         rej.appendChild(b);
       });
@@ -518,7 +561,7 @@
       form.insertBefore(aviso, form.firstChild);
     }
     abreFormulario();
-    saltan(bSeguir);
+    corre('grafica', 4);
 
     var destino = D.getElementById('contact-form');
     if (destino) {
