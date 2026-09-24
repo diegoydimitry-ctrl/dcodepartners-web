@@ -385,137 +385,7 @@
    el borde de arriba de la tarjeta, como si algo empujara desde dentro.
    Vive en la pista y no en el botón: al elegir se repinta el paso y el botón
    desaparece, así que una clase puesta en él no llegaba a verse. */
-.cfg-tapa{
-  position:absolute; height:4px; display:block;
-  border-radius:4px 4px 0 0; pointer-events:none;
-  background:linear-gradient(90deg, transparent, var(--v-a), transparent);
-  transform-origin:bottom center;
-  animation:cfg-tapa .82s cubic-bezier(.25,.9,.3,1) both;
-  box-shadow:0 -6px 24px color-mix(in srgb, var(--v-a) 70%, transparent);
-}
-@keyframes cfg-tapa{
-  0%   { transform:scaleY(.2) translateY(2px); opacity:0; }
-  22%  { transform:scaleY(3.2) translateY(-7px); opacity:1; }
-  70%  { transform:scaleY(2.4) translateY(-5px); opacity:.85; }
-  100% { transform:scaleY(.2) translateY(0); opacity:0; }
-}
-
-/* 2 · EL ESCONDITE. Una ventanita justo encima de la tarjeta, con la parte
-   de abajo recortada: el bicho sube desde fuera de cuadro y parece que sale
-   de detrás del borde, que es lo que tiene que parecer. */
-.cfg-ojo{ position:absolute; overflow:hidden; }
-
-/* El bicho. Dentro del escondite va pegado abajo; cuando se suelta pasa a
-   colocarse él solo por la pista. */
-.cfg-bicho{
-  position:absolute; left:0; bottom:0; display:block;
-  color:var(--v-a); will-change:transform;
-  filter:drop-shadow(0 10px 22px color-mix(in srgb, var(--v-a) 55%, transparent));
-}
-.cfg-bicho svg{ width:100%; height:100%; display:block; }
-.cfg-bicho.es-suelto{ bottom:auto; }
-
-/* 3 · LAS PATITAS. Se dibujan de cero —trazo con su guion desplazado— y solo
-   entonces empiezan a moverse. Antes de esto el bicho no tiene patas. */
-.cfg-bicho .cfg-pies path{
-  stroke-dasharray:7; stroke-dashoffset:7;
-}
-.cfg-bicho.es-patas .cfg-pies path{
-  animation:cfg-brotan .28s ease-out forwards;
-}
-.cfg-bicho.es-patas .cfg-pies path:nth-child(2){ animation-delay:.07s; }
-@keyframes cfg-brotan{ to{ stroke-dashoffset:0; } }
-
-/* 4 · CORRIENDO. El cuerpo bota, las patas alternan y la sombra se aplasta
-   cada vez que toca el suelo. */
-.cfg-bicho.es-corriendo svg{ animation:cfg-bote .3s ease-in-out infinite; }
-.cfg-bicho.es-corriendo .cfg-pies{
-  animation:cfg-zancada .3s steps(2, jump-none) infinite;
-  transform-origin:24px 40px;
-}
-@keyframes cfg-bote{
-  0%,100%{ transform:translateY(0) scale(1,1); }
-  38%    { transform:translateY(-9px) scale(.97,1.05); }
-  72%    { transform:translateY(0) scale(1.05,.94); }
-}
-@keyframes cfg-zancada{
-  0%   { transform:skewX(-20deg); }
-  100% { transform:skewX(20deg); }
-}
-
-/* 5 · LA POLVAREDA. Una mota por pisada, que se abre y se apaga. */
-.cfg-polvo{
-  position:absolute; width:9px; height:9px; margin:-4px 0 0 -4px;
-  border-radius:50%; display:block;
-  background:color-mix(in srgb, var(--v-a) 55%, transparent);
-  animation:cfg-mota .62s ease-out forwards;
-}
-@keyframes cfg-mota{
-  0%   { transform:scale(.4); opacity:.75; }
-  100% { transform:scale(2.4) translateY(6px); opacity:0; }
-}
-
-/* El latido de la tarjeta recién elegida. */
-.cfg-op.es-late, .cfg-chip.es-late{ animation:cfg-late .42s cubic-bezier(.3,1.4,.4,1); }
-@keyframes cfg-late{
-  0%   { transform:scale(1); }
-  32%  { transform:scale(.955); }
-  100% { transform:scale(1); }
-}
-
-/* Las opciones entran una detrás de otra, no todas de golpe. Vale tanto
-   para las tarjetas grandes como para los chips del segundo paso. */
-.cfg-caja .cfg-op, .cfg-caja .cfg-chip{ animation:cfg-entra .34s cubic-bezier(.2,.8,.3,1) both; }
-.cfg-caja .cfg-op:nth-child(1), .cfg-caja .cfg-chip:nth-child(1){ animation-delay:0ms; }
-.cfg-caja .cfg-op:nth-child(2), .cfg-caja .cfg-chip:nth-child(2){ animation-delay:34ms; }
-.cfg-caja .cfg-op:nth-child(3), .cfg-caja .cfg-chip:nth-child(3){ animation-delay:68ms; }
-.cfg-caja .cfg-op:nth-child(4), .cfg-caja .cfg-chip:nth-child(4){ animation-delay:102ms; }
-.cfg-caja .cfg-op:nth-child(5), .cfg-caja .cfg-chip:nth-child(5){ animation-delay:136ms; }
-.cfg-caja .cfg-op:nth-child(6), .cfg-caja .cfg-chip:nth-child(6){ animation-delay:170ms; }
-.cfg-caja .cfg-op:nth-child(7), .cfg-caja .cfg-chip:nth-child(7){ animation-delay:204ms; }
-.cfg-caja .cfg-op:nth-child(8), .cfg-caja .cfg-chip:nth-child(8){ animation-delay:238ms; }
-.cfg-caja .cfg-op:nth-child(n+9), .cfg-caja .cfg-chip:nth-child(n+9){ animation-delay:272ms; }
-@keyframes cfg-entra{
-  from{ opacity:0; transform:translateY(9px) scale(.985); }
-  to  { opacity:1; transform:none; }
-}
-
-/* La pregunta y el resumen, igual pero antes. */
-.cfg-caja .cfg-preg, .cfg-caja .cfg-ayuda, .cfg-vivo{
-  animation:cfg-entra .3s cubic-bezier(.2,.8,.3,1) both;
-}
-
-/* La barra empuja al avanzar. */
-.cfg-barra > i{ transition:width .46s cubic-bezier(.25,1.2,.35,1); }
-
-/* Y el formulario, cuando por fin le toca, llega desde abajo. */
-.form-card.es-espera{ display:none; }
-.form-card.es-llega{ animation:cfg-llega .5s cubic-bezier(.2,.85,.3,1) both; }
-@keyframes cfg-llega{
-  from{ opacity:0; transform:translateY(18px); }
-  to  { opacity:1; transform:none; }
-}
-
-/* Lo que se añade sin querer verlo: plegado y discreto. */
-.form-extra{ margin-top:4px; }
-.form-extra > summary{
-  cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:7px;
-  font-family:var(--mono); font-size:.6875rem; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--v-ink-3); padding:6px 0;
-}
-.form-extra > summary::-webkit-details-marker{ display:none; }
-.form-extra > summary::after{
-  content:''; width:7px; height:7px; border-right:1.5px solid currentColor;
-  border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-2px);
-  transition:transform .18s ease;
-}
-.form-extra[open] > summary::after{ transform:rotate(225deg) translateY(-2px); }
-.form-extra > summary:hover, .form-extra[open] > summary{ color:var(--v-a); }
-.form-extra > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; border-radius:5px; }
-
-@media (prefers-reduced-motion:reduce){
   .cfg-pista{ display:none; }
-  .cfg-tapa{ display:none; }
   .cfg-op.es-late, .cfg-chip.es-late, .cfg-caja .cfg-op, .cfg-caja .cfg-chip,
   .cfg-caja .cfg-preg, .cfg-caja .cfg-ayuda,
   .cfg-vivo, .form-card.es-llega{ animation:none; }
@@ -535,76 +405,42 @@
 }
 @media (prefers-reduced-motion:reduce){ .cfg-animo.es-pone{ animation:none; } }
 
-/* Los otros dos rastros. El polvo ya estaba; la chispa sale disparada hacia
-   un lado y la estela se estira por detrás y se apaga. */
-.cfg-polvo.es-chispa{
-  width:5px; height:5px; border-radius:50%;
-  background:radial-gradient(circle, var(--v-a, #43e0ff), transparent 70%);
-  box-shadow:0 0 10px 2px color-mix(in srgb, var(--v-a, #43e0ff) 60%, transparent);
-  animation:cfg-chispa .8s cubic-bezier(.2,.7,.3,1) forwards;
-}
-@keyframes cfg-chispa{
-  from{ opacity:1; transform:translate(0,0) scale(1); }
-  to  { opacity:0; transform:translate(var(--dx,0), var(--dy,24px)) scale(.3); }
-}
-.cfg-polvo.es-estela{
-  width:26px; height:3px; border-radius:2px; margin-left:-13px;
-  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--v-b, #9b6bff) 75%, transparent), transparent);
-  animation:cfg-estela .8s ease-out forwards;
-}
-@keyframes cfg-estela{
-  from{ opacity:.9; transform:rotate(var(--gir,0deg)) scaleX(1); }
-  to  { opacity:0; transform:rotate(var(--gir,0deg)) scaleX(.2); }
-}
-@media (prefers-reduced-motion:reduce){
-  .cfg-polvo.es-chispa, .cfg-polvo.es-estela{ animation:none; display:none; }
-}
-
-/* ═══════════ MICROESCENAS ═══════════
-   Lo que le pasa al bloque que acabas de pulsar. El clon vive en la capa
-   fija, con la pinta exacta del original, y la escena ocurre encima. Nada
-   de esto recibe el ratón: es respuesta, no interfaz. */
+/* ═══════════ LA RESPUESTA AL CLIC ═══════════
+   El clon del bloque, que es donde ocurre: encima del botón, en su sitio,
+   sin recibir el ratón. Dura medio segundo y se borra. */
 .cfg-esc{
-  position:fixed; margin:0; pointer-events:none; z-index:1;
-  will-change:transform, opacity; backface-visibility:hidden;
-  box-shadow:0 30px 60px -34px rgba(0,0,0,.85);
+  position:fixed; margin:0; pointer-events:none; z-index:2;
+  overflow:hidden; will-change:transform, opacity; backface-visibility:hidden;
+  box-shadow:0 0 0 1px color-mix(in srgb, var(--v-a, #43e0ff) 45%, transparent),
+             0 0 28px -4px color-mix(in srgb, var(--v-a, #43e0ff) 55%, transparent);
 }
-/* La luz que escapa por la grieta. */
-.cfg-luz{
-  position:fixed; pointer-events:none; border-radius:3px;
-  background:linear-gradient(180deg, transparent, var(--v-a, #43e0ff), transparent);
-  box-shadow:0 0 22px 5px color-mix(in srgb, var(--v-a, #43e0ff) 55%, transparent);
-  transform-origin:50% 50%;
+/* El temblor: acusa el golpe. Corto y con rebote, no una vibración larga. */
+.cfg-esc.es-tiembla{ animation:cfg-tiembla .36s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes cfg-tiembla{
+  0%,100%{ transform:translateX(0); }
+  16%{ transform:translateX(-3px) rotate(-.3deg); }
+  36%{ transform:translateX(3px) rotate(.3deg); }
+  58%{ transform:translateX(-1.8px); }
+  80%{ transform:translateX(1.2px); }
 }
-/* Las astillas: trozos de material, no confeti. */
-.cfg-astilla{
-  position:fixed; pointer-events:none; border-radius:2px;
-  background:linear-gradient(140deg,
-    color-mix(in srgb, var(--v-ink, #edf1f8) 26%, transparent),
-    color-mix(in srgb, var(--v-a, #43e0ff) 34%, transparent));
-  box-shadow:0 2px 8px -2px rgba(0,0,0,.6);
+/* El brillo: una banda de luz que cruza en diagonal y se apaga. Va dentro
+   del clon, que la recorta, así que no se sale por ningún lado. */
+.cfg-brillo{
+  position:absolute; inset:-40% -60%; pointer-events:none;
+  background:linear-gradient(104deg,
+    transparent 38%,
+    color-mix(in srgb, var(--v-a, #43e0ff) 55%, transparent) 48%,
+    color-mix(in srgb, #fff 70%, transparent) 51%,
+    color-mix(in srgb, var(--v-b, #9b6bff) 45%, transparent) 55%,
+    transparent 66%);
+  mix-blend-mode:screen;
+  animation:cfg-brillo .52s cubic-bezier(.3,.7,.3,1) both;
 }
-/* El golpe que lo expulsa: una barra de luz que entra y se va. */
-.cfg-golpe{
-  position:fixed; pointer-events:none; border-radius:3px;
-  background:linear-gradient(90deg, transparent, var(--v-b, #9b6bff));
-  box-shadow:0 0 18px 4px color-mix(in srgb, var(--v-b, #9b6bff) 50%, transparent);
-}
-/* La onda de la implosión. */
-.cfg-onda{
-  position:fixed; pointer-events:none; border-radius:50%;
-  border:2px solid color-mix(in srgb, var(--v-a, #43e0ff) 70%, transparent);
-  box-shadow:0 0 24px 2px color-mix(in srgb, var(--v-a, #43e0ff) 30%, transparent);
+@keyframes cfg-brillo{
+  from{ transform:translateX(-62%); opacity:0; }
+  22%{ opacity:1; }
+  to  { transform:translateX(62%); opacity:0; }
 }
 @media (prefers-reduced-motion:reduce){
-  .cfg-esc, .cfg-luz, .cfg-astilla, .cfg-golpe, .cfg-onda{ display:none; }
+  .cfg-esc, .cfg-brillo{ display:none; }
 }
-
-/* Los personajes. Viven en la capa fija, por encima del clon del bloque, y
-   no reciben el ratón: son respuesta, no interfaz. */
-.cfg-bicho2{
-  position:fixed; display:block; pointer-events:none; z-index:3;
-  will-change:transform, opacity; line-height:0;
-}
-.cfg-bicho2 svg{ display:block; height:auto; overflow:visible; }
-@media (prefers-reduced-motion:reduce){ .cfg-bicho2{ display:none; } }

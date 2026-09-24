@@ -198,23 +198,24 @@ for (const [aparato, op] of APARATOS) {
     /* Recorrido completo: sector → objetivos → gente → piezas → adaptación */
     const elegir = async (sel, n) => { await pg.click(`#configurador ${sel} >> nth=${n}`); };
     await elegir('.cfg-op', 2);
-    /* Elegir tiene que NOTARSE, y le tiene que pasar AL BLOQUE: se clona
-       en la capa fija y ahí se parte, sale despedido, se cae, se deshoja o
-       implosiona. Se comprueban las tres cosas que pueden romperse: que
-       arranque una escena, que haya clon, y que a los dos segundos no quede
-       ni rastro (un clon olvidado tapa la página entera). Y que no hayan
-       vuelto las figuras con patas, que es de donde venimos. */
-    const escena = await pg.evaluate(() => ({
-      cual: document.querySelector('.cfg-pista') && document.querySelector('.cfg-pista').getAttribute('data-escena'),
-      clones: document.querySelectorAll('.cfg-esc').length,
-      patas: document.querySelectorAll('.cfg-bicho, .cfg-pies').length,
-    }));
-    if (!escena.cual) fallos.push(`${donde}: al elegir no arranca ninguna escena`);
-    if (!escena.clones) fallos.push(`${donde}: la escena no clona el bloque pulsado`);
-    if (escena.patas) fallos.push(`${donde}: han vuelto las figuras con patas`);
-    await pg.waitForTimeout(1900);
-    const restos = await pg.evaluate(() => document.querySelectorAll('.cfg-esc, .cfg-astilla, .cfg-onda, .cfg-golpe').length);
-    if (restos) fallos.push(`${donde}: la escena deja ${restos} resto(s) en pantalla`);
+    /* Elegir tiene que NOTARSE: el bloque tiembla y lo cruza un brillo.
+       Se hace sobre un clon, porque el repintado del paso borra el botón a
+       los pocos milisegundos. Se comprueba que aparece, que no ha vuelto
+       nada de las figuras de antes y que no deja restos: un clon olvidado
+       se queda encima del formulario y no deja pulsar. */
+    const aviso = await pg.evaluate(() => {
+      const c = document.querySelector('.cfg-esc');
+      return { clon: !!c, tiembla: !!c && c.classList.contains('es-tiembla'),
+               brillo: document.querySelectorAll('.cfg-brillo').length,
+               viejo: document.querySelectorAll('.cfg-bicho, .cfg-bicho2, .cfg-pz, .cfg-pies').length };
+    });
+    if (!aviso.clon) fallos.push(`${donde}: al elegir no pasa nada`);
+    if (!aviso.tiembla) fallos.push(`${donde}: el bloque no tiembla`);
+    if (!aviso.brillo) fallos.push(`${donde}: el bloque no se enciende`);
+    if (aviso.viejo) fallos.push(`${donde}: han vuelto las figuras`);
+    await pg.waitForTimeout(950);
+    const restos = await pg.evaluate(() => document.querySelectorAll('.cfg-esc, .cfg-brillo').length);
+    if (restos) fallos.push(`${donde}: quedan ${restos} resto(s) en pantalla`);
     await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-chip', 0); await elegir('.cfg-chip', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
