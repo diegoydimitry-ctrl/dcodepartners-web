@@ -599,3 +599,12 @@
 @media (prefers-reduced-motion:reduce){
   .cfg-esc, .cfg-luz, .cfg-astilla, .cfg-golpe, .cfg-onda{ display:none; }
 }
+
+/* Los personajes. Viven en la capa fija, por encima del clon del bloque, y
+   no reciben el ratón: son respuesta, no interfaz. */
+.cfg-bicho2{
+  position:fixed; display:block; pointer-events:none; z-index:3;
+  will-change:transform, opacity; line-height:0;
+}
+.cfg-bicho2 svg{ display:block; height:auto; overflow:visible; }
+@media (prefers-reduced-motion:reduce){ .cfg-bicho2{ display:none; } }

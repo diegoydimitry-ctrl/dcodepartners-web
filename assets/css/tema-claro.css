@@ -326,16 +326,10 @@ html[data-theme="light"] .v6-panel-f{ border:1px solid color-mix(in srgb, var(--
     -22px 30px 70px -34px rgba(20,30,64,0.276),
     0 80px 150px -60px rgba(20,30,64,0.288),
     0 34px 90px -50px color-mix(in srgb, var(--blue, rgba(91,140,255,0.55)) 55%, transparent); }
-html[data-theme="light"] .v6-barra{ background:linear-gradient(180deg, rgba(253,254,255,0.96), rgba(246,249,255,0.96)); border-bottom:1px solid rgba(46,59,98,0.174); }
-html[data-theme="light"] .v6-url{ color:rgba(23,29,41,0.66); background:rgba(242,245,250,0.6); border:1px solid rgba(46,59,98,0.13); }
-html[data-theme="light"][data-theme="light"] .v6-barra{ border-bottom-color:rgba(205,210,218,0.12); }
-html[data-theme="light"][data-theme="light"] .v6-url{ border-color:rgba(205,210,218,0.1); }
 html[data-theme="light"] .v6-panel-f::before{ background:linear-gradient(115deg,
     color-mix(in srgb, var(--blue, #5b8cff) 40%, transparent),
     color-mix(in srgb, var(--violet, #9b6bff) 24%, transparent) 55%,
     color-mix(in srgb, var(--ink, #f3f6fb) 60%, transparent)); }
-html[data-theme="light"] .v6-panel-pie{ color:var(--stone-soft, #48505e); }
-html[data-theme="light"] .v6-panel-k{ color:var(--cyan, #0b6676); }
 html[data-theme="light"] body.v6 :is(.v6-lede, .v6-kicker, .v6-status, .v6-say, .v6-sys, .v6-cap,
             .v6-river-note, .v6-step-in, .v6-pacto, .v6-panel-pie, .v6-prueba li){ text-shadow:none; }
 html[data-theme="light"] .v6-marca{ color:var(--ink, #090f1a); }

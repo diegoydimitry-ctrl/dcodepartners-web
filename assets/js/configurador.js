@@ -305,6 +305,121 @@
     return pasos;
   }
 
+  /* ══════════════════ LOS PERSONAJES ══════════════════
+     Al elegir una opción entra en escena UN PERSONAJE, distinto en cada
+     familia, y le hace algo al bloque que acabas de pulsar: lo revienta, lo
+     tira de un zarpazo, se lo lleva volando, lo arranca con una pinza o sale
+     por debajo rompiéndolo en dos.
+
+     Están dibujados a mano en SVG —con sus degradados, su luz de canto y su
+     sombra—, no son iconos de línea: la gracia está en que se reconozca al
+     bicho, no en que se adivine. Y cada uno entra, hace lo suyo y se va en
+     menos de un segundo y medio; ninguno se queda por ahí.
+
+     Un solo personaje a la vez, y ninguno para quien pide menos movimiento. */
+
+  var DEFS =
+    '<defs>' +
+    /* pelo de gato */
+    '<linearGradient id="pgato" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#6b6f7e"/><stop offset=".45" stop-color="#4a4e5c"/><stop offset="1" stop-color="#2e313c"/></linearGradient>' +
+    '<radialGradient id="pyema" cx=".35" cy=".3" r=".8">' +
+      '<stop offset="0" stop-color="#ffa8b4"/><stop offset="1" stop-color="#d4697c"/></radialGradient>' +
+    /* metal */
+    '<linearGradient id="pmetal" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="#e8eefb"/><stop offset=".35" stop-color="#9fb0cf"/>' +
+      '<stop offset=".55" stop-color="#5d6b8a"/><stop offset="1" stop-color="#8fa0c0"/></linearGradient>' +
+    '<linearGradient id="pmetal2" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#b9c6e2"/><stop offset="1" stop-color="#48536e"/></linearGradient>' +
+    /* topo */
+    '<radialGradient id="ptopo" cx=".35" cy=".25" r=".9">' +
+      '<stop offset="0" stop-color="#6c5a53"/><stop offset=".55" stop-color="#43372f"/><stop offset="1" stop-color="#241c17"/></radialGradient>' +
+    /* pájaro */
+    '<linearGradient id="pave" x1=".1" y1="0" x2=".9" y2="1">' +
+      '<stop offset="0" stop-color="#3b4c7a"/><stop offset=".5" stop-color="#1e2742"/><stop offset="1" stop-color="#0d1222"/></linearGradient>' +
+    /* madera del mazo */
+    '<linearGradient id="pmadera" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#c79a63"/><stop offset=".5" stop-color="#9a703f"/><stop offset="1" stop-color="#6b4b27"/></linearGradient>' +
+    '<linearGradient id="pguante" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" stop-color="#fdfefe"/><stop offset="1" stop-color="#c8d2e4"/></linearGradient>' +
+    '<filter id="psombra" x="-40%" y="-40%" width="180%" height="180%">' +
+      '<feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#04070f" flood-opacity=".55"/></filter>' +
+    '</defs>';
+
+  /* Cada dibujo mira a la derecha y tiene su «punto de contacto» donde la
+     escena lo coloca. Van con filtro de sombra para que no parezcan pegatinas. */
+  var DIBUJO = {
+    /* LA ZARPA. Almohadillas, uñas fuera y pelo de verdad en el canto. */
+    zarpa:
+      '<g filter="url(#psombra)">' +
+      '<path d="M18 86c-8-14-9-30-2-43C24 28 44 18 66 20c22 2 38 16 41 35 3 18-8 34-27 41-20 7-49 4-62-10z" fill="url(#pgato)"/>' +
+      '<path d="M22 80c-6-12-6-26 0-37 8-14 25-22 43-21" fill="none" stroke="#8a90a3" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>' +
+      '<ellipse cx="62" cy="76" rx="24" ry="17" fill="url(#pyema)"/>' +
+      '<ellipse cx="33" cy="45" rx="10" ry="12" fill="url(#pyema)" transform="rotate(-22 33 45)"/>' +
+      '<ellipse cx="56" cy="34" rx="10" ry="12" fill="url(#pyema)" transform="rotate(-6 56 34)"/>' +
+      '<ellipse cx="79" cy="39" rx="10" ry="12" fill="url(#pyema)" transform="rotate(12 79 39)"/>' +
+      '<ellipse cx="96" cy="56" rx="9" ry="11" fill="url(#pyema)" transform="rotate(28 96 56)"/>' +
+      '<path d="M28 33c-4-6-4-12-1-16M52 20c-2-7-1-13 2-16M78 25c0-7 2-12 6-14M99 44c2-6 5-10 9-11" fill="none" stroke="#f4f7ff" stroke-width="4.6" stroke-linecap="round"/>' +
+      '</g>',
+    /* EL TOPO. Hocico rosa, ojillos cerrados y dos manazas de cavar. */
+    topo:
+      '<g filter="url(#psombra)">' +
+      '<ellipse cx="60" cy="64" rx="42" ry="38" fill="url(#ptopo)"/>' +
+      '<ellipse cx="60" cy="52" rx="30" ry="24" fill="#57483f" opacity=".5"/>' +
+      '<ellipse cx="60" cy="72" rx="17" ry="13" fill="#e9a0aa"/>' +
+      '<ellipse cx="60" cy="70" rx="11" ry="8" fill="#d4707f"/>' +
+      '<circle cx="54" cy="68" r="2.3" fill="#3a2520"/><circle cx="66" cy="68" r="2.3" fill="#3a2520"/>' +
+      '<path d="M42 50c4-3 9-3 12 0M66 50c3-3 8-3 12 0" fill="none" stroke="#1d1611" stroke-width="3" stroke-linecap="round"/>' +
+      '<g fill="#e9a0aa">' +
+      '<path d="M20 74c-7 2-11 8-9 14 2 5 9 7 15 4l10-6-3-13z"/>' +
+      '<path d="M100 74c7 2 11 8 9 14-2 5-9 7-15 4l-10-6 3-13z"/></g>' +
+      '<path d="M14 82l-6 4M16 88l-7 2M104 82l7 4M104 88l8 2" stroke="#f0dfe2" stroke-width="2.6" stroke-linecap="round" fill="none"/>' +
+      '</g>',
+    /* EL BRAZO. Tres tramos, pistón y pinza de dos dedos. */
+    brazo:
+      '<g filter="url(#psombra)">' +
+      '<rect x="48" y="0" width="26" height="34" rx="5" fill="url(#pmetal2)"/>' +
+      '<circle cx="61" cy="36" r="11" fill="url(#pmetal)"/><circle cx="61" cy="36" r="4" fill="#2b3348"/>' +
+      '<rect x="50" y="42" width="22" height="34" rx="6" fill="url(#pmetal2)"/>' +
+      '<rect x="55" y="46" width="4" height="26" rx="2" fill="#dbe5fb" opacity=".7"/>' +
+      '<circle cx="61" cy="80" r="10" fill="url(#pmetal)"/><circle cx="61" cy="80" r="3.5" fill="#2b3348"/>' +
+      '<path d="M46 88c-10 6-14 16-11 26l9-3c-2-7 1-13 8-17z" fill="url(#pmetal)"/>' +
+      '<path d="M76 88c10 6 14 16 11 26l-9-3c2-7-1-13-8-17z" fill="url(#pmetal)"/>' +
+      '<rect x="52" y="84" width="18" height="8" rx="3" fill="#39415a"/>' +
+      '<circle cx="61" cy="30" r="2.6" fill="#43e0ff"/>' +
+      '</g>',
+    /* EL PÁJARO. Alas abiertas, pico abierto y un ojo con brillo. */
+    ave:
+      '<g filter="url(#psombra)">' +
+      '<path d="M64 48c16-20 44-30 60-22-10 6-14 16-14 24 12-2 22 2 26 10-14 0-24 8-28 18-8 20-32 28-52 20-16-6-24-22-20-38 3-10 12-16 22-16z" fill="url(#pave)"/>' +
+      '<path d="M60 46c-14-14-36-18-50-10 8 4 12 12 12 20-10 0-18 4-22 12 12-2 22 4 26 12" fill="url(#pave)" opacity=".85"/>' +
+      '<path d="M96 58l26-6-26 14z" fill="#f5a524"/>' +
+      '<path d="M96 60l24 2-24 6z" fill="#c9781a"/>' +
+      '<circle cx="88" cy="54" r="6" fill="#f4f7ff"/><circle cx="89" cy="55" r="3.1" fill="#101627"/>' +
+      '<circle cx="87.4" cy="53.4" r="1.1" fill="#fff"/>' +
+      '<path d="M46 86l-10 16M58 92l-6 18" stroke="#1a2138" stroke-width="5" stroke-linecap="round" fill="none"/>' +
+      '</g>',
+    /* EL MAZO. Cabeza de acero, mango de madera y un guante sujetándolo. */
+    mazo:
+      '<g filter="url(#psombra)">' +
+      '<rect x="6" y="14" width="58" height="46" rx="9" fill="url(#pmetal)"/>' +
+      '<rect x="6" y="14" width="58" height="12" rx="6" fill="#f0f5ff" opacity=".45"/>' +
+      '<rect x="12" y="22" width="9" height="30" rx="4" fill="#39415a" opacity=".5"/>' +
+      '<rect x="60" y="28" width="58" height="17" rx="8" fill="url(#pmadera)"/>' +
+      '<path d="M66 33h46M66 40h40" stroke="#5c3f22" stroke-width="1.6" stroke-linecap="round" opacity=".5"/>' +
+      '<path d="M86 22c12-2 22 4 24 14 2 10-6 19-18 19-9 0-16-5-17-12l3-9z" fill="url(#pguante)"/>' +
+      '<path d="M88 30c7-2 14 1 15 7M88 40c7 2 14 0 16-5" fill="none" stroke="#93a1bc" stroke-width="2.2" stroke-linecap="round"/>' +
+      '</g>',
+  };
+
+  function figura(nombre, ancho) {
+    var g = el('i', 'cfg-bicho2 es-' + nombre);
+    g.innerHTML = '<svg viewBox="0 0 130 120" width="' + ancho + '" aria-hidden="true" focusable="false">' +
+      DEFS + DIBUJO[nombre] + '</svg>';
+    capa().appendChild(g);
+    return g;
+  }
+
   /* ══════════════════ MICROESCENAS ══════════════════
      Al elegir una opción NO sale un icono con patas a correr por la
      pantalla. Le pasa algo AL BLOQUE que acabas de pulsar: se parte, sale
@@ -323,20 +438,30 @@
      elige decide la reacción física que tiene sentido. */
   var REACCION = {
     dinero: 'expulsa', cobros: 'expulsa', cuotas: 'expulsa', carro: 'expulsa',
-    ecommerce: 'expulsa', pedidos: 'expulsa', compras: 'expulsa', finance: 'expulsa',
+    pedidos: 'expulsa', compras: 'expulsa', finance: 'expulsa',
     papel: 'deshoja', docs: 'deshoja', albaranes: 'deshoja', partes: 'deshoja',
-    impuestos: 'deshoja', seguros: 'deshoja', propuestas: 'deshoja', asesoria: 'deshoja',
+    impuestos: 'deshoja', seguros: 'deshoja', propuestas: 'deshoja',
     reloj: 'cae', calendario: 'cae', citas: 'cae', horas: 'cae', visitas: 'cae',
-    reservas: 'cae', recordar: 'cae', planifica: 'cae', restaurante: 'cae', clinica: 'cae',
+    reservas: 'cae', recordar: 'cae', planifica: 'cae',
     enchufe: 'parte', engranaje: 'parte', integra: 'parte', conectar: 'parte',
-    auto: 'parte', repetido: 'parte', portales: 'parte', industria: 'parte', llave: 'parte',
+    auto: 'parte', repetido: 'parte', portales: 'parte', llave: 'parte',
     gente: 'implosiona', clientes: 'implosiona', altas: 'implosiona', chat: 'implosiona',
     agente: 'implosiona', atencion: 'implosiona', fuera: 'implosiona', whatsapp: 'implosiona',
+  };
+  /* Los nueve sectores del primer paso van repartidos a mano: en una
+     rejilla de tres en tres, dos personajes iguales pegados se notan más
+     que cualquier otra cosa, así que ninguna casilla repite con la de al
+     lado ni con la de abajo. */
+  var SECTOR = {
+    inmobiliaria: 'parte',   restaurante: 'cae',      clinica: 'implosiona',
+    asesoria: 'deshoja',     gimnasio: 'expulsa',     ecommerce: 'parte',
+    agencia: 'cae',          industria: 'deshoja',    otro: 'implosiona',
   };
   var FAMILIAS = ['parte', 'expulsa', 'cae', 'deshoja', 'implosiona'];
   /* Lo que no esté en la tabla reparte por su nombre, no al azar: la misma
      opción hace siempre lo mismo, que es lo que la vuelve memorable. */
   function reaccionDe(id, paso) {
+    if (SECTOR[id]) return SECTOR[id];
     if (REACCION[id]) return REACCION[id];
     var n = 0, t = String(id || paso);
     for (var k = 0; k < t.length; k++) n = (n * 31 + t.charCodeAt(k)) >>> 0;
@@ -368,97 +493,144 @@
   }
 
   var ESCENAS = {
-    /* SE PARTE. Una grieta cruza el bloque, las dos mitades se abren un
-       poco, escapa la luz de dentro y caen tres astillas. */
+    /* EL MAZO. Entra por arriba a la derecha, cae de golpe sobre el bloque,
+       lo revienta, rebota y se retira. El bloque se parte donde golpea. */
     parte: function (tarjeta, r) {
+      var m = figura('mazo', 150);
+      var cx = r.left + r.width * .5, cy = r.top + r.height * .5;
+      m.style.cssText = 'left:' + (cx - 30) + 'px;top:' + (cy - 150) + 'px;transform-origin:88% 66%;';
+      m.animate([
+        { transform: 'translate(70px,-90px) rotate(-64deg)', opacity: 0 },
+        { transform: 'translate(30px,-40px) rotate(-46deg)', opacity: 1, offset: .22 },
+        { transform: 'translate(0,34px) rotate(16deg)', offset: .42 },
+        { transform: 'translate(-4px,24px) rotate(6deg)', offset: .54 },
+        { transform: 'translate(60px,-80px) rotate(-56deg)', opacity: 0 },
+      ], { duration: 1150, easing: 'cubic-bezier(.35,.02,.3,1)', fill: 'both' });
+
       var a = clona(tarjeta, r), b = clona(tarjeta, r);
-      var q = 42 + Math.random() * 16;
-      a.style.clipPath = 'polygon(0 0, ' + q + '% 0, ' + (q - 9) + '% 34%, ' + (q + 7) + '% 62%, ' + (q - 4) + '% 100%, 0 100%)';
-      b.style.clipPath = 'polygon(' + q + '% 0, 100% 0, 100% 100%, ' + (q - 4) + '% 100%, ' + (q + 7) + '% 62%, ' + (q - 9) + '% 34%)';
+      var q = 46 + Math.random() * 8;
+      a.style.clipPath = 'polygon(0 0,' + q + '% 0,' + (q - 9) + '% 36%,' + (q + 7) + '% 64%,' + (q - 4) + '% 100%,0 100%)';
+      b.style.clipPath = 'polygon(' + q + '% 0,100% 0,100% 100%,' + (q - 4) + '% 100%,' + (q + 7) + '% 64%,' + (q - 9) + '% 36%)';
       var luz = trozo('cfg-luz', r);
-      luz.style.left = (r.left + r.width * q / 100 - 2) + 'px';
-      luz.style.width = '4px';
-      luz.animate([{ opacity: 0, transform: 'scaleY(.2)' }, { opacity: 1, transform: 'scaleY(1)', offset: .25 }, { opacity: 0 }],
-        { duration: 620, easing: 'ease-out' });
-      a.animate([{ transform: 'none' }, { transform: 'translate(-16px,6px) rotate(-3.2deg)' }],
-        { duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)', fill: 'forwards' });
-      b.animate([{ transform: 'none' }, { transform: 'translate(18px,9px) rotate(3.6deg)' }],
-        { duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)', fill: 'forwards' });
-      for (var i = 0; i < 3; i++) (function (i) {
-        var s = trozo('cfg-astilla', { left: r.left + r.width * (q / 100) - 6, top: r.top + 18 + i * (r.height / 3.4), width: 11 + i * 3, height: 7 + i * 2 });
-        s.animate([{ transform: 'none', opacity: 1 },
-                   { transform: 'translate(' + (i % 2 ? 26 : -24) + 'px,' + (54 + i * 26) + 'px) rotate(' + (i % 2 ? 140 : -120) + 'deg)', opacity: 0 }],
-          { duration: 760 + i * 90, easing: 'cubic-bezier(.35,.05,.6,1)', fill: 'forwards' });
+      luz.style.left = (r.left + r.width * q / 100 - 2) + 'px'; luz.style.width = '4px';
+      luz.animate([{ opacity: 0 }, { opacity: 0, offset: .38 }, { opacity: 1, offset: .46 }, { opacity: 0 }],
+        { duration: 1000, easing: 'ease-out' });
+      var golpe = { delay: 430, easing: 'cubic-bezier(.15,.9,.3,1)', fill: 'forwards' };
+      a.animate([{ transform: 'none' }, { transform: 'translate(-30px,12px) rotate(-7deg)', opacity: 0 }],
+        Object.assign({ duration: 620 }, golpe));
+      var f = b.animate([{ transform: 'none' }, { transform: 'translate(34px,16px) rotate(8deg)', opacity: 0 }],
+        Object.assign({ duration: 620 }, golpe));
+      for (var i = 0; i < 5; i++) (function (i) {
+        var t = trozo('cfg-astilla', { left: cx - 8 + (i - 2) * 9, top: cy - 6, width: 9 + i * 3, height: 6 + i * 2 });
+        t.animate([{ transform: 'none', opacity: 0 }, { transform: 'none', opacity: 1, offset: .4 },
+                   { transform: 'translate(' + ((i - 2) * 34) + 'px,' + (58 + i * 14) + 'px) rotate(' + ((i - 2) * 90) + 'deg)', opacity: 0 }],
+          { duration: 1000, easing: 'cubic-bezier(.3,.05,.6,1)', fill: 'forwards' });
       })(i);
-      var f = a.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 560, fill: 'forwards' });
-      b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 560, fill: 'forwards' });
       return f.finished;
     },
 
-    /* SALE DESPEDIDO. Algo lo golpea por la izquierda: derrapa, se levanta
-       de un lado y se va de la pantalla. */
+    /* LA ZARPA. Asoma por la izquierda, engancha el bloque y lo manda de un
+       zarpazo fuera de la pantalla, girando. */
     expulsa: function (tarjeta, r) {
-      var c = clona(tarjeta, r);
-      var golpe = trozo('cfg-golpe', { left: r.left - 26, top: r.top + r.height / 2 - 3, width: 26, height: 6 });
-      golpe.animate([{ transform: 'translateX(-30px)', opacity: 0 }, { transform: 'translateX(6px)', opacity: 1, offset: .4 }, { transform: 'translateX(14px)', opacity: 0 }],
-        { duration: 300, easing: 'cubic-bezier(.2,.9,.3,1)' });
-      var a = c.animate([
-        { transform: 'none' },
-        { transform: 'translateX(-7px) skewX(4deg) scaleX(.94)', offset: .14 },
-        { transform: 'translateX(140px) rotate(5deg) skewX(-3deg)', offset: .5 },
-        { transform: 'translateX(' + (window.innerWidth - r.left + 80) + 'px) translateY(44px) rotate(16deg)', opacity: .1 },
-      ], { duration: 820, easing: 'cubic-bezier(.32,.02,.22,1)', fill: 'forwards' });
-      for (var i = 0; i < 4; i++) polvo(r.left + 10 + i * 16, r.top + r.height - 3, 'chispa');
-      return a.finished;
-    },
+      var z = figura('zarpa', 130);
+      z.style.cssText = 'left:' + (r.left - 150) + 'px;top:' + (r.top + r.height * .5 - 70) + 'px;transform-origin:20% 60%;';
+      z.animate([
+        { transform: 'translate(-80px,20px) rotate(-26deg)', opacity: 0 },
+        { transform: 'translate(20px,0) rotate(-6deg)', opacity: 1, offset: .26 },
+        { transform: 'translate(86px,-10px) rotate(16deg)', offset: .44 },
+        { transform: 'translate(-90px,26px) rotate(-30deg)', opacity: 0 },
+      ], { duration: 1080, easing: 'cubic-bezier(.3,.05,.3,1)', fill: 'both' });
 
-    /* SE CAE. Pierde el apoyo por un lado, bascula y se va hacia abajo
-       ganando velocidad. */
-    cae: function (tarjeta, r) {
       var c = clona(tarjeta, r);
-      c.style.transformOrigin = '18% 100%';
-      var a = c.animate([
+      var f = c.animate([
         { transform: 'none' },
-        { transform: 'rotate(-2deg) translateY(-6px)', offset: .12 },
-        { transform: 'rotate(9deg) translateY(26px)', offset: .36 },
-        { transform: 'rotate(26deg) translateY(' + (window.innerHeight - r.top + 60) + 'px)', opacity: .15 },
-      ], { duration: 900, easing: 'cubic-bezier(.5,0,.85,.6)', fill: 'forwards' });
+        { transform: 'none', offset: .3 },
+        { transform: 'translateX(-9px) skewX(5deg) scaleX(.93)', offset: .37 },
+        { transform: 'translate(180px,-14px) rotate(9deg)', offset: .62 },
+        { transform: 'translate(' + (window.innerWidth - r.left + 120) + 'px,50px) rotate(28deg)', opacity: .08 },
+      ], { duration: 1080, easing: 'cubic-bezier(.4,.02,.2,1)', fill: 'forwards' });
       window.setTimeout(function () {
-        for (var i = 0; i < 5; i++) polvo(r.left + 12 + i * (r.width / 5), r.top + r.height, 'polvo');
-      }, 320);
-      return a.finished;
+        for (var i = 0; i < 5; i++) polvo(r.left + 16 + i * 18, r.top + r.height - 4, 'chispa');
+      }, 330);
+      return f.finished;
     },
 
-    /* SE DESHOJA. Se separa en cuatro láminas que se abanican y se apagan
-       una detrás de otra. */
+    /* EL TOPO. Sale por debajo reventando el bloque, asoma el hocico, mira y
+       se vuelve a meter con su polvareda. */
+    cae: function (tarjeta, r) {
+      var t = figura('topo', 120);
+      var cx = r.left + r.width * .42;
+      t.style.cssText = 'left:' + (cx - 60) + 'px;top:' + (r.top + r.height - 58) + 'px;';
+      t.animate([
+        { transform: 'translateY(58px) scale(.7)', opacity: 0 },
+        { transform: 'translateY(-26px) scale(1.06)', opacity: 1, offset: .3 },
+        { transform: 'translateY(-34px) rotate(-7deg)', offset: .5 },
+        { transform: 'translateY(-30px) rotate(6deg)', offset: .66 },
+        { transform: 'translateY(64px) scale(.72)', opacity: 0 },
+      ], { duration: 1250, easing: 'cubic-bezier(.3,.8,.3,1)', fill: 'both' });
+
+      var a = clona(tarjeta, r), b = clona(tarjeta, r);
+      a.style.clipPath = 'polygon(0 0,44% 0,38% 40%,48% 70%,42% 100%,0 100%)';
+      b.style.clipPath = 'polygon(44% 0,100% 0,100% 100%,42% 100%,48% 70%,38% 40%)';
+      a.animate([{ transform: 'none' }, { transform: 'translate(-40px,10px) rotate(-11deg)', opacity: 0 }],
+        { duration: 760, delay: 210, easing: 'cubic-bezier(.2,.9,.3,1)', fill: 'forwards' });
+      var f = b.animate([{ transform: 'none' }, { transform: 'translate(44px,14px) rotate(12deg)', opacity: 0 }],
+        { duration: 760, delay: 210, easing: 'cubic-bezier(.2,.9,.3,1)', fill: 'forwards' });
+      window.setTimeout(function () {
+        for (var i = 0; i < 7; i++) polvo(cx - 30 + i * 10, r.top + r.height - 6, 'polvo');
+      }, 240);
+      return f.finished;
+    },
+
+    /* EL PÁJARO. Baja en picado, agarra el bloque con el pico y se lo lleva
+       hacia arriba a la derecha. */
     deshoja: function (tarjeta, r) {
-      var n = 4, ult = null;
-      for (var i = 0; i < n; i++) (function (i) {
-        var h = clona(tarjeta, r);
-        h.style.clipPath = 'inset(' + (i * 100 / n) + '% 0 ' + ((n - 1 - i) * 100 / n) + '% 0)';
-        var a = h.animate([
-          { transform: 'none', opacity: 1 },
-          { transform: 'translate(' + (i - 1.5) * 26 + 'px,' + (-8 - i * 9) + 'px) rotate(' + ((i - 1.5) * 4.5).toFixed(1) + 'deg)', opacity: 1, offset: .45 },
-          { transform: 'translate(' + (i - 1.5) * 54 + 'px,' + (-30 - i * 22) + 'px) rotate(' + ((i - 1.5) * 10).toFixed(1) + 'deg)', opacity: 0 },
-        ], { duration: 760, delay: i * 70, easing: 'cubic-bezier(.25,.8,.3,1)', fill: 'forwards' });
-        if (i === n - 1) ult = a;
-      })(i);
-      return ult ? ult.finished : Promise.resolve();
+      var p = figura('ave', 150);
+      p.style.cssText = 'left:' + (r.left + r.width * .5 - 120) + 'px;top:' + (r.top - 70) + 'px;';
+      p.animate([
+        { transform: 'translate(-220px,-140px) scale(.7) rotate(-12deg)', opacity: 0 },
+        { transform: 'translate(-40px,-12px) scale(1) rotate(6deg)', opacity: 1, offset: .3 },
+        { transform: 'translate(10px,14px) scale(1.03) rotate(2deg)', offset: .44 },
+        { transform: 'translate(300px,-260px) scale(.72) rotate(-18deg)', opacity: 0 },
+      ], { duration: 1250, easing: 'cubic-bezier(.35,.05,.3,1)', fill: 'both' });
+
+      var c = clona(tarjeta, r);
+      c.style.transformOrigin = '50% 0%';
+      var f = c.animate([
+        { transform: 'none' },
+        { transform: 'none', offset: .36 },
+        { transform: 'translateY(-14px) rotate(-3deg)', offset: .48 },
+        { transform: 'translate(300px,-280px) rotate(22deg) scale(.62)', opacity: 0 },
+      ], { duration: 1250, easing: 'cubic-bezier(.4,.02,.25,1)', fill: 'forwards' });
+      return f.finished;
     },
 
-    /* IMPLOSIONA. Se junta hacia su centro y en su sitio queda una onda que
-       se expande y se apaga. */
+    /* EL BRAZO. Baja del techo, pinza el bloque, lo levanta y lo sube con él.
+       Queda la onda del pistón al soltar el aire. */
     implosiona: function (tarjeta, r) {
+      var b = figura('brazo', 110);
+      var cx = r.left + r.width * .5;
+      b.style.cssText = 'left:' + (cx - 46) + 'px;top:' + (r.top - 200) + 'px;';
+      b.animate([
+        { transform: 'translateY(-140px)', opacity: 0 },
+        { transform: 'translateY(118px)', opacity: 1, offset: .3 },
+        { transform: 'translateY(126px)', offset: .44 },
+        { transform: 'translateY(-200px)', opacity: 0 },
+      ], { duration: 1200, easing: 'cubic-bezier(.4,.05,.3,1)', fill: 'both' });
+
       var c = clona(tarjeta, r);
-      var a = c.animate([
-        { transform: 'none', filter: 'blur(0)', opacity: 1 },
-        { transform: 'scale(1.045)', offset: .18 },
-        { transform: 'scale(.22) rotate(-6deg)', filter: 'blur(6px)', opacity: 0 },
-      ], { duration: 640, easing: 'cubic-bezier(.6,-.2,.3,1)', fill: 'forwards' });
-      var onda = trozo('cfg-onda', { left: r.left + r.width / 2 - 14, top: r.top + r.height / 2 - 14, width: 28, height: 28 });
-      onda.animate([{ transform: 'scale(.4)', opacity: .85 }, { transform: 'scale(' + (r.width / 14).toFixed(1) + ')', opacity: 0 }],
-        { duration: 760, delay: 140, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
-      return a.finished;
+      c.style.transformOrigin = '50% 0%';
+      var f = c.animate([
+        { transform: 'none' },
+        { transform: 'none', offset: .36 },
+        { transform: 'scale(.97) rotate(-1.5deg)', offset: .46 },
+        { transform: 'translateY(-260px) scale(.7) rotate(4deg)', opacity: 0 },
+      ], { duration: 1200, easing: 'cubic-bezier(.45,.02,.25,1)', fill: 'forwards' });
+      var onda = trozo('cfg-onda', { left: cx - 14, top: r.top + r.height * .5 - 14, width: 28, height: 28 });
+      onda.animate([{ transform: 'scale(.3)', opacity: 0 }, { transform: 'scale(.6)', opacity: .8, offset: .42 },
+                    { transform: 'scale(' + (r.width / 13).toFixed(1) + ')', opacity: 0 }],
+        { duration: 1000, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
+      return f.finished;
     },
   };
 
@@ -471,7 +643,7 @@
     hayBicho = true;
     quita();
     capa().setAttribute('data-escena', reaccionDe(id, paso));
-    var seguro = window.setTimeout(quita, 2600);
+    var seguro = window.setTimeout(quita, 2900);
     var fin = (ESCENAS[reaccionDe(id, paso)] || ESCENAS.parte)(tarjeta, r);
     Promise.resolve(fin).then(function () {
       window.clearTimeout(seguro);
@@ -565,7 +737,9 @@
        el botón ya no existe cuando llega el click normal. */
     b.addEventListener('click', function () {
       ultimaTarjeta = b;
-      if (b.getAttribute('aria-pressed') !== 'true') corre(DE[id], paso);
+      /* Se pasa el id de la opción, no el de su dibujo: la reacción la
+         decide lo que has elegido, y el mapa de arriba va por ids. */
+      if (b.getAttribute('aria-pressed') !== 'true') corre(id, paso);
       late(b);
     }, true);
     return b;

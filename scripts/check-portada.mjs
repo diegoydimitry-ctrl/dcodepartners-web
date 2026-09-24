@@ -25,17 +25,22 @@ const EXIGE = [
   ['el panel de Finance', /<div class="v6-panel"/],
   ['la captura para tema oscuro', /class="es-oscuro"[^>]*finance-dark\.webp/],
   ['la captura para tema claro', /class="es-claro"[^>]*finance-light\.webp/],
-  /* El pie va fuera de la figura a propósito: dentro lo borraba la máscara
-     del panel. Si alguien lo devuelve a un <figcaption>, esto lo caza. */
-  ['el pie del panel, fuera de la figura', /<p class="v6-panel-pie"><span class="v6-panel-k">/],
 ];
 const PROHIBE = [
   ['la marca de partículas como formación del hero', /var FORM = \[F0,/],
+];
+/* Lo que NO puede volver al HTML de las portadas. El rótulo encima del
+   panel se comía la esquina de la pantalla y su segunda línea salía
+   cortada; la barra de navegador sobraba encima del software. */
+const FUERA = [
+  ['el rótulo encima del panel', /<p class="v6-panel-pie"/],
+  ['la barra de navegador sobre el panel', /<div class="v6-barra"/],
 ];
 
 for (const p of ['index.html', 'en/index.html']) {
   const h = fs.readFileSync(path.join(RAIZ, p), 'utf8');
   for (const [que, re] of EXIGE) if (!re.test(h)) errores.push(`${p}: falta ${que}`);
+  for (const [que, re] of FUERA) if (re.test(h)) errores.push(`${p}: ha vuelto ${que}`);
   /* Y la imagen que promete tiene que existir de verdad. */
   for (const m of h.matchAll(/src="(\/assets\/img\/[^"]+)"/g)) {
     if (!fs.existsSync(path.join(RAIZ, m[1].slice(1)))) errores.push(`${p}: ${m[1]} no existe`);
