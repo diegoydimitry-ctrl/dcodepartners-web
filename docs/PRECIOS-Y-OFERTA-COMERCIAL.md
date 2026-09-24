@@ -374,7 +374,9 @@ catalogo.json  ──build:catalogo──▶  precios.html · en/precios.html ·
 - **una fila de la comparativa no trae la URL de la tarifa publicada**;
 - falta en la página la fecha y el criterio de la comparativa.
 
-**`npm run qa:precios`** abre la web en 3 aparatos × 2 idiomas y comprueba que no queda
+**`npm run qa:precios`** abre la web en 3 aparatos × 2 idiomas y comprueba que el
+menú marca `/precios` como página actual (la cáscara viene de Servicios y traía su
+«estás aquí» puesto), que no queda
 **ninguna cifra comercial suelta fuera de `/precios`**, que el catálogo y los filtros
 responden, que la comparativa viene plegada y se abre, que sus enlaces son `https` +
 `_blank` + `noopener`, y que el configurador llega hasta el final y rellena el
@@ -382,7 +384,8 @@ formulario.
 
 Ambas se han **probado rompiéndolas**: poner un precio suelto en `servicios.html`,
 cambiar un precio de la página sin regenerarla, quitar `noopener`, dejar la comparativa
-abierta y quitar una URL. Las cinco se cazaron; luego se restauró todo.
+abierta, quitar una URL y devolver el «estás aquí» a Servicios. Las seis se cazaron;
+luego se restauró todo.
 
 ### Lo que se quitó de otras páginas
 

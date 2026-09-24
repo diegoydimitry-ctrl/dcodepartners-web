@@ -223,6 +223,13 @@ function generar(lang) {
   /* El conmutador de idioma de la cabecera apunta a su pareja */
   h = h.replace(/(<a href=")[^"]*(" hreflang="es" lang="es" data-lang="es")/, `$1/precios$2`);
   h = h.replace(/(<a href=")[^"]*(" hreflang="en" lang="en" data-lang="en")/, `$1/en/precios$2`);
+  /* La cáscara viene de Servicios y trae su «estás aquí» puesto. En esta
+     página eso es mentira: el menú anunciaría Servicios mientras se lee
+     Precios. Se quita de donde estaba y se pone donde toca —aplicar-precios
+     no puede hacerlo porque esta página se regenera entera después. */
+  h = h.replace(/(<a href="[^"]*")\s+aria-current="page"(>)/g, '$1$2');
+  h = h.replace(new RegExp('(<li><a href="' + (lang === 'en' ? '/en' : '') + '/precios")(>)'), '$1 aria-current="page"$2');
+
   /* JSON-LD de la página molde: fuera, no describe esto */
   h = h.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '');
   /* La hoja y el guion de esta sección */

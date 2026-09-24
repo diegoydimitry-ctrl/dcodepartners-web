@@ -137,6 +137,14 @@ for (const [aparato, op] of APARATOS) {
         nuestras: d.querySelectorAll('.mercado-l .es-nuestro').length,
       };
     });
+    /* El menú tiene que decir que estás en Precios. La cáscara sale de
+       Servicios y traía su «estás aquí» puesto: el lector de pantalla
+       anunciaba la página equivocada. */
+    const aqui = await pg.evaluate(() => [...document.querySelectorAll('.main-nav a[aria-current="page"]')].map((a) => a.getAttribute('href')));
+    if (aqui.length !== 1 || !/\/precios$/.test(aqui[0] || '')) {
+      fallos.push(`${donde}: el menú marca como página actual ${aqui.join(', ') || '(ninguna)'} en vez de /precios`);
+    }
+
     if (!mk) fallos.push(`${donde}: no está la comparativa de mercado`);
     else {
       if (!mk.plegado) fallos.push(`${donde}: la comparativa de mercado viene desplegada`);
