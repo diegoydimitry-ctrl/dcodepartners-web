@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "sync-content": "npm run build:en-curso && npm run build:estado && npm run build:demo-en && npm run build:catalogo && npm run build:que-hacemos && npm run build:precios && npm run build:chat && npm run build:og && npm run build:tema && npm run update-asset-versions && npm run generate-kb",
+    "sync-content": "npm run build:en-curso && npm run build:estado && npm run build:demo-en && npm run build:catalogo && npm run build:que-hacemos && npm run build:fichas && npm run build:precios && npm run build:chat && npm run build:og && npm run build:tema && npm run update-asset-versions && npm run generate-kb",
     "build:estado": "node scripts/build-estado.mjs",
     "build:demo-en": "node scripts/build-demo-en.mjs",
     "generate-kb": "node scripts/build-knowledge-base.js",
@@ -37,6 +37,8 @@
     "build:webs": "node scripts/build-webs-ejemplo.mjs",
     "check:webs": "node scripts/build-webs-ejemplo.mjs --check",
     "check:que-hacemos": "node scripts/aplicar-que-hacemos.mjs --check",
+    "build:fichas": "node scripts/build-fichas.mjs",
+    "check:fichas": "node scripts/build-fichas.mjs --check",
     "build:precios": "node scripts/build-precios.mjs",
     "check:precios": "node scripts/build-precios.mjs --check",
     "build:og": "node scripts/build-og.mjs",

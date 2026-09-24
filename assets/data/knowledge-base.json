@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-24T11:59:39.853Z",
-  "pageCount": 62,
-  "chunkCount": 650,
+  "generatedAt": "2026-09-24T14:00:58.147Z",
+  "pageCount": 66,
+  "chunkCount": 630,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -1950,7 +1950,7 @@
         {
           "id": "/en/#c1",
           "heading": "What your team repeats every weeka system can do instead.",
-          "text": "We look at how you actually work, find where time and money leak out, and build the system that stops it. Four of them are running below: try them before you talk to anyone. Try the systems Take the diagnostic Our own software, not resold licences The systems we show you are the ones we run inside Scope, timeline and price in writing before anything starts What you are looking at A company before anyone tidied it The system, running D-Code Finance · demo data What we do"
+          "text": "We look at how you actually work, find where time and money leak out, and build the system that stops it. Four of them are running below: try them before you talk to anyone. Try the systems Take the diagnostic Our own software, not resold licences The systems we show you are the ones we run inside Scope, timeline and price in writing before anything starts What you are looking at A company before anyone tidied it The system, runningD-Code Finance · demo data What we do"
         },
         {
           "id": "/en/#c2",
@@ -2379,32 +2379,32 @@
         {
           "id": "/en/que-hacemos#c1",
           "heading": "Custom systems",
-          "text": "The system your company runs on, built to fit the way you actually work. What it includes We follow a customer, an order and an invoice end to end and measure where a person is acting as a bridge. Scope, deadline and price in writing before anything starts. Built in parts, inside the tools you already use. It ends up running, with documentation and access in your name. See the price"
+          "text": "The system your company runs on, built to fit the way you actually work. What it includes We follow a customer, an order and an invoice end to end and measure where a person is acting as a bridge. Scope, deadline and price in writing before anything starts. Built in parts, inside the tools you already use. It ends up running, with documentation and access in your name. See it in detail"
         },
         {
           "id": "/en/que-hacemos#c2",
           "heading": "Automations",
-          "text": "What is done by hand every week runs on its own, and tells you if something fails. What it includes One task, a whole process, or an AI flow that reads and classifies. Error handling and an alert when something goes wrong. Maintenance is separate and optional: with nobody behind it, it breaks the day someone changes their API. See the price"
+          "text": "What is done by hand every week runs on its own, and tells you if something fails. What it includes One task, a whole process, or an AI flow that reads and classifies. Error handling and an alert when something goes wrong. Maintenance is separate and optional: with nobody behind it, it breaks the day someone changes their API. See it in detail"
         },
         {
           "id": "/en/que-hacemos#c3",
           "heading": "AI agents",
-          "text": "They answer with your business data and escalate to a person when it matters. What it includes Web, WhatsApp or phone; one channel or several at once. They answer from your data, not from what they make up. Everything they say is logged and reviewable. Flat fee: you do not pay per conversation. See the price"
+          "text": "They answer with your business data and escalate to a person when it matters. What it includes Web, WhatsApp or phone; one channel or several at once. They answer from your data, not from what they make up. Everything they say is logged and reviewable. Flat fee: you do not pay per conversation. See it in detail"
         },
         {
           "id": "/en/que-hacemos#c4",
           "heading": "Integrations",
-          "text": "Your CRM, ERP, site and spreadsheets talking to each other, with minimum permissions. What it includes Data is entered once and shows up where it should. Also with your long-standing system, without touching its insides. Error handling, retries and a trail of what happened. See the price"
+          "text": "Your CRM, ERP, site and spreadsheets talking to each other, with minimum permissions. What it includes Data is entered once and shows up where it should. Also with your long-standing system, without touching its insides. Error handling, retries and a trail of what happened. See it in detail"
         },
         {
           "id": "/en/que-hacemos#c5",
           "heading": "Websites",
-          "text": "We build your site, rebuild the one you have and connect it to your systems. What it includes A new site: design, copy, speed and looking right on a phone. The one you already have: rebuilt or repaired, without starting over if there is no need. Connected: the form lands in your CRM, stock comes from the warehouse, the booking enters the diary. With a chatbot if you want one, answering from your data. See the price"
+          "text": "We build your site, rebuild the one you have and connect it to your systems. What it includes A new site: design, copy, speed and looking right on a phone. The one you already have: rebuilt or repaired, without starting over if there is no need. Connected: the form lands in your CRM, stock comes from the warehouse, the booking enters the diary. With a chatbot if you want one, answering from your data. See it in detail"
         },
         {
           "id": "/en/que-hacemos#c6",
           "heading": "Four examples of what comes out.",
-          "text": "Our own mock-ups, made-up companies. A site is not a brochure: it connects to what you already use. Real estate Listings come straight from the CRM: what is published is what exists, and the form qualifies the viewing before you give it. Restaurant The booking lands straight in the floor diary and the guest gets the reminder without anyone typing a thing. Clinic The slots you see are the real ones: the site reads the diary and writes back into it. Online shop Stock comes from the warehouse, not a spreadsheet: sold out cannot be bought and new arrivals publish themselves."
+          "text": "Our own mock-ups, made-up companies. A site is not a brochure: it connects to what you already use. Real estate Listings come straight from the CRM: what is published is what exists, and the form qualifies the viewing before you give it. Restaurant The booking lands straight in the floor diary and the guest gets the reminder without anyone typing a thing. Clinic The slots you see are the real ones: the site reads the diary and writes back into it. Online shop Stock comes from the warehouse, not a spreadsheet: sold out cannot be bought and new arrivals publish themselves. Look inside the sites"
         },
         {
           "id": "/en/que-hacemos#c7",
@@ -2475,170 +2475,132 @@
       ]
     },
     {
-      "url": "/en/servicios/agentes-ia",
-      "title": "AI Agents for Customer Service and Sales — D-Code Partners",
+      "url": "/en/servicios/agentes-de-ia",
+      "title": "Chatbots and AI agents · D-Code Partners",
       "chunks": [
         {
-          "id": "/en/servicios/agentes-ia#c0",
-          "heading": "Customer service and sales that make no one wait.",
-          "text": "Not a standalone chatbot: it answers in your website's chat and by email with your business's information, and knows when to hand the conversation to a person — inside your Support or Sales system."
+          "id": "/en/servicios/agentes-de-ia#c0",
+          "heading": "They answer from your data, not from what they make up.",
+          "text": "They answer on the web, on WhatsApp or by phone, reply with what is in your systems and hand the conversation to a person when needed. Everything they say is logged and reviewable. No making things upIf the answer is not in your data, it says so and escalates. An agent that improvises costs more customers than it saves. It escalates with the full contextWhoever picks up the conversation sees everything before it, not a “hello, how can I help?”. Flat feeYou do not pay per conversation. If it gets used a lot, all the better: that is the point. The log staysEvery answer, with its time and its source. It can be audited and it can be corrected."
         },
         {
-          "id": "/en/servicios/agentes-ia#c1",
-          "heading": "An agent trained on your information, not on generic answers.",
-          "text": "We start from your FAQs, your catalog, and how you communicate. Today we deploy the agent on web chat and email; other channels are evaluated case by case — we don't sell them as available by default. It stays supervised from day one so we can tune its behaviour against real cases. It's a piece that combines especially well with Integrations, so every conversation gets logged directly in your CRM. See the full D-Code Method"
+          "id": "/en/servicios/agentes-de-ia#c1",
+          "heading": "The one on this site, without going anywhere",
+          "text": "The assistant at the bottom right is one of these: it answers with what the site says and nothing else. Ask it something that is not written here and see what it replies."
         },
         {
-          "id": "/en/servicios/agentes-ia#c2",
-          "heading": "Is this for your business?",
-          "text": "It's a good fit if you get repeated inquiries from customers or prospects and today depend on someone being available to reply. If your priority is reducing internal admin work rather than external customer contact, the AI Automation service is probably the better starting point."
+          "id": "/en/servicios/agentes-de-ia#c2",
+          "heading": "The other four things we build.",
+          "text": "Custom systems When what you need cannot be bought ready-made. Automations What repeats every week stops being done by hand. Integrations Data is entered once and shows up where it should. Websites A site that talks to your systems, not a brochure."
         },
         {
-          "id": "/en/servicios/agentes-ia#c3",
-          "heading": "Immediate first contact",
-          "text": "Answers frequently asked questions, hours, prices, and availability in seconds, any time of day."
-        },
-        {
-          "id": "/en/servicios/agentes-ia#c4",
-          "heading": "Lead qualification",
-          "text": "Captures the key information from every contact and has it ready in your CRM before you even speak with that person."
-        },
-        {
-          "id": "/en/servicios/agentes-ia#c5",
-          "heading": "First-line support",
-          "text": "Resolves your existing customers' most common queries without them having to wait for someone to be free."
-        },
-        {
-          "id": "/en/servicios/agentes-ia#c6",
-          "heading": "Escalation to your team",
-          "text": "When a conversation needs human judgment, the agent hands it off with all the context already gathered."
-        },
-        {
-          "id": "/en/servicios/agentes-ia#c7",
-          "heading": "Reactivation and follow-up",
-          "text": "Automatic follow-up messages for appointments, pending quotes, or abandoned carts."
-        },
-        {
-          "id": "/en/servicios/agentes-ia#c8",
-          "heading": "Your brand's tone and data",
-          "text": "The agent responds only with the information you give it, in your company's tone, without making up answers. Slide to see them all"
-        },
-        {
-          "id": "/en/servicios/agentes-ia#c9",
-          "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book a call See FAQ"
+          "id": "/en/servicios/agentes-de-ia#c3",
+          "heading": "Tell us about your case.",
+          "text": "Thirty minutes and you will know where we would start. Book a call See the price"
         }
       ]
     },
     {
-      "url": "/en/servicios/automatizacion-ia",
-      "title": "AI Automation for Businesses — D-Code Partners",
+      "url": "/en/servicios/automatizaciones",
+      "title": "Automations · D-Code Partners",
       "chunks": [
         {
-          "id": "/en/servicios/automatizacion-ia#c0",
-          "heading": "Processes that run themselves, 24 hours a day.",
-          "text": "The engine that runs inside every part of the system: it takes on the repetitive work, the kind that eats hours and needs no judgment at every step."
+          "id": "/en/servicios/automatizaciones#c0",
+          "heading": "What repeats every week stops being done by hand.",
+          "text": "A task someone does every Tuesday starts running on its own, with error handling and an alert when something goes wrong. No magic and no black boxes: you can see what it did, when, and with what data. One task, a process, or an AI flowFrom “when an invoice arrives, file it here” to a whole chained process. With your toolsThe ones you already use. You do not have to change software to automate what that software does. It warns you when it breaksAnd it does break: the day someone changes their API. That is why maintenance is separate and stated. It comes documentedWhat it does, what it touches and how to switch it off. So it does not depend on reaching us."
         },
         {
-          "id": "/en/servicios/automatizacion-ia#c1",
-          "heading": "Automation built on your real operations, not a mock-up.",
-          "text": "We start by identifying the highest-impact processes during the initial diagnosis. Then we design the workflow, connect it to your current tools, and deploy it directly into your operations. You no longer depend on someone \"remembering\" to run the process: the system does it by default, and a person only steps in when their judgment truly adds value. See the full D-Code Method"
+          "id": "/en/servicios/automatizaciones#c1",
+          "heading": "See it in the sales system",
+          "text": "A single inbox where AI reads every incoming contact, sorts it and assigns it. That is an automation, and you can open it. Open the demo"
         },
         {
-          "id": "/en/servicios/automatizacion-ia#c2",
-          "heading": "Is this for your business?",
-          "text": "This service is especially fitting if your team spends hours every week on repetitive admin tasks with clear rules and little room for subjective judgment. If your case is different — for example, you need to respond to customer inquiries in real time — the AI Agents service is probably a better fit."
+          "id": "/en/servicios/automatizaciones#c2",
+          "heading": "The other four things we build.",
+          "text": "Custom systems When what you need cannot be bought ready-made. Chatbots and AI agents They answer from your data, not from what they make up. Integrations Data is entered once and shows up where it should. Websites A site that talks to your systems, not a brochure."
         },
         {
-          "id": "/en/servicios/automatizacion-ia#c3",
-          "heading": "Document management",
-          "text": "Classification, data extraction, and filing of invoices, contracts, or forms, without manual intervention."
-        },
-        {
-          "id": "/en/servicios/automatizacion-ia#c4",
-          "heading": "Reporting and tracking",
-          "text": "Periodic reports generated and sent automatically from your data, instead of gathering them by hand every week."
-        },
-        {
-          "id": "/en/servicios/automatizacion-ia#c5",
-          "heading": "Client onboarding",
-          "text": "Automatic welcome sequences, data collection, and account activation from the first point of contact."
-        },
-        {
-          "id": "/en/servicios/automatizacion-ia#c6",
-          "heading": "Sales follow-up",
-          "text": "Reminders, status updates, and automatic alerts so no prospective client goes unanswered."
-        },
-        {
-          "id": "/en/servicios/automatizacion-ia#c7",
-          "heading": "Invoicing and payments",
-          "text": "Invoice generation, payment reminders, and basic reconciliation without reviewing every transaction by hand."
-        },
-        {
-          "id": "/en/servicios/automatizacion-ia#c8",
-          "heading": "Recurring tasks",
-          "text": "Any process someone on your team currently repeats every day, week, or month, with clear, repeatable rules. Slide to see them all"
-        },
-        {
-          "id": "/en/servicios/automatizacion-ia#c9",
-          "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book a call See FAQ"
+          "id": "/en/servicios/automatizaciones#c3",
+          "heading": "Tell us about your case.",
+          "text": "Thirty minutes and you will know where we would start. Book a call See the price"
         }
       ]
     },
     {
       "url": "/en/servicios/integraciones",
-      "title": "Integrations Between CRM, ERP, and Tools — D-Code Partners",
+      "title": "Integrations · D-Code Partners",
       "chunks": [
         {
           "id": "/en/servicios/integraciones#c0",
-          "heading": "Your tools, actually connected to each other.",
-          "text": "Every area shares one data source: we link your CRM, your ERP, your website and your spreadsheets so information travels on its own."
+          "heading": "Data is entered once and shows up where it should.",
+          "text": "Your CRM, your ERP, your site and your spreadsheets, talking to each other. With the minimum permissions needed, with retries when the other side fails and with a trail of what happened. Also with your long-standing systemThe one nobody wants to touch. It is read and written through whatever it supports, without modifying its insides. Minimum permissionsAn integration does not need access to everything. Only what is needed is requested, and it is written down. Retries and a trailIf the other side goes down, it retries; if it keeps going down, it warns you. Nothing is lost silently. Both ways if neededOr just one, which is often the right and cheaper answer."
         },
         {
           "id": "/en/servicios/integraciones#c1",
-          "heading": "The glue that makes the rest of the system work.",
-          "text": "Most automation systems or AI agents only reach their full potential when connected to the tools you already use. That's why integrations almost never stand alone: they accompany the other two services so information flows from end to end. During the diagnosis, we review which tools you use today and which connections have the greatest impact before touching anything. See the full D-Code Method"
+          "heading": "Finance, which is integration all the way down",
+          "text": "Bank, invoices, expenses and documents on one screen. Underneath, that is connections, and you can open it and look. Open the demo"
         },
         {
           "id": "/en/servicios/integraciones#c2",
-          "heading": "Is this for your business?",
-          "text": "If you already use several digital tools but pass information from one to another by hand, this service is usually the one with the most immediate impact. If you don't yet have established digital tools, it may be worth talking about AI Automation first, to define the process before connecting it."
+          "heading": "The other four things we build.",
+          "text": "Custom systems When what you need cannot be bought ready-made. Automations What repeats every week stops being done by hand. Chatbots and AI agents They answer from your data, not from what they make up. Websites A site that talks to your systems, not a brochure."
         },
         {
           "id": "/en/servicios/integraciones#c3",
-          "heading": "CRM and lead capture",
-          "text": "Every form, chat, or call enters your CRM directly, without dumping it in by hand at the end of the day."
+          "heading": "Tell us about your case.",
+          "text": "Thirty minutes and you will know where we would start. Book a call See the price"
+        }
+      ]
+    },
+    {
+      "url": "/en/servicios/paginas-web",
+      "title": "Websites · D-Code Partners",
+      "chunks": [
+        {
+          "id": "/en/servicios/paginas-web#c0",
+          "heading": "A site that talks to your systems, not a brochure.",
+          "text": "We build yours, rebuild the one you have or connect the one that already works. What changes compared with an ordinary site: the form lands in your CRM already sorted, the booking drops into the diary and stock comes from the warehouse. Its own designNot a bought template with your logo on it. It shows, and visitors notice. Genuinely fastMeasured, not “we think it feels fine”. And right on a phone, which is where most people arrive. ConnectedTo the CRM, the diary, the warehouse or whatever you have. With a chatbot if you want one. In your nameDomain, hosting and access. If you leave one day, you take the site with you."
         },
         {
-          "id": "/en/servicios/integraciones#c4",
-          "heading": "Spreadsheets and BI",
-          "text": "Your dashboards update themselves from real data, not from a weekly manual export."
+          "id": "/en/servicios/paginas-web#c1",
+          "heading": "Four examples, and you can scroll them",
+          "text": "Our own mock-ups, made-up companies. Drag inside each one to see the rest of the page. Scroll inside each window to see the whole page. inmobiliaria.es Scroll the page Real estate Listings come straight from the CRM: what is published is what exists, and the form qualifies the viewing before you give it. restaurante.es Scroll the page Restaurant The booking lands straight in the floor diary and the guest gets the reminder without anyone typing a thing. clinica.es Scroll the page Clinic The slots you see are the real ones: the site reads the diary and writes back into it. tienda.es Scroll the page Online shop Stock comes from the warehouse, not a spreadsheet: sold out cannot be bought and new arrivals publish themselves. Made-up companies, our own mock-ups."
         },
         {
-          "id": "/en/servicios/integraciones#c5",
-          "heading": "ERP and invoicing",
-          "text": "Orders, quotes, and invoices synced between your website, your ERP, and your invoicing tool."
+          "id": "/en/servicios/paginas-web#c2",
+          "heading": "The other four things we build.",
+          "text": "Custom systems When what you need cannot be bought ready-made. Automations What repeats every week stops being done by hand. Chatbots and AI agents They answer from your data, not from what they make up. Integrations Data is entered once and shows up where it should."
         },
         {
-          "id": "/en/servicios/integraciones#c6",
-          "heading": "Internal communication",
-          "text": "Automatic alerts by email or in the tool your team already uses (with API access) whenever something happens that they need to know about."
+          "id": "/en/servicios/paginas-web#c3",
+          "heading": "Tell us about your case.",
+          "text": "Thirty minutes and you will know where we would start. Book a call See the price"
+        }
+      ]
+    },
+    {
+      "url": "/en/servicios/sistemas-a-medida",
+      "title": "Custom systems · D-Code Partners",
+      "chunks": [
+        {
+          "id": "/en/servicios/sistemas-a-medida#c0",
+          "heading": "When what you need cannot be bought ready-made.",
+          "text": "We look at how your company actually works — following a customer, an order and an invoice end to end — and build the system that does that work. Not one more tool: the place everything goes through. It starts with a measurementHow many times a person acts as a bridge between two programs. That figure decides what gets built first. Scope and price before anything is touchedIn writing. If it changes along the way, it gets rewritten. In partsThe first piece works in weeks, not months. What comes next is decided with it already running. Yours when it is doneThe code, the data and the access, in your name. No lock-in."
         },
         {
-          "id": "/en/servicios/integraciones#c7",
-          "heading": "APIs and in-house tools",
-          "text": "If your company uses custom software, we can still connect it through its API when one is available."
+          "id": "/en/servicios/sistemas-a-medida#c1",
+          "heading": "Four systems running",
+          "text": "On the home page there are four you can open right now: finance, sales, operations and support. Made-up company, real system. Open the demo"
         },
         {
-          "id": "/en/servicios/integraciones#c8",
-          "heading": "Security built in",
-          "text": "Every integration uses minimal permissions and its own credentials, never generic access to your entire system. Slide to see them all"
+          "id": "/en/servicios/sistemas-a-medida#c2",
+          "heading": "The other four things we build.",
+          "text": "Automations What repeats every week stops being done by hand. Chatbots and AI agents They answer from your data, not from what they make up. Integrations Data is entered once and shows up where it should. Websites A site that talks to your systems, not a brochure."
         },
         {
-          "id": "/en/servicios/integraciones#c9",
-          "heading": "Let's talk about your operations.",
-          "text": "A 30-minute call is enough to know if we can help you and what we would build and where we would start. Book a call See FAQ"
+          "id": "/en/servicios/sistemas-a-medida#c3",
+          "heading": "Tell us about your case.",
+          "text": "Thirty minutes and you will know where we would start. Book a call See the price"
         }
       ]
     },
@@ -2882,7 +2844,7 @@
         {
           "id": "/#c1",
           "heading": "Lo que tu equipo repite cada semanapuede hacerlo un sistema.",
-          "text": "Vemos por dónde se os escapan el tiempo y el dinero, y construimos el sistema que lo corta. Abajo hay cuatro funcionando. Prueba los sistemas Haz el diagnóstico Software propio, no reventa de licencias Los sistemas que enseñamos los usamos dentro Alcance, plazo y precio por escrito antes de empezar Lo que estás viendo Una empresa antes de ordenarla El sistema, funcionando D-Code Finance · datos de demostración Qué hacemos"
+          "text": "Vemos por dónde se os escapan el tiempo y el dinero, y construimos el sistema que lo corta. Abajo hay cuatro funcionando. Prueba los sistemas Haz el diagnóstico Software propio, no reventa de licencias Los sistemas que enseñamos los usamos dentro Alcance, plazo y precio por escrito antes de empezar Lo que estás viendo Una empresa antes de ordenarla El sistema, funcionandoD-Code Finance · datos de demostración Qué hacemos"
         },
         {
           "id": "/#c2",
@@ -3311,32 +3273,32 @@
         {
           "id": "/que-hacemos#c1",
           "heading": "Sistemas a medida",
-          "text": "El sistema con el que trabaja tu empresa, construido a la medida de cómo trabajáis. Qué incluye Seguimos un cliente, un pedido y una factura de principio a fin y medimos dónde una persona hace de puente. Alcance, plazo y precio por escrito antes de empezar. Se construye por partes, dentro de las herramientas que ya usáis. Queda funcionando, con documentación y los accesos a tu nombre. Ver el precio"
+          "text": "El sistema con el que trabaja tu empresa, construido a la medida de cómo trabajáis. Qué incluye Seguimos un cliente, un pedido y una factura de principio a fin y medimos dónde una persona hace de puente. Alcance, plazo y precio por escrito antes de empezar. Se construye por partes, dentro de las herramientas que ya usáis. Queda funcionando, con documentación y los accesos a tu nombre. Verlo en detalle"
         },
         {
           "id": "/que-hacemos#c2",
           "heading": "Automatizaciones",
-          "text": "Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, y avisa si algo falla. Qué incluye Una tarea suelta, un proceso entero o un flujo con IA que lee y clasifica. Control de errores y aviso cuando algo no sale. Mantenimiento aparte y opcional: sin nadie detrás, se rompe el día que otro cambia su API. Ver el precio"
+          "text": "Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, y avisa si algo falla. Qué incluye Una tarea suelta, un proceso entero o un flujo con IA que lee y clasifica. Control de errores y aviso cuando algo no sale. Mantenimiento aparte y opcional: sin nadie detrás, se rompe el día que otro cambia su API. Verlo en detalle"
         },
         {
           "id": "/que-hacemos#c3",
           "heading": "Agentes de IA",
-          "text": "Atienden y responden con los datos de tu negocio, y escalan a una persona cuando toca. Qué incluye Web, WhatsApp o teléfono; uno o varios canales a la vez. Responden con tus datos, no con lo que se inventen. Todo lo que contestan queda registrado y es revisable. Cuota fija: no se paga por conversación. Ver el precio"
+          "text": "Atienden y responden con los datos de tu negocio, y escalan a una persona cuando toca. Qué incluye Web, WhatsApp o teléfono; uno o varios canales a la vez. Responden con tus datos, no con lo que se inventen. Todo lo que contestan queda registrado y es revisable. Cuota fija: no se paga por conversación. Verlo en detalle"
         },
         {
           "id": "/que-hacemos#c4",
           "heading": "Integraciones",
-          "text": "Tu CRM, tu ERP, tu web y tus hojas hablándose, con los permisos mínimos. Qué incluye El dato se escribe una vez y aparece donde tiene que aparecer. También con el sistema de siempre, sin tocarlo por dentro. Control de errores, reintentos y rastro de lo que pasó. Ver el precio"
+          "text": "Tu CRM, tu ERP, tu web y tus hojas hablándose, con los permisos mínimos. Qué incluye El dato se escribe una vez y aparece donde tiene que aparecer. También con el sistema de siempre, sin tocarlo por dentro. Control de errores, reintentos y rastro de lo que pasó. Verlo en detalle"
         },
         {
           "id": "/que-hacemos#c5",
           "heading": "Páginas web",
-          "text": "Hacemos tu web, rehacemos la que tienes y la conectamos con tus sistemas. Qué incluye Web nueva: diseño, textos, velocidad y que se vea bien en un teléfono. La que ya tienes: se rehace o se arregla, sin empezar de cero si no hace falta. Conectada: el formulario entra en tu CRM, el stock sale del almacén, la cita entra en la agenda. Con chatbot si lo quieres, respondiendo con tus datos. Ver el precio"
+          "text": "Hacemos tu web, rehacemos la que tienes y la conectamos con tus sistemas. Qué incluye Web nueva: diseño, textos, velocidad y que se vea bien en un teléfono. La que ya tienes: se rehace o se arregla, sin empezar de cero si no hace falta. Conectada: el formulario entra en tu CRM, el stock sale del almacén, la cita entra en la agenda. Con chatbot si lo quieres, respondiendo con tus datos. Verlo en detalle"
         },
         {
           "id": "/que-hacemos#c6",
           "heading": "Cuatro ejemplos de lo que sale.",
-          "text": "Maquetas nuestras, empresas inventadas. La web no es un folleto: se conecta con lo que ya usas. Inmobiliaria Las fichas salen del CRM: lo que se publica es lo que hay, y el formulario califica la visita antes de darla. Restaurante La reserva entra sola en la agenda de sala y el cliente recibe el recordatorio sin que nadie escriba nada. Clínica Los huecos que se ven son los de verdad: la web lee la agenda y escribe en ella. Tienda online El stock sale del almacén, no de una hoja: lo agotado no se vende y lo que entra se publica solo."
+          "text": "Maquetas nuestras, empresas inventadas. La web no es un folleto: se conecta con lo que ya usas. Inmobiliaria Las fichas salen del CRM: lo que se publica es lo que hay, y el formulario califica la visita antes de darla. Restaurante La reserva entra sola en la agenda de sala y el cliente recibe el recordatorio sin que nadie escriba nada. Clínica Los huecos que se ven son los de verdad: la web lee la agenda y escribe en ella. Tienda online El stock sale del almacén, no de una hoja: lo agotado no se vende y lo que entra se publica solo. Ver las webs por dentro"
         },
         {
           "id": "/que-hacemos#c7",
@@ -3407,170 +3369,132 @@
       ]
     },
     {
-      "url": "/servicios/agentes-ia",
-      "title": "Agentes de IA para atención y ventas — D-Code Partners",
+      "url": "/servicios/agentes-de-ia",
+      "title": "Chatbots y agentes de IA · D-Code Partners",
       "chunks": [
         {
-          "id": "/servicios/agentes-ia#c0",
-          "heading": "Atención al cliente y ventas que no hacen esperar a nadie.",
-          "text": "No es un chatbot aislado: contesta en el chat de tu web y por email con la información de tu negocio, y sabe cuándo pasar la conversación a una persona."
+          "id": "/servicios/agentes-de-ia#c0",
+          "heading": "Contestan con tus datos, no con lo que se inventen.",
+          "text": "Atienden por la web, por WhatsApp o por teléfono, responden con lo que hay en tus sistemas y pasan la conversación a una persona cuando hace falta. Todo lo que dicen queda registrado y se puede revisar. Sin inventarSi la respuesta no está en tus datos, lo dice y escala. Un agente que improvisa cuesta más clientes de los que ahorra. Escala con el contexto enteroQuien recoge la conversación ve todo lo anterior, no un «hola, ¿en qué puedo ayudar?». Cuota fijaNo se paga por conversación. Si se usa mucho, mejor: para eso está. Queda el registroCada respuesta, con su hora y su fuente. Se puede auditar y se puede corregir."
         },
         {
-          "id": "/servicios/agentes-ia#c1",
-          "heading": "Un agente entrenado con tu información, no con generalidades.",
-          "text": "Partimos de tus preguntas frecuentes, tu catálogo y tu forma de comunicar. Hoy desplegamos el agente en chat web y email; otros canales se evalúan caso a caso, no los vendemos como disponibles de serie. Queda supervisado desde el primer día para ajustar su comportamiento con casos reales. Es una pieza que combina especialmente bien con Integraciones, para que cada conversación quede registrada directamente en tu CRM. Ver el Método D-Code completo"
+          "id": "/servicios/agentes-de-ia#c1",
+          "heading": "El de esta web, sin ir a ninguna parte",
+          "text": "El asistente de abajo a la derecha es uno de estos: responde con lo que dice la web y nada más. Pregúntale algo que no esté escrito y verás qué contesta."
         },
         {
-          "id": "/servicios/agentes-ia#c2",
-          "heading": "¿Es para tu empresa?",
-          "text": "Encaja bien si recibes consultas repetidas de clientes o potenciales clientes y hoy dependes de que alguien esté disponible para responder. Si tu prioridad es reducir trabajo administrativo interno más que atención externa, el servicio de Automatización IA probablemente sea el mejor punto de partida."
+          "id": "/servicios/agentes-de-ia#c2",
+          "heading": "Las otras cuatro cosas que construimos.",
+          "text": "Sistemas a medida Cuando lo que necesitas no se compra hecho. Automatizaciones Lo que se repite cada semana deja de hacerse a mano. Integraciones El dato se escribe una vez y aparece donde tiene que aparecer. Páginas web Una web que habla con tus sistemas, no un folleto."
         },
         {
-          "id": "/servicios/agentes-ia#c3",
-          "heading": "Primer contacto inmediato",
-          "text": "Responde preguntas frecuentes, horarios, precios y disponibilidad en segundos, a cualquier hora del día."
-        },
-        {
-          "id": "/servicios/agentes-ia#c4",
-          "heading": "Cualificación de leads",
-          "text": "Recoge la información clave de cada contacto y la deja lista en tu CRM antes de que hables tú con esa persona."
-        },
-        {
-          "id": "/servicios/agentes-ia#c5",
-          "heading": "Soporte de primer nivel",
-          "text": "Resuelve las consultas más habituales de tus clientes actuales sin que tengan que esperar a que alguien esté libre."
-        },
-        {
-          "id": "/servicios/agentes-ia#c6",
-          "heading": "Escalado a tu equipo",
-          "text": "Cuando la conversación necesita criterio humano, el agente la transfiere con todo el contexto ya recopilado."
-        },
-        {
-          "id": "/servicios/agentes-ia#c7",
-          "heading": "Reactivación y seguimiento",
-          "text": "Mensajes de seguimiento automáticos para citas, presupuestos pendientes o carritos abandonados."
-        },
-        {
-          "id": "/servicios/agentes-ia#c8",
-          "heading": "Tono y datos de tu marca",
-          "text": "El agente responde solo con la información que le facilitas, con el tono de tu empresa y sin inventar respuestas. Desliza para verlas todas"
-        },
-        {
-          "id": "/servicios/agentes-ia#c9",
-          "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver preguntas frecuentes"
+          "id": "/servicios/agentes-de-ia#c3",
+          "heading": "Cuéntanos tu caso.",
+          "text": "Treinta minutos y sabrás por dónde empezaríamos. Reservar una llamada Ver el precio"
         }
       ]
     },
     {
-      "url": "/servicios/automatizacion-ia",
-      "title": "Automatización con IA para empresas — D-Code Partners",
+      "url": "/servicios/automatizaciones",
+      "title": "Automatizaciones · D-Code Partners",
       "chunks": [
         {
-          "id": "/servicios/automatizacion-ia#c0",
-          "heading": "Procesos que se ejecutan solos, 24 horas al día.",
-          "text": "El motor que hace funcionar cada parte del sistema: se encarga de lo repetitivo, lo que consume horas y no necesita criterio en cada paso."
+          "id": "/servicios/automatizaciones#c0",
+          "heading": "Lo que se repite cada semana deja de hacerse a mano.",
+          "text": "Una tarea que alguien hace todos los martes pasa a ejecutarse sola, con su control de errores y su aviso cuando algo no sale. Ni magia ni cajas negras: se ve qué hizo, cuándo y con qué datos. Una tarea, un proceso o un flujo con IADesde «cuando entre una factura, guárdala aquí» hasta un proceso entero encadenado. Con tus herramientasLas que ya usáis. No hay que cambiar de programa para automatizar lo que hace ese programa. Avisa cuando se rompeY se rompe: el día que el otro cambia su API. Por eso el mantenimiento va aparte y se dice. Queda documentadoQué hace, qué toca y cómo apagarlo. Para que no dependa de que nos cojas el teléfono."
         },
         {
-          "id": "/servicios/automatizacion-ia#c1",
-          "heading": "Automatización sobre tu operativa real, no sobre una maqueta.",
-          "text": "Empezamos identificando los procesos con más impacto potencial durante el diagnóstico inicial. Después diseñamos el flujo, lo conectamos con tus herramientas actuales y lo desplegamos directamente en tu operativa. No dependes de que alguien \"se acuerde\" de ejecutar el proceso: el sistema lo hace por defecto, y solo interviene una persona cuando de verdad aporta criterio. Ver el Método D-Code completo"
+          "id": "/servicios/automatizaciones#c1",
+          "heading": "Míralo en el sistema comercial",
+          "text": "Una sola bandeja donde la IA lee cada contacto que entra, lo clasifica y lo asigna. Eso es una automatización, y se puede abrir. Abrir la demo"
         },
         {
-          "id": "/servicios/automatizacion-ia#c2",
-          "heading": "¿Es para tu empresa?",
-          "text": "Este servicio encaja especialmente si tu equipo dedica horas cada semana a tareas administrativas repetitivas, con reglas claras y poco margen de criterio subjetivo. Si tu caso es distinto — por ejemplo, necesitas responder consultas de clientes en tiempo real — el servicio de Agentes de IA probablemente encaje mejor."
+          "id": "/servicios/automatizaciones#c2",
+          "heading": "Las otras cuatro cosas que construimos.",
+          "text": "Sistemas a medida Cuando lo que necesitas no se compra hecho. Chatbots y agentes de IA Contestan con tus datos, no con lo que se inventen. Integraciones El dato se escribe una vez y aparece donde tiene que aparecer. Páginas web Una web que habla con tus sistemas, no un folleto."
         },
         {
-          "id": "/servicios/automatizacion-ia#c3",
-          "heading": "Gestión documental",
-          "text": "Clasificación, extracción de datos y archivado de facturas, contratos o formularios sin intervención manual."
-        },
-        {
-          "id": "/servicios/automatizacion-ia#c4",
-          "heading": "Reporting y seguimiento",
-          "text": "Informes periódicos generados y enviados automáticamente a partir de tus datos, sin recopilarlos a mano cada semana."
-        },
-        {
-          "id": "/servicios/automatizacion-ia#c5",
-          "heading": "Onboarding de clientes",
-          "text": "Secuencias automáticas de bienvenida, recopilación de datos y activación de cuenta desde el primer contacto."
-        },
-        {
-          "id": "/servicios/automatizacion-ia#c6",
-          "heading": "Seguimiento comercial",
-          "text": "Recordatorios, actualizaciones de estado y avisos automáticos para que ningún cliente potencial se quede sin respuesta."
-        },
-        {
-          "id": "/servicios/automatizacion-ia#c7",
-          "heading": "Facturación y cobros",
-          "text": "Generación de facturas, avisos de pago y conciliación básica sin revisar cada movimiento a mano."
-        },
-        {
-          "id": "/servicios/automatizacion-ia#c8",
-          "heading": "Tareas periódicas",
-          "text": "Cualquier proceso que hoy repite alguien de tu equipo cada día, semana o mes, con reglas claras y repetibles. Desliza para verlas todas"
-        },
-        {
-          "id": "/servicios/automatizacion-ia#c9",
-          "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver preguntas frecuentes"
+          "id": "/servicios/automatizaciones#c3",
+          "heading": "Cuéntanos tu caso.",
+          "text": "Treinta minutos y sabrás por dónde empezaríamos. Reservar una llamada Ver el precio"
         }
       ]
     },
     {
       "url": "/servicios/integraciones",
-      "title": "Integraciones CRM, ERP y herramientas — D-Code Partners",
+      "title": "Integraciones · D-Code Partners",
       "chunks": [
         {
           "id": "/servicios/integraciones#c0",
-          "heading": "Tus herramientas, conectadas entre sí de verdad.",
-          "text": "Todas las áreas comparten un mismo dato: unimos tu CRM, tu ERP, tu web y tus hojas de cálculo para que la información viaje sola."
+          "heading": "El dato se escribe una vez y aparece donde tiene que aparecer.",
+          "text": "Tu CRM, tu ERP, tu web y tus hojas, hablándose. Con los permisos mínimos necesarios, con reintentos cuando el otro lado falla y con rastro de lo que pasó. También con el sistema de siempreEse que nadie quiere tocar. Se lee y se escribe por la vía que admita, sin modificarlo por dentro. Permisos mínimosUna integración no necesita acceso a todo. Se pide lo justo y se deja escrito qué se pidió. Reintentos y rastroSi el otro lado se cae, se reintenta; si sigue cayéndose, avisa. Nada se pierde en silencio. En los dos sentidos si hace faltaO en uno solo, que muchas veces es lo correcto y lo más barato."
         },
         {
           "id": "/servicios/integraciones#c1",
-          "heading": "El pegamento que hace que el resto del sistema funcione.",
-          "text": "La mayoría de sistemas de automatización o agentes de IA solo dan todo su potencial cuando están conectados a las herramientas que ya usas. Por eso las integraciones casi nunca van solas: acompañan a los otros dos servicios para que la información fluya de principio a fin. Durante el diagnóstico revisamos qué herramientas usas hoy y qué conexiones tienen más impacto antes de tocar nada. Ver el Método D-Code completo"
+          "heading": "Finance, que es todo integración",
+          "text": "Banco, facturas, gastos y documentos en una sola pantalla. Eso por debajo son conexiones, y se puede abrir y mirar. Abrir la demo"
         },
         {
           "id": "/servicios/integraciones#c2",
-          "heading": "¿Es para tu empresa?",
-          "text": "Si ya usas varias herramientas digitales pero pasas información de una a otra a mano, este servicio suele ser el de mayor impacto inmediato. Si aún no tienes herramientas digitales establecidas, puede que primero convenga hablar de Automatización IA para definir el proceso antes de conectarlo."
+          "heading": "Las otras cuatro cosas que construimos.",
+          "text": "Sistemas a medida Cuando lo que necesitas no se compra hecho. Automatizaciones Lo que se repite cada semana deja de hacerse a mano. Chatbots y agentes de IA Contestan con tus datos, no con lo que se inventen. Páginas web Una web que habla con tus sistemas, no un folleto."
         },
         {
           "id": "/servicios/integraciones#c3",
-          "heading": "CRM y captación de leads",
-          "text": "Cada formulario, chat o llamada entra directamente en tu CRM, sin volcarlo a mano al final del día."
+          "heading": "Cuéntanos tu caso.",
+          "text": "Treinta minutos y sabrás por dónde empezaríamos. Reservar una llamada Ver el precio"
+        }
+      ]
+    },
+    {
+      "url": "/servicios/paginas-web",
+      "title": "Páginas web · D-Code Partners",
+      "chunks": [
+        {
+          "id": "/servicios/paginas-web#c0",
+          "heading": "Una web que habla con tus sistemas, no un folleto.",
+          "text": "Hacemos la tuya, rehacemos la que tienes o conectamos la que ya funciona. Lo que cambia respecto a una web normal: el formulario entra en tu CRM ya clasificado, la cita cae en la agenda y el stock sale del almacén. Diseño propioNo una plantilla comprada con tu logo encima. Se nota, y lo nota quien entra. Rápida de verdadMedida, no «nos parece que va bien». Y bien en un teléfono, que es por donde entra la mayoría. ConectadaAl CRM, a la agenda, al almacén o a lo que tengas. Con chatbot si lo quieres. A tu nombreDominio, hosting y accesos. Si un día te vas, te llevas la web."
         },
         {
-          "id": "/servicios/integraciones#c4",
-          "heading": "Hojas de cálculo y BI",
-          "text": "Tus paneles de control se actualizan solos a partir de los datos reales, no de una exportación manual semanal."
+          "id": "/servicios/paginas-web#c1",
+          "heading": "Cuatro ejemplos, y se pueden bajar",
+          "text": "Maquetas nuestras, empresas inventadas. Arrastra dentro de cada una para ver el resto de la página. Baja dentro de cada ventana para ver la página entera. inmobiliaria.es Bajar la página Inmobiliaria Las fichas salen del CRM: lo que se publica es lo que hay, y el formulario califica la visita antes de darla. restaurante.es Bajar la página Restaurante La reserva entra sola en la agenda de sala y el cliente recibe el recordatorio sin que nadie escriba nada. clinica.es Bajar la página Clínica Los huecos que se ven son los de verdad: la web lee la agenda y escribe en ella. tienda.es Bajar la página Tienda online El stock sale del almacén, no de una hoja: lo agotado no se vende y lo que entra se publica solo. Empresas inventadas, maquetas nuestras."
         },
         {
-          "id": "/servicios/integraciones#c5",
-          "heading": "ERP y facturación",
-          "text": "Pedidos, presupuestos y facturas sincronizados entre tu web, tu ERP y tu herramienta de facturación."
+          "id": "/servicios/paginas-web#c2",
+          "heading": "Las otras cuatro cosas que construimos.",
+          "text": "Sistemas a medida Cuando lo que necesitas no se compra hecho. Automatizaciones Lo que se repite cada semana deja de hacerse a mano. Chatbots y agentes de IA Contestan con tus datos, no con lo que se inventen. Integraciones El dato se escribe una vez y aparece donde tiene que aparecer."
         },
         {
-          "id": "/servicios/integraciones#c6",
-          "heading": "Comunicación interna",
-          "text": "Avisos automáticos por email o en la herramienta que ya use tu equipo (con API disponible) cuando ocurre algo que necesita saber."
+          "id": "/servicios/paginas-web#c3",
+          "heading": "Cuéntanos tu caso.",
+          "text": "Treinta minutos y sabrás por dónde empezaríamos. Reservar una llamada Ver el precio"
+        }
+      ]
+    },
+    {
+      "url": "/servicios/sistemas-a-medida",
+      "title": "Sistemas a medida · D-Code Partners",
+      "chunks": [
+        {
+          "id": "/servicios/sistemas-a-medida#c0",
+          "heading": "Cuando lo que necesitas no se compra hecho.",
+          "text": "Miramos cómo trabaja tu empresa de verdad —siguiendo un cliente, un pedido y una factura de principio a fin— y construimos el sistema que hace ese trabajo. No una herramienta más: el sitio por donde pasa todo. Se empieza midiendoCuántas veces una persona hace de puente entre dos programas. Esa cifra es la que decide qué se construye primero. Alcance y precio antes de tocar nadaPor escrito. Si cambia durante el camino, se vuelve a escribir. Por partesLa primera pieza funciona en semanas, no en meses. Lo siguiente se decide con ella ya en marcha. Tuyo al terminarEl código, los datos y los accesos, a tu nombre. Sin candado."
         },
         {
-          "id": "/servicios/integraciones#c7",
-          "heading": "APIs y herramientas propias",
-          "text": "Si tu empresa usa software a medida, lo conectamos igualmente a través de su API cuando está disponible."
+          "id": "/servicios/sistemas-a-medida#c1",
+          "heading": "Cuatro sistemas funcionando",
+          "text": "En la portada hay cuatro que puedes abrir ahora mismo: finanzas, comercial, operaciones y atención. Empresa ficticia, sistema de verdad. Abrir la demo"
         },
         {
-          "id": "/servicios/integraciones#c8",
-          "heading": "Con seguridad de por medio",
-          "text": "Cada integración usa permisos mínimos y credenciales propias, nunca acceso genérico a todo tu sistema. Desliza para verlas todas"
+          "id": "/servicios/sistemas-a-medida#c2",
+          "heading": "Las otras cuatro cosas que construimos.",
+          "text": "Automatizaciones Lo que se repite cada semana deja de hacerse a mano. Chatbots y agentes de IA Contestan con tus datos, no con lo que se inventen. Integraciones El dato se escribe una vez y aparece donde tiene que aparecer. Páginas web Una web que habla con tus sistemas, no un folleto."
         },
         {
-          "id": "/servicios/integraciones#c9",
-          "heading": "Hablemos de tu operativa.",
-          "text": "Una llamada de 30 minutos basta para saber si podemos ayudarte y qué construiríamos y por dónde empezaríamos. Reservar una llamada Ver preguntas frecuentes"
+          "id": "/servicios/sistemas-a-medida#c3",
+          "heading": "Cuéntanos tu caso.",
+          "text": "Treinta minutos y sabrás por dónde empezaríamos. Reservar una llamada Ver el precio"
         }
       ]
     },

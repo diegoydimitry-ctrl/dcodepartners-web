@@ -374,71 +374,86 @@
    Todo con transform y opacity, que es lo único que no cuesta fotogramas,
    y todo apagado para quien pide menos movimiento. */
 
-/* La pista por donde cruzan las figuras. Vive en <body>, por encima de todo
-   y sin capturar ni un clic. */
+/* ══════════════════ EL BICHO QUE SALE DE LA TARJETA ══════════════════
+   La pista vive en <body>, por encima de todo y sin capturar ni un clic. */
 .cfg-pista{
   position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden;
   contain:strict;
 }
-.cfg-figura{
-  position:absolute; left:0; display:block; width:76px; height:76px;
-  color:var(--v-a); will-change:transform; opacity:0;
-  filter:drop-shadow(0 8px 26px color-mix(in srgb, var(--v-a) 60%, transparent));
-}
-.cfg-figura svg{ width:100%; height:100%; display:block; stroke-width:1.6; }
 
-/* Cuatro maneras de cruzar. Todas recorren la pantalla de izquierda a
-   derecha; lo que cambia es CÓMO, que es lo que hace que una caja se
-   distinga de una estrella sin mirarla fijamente. */
-.cfg-figura.es-corre{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
-.cfg-figura.es-corre svg{ animation:cfg-trote .34s ease-in-out infinite; }
-.cfg-figura.es-salta{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
-.cfg-figura.es-salta svg{ animation:cfg-brinco .52s cubic-bezier(.3,.1,.4,1) infinite; }
-.cfg-figura.es-rueda{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
-.cfg-figura.es-rueda svg{ animation:cfg-vuelta .8s linear infinite; }
-.cfg-figura.es-gira{ animation:cfg-cruza var(--d,1.85s) linear forwards; }
-.cfg-figura.es-gira svg{ animation:cfg-tumbo 1.1s ease-in-out infinite; }
-.cfg-figura.es-vuela{ animation:cfg-planea var(--d,1.85s) ease-in-out forwards; }
-.cfg-figura.es-vuela svg{ animation:cfg-aleteo .42s ease-in-out infinite; }
+/* 1 · LA TAPA. Una franja de luz del color de la casa que se levanta desde
+   el borde de arriba de la tarjeta, como si algo empujara desde dentro.
+   Vive en la pista y no en el botón: al elegir se repinta el paso y el botón
+   desaparece, así que una clase puesta en él no llegaba a verse. */
+.cfg-tapa{
+  position:absolute; height:4px; display:block;
+  border-radius:4px 4px 0 0; pointer-events:none;
+  background:linear-gradient(90deg, transparent, var(--v-a), transparent);
+  transform-origin:bottom center;
+  animation:cfg-tapa .82s cubic-bezier(.25,.9,.3,1) both;
+  box-shadow:0 -6px 24px color-mix(in srgb, var(--v-a) 70%, transparent);
+}
+@keyframes cfg-tapa{
+  0%   { transform:scaleY(.2) translateY(2px); opacity:0; }
+  22%  { transform:scaleY(3.2) translateY(-7px); opacity:1; }
+  70%  { transform:scaleY(2.4) translateY(-5px); opacity:.85; }
+  100% { transform:scaleY(.2) translateY(0); opacity:0; }
+}
 
-@keyframes cfg-cruza{
-  0%   { transform:translateX(-90px); opacity:0; }
-  8%   { opacity:1; }
-  92%  { opacity:1; }
-  100% { transform:translateX(calc(100vw + 90px)); opacity:0; }
+/* 2 · EL ESCONDITE. Una ventanita justo encima de la tarjeta, con la parte
+   de abajo recortada: el bicho sube desde fuera de cuadro y parece que sale
+   de detrás del borde, que es lo que tiene que parecer. */
+.cfg-ojo{ position:absolute; overflow:hidden; }
+
+/* El bicho. Dentro del escondite va pegado abajo; cuando se suelta pasa a
+   colocarse él solo por la pista. */
+.cfg-bicho{
+  position:absolute; left:0; bottom:0; display:block;
+  color:var(--v-a); will-change:transform;
+  filter:drop-shadow(0 10px 22px color-mix(in srgb, var(--v-a) 55%, transparent));
 }
-@keyframes cfg-planea{
-  0%   { transform:translate(-90px, 0) rotate(-8deg); opacity:0; }
-  10%  { opacity:1; }
-  50%  { transform:translate(50vw, -54px) rotate(6deg); }
-  90%  { opacity:1; }
-  100% { transform:translate(calc(100vw + 90px), 10px) rotate(-6deg); opacity:0; }
+.cfg-bicho svg{ width:100%; height:100%; display:block; }
+.cfg-bicho.es-suelto{ bottom:auto; }
+
+/* 3 · LAS PATITAS. Se dibujan de cero —trazo con su guion desplazado— y solo
+   entonces empiezan a moverse. Antes de esto el bicho no tiene patas. */
+.cfg-bicho .cfg-pies path{
+  stroke-dasharray:7; stroke-dashoffset:7;
 }
-/* El trote: sube, baja y aplasta un poco al caer. Las dos piernas del SVG
-   alternan con el mismo compás. */
-@keyframes cfg-trote{
-  0%,100%{ transform:translateY(0) scaleY(1); }
-  40%    { transform:translateY(-7px) scaleY(1.04); }
-  70%    { transform:translateY(0) scaleY(.94); }
+.cfg-bicho.es-patas .cfg-pies path{
+  animation:cfg-brotan .28s ease-out forwards;
 }
-@keyframes cfg-brinco{
-  0%,100%{ transform:translateY(0) scale(1); }
-  35%    { transform:translateY(-16px) scale(1.04); }
-  60%    { transform:translateY(0) scale(.92, 1.06); }
+.cfg-bicho.es-patas .cfg-pies path:nth-child(2){ animation-delay:.07s; }
+@keyframes cfg-brotan{ to{ stroke-dashoffset:0; } }
+
+/* 4 · CORRIENDO. El cuerpo bota, las patas alternan y la sombra se aplasta
+   cada vez que toca el suelo. */
+.cfg-bicho.es-corriendo svg{ animation:cfg-bote .3s ease-in-out infinite; }
+.cfg-bicho.es-corriendo .cfg-pies{
+  animation:cfg-zancada .3s steps(2, jump-none) infinite;
+  transform-origin:24px 40px;
 }
-@keyframes cfg-vuelta{ to{ transform:rotate(360deg); } }
-@keyframes cfg-tumbo{
-  0%,100%{ transform:rotate(-14deg) scale(1); }
-  50%    { transform:rotate(14deg) scale(1.08); }
+@keyframes cfg-bote{
+  0%,100%{ transform:translateY(0) scale(1,1); }
+  38%    { transform:translateY(-9px) scale(.97,1.05); }
+  72%    { transform:translateY(0) scale(1.05,.94); }
 }
-@keyframes cfg-aleteo{
-  0%,100%{ transform:rotate(-6deg); }
-  50%    { transform:rotate(6deg); }
+@keyframes cfg-zancada{
+  0%   { transform:skewX(-20deg); }
+  100% { transform:skewX(20deg); }
 }
-/* Las piernas solo las tiene quien corre. */
-.cfg-figura:not(.es-corre) .cfg-pies{ display:none; }
-.cfg-figura.es-corre .cfg-pies{ animation:cfg-zancada .34s steps(2, jump-none) infinite; transform-origin:24px 40px; }
-@keyframes cfg-zancada{ 0%{ transform:skewX(-16deg); } 100%{ transform:skewX(16deg); } }
+
+/* 5 · LA POLVAREDA. Una mota por pisada, que se abre y se apaga. */
+.cfg-polvo{
+  position:absolute; width:9px; height:9px; margin:-4px 0 0 -4px;
+  border-radius:50%; display:block;
+  background:color-mix(in srgb, var(--v-a) 55%, transparent);
+  animation:cfg-mota .62s ease-out forwards;
+}
+@keyframes cfg-mota{
+  0%   { transform:scale(.4); opacity:.75; }
+  100% { transform:scale(2.4) translateY(6px); opacity:0; }
+}
 
 /* El latido de la tarjeta recién elegida. */
 .cfg-op.es-late, .cfg-chip.es-late{ animation:cfg-late .42s cubic-bezier(.3,1.4,.4,1); }
@@ -500,6 +515,7 @@
 
 @media (prefers-reduced-motion:reduce){
   .cfg-pista{ display:none; }
+  .cfg-tapa{ display:none; }
   .cfg-op.es-late, .cfg-chip.es-late, .cfg-caja .cfg-op, .cfg-caja .cfg-chip,
   .cfg-caja .cfg-preg, .cfg-caja .cfg-ayuda,
   .cfg-vivo, .form-card.es-llega{ animation:none; }

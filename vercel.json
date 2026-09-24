@@ -18,6 +18,26 @@
       "permanent": true
     },
     {
+      "source": "/servicios/automatizacion-ia",
+      "destination": "/servicios/automatizaciones",
+      "permanent": true
+    },
+    {
+      "source": "/en/servicios/automatizacion-ia",
+      "destination": "/en/servicios/automatizaciones",
+      "permanent": true
+    },
+    {
+      "source": "/servicios/agentes-ia",
+      "destination": "/servicios/agentes-de-ia",
+      "permanent": true
+    },
+    {
+      "source": "/en/servicios/agentes-ia",
+      "destination": "/en/servicios/agentes-de-ia",
+      "permanent": true
+    },
+    {
       "source": "/en/servicios",
       "destination": "/en/que-hacemos",
       "permanent": true

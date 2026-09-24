@@ -371,7 +371,10 @@
      Son tres ideas distintas a proposito: si las tres dibujaran lineas con
      nodos, seguirian siendo la misma pagina con otro fondo. */
 
-  /* EL CICLO — /servicios/automatizacion-ia
+  /* EL CICLO — vivía en /servicios/automatizacion-ia, que se fundió con las
+     fichas nuevas. Se queda porque no molesta y porque el bloque puede
+     volver; si no aparece su marca en ninguna página, no hace nada.
+     Antes: /servicios/automatizacion-ia
      "Lo que hoy se hace a mano cada semana pasa a ejecutarse solo."
      Siete ejecuciones encadenadas. Las primeras llevan encima el tallo de la
      mano que tuvo que acordarse; a partir de cierto punto el tallo desaparece
@@ -410,7 +413,9 @@
     }
   };
 
-  /* EL HILO — /servicios/agentes-ia
+  /* EL HILO — igual que el ciclo: era de /servicios/agentes-ia, y esa página
+     hoy es /servicios/agentes-de-ia, que no lo lleva.
+     Antes: /servicios/agentes-ia
      "No es un chatbot aislado... y sabe cuando pasar la conversacion a una
      persona." Un hilo que va y viene, y en un punto se abre un ramal que
      termina en una persona. El hilo no se corta: sigue. */

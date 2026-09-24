@@ -811,58 +811,91 @@ body.v6 .v6-status, body.v6 .v6-cap{
 
 /* ═══════════ EL PANEL DE FINANCE EN LA PORTADA ═══════════
    Donde había una D de partículas hay ahora una pantalla de verdad: el
-   panel del sistema financiero, girado en perspectiva y flotando. La D
+   panel del sistema financiero, inclinado en perspectiva y flotando. La D
    decía «D-Code»; esto dice qué hacemos, que es la pregunta con la que
-   entra quien llega. La imagen es la misma captura de la demo, así que no
-   hay una segunda versión del producto que mantener.
+   entra quien llega.
 
-   Va detrás del texto en z, no al lado: el titular manda y el panel es el
-   fondo del que asoma. En cuanto la ventana se estrecha, se retira. */
+   Aquí NO hay velo. Lo hubo —un degradado del color del fondo por el borde
+   izquierdo— y se veía: una banda negra cruzada encima de la pantalla, que
+   es justo lo contrario de lo que se quería. Ahora el panel simplemente
+   empieza donde acaba el titular, y lo que lo funde con la página es la
+   propia perspectiva: la esquina que se aleja queda pequeña y en sombra. */
+/* Se ancla por los DOS lados: así el borde izquierdo nunca entra en la
+   columna del titular, mida lo que mida la ventana. Con «width» fijo, a
+   1280 se metía debajo de «puede hacerlo un sistema». */
+/* Se ancla por los dos lados y POR ARRIBA: el borde superior empieza por
+   debajo del titular, así que la pantalla no pasa nunca por detrás de las
+   letras grandes. Ese era el problema de fondo, y el velo negro solo lo
+   tapaba: no hay que oscurecer el panel, hay que apartarlo del texto. */
+/* El hueco de arriba es para el pie de foto, que va por encima de la
+   pantalla: sin él caía fuera de la caja y el overflow:hidden —que está
+   para que el panel no saque barra horizontal por la derecha— se lo comía
+   entero. Lo cazó qa:solapes. */
 .v6-panel{
-  position:absolute; right:-5vw; top:56%; width:min(50vw, 760px);
-  transform:translateY(-38%); z-index:0; pointer-events:none;
-  perspective:1500px; perspective-origin:24% 50%;
+  position:absolute; left:52%; right:-7vw; top:50%; bottom:-16%; width:auto;
+  z-index:0; pointer-events:none; overflow:hidden; padding-top:58px;
+  perspective:1700px; perspective-origin:14% 20%;
 }
+@media (min-width:1600px){ .v6-panel{ left:49%; top:49%; } }
+/* La pantalla, con su grosor. Tres capas: el canto que le da cuerpo, la
+   imagen y el brillo del cristal.
+
+   El borde izquierdo no lleva nada ENCIMA: se desvanece. Antes había un
+   degradado del color del fondo pintado sobre la pantalla y se veía como lo
+   que era, una banda negra cruzada. Con una máscara no se pinta nada: es el
+   propio panel el que deja de existir hacia la izquierda, y el titular queda
+   sobre el fondo de la página, no sobre una mancha. */
 .v6-panel-f{
-  margin:0; transform:rotateY(-19deg) rotateX(7deg) rotateZ(-2deg) scale(.98);
-  transform-origin:left center; will-change:transform;
-  animation:v6-flota 13s ease-in-out infinite alternate;
+  margin:0; position:relative; transform-style:preserve-3d;
+  -webkit-mask-image:linear-gradient(101deg, transparent 4%, rgba(0,0,0,.28) 15%, #000 40%);
+  mask-image:linear-gradient(101deg, transparent 4%, rgba(0,0,0,.28) 15%, #000 40%);
+  transform:rotateY(-21deg) rotateX(8deg) rotateZ(-1.5deg);
+  transform-origin:left top; will-change:transform;
+  animation:v6-flota 15s ease-in-out infinite alternate;
 }
-/* Una por tema: la captura clara sobre fondo claro y la oscura sobre
-   oscuro, igual que en la galería de sistemas. */
-.v6-panel .es-claro{ display:none; }
-html[data-theme="light"] .v6-panel .es-oscuro{ display:none; }
-html[data-theme="light"] .v6-panel .es-claro{ display:block; }
 .v6-panel img{
-  display:block; width:100%; height:auto; border-radius:14px;
-  border:1px solid rgba(150,174,245,.22);
-  box-shadow:0 60px 120px -50px rgba(4,10,30,.95),
-             0 0 0 1px rgba(150,174,245,.08),
-             0 24px 60px -40px rgba(91,140,255,.5);
+  display:block; width:100%; height:auto; border-radius:16px;
+  border:1px solid color-mix(in srgb, var(--blue, #5b8cff) 28%, transparent);
+  box-shadow:
+    0 2px 0 color-mix(in srgb, var(--ink, #edf1f8) 12%, transparent),
+    0 90px 150px -60px rgba(3,7,22,.96),
+    0 40px 90px -50px color-mix(in srgb, var(--blue, #5b8cff) 55%, transparent);
 }
-/* Un velo del color del fondo por el borde izquierdo: el panel no termina,
-   se funde con la página, y el titular queda leyéndose encima sin caja. */
-.v6-panel::after{
-  content:''; position:absolute; inset:0; pointer-events:none;
-  /* El velo se hace con el fondo de la página, no con un gris escrito a
-     mano: en tema claro un rgba oscuro dejaba una mancha encima del panel. */
-  background:linear-gradient(100deg,
-    var(--bg) 0%,
-    color-mix(in srgb, var(--bg) 94%, transparent) 14%,
-    color-mix(in srgb, var(--bg) 42%, transparent) 38%,
-    transparent 64%);
+/* El canto: una losa detrás, desplazada en Z, que hace que la pantalla
+   tenga espesor en vez de ser una pegatina. */
+.v6-panel-f::before{
+  content:''; position:absolute; inset:0; border-radius:16px; pointer-events:none;
+  transform:translateZ(-18px) scale(1.012);
+  background:linear-gradient(120deg,
+    color-mix(in srgb, var(--blue, #5b8cff) 30%, transparent),
+    color-mix(in srgb, var(--violet, #9b6bff) 22%, transparent));
+  filter:blur(1px); opacity:.55;
 }
-.v6-panel figcaption{
-  position:absolute; left:12%; bottom:-40px; display:flex; flex-direction:column; gap:3px;
-  font-size:.74rem; line-height:1.4; color:var(--stone-soft, #8c95aa);
+/* Y el brillo del cristal, en diagonal, por encima de la imagen. */
+.v6-panel-f::after{
+  content:''; position:absolute; inset:0; border-radius:16px; pointer-events:none;
+  background:linear-gradient(104deg,
+    transparent 38%, transparent 70%,
+    color-mix(in srgb, var(--blue, #5b8cff) 14%, transparent) 100%);
+  mix-blend-mode:screen; opacity:.75;
+}
+/* El pie va FUERA de la figura, no dentro: la máscara que desvanece el
+   borde izquierdo de la pantalla afecta a todo lo que cuelga de ella, y el
+   pie, que está justo en esa esquina, se borraba con el panel. Fuera de la
+   figura se lee, y sigue dentro de la caja, que es lo que pedía
+   qa:solapes. */
+.v6-panel-pie{
+  position:absolute; left:4%; top:14px; margin:0;
+  display:flex; flex-direction:column; gap:3px;
+  font-size:.76rem; line-height:1.4; color:var(--stone-soft, #8c95aa);
 }
 .v6-panel-k{
   font-family:var(--mono); font-size:.6875rem; letter-spacing:.14em;
   text-transform:uppercase; color:var(--cyan, #43e0ff);
 }
 @keyframes v6-flota{
-  from{ transform:rotateY(-19deg) rotateX(7deg) rotateZ(-2deg) scale(.98) translateY(0); }
-  to  { transform:rotateY(-16deg) rotateX(5deg) rotateZ(-1deg) scale(.995) translateY(-14px); }
+  from{ transform:rotateY(-21deg) rotateX(8deg) rotateZ(-1.5deg) translateY(0); }
+  to  { transform:rotateY(-17deg) rotateX(5.5deg) rotateZ(-.5deg) translateY(-14px); }
 }
 
 /* El texto va por delante del panel, siempre. */
@@ -877,3 +910,9 @@ html[data-theme="light"] .v6-panel .es-claro{ display:block; }
 @media (prefers-reduced-motion:reduce){
   .v6-panel-f{ animation:none; }
 }
+
+/* Una por tema: la captura clara sobre fondo claro y la oscura sobre
+   oscuro, igual que en la galería de sistemas. */
+.v6-panel .es-claro{ display:none; }
+html[data-theme="light"] .v6-panel .es-oscuro{ display:none; }
+html[data-theme="light"] .v6-panel .es-claro{ display:block; }

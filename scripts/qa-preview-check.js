@@ -48,10 +48,11 @@ const PAGES = [
   '/en/departamentos/comercial', '/en/departamentos/direccion', '/en/departamentos/finanzas',
   '/en/departamentos/marketing', '/en/departamentos/produccion', '/en/departamentos/soporte',
   '/en/faq', '/en/garantias', '/en/metodo', '/en/privacidad', '/en/seguridad',
-  '/en/servicios', '/en/servicios/agentes-ia', '/en/servicios/automatizacion-ia',
-  '/en/servicios/integraciones', '/faq', '/garantias', '/metodo', '/privacidad',
-  '/seguridad', '/servicios', '/servicios/agentes-ia', '/servicios/automatizacion-ia',
-  '/servicios/integraciones',
+  '/en/servicios/agentes-de-ia', '/en/servicios/automatizaciones',
+  '/en/servicios/integraciones', '/en/servicios/paginas-web',
+  '/en/servicios/sistemas-a-medida', '/faq', '/garantias', '/metodo', '/privacidad',
+  '/seguridad', '/servicios/agentes-de-ia', '/servicios/automatizaciones',
+  '/servicios/integraciones', '/servicios/paginas-web', '/servicios/sistemas-a-medida',
   // D-Code Finance: página de producto propia (ES/EN). Faltaba en la lista.
   '/sistema-financiero', '/en/sistema-financiero',
   // La demo pública de Finance: puerta de entrada y aplicación (ES/EN).

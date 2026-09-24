@@ -1,0 +1,179 @@
+/* ═══════════════════════ LAS CINCO FICHAS ═══════════════════════
+   Una página por cada cosa que hacemos. La misma regla que en «Qué
+   hacemos»: lo mínimo a la vista. Un titular, cuatro frases, cuatro cosas
+   que hay que saber y algo que se pueda abrir. Nada de tabla comparativa ni
+   de folleto de doce pantallas.
+
+   No hay aquí ningún sistema visual nuevo: las secciones, los botones y las
+   bandas son los de siempre; esta hoja solo pone lo que no existía —la
+   figura del titular, la lista de puntos, el marco que se baja y el pie de
+   las otras cuatro—. */
+
+/* ── El titular, con su figura ────────────────────────────── */
+.fi-hero .fi-fig{
+  display:block; width:clamp(46px,5.4vw,62px); height:clamp(46px,5.4vw,62px);
+  color:var(--v-a); margin:0 0 clamp(14px,1.8vw,20px);
+}
+.fi-fig svg{ width:100%; height:100%; display:block; }
+.fi-hero .h-title{ max-width:19ch; }
+.fi-hero .lead{ max-width:60ch; }
+
+/* ── Lo que hay que saber ─────────────────────────────────── */
+/* Cuatro, no diez. Cada una es una afirmación en negrita y una frase que la
+   sostiene; en cuanto se pasa de ahí vuelve a ser un folleto. */
+.fi-puntos{
+  list-style:none; margin:clamp(20px,2.6vw,28px) 0 0; padding:0;
+  display:grid; gap:clamp(14px,1.8vw,20px); grid-template-columns:1fr;
+}
+/* Dos y dos. Con «auto-fit» salían tres arriba y una abajo sola, que se lee
+   como si la cuarta fuese un añadido. */
+@media (min-width:720px){ .fi-puntos{ grid-template-columns:1fr 1fr; } }
+.fi-puntos > li{
+  position:relative; padding:clamp(20px,2.4vw,26px);
+  border:1px solid var(--v-edge); border-radius:16px;
+  background-color:color-mix(in srgb, var(--v-bg) 86%, transparent);
+  background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  isolation:isolate;
+}
+/* Una barra de color arriba, del color de la casa y alternando, para que
+   cuatro cajas iguales no se lean como una tabla. */
+.fi-puntos > li::before{
+  content:''; position:absolute; left:clamp(20px,2.4vw,26px); top:0;
+  width:34px; height:2px; border-radius:0 0 2px 2px; background:var(--v-a);
+}
+.fi-puntos > li:nth-child(2n)::before{ background:var(--v-b); }
+.fi-puntos b{
+  display:block; font-family:var(--display, var(--serif));
+  font-size:clamp(1rem,1.5vw,1.1rem); font-weight:650; letter-spacing:-.02em;
+  color:var(--v-ink);
+}
+.fi-puntos span{
+  display:block; margin-top:7px; font-size:.9375rem; line-height:1.6;
+  color:var(--v-ink-2);
+}
+
+/* ── La demo ──────────────────────────────────────────────── */
+.fi-demo-c{
+  padding:clamp(26px,3.4vw,44px);
+  border:1px solid transparent; border-radius:20px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--v-bg) 62%, transparent),
+                            color-mix(in srgb, var(--v-bg) 80%, transparent)) padding-box,
+    linear-gradient(150deg, color-mix(in srgb, var(--v-a) 40%, transparent),
+                            color-mix(in srgb, var(--v-edge) 70%, transparent) 40%, transparent 74%) border-box;
+  -webkit-backdrop-filter:blur(20px) saturate(1.2); backdrop-filter:blur(20px) saturate(1.2);
+}
+.fi-demo-c .h-sec{ margin-top:10px; max-width:22ch; }
+.fi-demo-c .lead{ margin-top:12px; max-width:62ch; }
+.fi-demo-c .hero4-ctas{ margin-top:clamp(18px,2.2vw,24px); justify-content:flex-start; }
+.fi-demo.es-webs .head{ max-width:62ch; }
+.fi-ayuda{
+  margin:clamp(14px,1.8vw,18px) 0 0; font-family:var(--mono);
+  font-size:.6875rem; letter-spacing:.11em; text-transform:uppercase; color:var(--v-a);
+}
+.fi-nota{ margin:clamp(14px,1.8vw,18px) 0 0; font-size:.8125rem; color:var(--v-ink-3); }
+
+/* ── El marco que se puede bajar ──────────────────────────── */
+/* La foto de la primera pantalla enseña cómo empieza una web; lo que hay
+   debajo del pliegue no se veía en ningún sitio. Aquí cada maqueta va
+   dentro de una ventana con su barra y se baja con la rueda, con el dedo o
+   con el teclado: el contenedor lleva tabindex para que también se pueda
+   bajar sin ratón. */
+.fi-marcos{
+  display:grid; gap:clamp(18px,2.2vw,26px); grid-template-columns:1fr;
+  margin-top:clamp(20px,2.6vw,28px);
+}
+@media (min-width:860px){ .fi-marcos{ grid-template-columns:1fr 1fr; } }
+.fi-marco{
+  margin:0; position:relative;
+  border:1px solid var(--v-edge); border-radius:16px; overflow:hidden;
+  background:color-mix(in srgb, var(--v-bg) 92%, transparent);
+  transition:border-color .22s ease;
+}
+.fi-marco:hover{ border-color:color-mix(in srgb, var(--v-a) 40%, var(--v-edge)); }
+.fi-barra{
+  display:flex; align-items:center; gap:6px; padding:9px 14px;
+  border-bottom:1px solid var(--v-edge-2);
+  background:color-mix(in srgb, var(--v-bg-2) 88%, transparent);
+}
+.fi-barra i{
+  width:8px; height:8px; border-radius:50%; flex:none;
+  background:color-mix(in srgb, var(--v-ink-3) 42%, transparent);
+}
+.fi-barra span{
+  margin-left:10px; font-family:var(--mono); font-size:.6875rem;
+  color:var(--v-ink-3); letter-spacing:.02em;
+}
+/* El alto va atado al ancho del propio marco, no a la pantalla: la imagen
+   entra al 100 % del ancho, así que si el alto fuese fijo, en un móvil la
+   maqueta encogida casi cabía entera y bajar no hacía nada. Con la
+   proporción 16/11 siempre sobra la mitad larga de la página. */
+.fi-viewport{
+  aspect-ratio:16 / 11; max-height:400px; overflow-y:auto; overflow-x:hidden;
+  overscroll-behavior:contain; scrollbar-width:thin;
+  -webkit-overflow-scrolling:touch;
+}
+.fi-viewport img{ display:block; width:100%; height:auto; }
+.fi-viewport:focus-visible{ outline:2px solid var(--v-a); outline-offset:-2px; }
+/* La pista: se ve hasta que alguien baja, y entonces sobra. */
+.fi-pista{
+  position:absolute; right:14px; bottom:calc(clamp(56px,7vw,66px) + 10px);
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 13px; border-radius:999px; pointer-events:none;
+  font-family:var(--mono); font-size:.625rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--v-ink); background:color-mix(in srgb, var(--v-bg) 88%, transparent);
+  border:1px solid var(--v-edge);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  animation:fi-pista 2.4s ease-in-out infinite;
+  transition:opacity .3s ease;
+}
+.fi-pista svg{ width:13px; height:13px; }
+.fi-marco.es-bajado .fi-pista{ opacity:0; }
+@keyframes fi-pista{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(3px); } }
+.fi-marco figcaption{
+  padding:13px 16px 16px; border-top:1px solid var(--v-edge-2);
+  font-size:.875rem; line-height:1.55; color:var(--v-ink-2);
+}
+.fi-marco figcaption b{ display:block; color:var(--v-ink); font-weight:650; margin-bottom:3px; }
+
+/* ── Las otras cuatro ─────────────────────────────────────── */
+/* Dos y dos, o cuatro en fila si cabe. Pasar de una ficha a otra sin volver
+   a «Qué hacemos» es la mitad de la gracia de tener cinco páginas. */
+.fi-otros{
+  list-style:none; margin:clamp(20px,2.6vw,28px) 0 0; padding:0;
+  display:grid; gap:clamp(10px,1.2vw,14px); grid-template-columns:1fr;
+}
+@media (min-width:600px){ .fi-otros{ grid-template-columns:1fr 1fr; } }
+@media (min-width:1100px){ .fi-otros{ grid-template-columns:repeat(4, 1fr); } }
+.fi-otro{
+  display:flex; flex-direction:column; gap:9px; height:100%;
+  padding:clamp(16px,1.9vw,20px);
+  border:1px solid var(--v-edge); border-radius:14px;
+  background-color:color-mix(in srgb, var(--v-bg) 84%, transparent);
+  transition:border-color .2s ease, transform .2s ease;
+}
+/* La clase no es decorativa: styles.css subraya `main li a:not([class])`,
+   que es exactamente lo que era esto, y salían cuatro tarjetas con el
+   titular y la frase subrayados como si fuesen erratas. */
+.fi-otro{ text-decoration:none; }
+.fi-otro:hover{ border-color:color-mix(in srgb, var(--v-a) 45%, var(--v-edge)); transform:translateY(-2px); }
+.fi-otro:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; }
+.fi-otro-h{ display:flex; align-items:center; gap:10px; }
+.fi-otro-f{ width:24px; height:24px; flex:none; color:var(--v-a); }
+.fi-otro-f svg{ width:100%; height:100%; display:block; }
+.fi-otros b{
+  font-size:.9375rem; font-weight:650; letter-spacing:-.015em; color:var(--v-ink);
+  line-height:1.3;
+}
+.fi-otro-i{ margin-left:auto; display:flex; color:var(--v-a); flex:none; }
+.fi-otro-i svg{ width:15px; height:15px; transition:transform .18s ease; }
+.fi-otro:hover .fi-otro-i svg{ transform:translateX(3px); }
+.fi-otro-d{ font-size:.8125rem; line-height:1.5; color:var(--v-ink-3); }
+
+@media (prefers-reduced-motion:reduce){
+  .fi-pista{ animation:none; }
+  .fi-marco, .fi-otro, .fi-otro-i svg{ transition:none; }
+  .fi-otro:hover{ transform:none; }
+  .fi-viewport{ scroll-behavior:auto; }
+}

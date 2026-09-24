@@ -129,30 +129,31 @@
      color del tema y se animan con transform, que es lo único que no cuesta
      fotogramas. */
   var TRAZO = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
-  function svg(cuerpo, piernas) {
+  /* Todas llevan patas: el momento en que le salen es el que hace gracia, y
+     un reloj con patas corriendo es mejor chiste que un reloj sin ellas. */
+  function svg(cuerpo) {
     return '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">' + cuerpo +
-      (piernas === false ? '' :
-        '<g class="cfg-pies"><path d="M19 40v4" ' + TRAZO + '/><path d="M29 40v4" ' + TRAZO + '/></g>') +
+      '<g class="cfg-pies"><path d="M19 41v5" ' + TRAZO + '/><path d="M29 41v5" ' + TRAZO + '/></g>' +
       '</svg>';
   }
   var ICONOS = {
     /* dinero: el billete con piernas, que es el que pidió el encargo */
     dinero:   { paso: 'corre', svg: svg('<rect x="7" y="12" width="34" height="21" rx="3" ' + TRAZO + '/><circle cx="24" cy="22.5" r="5.5" ' + TRAZO + '/><path d="M13 18v9M35 18v9" ' + TRAZO + '/>') },
-    calendario:{ paso: 'salta', svg: svg('<rect x="8" y="11" width="32" height="28" rx="4" ' + TRAZO + '/><path d="M8 20h32M17 7v8M31 7v8" ' + TRAZO + '/><circle cx="18" cy="28" r="2" fill="currentColor"/><circle cx="27" cy="28" r="2" fill="currentColor"/>', false) },
-    estrella: { paso: 'gira',  svg: svg('<path d="M24 8l4.9 9.9 10.9 1.6-7.9 7.7 1.9 10.9-9.8-5.2-9.8 5.2 1.9-10.9-7.9-7.7 10.9-1.6z" ' + TRAZO + '/>', false) },
-    chat:     { paso: 'salta', svg: svg('<path d="M40 24c0 7.7-7.2 14-16 14-2.3 0-4.5-.4-6.4-1.2L8 40l3.4-8.3C9.2 29.5 8 26.9 8 24c0-7.7 7.2-14 16-14s16 6.3 16 14z" ' + TRAZO + '/><circle cx="18" cy="24" r="1.8" fill="currentColor"/><circle cx="24" cy="24" r="1.8" fill="currentColor"/><circle cx="30" cy="24" r="1.8" fill="currentColor"/>', false) },
-    papel:    { paso: 'vuela', svg: svg('<path d="M13 6h14l9 9v27H13z" ' + TRAZO + '/><path d="M27 6v9h9M19 26h12M19 33h9" ' + TRAZO + '/>', false) },
-    caja:     { paso: 'rueda', svg: svg('<path d="M24 7l17 8v18l-17 8-17-8V15z" ' + TRAZO + '/><path d="M7 15l17 8 17-8M24 23v18" ' + TRAZO + '/>', false) },
-    reloj:    { paso: 'salta', svg: svg('<circle cx="24" cy="24" r="16" ' + TRAZO + '/><path d="M24 14v10l7 4" ' + TRAZO + '/>', false) },
-    engranaje:{ paso: 'rueda', svg: svg('<circle cx="24" cy="24" r="7" ' + TRAZO + '/><path d="M24 5v6M24 37v6M43 24h-6M11 24H5M37.4 10.6l-4.2 4.2M14.8 33.2l-4.2 4.2M37.4 37.4l-4.2-4.2M14.8 14.8l-4.2-4.2" ' + TRAZO + '/>', false) },
-    chispa:   { paso: 'vuela', svg: svg('<path d="M26 5L12 27h10l-2 16 16-23H26z" ' + TRAZO + '/>', false) },
-    enchufe:  { paso: 'corre', svg: svg('<path d="M18 6v10M30 6v10M12 16h24v6a12 12 0 0 1-24 0z" ' + TRAZO + '/><path d="M24 34v8" ' + TRAZO + '/>', false) },
-    lupa:     { paso: 'salta', svg: svg('<circle cx="21" cy="21" r="12" ' + TRAZO + '/><path d="M30 30l11 11" ' + TRAZO + '/>', false) },
-    gente:    { paso: 'corre', svg: svg('<circle cx="24" cy="15" r="6" ' + TRAZO + '/><path d="M12 38c0-6.6 5.4-11 12-11s12 4.4 12 11" ' + TRAZO + '/>', false) },
-    pantalla: { paso: 'salta', svg: svg('<rect x="6" y="10" width="36" height="24" rx="3" ' + TRAZO + '/><path d="M18 40h12M24 34v6" ' + TRAZO + '/>', false) },
-    llave:    { paso: 'gira',  svg: svg('<circle cx="17" cy="31" r="8" ' + TRAZO + '/><path d="M23 25L40 8M34 14l4 4M30 18l4 4" ' + TRAZO + '/>', false) },
-    carro:    { paso: 'rueda', svg: svg('<path d="M7 9h5l5 21h19l4-14H14" ' + TRAZO + '/><circle cx="20" cy="38" r="3" ' + TRAZO + '/><circle cx="34" cy="38" r="3" ' + TRAZO + '/>', false) },
-    grafica:  { paso: 'salta', svg: svg('<path d="M8 38V10M8 38h32" ' + TRAZO + '/><path d="M15 31l7-8 6 5 9-12" ' + TRAZO + '/>', false) },
+    calendario:{ paso: 'salta', svg: svg('<rect x="8" y="11" width="32" height="28" rx="4" ' + TRAZO + '/><path d="M8 20h32M17 7v8M31 7v8" ' + TRAZO + '/><circle cx="18" cy="28" r="2" fill="currentColor"/><circle cx="27" cy="28" r="2" fill="currentColor"/>') },
+    estrella: { paso: 'gira',  svg: svg('<path d="M24 8l4.9 9.9 10.9 1.6-7.9 7.7 1.9 10.9-9.8-5.2-9.8 5.2 1.9-10.9-7.9-7.7 10.9-1.6z" ' + TRAZO + '/>') },
+    chat:     { paso: 'salta', svg: svg('<path d="M40 24c0 7.7-7.2 14-16 14-2.3 0-4.5-.4-6.4-1.2L8 40l3.4-8.3C9.2 29.5 8 26.9 8 24c0-7.7 7.2-14 16-14s16 6.3 16 14z" ' + TRAZO + '/><circle cx="18" cy="24" r="1.8" fill="currentColor"/><circle cx="24" cy="24" r="1.8" fill="currentColor"/><circle cx="30" cy="24" r="1.8" fill="currentColor"/>') },
+    papel:    { paso: 'vuela', svg: svg('<path d="M13 6h14l9 9v27H13z" ' + TRAZO + '/><path d="M27 6v9h9M19 26h12M19 33h9" ' + TRAZO + '/>') },
+    caja:     { paso: 'rueda', svg: svg('<path d="M24 7l17 8v18l-17 8-17-8V15z" ' + TRAZO + '/><path d="M7 15l17 8 17-8M24 23v18" ' + TRAZO + '/>') },
+    reloj:    { paso: 'salta', svg: svg('<circle cx="24" cy="24" r="16" ' + TRAZO + '/><path d="M24 14v10l7 4" ' + TRAZO + '/>') },
+    engranaje:{ paso: 'rueda', svg: svg('<circle cx="24" cy="24" r="7" ' + TRAZO + '/><path d="M24 5v6M24 37v6M43 24h-6M11 24H5M37.4 10.6l-4.2 4.2M14.8 33.2l-4.2 4.2M37.4 37.4l-4.2-4.2M14.8 14.8l-4.2-4.2" ' + TRAZO + '/>') },
+    chispa:   { paso: 'vuela', svg: svg('<path d="M26 5L12 27h10l-2 16 16-23H26z" ' + TRAZO + '/>') },
+    enchufe:  { paso: 'corre', svg: svg('<path d="M18 6v10M30 6v10M12 16h24v6a12 12 0 0 1-24 0z" ' + TRAZO + '/><path d="M24 34v8" ' + TRAZO + '/>') },
+    lupa:     { paso: 'salta', svg: svg('<circle cx="21" cy="21" r="12" ' + TRAZO + '/><path d="M30 30l11 11" ' + TRAZO + '/>') },
+    gente:    { paso: 'corre', svg: svg('<circle cx="24" cy="15" r="6" ' + TRAZO + '/><path d="M12 38c0-6.6 5.4-11 12-11s12 4.4 12 11" ' + TRAZO + '/>') },
+    pantalla: { paso: 'salta', svg: svg('<rect x="6" y="10" width="36" height="24" rx="3" ' + TRAZO + '/><path d="M18 40h12M24 34v6" ' + TRAZO + '/>') },
+    llave:    { paso: 'gira',  svg: svg('<circle cx="17" cy="31" r="8" ' + TRAZO + '/><path d="M23 25L40 8M34 14l4 4M30 18l4 4" ' + TRAZO + '/>') },
+    carro:    { paso: 'rueda', svg: svg('<path d="M7 9h5l5 21h19l4-14H14" ' + TRAZO + '/><circle cx="20" cy="38" r="3" ' + TRAZO + '/><circle cx="34" cy="38" r="3" ' + TRAZO + '/>') },
+    grafica:  { paso: 'salta', svg: svg('<path d="M8 38V10M8 38h32" ' + TRAZO + '/><path d="M15 31l7-8 6 5 9-12" ' + TRAZO + '/>') },
   };
 
   /* Qué figura le toca a cada opción. Las que no estén aquí salen con la de
@@ -179,30 +180,161 @@
   };
   var POR_PASO = ['lupa', 'chispa', 'gente', 'engranaje', 'llave'];
 
+  /* ══════════════════ EL BICHO QUE SALE DE LA TARJETA ══════════════════
+     Al elegir una opción NO aparece un adorno: se abre la tarjeta, asoma
+     por detrás la figura de eso que acabas de elegir, mira alrededor, le
+     salen dos patitas y se va corriendo por la página hasta que se cansa y
+     se marcha de un salto.
+
+     Cinco actos, y cada uno existe por algo:
+       1 · la tapa se abre       — dice de dónde sale, y engancha
+       2 · asoma y mira          — le da un segundo de vida antes de correr
+       3 · le salen las patitas  — se dibujan de cero; es el momento gracioso
+       4 · corre por la página   — recorrido propio, rebota y cambia de altura
+       5 · salta y se va         — con su polvareda
+
+     Todo con transform y opacity y con la API de animaciones del navegador,
+     que las hace en el compositor: ni un reflow en los tres segundos. Uno
+     cada vez, y ninguno para quien pide menos movimiento. */
+
   var QUIETO = window.matchMedia('(prefers-reduced-motion: reduce)');
   var TACTIL = window.matchMedia('(pointer:coarse)').matches;
-  var enVuelo = 0;
+  var hayBicho = false;
+
+  function capa() {
+    var c = D.getElementById('cfg-pista');
+    if (!c) {
+      c = el('div', 'cfg-pista'); c.id = 'cfg-pista';
+      c.setAttribute('aria-hidden', 'true');
+      D.body.appendChild(c);
+    }
+    return c;
+  }
+
+  function polvo(x, y) {
+    var p = el('i', 'cfg-polvo');
+    p.style.left = x + 'px'; p.style.top = y + 'px';
+    capa().appendChild(p);
+    window.setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 700);
+  }
+
+  /* El recorrido: cuatro o cinco tramos que rebotan entre los bordes y
+     cambian de altura. No es una línea recta de lado a lado porque una línea
+     recta se mira una vez; esto se sigue con la vista. */
+  function ruta(x0, y0) {
+    var W = window.innerWidth, H = window.innerHeight;
+    var pasos = [];
+    var x = x0, y = y0;
+    var n = 3 + Math.floor(Math.random() * 2);
+    for (var i = 0; i < n; i++) {
+      var haciaDerecha = i % 2 === 0 ? x < W * 0.55 : x > W * 0.45;
+      x = haciaDerecha ? Math.min(W - 70, x + 220 + Math.random() * 420)
+                       : Math.max(40, x - (220 + Math.random() * 420));
+      y = Math.max(90, Math.min(H - 130, y + (Math.random() * 2 - 1) * 170));
+      pasos.push({ x: x, y: y, dir: haciaDerecha ? 1 : -1 });
+    }
+    /* y se larga por arriba */
+    pasos.push({ x: x + (Math.random() > .5 ? 260 : -260), y: -140, dir: x > W / 2 ? 1 : -1, salto: true });
+    return pasos;
+  }
 
   function corre(id, paso) {
-    if (QUIETO.matches || enVuelo > 2) return;
+    if (QUIETO.matches || hayBicho) return;
     var ico = ICONOS[id] || ICONOS[POR_PASO[paso] || 'lupa'];
     if (!ico) return;
-    var capa = D.getElementById('cfg-pista');
-    if (!capa) {
-      capa = el('div', 'cfg-pista'); capa.id = 'cfg-pista';
-      capa.setAttribute('aria-hidden', 'true');
-      D.body.appendChild(capa);
-    }
-    var f = el('i', 'cfg-figura es-' + ico.paso);
-    f.innerHTML = ico.svg;
-    /* La banda vertical cambia cada vez: dos seguidas por el mismo carril se
-       leen como una repetición, y tres como un error. */
-    f.style.top = (14 + Math.random() * 58) + 'vh';
-    f.style.animationDuration = (TACTIL ? 1.5 : 1.85) + 's';
-    capa.appendChild(f); enVuelo++;
-    var fuera = function () { if (f.parentNode) { f.parentNode.removeChild(f); enVuelo--; } };
-    f.addEventListener('animationend', fuera, { once: true });
-    window.setTimeout(fuera, 2600);
+    var tarjeta = ultimaTarjeta;
+    if (!tarjeta) return;
+    hayBicho = true;
+
+    var r = tarjeta.getBoundingClientRect();
+    var ALTO = TACTIL ? 62 : 84;
+
+    /* ── 1 · la tapa se abre ─────────────────────────────────────────
+       La franja de luz NO va sobre la tarjeta: al elegir se repinta el paso
+       entero y el botón deja de existir a los pocos milisegundos, así que
+       una clase puesta en él se perdía antes de verse. Va en la pista, a la
+       altura de su borde de arriba, y se queda hasta que termina. */
+    var tapa = el('i', 'cfg-tapa');
+    tapa.style.left = (r.left + r.width * 0.08) + 'px';
+    tapa.style.top = r.top + 'px';
+    tapa.style.width = (r.width * 0.84) + 'px';
+    capa().appendChild(tapa);
+    window.setTimeout(function () { if (tapa.parentNode) tapa.parentNode.removeChild(tapa); }, 900);
+
+    /* ── 2 · asoma por detrás del borde de arriba ──────────────────── */
+    var ojo = el('div', 'cfg-ojo');
+    ojo.style.left = (r.left + r.width / 2 - ALTO / 2) + 'px';
+    ojo.style.top = (r.top - ALTO - 6) + 'px';
+    ojo.style.width = ALTO + 'px';
+    ojo.style.height = (ALTO + 8) + 'px';
+    var bicho = el('i', 'cfg-bicho');
+    bicho.style.width = ALTO + 'px'; bicho.style.height = ALTO + 'px';
+    bicho.innerHTML = ico.svg;
+    ojo.appendChild(bicho);
+    capa().appendChild(ojo);
+
+    var fin = function () {
+      [ojo, bicho].forEach(function (n) { if (n && n.parentNode) n.parentNode.removeChild(n); });
+      hayBicho = false;
+    };
+    var seguro = window.setTimeout(fin, 7000);
+
+    var asoma = bicho.animate([
+      { transform: 'translateY(' + (ALTO + 10) + 'px) scaleY(.82)' },
+      { transform: 'translateY(-6px) scaleY(1.06)', offset: .62 },
+      { transform: 'translateY(0) scaleY(1)' },
+    ], { duration: 400, easing: 'cubic-bezier(.2,1.1,.3,1)', fill: 'both' });
+
+    asoma.finished.then(function () {
+      /* mira a un lado y a otro */
+      return bicho.animate([
+        { transform: 'rotate(0deg)' }, { transform: 'rotate(-13deg)', offset: .3 },
+        { transform: 'rotate(11deg)', offset: .68 }, { transform: 'rotate(0deg)' },
+      ], { duration: 340, easing: 'ease-in-out', fill: 'both' }).finished;
+    }).then(function () {
+      /* ── 3 · le salen las patitas ────────────────────────────────── */
+      bicho.classList.add('es-patas');
+      return new Promise(function (ok) { window.setTimeout(ok, 260); });
+    }).then(function () {
+      /* ── 4 · fuera del escondite y a correr ──────────────────────── */
+      var cx = r.left + r.width / 2 - ALTO / 2;
+      var cy = r.top - ALTO - 6;
+      ojo.parentNode.removeChild(ojo);
+      bicho.style.left = cx + 'px'; bicho.style.top = cy + 'px';
+      bicho.classList.add('es-suelto', 'es-corriendo');
+      capa().appendChild(bicho);
+
+      var pasos = ruta(cx, cy);
+      var x = cx, y = cy;
+      var cadena = Promise.resolve();
+      pasos.forEach(function (p) {
+        cadena = cadena.then(function () {
+          var dx = p.x - x, dy = p.y - y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var ms = p.salto ? 620 : Math.max(420, Math.min(1500, dist * 1.9));
+          /* migas de polvo por donde pisa */
+          var pisadas = window.setInterval(function () {
+            var b = bicho.getBoundingClientRect();
+            polvo(b.left + b.width / 2, b.top + b.height - 4);
+          }, 130);
+          var a = bicho.animate([
+            { transform: 'translate(0,0) scaleX(' + p.dir + ')' },
+            { transform: 'translate(' + dx + 'px,' + (dy - (p.salto ? 0 : 26)) + 'px) scaleX(' + p.dir + ')', offset: .5 },
+            { transform: 'translate(' + dx + 'px,' + dy + 'px) scaleX(' + p.dir + ')' },
+          ], { duration: ms, easing: p.salto ? 'cubic-bezier(.3,-.3,.6,1)' : 'linear', fill: 'both' });
+          return a.finished.then(function () {
+            window.clearInterval(pisadas);
+            a.cancel();
+            x = p.x; y = p.y;
+            bicho.style.left = x + 'px'; bicho.style.top = y + 'px';
+            bicho.style.transform = 'scaleX(' + p.dir + ')';
+          });
+        });
+      });
+      return cadena;
+    }).then(function () {
+      window.clearTimeout(seguro); fin();
+    }).catch(function () { window.clearTimeout(seguro); fin(); });
   }
 
   function late(nodo) {
@@ -278,6 +410,8 @@
   aSalta.addEventListener('click', abreFormulario);
 
   /* ------------------------------------------------------------ pintar */
+  var ultimaTarjeta = null;
+
   function opcion(txt, sub, puesto, id) {
     var b = el('button', 'cfg-op' + (puesto ? ' is-on' : ''));
     b.type = 'button';
@@ -287,6 +421,7 @@
     /* El salto va en captura y antes que la lógica: si repintamos el paso,
        el botón ya no existe cuando llega el click normal. */
     b.addEventListener('click', function () {
+      ultimaTarjeta = b;
       if (b.getAttribute('aria-pressed') !== 'true') corre(DE[id], paso);
       late(b);
     }, true);
@@ -561,6 +696,10 @@
       form.insertBefore(aviso, form.firstChild);
     }
     abreFormulario();
+    /* Al enviar la configuración sale la gráfica del botón de enviar, que es
+       el último que se ha pulsado. «b» aquí era el botón de otra función:
+       ReferenceError, y con él se caía el volcado entero. Lo cazó qa:precios. */
+    ultimaTarjeta = D.querySelector('.cfg-enviar') || ultimaTarjeta;
     corre('grafica', 4);
 
     var destino = D.getElementById('contact-form');

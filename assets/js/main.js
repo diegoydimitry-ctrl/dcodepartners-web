@@ -567,7 +567,7 @@
                Un arrastre de la barra hasta el final deja los bloques POR
                ENCIMA de la ventana y ya no volvian a cumplirlo nunca: se
                quedaban invisibles para siempre. Medido saltando al final de
-               /conocenos, /blog, /departamentos y /servicios/agentes-ia.
+               /conocenos, /blog, /departamentos y /servicios/agentes-de-ia.
                Entrar sin animacion es infinitamente mejor que no entrar. */
             if (b.top < window.innerHeight * 0.92) {
               e.classList.add('is-visible'); io.unobserve(e); pend.splice(i, 1);

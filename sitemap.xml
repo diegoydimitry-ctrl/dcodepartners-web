@@ -128,19 +128,37 @@
   </url>
 
   <url>
-    <loc>https://dcodepartners.com/servicios/automatizacion-ia</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/automatizacion-ia"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/automatizacion-ia"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/automatizacion-ia"/>
+    <loc>https://dcodepartners.com/servicios/sistemas-a-medida</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/sistemas-a-medida"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
 
   <url>
-    <loc>https://dcodepartners.com/servicios/agentes-ia</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-ia"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-ia"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-ia"/>
+    <loc>https://dcodepartners.com/servicios/paginas-web</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/paginas-web"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/paginas-web"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/paginas-web"/>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/servicios/automatizaciones</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/automatizaciones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/automatizaciones"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/automatizaciones"/>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/servicios/agentes-de-ia</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-de-ia"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
@@ -435,20 +453,38 @@
   </url>
 
   <url>
-    <loc>https://dcodepartners.com/en/servicios/automatizacion-ia</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/automatizacion-ia"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/automatizacion-ia"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/automatizacion-ia"/>
+    <loc>https://dcodepartners.com/en/servicios/sistemas-a-medida</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/sistemas-a-medida"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/servicios/paginas-web</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/paginas-web"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/paginas-web"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/paginas-web"/>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/servicios/automatizaciones</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/automatizaciones"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/automatizaciones"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/automatizaciones"/>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
     <lastmod>2026-08-16</lastmod>
   </url>
 
   <url>
-    <loc>https://dcodepartners.com/en/servicios/agentes-ia</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-ia"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-ia"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-ia"/>
+    <loc>https://dcodepartners.com/en/servicios/agentes-de-ia</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-de-ia"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
     <lastmod>2026-08-16</lastmod>

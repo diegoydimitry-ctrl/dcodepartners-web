@@ -90,6 +90,14 @@ const FINANCE_ASSETS = [
   'assets/js/tema.js',
   'assets/css/dcode-os.css',
   'assets/js/dcode-os.js',
+  // Las hojas de las páginas generadas (/precios, /que-hacemos y las cinco
+  // fichas) entraban con ?v=0 escrito por su generador y ahí se quedaban:
+  // un cambio en el CSS no invalidaba la caché de nadie.
+  'assets/css/precios.css',
+  'assets/js/configurador.js',
+  'assets/css/que-hacemos.css',
+  'assets/css/fichas.css',
+  'assets/js/fichas.js',
 ].filter((rel) => fs.existsSync(path.join(ROOT, rel))).map((rel) => {
   const name = path.basename(rel);
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -25,7 +25,9 @@ const EXIGE = [
   ['el panel de Finance', /<div class="v6-panel"/],
   ['la captura para tema oscuro', /class="es-oscuro"[^>]*finance-dark\.webp/],
   ['la captura para tema claro', /class="es-claro"[^>]*finance-light\.webp/],
-  ['el pie del panel', /<figcaption><span class="v6-panel-k">/],
+  /* El pie va fuera de la figura a propósito: dentro lo borraba la máscara
+     del panel. Si alguien lo devuelve a un <figcaption>, esto lo caza. */
+  ['el pie del panel, fuera de la figura', /<p class="v6-panel-pie"><span class="v6-panel-k">/],
 ];
 const PROHIBE = [
   ['la marca de partículas como formación del hero', /var FORM = \[F0,/],

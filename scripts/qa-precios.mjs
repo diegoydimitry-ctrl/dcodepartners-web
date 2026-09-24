@@ -198,10 +198,29 @@ for (const [aparato, op] of APARATOS) {
     /* Recorrido completo: sector → objetivos → gente → piezas → adaptación */
     const elegir = async (sel, n) => { await pg.click(`#configurador ${sel} >> nth=${n}`); };
     await elegir('.cfg-op', 2);
-    /* Elegir tiene que NOTARSE: cruza una figura. Es lo que pidió el encargo y
-       es lo primero que se pierde sin querer al tocar el guion. */
-    const chispas = await pg.evaluate(() => document.querySelectorAll('.cfg-figura').length);
-    if (!chispas) fallos.push(`${donde}: al elegir no cruza ninguna figura`);
+    /* Elegir tiene que NOTARSE, y de una manera concreta: se abre la tarjeta,
+       asoma la figura por detrás, le salen patas y se va corriendo. Son
+       cuatro cosas encadenadas con promesas y basta que una se rompa para
+       que no pase nada; por eso se comprueban las cuatro. */
+    const asoma = await pg.evaluate(() => ({
+      tapa: !!document.querySelector('.cfg-tapa'),
+      bicho: !!document.querySelector('.cfg-bicho'),
+      escondido: !!document.querySelector('.cfg-ojo .cfg-bicho'),
+      patas: document.querySelectorAll('.cfg-bicho .cfg-pies path').length,
+    }));
+    if (!asoma.tapa) fallos.push(`${donde}: al elegir no se abre la tarjeta`);
+    if (!asoma.bicho) fallos.push(`${donde}: al elegir no asoma ninguna figura`);
+    if (!asoma.escondido) fallos.push(`${donde}: la figura no sale de detrás de la tarjeta`);
+    if (asoma.patas !== 2) fallos.push(`${donde}: la figura tiene ${asoma.patas} patas y tiene que tener 2`);
+    /* Asomar, mirar y echar las patas son 400 + 340 + 260 ms; a partir de
+       ahí corre. Se espera un poco más que eso a propósito. */
+    await pg.waitForTimeout(1250);
+    const corriendo = await pg.evaluate(() => {
+      const b = document.querySelector('.cfg-bicho');
+      return { suelto: !!b && b.classList.contains('es-corriendo'), polvo: document.querySelectorAll('.cfg-polvo').length };
+    });
+    if (!corriendo.suelto) fallos.push(`${donde}: la figura no echa a correr`);
+    if (!corriendo.polvo) fallos.push(`${donde}: la figura corre sin levantar polvo`);
     await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-chip', 0); await elegir('.cfg-chip', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);

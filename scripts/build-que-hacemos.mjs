@@ -8,6 +8,9 @@
  * desplegable; cuatro webs de ejemplo; las ocho áreas como puerta de entrada;
  * y el método entero plegado, para quien quiera.
  *
+ * Cada pieza lleva a su ficha —/servicios/<slug>, que hace build-fichas—, y
+ * es ahí donde está el detalle, la demo y el precio. Aquí solo la línea.
+ *
  * La cáscara sale de una página que ya existe, igual que /precios: mismo
  * head, misma cabecera, mismo pie, ningún sistema visual paralelo.
  *
@@ -18,6 +21,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const { AREAS, PIEZAS, PASOS } = await import('./contenido/paginas.mjs');
 const { MAQUETAS } = await import('./contenido/maquetas.mjs');
+const { FICHAS } = await import('./contenido/fichas.mjs');
+const SLUG = Object.fromEntries(FICHAS.map((f) => [f.id, f.slug]));
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -32,6 +37,8 @@ const T = {
     lead: 'Miramos por dónde se os escapan el tiempo y el dinero, y construimos lo que lo corta. Cinco piezas que se combinan según lo que haga falta.',
     mas: 'Qué incluye',
     verPrecio: 'Ver el precio',
+    verFicha: 'Verlo en detalle',
+    websIr: 'Ver las webs por dentro',
     websT: 'Páginas web', websH: 'Cuatro ejemplos de lo que sale.',
     websL: 'Maquetas nuestras, empresas inventadas. La web no es un folleto: se conecta con lo que ya usas.',
     areasT: 'Por dónde empezar', areasH: 'El mismo sistema, visto desde donde trabajas.',
@@ -51,6 +58,8 @@ const T = {
     lead: 'We look at where your time and money leak out, and build what stops it. Five pieces, combined as needed.',
     mas: 'What it includes',
     verPrecio: 'See the price',
+    verFicha: 'See it in detail',
+    websIr: 'Look inside the sites',
     websT: 'Websites', websH: 'Four examples of what comes out.',
     websL: 'Our own mock-ups, made-up companies. A site is not a brochure: it connects to what you already use.',
     areasT: 'Where to start', areasH: 'The same system, seen from where you work.',
@@ -87,7 +96,7 @@ ${fig(p.id)}
 <h3>${esc(p.t[lang])}</h3>
 <p class="qh-una">${esc(p.una[lang])}</p>
 <details class="qh-mas"><summary>${esc(t.mas)}</summary><ul>${p.mas[lang].map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>
-<a class="qh-precio" href="${p.href[lang]}">${esc(t.verPrecio)} ${FLECHA}</a>
+<a class="qh-precio" href="${base}/servicios/${SLUG[p.id]}">${esc(t.verFicha)} ${FLECHA}</a>
 </article>`).join('\n');
 
   const webs = MAQUETAS.map((m) => `<figure class="qh-web">
@@ -113,6 +122,7 @@ ${fig(p.id)}
 <section class="section-sm" data-amb="verde" aria-labelledby="qh-webs"><div class="container">
 <div class="head"><span class="eyebrow">${esc(t.websT)}</span><h2 id="qh-webs" class="h-sec">${esc(t.websH)}</h2><p class="lead">${esc(t.websL)}</p></div>
 <div class="qh-webs">${webs}</div>
+<p class="qh-webs-ir"><a class="qh-precio" href="${base}/servicios/${SLUG.webs}">${esc(t.websIr)} ${FLECHA}</a></p>
 </div></section>
 
 <section class="section-sm" data-amb="violeta" aria-labelledby="qh-areas"><div class="container">

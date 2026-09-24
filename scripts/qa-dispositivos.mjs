@@ -27,7 +27,7 @@ const APARATOS=[
   ['movil',{viewport:{width:393,height:852},deviceScaleFactor:3,isMobile:true,hasTouch:true}],
   ['movil320',{viewport:{width:320,height:680},deviceScaleFactor:2,isMobile:true,hasTouch:true}],
 ];
-const RUTAS=['/','/metodo','/que-hacemos','/precios','/sistema-financiero','/contacto','/faq','/conocenos','/blog','/garantias','/en/','/en/que-hacemos','/en/contacto'];
+const RUTAS=['/','/metodo','/que-hacemos','/servicios/paginas-web','/servicios/sistemas-a-medida','/precios','/sistema-financiero','/contacto','/faq','/conocenos','/blog','/garantias','/en/','/en/que-hacemos','/en/servicios/paginas-web','/en/contacto'];
 const br=await chromium.launch(opcionesNavegador());
 const malos=[];
 let n=0;

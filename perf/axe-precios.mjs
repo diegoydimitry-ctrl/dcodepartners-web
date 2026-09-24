@@ -4,7 +4,10 @@ import { levanta, opcionesNavegador } from '../scripts/qa/servidor.mjs';
 const AXE = fs.readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
 const PORT = 4191; const srv = await levanta(PORT); const BASE = 'http://127.0.0.1:' + PORT;
 const nav = await chromium.launch(opcionesNavegador());
-const RUTAS = ['/precios', '/en/precios', '/contacto', '/en/contacto', '/que-hacemos', '/en/que-hacemos', '/cambios-en-proceso'];
+const RUTAS = ['/precios', '/en/precios', '/contacto', '/en/contacto', '/que-hacemos', '/en/que-hacemos', '/cambios-en-proceso',
+  '/servicios/sistemas-a-medida', '/servicios/automatizaciones', '/servicios/agentes-de-ia',
+  '/servicios/integraciones', '/servicios/paginas-web',
+  '/en/servicios/agentes-de-ia', '/en/servicios/paginas-web'];
 const APA = [['raton', { viewport:{width:1440,height:940} }], ['tactil', { viewport:{width:393,height:852}, deviceScaleFactor:3, isMobile:true, hasTouch:true }]];
 let total = 0;
 for (const [ap, op] of APA) for (const tema of ['dark','light']) for (const ruta of RUTAS) {

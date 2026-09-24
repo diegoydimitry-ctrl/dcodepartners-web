@@ -22,8 +22,12 @@
   display:flex; flex-direction:column; gap:10px;
   padding:clamp(22px,2.6vw,30px);
   border:1px solid var(--v-edge); border-radius:18px;
-  background-color:var(--v-bg);
+  /* Las tarjetas sí son opacas: llevan texto corto encima de la galaxia y
+     el desenfoque cuesta más cuantas más piezas haya. La caja grande del
+     método es una y puede permitírselo; estas son cinco. */
+  background-color:color-mix(in srgb, var(--v-bg) 88%, transparent);
   background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
   position:relative; z-index:2; isolation:isolate; overflow:hidden;
   transition:border-color .22s ease, transform .22s ease;
 }
@@ -110,13 +114,33 @@
   letter-spacing:.12em; text-transform:uppercase; color:var(--v-ink-2); margin-bottom:4px;
 }
 
-/* ── El método, plegado ───────────────────────────────────── */
+/* ── El método, plegado ─────────────────────────────────────
+   Esto era una losa: un rectángulo opaco del color del fondo, con su borde
+   recto, pegado encima de la galaxia. Se veía como lo que era, una caja
+   negra, y era lo primero que saltaba a la vista de la sección.
+
+   Ahora es cristal: el fondo se desenfoca en vez de taparse, así que las
+   estrellas siguen ahí pero difuminadas —y el texto se lee, que es para lo
+   que sirve el desenfoque—, el borde se degrada en vez de cerrar un
+   rectángulo, y hay una luz interior arriba que levanta la pieza del fondo
+   en lugar de recortarla contra él. */
 .qh-metodo{
-  border:1px solid var(--v-edge); border-radius:16px;
-  padding:clamp(18px,2.2vw,24px);
-  background-color:var(--v-bg);
-  background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
+  border:1px solid transparent; border-radius:20px;
+  padding:clamp(20px,2.4vw,28px);
   position:relative; z-index:2; isolation:isolate;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--v-bg) 62%, transparent),
+      color-mix(in srgb, var(--v-bg) 78%, transparent)) padding-box,
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--v-a) 42%, transparent),
+      color-mix(in srgb, var(--v-edge) 70%, transparent) 38%,
+      transparent 72%) border-box;
+  -webkit-backdrop-filter:blur(22px) saturate(1.25);
+  backdrop-filter:blur(22px) saturate(1.25);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--v-ink) 12%, transparent),
+    0 34px 80px -50px rgba(4,10,30,.9);
 }
 .qh-metodo > summary{
   cursor:pointer; list-style:none; display:flex; flex-direction:column; gap:6px;
@@ -158,3 +182,7 @@
   .qh-pieza, .qh-pieza::before{ transition:none; }
   .qh-pieza:hover{ transform:none; }
 }
+
+/* El pie de las cuatro webs: la rejilla enseña cómo empiezan, y de ahí se
+   pasa a la ficha, que es donde se pueden bajar enteras. */
+.qh-webs-ir{ margin:clamp(16px,2vw,22px) 0 0; }

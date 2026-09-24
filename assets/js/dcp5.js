@@ -259,7 +259,8 @@
          y en una ventana baja puede no ocurrir nunca. Basta con que asome. */
     }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
     /* LO QUE VIVE DENTRO DE UN RAIL HORIZONTAL NO SE OBSERVA SOLO.
-       Medido en /servicios/agentes-ia y sus dos hermanas: las tarjetas quinta
+       Medido en las páginas de servicio (hoy /servicios/agentes-de-ia y sus
+       hermanas, antes /servicios/agentes-ia): las tarjetas quinta
        y sexta del rail estan a 1438 y 1752 px de la izquierda, o sea FUERA de
        la ventana en horizontal. El observador nunca las cruza, asi que nunca
        reciben la clase de entrada, asi que se quedan en opacidad 0 para
