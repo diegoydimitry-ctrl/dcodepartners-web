@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T19:15:43.443Z",
+  "generatedAt": "2026-09-24T20:11:24.554Z",
   "pageCount": 66,
   "chunkCount": 630,
   "pages": [
@@ -469,7 +469,7 @@
         {
           "id": "/contacto#c1",
           "heading": "Solicitud enviada correctamente",
-          "text": "Hemos recibido tu solicitud. Nuestro equipo la revisará y te escribirá en menos de 24h para contarte qué construiríamos y por dónde empezaríamos. Reserva una llamada de 30 min y salta directamente a una conversación — sin pasar por el formulario. Ver preguntas frecuentes"
+          "text": "Hemos recibido tu solicitud. Nuestro equipo la revisará y te escribirá en menos de 24h para contarte qué construiríamos y por dónde empezaríamos. Ver preguntas frecuentes"
         },
         {
           "id": "/contacto#c2",
@@ -1348,7 +1348,7 @@
         {
           "id": "/en/contacto#c1",
           "heading": "Request sent successfully",
-          "text": "We've received your request. Our team will review it and get back to you within 24h to tell you what we would build and where we would start. Book a 30-minute call and jump straight into a conversation — no form needed. See frequently asked questions"
+          "text": "We've received your request. Our team will review it and get back to you within 24h to tell you what we would build and where we would start. See frequently asked questions"
         },
         {
           "id": "/en/contacto#c2",

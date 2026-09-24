@@ -96,11 +96,10 @@ html[data-theme="dark"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal
     0 0 110px -18px rgba(67,224,255,0.253),
     inset 0 1px 0 var(--surface-highlight),
     inset 0 -1px 0 rgba(91,140,255,0.2); }
-  & :is(.contacto-main .booking-card), &:is(.contacto-main .booking-card), & :is(.contacto-side .contact-card), &:is(.contacto-side .contact-card){ box-shadow:0 28px 56px -34px rgba(20,30,64,0.18),
+  & :is(.contacto-side .contact-card), &:is(.contacto-side .contact-card){ box-shadow:0 28px 56px -34px rgba(20,30,64,0.18),
     0 0 0 1px rgba(255,255,255,0.04),
     inset 0 1px 0 rgba(255,255,255,0.05),
     inset 0 -1px 0 rgba(91,140,255,0.09); }
-  & :is(.booking-card-icon), &:is(.booking-card-icon){ border:1px solid rgba(6,69,81,0.3); }
   & :is(.form-progress-dot.is-active), &:is(.form-progress-dot.is-active){ box-shadow:0 0 10px rgba(67,224,255,0.413); }
   & :is(.form-success-icon), &:is(.form-success-icon){ border:1px solid rgba(15,72,50,0.3); }
   & :is(.security-check-icon), &:is(.security-check-icon){ border:1px solid rgba(6,69,81,0.3); }
@@ -640,11 +639,10 @@ html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .ga
     0 0 110px -18px rgba(67,224,255,.46),
     inset 0 1px 0 var(--surface-highlight),
     inset 0 -1px 0 rgba(91,140,255,.2); }
-  & :is(.contacto-main .booking-card), &:is(.contacto-main .booking-card), & :is(.contacto-side .contact-card), &:is(.contacto-side .contact-card){ box-shadow:0 28px 56px -34px rgba(0,0,0,.6),
+  & :is(.contacto-side .contact-card), &:is(.contacto-side .contact-card){ box-shadow:0 28px 56px -34px rgba(0,0,0,.6),
     0 0 0 1px rgba(255,255,255,.04),
     inset 0 1px 0 rgba(255,255,255,.05),
     inset 0 -1px 0 rgba(91,140,255,.09); }
-  & :is(.booking-card-icon), &:is(.booking-card-icon){ border:1px solid rgba(67,224,255,.3); }
   & :is(.form-progress-dot.is-active), &:is(.form-progress-dot.is-active){ box-shadow:0 0 10px rgba(67,224,255,.75); }
   & :is(.form-success-icon), &:is(.form-success-icon){ border:1px solid rgba(52,231,164,.4); }
   & :is(.security-check-icon), &:is(.security-check-icon){ border:1px solid rgba(67,224,255,.3); }

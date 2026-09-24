@@ -42,7 +42,6 @@
     var backBtn = document.getElementById('form-back-btn');
     var nextBtn = document.getElementById('form-next-btn');
     var submitBtn = document.getElementById('form-submit-btn');
-    var formSuccessBookBtn = document.getElementById('form-success-book-btn');
     var currentStep = 1;
 
     /* EL ERROR SE DICE EN LA PÁGINA Y EN SU IDIOMA.
@@ -178,13 +177,6 @@
       formSuccess.setAttribute('tabindex', '-1');
       formSuccess.focus();
     };
-
-    if (formSuccessBookBtn) {
-      formSuccessBookBtn.addEventListener('click', function () {
-        var bookingBtn = document.getElementById('booking-cta-btn');
-        if (bookingBtn) bookingBtn.click();
-      });
-    }
 
     showStep(1, false);
   }

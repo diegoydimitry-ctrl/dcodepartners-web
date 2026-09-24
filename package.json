@@ -36,6 +36,8 @@
     "check:en-curso": "node scripts/build-en-curso.mjs --check",
     "build:webs": "node scripts/build-webs-ejemplo.mjs",
     "check:webs": "node scripts/build-webs-ejemplo.mjs --check",
+    "build:capturas": "node scripts/build-capturas.mjs",
+    "check:capturas": "node scripts/build-capturas.mjs --check",
     "check:que-hacemos": "node scripts/aplicar-que-hacemos.mjs --check",
     "build:fichas": "node scripts/build-fichas.mjs",
     "check:fichas": "node scripts/build-fichas.mjs --check",

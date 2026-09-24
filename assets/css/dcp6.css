@@ -831,10 +831,14 @@ body.v6 .v6-status, body.v6 .v6-cap{
    entero y algo menor que uno grande y serrado. */
 .v6-panel{
   position:absolute; left:53%; right:7vw; top:51%; bottom:auto; width:auto;
-  z-index:0; pointer-events:none; overflow:visible; padding-top:0;
+  z-index:0; pointer-events:none; overflow:visible; padding-top:22px;
   perspective:1350px; perspective-origin:8% 40%;
 }
-@media (min-width:1600px){ .v6-panel{ left:55%; right:9vw; top:50%; } }
+@media (min-width:1600px){ .v6-panel{ left:56%; right:9vw; top:50%; padding-top:54px; } }
+/* En pantallas muy anchas el titular crece y se acerca; el panel se aparta
+   y se le da más hueco por arriba. Sin esto, a 2560 el canto de la pantalla
+   pasaba por detrás de la última línea. */
+@media (min-width:2200px){ .v6-panel{ left:58%; right:13vw; top:49%; padding-top:78px; } }
 .v6-panel-f{
   margin:0; position:relative; transform-style:preserve-3d;
   transform:rotateY(-26deg) rotateX(6deg) rotateZ(-2deg);
@@ -986,7 +990,7 @@ body.v6 :is(.btn, .v6-acts, .v6-acts *, .v6-prueba, .v6-prueba li, .cfg-op, .chi
 /* La gráfica: apoyada delante, abajo a la izquierda, y saliendo del canto
    de la pantalla, que es lo que ata las dos piezas. */
 .v6-pieza--graf{
-  left:-19%; bottom:-19%; width:min(16vw, 232px);
+  left:-26%; bottom:7%; width:min(15.5vw, 226px);
   transform:rotateY(-17deg) rotateX(9deg) translateZ(78px);
   animation:v6-pz-a 13s ease-in-out infinite alternate;
 }
