@@ -22,11 +22,28 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const sharp = require('sharp');
 const { FICHAS } = await import('./contenido/fichas.mjs');
 const { MAQUETAS } = await import('./contenido/maquetas.mjs');
 
+
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const RAIZ_IMG = path.join(RAIZ, 'assets/img/webs');
 const CHECK = process.argv.includes('--check');
+/* El alto de cada maqueta larga sale del fichero, no de un número escrito a
+   mano: las cuatro miden distinto —entre 1.130 y 1.270 píxeles— y con un
+   alto inventado el navegador reserva una caja que no es la suya y la
+   ventana da un salto al cargar la imagen. */
+const MEDIDA = {};
+for (const m of MAQUETAS) {
+  const f = path.join(RAIZ_IMG, `${m.id}-largo.webp`);
+  if (!fs.existsSync(f)) continue;
+  const { width, height } = await sharp(f).metadata();
+  MEDIDA[m.id] = { w: width, h: height };
+}
+
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const destinoDe = (f, lang) => (lang === 'en' ? 'en/' : '') + 'servicios/' + f.slug + '.html';
 
@@ -88,7 +105,7 @@ function demo(f, lang, t) {
     const marcos = MAQUETAS.map((m) => `<figure class="fi-marco">
 <div class="fi-barra" aria-hidden="true"><i></i><i></i><i></i><span>${esc(m.id.replace('web-', ''))}.es</span></div>
 <div class="fi-viewport" tabindex="0" role="group" aria-label="${esc(m.nombre[lang])} — ${esc(t.marcoUno)}">
-<img src="/assets/img/webs/${m.id}-largo.webp" width="1000" height="1180" loading="lazy" decoding="async" alt="${esc(m.nombre[lang])} — ${esc(m.que[lang])}">
+<img src="/assets/img/webs/${m.id}-largo.webp" width="${(MEDIDA[m.id] || { w: 1000 }).w}" height="${(MEDIDA[m.id] || { h: 1180 }).h}" loading="lazy" decoding="async" alt="${esc(m.nombre[lang])} — ${esc(m.que[lang])}">
 </div>
 <span class="fi-pista" aria-hidden="true">${ABAJO}${esc(t.marcoUno)}</span>
 <figcaption><b>${esc(m.nombre[lang])}</b>${esc(m.que[lang])}</figcaption>
@@ -168,6 +185,12 @@ if (CHECK) {
       if (f.demo.tipo === 'webs' && (h.match(/class="fi-marco"/g) || []).length !== MAQUETAS.length)
         fallos.push(`${d}: ${MAQUETAS.length} maquetas en el marco y no las hay`);
       if (!h.includes(`/precios#${f.precio}`)) fallos.push(`${d}: sin enlace a su precio`);
+      if (f.demo.tipo === 'webs') for (const m of MAQUETAS) {
+        const med = MEDIDA[m.id];
+        if (!med) { fallos.push(`${d}: falta la captura larga de ${m.id}`); continue; }
+        if (!h.includes(`${m.id}-largo.webp" width="${med.w}" height="${med.h}"`))
+          fallos.push(`${d}: ${m.id} declara un alto que no es el del fichero (${med.w}×${med.h})`);
+      }
     }
     for (const v of VIEJAS) {
       const d = (lang === 'en' ? 'en/' : '') + 'servicios/' + v;
