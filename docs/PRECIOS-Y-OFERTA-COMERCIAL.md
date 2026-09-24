@@ -376,7 +376,8 @@ catalogo.json  ──build:catalogo──▶  precios.html · en/precios.html ·
 
 **`npm run qa:precios`** abre la web en 3 aparatos × 2 idiomas y comprueba que el
 menú marca `/precios` como página actual (la cáscara viene de Servicios y traía su
-«estás aquí» puesto), que no queda
+«estás aquí» puesto), que donde el generador pega una etiqueta a un dato el dato no
+trae la etiqueta dentro («Suelto sería 1.170 € **sueltos**»), que no queda
 **ninguna cifra comercial suelta fuera de `/precios`**, que el catálogo y los filtros
 responden, que la comparativa viene plegada y se abre, que sus enlaces son `https` +
 `_blank` + `noopener`, y que el configurador llega hasta el final y rellena el
@@ -384,8 +385,10 @@ formulario.
 
 Ambas se han **probado rompiéndolas**: poner un precio suelto en `servicios.html`,
 cambiar un precio de la página sin regenerarla, quitar `noopener`, dejar la comparativa
-abierta, quitar una URL y devolver el «estás aquí» a Servicios. Las seis se cazaron;
-luego se restauró todo.
+abierta, quitar una URL, devolver el «estás aquí» a Servicios y volver a meter
+«sueltos» dentro del dato. Las siete se cazaron; luego se restauró todo. La de la
+palabra repetida hubo que rehacerla: la primera versión comparaba palabras exactas y
+«suelto»/«sueltos» se le escapaba, que era justo el caso.
 
 ### Lo que se quitó de otras páginas
 

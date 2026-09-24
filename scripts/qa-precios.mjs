@@ -137,6 +137,25 @@ for (const [aparato, op] of APARATOS) {
         nuestras: d.querySelectorAll('.mercado-l .es-nuestro').length,
       };
     });
+    /* Donde el generador pega una etiqueta a un dato, el dato no puede
+       traer la etiqueta dentro: «Suelto sería 1.170 € sueltos» salía de
+       eso. Se mira solo ahí —etiqueta + dato—, no en la prosa, donde
+       repetir una palabra puede ser legítimo. Singular y plural cuentan
+       como la misma palabra, que es justo el caso que se escapó. */
+    const repes = await pg.evaluate(() => {
+      const raiz = (w) => w.toLowerCase().replace(/[.,;:·()€$]/g, '').replace(/s$/, '');
+      const malo = [];
+      for (const el of document.querySelectorAll('.pr-ahorro i, .pr-ahorro b, .pr-precio i')) {
+        const cuenta = {};
+        for (const w of el.textContent.split(/\s+/).map(raiz).filter((w) => w.length > 4)) {
+          cuenta[w] = (cuenta[w] || 0) + 1;
+          if (cuenta[w] > 1) malo.push(`«${el.textContent.trim().slice(0, 60)}» repite «${w}»`);
+        }
+      }
+      return [...new Set(malo)];
+    });
+    if (repes.length) fallos.push(`${donde}: ${repes.join(' | ')}`);
+
     /* El menú tiene que decir que estás en Precios. La cáscara sale de
        Servicios y traía su «estás aquí» puesto: el lector de pantalla
        anunciaba la página equivocada. */

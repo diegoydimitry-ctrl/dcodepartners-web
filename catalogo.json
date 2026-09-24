@@ -810,7 +810,7 @@
         "precio_detalle": "de implantación",
         "precio_mes": "29 €",
         "precio_mes_detalle": "al mes",
-        "suelto": "1.170 € sueltos",
+        "suelto": "1.170 €",
         "ahorro": "Ahorras 180 €"
       },
       "en": {
@@ -827,7 +827,7 @@
         "precio_detalle": "setup",
         "precio_mes": "€29",
         "precio_mes_detalle": "per month",
-        "suelto": "€1,170 separately",
+        "suelto": "€1,170",
         "ahorro": "You save €180"
       },
       "setup": 990,
@@ -858,7 +858,7 @@
         "precio_detalle": "de implantación",
         "precio_mes": "149 €",
         "precio_mes_detalle": "al mes",
-        "suelto": "2.640 € + 169 €/mes sueltos",
+        "suelto": "2.640 € + 169 €/mes",
         "ahorro": "Ahorras 350 € y 20 €/mes"
       },
       "en": {
@@ -875,7 +875,7 @@
         "precio_detalle": "setup",
         "precio_mes": "€149",
         "precio_mes_detalle": "per month",
-        "suelto": "€2,640 + €169/month separately",
+        "suelto": "€2,640 + €169/month",
         "ahorro": "You save €350 and €20/month"
       },
       "setup": 2290,
@@ -910,7 +910,7 @@
         "precio_detalle": "de implantación",
         "precio_mes": "Desde 390 €",
         "precio_mes_detalle": "al mes",
-        "suelto": "8.690 € + 459 €/mes sueltos",
+        "suelto": "8.690 € + 459 €/mes",
         "ahorro": "Ahorras 1.790 € y 69 €/mes"
       },
       "en": {
@@ -929,7 +929,7 @@
         "precio_detalle": "setup",
         "precio_mes": "From €390",
         "precio_mes_detalle": "per month",
-        "suelto": "€8,690 + €459/month separately",
+        "suelto": "€8,690 + €459/month",
         "ahorro": "You save €1,790 and €69/month"
       },
       "setup": 6900,
