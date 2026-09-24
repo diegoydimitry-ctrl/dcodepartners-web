@@ -305,105 +305,180 @@
     return pasos;
   }
 
+  /* ══════════════════ MICROESCENAS ══════════════════
+     Al elegir una opción NO sale un icono con patas a correr por la
+     pantalla. Le pasa algo AL BLOQUE que acabas de pulsar: se parte, sale
+     despedido, se cae, se deshoja o implosiona. La reacción nace del propio
+     bloque y de lo que has elegido —el dinero sale disparado, los papeles se
+     deshojan, el tiempo se cae, las conexiones se rompen, la gente se junta
+     hacia dentro—, así que no es la misma animación con otro dibujo: es otra
+     cosa cada vez.
+
+     Cómo funciona: se clona el bloque en la capa fija, en su sitio exacto y
+     a su tamaño, y la escena ocurre sobre el clon. Así el repintado del paso
+     —que borra el botón a los pocos milisegundos— no la corta. Entre 0,6 y
+     1,2 segundos, con transform y opacity, y nada que estorbe al ratón. */
+
+  /* Qué le pasa a cada cosa. La familia manda sobre el icono: lo que se
+     elige decide la reacción física que tiene sentido. */
+  var REACCION = {
+    dinero: 'expulsa', cobros: 'expulsa', cuotas: 'expulsa', carro: 'expulsa',
+    ecommerce: 'expulsa', pedidos: 'expulsa', compras: 'expulsa', finance: 'expulsa',
+    papel: 'deshoja', docs: 'deshoja', albaranes: 'deshoja', partes: 'deshoja',
+    impuestos: 'deshoja', seguros: 'deshoja', propuestas: 'deshoja', asesoria: 'deshoja',
+    reloj: 'cae', calendario: 'cae', citas: 'cae', horas: 'cae', visitas: 'cae',
+    reservas: 'cae', recordar: 'cae', planifica: 'cae', restaurante: 'cae', clinica: 'cae',
+    enchufe: 'parte', engranaje: 'parte', integra: 'parte', conectar: 'parte',
+    auto: 'parte', repetido: 'parte', portales: 'parte', industria: 'parte', llave: 'parte',
+    gente: 'implosiona', clientes: 'implosiona', altas: 'implosiona', chat: 'implosiona',
+    agente: 'implosiona', atencion: 'implosiona', fuera: 'implosiona', whatsapp: 'implosiona',
+  };
+  var FAMILIAS = ['parte', 'expulsa', 'cae', 'deshoja', 'implosiona'];
+  /* Lo que no esté en la tabla reparte por su nombre, no al azar: la misma
+     opción hace siempre lo mismo, que es lo que la vuelve memorable. */
+  function reaccionDe(id, paso) {
+    if (REACCION[id]) return REACCION[id];
+    var n = 0, t = String(id || paso);
+    for (var k = 0; k < t.length; k++) n = (n * 31 + t.charCodeAt(k)) >>> 0;
+    return FAMILIAS[n % FAMILIAS.length];
+  }
+
+  /* El clon: mismo sitio, mismo tamaño, misma pinta, pero suelto en la capa
+     fija y sin poder recibir un clic. */
+  function clona(tarjeta, r) {
+    var c = tarjeta.cloneNode(true);
+    c.className = tarjeta.className + ' cfg-esc';
+    c.removeAttribute('id'); c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1;
+    c.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width +
+                      'px;height:' + r.height + 'px;';
+    capa().appendChild(c);
+    return c;
+  }
+  function quita() {
+    var c = capa();
+    while (c.firstChild) c.removeChild(c.firstChild);
+    hayBicho = false;
+  }
+  function trozo(clase, r, estilo) {
+    var t = el('i', clase);
+    t.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width +
+                      'px;height:' + r.height + 'px;' + (estilo || '');
+    capa().appendChild(t);
+    return t;
+  }
+
+  var ESCENAS = {
+    /* SE PARTE. Una grieta cruza el bloque, las dos mitades se abren un
+       poco, escapa la luz de dentro y caen tres astillas. */
+    parte: function (tarjeta, r) {
+      var a = clona(tarjeta, r), b = clona(tarjeta, r);
+      var q = 42 + Math.random() * 16;
+      a.style.clipPath = 'polygon(0 0, ' + q + '% 0, ' + (q - 9) + '% 34%, ' + (q + 7) + '% 62%, ' + (q - 4) + '% 100%, 0 100%)';
+      b.style.clipPath = 'polygon(' + q + '% 0, 100% 0, 100% 100%, ' + (q - 4) + '% 100%, ' + (q + 7) + '% 62%, ' + (q - 9) + '% 34%)';
+      var luz = trozo('cfg-luz', r);
+      luz.style.left = (r.left + r.width * q / 100 - 2) + 'px';
+      luz.style.width = '4px';
+      luz.animate([{ opacity: 0, transform: 'scaleY(.2)' }, { opacity: 1, transform: 'scaleY(1)', offset: .25 }, { opacity: 0 }],
+        { duration: 620, easing: 'ease-out' });
+      a.animate([{ transform: 'none' }, { transform: 'translate(-16px,6px) rotate(-3.2deg)' }],
+        { duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)', fill: 'forwards' });
+      b.animate([{ transform: 'none' }, { transform: 'translate(18px,9px) rotate(3.6deg)' }],
+        { duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)', fill: 'forwards' });
+      for (var i = 0; i < 3; i++) (function (i) {
+        var s = trozo('cfg-astilla', { left: r.left + r.width * (q / 100) - 6, top: r.top + 18 + i * (r.height / 3.4), width: 11 + i * 3, height: 7 + i * 2 });
+        s.animate([{ transform: 'none', opacity: 1 },
+                   { transform: 'translate(' + (i % 2 ? 26 : -24) + 'px,' + (54 + i * 26) + 'px) rotate(' + (i % 2 ? 140 : -120) + 'deg)', opacity: 0 }],
+          { duration: 760 + i * 90, easing: 'cubic-bezier(.35,.05,.6,1)', fill: 'forwards' });
+      })(i);
+      var f = a.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 560, fill: 'forwards' });
+      b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 560, fill: 'forwards' });
+      return f.finished;
+    },
+
+    /* SALE DESPEDIDO. Algo lo golpea por la izquierda: derrapa, se levanta
+       de un lado y se va de la pantalla. */
+    expulsa: function (tarjeta, r) {
+      var c = clona(tarjeta, r);
+      var golpe = trozo('cfg-golpe', { left: r.left - 26, top: r.top + r.height / 2 - 3, width: 26, height: 6 });
+      golpe.animate([{ transform: 'translateX(-30px)', opacity: 0 }, { transform: 'translateX(6px)', opacity: 1, offset: .4 }, { transform: 'translateX(14px)', opacity: 0 }],
+        { duration: 300, easing: 'cubic-bezier(.2,.9,.3,1)' });
+      var a = c.animate([
+        { transform: 'none' },
+        { transform: 'translateX(-7px) skewX(4deg) scaleX(.94)', offset: .14 },
+        { transform: 'translateX(140px) rotate(5deg) skewX(-3deg)', offset: .5 },
+        { transform: 'translateX(' + (window.innerWidth - r.left + 80) + 'px) translateY(44px) rotate(16deg)', opacity: .1 },
+      ], { duration: 820, easing: 'cubic-bezier(.32,.02,.22,1)', fill: 'forwards' });
+      for (var i = 0; i < 4; i++) polvo(r.left + 10 + i * 16, r.top + r.height - 3, 'chispa');
+      return a.finished;
+    },
+
+    /* SE CAE. Pierde el apoyo por un lado, bascula y se va hacia abajo
+       ganando velocidad. */
+    cae: function (tarjeta, r) {
+      var c = clona(tarjeta, r);
+      c.style.transformOrigin = '18% 100%';
+      var a = c.animate([
+        { transform: 'none' },
+        { transform: 'rotate(-2deg) translateY(-6px)', offset: .12 },
+        { transform: 'rotate(9deg) translateY(26px)', offset: .36 },
+        { transform: 'rotate(26deg) translateY(' + (window.innerHeight - r.top + 60) + 'px)', opacity: .15 },
+      ], { duration: 900, easing: 'cubic-bezier(.5,0,.85,.6)', fill: 'forwards' });
+      window.setTimeout(function () {
+        for (var i = 0; i < 5; i++) polvo(r.left + 12 + i * (r.width / 5), r.top + r.height, 'polvo');
+      }, 320);
+      return a.finished;
+    },
+
+    /* SE DESHOJA. Se separa en cuatro láminas que se abanican y se apagan
+       una detrás de otra. */
+    deshoja: function (tarjeta, r) {
+      var n = 4, ult = null;
+      for (var i = 0; i < n; i++) (function (i) {
+        var h = clona(tarjeta, r);
+        h.style.clipPath = 'inset(' + (i * 100 / n) + '% 0 ' + ((n - 1 - i) * 100 / n) + '% 0)';
+        var a = h.animate([
+          { transform: 'none', opacity: 1 },
+          { transform: 'translate(' + (i - 1.5) * 26 + 'px,' + (-8 - i * 9) + 'px) rotate(' + ((i - 1.5) * 4.5).toFixed(1) + 'deg)', opacity: 1, offset: .45 },
+          { transform: 'translate(' + (i - 1.5) * 54 + 'px,' + (-30 - i * 22) + 'px) rotate(' + ((i - 1.5) * 10).toFixed(1) + 'deg)', opacity: 0 },
+        ], { duration: 760, delay: i * 70, easing: 'cubic-bezier(.25,.8,.3,1)', fill: 'forwards' });
+        if (i === n - 1) ult = a;
+      })(i);
+      return ult ? ult.finished : Promise.resolve();
+    },
+
+    /* IMPLOSIONA. Se junta hacia su centro y en su sitio queda una onda que
+       se expande y se apaga. */
+    implosiona: function (tarjeta, r) {
+      var c = clona(tarjeta, r);
+      var a = c.animate([
+        { transform: 'none', filter: 'blur(0)', opacity: 1 },
+        { transform: 'scale(1.045)', offset: .18 },
+        { transform: 'scale(.22) rotate(-6deg)', filter: 'blur(6px)', opacity: 0 },
+      ], { duration: 640, easing: 'cubic-bezier(.6,-.2,.3,1)', fill: 'forwards' });
+      var onda = trozo('cfg-onda', { left: r.left + r.width / 2 - 14, top: r.top + r.height / 2 - 14, width: 28, height: 28 });
+      onda.animate([{ transform: 'scale(.4)', opacity: .85 }, { transform: 'scale(' + (r.width / 14).toFixed(1) + ')', opacity: 0 }],
+        { duration: 760, delay: 140, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
+      return a.finished;
+    },
+  };
+
   function corre(id, paso) {
     if (QUIETO.matches || hayBicho) return;
-    var ico = ICONOS[id] || ICONOS[POR_PASO[paso] || 'lupa'];
-    if (!ico) return;
     var tarjeta = ultimaTarjeta;
-    if (!tarjeta) return;
-    hayBicho = true;
-
+    if (!tarjeta || !tarjeta.getBoundingClientRect) return;
     var r = tarjeta.getBoundingClientRect();
-    var ALTO = TACTIL ? 62 : 84;
-
-    /* ── 1 · la tapa se abre ─────────────────────────────────────────
-       La franja de luz NO va sobre la tarjeta: al elegir se repinta el paso
-       entero y el botón deja de existir a los pocos milisegundos, así que
-       una clase puesta en él se perdía antes de verse. Va en la pista, a la
-       altura de su borde de arriba, y se queda hasta que termina. */
-    var tapa = el('i', 'cfg-tapa');
-    tapa.style.left = (r.left + r.width * 0.08) + 'px';
-    tapa.style.top = r.top + 'px';
-    tapa.style.width = (r.width * 0.84) + 'px';
-    capa().appendChild(tapa);
-    window.setTimeout(function () { if (tapa.parentNode) tapa.parentNode.removeChild(tapa); }, 900);
-
-    /* ── 2 · asoma por detrás del borde de arriba ──────────────────── */
-    var ojo = el('div', 'cfg-ojo');
-    ojo.style.left = (r.left + r.width / 2 - ALTO / 2) + 'px';
-    ojo.style.top = (r.top - ALTO - 6) + 'px';
-    ojo.style.width = ALTO + 'px';
-    ojo.style.height = (ALTO + 8) + 'px';
-    var bicho = el('i', 'cfg-bicho');
-    bicho.style.width = ALTO + 'px'; bicho.style.height = ALTO + 'px';
-    bicho.innerHTML = ico.svg;
-    ojo.appendChild(bicho);
-    capa().appendChild(ojo);
-
-    var fin = function () {
-      [ojo, bicho].forEach(function (n) { if (n && n.parentNode) n.parentNode.removeChild(n); });
-      hayBicho = false;
-    };
-    var seguro = window.setTimeout(fin, 7000);
-
-    var asoma = bicho.animate([
-      { transform: 'translateY(' + (ALTO + 10) + 'px) scaleY(.82)' },
-      { transform: 'translateY(-6px) scaleY(1.06)', offset: .62 },
-      { transform: 'translateY(0) scaleY(1)' },
-    ], { duration: 400, easing: 'cubic-bezier(.2,1.1,.3,1)', fill: 'both' });
-
-    asoma.finished.then(function () {
-      /* mira a un lado y a otro */
-      return bicho.animate([
-        { transform: 'rotate(0deg)' }, { transform: 'rotate(-13deg)', offset: .3 },
-        { transform: 'rotate(11deg)', offset: .68 }, { transform: 'rotate(0deg)' },
-      ], { duration: 340, easing: 'ease-in-out', fill: 'both' }).finished;
-    }).then(function () {
-      /* ── 3 · le salen las patitas ────────────────────────────────── */
-      bicho.classList.add('es-patas');
-      return new Promise(function (ok) { window.setTimeout(ok, 260); });
-    }).then(function () {
-      /* ── 4 · fuera del escondite y a correr ──────────────────────── */
-      var cx = r.left + r.width / 2 - ALTO / 2;
-      var cy = r.top - ALTO - 6;
-      ojo.parentNode.removeChild(ojo);
-      bicho.style.left = cx + 'px'; bicho.style.top = cy + 'px';
-      bicho.classList.add('es-suelto', 'es-corriendo');
-      capa().appendChild(bicho);
-
-      var pasos = ruta(cx, cy, id);
-      var rastro = pasos.rastro;
-      var x = cx, y = cy;
-      var cadena = Promise.resolve();
-      pasos.forEach(function (p) {
-        cadena = cadena.then(function () {
-          var dx = p.x - x, dy = p.y - y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          var ms = p.salto ? 620 : Math.max(420, Math.min(1500, dist * 1.9));
-          /* migas de polvo por donde pisa */
-          var pisadas = window.setInterval(function () {
-            var b = bicho.getBoundingClientRect();
-            polvo(b.left + b.width / 2, b.top + b.height - 4, rastro);
-          }, rastro === 'estela' ? 70 : 120);
-          var a = bicho.animate([
-            { transform: 'translate(0,0) scaleX(' + p.dir + ')' },
-            { transform: 'translate(' + dx + 'px,' + (dy - (p.salto ? 0 : 26)) + 'px) scaleX(' + p.dir + ')', offset: .5 },
-            { transform: 'translate(' + dx + 'px,' + dy + 'px) scaleX(' + p.dir + ')' },
-          ], { duration: ms, easing: p.salto ? 'cubic-bezier(.3,-.3,.6,1)' : 'linear', fill: 'both' });
-          return a.finished.then(function () {
-            window.clearInterval(pisadas);
-            a.cancel();
-            x = p.x; y = p.y;
-            bicho.style.left = x + 'px'; bicho.style.top = y + 'px';
-            bicho.style.transform = 'scaleX(' + p.dir + ')';
-          });
-        });
-      });
-      return cadena;
-    }).then(function () {
-      window.clearTimeout(seguro); fin();
-    }).catch(function () { window.clearTimeout(seguro); fin(); });
+    if (!r.width || !r.height) return;
+    hayBicho = true;
+    quita();
+    capa().setAttribute('data-escena', reaccionDe(id, paso));
+    var seguro = window.setTimeout(quita, 2600);
+    var fin = (ESCENAS[reaccionDe(id, paso)] || ESCENAS.parte)(tarjeta, r);
+    Promise.resolve(fin).then(function () {
+      window.clearTimeout(seguro);
+      window.setTimeout(quita, 120);
+    }).catch(function () { window.clearTimeout(seguro); quita(); });
   }
+
 
   function late(nodo) {
     if (QUIETO.matches || !nodo) return;

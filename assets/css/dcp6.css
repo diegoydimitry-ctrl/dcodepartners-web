@@ -823,60 +823,77 @@ body.v6 .v6-status, body.v6 .v6-cap{
 /* Se ancla por los DOS lados: así el borde izquierdo nunca entra en la
    columna del titular, mida lo que mida la ventana. Con «width» fijo, a
    1280 se metía debajo de «puede hacerlo un sistema». */
-/* LA PANTALLA DE LA PORTADA, COMO UN OBJETO.
-   Antes llevaba una máscara que la desvanecía hacia la izquierda, y la
-   máscara era el problema: dejaba la barra lateral de Finance a medio
-   borrar —esos recuadros oscuros flotando— y todo el borde emborronado.
-   Ahora no se difumina nada: la pantalla está entera, con su marco, su
-   canto y su sombra, y se aparta del titular por posición, no por borrado.
-   El recorte de la caja sigue ahí por una sola razón: el panel se sale por
-   la derecha a propósito y sin él saldría barra horizontal. */
+/* LA PANTALLA DE LA PORTADA: UNA ESCENA DE PRODUCTO, NO UNA CAPTURA.
+   Una captura girada y recortada por los bordes se lee como una imagen
+   pegada encima de la composición. Metida en su ventana —barra, semáforo,
+   dirección, bisel— se lee como lo que es: el producto, abierto. Y ahí el
+   giro deja de ser un efecto y pasa a ser perspectiva. */
 .v6-panel{
-  position:absolute; left:50%; right:-5vw; top:48%; bottom:-18%; width:auto;
+  position:absolute; left:50%; right:-4vw; top:47%; bottom:-20%; width:auto;
   z-index:0; pointer-events:none; overflow:hidden; padding-top:58px;
-  perspective:1150px; perspective-origin:0% 34%;
+  perspective:1250px; perspective-origin:6% 30%;
 }
-@media (min-width:1600px){ .v6-panel{ left:54%; top:50%; } }
-/* Tres capas y nada más: el canto que le da espesor, la pantalla y un
-   brillo de cristal muy leve. El giro es el que tendría en la mano. */
+@media (min-width:1600px){ .v6-panel{ left:53%; top:49%; } }
 .v6-panel-f{
   margin:0; position:relative; transform-style:preserve-3d;
-  transform:rotateY(-28deg) rotateX(7deg) rotateZ(-2.5deg);
+  transform:rotateY(-26deg) rotateX(6deg) rotateZ(-2deg);
   transform-origin:left center; will-change:transform;
-  animation:v6-flota 15s ease-in-out infinite alternate;
-}
-.v6-panel img{
-  display:block; width:100%; height:auto; border-radius:14px;
-  border:1px solid color-mix(in srgb, var(--blue, #5b8cff) 34%, transparent);
+  animation:v6-flota 16s ease-in-out infinite alternate;
+  /* El bisel: el marco de la ventana, no un borde de imagen. */
+  padding:0; border-radius:16px; overflow:hidden;
+  border:1px solid color-mix(in srgb, var(--ink, #edf1f8) 14%, transparent);
+  background:linear-gradient(180deg,
+    color-mix(in srgb, var(--ink, #edf1f8) 9%, transparent),
+    color-mix(in srgb, var(--ink, #0b0f19) 4%, transparent));
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ink, #edf1f8) 22%, transparent),
-    -18px 26px 60px -30px rgba(3,7,22,.9),
-    0 70px 130px -55px rgba(3,7,22,.95),
-    0 30px 80px -45px color-mix(in srgb, var(--blue, #5b8cff) 60%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--ink, #edf1f8) 26%, transparent),
+    -22px 30px 70px -34px rgba(3,7,22,.92),
+    0 80px 150px -60px rgba(3,7,22,.96),
+    0 34px 90px -50px color-mix(in srgb, var(--blue, #5b8cff) 55%, transparent);
 }
-/* El canto: la losa de detrás, desplazada en Z. Es lo que hace que se vea
-   el grosor por el lado izquierdo, que es el que da a quien mira. */
+/* La barra de la ventana. */
+.v6-barra{
+  display:flex; align-items:center; gap:10px; padding:9px 14px;
+  background:linear-gradient(180deg, rgba(28,36,62,.96), rgba(17,23,42,.96));
+  border-bottom:1px solid rgba(150,174,245,.14);
+}
+.v6-puntos{ display:flex; gap:6px; }
+.v6-puntos i{ width:9px; height:9px; border-radius:50%; background:rgba(150,174,245,.32); }
+.v6-puntos i:first-child{ background:#ff6b62; }
+.v6-puntos i:nth-child(2){ background:#f5a524; }
+.v6-puntos i:nth-child(3){ background:#35e0a1; }
+.v6-url{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.02em;
+  color:rgba(200,212,240,.66); padding:3px 12px; border-radius:6px;
+  background:rgba(8,12,24,.6); border:1px solid rgba(150,174,245,.1);
+}
+html[data-theme="light"] .v6-barra{
+  background:linear-gradient(180deg, #f4f7fd, #e8edf8); border-bottom-color:rgba(36,52,104,.12);
+}
+html[data-theme="light"] .v6-url{ color:#4a5570; background:#fff; border-color:rgba(36,52,104,.1); }
+.v6-pantalla{ position:relative; display:block; }
+.v6-panel img{ display:block; width:100%; height:auto; border:0; border-radius:0; box-shadow:none; }
+/* El canto: el grosor del aparato, por detrás y desplazado en Z. */
 .v6-panel-f::before{
-  content:''; position:absolute; inset:0; border-radius:14px; pointer-events:none;
-  transform:translateZ(-34px) translateX(-5px) scale(1.01);
+  content:''; position:absolute; inset:0; border-radius:16px; pointer-events:none;
+  transform:translateZ(-30px) translateX(-6px) scale(1.012);
   background:linear-gradient(115deg,
-    color-mix(in srgb, var(--blue, #5b8cff) 42%, transparent),
-    color-mix(in srgb, var(--violet, #9b6bff) 26%, transparent) 55%,
-    color-mix(in srgb, var(--ink, #0b0f19) 55%, transparent));
-  opacity:.8;
+    color-mix(in srgb, var(--blue, #5b8cff) 40%, transparent),
+    color-mix(in srgb, var(--violet, #9b6bff) 24%, transparent) 55%,
+    color-mix(in srgb, var(--ink, #0b0f19) 60%, transparent));
+  opacity:.75;
 }
-/* Y el reflejo del cristal, en diagonal y flojo: que se note que hay una
-   superficie, no que tape lo que pone en la pantalla. */
+/* El reflejo del cristal, flojo: que haya superficie sin tapar el contenido. */
 .v6-panel-f::after{
-  content:''; position:absolute; inset:0; border-radius:14px; pointer-events:none;
+  content:''; position:absolute; inset:0; border-radius:16px; pointer-events:none;
   background:linear-gradient(104deg,
-    color-mix(in srgb, #fff 7%, transparent) 0%, transparent 26%,
-    transparent 74%, color-mix(in srgb, var(--blue, #5b8cff) 12%, transparent) 100%);
-  mix-blend-mode:screen; opacity:.6;
+    color-mix(in srgb, #fff 8%, transparent) 0%, transparent 24%,
+    transparent 76%, color-mix(in srgb, var(--blue, #5b8cff) 11%, transparent) 100%);
+  mix-blend-mode:screen; opacity:.55;
 }
 /* El pie va FUERA de la figura: dentro se iba con ella al girar. */
 .v6-panel-pie{
-  position:absolute; left:2%; top:14px; margin:0;
+  position:absolute; left:7%; top:14px; margin:0;
   display:flex; flex-direction:column; gap:3px;
   font-size:.76rem; line-height:1.4; color:var(--stone-soft, #8c95aa);
 }
@@ -884,9 +901,10 @@ body.v6 .v6-status, body.v6 .v6-cap{
   font-family:var(--mono); font-size:.6875rem; letter-spacing:.14em;
   text-transform:uppercase; color:var(--cyan, #43e0ff);
 }
+
 @keyframes v6-flota{
-  from{ transform:rotateY(-28deg) rotateX(7deg) rotateZ(-2.5deg) translateY(0); }
-  to  { transform:rotateY(-24deg) rotateX(5deg) rotateZ(-1.2deg) translateY(-13px); }
+  from{ transform:rotateY(-26deg) rotateX(6deg) rotateZ(-2deg) translateY(0); }
+  to  { transform:rotateY(-23deg) rotateX(4.5deg) rotateZ(-1deg) translateY(-12px); }
 }
 
 /* El texto va por delante del panel, siempre. */
@@ -907,3 +925,53 @@ body.v6 .v6-status, body.v6 .v6-cap{
 .v6-panel .es-claro{ display:none; }
 html[data-theme="light"] .v6-panel .es-oscuro{ display:none; }
 html[data-theme="light"] .v6-panel .es-claro{ display:block; }
+
+/* ═══════════ NINGÚN VELO ENCIMA DE NADA ═══════════
+   Todos estos ::before eran óvalos oscuros pintados detrás del texto para
+   que se leyera sobre el campo. Sangran un 22-26 % por fuera de su bloque,
+   así que en la portada caían encima de la pantalla de Finance: las zonas
+   negras del panel eran esto, capa sobre capa.
+
+   Se van los nueve. El texto de esta portada YA lleva su propia sombra
+   —está en cada regla de arriba—, así que la lectura no depende de ellos;
+   se refuerza un punto más abajo y asunto cerrado. Un halo sigue el
+   contorno de la letra: no tiene borde, no se ve, y sobre todo no tapa lo
+   que hay detrás. */
+.v6-veil::before, .v6-veil--mid::before, .v6-veil--right::before,
+.v6-hero::before, .v6-status::after, .v6-say::after,
+.v6-step-in::before, .v6-river-note::before,
+.v6-end .v6-veil--mid::before, body.v6 .v6-river::before,
+body.v6 .v6-kicker::after{
+  display:none !important;
+}
+
+/* El refuerzo: sombra más cerrada y más opaca, para que ninguna letra
+   dependa de un velo que ya no existe. El degradado no la lleva (ahí la
+   sombra saldría detrás de la caja, no de las letras) y se apaña con su
+   propio brillo. */
+body.v6 :is(.v6-lede, .v6-kicker, .v6-status, .v6-say, .v6-sys, .v6-cap,
+            .v6-river-note, .v6-step-in, .v6-pacto, .v6-panel-pie, .v6-prueba li){
+  text-shadow:
+    0 1px 2px rgba(3,5,12,.95),
+    0 0 12px rgba(3,5,12,.9),
+    0 0 30px rgba(3,5,12,.75);
+}
+body.v6 :is(.v6-grad, .grad){ text-shadow:none; }
+
+/* LA MARCA, PRESENTE PERO SIN COMPETIR.
+   La portada enseña el producto abierto en su ventana; la identidad la pone
+   la marca de D-Code, grande y muy tenue, detrás del titular. Es la misma
+   geometría del logo de la cabecera —no un símbolo inventado para la
+   ocasión—, a un 6 % de opacidad: se nota que está, no se lee como un
+   segundo logo compitiendo con el de arriba. */
+.v6-marca{
+  position:absolute; left:-4.5vw; top:12%; width:min(46vw, 620px); height:auto;
+  z-index:0; pointer-events:none; color:var(--ink, #edf1f8);
+  opacity:.055; filter:blur(.4px);
+}
+.v6-marca-p{ fill:var(--blue, #5b8cff); opacity:.9; }
+@media (max-width:1100px){ .v6-marca{ left:-14vw; top:8%; width:74vw; opacity:.045; } }
+@media (prefers-reduced-motion:no-preference){
+  .v6-marca{ animation:v6-marca-late 18s ease-in-out infinite alternate; }
+}
+@keyframes v6-marca-late{ from{ opacity:.045; } to{ opacity:.08; } }

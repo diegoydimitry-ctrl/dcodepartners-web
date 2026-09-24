@@ -198,29 +198,23 @@ for (const [aparato, op] of APARATOS) {
     /* Recorrido completo: sector → objetivos → gente → piezas → adaptación */
     const elegir = async (sel, n) => { await pg.click(`#configurador ${sel} >> nth=${n}`); };
     await elegir('.cfg-op', 2);
-    /* Elegir tiene que NOTARSE, y de una manera concreta: se abre la tarjeta,
-       asoma la figura por detrás, le salen patas y se va corriendo. Son
-       cuatro cosas encadenadas con promesas y basta que una se rompa para
-       que no pase nada; por eso se comprueban las cuatro. */
-    const asoma = await pg.evaluate(() => ({
-      tapa: !!document.querySelector('.cfg-tapa'),
-      bicho: !!document.querySelector('.cfg-bicho'),
-      escondido: !!document.querySelector('.cfg-ojo .cfg-bicho'),
-      patas: document.querySelectorAll('.cfg-bicho .cfg-pies path').length,
+    /* Elegir tiene que NOTARSE, y le tiene que pasar AL BLOQUE: se clona
+       en la capa fija y ahí se parte, sale despedido, se cae, se deshoja o
+       implosiona. Se comprueban las tres cosas que pueden romperse: que
+       arranque una escena, que haya clon, y que a los dos segundos no quede
+       ni rastro (un clon olvidado tapa la página entera). Y que no hayan
+       vuelto las figuras con patas, que es de donde venimos. */
+    const escena = await pg.evaluate(() => ({
+      cual: document.querySelector('.cfg-pista') && document.querySelector('.cfg-pista').getAttribute('data-escena'),
+      clones: document.querySelectorAll('.cfg-esc').length,
+      patas: document.querySelectorAll('.cfg-bicho, .cfg-pies').length,
     }));
-    if (!asoma.tapa) fallos.push(`${donde}: al elegir no se abre la tarjeta`);
-    if (!asoma.bicho) fallos.push(`${donde}: al elegir no asoma ninguna figura`);
-    if (!asoma.escondido) fallos.push(`${donde}: la figura no sale de detrás de la tarjeta`);
-    if (asoma.patas !== 2) fallos.push(`${donde}: la figura tiene ${asoma.patas} patas y tiene que tener 2`);
-    /* Asomar, mirar y echar las patas son 400 + 340 + 260 ms; a partir de
-       ahí corre. Se espera un poco más que eso a propósito. */
-    await pg.waitForTimeout(1250);
-    const corriendo = await pg.evaluate(() => {
-      const b = document.querySelector('.cfg-bicho');
-      return { suelto: !!b && b.classList.contains('es-corriendo'), polvo: document.querySelectorAll('.cfg-polvo').length };
-    });
-    if (!corriendo.suelto) fallos.push(`${donde}: la figura no echa a correr`);
-    if (!corriendo.polvo) fallos.push(`${donde}: la figura corre sin levantar polvo`);
+    if (!escena.cual) fallos.push(`${donde}: al elegir no arranca ninguna escena`);
+    if (!escena.clones) fallos.push(`${donde}: la escena no clona el bloque pulsado`);
+    if (escena.patas) fallos.push(`${donde}: han vuelto las figuras con patas`);
+    await pg.waitForTimeout(1900);
+    const restos = await pg.evaluate(() => document.querySelectorAll('.cfg-esc, .cfg-astilla, .cfg-onda, .cfg-golpe').length);
+    if (restos) fallos.push(`${donde}: la escena deja ${restos} resto(s) en pantalla`);
     await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-chip', 0); await elegir('.cfg-chip', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);
     await elegir('.cfg-op', 1); await pg.click('.cfg-seguir'); await pg.waitForTimeout(180);

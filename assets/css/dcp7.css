@@ -1579,3 +1579,48 @@ html[data-theme="light"] .chat-aviso::after{
   .chat-aviso::after{ right:auto; left:12px; bottom:-5px; }
 }
 @media (prefers-reduced-motion:reduce){ .chat-aviso{ display:none; } }
+
+/* ═══════════ EL ASISTENTE, A TAMAÑO DE CONVERSACIÓN ═══════════
+   Estaba a 0,86 rem en una ventana de 368 px: una consola técnica, no una
+   conversación. En un ratón y en una tableta hay sitio de sobra, así que la
+   ventana crece y el texto con ella; en un teléfono se recoge, pero sin
+   bajar de 15 px, que es donde se empieza a forzar la vista. */
+.chat-window{
+  width:min(430px, calc(100vw - 40px));
+  height:min(620px, calc(100dvh - 140px));
+}
+.chat-messages{ padding:20px; gap:14px; }
+.chat-msg{
+  max-width:88%; padding:13px 16px; border-radius:16px;
+  font-size:1rem; line-height:1.62; letter-spacing:-.003em;
+}
+.chat-msg.bot{ border-bottom-left-radius:5px; }
+.chat-msg.user{ border-bottom-right-radius:5px; }
+.chat-msg p + p{ margin-top:10px; }
+.chat-msg-note{ font-size:.86rem !important; }
+.chat-quick-replies{ gap:8px; padding:0 20px 4px; }
+.chat-quick-replies button{ font-size:.875rem; padding:10px 15px; }
+.chat-input-row{ padding:14px 16px 16px; gap:10px; }
+.chat-input-row input{ font-size:1rem; padding:13px 15px; border-radius:10px; }
+.chat-input-row button{ width:46px; height:46px; border-radius:10px; }
+.chat-window .window-title{ font-size:.8125rem; }
+
+/* Tableta: la ventana puede ser aún mayor, que hay pantalla. */
+@media (min-width:760px) and (max-width:1180px){
+  .chat-window{ width:min(470px, calc(100vw - 48px)); height:min(680px, calc(100dvh - 150px)); }
+  .chat-msg{ font-size:1.0625rem; line-height:1.64; }
+  .chat-input-row input{ font-size:1.0625rem; }
+}
+/* Teléfono: más compacto, pero nunca por debajo de 15 px. */
+@media (max-width:560px){
+  .chat-window{ width:calc(100vw - 28px); height:min(70dvh, calc(100dvh - 120px)); }
+  .chat-messages{ padding:16px; gap:11px; }
+  .chat-msg{ max-width:92%; padding:11px 14px; font-size:.9375rem; line-height:1.56; }
+  .chat-quick-replies{ padding:0 16px 4px; }
+  .chat-quick-replies button{ font-size:.8125rem; }
+  .chat-input-row{ padding:12px 14px 14px; }
+  .chat-input-row input{ font-size:1rem; }   /* 16 px: por debajo, iOS hace zoom al escribir */
+}
+/* Y el globo de aviso, a juego. */
+.chat-aviso{ font-size:.9375rem; padding:12px 17px; }
+@media (min-width:760px){ .chat-aviso{ font-size:1rem; max-width:min(19rem,54vw); } }

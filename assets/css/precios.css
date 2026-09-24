@@ -559,3 +559,43 @@
 @media (prefers-reduced-motion:reduce){
   .cfg-polvo.es-chispa, .cfg-polvo.es-estela{ animation:none; display:none; }
 }
+
+/* ═══════════ MICROESCENAS ═══════════
+   Lo que le pasa al bloque que acabas de pulsar. El clon vive en la capa
+   fija, con la pinta exacta del original, y la escena ocurre encima. Nada
+   de esto recibe el ratón: es respuesta, no interfaz. */
+.cfg-esc{
+  position:fixed; margin:0; pointer-events:none; z-index:1;
+  will-change:transform, opacity; backface-visibility:hidden;
+  box-shadow:0 30px 60px -34px rgba(0,0,0,.85);
+}
+/* La luz que escapa por la grieta. */
+.cfg-luz{
+  position:fixed; pointer-events:none; border-radius:3px;
+  background:linear-gradient(180deg, transparent, var(--v-a, #43e0ff), transparent);
+  box-shadow:0 0 22px 5px color-mix(in srgb, var(--v-a, #43e0ff) 55%, transparent);
+  transform-origin:50% 50%;
+}
+/* Las astillas: trozos de material, no confeti. */
+.cfg-astilla{
+  position:fixed; pointer-events:none; border-radius:2px;
+  background:linear-gradient(140deg,
+    color-mix(in srgb, var(--v-ink, #edf1f8) 26%, transparent),
+    color-mix(in srgb, var(--v-a, #43e0ff) 34%, transparent));
+  box-shadow:0 2px 8px -2px rgba(0,0,0,.6);
+}
+/* El golpe que lo expulsa: una barra de luz que entra y se va. */
+.cfg-golpe{
+  position:fixed; pointer-events:none; border-radius:3px;
+  background:linear-gradient(90deg, transparent, var(--v-b, #9b6bff));
+  box-shadow:0 0 18px 4px color-mix(in srgb, var(--v-b, #9b6bff) 50%, transparent);
+}
+/* La onda de la implosión. */
+.cfg-onda{
+  position:fixed; pointer-events:none; border-radius:50%;
+  border:2px solid color-mix(in srgb, var(--v-a, #43e0ff) 70%, transparent);
+  box-shadow:0 0 24px 2px color-mix(in srgb, var(--v-a, #43e0ff) 30%, transparent);
+}
+@media (prefers-reduced-motion:reduce){
+  .cfg-esc, .cfg-luz, .cfg-astilla, .cfg-golpe, .cfg-onda{ display:none; }
+}
