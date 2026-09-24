@@ -320,9 +320,14 @@ html[data-theme="light"] .v6-of-precio{ border-top:1px solid rgba(46,59,98,0.174
 html[data-theme="light"] .v6-of-precio b{ color:#090f1a; }
 html[data-theme="light"] .v6-of-precio i{ color:var(--txt-3,#4b5b7b); }
 html[data-theme="light"] .v6-of-aviso{ color:var(--txt-3,#4b5b7b); }
-html[data-theme="light"] .v6-panel img{ box-shadow:0 2px 0 color-mix(in srgb, var(--ink, #edf1f8) 12%, transparent),
-    0 90px 150px -60px rgba(20,30,64,0.288),
-    0 40px 90px -50px color-mix(in srgb, var(--blue, rgba(91,140,255,0.55)) 55%, transparent); }
+html[data-theme="light"] .v6-panel img{ box-shadow:inset 0 1px 0 color-mix(in srgb, var(--ink, #edf1f8) 22%, transparent),
+    -18px 26px 60px -30px rgba(20,30,64,0.27),
+    0 70px 130px -55px rgba(20,30,64,0.285),
+    0 30px 80px -45px color-mix(in srgb, var(--blue, rgba(91,140,255,0.55)) 60%, transparent); }
+html[data-theme="light"] .v6-panel-f::before{ background:linear-gradient(115deg,
+    color-mix(in srgb, var(--blue, #5b8cff) 42%, transparent),
+    color-mix(in srgb, var(--violet, #9b6bff) 26%, transparent) 55%,
+    color-mix(in srgb, var(--ink, #f3f6fb) 55%, transparent)); }
 html[data-theme="light"] .v6-panel-pie{ color:var(--stone-soft, #48505e); }
 html[data-theme="light"] .v6-panel-k{ color:var(--cyan, #0b6676); }
 
