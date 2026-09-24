@@ -1,0 +1,419 @@
+/* ============================================================================
+   D-CODE PARTNERS — PRECIOS
+   ----------------------------------------------------------------------------
+   Un catálogo, no una tabla. La decisión de diseño de fondo es que aquí no se
+   compara por columnas —eso obliga a leer en cruz y a inventarse filas que no
+   dicen nada— sino por FICHAS: cada cosa dice qué es, para quién, qué incluye
+   y qué cuesta, y se puede filtrar hasta que quedan dos o tres.
+
+   No hay tokens nuevos: todo sale de dcp5.css (--v-panel, --v-edge, --v-ink,
+   --v-a/b/c, --sp-air, --ease) y de styles.css (.btn, .eyebrow, .container).
+   El tema claro no necesita una línea: superficies.css ya voltea .rcard y
+   compañía, y aquí se usan las mismas variables.
+   ========================================================================= */
+
+/* ------------------------------------------------ el aviso de precios */
+.pr-iva{
+  margin-top:18px; max-width:62ch;
+  font-size:.86rem; line-height:1.6; color:var(--v-ink-3);
+  border-left:2px solid var(--v-edge); padding-left:14px;
+}
+
+/* --------------------------------------- cómo se contrata: hoy y mañana */
+.pr-como{
+  display:grid; gap:clamp(18px,3vw,34px);
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+}
+.pr-como-c{
+  padding:clamp(18px,2.4vw,26px);
+  border:1px solid var(--v-edge); border-radius:16px;
+  background:var(--v-panel);
+}
+.pr-como-c--futuro{ border-style:dashed; background:transparent; }
+.pr-pasos{ list-style:none; margin:16px 0 0; padding:0; display:grid; gap:10px; }
+.pr-pasos li{
+  display:flex; align-items:center; gap:12px;
+  font-size:.95rem; color:var(--v-ink);
+}
+.pr-como-c--futuro .pr-pasos li{ color:var(--v-ink-3); }
+.pr-paso-n{
+  flex:none; width:26px; height:26px; border-radius:50%;
+  display:grid; place-items:center;
+  font-family:var(--mono); font-size:.72rem;
+  border:1px solid var(--v-edge); color:var(--v-ink-2);
+}
+.pr-pasos--hoy .pr-paso-n{ border-color:color-mix(in srgb, var(--v-a) 55%, transparent); color:var(--v-a); }
+.pr-nota-grande{
+  margin:clamp(18px,3vw,28px) 0 0; max-width:70ch;
+  font-size:.95rem; line-height:1.66; color:var(--v-ink-2);
+}
+
+/* ------------------------------------------------------------ filtros */
+.pr-filtros{ margin:clamp(18px,3vw,30px) 0 clamp(22px,3vw,34px); }
+.pr-filtro-fila{ display:flex; flex-wrap:wrap; gap:8px; }
+.pr-chip{
+  appearance:none; cursor:pointer;
+  font:inherit; font-size:.82rem; line-height:1;
+  padding:9px 14px; border-radius:999px;
+  border:1px solid var(--v-edge); background:var(--v-panel); color:var(--v-ink-2);
+  transition:border-color .18s var(--ease), color .18s var(--ease), background .18s var(--ease);
+}
+.pr-chip:hover{ border-color:color-mix(in srgb, var(--v-a) 45%, transparent); color:var(--v-ink); }
+.pr-chip.is-on{
+  border-color:color-mix(in srgb, var(--v-a) 70%, transparent);
+  color:var(--v-ink); background:color-mix(in srgb, var(--v-a) 12%, var(--v-panel));
+}
+.pr-chip:focus-visible{ outline:2px solid var(--v-a); outline-offset:2px; }
+.pr-filtro-mas{ margin-top:12px; }
+.pr-filtro-mas > summary{
+  cursor:pointer; font-family:var(--mono); font-size:.74rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-ink-3); padding:6px 0;
+}
+.pr-filtro-mas > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; }
+.pr-filtro-bloque{ margin-top:14px; }
+.pr-filtro-t{
+  display:block; margin-bottom:8px;
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-ink-3);
+}
+.pr-vacio{
+  margin:0 0 24px; padding:18px 20px; border-radius:14px;
+  border:1px dashed var(--v-edge); color:var(--v-ink-2); font-size:.95rem;
+}
+
+/* ------------------------------------------------------------- grupos */
+.pr-grupo{ margin-top:clamp(30px,4.5vw,54px); }
+.pr-grupo[hidden]{ display:none; }
+.pr-grupo-h{ margin-bottom:clamp(14px,2vw,22px); }
+.pr-grupo-h h3{
+  margin:0; font-size:clamp(1.12rem,1.7vw,1.4rem); letter-spacing:-.02em; color:var(--v-ink);
+}
+.pr-grupo-h p{ margin:6px 0 0; font-size:.92rem; color:var(--v-ink-3); max-width:60ch; }
+
+/* ------------------------------------------------------------ fichas */
+.pr-rej{
+  display:grid; gap:clamp(14px,2vw,20px);
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+}
+.pr-rej--packs{ grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); }
+.pr-card{
+  display:flex; flex-direction:column;
+  padding:clamp(18px,2.2vw,24px);
+  border:1px solid var(--v-edge); border-radius:16px;
+  background:var(--v-panel);
+  transition:border-color .2s var(--ease), transform .2s var(--ease);
+}
+.pr-card[hidden]{ display:none; }
+.pr-card:hover{ border-color:color-mix(in srgb, var(--v-a) 40%, transparent); }
+.pr-card.es-dest{
+  border-color:color-mix(in srgb, var(--v-a) 42%, transparent);
+  background:linear-gradient(180deg, color-mix(in srgb, var(--v-a) 7%, var(--v-panel)), var(--v-panel) 58%);
+}
+.pr-head{ margin-bottom:12px; }
+.pr-estado{
+  display:inline-block; margin-bottom:10px;
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.13em; text-transform:uppercase;
+  padding:4px 9px; border-radius:999px; border:1px solid var(--v-edge); color:var(--v-ink-3);
+}
+.pr-estado--disponible{
+  border-color:color-mix(in srgb, var(--x-ok, #35e0a1) 45%, transparent);
+  color:var(--x-ok, #35e0a1);
+}
+.pr-estado--a-medida{
+  border-color:color-mix(in srgb, var(--v-b) 45%, transparent); color:var(--v-b);
+}
+.pr-estado--proximamente{
+  border-color:color-mix(in srgb, var(--x-warn, #f5a524) 45%, transparent);
+  color:var(--x-warn, #f5a524);
+}
+.pr-card h3{
+  margin:0; font-size:clamp(1.06rem,1.5vw,1.24rem); letter-spacing:-.02em; color:var(--v-ink);
+}
+.pr-para{ margin:5px 0 0; font-size:.8rem; color:var(--v-ink-3); }
+.pr-que{ margin:0 0 16px; font-size:.92rem; line-height:1.62; color:var(--v-ink-2); }
+
+.pr-precio{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px;
+  margin:0 0 14px; padding:14px 0 0; border-top:1px solid var(--v-edge-2);
+}
+.pr-uno, .pr-mes{ display:flex; flex-direction:column; gap:2px; }
+/* El «+» viaja con la mensualidad, no con el pago único: si la línea se parte
+   —«Desde 1.500 €» y «Desde 190 €/mes» no caben juntas— tiene que quedar
+   delante del segundo importe, no colgando del primero. */
+.pr-mes{ position:relative; padding-left:16px; }
+.pr-uno b, .pr-mes b{
+  font-size:clamp(1.24rem,2vw,1.55rem); letter-spacing:-.03em; color:var(--v-ink); line-height:1.05;
+}
+.pr-uno i, .pr-mes i{ font-style:normal; font-size:.76rem; color:var(--v-ink-3); }
+.pr-mas{
+  position:absolute; left:0; top:.28em;
+  font-style:normal; font-size:.95rem; color:var(--v-ink-3);
+}
+
+.pr-mas-info{ margin:0 0 14px; }
+.pr-mas-info > summary{
+  cursor:pointer; font-family:var(--mono); font-size:.72rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--v-ink-3); padding:4px 0;
+}
+.pr-mas-info > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; }
+.pr-mas-info[open] > summary{ color:var(--v-ink-2); }
+.pr-l{ list-style:none; margin:12px 0 0; padding:0; display:grid; gap:8px; }
+.pr-l li{
+  position:relative; padding-left:18px;
+  font-size:.88rem; line-height:1.55; color:var(--v-ink-2);
+}
+.pr-l li::before{
+  content:""; position:absolute; left:0; top:.6em;
+  width:6px; height:6px; border-radius:50%;
+  background:color-mix(in srgb, var(--v-a) 70%, transparent);
+}
+.pr-no{ margin:12px 0 0; font-size:.84rem; line-height:1.55; color:var(--v-ink-3); }
+.pr-no b{ color:var(--v-ink-2); font-weight:600; }
+.pr-nota{
+  margin:0 0 14px; font-size:.8rem; line-height:1.5; color:var(--v-ink-3);
+  border-left:2px solid var(--v-edge); padding-left:11px;
+}
+.pr-cta{ margin-top:auto; }
+
+/* -------------------------------------------------------------- packs */
+.pr-pack .pr-ahorro{
+  margin:0 0 14px; display:flex; flex-direction:column; gap:2px;
+}
+.pr-pack .pr-ahorro b{ font-size:.92rem; color:var(--x-ok, #35e0a1); }
+.pr-pack .pr-ahorro i{ font-style:normal; font-size:.78rem; color:var(--v-ink-3); }
+
+/* --------------------------------------------------------- pie de página */
+.pr-conf{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:clamp(14px,2.5vw,28px);
+  padding:clamp(20px,3vw,30px);
+  border:1px solid var(--v-edge); border-radius:18px; background:var(--v-panel);
+}
+.pr-conf h2{ margin:8px 0 0; max-width:46ch; }
+.pr-dudas{ margin:clamp(16px,2.5vw,24px) 0 0; font-size:.9rem; color:var(--v-ink-3); }
+.pr-dudas a{ color:var(--v-ink-2); }
+
+/* ------------------------------------------------------------- móvil */
+@media (max-width:760px){
+  .pr-rej, .pr-rej--packs{ grid-template-columns:1fr; }
+  .pr-como{ grid-template-columns:1fr; }
+  .pr-conf{ flex-direction:column; align-items:flex-start; }
+  .pr-filtro-fila{ gap:7px; }
+  .pr-chip{ padding:8px 12px; font-size:.8rem; }
+}
+
+/* Movimiento reducido: sin transiciones, todo lo demás igual. */
+@media (prefers-reduced-motion: reduce){
+  .pr-chip, .pr-card{ transition:none; }
+}
+
+/* ============================================================================
+   EL CONFIGURADOR
+   ----------------------------------------------------------------------------
+   Vive en /contacto, encima del formulario. Aquí se elige con el dedo: las
+   opciones son botones grandes, los objetivos son chips, y el resumen se va
+   viendo mientras se avanza. Nada de esto es decorado: es lo que hace que
+   rellenarlo no se sienta como rellenar quince campos.
+
+   En un móvil las tarjetas pasan a una columna y el pie del paso se queda
+   pegado abajo, para no tener que buscar «Continuar» al final de la lista.
+   ========================================================================= */
+.cfg{
+  border:1px solid var(--v-edge); border-radius:18px;
+  background:var(--v-panel);
+  padding:clamp(20px,3vw,32px);
+  margin-bottom:clamp(24px,4vw,40px);
+}
+.cfg-cab h2{ margin:10px 0 0; }
+.cfg-sub{ margin:10px 0 0; max-width:56ch; color:var(--v-ink-2); font-size:.95rem; line-height:1.6; }
+
+.cfg-barra{
+  height:3px; border-radius:2px; margin:clamp(18px,3vw,26px) 0 8px;
+  background:var(--v-edge-2); overflow:hidden;
+}
+.cfg-barra i{
+  display:block; height:100%; width:0;
+  background:linear-gradient(90deg, var(--v-a), var(--v-b));
+  transition:width .38s var(--ease);
+}
+.cfg-cuenta{
+  margin:0 0 clamp(16px,2.4vw,22px);
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--v-ink-3);
+}
+
+.cfg-paso{ border:0; margin:0; padding:0; min-inline-size:0; }
+.cfg-preg{
+  padding:0; margin:0 0 6px;
+  font-size:clamp(1.1rem,1.9vw,1.45rem); letter-spacing:-.02em; color:var(--v-ink);
+}
+.cfg-preg:focus{ outline:none; }
+.cfg-preg:focus-visible{ outline:2px solid var(--v-a); outline-offset:4px; border-radius:4px; }
+.cfg-ayuda{ margin:0 0 16px; font-size:.86rem; color:var(--v-ink-3); }
+
+.cfg-rej{ display:grid; gap:10px; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); margin-top:14px; }
+.cfg-rej--sector{ grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); }
+.cfg-rej--gente{ grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); }
+.cfg-rej--chips{ display:flex; flex-wrap:wrap; gap:8px; }
+
+.cfg-op{
+  appearance:none; cursor:pointer; text-align:left; font:inherit;
+  display:flex; flex-direction:column; gap:5px;
+  padding:14px 16px; border-radius:14px;
+  border:1px solid var(--v-edge); background:var(--v-panel-2); color:var(--v-ink);
+  transition:border-color .18s var(--ease), background .18s var(--ease), transform .18s var(--ease);
+}
+.cfg-op b{ font-size:.96rem; font-weight:600; letter-spacing:-.01em; }
+.cfg-op span{ font-size:.82rem; line-height:1.45; color:var(--v-ink-3); }
+.cfg-op:hover{ border-color:color-mix(in srgb, var(--v-a) 45%, transparent); }
+.cfg-op.is-on{
+  border-color:color-mix(in srgb, var(--v-a) 75%, transparent);
+  background:color-mix(in srgb, var(--v-a) 12%, var(--v-panel-2));
+}
+.cfg-op.is-on b::after{
+  content:"✓"; margin-left:8px; color:var(--v-a); font-weight:400;
+}
+.cfg-op:focus-visible{ outline:2px solid var(--v-a); outline-offset:2px; }
+
+.cfg-chip{
+  appearance:none; cursor:pointer; font:inherit; font-size:.86rem; line-height:1;
+  padding:11px 15px; border-radius:999px;
+  border:1px solid var(--v-edge); background:var(--v-panel-2); color:var(--v-ink-2);
+  transition:border-color .18s var(--ease), color .18s var(--ease), background .18s var(--ease);
+}
+.cfg-chip b{ font-weight:500; }
+.cfg-chip:hover{ border-color:color-mix(in srgb, var(--v-a) 45%, transparent); color:var(--v-ink); }
+.cfg-chip.is-on{
+  border-color:color-mix(in srgb, var(--v-a) 72%, transparent);
+  background:color-mix(in srgb, var(--v-a) 14%, var(--v-panel-2)); color:var(--v-ink);
+}
+.cfg-chip:focus-visible{ outline:2px solid var(--v-a); outline-offset:2px; }
+
+.cfg-vivo[hidden]{ display:none; }
+.cfg-vivo{ display:flex; flex-wrap:wrap; gap:8px; margin-top:clamp(18px,3vw,26px); padding-top:16px; border-top:1px solid var(--v-edge-2); }
+.cfg-vivo-p{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:5px 10px; border-radius:999px; border:1px solid var(--v-edge-2); color:var(--v-ink-3);
+}
+
+/* `display:flex` gana a la regla del navegador para [hidden], así que hay que
+   decirlo: sin esto, el pie del paso se quedaba puesto en el resumen. */
+.cfg-pie{ display:flex; gap:10px; align-items:center; margin-top:clamp(18px,3vw,26px); }
+.cfg-pie[hidden], .cfg-saltar[hidden]{ display:none; }
+.cfg-pie .cfg-seguir{ margin-left:auto; }
+.cfg-seguir[disabled]{ opacity:.45; cursor:not-allowed; }
+.cfg-saltar{ margin:14px 0 0; font-size:.84rem; }
+.cfg-saltar a{ color:var(--v-ink-3); }
+
+/* ------------------------------------------------------------- resumen */
+.cfg-res{ outline:none; }
+.cfg-res-l{ list-style:none; margin:14px 0 0; padding:0; display:grid; gap:10px; }
+.cfg-res-l li{
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 14px;
+  padding:12px 14px; border-radius:12px;
+  border:1px solid var(--v-edge-2); background:var(--v-panel-2);
+}
+.cfg-res-l b{ font-size:.94rem; color:var(--v-ink); font-weight:600; }
+.cfg-res-l span{ font-size:.86rem; color:var(--v-ink-3); font-family:var(--mono); }
+
+.cfg-est{
+  margin-top:clamp(18px,3vw,26px); padding:clamp(16px,2.4vw,22px);
+  border-radius:14px; border:1px solid color-mix(in srgb, var(--v-a) 32%, transparent);
+  background:color-mix(in srgb, var(--v-a) 7%, var(--v-panel-2));
+}
+.cfg-est-t{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--v-ink-3);
+}
+.cfg-est-n{ margin:10px 0 0; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; }
+.cfg-est-n b{ font-size:clamp(1.3rem,2.6vw,1.8rem); letter-spacing:-.03em; color:var(--v-ink); }
+.cfg-est-n i{ font-style:normal; font-size:.82rem; color:var(--v-ink-3); }
+.cfg-est-n--mes b{ font-size:clamp(1rem,1.8vw,1.2rem); }
+.cfg-est-aviso{ margin:14px 0 0; font-size:.8rem; line-height:1.55; color:var(--v-ink-3); }
+.cfg-res-ctx{
+  margin:16px 0 0; font-family:var(--mono); font-size:.72rem;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--v-ink-3);
+}
+.cfg-enviar{ margin-top:clamp(16px,2.6vw,22px); }
+.cfg-res-sub{ margin:10px 0 0; font-size:.84rem; color:var(--v-ink-3); text-align:center; }
+.cfg-reinicia{
+  appearance:none; background:none; border:0; cursor:pointer; font:inherit;
+  display:block; margin:14px auto 0; padding:6px;
+  font-size:.82rem; color:var(--v-ink-3); text-decoration:underline;
+}
+.cfg-reinicia:focus-visible{ outline:2px solid var(--v-a); outline-offset:2px; }
+
+.cfg-listo{
+  margin:0 0 18px; padding:12px 14px; border-radius:12px;
+  border:1px solid color-mix(in srgb, var(--x-ok, #35e0a1) 40%, transparent);
+  background:color-mix(in srgb, var(--x-ok, #35e0a1) 10%, transparent);
+  font-size:.88rem; color:var(--v-ink);
+}
+
+@media (max-width:640px){
+  .cfg-rej, .cfg-rej--sector, .cfg-rej--gente{ grid-template-columns:1fr; }
+  .cfg-op{ padding:13px 14px; }
+  /* Aquí había una barra pegada abajo. Se quitó: sobre un panel translúcido
+     tapaba la pregunta del paso —qa:solapes la cazó a 320, 360, 390 y 393 en
+     los dos idiomas—. Los pasos son cortos y los botones se alcanzan
+     bajando; una comodidad no vale una pregunta ilegible. */
+  .cfg-pie{ margin-top:18px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .cfg-barra i, .cfg-op, .cfg-chip{ transition:none; }
+}
+
+/* ─────────────────── DÓNDE QUEDA ESTO EN EL MERCADO ───────────────────
+   Reutiliza .mercado de dcp5.css (mismo recuadro que en Finance, mismo
+   tema claro y mismas superficies) y le añade lo que aquí hace falta: la
+   unidad —porque «49 €» por usuario y «49 €» por empresa no son el mismo
+   precio— y el enlace a la tarifa publicada. Sin fuente una comparativa
+   es una opinión, y esta ronda va justo de lo contrario. */
+/* El recuadro lleva texto que hay que leer y por detrás pasa la galaxia.
+   Base opaca (--v-bg) más el tinte del panel encima: así no se cuelan
+   estrellas entre las cifras y sigue cambiando solo con el tema. */
+.pr-cuerpo .mercado, .section-sm .mercado{
+  background-color:var(--v-bg);
+  background-image:linear-gradient(var(--v-panel-2), var(--v-panel-2));
+  position:relative; z-index:2; isolation:isolate;
+}
+.mercado-l--fuentes{ grid-template-columns:repeat(auto-fit,minmax(min(236px,100%),1fr)); }
+.mercado-l--fuentes li{ gap:4px; }
+.mercado-l--fuentes .mercado-u{ color:var(--v-ink-2); font-weight:500; }
+.mercado-f{
+  margin-top:6px; font-size:.72rem; line-height:1.4; color:var(--v-a);
+  text-decoration:underline; text-underline-offset:3px;
+  text-decoration-color:color-mix(in srgb, currentColor 40%, transparent);
+}
+.mercado-f:hover, .mercado-f:focus-visible{ text-decoration-color:currentColor; }
+/* «Nosotros» es una etiqueta, no una cifra: gana .mercado-l span de dcp5
+   por especificidad si no se le sube aquí. */
+.mercado-l li span.mercado-f--no{
+  color:var(--v-ink-3); text-decoration:none; font-family:var(--mono);
+  font-size:.6875rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase;
+}
+.mercado-p--cierre{ margin-top:8px; color:var(--v-ink-3); }
+
+/* Plegada: son siete tarifas ajenas: referencia, no el asunto de la página.
+   Abierta ocupa siete pantallas de móvil y empuja los packs fuera de vista.
+   Mismo patrón que los planes de Finance, por lo mismo. */
+.mercado--plegado{ padding-block:clamp(16px,2vw,20px); }
+.mercado--plegado > summary{
+  display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+  margin:0; cursor:pointer; list-style:none; padding-right:26px; position:relative;
+}
+.mercado--plegado > summary::-webkit-details-marker{ display:none; }
+.mercado--plegado > summary::after{
+  content:''; position:absolute; right:2px; top:.28em; width:8px; height:8px;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg); transition:transform .18s ease;
+}
+.mercado--plegado[open] > summary::after{ transform:rotate(225deg); }
+.mercado--plegado[open] > summary{ margin-bottom:16px; }
+.mercado--plegado > summary:focus-visible{ outline:2px solid var(--v-a); outline-offset:4px; border-radius:6px; }
+.mercado-cuantas{
+  font-style:normal; letter-spacing:.06em; text-transform:none;
+  color:var(--v-ink-3); white-space:nowrap; flex:none;
+}
+@media (prefers-reduced-motion:reduce){ .mercado--plegado > summary::after{ transition:none; } }

@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CFG = JSON.parse(fs.readFileSync(path.join(RAIZ, 'precios.json'), 'utf8'));
+const CAT = JSON.parse(fs.readFileSync(path.join(RAIZ, 'catalogo.json'), 'utf8'));
 const CHECK = process.argv.includes('--check');
 
 function paginas(dir, out = []) {
@@ -60,11 +61,75 @@ for (const f of paginas(RAIZ)) {
   }
 }
 
+/* ─────────────── DOS FUENTES NO PUEDEN DECIR COSAS DISTINTAS ───────────────
+   catalogo.json manda: es el catálogo comercial entero y de él vive /precios.
+   precios.json solo guarda los «desde» que se escriben sueltos por la web.
+   Si alguien toca uno y se olvida del otro, la web dice dos precios para lo
+   mismo, que es exactamente lo que esta ronda vino a quitar. */
+{
+  const dePrecio = (id) => (CAT.productos.find((p) => p.id === id) || {});
+  /* Se comparan los NÚMEROS, no las frases: «Desde 29 €/mes» y «29 €» dicen
+     lo mismo y se escriben distinto según dónde vayan. Lo que no puede pasar
+     es que uno diga 29 y el otro 39. */
+  const cifras = (t) => (String(t).match(/[\d][\d.,]*/g) || []).map((x) => x.replace(/[.,](?=\d{3}\b)/g, ''));
+  const pares = [
+    ['finance', 'finance-1', ['precio_mes', 'precio'], ['es', 'detalle_es']],
+    ['medida', 'medida-1', ['precio'], ['es']],
+    ['agentes', 'agente-1', ['precio'], ['es']],
+  ];
+  for (const [clave, id, campos] of pares) {
+    const prod = dePrecio(id);
+    if (!prod.es) { errores.push(`catalogo.json: falta el producto ${id}, del que sale «desde ${clave}»`); continue; }
+    for (const lang of ['es', 'en']) {
+      const d = CFG.desde[clave] || {};
+      const puesto = cifras((d[lang] || '') + ' ' + (d['detalle_' + lang] || '')).sort().join('|');
+      const esperado = cifras(campos.map((c) => prod[lang][c] || '').join(' ')).sort().join('|');
+      if (esperado !== puesto) {
+        errores.push(`precios.json «desde.${clave}.${lang}» lleva ${puesto || '(nada)'} y catalogo.json (${id}) lleva ${esperado || '(nada)'}`);
+      }
+    }
+  }
+  /* Y la página de precios tiene que llevar de verdad lo que dice el catálogo:
+     si se edita a mano y se olvida regenerarla, esto lo caza. */
+  for (const [pagina, lang] of [['precios.html', 'es'], ['en/precios.html', 'en']]) {
+    const ruta = path.join(RAIZ, pagina);
+    if (!fs.existsSync(ruta)) { errores.push(`falta ${pagina} (se genera con npm run build:catalogo)`); continue; }
+    const h = fs.readFileSync(ruta, 'utf8');
+    /* El precio tiene que estar EN LA FICHA DE ESE PRODUCTO, no en cualquier
+       sitio de la página: «390 €» suelto lo cumpliría también la tabla de
+       mercado, y entonces el aviso no avisa de nada. */
+    for (const prod of CAT.productos.concat(CAT.packs)) {
+      const i = h.indexOf(`data-id="${prod.id}"`);
+      if (i < 0) { errores.push(`${pagina}: no aparece la ficha de ${prod.id}`); continue; }
+      const ficha = h.slice(i, h.indexOf('</article>', i));
+      for (const campo of ['precio', 'precio_mes']) {
+        const v = prod[lang][campo];
+        if (!v) continue;
+        if (!ficha.includes(esc(v))) errores.push(`${pagina}: la ficha de ${prod.id} no lleva «${v}» (${campo})`);
+      }
+    }
+    if (!h.includes(esc(CAT.aviso[lang]))) errores.push(`${pagina}: falta el aviso de precios de referencia`);
+    /* La comparativa de mercado: cada fila ajena tiene que traer la tarifa
+       pública de donde salió. Una comparativa sin fuente es una opinión, y
+       aquí se está comparando con el precio de otro. */
+    for (const fila of CAT.mercado.filas) {
+      if (!h.includes(esc(fila.mes[lang]))) errores.push(`${pagina}: la comparativa no lleva «${fila.mes[lang]}» de ${fila.quien}`);
+    }
+    if (!h.includes(esc(CAT.mercado.sub[lang]))) errores.push(`${pagina}: falta la fecha y el criterio de la comparativa de mercado`);
+  }
+
+  for (const fila of CAT.mercado.filas) {
+    if (!fila.nuestro && !/^https:\/\//.test(fila.url || '')) {
+      errores.push(`catalogo.json: la fila de mercado «${fila.quien}» no trae la URL de la tarifa publicada`);
+    }
+  }
+}
+
 if (errores.length) {
   console.error('✗ check:precios — ' + errores.length + ' problema(s):');
   errores.forEach((e) => console.error('  ' + e));
   process.exit(1);
 }
 console.log(CHECK
-  ? `✓ check:precios — ${marcas} marcas al día (revisado ${CFG.revisado})`
+  ? `✓ check:precios — ${marcas} marcas al día y el catálogo cuadra con la web (revisado ${CAT.revisado})`
   : `✓ Precios escritos: ${marcas} marcas en ${escritos} página(s) (revisado ${CFG.revisado})`);

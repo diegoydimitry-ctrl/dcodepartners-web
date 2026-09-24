@@ -119,6 +119,15 @@
   </url>
 
   <url>
+    <loc>https://dcodepartners.com/precios</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/precios"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/precios"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/precios"/>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
     <loc>https://dcodepartners.com/servicios</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios"/>
@@ -422,6 +431,15 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/sistema-financiero"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero"/>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://dcodepartners.com/en/precios</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/precios"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/precios"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/precios"/>
+    <priority>0.9</priority>
     <changefreq>monthly</changefreq>
   </url>
 

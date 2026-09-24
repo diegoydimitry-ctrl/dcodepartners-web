@@ -1151,6 +1151,29 @@ footer{ border-top:1px solid var(--v-edge-2); background:linear-gradient(180deg,
 .plan-precio span{ font-size:.82rem; color:var(--v-ink-3); }
 .plan-precio i{ font-style:normal; color:var(--v-ink-3); padding:0 2px; }
 .plan-gente{ margin:4px 0 0; font-family:var(--mono); font-size:0.6875rem; letter-spacing:.1em; text-transform:uppercase; color:var(--v-ink-3); }
+/* El precio de cada plan ya no vive aquí: vive en /precios, que es la única
+   fuente comercial. Aquí queda lo que esta página sí tiene que contar —qué
+   hace cada plan— y un enlace al importe, para que no haya dos cifras que
+   puedan acabar diciendo cosas distintas. */
+/* Dentro del <summary> esto NO puede ser un enlace: un enlace dentro de un
+   desplegable es interactivo anidado —axe lo marca serious, el lector de
+   pantalla lo anuncia mal y al pulsarlo se pliega la ficha—. Aquí es texto;
+   el enlace de verdad es .plan-precio-ir, ya dentro del panel. */
+.plan-precio-link{
+  display:inline-flex; align-items:center; gap:7px; margin:10px 0 0;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--v-ink-3);
+}
+.plan-precio-ir{ margin:0 0 14px; font-size:.86rem; }
+.plan-precio-ir a{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--v-a); text-decoration:none;
+  border-bottom:1px solid color-mix(in srgb, var(--v-a) 40%, transparent); padding-bottom:2px;
+}
+.plan-precio-ir a:hover, .plan-precio-ir a:focus-visible{ border-bottom-color:currentColor; }
+.plan-precio-link:hover{ border-bottom-color:var(--v-a); }
+.plan-precio-link:focus-visible{ outline:2px solid var(--v-a); outline-offset:3px; }
 
 /* ---- CON QUÉ SE CONECTA ----
    Seis tarjetas y una etiqueta de estado en cada una. La etiqueta es lo que
@@ -1254,7 +1277,7 @@ details.plan.es-cerrando > .plan-body{ opacity:.35; }
 .plan-n{ grid-area:n; padding-top:.35em; }
 .plan-head{ grid-area:cab; }
 .plan-quita{ grid-area:quita; margin:0; }
-.plan-precio{ grid-area:precio; margin:0; align-self:end; }
+.plan-precio, .plan-precio-link{ grid-area:precio; margin:0; align-self:end; }
 .plan-gente{ grid-area:precio; align-self:end; margin:0; transform:translateY(22px); }
 .plan-mas{ grid-area:mas; align-self:end; justify-self:end; }
 @media (max-width:900px){
@@ -1652,3 +1675,9 @@ body.v7 .vf-intro::before, body.v7 .conc-intro::before{
   margin:clamp(16px,2vw,22px) 0 0; font-size:.8125rem; line-height:1.55;
   color:var(--v-ink-3); max-width:74ch;
 }
+
+/* Los precios viven en /precios y solo ahí. Desde Finance se enlaza. */
+.mercado-ref{ margin:clamp(20px,2.6vw,30px) 0 0; font-size:.9rem; }
+.mercado-ref a{ color:var(--v-a); text-decoration:underline; text-underline-offset:4px;
+  text-decoration-color:color-mix(in srgb, currentColor 40%, transparent); }
+.mercado-ref a:hover, .mercado-ref a:focus-visible{ text-decoration-color:currentColor; }
