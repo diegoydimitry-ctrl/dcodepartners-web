@@ -45,9 +45,9 @@ export const CONTEXTOS = [
   {
     ruta: /^\/cambios-en-proceso$/,
     es: { hola: 'Este tablero dice qué está listo y qué no. Pregúntame por cualquiera de los dos.',
-          rapidas: ['¿Qué está funcionando ya?', '¿Qué falta por terminar?', '¿Cuándo estará la conciliación?'] },
+          rapidas: ['¿Qué está funcionando ya?', '¿Qué falta por terminar?', '¿Cómo sé que está listo de verdad?'] },
     en: { hola: 'This board says what is ready and what is not. Ask me about either.',
-          rapidas: ['What is already running?', 'What is still missing?', 'When will reconciliation be ready?'] },
+          rapidas: ['What is already running?', 'What is still missing?', 'How do I know it is really ready?'] },
   },
   {
     ruta: /^\/metodo$/,
