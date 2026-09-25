@@ -27,7 +27,15 @@ const paginas = execSync('git ls-files "*.html"', { cwd: RAIZ }).toString().spli
      la clase no llegaba nunca y quedaba un rectángulo opaco tapando el cielo.
      Aquí llega siempre y llega a tiempo. */
 export const HEAD = `<script>(function(){var r=document.documentElement,t;try{t=localStorage.getItem('dcp-tema')}catch(e){}r.setAttribute('data-theme',t==='light'?'light':'dark');try{if(matchMedia('(pointer:coarse)').matches)r.classList.add('cielo-quieto')}catch(e){}})();</script>`;
-export const CSS = '<link rel="stylesheet" href="/assets/css/galaxia.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema-claro.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema.css?v=0">\n<link rel="stylesheet" href="/assets/css/superficies.css?v=0">';
+/* tema-claro.css son ~52 KB de reglas que TODAS cuelgan de
+   html[data-theme="light"]: en oscuro —que es como entra casi todo el
+   mundo— no pintan nada y aun así bloqueaban el primer pintado mientras
+   el navegador las descargaba y las metía en el CSSOM. Va con media="not
+   all": el navegador se la sigue bajando (por si cambia el tema, así el
+   cambio es instantáneo) pero sin bloquear ni cotejar selectores. El
+   guion de al lado la enciende en el acto si la página abre en claro. */
+export const FLIP_CLARO = `<script>(function(){var l=document.querySelector('link[data-claro]');if(l&&document.documentElement.getAttribute('data-theme')==='light')l.media='all';})();</script>`;
+export const CSS = '<link rel="stylesheet" href="/assets/css/galaxia.css?v=0">\n<link rel="stylesheet" href="/assets/css/tema-claro.css?v=0" media="not all" data-claro>' + FLIP_CLARO + '\n<link rel="stylesheet" href="/assets/css/tema.css?v=0">\n<link rel="stylesheet" href="/assets/css/superficies.css?v=0">';
 /* La línea de montaje del cambio de sección. Tiene que estar en el HTML, no
    crearla al vuelo: «pagereveal» avisa antes de que corran los scripts con
    defer, así que un elemento creado desde tema.js llega tarde a la foto de

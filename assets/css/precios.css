@@ -473,3 +473,35 @@
   box-shadow:0 0 0 3px color-mix(in srgb, var(--v-a) 28%, transparent);
 }
 .cfg-campo-a{ font-size:.8125rem; line-height:1.45; color:var(--v-ink-3); }
+
+/* ═══════════ EL AIRE DEL FORMULARIO ═══════════
+   Los campos iban pegados: una etiqueta en mayúsculas de 12 px a nueve
+   píxeles del recuadro anterior no se lee como el principio de algo nuevo,
+   se lee como el pie del anterior. Se sube el ritmo vertical —más hueco
+   entre campo y campo que entre etiqueta y recuadro— y el desplegable de
+   «Añadir teléfono» deja de estar encajado entre dos campos. */
+.form-card .field{ margin-bottom:30px; }
+.form-card .field label{ margin-bottom:11px; }
+.form-card .field input,
+.form-card .field textarea{ padding:15px 16px; min-height:50px; }
+.form-card .field textarea{ min-height:112px; padding-top:14px; }
+.form-card .form-step-eyebrow{ margin-bottom:26px; }
+.form-card .form-progress{ margin-bottom:14px; }
+.form-card .form-step-count{ margin-bottom:22px; }
+.form-card .form-nav{ margin-top:30px; }
+.form-card .form-compliance{ gap:24px; }
+/* El desplegable: separado de lo de arriba, con su propia línea, y con aire
+   por dentro cuando se abre. */
+.form-card .form-extra{
+  margin:6px 0 4px; padding-top:22px;
+  border-top:1px solid var(--border, rgba(150,174,245,.15));
+}
+.form-card .form-extra > summary{ margin-bottom:0; }
+.form-card .form-extra[open] > summary{ margin-bottom:22px; }
+.form-card .form-extra .field:last-child{ margin-bottom:6px; }
+/* Y la tarjeta respira por dentro. */
+.form-card .window-body{ padding:clamp(22px,3vw,30px); }
+@media (max-width:560px){
+  .form-card .field{ margin-bottom:24px; }
+  .form-card .window-body{ padding:20px 18px 22px; }
+}

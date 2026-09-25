@@ -42,9 +42,14 @@ body:has(> .gx)::before, body:has(> .gx)::after{ display:none !important; }
 /* Los campos de partículas pintan sobre un lienzo transparente (dcp6/dcp8):
    se componen encima del cielo sin mix-blend-mode. La mezcla con un cielo
    animado era el mayor coste por fotograma de la web. */
-body:has(> .gx) .field, body:has(> .gx) .field--inst{ background:transparent !important; margin:0 !important; }
-/* (styles.css da a .field —la clase de los campos de formulario— un
-   margin-bottom de 24 px que también recortaba el lienzo fijo por abajo.) */
+/* OJO CON EL SELECTOR. «.field» es DOS cosas en esta web: el lienzo de
+   partículas —un div suelto, hijo directo de body— y cada campo de los
+   formularios. Esta regla llevaba `margin:0 !important` a secas, así que
+   dejaba los campos del formulario de contacto pegados unos a otros, sin
+   una sola línea de aire entre la etiqueta de uno y el recuadro del
+   anterior. Se apunta ahora solo al hijo directo de body, que es el
+   lienzo; los formularios no vuelven a enterarse de esto. */
+body:has(> .gx) > .field, body:has(> .gx) > .field--inst{ background:transparent !important; margin:0 !important; }
 /* La cabecera sin fondo no necesita desenfocar lo que tiene detrás: sobre el
    cielo, el saturate() dibujaba una franja. Al hacer scroll vuelve. */
 body:has(> .gx) #site-header:not(.scrolled){ -webkit-backdrop-filter:none; backdrop-filter:none; }

@@ -53,6 +53,14 @@
     R.setAttribute('data-theme', t);
     W.requestAnimationFrame(function () { W.requestAnimationFrame(function () { if (!enCurso) R.classList.remove('tema-cambiando'); }); });
     guardar(t);
+    /* La captura del panel del tema que entra: en la página vive apagada
+       —en data-srcset— para que el navegador NO se baje los dos temas
+       (son ~208 KB de la que nadie ve). Aquí se enciende la que toca. */
+    try { if (W.dcpCap) W.dcpCap(t === 'light' ? 'claro' : 'oscuro'); } catch (e) {}
+    /* La hoja del modo claro entra con media="not all" —descargada pero sin
+       bloquear ni cotejarse— porque en oscuro no pinta nada. Al pasar a
+       claro se enciende; ya está en la caché, así que no se espera a red. */
+    if (t === 'light') { var hc = D.querySelector('link[data-claro]'); if (hc && hc.media !== 'all') hc.media = 'all'; }
     pintarBoton();
     metaColor();
     try { D.dispatchEvent(new CustomEvent('dcp:tema', { detail: { tema: t } })); } catch (e) {}
@@ -279,8 +287,23 @@
   });
 
   /* El cielo del otro tema, precargado cuando la página ya está quieta: así
-     el cambio de tema no espera a descargar sus estrellas (5 PNG, ~65 KB). */
+     el cambio de tema no espera a descargar sus estrellas (6 PNG, ~97 KB).
+     SOLO donde ese adelanto es barato. En el teléfono y en la tableta esos
+     97 KB se pagaban SIEMPRE —en datos y en descodificar seis PNG— para un
+     botón que casi nadie toca ahí, y competían con lo que sí se ve. Se
+     descargan ahora cuando de verdad cambia el tema, que es cuando hacen
+     falta. Tampoco se adelanta nada si el aparato pide ahorrar datos o
+     avisa de que la red es lenta. */
+  function cieloVale() {
+    try {
+      if (!W.matchMedia('(pointer:fine)').matches) return false;
+      var c = W.navigator && W.navigator.connection;
+      if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return false;
+    } catch (e) {}
+    return true;
+  }
   function precargarCielo() {
+    if (!cieloVale()) return;
     try {
       [].forEach.call(D.styleSheets, function (h) {
         if (!h.href || h.href.indexOf('galaxia.css') < 0) return;
