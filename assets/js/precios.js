@@ -102,3 +102,82 @@
   pintar();
   guardar(false);
 })();
+
+
+/* ═══════ EN EL TELÉFONO, EL CATÁLOGO SE PLIEGA ═══════
+   Medido: /precios eran 15.170 px en una pantalla de 320 px. Los filtros ya
+   existían —categoría, sector y necesidad— pero al entrar se abren los siete
+   grupos a la vez y dieciocho fichas seguidas no se recorren: se abandonan.
+   Aquí cada grupo se pliega, con su recuento a la vista para que se sepa qué
+   hay dentro antes de abrirlo. El primero queda abierto para que se entienda
+   de qué va la pantalla sin tocar nada.
+
+   Solo por debajo de 767 px. En tableta y en ordenador el catálogo entero a
+   la vista es una ventaja, no un problema, y ahí no se toca nada. Y si un
+   filtro deja un grupo con fichas, se abre solo: plegado + filtrado a la vez
+   escondería justo lo que el visitante acaba de pedir. */
+(function () {
+  var M = window.matchMedia('(max-width:767px)');
+  var grupos = [].slice.call(document.querySelectorAll('.pr-grupo'));
+  if (!grupos.length) return;
+  var montado = false;
+
+  function cuenta(g) {
+    return g.querySelectorAll('.pr-card:not([hidden]):not(.es-fuera)').length;
+  }
+  function pinta(g) {
+    var b = g.querySelector('.pr-plg');
+    if (!b) return;
+    var n = cuenta(g);
+    b.querySelector('.pr-plg-n').textContent = n;
+    b.setAttribute('aria-expanded', g.classList.contains('es-abierto') ? 'true' : 'false');
+    g.hidden = n === 0;
+  }
+  function montar() {
+    if (montado) return;
+    montado = true;
+    grupos.forEach(function (g, i) {
+      var h = g.querySelector('.pr-grupo-h');
+      var t = h && h.querySelector('h3');
+      if (!h || !t) return;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pr-plg';
+      b.innerHTML = '<span class="pr-plg-n"></span><span class="pr-plg-i" aria-hidden="true"></span>';
+      b.setAttribute('aria-controls', g.id || (g.id = 'pr-g-' + i));
+      b.addEventListener('click', function () {
+        g.classList.toggle('es-abierto');
+        pinta(g);
+      });
+      h.appendChild(b);
+      if (i === 0) g.classList.add('es-abierto');
+      pinta(g);
+    });
+    document.documentElement.classList.add('pr-plegado');
+  }
+  function desmontar() {
+    if (!montado) return;
+    montado = false;
+    grupos.forEach(function (g) {
+      var b = g.querySelector('.pr-plg');
+      if (b) b.parentNode.removeChild(b);
+      g.classList.remove('es-abierto');
+      g.hidden = false;
+    });
+    document.documentElement.classList.remove('pr-plegado');
+  }
+  function aplicar() { if (M.matches) montar(); else desmontar(); }
+  aplicar();
+  try { M.addEventListener('change', aplicar); } catch (e) {}
+
+  /* Al filtrar, abrir los grupos que siguen teniendo algo. */
+  document.addEventListener('click', function (e) {
+    if (!montado || !e.target.closest('.pr-chip')) return;
+    window.setTimeout(function () {
+      grupos.forEach(function (g) {
+        if (cuenta(g) > 0) g.classList.add('es-abierto');
+        pinta(g);
+      });
+    }, 30);
+  });
+})();

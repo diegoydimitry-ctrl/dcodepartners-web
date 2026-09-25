@@ -40,8 +40,18 @@ const RUTAS=['/','/metodo','/que-hacemos','/servicios/paginas-web','/servicios/s
    lo invento yo. Quedan ancladas a su alto de hoy: no se arreglan, pero
    tampoco pueden crecer mientras se decide. Medido a 320 px, que es el peor
    caso. */
-const TOPE_TEL = 11000;
-const PENDIENTES = { '/precios': 15600, '/sistema-financiero': 15800 };
+/* El tope sube de 11.000 a 11.500, y conviene decir por qué y no disimularlo:
+   la portada ha ganado una sección entera —«El problema»— que antes no
+   existía, y que es el punto de partida de toda la narrativa. Son 1.089 px en
+   una pantalla de 320. El tope existe para que no vuelvan las diecisiete
+   pantallas de antes (15.671 px), no para congelar la web: a 11.123 px sigue
+   a 4.500 px de aquello. Si alguna vez hace falta subirlo otra vez, la
+   pregunta correcta es qué sobra, no cuánto se sube. */
+const TOPE_TEL = 11500;
+/* /precios ya está resuelto: el catálogo se pliega en el teléfono y pasó de
+   15.170 a 8.361 px a 320 px. Queda solo /sistema-financiero, cuyo largo son
+   las catorce piezas de Finance —información, no demos—. */
+const PENDIENTES = { '/sistema-financiero': 15800 };
 const br=await chromium.launch(opcionesNavegador());
 const malos=[];
 let n=0;

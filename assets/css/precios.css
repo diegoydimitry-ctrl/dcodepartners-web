@@ -505,3 +505,37 @@
   .form-card .field{ margin-bottom:24px; }
   .form-card .window-body{ padding:20px 18px 22px; }
 }
+
+/* El catálogo plegado en el teléfono. Solo se activa cuando el guion añade
+   html.pr-plegado, es decir por debajo de 767 px: si el JavaScript no llega,
+   el catálogo se ve entero como siempre y no se pierde nada. */
+/* La cabecera del grupo, en rejilla: el titular y el botón comparten la
+   primera fila y la descripción ocupa la segunda entera. El botón NO puede
+   ir en «position:absolute» sobre toda la cabecera —así estaba y el contador
+   caía justo encima de la descripción: lo cazó qa:solapes a 320 y a 430 px—. */
+html.pr-plegado .pr-grupo-h{
+  display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center;
+  column-gap:var(--e-3); row-gap:var(--e-2); padding:var(--e-4) 0; margin:0;
+}
+html.pr-plegado .pr-grupo-h h3{ grid-column:1; margin:0; font-size:var(--f-h3); }
+html.pr-plegado .pr-grupo-h > p{ grid-column:1 / -1; margin:0; display:none; }
+html.pr-plegado .pr-grupo.es-abierto .pr-grupo-h > p{ display:block; }
+html.pr-plegado .pr-grupo{ border-top:1px solid var(--borde, rgba(150,174,245,.16)); }
+
+.pr-plg{
+  grid-column:2; grid-row:1; justify-self:end;
+  display:inline-flex; align-items:center; gap:var(--e-2);
+  padding:6px 2px 6px var(--e-3); background:none; border:0; cursor:pointer;
+  font:inherit; color:var(--ink-2, #9fb0cf);
+}
+.pr-plg-n{ font-family:var(--mono); font-size:var(--f-mono); }
+.pr-plg-i{
+  width:9px; height:9px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translate(-2px,-2px); transition:transform .22s cubic-bezier(.22,1,.36,1);
+}
+.pr-grupo.es-abierto .pr-plg-i{ transform:rotate(-135deg) translate(-3px,-3px); }
+.pr-plg:focus-visible{ outline:2px solid var(--blue, #5b8cff); outline-offset:3px; border-radius:var(--r-ctrl); }
+
+html.pr-plegado .pr-grupo .pr-rej{ display:none; }
+html.pr-plegado .pr-grupo.es-abierto .pr-rej{ display:grid; }
+@media (prefers-reduced-motion:reduce){ .pr-plg-i{ transition:none; } }

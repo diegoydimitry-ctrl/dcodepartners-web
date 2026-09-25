@@ -1300,3 +1300,32 @@
   window.addEventListener('resize', alBajar, { passive: true });
   pinta();
 })();
+
+
+/* ══════════ EL PROBLEMA: encender la capa al llegar a la vista ══════════
+   Una clase, una vez, y el observador se desconecta. No se vuelve a animar
+   al pasar de nuevo —una animación de entrada que se repite deja de ser
+   información y pasa a ser ruido—. Con movimiento reducido se enciende
+   directamente, sin recorrido: los dos estados siguen contándose. */
+(function () {
+  var pb = document.querySelector('[data-pb]');
+  if (!pb) return;
+  try {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { pb.classList.add('es-on'); return; }
+  } catch (e) {}
+  if (!('IntersectionObserver' in window)) { pb.classList.add('es-on'); return; }
+  /* Medio segundo APAGADA antes de encenderse. Sin esa pausa el contraste no
+     se percibe: al llegar ya está encendida y lo que debería leerse como
+     «esto es lo de hoy → esto es con el sistema» se lee como una lista azul
+     y ya está. El antes hay que verlo para que el después signifique algo. */
+  var ob = new IntersectionObserver(function (es) {
+    for (var i = 0; i < es.length; i++) {
+      if (es[i].isIntersecting) {
+        ob.disconnect();
+        window.setTimeout(function () { pb.classList.add('es-on'); }, 520);
+        return;
+      }
+    }
+  }, { threshold: 0.28, rootMargin: '0px 0px -8% 0px' });
+  ob.observe(pb);
+})();

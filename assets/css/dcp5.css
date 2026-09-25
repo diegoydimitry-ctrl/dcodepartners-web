@@ -47,9 +47,40 @@
   --k-clientes:#35e0a1;  --k-produccion:#ffb43a; --k-finanzas:#5b8cff;
   --k-soporte:#2dd4bf;   --k-administracion:#8b93ff;
 
-  --f-display: clamp(2.7rem, 6.8vw, 5.6rem);
-  --f-h2:      clamp(1.8rem, 3.3vw, 2.8rem);
+  /* ═══════════════ LA ESCALA TIPOGRÁFICA, DECLARADA ═══════════════
+     Había tres tokens y veintitantos «clamp()» sueltos repartidos por las
+     hojas: cada sección decidía su tamaño por su cuenta. Eso es lo que
+     separa «páginas hechas» de «un sistema», y se nota a simple vista
+     comparando esta web con Linear o Stripe.
+     Razón 1,25 sobre una base de 16 px. Todo titular de la web sale de
+     aquí; si hace falta un tamaño que no está en la lista, la respuesta
+     casi siempre es que el titular sobra, no que falte un token. */
+  --f-display: clamp(2.7rem, 6.8vw, 5.6rem);   /* portada, una vez por web */
+  --f-h1:      clamp(2.25rem, 4.6vw, 3.5rem);  /* titular de página */
+  --f-h2:      clamp(1.8rem, 3.3vw, 2.8rem);   /* titular de sección */
+  --f-h3:      clamp(1.25rem, 1.6vw, 1.5rem);  /* titular de bloque */
+  --f-h4:      1.0625rem;                      /* titular de tarjeta */
   --f-body:    clamp(1rem, 1.02vw, 1.05rem);   /* DS · cuerpo web 16 px como mínimo */
+  --f-lead:    clamp(1.0625rem, 1.3vw, 1.25rem); /* entradilla bajo un titular */
+  --f-small:   .9375rem;
+  --f-mono:    .8125rem;
+
+  /* Interlineado: cuanto más grande el texto, más apretado. */
+  --lh-display: 1.02;  --lh-h1: 1.06;  --lh-h2: 1.1;
+  --lh-h3: 1.25;       --lh-body: 1.6; --lh-lead: 1.55;
+
+  /* ═══════════════ EL RITMO DEL ESPACIO ═══════════════
+     Un solo origen, múltiplos de 4. Ningún margen fuera de esta lista. */
+  --e-1: 4px;   --e-2: 8px;   --e-3: 12px;  --e-4: 16px;  --e-5: 24px;
+  --e-6: 32px;  --e-7: 48px;  --e-8: 64px;  --e-9: 96px;  --e-10: 128px;
+
+  /* ═══════════════ RADIOS CON JERARQUÍA ═══════════════
+     Contra la señal de «todo a 16 px»: el radio dice de qué tamaño es la
+     cosa. Un control no se redondea como una ventana. */
+  --r-ctrl: 6px;    /* botones, campos, píldoras pequeñas */
+  --r-card: 10px;   /* tarjetas y listas */
+  --r-win:  16px;   /* ventanas, paneles, superficies grandes */
+  --r-pill: 999px;  /* solo lo que es literalmente una píldora */
 
   --rad: 12px;   /* DS · radio de superficies (antes 18px) */
   --shell: 1180px;
@@ -150,7 +181,12 @@ body::after{
 /* ============================================================ 2. TIPOGRAFÍA */
 h1,h2,h3,.h-title{ font-family:var(--serif); letter-spacing:-.032em; text-wrap:balance; }
 h1{ font-size:var(--f-display); line-height:.96; font-weight:700; margin:0; }
-.h-title{ font-size:var(--f-h2); line-height:1.05; font-weight:700; }
+.h-title{ font-size:var(--f-h2); line-height:var(--lh-h2); font-weight:700; }
+/* El titular de una PÁGINA no puede medir lo mismo que el de una sección de
+   esa página: sin diferencia de tamaño no hay jerarquía, solo texto grande
+   repetido. Medido antes: h1 y h2 salían los dos a 45 px en /que-hacemos,
+   /precios y las cinco de /servicios/. */
+h1.h-title{ font-size:var(--f-h1); line-height:var(--lh-h1); }
 .h-xl{ font-size:clamp(2.1rem,4.4vw,3.6rem); line-height:1.02; font-weight:700;
   font-family:var(--serif); letter-spacing:-.035em; text-wrap:balance; margin:0; }
 p{ color:var(--v-ink-2); }

@@ -298,6 +298,24 @@ html[data-theme="dark"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal
   & :is(.v6-pieza-et), &:is(.v6-pieza-et){ color:var(--v-a, #0b6676); }
   & :is(.v6-pieza-n), &:is(.v6-pieza-n){ color:var(--ink, #090f1a); }
   & :is(.v6-pieza-d), &:is(.v6-pieza-d){ color:#0d6b4a; }
+  & :is(.v6-act2), &:is(.v6-act2){ color:var(--ink-2, #323a47); }
+  & :is(.v6-act2 b), &:is(.v6-act2 b){ color:var(--ink, #090f1a); }
+  & :is(.v6-act2:hover), &:is(.v6-act2:hover){ color:var(--ink, #090f1a); }
+  & :is(.pb-capa), &:is(.pb-capa){ border:1px solid var(--borde, rgba(46,59,98,0.196)); }
+  & :is(.pb.es-on .pb-capa), &:is(.pb.es-on .pb-capa){ border-color:rgba(43,60,98,0.3); }
+  & :is(.pb-et), &:is(.pb-et){ background:var(--v-bg, #f0f3f9); }
+  & :is(.pb-et-a), &:is(.pb-et-a){ color:var(--ink-3, #4d5b78); }
+  & :is(.pb-et-b), &:is(.pb-et-b){ color:var(--blue, #2650bd); }
+  & :is(.pb-n), &:is(.pb-n){ color:var(--ink-3, #4d5b78); }
+  & :is(.pb.es-on .pb-n), &:is(.pb.es-on .pb-n){ color:var(--blue, #2650bd); }
+  & :is(.pb-v), &:is(.pb-v){ color:var(--ink-2, #323a47); }
+  & :is(.pb-v b), &:is(.pb-v b){ color:var(--ink, #090f1a); }
+  & :is(.pb.es-on .pb-v), &:is(.pb.es-on .pb-v){ color:var(--ink-2, #323a47); }
+  & :is(.pb-x), &:is(.pb-x){ color:var(--ink-2, #323a47); }
+  & :is(.pb-c), &:is(.pb-c){ color:var(--ink-2, #323a47); }
+  & :is(.pb-c)::after, &:is(.pb-c)::after{ box-shadow:0 0 8px rgba(91,140,255,0.303); }
+  & :is(.pb-q), &:is(.pb-q){ color:var(--ink, #090f1a); }
+  & :is(.pb-on), &:is(.pb-on){ color:var(--blue, #2650bd); }
   /* dcp7.css */
   & :is(.dcx)::before, &:is(.dcx)::before{ background:radial-gradient(120% 66% at 100% 50%,
     rgba(240,243,249,0.98), rgba(240,243,249,0.92) 34%, rgba(240,243,249,0.58) 58%,
@@ -851,6 +869,24 @@ html[data-theme="light"] :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .ga
   & :is(.v6-pieza-et), &:is(.v6-pieza-et){ color:var(--v-a, #43e0ff); }
   & :is(.v6-pieza-n), &:is(.v6-pieza-n){ color:var(--ink, #edf1f8); }
   & :is(.v6-pieza-d), &:is(.v6-pieza-d){ color:#35e0a1; }
+  & :is(.v6-act2), &:is(.v6-act2){ color:var(--ink-2, #9fb0cf); }
+  & :is(.v6-act2 b), &:is(.v6-act2 b){ color:var(--ink, #edf1f8); }
+  & :is(.v6-act2:hover), &:is(.v6-act2:hover){ color:var(--ink, #edf1f8); }
+  & :is(.pb-capa), &:is(.pb-capa){ border:1px solid var(--borde, rgba(150,174,245,.16)); }
+  & :is(.pb.es-on .pb-capa), &:is(.pb.es-on .pb-capa){ border-color:rgba(91,140,255,.4); }
+  & :is(.pb-et), &:is(.pb-et){ background:var(--v-bg, #06080d); }
+  & :is(.pb-et-a), &:is(.pb-et-a){ color:var(--ink-3, #6b7a99); }
+  & :is(.pb-et-b), &:is(.pb-et-b){ color:var(--blue, #5b8cff); }
+  & :is(.pb-n), &:is(.pb-n){ color:var(--ink-3, #6b7a99); }
+  & :is(.pb.es-on .pb-n), &:is(.pb.es-on .pb-n){ color:var(--blue, #5b8cff); }
+  & :is(.pb-v), &:is(.pb-v){ color:var(--ink-2, #9fb0cf); }
+  & :is(.pb-v b), &:is(.pb-v b){ color:var(--ink, #edf1f8); }
+  & :is(.pb.es-on .pb-v), &:is(.pb.es-on .pb-v){ color:var(--ink-2, #9fb0cf); }
+  & :is(.pb-x), &:is(.pb-x){ color:var(--ink-2, #9fb0cf); }
+  & :is(.pb-c), &:is(.pb-c){ color:var(--ink-2, #9fb0cf); }
+  & :is(.pb-c)::after, &:is(.pb-c)::after{ box-shadow:0 0 8px rgba(91,140,255,.55); }
+  & :is(.pb-q), &:is(.pb-q){ color:var(--ink, #edf1f8); }
+  & :is(.pb-on), &:is(.pb-on){ color:var(--blue, #5b8cff); }
   /* dcp7.css */
   & :is(.dcx)::before, &:is(.dcx)::before{ background:radial-gradient(120% 66% at 100% 50%,
     rgba(6,8,13,.98), rgba(6,8,13,.92) 34%, rgba(6,8,13,.58) 58%,

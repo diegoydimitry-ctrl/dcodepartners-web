@@ -61,7 +61,7 @@ html[data-theme="light"] .os{
 .os-kicker::before{ content:""; width:28px; height:1px; background:linear-gradient(90deg, var(--v-a, #43e0ff), transparent); }
 html[data-theme="light"] .os-kicker{ color:#2f5fe0; }
 .os-h2{ margin:0 0 16px; font-family:"Space Grotesk", var(--sans); font-weight:600; letter-spacing:-.02em;
-  font-size:clamp(2rem,4.2vw,3.4rem); line-height:1.04; color:var(--os-t1); }
+  font-size:var(--f-h1); line-height:var(--lh-h1); color:var(--os-t1); }
 .os-h2 span{ background:linear-gradient(96deg, #43e0ff, #7aa2ff 45%, #b69bff); -webkit-background-clip:text; background-clip:text; color:transparent; }
 html[data-theme="light"] .os-h2 span{ background-image:linear-gradient(96deg, #0a7a99, #2f5fe0 45%, #6a42dc); }
 .os-intro{ margin:0; max-width:min(720px, 72ch); font-size:clamp(1rem,1.3vw,1.125rem); line-height:1.6; color:var(--os-t2); }

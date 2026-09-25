@@ -519,7 +519,7 @@ body.v6 .v6-end{ text-align:center; padding-top:clamp(120px,20vh,220px); align-i
 /* Titular de sección: tipografía, no cabecera de tabla. */
 .v6-title{
   font-family:var(--serif); font-weight:700; letter-spacing:-.034em;
-  font-size:clamp(1.75rem, 3.6vw, 3rem); line-height:1.04; margin:.38em 0 0;
+  font-size:var(--f-h2); line-height:var(--lh-h2); margin:.38em 0 0;
   max-width:19ch; color:#f4f7ff; text-shadow:0 3px 30px rgba(3,5,12,.88);
 }
 .v6-title--wide{ max-width:26ch; }
@@ -1065,4 +1065,131 @@ html[data-theme="light"] .v6-pieza--dinero{
 @media (prefers-reduced-motion:reduce){
   .v6-pieza{ animation:none; }
   .v6-panel-f{ transform:rotateY(-26deg) rotateX(6deg) rotateZ(-2deg); }
+}
+
+
+/* ══════════ UN SOLO BOTÓN PRIMARIO POR PANTALLA ══════════
+   El hero ofrecía «Prueba los sistemas» y «Haz el diagnóstico» como dos
+   botones del mismo peso: es pedir dos cosas a la vez y no elegir ninguna.
+   El segundo pasa a ser una línea que invita sin competir —la acción de
+   menos compromiso va primero en el texto, la de más, en negrita—. */
+.v6-act2{
+  display:inline-flex; align-items:baseline; gap:.45em;
+  font-size:var(--f-small); color:var(--ink-2, #9fb0cf);
+  text-decoration:none; padding:6px 0; border-bottom:1px solid transparent;
+  transition:color .18s ease, border-color .18s ease;
+}
+.v6-act2 b{ color:var(--ink, #edf1f8); font-weight:600; }
+.v6-act2 i{ font-style:normal; transition:transform .18s cubic-bezier(.22,1,.36,1); }
+.v6-act2:hover{ color:var(--ink, #edf1f8); border-bottom-color:currentColor; }
+.v6-act2:hover i{ transform:translateX(3px); }
+.v6-act2:focus-visible{ outline:2px solid var(--blue, #5b8cff); outline-offset:4px; border-radius:var(--r-ctrl); }
+@media (max-width:560px){ .v6-act2{ font-size:.875rem; } }
+
+/* ══════════════════ EL PROBLEMA · LA CAPA QUE SE ENCIENDE ══════════════════
+   El recurso narrativo central del rediseño, y a propósito el más barato que
+   existe: una lista, dos estados y una transición de «transform» y «opacity».
+   Ni WebGL, ni canvas, ni una imagen. La investigación midió que el primer
+   pintado va a 408 ms en un iPhone con la CPU frenada ×4; meter Three.js
+   —150 KB comprimidos, frente a los 183 KB que pesa TODO el CSS por red—
+   se comía ese presupuesto para contar esto mismo peor.
+
+   Los dos estados:
+     APAGADO  el trabajo a mano. Gris, monoespaciado, con su contador de
+              veces al día. Se lee como una lista de tareas pendientes.
+     ENCENDIDO lo que hace el sistema. Azul D-Code, el contador tachado.
+
+   El paso de uno a otro lo dispara entrar en la vista, escalonado por
+   «--i», para que se lea de arriba abajo y no todo a la vez. */
+.pb{ padding-block:var(--sp-air); }
+.pb .v6-intro{ max-width:52ch; margin-top:var(--e-4); }
+
+.pb-capa{
+  position:relative; margin-top:var(--e-7);
+  border:1px solid var(--borde, rgba(150,174,245,.16)); border-radius:var(--r-win);
+  padding:var(--e-7) var(--e-5) var(--e-5);
+  transition:border-color .6s ease;
+}
+.pb.es-on .pb-capa{ border-color:rgba(91,140,255,.4); }
+
+/* La etiqueta de la capa: cambia de palabra cuando se enciende. */
+.pb-et{
+  position:absolute; top:-.72em; left:var(--e-5);
+  display:inline-grid; padding:0 var(--e-3);
+  background:var(--v-bg, #06080d);
+  font-family:var(--mono); font-size:var(--f-mono);
+  letter-spacing:.14em; text-transform:uppercase;
+}
+.pb-et i{ grid-area:1/1; font-style:normal; transition:opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1); }
+.pb-et-a{ color:var(--ink-3, #6b7a99); }
+.pb-et-b{ color:var(--blue, #5b8cff); opacity:0; transform:translateY(6px); }
+.pb.es-on .pb-et-a{ opacity:0; transform:translateY(-6px); }
+.pb.es-on .pb-et-b{ opacity:1; transform:none; }
+
+.pb-l{ list-style:none; margin:0; padding:0; display:grid; gap:var(--e-1); counter-reset:none; }
+.pb-i{
+  display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:baseline;
+  gap:var(--e-4); padding:var(--e-3) var(--e-3); border-radius:var(--r-card);
+  transition:background .45s ease, transform .45s cubic-bezier(.22,1,.36,1);
+  transition-delay:calc(var(--i) * 55ms);
+}
+.pb.es-on .pb-i{ background:rgba(91,140,255,.055); }
+
+.pb-n{ font-family:var(--mono); font-size:var(--f-mono); color:var(--ink-3, #6b7a99); transition:color .45s ease; transition-delay:calc(var(--i) * 55ms); }
+.pb.es-on .pb-n{ color:var(--blue, #5b8cff); }
+
+.pb-v{ font-size:var(--f-lead); line-height:var(--lh-lead); color:var(--ink-2, #9fb0cf); transition:color .45s ease; transition-delay:calc(var(--i) * 55ms); }
+.pb-v b{ color:var(--ink, #edf1f8); font-weight:600; }
+.pb.es-on .pb-v{ color:var(--ink-2, #9fb0cf); }
+
+/* El contador. Es lo que convierte la lista en un problema: no es que se
+   haga, es cuántas veces. Al encenderse se tacha. */
+.pb-x{ font-family:var(--mono); font-size:var(--f-mono); color:var(--ink-2, #9fb0cf); white-space:nowrap; }
+.pb-c{ position:relative; display:inline-block; color:var(--ink-2, #9fb0cf); }
+.pb-c::after{
+  content:''; position:absolute; left:-3px; right:-3px; top:52%; height:2px; border-radius:2px;
+  background:var(--blue, #5b8cff); box-shadow:0 0 8px rgba(91,140,255,.55);
+  transform:scaleX(0); transform-origin:0 50%;
+  transition:transform .4s cubic-bezier(.22,1,.36,1); transition-delay:calc(var(--i) * 55ms + 180ms);
+}
+.pb.es-on .pb-c::after{ transform:scaleX(1); }
+/* Tachado, no borrado: la cifra tiene que poder leerse para que tacharla
+   signifique algo. A .55 era invisible. */
+.pb.es-on .pb-x{ opacity:.8; }
+
+.pb-q{
+  margin:var(--e-7) 0 0; max-width:46ch;
+  font-family:var(--serif); font-size:var(--f-h3); line-height:var(--lh-h3);
+  color:var(--ink, #edf1f8);
+}
+.pb-on{
+  display:block; margin-top:var(--e-2); color:var(--blue, #5b8cff);
+  opacity:0; transform:translateY(8px);
+  transition:opacity .6s ease .55s, transform .6s cubic-bezier(.22,1,.36,1) .55s;
+}
+.pb.es-on .pb-on{ opacity:1; transform:none; }
+
+@media (max-width:640px){
+  .pb-capa{ padding:var(--e-6) var(--e-4) var(--e-4); }
+  .pb-i{ grid-template-columns:auto minmax(0,1fr); gap:var(--e-3); padding:var(--e-2) var(--e-2); }
+  .pb-x{ grid-column:2; margin-top:1px; }
+  .pb-v{ font-size:var(--f-body); }
+  .pb{ padding-block:clamp(56px,9vw,84px); }
+  .pb-capa{ margin-top:var(--e-5); }
+  .pb-q{ margin-top:var(--e-5); font-size:var(--f-lead); }
+}
+/* A 400 px la fila se parte en tres líneas y siete filas se comen dos
+   pantallas enteras. El contador se queda en la cifra —«6 ×»— porque las
+   palabras «veces al día» ya las dice la fila de arriba, y el verbo pasa a
+   su propia línea para que el texto no quede en columnas de dos palabras. */
+@media (max-width:400px){
+  .pb-i{ grid-template-columns:auto minmax(0,1fr); gap:var(--e-2); padding:6px var(--e-1); }
+  .pb-v{ font-size:.9375rem; line-height:1.45; }
+  .pb-x{ font-size:.75rem; }
+  .pb-x .pb-u{ display:none; }
+  .pb-x::after{ content:' ×'; }
+}
+/* Movimiento reducido: los dos estados siguen contándose, sin recorrido. */
+@media (prefers-reduced-motion:reduce){
+  .pb-i, .pb-n, .pb-v, .pb-et i, .pb-on, .pb-c::after{ transition:none !important; }
 }
