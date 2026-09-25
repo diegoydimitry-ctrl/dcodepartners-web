@@ -605,7 +605,7 @@
 .dx-opt input:focus-visible + span{ outline:2px solid var(--blue); outline-offset:2px; }
 
 /* Paso 3 · el precio de una hora */
-.dx-tarifas{ margin:20px 0 0; padding:0; border:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; max-width:640px; }
+.dx-tarifas{ margin:20px 0 0; padding:0; border:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; max-width:800px; }
 .dx-tarifas .dx-opt span{ align-items:center; font-family:var(--serif); font-size:1.25rem; font-weight:600; min-height:64px; }
 
 /* Paso 4 · el resultado */
@@ -922,4 +922,79 @@ html[data-theme="light"] .gal-movil-foto .es-claro{ display:block; }
 html[data-theme="light"] .gal-movil-foto{
   border-color:rgba(36,52,104,.16); background:rgba(244,246,251,.6);
   box-shadow:0 18px 44px -30px rgba(20,30,64,.5);
+}
+
+/* ═══════════ EN EL TELÉFONO, LA WEB SE LEE; NO SE TOCA ═══════════
+   Medido en un iPhone 12: la portada eran 14.166 px —diecisiete pantallas—
+   y dos tercios de eso eran cuatro escenas pensadas para un ratón:
+
+     la galería de demos ....... 2.954 px
+     D-Code OS ................. 3.135 px  (.os-conv + .os-movil)
+     la escena de «Qué hacemos»  1.728 px
+     la del diagnóstico ........ 1.092 px
+
+   Son aplicaciones de escritorio y diagramas de tres columnas. Apretados en
+   390 px no se leen —en la captura del iPhone las cifras salían cortadas
+   dentro de sus recuadros— y lo único que consiguen es alargar la página
+   hasta que se hace interminable. Así que en el teléfono no salen: queda el
+   titular, un párrafo que cuenta lo mismo en palabras, y donde hace falta
+   una línea diciendo dónde se ve la demo de verdad.
+
+   EL PUNTO DE CORTE ES 767 px A PROPÓSITO. El iPad en vertical mide 768, y
+   en tableta esto se usa y se ve bien: ahí no cambia absolutamente nada.
+   Por eso no vale «max-width:768px» ni el «(pointer:coarse)» que usa el
+   cielo —una tableta también es un dedo—. */
+.solo-tel{ display:none; }
+@media (max-width:767px){
+  .solo-tel{ display:block; }
+  .solo-pantalla{ display:none !important; }
+  [data-arq], [data-dx], [data-gal]{ display:none !important; }
+  /* Solo el recorrido animado. «.os-movil» NO se toca: ya era el texto que
+     D-Code OS enseña en el teléfono —«la aplicación en un vistazo»— y está
+     escrito para leerse ahí. Taparlo era cambiar información por menos
+     información. Lo mismo vale para «.demo-movil» del sistema financiero,
+     que ya funcionaba así antes de esto y por eso no aparece aquí. */
+  #dcode-os .os-conv{ display:none !important; }
+
+  .solo-tel p{ margin:0 0 14px; max-width:36ch; }
+  .solo-tel p:last-child{ margin-bottom:0; }
+  .solo-tel{ margin:18px 0 6px; }
+  /* La línea de «esto se ve en una pantalla más grande»: se distingue del
+     párrafo que informa, sin gritar. No es un botón: no hay nada que pulsar. */
+  .solo-tel .tel-aviso{
+    margin-top:16px; padding-left:13px; border-left:2px solid var(--borde, rgba(150,174,245,.28));
+    color:var(--ink-2, #9fb0cf); font-size:.9375rem; line-height:1.5;
+  }
+  /* Los bloques que sujetaban una escena alta ya no tienen que ser altos. */
+  #que-hacemos.v6-block--tall, #diagnostico.v6-block--tall{ min-height:0; }
+  #sistemas.v6-block--demo{ min-height:0; }
+}
+
+/* EL COSTE DE LA HORA, ESCRITO POR QUIEN HACE EL DIAGNÓSTICO.
+   Los cuatro botones son atajos; el resultado entero cuelga de esta cifra y
+   una hora de trabajo no vale siempre 18, 25, 35 o 50 €.
+   OJO: este campo NO puede llevar la clase «.dx-opt». Esa regla esconde todo
+   input que haya dentro —«position:absolute; opacity:0»— porque los de al
+   lado son radios disfrazados de tarjeta; con ella, aquí solo se veía la
+   palabra OTRO y ningún sitio donde escribir. */
+.dx-libre-caja{
+  display:flex; flex-direction:column; align-items:stretch; justify-content:center; gap:6px;
+  min-height:64px; padding:8px 10px; cursor:text;
+  border:1px solid rgba(150,174,245,.22); border-radius:12px;
+}
+.dx-libre-caja:hover{ border-color:rgba(150,174,245,.4); }
+.dx-libre-caja:focus-within{ border-color:var(--blue); }
+.dx-libre-t{ font-family:var(--mono); font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase; color:#8c95aa; text-align:center; }
+.dx-libre{
+  width:100%; padding:2px 0; font-family:var(--serif); font-size:1.25rem; font-weight:600;
+  text-align:center; color:inherit; background:transparent; border:0; -moz-appearance:textfield;
+}
+.dx-libre::-webkit-outer-spin-button, .dx-libre::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.dx-libre::placeholder{ font-family:var(--mono); font-size:.9375rem; font-weight:400; color:#8c95aa; }
+.dx-libre:focus{ outline:none; }
+.dx-libre-caja:has(.dx-libre.es-puesta){ border-color:rgba(255,107,98,.65); background:rgba(255,107,98,.12); }
+.dx-libre-caja:has(.dx-libre.es-puesta) .dx-libre-t{ color:#ffb1ab; }
+@media (max-width:760px){
+  .dx-tarifas{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .dx-libre-caja{ grid-column:span 2; }
 }

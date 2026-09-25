@@ -1573,10 +1573,17 @@ html[data-theme="light"] .chat-aviso{
 html[data-theme="light"] .chat-aviso::after{
   background:rgba(240,244,251,.98); border-color:rgba(36,52,104,.16);
 }
+/* En el móvil el globo se pone ENCIMA de la burbuja, no a su lado: al lado
+   no cabe. Y se ancla por la derecha, no por la izquierda: la burbuja vive
+   pegada al borde derecho de la pantalla, así que con «left:0» el globo
+   arrancaba en el borde izquierdo de la burbuja y se salía por la derecha
+   —medido en el Preview a 375 px: 116 de sus 192 px fuera de la pantalla,
+   el texto cortado por la mitad—. Anclado a la derecha crece hacia dentro,
+   que es donde hay sitio. */
 @media (max-width:520px){
-  .chat-aviso{ right:auto; left:0; bottom:calc(100% + 10px); border-radius:14px 14px 14px 4px;
-    transform-origin:0 100%; }
-  .chat-aviso::after{ right:auto; left:12px; bottom:-5px; }
+  .chat-aviso{ right:0; left:auto; bottom:calc(100% + 10px); border-radius:14px 14px 4px 14px;
+    transform-origin:100% 100%; max-width:min(16rem, calc(100vw - 92px)); }
+  .chat-aviso::after{ right:14px; left:auto; bottom:-5px; }
 }
 @media (prefers-reduced-motion:reduce){ .chat-aviso{ display:none; } }
 

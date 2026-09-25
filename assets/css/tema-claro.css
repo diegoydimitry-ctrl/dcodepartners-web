@@ -693,3 +693,11 @@ html[data-theme="light"] .gal-movil-b{ border:1px solid rgba(46,59,98,0.3); colo
 html[data-theme="light"] .gal-movil-b:hover{ border-color:rgba(46,59,98,0.3); }
 html[data-theme="light"] .gal-movil-foto{ border:1px solid rgba(46,59,98,0.218); background:rgba(240,243,249,0.5); box-shadow:0 18px 44px -28px rgba(20,30,64,0.27); }
 html[data-theme="light"][data-theme="light"] .gal-movil-foto{ border-color:rgba(205,210,218,0.16); box-shadow:0 18px 44px -30px rgba(20,30,64,0.15); }
+@media (max-width:767px){
+  html[data-theme="light"] .solo-tel .tel-aviso{ border-left:2px solid var(--borde, rgba(46,59,98,0.3)); color:var(--ink-2, #323a47); }
+}
+html[data-theme="light"] .dx-libre-caja{ border:1px solid rgba(46,59,98,0.262); }
+html[data-theme="light"] .dx-libre-caja:hover{ border-color:rgba(46,59,98,0.3); }
+html[data-theme="light"] .dx-libre-t{ color:#48505e; }
+html[data-theme="light"] .dx-libre::placeholder{ color:#48505e; }
+html[data-theme="light"] .dx-libre-caja:has(.dx-libre.es-puesta) .dx-libre-t{ color:#874441; }

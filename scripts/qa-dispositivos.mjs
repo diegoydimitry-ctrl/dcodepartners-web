@@ -28,6 +28,20 @@ const APARATOS=[
   ['movil320',{viewport:{width:320,height:680},deviceScaleFactor:2,isMobile:true,hasTouch:true}],
 ];
 const RUTAS=['/','/metodo','/que-hacemos','/servicios/paginas-web','/servicios/sistemas-a-medida','/precios','/sistema-financiero','/contacto','/faq','/conocenos','/blog','/garantias','/en/','/en/que-hacemos','/en/servicios/paginas-web','/en/contacto'];
+/* El tope de alto en el teléfono. La portada —la que era la más larga— quedó
+   en 9.029 px tras quitar las escenas; 11.000 deja sitio para crecer sin
+   volver a las diecisiete pantallas de antes. Si una página lo pasa, o ha
+   entrado una escena de escritorio, o hay que partirla.
+
+   DOS PÁGINAS ESTÁN POR ENCIMA Y NO LAS TOCO TODAVÍA. Lo que las alarga no
+   son demos: es información que alguien puede querer leer en el móvil —las
+   dieciocho fichas de precio con su qué es y su cuánto cuesta, y las catorce
+   piezas de Finance—. Recortarlas es decidir qué deja de contarse, y eso no
+   lo invento yo. Quedan ancladas a su alto de hoy: no se arreglan, pero
+   tampoco pueden crecer mientras se decide. Medido a 320 px, que es el peor
+   caso. */
+const TOPE_TEL = 11000;
+const PENDIENTES = { '/precios': 15600, '/sistema-financiero': 15800 };
 const br=await chromium.launch(opcionesNavegador());
 const malos=[];
 let n=0;
@@ -52,7 +66,14 @@ for(const [nom,op] of APARATOS){
          la que cazó aquel «.field{display:none}» que apagó el formulario
          entero— y no que estén puestos antes de tiempo. */
       await p.evaluate(()=>{ const a=document.querySelector('.cfg-saltar a'); if(a) a.click();
-        const d=document.querySelector('.form-extra'); if(d) d.open=true; });
+        const d=document.querySelector('.form-extra'); if(d) d.open=true;
+        /* El globo del asistente sale solo cada 22 s, así que en una prueba
+           nunca aparece: se enciende a mano, con la frase más larga de las
+           diez que rota. Se salía 116 px de una pantalla de 375 y nadie lo
+           vio hasta mirar el Preview con los ojos, porque está recortado
+           —no empuja la página— y el desborde horizontal daba 0. */
+        const g=document.querySelector('.chat-aviso');
+        if(g){ g.textContent='¿Necesitas que te lo enseñemos en una demo?'; g.classList.add('es-visto'); } });
       await p.waitForTimeout(340);
 
       await p.evaluate(async()=>{const h=document.documentElement.scrollHeight;
@@ -69,10 +90,26 @@ for(const [nom,op] of APARATOS){
         const camposOcultos=campos.filter(e=>!vis(e)&&!e.closest('.form-step:not(.is-active)')).length;
         // imágenes rotas
         const rotas=[...document.querySelectorAll('img')].filter(i=>i.complete&&i.naturalWidth===0).length;
-        return {desborde:H.scrollWidth>H.clientWidth?H.scrollWidth-H.clientWidth:0, textos, campos:campos.length, camposOcultos, rotas,
+        /* NINGUNA ESCENA DE DEMO EN EL TELÉFONO, Y NADA DE PÁGINAS
+           INTERMINABLES. Son aplicaciones de escritorio y diagramas de tres
+           columnas: apretados en 390 px no se leen y alargaban la portada
+           hasta 15.671 px —diecisiete pantallas—. En tableta sí se usan, así
+           que esto solo mira el teléfono. */
+        const escenas=[...document.querySelectorAll('[data-arq],[data-dx],[data-gal],#dcode-os .os-conv')].filter(vis).length;
+        const altoPagina=Math.round(H.scrollHeight);
+        // el globo del asistente, entero dentro de la pantalla
+        const g=document.querySelector('.chat-aviso'); let globo=0;
+        if(g&&vis(g)){ const b=g.getBoundingClientRect();
+          globo=Math.round(Math.max(0, b.right-H.clientWidth, -b.left)); }
+        return {escenas, altoPagina, globo, desborde:H.scrollWidth>H.clientWidth?H.scrollWidth-H.clientWidth:0, textos, campos:campos.length, camposOcultos, rotas,
           quieto:H.classList.contains('cielo-quieto'), lienzos:document.querySelectorAll('.field canvas').length};
       });
       if(d.desborde>1) malos.push(`${nom}/${tema}${ruta}: desborde horizontal ${d.desborde}px`);
+      if(d.globo>1) malos.push(`${nom}/${tema}${ruta}: el globo del asistente se sale ${d.globo}px de la pantalla`);
+      const esTelefono = nom==='movil' || nom==='movil320';
+      if(esTelefono && d.escenas>0) malos.push(`${nom}/${tema}${ruta}: ${d.escenas} escena(s) de demo montadas en el teléfono`);
+      const tope = PENDIENTES[ruta] || TOPE_TEL;
+      if(esTelefono && d.altoPagina>tope) malos.push(`${nom}/${tema}${ruta}: ${d.altoPagina}px de alto en el teléfono (el tope son ${tope}px${PENDIENTES[ruta]?', y esta página está a la espera de qué se recorta':''})`);
       if(d.textos<4) malos.push(`${nom}/${tema}${ruta}: solo ${d.textos} textos visibles`);
       if(d.camposOcultos>0) malos.push(`${nom}/${tema}${ruta}: ${d.camposOcultos} campos de formulario ocultos`);
       if(d.rotas>0) malos.push(`${nom}/${tema}${ruta}: ${d.rotas} imágenes rotas`);

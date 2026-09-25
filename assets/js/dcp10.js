@@ -329,9 +329,47 @@
         i.addEventListener('change', function () { horas[i.name.slice(5)] = +i.value; });
       });
     }
-    $$('input[name="dx-tarifa"]', root).forEach(function (i) {
-      i.addEventListener('change', function () { tarifa = +i.value; });
+    /* EL COSTE DE LA HORA LO PONE ÉL. Los cuatro botones son atajos —18, 25,
+       35 y 50— pero una hora de trabajo no vale siempre uno de esos cuatro
+       números, y el resultado entero cuelga de esta cifra. Así que al lado va
+       un campo donde se escribe la suya. Mandan el último que se haya tocado:
+       si escribe, se apagan los botones; si pulsa un botón, se vacía el campo.
+       Un valor imposible —cero, en blanco, letras— no se acepta: se vuelve al
+       botón marcado, para que nunca salga un cálculo con una tarifa absurda. */
+    var radios = $$('input[name="dx-tarifa"]', root);
+    var libre = $('.dx-libre', root);
+    function tarifaDeBotones() {
+      for (var i = 0; i < radios.length; i++) if (radios[i].checked) return +radios[i].value;
+      return 25;
+    }
+    radios.forEach(function (i) {
+      i.addEventListener('change', function () {
+        tarifa = +i.value;
+        if (libre) { libre.value = ''; libre.classList.remove('es-puesta'); }
+      });
     });
+    if (libre) {
+      libre.addEventListener('input', function () {
+        var v = parseFloat(libre.value);
+        if (isFinite(v) && v >= 1 && v <= 500) {
+          tarifa = v;
+          libre.classList.add('es-puesta');
+          radios.forEach(function (r) { r.checked = false; });
+        } else {
+          libre.classList.remove('es-puesta');
+          if (libre.value === '') { radios.forEach(function (r) { if (+r.value === 25) r.checked = true; }); tarifa = tarifaDeBotones(); }
+        }
+      });
+      /* Al salir del campo con algo que no vale, se limpia y vuelve el botón. */
+      libre.addEventListener('blur', function () {
+        var v = parseFloat(libre.value);
+        if (libre.value !== '' && !(isFinite(v) && v >= 1 && v <= 500)) {
+          libre.value = ''; libre.classList.remove('es-puesta');
+          radios.forEach(function (r) { if (+r.value === 25) r.checked = true; });
+          tarifa = tarifaDeBotones();
+        }
+      });
+    }
 
     function calculo() {
       var H = 0, Hr = 0;
