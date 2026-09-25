@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>D-Code Partners — Anuncio 5 · D-Code Finance (recorte social)</title>
+<!--
+  Anuncio 5 — 22 s. Recorte directo de ad4.html para redes sociales: mismo
+  concepto y mismos activos visuales (paleta, dashboard, asistente), sin
+  locución — solo música y rótulos, para que funcione también sin sonido
+  en el feed. Mismo patrón que el teaser de DCode OS (ad3.html), que ya
+  demostró que un formato corto no necesita voz en off para transmitir el
+  mensaje.
+
+  Ver GUION-5.md y GUION-4.md para la fuente de cada dato de producto.
+
+  Render determinista, mismo motor que el resto: todo se deriva de
+  render(t). Mismos parámetros de URL (?fmt=9x16|16x9, ?t=segundos).
+-->
+<style>
+  @font-face{ font-family:'Inter'; font-weight:400 800; font-display:block;
+    src:url('../../assets/fonts/inter-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'Space Grotesk'; font-weight:500 700; font-display:block;
+    src:url('../../assets/fonts/spacegrotesk-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'JetBrains Mono'; font-weight:400 700; font-display:block;
+    src:url('../../assets/fonts/jetbrainsmono-variable.woff2') format('woff2'); }
+  html,body{ margin:0; padding:0; background:#000; overflow:hidden; }
+  #stage{ display:block; }
+  body.preview{ display:flex; align-items:center; justify-content:center; height:100vh; }
+  body.preview #stage{ max-width:100vw; max-height:100vh; width:auto; height:auto; object-fit:contain; }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<script>
+(() => {
+'use strict';
+
+const Q     = new URLSearchParams(location.search);
+const FMT   = Q.get('fmt') === '16x9' ? '16x9' : '9x16';
+const FRAME = Q.has('t') ? parseFloat(Q.get('t')) : null;
+const DUR   = 22.0;
+
+const cv = document.getElementById('stage');
+const W  = FMT === '9x16' ? 1080 : 1920;
+const H  = FMT === '9x16' ? 1920 : 1080;
+cv.width = W; cv.height = H;
+cv.style.width = W + 'px'; cv.style.height = H + 'px';
+const g = cv.getContext('2d', { alpha:false });
+
+const V  = H > W;
+const CX = W / 2, CY = H / 2;
+
+const C = {
+  bg:'#06080d', s0:'#06080d', s1:'#0e1320', s2:'#141c30', s3:'#1b2542',
+  borderSubtle:'#171d2c', border:'#1e2536', borderStrong:'#2b3448',
+  ink:'#eef2fb', stone:'#a7b0c4', stoneSoft:'#8b94ab',
+  blue:'#5b8cff', blue300:'#93b4ff',
+  cyan:'#43e0ff', cyan300:'#7ceaff',
+  green:'#34e7a4', amber:'#ffb454', red:'#ff6b6b',
+  violet:'#9b6bff', violet300:'#c3a6ff'
+};
+
+/* ─────────────────────────── utilidades ─────────────────────────── */
+
+const clamp = (v,a=0,b=1) => v < a ? a : v > b ? b : v;
+const lerp  = (a,b,t) => a + (b - a) * t;
+const easeOut      = t => 1 - Math.pow(1 - t, 3);
+const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
+const easeInOut    = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+const easeOutBack  = t => { const c=1.70158, s=c+1; return 1 + s*Math.pow(t-1,3) + c*Math.pow(t-1,2); };
+const easeInPower4  = t => t*t*t*t;
+const easeOutPower4 = t => 1 - Math.pow(1 - t, 4);
+const ramp = (t,a,b,fn=easeOut) => fn(clamp((t - a) / (b - a)));
+
+const CUT_TRAVEL = 0.12;
+const CUT_DUR    = 0.24;
+function cutOffsetX(localT, sceneDur, isFirst, isLast){
+  const travel = CUT_TRAVEL * W;
+  if (!isLast && sceneDur - localT < CUT_DUR){
+    const p = easeInPower4(clamp((localT - (sceneDur - CUT_DUR)) / CUT_DUR));
+    return -travel * p;
+  }
+  if (!isFirst && localT < CUT_DUR){
+    const p = easeOutPower4(clamp(localT / CUT_DUR));
+    return travel * (1 - p);
+  }
+  return 0;
+}
+
+function rgba(hex, a){
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+const FAM = { sg:'"Space Grotesk"', in:'Inter', mo:'"JetBrains Mono"' };
+function font(fam, weight, size, letter=0){
+  g.font = `${weight} ${size}px ${FAM[fam]}`;
+  g.letterSpacing = `${letter}px`;
+}
+function roundRect(x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); }
+function wrap(text, maxW){
+  const words = text.split(' '), lines = []; let line = '';
+  for (const w of words){
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line){ lines.push(line); line = w; }
+    else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+function centeredLines(lines, cx, top, lh, prog, rise = 30){
+  for (let i = 0; i < lines.length; i++){
+    const p = clamp((prog - i * 0.10) / (1 - Math.min(0.5, lines.length * 0.10)));
+    const e = easeOutQuint(p);
+    g.save(); g.globalAlpha = e;
+    g.fillText(lines[i], cx, top + i * lh + (1 - e) * rise);
+    g.restore();
+  }
+}
+function makeRng(seed){
+  let s = seed >>> 0;
+  return () => { s = (1103515245 * s + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+}
+
+/* ─────────────────────────── fondo y viñeta ─────────────────────────── */
+
+function background(t){
+  g.fillStyle = C.s0; g.fillRect(0, 0, W, H);
+  const gy = CY - H * 0.08;
+  const rg = g.createRadialGradient(CX, gy, 0, CX, gy, Math.max(W, H) * 0.7);
+  rg.addColorStop(0, rgba(C.blue, 0.14));
+  rg.addColorStop(0.5, rgba(C.blue, 0.05));
+  rg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+  const step = 84, drift = (t * 4) % step;
+  g.strokeStyle = rgba(C.border, 0.5);
+  g.lineWidth = 1; g.beginPath();
+  for (let x = -step + drift; x < W + step; x += step){ g.moveTo(x+.5, 0); g.lineTo(x+.5, H); }
+  for (let y = -step + drift; y < H + step; y += step){ g.moveTo(0, y+.5); g.lineTo(W, y+.5); }
+  g.stroke();
+}
+function vignette(){
+  const rg = g.createRadialGradient(CX, CY, Math.min(W,H)*0.32, CX, CY, Math.max(W,H)*0.78);
+  rg.addColorStop(0, 'rgba(0,0,0,0)');
+  rg.addColorStop(1, 'rgba(0,0,0,0.68)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+}
+
+/* ─────────────────────────── superficies UI ─────────────────────────── */
+
+function panel(x, y, w, h, r = 14, surface = C.s1){
+  g.save();
+  g.shadowColor = 'rgba(3,5,10,.7)'; g.shadowBlur = 44; g.shadowOffsetY = 20;
+  roundRect(x, y, w, h, r);
+  g.fillStyle = surface; g.fill();
+  g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+  g.strokeStyle = rgba(C.blue, .14); g.lineWidth = 1;
+  g.stroke();
+  g.strokeStyle = C.border; g.lineWidth = 1;
+  roundRect(x, y, w, h, r); g.stroke();
+  g.restore();
+}
+
+function badge(x, y, label, tone, alpha = 1, size = 18){
+  const tones = {
+    brand:  [C.blue,  rgba(C.blue,  .16)],
+    success:[C.green, rgba(C.green, .16)],
+    warning:[C.amber, rgba(C.amber, .16)],
+    critical:[C.red,  rgba(C.red,   .16)],
+    demo:   [C.violet,rgba(C.violet,.18)],
+    data:   [C.cyan,  rgba(C.cyan,  .16)]
+  };
+  const [fg, bgc] = tones[tone];
+  font('mo', 700, size, 1.1);
+  const w = g.measureText(label).width + size * 1.7, h = size * 1.7;
+  g.save(); g.globalAlpha = alpha;
+  roundRect(x, y, w, h, h/2);
+  g.fillStyle = bgc; g.fill();
+  g.strokeStyle = rgba(fg, .55); g.lineWidth = 1.2; g.stroke();
+  g.fillStyle = fg; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText(label, x + size * 0.85, y + h/2 + 1);
+  g.restore();
+  return w;
+}
+
+function dot(x, y, r, color, alpha = 1){
+  g.save(); g.globalAlpha = alpha;
+  g.beginPath(); g.arc(x, y, r, 0, Math.PI*2);
+  g.fillStyle = color; g.fill();
+  g.restore();
+}
+
+function kpiCard(x, y, w, h, label, value, tone, alpha){
+  const tones = { success:C.green, warning:C.amber, critical:C.red };
+  const fg = tones[tone];
+  g.save(); g.globalAlpha = alpha;
+  panel(x, y, w, h, 14, C.s1);
+  g.strokeStyle = rgba(fg, .28); g.lineWidth = 1.2;
+  roundRect(x, y, w, h, 14); g.stroke();
+  font('mo', 700, w < 260 ? 14 : 16, 1.2);
+  g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText(label.toUpperCase(), x + 20, y + 30);
+  dot(x + w - 24, y + 30, 5, fg, 1);
+  font('sg', 700, w < 260 ? 34 : 40, -0.5);
+  g.fillStyle = fg; g.textBaseline = 'alphabetic';
+  g.fillText(value, x + 20, y + h - 20);
+  g.restore();
+}
+
+/* ══════════════════ ESCENA 1 — el caos (0.0 – 3.2) ══════════════════ */
+
+const RNG1 = makeRng(0xF17A5C);
+const FRAGS = Array.from({length: 5}, (_, i) => ({
+  ox: (RNG1() - 0.5) * 0.90,
+  oy: (RNG1() - 0.5) * 0.78,
+  rot: (RNG1() - 0.5) * 0.30,
+  at: i * 0.10
+}));
+
+function frag(cx, cy, alpha){
+  const w = 160, h = 108;
+  g.save(); g.globalAlpha = alpha;
+  roundRect(cx - w/2, cy - h/2, w, h, 10);
+  g.fillStyle = C.s1; g.fill();
+  g.strokeStyle = C.border; g.lineWidth = 1; g.stroke();
+  g.strokeStyle = rgba(C.blue, .5); g.lineWidth = 1.4;
+  g.beginPath(); g.moveTo(cx - w/2 + 16, cy - h/2 + 24); g.lineTo(cx + w/2 - 16, cy - h/2 + 24); g.stroke();
+  for (let i = 0; i < 2; i++){
+    roundRect(cx - w/2 + 16, cy - h/2 + 42 + i*18, (i===0?100:60), 6, 3);
+    g.fillStyle = rgba(C.stone, .55); g.fill();
+  }
+  g.restore();
+}
+
+function s1(t){
+  const dur = 3.2;
+  const out = 1 - ramp(t, dur - 0.28, dur, easeInOut);
+  const unit = Math.min(W, H);
+  FRAGS.forEach((f, i) => {
+    const p = ramp(t, f.at, f.at + 0.26, easeOutQuint);
+    const a = clamp(p) * out;
+    if (a <= 0.001) return;
+    const cx = CX + f.ox * unit, cy = CY + f.oy * unit;
+    g.save(); g.translate(cx, cy); g.rotate(f.rot); g.translate(-cx, -cy);
+    frag(cx, cy, a * 0.9);
+    g.restore();
+  });
+
+  const cap = '¿SABES QUÉ ESTÁ PASANDO\nCON EL DINERO DE TU EMPRESA?';
+  const cp = ramp(t, 1.15, 1.65, easeOutQuint);
+  if (cp > 0){
+    const size = V ? 52 : 56;
+    font('sg', 700, size, -0.4);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const lines = cap.split('\n');
+    const lh = size * 1.22;
+    const top = CY - (lines.length - 1) * lh / 2;
+    g.save(); g.globalAlpha = out;
+    g.fillStyle = C.ink; g.shadowColor = 'rgba(6,8,13,.92)'; g.shadowBlur = 34;
+    centeredLines(lines, CX, top, lh, cp, 26);
+    g.restore();
+  }
+}
+
+/* ══════════════════ ESCENA 2 — revelación (3.2 – 7.0) ══════════════════ */
+
+let LOGO = null;
+
+function s2(t){
+  const dur = 3.8;
+  const out = 1 - ramp(t, dur - 0.28, dur, easeInOut);
+
+  const flash = ramp(t, 0.0, 0.22, easeOut) * (1 - ramp(t, 0.22, 0.7, easeInOut));
+  if (flash > 0){
+    g.save(); g.globalAlpha = flash * 0.5 * out;
+    const rg = g.createRadialGradient(CX, CY, 0, CX, CY, Math.min(W,H) * 0.5);
+    rg.addColorStop(0, rgba(C.cyan, .9)); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = rg; g.fillRect(0, 0, W, H);
+    g.restore();
+  }
+
+  const lp = ramp(t, 0.15, 0.75, easeOutQuint);
+  if (lp > 0){
+    const logoY = V ? CY - H * 0.04 : CY - 60;
+    const iconH = V ? 92 : 88;
+    const iconW = LOGO ? iconH * (LOGO.naturalWidth / LOGO.naturalHeight) : iconH * 1.19;
+    font('sg', 700, V ? 78 : 84, 0.5);
+    const wordW = g.measureText('D-Code Finance').width;
+    const x0 = CX - (iconW + 26 + wordW) / 2;
+    g.save(); g.globalAlpha = lp * out; g.translate(0, (1 - lp) * 18);
+    if (LOGO){
+      g.save(); g.shadowColor = rgba(C.blue, .5); g.shadowBlur = 32;
+      g.drawImage(LOGO, x0, logoY - iconH/2, iconW, iconH); g.restore();
+    }
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.fillStyle = C.ink;
+    font('sg', 700, V ? 78 : 84, 0.5);
+    g.fillText('D-Code ', x0 + iconW + 26, logoY + 11);
+    const w1 = g.measureText('D-Code ').width;
+    g.fillStyle = C.cyan;
+    g.fillText('Finance', x0 + iconW + 26 + w1, logoY + 11);
+    g.restore();
+
+    const sp = ramp(t, 1.0, 1.5, easeOutQuint);
+    if (sp > 0){
+      font('sg', 500, V ? 36 : 38, -0.2);
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.save(); g.globalAlpha = sp * out;
+      g.fillStyle = C.stone;
+      g.fillText('Todo el dinero de tu empresa, explicado.', CX, logoY + (V ? 84 : 78));
+      g.restore();
+    }
+  }
+}
+
+/* ══════════════════ ESCENA 3 — el sistema (7.0 – 13.2) ══════════════════ */
+
+const KPIS = [
+  { label: 'Cobrado',           value: '18.420 €', tone: 'success' },
+  { label: 'Pendiente de cobro',value: '6.150 €',  tone: 'warning' },
+  { label: 'Vencido',           value: '1.240 €',  tone: 'critical' }
+];
+const MODULES5 = ['Facturas', 'Cobros', 'Gastos', 'Presupuestos', 'Proyectos'];
+
+function s3(t){
+  const dur = 6.2;
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, dur - 0.30, dur, easeInOut);
+  const a = inn * out;
+
+  const panelW = V ? W * 0.88 : W * 0.58;
+  const px = CX - panelW / 2;
+  const py = V ? H * 0.30 : H * 0.20;
+  const p = ramp(t, 0.05, 0.42, easeOutQuint);
+
+  g.save(); g.globalAlpha = a * p; g.translate(0, (1 - p) * 20);
+  font('mo', 700, 16, 1.6);
+  g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText('SITUACIÓN', px, py);
+  badge(px + panelW - 92, py - 14, 'DEMO', 'demo', 1, 15);
+
+  font('sg', 700, V ? 38 : 40, -0.4);
+  g.fillStyle = C.ink; g.textBaseline = 'alphabetic';
+  g.fillText('Panel financiero', px, py + 46);
+
+  const kpiY = py + 70;
+  const kpiH = V ? 118 : 116;
+  const gap = 16;
+  const kpiW = (panelW - gap * 2) / 3;
+  KPIS.forEach((k, i) => {
+    const kp = ramp(t, 0.30 + i * 0.10, 0.62 + i * 0.10, easeOutQuint);
+    if (kp <= 0.001) return;
+    g.save(); g.globalAlpha = kp; g.translate(0, (1 - kp) * 14);
+    kpiCard(px + i * (kpiW + gap), kpiY, kpiW, kpiH, k.label, k.value, k.tone, 1);
+    g.restore();
+  });
+
+  let mx = px, my = kpiY + kpiH + 30;
+  MODULES5.forEach((m, i) => {
+    const at = 0.95 + i * 0.26;
+    const mp = ramp(t, at, at + 0.24, easeOutBack);
+    font('in', 600, V ? 20 : 21, 0.2);
+    const w = g.measureText(m).width + 40;
+    if (mx + w > px + panelW){ mx = px; my += 54; }
+    if (mp > 0.001){
+      g.save(); g.globalAlpha = clamp(mp);
+      const s = lerp(0.75, 1, clamp(mp));
+      g.translate(mx + w/2, my + 19); g.scale(s, s); g.translate(-(mx + w/2), -(my + 19));
+      roundRect(mx, my, w, 38, 19);
+      g.fillStyle = C.s2; g.fill();
+      g.strokeStyle = C.border; g.lineWidth = 1; g.stroke();
+      font('in', 600, V ? 20 : 21, 0.2);
+      g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'middle';
+      g.fillText(m, mx + 20, my + 20);
+      g.restore();
+    }
+    mx += w + 10;
+  });
+  g.restore();
+
+  const cap = 'TODA TU INFORMACIÓN FINANCIERA.\nEN UN SOLO LUGAR.';
+  const cp = ramp(t, dur - 1.5, dur - 1.05, easeOutQuint);
+  if (cp > 0){
+    const size = V ? 40 : 38;
+    font('sg', 700, size, -0.3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const lines = cap.split('\n');
+    const lh = size * 1.2;
+    const top = V ? H * 0.80 - lh/2 : H * 0.86 - lh/2;
+    g.save(); g.globalAlpha = a * cp;
+    g.fillStyle = C.ink; g.shadowColor = 'rgba(6,8,13,.92)'; g.shadowBlur = 26;
+    centeredLines(lines, CX, top, lh, cp, 18);
+    g.restore();
+  }
+}
+
+/* ══════════════════ ESCENA 4 — inteligencia (13.2 – 18.2) ══════════════════ */
+
+function s4(t){
+  const dur = 5.0;
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, dur - 0.30, dur, easeInOut);
+  const a = inn * out;
+
+  const w = V ? W * 0.86 : W * 0.50;
+  const h = V ? 320 : 300;
+  const x = CX - w/2, y = CY - h/2;
+  const p = ramp(t, 0.06, 0.38, easeOutQuint);
+
+  g.save(); g.globalAlpha = a * p; g.translate(0, (1 - p) * 18);
+  panel(x, y, w, h, 18);
+
+  font('mo', 700, 17, 1.4);
+  g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText('PREGUNTA A FINANZAS', x + 24, y + 38);
+  badge(x + w - 90, y + 20, 'DEMO', 'demo', 1, 15);
+
+  const q = '¿Cuánto tenemos pendiente de cobrar?';
+  const qp = ramp(t, 0.45, 0.80, easeOutQuint);
+  if (qp > 0){
+    font('in', 600, V ? 21 : 22, 0);
+    const qw = g.measureText(q).width + 40;
+    const qx = x + w - 24 - qw, qy = y + 68;
+    g.save(); g.globalAlpha = qp; g.translate(0, (1 - qp) * 12);
+    roundRect(qx, qy, qw, 48, 18);
+    g.fillStyle = rgba(C.blue, .85); g.fill();
+    g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillStyle = '#04060a';
+    g.fillText(q, qx + 20, qy + 25);
+    g.restore();
+  }
+
+  const ansY = y + 140;
+  const ap = ramp(t, 1.05, 1.4, easeOutQuint);
+  if (ap > 0){
+    font('sg', 700, V ? 25 : 26, -0.2);
+    g.save(); g.globalAlpha = ap; g.translate(0, (1 - ap) * 12);
+    const lines = wrap('Tenéis 6.150 € pendientes de cobrar, repartidos en 4 facturas.', w - 56);
+    g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    lines.forEach((ln, i) => g.fillText(ln, x + 28, ansY + i * 34));
+    g.restore();
+  }
+
+  const fp = ramp(t, 2.0, 2.35, easeOut);
+  if (fp > 0){
+    const fy = y + h - 46;
+    g.save(); g.globalAlpha = ap * fp;
+    g.strokeStyle = rgba(C.borderSubtle, 1); g.lineWidth = 1;
+    g.beginPath(); g.moveTo(x + 24, fy - 18); g.lineTo(x + w - 24, fy - 18); g.stroke();
+    font('mo', 400, V ? 15 : 16, 0.3);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText('FUENTE · FACTURAS EMITIDAS Y NO COBRADAS, A FECHA DE HOY.', x + 24, fy);
+    g.restore();
+  }
+  g.restore();
+
+  const cap = 'ASISTENTE DETERMINISTA.\nNUNCA INVENTA CIFRAS.';
+  const cp = ramp(t, dur - 1.55, dur - 1.1, easeOutQuint);
+  if (cp > 0){
+    const size = V ? 40 : 38;
+    font('sg', 700, size, -0.3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const lines = cap.split('\n');
+    const lh = size * 1.2;
+    const top = V ? H * 0.88 - lh/2 : H * 0.90 - lh/2;
+    g.save(); g.globalAlpha = a * cp;
+    g.fillStyle = C.cyan300; g.shadowColor = 'rgba(6,8,13,.92)'; g.shadowBlur = 26;
+    centeredLines(lines, CX, top, lh, cp, 16);
+    g.restore();
+  }
+}
+
+/* ══════════════════ ESCENA 5 — cierre (18.2 – 22.0) ══════════════════ */
+
+function s5(t){
+  const cover = ramp(t, 0, 0.35, easeInOut);
+  g.save(); g.globalAlpha = cover;
+  const bg = g.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#080c16'); bg.addColorStop(.55, '#0a1020'); bg.addColorStop(1, '#06080d');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  const rg = g.createRadialGradient(CX, CY - H*0.05, 0, CX, CY - H*0.05, Math.max(W,H)*0.6);
+  rg.addColorStop(0, rgba(C.blue, .22)); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+  g.restore();
+
+  const lp = ramp(t, 0.25, 0.85, easeOutQuint);
+  if (lp > 0){
+    const logoY = V ? H * 0.36 : CY - 78;
+    const iconH = V ? 84 : 80;
+    const iconW = LOGO ? iconH * (LOGO.naturalWidth / LOGO.naturalHeight) : iconH * 1.19;
+    font('sg', 700, V ? 68 : 72, 0.5);
+    const wordW = g.measureText('D-Code Finance').width;
+    const x0 = CX - (iconW + 24 + wordW) / 2;
+    g.save(); g.globalAlpha = lp; g.translate(0, (1 - lp) * 16);
+    if (LOGO){
+      g.save(); g.shadowColor = rgba(C.blue, .5); g.shadowBlur = 30;
+      g.drawImage(LOGO, x0, logoY - iconH/2, iconW, iconH); g.restore();
+    }
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    font('sg', 700, V ? 68 : 72, 0.5);
+    g.fillStyle = C.ink; g.fillText('D-Code ', x0 + iconW + 24, logoY + 10);
+    const w1 = g.measureText('D-Code ').width;
+    g.fillStyle = C.cyan; g.fillText('Finance', x0 + iconW + 24 + w1, logoY + 10);
+    g.restore();
+  }
+
+  const qp = ramp(t, 1.0, 1.4, easeOutQuint);
+  if (qp > 0){
+    const size = V ? 42 : 44;
+    font('sg', 700, size, -0.2);
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    const lines = wrap('Todo el dinero de tu empresa, explicado.', V ? W * 0.84 : W * 0.55);
+    const lh = size * 1.26;
+    const top = V ? H * 0.50 : CY - 6;
+    g.fillStyle = C.ink;
+    centeredLines(lines, CX, top, lh, qp, 18);
+  }
+
+  const mp = ramp(t, 2.0, 2.4, easeOutQuint);
+  if (mp > 0){
+    font('mo', 700, V ? 23 : 24, 3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.save(); g.globalAlpha = mp;
+    g.fillStyle = C.violet300;
+    g.fillText('MUY PRONTO, PARA NUESTROS CLIENTES', CX, V ? H * 0.62 : CY + 108);
+    g.restore();
+  }
+
+  const dp = ramp(t, 2.7, 3.1, easeOutQuint);
+  if (dp > 0){
+    const y = V ? H * 0.71 : CY + 176;
+    g.save(); g.globalAlpha = dp;
+    const lw = 180 * easeOut(dp);
+    const grd = g.createLinearGradient(CX - lw/2, 0, CX + lw/2, 0);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(.5, rgba(C.cyan, .85));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grd; g.fillRect(CX - lw/2, y - 1, lw, 2);
+    font('mo', 700, V ? 34 : 36, 3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = C.cyan;
+    g.shadowColor = rgba(C.cyan, .4); g.shadowBlur = 24;
+    g.fillText('dcodepartners.com', CX, y + (V ? 52 : 50));
+    g.restore();
+  }
+}
+
+/* ══════════════════════════ línea de tiempo ══════════════════════════ */
+
+const SCENES = [
+  { a: 0.0,  b: 3.2,  fn: s1 },
+  { a: 3.2,  b: 7.0,  fn: s2 },
+  { a: 7.0,  b: 13.2, fn: s3 },
+  { a: 13.2, b: 18.2, fn: s4 },
+  { a: 18.2, b: 22.0, fn: s5 }
+];
+
+function render(t){
+  t = clamp(t, 0, DUR);
+  g.save();
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.letterSpacing = '0px';
+
+  background(t);
+
+  for (let i = 0; i < SCENES.length; i++){
+    const sc = SCENES[i];
+    if (t >= sc.a && t < sc.b){
+      const localT = t - sc.a;
+      const dx = cutOffsetX(localT, sc.b - sc.a, i === 0, i === SCENES.length - 1);
+      g.save(); g.translate(dx, 0); sc.fn(localT); g.restore();
+    }
+  }
+  if (t >= DUR - 0.001){ g.save(); s5(DUR - 18.2); g.restore(); }
+
+  vignette();
+
+  const intro = 1 - ramp(t, 0, 0.25, easeInOut);
+  if (intro > 0){ g.fillStyle = rgba('#000000', intro); g.fillRect(0, 0, W, H); }
+  g.restore();
+}
+
+/* ═══════════════════════════ arranque ═══════════════════════════ */
+
+function loadLogo(){
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => { LOGO = img; res(); };
+    img.onerror = () => res();
+    img.src = './assets/dcode-mark.png';
+  });
+}
+
+async function boot(){
+  await Promise.all([
+    document.fonts.load('700 100px "Space Grotesk"'),
+    document.fonts.load('500 100px "Space Grotesk"'),
+    document.fonts.load('700 100px "JetBrains Mono"'),
+    document.fonts.load('400 100px "JetBrains Mono"'),
+    document.fonts.load('500 100px Inter'),
+    document.fonts.load('600 100px Inter'),
+    document.fonts.load('700 100px Inter')
+  ]);
+  await document.fonts.ready;
+  await loadLogo();
+
+  if (FRAME !== null){
+    render(FRAME);
+    window.__ready = true;
+  } else {
+    document.body.classList.add('preview');
+    const t0 = performance.now();
+    const loop = () => { render(((performance.now() - t0) / 1000) % (DUR + 1.0)); requestAnimationFrame(loop); };
+    loop();
+  }
+}
+
+window.__render = render;
+boot();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Registros de render (se regeneran en cada ejecución)
+out/*.log
+
+
+# Pruebas de locución con Kokoro: material de descarte, no entregable.
+out/prueba-voz/
+voces/

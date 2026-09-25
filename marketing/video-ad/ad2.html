@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>D-Code Partners — Anuncio 2 · «Llamar a Javier»</title>
+<!--
+  Anuncio 2 — 58 s. Pieza de captación orgánica, formato "screen-life":
+  el escenario es el móvil y el escritorio del protagonista.
+
+  Render determinista: todo se deriva de render(t). Mismos parámetros de URL
+  que ad.html (?fmt=9x16|16x9, ?t=segundos, sin ?t para previsualizar).
+-->
+<style>
+  @font-face{ font-family:'Inter'; font-weight:400 800; font-display:block;
+    src:url('../../assets/fonts/inter-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'Space Grotesk'; font-weight:500 700; font-display:block;
+    src:url('../../assets/fonts/spacegrotesk-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'JetBrains Mono'; font-weight:400 700; font-display:block;
+    src:url('../../assets/fonts/jetbrainsmono-variable.woff2') format('woff2'); }
+  html,body{ margin:0; padding:0; background:#000; overflow:hidden; }
+  #stage{ display:block; }
+  body.preview{ display:flex; align-items:center; justify-content:center; height:100vh; }
+  body.preview #stage{ max-width:100vw; max-height:100vh; width:auto; height:auto; object-fit:contain; }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<script>
+(() => {
+'use strict';
+
+const Q     = new URLSearchParams(location.search);
+const FMT   = Q.get('fmt') === '16x9' ? '16x9' : '9x16';
+const FRAME = Q.has('t') ? parseFloat(Q.get('t')) : null;
+const DUR   = 60.0;
+
+const cv = document.getElementById('stage');
+const W  = FMT === '9x16' ? 1080 : 1920;
+const H  = FMT === '9x16' ? 1920 : 1080;
+cv.width = W; cv.height = H;
+cv.style.width = W + 'px'; cv.style.height = H + 'px';
+const g = cv.getContext('2d', { alpha:false });
+
+const V  = H > W;
+const CX = W / 2, CY = H / 2;
+
+const C = {
+  bg:'#06080d', panel:'#0e1320', panel2:'#121828', panel3:'#171d2c',
+  border:'#1e2536', borderSoft:'#171d2c',
+  ink:'#eef2fb', stone:'#a7b0c4', stoneSoft:'#8089a0',
+  blue:'#5b8cff', cyan:'#43e0ff', violet:'#9b6bff',
+  green:'#34e7a4', amber:'#ffb454', red:'#ff6b6b'
+};
+
+/* ───────────────────────────── utilidades ───────────────────────────── */
+
+const clamp = (v,a=0,b=1) => v < a ? a : v > b ? b : v;
+const lerp  = (a,b,t) => a + (b - a) * t;
+const easeOut      = t => 1 - Math.pow(1 - t, 3);
+const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
+const easeInOut    = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+const easeOutBack  = t => { const c=1.70158, s=c+1; return 1 + s*Math.pow(t-1,3) + c*Math.pow(t-1,2); };
+const ramp = (t,a,b,fn=easeOut) => fn(clamp((t - a) / (b - a)));
+const win  = (t,a,b,c,d) => Math.min(ramp(t,a,b), 1 - ramp(t,c,d));
+const easeInPower4  = t => t*t*t*t;
+const easeOutPower4 = t => 1 - Math.pow(1 - t, 4);
+
+/* Corte entre escenas (cut-the-curve, motion-doctrine): ver la nota gemela en
+   ad.html. Sustituye el crossfade por opacidad — que dejaba las dos escenas
+   casi a alfa 0 a la vez en cada corte — por un desplazamiento direccional de
+   velocidad emparejada: la saliente se desliza a la izquierda acelerando, la
+   entrante continúa decelerando, mismo recorrido y duración en los dos lados. */
+const CUT_TRAVEL = 0.12;
+const CUT_DUR    = 0.32;
+
+function cutOffsetX(localT, sceneDur, isFirst, isLast){
+  const travel = CUT_TRAVEL * W;
+  if (!isLast && sceneDur - localT < CUT_DUR){
+    const p = easeInPower4(clamp((localT - (sceneDur - CUT_DUR)) / CUT_DUR));
+    return -travel * p;
+  }
+  if (!isFirst && localT < CUT_DUR){
+    const p = easeOutPower4(clamp(localT / CUT_DUR));
+    return travel * (1 - p);
+  }
+  return 0;
+}
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+
+function rgba(hex, a){
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+const FAM = { sg:'"Space Grotesk"', in:'Inter', mo:'"JetBrains Mono"' };
+function font(fam, weight, size, letter=0){
+  g.font = `${weight} ${size}px ${FAM[fam]}`;
+  g.letterSpacing = `${letter}px`;
+}
+function roundRect(x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); }
+
+function wrap(text, maxW){
+  const words = text.split(' '), lines = []; let line = '';
+  for (const w of words){
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line){ lines.push(line); line = w; }
+    else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+/* Rótulo del narrador. La pieza se ve sin sonido en el feed, así que cada
+   frase del narrador va también como texto: el chiste tiene que llegar en
+   silencio. */
+function caption(t, a, b, c, d, text, accent, layout){
+  const o = win(t, a, b, c, d);
+  if (o <= 0) return;
+  /* En 16:9 el rótulo va a la derecha solo cuando el plano es el móvil, que
+     ocupa la izquierda. En los planos de escritorio la maqueta está centrada,
+     así que el rótulo baja para no pisarla. */
+  const side = !V && layout === 'side';
+  const size = V ? 46 : 42;
+  font('sg', 700, size, -0.3);
+  const maxW = V ? W * 0.86 : (side ? W * 0.34 : W * 0.62);
+  const lines = wrap(text, maxW);
+  const lh = size * 1.24;
+  const cx = side ? W * 0.76 : CX;
+  const top = side ? CY - (lines.length - 1) * lh / 2
+                   : (V ? H * 0.885 : H * 0.905) - (lines.length - 1) * lh;
+
+  g.save();
+  g.globalAlpha = o;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (!side){
+    const sc = g.createLinearGradient(0, top - lh, 0, H);
+    sc.addColorStop(0, 'rgba(6,8,13,0)');
+    sc.addColorStop(0.4, 'rgba(6,8,13,.85)');
+    sc.addColorStop(1, 'rgba(6,8,13,.95)');
+    g.fillStyle = sc; g.fillRect(0, top - lh, W, H - top + lh);
+  }
+  g.fillStyle = accent || C.ink;
+  g.shadowColor = 'rgba(6,8,13,.9)'; g.shadowBlur = 24;
+  lines.forEach((ln, i) => {
+    const p = ramp(t, a + i * 0.07, b + i * 0.07, easeOutQuint);
+    g.save(); g.globalAlpha = o * p;
+    g.fillText(ln, cx, top + i * lh + (1 - p) * 14);
+    g.restore();
+  });
+  g.restore();
+}
+
+/* ───────────────────────────── fondo ───────────────────────────── */
+
+function background(t, tint, inten){
+  g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+  const gy = CY - H * 0.05;
+  const rg = g.createRadialGradient(CX, gy, 0, CX, gy, Math.max(W,H) * 0.75);
+  rg.addColorStop(0, rgba(tint, inten));
+  rg.addColorStop(0.5, rgba(tint, inten * 0.25));
+  rg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+
+  const step = 96, drift = (t * 5) % step;
+  g.strokeStyle = rgba(C.border, 0.4);
+  g.lineWidth = 1; g.beginPath();
+  for (let x = -step + drift; x < W + step; x += step){ g.moveTo(x+.5, 0); g.lineTo(x+.5, H); }
+  for (let y = -step + drift; y < H + step; y += step){ g.moveTo(0, y+.5); g.lineTo(W, y+.5); }
+  g.stroke();
+}
+
+function vignette(){
+  const rg = g.createRadialGradient(CX, CY, Math.min(W,H)*0.32, CX, CY, Math.max(W,H)*0.8);
+  rg.addColorStop(0, 'rgba(0,0,0,0)');
+  rg.addColorStop(1, 'rgba(0,0,0,0.7)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+}
+
+/* ─────────────────────── maquetas de interfaz ─────────────────────── */
+
+/* Móvil. En vertical va centrado; en horizontal, a la izquierda, con los
+   rótulos del narrador a la derecha. */
+const PH = V ? { w: 700, h: 1360 } : { w: 452, h: 880 };
+const PHX = V ? CX : W * 0.30;
+const PHY = V ? H * 0.455 : CY;
+
+function phoneFrame(alpha, scale){
+  g.save();
+  g.globalAlpha = alpha;
+  g.translate(PHX, PHY);
+  g.scale(scale, scale);
+  g.shadowColor = 'rgba(0,0,0,.65)'; g.shadowBlur = 60; g.shadowOffsetY = 24;
+  roundRect(-PH.w/2, -PH.h/2, PH.w, PH.h, 54);
+  g.fillStyle = '#05070c'; g.fill();
+  g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+  g.strokeStyle = rgba(C.border, 1); g.lineWidth = 3; g.stroke();
+  roundRect(-PH.w/2 + 10, -PH.h/2 + 10, PH.w - 20, PH.h - 20, 46);
+  g.fillStyle = C.panel; g.fill();
+  return { x0: -PH.w/2 + 10, y0: -PH.h/2 + 10, w: PH.w - 20, h: PH.h - 20 };
+}
+
+/** Barra de estado con hora animable. */
+function statusBar(box, hora){
+  font('mo', 700, 24, 0.5);
+  g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillStyle = C.stone;
+  g.fillText(hora, box.x0 + 34, box.y0 + 46);
+  g.textAlign = 'right';
+  g.fillText('▮▮▯  ⌁', box.x0 + box.w - 34, box.y0 + 46);
+  g.beginPath();
+  g.moveTo(box.x0 + 22, box.y0 + 76); g.lineTo(box.x0 + box.w - 22, box.y0 + 76);
+  g.strokeStyle = rgba(C.border, 1); g.lineWidth = 1.5; g.stroke();
+}
+
+/** Cabecera de conversación. */
+function chatHeader(box, nombre, sub, subColor){
+  g.beginPath(); g.arc(box.x0 + 66, box.y0 + 136, 30, 0, Math.PI*2);
+  g.fillStyle = C.panel3; g.fill();
+  g.strokeStyle = rgba(C.border,1); g.lineWidth = 1.5; g.stroke();
+  font('sg', 700, 26, 0); g.fillStyle = C.stone;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(nombre.slice(0,1), box.x0 + 66, box.y0 + 137);
+
+  font('sg', 700, 30, 0); g.textAlign = 'left'; g.fillStyle = C.ink;
+  g.fillText(nombre, box.x0 + 110, box.y0 + 126);
+  font('in', 500, 21, 0); g.fillStyle = subColor || C.stoneSoft;
+  g.fillText(sub, box.x0 + 110, box.y0 + 156);
+
+  g.beginPath();
+  g.moveTo(box.x0 + 22, box.y0 + 182); g.lineTo(box.x0 + box.w - 22, box.y0 + 182);
+  g.strokeStyle = rgba(C.border,1); g.lineWidth = 1.5; g.stroke();
+}
+
+/**
+ * Burbuja de conversación. Devuelve la altura ocupada.
+ * side: 'in' (cliente, izquierda) | 'out' (tú/sistema, derecha)
+ */
+/** Altura que ocupará una burbuja, para poder anclar la conversación abajo. */
+function bubbleH(box, text){
+  font('in', 500, 27, 0);
+  const lines = wrap(text, box.w * 0.74 - 46);
+  return lines.length * 36 + 52 + 18;
+}
+
+function bubble(box, y, side, text, hora, appear, opts = {}){
+  const maxW = box.w * 0.74;
+  font('in', 500, 27, 0);
+  const lines = wrap(text, maxW - 46);
+  const lh = 36;
+  const bw = Math.min(maxW, Math.max(...lines.map(l => g.measureText(l).width)) + 46);
+  const bh = lines.length * lh + 52;
+  const e = easeOutBack(clamp(appear));
+  const x = side === 'in' ? box.x0 + 24 : box.x0 + box.w - 24 - bw;
+
+  g.save();
+  g.globalAlpha = clamp(appear);
+  g.translate(x + bw/2, y + bh/2 + (1 - easeOut(clamp(appear))) * 18);
+  g.scale(lerp(0.94, 1, e), lerp(0.94, 1, e));
+
+  roundRect(-bw/2, -bh/2, bw, bh, 20);
+  g.fillStyle = side === 'in' ? C.panel2 : (opts.system ? rgba(C.blue, .20) : rgba(C.green, .16));
+  g.fill();
+  g.strokeStyle = side === 'in' ? rgba(C.border,1)
+                : (opts.system ? rgba(C.blue,.55) : rgba(C.green,.4));
+  g.lineWidth = 1.4; g.stroke();
+
+  font('in', 500, 27, 0);
+  g.fillStyle = side === 'in' ? C.stone : C.ink;
+  g.textAlign = 'left'; g.textBaseline = 'middle';
+  lines.forEach((ln, i) => g.fillText(ln, -bw/2 + 23, -bh/2 + 30 + i * lh));
+
+  font('mo', 400, 17, 0.5);
+  g.fillStyle = rgba(C.stoneSoft, .8);
+  g.textAlign = 'right';
+  g.fillText(hora + (side === 'out' ? (opts.read ? '  ✓✓' : '  ✓') : ''), bw/2 - 18, bh/2 - 17);
+  g.restore();
+
+  return bh + 18;
+}
+
+/** Ventana de escritorio con barra de título. */
+function windowFrame(alpha, title, wRatio, hPx, cy){
+  const w = V ? W * wRatio : W * (wRatio * 0.68);
+  const h = hPx;
+  const x = CX - w/2, y = (cy !== undefined ? cy : CY - 60) - h/2;
+  g.save();
+  g.globalAlpha = alpha;
+  g.shadowColor = 'rgba(0,0,0,.6)'; g.shadowBlur = 50; g.shadowOffsetY = 20;
+  roundRect(x, y, w, h, 20);
+  g.fillStyle = C.panel; g.fill();
+  g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+  g.strokeStyle = rgba(C.border,1); g.lineWidth = 1.6; g.stroke();
+
+  roundRect(x, y, w, 62, 20);
+  g.save(); g.clip(); g.fillStyle = C.panel2; g.fillRect(x, y, w, 62); g.restore();
+  g.beginPath(); g.moveTo(x, y + 62); g.lineTo(x + w, y + 62);
+  g.strokeStyle = rgba(C.border,1); g.lineWidth = 1.4; g.stroke();
+
+  [C.red, C.amber, C.green].forEach((c, i) => {
+    g.beginPath(); g.arc(x + 28 + i * 26, y + 31, 7.5, 0, Math.PI*2);
+    g.fillStyle = rgba(c, .75); g.fill();
+  });
+  font('mo', 700, 20, 1);
+  g.fillStyle = C.stoneSoft; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(title, x + w/2, y + 32);
+
+  return { x, y, w, h, bodyY: y + 62 };
+}
+
+/* ═══════════ ACTO 1 · ESCENA 1 — «Ahora mismo te respondo» (0 – 7,2) ═══════════ */
+
+function s1(t){
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 6.50, 6.6, easeInOut);
+  const box = phoneFrame(inn * out, 1);
+
+  // La hora salta de 11:02 a 17:34 en el corte.
+  const jumped = t > 3.5;
+  statusBar(box, jumped ? '17:34' : '11:02');
+  chatHeader(box, 'Marta · Cliente', jumped ? 'últ. vez hoy a las 17:30' : 'en línea',
+             jumped ? C.stoneSoft : C.green);
+
+  // Los mensajes se apoyan en la parte baja de la pantalla, como en cualquier
+  // app de mensajería: así se lee como una captura real y no queda hueco.
+  const M1 = '¡Hola, buenas! ¿Tenéis hueco el jueves?';
+  const M2 = 'Ahora mismo te respondo 👍';
+  const SEP_H = 66;
+  const stack = bubbleH(box, M1) + bubbleH(box, M2) + SEP_H;
+  let y = box.y0 + box.h - 44 - stack;
+
+  y += bubble(box, y, 'in',  M1, '11:02', ramp(t, 0.55, 0.95));
+  y += bubble(box, y, 'out', M2, '11:02', ramp(t, 1.65, 2.05), { read: true });
+
+  // Separador de "6 horas después"
+  const sep = ramp(t, 3.55, 4.0, easeOutQuint);
+  if (sep > 0){
+    g.save(); g.globalAlpha = sep;
+    const sy = y + 26;
+    font('mo', 700, 20, 3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const label = 'SEIS HORAS DESPUÉS';
+    const lw = g.measureText(label).width + 46;
+    roundRect(box.x0 + box.w/2 - lw/2, sy - 20, lw, 40, 20);
+    g.fillStyle = C.panel3; g.fill();
+    g.strokeStyle = rgba(C.border,1); g.lineWidth = 1.3; g.stroke();
+    g.fillStyle = C.stoneSoft;
+    g.fillText(label, box.x0 + box.w/2, sy);
+    g.restore();
+  }
+
+  // Nada más. Ese es el chiste: la conversación sigue igual.
+  g.restore();
+
+  caption(t, 4.35, 4.8, 6.1, 6.45, 'Técnicamente, sigue siendo «ahora».', null, 'side');
+}
+
+/* ═══════════ ESCENA 2 — La cascada de notificaciones (7,2 – 12,4) ═══════════ */
+
+const NOTIS = [
+  ['Llamada perdida',   'Javier',              C.red   ],
+  ['4 mensajes nuevos', 'Grupo · Proveedores', C.green ],
+  ['Correo',            'Factura F-118',    C.blue  ],
+  ['Recordatorio',      'Reunión en 10 min',   C.cyan  ],
+  ['Llamada perdida',   'Número desconocido',  C.red   ],
+  ['Mensaje',           'Marta · Cliente',     C.green ],
+  ['Correo',            'Presupuesto pendiente', C.blue],
+  ['Llamada perdida',   'Javier (2)',          C.red   ]
+];
+
+function s2(t){
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 5.10, 5.2, easeInOut);
+  const box = phoneFrame(inn * out, 1);
+  statusBar(box, '17:34');
+
+  g.save();
+  roundRect(box.x0, box.y0 + 84, box.w, box.h - 84, 0);
+  g.clip();
+
+  // Las notificaciones caen cada vez más rápido y se salen de la pantalla.
+  NOTIS.forEach((n, i) => {
+    const at = 0.25 + 2.6 * Math.pow(i / NOTIS.length, 1.5);
+    const p = clamp((t - at) / 0.34);
+    if (p <= 0) return;
+    const e = easeOutQuint(p);
+    const y = box.y0 + 130 + i * 128 - Math.max(0, (t - 2.9)) * 96;
+    g.save();
+    g.globalAlpha = inn * out * p;
+    g.translate(box.x0 + box.w/2, y + (1 - e) * -34);
+    roundRect(-box.w/2 + 22, -50, box.w - 44, 100, 22);
+    g.fillStyle = C.panel2; g.fill();
+    g.strokeStyle = rgba(C.border,1); g.lineWidth = 1.4; g.stroke();
+    g.beginPath(); g.arc(-box.w/2 + 68, 0, 15, 0, Math.PI*2);
+    g.fillStyle = rgba(n[2], .9); g.fill();
+    font('sg', 700, 26, 0);
+    g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText(n[0], -box.w/2 + 96, -14);
+    font('in', 500, 22, 0);
+    g.fillStyle = C.stoneSoft;
+    g.fillText(n[1], -box.w/2 + 96, 16);
+    g.restore();
+  });
+  g.restore();
+  g.restore();
+
+  caption(t, 3.35, 3.8, 4.75, 5.05, 'Dirigir una empresa. Y hacer de centralita.', null, 'side');
+}
+
+/* ═══════════ ESCENA 3 — 47 pestañas (12,4 – 17,2) ═══════════ */
+
+function s3(t){
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 4.70, 4.8, easeInOut);
+  const a = inn * out;
+  const win_ = windowFrame(a, 'Navegador', 0.90, V ? 760 : 620, V ? H * 0.42 : CY);
+
+  // Tira de pestañas: 47 pestañas comprimidas hasta ser ilegibles.
+  const N = 47, shown = Math.round(easeOut(clamp(t / 2.0)) * N);
+  const stripY = win_.bodyY + 14, stripH = 54;
+  const tw = (win_.w - 40) / N;
+  for (let i = 0; i < shown; i++){
+    const x = win_.x + 20 + i * tw;
+    g.save(); g.globalAlpha = a;
+    roundRect(x + 1, stripY, tw - 2, stripH, 7);
+    g.fillStyle = i === 0 ? C.panel3 : C.panel2; g.fill();
+    g.strokeStyle = rgba(C.border, .9); g.lineWidth = 1; g.stroke();
+    g.beginPath(); g.arc(x + tw/2, stripY + stripH/2, Math.min(5, tw*0.20), 0, Math.PI*2);
+    g.fillStyle = rgba([C.blue,C.green,C.amber,C.cyan,C.violet][i % 5], .8); g.fill();
+    g.restore();
+  }
+
+  // Contador
+  const cp = ramp(t, 1.9, 2.5, easeOutQuint);
+  if (cp > 0){
+    g.save(); g.globalAlpha = a * cp;
+    const n = Math.round(easeOut(clamp((t - 1.9) / 0.9)) * 47);
+    font('mo', 700, V ? 200 : 168, -6);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = C.ink;
+    g.shadowColor = rgba(C.blue,.4); g.shadowBlur = 44;
+    g.fillText(String(n), win_.x + win_.w/2, win_.y + win_.h * 0.56);
+    g.shadowColor = 'transparent'; g.shadowBlur = 0;
+    font('mo', 700, 26, 5);
+    g.fillStyle = C.stoneSoft;
+    g.fillText('PESTAÑAS ABIERTAS', win_.x + win_.w/2, win_.y + win_.h * 0.56 + (V ? 140 : 120));
+    g.restore();
+  }
+  g.restore();
+
+  caption(t, 2.75, 3.2, 4.35, 4.65, '47 pestañas. Porque 46 eran pocas.');
+}
+
+/* ═══════════ ESCENA 4 — Los Excel definitivos (17,2 – 22,6) ═══════════ */
+
+const FILES = [
+  ['FINAL.xlsx',                                  'hace 3 meses'],
+  ['FINAL_FINAL.xlsx',                            'hace 6 semanas'],
+  ['FINAL_FINAL_AHORA_SÍ.xlsx',                   'hace 2 semanas'],
+  ['FINAL_FINAL_AHORA_SÍ_DEFINITIVO.xlsx',        'el martes'],
+  ['FINAL_FINAL_AHORA_SÍ_DEFINITIVO_BUENO.xlsx',  'hace 4 minutos']
+];
+
+function s4(t){
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 5.30, 5.4, easeInOut);
+  const a = inn * out;
+  const win_ = windowFrame(a, 'Documentos', 0.92, V ? 700 : 600, V ? H * 0.42 : CY);
+
+  const rowH = V ? 108 : 96;
+  FILES.forEach((f, i) => {
+    const at = 0.35 + i * 0.52;
+    const p = ramp(t, at, at + 0.38, easeOutQuint);
+    if (p <= 0) return;
+    const y = win_.bodyY + 30 + i * rowH;
+    g.save(); g.globalAlpha = a * p;
+    g.translate(0, (1 - p) * 16);
+
+    roundRect(win_.x + 24, y, win_.w - 48, rowH - 16, 12);
+    g.fillStyle = i === FILES.length - 1 ? rgba(C.green, .07) : C.panel2; g.fill();
+    g.strokeStyle = i === FILES.length - 1 ? rgba(C.green,.35) : rgba(C.borderSoft,1);
+    g.lineWidth = 1.3; g.stroke();
+
+    // Icono de hoja de cálculo
+    roundRect(win_.x + 46, y + (rowH-16)/2 - 20, 34, 40, 6);
+    g.fillStyle = rgba(C.green, .18); g.fill();
+    g.strokeStyle = rgba(C.green, .6); g.lineWidth = 1.4; g.stroke();
+    font('mo', 700, 15, 0.5); g.fillStyle = rgba(C.green, .95);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('X', win_.x + 63, y + (rowH-16)/2 + 1);
+
+    // El nombre encoge según crece, para que quepa: parte del chiste.
+    const nameMax = win_.w - 360;
+    let size = V ? 30 : 27;
+    font('mo', 700, size, 0);
+    while (g.measureText(f[0]).width > nameMax && size > 15){ size -= 1; font('mo', 700, size, 0); }
+    g.fillStyle = C.ink; g.textAlign = 'left';
+    g.fillText(f[0], win_.x + 96, y + (rowH-16)/2);
+
+    font('in', 500, 20, 0);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'right';
+    g.fillText(f[1], win_.x + win_.w - 46, y + (rowH-16)/2);
+    g.restore();
+  });
+  g.restore();
+
+  caption(t, 3.3, 3.75, 4.95, 5.25,
+          'El sistema de gestión más avanzado del mercado.');
+}
+
+/* ═══════════ ACTO 2 · ESCENA 5 — Javier (22,6 – 28,0) ═══════════ */
+
+const NOTAS = [
+  'LLAMAR A JAVIER', 'LLAMAR A JAVIER', 'LLAMAR A JAVIER',
+  'LLAMAR A JAVIER', 'LLAMAR A JAVIER', 'LLAMAR A JAVIER (EN SERIO)'
+];
+
+const notaLayout = (() => {
+  const rnd = mulberry32(0x1A71E);
+  const cols = V ? 2 : 3;
+  return NOTAS.map((n, i) => {
+    const col = i % cols, row = Math.floor(i / cols);
+    const rows = Math.ceil(NOTAS.length / cols);
+    const x0 = V ? W * 0.17 : W * 0.24, x1 = V ? W * 0.83 : W * 0.76;
+    const y0 = V ? H * 0.24 : H * 0.26, y1 = V ? H * 0.62 : H * 0.66;
+    return {
+      text: n,
+      x: lerp(x0, x1, cols === 1 ? .5 : col / (cols - 1)) + (rnd() - .5) * 26,
+      y: lerp(y0, y1, rows === 1 ? .5 : row / (rows - 1)) + (rnd() - .5) * 24,
+      rot: (rnd() - .5) * 0.20,
+      at: 0.3 + i * 0.36
+    };
+  });
+})();
+
+function s5(t){
+  const out = 1 - ramp(t, 4.90, 5.0, easeInOut);
+
+  notaLayout.forEach((n, i) => {
+    const p = ramp(t, n.at, n.at + 0.32, easeOutBack);
+    if (p <= 0) return;
+    const last = i === NOTAS.length - 1;
+    const s = V ? 216 : 192;
+    g.save();
+    g.globalAlpha = out * clamp(p);
+    g.translate(n.x, n.y);
+    g.rotate(n.rot * easeOut(clamp(p)));
+    g.scale(lerp(0.86, 1, clamp(p)), lerp(0.86, 1, clamp(p)));
+
+    g.shadowColor = 'rgba(0,0,0,.55)'; g.shadowBlur = 30; g.shadowOffsetY = 12;
+    roundRect(-s/2, -s/2, s, s, 8);
+    g.fillStyle = last ? '#ffd47a' : '#ffe08a'; g.fill();
+    g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+
+    font('sg', 700, last ? 26 : 30, -0.2);
+    g.fillStyle = '#2a2410';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const lines = wrap(n.text, s - 34);
+    const lh = (last ? 30 : 34);
+    lines.forEach((ln, k) => g.fillText(ln, 0, (k - (lines.length-1)/2) * lh));
+    g.restore();
+  });
+
+  caption(t, 2.85, 3.3, 4.55, 4.85, 'Javier debe de ser alguien importante.');
+}
+
+/* ═══════════ ESCENA 6 — La agenda imposible (28,0 – 33,4) ═══════════ */
+
+const EVENTOS = [
+  ['09:00', 'Llamada proveedor',     C.blue,  0.00, 0.14],
+  ['10:00', 'Presupuesto Marta',     C.cyan,  0.13, 0.30],
+  ['11:30', 'Reunión de equipo',        C.violet,0.26, 0.44],
+  ['14:00', 'COMER',                 C.green, 0.44, 0.58],
+  ['14:10', 'Llamada cliente',       C.red,   0.46, 0.66],
+  ['16:00', 'Revisar facturas',      C.amber, 0.64, 0.80],
+  ['17:00', 'Llamar a Javier',       C.red,   0.78, 0.94]
+];
+
+function s6(t){
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, 4.90, 5.0, easeInOut);
+  const a = inn * out;
+  const win_ = windowFrame(a, 'Agenda · Hoy', 0.90, V ? 820 : 640, V ? H * 0.40 : CY);
+
+  const trackX = win_.x + 130, trackW = win_.w - 180;
+  const top = win_.bodyY + 34, hgt = win_.h - 62 - 68;
+
+  // Rejilla horaria
+  g.save(); g.globalAlpha = a;
+  for (let i = 0; i <= 8; i++){
+    const y = top + hgt * (i / 8);
+    g.beginPath(); g.moveTo(win_.x + 30, y); g.lineTo(win_.x + win_.w - 30, y);
+    g.strokeStyle = rgba(C.borderSoft, 1); g.lineWidth = 1; g.stroke();
+    font('mo', 400, 19, 0.5);
+    g.fillStyle = rgba(C.stoneSoft, .7);
+    g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText(String(9 + i).padStart(2,'0') + ':00', win_.x + 34, y);
+  }
+  g.restore();
+
+  EVENTOS.forEach((ev, i) => {
+    const at = 0.3 + i * 0.30;
+    const p = ramp(t, at, at + 0.3, easeOutQuint);
+    if (p <= 0) return;
+    const y = top + hgt * ev[3], h = hgt * (ev[4] - ev[3]) - 6;
+    // Los dos eventos que se solapan se desplazan para que se vea el choque.
+    const overlap = (i === 3 || i === 4);
+    const x = trackX + (i === 4 ? 46 : 0);
+    const w = trackW - (overlap ? 46 : 0);
+
+    g.save(); g.globalAlpha = a * p;
+    roundRect(x, y, w, h, 10);
+    g.fillStyle = rgba(ev[2], .16); g.fill();
+    g.strokeStyle = rgba(ev[2], .6); g.lineWidth = 1.5; g.stroke();
+    g.beginPath(); g.moveTo(x + 4, y + 8); g.lineTo(x + 4, y + h - 8);
+    g.strokeStyle = ev[2]; g.lineWidth = 4; g.lineCap = 'round'; g.stroke();
+    font('sg', 700, 24, 0);
+    g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText(ev[1], x + 20, y + h/2);
+    g.restore();
+  });
+  g.restore();
+
+  caption(t, 2.85, 3.3, 4.55, 4.85, 'Ahí, debajo, había una comida.');
+}
+
+/* ═══════════ ACTO 3 · ESCENA 7 — El problema real (33,4 – 41,4) ═══════════ */
+
+function s7(t){
+  // Todo se apaga. Este es el único momento serio de la pieza.
+  const line = win(t, 0.15, 0.6, 0.95, 1.35);
+  if (line > 0){
+    const w = W * 0.8 * easeOut(clamp(t / 0.8));
+    const grd = g.createLinearGradient(CX - w/2, 0, CX + w/2, 0);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(.5, rgba(C.cyan, .85 * line));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grd; g.fillRect(CX - w/2, CY - 1.5, w, 3);
+  }
+
+  const blocks = [
+    ['Y aquí está el problema.',                                        1.15, 1.75, 2.85, 3.25, C.stone],
+    ['No es que tengas demasiado trabajo.',                             3.35, 3.95, 5.15, 5.55, C.ink],
+    ['Es que estás haciendo demasiado trabajo\nque no deberías hacer tú.', 5.65, 6.3, 7.6, 8.0, C.ink]
+  ];
+  for (const [txt, a, b, c, d, col] of blocks){
+    const o = win(t, a, b, c, d);
+    if (o <= 0) continue;
+    const size = V ? 60 : 66;
+    font('sg', 700, size, -0.6);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const src = txt.split('\n');
+    const lines = src.length > 1 ? src : wrap(txt, V ? W * 0.86 : W * 0.62);
+    const lh = size * 1.2;
+    g.save();
+    g.fillStyle = col;
+    g.shadowColor = rgba(C.blue, .3); g.shadowBlur = 30;
+    lines.forEach((ln, i) => {
+      const p = ramp(t, a + i * 0.1, b + i * 0.1, easeOutQuint);
+      g.save(); g.globalAlpha = o * p;
+      g.fillText(ln, CX, CY + (i - (lines.length-1)/2) * lh + (1 - p) * 18);
+      g.restore();
+    });
+    g.restore();
+  }
+}
+
+/* ═══════════ ACTO 4 · ESCENA 8 — Lo mismo, resuelto solo (41,4 – 50,6) ═══════════ */
+
+const FLOW = ['CLIENTE', 'WHATSAPP', 'IA', 'CRM', 'AGENDA', 'SEGUIMIENTO'];
+
+function s8(t){
+  /* Beat A: la misma conversación del principio, pero contestada al instante. */
+  const aOut = 1 - ramp(t, 5.5, 5.9, easeInOut);
+  if (aOut > 0){
+    const inn = ramp(t, 0, 0.10, easeInOut);
+    const box = phoneFrame(inn * aOut, 1);
+    statusBar(box, '11:02');
+    chatHeader(box, 'Marta · Cliente', 'respondiendo automáticamente', C.blue);
+
+    const A1 = '¡Hola, buenas! ¿Tenéis hueco el jueves?';
+    const A2 = '¡Hola, Marta! El jueves nos queda libre a las 11:30 y a las 16:00. ¿Cuál te viene mejor?';
+    const A3 = 'A las 11:30 perfecto';
+    const A4 = 'Confirmado ✓ Te acabo de enviar el recordatorio.';
+    const stack = bubbleH(box,A1) + bubbleH(box,A2) + bubbleH(box,A3) + bubbleH(box,A4);
+    const chipsH = 3 * 56 + 14;
+    let y = Math.max(box.y0 + 214, box.y0 + box.h - 44 - stack - chipsH);
+
+    y += bubble(box, y, 'in',  A1, '11:02', ramp(t, 0.3, 0.7));
+    y += bubble(box, y, 'out', A2, '11:02', ramp(t, 1.15, 1.6), { system: true, read: true });
+    y += bubble(box, y, 'in',  A3, '11:03', ramp(t, 2.2, 2.6));
+    y += bubble(box, y, 'out', A4, '11:03', ramp(t, 3.0, 3.45), { system: true, read: true });
+
+    // Confirmaciones del sistema
+    const chips = [['CITA CONFIRMADA', C.green], ['CRM ACTUALIZADO', C.blue], ['RECORDATORIO ENVIADO', C.cyan]];
+    chips.forEach((c, i) => {
+      const p = ramp(t, 3.6 + i * 0.28, 3.95 + i * 0.28, easeOutBack);
+      if (p <= 0) return;
+      g.save(); g.globalAlpha = clamp(p) * aOut;
+      font('mo', 700, 20, 1.6);
+      const cw = g.measureText(c[0]).width + 46;
+      const cy = y + 14 + i * 56;
+      roundRect(box.x0 + box.w/2 - cw/2, cy, cw, 44, 22);
+      g.fillStyle = rgba(c[1], .14); g.fill();
+      g.strokeStyle = rgba(c[1], .6); g.lineWidth = 1.4; g.stroke();
+      g.fillStyle = c[1];
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillText(c[0], box.x0 + box.w/2, cy + 23);
+      g.restore();
+    });
+    g.restore();
+
+    caption(t, 4.5, 4.9, 5.35, 5.75, 'Once y dos. El mismo minuto.', C.cyan, 'side');
+  }
+
+  /* Beat B: el flujo que hay detrás. */
+  const bIn = ramp(t, 5.9, 6.3, easeInOut);
+  const bOut = 1 - ramp(t, 9.10, 9.2, easeInOut);
+  if (bIn > 0){
+    g.save(); g.globalAlpha = bIn * bOut;
+    const n = FLOW.length;
+    const measure = l => { font('mo', 700, V ? 22 : 20, 1.8); return g.measureText(l).width + 58; };
+
+    if (V){
+      const top = H * 0.26, gap = H * 0.088;
+      FLOW.forEach((label, i) => {
+        const at = 6.35 + i * 0.16;
+        const p = ramp(t, at, at + 0.3, easeOutBack);
+        if (p <= 0) return;
+        const y = top + i * gap;
+        if (i > 0){
+          const lp = ramp(t, at - 0.12, at + 0.1);
+          g.save(); g.globalAlpha = bIn * bOut * lp;
+          g.beginPath(); g.moveTo(CX, y - gap + 28); g.lineTo(CX, y - 28);
+          g.strokeStyle = rgba(C.blue, .6); g.lineWidth = 2.4;
+          g.shadowColor = rgba(C.blue,.5); g.shadowBlur = 12; g.stroke();
+          g.restore();
+        }
+        drawPill(CX, y, label, clamp(p), measure(label), bIn * bOut);
+      });
+      // Pulso recorriendo la cadena
+      const pt = (t - 7.5) / 1.5;
+      if (pt > 0 && pt < 1){
+        const s = easeInOut(pt) * (n - 1);
+        const i = Math.min(n - 2, Math.floor(s)), f = s - i;
+        const y = lerp(top + i * gap + 28, top + (i+1) * gap - 28, f);
+        const grd = g.createRadialGradient(CX, y, 0, CX, y, 44);
+        grd.addColorStop(0, rgba(C.cyan, .95)); grd.addColorStop(1, 'rgba(0,0,0,0)');
+        g.fillStyle = grd; g.beginPath(); g.arc(CX, y, 44, 0, Math.PI*2); g.fill();
+      }
+    } else {
+      const x0 = W * 0.09, x1 = W * 0.91;
+      const px = i => lerp(x0, x1, i / (n - 1));
+      FLOW.forEach((label, i) => {
+        const at = 6.35 + i * 0.16;
+        const p = ramp(t, at, at + 0.3, easeOutBack);
+        if (p <= 0) return;
+        if (i > 0){
+          const lp = ramp(t, at - 0.12, at + 0.1);
+          const a = px(i-1) + measure(FLOW[i-1])/2 + 12;
+          const b = px(i)   - measure(FLOW[i])/2   - 12;
+          g.save(); g.globalAlpha = bIn * bOut * lp;
+          g.beginPath(); g.moveTo(a, CY); g.lineTo(b, CY);
+          g.strokeStyle = rgba(C.blue, .6); g.lineWidth = 2.4;
+          g.shadowColor = rgba(C.blue,.5); g.shadowBlur = 12; g.stroke();
+          g.restore();
+        }
+        drawPill(px(i), CY, label, clamp(p), measure(label), bIn * bOut);
+      });
+      const pt = (t - 7.5) / 1.5;
+      if (pt > 0 && pt < 1){
+        const s = easeInOut(pt) * (n - 1);
+        const i = Math.min(n - 2, Math.floor(s)), f = s - i;
+        const x = lerp(px(i) + measure(FLOW[i])/2 + 12, px(i+1) - measure(FLOW[i+1])/2 - 12, f);
+        const grd = g.createRadialGradient(x, CY, 0, x, CY, 44);
+        grd.addColorStop(0, rgba(C.cyan, .95)); grd.addColorStop(1, 'rgba(0,0,0,0)');
+        g.fillStyle = grd; g.beginPath(); g.arc(x, CY, 44, 0, Math.PI*2); g.fill();
+      }
+    }
+    g.restore();
+  }
+}
+
+function drawPill(x, y, label, p, w, alpha){
+  const h = 56;
+  g.save();
+  g.globalAlpha = alpha * p;
+  g.translate(x, y);
+  g.scale(lerp(0.86, 1, p), lerp(0.86, 1, p));
+  roundRect(-w/2, -h/2, w, h, 13);
+  g.fillStyle = C.panel2; g.fill();
+  g.strokeStyle = rgba(C.cyan, .7); g.lineWidth = 1.8;
+  g.shadowColor = rgba(C.cyan,.4); g.shadowBlur = 18; g.stroke();
+  g.shadowColor = 'transparent'; g.shadowBlur = 0;
+  font('mo', 700, V ? 22 : 20, 1.8);
+  g.fillStyle = C.ink; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(label, 0, 1);
+  g.restore();
+}
+
+/* ═══════════ ACTO 5 · ESCENA 9 — Remate y marca (50,6 – 58,0) ═══════════ */
+
+let LOGO = null;
+
+function s9(t){
+  // Fondo limpio
+  const cover = ramp(t, 0, 0.45, easeInOut);
+  g.save(); g.globalAlpha = cover;
+  const bg = g.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#080c16'); bg.addColorStop(.55, '#0a1020'); bg.addColorStop(1, '#06080d');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  const rg = g.createRadialGradient(CX, CY - H*0.05, 0, CX, CY - H*0.05, Math.max(W,H)*0.6);
+  rg.addColorStop(0, rgba(C.blue, .2)); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+  g.restore();
+
+  // El remate, en tres tiempos.
+  const beats = [
+    ['Si para llevar tu empresa tienes que estar pendiente de todo…', 0.40, 1.00, 2.50, 2.90],
+    ['…igual no tienes una empresa.',                                  3.00, 3.55, 4.60, 5.00],
+    ['Tienes otro trabajo.',                                           5.10, 5.65, 6.60, 7.00]
+  ];
+  for (const [txt, a, b, c, d] of beats){
+    const o = win(t, a, b, c, d);
+    if (o <= 0) continue;
+    const size = V ? 62 : 68;
+    font('sg', 700, size, -0.6);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const lines = wrap(txt, V ? W * 0.86 : W * 0.64);
+    const lh = size * 1.2;
+    g.save(); g.fillStyle = C.ink;
+    g.shadowColor = 'rgba(6,8,13,.9)'; g.shadowBlur = 30;
+    lines.forEach((ln, i) => {
+      const p = ramp(t, a + i * 0.09, b + i * 0.09, easeOutQuint);
+      g.save(); g.globalAlpha = o * p;
+      g.fillText(ln, CX, CY + (i - (lines.length-1)/2) * lh + (1 - p) * 16);
+      g.restore();
+    });
+    g.restore();
+  }
+
+  /* Cierre de marca. */
+  const lp = ramp(t, 7.20, 7.85, easeOutQuint);
+  if (lp > 0){
+    const logoY = V ? H * 0.345 : CY - 150;
+    const iconH = V ? 84 : 80;
+    const iconW = LOGO ? iconH * (LOGO.naturalWidth / LOGO.naturalHeight) : iconH * 1.19;
+    font('sg', 700, V ? 84 : 88, 0.5);
+    const wordW = g.measureText('D-Code').width;
+    const x0 = CX - (iconW + 28 + wordW) / 2;
+
+    g.save(); g.globalAlpha = lp; g.translate(0, (1 - lp) * 16);
+    if (LOGO){
+      g.save(); g.shadowColor = rgba(C.blue,.5); g.shadowBlur = 30;
+      g.drawImage(LOGO, x0, logoY - iconH/2, iconW, iconH); g.restore();
+    }
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    font('sg', 700, V ? 84 : 88, 0.5); g.fillStyle = C.ink;
+    g.fillText('D-Code', x0 + iconW + 28, logoY + 12);
+    font('mo', 700, V ? 24 : 25, 11); g.fillStyle = C.cyan;
+    g.fillText('PARTNERS', x0 + iconW + 30, logoY + 47);
+    g.restore();
+
+    // Posicionamiento
+    const sp = ramp(t, 7.90, 8.50, easeOutQuint);
+    if (sp > 0){
+      g.save(); g.globalAlpha = sp;
+      const size = V ? 46 : 48;
+      font('sg', 700, size, -0.2);
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      const lines = wrap('Automatizamos lo que no debería depender de ti.', V ? W * 0.82 : W * 0.5);
+      const lh = size * 1.24;
+      const top = (V ? H * 0.46 : CY - 20) - (lines.length - 1) * lh / 2;
+      g.fillStyle = C.stone;
+      lines.forEach((ln, i) => g.fillText(ln, CX, top + i * lh));
+      g.restore();
+    }
+
+    // Pregunta (cebo de comentarios) + dominio
+    const qp = ramp(t, 8.60, 9.30, easeOutQuint);
+    if (qp > 0){
+      g.save(); g.globalAlpha = qp;
+      const y = V ? H * 0.575 : CY + 110;
+      const lw = 190 * easeOut(qp);
+      const grd = g.createLinearGradient(CX - lw/2, 0, CX + lw/2, 0);
+      grd.addColorStop(0, 'rgba(0,0,0,0)');
+      grd.addColorStop(.5, rgba(C.cyan, .8));
+      grd.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = grd; g.fillRect(CX - lw/2, y - 1, lw, 2);
+
+      font('sg', 700, V ? 44 : 46, -0.2);
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillStyle = C.ink;
+      const ql = wrap('¿Qué automatizarías tú primero?', V ? W * 0.84 : W * 0.5);
+      ql.forEach((ln, i) => g.fillText(ln, CX, y + 58 + i * 54));
+
+      font('mo', 700, V ? 34 : 36, 2.5);
+      g.fillStyle = C.cyan;
+      g.shadowColor = rgba(C.cyan,.4); g.shadowBlur = 22;
+      g.fillText('dcodepartners.com', CX, y + 58 + ql.length * 54 + 30);
+      g.restore();
+    }
+  }
+
+  /* Guiño final: la nota de Javier, por fin tachada. */
+  const jp = ramp(t, 5.90, 6.35, easeOutBack);
+  if (jp > 0 && t < 7.45){
+    const o = 1 - ramp(t, 7.10, 7.45, easeInOut);
+    const s = V ? 200 : 180;
+    const x = V ? W * 0.74 : W * 0.80, y = V ? H * 0.79 : H * 0.76;
+    g.save();
+    g.globalAlpha = clamp(jp) * o;
+    g.translate(x, y); g.rotate(-0.09);
+    g.shadowColor = 'rgba(0,0,0,.55)'; g.shadowBlur = 26; g.shadowOffsetY = 10;
+    roundRect(-s/2, -s/2, s, s, 8);
+    g.fillStyle = '#ffe08a'; g.fill();
+    g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+    font('sg', 700, 28, -0.2);
+    g.fillStyle = '#2a2410'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    ['LLAMAR A', 'JAVIER'].forEach((ln, i) => g.fillText(ln, 0, -18 + i * 34));
+    // Tachado + visto
+    const tp = ramp(t, 6.40, 6.85, easeOut);
+    if (tp > 0){
+      g.beginPath();
+      g.moveTo(-s/2 + 24, -6); g.lineTo(-s/2 + 24 + (s - 48) * tp, -6);
+      g.strokeStyle = '#2a2410'; g.lineWidth = 4; g.lineCap = 'round'; g.stroke();
+      g.globalAlpha = clamp(jp) * o * tp;
+      font('sg', 700, 40, 0);
+      g.fillStyle = '#1d7a4f';
+      g.fillText('✓ HECHO', 0, 56);
+    }
+    g.restore();
+  }
+
+  /* Sin fundido final: la tarjeta de marca se sostiene 1,5 s en pantalla. */
+}
+
+/* ══════════════════════════ línea de tiempo ══════════════════════════ */
+
+const SCENES = [
+  { a:  0.0, b:  6.6, fn: s1, tint: C.blue,  i: 0.16 },
+  { a:  6.6, b: 11.8, fn: s2, tint: C.red,   i: 0.16 },
+  { a: 11.8, b: 16.6, fn: s3, tint: C.blue,  i: 0.18 },
+  { a: 16.6, b: 22.0, fn: s4, tint: C.green, i: 0.14 },
+  { a: 22.0, b: 27.0, fn: s5, tint: C.amber, i: 0.18 },
+  { a: 27.0, b: 32.0, fn: s6, tint: C.red,   i: 0.18 },
+  { a: 32.0, b: 40.0, fn: s7, tint: C.blue,  i: 0.05 },
+  { a: 40.0, b: 49.2, fn: s8, tint: C.cyan,  i: 0.22 },
+  { a: 49.2, b: 60.0, fn: s9, tint: C.blue,  i: 0.22 }
+];
+
+function activeTint(t){
+  let cur = SCENES[0];
+  for (const s of SCENES) if (t >= s.a) cur = s;
+  const idx = SCENES.indexOf(cur);
+  const prev = SCENES[Math.max(0, idx - 1)];
+  const k = clamp((t - cur.a) / 0.6);
+  const mix = (h1, h2, m) => {
+    const A = parseInt(h1.slice(1),16), B = parseInt(h2.slice(1),16);
+    const r = Math.round(lerp((A>>16)&255,(B>>16)&255,m));
+    const gg= Math.round(lerp((A>>8)&255,(B>>8)&255,m));
+    const b = Math.round(lerp(A&255,B&255,m));
+    return '#' + [r,gg,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+  };
+  return { c: mix(prev.tint, cur.tint, k), i: lerp(prev.i, cur.i, k) };
+}
+
+function render(t){
+  t = clamp(t, 0, DUR);
+  g.save();
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.letterSpacing = '0px';
+
+  const m = activeTint(t);
+  background(t, m.c, m.i);
+
+  for (let i = 0; i < SCENES.length; i++){
+    const sc = SCENES[i];
+    if (t >= sc.a && t < sc.b){
+      const localT = t - sc.a;
+      const dx = cutOffsetX(localT, sc.b - sc.a, i === 0, i === SCENES.length - 1);
+      g.save();
+      g.translate(dx, 0);
+      sc.fn(localT);
+      g.restore();
+    }
+  }
+  if (t >= DUR - 0.001){ g.save(); s9(DUR - 49.2); g.restore(); }
+
+  vignette();
+
+  const intro = 1 - ramp(t, 0, 0.3, easeInOut);
+  if (intro > 0){ g.fillStyle = rgba('#000000', intro); g.fillRect(0, 0, W, H); }
+  g.restore();
+}
+
+/* ═══════════════════════════ arranque ═══════════════════════════ */
+
+function loadLogo(){
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => { LOGO = img; res(); };
+    img.onerror = () => res();
+    img.src = './assets/dcode-mark.png';
+  });
+}
+
+async function boot(){
+  await Promise.all([
+    document.fonts.load('700 100px "Space Grotesk"'),
+    document.fonts.load('500 100px "Space Grotesk"'),
+    document.fonts.load('700 100px "JetBrains Mono"'),
+    document.fonts.load('400 100px "JetBrains Mono"'),
+    document.fonts.load('500 100px Inter'),
+    document.fonts.load('700 100px Inter')
+  ]);
+  await document.fonts.ready;
+  await loadLogo();
+
+  if (FRAME !== null){
+    render(FRAME);
+    window.__ready = true;
+  } else {
+    document.body.classList.add('preview');
+    const t0 = performance.now();
+    const loop = () => { render(((performance.now() - t0) / 1000) % (DUR + 1.5)); requestAnimationFrame(loop); };
+    loop();
+  }
+}
+
+window.__render = render;
+boot();
+})();
+</script>
+</body>
+</html>
