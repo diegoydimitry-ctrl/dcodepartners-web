@@ -170,6 +170,38 @@
     en: 'I’d rather <b>a person</b> confirmed that, so I don’t tell you something I’m not sure of. Shall we call or write to you?'
   };
 
+
+  /* ════════════ UNA BANDEJA CON LA MAÑANA ENTERA, NO CON TRES ════════════
+     Tres conversaciones no enseñan un sistema de atención: enseñan un día sin
+     clientes. Las tres de arriba se quedan a mano —el recorrido las nombra
+     por su id— y estas dieciséis vienen de una tabla.
+     Cada fila: id · canal · quién · qué pregunta [ES,EN] · cómo acabó · hora.
+     La mezcla importa tanto como el número: la mayoría se resuelven solas,
+     unas pocas pasan a una persona y un par siguen en curso. Si salieran
+     todas resueltas solas nadie se lo creería, y con razón. */
+  var MAS_CONV = [
+    ['c4','tel','Gimnasio Ardal',['La máquina hace ruido, ¿podéis venir?','The unit is making a noise, can you come?'],'persona','08:12'],
+    ['c5','web','Javier Solaz',['¿Cuánto cuesta climatizar un chalet?','How much to air-condition a house?'],'sola','08:20'],
+    ['c6','wa','Nuria Peral',['¿El mantenimiento incluye los filtros?','Does the service include the filters?'],'sola','08:31'],
+    ['c7','correo','Hotel Vegalta',['Factura de marzo, ¿me la reenviáis?','Could you resend March’s invoice?'],'sola','08:44'],
+    ['c8','tel','Óptica Bendaña',['No enfría desde el lunes','Not cooling since Monday'],'persona','08:52'],
+    ['c9','web','Cafetería Nerva',['¿Trabajáis los sábados?','Do you work Saturdays?'],'sola','09:03'],
+    ['c10','wa','Notaría Alcaraz',['¿A qué hora venís el jueves?','What time are you coming on Thursday?'],'sola','09:18'],
+    ['c11','correo','Colegio Arantes',['¿El presupuesto incluye la retirada?','Does the quote include removal?'],'persona','09:26'],
+    ['c12','tel','Residencia El Torcal',['Queremos adelantar la revisión','We want to bring the service forward'],'curso','09:35'],
+    ['c13','web','Bar La Espiga',['¿Financiáis la instalación?','Do you offer finance?'],'sola','09:47'],
+    ['c14','wa','Autoescuela Vinca',['Confirmo la cita del martes','Confirming Tuesday’s appointment'],'sola','09:55'],
+    ['c15','correo','Supermercados Trena',['Contrato único para tres tiendas','One contract for three shops'],'espera','10:01'],
+    ['c16','web','Ana Belmar',['¿Dais garantía en la instalación?','Is the installation guaranteed?'],'sola','10:09'],
+    ['c17','tel','Inmobiliaria Sarela',['Cambio de dirección de factura','Change of invoice address'],'sola','10:14'],
+    ['c18','wa','Clínica Dental Sorela',['¿Podéis pasar a medir esta semana?','Could you come and measure this week?'],'curso','10:16'],
+    ['c19','web','Talleres Marbeny',['¿Cuánto tarda una nave de 600 m²?','How long for a 600 m² workshop?'],'sola','10:17']
+  ];
+  function masConvs(en) {
+    var i = en ? 1 : 0;
+    return MAS_CONV.map(function (r) { return { id: r[0], canal: r[1], q: r[2], a: r[3][i], est: r[4], hace: r[5] }; });
+  }
+
   function estado(app) {
     var t = app.t;
     return {
@@ -179,7 +211,7 @@
         { t: 'ok', x: app.en ? 'Web chat from <b>Marta R.</b> solved on its own' : 'Chat web de <b>Marta R.</b> resuelto solo', s: '', h: '09:12', k: 'a-2' },
         { t: 'persona', x: app.en ? '<b>Oficinas Tavira Legal</b> handed to Laura M.' : '<b>Oficinas Tavira Legal</b> pasado a Laura M.', s: '', h: '10:05', k: 'a-1' }
       ],
-      convs: t.conv.map(function (c) { return JSON.parse(JSON.stringify(c)); }),
+      convs: t.conv.map(function (c) { return JSON.parse(JSON.stringify(c)); }).concat(masConvs(app.en)),
       llamada: null, correo: null, queja: null,
       chat: [{ de: 'ia', x: t.q.hola }], escribe: false
     };

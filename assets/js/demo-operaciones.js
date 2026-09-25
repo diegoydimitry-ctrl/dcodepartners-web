@@ -128,6 +128,69 @@
     }
   };
 
+
+  /* ═════════════ UN TALLER CON TRABAJO, NO CON TRES PARTES ═════════════
+     Había tres órdenes de trabajo y cinco bloques en la planificación: una
+     empresa de climatización con tres trabajos en la semana no enseña un
+     sistema de operaciones. Las tres de arriba se quedan a mano —el
+     recorrido guiado las nombra por su id— y estas dieciséis se montan de
+     una tabla. Cada fila: id · cliente · qué es [ES,EN] · estado · día
+     (0 = lunes, null = sin planificar) · técnicos. */
+  var MAS_OT = [
+    ['OT-2416','Óptica Bendaña',['Avería · no enfría','Breakdown · not cooling'],'curso',0,['IR']],
+    ['OT-2417','Gimnasio Ardal',['Ruido en unidad exterior','Outdoor unit noise'],'curso',0,['MG']],
+    ['OT-2418','Notaría Alcaraz',['Instalación sala de espera','Waiting room install'],'plan',1,['IR','MG']],
+    ['OT-2419','Supermercados Trena',['Revisión cámaras · tienda 1','Cold room service · shop 1'],'plan',1,['OL']],
+    ['OT-2420','Supermercados Trena',['Revisión cámaras · tienda 2','Cold room service · shop 2'],'plan',2,['OL']],
+    ['OT-2421','Autoescuela Vinca',['Aula y recepción','Classroom and front desk'],'plan',2,['MG']],
+    ['OT-2422','Residencia El Torcal',['Revisión de nueve equipos','Nine-unit service'],'plan',3,['OL','IR']],
+    ['OT-2423','Inmobiliaria Sarela',['Oficina de 70 m²','70 m² office'],'plan',3,['MG']],
+    ['OT-2424','Cafetería Nerva',['Dos splits','Two split units'],'plan',4,['IR']],
+    ['OT-2425','Clínica Dental Sorela',['Retirada de equipos viejos','Remove old units'],'plan',4,['MG','OL']],
+    ['OT-2426','Talleres Marbeny',['Toma de medidas en nave','Workshop survey'],'nueva',null,[]],
+    ['OT-2427','Colegio Arantes',['Seis aulas · agosto','Six classrooms · August'],'nueva',null,[]],
+    ['OT-2428','Hotel Vegalta',['Arranque del contrato anual','Annual contract kick-off'],'material',null,['OL']],
+    ['OT-2429','Bar La Espiga',['Terraza cerrada','Enclosed terrace'],'material',null,['IR']],
+    ['OT-2410','Panadería Brisa',['Cambio de filtros','Filter replacement'],'hecha',null,['OL']],
+    ['OT-2409','Marta R.',['Piso de 90 m²','90 m² flat'],'fact',null,['IR','MG']]
+  ];
+  function masOts(en) {
+    var i = en ? 1 : 0;
+    return MAS_OT.map(function (r) { return { id: r[0], c: r[1], n: r[2][i], e: r[3], d: r[4], t: r[5].slice() }; });
+  }
+  /* La semana de los tres técnicos, no cinco huecos. */
+  var MAS_BLOQ = [
+    ['IR',0,['Óptica Bendaña','Óptica Bendaña'],'8:00–9:30','trab'],
+    ['MG',0,['Gimnasio Ardal','Gimnasio Ardal'],'10:00–13:00','trab'],
+    ['OL',0,['Ruta de mantenimiento · centro','Maintenance route · centre'],'13:00–15:00','mant'],
+    ['IR',1,['Notaría Alcaraz','Notaría Alcaraz'],'8:30–13:00','trab'],
+    ['MG',1,['Notaría Alcaraz','Notaría Alcaraz'],'8:30–13:00','trab'],
+    ['OL',1,['Supermercados Trena · tienda 1','Trena supermarkets · shop 1'],'10:00–13:00','mant'],
+    ['OL',2,['Supermercados Trena · tienda 2','Trena supermarkets · shop 2'],'9:00–12:00','mant'],
+    ['MG',2,['Autoescuela Vinca','Vinca driving school'],'9:00–14:00','trab'],
+    ['OL',3,['Residencia El Torcal','El Torcal care home'],'8:00–14:00','mant'],
+    ['IR',3,['Residencia El Torcal','El Torcal care home'],'8:00–14:00','mant'],
+    ['MG',3,['Inmobiliaria Sarela','Sarela estate agents'],'9:30–13:00','trab'],
+    ['IR',4,['Cafetería Nerva','Nerva coffee shop'],'8:30–11:00','trab'],
+    ['MG',4,['Clínica Dental Sorela','Sorela dental clinic'],'9:00–13:00','trab'],
+    ['OL',4,['Ruta de mantenimiento · sur','Maintenance route · south'],'9:00–13:00','mant']
+  ];
+  function masBloques(en) {
+    var i = en ? 1 : 0;
+    return MAS_BLOQ.map(function (r) { return { tec: r[0], d: r[1], x: r[2][i], h: r[3], tipo: r[4] }; });
+  }
+  var MAS_PED = [
+    ['PC-330','Climatiza Ibérica',['Split 3,5 kW ×4','3.5 kW split ×4'],1,true],
+    ['PC-331','Suministros Térmicos Balda',['Tubería de cobre 60 m','Copper pipe 60 m'],1,true],
+    ['PC-332','Climatiza Ibérica',['Compresor de repuesto','Spare compressor'],3,false],
+    ['PC-333','Frigoveca',['Gas R-32 ×6','R-32 gas ×6'],2,true],
+    ['PC-334','Suministros Térmicos Balda',['Rejillas ×20','Grilles ×20'],4,false]
+  ];
+  function masPedidos(en) {
+    var D = en ? ['Mon','Tue','Wed','Thu','Fri'] : ['Lun','Mar','Mié','Jue','Vie'], i = en ? 1 : 0;
+    return MAS_PED.map(function (r) { return { id: r[0], prov: r[1], x: r[2][i], llega: D[r[3]], ok: r[4] }; });
+  }
+
   function estado(app) {
     var t = app.t;
     return {
@@ -136,7 +199,7 @@
       act: [
         { t: 'ok', x: app.en ? 'Invoice for <b>Hostal Rúa Verde</b> ready from its job sheet' : 'Factura de <b>Hostal Rúa Verde</b> preparada desde su parte', s: '', h: '07:58', k: 'a-1' }
       ],
-      ots: t.otros.map(function (o) { return JSON.parse(JSON.stringify(o)); }),
+      ots: t.otros.map(function (o) { return JSON.parse(JSON.stringify(o)); }).concat(masOts(app.en)),
       olmo: null,
       bloques: [
         { tec: 'OL', d: 0, x: 'Academia Linde', h: '9:00–12:00', tipo: 'mant' },
@@ -144,8 +207,8 @@
         { tec: 'IR', d: 0, x: 'Hostal Rúa Verde', h: '8:00–13:00', tipo: 'trab' },
         { tec: 'MG', d: 1, x: app.en ? 'Office electrics' : 'Cuadro eléctrico oficina', h: '9:00–12:00', tipo: 'trab' },
         { tec: 'IR', d: 2, x: app.en ? 'Stock pick-up' : 'Recogida de material', h: '12:00–13:00', tipo: 'trab' }
-      ],
-      pedidos: [{ id: 'PC-329', prov: 'Suministros Térmicos Balda', x: app.en ? 'Brackets ×12' : 'Soportes ×12', llega: app.en ? 'Mon' : 'Lun', ok: true }],
+      ].concat(masBloques(app.en)),
+      pedidos: [{ id: 'PC-329', prov: 'Suministros Térmicos Balda', x: app.en ? 'Brackets ×12' : 'Soportes ×12', llega: app.en ? 'Mon' : 'Lun', ok: true }].concat(masPedidos(app.en)),
       prop: null
     };
   }

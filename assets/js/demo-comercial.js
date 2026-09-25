@@ -90,7 +90,7 @@
         { canal: 'anuncio', q: 'Rosa Quintero', e: 'Particular', a: 'Aire en dos habitaciones', msg: 'Quiero precio para poner aire acondicionado en dos habitaciones de un piso.', campos: { tipo: 'Instalación nueva', tam: 'Vivienda · 2 estancias', zona: 'Madrid · Centro', plazo: 'Sin fecha', valor: '1.800 – 2.600 €', prio: 'Media' }, quien: 'LM', regla: 'Vivienda → Laura M.' },
         { canal: 'tel', q: 'Hotel Ribera Alta', e: 'Hotel Ribera Alta', a: 'La máquina de recepción pierde agua', msg: 'Llamada: la máquina de la recepción pierde agua desde esta mañana. Tienen contrato de mantenimiento.', campos: { tipo: 'Avería', tam: 'Cliente con contrato', zona: 'Madrid · Centro', plazo: 'Hoy', valor: '—', prio: 'Alta' }, deriva: true }
       ],
-      hace: ['hace 3 min', 'hace 18 min', 'hace 1 h', 'hace 2 h', 'ayer']
+      hace: ['hace 3 min', 'hace 18 min', 'hace 1 h', 'hace 2 h', 'ayer', 'hace 40 min', 'hace 3 h', 'hace 5 h', 'hace 7 h', 'anteayer', 'hace 3 días']
     },
     en: {
       app: 'Sales', empresa: 'Arvena Climatización', yo: { n: 'Laura M.', ini: 'LM' },
@@ -154,9 +154,134 @@
         { canal: 'anuncio', q: 'Rosa Quintero', e: 'Private customer', a: 'AC in two bedrooms', msg: 'I’d like a price for air-conditioning in two bedrooms of a flat.', campos: { tipo: 'New install', tam: 'Home · 2 rooms', zona: 'Madrid · Centre', plazo: 'No date', valor: '€1,800 – €2,600', prio: 'Medium' }, quien: 'LM', regla: 'Home → Laura M.' },
         { canal: 'tel', q: 'Hotel Ribera Alta', e: 'Hotel Ribera Alta', a: 'The reception unit is leaking', msg: 'Call: the reception unit has been leaking water since this morning. They have a maintenance contract.', campos: { tipo: 'Breakdown', tam: 'Contract customer', zona: 'Madrid · Centre', plazo: 'Today', valor: '—', prio: 'High' }, deriva: true }
       ],
-      hace: ['3 min ago', '18 min ago', '1 h ago', '2 h ago', 'yesterday']
+      hace: ['3 min ago', '18 min ago', '1 h ago', '2 h ago', 'yesterday', '40 min ago', '3 h ago', '5 h ago', '7 h ago', '2 days ago', '3 days ago']
     }
   };
+
+
+  /* ══════════════ LA BANDEJA, CON EL VOLUMEN DE UNA EMPRESA DE VERDAD ══════
+     Antes había tres entradas. Tres. Una empresa con tres contactos en la
+     bandeja no enseña un sistema comercial: enseña una empresa sin clientes,
+     que es justo lo contrario de lo que esto tiene que contar. Las tres
+     primeras siguen a mano arriba —el recorrido guiado las nombra por su id,
+     y la historia de diez pasos pasa por ellas—; estas trece se escriben en
+     una tabla corta y se montan solas, para no repetir catorce veces la misma
+     estructura en los dos idiomas.
+     Cada fila: id · canal · quién · qué es · [asunto ES,EN] · índice de
+     «hace» · [tipo] · [prioridad] · a quién le toca · [lo que ha escrito] ·
+     lo que ha entendido la IA · [la regla que lo asignó]. */
+  var MAS = [
+    ['e4','correo','Gimnasio Ardal','',['Ruido fuerte en la unidad exterior','Loud noise from the outdoor unit'],5,['Avería','Breakdown'],['Alta','High'],'AT',
+      ['La máquina de la sala grande hace un ruido muy fuerte desde ayer por la tarde. Tenemos clases toda la semana.','The unit in the main room has been making a loud noise since yesterday afternoon. We have classes all week.'],
+      {tam:['1 equipo · 12 kW','1 unit · 12 kW'],zona:['Madrid · Este','Madrid · East'],plazo:['Esta semana','This week'],valor:['180 – 400 €','€180 – €400']},
+      ['Avería → Andrés T.','Breakdown → Andrés T.']],
+    ['e5','web','Residencial Los Almendros','Comunidad de vecinos',['Climatizar el portal y la sala común','AC for the lobby and common room'],1,['Instalación nueva','New install'],['Media','Medium'],'SP',
+      ['Somos una comunidad de 48 viviendas. Queremos climatizar el portal y la sala de reuniones. ¿Podéis pasar a verlo?','We are a 48-home residents association. We want AC in the lobby and the meeting room. Could you come and see it?'],
+      {tam:['2 espacios · 140 m²','2 spaces · 140 m²'],zona:['Madrid · Norte','Madrid · North'],plazo:['Antes del verano','Before summer'],valor:['11.000 – 14.500 €','€11,000 – €14,500']},
+      ['Obra grande → Sergio P.','Large job → Sergio P.']],
+    ['e6','tel','Bar La Espiga','',['Presupuesto para la terraza cerrada','Quote for the enclosed terrace'],6,['Instalación pequeña','Small install'],['Media','Medium'],'LM',
+      ['Llamada transcrita: quieren climatizar la terraza que han cerrado este invierno, unos 35 m².','Transcribed call: they want AC in the terrace they enclosed this winter, about 35 m².'],
+      {tam:['Terraza · 35 m²','Terrace · 35 m²'],zona:['Madrid · Centro','Madrid · Centre'],plazo:['Este trimestre','This quarter'],valor:['4.100 – 5.400 €','€4,100 – €5,400']},
+      ['Zona centro → Laura M.','Centre area → Laura M.']],
+    ['e7','wa','Nuria Peral','Particular',['¿El mantenimiento incluye la limpieza?','Does the service include cleaning?'],0,['Consulta','Question'],['Baja','Low'],'AT',
+      ['Buenas, una duda: el contrato de mantenimiento, ¿incluye la limpieza de filtros o va aparte?','Hi, a question: does the maintenance contract include filter cleaning or is that separate?'],
+      {tam:['Cliente con contrato','Customer on contract'],zona:['Madrid · Sur','Madrid · South'],plazo:['Sin fecha','No date'],valor:['—','—']},
+      ['Consulta de cliente → Andrés T.','Customer question → Andrés T.']],
+    ['e8','anuncio','Talleres Marbeny','',['Nave de 600 m² sin climatizar','600 m² workshop with no AC'],7,['Instalación grande','Large install'],['Alta','High'],'SP',
+      ['Vimos el anuncio. Tenemos una nave de 600 m² donde en verano no se puede trabajar. ¿Qué haría falta?','We saw the ad. We have a 600 m² workshop where you cannot work in summer. What would it take?'],
+      {tam:['Nave · 600 m²','Workshop · 600 m²'],zona:['Madrid · Sur','Madrid · South'],plazo:['Dos meses','Two months'],valor:['28.000 – 36.000 €','€28,000 – €36,000']},
+      ['Obra grande → Sergio P.','Large job → Sergio P.']],
+    ['e9','correo','Clínica Dental Sorela','',['Renovar dos equipos de 2009','Replace two 2009 units'],8,['Renovación','Replacement'],['Media','Medium'],'LM',
+      ['Tenemos dos equipos de 2009 que ya dan problemas. Nos gustaría cambiarlos antes del verano.','We have two 2009 units that keep failing. We would like to replace them before summer.'],
+      {tam:['2 equipos','2 units'],zona:['Madrid · Centro','Madrid · Centre'],plazo:['Antes del verano','Before summer'],valor:['6.200 – 7.800 €','€6,200 – €7,800']},
+      ['Zona centro → Laura M.','Centre area → Laura M.']],
+    ['e10','web','Hotel Vegalta','',['Mantenimiento de 40 habitaciones','Service for 40 rooms'],9,['Mantenimiento','Maintenance'],['Media','Medium'],'AT',
+      ['Buscamos empresa para el mantenimiento anual de los equipos de 40 habitaciones y zonas comunes.','We are looking for a company for the annual service of 40 rooms and common areas.'],
+      {tam:['40 habitaciones','40 rooms'],zona:['Madrid · Norte','Madrid · North'],plazo:['Este trimestre','This quarter'],valor:['9.400 €/año','€9,400/yr']},
+      ['Mantenimiento → Andrés T.','Maintenance → Andrés T.']],
+    ['e11','tel','Óptica Bendaña','',['No enfría desde el lunes','Not cooling since Monday'],2,['Avería','Breakdown'],['Alta','High'],'AT',
+      ['Llamada transcrita: el equipo de la tienda no enfría desde el lunes y tienen el escaparate al sol.','Transcribed call: the shop unit has not been cooling since Monday and the window gets full sun.'],
+      {tam:['1 equipo','1 unit'],zona:['Madrid · Centro','Madrid · Centre'],plazo:['Urgente','Urgent'],valor:['150 – 320 €','€150 – €320']},
+      ['Avería → Andrés T.','Breakdown → Andrés T.']],
+    ['e12','anuncio','Javier Solaz','Particular',['Aire en un chalet de dos plantas','AC for a two-storey house'],3,['Instalación nueva','New install'],['Media','Medium'],'LM',
+      ['Quiero climatizar un chalet de dos plantas, unos 180 m². ¿Me podéis dar una idea de precio?','I want AC in a two-storey house, about 180 m². Could you give me a rough price?'],
+      {tam:['Vivienda · 180 m²','Home · 180 m²'],zona:['Madrid · Oeste','Madrid · West'],plazo:['Sin fecha','No date'],valor:['7.500 – 9.900 €','€7,500 – €9,900']},
+      ['Vivienda → Laura M.','Home → Laura M.']],
+    ['e13','correo','Colegio Arantes','',['Presupuesto para seis aulas','Quote for six classrooms'],4,['Instalación grande','Large install'],['Media','Medium'],'SP',
+      ['Nos piden presupuesto para climatizar seis aulas. La obra tendría que ser en agosto.','We need a quote for six classrooms. The work would have to be in August.'],
+      {tam:['6 aulas · 320 m²','6 classrooms · 320 m²'],zona:['Madrid · Oeste','Madrid · West'],plazo:['Agosto','August'],valor:['19.000 – 24.000 €','€19,000 – €24,000']},
+      ['Obra grande → Sergio P.','Large job → Sergio P.']],
+    ['e14','wa','Panadería Brisa','',['Añadir el obrador al contrato','Add the bakery floor to the contract'],5,['Mantenimiento','Maintenance'],['Baja','Low'],'AT',
+      ['Ya tenemos contrato con vosotros para la tienda. ¿Podemos meter también el obrador?','We already have a contract with you for the shop. Can we add the bakery floor too?'],
+      {tam:['+1 equipo','+1 unit'],zona:['Madrid · Este','Madrid · East'],plazo:['Este mes','This month'],valor:['+ 420 €/año','+€420/yr']},
+      ['Cliente con contrato → Andrés T.','Customer on contract → Andrés T.']],
+    ['e15','web','Asesoría Quindal','',['Dos despachos y una sala','Two offices and a meeting room'],10,['Instalación pequeña','Small install'],['Baja','Low'],'LM',
+      ['Nos mudamos de oficina en mayo y queremos dejarla climatizada antes de entrar.','We are moving office in May and want the AC in before we move in.'],
+      {tam:['Oficina · 3 espacios','Office · 3 spaces'],zona:['Madrid · Centro','Madrid · Centre'],plazo:['Mayo','May'],valor:['5.600 – 6.900 €','€5,600 – €6,900']},
+      ['Zona centro → Laura M.','Centre area → Laura M.']],
+    ['e16','tel','Supermercados Trena','',['Revisión de las cámaras de tres tiendas','Service for the cold rooms in three shops'],10,['Mantenimiento','Maintenance'],['Media','Medium'],'SP',
+      ['Llamada transcrita: quieren un solo contrato para las cámaras de sus tres tiendas.','Transcribed call: they want a single contract for the cold rooms in their three shops.'],
+      {tam:['3 tiendas','3 shops'],zona:['Madrid · Sur','Madrid · South'],plazo:['Este trimestre','This quarter'],valor:['6.800 €/año','€6,800/yr']},
+      ['Multi-tienda → Sergio P.','Multi-site → Sergio P.']],
+  ];
+  function masEntradas(en, t) {
+    var i = en ? 1 : 0;
+    return MAS.map(function (r) {
+      var c = r[10];
+      return { id: r[0], canal: r[1], q: r[2], e: r[3] ? (en && r[3] === 'Particular' ? 'Private customer' : en && r[3] === 'Comunidad de vecinos' ? 'Residents association' : r[3]) : r[2],
+        a: r[4][i], hace: t.hace[r[5]], tipo: r[6][i], prio: r[7][i], quien: r[8], msg: r[9][i],
+        campos: { tipo: r[6][i], tam: c.tam[i], zona: c.zona[i], plazo: c.plazo[i], valor: c.valor[i], prio: r[7][i] },
+        regla: r[11][i] };
+    });
+  }
+
+
+  /* El tablero tenía seis oportunidades para cinco etapas: columnas de una
+     tarjeta, y «En cartera» sumaba 36.000 € de una empresa entera. Con
+     veintidós el tablero se lee como un tablero y la cifra del panel —que
+     sale de aquí, no está escrita a mano— cuadra con una empresa que
+     trabaja. Cada fila: id · quién · qué · etapa · valor · de quién es ·
+     siguiente paso · [días sin respuesta]. */
+  var MAS_OPPS = [
+    ['o7','Gimnasio Ardal',['Avería sala grande','Main room breakdown'],'nuevo',320,'AT',['Visita de diagnóstico','Diagnostic visit']],
+    ['o8','Residencial Los Almendros',['Portal y sala común','Lobby and common room'],'nuevo',12800,'SP',['Llamar a la presidenta','Call the chair']],
+    ['o9','Bar La Espiga',['Terraza cerrada','Enclosed terrace'],'nuevo',4700,'LM',['Pedir plano de la terraza','Ask for the terrace plan']],
+    ['o10','Talleres Marbeny',['Nave de 600 m²','600 m² workshop'],'visita',32000,'SP',['Visita el jueves','Visit on Thursday']],
+    ['o11','Clínica Dental Sorela',['Renovar dos equipos','Replace two units'],'visita',7000,'LM',['Medir antes del presupuesto','Measure before quoting']],
+    ['o12','Óptica Bendaña',['Equipo que no enfría','Unit not cooling'],'visita',240,'AT',['Hoy por la tarde','This afternoon']],
+    ['o13','Hotel Vegalta',['Mantenimiento 40 habitaciones','Service, 40 rooms'],'presupuesto',9400,'AT',['Esperando respuesta','Waiting for a reply'],5],
+    ['o14','Colegio Arantes',['Seis aulas','Six classrooms'],'presupuesto',21500,'SP',['Seguimiento programado','Follow-up scheduled']],
+    ['o15','Javier Solaz',['Chalet de dos plantas','Two-storey house'],'presupuesto',8700,'LM',['Esperando respuesta','Waiting for a reply'],11],
+    ['o16','Asesoría Quindal',['Tres espacios','Three spaces'],'presupuesto',6200,'LM',['Enviado esta mañana','Sent this morning']],
+    ['o17','Supermercados Trena',['Cámaras de tres tiendas','Cold rooms, three shops'],'negociacion',6800,'SP',['Ajustando el alcance','Adjusting the scope']],
+    ['o18','Residencia El Torcal',['Nueve equipos','Nine units'],'negociacion',16400,'SP',['Pendiente de su consejo','Waiting for their board']],
+    ['o19','Cafetería Nerva',['Dos splits','Two split units'],'negociacion',2800,'LM',['Comparando con otra oferta','Comparing with another quote']],
+    ['o20','Notaría Alcaraz',['Sala de espera','Waiting room'],'ganado',3400,'LM',['Pasado a Operaciones','Sent to Operations']],
+    ['o21','Autoescuela Vinca',['Aula y recepción','Classroom and front desk'],'ganado',2600,'AT',['Pasado a Operaciones','Sent to Operations']],
+    ['o22','Inmobiliaria Sarela',['Oficina de 70 m²','70 m² office'],'ganado',4900,'SP',['Facturado','Invoiced']]
+  ];
+  function masOpps(en) {
+    var i = en ? 1 : 0;
+    return MAS_OPPS.map(function (r) {
+      var o = { id: r[0], n: r[1], d: r[2][i], etapa: r[3], v: r[4], q: r[5], sig: r[6][i] };
+      if (r[7]) o.dias = r[7];
+      return o;
+    });
+  }
+  /* La semana entera, no tres huecos sueltos. */
+  var MAS_AGENDA = [
+    [0,'08:30','Óptica Bendaña','visita','AT'],  [0,'16:00','Bar La Espiga','llamada','LM'],
+    [1,'09:00','Talleres Marbeny','visita','SP'],[1,'18:00','Colegio Arantes','seguimiento','SP'],
+    [2,'10:30','Clínica Dental Sorela','visita','LM'],
+    [3,'09:00','Residencial Los Almendros','visita','SP'],[3,'12:30','Hotel Vegalta','seguimiento','AT'],
+    [3,'17:30','Javier Solaz','llamada','LM'],
+    [4,'08:30','Gimnasio Ardal','visita','AT'],  [4,'11:00','Supermercados Trena','llamada','SP'],
+    [4,'16:30','Asesoría Quindal','seguimiento','LM']
+  ];
+  function masAgenda(en) {
+    var D = en ? ['Mon','Tue','Wed','Thu','Fri'] : ['Lun','Mar','Mié','Jue','Vie'];
+    return MAS_AGENDA.map(function (r) { return { d: D[r[0]], h: r[1], x: r[2], tipo: r[3], q: r[4] }; });
+  }
 
   /* ------------------------------------------------------------ ESTADO */
   function estado(app) {
@@ -172,7 +297,7 @@
         { id: 'e1', canal: 'web', q: 'Oficinas Tavira Legal', e: 'Oficinas Tavira Legal', a: en ? 'Quote for two offices' : 'Presupuesto para dos despachos', hace: t.hace[2], tipo: en ? 'Small install' : 'Instalación pequeña', prio: en ? 'Medium' : 'Media', quien: 'LM', msg: en ? 'We’d like a quote to air-condition two offices of about 20 m² each.' : 'Queremos presupuesto para climatizar dos despachos de unos 20 m² cada uno.', campos: en ? { tipo: 'Small install', tam: 'Office · 2 rooms', zona: 'Madrid · Centre', plazo: 'No date', valor: '€3,800 – €5,200', prio: 'Medium' } : { tipo: 'Instalación pequeña', tam: 'Oficina · 2 despachos', zona: 'Madrid · Centro', plazo: 'Sin fecha', valor: '3.800 – 5.200 €', prio: 'Media' }, regla: en ? 'Centre area → Laura M.' : 'Zona centro → Laura M.' },
         { id: 'e2', canal: 'correo', q: 'Academia Linde', e: 'Academia Linde', a: en ? 'Annual service of the units' : 'Revisión anual de los equipos', hace: t.hace[3], tipo: en ? 'Maintenance' : 'Mantenimiento', prio: en ? 'Low' : 'Baja', quien: 'AT', msg: en ? 'Hi, it’s time for the annual service of our three units. When could you come?' : 'Hola, toca la revisión anual de nuestros tres equipos. ¿Cuándo podríais venir?', campos: en ? { tipo: 'Maintenance', tam: '3 units', zona: 'Madrid · North', plazo: 'This month', valor: '€850', prio: 'Low' } : { tipo: 'Mantenimiento', tam: '3 equipos', zona: 'Madrid · Norte', plazo: 'Este mes', valor: '850 €', prio: 'Baja' }, regla: en ? 'Maintenance → Andrés T.' : 'Mantenimiento → Andrés T.' },
         { id: 'e3', canal: 'anuncio', q: 'Marta R.', e: en ? 'Private customer' : 'Particular', a: en ? 'AC in a 90 m² flat' : 'Aire en un piso de 90 m²', hace: t.hace[4], tipo: en ? 'New install' : 'Instalación nueva', prio: en ? 'Medium' : 'Media', quien: 'LM', msg: en ? 'I saw your ad. How much would it cost to air-condition a 90 m² flat?' : 'He visto vuestro anuncio. ¿Cuánto costaría climatizar un piso de 90 m²?', campos: en ? { tipo: 'New install', tam: 'Home · 90 m²', zona: 'Madrid · South', plazo: 'No date', valor: '€2,900 – €3,600', prio: 'Medium' } : { tipo: 'Instalación nueva', tam: 'Vivienda · 90 m²', zona: 'Madrid · Sur', plazo: 'Sin fecha', valor: '2.900 – 3.600 €', prio: 'Media' }, regla: en ? 'Home → Laura M.' : 'Vivienda → Laura M.' }
-      ],
+      ].concat(masEntradas(en, t)),
       lead: null,               // la entrada estrella, cuando llega
       opps: [
         { id: 'o1', n: 'Marta R.', d: en ? '90 m² flat' : 'Piso de 90 m²', etapa: 'nuevo', v: 3200, q: 'LM', sig: en ? 'Call to arrange a visit' : 'Llamar para ver la vivienda' },
@@ -181,12 +306,12 @@
         { id: 'o4', n: 'Hostal Rúa Verde', d: en ? '12 rooms' : '12 habitaciones', etapa: 'presupuesto', v: 21400, q: 'SP', sig: en ? 'Follow-up sent' : 'Seguimiento enviado' },
         { id: 'o5', n: 'Clínica Veterinaria Olmo', d: en ? '3 units' : '3 equipos', etapa: 'negociacion', v: 9800, q: 'SP', sig: en ? 'Waiting for approval' : 'Esperando aprobación' },
         { id: 'o6', n: 'Panadería Brisa', d: en ? 'Maintenance contract' : 'Contrato de mantenimiento', etapa: 'ganado', v: 1200, q: 'AT', sig: en ? 'Won last week' : 'Ganado la semana pasada' }
-      ],
+      ].concat(masOpps(en)),
       agenda: [
         { d: en ? 'Mon' : 'Lun', h: '09:30', x: 'Academia Linde', tipo: 'visita', q: 'AT' },
         { d: en ? 'Tue' : 'Mar', h: '12:00', x: 'Hostal Rúa Verde', tipo: 'llamada', q: 'SP' },
         { d: en ? 'Wed' : 'Mié', h: '17:00', x: 'Marta R.', tipo: 'llamada', q: 'LM' }
-      ]
+      ].concat(masAgenda(en))
     };
   }
 
