@@ -1,0 +1,14 @@
+import { chromium } from "playwright";
+import { writeFileSync } from "node:fs";
+import { resolve, dirname } from "node:path"; import { fileURLToPath } from "node:url";
+const AQUI = dirname(fileURLToPath(import.meta.url));
+const nav = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args:["--autoplay-policy=no-user-gesture-required"] });
+const p = await (await nav.newContext()).newPage();
+p.on("pageerror", e => console.error("ERR:", String(e).slice(0,400)));
+p.on("console", m => { if (m.type()==="error") console.error("C:", m.text().slice(0,200)); });
+await p.goto("file://" + resolve(AQUI, "audio.html"), { waitUntil: "load" });
+await p.waitForFunction(() => window.LISTO === true, null, { timeout: 300000 });
+const { wav, pico } = await p.evaluate(() => ({ wav: window.WAV, pico: window.PICO_DB }));
+writeFileSync(resolve(AQUI, "banda.wav"), Buffer.from(wav, "base64"));
+console.log("banda.wav escrito · pico", pico, "dBFS");
+await nav.close();

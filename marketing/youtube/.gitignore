@@ -1,0 +1,9 @@
+# Intermedios del render: 1350 PNG a 4K, más de 4 GB. Se regeneran enteros
+# con `node _build/render.mjs`, que es determinista, así que versionarlos
+# sería guardar algo que ya está descrito por el código de al lado.
+_build/frames/
+_build/node_modules
+_build/*.wav
+
+# El máster a 4K (unos cientos de MB). La entrega es el 1080p, que sí va.
+_build/*-4k.mp4

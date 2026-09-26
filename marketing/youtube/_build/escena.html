@@ -1,0 +1,1007 @@
+<meta charset="utf-8">
+<title>D-Code · El bucle</title>
+<style>
+  @font-face{font-family:SG;src:url(../_assets/fuentes/spacegrotesk-variable.woff2) format('woff2');font-weight:300 700;font-display:block}
+  @font-face{font-family:IN;src:url(../_assets/fuentes/inter-variable.woff2) format('woff2');font-weight:100 900;font-display:block}
+  @font-face{font-family:JB;src:url(../_assets/fuentes/jetbrainsmono-variable.woff2) format('woff2');font-weight:100 800;font-display:block}
+  html,body{margin:0;padding:0;background:#000;overflow:hidden}
+  canvas{display:block}
+</style>
+<canvas id="c"></canvas>
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//  «EL BUCLE» — anuncio YouTube skippable, 45 s, 16:9
+//
+//  Todo lo que se ve aquí se dibuja en un canvas, fotograma a fotograma, en
+//  función de un único reloj `t`. Nada depende de requestAnimationFrame ni
+//  del reloj del sistema: `pinta(t)` con el mismo `t` da siempre exactamente
+//  la misma imagen. Es lo que permite renderizar fuera de tiempo real y
+//  volver a montar el vídeo entero sin que cambie un píxel.
+//
+//  Las pantallas de producto son CAPTURAS REALES de D-Code Finance, D-Code
+//  OS y la App de Partners corriendo en local. No hay mockups.
+//
+//  Las ventanas del primer acto —la hoja de cálculo, el correo, el
+//  formulario— sí son dibujadas: son la dramatización del trabajo repetitivo
+//  de cualquier empresa, no una pantalla de D-Code, y por eso no llevan
+//  ningún dato que pueda leerse como un cliente ni como una cifra real.
+// ════════════════════════════════════════════════════════════════════════
+
+const W = 3840, H = 2160;          // master 4K
+const S = W / 1920;                // factor de escala: se diseña en 1920 y se multiplica
+const FPS = 30, DUR = 45;
+
+const c = document.getElementById('c');
+c.width = W; c.height = H;
+const X = c.getContext('2d', { alpha: false });
+
+// ── Paleta ──────────────────────────────────────────────────────────────
+// Tomada de los tokens reales del sitio (assets/css/dcp8.css). El acento
+// se usa con cuentagotas: el degradado de marca queda reservado al cierre,
+// para que el resto de la pieza no parezca «tecnología genérica con neón».
+const NEGRO   = '#05070c';
+const TINTA   = '#f5f8ff';
+const TINTA2  = '#b3bfe0';
+const TINTA3  = '#6f7b96';
+const PANEL   = '#0d1220';
+const PANEL2  = '#141b2e';
+const BORDE   = 'rgba(150,174,245,.14)';
+const CIAN    = '#4dd0e1';
+const VIOLETA = '#7c6cff';
+const ROSA    = '#ff6b9d';
+const AMBAR   = '#ffb43a';
+
+// ── Utilidades de tiempo ────────────────────────────────────────────────
+const clamp = (v, a = 0, b = 1) => v < a ? a : v > b ? b : v;
+/** 0→1 dentro de [a,b]; fuera, 0 o 1. */
+const ramp = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut  = x => 1 - Math.pow(1 - x, 3);
+const easeIn   = x => x * x * x;
+const easeIO   = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const easeExpO = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const mix = (a, b, x) => a + (b - a) * x;
+
+/** Ruido determinista: mismo índice, mismo valor, siempre. */
+function ruido(i) {
+  const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453;
+  return x - Math.floor(x);
+}
+/** Deriva suave de cámara en mano: suma de senos, sin aleatoriedad viva. */
+function pulso(t, semilla, amp, vel) {
+  return (Math.sin(t * vel + semilla) * .6 + Math.sin(t * vel * 1.7 + semilla * 3.1) * .4) * amp;
+}
+
+// ── Recursos ────────────────────────────────────────────────────────────
+const IMG = {};
+const NOMBRES = {
+  finPanel: 'fin-panel', finCobros: 'fin-cobros', finIA: 'fin-ia',
+  osHoy: 'os-hoy', osAuto: 'os-automatizaciones',
+  paInicio: 'pa-inicio', paProcesos: 'pa-procesos',
+};
+let logo = null;
+
+async function cargar() {
+  const tareas = Object.entries(NOMBRES).map(([k, f]) => new Promise(res => {
+    const im = new Image();
+    im.onload = () => { IMG[k] = im; res(); };
+    im.onerror = () => res();
+    im.src = `../_assets/capturas/${f}.png`;
+  }));
+  tareas.push(new Promise(res => {
+    const im = new Image();
+    im.onload = () => { logo = im; res(); }; im.onerror = () => res();
+    im.src = '../_assets/dcode-icon-sm.png';
+  }));
+  await Promise.all(tareas);
+  await document.fonts.load('600 100px SG');
+  await document.fonts.load('400 100px IN');
+  await document.fonts.load('500 100px JB');
+  await document.fonts.ready;
+}
+
+// ── Cámara ──────────────────────────────────────────────────────────────
+// Una cámara de verdad no salta: se acerca, y al acercarse el fondo se
+// desenfoca. `enfoque` es la distancia a la que está el plano nítido; cada
+// capa se dibuja con un desenfoque proporcional a lo lejos que esté de él.
+const cam = { x: 0, y: 0, z: 1, rot: 0, enfoque: 1 };
+
+function conCamara(fn, prof = 1) {
+  X.save();
+  X.translate(W / 2, H / 2);
+  X.rotate(cam.rot);
+  const z = cam.z * (1 + (prof - 1) * .35);   // paralaje: lo lejano se mueve menos
+  X.scale(z, z);
+  X.translate(-cam.x * prof, -cam.y * prof);
+  fn();
+  X.restore();
+}
+
+// ── Lienzos auxiliares (desenfoque por capa) ────────────────────────────
+const aux = document.createElement('canvas'); aux.width = W; aux.height = H;
+const A = aux.getContext('2d');
+const aux2 = document.createElement('canvas'); aux2.width = W; aux2.height = H;
+const A2 = aux2.getContext('2d');
+
+/** Dibuja `fn` en un lienzo aparte, lo desenfoca y lo compone. */
+function capaDesenfocada(px, fn, alfa = 1) {
+  if (px < .3) { X.save(); X.globalAlpha = alfa; fn(X); X.restore(); return; }
+  A.setTransform(1, 0, 0, 1, 0, 0);
+  A.clearRect(0, 0, W, H);
+  fn(A);
+  X.save();
+  X.globalAlpha = alfa;
+  X.filter = `blur(${px.toFixed(2)}px)`;
+  X.drawImage(aux, 0, 0);
+  X.restore();
+}
+
+// ── Primitivas de dibujo ────────────────────────────────────────────────
+function rr(ctx, x, y, w, h, r) {
+  const k = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + k, y);
+  ctx.arcTo(x + w, y, x + w, y + h, k);
+  ctx.arcTo(x + w, y + h, x, y + h, k);
+  ctx.arcTo(x, y + h, x, y, k);
+  ctx.arcTo(x, y, x + w, y, k);
+  ctx.closePath();
+}
+
+function texto(ctx, s, x, y, { f = 'IN', p = 400, t = 40, col = TINTA, al = 'left', esp = 0, op = 1 } = {}) {
+  ctx.save();
+  ctx.globalAlpha *= op;
+  ctx.font = `${p} ${t * S}px ${f}`;
+  ctx.fillStyle = col;
+  ctx.textAlign = al;
+  ctx.textBaseline = 'alphabetic';
+  if (esp) {
+    ctx.letterSpacing = `${esp * S}px`;
+  }
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+
+/** Ancho real de un texto con los mismos ajustes que `texto`. */
+function anchoTexto(ctx, s, { f = 'IN', p = 400, t = 40, esp = 0 } = {}) {
+  ctx.save();
+  ctx.font = `${p} ${t * S}px ${f}`;
+  if (esp) ctx.letterSpacing = `${esp * S}px`;
+  const w = ctx.measureText(s).width;
+  ctx.restore();
+  return w;
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ACTO 1 · EL BUCLE
+//  Dos ventanas. Un dato que se copia de una a otra. El gesto se repite,
+//  y cada repetición es un poco más rápida que la anterior.
+// ════════════════════════════════════════════════════════════════════════
+
+// Un ciclo = seleccionar · copiar · cambiar de ventana · pegar · volver.
+// La duración baja de 1.15 s a 0.18 s: es la aceleración que convierte una
+// tarea en una máquina absurda sin que haya que decirlo.
+const CICLOS = [];
+(function construirCiclos() {
+  let t = -0.28, d = 1.62;
+  for (let i = 0; i < 52; i++) {
+    CICLOS.push({ i, t0: t, dur: d });
+    t += d;
+    d = Math.max(0.165, d * (i < 2 ? 0.80 : 0.888));
+  }
+})();
+
+// POSICIONES FIJAS, ORDENADAS POR CERCANÍA AL CENTRO.
+//
+// Antes la rejilla se calculaba con `cols = ceil(sqrt(total))` y se
+// centraba: al aparecer una tanda nueva cambiaba `cols`, y TODAS las
+// ventanas —incluida la primera— saltaban de sitio. Con la cámara pegada a
+// la primera, el salto era un corte que nadie había pedido.
+//
+// Aquí el sitio de cada ventana no depende de cuántas haya: la número 0
+// está siempre en el origen y las demás se ordenan por distancia. El caos
+// CRECE HACIA FUERA desde la tarea original, que además es justo lo que
+// cuenta la escena.
+const PASO_X = 760, PASO_Y = 760 * .66;
+const RETICULA = (() => {
+  const pts = [];
+  for (let gy = -5; gy <= 5; gy++)
+    for (let gx = -7; gx <= 7; gx++)
+      pts.push({ gx, gy, d: gx * gx * .46 + gy * gy });
+  pts.sort((a, b) => a.d - b.d || a.gy - b.gy || a.gx - b.gx);
+  return pts;
+})();
+
+function posNodo(i) {
+  const q = RETICULA[i % RETICULA.length];
+  return {
+    x: q.gx * PASO_X * S + (ruido(i * 3.7) - .5) * 90 * S,
+    y: q.gy * PASO_Y * S + (ruido(i * 9.1) - .5) * 70 * S,
+  };
+}
+
+function cicloEn(t) {
+  for (let i = CICLOS.length - 1; i >= 0; i--) if (t >= CICLOS[i].t0) return CICLOS[i];
+  return CICLOS[0];
+}
+
+/** Fase 0..1 dentro del ciclo actual, y el índice del ciclo. */
+function faseBucle(t) {
+  const cc = cicloEn(t);
+  return { f: clamp((t - cc.t0) / cc.dur), n: cc.i, dur: cc.dur };
+}
+
+/**
+ * VENTANA DE HOJA DE CÁLCULO — el origen del dato.
+ * Filas neutras a propósito: ni un nombre de cliente, ni una cifra que
+ * pueda leerse como real. Lo que tiene que reconocerse es el GESTO.
+ */
+function hoja(ctx, x, y, w, h, { fase, filaSel, tono = 1, marco = true }) {
+  ctx.save();
+  if (marco) {
+    rr(ctx, x, y, w, h, 14 * S);
+    ctx.fillStyle = PANEL; ctx.fill();
+    ctx.strokeStyle = BORDE; ctx.lineWidth = 1.5 * S; ctx.stroke();
+    // barra de título
+    ctx.save(); rr(ctx, x, y, w, 44 * S, 14 * S); ctx.clip();
+    ctx.fillStyle = PANEL2; ctx.fillRect(x, y, w, 44 * S); ctx.restore();
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.arc(x + (20 + i * 17) * S, y + 22 * S, 5 * S, 0, 7);
+      ctx.fillStyle = ['#3d4560', '#3d4560', '#3d4560'][i]; ctx.fill();
+    }
+    texto(ctx, 'hoja de cálculo', x + 80 * S, y + 28 * S, { f: 'JB', t: 15, col: TINTA3, op: tono });
+  }
+  const top = y + 60 * S, rh = 30 * S;
+  const cols = [0.06, 0.34, 0.60, 0.80];
+  // cabecera
+  ctx.globalAlpha = tono * .5;
+  for (let ci = 0; ci < 4; ci++)
+    texto(ctx, ['#', 'concepto', 'estado', 'importe'][ci], x + w * cols[ci], top, { f: 'JB', t: 13, col: TINTA3 });
+  ctx.globalAlpha = 1;
+  const n = Math.floor((h - 80 * S) / rh);
+  for (let i = 0; i < n; i++) {
+    const fy = top + 18 * S + i * rh;
+    if (fy > y + h - 14 * S) break;
+    const sel = i === filaSel;
+    if (sel) {
+      ctx.fillStyle = `rgba(77,208,225,${.10 + .16 * fase})`;
+      ctx.fillRect(x + 8 * S, fy - 17 * S, w - 16 * S, rh - 4 * S);
+      ctx.fillStyle = CIAN;
+      ctx.fillRect(x + 8 * S, fy - 17 * S, 3 * S, rh - 4 * S);
+    }
+    const o = sel ? 1 : .40;
+    const r0 = ruido(i * 7.1 + 3);
+    texto(ctx, String(1040 + i), x + w * cols[0], fy, { f: 'JB', t: 14, col: TINTA3, op: o * tono });
+    // barra gris en vez de palabras: no dice nada que no sea verdad
+    ctx.globalAlpha = o * tono * .55;
+    ctx.fillStyle = sel ? TINTA2 : '#404a66';
+    ctx.fillRect(x + w * cols[1], fy - 10 * S, w * (.14 + r0 * .16), 8 * S);
+    ctx.fillRect(x + w * cols[2], fy - 10 * S, w * .09, 8 * S);
+    ctx.globalAlpha = 1;
+    texto(ctx, (120 + Math.floor(r0 * 800)) + ',00', x + w * cols[3], fy, { f: 'JB', t: 14, col: sel ? TINTA : TINTA3, op: o * tono });
+  }
+  ctx.restore();
+}
+
+/** VENTANA DESTINO — el formulario donde acaba el dato, pegado a mano. */
+function formulario(ctx, x, y, w, h, { pegado, fase, tono = 1 }) {
+  ctx.save();
+  rr(ctx, x, y, w, h, 14 * S);
+  ctx.fillStyle = PANEL; ctx.fill();
+  ctx.strokeStyle = BORDE; ctx.lineWidth = 1.5 * S; ctx.stroke();
+  ctx.save(); rr(ctx, x, y, w, 44 * S, 14 * S); ctx.clip();
+  ctx.fillStyle = PANEL2; ctx.fillRect(x, y, w, 44 * S); ctx.restore();
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath(); ctx.arc(x + (20 + i * 17) * S, y + 22 * S, 5 * S, 0, 7);
+    ctx.fillStyle = '#3d4560'; ctx.fill();
+  }
+  texto(ctx, 'otro sistema', x + 80 * S, y + 28 * S, { f: 'JB', t: 15, col: TINTA3, op: tono });
+
+  const campos = 5;
+  for (let i = 0; i < campos; i++) {
+    const fy = y + (78 + i * 62) * S;
+    if (fy + 46 * S > y + h) break;
+    ctx.globalAlpha = tono * .45;
+    ctx.fillStyle = '#39425c';
+    ctx.fillRect(x + 26 * S, fy, w * .22, 7 * S);
+    ctx.globalAlpha = 1;
+    const activo = i === 2;
+    rr(ctx, x + 26 * S, fy + 16 * S, w - 52 * S, 34 * S, 7 * S);
+    ctx.fillStyle = activo ? 'rgba(124,108,255,.07)' : 'rgba(255,255,255,.022)';
+    ctx.fill();
+    ctx.strokeStyle = activo && pegado ? 'rgba(124,108,255,.5)' : BORDE;
+    ctx.lineWidth = 1.2 * S; ctx.stroke();
+    if (activo) {
+      if (pegado) {
+        texto(ctx, '1046 · 738,00', x + 40 * S, fy + 39 * S, { f: 'JB', t: 15, col: TINTA, op: tono });
+      } else if (fase % 1 < .55) {
+        ctx.fillStyle = TINTA2;
+        ctx.fillRect(x + 40 * S, fy + 24 * S, 2 * S, 18 * S);   // cursor parpadeando
+      }
+    } else {
+      ctx.globalAlpha = tono * .3;
+      ctx.fillStyle = '#4a5474';
+      ctx.fillRect(x + 40 * S, fy + 29 * S, w * (.1 + ruido(i * 3.3) * .3), 7 * S);
+      ctx.globalAlpha = 1;
+    }
+  }
+  ctx.restore();
+}
+
+/** El puntero. Se mueve con un arco, no en línea recta: así se lee humano. */
+function puntero(ctx, x, y, escala = 1, op = 1) {
+  ctx.save();
+  ctx.globalAlpha = op;
+  ctx.translate(x, y);
+  ctx.scale(escala * S, escala * S);
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(0, 26); ctx.lineTo(6.4, 20.2);
+  ctx.lineTo(11.2, 30.4); ctx.lineTo(15.6, 28.2); ctx.lineTo(10.9, 18.2);
+  ctx.lineTo(19, 17.4); ctx.closePath();
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(0,0,0,.65)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 2;
+  ctx.fill();
+  ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(0,0,0,.55)'; ctx.stroke();
+  ctx.restore();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  TIPOGRAFÍA EN PANTALLA
+//  Las frases del guion aparecen escritas. Cada una entra por peso y por
+//  desenfoque, nunca por deslizamiento: un texto que se desliza es de
+//  plantilla; uno que se materializa parece rodado.
+// ════════════════════════════════════════════════════════════════════════
+function frase(ctx, s, t, t0, t1, {
+  y = 0.5, t: tam = 62, f = 'SG', p = 500, col = TINTA, al = 'center', esp = -1, sub = null, tsub = 24,
+} = {}) {
+  if (t < t0 - .35 || t > t1 + .45) return;
+  const ent = easeOut(ramp(t, t0, t0 + .42));
+  const sal = 1 - easeIn(ramp(t, t1, t1 + .38));
+  const op = ent * sal;
+  if (op <= .004) return;
+  const desp = (1 - ent) * 16 * S;
+  const bl = (1 - ent) * 9 + (1 - sal) * 7;
+  const px = al === 'center' ? W / 2 : W * 0.115;
+  const py = H * y + desp;
+  ctx.save();
+  if (bl > .3) ctx.filter = `blur(${bl.toFixed(2)}px)`;
+  ctx.globalAlpha = op;
+  // sombra larga y suave: despega el texto del fondo sin caja
+  ctx.shadowColor = 'rgba(0,0,0,.72)'; ctx.shadowBlur = 44 * S; ctx.shadowOffsetY = 3 * S;
+  texto(ctx, s, px, py, { f, p, t: tam, col, al, esp });
+  if (sub) {
+    ctx.shadowBlur = 30 * S;
+    texto(ctx, sub, px, py + tam * 0.92 * S, { f: 'JB', p: 400, t: tsub, col: TINTA3, al, esp: 1 });
+  }
+  ctx.restore();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  PANTALLA DE PRODUCTO EN EL ESPACIO
+//  La captura real, con marco, reflejo y sombra, colocada en perspectiva
+//  falsa por escala. La cámara la atraviesa: al final del plano la imagen
+//  llena el cuadro y el corte se hace DENTRO de ella.
+// ════════════════════════════════════════════════════════════════════════
+function pantalla(ctx, img, cx, cy, escala, { op = 1, recorte = null, brillo = 1, rot = 0 } = {}) {
+  if (!img) return;
+  const iw = img.width, ih = img.height;
+  // proporción del TROZO que se va a dibujar, no la de la captura entera
+  const aw = recorte ? recorte[2] * iw : iw;
+  const ah = recorte ? recorte[3] * ih : ih;
+  const rw = 1180 * S * escala;
+  const rh = rw * (ah / aw);
+  ctx.save();
+  ctx.globalAlpha = op;
+  ctx.translate(cx, cy);
+  if (rot) ctx.rotate(rot);
+  // sombra de contacto
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 90 * S * escala; ctx.shadowOffsetY = 26 * S * escala;
+  rr(ctx, -rw / 2, -rh / 2, rw, rh, 16 * S * escala);
+  ctx.fillStyle = '#05070c'; ctx.fill();
+  ctx.restore();
+  ctx.save();
+  rr(ctx, -rw / 2, -rh / 2, rw, rh, 16 * S * escala);
+  ctx.clip();
+  if (recorte) {
+    const [sx, sy, sw, sh] = recorte;
+    ctx.drawImage(img, sx * iw, sy * ih, sw * iw, sh * ih, -rw / 2, -rh / 2, rw, rh);
+  } else {
+    ctx.drawImage(img, -rw / 2, -rh / 2, rw, rh);
+  }
+  if (brillo !== 1) {
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.fillStyle = brillo > 1 ? `rgba(255,255,255,${(brillo - 1) * .5})` : `rgba(0,0,0,${(1 - brillo)})`;
+    ctx.fillRect(-rw / 2, -rh / 2, rw, rh);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  // reflejo diagonal: una sola franja, muy tenue
+  const g = ctx.createLinearGradient(-rw / 2, -rh / 2, rw / 2, rh / 2);
+  g.addColorStop(0, 'rgba(255,255,255,0)');
+  g.addColorStop(.42, 'rgba(255,255,255,.035)');
+  g.addColorStop(.52, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(-rw / 2, -rh / 2, rw, rh);
+  ctx.restore();
+  // filo
+  rr(ctx, -rw / 2, -rh / 2, rw, rh, 16 * S * escala);
+  ctx.strokeStyle = 'rgba(190,210,255,.13)'; ctx.lineWidth = 1.6 * S; ctx.stroke();
+  ctx.restore();
+}
+
+/** Rótulo de producto: mono, pequeño, con un filo de color a la izquierda. */
+function rotulo(ctx, s, t, t0, t1, col) {
+  const ent = easeOut(ramp(t, t0, t0 + .30));
+  const sal = 1 - easeIn(ramp(t, t1 - .22, t1));
+  const op = ent * sal;
+  if (op <= .004) return;
+  const x = W * 0.085, y = H * 0.845;
+  const w = anchoTexto(ctx, s, { f: 'SG', p: 500, t: 40 });
+  ctx.save();
+  ctx.globalAlpha = op;
+  ctx.fillStyle = col;
+  ctx.fillRect(x - 22 * S, y - 30 * S, 4 * S, 40 * S);
+  ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 40 * S;
+  texto(ctx, s, x, y, { f: 'SG', p: 500, t: 40, col: TINTA });
+  ctx.restore();
+  // subrayado que se dibuja solo
+  const av = easeOut(ramp(t, t0 + .1, t0 + .7));
+  ctx.save();
+  ctx.globalAlpha = op * .55;
+  ctx.fillStyle = col;
+  ctx.fillRect(x, y + 16 * S, w * av, 2 * S);
+  ctx.restore();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  POST: aberración, grano, viñeta, barrido
+//  El grano es determinista (depende del número de fotograma) para que dos
+//  renders del mismo plano sean idénticos.
+// ════════════════════════════════════════════════════════════════════════
+const granoTile = (() => {
+  const g = document.createElement('canvas'); g.width = 256; g.height = 256;
+  const gx = g.getContext('2d');
+  const d = gx.createImageData(256, 256);
+  for (let i = 0; i < 256 * 256; i++) {
+    const v = 118 + ruido(i * 1.37) * 74;
+    d.data[i * 4] = d.data[i * 4 + 1] = d.data[i * 4 + 2] = v;
+    d.data[i * 4 + 3] = 255;
+  }
+  gx.putImageData(d, 0, 0);
+  return g;
+})();
+
+function post(t, fr, { grano = 0.055, vineta = 0.55, ab = 1.0 } = {}) {
+  // aberración cromática: se desplazan los canales extremos, muy poco
+  if (ab > 0.02) {
+    A2.setTransform(1, 0, 0, 1, 0, 0);
+    A2.clearRect(0, 0, W, H);
+    A2.drawImage(c, 0, 0);
+    X.save();
+    X.globalCompositeOperation = 'lighter';
+    X.globalAlpha = .16 * ab;
+    X.drawImage(aux2, -1.7 * ab * S, 0, W, H);
+    X.drawImage(aux2, 1.7 * ab * S, 0, W, H);
+    X.restore();
+  }
+  // viñeta
+  if (vineta > 0) {
+    const g = X.createRadialGradient(W / 2, H * .47, H * .28, W / 2, H * .5, H * .92);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, `rgba(0,0,0,${vineta})`);
+    X.fillStyle = g; X.fillRect(0, 0, W, H);
+  }
+  // grano
+  if (grano > 0) {
+    X.save();
+    X.globalCompositeOperation = 'overlay';
+    X.globalAlpha = grano;
+    const ox = (fr * 71) % 256, oy = (fr * 137) % 256;
+    for (let yy = -256; yy < H; yy += 256)
+      for (let xx = -256; xx < W; xx += 256)
+        X.drawImage(granoTile, xx + ox, yy + oy);
+    X.restore();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  LA PELÍCULA
+// ════════════════════════════════════════════════════════════════════════
+function pinta(t, fr) {
+  X.setTransform(1, 0, 0, 1, 0, 0);
+  X.fillStyle = NEGRO;
+  X.fillRect(0, 0, W, H);
+
+  if (t < 12.0)      acto1(t, fr);
+  else if (t < 18.2) acto2(t, fr);
+  else if (t < 24.0) acto3(t, fr);
+  else if (t < 36.2) acto4(t, fr);
+  else if (t < 41.0) acto5(t, fr);
+  else               acto6(t, fr);
+}
+
+// ── ACTO 1 ──────────────────────────────────────────────────────────────
+function acto1(t, fr) {
+  const { f, n } = faseBucle(t);
+
+  // La cámara arranca MUY cerca —macro— y retrocede durante doce segundos.
+  // No hay un solo corte en todo el acto: el crecimiento del caos es un
+  // único movimiento, y por eso se siente como que no para.
+  const retro = easeIO(ramp(t, 0, 11.4));
+  cam.z = mix(4.15, 0.44, retro);
+
+  // LA CÁMARA SIGUE AL PUNTERO, no al centro de la escena.
+  //
+  // Los tres primeros ciclos son macro: se ve la fila seleccionada, se
+  // copia, la cámara barre a la ventana de al lado, se pega, y vuelve. Es
+  // lo que hace una cámara de verdad y es lo que convierte «hay dos
+  // ventanas» en «mira lo que está pasando».
+  //
+  // A partir del tercer ciclo el seguimiento se suelta —`suelta`— y la
+  // cámara deja de perseguir para quedarse quieta mientras el mundo crece
+  // a su alrededor. Si siguiera al puntero durante los doce segundos, el
+  // plano marearía.
+  const HOJA_CX = -179 * S, FORM_CX = 179 * S;
+  const seg = f < .30 ? 0
+    : f < .58 ? easeIO((f - .30) / .28)
+      : f < .80 ? 1
+        : 1 - easeIO((f - .80) / .20);
+  const suelta = 1 - easeIO(ramp(t, 2.6, 5.2));
+  const objetivo = mix(HOJA_CX, FORM_CX, seg) * suelta;
+  cam.x = pulso(t, 1.2, 20 * S, .55) + objetivo + mix(0, 0, retro);
+  cam.y = pulso(t, 4.7, 14 * S, .43) + mix(10, 0, retro) * S - seg * 12 * S * suelta;
+  cam.rot = pulso(t, 2.1, 0.0022, .38);
+
+  // Cuántas parejas de ventanas hay en pantalla: 1 → 3 → 9 → 21 → 40.
+  // Aparecen por tandas, no de golpe; cada tanda entra con un golpe seco.
+  const TANDAS = [
+    { t: 0.0, n: 1 }, { t: 4.3, n: 3 }, { t: 6.1, n: 8 },
+    { t: 7.8, n: 18 }, { t: 9.2, n: 32 }, { t: 10.4, n: 54 },
+  ];
+  let total = 1;
+  for (const b of TANDAS) if (t >= b.t) total = b.n;
+
+  // Las ventanas lejanas se dibujan desenfocadas: profundidad real, no
+  // una capa de blur global.
+  const dibujaRejilla = (ctx, desde, hasta) => {
+    for (let i = desde; i < hasta && i < total; i++) {
+      const { x: x0, y: y0 } = posNodo(i);
+
+      // cada ventana lleva su propio bucle, desfasado: la suma es un
+      // zumbido, no un metrónomo
+      const desf = ruido(i * 5.3) * 0.9;
+      const ti = t - desf;
+      const { f: fi, n: ni } = faseBucle(Math.max(0, ti));
+      const nac = i === 0 ? 1 : easeOut(ramp(t, (TANDAS.find(b => b.n >= i + 1) || TANDAS[0]).t, (TANDAS.find(b => b.n >= i + 1) || TANDAS[0]).t + .55));
+      if (nac <= 0) continue;
+
+      ctx.save();
+      ctx.globalAlpha = nac * (i === 0 ? 1 : mix(.42, .92, ruido(i * 2.2)));
+      const w = 330 * S, h = 232 * S;
+      hoja(ctx, x0 - w - 14 * S, y0 - h / 2, w, h, { fase: fi, filaSel: 2 + (ni % 4), tono: 1 });
+      formulario(ctx, x0 + 14 * S, y0 - h / 2, w, h, { pegado: fi > .62, fase: ti * 1.6, tono: 1 });
+      // puntero de esa ventana
+      const px = fi < .30 ? mix(x0 - w * .55, x0 - w * .55, fi / .30)
+        : fi < .58 ? mix(x0 - w * .55, x0 + w * .42, easeIO((fi - .30) / .28))
+          : fi < .80 ? x0 + w * .42
+            : mix(x0 + w * .42, x0 - w * .55, easeIO((fi - .80) / .20));
+      const py = y0 + (fi < .3 ? 6 * S : fi < .58 ? -mix(0, 30 * S, Math.sin((fi - .3) / .28 * Math.PI)) : 0);
+      puntero(ctx, px, py, 1.25, nac);
+      ctx.restore();
+    }
+  };
+
+  // capa lejana (desenfocada) y capa próxima (nítida)
+  const blurLejos = mix(0, 11, ramp(t, 3.4, 9.0));
+  if (total > 1) {
+    capaDesenfocada(blurLejos, ctx => conCamaraEn(ctx, () => dibujaRejilla(ctx, 1, total), 1.0), 1);
+  }
+  capaDesenfocada(mix(4.5, 0, ramp(t, 0, 1.1)), ctx => conCamaraEn(ctx, () => dibujaRejilla(ctx, 0, 1), 1.0), 1);
+
+  // Destello de «pegado»: un parpadeo blanquísimo de un fotograma largo.
+  const golpe = f > .60 && f < .66 ? (1 - (f - .60) / .06) : 0;
+  if (golpe > 0 && t < 11.2) {
+    X.save(); X.globalAlpha = golpe * mix(.05, .16, ramp(t, 4, 10));
+    X.fillStyle = '#9fb4ff'; X.fillRect(0, 0, W, H); X.restore();
+  }
+
+  // ── Texto del acto ──
+  frase(X, '¿Cuánto tiempo pierdes haciendo esto cada día?', t, 1.55, 4.35, { y: .845, t: 60 });
+  frase(X, 'Copiar de un sitio a otro.', t, 4.75, 6.05, { y: .175, t: 44, col: TINTA2 });
+  frase(X, 'Responder lo mismo otra vez.', t, 6.15, 7.35, { y: .175, t: 44, col: TINTA2 });
+  frase(X, 'Buscar el dato que ya existe.', t, 7.45, 8.60, { y: .175, t: 44, col: TINTA2 });
+  frase(X, 'Comprobar que está hecho.', t, 8.70, 9.80, { y: .175, t: 44, col: TINTA2 });
+  frase(X, 'Y ya lo has normalizado.', t, 10.15, 11.75, { y: .845, t: 58 });
+
+  post(t, fr, { grano: .062, vineta: mix(.42, .70, ramp(t, 2, 11)), ab: mix(.5, 1.5, ramp(t, 5, 11)) });
+}
+
+/** conCamara sobre un contexto concreto (para las capas desenfocadas). */
+function conCamaraEn(ctx, fn, prof = 1) {
+  ctx.save();
+  ctx.translate(W / 2, H / 2);
+  ctx.rotate(cam.rot);
+  const z = cam.z * (1 + (prof - 1) * .35);
+  ctx.scale(z, z);
+  ctx.translate(-cam.x * prof, -cam.y * prof);
+  fn();
+  ctx.restore();
+}
+
+// ── ACTO 2 · EL CORTE ───────────────────────────────────────────────────
+// Aquí se para todo. El sonido desaparece (lo hace la pista de audio) y la
+// imagen se queda congelada en el fotograma del segundo 12: lo que se
+// mueve es sólo la cámara, muy despacio, y el color, que se va.
+function acto2(t, fr) {
+  const l = t - 12.0;
+  const CONG = 11.999;          // el instante exacto en que se detiene
+
+  const { } = faseBucle(CONG);
+  cam.z = mix(0.44, 0.60, easeIO(ramp(l, 0.35, 6.2)));
+  cam.x = pulso(CONG, 1.2, 26 * S, .55) + pulso(l, 8, 5 * S, .18);
+  cam.y = pulso(CONG, 4.7, 18 * S, .43);
+  cam.rot = pulso(CONG, 2.1, .0022, .38);
+
+  // La rejilla, quieta. Se redibuja con el reloj detenido.
+  const total = 54;
+  const dibuja = (ctx) => {
+    for (let i = 0; i < total; i++) {
+      const { x: x0, y: y0 } = posNodo(i);
+      const { f: fi, n: ni } = faseBucle(Math.max(0, CONG - ruido(i * 5.3) * .9));
+      ctx.save();
+      ctx.globalAlpha = i === 0 ? 1 : mix(.42, .92, ruido(i * 2.2));
+      const w = 330 * S, h = 232 * S;
+      hoja(ctx, x0 - w - 14 * S, y0 - h / 2, w, h, { fase: fi, filaSel: 2 + (ni % 4) });
+      formulario(ctx, x0 + 14 * S, y0 - h / 2, w, h, { pegado: fi > .62, fase: CONG * 1.6 });
+      ctx.restore();
+    }
+  };
+  capaDesenfocada(mix(9, 4.5, ramp(l, 0, 5)), ctx => conCamaraEn(ctx, () => dibuja(ctx)), 1);
+
+  // Desaturado y apagado progresivo: el caos pierde interés, no se borra.
+  const gris = easeIO(ramp(l, 0.10, 2.4));
+  if (gris > 0) {
+    X.save();
+    X.globalAlpha = gris * .82;
+    X.globalCompositeOperation = 'saturation';
+    X.fillStyle = '#808080'; X.fillRect(0, 0, W, H);
+    X.restore();
+    X.save();
+    X.globalAlpha = gris * .30;
+    X.fillStyle = '#05070c'; X.fillRect(0, 0, W, H);
+    X.restore();
+  }
+
+  // La ventana viva. Se dibuja DESPUÉS del gris, así que no le afecta: es
+  // el único punto de la pantalla que conserva color, y la cámara está
+  // yendo hacia ella.
+  const viva = ramp(l, .8, 2.2);
+  if (viva > 0) {
+    conCamara(() => {
+      const w = 330 * S, h = 232 * S;
+      X.save();
+      X.globalAlpha = viva;
+      X.shadowColor = 'rgba(77,208,225,.55)'; X.shadowBlur = 150 * S;
+      const p0 = posNodo(0);
+      hoja(X, p0.x - w - 14 * S, p0.y - h / 2, w, h,
+        { fase: faseBucle(CONG).f, filaSel: 2 + (faseBucle(CONG).n % 4) });
+      X.restore();
+    });
+  }
+
+  // Un solo destello blanco de dos fotogramas en el instante del corte:
+  // es el «clic» visual que acompaña al silencio.
+  if (l < 0.07) { X.save(); X.globalAlpha = (1 - l / .07) * .5; X.fillStyle = '#dce6ff'; X.fillRect(0, 0, W, H); X.restore(); }
+
+  frase(X, 'Pero muchas de esas tareas', t, 13.15, 15.25, { y: .455, t: 66 });
+  frase(X, 'no deberían hacerse a mano.', t, 15.35, 17.85, { y: .545, t: 66, col: CIAN });
+
+  post(t, fr, { grano: .05, vineta: .72, ab: .35 });
+}
+
+// ── ACTO 3 · CAOS → ORDEN ───────────────────────────────────────────────
+// Las mismas ventanas, ahora reducidas a nodos, se ordenan en una retícula
+// y se enlazan. Es literalmente el mismo material colocándose: no se
+// sustituye el caos por otra cosa, se ORDENA.
+function acto3(t, fr) {
+  const l = t - 18.2;
+  const p = easeIO(ramp(l, 0, 3.4));
+
+  cam.z = mix(0.60, 0.86, easeIO(ramp(l, 0, 4.6)));
+  cam.x = pulso(l, 3, 8 * S, .2);
+  cam.y = pulso(l, 6, 6 * S, .17);
+  cam.rot = mix(pulso(11.99, 2.1, .0022, .38), 0, p);
+
+  const N = 54;
+  // destino: retícula limpia de 9 × 6
+  const DC = 9, DF = 6, dpx = 196 * S, dpy = 150 * S;
+
+  const nodos = [];
+  for (let i = 0; i < N; i++) {
+    const { x: ax, y: ay } = posNodo(i);
+    const bx = ((i % DC) - (DC - 1) / 2) * dpx;
+    const by = (Math.floor(i / DC) - (DF - 1) / 2) * dpy;
+    // cada nodo sale con su propio retardo: la retícula se «cuaja»
+    const pi = easeIO(clamp((l - ruido(i * 1.9) * 1.25) / 2.5));
+    nodos.push({ x: mix(ax, bx, pi), y: mix(ay, by, pi), pi, i });
+  }
+
+  conCamara(() => {
+    // enlaces: se dibujan cuando los nodos ya casi han llegado
+    const enl = ramp(l, 1.9, 4.3);
+    if (enl > 0) {
+      X.save();
+      X.lineWidth = 1.5 * S;
+      for (let i = 0; i < N; i++) {
+        const a = nodos[i];
+        if (a.pi < .7) continue;
+        const der = (i % DC) < DC - 1 ? nodos[i + 1] : null;
+        const aba = i + DC < N ? nodos[i + DC] : null;
+        for (const b of [der, aba]) {
+          if (!b || b.pi < .7) continue;
+          const vis = clamp((enl - ruido(i * 4.4) * .5) * 2);
+          if (vis <= 0) continue;
+          X.globalAlpha = vis * .30;
+          X.strokeStyle = CIAN;
+          X.beginPath(); X.moveTo(a.x, a.y);
+          X.lineTo(mix(a.x, b.x, vis), mix(a.y, b.y, vis));
+          X.stroke();
+        }
+      }
+      X.restore();
+    }
+    // nodos: de PAREJA de ventanas a celda limpia
+    //
+    // La pareja hoja + formulario se desvanece mientras la celda aparece,
+    // las dos en el mismo sitio y a la vez. Así el acto 3 arranca con
+    // exactamente la misma imagen con la que acabó el 2 —el corte no se
+    // ve— y lo que cambia es sólo la forma.
+    for (const nd of nodos) {
+      const fu = 1 - clamp(nd.pi * 2.1);      // la pareja se va en la primera mitad
+      if (fu > .01) {
+        const w2 = 330 * S, h2 = 232 * S;
+        X.save();
+        X.globalAlpha = fu * .8;
+        hoja(X, nd.x - w2 - 14 * S, nd.y - h2 / 2, w2, h2,
+          { fase: faseBucle(11.999).f, filaSel: 2 + (nd.i % 4) });
+        formulario(X, nd.x + 14 * S, nd.y - h2 / 2, w2, h2, { pegado: true, fase: 0 });
+        X.restore();
+      }
+      const ap = clamp((nd.pi - .28) / .72);
+      if (ap <= .01) continue;
+      const w = mix(330 * S, 150 * S, nd.pi), h = mix(232 * S, 104 * S, nd.pi);
+      X.save();
+      X.globalAlpha = mix(.55, .95, nd.pi) * ap;
+      rr(X, nd.x - w / 2, nd.y - h / 2, w, h, mix(8, 11, nd.pi) * S);
+      X.fillStyle = PANEL; X.fill();
+      X.strokeStyle = nd.pi > .85 ? 'rgba(77,208,225,.30)' : BORDE;
+      X.lineWidth = 1.4 * S; X.stroke();
+      // dentro: dos barras. Al ordenarse, se alinean.
+      X.globalAlpha = mix(.30, .75, nd.pi);
+      X.fillStyle = nd.pi > .9 ? CIAN : '#3b4562';
+      X.fillRect(nd.x - w / 2 + 16 * S, nd.y - 12 * S, mix(w * .3, w * .46, nd.pi), 6 * S);
+      X.fillStyle = '#39425c';
+      X.fillRect(nd.x - w / 2 + 16 * S, nd.y + 4 * S, mix(w * .5, w * .28, nd.pi), 6 * S);
+      X.restore();
+    }
+  });
+
+  frase(X, 'Miramos cómo funciona tu negocio', t, 19.05, 20.95, { y: .175, t: 52, col: TINTA });
+  frase(X, 'y construimos el sistema que lo hace por ti.', t, 21.55, 23.70, { y: .175, t: 52, col: TINTA });
+
+  // Primera señal de marca: discreta, abajo, a los 21 s. No antes.
+  const bm = ramp(t, 21.2, 22.0) * (1 - ramp(t, 23.4, 24.0));
+  if (bm > 0 && logo) {
+    X.save(); X.globalAlpha = bm * .5;
+    X.drawImage(logo, W * .073, H * .865, 30 * S, 30 * S);
+    texto(X, 'D-CODE PARTNERS', W * .073 + 44 * S, H * .865 + 22 * S, { f: 'JB', p: 500, t: 17, col: TINTA3, esp: 3 });
+    X.restore();
+  }
+
+  post(t, fr, { grano: .045, vineta: .62, ab: .5 });
+}
+
+// ── ACTO 4 · LOS PRODUCTOS ──────────────────────────────────────────────
+// Cuatro planos de tres segundos. La cámara entra en cada pantalla hasta
+// que la pantalla ES el cuadro, y el corte se produce dentro de ella.
+// Ninguna tarjeta, ningún mockup flotando: pantallas en el espacio.
+const PRODUCTOS = [
+  { k: 'finPanel',  k2: 'finCobros',  t0: 24.0,  rot: 'Un sistema financiero conectado.',        col: CIAN,    foco: [.163, .092, .530, .424] },
+  { k: 'paProcesos', k2: 'paInicio',  t0: 27.05, rot: 'Una aplicación propia para tu negocio.',  col: VIOLETA, foco: [.145, .252, .555, .444] },
+  { k: 'finIA',     k2: 'finPanel',   t0: 30.10, rot: 'Un asistente que responde con tus datos.', col: ROSA,   foco: [.318, .080, .412, .214] },
+  { k: 'osHoy',     k2: 'osAuto',     t0: 33.10, rot: 'Y un sistema que lo conecta todo.',       col: AMBAR,   foco: [.118, .176, .478, .236] },
+];
+
+function acto4(t, fr) {
+  cam.z = 1; cam.x = 0; cam.y = 0; cam.rot = 0;
+
+  for (let i = 0; i < PRODUCTOS.length; i++) {
+    const P = PRODUCTOS[i];
+    const dur = i === 3 ? 3.10 : 3.05;
+    const l = t - P.t0;
+    if (l < 0 || l > dur) continue;
+    const img = IMG[P.k], img2 = IMG[P.k2];
+
+    // El plano: entra grande y desenfocado, se enfoca, y sigue avanzando
+    // hasta atravesar la pantalla. La escala nunca se detiene.
+    const av = clamp(l / dur);
+    const esc = mix(1.10, 2.70, easeIn(av) * .55 + av * .45);
+    const bl = Math.max(0, (1 - easeOut(ramp(l, 0, 0.42))) * 20) + Math.max(0, ramp(l, dur - .55, dur) * 24);
+    const op = easeOut(ramp(l, 0, 0.10));
+
+    // deriva de cámara: nunca está del todo quieta
+    const dx = pulso(l, i * 3.3, 26 * S, .5);
+    const dy = pulso(l, i * 7.7, 18 * S, .42);
+
+    // segunda pantalla al fondo, muy desenfocada: da profundidad y dice
+    // que el producto tiene más de una pantalla sin tener que enseñarlas
+    capaDesenfocada(26, ctx => {
+      pantalla(ctx, img2, W / 2 + dx * 2.4 + 300 * S, H / 2 + dy * 2 - 110 * S,
+        esc * .62, { op: op * .5, rot: -0.035 });
+    }, 1);
+
+    capaDesenfocada(bl, ctx => {
+      pantalla(ctx, img, W / 2 + dx, H / 2 + dy, esc, { op, recorte: P.foco, brillo: mix(1.06, .93, av) });
+    }, 1);
+
+    // barrido de luz que recorre la pantalla al entrar
+    const sw = ramp(l, .12, .85);
+    if (sw > 0 && sw < 1) {
+      X.save();
+      X.globalAlpha = op * .13 * Math.sin(sw * Math.PI);
+      const g = X.createLinearGradient(W * (sw * 1.6 - .35), 0, W * (sw * 1.6 - .1), H);
+      g.addColorStop(0, 'rgba(255,255,255,0)');
+      g.addColorStop(.5, 'rgba(210,228,255,1)');
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      X.fillStyle = g; X.fillRect(0, 0, W, H);
+      X.restore();
+    }
+
+    rotulo(X, P.rot, t, P.t0 + .30, P.t0 + dur - .05, P.col);
+  }
+
+  // marca constante pero pequeña durante todo el montaje
+  if (logo) {
+    const o = ramp(t, 24.1, 24.7) * (1 - ramp(t, 35.9, 36.2));
+    X.save(); X.globalAlpha = o * .42;
+    X.drawImage(logo, W - 108 * S, 58 * S, 28 * S, 28 * S);
+    X.restore();
+  }
+
+  post(t, fr, { grano: .04, vineta: .58, ab: .8 });
+}
+
+// ── ACTO 5 · LO HUMANO ──────────────────────────────────────────────────
+// Se retira todo. Queda un campo de texto y una frase escrita por una
+// persona. No hay código en pantalla en ningún momento de la pieza.
+function acto5(t, fr) {
+  const l = t - 36.2;
+  cam.z = 1; cam.x = 0; cam.y = 0; cam.rot = 0;
+
+  // El sistema sigue detrás, fuera de foco. Que el fondo esté vivo es lo
+  // que separa «pantalla limpia» de «pantalla vacía».
+  capaDesenfocada(34, ctx => {
+    ctx.save();
+    ctx.globalAlpha = .34 * easeOut(ramp(l, 0, .35)) * (1 - ramp(l, 4.0, 4.8));
+    ctx.translate(W / 2, H / 2);
+    const dpx = 196 * S * 1.9, dpy = 150 * S * 1.9;
+    for (let gy = -3; gy <= 3; gy++) for (let gx = -6; gx <= 6; gx++) {
+      const x = gx * dpx + pulso(l + gx, gy * 2.1, 9 * S, .22);
+      const y = gy * dpy + pulso(l + gy, gx * 1.7, 7 * S, .19);
+      rr(ctx, x - 75 * S, y - 52 * S, 150 * S, 104 * S, 11 * S);
+      ctx.fillStyle = PANEL; ctx.fill();
+      ctx.strokeStyle = 'rgba(77,208,225,.26)'; ctx.lineWidth = 1.4 * S; ctx.stroke();
+      ctx.fillStyle = 'rgba(77,208,225,.42)';
+      ctx.fillRect(x - 59 * S, y - 12 * S, 68 * S, 6 * S);
+      ctx.fillStyle = '#39425c';
+      ctx.fillRect(x - 59 * S, y + 4 * S, 42 * S, 6 * S);
+    }
+    ctx.restore();
+  }, 1);
+
+  const ent = easeOut(ramp(l, 0, .7));
+  const bw = 1300 * S, bh = 148 * S;
+  const bx = W / 2 - bw / 2, by = H * .48 - bh / 2 + (1 - ent) * 22 * S;
+
+  X.save();
+  X.globalAlpha = ent;
+  rr(X, bx, by, bw, bh, 16 * S);
+  X.fillStyle = 'rgba(255,255,255,.028)'; X.fill();
+  X.strokeStyle = 'rgba(150,174,245,.20)'; X.lineWidth = 1.6 * S; X.stroke();
+  X.restore();
+
+  // La frase se escribe. Es lo único de la pieza que se teclea en pantalla,
+  // y es deliberado: es el único trabajo que sigue siendo de la persona.
+  const LINEA = 'Tardo tres días en pasar los pedidos al sistema.';
+  const nch = Math.floor(clamp((l - .55) / 2.05) * LINEA.length);
+  const vis = LINEA.slice(0, nch);
+  X.save();
+  X.globalAlpha = ent;
+  texto(X, vis, bx + 52 * S, by + bh / 2 + 16 * S, { f: 'IN', p: 400, t: 44, col: TINTA });
+  if (l > .5 && l < 3.1 && (l * 2) % 1 < .55) {
+    const wv = anchoTexto(X, vis, { f: 'IN', p: 400, t: 44 });
+    X.fillStyle = CIAN;
+    X.fillRect(bx + 57 * S + wv, by + bh / 2 - 23 * S, 2.5 * S, 46 * S);
+  }
+  X.restore();
+
+  // La respuesta no es una pantalla nueva: es una línea que se resuelve.
+  const ok = ramp(l, 2.85, 3.55);
+  if (ok > 0) {
+    X.save();
+    X.globalAlpha = ok;
+    const yy = by + bh + 78 * S;
+    X.strokeStyle = CIAN; X.lineWidth = 3 * S; X.lineCap = 'round';
+    X.beginPath();
+    X.arc(bx + 26 * S, yy - 10 * S, 13 * S, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * ok);
+    X.stroke();
+    if (ok > .75) {
+      X.beginPath();
+      X.moveTo(bx + 19 * S, yy - 10 * S); X.lineTo(bx + 24 * S, yy - 5 * S); X.lineTo(bx + 33 * S, yy - 17 * S);
+      X.stroke();
+    }
+    texto(X, 'Hecho automáticamente, cada día, a las 8:00.', bx + 58 * S, yy, { f: 'IN', p: 400, t: 34, col: TINTA2, op: ok });
+    X.restore();
+  }
+
+  frase(X, 'No necesitas saber de IA.', t, 37.15, 38.65, { y: .225, t: 54 });
+  frase(X, 'Ni de programación.', t, 38.85, 40.45, { y: .225, t: 54 });
+
+  post(t, fr, { grano: .038, vineta: .55, ab: .35 });
+}
+
+// ── ACTO 6 · CIERRE ─────────────────────────────────────────────────────
+function acto6(t, fr) {
+  const l = t - 41.0;
+
+  // La frase final hereda la posición de la anterior y sube al centro:
+  // es la misma conversación, no una pantalla de marca pegada al final.
+  const sube = easeIO(ramp(l, 0, .85));
+  frase(X, 'Solo necesitas saber qué problema tienes.', t, 41.0, 43.0,
+    { y: mix(.225, .385, sube), t: 56, col: TINTA });
+
+  const lg = easeOut(ramp(l, 1.55, 2.35));
+  if (lg > 0) {
+    X.save();
+    X.globalAlpha = lg;
+    const cy = H * .545;
+    const anchoNom = anchoTexto(X, 'D-CODE', { f: 'SG', p: 600, t: 76, esp: 1 });
+    const lw = 76 * S, hueco = 30 * S;
+    const x0 = W / 2 - (lw + hueco + anchoNom) / 2;
+    if (logo) X.drawImage(logo, x0, cy - 56 * S, lw, lw);
+    texto(X, 'D-CODE', x0 + lw + hueco, cy + 6 * S, { f: 'SG', p: 600, t: 76, col: TINTA, esp: 1 });
+    texto(X, 'PARTNERS', x0 + lw + hueco + 4 * S, cy + 50 * S, { f: 'JB', p: 400, t: 26, col: TINTA2, esp: 11 });
+    X.restore();
+
+    // única aparición del degradado de marca en toda la pieza
+    const gw = 300 * S * easeOut(ramp(l, 1.9, 2.8));
+    const g = X.createLinearGradient(W / 2 - gw / 2, 0, W / 2 + gw / 2, 0);
+    g.addColorStop(0, CIAN); g.addColorStop(.54, VIOLETA); g.addColorStop(1, ROSA);
+    X.save(); X.globalAlpha = lg * .95;
+    X.fillStyle = g;
+    X.fillRect(W / 2 - gw / 2, H * .638, gw, 3 * S);
+    X.restore();
+  }
+
+  const ct = easeOut(ramp(l, 2.35, 3.0));
+  if (ct > 0) {
+    X.save(); X.globalAlpha = ct;
+    texto(X, 'Cuéntanos qué te está haciendo perder tiempo.', W / 2, H * .725,
+      { f: 'IN', p: 400, t: 34, col: TINTA2, al: 'center' });
+    texto(X, 'dcodepartners.com', W / 2, H * .795,
+      { f: 'JB', p: 500, t: 30, col: TINTA, al: 'center', esp: 2 });
+    X.restore();
+  }
+
+  // cierre a negro suave en el último cuarto de segundo
+  const fin = ramp(t, 44.72, 45.0);
+  if (fin > 0) { X.save(); X.globalAlpha = fin; X.fillStyle = NEGRO; X.fillRect(0, 0, W, H); X.restore(); }
+
+  post(t, fr, { grano: .032, vineta: .5, ab: .25 });
+}
+
+// ── API de render ───────────────────────────────────────────────────────
+window.LISTO = false;
+window.pintaFrame = (fr) => { pinta(fr / FPS, fr); };
+window.META = { W, H, FPS, DUR, FRAMES: Math.round(FPS * DUR) };
+cargar().then(() => { window.LISTO = true; pinta(0, 0); });
+</script>

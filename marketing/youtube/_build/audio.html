@@ -1,0 +1,401 @@
+<meta charset="utf-8">
+<title>D-Code · banda sonora</title>
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//  BANDA SONORA Y DISEÑO SONORO — «El bucle»
+//
+//  Todo está sintetizado aquí: no hay biblioteca de efectos ni música de
+//  catálogo. El motivo es doble. Uno, que nada de esto puede parecerse al
+//  anuncio de Instagram, y una pista comprada se parece a sí misma allá
+//  donde suene. Y dos, que los sonidos del primer acto tienen que caer
+//  EXACTAMENTE donde cae el gesto en la imagen: se generan a partir de la
+//  misma tabla de ciclos que usa la escena, así que la sincronía no se
+//  ajusta a oído, es la misma cuenta.
+//
+//  Se renderiza con OfflineAudioContext, o sea más rápido que en tiempo
+//  real y siempre idéntico.
+// ════════════════════════════════════════════════════════════════════════
+const SR = 48000, DUR = 45.4;
+const ctx = new OfflineAudioContext(2, Math.ceil(SR * DUR), SR);
+
+const master = ctx.createGain(); master.gain.value = 1;
+const limitador = ctx.createDynamicsCompressor();
+// Un limitador de verdad, no un compresor de radio: umbral alto, ratio
+// grande y ataque rápido. Sólo sujeta los picos; no aplasta la dinámica,
+// que es justo lo que tiene que contar esta pieza.
+limitador.threshold.value = -1.6;
+limitador.knee.value = 0;
+limitador.ratio.value = 20;
+limitador.attack.value = 0.003;
+limitador.release.value = 0.18;
+master.connect(limitador).connect(ctx.destination);
+
+// ── Reverberación: impulso sintetizado ──────────────────────────────────
+function impulso(seg, caida, brillo) {
+  const n = Math.floor(SR * seg);
+  const b = ctx.createBuffer(2, n, SR);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = b.getChannelData(ch);
+    let s = 0;
+    for (let i = 0; i < n; i++) {
+      const x = i / n;
+      const r = Math.random() * 2 - 1;
+      s = s * (1 - brillo) + r * brillo;          // paso bajo de un polo
+      d[i] = s * Math.pow(1 - x, caida);
+    }
+  }
+  return b;
+}
+const salaCorta = ctx.createConvolver(); salaCorta.buffer = impulso(0.9, 3.4, 0.55);
+const salaLarga = ctx.createConvolver(); salaLarga.buffer = impulso(3.4, 2.1, 0.30);
+const envioCorto = ctx.createGain(); envioCorto.gain.value = 0.22; envioCorto.connect(salaCorta).connect(master);
+const envioLargo = ctx.createGain(); envioLargo.gain.value = 0.30; envioLargo.connect(salaLarga).connect(master);
+
+// ── Ruido base reutilizable ─────────────────────────────────────────────
+const RUIDO = (() => {
+  const n = SR * 3, b = ctx.createBuffer(1, n, SR), d = b.getChannelData(0);
+  let s = 0;
+  for (let i = 0; i < n; i++) { const r = Math.random() * 2 - 1; s = s * .5 + r * .5; d[i] = r * .7 + s * .3; }
+  return b;
+})();
+function fuenteRuido(t, dur) {
+  const s = ctx.createBufferSource();
+  s.buffer = RUIDO; s.loop = true;
+  s.playbackRate.value = 0.9 + Math.random() * 0.2;
+  s.start(t); s.stop(t + dur + .05);
+  return s;
+}
+
+function env(g, t, a, d, pico, sost = 0, dursost = 0) {
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(Math.max(pico, 0.0002), t + a);
+  if (dursost > 0) {
+    g.gain.setValueAtTime(Math.max(pico, 0.0002), t + a);
+    g.gain.exponentialRampToValueAtTime(Math.max(sost, 0.0002), t + a + dursost);
+  }
+  g.gain.exponentialRampToValueAtTime(0.0001, t + a + dursost + d);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  EFECTOS
+// ════════════════════════════════════════════════════════════════════════
+
+/** Tecla. Un golpe seco de aire más un cuerpo de plástico, nada más. */
+function tecla(t, fuerza = 1, tono = 1) {
+  const s = fuenteRuido(t, .05);
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+  bp.frequency.value = 2400 * tono + Math.random() * 900; bp.Q.value = 1.1;
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 900;
+  const g = ctx.createGain();
+  env(g, t, .0012, .034, .10 * fuerza);
+  s.connect(bp).connect(hp).connect(g).connect(master);
+  g.connect(envioCorto);
+  // cuerpo: la tapa de la tecla contra el chasis
+  const o = ctx.createOscillator(); o.type = 'sine';
+  o.frequency.setValueAtTime(190 * tono, t);
+  o.frequency.exponentialRampToValueAtTime(95 * tono, t + .03);
+  const g2 = ctx.createGain(); env(g2, t, .001, .028, .045 * fuerza);
+  o.connect(g2).connect(master); o.start(t); o.stop(t + .07);
+}
+
+/** Clic de ratón: más agudo, más corto, con su micro-eco de carcasa. */
+function clic(t, fuerza = 1) {
+  const s = fuenteRuido(t, .03);
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+  bp.frequency.value = 4200; bp.Q.value = 2.2;
+  const g = ctx.createGain(); env(g, t, .0008, .016, .085 * fuerza);
+  s.connect(bp).connect(g).connect(master); g.connect(envioCorto);
+  const o = ctx.createOscillator(); o.type = 'square';
+  o.frequency.value = 1500; const g2 = ctx.createGain();
+  env(g2, t, .0006, .009, .02 * fuerza);
+  o.connect(g2).connect(master); o.start(t); o.stop(t + .03);
+}
+
+/** Cambio de ventana: un barrido de aire, corto y sin cola. */
+function cambio(t, fuerza = 1) {
+  const s = fuenteRuido(t, .16);
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = .9;
+  bp.frequency.setValueAtTime(600, t);
+  bp.frequency.exponentialRampToValueAtTime(3600, t + .10);
+  bp.frequency.exponentialRampToValueAtTime(900, t + .16);
+  const g = ctx.createGain(); env(g, t, .012, .10, .052 * fuerza, .02, .03);
+  s.connect(bp).connect(g).connect(master); g.connect(envioCorto);
+}
+
+/** Pegar: el golpe grave que confirma que el dato ha caído en su casilla. */
+function pegar(t, fuerza = 1) {
+  const o = ctx.createOscillator(); o.type = 'sine';
+  o.frequency.setValueAtTime(140, t);
+  o.frequency.exponentialRampToValueAtTime(62, t + .12);
+  const g = ctx.createGain(); env(g, t, .002, .13, .13 * fuerza);
+  o.connect(g).connect(master); g.connect(envioCorto);
+  o.start(t); o.stop(t + .2);
+  clic(t, .5 * fuerza);
+}
+
+/** Golpe grave con cola: el que abre el acto 3. */
+function sub(t, fuerza = 1, desde = 96, hasta = 30, largo = 1.5) {
+  const o = ctx.createOscillator(); o.type = 'sine';
+  o.frequency.setValueAtTime(desde, t);
+  o.frequency.exponentialRampToValueAtTime(hasta, t + largo * .55);
+  const g = ctx.createGain(); env(g, t, .006, largo, .60 * fuerza);
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 220;
+  o.connect(lp).connect(g).connect(master); g.connect(envioLargo);
+  o.start(t); o.stop(t + largo + .3);
+}
+
+/** Nota del motivo. Triángulo + quinta, ataque lento, mucha sala. */
+function nota(t, hz, largo, vol = .1, tipo = 'triangle') {
+  for (const [mult, v, det] of [[1, 1, 0], [1, .55, 4.5], [2, .16, -3], [3, .07, 2]]) {
+    const o = ctx.createOscillator(); o.type = tipo;
+    o.frequency.value = hz * mult; o.detune.value = det;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol * v, t + Math.min(.22, largo * .25));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + largo);
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(2600, t);
+    lp.frequency.exponentialRampToValueAtTime(1100, t + largo);
+    o.connect(lp).connect(g).connect(master);
+    g.connect(envioLargo);
+    o.start(t); o.stop(t + largo + .2);
+  }
+}
+
+/** Zumbido de fondo: dos sierras desafinadas bajo un filtro que se abre. */
+function drone(t0, t1, hz, volMax, corteIni, corteFin) {
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(volMax, t0 + 1.4);
+  g.gain.setValueAtTime(volMax, t1 - .5);
+  g.gain.exponentialRampToValueAtTime(0.0001, t1);
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+  lp.frequency.setValueAtTime(corteIni, t0);
+  lp.frequency.exponentialRampToValueAtTime(corteFin, t1);
+  lp.Q.value = 1.6;
+  for (const det of [-7, 6, 0]) {
+    const o = ctx.createOscillator(); o.type = 'sawtooth';
+    o.frequency.value = hz; o.detune.value = det;
+    const gg = ctx.createGain(); gg.gain.value = det === 0 ? .5 : .32;
+    o.connect(gg).connect(lp); o.start(t0); o.stop(t1 + .1);
+  }
+  lp.connect(g).connect(master);
+  g.connect(envioLargo);
+}
+
+/** Aire de sala. Está toda la pieza; sin él, los silencios suenan a corte. */
+function sala(t0, t1, vol) {
+  const s = fuenteRuido(t0, t1 - t0);
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 480;
+  const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 45;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + .8);
+  g.gain.setValueAtTime(vol, t1 - .8);
+  g.gain.exponentialRampToValueAtTime(0.0001, t1);
+  s.connect(lp).connect(hp).connect(g).connect(master);
+}
+
+/** Pitido de oído: lo que queda cuando todo lo demás se corta de golpe. */
+function pitido(t, largo, vol) {
+  const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = 6100;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + .02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + largo);
+  o.connect(g).connect(master); o.start(t); o.stop(t + largo + .1);
+}
+
+/** Pulso rítmico del montaje: un corazón sordo, no una batería. */
+function pulsoGrave(t, vol = .22) {
+  const o = ctx.createOscillator(); o.type = 'sine';
+  o.frequency.setValueAtTime(78, t);
+  o.frequency.exponentialRampToValueAtTime(44, t + .10);
+  const g = ctx.createGain(); env(g, t, .004, .22, vol);
+  o.connect(g).connect(master); o.start(t); o.stop(t + .4);
+  const s = fuenteRuido(t, .05);
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 180; bp.Q.value = .8;
+  const g2 = ctx.createGain(); env(g2, t, .002, .05, vol * .35);
+  s.connect(bp).connect(g2).connect(master);
+}
+
+/** Brillo alto y corto: el acento propio de cada producto. */
+function chispa(t, hz, vol = .05, largo = .9) {
+  const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = hz;
+  const g = ctx.createGain(); env(g, t, .004, largo, vol);
+  o.connect(g).connect(master); g.connect(envioLargo);
+  o.start(t); o.stop(t + largo + .2);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  LA MISMA TABLA DE CICLOS QUE LA IMAGEN
+// ════════════════════════════════════════════════════════════════════════
+const CICLOS = [];
+(function () {
+  let t = -0.28, d = 1.62;
+  for (let i = 0; i < 52; i++) { CICLOS.push({ i, t0: t, dur: d }); t += d; d = Math.max(0.165, d * (i < 2 ? 0.80 : 0.888)); }
+})();
+function ruido(i) { const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); }
+
+// ════════════════════════════════════════════════════════════════════════
+//  MONTAJE
+// ════════════════════════════════════════════════════════════════════════
+const CORTE = 12.0;
+
+// ── Acto 1 · el bucle ───────────────────────────────────────────────────
+sala(0, CORTE, .020);
+drone(0.0, CORTE, 55, .055, 140, 900);      // la tensión que nadie nota hasta que para
+
+// La ventana 0 suena en primer plano. Las demás, cada una con su desfase,
+// suenan más flojas y más lejos: es lo que convierte la repetición en masa.
+const VENTANAS = 54;
+for (let v = 0; v < VENTANAS; v++) {
+  const desf = v === 0 ? 0 : ruido(v * 5.3) * 0.9;
+  const nace = v === 0 ? 0 : [0, 4.3, 6.1, 7.8, 9.2, 10.4][[1, 3, 8, 18, 32, 54].findIndex(n => n > v)] ?? 10.4;
+  // más lejos, más flojo y con menos agudos
+  const lejos = v === 0 ? 1 : 0.16 + ruido(v * 2.9) * 0.16;
+  for (const cc of CICLOS) {
+    const t = cc.t0 + desf;
+    if (t < nace || t > CORTE - .02) continue;
+    if (v > 0 && ruido(v * 3.1 + cc.i) > .62) continue;   // no todas suenan siempre
+    const d = cc.dur;
+    clic(t + d * .04, .85 * lejos);                        // seleccionar
+    tecla(t + d * .16, .9 * lejos, 1.0);                   // ctrl
+    tecla(t + d * .20, 1.0 * lejos, 1.15);                 // c
+    cambio(t + d * .34, .9 * lejos);                       // cambiar de ventana
+    tecla(t + d * .62, .9 * lejos, 1.0);                   // ctrl
+    tecla(t + d * .66, 1.0 * lejos, 1.10);                 // v
+    if (v === 0 || lejos > .22) pegar(t + d * .70, .8 * lejos);
+    if (d > .5) cambio(t + d * .90, .6 * lejos);           // volver
+  }
+}
+
+// Un armónico que sube durante los doce segundos: la presión que crece sin
+// que se pueda señalar de dónde viene.
+(function tension() {
+  const o = ctx.createOscillator(); o.type = 'sawtooth';
+  o.frequency.setValueAtTime(110, 3.0);
+  o.frequency.exponentialRampToValueAtTime(440, CORTE);
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 7;
+  bp.frequency.setValueAtTime(300, 3.0);
+  bp.frequency.exponentialRampToValueAtTime(2800, CORTE);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, 3.0);
+  g.gain.exponentialRampToValueAtTime(.048, CORTE - .25);
+  g.gain.exponentialRampToValueAtTime(0.0001, CORTE - .005);
+  o.connect(bp).connect(g).connect(master);
+  o.start(3.0); o.stop(CORTE);
+})();
+
+// ── El corte ────────────────────────────────────────────────────────────
+// No hay ningún sonido entre 12.00 y 12.62 salvo el pitido de oído. Es el
+// único silencio de la pieza y por eso funciona.
+pitido(CORTE + .01, 1.5, .010);
+
+// ── Acto 2 · lo que queda ───────────────────────────────────────────────
+sala(CORTE + .62, 18.4, .014);
+nota(12.75, 146.83, 4.2, .075);                 // re
+nota(14.55, 174.61, 3.6, .052);                 // fa  → menor
+nota(16.30, 220.00, 3.2, .046);                 // la
+drone(13.2, 18.3, 36.71, .055, 90, 210);
+
+// ── Acto 3 · el sistema ─────────────────────────────────────────────────
+sub(17.85, 1.0, 92, 28, 2.0);                   // el golpe que cambia de mundo
+sala(18.3, 24.1, .013);
+drone(18.35, 24.05, 73.42, .050, 200, 820);
+// el motivo se repite, pero la tercera sube: de menor a mayor, que es todo
+// lo que hace falta para que suene a solución y no a amenaza
+nota(18.45, 146.83, 2.4, .085);
+nota(19.35, 220.00, 2.0, .060);
+nota(20.15, 277.18, 3.0, .058);                 // do#  → mayor
+nota(21.55, 293.66, 2.6, .050);
+nota(22.60, 369.99, 2.4, .046);
+for (let i = 0; i < 10; i++) pulsoGrave(18.5 + i * .58, .10 + i * .012);
+
+// ── Acto 4 · los productos ──────────────────────────────────────────────
+sala(24.0, 36.3, .012);
+drone(24.0, 36.25, 73.42, .056, 380, 1500);
+// pulso constante, dos por plano, que sostiene el montaje sin marcarlo
+for (let i = 0; i < 25; i++) pulsoGrave(24.0 + i * .5, .17);
+const ACENTOS = [
+  [24.00, 1174.7, .040],   // Finance   · preciso
+  [27.05, 880.0, .034],    // App       · cálido
+  [30.10, 1567.9, .030],   // Asistente · aire
+  [33.10, 587.3, .046],    // OS        · cuerpo
+];
+for (const [t, hz, v] of ACENTOS) {
+  chispa(t + .04, hz, v, 1.5);
+  sub(t, .55, 70, 34, 1.1);
+  nota(t + .05, hz / 4, 2.2, .045);
+}
+
+// ── Acto 5 · la persona ─────────────────────────────────────────────────
+sala(36.2, 41.1, .016);
+drone(36.3, 41.0, 73.42, .034, 300, 520);
+nota(36.45, 293.66, 3.0, .050);
+nota(38.10, 220.00, 2.8, .040);
+// la frase se escribe: 34 pulsaciones repartidas en los 2,05 s que dura
+(function teclear() {
+  const t0 = 36.2 + .55, largo = 2.05, n = 34;
+  for (let i = 0; i < n; i++) {
+    const j = ruido(i * 7.7) * .018;            // nadie teclea a compás
+    tecla(t0 + (i / n) * largo + j, .5, .95 + ruido(i * 2.3) * .2);
+  }
+})();
+// confirmación: dos notas que suben, muy discretas
+chispa(39.15, 987.77, .030, 1.1);
+chispa(39.32, 1318.5, .026, 1.2);
+
+// ── Acto 6 · cierre ─────────────────────────────────────────────────────
+sala(41.0, 45.3, .013);
+sub(41.05, .55, 78, 36, 1.8);
+// acorde final: re mayor abierto, que abre en vez de cerrar
+nota(41.10, 146.83, 4.0, .080);
+nota(41.10, 220.00, 3.8, .050);
+nota(42.60, 293.66, 2.6, .048);
+nota(42.60, 369.99, 2.4, .040);
+nota(43.55, 440.00, 1.8, .030);
+drone(41.0, 44.9, 73.42, .040, 300, 700);
+
+// ════════════════════════════════════════════════════════════════════════
+//  RENDER → WAV
+// ════════════════════════════════════════════════════════════════════════
+function aWav(buf) {
+  const n = buf.length, ch = buf.numberOfChannels;
+  const datos = new ArrayBuffer(44 + n * ch * 2);
+  const v = new DataView(datos);
+  const esc = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  esc(0, 'RIFF'); v.setUint32(4, 36 + n * ch * 2, true); esc(8, 'WAVE');
+  esc(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+  v.setUint16(22, ch, true); v.setUint32(24, SR, true);
+  v.setUint32(28, SR * ch * 2, true); v.setUint16(32, ch * 2, true); v.setUint16(34, 16, true);
+  esc(36, 'data'); v.setUint32(40, n * ch * 2, true);
+  const canales = [];
+  for (let c = 0; c < ch; c++) canales.push(buf.getChannelData(c));
+  let o = 44;
+  for (let i = 0; i < n; i++)
+    for (let c = 0; c < ch; c++) {
+      let x = canales[c][i];
+      x = x < -1 ? -1 : x > 1 ? 1 : x;
+      v.setInt16(o, x < 0 ? x * 0x8000 : x * 0x7fff, true); o += 2;
+    }
+  return new Uint8Array(datos);
+}
+
+window.LISTO = false;
+ctx.startRendering().then(buf => {
+  const bytes = aWav(buf);
+  // pico real, para poder decir en la documentación a cuánto quedó
+  let pico = 0;
+  for (let c = 0; c < buf.numberOfChannels; c++) {
+    const d = buf.getChannelData(c);
+    for (let i = 0; i < d.length; i++) { const a = Math.abs(d[i]); if (a > pico) pico = a; }
+  }
+  let bin = '';
+  const trozo = 0x8000;
+  for (let i = 0; i < bytes.length; i += trozo) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + trozo));
+  window.WAV = btoa(bin);
+  window.PICO_DB = (20 * Math.log10(pico)).toFixed(2);
+  window.LISTO = true;
+});
+</script>
