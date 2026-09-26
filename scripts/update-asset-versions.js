@@ -61,6 +61,10 @@ const dcp8CssHash = hashFile('assets/css/dcp8.css');
 const dcp8JsHash = hashFile('assets/js/dcp8.js');
 // dcp9 son las composiciones atadas a un bloque concreto del contenido.
 const dcp9JsHash = hashFile('assets/js/dcp9.js');
+// v10 "El sistema, en profundidad": la escena WebGL del Hero y tipografía
+// nueva. Ver assets/js/dcode-system.js para el motor reutilizable.
+const dcp10CssHash = hashFile('assets/css/dcp10.css');
+const dcp10JsHash = hashFile('assets/js/dcp10.js');
 
 const htmlFiles = findHtmlFiles(ROOT, []);
 let changed = 0;
@@ -78,7 +82,9 @@ for (const file of htmlFiles) {
     .replace(/dcp7\.js\?v=[A-Za-z0-9_-]+/g, `dcp7.js?v=${dcp7JsHash}`)
     .replace(/dcp8\.css\?v=[A-Za-z0-9_-]+/g, `dcp8.css?v=${dcp8CssHash}`)
     .replace(/dcp8\.js\?v=[A-Za-z0-9_-]+/g, `dcp8.js?v=${dcp8JsHash}`)
-    .replace(/dcp9\.js\?v=[A-Za-z0-9_-]+/g, `dcp9.js?v=${dcp9JsHash}`);
+    .replace(/dcp9\.js\?v=[A-Za-z0-9_-]+/g, `dcp9.js?v=${dcp9JsHash}`)
+    .replace(/dcp10\.css\?v=[A-Za-z0-9_-]+/g, `dcp10.css?v=${dcp10CssHash}`)
+    .replace(/dcp10\.js\?v=[A-Za-z0-9_-]+/g, `dcp10.js?v=${dcp10JsHash}`);
   if (updated !== original) {
     fs.writeFileSync(file, updated, 'utf8');
     changed++;
@@ -96,4 +102,6 @@ console.log(`dcp7.js    -> ?v=${dcp7JsHash}`);
 console.log(`dcp8.css   -> ?v=${dcp8CssHash}`);
 console.log(`dcp8.js    -> ?v=${dcp8JsHash}`);
 console.log(`dcp9.js    -> ?v=${dcp9JsHash}`);
+console.log(`dcp10.css  -> ?v=${dcp10CssHash}`);
+console.log(`dcp10.js   -> ?v=${dcp10JsHash}`);
 console.log(`Archivos .html actualizados: ${changed}/${htmlFiles.length}`);
