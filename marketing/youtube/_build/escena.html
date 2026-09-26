@@ -434,7 +434,21 @@ function rotulo(ctx, s, t, t0, t1, col) {
   const sal = 1 - easeIn(ramp(t, t1 - .22, t1));
   const op = ent * sal;
   if (op <= .004) return;
-  const x = W * 0.085, y = H * 0.845;
+  // Franja de apoyo. Sin ella el rótulo cae encima de las cifras del
+  // producto —«106.230,00 €» tachado por «Un sistema financiero
+  // conectado.»— y se pierden las dos cosas. Es un degradado, no una caja:
+  // no recorta la imagen, sólo le baja el brillo por debajo del texto.
+  const franja = ctx.createLinearGradient(0, H * 0.70, 0, H);
+  franja.addColorStop(0, 'rgba(3,5,9,0)');
+  franja.addColorStop(.55, 'rgba(3,5,9,.52)');
+  franja.addColorStop(1, 'rgba(3,5,9,.80)');
+  ctx.save();
+  ctx.globalAlpha = op;
+  ctx.fillStyle = franja;
+  ctx.fillRect(0, H * 0.70, W, H * 0.30);
+  ctx.restore();
+
+  const x = W * 0.085, y = H * 0.905;
   const w = anchoTexto(ctx, s, { f: 'SG', p: 500, t: 40 });
   ctx.save();
   ctx.globalAlpha = op;
@@ -881,7 +895,7 @@ function acto5(t, fr) {
   // que separa «pantalla limpia» de «pantalla vacía».
   capaDesenfocada(34, ctx => {
     ctx.save();
-    ctx.globalAlpha = .34 * easeOut(ramp(l, 0, .35)) * (1 - ramp(l, 4.0, 4.8));
+    ctx.globalAlpha = .34 * easeOut(ramp(l, 0, .14)) * (1 - ramp(l, 4.0, 4.8));
     ctx.translate(W / 2, H / 2);
     const dpx = 196 * S * 1.9, dpy = 150 * S * 1.9;
     for (let gy = -3; gy <= 3; gy++) for (let gx = -6; gx <= 6; gx++) {
@@ -898,7 +912,7 @@ function acto5(t, fr) {
     ctx.restore();
   }, 1);
 
-  const ent = easeOut(ramp(l, 0, .7));
+  const ent = easeOut(ramp(l, 0, .22));
   const bw = 1300 * S, bh = 148 * S;
   const bx = W / 2 - bw / 2, by = H * .48 - bh / 2 + (1 - ent) * 22 * S;
 

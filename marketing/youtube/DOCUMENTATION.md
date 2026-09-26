@@ -247,9 +247,9 @@ dicen, no en vez de.
 
 | Fichero | Qué es |
 |---|---|
-| `dcode-youtube-ad-45s-master.mp4` | **La entrega.** 1920 × 1080, 30 fps, H.264 High, AAC 320 kb/s |
-| `dcode-youtube-ad-20s.mp4` | Corte de 20 s |
-| `dcode-youtube-ad-6s.mp4` | Bumper de 6 s |
+| `dcode-youtube-ad-45s-master.mp4` | **La entrega.** 45,01 s · 1920 × 1080 · 30 fps · H.264 High · yuv420p · AAC-LC 320 kb/s · 17 MB |
+| `dcode-youtube-ad-20s.mp4` | Corte de 19,40 s · mismas especificaciones · 7,2 MB |
+| `dcode-youtube-ad-6s.mp4` | Bumper de 6,00 s · mismas especificaciones · 1,5 MB |
 | `_build/escena.html` | La película entera: una función de `t` |
 | `_build/audio.html` | Banda sonora y diseño sonoro |
 | `_build/render.mjs` | Render por fotogramas (troceable) |
@@ -268,7 +268,43 @@ determinista.
 
 ---
 
-## 10 · Reproducirlo
+## 10 · Control de calidad
+
+Medido sobre los ficheros entregados, no sobre los intermedios.
+
+| Comprobación | Resultado |
+|---|---|
+| Duración | 45,01 s · 19,40 s · 6,00 s |
+| Vídeo | 1920 × 1080, 30 fps constantes, H.264 High, yuv420p, `+faststart` |
+| Audio | AAC-LC 320 kb/s, 48 kHz, estéreo, en los tres ficheros |
+| Sonoridad | −14,4 / −14,8 / −15,3 LUFS integrado |
+| Pico real | −1,0 / −1,1 / −1,1 dBFS · sin saturación |
+| Fotogramas negros | Ninguno accidental. `blackdetect` sólo marca el cierre (41–45 s), que es una pantalla oscura con texto, a propósito |
+| Ortografía y marca | Diecinueve rótulos revisados uno a uno; «D-CODE PARTNERS» y `dcodepartners.com` correctos |
+| Interfaces | Las cuatro son capturas reales y se dibujan con la proporción de su recorte, sin deformar |
+| Textos superpuestos | Ninguno: se separaron las dos frases del acto 3, que se solapaban 0,28 s |
+
+Cuatro defectos encontrados revisando el montaje, y corregidos:
+
+1. **La retícula se recentraba al crecer.** Al aparecer cada tanda de
+   ventanas cambiaba el número de columnas y todas saltaban de sitio, la
+   primera incluida, justo con la cámara pegada a ella. Ahora las posiciones
+   se ordenan por distancia al origen: la ventana inicial no se mueve nunca
+   y el caos crece hacia fuera, que además es lo que cuenta la escena.
+2. **Las capturas se dibujaban deformadas.** La altura del plano salía de la
+   proporción de la captura entera aunque sólo se estuviera enseñando un
+   trozo. Cualquier recorte con otra forma estiraba la interfaz. Una
+   interfaz real deformada deja de ser una interfaz real.
+3. **El rótulo tachaba la cifra.** «Un sistema financiero conectado.» caía
+   encima de «106.230,00 €» y se perdían las dos. Se bajó el rótulo y se le
+   puso debajo una franja degradada.
+4. **Un cuarto de segundo casi vacío tras el corte del segundo 36.** El
+   campo de texto tardaba 0,7 s en aparecer, así que el corte caía sobre el
+   principio de un fundido en vez de sobre una imagen compuesta.
+
+---
+
+## 11 · Reproducirlo
 
 ```bash
 cd marketing/youtube/_build
