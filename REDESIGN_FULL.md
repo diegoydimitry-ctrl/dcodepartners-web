@@ -137,3 +137,22 @@ nuevo redefine sus tokens y los reviste. Así, las pruebas de producción
 
 - El sandbox no tiene GPU: los FPS y el INP reales hay que medirlos en un equipo físico. Las cifras de carga sí son reales (ver `PREVIEW.md`).
 - La estructura interna de las secciones de producto (demos, D-Code OS, diagnóstico, precios) es la de producción, revestida con el sistema nuevo. No se ha rediseñado su maquetación interna: cambiarla exige reescribir su JS y sus pruebas.
+
+## 8. Medido (Chromium headless, sin GPU: carga fiable, FPS no)
+
+| | 1440×900 | 390×844 |
+|---|---|---|
+| FCP | 540 ms | 384 ms |
+| LCP | 540 ms (titular HTML) | 480 ms |
+| CLS | 0,002 | 0,016 |
+| Evento `load` | 663 ms | 395 ms |
+| Peticiones | 62 | 58 |
+| Escena | 118 llamadas de dibujo · 106 k triángulos | 117 · 105 k |
+
+La producción actual (`e99d61f`), con el mismo banco, daba un FCP/LCP de 2,0–2,6 s en escritorio y de 0,8 s en móvil.
+
+**QA:**
+- **Barrido:** 164 combinaciones (74 páginas a 1440 y 390 px, más las dos portadas a 375, 390, 430, 768, 1024, 1440 y 1920). 0 errores JS y 0 desbordes. Los únicos avisos son las URLs limpias de las demos de Finance, que el servidor local no resuelve y Vercel sí, y la herramienta interna de estudio, que no se despliega.
+- **Movimiento reducido:** un fotograma fijo por plano.
+- **Sin WebGL:** fotografía de la pieza.
+- **Pruebas de producción en verde:** `check:tema`, `check:portada`, `check:enlaces`, `check:superficie`, `check:consentimiento`, `check:chat`, `check:estado` y `check-instruments`.

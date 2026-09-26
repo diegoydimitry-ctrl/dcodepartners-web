@@ -431,3 +431,6 @@ html:root[data-theme] body .dcx::before{ background:none !important; box-shadow:
 /* Cabecera también en móvil con la luz de laboratorio. */
 html:root[data-theme="light"] body #site-header{ background:rgba(238,235,229,.86) !important; }
 html:root[data-theme="dark"] body #site-header{ background:rgba(13,14,17,.86) !important; }
+html[data-theme] .nucleo-escenario.vivo{ background-image:none !important; }
+/* El índice lateral de producción solo donde hay margen para él. */
+@media (max-width:1599px){ html[data-theme] .dcx{ display:none !important; } }
