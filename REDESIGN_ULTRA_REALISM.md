@@ -228,7 +228,10 @@ equipo sin aceleración no pinte en bucle.
   - `check:chat`
   - `check:estado`
   - `check:superficie`: nada interno llega al despliegue
-- **Barrido en navegador:** ver el resumen de la entrega.
+- **Barrido en navegador:** 158 combinaciones, que son las 74 páginas a 1440 y 390 px más las dos portadas a 375, 430, 768, 1024 y 1920. **0 errores JS y 0 desbordes horizontales.** Hay 4 avisos, todos de las páginas de demo de Finance: piden `/sistema-financiero/app` sin `.html`. El servidor local no resuelve esa URL; Vercel sí (`cleanUrls`). Son páginas que esta rama no toca.
+- **Movimiento reducido:** fotograma fijo por estado (`quieto: true`), en las dos portadas y en los interiores. El titular es visible.
+- **Sin WebGL:** póster de la planta en la portada y contenido completo; en los interiores, la página sin escena.
+- **Diagnóstico → planta:** al marcar Comercial y Finanzas se encienden exactamente esos dos módulos.
 
 ## 9. Pendiente, dicho claro
 
