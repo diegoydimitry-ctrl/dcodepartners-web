@@ -1,0 +1,92 @@
+/* ==========================================================================
+   D-CODE · LA PLANTA — escenario y composición
+   ==========================================================================
+   El lienzo nunca está vacío: debajo va el póster de la propia planta
+   (renderizado con el mismo motor), que es también el respaldo sin WebGL.
+   ========================================================================== */
+
+.planta-escenario{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:#070a11 url("/assets/img/planta/poster-oscuro.webp") 68% 46% / cover no-repeat;
+  opacity:var(--planta-vis, 1);
+  transition:opacity .9s ease;
+}
+[data-theme="light"] .planta-escenario{ background-color:#e9edf3; background-image:url("/assets/img/planta/poster-claro.webp"); }
+.planta-escenario canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0; transition:opacity 1.2s ease; }
+.planta-escenario.planta-viva{ background-image:none; }
+.planta-escenario.planta-viva canvas{ opacity:1; }
+.planta-escenario.planta-sin-webgl canvas{ display:none; }
+.planta-escenario.planta-apagada{ visibility:hidden; transition:opacity .9s ease, visibility 0s linear .9s; }
+
+/* La planta sustituye al campo de partículas y al cielo en la portada: el
+   estudio de la escena es el fondo. Las secciones de producto (demos, OS)
+   tapan con su propio fondo cuando la planta se apaga. */
+body.planta-portada .field, body.planta-portada .gx{ display:none !important; }
+body.planta-portada main{ position:relative; z-index:1; }
+body.planta-portada footer{ position:relative; z-index:1; }
+
+/* Hero: el titular a la izquierda, la planta es la protagonista a la derecha. */
+body.planta-portada .v6-hero{ min-height:100vh; min-height:100svh; background:none; }
+body.planta-portada .v6-hero .v6-panel, body.planta-portada .v6-hero .v6-marca{ display:none !important; }
+body.planta-portada .v6-hero .v6-lede{ max-width:620px; }
+body.planta-portada .v6-hero .v6-veil{ background:none; box-shadow:none; }
+body.planta-portada .v6-hero h1{ text-wrap:balance; }
+body.planta-portada .v6-status{ font-family:var(--mono, "JetBrains Mono", monospace); }
+
+/* Legibilidad sobre la escena, sin velo: una sombra de texto del color del
+   estudio, que solo se nota donde hace falta. */
+body.planta-portada .v6-lede h1, body.planta-portada .v6-step h2{ text-shadow:0 2px 28px rgba(7,10,17,.75); }
+[data-theme="light"] body.planta-portada .v6-lede h1,
+[data-theme="light"] body.planta-portada .v6-step h2{ text-shadow:0 2px 28px rgba(233,237,243,.9); }
+
+/* Móvil: composición propia. La planta arriba, el texto abajo sobre un
+   degradado del color del estudio; nada de "escritorio reducido". */
+@media (max-width:900px){
+  body.planta-portada .v6-hero{ display:flex; align-items:flex-end; padding-top:40vh; padding-top:40svh; }
+  body.planta-portada .v6-hero::before{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:linear-gradient(180deg, transparent 22%, rgba(7,10,17,.72) 52%, rgba(7,10,17,.94));
+  }
+  [data-theme="light"] body.planta-portada .v6-hero::before{ background:linear-gradient(180deg, transparent 22%, rgba(233,237,243,.78) 52%, rgba(233,237,243,.96)); }
+  body.planta-portada .v6-hero > .container{ position:relative; z-index:1; }
+  .planta-escenario{ background-position:50% 18%; background-size:170% auto; }
+  body.planta-portada .v6-step .container{ position:relative; }
+  body.planta-portada .v6-step .v6-step-in{ background:rgba(7,10,17,.72); padding:20px; border-radius:var(--r-card, 10px); }
+  [data-theme="light"] body.planta-portada .v6-step .v6-step-in{ background:rgba(233,237,243,.82); }
+}
+
+/* Etiqueta que sigue al cursor sobre un módulo. */
+.planta-etiqueta{
+  position:fixed; left:0; top:0; z-index:60; pointer-events:none;
+  display:grid; gap:2px; padding:9px 12px; border-radius:var(--r-ctrl, 6px);
+  background:rgba(9,12,20,.92); border:1px solid rgba(160,185,255,.28); color:#eef2fb;
+  font:500 13px/1.3 var(--sans, Inter, sans-serif);
+  opacity:0; transition:opacity .2s ease;
+}
+.planta-etiqueta b{ font-family:var(--serif, "Space Grotesk", sans-serif); font-size:15px; }
+.planta-etiqueta span{ color:#9fb6ff; font-family:var(--mono, monospace); font-size:11.5px; letter-spacing:.06em; }
+.planta-etiqueta.on{ opacity:1; }
+body.planta-mano{ cursor:pointer; }
+
+/* Interiores: la parte del sistema que corresponde a la página, a la derecha
+   del titular, fundida hacia el texto. */
+.planta-hero{ position:relative; isolation:isolate; overflow:hidden; }
+.planta-hero > :not(.planta-escenario){ position:relative; z-index:1; }
+.planta-escenario--interior{
+  position:absolute; inset:0 0 0 38%; z-index:0;
+  background:none; opacity:1;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 26%);
+  mask-image:linear-gradient(90deg, transparent, #000 26%);
+}
+@media (max-width:900px){
+  .planta-escenario--interior{ inset:0; opacity:.38; -webkit-mask-image:linear-gradient(180deg, #000 30%, transparent); mask-image:linear-gradient(180deg, #000 30%, transparent); }
+}
+
+/* Donde la página muestra su parte del sistema en 3D, el instrumento 2D de
+   ambiente (dcp8) se retira: dos dibujos del mismo papel se estorban. */
+body.planta-interior .field--inst{ display:none !important; }
+.planta-hero .page-hero-meta{ position:relative; z-index:2; }
+
+@media (prefers-reduced-motion: reduce){
+  .planta-escenario, .planta-escenario canvas{ transition:none; }
+}
