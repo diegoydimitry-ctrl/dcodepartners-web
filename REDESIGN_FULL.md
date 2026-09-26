@@ -4,155 +4,122 @@ Rama `claude/dcode-full-redesign`, que parte de `e99d61f`: el commit que
 sirve hoy producción, según los deploys de Vercel. Esta rama no toca
 producción.
 
-## 1. Dirección
+## 1. Dirección (revisión 2)
 
-**Antes:** web oscura con cielo de estrellas, campo de partículas,
-degradados cian-violeta y cajas de vidrio azul marino.
+La primera preview tenía un solo objeto 3D (el «Núcleo») repetido en todas
+las secciones, que no se leía como D-Code y que tardaba en cargar. Esta
+revisión lo sustituye por:
 
-**Ahora:** un laboratorio de ingeniería.
-- **Luz de laboratorio** (hueso cálido `#eeebe5`) como base de confianza.
-- **Grafito** para las superficies de producto: las demos, D-Code OS y el diagnóstico siguen invertidos, como en producción, pero en grafito neutro en lugar de azul marino.
-- **Un solo azul D-Code** (`#2b57f5`) como energía del sistema, nunca decorativo.
-- **Materia en vez de brillo:** superficies mates, filetes finos, grano de fotografía. Sin cielos, sin neón y sin degradados de marca.
+- **Modo oscuro por defecto**, un estudio de noche; el claro (hueso cálido) es
+  la alternativa. El selector es un botón redondo pequeño en la navegación y
+  el cambio de tema relanza la luz y los materiales de las escenas vivas.
+- **Una biblioteca de escenas**, una por idea. Cada sección enseña la parte
+  del sistema de la que habla. Ninguna escena se repite con el mismo plano.
+- **Un solo motor 3D** compartido por toda la web, perezoso y medido.
+- **Todo el contenido en HTML**: las escenas son ilustración. Titulares,
+  textos, precios, demos, D-Code OS, diagnóstico, chatbot, formularios, SEO
+  y ES/EN son los de producción.
 
-**Tipografía:**
-- **Instrument Sans** (variable, OFL) para display y texto.
-- **Instrument Serif** en cursiva como voz editorial: lo que antes era texto en degradado.
-- **JetBrains Mono** para la anotación técnica (etiquetas, cotas, «FIG.»).
+## 2. La biblioteca de escenas
 
-## 2. La pieza: El Núcleo D-Code
+Cada escena es un módulo `assets/js/escenas/e-*.js` de 1–3 KB con gzip. El
+motor solo lo descarga cuando su sección se acerca a la pantalla.
 
-El 3D es **un solo objeto físico** con significado, no cajas ni partículas.
-Es un mecanismo torneado cuyas capas son las capas de D-Code OS tal como
-las nombra la web de producción. De abajo arriba:
-
-| Pieza | Material | Qué es |
+| Escena | Dónde | Qué cuenta |
 |---|---|---|
-| Zócalo | Aluminio anodizado negro, canto moleteado, grabado láser | La base: «D-Code Partners · Sistema operativo empresarial» |
-| Datos | Cerámica técnica blanca con surcos de torneado | «El dato entra una vez» |
-| Automatizaciones | Titanio hilado (anisotropía) con **8 tomas de latón** | Las 8 áreas de la empresa; cada toma lleva la luz de su color |
-| IA | Disco de vidrio (transmisión y dispersión) con un circuito dentro | «Lee, clasifica, responde y propone» |
-| Interfaces | Bisel de acero pulido y esfera de vidrio negro con escala | El panel |
-| Monitorización | Collar de aluminio y cúpula de vidrio con sensor | «Qué pasó, cuándo, en qué sistema» |
-| Mejora continua | Aro que orbita el conjunto | «Cada mes se miran los números» |
-| Cables | Funda de caucho y conector de aluminio | Las integraciones |
+| `sistema` | Héroe de portada | El propio logotipo de D-Code, fabricado. Los píxeles son las herramientas de la empresa (hoja, correo, chat, facturas, agenda y carpetas), cada una de un material. Llegan sueltas y encajan; el píxel azul es la IA y por la «D» de aluminio circula el dato. Es el titular «no te faltan herramientas, te falta que hablen entre ellas». |
+| `sistema` · firma | Conócenos | La marca ya montada: quiénes somos. |
+| `datos` | Portada · El problema | Treinta fichas, las treinta veces al día que alguien copia, pega, busca o revisa (las cifras de la lista de la sección). Sueltas y en ámbar; al bajar pasan por el anillo del sistema y salen ordenadas en siete columnas, una por tarea. |
+| `integracion` | Portada · Qué hacemos, `/que-hacemos` | Seis herramientas reales (hoja, correo, chat, facturas, agenda y carpetas), cada una con su luz de estado en ámbar. Al bajar se tiende un cable de cada una a D-Code OS en el centro, la luz pasa a azul y el dato va y viene. |
+| `integracion` · puente | `/servicios/integraciones` | Dos grupos de herramientas enfrentados, unidos a través del centro. |
+| `ia` | `/servicios/agentes-de-ia` | Una red de nodos de vidrio, no un cerebro. Entran consultas, la señal atraviesa la red capa a capa y enciende una de tres salidas: responde, clasifica o pasa a una persona. |
+| `automatizacion` | `/servicios/automatizaciones` | Una línea de datos con cuatro estaciones: evento, proceso, decisión y acción. Las cápsulas la recorren solas y cada estación se enciende al pasar una. |
+| `software` · lab | Portada · Laboratorio | Pantallas **reales** de D-Code (Finance, D-Code OS, Comercial, Operaciones, Atención) en láminas de vidrio con canto de aluminio. Al bajar se separan en capas. |
+| `software` · finance, medida | `/sistema-financiero`, `/servicios/sistemas-a-medida` | Las mismas láminas, con el orden y el producto de cada página. |
+| `software` · web | `/servicios/paginas-web` | Las webs de producción (inmobiliaria, restaurante, clínica y tienda) en abanico, cableadas al mismo núcleo: la web lee y escribe en el sistema. |
+| `departamento` | Portada · Ocho áreas | Ocho objetos sobre su peana, en círculo y cableados a D-Code OS: embudo (Comercial), antena (Marketing), anillo (Clientes), engranaje (Producción), monedas (Finanzas), mensaje (Soporte), archivo (Administración) y esfera (Dirección). |
+| `departamento` · <área> | `/departamentos/<área>` (×8) | Su objeto en primer plano, iluminado y enviando su dato al centro, con los demás detrás. |
+| `metodo` | Portada · Método, `/metodo` | Seis recorridos (un cliente, un pedido, una factura…) enredados como van hoy. Una lámina de luz los analiza y, detrás de ella, cada uno queda recto: seguir el recorrido real y diseñar el que debería ser. |
+| `metodo` · casos | `/casos-exito` | Antes y después, uno junto a otro y separados por vidrio. |
+| `precios` | Portada · Precios, `/precios` | Un bastidor y tres módulos que encajan en él al bajar (Finance, un sistema a medida, agentes e integraciones): se empieza por uno y se añade lo que haga falta. Las cifras siguen en HTML y no cambian. |
+| `contacto` | Portada · Contacto, `/contacto` | Las ocho áreas, cada una con su color, convergen en un anillo que mira a quien lee: el sistema termina en una persona. |
 
 **Realismo:**
-- **Luz:** HDRI fotográfico de estudio (CC0), prefiltrado con PMREM, como luz y reflejo real.
-- **Materiales:** `MeshPhysicalMaterial` con anisotropía (metal hilado), clearcoat, sheen (cerámica), transmisión, IOR 1,5, atenuación y dispersión (vidrio).
-- **Uso real en la superficie:** mapas de rugosidad con huellas y microarañazos, normales de moleteado y de torneado. Son texturas generadas por procedimiento en esta rama, sin descargas.
-- **Geometría:** perfiles torneados con cantos redondeados (`LatheGeometry`), que son lo que atrapa la luz en una pieza mecanizada.
-- **Sombra:** penumbra ancha y contacto oscuro (como en fotografía de producto), más la sombra suave de la luz clave.
-- **Imagen:** tone mapping Khronos PBR Neutral, bloom solo en lo emisivo y un pase de cine con viñeta y grano.
-- **Lienzo transparente:** el objeto se apoya en la propia página, sin costuras de color.
+- **Luz:** un estudio procedural prefiltrado con PMREM (softboxes cenital, tiras laterales, rebote y ventana tras la cámara) para el oscuro y para el claro. Da reflejos reales al metal sin descargar un HDRI.
+- **Materiales:** `MeshPhysicalMaterial` con aluminio torneado (normal de torneado y anisotropía), acero, grafito, moleteado, cerámica, silicio con iridiscencia, caucho, latón y vidrio. El vidrio usa transmisión real en calidad alta.
+- **Sombras:** sombras de contacto horneadas en textura (una por objeto, casi gratis) y la sombra de la luz clave solo en calidad alta.
+- **Imagen:** tone mapping Khronos PBR Neutral.
+- **Movimiento:** muelles con inercia, sin giros de 360°. El cursor inclina la pieza y el scroll da el avance de cada escena.
 
-**Movimiento con intención** (portada):
+## 3. El motor (`assets/js/escenas/motor.js`)
 
-| Capítulo de producción | Plano |
-|---|---|
-| Hero | La pieza ensamblada, montándose al llegar (las capas caen y se asientan con muelle) |
-| El problema | Las capas desalineadas, los cables desenchufados y las tomas en ámbar intermitente: el trabajo a mano |
-| Diagnóstico | Anillo de escaneo recorriendo la pila; las áreas que marca el usuario encienden su toma |
-| **Anatomía** (nuevo) | Vista explosionada con **cotas HTML** que siguen a cada capa. El texto de cada capa es el de producción. |
-| Qué hacemos, demos, D-Code OS, oferta | El estudio se apaga y deja de renderizar: manda el producto real |
-| Método 01–04 | Escaneo, anatomía, implantación y medición (las tomas laten) |
-| Contacto | La pieza completa, de abajo arriba, bajo el titular |
+- **Un solo `WebGLRenderer`** sobre un lienzo fijo y transparente para toda la página. Cada escena se dibuja con *scissor* en el rectángulo de su hueco `[data-escena]`: no hay un contexto WebGL por sección.
+- **Carga en tres tiempos:**
+  1. El HTML y el CSS pintan primero. El LCP es el titular.
+  2. `app.js` (1,6 KB) espera a `requestIdleCallback` y entonces importa el motor y Three.js.
+  3. Cada escena se importa cuando su hueco está a menos de un 70 % de pantalla. Se compila con `compileAsync` antes de entrar, así no hay tirones al hacer scroll.
+- **Descarga:** a más de tres pantallas de distancia, la escena libera su geometría y sus luces.
+- **Pausa:** fuera de pantalla, con la pestaña oculta o cuando todo está quieto.
+- **Calidad:**
 
-El cursor da inercia a la pieza, parallax de cámara y luz. En móvil la
-composición es otra: la pieza arriba, el titular abajo y las cotas
-sustituidas por la lista.
+  | Nivel | Cuándo | DPR | Vidrio | Sombra de luz |
+  |---|---|---|---|---|
+  | alta | Escritorio con 8 GB o más | 1,8 | transmisión | sí |
+  | media | Táctil, pantalla estrecha o ≤4 GB | 1,4 | transparencia | no |
+  | baja | ≤2 GB o 2 núcleos | 1,0 | transparencia | no |
 
-## 3. Fotografía de producto
+  Si la mediana del fotograma pasa de 24 ms, el DPR baja solo. `?calidad=` fuerza un nivel.
+- **Recursos compartidos:** geometrías y materiales se crean una vez y los pulsos de dato son una sola `InstancedMesh` por escena.
+- **Pósteres:** cada hueco lleva de fondo un fotograma real de su escena en WebP, por tema. Pinta al instante, queda como respaldo sin WebGL y el lienzo vivo lo sustituye. Los de las bandas solo se piden al acercarse.
+- **Movimiento reducido:** un fotograma fijo por escena, sin animación.
+- **Sin WebGL:** se queda el póster.
 
-Cada página interior importante lleva en su héroe **la fotografía de su
-parte del sistema**. Son renders del mismo motor en calidad «foto»:
-2×, sombras de 2048 y 192 segmentos. Hay una versión clara y otra oscura, a
-1600×1000 en WebP.
+## 4. Sistema de diseño
 
-Planos:
-- Cada departamento: macro de **su toma**, iluminada.
-- Automatizaciones: medición.
-- Agentes: macro de la IA.
-- Integraciones: cables.
-- Páginas web: la interfaz.
-- Sistemas a medida y garantías: anatomía a contraluz.
-- Qué hacemos: anatomía.
-- Método: escaneo.
-- Casos: desalineado.
-- Conócenos y departamentos: planta cenital.
-- Contacto y FAQ: régimen.
+Solo se redefinen tokens y revestimientos: el HTML de los componentes de
+producción no se ha reescrito, así que sus pruebas siguen siendo válidas.
 
-La fotografía no bloquea nada: es un `<img>` con `alt=""` y el
-contenido está en HTML. Se regenera con
-`scripts/fotos/estudio.html` y `node .foto.mjs` (ver `PREVIEW.md`).
-
-## 4. Rendimiento
-
-- El motor se pide **después de `load`**. El LCP es el titular HTML.
-- **Niveles de calidad:**
-
-  | Nivel | Cuándo | DPR | Sombra | Postproceso | Vidrio |
-  |---|---|---|---|---|---|
-  | alta | Escritorio con 8 GB o más | 1,75 | 2048 | sí | transmisión con dispersión |
-  | media | Táctil, pantalla estrecha o ≤4 GB | 1,4 | 1024 | sí | transparencia |
-  | baja | ≤2 GB o 2 núcleos | 1 | 512 | no | transparencia |
-  | estática | GPU por software | — | — | — | — |
-
-  En estática se pinta solo al cambiar de plano, igual que con movimiento reducido.
-- **Degradación en marcha:**
-  - Si la mediana del fotograma pasa de 26 ms, se quita el postproceso y se baja el DPR a 1.
-  - Si pasa de 45 ms, pasa a estática.
-- **Pausas:** fuera de pantalla, con la pestaña oculta y detrás de las secciones de producto.
-- **Respaldo sin WebGL:** fotografía del Núcleo como fondo del estudio.
-- **Pesos:**
-  - HDRI: 111 KB.
-  - Texturas de uso, moleteado y torneado: 58 KB.
-  - Fuentes nuevas: 100 KB.
-  - Three.js + addons: ≈ 190 KB con gzip.
+- **Oscuro:**
+  - Fondos `#07080a`, `#0c0d10` y `#111317`.
+  - Tinta `#eceef1`, `#a7abb3` y `#7c818b`.
+  - Acento `#5b8cff`.
+- **Claro:** hueso `#eeebe5`, tinta grafito y acento `#2b57f5`.
+- **Tipos:**
+  - Instrument Sans (display y texto).
+  - Instrument Serif en cursiva como voz editorial.
+  - Mono para las etiquetas técnicas.
+- **Cabecera:** se oculta al bajar y reaparece al subir. El selector de tema va integrado en la navegación.
+- **Superficies de producto** (demos, D-Code OS, diagnóstico) en grafito en los dos temas.
 
 ## 5. Qué se conserva de producción
 
-Todo el contenido, las rutas, los precios de `/precios` (sin cambiar una
-cifra) y las cuatro demos (Finance, Comercial, Operaciones, Atención). Se
-conservan también:
-- D-Code OS con sus vistas, el diagnóstico, el formulario de contacto por pasos y el chatbot con su saludo por sección.
-- El tema claro/oscuro, ES/EN, SEO (títulos, meta, OG, JSON-LD, sitemap, canonical), el consentimiento y la analítica.
-- La lista blanca de despliegue.
+Se conservan:
+- Todo el contenido y las rutas.
+- Los precios de `/precios`, sin cambiar una cifra.
+- Las cuatro demos, D-Code OS, el diagnóstico, el formulario por pasos y el chatbot.
+- ES/EN, SEO (títulos, meta, OG, JSON-LD, sitemap y canonical), el consentimiento y la analítica.
+- La lista blanca de despliegue (`.vercelignore`).
 
-El HTML de los componentes de producción no se ha reescrito: el sistema
-nuevo redefine sus tokens y los reviste. Así, las pruebas de producción
-(`check:*`) siguen siendo válidas y pasan.
+No se ha inventado ninguna métrica, cliente, resultado, precio ni función.
 
 ## 6. Activos externos y licencias
 
 | Activo | Origen | Licencia |
 |---|---|---|
-| Three.js r180 (build y addons) | npm `three@0.180.0` | MIT (`docs/THREEJS-LICENSE.txt`) |
-| HDRI `studio.exr` | npm `@pmndrs/assets@1.7.0` (Poly Haven) | CC0 (`docs/HDRI-PMNDRS-ASSETS-CC0.txt`) |
+| Three.js r180 (build y 2 addons) | npm `three@0.180.0` | MIT (`docs/THREEJS-LICENSE.txt`) |
 | Instrument Sans | npm `@fontsource-variable/instrument-sans` | OFL (`docs/FONTS-INSTRUMENT-SANS-OFL.txt`) |
 | Instrument Serif | npm `@fontsource/instrument-serif` | OFL (`docs/FONTS-INSTRUMENT-SERIF-OFL.txt`) |
-| Texturas de uso, moleteado, torneado y grano | Generadas por procedimiento en esta rama | Propias |
+| Texturas de torneado, moleteado, uso y grano | Generadas por procedimiento | Propias |
+| Pantallas de las escenas | Capturas de las demos y webs que ya están en producción | Propias |
 
-## 7. Limitaciones conocidas
+Se retiran el HDRI, el postprocesado y los loaders que usaba el Núcleo.
 
-- El sandbox no tiene GPU: los FPS y el INP reales hay que medirlos en un equipo físico. Las cifras de carga sí son reales (ver `PREVIEW.md`).
-- La estructura interna de las secciones de producto (demos, D-Code OS, diagnóstico, precios) es la de producción, revestida con el sistema nuevo. No se ha rediseñado su maquetación interna: cambiarla exige reescribir su JS y sus pruebas.
+## 7. Medido
 
-## 8. Medido (Chromium headless, sin GPU: carga fiable, FPS no)
+Ver la sección «Medidas» de `PREVIEW.md`.
 
-| | 1440×900 | 390×844 |
-|---|---|---|
-| FCP | 540 ms | 384 ms |
-| LCP | 540 ms (titular HTML) | 480 ms |
-| CLS | 0,002 | 0,016 |
-| Evento `load` | 663 ms | 395 ms |
-| Peticiones | 62 | 58 |
-| Escena | 118 llamadas de dibujo · 106 k triángulos | 117 · 105 k |
+## 8. Limitaciones
 
-La producción actual (`e99d61f`), con el mismo banco, daba un FCP/LCP de 2,0–2,6 s en escritorio y de 0,8 s en móvil.
-
-**QA:**
-- **Barrido:** 164 combinaciones (74 páginas a 1440 y 390 px, más las dos portadas a 375, 390, 430, 768, 1024, 1440 y 1920). 0 errores JS y 0 desbordes. Los únicos avisos son las URLs limpias de las demos de Finance, que el servidor local no resuelve y Vercel sí, y la herramienta interna de estudio, que no se despliega.
-- **Movimiento reducido:** un fotograma fijo por plano.
-- **Sin WebGL:** fotografía de la pieza.
-- **Pruebas de producción en verde:** `check:tema`, `check:portada`, `check:enlaces`, `check:superficie`, `check:consentimiento`, `check:chat`, `check:estado` y `check-instruments`.
+- El sandbox no tiene GPU (SwiftShader). Las cifras de carga son fiables, pero los FPS y el tiempo al primer fotograma son varias veces peores que en un equipo real y hay que medirlos en hardware físico.
+- La maquetación interna de las secciones de producto (demos, D-Code OS, diagnóstico y tablas de precios) es la de producción, revestida con el sistema nuevo.
+- Los pósteres son fotogramas a 1× y se regeneran a mano tras tocar una escena (ver `PREVIEW.md`).

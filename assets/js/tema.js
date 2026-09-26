@@ -3,7 +3,7 @@
    ----------------------------------------------------------------------------
    1. El tema vive en <html data-theme="dark|light">. Lo pone un script de
       tres líneas en el <head> ANTES de pintar (sin destello) leyendo
-      localStorage('dcp-tema'). Sin elección guardada, claro (luz de laboratorio): es la identidad
+      localStorage('dcp-tema'). Sin elección guardada, oscuro (estudio de noche): es la identidad
       de la marca. Este fichero solo gestiona el botón y el cambio.
    2. El cambio no es un fundido. La página actual se va absorbida hacia la
       IZQUIERDA y la nueva entra desde la DERECHA, con una costura de luz que
@@ -44,7 +44,7 @@
   }
   function metaColor() {
     var m = D.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute('content', actual() === 'light' ? '#f3f5fb' : '#06080d');
+    if (m) m.setAttribute('content', actual() === 'light' ? '#eeebe5' : '#07080a');
   }
   function aplicar(t) {
     // Sin transiciones de color durante el cambio: cientos de elementos

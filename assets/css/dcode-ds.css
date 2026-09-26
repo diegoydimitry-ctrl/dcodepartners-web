@@ -37,12 +37,12 @@ html:root[data-theme], html:root{
   --ds-grano:.045;
 }
 html:root[data-theme="dark"]{
-  --ds-bg:#0d0e11; --ds-bg-2:#131418; --ds-surface:#17191d; --ds-surface-2:#1c1e23;
-  --ds-ink:#ece9e3; --ds-ink-2:#b6b3ad; --ds-ink-3:#8f8c87;
-  --ds-line:rgba(236,233,227,.12); --ds-line-2:rgba(236,233,227,.24);
-  --ds-accent:#7c97ff; --ds-accent-2:#a9bbff; --ds-on-accent:#0d0e11;
-  --ds-sombra:0 1px 0 rgba(255,255,255,.04) inset, 0 24px 50px -30px rgba(0,0,0,.8);
-  --ds-grano:.06;
+  --ds-bg:#07080a; --ds-bg-2:#0c0d10; --ds-surface:#111317; --ds-surface-2:#16181d;
+  --ds-ink:#eceef1; --ds-ink-2:#a7abb3; --ds-ink-3:#7c818b;
+  --ds-line:rgba(236,240,248,.08); --ds-line-2:rgba(236,240,248,.17);
+  --ds-accent:#5b8cff; --ds-accent-2:#8fb0ff; --ds-on-accent:#07080a;
+  --ds-sombra:0 1px 0 rgba(255,255,255,.04) inset, 0 30px 60px -34px rgba(0,0,0,.9);
+  --ds-grano:.05;
 }
 /* Los tokens de producción, apuntando al sistema nuevo (los componentes
    existentes los consumen: así cambian todos a la vez). */
@@ -83,7 +83,7 @@ html[data-theme] body{
 /* Grano de fotografía: la luz de un sitio real, no la de una pantalla. */
 html[data-theme] body::after{
   content:""; position:fixed; inset:0; z-index:9990; pointer-events:none;
-  background:url("/assets/img/nucleo/tex/grano.png") repeat; background-size:256px;
+  background:url("/assets/img/escenas/tex/grano.png") repeat; background-size:256px;
   opacity:var(--ds-grano); mix-blend-mode:multiply;
 }
 html[data-theme="dark"] body::after{ mix-blend-mode:screen; opacity:.035; }
@@ -161,11 +161,15 @@ html[data-theme] .lang-switch{ border:1px solid var(--ds-line) !important; backg
 html[data-theme] .lang-switch a{ font-family:var(--ds-mono); font-size:11px; color:var(--ds-ink-3) !important; border-radius:999px; }
 html[data-theme] .lang-switch a[aria-current="true"]{ background:var(--ds-ink) !important; color:var(--ds-bg) !important; box-shadow:none !important; }
 html[data-theme] .nav-right .btn-primary{ padding:10px 18px; font-size:14px; }
-html[data-theme] .tema-btn{
-  position:fixed !important; left:auto !important; right:92px !important; top:auto !important; bottom:26px !important; z-index:70 !important;
-  background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line) !important;
-  box-shadow:none !important; font-family:var(--ds-mono) !important; font-size:11px !important; letter-spacing:.08em; text-transform:uppercase;
+html:root[data-theme] body .tema-btn.tema-en-nav{
+  position:static !important; inset:auto !important; transform:none !important; width:36px !important; height:36px !important; min-width:0 !important;
+  padding:0 !important; border-radius:999px !important; display:inline-grid !important; place-items:center; margin-right:4px;
+  background:transparent !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line-2) !important; box-shadow:none !important;
 }
+html:root[data-theme] body .tema-btn.tema-en-nav > :not(.tema-btn-i){ display:none !important; }
+html:root[data-theme] body .tema-btn.tema-en-nav .tema-btn-i{ width:18px !important; height:18px !important; background:none !important; box-shadow:none !important; margin:0 !important; }
+html:root[data-theme] body .tema-btn.tema-en-nav:hover{ border-color:var(--ds-ink) !important; }
+html[data-theme] .tema-btn{ background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line) !important; box-shadow:none !important; }
 html[data-theme] .burger span, html[data-theme] .burger span::before, html[data-theme] .burger span::after{ background:var(--ds-ink) !important; }
 @media (max-width:940px){
   html[data-theme] nav.main-nav{ background:var(--ds-bg) !important; }
@@ -190,21 +194,14 @@ html[data-theme] .page-hero .container, html[data-theme] .page-hero .ph-main{ po
 html[data-theme] .page-hero .h-title, html[data-theme] .page-hero h1{ max-width:13ch; margin-top:22px; }
 html[data-theme] .page-hero--split .h-title, html[data-theme] .dept-page .page-hero h1{ max-width:15ch; }
 html[data-theme] .page-hero .lead{ margin-top:24px; }
-.ds-foto{ position:absolute; z-index:0; top:0; right:0; bottom:0; width:min(58%, 980px); margin:0; pointer-events:none; }
-.ds-foto img{ width:100%; height:100%; object-fit:cover; object-position:50% 55%; display:block; }
-.ds-foto::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, var(--ds-bg) 0%, color-mix(in srgb, var(--ds-bg) 40%, transparent) 28%, transparent 55%), linear-gradient(0deg, var(--ds-bg), transparent 26%); }
-.ds-foto figcaption{ position:absolute; right:var(--ds-gut); bottom:22px; z-index:1; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
-html[data-theme="light"] .ds-foto .ds-oscuro, html[data-theme="dark"] .ds-foto .ds-claro{ display:none; }
-html[data-theme] .page-hero.ds-con-foto{ min-height:min(82vh, 820px); display:flex; align-items:center; }
-html[data-theme] .page-hero.ds-con-foto > .container{ flex:1; }
-html[data-theme] .page-hero.ds-con-foto .h-title, html[data-theme] .page-hero.ds-con-foto h1, html[data-theme] .page-hero.ds-con-foto .lead{ max-width:min(13ch, 46vw); }
-html[data-theme] .page-hero.ds-con-foto .lead{ max-width:min(52ch, 44vw); }
+html[data-theme] .page-hero.esc-con{ min-height:min(80vh, 800px); display:flex; align-items:center; }
+html[data-theme] .page-hero.esc-con > .container{ flex:1; }
+html[data-theme] .page-hero.esc-con .h-title, html[data-theme] .page-hero.esc-con h1{ max-width:min(13ch, 42vw); }
+html[data-theme] .page-hero.esc-con .lead{ max-width:min(52ch, 40vw); }
 html[data-theme] .page-hero-meta{ position:relative; z-index:2; }
 @media (max-width:900px){
-  .ds-foto{ position:relative; width:auto; height:56vw; min-height:240px; margin:28px calc(var(--ds-gut) * -1) 0; }
-  .ds-foto::after{ background:linear-gradient(0deg, var(--ds-bg), transparent 30%); }
-  html[data-theme] .page-hero.ds-con-foto{ display:block; min-height:0; padding-bottom:0 !important; }
-  html[data-theme] .page-hero.ds-con-foto .h-title, html[data-theme] .page-hero.ds-con-foto h1, html[data-theme] .page-hero.ds-con-foto .lead{ max-width:none; }
+  html[data-theme] .page-hero.esc-con{ display:flex; flex-direction:column; align-items:stretch; min-height:0; }
+  html[data-theme] .page-hero.esc-con .h-title, html[data-theme] .page-hero.esc-con h1, html[data-theme] .page-hero.esc-con .lead{ max-width:none; }
 }
 
 /* ------------------------------------------------------------ SECCIONES */
@@ -259,7 +256,7 @@ html:root[data-theme="light"] body .cta-band .btn-primary:hover{ background:var(
    Producción invierte a propósito las cajas (claro: fondo claro + cajas
    oscuras) y lo genera scripts/build-tema-claro.mjs. Se respeta la idea y se
    cambia la materia: de azul marino a grafito neutro, el de un instrumento. */
-html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .gal-sig-b, .dx, .btn-ghost, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){
+html:root[data-theme] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .gal-sig-b, .dx, .btn-ghost, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){
   --bg:#18191c; --bg-soft:#16171a; --bg-elev:#1a1b1f; --panel:#18191c; --panel-2:#1d1e22; --border:#2c2d32; --border-soft:#232428;
   --surface-top:#202125; --surface-border:rgba(236,233,227,.12); --surface-highlight:rgba(255,255,255,.05); --surface-bar-top:#222327;
   --surface-ring-top:rgba(236,233,227,.22); --surface-ring-mid:rgba(236,233,227,.08); --surface-ring-bottom:rgba(236,233,227,.08); --surface-sheen:transparent;
@@ -269,9 +266,9 @@ html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .ga
   --v-ink:#ece9e3; --v-ink-2:#b6b3ad; --v-ink-3:#8f8c87; --v-a:#8aa2ff; --v-b:#a9bbff; --v-grad:linear-gradient(90deg,#ece9e3,#ece9e3);
   --ds-surface:#1d1e22; --ds-surface-2:#222327; --ds-line:rgba(236,233,227,.12); --ds-line-2:rgba(236,233,227,.22); --ds-ink:#ece9e3; --ds-ink-2:#b6b3ad; --ds-ink-3:#8f8c87; --ds-accent:#8aa2ff; --ds-bg:#18191c;
 }
-html:root[data-theme="light"] body :is(.sd){ --sd-bg:#16171a; --sd-s:#1b1c20; --sd-s2:#1f2024; --sd-s3:#1a1b1f; --sd-b:#2c2d32; --sd-b2:#393a40; }
-html:root[data-theme="light"] body :is(.fdemo-scope){ --dc-bg:#16171a; --dc-surface:#1b1c20; --dc-surface-2:#1f2024; --dc-surface-3:#1a1b1f; --dc-border:#2c2d32; --dc-border-strong:#393a40; }
-html:root[data-theme="light"] body :is(.os-app, .oss, .os-capa){ --os-bg:#16171a; --os-s:#1b1c20; --os-s2:#1f2024; --os-s3:#1a1b1f; --os-b:rgba(236,233,227,.12); }
+html:root[data-theme] body :is(.sd){ --sd-bg:#16171a; --sd-s:#1b1c20; --sd-s2:#1f2024; --sd-s3:#1a1b1f; --sd-b:#2c2d32; --sd-b2:#393a40; }
+html:root[data-theme] body :is(.fdemo-scope){ --dc-bg:#16171a; --dc-surface:#1b1c20; --dc-surface-2:#1f2024; --dc-surface-3:#1a1b1f; --dc-border:#2c2d32; --dc-border-strong:#393a40; }
+html:root[data-theme] body :is(.os-app, .oss, .os-capa){ --os-bg:#16171a; --os-s:#1b1c20; --os-s2:#1f2024; --os-s3:#1a1b1f; --os-b:rgba(236,233,227,.12); }
 html:root[data-theme] body :is(.sd, .fdemo-scope, .os-app){ box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55) !important; }
 
 /* ------------------------------------------------------------ FORMULARIOS */
@@ -305,84 +302,125 @@ html[data-theme] .chat-msg.user{ background:var(--ds-ink) !important; color:var(
 html[data-theme] .chat-aviso{ background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line) !important; box-shadow:var(--ds-sombra) !important; }
 
 /* ==========================================================================
-   PORTADA · EL NÚCLEO
-   ========================================================================== */
-.nucleo-escenario{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--nv, 1); transition:opacity .9s var(--ds-ease);
-  background:var(--ds-bg) url("/assets/img/nucleo/fotos/ensamblado-claro.webp") 78% 60% / cover no-repeat; }
-html[data-theme="dark"] .nucleo-escenario{ background-image:url("/assets/img/nucleo/fotos/ensamblado-oscuro.webp"); }
-.nucleo-escenario canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity 1.2s ease; }
-.nucleo-escenario.vivo{ background-image:none; }
-.nucleo-escenario.vivo canvas{ opacity:1; }
-.nucleo-escenario.apagado{ visibility:hidden; transition:opacity .9s, visibility 0s linear .9s; }
-@media (max-width:900px){ .nucleo-escenario{ background-position:50% 12%; background-size:180% auto; } }
-body.nucleo-portada main, body.nucleo-portada footer{ position:relative; z-index:1; }
-
-/* El Hero de producción, recompuesto: titular enorme a la izquierda, la
-   pieza a la derecha; la captura de Finance deja el Hero (sigue en el
-   laboratorio, donde se usa). */
-html[data-theme] body.nucleo-portada .v6-hero{ min-height:100vh; min-height:100svh; background:none !important; display:flex; align-items:center; }
-html[data-theme] body.nucleo-portada .v6-hero .v6-panel, html[data-theme] body.nucleo-portada .v6-hero .v6-marca{ display:none !important; }
-html[data-theme] body.nucleo-portada .v6-hero .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; }
-html[data-theme] body.nucleo-portada .v6-lede{ max-width:720px; }
-html[data-theme] body.nucleo-portada .v6-lede h1{ font-size:var(--f-display); line-height:var(--lh-display); letter-spacing:-.052em; font-weight:540; max-width:10ch; }
-html[data-theme] body.nucleo-portada .v6-lede h1 span{ display:block; }
-html[data-theme] body.nucleo-portada .v6-status{ font-family:var(--ds-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
-html[data-theme] body.nucleo-portada .v6-status b{ color:var(--ds-ink); font-weight:500; }
-html[data-theme] body.nucleo-portada .v6-prueba li{ color:var(--ds-ink-2); font-size:14px; }
-html[data-theme] body.nucleo-portada .v6-prueba li::before{ background:var(--ds-ink) !important; box-shadow:none !important; }
-html[data-theme] body.nucleo-portada .v6-act2{ color:var(--ds-ink); }
-html[data-theme] body.nucleo-portada .v6-act2 b{ color:var(--ds-ink); border-bottom:1px solid var(--ds-line-2); }
+   ESCENAS · huecos y lienzo compartido
+   ==========================================================================
+   Un solo <canvas> fijo, encima de la página y sin eventos: el motor pinta
+   cada escena en el rectángulo de su hueco. Mientras el motor llega, el
+   hueco muestra su póster (un fotograma de la propia escena): la página
+   aparece completa al instante y después cobra vida. */
+.esc-lienzo{ position:fixed; inset:0; width:100vw; height:100vh; z-index:30; pointer-events:none; }
+.esc{ position:relative; display:block; pointer-events:none; background:no-repeat 50% 50% / cover; }
+.esc.esc-viva{ background-image:none !important; }
+/* Portada: la escena del héroe ocupa la mitad derecha. */
+html[data-theme] body.esc-portada .v6-hero{ position:relative; min-height:100vh; min-height:100svh; display:flex; align-items:center; background:none !important; }
+html[data-theme] body.esc-portada .v6-hero > .container{ position:relative; z-index:2; width:100%; }
+html[data-theme] body.esc-portada .v6-hero .v6-panel, html[data-theme] body.esc-portada .v6-hero .v6-marca{ display:none !important; }
+html[data-theme] body.esc-portada .v6-hero .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; }
+html[data-theme] body.esc-portada .v6-lede{ max-width:min(640px, 44vw); }
+  html[data-theme] body.esc-portada .v6-lede > p{ max-width:min(560px, 38vw); }
+html[data-theme] body.esc-portada .v6-lede h1{ font-size:clamp(2.9rem, 6.4vw, 6.8rem); line-height:var(--lh-display); letter-spacing:-.052em; font-weight:540; }
+html[data-theme] body.esc-portada .v6-lede h1 span{ display:block; }
+html[data-theme] body.esc-portada .v6-status{ font-family:var(--ds-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
+html[data-theme] body.esc-portada .v6-status b{ color:var(--ds-ink); font-weight:500; }
+html[data-theme] body.esc-portada .v6-prueba li{ color:var(--ds-ink-2); font-size:14px; }
+html[data-theme] body.esc-portada .v6-prueba li::before{ background:var(--ds-accent) !important; box-shadow:none !important; }
+html[data-theme] body.esc-portada .v6-act2, html[data-theme] body.esc-portada .v6-act2 b{ color:var(--ds-ink); }
+.esc-heroe{ position:absolute; z-index:1; top:0; right:0; bottom:0; width:min(52vw, 1000px); }
+/* Bandas: la dimensión 3D de cada capítulo, entre su titular y su contenido. */
+.esc-banda{ width:100%; height:clamp(300px, 46vh, 560px); margin-block:clamp(16px, 3vw, 44px); }
+.esc-banda--alta{ height:clamp(380px, 62vh, 740px); }
+.esc-banda--corta{ height:clamp(240px, 34vh, 420px); }
+.esc-banda--lab{ height:clamp(300px, 48vh, 600px); }
+.esc-banda--cierre{ height:clamp(240px, 38vh, 440px); margin-top:0; }
+/* Interiores: la escena de la página a la derecha del titular. */
+.esc-hero{ position:absolute; z-index:0; top:0; right:0; bottom:0; width:min(46%, 880px); }
 @media (max-width:900px){
-  html[data-theme] body.nucleo-portada .v6-hero{ align-items:flex-end; padding-top:44vh; padding-top:44svh; }
-  html[data-theme] body.nucleo-portada .v6-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
-    background:linear-gradient(180deg, transparent 30%, color-mix(in srgb, var(--ds-bg) 88%, transparent) 55%, var(--ds-bg)); }
-  html[data-theme] body.nucleo-portada .v6-hero > .container{ position:relative; z-index:1; }
+  html[data-theme] body.esc-portada .v6-hero{ flex-direction:column; align-items:stretch; padding-top:0; }
+  html[data-theme] body.esc-portada .v6-lede{ max-width:none; }
+  .esc-heroe{ position:relative; width:auto; height:min(92vw, 520px); margin:8px calc(var(--ds-gut) * -1) 0; }
+  .esc-hero{ position:relative; order:2; width:auto; height:min(80vw, 460px); margin:24px calc(var(--ds-gut) * -1) 0; }
+  .esc-banda{ height:clamp(260px, 70vw, 420px); }
 }
-/* Secciones de la portada: sobre el estudio, sin velos ni cajas de cristal. */
-html[data-theme] body.nucleo-portada .v6-block, html[data-theme] body.nucleo-portada .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
-html[data-theme] body.nucleo-portada .v6-step h2{ font-size:clamp(2.6rem, 5.4vw, 5rem); letter-spacing:-.045em; }
-html[data-theme] body.nucleo-portada .v6-step-n{ font-family:var(--ds-mono) !important; -webkit-text-stroke:0 !important; color:var(--ds-ink-3) !important; font-size:12px !important; letter-spacing:.16em; background:none !important; }
-html[data-theme] body.nucleo-portada .v6-step-n::before{ content:"FIG. "; }
-/* Donde la portada enseña producto (demos, D-Code OS, diagnóstico, oferta),
-   el estudio se retira: el fondo es la mesa de trabajo. */
-html[data-theme] body.nucleo-portada #sistemas, html[data-theme] body.nucleo-portada #dcode-os, html[data-theme] body.nucleo-portada #que-puedes-tener{ background:var(--ds-bg-2) !important; border-block:1px solid var(--ds-line); }
-
-/* Anatomía: las seis capas con sus cotas, como un plano de ingeniería. */
-.ds-anatomia{ position:relative; height:320vh; }
-.ds-anatomia-pin{ position:sticky; top:0; height:100vh; height:100svh; display:flex; align-items:center; }
-.ds-anatomia-pin > .container{ flex:1; width:100%; }
-.ds-anatomia-tx{ max-width:460px; position:relative; z-index:2; }
-.ds-anatomia-tx h2{ margin-top:18px; }
-.ds-anatomia-tx p{ color:var(--ds-ink-2); margin-top:18px; line-height:1.6; }
-.ds-capas{ list-style:none; margin:28px 0 0; padding:0; counter-reset:c; }
-.ds-capas li{ counter-increment:c; display:grid; grid-template-columns:3.2em minmax(0,1fr); gap:4px 12px; padding:12px 0; border-top:1px solid var(--ds-line); opacity:.42; transition:opacity .45s var(--ds-ease); }
-.ds-capas li:last-child{ border-bottom:1px solid var(--ds-line); }
-.ds-capas li::before{ content:counter(c, decimal-leading-zero); font-family:var(--ds-mono); font-size:11px; letter-spacing:.12em; color:var(--ds-ink-3); padding-top:4px; grid-row:span 2; }
-.ds-capas b{ font-weight:580; letter-spacing:-.02em; font-size:18px; }
-.ds-capas span{ color:var(--ds-ink-2); font-size:14.5px; line-height:1.5; }
-.ds-capas li.on{ opacity:1; }
-html:not(.ds-js) .ds-capas li{ opacity:1; }
-/* Cotas: línea fina y etiqueta mono, siguiendo a cada capa en pantalla. */
-.ds-cotas{ position:fixed; inset:0; z-index:3; pointer-events:none; opacity:0; transition:opacity .5s; }
-.ds-cotas.on{ opacity:1; }
-.ds-cota{ position:absolute; left:0; top:0; display:flex; align-items:center; gap:10px; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ds-ink); white-space:nowrap; will-change:transform; }
-.ds-cota::before{ content:""; width:7px; height:7px; border-radius:50%; border:1px solid var(--ds-ink); background:var(--ds-bg); flex:none; }
-.ds-cota i{ display:block; width:56px; height:1px; background:var(--ds-ink); opacity:.6; }
-@media (max-width:900px){
-  .ds-anatomia{ height:auto; }
-  .ds-anatomia-pin{ position:relative; height:auto; padding-block:48vh 72px; align-items:flex-end; }
-  .ds-capas li{ opacity:1; }
-  .ds-cotas{ display:none; }
-}
-
-/* Etiqueta del cursor sobre una toma de departamento. */
-.ds-etiqueta{ position:fixed; left:0; top:0; z-index:60; pointer-events:none; padding:8px 12px; border-radius:10px; background:var(--ds-ink); color:var(--ds-bg);
-  font:500 12px/1.3 var(--ds-mono); letter-spacing:.06em; opacity:0; transition:opacity .2s; }
-.ds-etiqueta.on{ opacity:1; }
+/* Capítulo «Ocho áreas»: la escena del sistema y la lista de sus áreas. */
+.ds-areas-tx{ max-width:760px; }
+.ds-areas-l{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); border-top:1px solid var(--ds-line); }
+.ds-areas-l a, .ds-areas-l a *{ text-decoration:none !important; }
+.ds-areas-l a{ display:block; height:100%; padding:20px 20px 22px 0; border-bottom:1px solid var(--ds-line); text-decoration:none; color:var(--ds-ink); transition:color .25s; }
+.ds-areas-l li + li a{ padding-left:20px; border-left:1px solid var(--ds-line); }
+.ds-areas-l li:nth-child(4n+1) a{ padding-left:0; border-left:0; }
+.ds-areas-l b{ display:flex; align-items:center; gap:10px; font-weight:580; letter-spacing:-.02em; font-size:18px; }
+.ds-areas-l b::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--k); box-shadow:0 0 12px var(--k); }
+.ds-areas-l span{ display:block; margin-top:8px; color:var(--ds-ink-2); font-size:14.5px; line-height:1.5; }
+.ds-areas-l a:hover b{ color:var(--ds-accent); }
+@media (max-width:900px){ .ds-areas-l{ grid-template-columns:repeat(2, minmax(0,1fr)); } .ds-areas-l li:nth-child(odd) a{ padding-left:0; border-left:0; } .ds-areas-l li:nth-child(even) a{ padding-left:16px; border-left:1px solid var(--ds-line); } }
+/* Secciones de la portada: sobre el fondo, sin velos ni cristal. */
+html[data-theme] body.esc-portada .v6-block, html[data-theme] body.esc-portada .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+html[data-theme] body.esc-portada .v6-step h2{ font-size:clamp(2.4rem, 5vw, 4.6rem); letter-spacing:-.045em; }
+html[data-theme] body.esc-portada .v6-step-n{ font-family:var(--ds-mono) !important; -webkit-text-stroke:0 !important; color:var(--ds-ink-3) !important; font-size:12px !important; letter-spacing:.16em; background:none !important; }
+html[data-theme] body.esc-portada .v6-step-n::before{ content:"FASE "; }
+html[data-theme] body.esc-portada #sistemas, html[data-theme] body.esc-portada #dcode-os{ background:var(--ds-bg-2) !important; border-block:1px solid var(--ds-line); }
+/* Pósters: un fotograma real de cada escena, por tema. Pintan al instante
+   y se quedan si no hay WebGL; el lienzo vivo los sustituye. Las bandas lo
+   piden solo al acercarse (.cerca), así no se descargan de entrada. */
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/sistema-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/sistema-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"][data-modo="firma"]{ background-image:url("/assets/img/escenas/poster/sistema-firma-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"][data-modo="firma"]{ background-image:url("/assets/img/escenas/poster/sistema-firma-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="web"]{ background-image:url("/assets/img/escenas/poster/software-web-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="web"]{ background-image:url("/assets/img/escenas/poster/software-web-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="medida"]{ background-image:url("/assets/img/escenas/poster/software-medida-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="medida"]{ background-image:url("/assets/img/escenas/poster/software-medida-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="finance"]{ background-image:url("/assets/img/escenas/poster/software-finance-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="finance"]{ background-image:url("/assets/img/escenas/poster/software-finance-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"][data-modo="casos"]{ background-image:url("/assets/img/escenas/poster/metodo-casos-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"][data-modo="casos"]{ background-image:url("/assets/img/escenas/poster/metodo-casos-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"][data-modo="puente"]{ background-image:url("/assets/img/escenas/poster/integracion-puente-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"][data-modo="puente"]{ background-image:url("/assets/img/escenas/poster/integracion-puente-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="ia"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/ia-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="ia"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/ia-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="automatizacion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/automatizacion-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="automatizacion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/automatizacion-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="soporte"]{ background-image:url("/assets/img/escenas/poster/departamento-soporte-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="soporte"]{ background-image:url("/assets/img/escenas/poster/departamento-soporte-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="produccion"]{ background-image:url("/assets/img/escenas/poster/departamento-produccion-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="produccion"]{ background-image:url("/assets/img/escenas/poster/departamento-produccion-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="marketing"]{ background-image:url("/assets/img/escenas/poster/departamento-marketing-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="marketing"]{ background-image:url("/assets/img/escenas/poster/departamento-marketing-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="finanzas"]{ background-image:url("/assets/img/escenas/poster/departamento-finanzas-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="finanzas"]{ background-image:url("/assets/img/escenas/poster/departamento-finanzas-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="direccion"]{ background-image:url("/assets/img/escenas/poster/departamento-direccion-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="direccion"]{ background-image:url("/assets/img/escenas/poster/departamento-direccion-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="comercial"]{ background-image:url("/assets/img/escenas/poster/departamento-comercial-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="comercial"]{ background-image:url("/assets/img/escenas/poster/departamento-comercial-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="clientes"]{ background-image:url("/assets/img/escenas/poster/departamento-clientes-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="clientes"]{ background-image:url("/assets/img/escenas/poster/departamento-clientes-claro.webp"); }
+html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="administracion"]{ background-image:url("/assets/img/escenas/poster/departamento-administracion-oscuro.webp"); }
+html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="administracion"]{ background-image:url("/assets/img/escenas/poster/departamento-administracion-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-banda-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-banda-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="datos"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/datos-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="datos"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/datos-banda-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="software"][data-modo="lab"]{ background-image:url("/assets/img/escenas/poster/software-lab-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="software"][data-modo="lab"]{ background-image:url("/assets/img/escenas/poster/software-lab-banda-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-banda-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-banda-claro.webp"); }
+html[data-theme="dark"] .esc-banda.cerca[data-escena="departamento"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/departamento-banda-oscuro.webp"); }
+html[data-theme="light"] .esc-banda.cerca[data-escena="departamento"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/departamento-banda-claro.webp"); }
 
 /* ------------------------------------------------------------ MOVIMIENTO */
 @media (prefers-reduced-motion: reduce){
-  .nucleo-escenario, .nucleo-escenario canvas, .ds-capas li, .ds-cotas{ transition:none !important; }
   html[data-theme] #site-header.ds-oculta{ transform:none; }
   html[data-theme] .btn, html[data-theme] a.out:hover{ transform:none !important; }
 }
@@ -395,42 +433,41 @@ html:root[data-theme="light"] body .cta-band a.btn-ghost{ color:#eeebe5 !importa
 html:root[data-theme="light"] body :is(.dx, .v6-of, .window, .rcard, .board) a.btn-ghost{ color:#ece9e3 !important; border-color:rgba(236,233,227,.26) !important; }
 
 /* Revestimiento de grafito: estas cajas traen el azul marino como literal. */
-html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
-html:root[data-theme="light"] body :is(.dx-area, .arq-area, .gal-tab){ background:rgba(255,255,255,.035) !important; }
-html:root[data-theme="light"] body :is(.dx-area[aria-pressed="true"], .gal-tab[aria-selected="true"], .gal-tab.is-on){ background:rgba(255,255,255,.09) !important; }
-html:root[data-theme="light"] body :is(.os-app, .oss, .os-capa){ --os-card:linear-gradient(180deg,#1f2024,#17181b); --os-s:#1b1c20; --os-s2:#1f2024; --os-b2:#393a40; --os-sombra:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55); }
-html:root[data-theme="light"] body .oss{ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
+html:root[data-theme] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
+html:root[data-theme] body :is(.dx-area, .arq-area, .gal-tab){ background:rgba(255,255,255,.035) !important; }
+html:root[data-theme] body :is(.dx-area[aria-pressed="true"], .gal-tab[aria-selected="true"], .gal-tab.is-on){ background:rgba(255,255,255,.09) !important; }
+html:root[data-theme] body :is(.os-app, .oss, .os-capa){ --os-card:linear-gradient(180deg,#1f2024,#17181b); --os-s:#1b1c20; --os-s2:#1f2024; --os-b2:#393a40; --os-sombra:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55); }
+html:root[data-theme] body .oss{ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
 
 /* Fondo de página: la luz de laboratorio llega hasta el lienzo del html
    (tema-claro lo pintaba azulado). */
 html:root[data-theme="light"], html:root[data-theme="light"] body{ background:#eeebe5 !important; }
-html:root[data-theme="dark"], html:root[data-theme="dark"] body{ background:#0d0e11 !important; }
+html:root[data-theme="dark"], html:root[data-theme="dark"] body{ background:#07080a !important; }
 
 /* Héroes partidos con fotografía: el texto y sus sellos se apilan a la
    izquierda; la derecha es de la fotografía. */
-html:root[data-theme] body .page-hero.ds-con-foto > .container{ display:block !important; }
-html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; max-width:46vw; }
-html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta > *{ flex:0 0 auto; }
-html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta :is(li, .pill, span){ font-family:var(--ds-mono); font-size:11px; letter-spacing:.06em; }
+html:root[data-theme] body .page-hero.esc-con > .container{ display:block !important; }
+html:root[data-theme] body .page-hero.esc-con .page-hero-meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; max-width:42vw; }
+html:root[data-theme] body .page-hero.esc-con .page-hero-meta > *{ flex:0 0 auto; }
+html:root[data-theme] body .page-hero.esc-con .page-hero-meta :is(li, .pill, span){ font-family:var(--ds-mono); font-size:11px; letter-spacing:.06em; }
 html[data-theme] .head, html[data-theme] .section-head{ margin-bottom:clamp(32px, 4vw, 56px); }
 /* El índice lateral de producción (dcp7), más discreto sobre las fotografías. */
 html[data-theme] .dcx{ mix-blend-mode:normal; }
 html[data-theme] .dcx a, html[data-theme] .dcx-now{ font-family:var(--ds-mono) !important; color:var(--ds-ink-3) !important; }
-@media (max-width:900px){ html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ max-width:none; } }
+@media (max-width:900px){ html:root[data-theme] body .page-hero.esc-con .page-hero-meta{ max-width:none; } }
 
 /* Sellos del héroe partido: una línea de etiquetas, sin velos detrás. */
 html:root[data-theme] body .page-hero .page-hero-meta::before, html:root[data-theme] body .page-hero .page-hero-meta::after{ display:none !important; }
-html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ flex-direction:row !important; border-top:0 !important; padding-top:0 !important; background:none !important; }
-html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta :is(.badge, .trust-badge){
+html:root[data-theme] body .page-hero.esc-con .page-hero-meta{ flex-direction:row !important; border-top:0 !important; padding-top:0 !important; background:none !important; }
+html:root[data-theme] body .page-hero.esc-con .page-hero-meta :is(.badge, .trust-badge){
   display:inline-flex !important; width:auto !important; padding:7px 12px !important; border:1px solid var(--ds-line-2) !important;
   border-radius:999px !important; background:transparent !important; font-size:10.5px !important; letter-spacing:.1em !important; text-transform:uppercase; box-shadow:none !important;
 }
-html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta .trust-badge::before{ display:none !important; }
+html:root[data-theme] body .page-hero.esc-con .page-hero-meta .trust-badge::before{ display:none !important; }
 /* Índice lateral sin placa. */
 html:root[data-theme] body .dcx::before{ background:none !important; box-shadow:none !important; backdrop-filter:none !important; }
 /* Cabecera también en móvil con la luz de laboratorio. */
 html:root[data-theme="light"] body #site-header{ background:rgba(238,235,229,.86) !important; }
-html:root[data-theme="dark"] body #site-header{ background:rgba(13,14,17,.86) !important; }
-html[data-theme] .nucleo-escenario.vivo{ background-image:none !important; }
+html:root[data-theme="dark"] body #site-header{ background:rgba(7,8,10,.82) !important; }
 /* El índice lateral de producción solo donde hay margen para él. */
 @media (max-width:1599px){ html[data-theme] .dcx{ display:none !important; } }

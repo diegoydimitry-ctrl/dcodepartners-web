@@ -100,7 +100,7 @@ const FINANCE_ASSETS = [
   'assets/js/fichas.js',
   // Sistema de diseño «Laboratorio» y El Núcleo (motor 3D).
   'assets/css/dcode-ds.css',
-  'assets/js/nucleo/app.js',
+  'assets/js/escenas/app.js',
 ].filter((rel) => fs.existsSync(path.join(ROOT, rel))).map((rel) => {
   const name = path.basename(rel);
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -108,17 +108,27 @@ const FINANCE_ASSETS = [
   return { name, hash: hashFile(rel), re: new RegExp('(?<![\\w-])' + escaped + '\\?v=[A-Za-z0-9_-]+', 'g') };
 });
 
-// El motor de El Núcleo se importa dinámicamente DESDE app.js: su ?v= vive
-// dentro de ese fichero y se reescribe antes de calcular el hash de app.js.
+// El motor de escenas y sus módulos se importan dinámicamente: su ?v=
+// vive dentro de los ficheros JS. Orden: cada escena → motor.js (que las
+// importa con un ?v= común, el hash de todas) → app.js (que importa el motor).
 {
-  const motorHash = hashFile('assets/js/nucleo/nucleo.js');
-  const pApp = path.join(ROOT, 'assets/js/nucleo/app.js');
-  const src = fs.readFileSync(pApp, 'utf8');
-  const out = src.replace(/nucleo\.js\?v=[A-Za-z0-9_-]+/g, `nucleo.js?v=${motorHash}`);
+  const dir = path.join(ROOT, 'assets/js/escenas');
+  const escenas = fs.readdirSync(dir).filter((f) => /^e-.*\.js$/.test(f)).sort();
+  const hEsc = crypto.createHash('sha256');
+  for (const f of escenas) hEsc.update(fs.readFileSync(path.join(dir, f)));
+  const escHash = hEsc.digest('hex').slice(0, HASH_LEN);
+  const pMotor = path.join(dir, 'motor.js');
+  let src = fs.readFileSync(pMotor, 'utf8');
+  let out = src.replace(/const V = "\?v=[A-Za-z0-9_-]+";/, `const V = "?v=${escHash}";`);
+  if (out !== src) fs.writeFileSync(pMotor, out, 'utf8');
+  const motorHash = hashFile('assets/js/escenas/motor.js');
+  const pApp = path.join(dir, 'app.js');
+  src = fs.readFileSync(pApp, 'utf8');
+  out = src.replace(/motor\.js\?v=[A-Za-z0-9_-]+/g, `motor.js?v=${motorHash}`);
   if (out !== src) fs.writeFileSync(pApp, out, 'utf8');
   const i = FINANCE_ASSETS.findIndex((a) => a.name === 'app.js');
-  if (i >= 0) FINANCE_ASSETS[i].hash = hashFile('assets/js/nucleo/app.js');
-  console.log(`nucleo.js  -> ?v=${motorHash} (dentro de nucleo/app.js)`);
+  if (i >= 0) FINANCE_ASSETS[i].hash = hashFile('assets/js/escenas/app.js');
+  console.log(`escenas -> ?v=${escHash} · motor.js -> ?v=${motorHash}`);
 }
 
 const htmlFiles = findHtmlFiles(ROOT, []);

@@ -1,0 +1,12 @@
+<!doctype html><html lang="es" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estudio de escenas</title>
+<script>var q=new URLSearchParams(location.search);if(q.get('tr'))document.documentElement.classList.add('tr');document.documentElement.setAttribute('data-theme',q.get('tema')==='claro'?'light':'dark');</script>
+<style>html,body{margin:0;height:100%;background:#08090b}html.tr,html.tr body{background:transparent!important}html[data-theme=light],html[data-theme=light] body{background:#eeebe5}
+.esc-lienzo{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}#s{position:absolute;inset:0}</style></head>
+<body><div id="s"></div>
+<script>var s=document.getElementById('s');s.setAttribute('data-escena',q.get('e')||'sistema');if(q.get('modo'))s.setAttribute('data-modo',q.get('modo'));</script>
+<script type="module">
+import { crearMotor } from "/assets/js/escenas/motor.js";
+const cv=document.createElement('canvas');cv.className='esc-lienzo';document.body.appendChild(cv);
+window.__motor=crearMotor(cv,{claro:document.documentElement.getAttribute('data-theme')==='light',alPrimer:()=>{window.__listo=true}});
+</script></body></html>
