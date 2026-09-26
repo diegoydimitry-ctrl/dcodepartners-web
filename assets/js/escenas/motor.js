@@ -23,7 +23,7 @@ import { RoomEnvironment } from "/assets/vendor/three/addons/environments/RoomEn
 import { RoundedBoxGeometry } from "/assets/vendor/three/addons/geometries/RoundedBoxGeometry.js";
 
 const TAU = Math.PI * 2;
-const V = "?v=036eca1ecf"; // el versionado lo reescribe update-asset-versions
+const V = "?v=70a2ab396c"; // el versionado lo reescribe update-asset-versions
 
 /* ------------------------------------------------------------ CALIDAD */
 function detectar() {
@@ -240,6 +240,7 @@ export function crearMotor(canvas, o = {}) {
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.setScissorTest(true);
   const K = crearKit(renderer, calidad);
+  K.pedir = () => pedir();
   K.setTema(!!o.claro);
 
   const vistas = new Map(); // el → { mod, esc, visible, lista }

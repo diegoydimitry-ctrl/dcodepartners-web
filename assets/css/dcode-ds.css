@@ -256,7 +256,7 @@ html:root[data-theme="light"] body .cta-band .btn-primary:hover{ background:var(
    Producción invierte a propósito las cajas (claro: fondo claro + cajas
    oscuras) y lo genera scripts/build-tema-claro.mjs. Se respeta la idea y se
    cambia la materia: de azul marino a grafito neutro, el de un instrumento. */
-html:root[data-theme] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .gal-sig-b, .dx, .btn-ghost, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){
+html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .gal-sig-b, .dx, .btn-ghost, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){
   --bg:#18191c; --bg-soft:#16171a; --bg-elev:#1a1b1f; --panel:#18191c; --panel-2:#1d1e22; --border:#2c2d32; --border-soft:#232428;
   --surface-top:#202125; --surface-border:rgba(236,233,227,.12); --surface-highlight:rgba(255,255,255,.05); --surface-bar-top:#222327;
   --surface-ring-top:rgba(236,233,227,.22); --surface-ring-mid:rgba(236,233,227,.08); --surface-ring-bottom:rgba(236,233,227,.08); --surface-sheen:transparent;
@@ -266,11 +266,28 @@ html:root[data-theme] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .
   --v-ink:#ece9e3; --v-ink-2:#b6b3ad; --v-ink-3:#8f8c87; --v-a:#8aa2ff; --v-b:#a9bbff; --v-grad:linear-gradient(90deg,#ece9e3,#ece9e3);
   --ds-surface:#1d1e22; --ds-surface-2:#222327; --ds-line:rgba(236,233,227,.12); --ds-line-2:rgba(236,233,227,.22); --ds-ink:#ece9e3; --ds-ink-2:#b6b3ad; --ds-ink-3:#8f8c87; --ds-accent:#8aa2ff; --ds-bg:#18191c;
 }
-html:root[data-theme] body :is(.sd){ --sd-bg:#16171a; --sd-s:#1b1c20; --sd-s2:#1f2024; --sd-s3:#1a1b1f; --sd-b:#2c2d32; --sd-b2:#393a40; }
-html:root[data-theme] body :is(.fdemo-scope){ --dc-bg:#16171a; --dc-surface:#1b1c20; --dc-surface-2:#1f2024; --dc-surface-3:#1a1b1f; --dc-border:#2c2d32; --dc-border-strong:#393a40; }
-html:root[data-theme] body :is(.os-app, .oss, .os-capa){ --os-bg:#16171a; --os-s:#1b1c20; --os-s2:#1f2024; --os-s3:#1a1b1f; --os-b:rgba(236,233,227,.12); }
-html:root[data-theme] body :is(.sd, .fdemo-scope, .os-app){ box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55) !important; }
+html:root[data-theme="light"] body :is(.sd){ --sd-bg:#16171a; --sd-s:#1b1c20; --sd-s2:#1f2024; --sd-s3:#1a1b1f; --sd-b:#2c2d32; --sd-b2:#393a40; }
+html:root[data-theme="light"] body :is(.fdemo-scope){ --dc-bg:#16171a; --dc-surface:#1b1c20; --dc-surface-2:#1f2024; --dc-surface-3:#1a1b1f; --dc-border:#2c2d32; --dc-border-strong:#393a40; }
+html:root[data-theme="light"] body :is(.os-app, .oss, .os-capa){ --os-bg:#16171a; --os-s:#1b1c20; --os-s2:#1f2024; --os-s3:#1a1b1f; --os-b:rgba(236,233,227,.12); }
+html:root[data-theme="light"] body :is(.sd, .fdemo-scope, .os-app){ box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55) !important; }
 
+
+/* En oscuro, las mismas cajas son papel blanco (como en producción): el
+   producto se lee siempre por contraste con la página. */
+html:root[data-theme="dark"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .gal-sig-b, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil, .out, .card, .guarantee-card, .blog-card, .faq-item, .fi-otro, .shift-col, .trust-badge, .v6-say, .step-card, .pr-card){
+  --bg:#ffffff; --bg-soft:#f5f6f8; --bg-elev:#ffffff; --panel:#ffffff; --panel-2:#f4f5f7; --border:#e2e4e9; --border-soft:#eceef1;
+  --surface-top:#ffffff; --surface-border:#e2e4e9; --surface-highlight:transparent; --surface-bar-top:#f6f7f9;
+  --surface-ring-top:#e2e4e9; --surface-ring-mid:#eceef1; --surface-ring-bottom:#eceef1; --surface-sheen:transparent;
+  --ink:#101217; --stone:#454a53; --stone-soft:#5d626b; --line:#e2e4e9; --blue:#2b57f5; --cyan:#2b57f5; --violet:#1d3fc4; --signal-text:#1d3fc4;
+  --grad-brand:linear-gradient(90deg,#101217,#101217); --glow-blue:none;
+  --v-bg:#ffffff; --v-bg-2:#f5f6f8; --v-panel:#f4f5f7; --v-panel-2:#eceef1; --v-edge:#e2e4e9; --v-edge-2:#eceef1;
+  --v-ink:#101217; --v-ink-2:#454a53; --v-ink-3:#5d626b; --v-a:#2b57f5; --v-b:#1d3fc4; --v-grad:linear-gradient(90deg,#101217,#101217);
+  --ds-surface:#ffffff; --ds-surface-2:#f6f7f9; --ds-line:#e2e4e9; --ds-line-2:#d3d6dc; --ds-ink:#101217; --ds-ink-2:#454a53; --ds-ink-3:#5d626b; --ds-accent:#2b57f5; --ds-bg:#ffffff;
+  color:#101217;
+}
+html:root[data-theme="dark"] body :is(.rcard, a.area, .conexion, .arq-mod, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil, .out, .card, .guarantee-card, .blog-card, .faq-item, .fi-otro, .shift-col, .trust-badge, .v6-say, .step-card){ background:#ffffff !important; border-color:#e2e4e9 !important; }
+html:root[data-theme="dark"] body :is(.dx-area, .arq-area, .gal-tab){ background:#f5f6f8 !important; }
+html:root[data-theme="dark"] body :is(.dx-area[aria-pressed="true"], .gal-tab[aria-selected="true"], .gal-tab.is-on){ background:#e9eefe !important; border-color:#2b57f5 !important; }
 /* ------------------------------------------------------------ FORMULARIOS */
 html[data-theme] input:not([type="checkbox"]):not([type="radio"]), html[data-theme] textarea, html[data-theme] select{
   background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line-2) !important;
@@ -311,114 +328,185 @@ html[data-theme] .chat-aviso{ background:var(--ds-surface-2) !important; color:v
 .esc-lienzo{ position:fixed; inset:0; width:100vw; height:100vh; z-index:30; pointer-events:none; }
 .esc{ position:relative; display:block; pointer-events:none; background:no-repeat 50% 50% / cover; }
 .esc.esc-viva{ background-image:none !important; }
-/* Portada: la escena del héroe ocupa la mitad derecha. */
-html[data-theme] body.esc-portada .v6-hero{ position:relative; min-height:100vh; min-height:100svh; display:flex; align-items:center; background:none !important; }
-html[data-theme] body.esc-portada .v6-hero > .container{ position:relative; z-index:2; width:100%; }
-html[data-theme] body.esc-portada .v6-hero .v6-panel, html[data-theme] body.esc-portada .v6-hero .v6-marca{ display:none !important; }
-html[data-theme] body.esc-portada .v6-hero .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; }
-html[data-theme] body.esc-portada .v6-lede{ max-width:min(640px, 44vw); }
-  html[data-theme] body.esc-portada .v6-lede > p{ max-width:min(560px, 38vw); }
-html[data-theme] body.esc-portada .v6-lede h1{ font-size:clamp(2.9rem, 6.4vw, 6.8rem); line-height:var(--lh-display); letter-spacing:-.052em; font-weight:540; }
-html[data-theme] body.esc-portada .v6-lede h1 span{ display:block; }
-html[data-theme] body.esc-portada .v6-status{ font-family:var(--ds-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
-html[data-theme] body.esc-portada .v6-status b{ color:var(--ds-ink); font-weight:500; }
-html[data-theme] body.esc-portada .v6-prueba li{ color:var(--ds-ink-2); font-size:14px; }
-html[data-theme] body.esc-portada .v6-prueba li::before{ background:var(--ds-accent) !important; box-shadow:none !important; }
-html[data-theme] body.esc-portada .v6-act2, html[data-theme] body.esc-portada .v6-act2 b{ color:var(--ds-ink); }
-.esc-heroe{ position:absolute; z-index:1; top:0; right:0; bottom:0; width:min(52vw, 1000px); }
-/* Bandas: la dimensión 3D de cada capítulo, entre su titular y su contenido. */
-.esc-banda{ width:100%; height:clamp(300px, 46vh, 560px); margin-block:clamp(16px, 3vw, 44px); }
-.esc-banda--alta{ height:clamp(380px, 62vh, 740px); }
-.esc-banda--corta{ height:clamp(240px, 34vh, 420px); }
-.esc-banda--lab{ height:clamp(300px, 48vh, 600px); }
-.esc-banda--cierre{ height:clamp(240px, 38vh, 440px); margin-top:0; }
+/* ---------------------------------------------------------- ESTUDIO (héroe)
+   Un banco de trabajo: el sistema en el centro, el titular y la ficha a la
+   izquierda, los mandos a la derecha y, abajo, la barra de módulos y áreas.
+   Rejilla fina y escuadras en las esquinas: un instrumento, no un póster. */
+html:root[data-theme]{ --st-bg:#08090d; --st-rej:rgba(236,240,248,.045); --st-panel:rgba(14,16,21,.92); --st-esq:rgba(143,176,255,.55); --st-halo:rgba(91,140,255,.10); }
+html:root[data-theme="light"]{ --st-bg:#f3f1ec; --st-rej:rgba(20,21,25,.055); --st-panel:rgba(255,255,255,.9); --st-esq:rgba(43,87,245,.5); --st-halo:rgba(43,87,245,.07); }
+.st-marco-fondo, .st, .sx-escena{
+  background:
+    radial-gradient(ellipse 60% 55% at 58% 42%, var(--st-halo), transparent 70%),
+    linear-gradient(var(--st-rej) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, var(--st-rej) 1px, transparent 1px) 0 0 / 44px 44px,
+    var(--st-bg);
+}
+html[data-theme] body.esc-portada .v6-hero{ position:relative; min-height:0; display:block; padding:14px clamp(10px, 1.4vw, 22px) 0 !important; background:none !important; }
+html[data-theme] body.esc-portada .v6-hero .v6-panel, html[data-theme] body.esc-portada .v6-hero .v6-marca, html[data-theme] body.esc-portada .v6-status{ display:none !important; }
+.st{
+  position:relative; display:grid; gap:14px; padding:18px;
+  grid-template-columns:minmax(300px, 380px) minmax(0, 1fr) 46px; grid-template-rows:auto minmax(0, 1fr) auto;
+  grid-template-areas:"lede escena mandos" "info escena mandos" "info barra barra";
+  height:calc(100svh - var(--hdr-h, 72px) - 20px); min-height:660px; max-height:1000px;
+  border:1px solid var(--ds-line); border-radius:20px; overflow:hidden; color:var(--ds-ink);
+}
+.st-esq{ position:absolute; inset:12px; pointer-events:none; z-index:0;
+  background:
+    linear-gradient(var(--st-esq),var(--st-esq)) 0 0/18px 1.5px, linear-gradient(var(--st-esq),var(--st-esq)) 0 0/1.5px 18px,
+    linear-gradient(var(--st-esq),var(--st-esq)) 100% 0/18px 1.5px, linear-gradient(var(--st-esq),var(--st-esq)) 100% 0/1.5px 18px,
+    linear-gradient(var(--st-esq),var(--st-esq)) 0 100%/18px 1.5px, linear-gradient(var(--st-esq),var(--st-esq)) 0 100%/1.5px 18px,
+    linear-gradient(var(--st-esq),var(--st-esq)) 100% 100%/18px 1.5px, linear-gradient(var(--st-esq),var(--st-esq)) 100% 100%/1.5px 18px;
+  background-repeat:no-repeat; }
+.st-lienzo{ grid-area:escena; min-height:0; pointer-events:auto !important; touch-action:pan-y; cursor:grab; background:no-repeat 50% 50% / contain; }
+.st-lienzo:active{ cursor:grabbing; }
+.st > .container{ grid-area:lede; position:relative; z-index:1; max-width:none !important; padding:0 !important; margin:0 !important; }
+html[data-theme] body .st .v6-lede, .st-info, .st-barra{ background:var(--st-panel) !important; border:1px solid var(--ds-line) !important; border-radius:14px !important; }
+html[data-theme] body.esc-portada .st .v6-lede{ max-width:none; padding:22px 22px 20px; }
+html[data-theme] body.esc-portada .st .v6-kicker{ font-size:10.5px; }
+html[data-theme] body.esc-portada .st .v6-lede h1{ font-size:clamp(2rem, 2.55vw, 2.9rem); line-height:1; letter-spacing:-.045em; font-weight:560; margin:14px 0 12px; }
+html[data-theme] body.esc-portada .st .v6-lede h1 span{ display:block; }
+html[data-theme] body.esc-portada .st .v6-sub{ font-size:15px; line-height:1.55; color:var(--ds-ink-2); margin:0 0 16px; }
+html[data-theme] body.esc-portada .st .v6-acts{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin:0; }
+html[data-theme] body.esc-portada .st .v6-act2{ font-size:13.5px; color:var(--ds-ink-2); }
+html[data-theme] body.esc-portada .st .v6-act2 b{ color:var(--ds-ink); }
+html[data-theme] body.esc-portada .st .v6-prueba{ margin:16px 0 0; padding:14px 0 0; border-top:1px solid var(--ds-line); display:grid; gap:6px; }
+html[data-theme] body.esc-portada .st .v6-prueba li{ font-size:12.5px; color:var(--ds-ink-2); }
+html[data-theme] body.esc-portada .st .v6-prueba li::before{ background:var(--ds-accent) !important; box-shadow:none !important; }
+.st-info{ grid-area:info; align-self:end; position:relative; z-index:1; padding:18px 20px 20px; }
+.st-et{ margin:0 0 8px; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--ds-ink-3); }
+.st-info-t{ margin:0; font-size:20px !important; line-height:1.15; letter-spacing:-.02em; font-weight:580; color:var(--ds-ink); }
+.st-info-d{ margin:8px 0 0; font-size:14px; line-height:1.55; color:var(--ds-ink-2); }
+.st-info-l{ display:inline-flex; margin-top:12px; font-size:13.5px; font-weight:560; color:var(--ds-accent); text-decoration:none; }
+.st-info-l::after{ content:" →"; white-space:pre; }
+.st-mandos{ grid-area:mandos; align-self:center; display:flex; flex-direction:column; gap:8px; position:relative; z-index:1; }
+.st-mandos button, .st-mod, .st-area{ font:inherit; cursor:pointer; }
+.st-mandos button{ width:40px; height:40px; display:grid; place-items:center; border-radius:10px; border:1px solid var(--ds-line-2); background:var(--st-panel); color:var(--ds-ink-2); transition:color .2s, border-color .2s; }
+.st-mandos button:hover{ color:var(--ds-ink); border-color:var(--ds-ink-2); }
+.st-mandos svg{ width:18px; height:18px; }
+.st-arr{ position:absolute; z-index:1; right:78px; top:26px; margin:0; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); pointer-events:none; }
+.st-barra{ grid-area:barra; position:relative; z-index:1; padding:12px 16px; display:grid; gap:10px; }
+.st-fila{ display:flex; align-items:center; gap:14px; min-width:0; }
+.st-fila > .st-et{ margin:0; flex:0 0 96px; }
+.st-mods, .st-areas{ display:flex; gap:6px; min-width:0; overflow-x:auto; scrollbar-width:none; }
+.st-mods::-webkit-scrollbar, .st-areas::-webkit-scrollbar{ display:none; }
+.st-mod{ display:flex; flex-direction:column; align-items:center; gap:6px; padding:6px 8px 4px; min-width:84px; background:none; border:0; color:var(--ds-ink-2); font-size:11.5px; letter-spacing:.01em; border-radius:10px; }
+.st-mod i{ width:34px; height:34px; border-radius:50%; box-shadow:0 0 0 1px var(--ds-line-2), 0 6px 14px -6px rgba(0,0,0,.6); transition:box-shadow .2s, transform .2s; }
+.st-mod:hover i{ transform:translateY(-2px); }
+.st-mod[aria-pressed="true"]{ color:var(--ds-ink); }
+.st-mod[aria-pressed="true"] i{ box-shadow:0 0 0 2px var(--ds-bg), 0 0 0 3.5px var(--ds-accent); }
+.st-mod--finance i{ background:radial-gradient(circle at 34% 28%, #dfe8ff 0 6%, #7ea2ff 26%, #2f55d6 56%, #101c52 92%); }
+.st-mod--os i{ background:radial-gradient(circle at 34% 28%, #ffffff 0 6%, #d4d8de 26%, #8c929c 60%, #3a3e45 94%); }
+.st-mod--ia i{ background:radial-gradient(circle at 50% 55%, #9fc0ff 0 12%, #3c6bff 30%, rgba(20,40,120,.9) 62%, #0a1440 94%); }
+.st-mod--auto i{ background:repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 1px, transparent 1px 3px), radial-gradient(circle at 34% 28%, #f4f5f7 0 6%, #a7adb6 30%, #555a62 70%, #24272c 96%); }
+.st-mod--integ i{ background:radial-gradient(circle at 34% 28%, #6a6d74 0 6%, #2a2c30 34%, #111214 70%, #050506 96%); }
+.st-mod--web i{ background:linear-gradient(180deg, #e9ecf2 0 22%, #2b3040 22% 100%); }
+.st-area{ padding:7px 10px; background:none; border:0; border-bottom:1.5px solid transparent; color:var(--ds-ink-2); font-family:var(--ds-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; border-radius:0; }
+.st-area::before{ content:""; display:inline-block; width:6px; height:6px; margin-right:8px; border-radius:50%; background:var(--k); vertical-align:1px; }
+.st-area:hover{ color:var(--ds-ink); }
+.st-area[aria-pressed="true"]{ color:var(--ds-ink); border-bottom-color:var(--ds-accent); }
+.st-cta{ margin-left:auto; flex:0 0 auto; }
+.st-cta i{ font-style:normal; margin-left:4px; }
+.st button:focus-visible, .st a:focus-visible{ outline:2px solid var(--ds-accent); outline-offset:2px; }
+@media (max-width:1023px){
+  .st{ height:auto; max-height:none; min-height:0; grid-template-columns:minmax(0,1fr); grid-template-rows:none; grid-template-areas:"lede" "escena" "barra" "info"; padding:12px; }
+  .st-lienzo{ height:min(86vw, 520px); }
+  .st-mandos, .st-arr{ display:none; }
+  .st-fila{ flex-wrap:wrap; gap:8px; }
+  .st-fila > .st-et{ flex:0 0 100%; }
+  .st-mods, .st-areas{ flex:0 0 100%; }
+  .st-cta{ margin-left:0; }
+  html[data-theme] body.esc-portada .st .v6-lede h1{ font-size:clamp(2.1rem, 8.4vw, 3rem); }
+}
+
+/* ---------------------------------------------------------- LOS NUEVE PASOS
+   La misma pieza, fija a un lado, cambia de estado con cada paso que pasa
+   por delante al hacer scroll. */
+.sx{ display:grid; grid-template-columns:minmax(0, .7fr) minmax(0, 1.3fr); gap:clamp(24px, 4vw, 64px); margin-top:clamp(28px, 4vw, 56px); }
+.sx-escena{ grid-column:2; grid-row:1; position:sticky; top:calc(var(--hdr-h, 72px) + 16px); height:calc(100vh - var(--hdr-h, 72px) - 48px); max-height:860px; border:1px solid var(--ds-line); border-radius:20px; overflow:hidden; }
+.sx-lienzo{ position:absolute; inset:0; background:no-repeat 50% 50% / cover; }
+.sx-nota{ position:absolute; left:18px; bottom:14px; margin:0; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
+.sx-pasos{ grid-column:1; grid-row:1; list-style:none; margin:0; padding:18vh 0 26vh; }
+.sx-paso{ min-height:64vh; display:flex; flex-direction:column; justify-content:center; opacity:.22; transition:opacity .5s var(--ds-ease); }
+.sx-paso.is-on{ opacity:1; }
+.sx-n{ font-family:var(--ds-mono); font-size:12px; letter-spacing:.16em; color:var(--ds-accent); }
+.sx-n i{ font-style:normal; color:var(--ds-ink-3); }
+.sx-paso h3{ margin:12px 0 14px; font-size:clamp(2.1rem, 3.6vw, 3.4rem); line-height:1; letter-spacing:-.045em; font-weight:560; color:var(--ds-ink); }
+.sx-paso p{ margin:0; max-width:34ch; font-size:clamp(1.05rem, 1.3vw, 1.25rem); line-height:1.55; color:var(--ds-ink-2); }
+html.sin-js .sx-paso, .sx:not(.is-vivo) .sx-paso{ opacity:1; }
+@media (max-width:900px){
+  .sx{ grid-template-columns:minmax(0,1fr); gap:0; }
+  .sx-escena{ grid-column:1; top:calc(var(--hdr-h, 64px) + 8px); height:46vh; z-index:2; margin-inline:calc(var(--ds-gut) * -.5); }
+  .sx-pasos{ grid-row:2; padding:6vh 0 30vh; }
+  .sx-paso{ min-height:52vh; justify-content:center; }
+  .sx-escena{ height:42vh; }
+}
+
 /* Interiores: la escena de la página a la derecha del titular. */
 .esc-hero{ position:absolute; z-index:0; top:0; right:0; bottom:0; width:min(46%, 880px); }
-@media (max-width:900px){
-  html[data-theme] body.esc-portada .v6-hero{ flex-direction:column; align-items:stretch; padding-top:0; }
-  html[data-theme] body.esc-portada .v6-lede{ max-width:none; }
-  .esc-heroe{ position:relative; width:auto; height:min(92vw, 520px); margin:8px calc(var(--ds-gut) * -1) 0; }
-  .esc-hero{ position:relative; order:2; width:auto; height:min(80vw, 460px); margin:24px calc(var(--ds-gut) * -1) 0; }
-  .esc-banda{ height:clamp(260px, 70vw, 420px); }
-}
-/* Capítulo «Ocho áreas»: la escena del sistema y la lista de sus áreas. */
-.ds-areas-tx{ max-width:760px; }
-.ds-areas-l{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); border-top:1px solid var(--ds-line); }
-.ds-areas-l a, .ds-areas-l a *{ text-decoration:none !important; }
-.ds-areas-l a{ display:block; height:100%; padding:20px 20px 22px 0; border-bottom:1px solid var(--ds-line); text-decoration:none; color:var(--ds-ink); transition:color .25s; }
-.ds-areas-l li + li a{ padding-left:20px; border-left:1px solid var(--ds-line); }
-.ds-areas-l li:nth-child(4n+1) a{ padding-left:0; border-left:0; }
-.ds-areas-l b{ display:flex; align-items:center; gap:10px; font-weight:580; letter-spacing:-.02em; font-size:18px; }
-.ds-areas-l b::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--k); box-shadow:0 0 12px var(--k); }
-.ds-areas-l span{ display:block; margin-top:8px; color:var(--ds-ink-2); font-size:14.5px; line-height:1.5; }
-.ds-areas-l a:hover b{ color:var(--ds-accent); }
-@media (max-width:900px){ .ds-areas-l{ grid-template-columns:repeat(2, minmax(0,1fr)); } .ds-areas-l li:nth-child(odd) a{ padding-left:0; border-left:0; } .ds-areas-l li:nth-child(even) a{ padding-left:16px; border-left:1px solid var(--ds-line); } }
+@media (max-width:900px){ .esc-hero{ position:relative; order:2; width:auto; height:min(80vw, 460px); margin:24px calc(var(--ds-gut) * -1) 0; } }
+
+/* Precios: qué es cada cosa. */
+.pr-mapa{ display:grid; grid-template-columns:1fr 1fr 1.4fr; gap:14px; margin-top:28px; }
+.pr-mapa-p, .pr-mapa-s{ display:flex; flex-direction:column; gap:8px; padding:22px; border-radius:var(--r-card); border:1px solid var(--ds-line-2); text-decoration:none; color:var(--ds-ink); }
+.pr-mapa em, .pr-lleva span{ font-style:normal; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-accent); }
+.pr-mapa-p b{ font-size:24px; letter-spacing:-.03em; font-weight:600; }
+.pr-mapa-p span{ color:var(--ds-ink-2); line-height:1.55; }
+.pr-mapa-p:hover{ border-color:var(--ds-ink); }
+.pr-mapa-s ul{ list-style:none; margin:0; padding:0; display:grid; gap:2px; }
+.pr-mapa-s a{ display:grid; grid-template-columns:150px 1fr; gap:12px; padding:8px 0; border-top:1px solid var(--ds-line); text-decoration:none; color:var(--ds-ink); font-size:14.5px; }
+.pr-mapa-s a span{ color:var(--ds-ink-2); }
+.pr-mapa-s a:hover b{ color:var(--ds-accent); }
+.pr-mapa-n{ margin-top:16px; color:var(--ds-ink-3); font-size:14px; }
+.pr-lleva{ margin:10px 0 0; font-size:13.5px; line-height:1.6; }
+.pr-lleva span{ margin-right:6px; }
+@media (max-width:900px){ .pr-mapa{ grid-template-columns:1fr; } .pr-mapa-s a{ grid-template-columns:1fr; gap:2px; } }
+
 /* Secciones de la portada: sobre el fondo, sin velos ni cristal. */
 html[data-theme] body.esc-portada .v6-block, html[data-theme] body.esc-portada .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
 html[data-theme] body.esc-portada .v6-step h2{ font-size:clamp(2.4rem, 5vw, 4.6rem); letter-spacing:-.045em; }
 html[data-theme] body.esc-portada .v6-step-n{ font-family:var(--ds-mono) !important; -webkit-text-stroke:0 !important; color:var(--ds-ink-3) !important; font-size:12px !important; letter-spacing:.16em; background:none !important; }
 html[data-theme] body.esc-portada .v6-step-n::before{ content:"FASE "; }
 html[data-theme] body.esc-portada #sistemas, html[data-theme] body.esc-portada #dcode-os{ background:var(--ds-bg-2) !important; border-block:1px solid var(--ds-line); }
-/* Pósters: un fotograma real de cada escena, por tema. Pintan al instante
-   y se quedan si no hay WebGL; el lienzo vivo los sustituye. Las bandas lo
-   piden solo al acercarse (.cerca), así no se descargan de entrada. */
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/sistema-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/sistema-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"][data-modo="firma"]{ background-image:url("/assets/img/escenas/poster/sistema-firma-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="sistema"][data-modo="firma"]{ background-image:url("/assets/img/escenas/poster/sistema-firma-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="web"]{ background-image:url("/assets/img/escenas/poster/software-web-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="web"]{ background-image:url("/assets/img/escenas/poster/software-web-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="medida"]{ background-image:url("/assets/img/escenas/poster/software-medida-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="medida"]{ background-image:url("/assets/img/escenas/poster/software-medida-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="finance"]{ background-image:url("/assets/img/escenas/poster/software-finance-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="software"][data-modo="finance"]{ background-image:url("/assets/img/escenas/poster/software-finance-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"][data-modo="casos"]{ background-image:url("/assets/img/escenas/poster/metodo-casos-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"][data-modo="casos"]{ background-image:url("/assets/img/escenas/poster/metodo-casos-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"][data-modo="puente"]{ background-image:url("/assets/img/escenas/poster/integracion-puente-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"][data-modo="puente"]{ background-image:url("/assets/img/escenas/poster/integracion-puente-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="ia"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/ia-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="ia"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/ia-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="automatizacion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/automatizacion-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="automatizacion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/automatizacion-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="soporte"]{ background-image:url("/assets/img/escenas/poster/departamento-soporte-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="soporte"]{ background-image:url("/assets/img/escenas/poster/departamento-soporte-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="produccion"]{ background-image:url("/assets/img/escenas/poster/departamento-produccion-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="produccion"]{ background-image:url("/assets/img/escenas/poster/departamento-produccion-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="marketing"]{ background-image:url("/assets/img/escenas/poster/departamento-marketing-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="marketing"]{ background-image:url("/assets/img/escenas/poster/departamento-marketing-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="finanzas"]{ background-image:url("/assets/img/escenas/poster/departamento-finanzas-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="finanzas"]{ background-image:url("/assets/img/escenas/poster/departamento-finanzas-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="direccion"]{ background-image:url("/assets/img/escenas/poster/departamento-direccion-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="direccion"]{ background-image:url("/assets/img/escenas/poster/departamento-direccion-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="comercial"]{ background-image:url("/assets/img/escenas/poster/departamento-comercial-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="comercial"]{ background-image:url("/assets/img/escenas/poster/departamento-comercial-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="clientes"]{ background-image:url("/assets/img/escenas/poster/departamento-clientes-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="clientes"]{ background-image:url("/assets/img/escenas/poster/departamento-clientes-claro.webp"); }
-html[data-theme="dark"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="administracion"]{ background-image:url("/assets/img/escenas/poster/departamento-administracion-oscuro.webp"); }
-html[data-theme="light"] :is(.esc-heroe, .esc-hero)[data-escena="departamento"][data-modo="administracion"]{ background-image:url("/assets/img/escenas/poster/departamento-administracion-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="metodo"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/metodo-banda-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="integracion"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/integracion-banda-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="datos"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/datos-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="datos"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/datos-banda-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="software"][data-modo="lab"]{ background-image:url("/assets/img/escenas/poster/software-lab-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="software"][data-modo="lab"]{ background-image:url("/assets/img/escenas/poster/software-lab-banda-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="precios"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/precios-banda-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="contacto"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/contacto-banda-claro.webp"); }
-html[data-theme="dark"] .esc-banda.cerca[data-escena="departamento"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/departamento-banda-oscuro.webp"); }
-html[data-theme="light"] .esc-banda.cerca[data-escena="departamento"]:not([data-modo]){ background-image:url("/assets/img/escenas/poster/departamento-banda-claro.webp"); }
-
+/* PÓSTERES: un fotograma real de la escena, por modo y tema. Pintan al
+   instante, quedan si no hay WebGL y el lienzo vivo los sustituye. */
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="administracion"]{ background-image:url("/assets/img/escenas/poster/sistema-administracion-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="administracion"]{ background-image:url("/assets/img/escenas/poster/sistema-administracion-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="auto"]{ background-image:url("/assets/img/escenas/poster/sistema-auto-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="auto"]{ background-image:url("/assets/img/escenas/poster/sistema-auto-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="casos"]{ background-image:url("/assets/img/escenas/poster/sistema-casos-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="casos"]{ background-image:url("/assets/img/escenas/poster/sistema-casos-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="clientes"]{ background-image:url("/assets/img/escenas/poster/sistema-clientes-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="clientes"]{ background-image:url("/assets/img/escenas/poster/sistema-clientes-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="comercial"]{ background-image:url("/assets/img/escenas/poster/sistema-comercial-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="comercial"]{ background-image:url("/assets/img/escenas/poster/sistema-comercial-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="direccion"]{ background-image:url("/assets/img/escenas/poster/sistema-direccion-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="direccion"]{ background-image:url("/assets/img/escenas/poster/sistema-direccion-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="finance"]{ background-image:url("/assets/img/escenas/poster/sistema-finance-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="finance"]{ background-image:url("/assets/img/escenas/poster/sistema-finance-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="finanzas"]{ background-image:url("/assets/img/escenas/poster/sistema-finanzas-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="finanzas"]{ background-image:url("/assets/img/escenas/poster/sistema-finanzas-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="ia"]{ background-image:url("/assets/img/escenas/poster/sistema-ia-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="ia"]{ background-image:url("/assets/img/escenas/poster/sistema-ia-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="integ"]{ background-image:url("/assets/img/escenas/poster/sistema-integ-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="integ"]{ background-image:url("/assets/img/escenas/poster/sistema-integ-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="marketing"]{ background-image:url("/assets/img/escenas/poster/sistema-marketing-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="marketing"]{ background-image:url("/assets/img/escenas/poster/sistema-marketing-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="metodo"]{ background-image:url("/assets/img/escenas/poster/sistema-metodo-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="metodo"]{ background-image:url("/assets/img/escenas/poster/sistema-metodo-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="nucleo"]{ background-image:url("/assets/img/escenas/poster/sistema-nucleo-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="nucleo"]{ background-image:url("/assets/img/escenas/poster/sistema-nucleo-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="produccion"]{ background-image:url("/assets/img/escenas/poster/sistema-produccion-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="produccion"]{ background-image:url("/assets/img/escenas/poster/sistema-produccion-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="soporte"]{ background-image:url("/assets/img/escenas/poster/sistema-soporte-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="soporte"]{ background-image:url("/assets/img/escenas/poster/sistema-soporte-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="todo"]{ background-image:url("/assets/img/escenas/poster/sistema-todo-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="todo"]{ background-image:url("/assets/img/escenas/poster/sistema-todo-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="web"]{ background-image:url("/assets/img/escenas/poster/sistema-web-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="web"]{ background-image:url("/assets/img/escenas/poster/sistema-web-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="estudio"]{ background-image:url("/assets/img/escenas/poster/sistema-estudio-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="estudio"]{ background-image:url("/assets/img/escenas/poster/sistema-estudio-claro.webp"); }
+html[data-theme="dark"] .esc[data-escena="sistema"][data-modo="pasos"].cerca{ background-image:url("/assets/img/escenas/poster/sistema-pasos-oscuro.webp"); }
+html[data-theme="light"] .esc[data-escena="sistema"][data-modo="pasos"].cerca{ background-image:url("/assets/img/escenas/poster/sistema-pasos-claro.webp"); }
 /* ------------------------------------------------------------ MOVIMIENTO */
 @media (prefers-reduced-motion: reduce){
   html[data-theme] #site-header.ds-oculta{ transform:none; }
@@ -433,11 +521,11 @@ html:root[data-theme="light"] body .cta-band a.btn-ghost{ color:#eeebe5 !importa
 html:root[data-theme="light"] body :is(.dx, .v6-of, .window, .rcard, .board) a.btn-ghost{ color:#ece9e3 !important; border-color:rgba(236,233,227,.26) !important; }
 
 /* Revestimiento de grafito: estas cajas traen el azul marino como literal. */
-html:root[data-theme] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
-html:root[data-theme] body :is(.dx-area, .arq-area, .gal-tab){ background:rgba(255,255,255,.035) !important; }
-html:root[data-theme] body :is(.dx-area[aria-pressed="true"], .gal-tab[aria-selected="true"], .gal-tab.is-on){ background:rgba(255,255,255,.09) !important; }
-html:root[data-theme] body :is(.os-app, .oss, .os-capa){ --os-card:linear-gradient(180deg,#1f2024,#17181b); --os-s:#1b1c20; --os-s2:#1f2024; --os-b2:#393a40; --os-sombra:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55); }
-html:root[data-theme] body .oss{ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
+html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
+html:root[data-theme="light"] body :is(.dx-area, .arq-area, .gal-tab){ background:rgba(255,255,255,.035) !important; }
+html:root[data-theme="light"] body :is(.dx-area[aria-pressed="true"], .gal-tab[aria-selected="true"], .gal-tab.is-on){ background:rgba(255,255,255,.09) !important; }
+html:root[data-theme="light"] body :is(.os-app, .oss, .os-capa){ --os-card:linear-gradient(180deg,#1f2024,#17181b); --os-s:#1b1c20; --os-s2:#1f2024; --os-b2:#393a40; --os-sombra:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55); }
+html:root[data-theme="light"] body .oss{ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
 
 /* Fondo de página: la luz de laboratorio llega hasta el lienzo del html
    (tema-claro lo pintaba azulado). */
@@ -471,3 +559,4 @@ html:root[data-theme="light"] body #site-header{ background:rgba(238,235,229,.86
 html:root[data-theme="dark"] body #site-header{ background:rgba(7,8,10,.82) !important; }
 /* El índice lateral de producción solo donde hay margen para él. */
 @media (max-width:1599px){ html[data-theme] .dcx{ display:none !important; } }
+.st-info-l[hidden]{ display:none !important; }

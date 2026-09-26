@@ -943,7 +943,7 @@
         "auto-1"
       ],
       "es": {
-        "nombre": "Empezar",
+        "nombre": "Pack Finance + automatizaciones",
         "para": "Primera vez que se ordena algo",
         "que": "El sistema financiero en marcha y las dos tareas que más se repiten, automatizadas.",
         "incluye": [
@@ -960,7 +960,7 @@
         "ahorro": "Ahorras 180 €"
       },
       "en": {
-        "nombre": "Start",
+        "nombre": "Finance + automations pack",
         "para": "First time putting things in order",
         "que": "The financial system running and the two most repeated tasks automated.",
         "incluye": [
@@ -991,7 +991,7 @@
         "agente-1"
       ],
       "es": {
-        "nombre": "Operar",
+        "nombre": "Pack Finance con inteligencia + agente",
         "para": "Empresas que ya venden y se les acumula el trabajo",
         "que": "Finance con inteligencia, un proceso entero automatizado y un agente atendiendo.",
         "incluye": [
@@ -1008,7 +1008,7 @@
         "ahorro": "Ahorras 350 € y 20 €/mes"
       },
       "en": {
-        "nombre": "Operate",
+        "nombre": "Finance with intelligence + agent pack",
         "para": "Companies already selling, with work piling up",
         "que": "Finance with intelligence, a whole process automated and an agent answering.",
         "incluye": [
@@ -1041,7 +1041,7 @@
         "integra-2"
       ],
       "es": {
-        "nombre": "Sistema completo",
+        "nombre": "Pack D-Code OS completo",
         "para": "Empresas con varios sistemas y varias personas",
         "que": "La capa que lo conecta todo, el sistema financiero, la automatización con IA, el agente multicanal y la conexión con lo que ya tienes.",
         "incluye": [
@@ -1060,7 +1060,7 @@
         "ahorro": "Ahorras 1.790 € y 69 €/mes"
       },
       "en": {
-        "nombre": "Whole system",
+        "nombre": "Complete D-Code OS pack",
         "para": "Companies with several systems and several people",
         "que": "The layer that connects everything, the financial system, AI automation, the multichannel agent and the connection with what you already have.",
         "incluye": [

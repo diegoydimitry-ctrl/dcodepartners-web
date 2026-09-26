@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-26T20:59:10.996Z",
+  "generatedAt": "2026-09-26T22:07:21.406Z",
   "pageCount": 66,
-  "chunkCount": 634,
+  "chunkCount": 636,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -1950,57 +1950,57 @@
         {
           "id": "/en/#c1",
           "heading": "You are not short of tools.They just don’t talk to each other.",
-          "text": "We look at how you actually work —who does what, with which tool, and how many times— and build the system that joins it up. Four of them are running below, with made-up data. Try a system What is it costing you today? Take the diagnostic → Our own software, not resold licences The systems we show you are the ones we run inside Scope, timeline and price in writing before anything starts What you are looking at A company before anyone tidied it MONTHLY INFLOW COLLECTED THIS MONTH €143,718.50 +18.4% vs. last month The problem"
+          "text": "We look at how you actually work —who does what, with which tool, and how many times— and build the system that joins it up. Four of them are running below, with made-up data. Try a system What is it costing you today? Take the diagnostic → Our own software, not resold licences The systems we show you are the ones we run inside Scope, timeline and price in writing before anything starts What you are looking at A company before anyone tidied it D-Code"
         },
         {
           "id": "/en/#c2",
+          "heading": "The D-Code system",
+          "text": "Six areas, one core and everything connected. Pick a module or an area and the piece shows you. Drag to rotate Modules Your company Let's talk › MONTHLY INFLOW COLLECTED THIS MONTH €143,718.50 +18.4% vs. last month The problem"
+        },
+        {
+          "id": "/en/#c3",
           "heading": "None of this is broken. It is just done by hand, again.",
           "text": "Seven things someone on your team will do today, and tomorrow, and next Tuesday. BY HAND WITH THE SYSTEM 01Copy the order from the email into the sheet6 times a day 02Paste the same data into the invoicing program6 times a day 03Search for whichever folder the contract ended up in4 times a day 04Answer the same question for the third time5 times a day 05Write down the job sheet to enter it later3 times a day 06Check whether the customer has missed a payment2 times a day 07Remember to call on Tuesday4 times a day What if none of them had to be done that way? With the system they are not done: they happen. Diagnostic · 30 seconds"
         },
         {
-          "id": "/en/#c3",
+          "id": "/en/#c4",
           "heading": "Where does your time go?",
           "text": "It is nearly always the same six areas: sales, clients, operations, finance, admin and marketing. The contact form narrows it down in five questions. D-Code diagnostic Where How much Cost Result The diagnostic needs JavaScript. If you prefer, tell us about it in a 30-minute call."
         },
         {
-          "id": "/en/#c4",
+          "id": "/en/#c5",
           "heading": "Where does most of your time go?",
           "text": "Pick one or more areas. Wherever something is done by hand, repeated, or depends on someone remembering. None selected"
         },
         {
-          "id": "/en/#c5",
+          "id": "/en/#c6",
           "heading": "How much time goes on it each week, across the team?",
           "text": "A rough guess is fine. Count the whole team together, not one person."
         },
         {
-          "id": "/en/#c6",
+          "id": "/en/#c7",
           "heading": "What does an hour of work cost your company?",
           "text": "Including employer costs. If you’re not sure, leave €25. What does an hour of work cost your company? What we do"
         },
         {
-          "id": "/en/#c7",
+          "id": "/en/#c8",
           "heading": "We don’t install tools. We build the system your company runs on.",
-          "text": "One place where clients, orders, jobs, invoices and documents live. Data goes in once and the work moves on its own: nobody copies anything between programs. Your company The system Measured Sales Excel Email Follow-ups that slip 9 a month Marketing Web Ads Unsorted contacts 3 places Customer WhatsApp Phone The same questions 6 h/week Operations Sheets Paper Data retyped by hand 4 times Finance Invoices Bank Payments that slip 38 days Administration Folders Email Which one is the latest? 3 copies AI Reads, sorts and suggests. Reads the email Sorts Suggests You decide One source of truth Your company’s system Customers Orders Jobs Invoices Documents Automations Quote accepted → job Job done → invoice Invoice overdue → reminder Management dashboard Hours by hand↓ Response time↓ Tasks with no owner↓ Days to get paid↓ This month’s tweak: stock alert Illustrative diagram · no client data 01 / 09 Your company Six areas, each with its own software and spreadsheets. None of them talk to each other. 01Your companySix areas, each with its own software and spreadsheets. None of them talk to each other. 02ProblemsWork gets lost between areas: data retyped by hand and forgotten follow-ups. 03AnalysisWe follow a customer, an order and an invoice, and measure where a person bridges the gap. 04DesignWe decide what the system does on its own and what a person still decides. 05ConnectionOne source of truth for every area: the same customer in sales, support and finance. 06AutomationWhat one area finishes triggers the next. Nothing typed twice. 07AIIt reads, sorts and drafts. What matters is decided by a person. 08MeasurementHours by hand, response times, tasks with no owner. Figures, not impressions. 09Continuous improvementEvery month the numbers get looked at and things get adjusted. What we don’t do Sell standalone tools that nobody ever connects. Install some software and disappear. Hand over a report and leave you alone with it. What we do We build the system around how you actually work. We connect the areas, automate, and add AI where it helps. We measure it and improve it with you, month after month. Try the systems"
+          "text": "One place where clients, orders, jobs, invoices and documents live. Data goes in once and the work moves on its own: nobody copies anything between programs. Illustrative diagram · no client data 01 / 09Your companySix areas, each with its own software and spreadsheets. None of them talk to each other. 02 / 09ProblemsWork gets lost between areas: data retyped by hand and forgotten follow-ups. 03 / 09AnalysisWe follow a customer, an order and an invoice, and measure where a person bridges the gap. 04 / 09DesignWe decide what the system does on its own and what a person still decides. 05 / 09ConnectionOne source of truth for every area: the same customer in sales, support and finance. 06 / 09AutomationWhat one area finishes triggers the next. Nothing typed twice. 07 / 09AIIt reads, sorts and drafts. What matters is decided by a person. 08 / 09MeasurementHours by hand, response times, tasks with no owner. Figures, not impressions. 09 / 09Continuous improvementEvery month the numbers get looked at and things get adjusted. What we don’t do Sell standalone tools that nobody ever connects. Install some software and disappear. Hand over a report and leave you alone with it. What we do We build the system around how you actually work. We connect the areas, automate, and add AI where it helps. We measure it and improve it with you, month after month. Try the systems"
         },
         {
-          "id": "/en/#c8",
+          "id": "/en/#c9",
           "heading": "Four systems, up and running.",
           "text": "With made-up data. They drive themselves; the moment you touch something, you take over. Finance is our own product; the other three, examples of what we build to measure. D-Code Finance — payments, invoices and due dates in one place — is our own product. Sales, Operations and Customer support are examples of what we build to order. The demos are the real applications, with made-up data. They are best seen on a computer or a tablet. D-Code FinanceYour money, in one placeGet paidOur product SalesFrom contact to saleSell OperationsFrom yes to job doneDeliver Customer serviceAnswers with your dataSupport 01TodayContacts arrive through four channels and follow-up depends on someone remembering. 02With the systemOne inbox: they get sorted, assigned, and followed up on their own. Loading the system… <p class=\"demo-aviso\">This demo needs JavaScript.</p> Example system · fictional company · made-up data. This is how it would work with yours. 01TodayA customer’s yes ends up in a WhatsApp and a spreadsheet. 02With the systemWork order, parts and schedule; the signed job sheet comes out as an invoice. Loading the system… <p class=\"demo-aviso\">This demo needs JavaScript.</p> Example system · fictional company · made-up data. This is how it would work with yours. 01TodayThe phone interrupts the technicians and the same questions arrive through three channels. 02With the systemIt answers with your data and hands the delicate ones to a person, summary ready. Loading the system… <p class=\"demo-aviso\">This demo needs JavaScript.</p> Example system · fictional company · made-up data. This is how it would work with yours. 01TodayThe money lives in the bank, in the invoicing software and in someone’s head. 02With the systemYou drop in the PDF, it files the invoices and flags what falls due. DEMO · made-up data This is not a screenshot: it is the application. It is using itself right now — touch it and you take over. The names and the amounts are made up; everything else is the real system. The application, at a glance"
         },
         {
-          "id": "/en/#c9",
+          "id": "/en/#c10",
           "heading": "Here you read it; to use it, a computer.",
           "text": "Twenty-five screens and eight-column tables look worse squeezed into a phone. We tell you about it here; you open it at a keyboard. The dashboardIt starts with a sentence saying what is going on, and the figures that hold it up underneath. You drop it a document and it files itA PDF with twenty invoices inside comes out as twenty invoices filed, each with its number and its supplier. You ask it in plain languageWho owes me, what is overdue, what should I look at today. It answers with the figure and the invoice it came from. Twenty-five screensInvoices, collections, expenses, treasury, projects, radar, tax register and the rest. See everything it does <p class=\"demo-aviso\">The demo needs JavaScript. Without it you can read what the system does on its own page.</p> Tax register Ready for VERI*FACTU Every invoice, recorded and chained from the moment it is issued. Submission to the AEAT is the next step. Where it stands Bank reconciliation Coming soon Your bank statement, matched against your invoices and expenses. It is the next piece. How it will work"
         },
         {
-          "id": "/en/#c10",
-          "heading": "From what you have today to asking your own numbers",
-          "text": "01The formWe send it to you and you fill it in. 02ValidationWe check it before touching anything. 03Up in 1 dayWith your earlier clients, invoices and expenses inside. You do not start empty. 04RunningIt issues, records and flags what falls due. We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the Finance plans Let’s talk about putting it in Eight areas, one system"
-        },
-        {
           "id": "/en/#c11",
-          "heading": "Every area of your company, connected to the same core.",
-          "text": "Each area keeps working the way it does; what changes is that they all talk to each other through the same layer. SalesNo sale lost to poor follow-up. MarketingA website that keeps bringing in opportunities. CustomerEvery client looked after, without depending on any one person. OperationsEvery job starts on its own and meets its deadline. FinanceGet paid sooner and see spend every day, not at month-end. SupportFast replies, even after hours. AdministrationYour company watched over, protected and in order. LeadershipOne clear decision every morning, backed by real data. D-Code OS · the operating layer"
+          "heading": "From what you have today to asking your own numbers",
+          "text": "01The formWe send it to you and you fill it in. 02ValidationWe check it before touching anything. 03Up in 1 dayWith your earlier clients, invoices and expenses inside. You do not start empty. 04RunningIt issues, records and flags what falls due. We send you a form. You fill it in and, once it is validated, your system is up and running in 1 day. With Finance, made to measure, we first design the solution with you; once you approve it, we do the rollout. See the Finance plans Let’s talk about putting it in D-Code OS · the operating layer"
         },
         {
           "id": "/en/#c12",
@@ -2099,8 +2099,8 @@
         },
         {
           "id": "/en/#c31",
-          "heading": "Three ways to start.",
-          "text": "D-Code Finance → Our own product The money in one place: invoices, payments, expenses and the tax register up to date. From €29/month plus €390 setup A system made to measure → What your team repeats every week —sales, operations, service— done by the system. From €1,500 depending on scope Agents and integrations → They answer with your data and connect what you already use, with minimum permissions. From €750 depending on scope Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts. Let us start"
+          "heading": "Two products and a system built to measure.",
+          "text": "D-Code Finance → Our own product The money in one place: invoices, payments, expenses and the tax register up to date. From €29/month plus €390 setup D-Code OS → The operating layer The layer that connects your systems: data is entered once. From €2 depending on how many systems A system made to measure → What your team repeats every week —sales, operations, service— done by the system. From €1,500 depending on scope Agents and integrations → They answer with your data and connect what you already use, with minimum permissions. From €750 depending on scope Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts. Let us start"
         },
         {
           "id": "/en/#c32",
@@ -2157,160 +2157,165 @@
         {
           "id": "/en/precios#c0",
           "heading": "This is what we do. And this is what it costs.",
-          "text": "No hidden rates and no \"ask us\" on everything. What has a price shows it; what depends on your company says so. Prices exclude VAT. Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts. 1You choose 2You request it 3We configure it with you 4We roll it out 1You choose 2You pay 3It activates 4It configures 5Up and running There is no online checkout yet. You ask for it, we configure it with you and we roll it out. Direct purchase is coming; when it does, it will say so here."
+          "text": "No hidden rates and no \"ask us\" on everything. What has a price shows it; what depends on your company says so. Prices exclude VAT. Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts."
         },
         {
           "id": "/en/precios#c1",
+          "heading": "Two products of our own and the services that connect them to your company.",
+          "text": "Our own product D-Code Finance Your company's financial system, on your own data. The operating layer D-Code OS The layer that connects your systems: data is entered once. Services AutomationsWhat is done by hand every week, running on its own. AI agentsThey answer, qualify and reply with your business data. IntegrationsYour tools talking to each other, with minimum permissions. WebsitesYour site built, rebuilt or connected to what you already use. Custom systemsThe system your company needs and cannot buy off the shelf. Packs are combinations of these pieces, priced for taking them together. 1You choose 2You request it 3We configure it with you 4We roll it out 1You choose 2You pay 3It activates 4It configures 5Up and running There is no online checkout yet. You ask for it, we configure it with you and we roll it out. Direct purchase is coming; when it does, it will say so here."
+        },
+        {
+          "id": "/en/precios#c2",
           "heading": "Several pieces together cost less than separately. And you decide once, not five times.",
           "text": "Available today"
         },
         {
-          "id": "/en/precios#c2",
-          "heading": "Start",
-          "text": "First time putting things in order The financial system running and the two most repeated tasks automated. €990 setup + €29 per month You save €180Separately it would be €1,170 Diagnosis Finance rolled out, with your data inside Two automations of your choice 30 days of support I want this bundle Available today"
-        },
-        {
           "id": "/en/precios#c3",
-          "heading": "Operate",
-          "text": "Companies already selling, with work piling up Finance with intelligence, a whole process automated and an agent answering. €2,290 setup + €149 per month You save €350 and €20/monthSeparately it would be €2,640 + €169/month Finance with intelligence, up to 10 people A pack of 3 to 5 automations One single-channel AI agent Training and 30 days of support I want this bundle Scoped and quoted"
+          "heading": "Finance + automations pack",
+          "text": "First time putting things in order The financial system running and the two most repeated tasks automated. Includes Finance + 2 × One automation €990 setup + €29 per month You save €180Separately it would be €1,170 Diagnosis Finance rolled out, with your data inside Two automations of your choice 30 days of support I want this bundle Available today"
         },
         {
           "id": "/en/precios#c4",
-          "heading": "Whole system",
-          "text": "Companies with several systems and several people The layer that connects everything, the financial system, AI automation, the multichannel agent and the connection with what you already have. From €6,900 setup + From €390 per month You save €1,790 and €69/monthSeparately it would be €8,690 + €459/month D-Code OS rolled out Finance with intelligence AI automation Multichannel agent Connection with your ERP or in-house system Training and handover I want this bundle"
+          "heading": "Finance with intelligence + agent pack",
+          "text": "Companies already selling, with work piling up Finance with intelligence, a whole process automated and an agent answering. Includes Finance with intelligence + Automation pack + Single-channel agent €2,290 setup + €149 per month You save €350 and €20/monthSeparately it would be €2,640 + €169/month Finance with intelligence, up to 10 people A pack of 3 to 5 automations One single-channel AI agent Training and 30 days of support I want this bundle Scoped and quoted"
         },
         {
           "id": "/en/precios#c5",
+          "heading": "Complete D-Code OS pack",
+          "text": "Companies with several systems and several people The layer that connects everything, the financial system, AI automation, the multichannel agent and the connection with what you already have. Includes D-Code OS + Finance with intelligence + AI automation + Multichannel agent + Connect your ERP or in-house system From €6,900 setup + From €390 per month You save €1,790 and €69/monthSeparately it would be €8,690 + €459/month D-Code OS rolled out Finance with intelligence AI automation Multichannel agent Connection with your ERP or in-house system Training and handover I want this bundle"
+        },
+        {
+          "id": "/en/precios#c6",
           "heading": "Each thing, what it is and what it costs.",
           "text": "Filter My sector What I need Nothing matches that filter. Try another one, or tell us and we will look into it."
         },
         {
-          "id": "/en/precios#c6",
+          "id": "/en/precios#c7",
           "heading": "D-Code Finance",
           "text": "Your company's financial system, on your own data. Available today"
         },
         {
-          "id": "/en/precios#c7",
+          "id": "/en/precios#c8",
           "heading": "Finance",
           "text": "Companies with up to 3 people in admin The financial system on your own data, with its standard configuration. €390 setup + €29 per month · up to 3 people What it includes Day to day: invoices, payments, to-invoice, expenses, duplicates and documents The business: quotes, orders, delivery notes, customers, suppliers and projects Cash flow week by week and at 30, 60 and 90 days Radar: seven rules with their written threshold VAT books in CSV for your accountant Live in 1 day, with your previous data inside Not included: Fields or flows specific to your business. Connections with other tools. Request activation Available today"
         },
         {
-          "id": "/en/precios#c8",
+          "id": "/en/precios#c9",
           "heading": "Finance with intelligence",
           "text": "Companies with up to 10 people and document volume All of the above plus something that reads your documents and answers with your numbers. €690 setup + €79 per month · up to 10 people What it includes Everything in Finance Supplier invoice reading: drop them in and they post themselves Questions in plain language about your own numbers Up to 10 people Not included: Connections with other tools. Request activation Scoped and quoted"
         },
         {
-          "id": "/en/precios#c9",
+          "id": "/en/precios#c10",
           "heading": "Finance, tailored",
           "text": "Companies with their own way of working The financial system with your fields, your flows and your connections. From €1,500 depending on scope + From €190 per month · no limit on people What it includes Everything above Fields and flows specific to your business Connections with the tools you already use No limit on people Talk about this Available today"
         },
         {
-          "id": "/en/precios#c10",
+          "id": "/en/precios#c11",
           "heading": "Extra person",
           "text": "When the team grows within the plan One more person inside your Finance, with their role and permissions. €9 per month per person What it includes Their user, role and permissions per module and per action Request activation"
         },
         {
-          "id": "/en/precios#c11",
+          "id": "/en/precios#c12",
           "heading": "D-Code OS",
           "text": "The layer that connects your systems: data is entered once. Scoped and quoted"
         },
         {
-          "id": "/en/precios#c12",
+          "id": "/en/precios#c13",
           "heading": "D-Code OS",
           "text": "Companies with several systems that don't talk to each other The layer that connects your company's systems: data is entered once, work moves on its own and everything is traced. From €2,900 setup, depending on how many systems + From €190 per month for operation and support What it includes The map of your systems and where each piece of data goes Activity as it happens, with its trail What the AI does alone is logged; what matters waits for a person Rollout and training for your team Not included: The systems it connects, contracted separately. Today it is rolled out case by case. Buying it as a closed plan is coming; when it does, it will say so here. Talk about this"
         },
         {
-          "id": "/en/precios#c13",
+          "id": "/en/precios#c14",
           "heading": "Automations",
           "text": "What is done by hand every week, running on its own. Available today"
         },
         {
-          "id": "/en/precios#c14",
+          "id": "/en/precios#c15",
           "heading": "One automation",
           "text": "One specific task that repeats every week A task a person does by hand today, running on its own and warning you if something fails. From €390 one-off, no lock-in What it includes Analysis of the task and its exceptions The flow built and tested with real data Error handling and an alert when something goes wrong Documentation and 30 days of support Request activation Available today"
         },
         {
-          "id": "/en/precios#c15",
+          "id": "/en/precios#c16",
           "heading": "Automation pack",
           "text": "A whole process, not one task Three to five automations chained together: what one finishes triggers the next. From €1,200 one-off, depending on scope What it includes 3 to 5 flows in production Connection with the tools you already use Error handling and monitoring Training for two people and documentation 30 days of support Request activation Available today"
         },
         {
-          "id": "/en/precios#c16",
+          "id": "/en/precios#c17",
           "heading": "AI automation",
           "text": "Work that today requires reading, understanding and deciding Documents that read themselves, text that is classified and decisions that are proposed; what matters waits for a person. From €2,400 one-off, depending on scope What it includes Document reading (invoices, work orders, emails) Classification and data extraction What the AI decides is logged and reviewable Approval points wherever you say AI usage is billed at cost, separately and itemised. Request activation Available today"
         },
         {
-          "id": "/en/precios#c17",
+          "id": "/en/precios#c18",
           "heading": "Maintenance",
           "text": "When what is built has to keep working Watching over what is running, fixes when a tool changes and small adjustments. From €150 per month, optional, no lock-in What it includes Monitoring and an alert if something stops Fixes when a tool changes its API Small adjustments within scope Request activation"
         },
         {
-          "id": "/en/precios#c18",
+          "id": "/en/precios#c19",
           "heading": "AI agents",
           "text": "They answer, qualify and reply with your business data. Available today"
         },
         {
-          "id": "/en/precios#c19",
+          "id": "/en/precios#c20",
           "heading": "Single-channel agent",
           "text": "Anyone who gets the same questions through one place It answers, understands and replies with your business data; it escalates to a person when needed. From €750 setup + From €90 per month for operation What it includes One channel: web, WhatsApp or phone Answers from your data, not made up Escalation to a person with the whole context A log of everything it answers Usage (messages, minutes, model) is billed at cost, separately and itemised. Request activation Available today"
         },
         {
-          "id": "/en/precios#c20",
+          "id": "/en/precios#c21",
           "heading": "Multichannel agent",
           "text": "Anyone answering through several places at once The same agent across channels, with the whole conversation and connected to your systems. From €1,500 setup + From €190 per month for operation What it includes Several channels at once Connected to your systems: it creates, reads and updates Qualification and routing A panel with what it answers and what it escalates Usage (messages, minutes, model) is billed at cost, separately and itemised. Request activation"
         },
         {
-          "id": "/en/precios#c21",
+          "id": "/en/precios#c22",
           "heading": "Websites",
           "text": "Your site built, rebuilt or connected to what you already use. Available today"
         },
         {
-          "id": "/en/precios#c22",
+          "id": "/en/precios#c23",
           "heading": "A new website",
           "text": "Anyone with no site, or with one they would rather not show Design, copy, speed and looking right on a phone. Yours, not a template with your logo on it. From €1,200 one-off, depending on how many pages What it includes Its own design, not a bought template Copy written with you, not filler Genuinely fast and right on a phone Analytics and a cookie notice that follows the law Access and the domain, in your name Not included: Content you would write yourself and never send us. Photography and video production. Request activation Available today"
         },
         {
-          "id": "/en/precios#c23",
+          "id": "/en/precios#c24",
           "heading": "Fix the one you have",
           "text": "Anyone with a site who does not want to start over What gets in the way is rebuilt and what is broken is fixed, without throwing away what works. From €690 one-off, depending on what is there What it includes A review of speed, mobile and accessibility A redesign of the pages that work worst Copy revised where it needs it Whatever already worked stays Request activation Available today"
         },
         {
-          "id": "/en/precios#c24",
+          "id": "/en/precios#c25",
           "heading": "Connect your site",
           "text": "Anyone whose site receives something a person then copies by hand The form lands in your CRM, the booking in the diary and stock comes from the warehouse. With a chatbot if you want one. From €890 one-off, depending on what it connects to What it includes The form lands where it should, already sorted Appointments, bookings or orders against your real system A chatbot answering from your data, if you want one Error handling: if something fails, you know Not included: The site itself, if it has to be built. Request activation"
         },
         {
-          "id": "/en/precios#c25",
+          "id": "/en/precios#c26",
           "heading": "Integrations",
           "text": "Your tools talking to each other, with minimum permissions. Available today"
         },
         {
-          "id": "/en/precios#c26",
+          "id": "/en/precios#c27",
           "heading": "Connect two tools",
           "text": "When the same data is typed twice Your two tools talking in whichever direction is needed, with minimum permissions. From €490 one-off What it includes Data is entered once and shows up where it should Minimum necessary permissions Error handling and retries Documentation Request activation Available today"
         },
         {
-          "id": "/en/precios#c27",
+          "id": "/en/precios#c28",
           "heading": "Connect your ERP or in-house system",
           "text": "Companies with a system that must not be touched Your ERP, your CRM or your long-standing system connected to the rest, without touching its insides. From €1,200 one-off, depending on the system What it includes Read and write through whatever your system supports Without modifying the existing system Error handling, retries and traceability Documentation and handover Request activation"
         },
         {
-          "id": "/en/precios#c28",
+          "id": "/en/precios#c29",
           "heading": "Custom systems",
           "text": "The system your company needs and cannot buy off the shelf. Available today"
         },
         {
-          "id": "/en/precios#c29",
+          "id": "/en/precios#c30",
           "heading": "Diagnosis",
           "text": "Any company that doesn't know where to start We follow the real path of a customer, an order and an invoice, and note every point where someone is acting as a bridge. Free and the list is yours, whether we build it or not What it includes Half an hour of call and a couple of hours from whoever does that work The written list of where time and money leak out What we would build, with what scope and where we would start Request activation Scoped and quoted"
         },
         {
-          "id": "/en/precios#c30",
+          "id": "/en/precios#c31",
           "heading": "Custom system",
           "text": "When what you need cannot be bought ready-made We build the system your company needs: analysis, design, development, automations, integrations and AI where it adds judgement. From €1,500 depending on scope + From €190 per month of maintenance, optional What it includes Analysis of the real path and where time leaks out Scope, deadline and price in writing before anything starts Development in parts, inside the tools you already use The system running, with documentation and access in your name Talk about this"
         },
         {
-          "id": "/en/precios#c31",
+          "id": "/en/precios#c32",
           "heading": "Five questions and we tell you what you would need and roughly what it would cost.",
           "text": "Open the configurator Questions before deciding? FAQ"
         }
@@ -2854,57 +2859,57 @@
         {
           "id": "/#c1",
           "heading": "No te faltan herramientas.Te falta que hablen entre ellas.",
-          "text": "Miramos cómo trabajáis de verdad —quién hace qué, con qué y cuántas veces— y construimos el sistema que lo une. Abajo hay cuatro funcionando, con datos inventados. Toca un sistema ¿Cuánto os cuesta hoy? Hazlo el diagnóstico → Software propio, no reventa de licencias Los sistemas que enseñamos los usamos dentro Alcance, plazo y precio por escrito antes de empezar Lo que estás viendo Una empresa antes de ordenarla ENTRADAS POR MES COBRADO ESTE MES 143.718,50 € +18,4 % vs. el mes anterior El problema"
+          "text": "Miramos cómo trabajáis de verdad —quién hace qué, con qué y cuántas veces— y construimos el sistema que lo une. Abajo hay cuatro funcionando, con datos inventados. Toca un sistema ¿Cuánto os cuesta hoy? Hazlo el diagnóstico → Software propio, no reventa de licencias Los sistemas que enseñamos los usamos dentro Alcance, plazo y precio por escrito antes de empezar Lo que estás viendo Una empresa antes de ordenarla D-Code"
         },
         {
           "id": "/#c2",
+          "heading": "El sistema D-Code",
+          "text": "Seis áreas, un núcleo y todo conectado. Elige un módulo o un área y la pieza te lo enseña. Arrastra para girar Módulos Tu empresa Hablemos › ENTRADAS POR MES COBRADO ESTE MES 143.718,50 € +18,4 % vs. el mes anterior El problema"
+        },
+        {
+          "id": "/#c3",
           "heading": "Nada de esto está roto. Solo se hace a mano, otra vez.",
           "text": "Siete cosas que alguien de tu equipo hará hoy, y mañana, y el martes que viene. A MANO CON EL SISTEMA 01Copiar el pedido del correo a la hoja6 veces al día 02Pegar los mismos datos en el programa de facturas6 veces al día 03Buscar en qué carpeta quedó el contrato4 veces al día 04Responder por tercera vez la misma pregunta5 veces al día 05Apuntar el parte del técnico para pasarlo luego3 veces al día 06Revisar si al cliente se le ha pasado el pago2 veces al día 07Recordar que hay que llamar el martes4 veces al día ¿Y si ninguna tuviera que hacerse así? Con el sistema no se hacen: pasan. Diagnóstico · 30 segundos"
         },
         {
-          "id": "/#c3",
+          "id": "/#c4",
           "heading": "¿Dónde se os va el tiempo?",
           "text": "Casi siempre son las mismas seis áreas: comercial, clientes, operaciones, finanzas, administración y marketing. En el formulario de contacto lo concretamos en cinco preguntas. Diagnóstico D-Code Dónde Cuánto Coste Resultado El diagnóstico necesita JavaScript. Si prefieres, cuéntanoslo en una llamada de 30 minutos."
         },
         {
-          "id": "/#c4",
+          "id": "/#c5",
           "heading": "¿Dónde se os va más tiempo?",
           "text": "Elige una o varias áreas. Donde algo se hace a mano, se repite o depende de que alguien se acuerde. Ninguna elegida"
         },
         {
-          "id": "/#c5",
+          "id": "/#c6",
           "heading": "¿Cuánto tiempo se os va a la semana, entre todos?",
           "text": "A ojo basta. Cuenta todo el equipo junto, no una persona."
         },
         {
-          "id": "/#c6",
+          "id": "/#c7",
           "heading": "¿Cuánto cuesta una hora de trabajo en tu empresa?",
           "text": "Con la seguridad social incluida. Si no lo sabes, deja 25 €. ¿Cuánto cuesta una hora de trabajo en tu empresa? Qué hacemos"
         },
         {
-          "id": "/#c7",
+          "id": "/#c8",
           "heading": "No instalamos herramientas. Construimos el sistema con el que funciona tu empresa.",
-          "text": "Un solo sitio donde viven clientes, pedidos, trabajos, facturas y documentos. El dato entra una vez y el trabajo se mueve solo: nadie copia nada entre programas. Tu empresa El sistema Medido Comercial Excel Correo Seguimientos que se olvidan 9 al mes Marketing Web Anuncios Contactos sin clasificar 3 sitios Clientes WhatsApp Teléfono Las mismas preguntas 6 h/sem Operaciones Hojas Papel Datos copiados a mano 4 veces Finanzas Facturas Banco Cobros que se escapan 38 días Administración Carpetas Correo ¿Cuál es la última versión? 3 copias IA Lee, clasifica y propone. Lee el correo Clasifica Propone Decides tú Un solo dato El sistema de tu empresa Clientes Pedidos Trabajos Facturas Documentos Automatizaciones Presupuesto aceptado → trabajo Trabajo hecho → factura Factura vencida → aviso Panel de dirección Horas a mano↓ Tiempo de respuesta↓ Tareas sin dueño↓ Días hasta cobrar↓ Ajuste del mes: aviso de stock Esquema ilustrativo · sin datos de clientes 01 / 09 Tu empresa Seis áreas, cada una con sus programas y sus hojas. Ninguna se habla con las demás. 01Tu empresaSeis áreas, cada una con sus programas y sus hojas. Ninguna se habla con las demás. 02ProblemasEl trabajo se pierde entre áreas: datos copiados a mano y seguimientos olvidados. 03AnálisisSeguimos un cliente, un pedido y una factura, y medimos dónde hace de puente una persona. 04DiseñoDecidimos qué hace el sistema solo y qué sigue decidiendo una persona. 05ConexiónUn solo dato para todas las áreas: el mismo cliente en ventas, soporte y finanzas. 06AutomatizaciónLo que termina un área dispara la siguiente. Sin teclear dos veces. 07IALee, clasifica y propone. Lo que importa lo decide una persona. 08MediciónHoras a mano, tiempos de respuesta, tareas sin dueño. Cifras, no impresiones. 09Mejora continuaCada mes se miran los números y se ajusta. Lo que no hacemos Vender herramientas sueltas que luego nadie conecta. Instalar un programa y desaparecer. Entregar un informe y dejarte solo con él. Lo que hacemos Construimos el sistema a la medida de cómo trabajáis. Conectamos las áreas, automatizamos y ponemos IA donde aporta. Lo medimos y lo mejoramos contigo, mes a mes. Prueba los sistemas"
+          "text": "Un solo sitio donde viven clientes, pedidos, trabajos, facturas y documentos. El dato entra una vez y el trabajo se mueve solo: nadie copia nada entre programas. Esquema ilustrativo · sin datos de clientes 01 / 09Tu empresaSeis áreas, cada una con sus programas y sus hojas. Ninguna se habla con las demás. 02 / 09ProblemasEl trabajo se pierde entre áreas: datos copiados a mano y seguimientos olvidados. 03 / 09AnálisisSeguimos un cliente, un pedido y una factura, y medimos dónde hace de puente una persona. 04 / 09DiseñoDecidimos qué hace el sistema solo y qué sigue decidiendo una persona. 05 / 09ConexiónUn solo dato para todas las áreas: el mismo cliente en ventas, soporte y finanzas. 06 / 09AutomatizaciónLo que termina un área dispara la siguiente. Sin teclear dos veces. 07 / 09IALee, clasifica y propone. Lo que importa lo decide una persona. 08 / 09MediciónHoras a mano, tiempos de respuesta, tareas sin dueño. Cifras, no impresiones. 09 / 09Mejora continuaCada mes se miran los números y se ajusta. Lo que no hacemos Vender herramientas sueltas que luego nadie conecta. Instalar un programa y desaparecer. Entregar un informe y dejarte solo con él. Lo que hacemos Construimos el sistema a la medida de cómo trabajáis. Conectamos las áreas, automatizamos y ponemos IA donde aporta. Lo medimos y lo mejoramos contigo, mes a mes. Prueba los sistemas"
         },
         {
-          "id": "/#c8",
+          "id": "/#c9",
           "heading": "Cuatro sistemas funcionando.",
           "text": "Con datos inventados. Se usan solos; en cuanto tocas algo, mandas tú. Finance es nuestro producto; los otros tres, ejemplos de lo que construimos a medida. D-Code Finance —cobros, facturas y vencimientos en un solo sitio— es nuestro producto. Comercial, Operaciones y Atención al cliente son ejemplos de lo que construimos a medida. Las demos son las aplicaciones de verdad, con datos inventados. Se ven en ordenador o en tableta. D-Code FinanceEl dinero, en un solo sitioCobrarProducto propio ComercialDel contacto a la ventaVender OperacionesDel sí al trabajo hechoHacer Atención al clienteContesta con tus datosAtender 01HoyLos contactos llegan por cuatro sitios y el seguimiento depende de que alguien se acuerde. 02Con el sistemaUna bandeja: se clasifican, se asignan y el seguimiento va solo. Cargando el sistema… <p class=\"demo-aviso\">Esta demo necesita JavaScript.</p> Sistema de ejemplo · empresa ficticia · datos inventados. Así funcionaría con los vuestros. 01HoyUn sí del cliente acaba en un WhatsApp y una hoja de cálculo. 02Con el sistemaOrden de trabajo, material y agenda; el parte firmado sale como factura. Cargando el sistema… <p class=\"demo-aviso\">Esta demo necesita JavaScript.</p> Sistema de ejemplo · empresa ficticia · datos inventados. Así funcionaría con los vuestros. 01HoyEl teléfono interrumpe a los técnicos y las mismas preguntas llegan por tres canales. 02Con el sistemaContesta con vuestros datos y pasa a una persona lo delicado, con el resumen hecho. Cargando el sistema… <p class=\"demo-aviso\">Esta demo necesita JavaScript.</p> Sistema de ejemplo · empresa ficticia · datos inventados. Así funcionaría con los vuestros. 01HoyEl dinero vive en el banco, en el programa de facturas y en la cabeza de alguien. 02Con el sistemaLe sueltas el PDF, da de alta las facturas y avisa de los vencimientos. DEMO · datos ficticios Esto no es una captura: es la aplicación. Se está usando sola ahora mismo — tócala y la llevas tú. Los nombres y los importes son inventados; todo lo demás es el sistema de verdad. La aplicación, en un vistazo"
         },
         {
-          "id": "/#c9",
+          "id": "/#c10",
           "heading": "Aquí se lee; para tocarla, un ordenador.",
           "text": "Veinticinco pantallas y tablas de ocho columnas se ven peor apretadas en un móvil. Te lo contamos aquí y lo abres delante de un teclado. El panelEmpieza por una frase que dice qué está pasando, y debajo las cifras que la sostienen. Le sueltas un documento y lo colocaUn PDF con veinte facturas dentro sale convertido en veinte facturas dadas de alta, cada una con su número y su proveedor. Le preguntas en tu idiomaQuién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura de la que sale. Veinticinco pantallasFacturas, cobros, gastos, tesorería, proyectos, radar, registro fiscal y lo demás. Ver todo lo que hace <p class=\"demo-aviso\">La demo necesita JavaScript. Sin él puedes ver qué hace el sistema en su ficha.</p> Registro fiscal Preparado para VERI*FACTU Cada factura, registrada y encadenada desde que se emite. La remisión a la AEAT es el siguiente paso. En qué punto está Conciliación bancaria Próximamente El extracto del banco, cruzado con tus facturas y tus gastos. Es la siguiente pieza. Cómo funcionará"
         },
         {
-          "id": "/#c10",
-          "heading": "De lo que tienes hoy a preguntarle a tus números",
-          "text": "01FormularioTe lo enviamos y lo completas. 02ValidaciónLo revisamos antes de tocar nada. 03En marcha en 1 díaCon tus clientes, facturas y gastos anteriores dentro. No se empieza vacío. 04FuncionandoEmite, registra y avisa de los vencimientos. Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los planes de Finance Hablemos de implantarlo Ocho áreas, un sistema"
-        },
-        {
           "id": "/#c11",
-          "heading": "Cada área de tu empresa, conectada al mismo centro.",
-          "text": "Cada área sigue trabajando a su manera; lo que cambia es que todas se hablan a través de la misma capa. ComercialQue ninguna venta se pierda por falta de seguimiento. MarketingQue tu web no deje de traer oportunidades. ClientesQue cada cliente se sienta cuidado, sin depender de nadie en concreto. OperacionesQue cada trabajo arranque solo y cumpla su plazo. FinanzasCobrar antes y ver el gasto cada día, no al cierre de mes. SoporteRespuesta rápida, también fuera de horario. AdministraciónTu empresa vigilada, protegida y en orden. DirecciónUna decisión clara cada mañana, con datos reales. D-Code OS · la capa operativa"
+          "heading": "De lo que tienes hoy a preguntarle a tus números",
+          "text": "01FormularioTe lo enviamos y lo completas. 02ValidaciónLo revisamos antes de tocar nada. 03En marcha en 1 díaCon tus clientes, facturas y gastos anteriores dentro. No se empieza vacío. 04FuncionandoEmite, registra y avisa de los vencimientos. Te enviamos un formulario. Lo completas y, una vez validado, tu sistema queda en marcha en 1 día. En Finance a medida, primero diseñamos contigo la solución; cuando la apruebas, hacemos la implantación. Ver los planes de Finance Hablemos de implantarlo D-Code OS · la capa operativa"
         },
         {
           "id": "/#c12",
@@ -3003,8 +3008,8 @@
         },
         {
           "id": "/#c31",
-          "heading": "Tres formas de empezar.",
-          "text": "D-Code Finance → Producto propio El dinero en un sitio: facturas, cobros, gastos y el registro fiscal al día. Desde 29 €/mes más 390 € de puesta en marcha Un sistema a medida → Lo que tu equipo repite cada semana —comercial, operaciones, atención— hecho por el sistema. Desde 1.500 € según el alcance Agentes e integraciones → Contestan con tus datos y conectan lo que ya usáis, con los permisos mínimos. Desde 750 € según el alcance Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. Empecemos"
+          "heading": "Dos productos y un sistema a medida.",
+          "text": "D-Code Finance → Producto propio El dinero en un sitio: facturas, cobros, gastos y el registro fiscal al día. Desde 29 €/mes más 390 € de puesta en marcha D-Code OS → La capa operativa La capa que conecta tus sistemas: el dato entra una vez. Desde 2.900 € de implantación según cuántos sistemas Un sistema a medida → Lo que tu equipo repite cada semana —comercial, operaciones, atención— hecho por el sistema. Desde 1.500 € según el alcance Agentes e integraciones → Contestan con tus datos y conectan lo que ya usáis, con los permisos mínimos. Desde 750 € según el alcance Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. Empecemos"
         },
         {
           "id": "/#c32",
@@ -3061,160 +3066,165 @@
         {
           "id": "/precios#c0",
           "heading": "Esto es lo que hacemos. Y esto es lo que cuesta.",
-          "text": "Sin tarifas escondidas ni «consulta precio» en todo. Lo que tiene precio, lo lleva puesto; lo que depende de tu empresa, lo dice. Precios sin IVA. Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. 1Eliges 2Lo solicitas 3Lo configuramos contigo 4Lo implantamos 1Eliges 2Pagas 3Se activa 4Se configura 5Funcionando Hoy no se paga en la web. Nos lo pides, lo configuramos contigo y lo implantamos nosotros. La compra directa llegará; cuando llegue, lo dirá aquí."
+          "text": "Sin tarifas escondidas ni «consulta precio» en todo. Lo que tiene precio, lo lleva puesto; lo que depende de tu empresa, lo dice. Precios sin IVA. Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar."
         },
         {
           "id": "/precios#c1",
+          "heading": "Dos productos propios y los servicios que los conectan con tu empresa.",
+          "text": "Producto propio D-Code Finance El sistema financiero de tu empresa, sobre tus datos. La capa operativa D-Code OS La capa que conecta tus sistemas: el dato entra una vez. Servicios AutomatizacionesLo que hoy se hace a mano cada semana, ejecutándose solo. Agentes de IAAtienden, cualifican y responden con los datos de tu negocio. IntegracionesTus herramientas hablándose, con los permisos mínimos. Páginas webTu web hecha, rehecha o conectada con lo que ya usas. Sistemas a medidaEl sistema que tu empresa necesita y no existe comprado. Los packs son combinaciones de estas piezas, con el precio de contratarlas juntas. 1Eliges 2Lo solicitas 3Lo configuramos contigo 4Lo implantamos 1Eliges 2Pagas 3Se activa 4Se configura 5Funcionando Hoy no se paga en la web. Nos lo pides, lo configuramos contigo y lo implantamos nosotros. La compra directa llegará; cuando llegue, lo dirá aquí."
+        },
+        {
+          "id": "/precios#c2",
           "heading": "Varias piezas juntas salen más baratas que sueltas. Y hay que decidir una vez, no cinco.",
           "text": "Se contrata hoy"
         },
         {
-          "id": "/precios#c2",
-          "heading": "Empezar",
-          "text": "Primera vez que se ordena algo El sistema financiero en marcha y las dos tareas que más se repiten, automatizadas. 990 € de implantación + 29 € al mes Ahorras 180 €Suelto sería 1.170 € Diagnóstico Finance implantado, con tus datos dentro Dos automatizaciones a elegir 30 días de soporte Quiero este pack Se contrata hoy"
-        },
-        {
           "id": "/precios#c3",
-          "heading": "Operar",
-          "text": "Empresas que ya venden y se les acumula el trabajo Finance con inteligencia, un proceso entero automatizado y un agente atendiendo. 2.290 € de implantación + 149 € al mes Ahorras 350 € y 20 €/mesSuelto sería 2.640 € + 169 €/mes Finance con inteligencia, hasta 10 personas Un paquete de 3 a 5 automatizaciones Un agente de IA en un canal Formación y 30 días de soporte Quiero este pack Se valora el alcance"
+          "heading": "Pack Finance + automatizaciones",
+          "text": "Primera vez que se ordena algo El sistema financiero en marcha y las dos tareas que más se repiten, automatizadas. Lleva Finance + 2 × Una automatización 990 € de implantación + 29 € al mes Ahorras 180 €Suelto sería 1.170 € Diagnóstico Finance implantado, con tus datos dentro Dos automatizaciones a elegir 30 días de soporte Quiero este pack Se contrata hoy"
         },
         {
           "id": "/precios#c4",
-          "heading": "Sistema completo",
-          "text": "Empresas con varios sistemas y varias personas La capa que lo conecta todo, el sistema financiero, la automatización con IA, el agente multicanal y la conexión con lo que ya tienes. Desde 6.900 € de implantación + Desde 390 € al mes Ahorras 1.790 € y 69 €/mesSuelto sería 8.690 € + 459 €/mes D-Code OS implantado Finance con inteligencia Automatización con IA Agente multicanal Conexión con tu ERP o sistema propio Formación y traspaso Quiero este pack"
+          "heading": "Pack Finance con inteligencia + agente",
+          "text": "Empresas que ya venden y se les acumula el trabajo Finance con inteligencia, un proceso entero automatizado y un agente atendiendo. Lleva Finance con inteligencia + Paquete de automatizaciones + Agente de un canal 2.290 € de implantación + 149 € al mes Ahorras 350 € y 20 €/mesSuelto sería 2.640 € + 169 €/mes Finance con inteligencia, hasta 10 personas Un paquete de 3 a 5 automatizaciones Un agente de IA en un canal Formación y 30 días de soporte Quiero este pack Se valora el alcance"
         },
         {
           "id": "/precios#c5",
+          "heading": "Pack D-Code OS completo",
+          "text": "Empresas con varios sistemas y varias personas La capa que lo conecta todo, el sistema financiero, la automatización con IA, el agente multicanal y la conexión con lo que ya tienes. Lleva D-Code OS + Finance con inteligencia + Automatización con IA + Agente multicanal + Conectar con tu ERP o sistema propio Desde 6.900 € de implantación + Desde 390 € al mes Ahorras 1.790 € y 69 €/mesSuelto sería 8.690 € + 459 €/mes D-Code OS implantado Finance con inteligencia Automatización con IA Agente multicanal Conexión con tu ERP o sistema propio Formación y traspaso Quiero este pack"
+        },
+        {
+          "id": "/precios#c6",
           "heading": "Cada cosa, qué es y cuánto cuesta.",
           "text": "Filtrar Mi sector Lo que necesito Con ese filtro no queda nada. Prueba con otro, o cuéntanoslo y lo miramos."
         },
         {
-          "id": "/precios#c6",
+          "id": "/precios#c7",
           "heading": "D-Code Finance",
           "text": "El sistema financiero de tu empresa, sobre tus datos. Se contrata hoy"
         },
         {
-          "id": "/precios#c7",
+          "id": "/precios#c8",
           "heading": "Finance",
           "text": "Empresas de hasta 3 personas en administración El sistema financiero sobre tus datos, con su configuración estándar. 390 € de implantación + 29 € al mes · hasta 3 personas Qué incluye El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos Tesorería semana a semana y a 30, 60 y 90 días Radar: siete reglas con su umbral escrito Libros de IVA en CSV para tu gestoría En marcha en 1 día, con tus datos anteriores dentro No incluye: Campos ni flujos propios de tu negocio. Conexiones con otras herramientas. Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c8",
+          "id": "/precios#c9",
           "heading": "Finance con inteligencia",
           "text": "Empresas de hasta 10 personas con volumen de documentos Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus números. 690 € de implantación + 79 € al mes · hasta 10 personas Qué incluye Todo lo de Finance Lectura de facturas de proveedor: se sueltan y entran solas Preguntas en lenguaje normal sobre tus propios números Hasta 10 personas No incluye: Conexiones con otras herramientas. Solicitar activación Se valora el alcance"
         },
         {
-          "id": "/precios#c9",
+          "id": "/precios#c10",
           "heading": "Finance a medida",
           "text": "Empresas con su propia forma de trabajar El sistema financiero con tus campos, tus flujos y tus conexiones. Desde 1.500 € según el alcance + Desde 190 € al mes · sin límite de personas Qué incluye Todo lo anterior Campos y flujos propios de tu negocio Conexiones con las herramientas que ya usas Sin límite de personas Hablar de esto Se contrata hoy"
         },
         {
-          "id": "/precios#c10",
+          "id": "/precios#c11",
           "heading": "Persona adicional",
           "text": "Cuando el equipo crece dentro del plan Una persona más dentro de tu Finance, con su rol y sus permisos. 9 € al mes por persona Qué incluye Su usuario, su rol y sus permisos por módulo y por acción Solicitar activación"
         },
         {
-          "id": "/precios#c11",
+          "id": "/precios#c12",
           "heading": "D-Code OS",
           "text": "La capa que conecta tus sistemas: el dato entra una vez. Se valora el alcance"
         },
         {
-          "id": "/precios#c12",
+          "id": "/precios#c13",
           "heading": "D-Code OS",
           "text": "Empresas con varios sistemas que no se hablan La capa que conecta los sistemas de tu empresa: el dato entra una vez, el trabajo se mueve solo y todo queda trazado. Desde 2.900 € de implantación, según cuántos sistemas + Desde 190 € al mes de operación y soporte Qué incluye El mapa de tus sistemas y por dónde pasa cada dato La actividad según ocurre, con su rastro Lo que la IA hace sola queda registrado; lo que importa espera a una persona Implantación y formación de tu equipo No incluye: Los sistemas que conecta, que se contratan aparte. Hoy se implanta caso a caso. Contratarlo por planes cerrados llegará; cuando llegue, lo dirá aquí. Hablar de esto"
         },
         {
-          "id": "/precios#c13",
+          "id": "/precios#c14",
           "heading": "Automatizaciones",
           "text": "Lo que hoy se hace a mano cada semana, ejecutándose solo. Se contrata hoy"
         },
         {
-          "id": "/precios#c14",
+          "id": "/precios#c15",
           "heading": "Una automatización",
           "text": "Una tarea concreta que se repite cada semana Una tarea que hoy hace una persona a mano, ejecutándose sola y avisando si algo falla. Desde 390 € pago único, sin permanencia Qué incluye Análisis de la tarea y de sus excepciones El flujo montado y probado con datos reales Control de errores y aviso cuando algo no sale Documentación y 30 días de soporte Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c15",
+          "id": "/precios#c16",
           "heading": "Paquete de automatizaciones",
           "text": "Un proceso entero, no una tarea suelta De tres a cinco automatizaciones que se encadenan: lo que termina una dispara la siguiente. Desde 1.200 € pago único, según el alcance Qué incluye De 3 a 5 flujos en producción Conexión con las herramientas que ya usas Control de errores y monitorización Formación de dos personas y documentación 30 días de soporte Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c16",
+          "id": "/precios#c17",
           "heading": "Automatización con IA",
           "text": "Trabajo que hoy exige leer, entender y decidir Documentos que se leen solos, texto que se clasifica y decisiones que se proponen; lo que importa espera a una persona. Desde 2.400 € pago único, según el alcance Qué incluye Lectura de documentos (facturas, partes, correos) Clasificación y extracción de datos Lo que la IA decide queda registrado y es revisable Puntos de aprobación donde tú digas El consumo de IA se factura a coste, aparte y con su detalle. Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c17",
+          "id": "/precios#c18",
           "heading": "Mantenimiento",
           "text": "Cuando lo montado tiene que seguir funcionando Vigilancia de lo que ya está en marcha, arreglos cuando una herramienta cambia y ajustes pequeños. Desde 150 € al mes, opcional y sin permanencia Qué incluye Monitorización y aviso si algo se para Arreglos cuando una herramienta cambia su API Ajustes pequeños dentro del alcance Solicitar activación"
         },
         {
-          "id": "/precios#c18",
+          "id": "/precios#c19",
           "heading": "Agentes de IA",
           "text": "Atienden, cualifican y responden con los datos de tu negocio. Se contrata hoy"
         },
         {
-          "id": "/precios#c19",
+          "id": "/precios#c20",
           "heading": "Agente de un canal",
           "text": "Quien recibe siempre las mismas preguntas por un sitio Atiende, entiende y responde con los datos de tu negocio; escala a una persona cuando toca. Desde 750 € de implantación + Desde 90 € al mes de operación Qué incluye Un canal: web, WhatsApp o teléfono Respuestas con tus datos, no inventadas Escalado a persona con el contexto entero Registro de todo lo que responde El consumo (mensajes, minutos, modelo) se factura a coste, aparte y con su detalle. Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c20",
+          "id": "/precios#c21",
           "heading": "Agente multicanal",
           "text": "Quien atiende por varios sitios a la vez El mismo agente en varios canales, con la conversación entera y conectado a tus sistemas. Desde 1.500 € de implantación + Desde 190 € al mes de operación Qué incluye Varios canales a la vez Conectado a tus sistemas: crea, consulta y actualiza Cualificación y enrutado Panel con lo que responde y lo que escala El consumo (mensajes, minutos, modelo) se factura a coste, aparte y con su detalle. Solicitar activación"
         },
         {
-          "id": "/precios#c21",
+          "id": "/precios#c22",
           "heading": "Páginas web",
           "text": "Tu web hecha, rehecha o conectada con lo que ya usas. Se contrata hoy"
         },
         {
-          "id": "/precios#c22",
+          "id": "/precios#c23",
           "heading": "Web nueva",
           "text": "Quien no tiene web, o la que tiene no la enseña a nadie Diseño, textos, velocidad y que se vea bien en un teléfono. Tuya, no una plantilla con tu logo encima. Desde 1.200 € pago único, según cuántas páginas Qué incluye Diseño propio, no una plantilla comprada Textos escritos contigo, no rellenos Rápida de verdad y bien en el teléfono Analítica y aviso de cookies según la ley Los accesos y el dominio, a tu nombre No incluye: Contenido que tengas que escribir tú y no nos des. Fotografía y vídeo de producción. Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c23",
+          "id": "/precios#c24",
           "heading": "Arreglar la que tienes",
           "text": "Quien ya tiene web y no quiere empezar de cero Se rehace lo que estorba y se arregla lo que falla, sin tirar lo que ya funciona. Desde 690 € pago único, según lo que haya Qué incluye Repaso de velocidad, móvil y accesibilidad Rediseño de las páginas que peor funcionan Textos revisados donde hagan falta Lo que ya iba bien se queda Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c24",
+          "id": "/precios#c25",
           "heading": "Conectar tu web",
           "text": "Quien recibe por la web algo que luego alguien copia a mano El formulario entra en tu CRM, la cita en la agenda y el stock sale del almacén. Con chatbot si lo quieres. Desde 890 € pago único, según con qué se conecte Qué incluye El formulario entra donde tiene que entrar, ya clasificado Citas, reservas o pedidos contra tu sistema de verdad Chatbot que responde con tus datos, si lo quieres Control de errores: si algo falla, lo sabes No incluye: La web en sí, si hay que hacerla. Solicitar activación"
         },
         {
-          "id": "/precios#c25",
+          "id": "/precios#c26",
           "heading": "Integraciones",
           "text": "Tus herramientas hablándose, con los permisos mínimos. Se contrata hoy"
         },
         {
-          "id": "/precios#c26",
+          "id": "/precios#c27",
           "heading": "Conectar dos herramientas",
           "text": "Cuando el mismo dato se teclea dos veces Tus dos herramientas hablándose en la dirección que haga falta, con los permisos mínimos. Desde 490 € pago único Qué incluye El dato entra una vez y aparece donde tiene que aparecer Permisos mínimos necesarios Control de errores y reintentos Documentación Solicitar activación Se contrata hoy"
         },
         {
-          "id": "/precios#c27",
+          "id": "/precios#c28",
           "heading": "Conectar con tu ERP o sistema propio",
           "text": "Empresas con un sistema que no se toca Tu ERP, tu CRM o tu sistema de siempre conectado con el resto, sin tocarlo por dentro. Desde 1.200 € pago único, según el sistema Qué incluye Lectura y escritura por la vía que admita tu sistema Sin modificar el sistema existente Control de errores, reintentos y trazabilidad Documentación y traspaso Solicitar activación"
         },
         {
-          "id": "/precios#c28",
+          "id": "/precios#c29",
           "heading": "Sistemas a medida",
           "text": "El sistema que tu empresa necesita y no existe comprado. Se contrata hoy"
         },
         {
-          "id": "/precios#c29",
+          "id": "/precios#c30",
           "heading": "Diagnóstico",
           "text": "Cualquier empresa que no sepa por dónde empezar Seguimos el recorrido real de un cliente, un pedido y una factura, y anotamos cada punto en el que alguien hace de puente. Gratis y la lista es tuya, la construyamos o no Qué incluye Media hora de llamada y un par de horas de quien hace ese trabajo La lista escrita de por dónde se escapan el tiempo y el dinero Qué construiríamos, con qué alcance y por dónde empezaríamos Solicitar activación Se valora el alcance"
         },
         {
-          "id": "/precios#c30",
+          "id": "/precios#c31",
           "heading": "Sistema a medida",
           "text": "Cuando lo que necesitas no se compra hecho Construimos el sistema que tu empresa necesita: análisis, diseño, desarrollo, automatizaciones, integraciones e IA donde aporte criterio. Desde 1.500 € según el alcance + Desde 190 € al mes de mantenimiento, opcional Qué incluye Análisis del recorrido real y de dónde se escapa el tiempo Alcance, plazo y precio por escrito antes de empezar Desarrollo por partes, dentro de las herramientas que ya usáis El sistema funcionando, con documentación y accesos a tu nombre Hablar de esto"
         },
         {
-          "id": "/precios#c31",
+          "id": "/precios#c32",
           "heading": "Cinco preguntas y te decimos qué te haría falta y cuánto costaría, aproximadamente.",
           "text": "Abrir el configurador ¿Dudas antes de decidir? Preguntas frecuentes"
         }

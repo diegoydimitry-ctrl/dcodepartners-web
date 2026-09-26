@@ -4,7 +4,7 @@
 <style>html,body{margin:0;height:100%;background:#08090b}html.tr,html.tr body{background:transparent!important}html[data-theme=light],html[data-theme=light] body{background:#eeebe5}
 .esc-lienzo{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}#s{position:absolute;inset:0}</style></head>
 <body><div id="s"></div>
-<script>var s=document.getElementById('s');s.setAttribute('data-escena',q.get('e')||'sistema');if(q.get('modo'))s.setAttribute('data-modo',q.get('modo'));</script>
+<script>var s=document.getElementById('s');s.setAttribute('data-escena',q.get('e')||'sistema');if(q.get('modo'))s.setAttribute('data-modo',q.get('modo'));if(q.get('paso'))s.dataset.paso=q.get('paso');if(q.get('foco'))s.dataset.foco=q.get('foco');</script>
 <script type="module">
 import { crearMotor } from "/assets/js/escenas/motor.js";
 const cv=document.createElement('canvas');cv.className='esc-lienzo';document.body.appendChild(cv);

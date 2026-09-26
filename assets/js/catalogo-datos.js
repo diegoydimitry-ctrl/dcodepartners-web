@@ -464,10 +464,10 @@ window.DCP_CATALOGO = {
    "setup": 990,
    "mes": 29,
    "es": {
-    "nombre": "Empezar"
+    "nombre": "Pack Finance + automatizaciones"
    },
    "en": {
-    "nombre": "Start"
+    "nombre": "Finance + automations pack"
    }
   },
   {
@@ -480,10 +480,10 @@ window.DCP_CATALOGO = {
    "setup": 2290,
    "mes": 149,
    "es": {
-    "nombre": "Operar"
+    "nombre": "Pack Finance con inteligencia + agente"
    },
    "en": {
-    "nombre": "Operate"
+    "nombre": "Finance with intelligence + agent pack"
    }
   },
   {
@@ -498,10 +498,10 @@ window.DCP_CATALOGO = {
    "setup": 6900,
    "mes": 390,
    "es": {
-    "nombre": "Sistema completo"
+    "nombre": "Pack D-Code OS completo"
    },
    "en": {
-    "nombre": "Whole system"
+    "nombre": "Complete D-Code OS pack"
    }
   }
  ],

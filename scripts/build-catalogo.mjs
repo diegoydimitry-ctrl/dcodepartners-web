@@ -46,6 +46,8 @@ const T = {
     catalogo: 'El catálogo', catalogoSub: 'Cada cosa, qué es y cuánto cuesta.',
     dudas: '¿Dudas antes de decidir?', dudasCta: 'Preguntas frecuentes',
     mes: 'al mes',
+    mapa: 'Qué es cada cosa', mapaSub: 'Dos productos propios y los servicios que los conectan con tu empresa.', propio: 'Producto propio', capa: 'La capa operativa', servicios: 'Servicios',
+    mapaNota: 'Los packs son combinaciones de estas piezas, con el precio de contratarlas juntas.', lleva: 'Lleva',
    
   },
   en: {
@@ -68,6 +70,8 @@ const T = {
     catalogo: 'The catalogue', catalogoSub: 'Each thing, what it is and what it costs.',
     dudas: 'Questions before deciding?', dudasCta: 'FAQ',
     mes: 'per month',
+    mapa: 'What each thing is', mapaSub: 'Two products of our own and the services that connect them to your company.', propio: 'Our own product', capa: 'The operating layer', servicios: 'Services',
+    mapaNota: 'Packs are combinations of these pieces, priced for taking them together.', lleva: 'Includes',
    
   },
 };
@@ -98,9 +102,13 @@ function fichaPack(p, lang, t) {
   const incluye = (d.incluye || []).map((x) => `<li>${esc(x)}</li>`).join('');
   const precioMes = d.precio_mes
     ? `<span class="pr-mes"><em class="pr-mas" aria-hidden="true">+</em><b>${esc(d.precio_mes)}</b><i>${esc(d.precio_mes_detalle || '')}</i></span>` : '';
+  const cuenta = {};
+  (p.lleva || []).forEach((id) => { cuenta[id] = (cuenta[id] || 0) + 1; });
+  const lleva = Object.keys(cuenta).map((id) => { const x = cat.productos.find((q) => q.id === id); const n = x ? x[lang].nombre : id; return (cuenta[id] > 1 ? cuenta[id] + ' × ' : '') + n; });
   return `<article class="pr-card pr-pack${p.destacado ? ' es-dest' : ''}" data-id="${p.id}" data-setup="${p.setup}" data-mes="${p.mes}">
 <header class="pr-head"><span class="pr-estado pr-estado--${p.estado}">${esc(t.estados[p.estado])}</span><h3>${esc(d.nombre)}</h3><p class="pr-para">${esc(d.para)}</p></header>
 <p class="pr-que">${esc(d.que)}</p>
+${lleva.length ? `<p class="pr-lleva"><span>${esc(t.lleva)}</span> ${lleva.map((x) => `<b>${esc(x)}</b>`).join(' + ')}</p>` : ''}
 <div class="pr-precio"><span class="pr-uno"><b>${esc(d.precio)}</b><i>${esc(d.precio_detalle || '')}</i></span>${precioMes}</div>
 <p class="pr-ahorro"><b>${esc(d.ahorro)}</b><i>${esc(t.sueltoSeria)} ${esc(d.suelto)}</i></p>
 <ul class="pr-l">${incluye}</ul>
@@ -132,12 +140,22 @@ function cuerpo(lang) {
   const manana = cat.contratacion.manana[lang].map((p, i) => `<li><span class="pr-paso-n">${i + 1}</span>${esc(p)}</li>`).join('');
 
   return `<div class="container"> <nav class="breadcrumbs" aria-label="${lang === 'en' ? 'Breadcrumb' : 'Ruta de navegación'}"> <ol><li><a href="${base}/">${esc(t.rutaInicio)}</a></li><li class="sep">/</li><li aria-current="page">${esc(t.titulo)}</li></ol> </nav> </div>
-<section class="page-hero" data-amb="cian"> <div class="container">
+<section class="page-hero esc-con" data-amb="cian"><div class="esc esc-hero" data-escena="sistema" data-modo="todo" aria-hidden="true"></div> <div class="container">
 <span class="eyebrow">${esc(t.kicker)}</span>
 <h1 class="h-title">${esc(t.h1a)}<br><span class="grad">${esc(t.h1b)}</span></h1>
 <p class="lead">${esc(t.lead)}</p>
 <p class="pr-iva">${esc(cat.iva[lang])} ${esc(cat.aviso[lang])}</p>
 </div> </section>
+
+<section class="section-sm edge-top" aria-labelledby="pr-mapa-t"><div class="container">
+<span class="eyebrow">${esc(t.mapa)}</span>
+<h2 id="pr-mapa-t" class="h-sec">${esc(t.mapaSub)}</h2>
+<div class="pr-mapa">
+${['finance', 'os'].map((id) => { const c = cat.categorias.find((x) => x.id === id); return `<a class="pr-mapa-p" href="#g-${id}"><em>${esc(id === 'finance' ? t.propio : t.capa)}</em><b>${esc(c[lang])}</b><span>${esc(c[lang === 'en' ? 'resumen_en' : 'resumen_es'])}</span></a>`; }).join('')}
+<div class="pr-mapa-s"><em>${esc(t.servicios)}</em><ul>${['automatiza', 'agentes', 'integra', 'webs', 'medida'].map((id) => { const c = cat.categorias.find((x) => x.id === id); return `<li><a href="#g-${id}"><b>${esc(c[lang])}</b><span>${esc(c[lang === 'en' ? 'resumen_en' : 'resumen_es'])}</span></a></li>`; }).join('')}</ul></div>
+</div>
+<p class="pr-mapa-n">${esc(t.mapaNota)}</p>
+</div></section>
 
 <section class="section-sm edge-top" data-amb="violeta" aria-labelledby="pr-como"><div class="container">
 <div class="pr-como">
