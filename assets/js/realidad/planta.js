@@ -178,7 +178,8 @@ export function detectarCalidad() {
     gpu = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : "";
   } catch (e) { /* sin información: se decide por el resto */ }
   const software = /swiftshader|llvmpipe|software|basic render/i.test(gpu);
-  if (software || mem <= 2 || nucleos <= 2) return "baja";
+  if (software) return "estatica"; // sin aceleración gráfica: cada fotograma bloquearía el hilo principal
+  if (mem <= 2 || nucleos <= 2) return "baja";
   if (tactil || estrecho || mem <= 4) return "media";
   return "alta";
 }
@@ -186,6 +187,9 @@ const PERFIL = {
   alta:  { dpr: 1.75, sombra: 2048, bloom: true,  vidrio: true,  pulsos: 7, fichas: 26 },
   media: { dpr: 1.35, sombra: 1024, bloom: true,  vidrio: false, pulsos: 5, fichas: 18 },
   baja:  { dpr: 1.0,  sombra: 0,    bloom: false, vidrio: false, pulsos: 3, fichas: 10 },
+  // Estática: la misma escena, pintada solo cuando cambia de estado (como con
+  // movimiento reducido). Para equipos sin GPU real.
+  estatica: { dpr: 1.0, sombra: 0, bloom: false, vidrio: false, pulsos: 3, fichas: 10 },
 };
 
 /* ------------------------------------------------------------ LA ESCENA */
@@ -193,8 +197,8 @@ export class Planta {
   constructor(canvas, o = {}) {
     this.canvas = canvas;
     this.o = o;
-    this.quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     this.calidad = o.calidad || detectarCalidad();
+    this.quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches || this.calidad === "estatica";
     this.perfil = Object.assign({}, PERFIL[this.calidad]);
     this.claro = o.claro || false;
     this.solo = o.solo || null; // un solo módulo (páginas interiores)
@@ -237,12 +241,19 @@ export class Planta {
     this.puntero = { x: 0, y: 0, sx: 0, sy: 0 };
     this.hover = -1;
     this.foco = -1;
+    this.focos = new Set();
     this.tiempo = 0;
     this.visible = true;
     this.oculta = false;
     this.raf = null;
     this.fotogramas = [];
     this.encuadre = { vx: 0, vy: 0 }; // override del encuadre (móvil)
+    // Entrada: los módulos llegan desde arriba y se asientan por su propio
+    // peso (el muelle hace el resto) mientras la cámara se acerca.
+    if (!this.quieto && !this.solo) {
+      this.modulos.forEach((mo, i) => { mo.pos.y = 9 + i * 0.7; mo.vel.y = -2; });
+      this.cam.p.multiplyScalar(1.35);
+    }
     this._resize();
   }
 
@@ -642,6 +653,8 @@ export class Planta {
   saltar() { this._paso(0.016, true); for (let i = 0; i < 40; i++) this._paso(0.05); this._render(); }
 
   setFoco(i) { this.foco = i == null ? -1 : i; this._pintarSiQuieto(); }
+  /** Varios módulos a la vez, por id de departamento (p. ej. las áreas marcadas en el diagnóstico). */
+  setFocos(ids) { this.focos = new Set(this.modulos.map((mo, i) => (ids.indexOf(mo.m.id) >= 0 ? i : -1)).filter((i) => i >= 0)); if (!this.quieto) this.arrancar(); this._pintarSiQuieto(); }
   setEncuadre(vx, vy) { this.encuadre = { vx, vy }; this._resize(); }
   setTema(claro) {
     if (claro === this.claro) return;
@@ -729,7 +742,8 @@ export class Planta {
     this.modulos.forEach((mo, i) => {
       const d = mo.dis;
       const flota = dis * (d.y + Math.sin(t * 0.6 + i) * 0.12 * deriva);
-      const alz = (i === this.hover || i === this.foco) ? 0.14 : 0;
+      const marcado = i === this.hover || i === this.foco || this.focos.has(i);
+      const alz = marcado ? 0.14 : 0;
       mo.alzado = amort(mo.alzado, alz, dt, 8);
       const obj = this._v.set(mo.bx + d.x * dis, flota + mo.alzado, mo.bz + d.z * dis);
       if (forzado) { mo.pos.copy(obj); mo.vel.set(0, 0, 0); }
@@ -742,7 +756,7 @@ export class Planta {
       mo.g.rotation.set(d.rx * dis, d.ry * dis + (this.solo ? Math.sin(t * 0.25) * 0.12 * deriva : 0), d.rz * dis);
       // Franja: apagada y ámbar cuando está suelto; su color cuando conecta.
       const on = 0.25 + 0.75 * (1 - dis);
-      const destaca = (i === this.hover || i === this.foco) ? 1.6 : 1;
+      const destaca = marcado ? 1.6 : 1;
       mo.franjaMat.color.set(mo.m.color).multiplyScalar(on * destaca * (this.claro ? 1.1 : 1.9));
       mo.pantallaMat.color.setScalar((this.claro ? 0.92 : 0.62) * (0.6 + 0.4 * (1 - dis)) * (destaca > 1 ? 1.25 : 1));
       mo.aristas.material.opacity = S.plano * 0.9;
@@ -829,7 +843,7 @@ export class Planta {
      (mediana > 26 ms), se baja un escalón. Nunca se sube: la estabilidad
      vale más que el último detalle. */
   _medir(dt) {
-    if (this.bajado === "baja" || !dt) return;
+    if (!dt) return;
     this.fotogramas.push(dt * 1000);
     if (this.fotogramas.length < 90) return;
     const f = this.fotogramas.sort((a, b) => a - b), med = f[45];
@@ -837,7 +851,10 @@ export class Planta {
     this.ultimaMediana = med;
     if (med > 26) this.bajar();
   }
+  // Si ni en baja sostiene el ritmo (mediana > 45 ms), pasa a estática.
+  _aEstatica() { this.parar(); this.quieto = true; this.calidad = "estatica"; this.saltar(); }
   bajar() {
+    if (this.bajado === "baja") { if ((this.ultimaMediana || 0) > 45) this._aEstatica(); return; }
     if (this.composer && this.calidad !== "baja") {
       this.composer = null; this.perfil.bloom = false;
     } else {

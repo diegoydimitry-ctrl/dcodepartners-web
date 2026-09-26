@@ -14,7 +14,7 @@
   var D = document, R = D.documentElement;
   var EN = (R.getAttribute("lang") || "es").slice(0, 2) === "en";
   var P = EN ? "/en" : "";
-  var MOTOR = "/assets/js/realidad/planta.js?v=f5998bbcb6";
+  var MOTOR = "/assets/js/realidad/planta.js?v=60746502a5";
 
   function webgl() {
     try { var c = D.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl"))); }
@@ -31,7 +31,7 @@
     // [selector, estado, visible, lado del texto]
     ["#inicio", "desorden", 1, "izq"],
     ["#problema", "problema", 1, "izq"],
-    ["#diagnostico", "analizar", 0.28, "izq"],
+    ["#diagnostico", "analizar", 0.5, "izq"],
     ["#que-hacemos", "conectar", 0.22, "izq"],
     ["#sistemas", "conectar", 0, "izq"],
     ["#dcode-os", "conectar", 0, "izq"],
@@ -83,7 +83,10 @@
 
     if (!webgl()) { escenario.classList.add("planta-sin-webgl"); return; }
     var canvas = escenario.querySelector("canvas");
-    import(MOTOR).then(function (m) {
+    // El motor (≈170 KB comprimido) se pide después de `load`: el titular,
+    // las demos y las métricas de carga no esperan al 3D.
+    var cargado = D.readyState === "complete" ? Promise.resolve() : new Promise(function (r) { window.addEventListener("load", r, { once: true }); });
+    cargado.then(function () { return import(MOTOR); }).then(function (m) {
       return m.montarPlanta(canvas, { estado: actual ? actual.estado : "desorden", claro: claro(), observar: false });
     }).then(function (p) {
       planta = p;
@@ -93,10 +96,27 @@
       actual = null; aplicar();
       vigilarTema(function (c) { p.setTema(c); });
       interaccion(p, escenario);
+      diagnostico(p);
     }).catch(function (e) {
       console.error("[planta] no disponible:", e);
       escenario.classList.add("planta-sin-webgl");
     });
+  }
+
+  /* Diagnóstico: las áreas que marca la persona se encienden en la planta.
+     Se observa el aria-pressed que ya gestiona dcp10 (no se toca su lógica). */
+  function diagnostico(p) {
+    var botones = D.querySelectorAll("#diagnostico .dx-area[data-area]");
+    if (!botones.length) return;
+    var ALIAS = { operaciones: "produccion" };
+    function leer() {
+      var ids = [];
+      botones.forEach(function (b) { if (b.getAttribute("aria-pressed") === "true") { var a = b.getAttribute("data-area"); ids.push(ALIAS[a] || a); } });
+      p.setFocos(ids);
+    }
+    var mo = new MutationObserver(leer);
+    botones.forEach(function (b) { mo.observe(b, { attributes: true, attributeFilter: ["aria-pressed"] }); });
+    leer();
   }
 
   /* Cursor: parallax de cámara y luz, y los módulos se pueden señalar.
