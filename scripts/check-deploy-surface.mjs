@@ -41,7 +41,7 @@ export function deployedFiles(files, vercelignoreText) {
   return files.filter((f) => !ig.ignores(f));
 }
 
-const PUBLIC_EXT = /\.(html|css|js|mjs|json|png|jpe?g|webp|avif|gif|svg|ico|woff2?|ttf|otf|xml|txt|webmanifest|mp4|webm|pdf)$/i;
+const PUBLIC_EXT = /\.(html|css|js|mjs|json|png|jpe?g|webp|avif|gif|svg|ico|woff2?|ttf|otf|xml|txt|webmanifest|mp4|webm|pdf|exr)$/i; // exr: HDRI de estudio de El Núcleo (luz y reflejos, CC0)
 const FORBIDDEN = [
   /^docs\//, /^scripts\//, /^\.github\//, /^automation\//, /^auditoria\//, /^informes?\//i,
   /(^|\/)README(\.[a-z]+)?$/i, /(^|\/)CLAUDE\.md$/i, /(^|\/)AGENTS\.md$/i, /\.mdx?$/i, /\.ya?ml$/i,

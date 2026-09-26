@@ -162,7 +162,7 @@ html[data-theme] .lang-switch a{ font-family:var(--ds-mono); font-size:11px; col
 html[data-theme] .lang-switch a[aria-current="true"]{ background:var(--ds-ink) !important; color:var(--ds-bg) !important; box-shadow:none !important; }
 html[data-theme] .nav-right .btn-primary{ padding:10px 18px; font-size:14px; }
 html[data-theme] .tema-btn{
-  position:fixed !important; left:18px !important; right:auto !important; top:auto !important; bottom:18px !important; z-index:70 !important;
+  position:fixed !important; left:auto !important; right:92px !important; top:auto !important; bottom:26px !important; z-index:70 !important;
   background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line) !important;
   box-shadow:none !important; font-family:var(--ds-mono) !important; font-size:11px !important; letter-spacing:.08em; text-transform:uppercase;
 }
@@ -287,7 +287,7 @@ html[data-theme] footer{ background:var(--ds-bg) !important; border-top:1px soli
 html[data-theme] footer .container{ padding-top:clamp(64px, 8vw, 110px); }
 html[data-theme] footer .container::before{
   content:"D-Code Partners"; display:block; font-family:var(--ds-display); font-weight:560; letter-spacing:-.06em; line-height:.8;
-  font-size:clamp(3.2rem, 13.2vw, 13.5rem); color:var(--ds-ink); margin-bottom:clamp(40px, 6vw, 90px); white-space:nowrap; overflow:hidden;
+  font-size:min(10.6vw, 11.4rem); color:var(--ds-ink); margin-bottom:clamp(40px, 6vw, 90px); white-space:nowrap;
 }
 html[data-theme] .footer-col h2{ font-family:var(--ds-mono) !important; font-size:11px !important; letter-spacing:.16em; text-transform:uppercase; color:var(--ds-ink-3) !important; font-weight:500 !important; }
 html[data-theme] .footer-col h2::before{ display:none !important; }
@@ -417,3 +417,17 @@ html[data-theme] .head, html[data-theme] .section-head{ margin-bottom:clamp(32px
 html[data-theme] .dcx{ mix-blend-mode:normal; }
 html[data-theme] .dcx a, html[data-theme] .dcx-now{ font-family:var(--ds-mono) !important; color:var(--ds-ink-3) !important; }
 @media (max-width:900px){ html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ max-width:none; } }
+
+/* Sellos del héroe partido: una línea de etiquetas, sin velos detrás. */
+html:root[data-theme] body .page-hero .page-hero-meta::before, html:root[data-theme] body .page-hero .page-hero-meta::after{ display:none !important; }
+html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ flex-direction:row !important; border-top:0 !important; padding-top:0 !important; background:none !important; }
+html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta :is(.badge, .trust-badge){
+  display:inline-flex !important; width:auto !important; padding:7px 12px !important; border:1px solid var(--ds-line-2) !important;
+  border-radius:999px !important; background:transparent !important; font-size:10.5px !important; letter-spacing:.1em !important; text-transform:uppercase; box-shadow:none !important;
+}
+html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta .trust-badge::before{ display:none !important; }
+/* Índice lateral sin placa. */
+html:root[data-theme] body .dcx::before{ background:none !important; box-shadow:none !important; backdrop-filter:none !important; }
+/* Cabecera también en móvil con la luz de laboratorio. */
+html:root[data-theme="light"] body #site-header{ background:rgba(238,235,229,.86) !important; }
+html:root[data-theme="dark"] body #site-header{ background:rgba(13,14,17,.86) !important; }
