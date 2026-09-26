@@ -1,0 +1,419 @@
+/* ==========================================================================
+   D-CODE DESIGN SYSTEM · «LABORATORIO»
+   ==========================================================================
+   El universo visual nuevo de dcodepartners.com, en una sola hoja que se
+   carga justo antes de tema.css/superficies.css. No toca el HTML de los
+   componentes de producción: redefine sus tokens y los reviste.
+
+   Dirección: ingeniería de precisión. Luz de laboratorio (hueso cálido) como
+   base de confianza; el estudio oscuro, como toma. Un solo azul D-Code como
+   energía del sistema, nunca como decoración. Materia en vez de brillo:
+   superficies mates, filetes finos, grano de fotografía; nada de cielos,
+   neones ni degradados de marca.
+
+   Tipos: Instrument Sans (display y texto) · Instrument Serif cursiva
+   (acentos editoriales) · JetBrains Mono (anotación técnica, cotas).
+
+   Especificidad: los tokens van en html:root[data-theme] (0,2,1) para ganar
+   a tema.css; los componentes, con el prefijo html[data-theme].
+   ========================================================================== */
+
+@font-face{ font-family:"Instrument Sans"; src:url("/assets/fonts/instrumentsans-variable.woff2") format("woff2"); font-weight:400 700; font-stretch:75% 100%; font-display:swap; }
+@font-face{ font-family:"Instrument Serif"; src:url("/assets/fonts/instrumentserif-italic.woff2") format("woff2"); font-style:italic; font-weight:400; font-display:swap; }
+@font-face{ font-family:"Instrument Serif"; src:url("/assets/fonts/instrumentserif-regular.woff2") format("woff2"); font-style:normal; font-weight:400; font-display:swap; }
+
+/* ------------------------------------------------------------ TOKENS */
+html:root[data-theme], html:root{
+  --ds-bg:#eeebe5; --ds-bg-2:#e5e1d9; --ds-surface:#f7f5f1; --ds-surface-2:#fbfaf8;
+  --ds-ink:#141519; --ds-ink-2:#43454b; --ds-ink-3:#65645f;
+  --ds-line:rgba(20,21,25,.12); --ds-line-2:rgba(20,21,25,.24);
+  --ds-accent:#2b57f5; --ds-accent-2:#1d3fc4; --ds-on-accent:#ffffff;
+  --ds-sombra:0 1px 0 rgba(255,255,255,.7) inset, 0 18px 40px -28px rgba(20,21,25,.35);
+  --ds-display:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --ds-serif:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --ds-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --ds-ease:cubic-bezier(.2,.7,.1,1);
+  --ds-gut:clamp(20px, 5.5vw, 88px);
+  --ds-grano:.045;
+}
+html:root[data-theme="dark"]{
+  --ds-bg:#0d0e11; --ds-bg-2:#131418; --ds-surface:#17191d; --ds-surface-2:#1c1e23;
+  --ds-ink:#ece9e3; --ds-ink-2:#b6b3ad; --ds-ink-3:#8f8c87;
+  --ds-line:rgba(236,233,227,.12); --ds-line-2:rgba(236,233,227,.24);
+  --ds-accent:#7c97ff; --ds-accent-2:#a9bbff; --ds-on-accent:#0d0e11;
+  --ds-sombra:0 1px 0 rgba(255,255,255,.04) inset, 0 24px 50px -30px rgba(0,0,0,.8);
+  --ds-grano:.06;
+}
+/* Los tokens de producción, apuntando al sistema nuevo (los componentes
+   existentes los consumen: así cambian todos a la vez). */
+html:root[data-theme], html:root{
+  --v-bg:var(--ds-bg); --v-bg-2:var(--ds-bg-2);
+  --v-panel:var(--ds-surface); --v-panel-2:var(--ds-surface-2);
+  --v-edge:var(--ds-line-2); --v-edge-2:var(--ds-line);
+  --v-ink:var(--ds-ink); --v-ink-2:var(--ds-ink-2); --v-ink-3:var(--ds-ink-3);
+  --v-a:var(--ds-accent); --v-b:var(--ds-accent-2); --v-c:var(--ds-accent);
+  --v-grad:linear-gradient(90deg, var(--ds-ink), var(--ds-ink));
+  --bg:var(--ds-bg); --bg-soft:var(--ds-bg-2); --bg-elev:var(--ds-surface);
+  --panel:var(--ds-surface); --panel-2:var(--ds-surface-2);
+  --border:var(--ds-line-2); --border-soft:var(--ds-line); --line:var(--ds-line);
+  --surface-top:var(--ds-surface); --surface-border:var(--ds-line-2); --surface-highlight:transparent;
+  --surface-bar-top:var(--ds-surface-2); --surface-ring-top:var(--ds-line-2); --surface-ring-mid:var(--ds-line); --surface-ring-bottom:var(--ds-line); --surface-sheen:transparent;
+  --ink:var(--ds-ink); --stone:var(--ds-ink-2); --stone-soft:var(--ds-ink-3);
+  --blue:var(--ds-accent); --cyan:var(--ds-accent); --violet:var(--ds-accent-2); --signal-text:var(--ds-accent);
+  --serif:var(--ds-display); --sans:var(--ds-display); --mono:var(--ds-mono);
+  --grad-brand:linear-gradient(90deg, var(--ds-ink), var(--ds-ink));
+
+  --f-display: clamp(3.1rem, 8.4vw, 8.6rem);
+  --f-h1:      clamp(2.5rem, 5.6vw, 5rem);
+  --f-h2:      clamp(2rem, 3.9vw, 3.5rem);
+  --f-h3:      clamp(1.3rem, 1.7vw, 1.6rem);
+  --lh-display:.94; --lh-h1:.98; --lh-h2:1.02;
+  --r-ctrl:999px; --r-card:14px; --r-win:18px; --rad:14px;
+  --shell:1320px; --gut:var(--ds-gut);
+  --sp-air:clamp(96px, 13vw, 200px); --sp-norm:clamp(72px, 9vw, 136px);
+  --ease:var(--ds-ease);
+}
+
+/* ------------------------------------------------------------ BASE */
+html[data-theme] body{
+  background:var(--ds-bg); color:var(--ds-ink);
+  font-family:var(--ds-display); font-optical-sizing:auto; letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+/* Grano de fotografía: la luz de un sitio real, no la de una pantalla. */
+html[data-theme] body::after{
+  content:""; position:fixed; inset:0; z-index:9990; pointer-events:none;
+  background:url("/assets/img/nucleo/tex/grano.png") repeat; background-size:256px;
+  opacity:var(--ds-grano); mix-blend-mode:multiply;
+}
+html[data-theme="dark"] body::after{ mix-blend-mode:screen; opacity:.035; }
+html[data-theme] ::selection{ background:var(--ds-ink); color:var(--ds-bg); }
+html[data-theme] :focus-visible{ outline:2px solid var(--ds-accent); outline-offset:3px; }
+html[data-theme] a{ text-underline-offset:.2em; }
+
+/* Fuera el cielo, los campos 2D y los halos: el universo ya no es espacio. */
+html[data-theme] .gx, html[data-theme] .glow-orb, html[data-theme] .field:not(.field--inst), html[data-theme] .field--inst{ display:none !important; }
+html[data-theme] .dcx-bar{ background:var(--ds-accent) !important; }
+
+/* ------------------------------------------------------------ TIPOGRAFÍA */
+html[data-theme] h1, html[data-theme] h2, html[data-theme] h3, html[data-theme] .h-title, html[data-theme] .v6-title, html[data-theme] .os-h2{
+  font-family:var(--ds-display); font-weight:560; letter-spacing:-.035em; color:var(--ds-ink); text-wrap:balance;
+}
+html[data-theme] h1, html[data-theme] .page-hero .h-title{ font-size:var(--f-h1); line-height:var(--lh-h1); letter-spacing:-.045em; font-weight:540; }
+html[data-theme] h2, html[data-theme] .h-title{ font-size:var(--f-h2); line-height:var(--lh-h2); }
+html[data-theme] h3{ letter-spacing:-.02em; font-weight:580; }
+/* Lo que antes era degradado de marca, ahora es voz editorial. */
+html[data-theme] .grad, html[data-theme] .v6-grad, html[data-theme] .grad-text, html[data-theme] .os-h2 span, html[data-theme] .h-title em, html[data-theme] .v6-title em, html[data-theme] h1 em, html[data-theme] h2 em{
+  font-family:var(--ds-serif); font-style:italic; font-weight:400; letter-spacing:-.01em;
+  background:none !important; -webkit-background-clip:border-box !important; background-clip:border-box !important;
+  -webkit-text-fill-color:currentColor !important; color:var(--ds-ink) !important; font-size:1.06em;
+}
+html[data-theme] .lead, html[data-theme] .v6-sub, html[data-theme] .v6-intro, html[data-theme] .os-lead{
+  font-size:var(--f-lead); line-height:1.55; color:var(--ds-ink-2); max-width:56ch;
+}
+html[data-theme] p{ color:inherit; }
+/* Etiqueta técnica: mono, versalitas, con su cota. */
+html[data-theme] .eyebrow, html[data-theme] .v6-kicker, html[data-theme] .os-kicker, html[data-theme] .dcp-kicker{
+  font-family:var(--ds-mono); font-size:11.5px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-ink-3); background:none; border:0; padding:0; display:inline-flex; align-items:center; gap:12px;
+}
+html[data-theme] .eyebrow::before, html[data-theme] .v6-kicker::before{ content:""; width:22px; height:1px; background:currentColor; display:inline-block; opacity:.8; }
+
+/* ------------------------------------------------------------ BOTONES */
+html[data-theme] .btn{
+  font-family:var(--ds-display); font-weight:560; font-size:15px; letter-spacing:-.01em;
+  border-radius:999px; padding:14px 24px; box-shadow:none !important; transition:background .25s var(--ds-ease), color .25s, border-color .25s, transform .35s var(--ds-ease);
+}
+html:root[data-theme] body .btn-primary, html[data-theme] .btn-primary{ background:var(--ds-ink) !important; color:var(--ds-bg) !important; border:1px solid var(--ds-ink) !important; }
+html:root[data-theme] body .btn-primary:hover, html[data-theme] .btn-primary:hover{ background:var(--ds-accent) !important; border-color:var(--ds-accent) !important; color:var(--ds-on-accent) !important; transform:translateY(-1px); }
+html[data-theme] .btn-primary::after, html[data-theme] .btn-primary::before{ display:none !important; }
+html:root[data-theme] body .btn-ghost, html:root[data-theme] body .btn-secondary, html:root[data-theme] body .gal-sig-b, html[data-theme] .btn-ghost, html[data-theme] .btn-secondary{ background:transparent !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line-2) !important; }
+html:root[data-theme] body .btn-ghost:hover, html:root[data-theme] body .gal-sig-b:hover, html[data-theme] .btn-ghost:hover{ border-color:var(--ds-ink) !important; }
+
+/* ------------------------------------------------------------ CABECERA */
+html[data-theme] #site-header{
+  background:color-mix(in srgb, var(--ds-bg) 78%, transparent) !important;
+  backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid transparent !important; box-shadow:none !important;
+  transition:transform .5s var(--ds-ease), border-color .3s;
+}
+html[data-theme] #site-header.scrolled{ border-bottom-color:var(--ds-line) !important; }
+html[data-theme] #site-header.ds-oculta{ transform:translateY(-100%); }
+html[data-theme] .nav-wrap{ max-width:none; padding-inline:var(--ds-gut); }
+html[data-theme] .logo, html[data-theme] .logo-word{ color:var(--ds-ink) !important; }
+html[data-theme] .logo-word{ font-family:var(--ds-display); font-weight:620; letter-spacing:-.02em; }
+html[data-theme] .logo-sub{ font-family:var(--ds-mono); color:var(--ds-ink-3) !important; letter-spacing:.24em; }
+html[data-theme] .logo svg, html[data-theme] .logo img{ color:var(--ds-ink); }
+html[data-theme] nav.main-nav > ul > li > a, html[data-theme] nav.main-nav .nav-link-btn{
+  font-family:var(--ds-display); font-size:14.5px; font-weight:500; color:var(--ds-ink-2) !important; background:none !important; letter-spacing:-.005em;
+}
+html[data-theme] nav.main-nav > ul > li > a:hover, html[data-theme] nav.main-nav a[aria-current="page"]{ color:var(--ds-ink) !important; }
+html[data-theme] .nav-indicator{ background:var(--ds-ink) !important; height:1px !important; box-shadow:none !important; }
+html[data-theme] .mega-menu{
+  background:var(--ds-surface-2) !important; border:1px solid var(--ds-line) !important; border-radius:18px !important;
+  box-shadow:0 40px 80px -40px rgba(20,21,25,.35) !important; backdrop-filter:none !important;
+}
+html[data-theme] .mega-item{ border-radius:10px !important; }
+html[data-theme] .mega-item:hover{ background:var(--ds-bg) !important; }
+html[data-theme] .mega-item strong{ color:var(--ds-ink) !important; font-weight:560; }
+html[data-theme] .mega-item span span{ color:var(--ds-ink-3) !important; font-family:var(--ds-mono); font-size:11.5px; letter-spacing:.06em; }
+html[data-theme] .lang-switch{ border:1px solid var(--ds-line) !important; background:none !important; border-radius:999px; }
+html[data-theme] .lang-switch a{ font-family:var(--ds-mono); font-size:11px; color:var(--ds-ink-3) !important; border-radius:999px; }
+html[data-theme] .lang-switch a[aria-current="true"]{ background:var(--ds-ink) !important; color:var(--ds-bg) !important; box-shadow:none !important; }
+html[data-theme] .nav-right .btn-primary{ padding:10px 18px; font-size:14px; }
+html[data-theme] .tema-btn{
+  position:fixed !important; left:18px !important; right:auto !important; top:auto !important; bottom:18px !important; z-index:70 !important;
+  background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line) !important;
+  box-shadow:none !important; font-family:var(--ds-mono) !important; font-size:11px !important; letter-spacing:.08em; text-transform:uppercase;
+}
+html[data-theme] .burger span, html[data-theme] .burger span::before, html[data-theme] .burger span::after{ background:var(--ds-ink) !important; }
+@media (max-width:940px){
+  html[data-theme] nav.main-nav{ background:var(--ds-bg) !important; }
+  html[data-theme] nav.main-nav a, html[data-theme] nav.main-nav .nav-link-btn{ font-size:1.35rem !important; font-weight:560 !important; color:var(--ds-ink) !important; letter-spacing:-.02em; }
+}
+
+/* ------------------------------------------------------------ MIGAS */
+html[data-theme] .breadcrumbs a, html[data-theme] .breadcrumbs li{ font-family:var(--ds-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ds-ink-3) !important; }
+html[data-theme] .breadcrumbs a{ text-decoration:none; }
+html[data-theme] .breadcrumbs a:hover{ color:var(--ds-ink) !important; }
+
+/* ------------------------------------------------------------ HÉROE INTERIOR
+   Titular grande a la izquierda y, a la derecha, la fotografía: la pieza de
+   D-Code que corresponde a la página, renderizada con el mismo motor. */
+html[data-theme] .page-hero{
+  position:relative; isolation:isolate; overflow:hidden;
+  padding-block:clamp(64px, 10vh, 140px) clamp(56px, 8vh, 110px) !important;
+  background:none !important; border-bottom:1px solid var(--ds-line);
+}
+html[data-theme] .page-hero::before, html[data-theme] .page-hero::after{ display:none !important; }
+html[data-theme] .page-hero .container, html[data-theme] .page-hero .ph-main{ position:relative; z-index:2; }
+html[data-theme] .page-hero .h-title, html[data-theme] .page-hero h1{ max-width:13ch; margin-top:22px; }
+html[data-theme] .page-hero--split .h-title, html[data-theme] .dept-page .page-hero h1{ max-width:15ch; }
+html[data-theme] .page-hero .lead{ margin-top:24px; }
+.ds-foto{ position:absolute; z-index:0; top:0; right:0; bottom:0; width:min(58%, 980px); margin:0; pointer-events:none; }
+.ds-foto img{ width:100%; height:100%; object-fit:cover; object-position:50% 55%; display:block; }
+.ds-foto::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, var(--ds-bg) 0%, color-mix(in srgb, var(--ds-bg) 40%, transparent) 28%, transparent 55%), linear-gradient(0deg, var(--ds-bg), transparent 26%); }
+.ds-foto figcaption{ position:absolute; right:var(--ds-gut); bottom:22px; z-index:1; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
+html[data-theme="light"] .ds-foto .ds-oscuro, html[data-theme="dark"] .ds-foto .ds-claro{ display:none; }
+html[data-theme] .page-hero.ds-con-foto{ min-height:min(82vh, 820px); display:flex; align-items:center; }
+html[data-theme] .page-hero.ds-con-foto > .container{ flex:1; }
+html[data-theme] .page-hero.ds-con-foto .h-title, html[data-theme] .page-hero.ds-con-foto h1, html[data-theme] .page-hero.ds-con-foto .lead{ max-width:min(13ch, 46vw); }
+html[data-theme] .page-hero.ds-con-foto .lead{ max-width:min(52ch, 44vw); }
+html[data-theme] .page-hero-meta{ position:relative; z-index:2; }
+@media (max-width:900px){
+  .ds-foto{ position:relative; width:auto; height:56vw; min-height:240px; margin:28px calc(var(--ds-gut) * -1) 0; }
+  .ds-foto::after{ background:linear-gradient(0deg, var(--ds-bg), transparent 30%); }
+  html[data-theme] .page-hero.ds-con-foto{ display:block; min-height:0; padding-bottom:0 !important; }
+  html[data-theme] .page-hero.ds-con-foto .h-title, html[data-theme] .page-hero.ds-con-foto h1, html[data-theme] .page-hero.ds-con-foto .lead{ max-width:none; }
+}
+
+/* ------------------------------------------------------------ SECCIONES */
+html[data-theme] .section, html[data-theme] .section-sm, html[data-theme] .section-air{ background:none !important; }
+html[data-theme] .edge-top{ border-top:1px solid var(--ds-line) !important; }
+html[data-theme] .edge-top::before, html[data-theme] .lit::before, html[data-theme] .lit::after{ display:none !important; }
+html[data-theme] .head .h-title, html[data-theme] .section-head .h-title{ max-width:18ch; }
+html[data-theme] .container{ max-width:var(--shell); padding-inline:var(--ds-gut); }
+
+/* Superficies: materia mate con filete, sin halos ni vidrio. */
+html[data-theme] .window, html[data-theme] .out, html[data-theme] .guarantee-card, html[data-theme] .blog-card, html[data-theme] .faq-item,
+html[data-theme] .card, html[data-theme] .fi-otro, html[data-theme] .shift-col, html[data-theme] .trust-badge, html[data-theme] .v6-say, html[data-theme] .step-card{
+  background:var(--ds-surface) !important; border:1px solid var(--ds-line) !important; border-radius:var(--r-card) !important;
+  box-shadow:var(--ds-sombra) !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; color:var(--ds-ink);
+}
+html[data-theme] .window{ border-radius:var(--r-win) !important; overflow:hidden; }
+html[data-theme] .window-bar{ background:var(--ds-surface-2) !important; border-bottom:1px solid var(--ds-line) !important; }
+html[data-theme] .window-title{ font-family:var(--ds-mono) !important; color:var(--ds-ink-3) !important; }
+html[data-theme] .window-dots span{ background:var(--ds-line-2) !important; box-shadow:none !important; }
+html[data-theme] .out b, html[data-theme] .fi-otro-h, html[data-theme] .blog-card h3{ color:var(--ds-ink) !important; font-weight:580; letter-spacing:-.02em; }
+html[data-theme] .out span, html[data-theme] .fi-otro-d{ color:var(--ds-ink-2) !important; }
+html[data-theme] a.out:hover, html[data-theme] a.fi-otro:hover, html[data-theme] a.blog-card:hover{ border-color:var(--ds-ink) !important; transform:translateY(-2px); }
+html[data-theme] .out::before, html[data-theme] .out::after, html[data-theme] .window::before, html[data-theme] .window::after{ box-shadow:none !important; }
+html[data-theme] .badge, html[data-theme] .tag, html[data-theme] .blog-cat, html[data-theme] .demo-tag{
+  font-family:var(--ds-mono) !important; font-size:10.5px !important; letter-spacing:.12em; text-transform:uppercase;
+  background:transparent !important; color:var(--ds-ink-2) !important; border:1px solid var(--ds-line-2) !important; border-radius:999px !important; box-shadow:none !important;
+}
+html[data-theme] .shift-arrow{ color:var(--ds-ink-3) !important; }
+html[data-theme] .chain, html[data-theme] .motion-journey{ filter:saturate(.7); }
+html[data-theme] .prose{ color:var(--ds-ink-2); font-size:1.0625rem; line-height:1.7; }
+html[data-theme] .prose h2, html[data-theme] .prose h3{ color:var(--ds-ink); margin-top:2.2em; }
+html[data-theme] .prose h2{ font-size:clamp(1.6rem, 2.4vw, 2.1rem); }
+html[data-theme] .prose a{ color:var(--ds-accent); }
+
+/* Llamada final: el cierre de cada página, como una lámina. */
+html[data-theme] .cta-band{
+  background:var(--ds-ink) !important; color:var(--ds-bg) !important; text-align:left !important;
+  padding-block:clamp(88px, 12vw, 180px) !important; border:0 !important; position:relative; overflow:hidden;
+}
+html[data-theme="dark"] .cta-band{ background:var(--ds-surface) !important; color:var(--ds-ink) !important; border-block:1px solid var(--ds-line) !important; }
+html[data-theme] .cta-band::before, html[data-theme] .cta-band::after{ display:none !important; }
+html[data-theme] .cta-band .h-title{ color:inherit !important; font-size:clamp(2.4rem, 6vw, 5.4rem); max-width:14ch; margin-inline:0 !important; line-height:.96; letter-spacing:-.045em; }
+html[data-theme] .cta-band .lead{ color:inherit !important; opacity:.72; margin-inline:0 !important; }
+html[data-theme] .cta-band .eyebrow{ color:inherit !important; opacity:.6; margin-inline:0 !important; }
+html[data-theme] .cta-band .hero4-ctas, html[data-theme] .cta-band .hero-ctas, html[data-theme] .cta-band .stage-ctas{ justify-content:flex-start !important; margin-top:36px; }
+html:root[data-theme="light"] body .cta-band .btn-primary{ background:var(--ds-bg) !important; color:var(--ds-ink) !important; border-color:var(--ds-bg) !important; }
+html:root[data-theme="light"] body .cta-band .btn-ghost{ color:var(--ds-bg) !important; border-color:rgba(238,235,229,.35) !important; }
+html:root[data-theme="light"] body .cta-band .btn-primary:hover{ background:var(--ds-accent) !important; color:#fff !important; border-color:var(--ds-accent) !important; }
+
+
+/* ------------------------------------------------------------ CAJAS INVERTIDAS
+   Producción invierte a propósito las cajas (claro: fondo claro + cajas
+   oscuras) y lo genera scripts/build-tema-claro.mjs. Se respeta la idea y se
+   cambia la materia: de azul marino a grafito neutro, el de un instrumento. */
+html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .gal-sig-b, .dx, .btn-ghost, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){
+  --bg:#18191c; --bg-soft:#16171a; --bg-elev:#1a1b1f; --panel:#18191c; --panel-2:#1d1e22; --border:#2c2d32; --border-soft:#232428;
+  --surface-top:#202125; --surface-border:rgba(236,233,227,.12); --surface-highlight:rgba(255,255,255,.05); --surface-bar-top:#222327;
+  --surface-ring-top:rgba(236,233,227,.22); --surface-ring-mid:rgba(236,233,227,.08); --surface-ring-bottom:rgba(236,233,227,.08); --surface-sheen:transparent;
+  --ink:#ece9e3; --stone:#b6b3ad; --stone-soft:#a9a6a0; --line:#2c2d32; --blue:#8aa2ff; --cyan:#8aa2ff; --violet:#a9bbff; --signal-text:#a9bbff;
+  --grad-brand:linear-gradient(90deg,#ece9e3,#ece9e3); --glow-blue:none;
+  --v-bg:#18191c; --v-bg-2:#16171a; --v-panel:rgba(255,255,255,.04); --v-panel-2:rgba(255,255,255,.07); --v-edge:rgba(236,233,227,.14); --v-edge-2:rgba(236,233,227,.07);
+  --v-ink:#ece9e3; --v-ink-2:#b6b3ad; --v-ink-3:#8f8c87; --v-a:#8aa2ff; --v-b:#a9bbff; --v-grad:linear-gradient(90deg,#ece9e3,#ece9e3);
+  --ds-surface:#1d1e22; --ds-surface-2:#222327; --ds-line:rgba(236,233,227,.12); --ds-line-2:rgba(236,233,227,.22); --ds-ink:#ece9e3; --ds-ink-2:#b6b3ad; --ds-ink-3:#8f8c87; --ds-accent:#8aa2ff; --ds-bg:#18191c;
+}
+html:root[data-theme="light"] body :is(.sd){ --sd-bg:#16171a; --sd-s:#1b1c20; --sd-s2:#1f2024; --sd-s3:#1a1b1f; --sd-b:#2c2d32; --sd-b2:#393a40; }
+html:root[data-theme="light"] body :is(.fdemo-scope){ --dc-bg:#16171a; --dc-surface:#1b1c20; --dc-surface-2:#1f2024; --dc-surface-3:#1a1b1f; --dc-border:#2c2d32; --dc-border-strong:#393a40; }
+html:root[data-theme="light"] body :is(.os-app, .oss, .os-capa){ --os-bg:#16171a; --os-s:#1b1c20; --os-s2:#1f2024; --os-s3:#1a1b1f; --os-b:rgba(236,233,227,.12); }
+html:root[data-theme] body :is(.sd, .fdemo-scope, .os-app){ box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55) !important; }
+
+/* ------------------------------------------------------------ FORMULARIOS */
+html[data-theme] input:not([type="checkbox"]):not([type="radio"]), html[data-theme] textarea, html[data-theme] select{
+  background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line-2) !important;
+  border-radius:10px !important; box-shadow:none !important; font-family:var(--ds-display);
+}
+html[data-theme] input:focus, html[data-theme] textarea:focus, html[data-theme] select:focus{ border-color:var(--ds-ink) !important; outline:none; }
+html[data-theme] label{ color:var(--ds-ink-2); }
+
+/* ------------------------------------------------------------ PIE */
+html[data-theme] footer{ background:var(--ds-bg) !important; border-top:1px solid var(--ds-line) !important; position:relative; z-index:1; }
+html[data-theme] footer .container{ padding-top:clamp(64px, 8vw, 110px); }
+html[data-theme] footer .container::before{
+  content:"D-Code Partners"; display:block; font-family:var(--ds-display); font-weight:560; letter-spacing:-.06em; line-height:.8;
+  font-size:clamp(3.2rem, 13.2vw, 13.5rem); color:var(--ds-ink); margin-bottom:clamp(40px, 6vw, 90px); white-space:nowrap; overflow:hidden;
+}
+html[data-theme] .footer-col h2{ font-family:var(--ds-mono) !important; font-size:11px !important; letter-spacing:.16em; text-transform:uppercase; color:var(--ds-ink-3) !important; font-weight:500 !important; }
+html[data-theme] .footer-col h2::before{ display:none !important; }
+html[data-theme] footer a{ color:var(--ds-ink-2) !important; }
+html[data-theme] footer a:hover{ color:var(--ds-ink) !important; }
+html[data-theme] .footer-brand p{ color:var(--ds-ink-2) !important; }
+html[data-theme] .footer-logo span{ color:var(--ds-ink) !important; font-family:var(--ds-display); }
+html[data-theme] .footer-bottom{ border-top-color:var(--ds-line) !important; font-family:var(--ds-mono) !important; color:var(--ds-ink-3) !important; font-size:11.5px !important; }
+
+/* ------------------------------------------------------------ CHAT */
+html[data-theme] .chat-bubble{ background:var(--ds-ink) !important; color:var(--ds-bg) !important; box-shadow:0 14px 30px -12px rgba(20,21,25,.45) !important; }
+html[data-theme] .chat-window{ background:var(--ds-surface-2) !important; border:1px solid var(--ds-line) !important; box-shadow:0 40px 90px -40px rgba(20,21,25,.45) !important; }
+html[data-theme] .chat-msg.bot{ background:var(--ds-bg) !important; color:var(--ds-ink) !important; }
+html[data-theme] .chat-msg.user{ background:var(--ds-ink) !important; color:var(--ds-bg) !important; }
+html[data-theme] .chat-aviso{ background:var(--ds-surface-2) !important; color:var(--ds-ink) !important; border:1px solid var(--ds-line) !important; box-shadow:var(--ds-sombra) !important; }
+
+/* ==========================================================================
+   PORTADA · EL NÚCLEO
+   ========================================================================== */
+.nucleo-escenario{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:var(--nv, 1); transition:opacity .9s var(--ds-ease);
+  background:var(--ds-bg) url("/assets/img/nucleo/fotos/ensamblado-claro.webp") 78% 60% / cover no-repeat; }
+html[data-theme="dark"] .nucleo-escenario{ background-image:url("/assets/img/nucleo/fotos/ensamblado-oscuro.webp"); }
+.nucleo-escenario canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity 1.2s ease; }
+.nucleo-escenario.vivo{ background-image:none; }
+.nucleo-escenario.vivo canvas{ opacity:1; }
+.nucleo-escenario.apagado{ visibility:hidden; transition:opacity .9s, visibility 0s linear .9s; }
+@media (max-width:900px){ .nucleo-escenario{ background-position:50% 12%; background-size:180% auto; } }
+body.nucleo-portada main, body.nucleo-portada footer{ position:relative; z-index:1; }
+
+/* El Hero de producción, recompuesto: titular enorme a la izquierda, la
+   pieza a la derecha; la captura de Finance deja el Hero (sigue en el
+   laboratorio, donde se usa). */
+html[data-theme] body.nucleo-portada .v6-hero{ min-height:100vh; min-height:100svh; background:none !important; display:flex; align-items:center; }
+html[data-theme] body.nucleo-portada .v6-hero .v6-panel, html[data-theme] body.nucleo-portada .v6-hero .v6-marca{ display:none !important; }
+html[data-theme] body.nucleo-portada .v6-hero .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; }
+html[data-theme] body.nucleo-portada .v6-lede{ max-width:720px; }
+html[data-theme] body.nucleo-portada .v6-lede h1{ font-size:var(--f-display); line-height:var(--lh-display); letter-spacing:-.052em; font-weight:540; max-width:10ch; }
+html[data-theme] body.nucleo-portada .v6-lede h1 span{ display:block; }
+html[data-theme] body.nucleo-portada .v6-status{ font-family:var(--ds-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-3); }
+html[data-theme] body.nucleo-portada .v6-status b{ color:var(--ds-ink); font-weight:500; }
+html[data-theme] body.nucleo-portada .v6-prueba li{ color:var(--ds-ink-2); font-size:14px; }
+html[data-theme] body.nucleo-portada .v6-prueba li::before{ background:var(--ds-ink) !important; box-shadow:none !important; }
+html[data-theme] body.nucleo-portada .v6-act2{ color:var(--ds-ink); }
+html[data-theme] body.nucleo-portada .v6-act2 b{ color:var(--ds-ink); border-bottom:1px solid var(--ds-line-2); }
+@media (max-width:900px){
+  html[data-theme] body.nucleo-portada .v6-hero{ align-items:flex-end; padding-top:44vh; padding-top:44svh; }
+  html[data-theme] body.nucleo-portada .v6-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:linear-gradient(180deg, transparent 30%, color-mix(in srgb, var(--ds-bg) 88%, transparent) 55%, var(--ds-bg)); }
+  html[data-theme] body.nucleo-portada .v6-hero > .container{ position:relative; z-index:1; }
+}
+/* Secciones de la portada: sobre el estudio, sin velos ni cajas de cristal. */
+html[data-theme] body.nucleo-portada .v6-block, html[data-theme] body.nucleo-portada .v6-veil{ background:none !important; box-shadow:none !important; border:0 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+html[data-theme] body.nucleo-portada .v6-step h2{ font-size:clamp(2.6rem, 5.4vw, 5rem); letter-spacing:-.045em; }
+html[data-theme] body.nucleo-portada .v6-step-n{ font-family:var(--ds-mono) !important; -webkit-text-stroke:0 !important; color:var(--ds-ink-3) !important; font-size:12px !important; letter-spacing:.16em; background:none !important; }
+html[data-theme] body.nucleo-portada .v6-step-n::before{ content:"FIG. "; }
+/* Donde la portada enseña producto (demos, D-Code OS, diagnóstico, oferta),
+   el estudio se retira: el fondo es la mesa de trabajo. */
+html[data-theme] body.nucleo-portada #sistemas, html[data-theme] body.nucleo-portada #dcode-os, html[data-theme] body.nucleo-portada #que-puedes-tener{ background:var(--ds-bg-2) !important; border-block:1px solid var(--ds-line); }
+
+/* Anatomía: las seis capas con sus cotas, como un plano de ingeniería. */
+.ds-anatomia{ position:relative; height:320vh; }
+.ds-anatomia-pin{ position:sticky; top:0; height:100vh; height:100svh; display:flex; align-items:center; }
+.ds-anatomia-pin > .container{ flex:1; width:100%; }
+.ds-anatomia-tx{ max-width:460px; position:relative; z-index:2; }
+.ds-anatomia-tx h2{ margin-top:18px; }
+.ds-anatomia-tx p{ color:var(--ds-ink-2); margin-top:18px; line-height:1.6; }
+.ds-capas{ list-style:none; margin:28px 0 0; padding:0; counter-reset:c; }
+.ds-capas li{ counter-increment:c; display:grid; grid-template-columns:3.2em minmax(0,1fr); gap:4px 12px; padding:12px 0; border-top:1px solid var(--ds-line); opacity:.42; transition:opacity .45s var(--ds-ease); }
+.ds-capas li:last-child{ border-bottom:1px solid var(--ds-line); }
+.ds-capas li::before{ content:counter(c, decimal-leading-zero); font-family:var(--ds-mono); font-size:11px; letter-spacing:.12em; color:var(--ds-ink-3); padding-top:4px; grid-row:span 2; }
+.ds-capas b{ font-weight:580; letter-spacing:-.02em; font-size:18px; }
+.ds-capas span{ color:var(--ds-ink-2); font-size:14.5px; line-height:1.5; }
+.ds-capas li.on{ opacity:1; }
+html:not(.ds-js) .ds-capas li{ opacity:1; }
+/* Cotas: línea fina y etiqueta mono, siguiendo a cada capa en pantalla. */
+.ds-cotas{ position:fixed; inset:0; z-index:3; pointer-events:none; opacity:0; transition:opacity .5s; }
+.ds-cotas.on{ opacity:1; }
+.ds-cota{ position:absolute; left:0; top:0; display:flex; align-items:center; gap:10px; font-family:var(--ds-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ds-ink); white-space:nowrap; will-change:transform; }
+.ds-cota::before{ content:""; width:7px; height:7px; border-radius:50%; border:1px solid var(--ds-ink); background:var(--ds-bg); flex:none; }
+.ds-cota i{ display:block; width:56px; height:1px; background:var(--ds-ink); opacity:.6; }
+@media (max-width:900px){
+  .ds-anatomia{ height:auto; }
+  .ds-anatomia-pin{ position:relative; height:auto; padding-block:48vh 72px; align-items:flex-end; }
+  .ds-capas li{ opacity:1; }
+  .ds-cotas{ display:none; }
+}
+
+/* Etiqueta del cursor sobre una toma de departamento. */
+.ds-etiqueta{ position:fixed; left:0; top:0; z-index:60; pointer-events:none; padding:8px 12px; border-radius:10px; background:var(--ds-ink); color:var(--ds-bg);
+  font:500 12px/1.3 var(--ds-mono); letter-spacing:.06em; opacity:0; transition:opacity .2s; }
+.ds-etiqueta.on{ opacity:1; }
+
+/* ------------------------------------------------------------ MOVIMIENTO */
+@media (prefers-reduced-motion: reduce){
+  .nucleo-escenario, .nucleo-escenario canvas, .ds-capas li, .ds-cotas{ transition:none !important; }
+  html[data-theme] #site-header.ds-oculta{ transform:none; }
+  html[data-theme] .btn, html[data-theme] a.out:hover{ transform:none !important; }
+}
+
+/* El botón fantasma está en la lista de cajas invertidas de producción; aquí
+   manda el sistema nuevo: contorno fino y tinta de la página. */
+html:root[data-theme="light"] body a.btn-ghost, html:root[data-theme="light"] body button.btn-ghost{ color:#141519 !important; border-color:rgba(20,21,25,.26) !important; background:transparent !important; }
+html:root[data-theme="light"] body a.btn-ghost:hover, html:root[data-theme="light"] body button.btn-ghost:hover{ border-color:#141519 !important; }
+html:root[data-theme="light"] body .cta-band a.btn-ghost{ color:#eeebe5 !important; border-color:rgba(238,235,229,.35) !important; }
+html:root[data-theme="light"] body :is(.dx, .v6-of, .window, .rcard, .board) a.btn-ghost{ color:#ece9e3 !important; border-color:rgba(236,233,227,.26) !important; }
+
+/* Revestimiento de grafito: estas cajas traen el azul marino como literal. */
+html:root[data-theme="light"] body :is(.rcard, .arq-area, a.area, .conexion, .gal-tab, .gal-historia > li, .arq-mod, .arq-btn, .board, details.plan, .window, .chaos-order, .vf-cadena, .vf-col, .vf-sello, .conc-fig, .cmp, .gal-carga, .dx, .v7-fiscal-i, .vf-track, .v6-of, .gal-movil){ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
+html:root[data-theme="light"] body :is(.dx-area, .arq-area, .gal-tab){ background:rgba(255,255,255,.035) !important; }
+html:root[data-theme="light"] body :is(.dx-area[aria-pressed="true"], .gal-tab[aria-selected="true"], .gal-tab.is-on){ background:rgba(255,255,255,.09) !important; }
+html:root[data-theme="light"] body :is(.os-app, .oss, .os-capa){ --os-card:linear-gradient(180deg,#1f2024,#17181b); --os-s:#1b1c20; --os-s2:#1f2024; --os-b2:#393a40; --os-sombra:0 1px 0 rgba(255,255,255,.05) inset, 0 40px 80px -46px rgba(20,21,25,.55); }
+html:root[data-theme="light"] body .oss{ background:linear-gradient(180deg,#1f2024,#17181b) !important; }
+
+/* Fondo de página: la luz de laboratorio llega hasta el lienzo del html
+   (tema-claro lo pintaba azulado). */
+html:root[data-theme="light"], html:root[data-theme="light"] body{ background:#eeebe5 !important; }
+html:root[data-theme="dark"], html:root[data-theme="dark"] body{ background:#0d0e11 !important; }
+
+/* Héroes partidos con fotografía: el texto y sus sellos se apilan a la
+   izquierda; la derecha es de la fotografía. */
+html:root[data-theme] body .page-hero.ds-con-foto > .container{ display:block !important; }
+html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; max-width:46vw; }
+html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta > *{ flex:0 0 auto; }
+html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta :is(li, .pill, span){ font-family:var(--ds-mono); font-size:11px; letter-spacing:.06em; }
+html[data-theme] .head, html[data-theme] .section-head{ margin-bottom:clamp(32px, 4vw, 56px); }
+/* El índice lateral de producción (dcp7), más discreto sobre las fotografías. */
+html[data-theme] .dcx{ mix-blend-mode:normal; }
+html[data-theme] .dcx a, html[data-theme] .dcx-now{ font-family:var(--ds-mono) !important; color:var(--ds-ink-3) !important; }
+@media (max-width:900px){ html:root[data-theme] body .page-hero.ds-con-foto .page-hero-meta{ max-width:none; } }
