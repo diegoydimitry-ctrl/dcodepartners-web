@@ -98,12 +98,29 @@ const FINANCE_ASSETS = [
   'assets/css/que-hacemos.css',
   'assets/css/fichas.css',
   'assets/js/fichas.js',
+  // La Planta (motor de realismo): hoja, orquestador y motor.
+  'assets/css/realidad.css',
+  'assets/js/realidad/app.js',
 ].filter((rel) => fs.existsSync(path.join(ROOT, rel))).map((rel) => {
   const name = path.basename(rel);
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   // (?<![\w-]) evita que "finance-demo.js" coincida dentro de otro nombre.
   return { name, hash: hashFile(rel), re: new RegExp('(?<![\\w-])' + escaped + '\\?v=[A-Za-z0-9_-]+', 'g') };
 });
+
+// El motor de la planta se importa dinámicamente DESDE app.js: su ?v= vive
+// dentro de ese fichero. Se reescribe antes de calcular el hash de app.js
+// (que así cambia cuando cambia el motor).
+{
+  const motorHash = hashFile('assets/js/realidad/planta.js');
+  const pApp = path.join(ROOT, 'assets/js/realidad/app.js');
+  const src = fs.readFileSync(pApp, 'utf8');
+  const out = src.replace(/planta\.js\?v=[A-Za-z0-9_-]+/g, `planta.js?v=${motorHash}`);
+  if (out !== src) fs.writeFileSync(pApp, out, 'utf8');
+  const i = FINANCE_ASSETS.findIndex((a) => a.name === 'app.js');
+  if (i >= 0) FINANCE_ASSETS[i].hash = hashFile('assets/js/realidad/app.js');
+  console.log(`planta.js  -> ?v=${motorHash} (dentro de realidad/app.js)`);
+}
 
 const htmlFiles = findHtmlFiles(ROOT, []);
 let changed = 0;
