@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-26T10:08:34.791Z",
+  "generatedAt": "2026-09-26T17:51:30.294Z",
   "pageCount": 66,
-  "chunkCount": 585,
+  "chunkCount": 582,
   "pages": [
     {
       "url": "/acuerdo-encargado-tratamiento",
@@ -2266,52 +2266,52 @@
         {
           "id": "/en/#c0",
           "heading": "",
-          "text": "Business systems, built to fit"
+          "text": "01Entry 02The problem 03The connection 04The system 05What we build 06Lab 07Cases 08Pricing 09Contact Business systems, built to fit"
         },
         {
           "id": "/en/#c1",
-          "heading": "We read your company.We build its system.",
-          "text": "We look at how you actually work, find where the time goes and build the system that connects your operation. We do not sell closed packages. Talk about your operation How we work The system, right now Converging Why companies call us"
+          "heading": "We read your company. We build its system.",
+          "text": "We look at how you actually work, find where the time goes and build the system that connects your operation. We do not sell closed packages. Talk about your operation → How we work Walk through the system 02 — The problem"
         },
         {
           "id": "/en/#c2",
           "heading": "It almost always starts the same way.",
-          "text": "&ldquo;I am always chasing payments.&rdquo; The money arrives late because chasing it depends on somebody remembering. &ldquo;Opportunities slip away.&rdquo; They come in through several channels and follow-up happens if there is time left. &ldquo;The same data, in three places.&rdquo; Information is duplicated, it does not reconcile, and the reports come out wrong. How we work"
+          "text": "I am always chasing payments.The money arrives late because chasing it depends on somebody remembering. Opportunities slip away.They come in through several channels and follow-up happens if there is time left. The same data, in three places.Information is duplicated, it does not reconcile, and the reports come out wrong. 03 — The connection"
         },
         {
           "id": "/en/#c3",
-          "heading": "We analyse",
-          "text": "We look at what already happens. The routes that repeat show up, and so do the ones that lead nowhere — that is the first thing you see. The system finds what repeats 02"
+          "heading": "One problem, one analysis, one system. Never a package.",
+          "text": "01We analyseWe look at what already happens. The routes that repeat show up, and so do the ones that lead nowhere — that is the first thing you see. 02We designWe decide what goes with what. Nothing stays loose: each thing starts belonging to a part. 03We buildThe structure goes up and the wiring is laid over it. First the frame, then what will run through it. 04We measureWork flows with an origin and a destination, queues where it must and moves on. And what flows can be counted. The full method → 04 — The system"
         },
         {
           "id": "/en/#c4",
-          "heading": "We design",
-          "text": "We decide what goes with what. Nothing stays loose: each thing starts belonging to a part. Every piece finds its place 03"
+          "heading": "People, processes, data, tools, AI and automation — connected, not stacked.",
+          "text": "PeopleWho does what, and when it is their turn. ProcessesWhat repeats, decided once. DataData is written once and reaches wherever it needs to reach. ToolsYour CRM, ERP, website and spreadsheets, connected. AIJudgement where it helps; a person when needed. AutomationWhat is done by hand every week starts running on its own. Each layer organises itself. Each layer talks to the next. That is a system: not a list of technologies, a structure that holds itself up. 05 — What we build"
         },
         {
           "id": "/en/#c5",
-          "heading": "We build",
-          "text": "The structure goes up and the wiring is laid over it. First the frame, then what will run through it. The structure goes up 04"
+          "heading": "Pieces that already exist. And the ones missing.",
+          "text": "When your problem matches one of them, we adapt it. When none of them fits, we build the one that is missing. There is no catalogue to choose from. SalesSo no sale is lost for lack of follow-up. MarketingLeads that arrive already qualified, not raw. CustomerSo every client feels looked after. DeliveryProjects that start on their own and hit deadlines. FinanceInvoice, collect and control spend without chasing. SupportFast replies, even out of hours. OperationsYour company, protected and in order. LeadershipOne clear decision every morning, on real data. Three disciplines that build it Process automation What is done by hand every week starts running on its own, with control and traceability. AI agents They serve, qualify and answer with your business data; they escalate to a person when needed. Integrations Your CRM, ERP, website and spreadsheets, connected with the minimum permissions needed. How they combine → 06 — D-Code Lab"
         },
         {
           "id": "/en/#c6",
-          "heading": "We measure",
-          "text": "Work flows with an origin and a destination, queues where it must and moves on. And what flows can be counted. Work flows and gets counted What we already know how to build"
+          "heading": "We will not describe it. Try it.",
+          "text": "Software and systems that already work, open to try. Sample data, no sign-up. A complete financial system we developed ourselves. Walk through it module by module. d-code finance The same assistant that answers on this site, trained on D-Code's real content. Ask it a real question. Each department has its own page, with the system drawn the way it works. Step into one. Finance Invoice, collect and control spend without chasing. Sales So no sale is lost for lack of follow-up. Support Fast replies, even out of hours. Leadership One clear decision every morning, on real data. Dashboard, invoices, collections, expenses, budgets and analysis, with sample data from an example company. No sign-up. Enter the demo → What D-Code Finance is 07 — Cases"
         },
         {
           "id": "/en/#c7",
-          "heading": "Pieces that already exist. And the ones missing.",
-          "text": "Sales Marketing Customer Delivery Finance Support Operations Leadership Automation AI agents Integrations When your problem matches one of them, we adapt it. When none of them fits, we build the one that is missing. There is no catalogue to choose from. Our own software"
+          "heading": "Before we ask you to trust us, we run it inside our own company.",
+          "text": "Three real D-Code Partners cases — including what worked and what did not go the way we expected. Sales From detected company to proposal sent, without anyone having to remember to do it BeforeThe opportunity radar existed, but moving from \"interesting company\" to \"proposal sent\" was a manual step with no fixed deadline. ProblemTurning sector opportunities into proposals depended on someone manually reviewing a list every week. SystemEvery Monday, the system converts the highest-scoring companies into leads and triggers an AI proposal — which goes through human review before it goes out. AfterAutomating detection and the proposal doesn't close the sale by itself — it creates the opportunity for a conversation. It still takes a person. Delivery Distributing the team's workload without anyone having to decide it every hour BeforeCreating projects and assigning tasks were manual steps, at the mercy of the workload of whoever had to handle them that day. ProblemCreating the project file, assigning tasks and tracking deadlines depended on someone remembering amid the rest of the day's work. SystemWhen a project closes, the system creates it; every hour it distributes tasks by each person's actual workload; every day it flags what's about to come due. AfterIt's the system we use most internally today: it automates the small, repetitive decisions that eat up more time than they look like. Internal discipline When our hypothesis about a failure didn't match what the data actually said BeforeWe nearly modified a workflow based on a hypothesis, without first checking it against the actual runs. ProblemOur internal audit system had been flagging that workflow as the likely cause of an elevated error rate. SystemWe audited the real executions one by one — and the errors were concentrated in two different workflows than the ones flagged. AfterWe don't fix a failure until we've verified its cause against direct evidence, even when the suspicion comes from our own system. The three cases, in full → 08 — Pricing"
         },
         {
           "id": "/en/#c8",
-          "heading": "D-Code Finance",
-          "text": "A complete financial system we developed ourselves. Walk through it module by module. d-code finance Open the full demo See D-Code Finance Let us start"
+          "heading": "How much does it cost? It depends on the system and the scope.",
+          "text": "We agree it with you before we start building, not afterwards. And always with these four rules. Price agreed before building Scope, timelines, deliverables and price are set in a proposal you accept before we start. No lock-in There is no minimum term and no cancellation penalty. The system is yours Unless agreed otherwise, once the project is paid the automations, workflows and configurations built for you are yours. Delivery is not the end We stay available for adjustments and maintenance: an ongoing relationship, not a one-off delivery. Terms of engagement → FAQ → 09 — Contact"
         },
         {
           "id": "/en/#c9",
-          "heading": "Thirty minutes and you will know what can be automated.",
-          "text": "Tell us how you work today and we will tell you where we would start. Book a call See real cases"
+          "heading": "Tell us what is wasting your time.",
+          "text": "Thirty minutes and you will know what can be automated. Tell us how you work today and we will tell you where we would start. Start with what weighs most Book a call → dcodedepartment@gmail.com We reply within 24h · Madrid, Spain"
         }
       ]
     },
@@ -2480,30 +2480,25 @@
         {
           "id": "/en/servicios#c0",
           "heading": "Three disciplines. One system.",
-          "text": "They are not sold separately. They combine according to what your operation needs."
+          "text": "They are not sold separately. They combine according to what your operation needs. 01 Problem"
         },
         {
           "id": "/en/servicios#c1",
-          "heading": "The problem",
-          "text": "Tools that don't talk to each other Tasks repeated every week Decisions waiting for someone to pull the data by hand"
+          "heading": "Work done by hand, too late or twice.",
+          "text": "Tools that don't talk to each other Tasks repeated every week Decisions waiting for someone to pull the data by hand 02 Transformation"
         },
         {
           "id": "/en/servicios#c2",
-          "heading": "What we do",
-          "text": "We automate repetitive work, put AI where judgement is needed and connect your tools so information moves on its own."
+          "heading": "That you stop doing the work that can do itself.",
+          "text": "We automate repetitive work, put AI where judgement is needed and connect your tools so information moves on its own. Fewer repeated tasks What is done by hand every week stops being done by hand. Less information lost Data is written once and reaches wherever it needs to reach. Decisions with data Using the numbers that are already there, not the ones somebody would have to gather. 03 Solution"
         },
         {
           "id": "/en/servicios#c3",
           "heading": "Three pieces assembled to measure.",
-          "text": "Process automation → What is done by hand every week starts running on its own, with control and traceability. AI agents → They serve, qualify and answer with your business data; they escalate to a person when needed. Integrations → Your CRM, ERP, website and spreadsheets, connected with the minimum permissions needed."
+          "text": "They are not sold separately. They are combined according to what your operation needs. A Process automation What is done by hand every week starts running on its own, with control and traceability. → B AI agents They serve, qualify and answer with your business data; they escalate to a person when needed. → C Integrations Your CRM, ERP, website and spreadsheets, connected with the minimum permissions needed. →"
         },
         {
           "id": "/en/servicios#c4",
-          "heading": "That you stop doing the work that can do itself.",
-          "text": "Fewer repeated tasks, less lost information and decisions made on data that is already there. Fewer repeated tasks What is done by hand every week stops being done by hand. Less information lost Data is written once and reaches wherever it needs to reach. Decisions with data Using the numbers that are already there, not the ones somebody would have to gather."
-        },
-        {
-          "id": "/en/servicios#c5",
           "heading": "Let’s start with your operation.",
           "text": "Thirty minutes, and you will know where we would start. Book my call How we work"
         }
@@ -2882,57 +2877,52 @@
         {
           "id": "/#c0",
           "heading": "",
-          "text": "Sistemas empresariales a medida"
+          "text": "01Entrada 02El problema 03La conexión 04El sistema 05Lo que construimos 06Laboratorio 07Casos 08Precio 09Contacto Sistemas empresariales a medida"
         },
         {
           "id": "/#c1",
-          "heading": "Analizamos tu empresa.Construimos su sistema.",
-          "text": "Miramos cómo trabajas de verdad, encontramos dónde se pierde el tiempo y construimos el sistema que conecta tu operación. No vendemos paquetes cerrados. Hablemos de tu operación Cómo trabajamos El sistema, ahora mismo Convergiendo Por qué nos llaman"
+          "heading": "Analizamos tu empresa. Construimos su sistema.",
+          "text": "Miramos cómo trabajas de verdad, encontramos dónde se pierde el tiempo y construimos el sistema que conecta tu operación. No vendemos paquetes cerrados. Hablemos de tu operación → Cómo trabajamos Recorre el sistema 02 — El problema"
         },
         {
           "id": "/#c2",
           "heading": "Casi siempre empieza igual.",
-          "text": "«Persigo cobros.» El dinero llega tarde porque avisar depende de que alguien se acuerde. «Se me escapan oportunidades.» Entran por varios sitios y el seguimiento se hace si queda tiempo. «Lo mismo, en tres sitios.» La información se repite, no cuadra y los informes salen mal. Cómo trabajamos"
+          "text": "Persigo cobros.El dinero llega tarde porque avisar depende de que alguien se acuerde. Se me escapan oportunidades.Entran por varios sitios y el seguimiento se hace si queda tiempo. Lo mismo, en tres sitios.La información se repite, no cuadra y los informes salen mal. 03 — La conexión"
         },
         {
           "id": "/#c3",
-          "heading": "Analizamos",
-          "text": "Miramos lo que ya ocurre. Aparecen los trayectos que se repiten y los que no llevan a ninguna parte — eso es lo primero que se ve. El sistema encuentra lo que se repite 02"
+          "heading": "Un problema, un análisis, un sistema. Nunca un paquete.",
+          "text": "01AnalizamosMiramos lo que ya ocurre. Aparecen los trayectos que se repiten y los que no llevan a ninguna parte — eso es lo primero que se ve. 02DiseñamosDecidimos qué va con qué. Cada cosa deja de estar suelta y pasa a pertenecer a una parte. 03ConstruimosSe levanta la estructura y se tiende la instalación por encima. Primero el armazón, después lo que va a circular por él. 04MedimosEl trabajo circula con origen y destino, hace cola donde toca y sale. Y lo que circula se puede contar. El método completo → 04 — El sistema"
         },
         {
           "id": "/#c4",
-          "heading": "Diseñamos",
-          "text": "Decidimos qué va con qué. Cada cosa deja de estar suelta y pasa a pertenecer a una parte. Cada pieza encuentra su sitio 03"
+          "heading": "Personas, procesos, datos, herramientas, IA y automatizaciones — conectados, no apilados.",
+          "text": "PersonasQuién hace cada cosa, y cuándo le toca. ProcesosLo que se repite, decidido una vez. DatosEl dato se escribe una vez y llega a donde tiene que llegar. HerramientasTu CRM, tu ERP, tu web y tus hojas, conectados. IACriterio donde aporta; una persona cuando toca. AutomatizacionesLo que hoy se hace a mano cada semana pasa a ejecutarse solo. Cada capa se organiza. Cada capa habla con la de al lado. Eso es un sistema: no una lista de tecnologías, una estructura que se sostiene sola. 05 — Lo que construimos"
         },
         {
           "id": "/#c5",
-          "heading": "Construimos",
-          "text": "Se levanta la estructura y se tiende la instalación por encima. Primero el armazón, después lo que va a circular por él. Se monta la estructura 04"
+          "heading": "Piezas que ya existen. Y las que falten.",
+          "text": "Cuando tu problema encaja con una de ellas, la adaptamos. Cuando no encaja ninguna, construimos la que falta. No hay un catálogo del que elegir. ComercialQue ninguna venta se pierda por falta de seguimiento. MarketingLeads que llegan ya clasificados, no en bruto. ClientesQue cada cliente se sienta cuidado, sin depender de nadie. ProducciónProyectos que arrancan solos y cumplen plazos. FinanzasFactura, cobra y controla el gasto sin perseguir a nadie. SoporteRespuesta rápida, incluso fuera de horario. AdministraciónTu empresa, protegida y ordenada, sin esfuerzo. DirecciónUna decisión clara cada mañana, con datos reales. Tres disciplinas que lo montan Automatización de procesos Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, con control y trazabilidad. Agentes de IA Atienden, cualifican y responden con los datos de tu negocio; escalan a una persona cuando toca. Integraciones Tu CRM, tu ERP, tu web y tus hojas, conectados con los permisos mínimos necesarios. Cómo se combinan → 06 — Laboratorio D-Code"
         },
         {
           "id": "/#c6",
-          "heading": "Medimos",
-          "text": "El trabajo circula con origen y destino, hace cola donde toca y sale. Y lo que circula se puede contar. El trabajo circula y se cuenta Lo que acabas de leer, en marcha"
+          "heading": "No te lo contamos. Tócalo.",
+          "text": "Software y sistemas que ya funcionan, abiertos para probar. Datos ficticios, sin registro. Un sistema financiero completo desarrollado por nosotros. Recórrelo módulo a módulo. d-code finance El mismo asistente que atiende en esta web, entrenado con el contenido real de D-Code. Hazle una pregunta de verdad. Cada departamento tiene su propia página, con el sistema dibujado tal y como funciona. Entra en uno. Finanzas Cobrar antes y controlar el gasto cada día, no al cierre de mes. Comercial Pipeline centralizado y propuestas en minutos. Soporte Cada email, un ticket priorizado con SLA. Dirección Una decisión ejecutiva clara cada mañana. Dashboard, facturas, cobros, gastos, presupuestos y análisis, con datos ficticios de una empresa de ejemplo. Sin registro. Entrar en la demo → Qué es D-Code Finance 07 — Casos"
         },
         {
           "id": "/#c7",
-          "heading": "Personas, procesos, datos, herramientas, IA y automatizaciones — conectados, no apilados.",
-          "text": "Cada capa se organiza. Cada capa habla con la de al lado. Eso es un sistema: no una lista de tecnologías, una estructura que se sostiene sola. Lo que ya sabemos construir"
+          "heading": "Antes de pedirte que confíes, lo probamos en nuestra propia empresa.",
+          "text": "Tres casos reales de D-Code Partners — con lo que funcionó y con lo que no salió como esperábamos. Comercial De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse de hacerlo AntesEl radar de oportunidades existía, pero pasar de \"empresa interesante\" a \"propuesta enviada\" era un paso manual, sin fecha fija. ProblemaDetectar oportunidades por sector y convertirlas en propuestas dependía de que alguien revisara un listado a mano cada semana. SistemaCada lunes, el sistema convierte las empresas mejor puntuadas en leads y dispara una propuesta con IA — que pasa por revisión humana antes de salir. DespuésAutomatizar la detección y la propuesta no cierra la venta sola: crea la oportunidad de conversación. Sigue haciendo falta una persona. Producción Repartir el trabajo del equipo sin que nadie tenga que decidirlo cada hora AntesLa creación de proyectos y el reparto de tareas eran pasos manuales, sujetos a la carga de trabajo de quien tuviera que hacerlos ese día. ProblemaCrear la ficha, repartir tareas y vigilar plazos dependía de que alguien se acordara entre el resto del trabajo del día. SistemaAl cerrar un proyecto, el sistema lo crea solo; cada hora reparte las tareas según la carga real de cada persona; cada día avisa de lo que va a vencer. DespuésEs el sistema que más usamos internamente hoy: automatiza el tipo de decisión pequeña y repetitiva que consume más tiempo del que parece. Disciplina interna Cuando la hipótesis sobre un fallo no coincidía con lo que decían los datos AntesEstuvimos a punto de intervenir sobre un workflow siguiendo una hipótesis, sin haberla contrastado contra las ejecuciones reales. ProblemaNuestro sistema de auditoría interna señalaba ese workflow como causa probable de una tasa de errores elevada. SistemaSe auditaron las ejecuciones reales una por una — y los errores se concentraban en dos workflows distintos a los señalados. DespuésNo corregimos un fallo hasta verificar su causa contra la evidencia directa, ni siquiera cuando la sospecha viene de nuestro propio sistema. Los tres casos, completos → 08 — Precio"
         },
         {
           "id": "/#c8",
-          "heading": "Piezas que ya existen. Y las que falten.",
-          "text": "Comercial Marketing Clientes Producción Finanzas Soporte Administración Dirección Automatizaciones Agentes de IA Integraciones Cuando tu problema encaja con una de ellas, la adaptamos. Cuando no encaja ninguna, construimos la que falta. No hay un catálogo del que elegir. Software propio"
+          "heading": "¿Cuánto cuesta? Depende del sistema y del alcance.",
+          "text": "Lo acordamos contigo antes de empezar a construir, no después. Y con estas cuatro reglas, siempre. Precio acordado antes de construir El alcance, los plazos, los entregables y el precio se fijan en una propuesta que aceptas antes de empezar. Sin permanencia No hay permanencia mínima ni penalización por cancelar. El sistema es tuyo Salvo pacto distinto, una vez abonado el proyecto las automatizaciones, flujos y configuraciones hechas para ti son tuyas. No se acaba en la entrega Seguimos disponibles para ajustes y mantenimiento: una relación continua, no una entrega que se olvida. Condiciones de contratación → Preguntas frecuentes → 09 — Contacto"
         },
         {
           "id": "/#c9",
-          "heading": "D-Code Finance",
-          "text": "Un sistema financiero completo desarrollado por nosotros. Recórrelo módulo a módulo. d-code finance Abrir la demo completa Ver D-Code Finance Empecemos"
-        },
-        {
-          "id": "/#c10",
-          "heading": "Treinta minutos y sabrás qué se puede automatizar.",
-          "text": "Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Reservar una llamada Ver casos reales"
+          "heading": "Cuéntanos qué te está haciendo perder tiempo.",
+          "text": "Treinta minutos y sabrás qué se puede automatizar. Cuéntanos cómo trabajáis hoy y te decimos por dónde empezaríamos. Empieza por lo que más te pesa Reservar una llamada → dcodedepartment@gmail.com Respondemos en menos de 24h · Madrid, España"
         }
       ]
     },
@@ -3101,30 +3091,25 @@
         {
           "id": "/servicios#c0",
           "heading": "Tres disciplinas. Un sistema.",
-          "text": "No se venden por separado. Se combinan según lo que tu operación necesita."
+          "text": "No se venden por separado. Se combinan según lo que tu operación necesita. 01 Problema"
         },
         {
           "id": "/servicios#c1",
-          "heading": "El problema",
-          "text": "Herramientas que no se hablan Tareas repetidas cada semana Decisiones que esperan a que alguien reúna los datos a mano"
+          "heading": "Lo que hoy se hace a mano, a destiempo o dos veces.",
+          "text": "Herramientas que no se hablan Tareas repetidas cada semana Decisiones que esperan a que alguien reúna los datos a mano 02 Transformación"
         },
         {
           "id": "/servicios#c2",
-          "heading": "Lo que hacemos",
-          "text": "Automatizamos el trabajo repetitivo, ponemos IA donde aporta criterio y conectamos tus herramientas para que la información circule sola."
+          "heading": "Que dejes de hacer el trabajo que puede hacerse solo.",
+          "text": "Automatizamos el trabajo repetitivo, ponemos IA donde aporta criterio y conectamos tus herramientas para que la información circule sola. Menos tareas repetidas Lo que hoy se hace a mano cada semana deja de hacerse a mano. Menos información perdida El dato se escribe una vez y llega a donde tiene que llegar. Decisiones con datos Con los números que ya están ahí, no con los que habría que reunir. 03 Solución"
         },
         {
           "id": "/servicios#c3",
           "heading": "Tres piezas que se montan a medida.",
-          "text": "Automatización de procesos → Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, con control y trazabilidad. Agentes de IA → Atienden, cualifican y responden con los datos de tu negocio; escalan a una persona cuando toca. Integraciones → Tu CRM, tu ERP, tu web y tus hojas, conectados con los permisos mínimos necesarios."
+          "text": "No se venden por separado. Se combinan según lo que tu operación necesita. A Automatización de procesos Lo que hoy se hace a mano cada semana pasa a ejecutarse solo, con control y trazabilidad. → B Agentes de IA Atienden, cualifican y responden con los datos de tu negocio; escalan a una persona cuando toca. → C Integraciones Tu CRM, tu ERP, tu web y tus hojas, conectados con los permisos mínimos necesarios. →"
         },
         {
           "id": "/servicios#c4",
-          "heading": "Que dejes de hacer el trabajo que puede hacerse solo.",
-          "text": "Menos tareas repetidas, menos información perdida y decisiones con datos que ya están ahí. Menos tareas repetidas Lo que hoy se hace a mano cada semana deja de hacerse a mano. Menos información perdida El dato se escribe una vez y llega a donde tiene que llegar. Decisiones con datos Con los números que ya están ahí, no con los que habría que reunir."
-        },
-        {
-          "id": "/servicios#c5",
           "heading": "Empecemos por tu operativa.",
           "text": "Treinta minutos, y sabrás por dónde empezaríamos. Reservar mi llamada Cómo trabajamos"
         }

@@ -64,6 +64,16 @@ const dcp9JsHash = hashFile('assets/js/dcp9.js');
 // v10 "El sistema, en profundidad": la escena WebGL del Hero y tipografía
 // nueva. Ver assets/js/dcode-system.js para el motor reutilizable.
 const dcp10CssHash = hashFile('assets/css/dcp10.css');
+// El motor 3D se importa dinámicamente DESDE dcp10.js: su ?v= vive dentro de
+// ese fichero, así que se reescribe primero y solo después se calcula el
+// hash de dcp10.js (que por tanto cambia cuando cambia el motor).
+const motorHash = hashFile('assets/js/dcode-system.js');
+{
+  const p10 = path.join(ROOT, 'assets/js/dcp10.js');
+  const src = fs.readFileSync(p10, 'utf8');
+  const out = src.replace(/dcode-system\.js\?v=[A-Za-z0-9_-]+/g, `dcode-system.js?v=${motorHash}`);
+  if (out !== src) fs.writeFileSync(p10, out, 'utf8');
+}
 const dcp10JsHash = hashFile('assets/js/dcp10.js');
 
 const htmlFiles = findHtmlFiles(ROOT, []);
@@ -104,4 +114,5 @@ console.log(`dcp8.js    -> ?v=${dcp8JsHash}`);
 console.log(`dcp9.js    -> ?v=${dcp9JsHash}`);
 console.log(`dcp10.css  -> ?v=${dcp10CssHash}`);
 console.log(`dcp10.js   -> ?v=${dcp10JsHash}`);
+console.log(`motor 3D   -> ?v=${motorHash} (dentro de dcp10.js)`);
 console.log(`Archivos .html actualizados: ${changed}/${htmlFiles.length}`);
