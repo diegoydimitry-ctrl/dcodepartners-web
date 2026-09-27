@@ -4,7 +4,8 @@
 .dx-marca { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .09em; text-transform: uppercase; color: var(--tinta-2); }
 .dx-marca svg { width: 20px; height: auto; }
 .dx-m-a { fill: var(--aire); }
-.dx-pasos { display: flex; list-style: none; padding: 0; margin: 0; counter-reset: p; }
+.dx-pasos { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; counter-reset: p; }
+@media (max-width: 480px) { .dx-pasos li { padding-inline: 6px; letter-spacing: .04em; } }
 .dx-pasos li { counter-increment: p; display: inline-flex; gap: 6px; padding: 4px 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); border-bottom: 1px solid transparent; }
 .dx-pasos li::before { content: counter(p, decimal-leading-zero); }
 .dx-pasos li.is-on { color: var(--tinta); border-bottom-color: var(--tinta); }
@@ -86,4 +87,4 @@
 .dx-fin .boton svg { width: 16px; height: 16px; }
 @media (max-width: 560px) { .dx-areas, .dx-kpis { grid-template-columns: 1fr; } .dx-area:nth-child(odd), .dx-kpi:nth-child(odd) { border-right: 0; } .dx-area:nth-child(even), .dx-kpi:nth-child(even) { padding-left: 0; } .dx-fila-in { grid-template-columns: 1fr; } .dx-barra { grid-template-columns: 80px minmax(0,1fr) auto; } }
 .diag-in { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--e-8) var(--col-gap); align-items: start; padding-block: var(--ritmo-normal); }
-@media (max-width: 1000px) { .diag-in { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .diag-in { grid-template-columns: minmax(0, 1fr); } }

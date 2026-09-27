@@ -207,6 +207,17 @@ export function cabecera(lang, ruta) {
 </div>`;
 }
 
+/* Redes: iconos de trazo propios (mismo grosor que el resto de iconos del sitio), sin colores de marca. */
+export const REDES = [
+  ["Instagram", "https://www.instagram.com/d_codepartners/", "@d_codepartners", '<rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.4" cy="6.6" r=".6" fill="currentColor" stroke="none"/>'],
+  ["LinkedIn", "https://www.linkedin.com/in/diego-si%C3%B1eriz-b45319427/", "Diego Siñeriz", '<rect x="3.2" y="3.2" width="17.6" height="17.6" rx="3"/><path d="M8 10.5v6M8 7.4v.1M11.6 16.5v-6M11.6 13.2c0-1.6 1-2.8 2.5-2.8s2.3 1 2.3 2.7v3.4"/>'],
+  ["Facebook", "https://www.facebook.com/profile.php?id=61593223960437", "D-Code Partners", '<circle cx="12" cy="12" r="8.8"/><path d="M13.3 20.8v-7.6h2.4M13.3 20.8v-7.6M10.4 13.2h2.9M13.3 13.2v-2.3c0-1.4.8-2.2 2.2-2.2h1"/>'],
+];
+function redes(lang) {
+  const sigue = lang === "en" ? "Follow D-Code" : "Síguenos";
+  return `<nav class="pie-redes" aria-label="${sigue}"><p class="rotulo">${sigue}</p><ul>${REDES.map(([n, u, h, d]) => `<li><a class="red" href="${u}" target="_blank" rel="noopener noreferrer me" aria-label="${n}: ${esc(h)}${lang === "en" ? " (opens in a new tab)" : " (se abre en otra pestaña)"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${d}</svg><span class="red-n" aria-hidden="true">${n}</span></a></li>`).join("")}</ul></nav>`;
+}
+
 export function pie(lang) {
   const t = T[lang].pie;
   return `<footer class="pie">
@@ -215,6 +226,7 @@ export function pie(lang) {
       <div class="pie-marca"><a class="marca" href="${L(lang, "/")}" aria-label="D-Code Partners">${LOGO}<span class="marca-n" aria-hidden="true">D-Code<small>PARTNERS</small></span></a><p>${esc(t.frase)}</p><p style="margin-top:12px"><a href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a></p></div>
       ${t.cols.map(([h, ls]) => `<nav aria-label="${esc(h)}"><h2 class="rotulo">${esc(h)}</h2><ul>${ls.map(([r, n]) => `<li><a href="${L(lang, r)}">${esc(n)}</a></li>`).join("")}</ul></nav>`).join("\n      ")}
     </div>
+    ${redes(lang)}
     <div class="pie-base"><p class="rotulo">${t.base}</p><p class="rotulo">${t.baseDer}</p></div>
   </div>
 </footer>`;

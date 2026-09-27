@@ -22,10 +22,14 @@
 .prod-mas { grid-column: 1 / -1; }
 .prod-mas summary { cursor: pointer; color: var(--tinta-2); font-size: .92rem; width: max-content; }
 .prod-mas summary:hover { color: var(--tinta); }
-.prod-mas[open] { display: grid; gap: 10px; }
-.prod-mas ul { padding-left: 1.1em; display: grid; gap: 6px; color: var(--tinta-2); margin: 6px 0 0; font-size: .94rem; }
+.prod-mas { padding-top: 4px; }
+/* <details> no reparte a sus hijos con grid (el contenido va en un hueco propio): márgenes explícitos. */
+.prod-mas[open] summary { margin-bottom: 18px; }
+.prod-mas ul { padding-left: 1.1em; display: grid; gap: 10px; color: var(--tinta-2); margin: 0; font-size: .94rem; line-height: 1.5; }
+.prod-mas li::marker { color: var(--tinta-3); }
+.prod-mas .rotulo { margin: 28px 0 12px; padding-top: 20px; border-top: 1px solid var(--linea); }
 .prod-no { opacity: .75; }
-.prod-acc { grid-column: 1 / -1; }
+.prod-acc { grid-column: 1 / -1; margin-top: 8px; }
 .prod-acc .enlace { font-size: .92rem; }
 .pasos-compra { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--col-gap); border-top: 1px solid var(--linea-2); }
 .pasos-compra li { padding-top: 16px; display: grid; gap: 6px; font-size: 1.05rem; }

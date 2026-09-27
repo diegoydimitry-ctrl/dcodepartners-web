@@ -245,6 +245,16 @@ strong, b { font-weight: 650; color: var(--tinta); }
 .pie ul { list-style: none; padding: 0; display: grid; gap: 10px; }
 .pie a { text-decoration: none; color: var(--tinta-2); font-size: .95rem; }
 .pie a:hover { color: var(--tinta); text-decoration: underline; text-decoration-color: var(--aire); }
+/* redes: una fila propia al final; icono de trazo + nombre en una cápsula con filete; al pasar, se invierte */
+.pie-redes { margin-top: var(--e-9); padding-top: var(--e-6); border-top: 1px solid var(--linea); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--e-5); }
+.pie-redes ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.pie .red { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 20px 0 14px; border: 1px solid var(--linea-2); border-radius: 999px; color: var(--tinta); font-size: .95rem; font-weight: 500; text-decoration: none; transition: background-color var(--t-rapida) ease, color var(--t-rapida) ease, border-color var(--t-rapida) ease, transform 160ms var(--ease-out); }
+.pie .red svg { width: 20px; height: 20px; flex: none; transition: transform var(--t-media) var(--ease-out); }
+.pie .red:active { transform: scale(.97); }
+.pie .red:focus-visible { outline: 2px solid var(--aire); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .pie .red:hover { background: var(--inversa); color: var(--sobre-inversa); border-color: var(--inversa); text-decoration: none; } .pie .red:hover svg { transform: scale(1.08); } }
+@media (max-width: 560px) { .pie .red { padding: 0; width: 52px; height: 52px; justify-content: center; } .pie .red-n { display: none; } }
+.pie-redes + .pie-base { margin-top: var(--e-6); }
 .pie-base { margin-top: var(--e-9); padding-top: var(--e-5); border-top: 1px solid var(--linea); display: flex; flex-wrap: wrap; gap: var(--e-4); justify-content: space-between; }
 .pie-marca p { margin-top: var(--e-4); max-width: 30ch; color: var(--tinta-3); font-size: .95rem; }
 @media (max-width: 900px) { .pie-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pie-marca { grid-column: 1 / -1; } }

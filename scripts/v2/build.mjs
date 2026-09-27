@@ -32,7 +32,7 @@ const diagnostico = (lang) => `<div class="marco diag-in"><div style="display:gr
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const escribir = (rel, html) => { const f = path.join(RAIZ, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, html); console.log("  " + rel); };
 
-const ORG = { "@context": "https://schema.org", "@type": "Organization", "@id": SITIO + "/#organizacion", name: "D-Code Partners", alternateName: "D-Code", url: SITIO + "/", logo: SITIO + "/assets/logo/dcode-icon-sm.png", image: SITIO + "/assets/og-image.png", email: "dcodedepartment@gmail.com", address: { "@type": "PostalAddress", addressLocality: "Madrid", addressCountry: "ES" }, founder: [{ "@type": "Person", name: "Diego Siñeriz" }, { "@type": "Person", name: "Dimitry Sosenko" }] };
+const ORG = { "@context": "https://schema.org", "@type": "Organization", "@id": SITIO + "/#organizacion", name: "D-Code Partners", alternateName: "D-Code", url: SITIO + "/", logo: SITIO + "/assets/logo/dcode-icon-sm.png", image: SITIO + "/assets/og-image.png", email: "dcodedepartment@gmail.com", sameAs: ["https://www.instagram.com/d_codepartners/", "https://www.facebook.com/profile.php?id=61593223960437"], address: { "@type": "PostalAddress", addressLocality: "Madrid", addressCountry: "ES" }, founder: [{ "@type": "Person", name: "Diego Siñeriz", sameAs: "https://www.linkedin.com/in/diego-si%C3%B1eriz-b45319427/" }, { "@type": "Person", name: "Dimitry Sosenko" }] };
 const WEB = (lang) => ({ "@context": "https://schema.org", "@type": "WebSite", "@id": SITIO + "/#web", url: SITIO + "/", name: "D-Code Partners", inLanguage: lang === "en" ? "en" : "es", publisher: { "@id": SITIO + "/#organizacion" } });
 
 const PAGINAS = [
@@ -55,7 +55,7 @@ const PAGINAS = [
   })),
   ...["es", "en"].map((lang) => { const c = CT(lang); return {
     lang, ruta: lang === "en" ? "/en/contacto" : "/contacto", archivo: (lang === "en" ? "en/" : "") + "contacto.html",
-    titulo: c.meta.title, descripcion: c.meta.desc, css: ["/assets/v2/contacto.css"], jsonld: c.ld.map((j) => JSON.parse(j)),
+    titulo: c.meta.title, descripcion: c.meta.desc, css: ["/assets/v2/interior.css", "/assets/v2/contacto.css"], jsonld: c.ld.map((j) => JSON.parse(j)),
     extraHead: '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>',
     cuerpo: () => contacto(lang), scripts: ['<script src="/assets/js/catalogo-datos.js" defer></script>', '<script src="/assets/js/configurador.js" defer></script>'],
   }; }),
