@@ -209,7 +209,7 @@ function pintar(b) {
     case "h4": return `<h4 class="h4">${b.h}</h4>`;
     case "etiqueta": return `<p class="etiqueta">${b.h}</p>`;
     case "lead": return `<p class="lead">${b.h}</p>`;
-    case "p": return `<p>${b.h}</p>`;
+    case "p": return /^(Listo|En proceso|Próximamente|Proximamente|Ready|Done|In progress|Coming soon|Live|Operativo)$/i.test(b.h.trim()) ? `<p class="estado estado--${/^(listo|ready|done|live|operativo)$/i.test(b.h.trim()) ? "si" : "no"}">${b.h}</p>` : `<p>${b.h}</p>`;
     case "lista": return b.h;
     case "html": return b.h;
     case "cita": return `<blockquote>${b.h}</blockquote>`;
@@ -298,7 +298,11 @@ export function migrar(rel) {
     const archivo = (lang === "en" ? "en/" : "") + rel;
     let html; try { html = viejo(archivo); } catch { continue; }
     const doc = parse(html, { comment: false });
-    const main = doc.querySelector("main") || doc.querySelector("body") || doc;
+    let main = doc.querySelector("main");
+    if (!main) { // página sin <main>: el cuerpo, pero sin la cabecera ni el pie antiguos (ya los pone la plantilla)
+      main = doc.querySelector("body") || doc;
+      main.querySelectorAll("body > header, body > footer, body > nav, .site-header, .site-footer, footer, .cookie-banner, [class*=chat]").forEach((x) => x.remove());
+    }
     const bs = bloques(main);
     const ruta = "/" + (lang === "en" ? "en/" : "") + rel.replace(/(index)?\.html$/, "").replace(/\/$/, "");
     const m = meta(doc);
