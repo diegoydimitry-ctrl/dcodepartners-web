@@ -64,6 +64,28 @@ Dependencias nuevas en producción: **ninguna**. Fuentes nuevas: Archivo y Marti
 
 No hay ningún otro objeto 3D en el sitio: el resto del peso lo llevan la tipografía y el producto real.
 
+## 4 bis. Interiores: del texto migrado a componentes
+
+La migración del contenido de producción aplanaba los diseños antiguos: celdas en línea que quedaban pegadas («AltaF-2026-0140Anterior81A9…»), el pie antiguo convertido en capítulos (Cambios en proceso), listas de tarjetas convertidas en viñetas. Se corrige en `scripts/v2/migrar.mjs`, reconociendo la estructura y no la página:
+
+| Estructura antigua | Ahora |
+|---|---|
+| Registros encadenados de VERI*FACTU | **Cadena**: tipo y número, huella anterior y huella propia; la propia de uno y la anterior del siguiente, unidas por una línea azul |
+| Estados de VERI*FACTU | **Hoja de ruta**: una línea, un punto por paso, el actual encendido |
+| `li` con título (b) + texto (span) | **Lista de puntos** con filete, número si lo lleva |
+| Listas de tarjetas-enlace (áreas, servicios) | **Filas enlazadas** |
+| Registros de varias celdas (extracto del banco) | **Tabla** |
+| Tres o más puntos seguidos | **Rejilla** de dos columnas |
+| «01» + título | **Paso numerado** |
+| «Listo / En proceso / Próximamente» | **Indicador** (punto azul si está listo) |
+| Retratos de los fundadores | Blanco y negro; el color vuelve al pasar |
+
+Y como red de seguridad, un espacio entre dos elementos contiguos sin espacio entre ellos. Revisado con el detector automático de solapes en 70 páginas × 3 anchos: **0 incidencias**.
+
+**Lectura con movimiento**: cabecera de página con la misma luz de estudio que la portada y título grande; capítulos numerados con una línea que se llena mientras se lee (`view-timeline`); títulos que se descubren; contenido que entra al llegar. Todo CSS en el compositor; sin soporte o con movimiento reducido, estático y completo.
+
+**Navegación**: transición de vista entre documentos (`@view-transition`): fundido corto y cabecera fija, como una sola aplicación.
+
 ## 5. Motion
 
 | Qué | Cómo | Por qué |

@@ -15,7 +15,8 @@
 4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
 5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
 6. **Diagnóstico** (`/diagnostico`): tres preguntas y el resultado con tus horas y tu coste por hora.
-7. Cualquier interior: `/departamentos/finanzas`, `/servicios/automatizaciones`, `/metodo`, `/faq`, `/aviso-legal`.
+7. **Finance** (`/sistema-financiero`), capítulo «Cada factura, registrada y encadenada»: la cadena de registros y la hoja de ruta de VERI*FACTU.
+8. Cualquier interior (fíjate en el número de capítulo: su línea se llena al leer; y al cambiar de página, el fundido): `/departamentos/finanzas`, `/servicios/automatizaciones`, `/metodo`, `/faq`, `/aviso-legal`.
 8. **EN**: `/en` y el selector ES/EN de la cabecera.
 9. En el **móvil**: la escena arriba, el texto abajo; menú a pantalla completa.
 10. Con **movimiento reducido** activado en el sistema: la pieza montada, quieta, y los capítulos uno debajo de otro.
