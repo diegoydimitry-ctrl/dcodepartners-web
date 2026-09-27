@@ -12,7 +12,7 @@ $$("[data-tema]").forEach((b) => b.addEventListener("click", () => {
   const claro = raiz.dataset.theme !== "light";
   const aplicar = () => { raiz.dataset.theme = claro ? "light" : "dark"; try { localStorage.setItem("dcp-tema", claro ? "light" : "dark"); } catch (e) { /* sin almacenamiento */ } };
   // El cambio de tema como cambio de luz: un fundido corto de toda la vista.
-  if (document.startViewTransition && !REDUCIDO) document.startViewTransition(aplicar); else aplicar();
+  if (document.startViewTransition && !REDUCIDO) { raiz.classList.add("vt-tema"); document.startViewTransition(aplicar).finished.finally(() => raiz.classList.remove("vt-tema")); } else aplicar();
 }));
 
 /* ------------------------------------------------------------ cabecera */

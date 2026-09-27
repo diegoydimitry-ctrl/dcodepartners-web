@@ -291,3 +291,14 @@ strong, b { font-weight: 650; color: var(--tinta); }
 .chat-input-row button { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--tinta); color: var(--bg); display: grid; place-items: center; }
 .chat-input-row button svg { width: 16px; height: 16px; }
 @media (prefers-reduced-motion: reduce) { .chat-widget.open .chat-window { animation: none; } }
+
+/* Navegación entre páginas como una sola aplicación: fundido corto entre documentos
+   (View Transitions entre documentos; los navegadores sin soporte navegan como siempre).
+   La cabecera no parpadea: es el mismo elemento en las dos páginas. */
+@view-transition { navigation: auto; }
+.cab { view-transition-name: cabecera; }
+html:not(.vt-tema)::view-transition-old(root) { animation: vt-sale 220ms var(--ease-out) both; }
+html:not(.vt-tema)::view-transition-new(root) { animation: vt-entra 380ms var(--ease-out) both; }
+@keyframes vt-sale { to { opacity: 0; transform: translateY(-8px); } }
+@keyframes vt-entra { from { opacity: 0; transform: translateY(14px); } }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
