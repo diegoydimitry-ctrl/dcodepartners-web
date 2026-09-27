@@ -12,8 +12,11 @@ SR, DUR = 48000, 24.0
 n = int(SR * DUR)
 t = np.arange(n) / SR
 
-# Marcas de tiempo, en segundos, alineadas con escena.html (fotograma / 30)
-T_VENDE, T_RELACION, T_CIFRA, T_CIERRE = 244 / 30, 428 / 30, 574 / 30, 698 / 30
+# Marcas de tiempo, en segundos, alineadas con escena.html (fotograma / 30).
+# Revisión 2: la oferta abre la pieza, así que el bajo entra antes y el golpe de
+# la cifra se adelanta con ella.
+T_OFERTA, T_PORQUE = 16 / 30, 110 / 30
+T_VENDE, T_RELACION, T_CIFRA, T_CIERRE = 210 / 30, 400 / 30, 545 / 30, 650 / 30
 
 
 def env(ini, fin, sube=0.35, baja=0.6):
@@ -68,7 +71,11 @@ for k in range(int(DUR / periodo) + 1):
 base = (seno(110) + 0.6 * seno(164.81) + 0.35 * seno(220)) / 2
 mezcla += 0.14 * env(0.4, DUR - 0.5, 2.2, 2.4) * base
 
-# 3 · el bajo entra con "lo que vas a vender"
+# 3 · la cifra de apertura: un golpe corto cuando aparece el 50 %
+mezcla += 0.34 * env(T_OFERTA, T_OFERTA + 0.9, 0.006, 0.85) * np.sin(
+    2 * math.pi * np.cumsum(58 * np.exp(-2.6 * np.clip(t - T_OFERTA, 0, None))) / SR)
+
+# 4 · el bajo entra con "lo que vendes"
 mezcla += 0.20 * env(T_VENDE, DUR - 0.6, 0.9, 2.2) * (seno(55) + 0.45 * seno(82.41))
 
 # 4 · arpegio tenue que abre la parte de la relación comercial
