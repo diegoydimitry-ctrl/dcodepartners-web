@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>RUIDO · D-Code Partners</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script src="../comun/motor.js"></script>
+<script>
+"use strict";
+// RUIDO — anuncio de YouTube (16:9). Cada fotograma es función de t; los tiempos salen de la voz (montaje.json)
+// y de la banda sonora (audio/cortes.json).
+const W = 1920, H = 1080, FPS = 30;
+const D = window.DATOS, MT = D.montaje, CT = D.cortes;
+const V = Object.fromEntries(MT.voz.map((f) => [f.id, f]));
+const [SIL0, SIL1] = CT.silencio, G0 = CT.golpe, [R0, R1] = CT.rotura, FIN = CT.fin_groove, TICK = CT.tick;
+window.META = { W, H, fps: FPS, duracion: MT.duracion, segura: [96, 54, 1824, 1026], minpx: 24 };
+const c = document.getElementById("c").getContext("2d");
+const { clamp, lerp, prog, eOut, eOut5, eIn, eIO, eExpo, muelle, ventana, hash } = M;
+
+const C = { negro: "#09090b", panel: "#141418", panel2: "#1b1b21", linea: "#2a2a32", texto: "#f2f2f4", tenue: "#8b8b97",
+            rojo: "#ff3d2e", claro: "#f3f4f6", tarjeta: "#ffffff", tinta: "#0c0e13", gris: "#d9dce3", gris2: "#6b7280",
+            azul: "#2f6bff", pixel: "#5b8cff" };
+const F = (p, px) => M.fuente(p, px, "Inter Tight");
+const SERIF = (px) => `italic 400 ${px}px "Instrument Serif"`;
+const MONO = (p, px) => M.fuente(p, px, "JetBrains Mono");
+const palabra = (id, i) => V[id].palabras[i];
+const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "").startsWith(w));
+
+// ════════════════════════════ 1 · GANCHO: microplanos de trabajo cotidiano ════════════════════════════
+// Interfaces genéricas (sin marcas de terceros), dibujadas en oscuro, encuadres cerrados.
+function ui_marco(x, y, w, h, titulo) {
+  M.rr(c, x, y, w, h, 18); c.fillStyle = C.panel; c.fill(); c.strokeStyle = C.linea; c.lineWidth = 2; c.stroke();
+  if (titulo) M.texto(c, titulo, x + 28, y + 50, { f: MONO(500, 22), color: C.tenue, track: 2, registrar: false });
+}
+function lineas(x, y, w, n, alto, r, color = "#2c2c35") {
+  for (let i = 0; i < n; i++) { const ww = w * (0.45 + 0.55 * r()); M.rr(c, x, y + i * alto, ww, alto * 0.42, 6); c.fillStyle = color; c.fill(); }
+}
+const PLANOS = [
+  function correo(t, r) {                     // bandeja de entrada saturada
+    ui_marco(160, 90, 1600, 900, "BANDEJA DE ENTRADA · 128 SIN LEER");
+    const asuntos = ["Re: Re: Fwd: presupuesto actualizado", "¿Me confirmas los datos del cliente?", "URGENTE: factura sin enviar",
+      "Re: ¿quién tiene la última versión?", "Recordatorio: informe semanal", "Fwd: Fwd: datos para el Excel", "Re: lo mismo que ayer"];
+    asuntos.forEach((s, i) => {
+      const y = 170 + i * 112; c.fillStyle = i % 2 ? "#17171c" : "#1c1c23"; c.fillRect(162, y, 1596, 110);
+      c.fillStyle = C.rojo; c.beginPath(); c.arc(214, y + 55, 9, 0, 7); c.fill();
+      M.texto(c, s, 250, y + 66, { f: F(i < 3 ? 700 : 500, 40), color: i < 3 ? C.texto : C.tenue, registrar: false });
+      M.texto(c, ["09:02", "09:07", "09:11", "09:12", "09:20", "09:31", "09:33"][i], 1700, y + 66, { f: MONO(500, 28), color: C.tenue, al: "right", registrar: false });
+    });
+  },
+  function hoja(t, r) {                       // hoja de cálculo: selección copiándose
+    c.fillStyle = "#101014"; c.fillRect(0, 0, W, H);
+    const cw = 250, ch = 76;
+    for (let i = 0; i < 9; i++) for (let j = 0; j < 15; j++) {
+      const x = 40 + i * cw, y = 40 + j * ch;
+      c.strokeStyle = "#24242b"; c.lineWidth = 2; c.strokeRect(x, y, cw, ch);
+      if (j === 0) M.texto(c, "ABCDEFGHI"[i], x + cw / 2, y + 50, { f: MONO(600, 30), color: C.tenue, al: "center", registrar: false });
+      else if (i > 0) M.texto(c, (1000 + ((hash(i * 31 + j) * 90000) | 0)).toLocaleString("es-ES") + ",00", x + cw - 18, y + 50, { f: MONO(400, 28), color: "#b9b9c4", al: "right", registrar: false });
+      else M.texto(c, String(j + 1), x + cw / 2, y + 50, { f: MONO(400, 28), color: C.tenue, al: "center", registrar: false });
+    }
+    c.save(); c.setLineDash([18, 12]); c.lineDashOffset = -t * 120; c.strokeStyle = "#35c46a"; c.lineWidth = 5;
+    c.strokeRect(40 + cw, 40 + ch * 3, cw * 3, ch * 6); c.restore();
+  },
+  function chat(t, r) {                       // chat: las mismas preguntas
+    c.fillStyle = "#0f1013"; c.fillRect(0, 0, W, H);
+    const b = [["¿Me pasas el Excel de ayer?", 0], ["¿Cuál, el final o el final2?", 1], ["¿Dónde está la factura de marzo?", 0],
+               ["¿Quién llamó al cliente?", 0], ["Te lo reenvío otra vez", 1]];
+    b.forEach(([s, yo], i) => {
+      const w = M.ancho(c, s, F(500, 50)) + 80, x = yo ? 1760 - w : 160, y = 110 + i * 180;
+      M.rr(c, x, y, w, 130, 40); c.fillStyle = yo ? "#2b2f3a" : "#1d1d24"; c.fill();
+      M.texto(c, s, x + 40, y + 82, { f: F(500, 50), color: C.texto, registrar: false });
+    });
+    for (let k = 0; k < 3; k++) { c.fillStyle = C.tenue; c.globalAlpha = 0.4 + 0.6 * Math.abs(Math.sin(t * 8 + k)); c.beginPath(); c.arc(200 + k * 36, 1020, 11, 0, 7); c.fill(); }
+    c.globalAlpha = 1;
+  },
+  function factura(t, r) {                    // factura en papel, pendiente
+    c.fillStyle = "#1a1a1f"; c.fillRect(0, 0, W, H);
+    c.save(); c.translate(960, 560); c.rotate(-0.04); c.fillStyle = "#eceae4"; c.fillRect(-620, -560, 1240, 1300);
+    M.texto(c, "FACTURA", -540, -420, { f: F(800, 96), color: "#1a1a1a", registrar: false });
+    M.texto(c, "Nº 2026-0187", -540, -350, { f: MONO(500, 40), color: "#444", registrar: false });
+    for (let i = 0; i < 6; i++) { c.fillStyle = "#c9c6bd"; c.fillRect(-540, -240 + i * 90, 1080, 3);
+      M.texto(c, ["Servicio", "Horas", "Material", "Desplazamiento", "Revisión", "Total"][i], -540, -262 + i * 90, { f: F(500, 36), color: "#333", registrar: false });
+      M.texto(c, ["1.200,00", "640,00", "310,50", "90,00", "150,00", "2.390,50 €"][i], 540, -262 + i * 90, { f: MONO(500, 36), color: "#333", al: "right", registrar: false }); }
+    c.rotate(0.12); c.strokeStyle = C.rojo; c.lineWidth = 10; c.strokeRect(80, 240, 520, 150);
+    M.texto(c, "PENDIENTE", 340, 345, { f: F(900, 84), color: C.rojo, al: "center", registrar: false });
+    c.restore();
+  },
+  function llamada(t, r) {                    // llamada entrante que interrumpe
+    c.fillStyle = "#0c0d10"; c.fillRect(0, 0, W, H);
+    for (let k = 0; k < 3; k++) { const a = ((t * 1.4 + k / 3) % 1); c.strokeStyle = `rgba(255,255,255,${0.25 * (1 - a)})`; c.lineWidth = 4;
+      c.beginPath(); c.arc(960, 430, 140 + a * 260, 0, 7); c.stroke(); }
+    c.fillStyle = "#2b2f3a"; c.beginPath(); c.arc(960, 430, 140, 0, 7); c.fill();
+    M.texto(c, "C", 960, 480, { f: F(700, 130), color: C.texto, al: "center", registrar: false });
+    M.texto(c, "Cliente", 960, 700, { f: F(700, 76), color: C.texto, al: "center", registrar: false });
+    M.texto(c, "Llamada entrante… (4ª hoy)", 960, 770, { f: F(400, 40), color: C.tenue, al: "center", registrar: false });
+    [[760, "#e5484d"], [1160, "#30a46c"]].forEach(([x, col]) => { c.fillStyle = col; c.beginPath(); c.arc(x, 930, 70, 0, 7); c.fill(); });
+  },
+  function menu(t, r) {                       // copiar / pegar, con el cursor
+    c.fillStyle = "#121216"; c.fillRect(0, 0, W, H); lineas(140, 120, 1100, 9, 100, r);
+    ui_marco(900, 250, 700, 560, "");
+    ["Cortar", "Copiar", "Pegar", "Pegar sin formato", "Duplicar"].forEach((s, i) => {
+      const y = 290 + i * 100; if (i === 2) { M.rr(c, 920, y, 660, 90, 12); c.fillStyle = "#2f6bff55"; c.fill(); }
+      M.texto(c, s, 960, y + 60, { f: F(500, 46), color: C.texto, registrar: false });
+      M.texto(c, ["Ctrl X", "Ctrl C", "Ctrl V", "Ctrl ⇧ V", "Ctrl D"][i], 1550, y + 60, { f: MONO(400, 32), color: C.tenue, al: "right", registrar: false });
+    });
+    c.save(); c.translate(1300 + Math.sin(t * 9) * 6, 540); c.fillStyle = "#fff"; c.strokeStyle = "#000"; c.lineWidth = 3;
+    c.beginPath(); c.moveTo(0, 0); c.lineTo(0, 70); c.lineTo(18, 54); c.lineTo(32, 84); c.lineTo(44, 78); c.lineTo(30, 50); c.lineTo(52, 50); c.closePath(); c.fill(); c.stroke(); c.restore();
+  },
+  function agenda(t, r) {                     // agenda: todo se pisa
+    c.fillStyle = "#0e0f12"; c.fillRect(0, 0, W, H);
+    ["LUN", "MAR", "MIÉ", "JUE", "VIE"].forEach((d, i) => { M.texto(c, d, 230 + i * 340, 90, { f: MONO(600, 34), color: C.tenue, al: "center", registrar: false });
+      c.fillStyle = "#1f1f26"; c.fillRect(62 + i * 340, 120, 2, 940); });
+    const ev = [[0, 180, 300, "Reunión"], [0, 330, 220, "Llamar a…"], [1, 160, 380, "Cierre mes"], [1, 420, 260, "Revisar Excel"],
+      [2, 250, 300, "Reunión"], [2, 380, 280, "Informe"], [3, 170, 420, "Pedidos"], [3, 300, 260, "Urgente"], [4, 200, 330, "Reunión"], [4, 350, 300, "Copiar datos"]];
+    ev.forEach(([d, y, h, s], i) => { const x = 80 + d * 340 + (i % 2) * 90; M.rr(c, x, y, 250, h, 14); c.fillStyle = i % 3 ? "#e5484d33" : "#e5484d66"; c.fill();
+      c.strokeStyle = C.rojo; c.lineWidth = 3; c.stroke(); M.texto(c, s, x + 20, y + 50, { f: F(600, 34), color: C.texto, registrar: false }); });
+  },
+  function busqueda(t, r) {                   // buscar el archivo bueno
+    c.fillStyle = "#0f1013"; c.fillRect(0, 0, W, H);
+    M.rr(c, 200, 330, 1520, 160, 80); c.fillStyle = "#1d1d24"; c.fill(); c.strokeStyle = "#3a3a44"; c.lineWidth = 3; c.stroke();
+    c.strokeStyle = C.tenue; c.lineWidth = 8; c.beginPath(); c.arc(310, 405, 30, 0, 7); c.stroke(); c.beginPath(); c.moveTo(332, 427); c.lineTo(360, 455); c.stroke();
+    const q = "presupuesto_marzo_FINAL_v3.xlsx"; const n = Math.min(q.length, Math.floor(t * 70) + 6);
+    M.texto(c, q.slice(0, n) + (Math.floor(t * 6) % 2 ? "|" : ""), 400, 432, { f: F(500, 60), color: C.texto, registrar: false });
+    M.texto(c, "0 resultados", 400, 600, { f: F(600, 52), color: C.rojo, registrar: false });
+  },
+  function avisos(t, r) {                     // avisos apilados
+    c.fillStyle = "#0d0e11"; c.fillRect(0, 0, W, H);
+    ["14 mensajes nuevos", "Recordatorio: enviar el informe", "3 tareas vencidas", "¿Has visto mi correo?", "Actualiza los datos del cliente"].forEach((s, i) => {
+      const y = 100 + i * 190, x = 420 + (i % 2) * 60; M.rr(c, x, y, 1080, 160, 30); c.fillStyle = "#1c1c23"; c.fill();
+      c.fillStyle = C.rojo; M.rr(c, x + 34, y + 44, 72, 72, 18); c.fill();
+      M.texto(c, s, x + 140, y + 98, { f: F(600, 46), color: C.texto, registrar: false });
+    });
+  },
+  function archivos(t, r) {                   // versiones del mismo archivo
+    ui_marco(200, 120, 1520, 840, "DOCUMENTOS");
+    ["informe_final.docx", "informe_final(1).docx", "informe_final_DEF.docx", "informe_final_DEF_bueno.docx", "informe_final_DEF_bueno_v2.docx", "copia de informe_final.docx"].forEach((s, i) => {
+      const y = 200 + i * 120; c.fillStyle = "#3a6df0"; M.rr(c, 250, y + 20, 54, 70, 8); c.fill();
+      M.texto(c, s, 340, y + 72, { f: F(500, 46), color: i === 4 ? C.texto : C.tenue, registrar: false });
+    });
+  },
+];
+// qué plano va en cada corte (sin repetir consecutivos)
+const ORDEN = [0, 5, 1, 3, 2, 8, 5, 1, 6, 4, 0, 2, 7, 9, 1, 8, 3, 6, 4, 2, 5, 0, 9, 7, 1, 8, 2, 6];
+
+function gancho(t, n) {
+  // cortes: los 20 del sonido + microcortes cada 2 fotogramas en la última palabra (el nervio sube)
+  const extra = []; for (let x = V.h5.t0 + 0.2; x < SIL0; x += 2 / FPS) extra.push(x);
+  const cortes = [0, ...CT.cortes.filter((x) => x > 0.05), ...extra].sort((a, b) => a - b);
+  let k = 0; while (k + 1 < cortes.length && t >= cortes[k + 1]) k++;
+  const t0 = cortes[k], dt = t - t0, r = M.rng(k * 97 + 11);
+  const tipo = PLANOS[ORDEN[k % ORDEN.length]];
+  // encuadre cerrado y distinto en cada plano: escala, desplazamiento, giro
+  const esc = 1.12 + r() * 0.35 + dt * 0.25, rot = (r() - 0.5) * 0.08, ox = (r() - 0.5) * 260, oy = (r() - 0.5) * 160;
+  c.save(); c.fillStyle = C.negro; c.fillRect(0, 0, W, H);
+  c.translate(W / 2 + ox, H / 2 + oy); c.rotate(rot); c.scale(esc, esc); c.translate(-W / 2, -H / 2);
+  tipo(t, r); c.restore();
+  // oscurece para que la palabra mande
+  c.fillStyle = "rgba(6,6,8,0.55)"; c.fillRect(0, 0, W, H);
+  // en el fotograma del corte: destello y desgarro horizontal
+  if (dt < 1.01 / FPS) {
+    c.fillStyle = "rgba(255,255,255,0.10)"; c.fillRect(0, 0, W, H);
+    const im = c.getImageData(0, 0, W, H); const rr = M.rng(k * 7 + 3);
+    for (let s = 0; s < 6; s++) { const y = (rr() * H) | 0, h = 10 + ((rr() * 60) | 0), dx = ((rr() - 0.5) * 120) | 0; c.putImageData(im, dx, 0, 0, y, W, h); }
+  }
+  palabrasGancho(t);
+  // la cinta se frena: la imagen cae y se apaga en los últimos fotogramas antes del silencio
+  const kf = prog(t, V.h5.t1 - 0.06, SIL0);
+  if (kf > 0) { const im = c.getImageData(0, 0, W, H); c.fillStyle = "#000"; c.fillRect(0, 0, W, H);
+    c.globalAlpha = 1 - kf * 0.7; c.putImageData(im, 0, (eIn(kf) * 220) | 0); c.globalAlpha = 1;
+    c.fillStyle = `rgba(0,0,0,${kf * 0.6})`; c.fillRect(0, 0, W, H); }
+}
+
+function palabrasGancho(t) {
+  const ids = ["h1", "h2", "h3", "h4", "h5"]; let act = null;
+  ids.forEach((id, i) => { const t1 = i < 4 ? V[ids[i + 1]].t0 : SIL0; if (t >= V[id].t0 - 1 / FPS && t < t1) act = [id, t - V[id].t0 + 1 / FPS]; });
+  if (!act) return;
+  const [id, dt] = act, k = muelle(prog(dt, 0, 0.35)), ent = eOut5(prog(dt, 0, 0.08));
+  c.save();
+  const sombra = () => { c.shadowColor = "rgba(0,0,0,0.6)"; c.shadowBlur = 40; };
+  if (id === "h1") {        // COPIAR: la palabra se copia a sí misma
+    sombra(); const s = lerp(1.25, 1, k);
+    c.translate(140, 640); c.scale(s, s);
+    if (dt > 0.1) M.texto(c, "COPIAR", 22 * eOut(prog(dt, 0.1, 0.25)), 22 * eOut(prog(dt, 0.1, 0.25)), { f: F(900, 300), color: C.rojo, alpha: 0.55, track: -8, registrar: false });
+    M.texto(c, "COPIAR", 0, 0, { f: F(900, 300), color: C.texto, alpha: ent, track: -8 });
+  } else if (id === "h2") { // PEGAR: cae y se pega
+    sombra(); c.translate(1780, 640 - (1 - eOut5(prog(dt, 0, 0.12))) * 120);
+    M.texto(c, "PEGAR", 0, 0, { f: F(900, 320), color: C.texto, alpha: ent, al: "right", track: -8 });
+  } else if (id === "h3") { // RESPONDER: con su cadena de «Re:»
+    sombra(); const s = lerp(1.18, 1, k); c.translate(960, 600); c.scale(s, s);
+    M.texto(c, "Re: Re: Re: Re:", 0, -250, { f: MONO(600, 52), color: C.rojo, al: "center", alpha: ent });
+    M.texto(c, "RESPONDER", 0, 0, { f: F(900, 250), color: C.texto, alpha: ent, al: "center", track: -8 });
+  } else if (id === "h4") { // BUSCAR: se escribe como en un buscador
+    sombra(); const n = Math.min(6, Math.ceil(prog(dt, 0, 0.22) * 6));
+    M.texto(c, "BUSCAR".slice(0, n), 140, 420, { f: F(900, 300), color: C.texto, track: -8 });
+    if (Math.floor(dt * 8) % 2 === 0) { const w = M.ancho(c, "BUSCAR".slice(0, n), F(900, 300), -8); c.fillStyle = C.rojo; c.fillRect(160 + w, 190, 16, 250); }
+  } else {                  // OTRA VEZ: eco, cada vez más
+    const tr = hash(Math.floor(dt * 30)) * 10 - 5;
+    for (let e = 4; e >= 0; e--) {
+      const y = 650 + (e - 2) * 185 * eOut(prog(dt, 0.05 + e * 0.07, 0.25 + e * 0.07));
+      M.texto(c, "OTRA VEZ", 960 + (e ? tr * e : 0), y, { f: F(900, 230), color: e ? C.rojo : C.texto, alpha: e ? 0.5 / e * eOut(prog(dt, e * 0.07, 0.2 + e * 0.07)) : 1, al: "center", track: -8, registrar: e === 0 });
+    }
+  }
+  c.restore();
+}
+
+// ════════════════════════════ 2 · «Esto no es trabajo. Es ruido.» ════════════════════════════
+function frase(t) {
+  c.fillStyle = C.negro; c.fillRect(0, 0, W, H);
+  const pa = V.l1.palabras; const dim = eOut(prog(t, V.l2.t0 - 0.1, V.l2.t0 + 0.2));
+  let x = 0; const f = F(600, 110); const tot = pa.reduce((s, p) => s + M.ancho(c, p.w + " ", f, -2), 0);
+  const salida = prog(t, 7.25, 7.75);
+  pa.forEach((p) => {
+    const k = eOut5(prog(t, p.t0 - 0.03, p.t0 + 0.22)); const w = M.ancho(c, p.w + " ", f, -2);
+    M.texto(c, p.w, 960 - tot / 2 + x, lerp(560, 330, eIO(dim)) + (1 - k) * 40, { f, color: C.texto, alpha: k * (1 - dim * 0.65) * (1 - salida), track: -2 });
+    x += w;
+  });
+  if (t >= V.l2.t0 - 0.02) {
+    const dt = t - V.l2.t0, k = muelle(prog(dt, 0, 0.4));
+    M.texto(c, "Es", 960, 520 - (1 - eOut(prog(dt, 0, 0.15))) * 30, { f: F(500, 80), color: C.tenue, al: "center", alpha: eOut(prog(dt, 0, 0.15)) * (1 - salida) });
+    // RUIDO: vibra; al principio con desgarro fuerte, luego un temblor que no se va
+    const fuerza = 0.25 + 1.2 * Math.exp(-dt * 5);
+    c.save(); c.translate(960, 800); const s = lerp(1.3, 1, k) * (1 - 0.25 * eIn(salida)); c.scale(s, s);
+    for (let sl = 0; sl < 12; sl++) {
+      const y0 = -250 + sl * 26, dx = (hash(sl * 13 + Math.floor(t * 30)) - 0.5) * 60 * fuerza;
+      c.save(); c.beginPath(); c.rect(-1000, y0, 2000, 26); c.clip();
+      M.texto(c, "RUIDO.", dx + 10 * fuerza, 0, { f: F(900, 320), color: C.rojo, al: "center", alpha: 0.6 * (1 - salida), track: -6, registrar: false });
+      M.texto(c, "RUIDO.", dx, 0, { f: F(900, 320), color: C.texto, al: "center", alpha: 1 - salida, track: -6, registrar: sl === 6 });
+      c.restore();
+    }
+    c.restore();
+  }
+}
+
+// ════════════════════════════ 3 · El problema: islas desconectadas ════════════════════════════
+const ISLAS = [
+  { id: "CORREO", x: 330, y: 300, pc: [720, 180] }, { id: "FACTURAS", x: 820, y: 210, pc: [1200, 180] },
+  { id: "CHAT", x: 1420, y: 330, pc: [1680, 180] }, { id: "CLIENTES", x: 420, y: 700, pc: [720, 540] },
+  { id: "EXCEL", x: 1010, y: 640, pc: [1200, 540] }, { id: "AGENDA", x: 1530, y: 760, pc: [1680, 540] },
+];
+// saltos de la persona: isla de destino en cada palabra de l3, l4, l5
+const SALTOS = (() => {
+  const s = [{ t: 7.6, i: 1 }]; const seq = [4, 0, 1, 4, 2, 3, 5, 2, 0, 4, 3, 1, 2, 5, 0, 4, 2, 3, 1, 5, 2, 4, 0];
+  let k = 0; ["l3", "l4", "l5"].forEach((id) => V[id].palabras.forEach((p) => s.push({ t: p.t0, i: seq[k++ % seq.length] })));
+  return s;
+})();
+function posPersona(t) {
+  let a = SALTOS[0], b = null;
+  for (let i = 0; i < SALTOS.length; i++) if (SALTOS[i].t <= t) { a = SALTOS[i]; b = SALTOS[i + 1] || null; }
+  const pa = ISLAS[a.i]; const i0 = SALTOS.indexOf(a); const prev = i0 > 0 ? ISLAS[SALTOS[i0 - 1].i] : pa;
+  const k = eIO(prog(t, a.t, a.t + 0.22)); const x = lerp(prev.x, pa.x, k), y = lerp(prev.y, pa.y, k) - Math.sin(k * Math.PI) * 120;
+  return [x, y, i0];
+}
+function isla(ix, x, y, esc, alpha, t, limpio = 0) {
+  const I = ISLAS[ix]; const w = 330, h = 210;
+  c.save(); c.translate(x, y); c.scale(esc, esc); c.globalAlpha *= alpha;
+  const oscuro = 1 - limpio;
+  M.rr(c, -w / 2, -h / 2, w, h, 22);
+  c.fillStyle = oscuro > 0.5 ? C.panel : C.tarjeta; c.fill();
+  c.strokeStyle = oscuro > 0.5 ? C.linea : C.gris; c.lineWidth = 2.5; c.stroke();
+  M.texto(c, I.id, -w / 2 + 26, -h / 2 + 48, { f: MONO(600, 28), color: oscuro > 0.5 ? C.tenue : C.gris2, track: 2 });
+  icono(ix, w / 2 - 44, -h / 2 + 36, oscuro > 0.5 ? C.tenue : C.azul);
+  const r = M.rng(ix * 5 + 1);
+  for (let i = 0; i < 3; i++) { M.rr(c, -w / 2 + 26, -h / 2 + 84 + i * 34, (w - 52) * (0.4 + 0.6 * r()), 14, 7); c.fillStyle = oscuro > 0.5 ? "#2a2a33" : "#e8eaef"; c.fill(); }
+  c.restore();
+}
+// iconos de línea de cada herramienta (dibujados, genéricos)
+function icono(ix, x, y, col) {
+  c.save(); c.translate(x, y); c.strokeStyle = col; c.fillStyle = col; c.lineWidth = 3; c.lineJoin = "round"; c.beginPath();
+  if (ix === 0) { c.rect(-16, -11, 32, 22); c.moveTo(-16, -11); c.lineTo(0, 3); c.lineTo(16, -11); }
+  else if (ix === 1) { c.rect(-12, -15, 24, 30); c.moveTo(-6, -5); c.lineTo(6, -5); c.moveTo(-6, 2); c.lineTo(6, 2); c.moveTo(-6, 9); c.lineTo(2, 9); }
+  else if (ix === 2) { c.roundRect(-16, -13, 32, 20, 6); c.moveTo(-8, 7); c.lineTo(-10, 15); c.lineTo(0, 7); }
+  else if (ix === 3) { c.arc(0, -6, 7, 0, 7); c.moveTo(-13, 15); c.quadraticCurveTo(0, -2, 13, 15); }
+  else if (ix === 4) { c.rect(-15, -13, 30, 26); c.moveTo(-15, -4); c.lineTo(15, -4); c.moveTo(-15, 5); c.lineTo(15, 5); c.moveTo(-4, -13); c.lineTo(-4, 13); }
+  else { c.rect(-15, -12, 30, 26); c.moveTo(-15, -4); c.lineTo(15, -4); c.moveTo(-8, -17); c.lineTo(-8, -9); c.moveTo(8, -17); c.lineTo(8, -9); }
+  c.stroke(); c.restore();
+}
+function problema(t, n) {
+  c.fillStyle = C.negro; c.fillRect(0, 0, W, H);
+  const cam = eIO(prog(t, 7.4, 15.3)); const esc = lerp(0.96, 1.1, cam);
+  c.save(); c.translate(960, 540); c.scale(esc, esc); c.rotate(lerp(-0.01, 0.015, cam)); c.translate(-960, -540);
+  const aparece = (i) => eOut(prog(t, 7.4 + i * 0.07, 7.9 + i * 0.07));
+  // enlaces rotos (l4: «herramientas que no se hablan»)
+  const tH = pal("l4", "hablan").t0;
+  [[0, 1], [1, 2], [3, 4], [4, 5], [0, 3], [1, 4]].forEach(([a, b], j) => {
+    const k = prog(t, V.l4.t0 + j * 0.12, V.l4.t0 + 0.5 + j * 0.12); if (k <= 0) return;
+    const A = ISLAS[a], B = ISLAS[b]; const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+    c.save(); c.setLineDash([14, 14]); c.strokeStyle = t > tH ? "#ff3d2e88" : "#ffffff44"; c.lineWidth = 3;
+    const corta = t > tH ? 0.38 : 0.5;
+    c.beginPath(); c.moveTo(A.x, A.y); c.lineTo(lerp(A.x, mx, eOut(k) * corta * 2), lerp(A.y, my, eOut(k) * corta * 2)); c.stroke();
+    c.beginPath(); c.moveTo(B.x, B.y); c.lineTo(lerp(B.x, mx, eOut(k) * corta * 2), lerp(B.y, my, eOut(k) * corta * 2)); c.stroke(); c.restore();
+    if (t > tH) { const kx = muelle(prog(t, tH + j * 0.05, tH + 0.3 + j * 0.05)); c.save(); c.translate(mx, my); c.scale(kx, kx);
+      c.strokeStyle = C.rojo; c.lineWidth = 7; c.beginPath(); c.moveTo(-18, -18); c.lineTo(18, 18); c.moveTo(18, -18); c.lineTo(-18, 18); c.stroke(); c.restore(); }
+  });
+  ISLAS.forEach((I, i) => isla(i, I.x + Math.sin(t * 0.9 + i) * 8, I.y + Math.cos(t * 0.7 + i * 2) * 8, 1, aparece(i), t));
+  // datos que se copian a mano (l3): una ficha viaja de FACTURAS a EXCEL, una y otra vez
+  if (t > V.l3.t0 - 0.2 && t < V.l4.t0 + 0.4) {
+    for (let q = 0; q < 3; q++) {
+      const k = ((t - V.l3.t0) * 0.9 + q / 3) % 1; if (t - V.l3.t0 + q / 3 < 0) continue;
+      const A = ISLAS[1], B = ISLAS[4]; const x = lerp(A.x, B.x, eIO(k)), y = lerp(A.y, B.y, eIO(k)) - Math.sin(k * Math.PI) * 80;
+      M.rr(c, x - 70, y - 22, 140, 44, 10); c.fillStyle = "#26262e"; c.fill(); c.strokeStyle = C.rojo; c.lineWidth = 2; c.stroke();
+      M.texto(c, "2026-0187", x, y + 9, { f: MONO(600, 20), color: C.texto, al: "center", registrar: false });
+    }
+  }
+  // l5: la misma pregunta, a la misma persona — globos que se acumulan sobre ella
+  const [px, py] = posPersona(t);
+  if (t > V.l5.t0) {
+    const nq = Math.floor(prog(t, V.l5.t0, V.l5.t1) * 11) + 1;
+    for (let q = 0; q < nq; q++) {
+      const a = hash(q * 3.1) * Math.PI * 2, rr = 150 + hash(q * 7.7) * 110, k = eOut5(prog(t, V.l5.t0 + q * 0.27, V.l5.t0 + q * 0.27 + 0.2));
+      const x = px + Math.cos(a) * rr * k, y = py + Math.sin(a) * rr * 0.7 * k - 30;
+      const s = ["¿Dónde está…?", "¿Me lo pasas?", "¿Cuál es el bueno?", "¿Quién lo tiene?"][q % 4];
+      const w = M.ancho(c, s, F(600, 26)) + 36;
+      c.globalAlpha = k * 0.95; M.rr(c, x - w / 2, y - 24, w, 48, 24); c.fillStyle = "#2b2b34"; c.fill(); c.strokeStyle = "#ff3d2e99"; c.lineWidth = 2; c.stroke();
+      M.texto(c, s, x, y + 9, { f: F(600, 26), color: C.texto, al: "center", registrar: false }); c.globalAlpha = 1;
+    }
+  }
+  // el rastro: el camino de la persona, que se enreda salto a salto
+  c.save(); c.strokeStyle = "#ff3d2eaa"; c.lineWidth = 3; c.beginPath(); let prim = true;
+  for (let tt = 7.6; tt <= t; tt += 1 / 60) { const [x, y] = posPersona(tt); if (prim) { c.moveTo(x, y); prim = false; } else c.lineTo(x, y); }
+  c.stroke(); c.restore();
+  c.fillStyle = "#ff3d2e40"; c.beginPath(); c.arc(px, py, 30 + 6 * Math.sin(t * 6), 0, 7); c.fill();
+  c.fillStyle = C.rojo; c.beginPath(); c.arc(px, py, 14, 0, 7); c.fill();
+  c.restore();
+  // reloj: el día pasa (arriba a la derecha)
+  const dias = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
+  const kd = prog(t, V.l5.t0, V.l5.t1); const d = Math.min(4, Math.floor(kd * 5));
+  const hora = t < V.l5.t0 ? 9 + (t - 7.4) * 0.8 : 9 + ((kd * 5) % 1) * 9.5;
+  M.texto(c, `${dias[t < V.l5.t0 ? 0 : d]} · ${String(Math.floor(hora)).padStart(2, "0")}:${String(Math.floor((hora % 1) * 60)).padStart(2, "0")}`, 1790, 110,
+          { f: MONO(600, 30), color: C.tenue, al: "right", alpha: eOut(prog(t, 7.6, 8)), track: 2 });
+  subtitulo(t, ["l3", "l4", "l5"], { "mano": 1, "hablan": 1, "persona": 1, "misma": 1, "a": 0 });
+  M.vineta(c, W, H, 0.35 + 0.35 * cam, "40,0,0");
+}
+// subtítulo cinético: la frase activa, palabra a palabra, con las palabras clave en rojo
+function subtitulo(t, ids, clave, oscuro = true) {
+  const id = ids.find((i) => t >= V[i].t0 - 0.05 && t < (V[ids[ids.indexOf(i) + 1]]?.t0 ?? V[i].t1 + 0.6));
+  if (!id) return; const pa = V[id].palabras; const f = F(650, 60);
+  const tot = pa.reduce((s, p) => s + M.ancho(c, p.w + " ", f, -1), 0); let x = 960 - tot / 2;
+  const sal = 1 - eIn(prog(t, (V[ids[ids.indexOf(id) + 1]]?.t0 ?? V[id].t1 + 0.6) - 0.15, V[ids[ids.indexOf(id) + 1]]?.t0 ?? V[id].t1 + 0.6));
+  pa.forEach((p) => {
+    const k = eOut5(prog(t, p.t0 - 0.04, p.t0 + 0.16)); const w = M.ancho(c, p.w + " ", f, -1);
+    const lim = p.w.toLowerCase().replace(/[^\wáéíóúñ]/g, "");
+    const rojo = clave[lim] && (lim !== "misma" || id === "l5");
+    M.texto(c, p.w, x, 980 + (1 - k) * 18, { f, color: rojo ? C.rojo : (oscuro ? C.texto : C.tinta), alpha: k * sal, track: -1 }); x += w;
+  });
+}
+
+// ════════════════════════════ 4 · Transformación: el sistema ════════════════════════════
+const REJ = [[560, 480], [960, 480], [1360, 480], [560, 800], [960, 800], [1360, 800]];   // retícula ordenada (centro)
+const REJ2 = [[860, 330], [1240, 330], [1620, 330], [860, 700], [1240, 700], [1620, 700]]; // desplazada a la derecha
+const NODO = () => [1240, 515];
+function sistema(t, n) {
+  // 15,4: destello blanco → mundo claro
+  c.fillStyle = C.claro; c.fillRect(0, 0, W, H);
+  // retícula de fondo, muy tenue
+  c.strokeStyle = "#e3e5ea"; c.lineWidth = 1.5;
+  for (let x = 0; x <= W; x += 60) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); }
+  for (let y = 0; y <= H; y += 60) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+  const kOrden = eIO(prog(t, G0 + 0.05, G0 + 1.1));        // las islas encajan
+  const kLado = eIO(prog(t, V.l7.t0 - 0.35, V.l7.t0 + 0.25)); // la retícula deja sitio al verbo
+  const pos = (i) => { const I = ISLAS[i]; const [ax, ay] = REJ[i], [bx, by] = REJ2[i];
+    return [lerp(I.x, lerp(ax, bx, kLado), kOrden), lerp(I.y, lerp(ay, by, kLado), kOrden)]; };
+  const esc = lerp(1, 1.0, kLado);
+  // conexiones: se trazan en l9 («lo conectamos todo»); antes, solo la retícula punteada del diseño
+  const aristas = [[0, 1], [1, 2], [3, 4], [4, 5], [0, 3], [1, 4], [2, 5]];
+  const tCon = V.l9.t0, tDis = V.l8.t0;
+  aristas.forEach(([a, b], j) => {
+    const [ax, ay] = pos(a), [bx, by] = pos(b);
+    const kd = eOut(prog(t, tDis + j * 0.06, tDis + 0.5 + j * 0.06));
+    if (kd > 0 && t < tCon + 0.4) { c.save(); c.setLineDash([10, 10]); c.strokeStyle = "#9aa3b5"; c.lineWidth = 2; c.globalAlpha = kd;
+      c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke(); c.restore(); }
+    const kc = eOut(prog(t, tCon + 0.1 + j * 0.1, tCon + 0.6 + j * 0.1));
+    if (kc > 0) { c.strokeStyle = C.azul; c.lineWidth = 4; c.beginPath(); c.moveTo(ax, ay); c.lineTo(lerp(ax, bx, kc), lerp(ay, by, kc)); c.stroke(); }
+  });
+  // nodo central (la IA): aparece con «inteligencia artificial» (l10) y se conecta a todas
+  const tIA = pal("l10", "inteligencia").t0; const kIA = muelle(prog(t, tIA - 0.1, tIA + 0.5));
+  const [nx, ny] = NODO();
+  if (kIA > 0) {
+    ISLAS.forEach((_, i) => { const [x, y] = pos(i); const k = eOut(prog(t, tIA + i * 0.05, tIA + 0.4 + i * 0.05));
+      c.strokeStyle = C.pixel; c.lineWidth = 3; c.beginPath(); c.moveTo(nx, ny); c.lineTo(lerp(nx, x, k), lerp(ny, y, k)); c.stroke(); });
+  }
+  // pulsos azules: recorren las conexiones al ritmo del arpegio (semicorcheas)
+  if (t > tCon + 0.4) {
+    const paso = 0.125; const i0 = Math.floor((t - tCon) / paso);
+    for (let q = Math.max(0, i0 - 6); q <= i0; q++) {
+      const k = (t - tCon - q * paso) / 0.75; if (k < 0 || k > 1) continue;
+      const [a, b] = aristas[(q * 3) % aristas.length]; const [ax, ay] = pos(a), [bx, by] = pos(b);
+      const dir = q % 2; const kk = dir ? 1 - k : k;
+      c.fillStyle = C.azul; c.globalAlpha = Math.sin(k * Math.PI); c.beginPath(); c.arc(lerp(ax, bx, kk), lerp(ay, by, kk), 9, 0, 7); c.fill(); c.globalAlpha = 1;
+    }
+  }
+  // tarjetas
+  ISLAS.forEach((I, i) => { const [x, y] = pos(i); isla(i, x, y, esc, 1, t, 1); });
+  if (kIA > 0) { c.save(); c.translate(nx, ny); c.scale(kIA, kIA); c.fillStyle = C.pixel; c.fillRect(-34, -34, 68, 68);
+    M.texto(c, "IA", 0, 13, { f: F(800, 34), color: "#fff", al: "center", registrar: false }); c.restore(); }
+  // análisis (l7): una línea de escaneo recorre las tarjetas y deja un diagnóstico en cada una
+  const tA = V.l7.t0;
+  if (t > tA && t < V.l9.t0 + 0.3) {
+    const k = prog(t, tA, tA + 1.6); const xs = lerp(650, 1800, eIO(k));
+    if (k < 1) { c.fillStyle = "#2f6bff22"; c.fillRect(xs - 60, 120, 60, 720); c.fillStyle = C.azul; c.fillRect(xs, 120, 4, 720); }
+    const diag = ["copia manual", "sin conectar", "pregunta repetida", "datos duplicados", "a mano cada mes", "sin avisos"];
+    ISLAS.forEach((_, i) => { const [x, y] = pos(i); if (xs < x - 60) return;
+      const ke = eOut(prog(xs, x - 60, x + 40)) * (1 - eIn(prog(t, V.l9.t0, V.l9.t0 + 0.3)));
+      const s = diag[i]; const w = M.ancho(c, s, F(600, 26)) + 34;
+      c.globalAlpha = ke; M.rr(c, x - w / 2, y + 62 * esc, w, 44, 22); c.fillStyle = "#fff1ef"; c.fill(); c.strokeStyle = C.rojo; c.lineWidth = 2; c.stroke();
+      M.texto(c, s, x, y + 62 * esc + 31, { f: F(600, 26), color: "#c2261a", al: "center" }); c.globalAlpha = 1; });
+  }
+  // conectamos: procesos · datos · herramientas se encienden sobre las tarjetas
+  ["procesos", "datos", "herramientas"].forEach((w, j) => {
+    const p = pal("l9", w); const k = eOut(prog(t, p.t0 - 0.05, p.t0 + 0.2)) * (1 - eIn(prog(t, 30.9, 31.3)));
+    if (k <= 0) return; const [x, y] = [[860, 190], [1240, 860], [1620, 190]][j];
+    const s = w.toUpperCase(); const ww = M.ancho(c, s, MONO(700, 26), 3) + 40;
+    c.globalAlpha = k; M.rr(c, x - ww / 2, y - 30, ww, 50, 25); c.fillStyle = C.azul; c.fill();
+    M.texto(c, s, x, y + 5, { f: MONO(700, 26), color: "#fff", al: "center", track: 3 }); c.globalAlpha = 1;
+  });
+  // automatización: tareas que se completan solas (l10)
+  const tAu = pal("l10", "automatización").t0;
+  ["✓ Factura enviada", "✓ Datos sincronizados", "✓ Cliente avisado", "✓ Informe listo"].forEach((s, j) => {
+    const k = eOut5(prog(t, tAu + j * 0.35, tAu + 0.3 + j * 0.35)) * (1 - eIn(prog(t, 30.9, 31.3)));
+    if (k <= 0) return; const x = 1240 + [-380, 380, -380, 380][j], y = 515 + [-28, -28, 28, 28][j];
+    const w = M.ancho(c, s, F(600, 26)) + 36;
+    c.globalAlpha = k; M.rr(c, x - w / 2, y - 22 + (1 - k) * 20, w, 44, 22); c.fillStyle = "#e9f0ff"; c.fill(); c.strokeStyle = C.azul; c.lineWidth = 2; c.stroke();
+    M.texto(c, s, x, y + 9 + (1 - k) * 20, { f: F(600, 26), color: "#1d4ed8", al: "center" }); c.globalAlpha = 1;
+  });
+  // titulares
+  if (t < V.l7.t0 - 0.3) cabecera(t);
+  verbos(t);
+}
+function cabecera(t) {   // «D-Code Partners convierte ese ruido en un sistema»
+  const kSal = 1 - eIn(prog(t, V.l7.t0 - 0.6, V.l7.t0 - 0.3));
+  const pb = V.l6.palabras; const tM = pb[1].t0, tR = pal("l6", "ruido").t0, tS = pal("l6", "sistema").t0;
+  M.texto(c, "D-CODE PARTNERS", 960, 150, { f: MONO(700, 30), color: C.azul, al: "center", track: 6, alpha: eOut(prog(t, tM - 0.05, tM + 0.25)) * kSal });
+  const k1 = eOut5(prog(t, pal("l6", "convertimos").t0 - 0.05, pal("l6", "convertimos").t0 + 0.25));
+  const f = F(700, 84); const a = "convertimos ese ", b = "ruido", d = " en un ", e = "sistema.";
+  const fS = SERIF(112);
+  const wA = M.ancho(c, a, f, -2), wB = M.ancho(c, b, f, -2), wD = M.ancho(c, d, f, -2), wE = M.ancho(c, e, fS);
+  let x = 960 - (wA + wB + wD + wE) / 2; const y = 258;
+  M.texto(c, a, x, y + (1 - k1) * 20, { f, color: C.tinta, alpha: k1 * kSal, track: -2 }); x += wA;
+  const kR = eOut5(prog(t, tR - 0.05, tR + 0.2));
+  M.texto(c, b, x, y + (1 - kR) * 20, { f, color: C.rojo, alpha: kR * kSal, track: -2 });
+  const kT = eIO(prog(t, tR + 0.3, tR + 0.6)); if (kT > 0) { c.fillStyle = C.rojo; c.globalAlpha = kSal; c.fillRect(x - 4, y - 30, (wB + 8) * kT, 8); c.globalAlpha = 1; }
+  x += wB;
+  M.texto(c, d, x, y + (1 - kR) * 20, { f, color: C.tinta, alpha: eOut5(prog(t, tR + 0.15, tR + 0.4)) * kSal, track: -2 }); x += wD;
+  const kS = muelle(prog(t, tS - 0.05, tS + 0.45));
+  c.save(); c.translate(x + wE / 2, y); c.scale(lerp(0.7, 1, kS), lerp(0.7, 1, kS));
+  M.texto(c, e, 0, 0, { f: fS, color: C.azul, al: "center", alpha: clamp(kS * 1.4) * kSal }); c.restore();
+}
+function verbos(t) {     // columna izquierda: ANALIZAMOS / DISEÑAMOS / CONECTAMOS  (+ AUTOMATIZACIÓN · IA)
+  const sal = 1 - eIn(prog(t, 30.9, 31.3)); if (sal <= 0) return;
+  const filas = [["l7", "Analizamos", "cómo trabaja tu empresa"], ["l8", "Diseñamos", "el sistema"], ["l9", "Conectamos", "procesos, datos y herramientas"],
+                 ["l10", "+ Automatización", "e inteligencia artificial"]];
+  filas.forEach(([id, v, sub], i) => {
+    const t0 = V[id].t0; if (t < t0 - 0.05) return;
+    const k = muelle(prog(t, t0 - 0.05, t0 + 0.45)), ke = eOut5(prog(t, t0 - 0.05, t0 + 0.2));
+    const activo = t < (filas[i + 1] ? V[filas[i + 1][0]].t0 : 99);
+    const y = 330 + i * 150;
+    c.save(); c.translate(130 - (1 - ke) * 40, y);
+    M.texto(c, v.toUpperCase(), 0, 0, { f: F(900, i === 3 ? 64 : 80), color: activo ? C.tinta : "#aab0bd", alpha: ke * sal, track: -2 });
+    M.texto(c, sub, 2, 50, { f: F(500, 34), color: activo ? C.azul : "#aab0bd", alpha: eOut(prog(t, t0 + 0.15, t0 + 0.45)) * sal });
+    c.restore();
+    if (activo) { c.fillStyle = C.azul; c.globalAlpha = sal; c.fillRect(96, y - 62, 10 * k, 118); c.globalAlpha = 1; }
+  });
+}
+
+// ════════════════════════════ 5 · No es «usar IA»: es que funcione mejor ════════════════════════════
+const CAPTURAS = {};
+function recorte(im, sx, sy, sw, sh, dx, dy, dw, dh, r = 26, alpha = 1) {
+  c.save(); c.globalAlpha *= alpha; M.rr(c, dx, dy, dw, dh, r); c.clip(); c.drawImage(im, sx, sy, sw, sh, dx, dy, dw, dh); c.restore();
+  c.save(); c.globalAlpha *= alpha * 0.9; M.rr(c, dx, dy, dw, dh, r); c.strokeStyle = "#ffffff26"; c.lineWidth = 2; c.stroke(); c.restore();
+}
+function producto(t, n) {
+  c.fillStyle = "#07080b"; c.fillRect(0, 0, W, H);
+  // 30,9 → 31,4: la cámara entra en el nodo IA y se abre la pantalla real
+  const kIn = eIO(prog(t, 30.9, 31.45));
+  const im = CAPTURAS["fin-panel"];
+  if (t < R1) {
+    // pantalla real de fondo, muy cerca y en movimiento lento (panel financiero)
+    const pan = prog(t, 30.9, R1);
+    const sx = lerp(600, 760, pan), sy = lerp(330, 420, pan), sw = 1650, sh = 928;
+    c.filter = `blur(${lerp(0, 7, kIn)}px)`;
+    recorte(im, sx, sy, sw, sh, lerp(960, 0, kIn) - lerp(34, 0, kIn), lerp(470, 0, kIn) - lerp(34, 0, kIn) + 70 * (1 - kIn), lerp(68, W, kIn), lerp(68, H, kIn), lerp(8, 0, kIn), 1);
+    c.filter = "none"; c.fillStyle = `rgba(7,8,11,${lerp(0, 0.8, kIn)})`; c.fillRect(0, 0, W, H);
+    // «No se trata de usar inteligencia artificial.»
+    const pa = V.l11.palabras; const kA = eOut(prog(t, pa[0].t0 - 0.05, pa[0].t0 + 0.3));
+    M.texto(c, "No se trata de", 960, 400, { f: F(500, 64), color: C.tenue, al: "center", alpha: kA });
+    const tU = pal("l11", "usar").t0; const kU = eOut5(prog(t, tU - 0.05, tU + 0.3));
+    const s = "usar inteligencia artificial."; const f = F(800, 104);
+    M.texto(c, s, 960, 560 + (1 - kU) * 30, { f, color: C.texto, al: "center", alpha: kU, track: -3 });
+    const tT = V.l11.palabras[V.l11.palabras.length - 1].t1 - 0.1; const kT = eIO(prog(t, tT, tT + 0.35));
+    if (kT > 0) { const w = M.ancho(c, s, f, -3); c.save(); c.translate(960 - w / 2 - 20, 525); c.rotate(-0.02);
+      c.fillStyle = C.rojo; c.fillRect(0, 0, (w + 40) * kT, 12); c.restore(); }
+  } else {
+    // 34,4: la base vuelve. Pantallas reales, recortes cerrados, cortando a cada compás
+    const pl = [["os-hoy", 260, 150, 1500, 700], ["fin-panel", 280, 180, 1500, 620], ["pa-procesos", 230, 180, 1520, 900], ["fin-cobros", 280, 160, 1500, 800]];
+    const b = Math.floor((t - R1) / 1.0) % pl.length; const dt = (t - R1) % 1.0;
+    const [nom, sx, sy, sw, sh] = pl[b]; const ims = CAPTURAS[nom];
+    const z = 1 + dt * 0.04; const dw = 1040 * z, dh = dw * sh / sw;
+    c.save(); c.translate(1400, 540); c.rotate(-0.035); recorte(ims, sx, sy, sw, sh, -dw / 2, -dh / 2, dw, dh, 24, 1); c.restore();
+    const g = c.createLinearGradient(0, 0, 1100, 0); g.addColorStop(0, "rgba(7,8,11,0.96)"); g.addColorStop(0.75, "rgba(7,8,11,0.55)"); g.addColorStop(1, "rgba(7,8,11,0)");
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    const pa = V.l12.palabras; const k1 = eOut5(prog(t, pa[0].t0 - 0.05, pa[0].t0 + 0.25));
+    M.texto(c, "Se trata de que", 130, 430 + (1 - k1) * 20, { f: F(500, 64), color: C.tenue, alpha: k1 });
+    M.texto(c, "tu empresa", 130, 530 + (1 - k1) * 20, { f: F(800, 96), color: C.texto, alpha: eOut5(prog(t, pal("l12", "tu").t0 - 0.05, pal("l12", "tu").t0 + 0.25)), track: -2 });
+    const tF = pal("l12", "funcione").t0; const kF = muelle(prog(t, tF - 0.05, tF + 0.5));
+    c.save(); c.translate(130, 690); c.scale(lerp(0.85, 1, kF), lerp(0.85, 1, kF));
+    M.texto(c, "funcione mejor.", 0, 0, { f: SERIF(170), color: C.pixel, alpha: clamp(kF * 1.5) }); c.restore();
+    M.texto(c, "Pantallas reales de producto · datos de demostración", 130, 1000, { f: MONO(500, 24), color: "#9aa0ad", alpha: 0.9, track: 1 });
+  }
+}
+
+// ════════════════════════════ 6 · Cierre: todo se recoge en un píxel azul ════════════════════════════
+function cierre(t, n) {
+  const k = eIn(prog(t, FIN, TICK));                 // se recoge
+  const fondo = t >= TICK - 0.5 / FPS ? 1 : 0;            // corte seco a blanco en el «tic»
+  c.fillStyle = C.claro; c.fillRect(0, 0, W, H);
+  if (fondo < 1) { c.globalAlpha = 1 - fondo; c.fillStyle = "#07080b"; c.fillRect(0, 0, W, H); c.globalAlpha = 1; }
+  // composición final: logo + marca, centrada
+  const alto = 180, fM = F(800, 124), wM = M.ancho(c, "D-Code Partners", fM, -3);
+  const wLogo = alto * 1.2, gap = 60, tot = wLogo + gap + wM, x0 = 960 - tot / 2, y0 = 400;
+  const [px, py] = [x0 + (16 + 7.5) / 100 * alto, y0 + (45 + 7.5) / 100 * alto];   // centro del píxel del logo
+  if (t < TICK) {
+    // la última pantalla se encoge hacia el centro y se vuelve un píxel azul que viaja a su sitio
+    const s = lerp(1, 0.0, k); const im = CAPTURAS["os-hoy"];
+    if (s > 0.02) { c.save(); c.translate(lerp(960, px, k), lerp(540, py, k)); c.rotate(lerp(-0.035, 0, k));
+      recorte(im, 260, 150, 1500, 800, -700 * s, -373 * s, 1400 * s, 746 * s, 24 * s, 1 - k * 0.3);
+      c.globalAlpha = k; c.fillStyle = C.pixel; c.fillRect(-700 * s, -373 * s, 1400 * s, 746 * s); c.restore(); c.globalAlpha = 1; }
+    const lado = lerp(60, 15 / 100 * alto, k); c.globalAlpha = k; c.fillStyle = C.pixel;
+    c.fillRect(lerp(960, px, k) - lado / 2, lerp(540, py, k) - lado / 2, lado, lado); c.globalAlpha = 1;
+  } else {
+    const kl = prog(t, TICK, TICK + 0.7);
+    // onda del «tic» al posarse el píxel
+    const ko = prog(t, TICK, TICK + 0.6); if (ko < 1) { c.strokeStyle = `rgba(91,140,255,${1 - ko})`; c.lineWidth = 3; c.beginPath(); c.arc(px, py, 10 + ko * 160, 0, 7); c.stroke(); }
+    M.logo(c, x0, y0, alto, C.tinta, C.pixel, kl, 1);
+    const tM = V.l13.t0; const kM = eOut5(prog(t, tM, tM + 0.35));
+    c.save(); c.beginPath(); c.rect(x0 + wLogo + gap - 10, y0 - 40, wM + 40, alto + 80); c.clip();
+    M.texto(c, "D-Code Partners", x0 + wLogo + gap - (1 - kM) * 60, y0 + alto * 0.72, { f: fM, color: C.tinta, alpha: kM, track: -3 }); c.restore();
+    // lema, palabra a palabra con la voz
+    const pa = V.l14.palabras; const fL = F(500, 52); const totL = pa.reduce((s, p) => s + M.ancho(c, p.w + " ", fL, -1), 0); let x = 960 - totL / 2;
+    pa.forEach((p) => { const kk = eOut5(prog(t, p.t0 - 0.05, p.t0 + 0.25)); M.texto(c, p.w, x, 740 + (1 - kk) * 16, { f: fL, color: C.gris2, alpha: kk, track: -1 }); x += M.ancho(c, p.w + " ", fL, -1); });
+    const kU = eOut(prog(t, V.l14.t0 + 0.9, V.l14.t0 + 1.4));
+    M.texto(c, "dcodepartners.com", 960, 860, { f: MONO(600, 40), color: C.azul, al: "center", alpha: kU, track: 2 });
+  }
+}
+
+// ════════════════════════════ firma de esquina (marca presente desde el principio) ════════════════════════════
+function firma(t) {
+  let a = eOut(prog(t, 0.45, 0.8));
+  if (t >= SIL0 - 0.08 && t < SIL1 + 0.3) a = 0;                        // en el silencio no hay nada
+  if (t > SIL1 + 0.3) a = eOut(prog(t, SIL1 + 0.3, SIL1 + 0.8));
+  if (t > FIN) a *= 1 - eIn(prog(t, FIN, FIN + 0.3));                  // el cierre ya es la marca
+  if (a <= 0) return;
+  const claro = t >= G0 && t < 30.9;
+  c.save(); c.globalAlpha = a * 0.9;
+  M.logo(c, 96, 58, 34, claro ? C.tinta : "#ffffff", C.pixel);
+  M.texto(c, "D-Code Partners", 96 + 34 * 1.2 + 14, 58 + 26, { f: F(650, 26), color: claro ? C.tinta : "#ffffff", track: -0.5 });
+  c.restore();
+}
+
+// ════════════════════════════ fotograma ════════════════════════════
+window.pintaFrame = (n) => {
+  const t = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
+  if (t < SIL0) gancho(t, n);
+  else if (t < SIL1) { c.fillStyle = "#000"; c.fillRect(0, 0, W, H); return; }
+  else if (t < 7.4) frase(t);
+  else if (t < G0 - 0.12) { problema(t, n); if (t < 7.75) { c.globalAlpha = 1 - eOut(prog(t, 7.4, 7.75)); frase(t); c.globalAlpha = 1; } }
+  else if (t < G0) { c.fillStyle = "#000"; c.fillRect(0, 0, W, H); }
+  else if (t < 30.9) sistema(t, n);
+  else if (t < FIN) producto(t, n);
+  else cierre(t, n);
+  // destello del golpe de transformación y del regreso de la base
+  const fl = Math.max(1 - prog(t, G0, G0 + 0.3), 0) * (t >= G0 ? 1 : 0);
+  if (fl > 0) { c.fillStyle = `rgba(255,255,255,${fl})`; c.fillRect(0, 0, W, H); }
+  const fl2 = t >= R1 && t < R1 + 0.2 ? 1 - prog(t, R1, R1 + 0.2) : 0;
+  if (fl2 > 0) { c.fillStyle = `rgba(91,140,255,${fl2 * 0.5})`; c.fillRect(0, 0, W, H); }
+  firma(t);
+  M.grano(c, W, H, n, t >= G0 && t < 30.9 || t > TICK ? 0.035 : 0.075);
+};
+
+(async () => {
+  const fu = "../comun/fuentes/";
+  const ims = await M.cargar([["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }], ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }],
+    ["Instrument Serif", fu + "instrument-serif-italic.woff2", { style: "italic" }]],
+    Object.fromEntries(["fin-panel", "fin-cobros", "os-hoy", "pa-procesos"].map((k) => [k, `../../youtube/_assets/capturas/${k}.png`])));
+  Object.assign(CAPTURAS, ims);
+  window.pintaFrame(0); window.LISTO = true;
+})();
+</script></body></html>

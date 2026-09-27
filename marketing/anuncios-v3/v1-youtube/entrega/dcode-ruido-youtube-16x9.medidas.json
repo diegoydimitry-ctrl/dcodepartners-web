@@ -1,0 +1,9 @@
+{
+ "archivo": "v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4",
+ "duracion_s": 43.0,
+ "video": "h264 1920×1080 30/1 fps · 1290 fotogramas · yuv420p",
+ "audio": "aac 48000 Hz 2 canales 318 kb/s",
+ "lufs_integrados": -14.3,
+ "pico_real_dbtp": -1.5,
+ "tamano_mb": 36.9
+}
