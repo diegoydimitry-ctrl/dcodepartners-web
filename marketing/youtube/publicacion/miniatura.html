@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<title>Miniatura · El bucle</title>
+<!--
+  Miniatura 1280x720 del anuncio «El bucle».
+  Se renderiza con: node publicacion/miniatura.mjs
+  El titular es la primera frase del propio anuncio (t=1,55), no una frase nueva.
+-->
+<style>
+  @font-face{font-family:Inter;src:url(../_assets/fuentes/inter-variable.woff2)format('woff2');font-weight:100 900;font-display:block}
+  @font-face{font-family:'JetBrains Mono';src:url(../_assets/fuentes/jetbrainsmono-variable.woff2)format('woff2');font-weight:100 800;font-display:block}
+  html,body{margin:0;background:#05070c}
+  #c{display:block}
+</style>
+<canvas id="c" width="1280" height="720"></canvas>
+<script>
+const W=1280,H=720,x=document.getElementById('c').getContext('2d',{alpha:false});
+const BG='#05070c',INK='#fff',INK2='#93a0b5',BLUE='#5b8cff';
+const rnd=i=>{const s=Math.sin(i*127.1+i*i*0.017)*43758.5453;return s-Math.floor(s)};
+function rr(X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
+
+const MARCA={rects:[[26,1,16,16],[1,27,13,13],[35,26,13,13],[2,64,12,12],[35,64,13,13],[26,83,16,16],[102,43,16,16]],
+ paths:['M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z','M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z'],
+ pixel:[16,45,15,15]};
+const P2D=MARCA.paths.map(d=>new Path2D(d));
+function marca(cx,cy,e){
+  x.save();x.translate(cx-60*e,cy-50*e);x.scale(e,e);x.fillStyle=INK;
+  for(const[a,b,w,h]of MARCA.rects){rr(a,b,w,h,2);x.fill();}
+  for(const p of P2D)x.fill(p);
+  const[px,py,pw,ph]=MARCA.pixel;x.fillStyle=BLUE;rr(px,py,pw,ph,2);x.fill();x.restore();
+}
+
+function pinta(){
+  x.fillStyle=BG;x.fillRect(0,0,W,H);
+
+  // El bucle: la misma ventana repetida, alejándose en perspectiva hacia el fondo.
+  // La de delante está encendida; las de atrás se apagan. Es el gesto del anuncio.
+  const N=9;
+  for(let i=N-1;i>=0;i--){
+    const t=i/(N-1);
+    const esc=1-0.50*t;
+    const w=430*esc,h=286*esc;
+    const cx=880+t*120, cy=352-t*52;
+    const a=(1-t)**1.25;
+    x.save();x.globalAlpha=0.30+0.70*a;
+    x.fillStyle=`rgba(12,17,28,${0.75+0.25*a})`;
+    rr(cx-w/2,cy-h/2,w,h,14*esc);x.fill();
+    x.strokeStyle=`rgba(255,255,255,${0.05+0.16*a})`;x.lineWidth=1.4;x.stroke();
+    // barra de título
+    x.fillStyle=`rgba(255,255,255,${0.05+0.10*a})`;
+    rr(cx-w/2,cy-h/2,w,28*esc,14*esc);x.fill();
+    for(let k=0;k<3;k++){x.fillStyle=`rgba(255,255,255,${0.12+0.2*a})`;
+      x.beginPath();x.arc(cx-w/2+22*esc+k*17*esc,cy-h/2+14*esc,4.4*esc,0,7);x.fill();}
+    // filas de datos
+    for(let l=0;l<6;l++){
+      const sel=(l===2);
+      x.fillStyle=sel?`rgba(91,140,255,${0.30+0.55*a})`:`rgba(255,255,255,${0.055+0.11*a})`;
+      const rw=(w-78*esc)*(0.34+0.6*rnd(i*7+l));
+      rr(cx-w/2+30*esc,cy-h/2+58*esc+l*38*esc,rw,15*esc,4*esc);x.fill();
+    }
+    x.restore();
+  }
+  // resplandor sobre la ventana de delante
+  const g0=x.createRadialGradient(905,352,0,905,352,400);
+  g0.addColorStop(0,'rgba(91,140,255,.20)');g0.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=g0;x.fillRect(360,-100,920,920);
+
+  // velo a la izquierda para que el titular tenga contraste de sobra
+  const g=x.createLinearGradient(0,0,W*0.60,0);
+  g.addColorStop(0,'rgba(5,7,12,.99)');g.addColorStop(.62,'rgba(5,7,12,.90)');g.addColorStop(1,'rgba(5,7,12,0)');
+  x.fillStyle=g;x.fillRect(0,0,W,H);
+
+  // etiqueta
+  x.font='700 21px "JetBrains Mono", monospace';x.fillStyle=BLUE;x.textAlign='left';
+  let px=74;for(const ch of 'EL BUCLE'){x.fillText(ch,px,150);px+=x.measureText(ch).width+7;}
+
+  // titular: la primera frase del anuncio
+  x.textAlign='left';x.fillStyle=INK;
+  x.font='750 68px "Inter", sans-serif';
+  x.fillText('¿Cuánto tiempo',74,258);
+  x.fillText('pierdes haciendo',74,334);
+  x.save();x.fillStyle=BLUE;x.fillText('esto',74,410);
+  const wEsto=x.measureText('esto').width;x.restore();
+  x.fillStyle=INK;x.fillText(' cada día?',74+wEsto,410);
+
+  // subrayado bajo "esto"
+  x.strokeStyle=BLUE;x.lineWidth=5;x.lineCap='round';
+  x.beginPath();x.moveTo(76,430);x.lineTo(74+wEsto-4,430);x.stroke();
+
+  x.font='450 27px "Inter", sans-serif';x.fillStyle=INK2;
+  x.fillText('Muchas de esas tareas no deberían hacerse a mano.',74,486);
+
+  // marca
+  marca(112,620,0.78);
+  x.font='700 30px "Inter", sans-serif';x.fillStyle=INK;x.textAlign='left';
+  x.fillText('D-CODE',186,614);
+  x.font='600 16px "JetBrains Mono", monospace';x.fillStyle=INK2;
+  let qx=187;for(const ch of 'PARTNERS'){x.fillText(ch,qx,640);qx+=x.measureText(ch).width+4.2;}
+
+  // grano
+  x.save();x.globalAlpha=0.03;
+  for(let i=0;i<2600;i++){x.fillStyle=rnd(i)>.5?'#fff':'#000';
+    x.fillRect((rnd(i*2.1)*W)|0,(rnd(i*3.7)*H)|0,2,2);}
+  x.restore();
+}
+
+(async()=>{
+  await document.fonts.load('750 74px "Inter"');
+  await document.fonts.load('700 21px "JetBrains Mono"');
+  await document.fonts.ready;
+  pinta();
+  window.LISTO=true;
+})();
+</script>
+</html>
