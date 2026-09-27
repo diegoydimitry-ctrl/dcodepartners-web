@@ -9,7 +9,7 @@ Pieza para captar personas que vendan D-Code Partners. No es un anuncio de emple
 | `out/dcode-vendedores-9x16.mp4` | 1080×1920 · 24,000 s · 30 fps · 720 fotogramas | Reels y Stories |
 | `out/dcode-vendedores-4x5.mp4` | 1080×1350 · 24,000 s · 30 fps · 720 fotogramas | Feed |
 
-Los dos: H.264 High, AAC-LC 48 kHz estéreo, −13,8 LUFS integrado y −1,0 dBFS de pico real (objetivo −14 LUFS,
+Los dos: H.264 High, AAC-LC 48 kHz estéreo, −13,9 LUFS integrado y −1,0 dBFS de pico real (objetivo −14 LUFS,
 que es lo que Instagram deja pasar sin volver a tocar el volumen).
 
 **No hay versión 1:1.** El texto ocupa de y=280 a y=1470 del vertical: 1190 px. En 1080 de alto no cabe, y el
