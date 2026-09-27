@@ -8,8 +8,9 @@
 | Production | **Sin tocar.** Sigue en `diseno/dcode-design-system` (`e99d61f`) |
 
 ## Cómo probarla (5 minutos)
-1. **Portada `/`**: baja despacio. Las piezas sueltas se unen y al final se enciende el píxel azul. Cuatro frases en total.
-2. Cambia a **modo claro** (sol, arriba a la derecha): la misma escena, con sombra real sobre blanco.
+1. **Portada `/`**: baja despacio. Las piezas sueltas flotan, se unen y al final se enciende el píxel azul. Mueve el ratón: la luz del estudio se desliza por la cerámica. Cuatro frases en total.
+2. Cambia a **modo claro** (sol, arriba a la derecha): la misma escena, con sombra de contacto sobre blanco.
+3. Baja hasta el **pie**: Instagram, LinkedIn y Facebook.
 3. **Tócalo**: pulsa la captura de Finance o cualquiera de los cinco botones; la demo se abre en un visor (Escape la cierra).
 4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
 5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
@@ -23,12 +24,8 @@
 `/` · `/que-hacemos` · `/servicios/*` (5) · `/departamentos/*` (8) · `/sistema-financiero` · `/precios` · `/metodo` · `/diagnostico` · `/contacto` · `/casos-exito` · `/cambios-en-proceso` · `/garantias` · `/faq` · `/conocenos` · `/blog` (+3) · legales (6). Todas en `/en/…`.
 
 ## Escenas 3D
-Una: **las piezas** (portada). Render Blender Cycles → `assets/v2/img/piezas/{1100,700}/NNN.webp`. Para regenerarla:
-```bash
-pip install bpy==4.2.0   # Python 3.11
-python3.11 scripts/v2/logo3d/escena.py --out ~/logo-render --muestras 40 --res 1100
-python3 scripts/v2/logo3d/empaquetar.py ~/logo-render
-```
+Una: **las piezas** (portada), en tiempo real con three.js. Fuente: `scripts/v2/escena/piezas.js`; se empaqueta con `npm run build:3d` (incluido en `build:v2`) en `assets/v2/js/piezas3d.js`.
+Imagen para movimiento reducido / sin WebGL: `assets/v2/img/piezas/{1100,700}/072.webp` (render de Blender, `scripts/v2/logo3d/`).
 
 ## Construir el sitio
 ```bash

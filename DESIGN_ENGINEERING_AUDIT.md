@@ -12,7 +12,8 @@ Convenciones: lo medido lleva su número y cómo se midió. **NO MEDIDO** = no s
 |---|---|---|
 | rev. 3 (`564ea00`) | Bandeja 3D de aluminio con teclas de colores, configurador con mandos de cámara, el mismo objeto en portada, nueve pasos e interiores | «No me gusta»: 3D de videojuego, abstracto, repetido, decorativo, parece demo de WebGL |
 | Correo neumático (esta rama, no publicada) | Tubos de vidrio y cápsulas en una pared de hormigón | «No tiene ningún sentido» para la esencia de D-Code |
-| **Piezas (esta entrega)** | Las piezas del logotipo, fabricadas como objetos reales, se unen en un sistema; al final se enciende el píxel azul (la IA). Blanco y negro, ultraminimalista | Pendiente de revisión |
+| Piezas · secuencia de Blender (`a940d2c`) | Las piezas del logotipo se unen; 72 fotogramas renderizados que avanzan con el scroll | «Va súper mal»: sombras manchadas, corte en el borde de la imagen, poca fluidez (fotogramas que faltaban mientras cargaban) |
+| **Piezas · tiempo real (esta entrega)** | La misma idea, pero en 3D de verdad (three.js): geometría que se mueve con el scroll, luz de estudio, sombra de contacto, responde al puntero | Pendiente de revisión |
 
 Qué se sacó de los dos descartes: el 3D tiene que ser **la marca misma**, no una metáfora que haya que traducir, y el realismo tiene que ser el de un **render de producto**, no el de una escena de tiempo real.
 
@@ -49,13 +50,17 @@ Dependencias nuevas en producción: **ninguna**. Fuentes nuevas: Archivo y Marti
 | | |
 |---|---|
 | Qué representa | Las 10 piezas del logotipo (6 píxeles, 2 arcos, 1 barra y el píxel azul). Sueltas = áreas y herramientas que no se hablan. Unidas = el sistema. El píxel azul se enciende = la IA |
-| Cómo se hace | `scripts/v2/logo3d/escena.py` (Blender 4.2, Cycles, 40 muestras + OpenImageDenoise). Geometría sacada del SVG del logotipo, extruida 13 cm con bisel de 6 segmentos |
-| Materiales | Cerámica negra satinada (base 0,018, rugosidad 0,34, capa transparente 0,55) con micro-relieve de ruido; píxel azul con capa y emisión que sube al final |
-| Luz | Estudio: ventana grande arriba a la izquierda, dos filos por detrás, rebote frontal bajo; mundo casi negro; transformación AgX Punchy |
-| Sombra | Suelo *shadow catcher* con **fondo transparente**: la misma secuencia vale en oscuro (la sombra no se ve) y en claro (sombra suave real) |
-| Cámara | 52 mm, f/5,6 con foco en el logotipo; se acerca y rodea al unirse las piezas |
-| Por qué no tiempo real | Realismo de render de producto **igual en cualquier aparato**; dibujar un fotograma en un canvas cuesta lo mismo en un móvil modesto que en un ordenador |
-| Coste | 72 fotogramas · 1100 px (escritorio) y 700 px (móvil) · WebP con alfa · **medido: 11 fotogramas = 1,1 MB en total entre los dos tamaños** (la cifra final, en PERFORMANCE_AUDIT.md) |
+| Técnica | **3D en tiempo real** con three.js r186 (`scripts/v2/escena/piezas.js` → `assets/v2/js/piezas3d.js`, esbuild). Sustituye a la secuencia de 72 fotogramas de Blender |
+| Por qué cambió | La secuencia pesaba 4,6 MB en escritorio, dependía de la red (si faltaban fotogramas se fundían dos lejanos y el movimiento iba a saltos) y su sombra se cortaba en el borde de la imagen. En tiempo real el scroll mueve geometría: cada fotograma se dibuja al momento y el lienzo ocupa toda la escena |
+| Geometría | Cubos: `RoundedBoxGeometry` (radio 2,2 cm). Arcos: **barrido** de un perfil de cantos redondeados a lo largo de su eje (recta → cuarto de círculo → recta), con normales exactas y puntas redondeadas: sin facetas ni rayas |
+| Materiales | Cerámica negra con barniz (`MeshPhysicalMaterial`, rugosidad 0,3, clearcoat 0,65) + micro-relieve procedural (mapa de normales generado en el navegador). Píxel azul con barniz y emisión que sube al final |
+| Luz | Entorno de **estudio generado en el navegador** (caja oscura con seis cajas de luz → PMREM): los reflejos de las cajas de luz sobre la cerámica negra son lo que la hace parecer fotografiada. Sin HDR que descargar. Tono AgX |
+| Sombra | **Sombra de contacto**: una cámara mira las piezas desde el suelo, su silueta (más oscura cuanto más cerca) se difumina dos veces. En oscuro, además, un charco de luz de foco en el suelo |
+| Vida | Las piezas sueltas flotan y giran despacio; la luz del estudio se desliza por la cerámica con el scroll y el puntero; el logotipo montado se inclina un poco hacia el puntero |
+| Encuadre | Desplazamiento del centro óptico (`setViewOffset`): a la derecha en ancho, arriba en móvil; zoom que acompaña al montaje |
+| Rendimiento | Dibuja solo cuando algo cambia; se para fuera de pantalla y con la pestaña oculta; baja la resolución sola si no llega a ~50 fps. Sombra a 512 px (256 en móvil) |
+| Peso | **148 KB gzip** todo el 3D (three incluido), frente a 4.575 KB de la secuencia en escritorio y 2.583 KB en móvil (medido) |
+| Sin 3D | Movimiento reducido, sin WebGL o si falla: imagen del logotipo montado (render de Blender), que solo se descarga en ese caso |
 
 No hay ningún otro objeto 3D en el sitio: el resto del peso lo llevan la tipografía y el producto real.
 
@@ -63,8 +68,8 @@ No hay ningún otro objeto 3D en el sitio: el resto del peso lo llevan la tipogr
 
 | Qué | Cómo | Por qué |
 |---|---|---|
-| Piezas | Avanzan con el scroll; muelle críticamente amortiguado (k=90) sobre el progreso | Sigue al dedo sin rebotar ni ir a saltos |
-| Fotogramas | Fundido entre los dos más cercanos cargados | Sin saltos aunque falten intermedios mientras cargan |
+| Piezas | Geometría en tiempo real; muelle críticamente amortiguado (k=90) sobre el progreso del scroll; cada pieza con su retraso y curva quíntica | Sigue al dedo sin rebotar ni ir a saltos; nunca falta un fotograma |
+| Puntero | La luz del estudio gira y el logotipo se inclina (suavizado exponencial) | La escena responde: es un objeto, no un vídeo |
 | Capítulos | Opacidad + 16 px + desenfoque 6 px → 0, 520–620 ms, `ease-out` fuerte | El desenfoque une los dos estados (Emil) |
 | Apariciones | Una vez, 700 ms, escalonado 60 ms | Solo lo que entra por primera vez |
 | Botones | `scale(.97)` 160 ms | Respuesta al pulsar |

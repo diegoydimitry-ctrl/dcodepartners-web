@@ -8,12 +8,17 @@ Medido el 27/09/2026 con `~/tools/perf.mjs` (Playwright + Chromium 141): **CPU �
 | **Portada después** | 390 | **1.060 ms** | **1.060 ms** | **0** | 854 | 32 |
 | Portada antes | 1440 | 5.856 ms | 6.888 ms | 0,002 | 1.555 | 42 |
 | **Portada después** | 1440 | **1.092 ms** | **1.092 ms** | 0,013 | 864 | 18 |
+| **Portada 3D en tiempo real** (`c6eb414`) | 390 | **1.072 ms** | **1.072 ms** (H1) | **0** | 749 (sin compresión; three gzip = 148) | **9** |
+| **Portada 3D en tiempo real** | 1440 | **1.064 ms** | **1.064 ms** (H1) | 0,013 | 749 (ídem) | **9** |
 | Precios antes | 390 | 5.388 ms | 6.000 ms | 0,037 | 1.551 | 30 |
 | **Precios después** | 390 | **956 ms** | **1.836 ms** | **0** | **232** | **8** |
 | Finanzas (departamento) antes | 390 | 5.292 ms | 5.292 ms | 0,001 | 1.328 | 37 |
 | **Finanzas después** | 390 | **776 ms** | **776 ms** | 0 | **198** | **7** |
 
 \* En la portada «después», los KB incluyen los fotogramas de la escena que se descargan **después** del primer pintado durante los 3 s de la medición (carga progresiva); no bloquean nada.
+
+### Fluidez del 3D (medida en el navegador del equipo de Dirección, GTX 1060, Chrome, 803 px)
+Recorrido completo de la sección en 6 s con `requestAnimationFrame`: se mide en cuanto la Preview del commit del 3D esté publicada (la medida de 59 fps / p95 16,8 ms tomada antes era aún de la secuencia de fotogramas y no cuenta). Móvil real: **NO MEDIDO**.
 
 ## Por qué
 - 11 hojas de estilo y 8 scripts por página → 1 hoja común (`dc.css`) + la de la página, y 1 módulo común (`sitio.js`, 4 KB).
