@@ -27,7 +27,7 @@ De la investigación (fuentes al final):
    veinte microplanos en cuatro segundos y deja la marca en una esquina desde el principio, sin intro.
 2. **Marca pronto pero sin intro**: el logotipo integrado, no como cortinilla. → Una firma pequeña en esquina
    desde el segundo 0,5 en *RUIDO*; en *LA MITAD*, la marca va dentro de la frase de reclutamiento.
-3. **Tensión y alivio.** → El silencio del segundo 4,2 en *RUIDO* es el acontecimiento: todo para en seco.
+3. **Tensión y alivio.** → El silencio del segundo 4,3 en *RUIDO* es el acontecimiento: todo para en seco.
 4. **En Reels, los 3 primeros segundos**: interrupción de patrón, afirmación directa, revelación de resultado
    o pregunta. → *LA MITAD* abre con una revelación de resultado: un proyecto cerrado se parte en dos.
 5. **Zona segura en 9:16**: lo importante en el 75 % central; arriba y abajo, un 14 % tapado por la interfaz.
@@ -43,10 +43,10 @@ De la investigación (fuentes al final):
 
 ### Concepto
 
-Cualquier empresa funciona sobre un ruido que ya nadie oye: copiar, pegar, reenviar, buscar, preguntar lo
+Cualquier empresa funciona sobre un ruido que ya nadie oye: copiar, pegar, responder, buscar, preguntar lo
 mismo. El anuncio **convierte ese ruido literalmente en la banda sonora**: el gancho es una tormenta de
 microplanos de trabajo cotidiano cortados al ritmo de una percusión hecha con esos mismos sonidos —teclas,
-avisos, vibraciones, clics—. A los 4,2 s todo se para en seco: negro y silencio. Y entonces la frase que da
+avisos, vibraciones, clics—. A los 4,3 s todo se para en seco: negro y silencio. Y entonces la frase que da
 la vuelta: *«Esto no es trabajo. Es ruido.»* El botón de saltar aparece justo cuando el espectador tiene una
 pregunta abierta.
 
@@ -54,25 +54,24 @@ A partir de ahí el anuncio **cambia de mundo**: de la oscuridad roja y saturada
 azul, donde las piezas sueltas se ordenan y se conectan. El cierre recoge todo el sistema en un solo píxel
 azul, que es el píxel del logotipo de D-Code: la IA.
 
-### Guion
+### Guion (final, tiempos reales del montaje)
 
-| t (objetivo) | Voz | Pantalla |
+| t (s) | Voz | Pantalla |
 |---|---|---|
-| 0,4 – 3,6 | «Copiar.» «Pegar.» «Reenviar.» «Buscar.» «Otra vez.» — cada palabra en un golpe | Microplanos de 3–5 fotogramas: correo, hoja de cálculo, chat, factura, llamada entrante, menú copiar, agenda solapada. Las mismas palabras golpean en pantalla |
-| 3,6 – 4,2 | — | Aceleración, parpadeo, la imagen se desgarra |
-| 4,2 – 4,8 | **silencio** | **negro** |
-| 4,8 – 7,6 | «Esto no es trabajo.» · «Es ruido.» | La frase, enorme y limpia; «RUIDO» vibra |
-| 7,6 – 15 | «Datos que se copian a mano. Herramientas que no se hablan. Y la misma pregunta, cada día, a la misma persona.» | Islas desconectadas (correo, facturas, chat, clientes, agenda); una persona saltando de una a otra; el trazo de su camino se enreda |
-| 15 | — | **Golpe de transformación**: todo pasa a blanco |
-| 15 – 28 | «En Dicode Partners convertimos ese ruido en un sistema. Analizamos cómo trabaja tu empresa. Diseñamos el sistema. Y lo conectamos todo: procesos, datos y herramientas. Con automatización e inteligencia artificial.» | Las islas encajan en una retícula; líneas que se trazan; un pulso azul recorre las conexiones. ANALIZAMOS / DISEÑAMOS / CONECTAMOS en los golpes |
-| 28 – 36 | «No se trata de usar inteligencia artificial. Se trata de que tu empresa funcione mejor.» | Pantallas reales de producto (Finance, OS) en encuadres cerrados; «usar IA» tachado → «funcione mejor» |
-| 36 – 41 | «Dicode Partners. Sistemas inteligentes para empresas.» | El sistema entero se recoge en un píxel azul → el píxel del logotipo. Marca, lema y dcodepartners.com |
+| 0,3 – 4,3 | «Copiar.» «Pegar.» «Responder.» «Buscar.» «Otra vez.» — una palabra por golpe | 20 microplanos de interfaces genéricas (correo, hoja de cálculo, chat, factura, llamada, menú copiar/pegar, agenda, buscador, avisos, versiones de archivo), cortados en semicorcheas; cada palabra con su propia animación (COPIAR se duplica, PEGAR cae, BUSCAR se teclea, OTRA VEZ hace eco). Firma de D-Code en la esquina desde 0,5 s |
+| 4,3 – 4,8 | **silencio** | **negro** |
+| 4,85 – 7,6 | «Esto no es trabajo.» · «Es ruido.» | La frase limpia; «RUIDO.» enorme, con desgarro que se queda temblando |
+| 7,4 – 15,3 | «Datos que se copian a mano. Herramientas que no se hablan. Y la misma pregunta, cada día, a la misma persona.» | Seis islas desconectadas; la persona salta de una a otra y su rastro se enreda; enlaces que se rompen (✕); preguntas que se acumulan; reloj de lunes a viernes; subtítulo con las claves en rojo |
+| 15,4 | — | Golpe: destello blanco y cambio de mundo |
+| 15,9 – 30,9 | «En D-Code Partners convertimos ese ruido en un sistema. Analizamos cómo trabaja tu empresa. Diseñamos el sistema. Y lo conectamos todo: procesos, datos y herramientas. Con automatización e inteligencia artificial.» | Las islas encajan en retícula; «ruido» tachado → *sistema*; ANALIZAMOS (escaneo con diagnóstico en cada herramienta), DISEÑAMOS (retícula punteada), CONECTAMOS (líneas azules con pulsos al ritmo del arpegio), nodo IA y tareas que se completan solas |
+| 31,4 – 37,4 | «No se trata de usar inteligencia artificial.» · «Se trata de que tu empresa funcione mejor.» | Pantalla real de D-Code Finance desenfocada; «usar inteligencia artificial» se tacha; vuelve la base con pantallas reales de producto (OS, Finance, App) cortando a cada compás. Rótulo: «datos de demostración» |
+| 37,4 – 43 | «D-Code Partners.» · «Sistemas inteligentes para empresas.» | La última pantalla se recoge en un píxel azul que se posa en el logotipo (corte a blanco en el «tic»); marca, lema y dcodepartners.com |
 
 ### Sonido
 
 - **Gancho**: percusión de oficina en semicorcheas (teclado, aviso, vibración, clic, obturador), bombo en cada
   tiempo, una subida de ruido debajo. Termina en un *tape stop* (la cinta se frena y baja de tono).
-- **4,2 s**: silencio real. Luego un golpe subgrave y un *whoosh* invertido hacia la frase.
+- **4,3 s**: silencio real. Luego un golpe subgrave y un *whoosh* invertido hacia la frase.
 - **Problema**: dron grave, reloj en corcheas, avisos desafinados como notas sueltas. Tenso.
 - **15 s**: impacto limpio con brillo, y entra el *groove*: bombo a negras, bajo a contratiempo, *hats* en
   semicorcheas, palmada en 2 y 4, acordes de séptima y un arpegio que es el pulso azul.
@@ -93,16 +92,20 @@ la otra llena la pantalla: **50 % para ti**. Quien sabe vender entiende la ofert
 Estética de cartel: campos de color planos y saturados que cambian a cada golpe, tipografía condensada y
 enorme, números gigantes. Nada de fondo corporativo, nada de «únete a nuestro equipo».
 
-### Guion
+### Guion (final, tiempos reales del montaje)
 
-| t (objetivo) | Voz | Pantalla |
+| t (s) | Voz | Pantalla |
 |---|---|---|
-| 0,0 – 1,1 | «Cierras un proyecto.» | Un ticket «PROYECTO — CERRADO» y un sello que cae |
-| 1,1 – 2,6 | «La mitad es tuya.» | **Tajo** vertical: el ticket se parte. Una mitad sale hacia «D-CODE»; la otra se convierte en **50 %** |
-| 2,6 – 7,5 | «En Dicode Partners buscamos personas para ventas.» · «Gente que sabe abrir puertas.» | **BUSCAMOS / PERSONAS / PARA / VENTAS**, una palabra por golpe, cada una en un color |
-| 7,5 – 13,5 | «Vas a vender automatización, inteligencia artificial y sistemas a medida para empresas.» | Tres tarjetas que golpean, cada una con su miniinterfaz animada |
-| 13,5 – 24 | «Tú detectas la oportunidad. Tú consigues el cliente. Nosotros lo construimos. No necesitas saber programar. Y te llevas el cincuenta por ciento de lo que consigas.» | Pantalla partida **TÚ \| D-CODE**; los papeles se reparten a cada lado; vuelve el **50 %**, más grande, con la caja registradora |
-| 24 – 31 | «¿Quieres saber cómo funciona?» · «Escríbenos por Instagram o por correo.» | La pregunta a pantalla completa; icono de mensaje directo; **dcodedepartment@gmail.com** fijo al menos 3 s; marca |
+| 0,0 – 1,6 | «Cierras un proyecto.» | Primer fotograma: un ticket «PROYECTO Nº 047» cae con un golpe de sello (vende: tú · construye: D-Code); en «proyecto» se estampa CERRADO |
+| 1,7 – 3,0 | «La mitad es tuya.» | **Tajo**: el ticket se parte y las mitades salen; queda **50 %** · PARA TI en campo lima |
+| 3,4 – 5,3 | «Buscamos personas para ventas.» | BUSCAMOS / PERSONAS / PARA / VENTAS, una palabra por golpe, cada una en su color; etiqueta D-CODE PARTNERS |
+| 5,6 – 7,3 | «Gente que sabe abrir puertas.» | Una puerta que se abre y deja pasar la luz |
+| 7,7 – 13,6 | «Vas a vender automatización, inteligencia artificial y sistemas a medida para empresas.» | Tres tarjetas que se apilan, cada una con su miniinterfaz animada (flujo que se completa, pregunta/respuesta, bloques que encajan) |
+| 14,1 – 19,1 | «Tu parte: encontrar la oportunidad y conseguir el cliente.» · «La nuestra: construirlo.» | Pantalla partida por la línea de corte: TU PARTE (lima, dos pasos) · LA NUESTRA (azul, logotipo) |
+| 19,3 – 21,1 | «No necesitas saber programar.» | «</>» tachado |
+| 21,4 – 24,4 | «Y te llevas el 50 % de lo que consigas.» | Negro y tensión, contador que sube; en el «50» exacto: **50 %** a pantalla completa, caja registradora, PARA TI · EN COMISIÓN |
+| 24,9 – 27,2 | «¿Te interesa? Te contamos cómo funciona.» | La pregunta, a pantalla completa |
+| 27,4 – 33,0 | «Escríbenos por Instagram, o por correo.» · «Vende con D-Code Partners.» | Dos vías: mensaje por Instagram y **dcodedepartment@gmail.com** (fijo 3,9 s); marca; sello final «50 %» |
 
 ### Sonido
 
@@ -118,23 +121,33 @@ enorme, números gigantes. Nada de fondo corporativo, nada de «únete a nuestro
 ## 3 · Voces — cómo se han hecho y qué se ha medido
 
 **No hay credencial de ElevenLabs en este entorno, y su API y HuggingFace están denegados por el proxy**
-(403 en el CONNECT, comprobado). Se ha usado **Kokoro-82M** en local (licencia Apache-2.0), descargado de sus
-*releases* de GitHub, con sus dos mejores voces en español.
+(403 en el CONNECT, comprobado). Se ha usado **Kokoro-82M** en local (licencia Apache-2.0), con dos voces
+distintas: `em_alex` (hombre, grave) para RUIDO y `ef_dora` (mujer, más rápida) para LA MITAD.
 
-| Voz | Vídeo | Error de transcripción medido (Whisper small, en local) |
-|---|---|---|
-| `em_alex` · hombre | RUIDO | 0,0 % en la frase de prueba |
-| `ef_dora` · mujer | LA MITAD | 5,6 % (solo el anglicismo «emails», que no se usa) |
+- **Frase a frase** (`guion.json` → `voz/<id>.wav`), cada una colocada en su tiempo por `montaje.json`.
+- **Casting por inteligibilidad**: cada frase se transcribe con Whisper small en local y se repite con otra
+  escritura o velocidad hasta que se entiende (p. ej. «Reenviar» → «Responder», «¡Pegar!», «¡Buscar!»).
+- **La marca se pronuncia «Di-coud»** (inglés, *code*), escrita `Dicoud` para el sintetizador. Whisper la oye
+  como «Decode Partners». Si la pronunciáis de otra forma, es cambiar el campo `tts` y regenerar esa frase:
+  `python3 comun/voz.py v1-youtube l6 l13` → `comun/sincroniza.py` → `comun/palabras.py` → `audio.py` → render.
+- **Límite honesto**: no puedo escuchar. Está medido que se *entiende* (0 % de error sobre la mezcla final);
+  no está medido que suene *natural*. Es una voz sintética de buena calidad, no un locutor. Para la versión de
+  pauta se recomienda sustituir los ficheros por una locución de ElevenLabs o de un locutor, con el mismo guion
+  y los mismos cortes: la imagen y la música no cambian.
 
-- **Se sintetiza frase a frase**, no el guion de corrido: cada frase se coloca en su tiempo, con sus pausas
-  diseñadas. Es lo que separa una locución dirigida de una lectura de corrido.
-- **La marca se pronuncia «Di-code».** Escrito «D-Code», Whisper lo transcribe como «The Code»; escrito
-  «Dicode», como «Dicode Partners». HIPÓTESIS: que así la pronunciáis vosotros. Si decís «De-code», es cambiar
-  una palabra en `guion.json` y volver a generar.
-- **Sustituible sin tocar la imagen.** Cada frase es un fichero con su tiempo de entrada. Si se quiere una
-  locución profesional (ElevenLabs o un locutor), se graba con el mismo guion y se sustituyen los ficheros.
+## 4 · Cómo se reconstruye
 
----
+```
+VOZ_MODELOS=<modelos> python3 comun/voz.py v1-youtube        # locución (Kokoro) + verificación (Whisper)
+python3 comun/palabras.py v1-youtube                          # tiempos por palabra
+python3 v1-youtube/audio.py                                   # música, efectos y mezcla
+VOZ_MODELOS=<modelos> python3 comun/analiza_audio.py v1-youtube   # QA de audio
+PLAYWRIGHT=… CHROMIUM=… node comun/render.mjs v1-youtube      # imagen (y control de zonas seguras)
+python3 comun/final.py v1-youtube dcode-ruido-youtube-16x9    # −14 LUFS, mux y medidas
+```
+(igual con `v2-vendedores` / `dcode-la-mitad-vendedores-9x16`). No hay ni un sample, imagen de archivo ni
+música de terceros: todo el sonido se sintetiza en `comun/sintesis.py`; las únicas imágenes son capturas de
+los productos de D-Code (con datos de demostración) y el logotipo oficial.
 
 ## Fuentes de la investigación
 

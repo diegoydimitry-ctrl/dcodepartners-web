@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>LA MITAD · D-Code Partners</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../comun/motor.js"></script>
+<script>
+"use strict";
+// LA MITAD — anuncio de captación de vendedores (9:16). Todo el anuncio es un trato partido en dos.
+// Todo el texto vive entre y=270 y y=1650 (lo demás lo tapa la interfaz de Reels) y a 64 px de los lados.
+const W = 1080, H = 1920, FPS = 30;
+const D = window.DATOS, MT = D.montaje, G = D.golpes;
+const V = Object.fromEntries(MT.voz.map((f) => [f.id, f]));
+window.META = { W, H, fps: FPS, duracion: MT.duracion, segura: [64, 270, 1016, 1650], minpx: 30 };
+const c = document.getElementById("c").getContext("2d");
+const { clamp, lerp, prog, eOut, eOut5, eIn, eIO, muelle, hash } = M;
+const C = { crema: "#f3eee4", negro: "#0b0b0c", azul: "#2448ff", lima: "#d6ff3d", coral: "#ff4a2a", blanco: "#ffffff", gris: "#8c8a85", pixel: "#5b8cff" };
+const A = (px) => `400 ${px}px "Anton"`;
+const R = (p, px) => `${p} ${px}px "Archivo"`;
+const MONO = (p, px) => M.fuente(p, px, "JetBrains Mono");
+const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "").startsWith(w));
+const T50 = G.cincuenta, TAJO = G.tajo;
+
+// tamaño que hace que un texto quepa en un ancho
+function ajusta(s, fam, anchoMax, pxMax, track = 0) { const w = M.ancho(c, s, fam(100), track * 100 / pxMax); return Math.min(pxMax, (100 * anchoMax) / w); }
+// palabra cartel: entra con golpe (escala 1,25 → 1 con muelle) centrada en (x, y)
+function cartel(s, x, y, px, color, t0, t, o = {}) {
+  const k = muelle(prog(t, t0 - 0.02, t0 + 0.32), 3, 6), e = eOut5(prog(t, t0 - 0.02, t0 + 0.08));
+  if (e <= 0) return;
+  c.save(); c.translate(x, y); const s_ = lerp(o.desde ?? 1.25, 1, k); c.scale(s_, s_);
+  M.texto(c, s, 0, 0, { f: (o.fam || A)(px), color, al: "center", base: "middle", alpha: e * (o.alpha ?? 1), track: o.track ?? 0 });
+  c.restore();
+}
+function fondo(col) { c.fillStyle = col; c.fillRect(0, 0, W, H); }
+function etiqueta(s, y, col, bg, alpha = 1) {   // pastilla pequeña de contexto
+  const f = MONO(700, 30); const w = M.ancho(c, s, f, 4) + 56;
+  c.save(); c.globalAlpha *= alpha; M.rr(c, 540 - w / 2, y - 30, w, 60, 30); c.fillStyle = bg; c.fill();
+  M.texto(c, s, 540, y + 11, { f, color: col, al: "center", track: 4 }); c.restore();
+}
+
+// ════════════════ 0 → 3,4 · el trato: un proyecto cerrado se parte en dos ════════════════
+function ticket(x, y, rot, t, mitad = 0, corte = 0) {
+  const reg = !mitad;
+  // mitad: 0 entero, -1 solo la izquierda, 1 solo la derecha; corte: separación
+  const w = 760, h = 980;
+  c.save(); c.translate(x, y); c.rotate(rot);
+  if (mitad) { c.beginPath(); if (mitad < 0) c.rect(-w, -h, w - 0 + 0, h * 2); else c.rect(0, -h, w, h * 2); c.clip(); }
+  c.fillStyle = "#00000022"; M.rr(c, -w / 2 + 14, -h / 2 + 22, w, h, 26); c.fill();
+  c.fillStyle = C.blanco; M.rr(c, -w / 2, -h / 2, w, h, 26); c.fill();
+  M.texto(c, "PROYECTO", -w / 2 + 60, -h / 2 + 130, { f: A(110), color: C.negro, registrar: reg });
+  M.texto(c, "Nº 047", w / 2 - 60, -h / 2 + 128, { f: MONO(700, 40), color: C.gris, al: "right", registrar: reg });
+  c.fillStyle = "#e6e2d8"; c.fillRect(-w / 2 + 60, -h / 2 + 175, w - 120, 4);
+  const filas = [["SERVICIO", "Automatización + IA"], ["CLIENTE", "Empresa de tu zona"], ["QUIÉN LO VENDE", "Tú"], ["QUIÉN LO CONSTRUYE", "D-Code"]];
+  filas.forEach(([k, v], i) => { const yy = -h / 2 + 270 + i * 120;
+    M.texto(c, k, -w / 2 + 60, yy, { f: MONO(700, 32), color: C.gris, track: 2, registrar: reg });
+    M.texto(c, v, -w / 2 + 60, yy + 56, { f: R(700, 46), color: C.negro, registrar: reg }); });
+  // línea de corte punteada en el centro (el trato ya viene partido por la mitad)
+  c.save(); c.setLineDash([16, 14]); c.strokeStyle = "#c9c4b8"; c.lineWidth = 4; c.beginPath(); c.moveTo(0, -h / 2 + 200); c.lineTo(0, h / 2 - 40); c.stroke(); c.restore();
+  // sello CERRADO
+  const ks = prog(t, G.cerrado - 0.08, G.cerrado);
+  if (ks > 0) { const e = t < G.cerrado ? eIn(ks) : 1; c.save(); c.translate(0, h / 2 - 170); c.rotate(-0.12); const s = lerp(2.4, 1, e); c.scale(s, s);
+    c.globalAlpha = e; c.strokeStyle = C.coral; c.lineWidth = 9; M.rr(c, -250, -72, 500, 144, 18); c.stroke();
+    M.texto(c, "CERRADO", 0, 38, { f: A(118), color: C.coral, al: "center", track: 6, registrar: reg }); c.restore(); }
+  c.restore();
+}
+function trato(t) {
+  fondo(C.crema);
+  const kIn = eOut5(prog(t, 0, 0.14));          // primer fotograma: el ticket cae con el sello
+  const [pa1] = [V.a1.palabras];
+  if (t < TAJO) {
+    const sac = t < 0.14 ? (1 - kIn) * 0.08 : 0;
+    ticket(540, 1010 + (1 - kIn) * -160, -0.03 + sac, t);
+    // «CIERRAS UN PROYECTO.»
+    const f1 = A(96);
+    cartel("CIERRAS", 540, 360, 110, C.negro, pa1[0].t0, t, { desde: 1.1 });
+    cartel("UN PROYECTO.", 540, 470, 110, C.negro, pa1[1].t0, t, { desde: 1.1 });
+  } else {
+    // el tajo: una línea blanca cruza, el ticket se abre en dos
+    const kc = eOut5(prog(t, TAJO, TAJO + 0.45)), dt = t - TAJO;
+    if (dt < 0.12) { fondo(C.blanco); }
+    else fondo(C.lima);
+    ticket(540 - kc * 760, 1060 + kc * 160, -0.03 - kc * 0.16, t, -1);
+    ticket(540 + kc * 760, 1060 + kc * 160, -0.03 + kc * 0.16, t, 1);
+    // (las dos mitades salen de cuadro: queda solo el 50 %)
+    // la derecha: 50 %
+    const k50 = muelle(prog(t, TAJO + 0.05, TAJO + 0.5), 3, 6);
+    c.save(); c.translate(540, 1080); c.rotate(-0.04); c.scale(lerp(0.4, 1, k50), lerp(0.4, 1, k50));
+    M.texto(c, "50%", 0, 0, { f: A(360), color: C.negro, al: "center", base: "middle", alpha: clamp(k50 * 2) }); c.restore();
+    M.texto(c, "PARA TI", 540, 1420, { f: A(110), color: C.coral, al: "center", alpha: eOut5(prog(t, TAJO + 0.35, TAJO + 0.6)) });
+    // «LA MITAD ES TUYA.»
+    const pa = V.a2.palabras;
+    cartel("LA MITAD", 540, 380, 150, C.negro, pa[0].t0, t);
+    cartel("ES TUYA.", 540, 530, 150, C.negro, pa[2].t0, t);
+    // línea del tajo
+    if (dt < 0.2) { const k = eOut5(prog(dt, 0, 0.12)); c.save(); c.globalAlpha = 1 - prog(dt, 0.1, 0.2); c.translate(540, 1010); c.rotate(0.06);
+      c.fillStyle = C.negro; c.fillRect(-4, -1000 * k, 8, 2000 * k); c.restore(); }
+  }
+}
+
+// ════════════════ 3,4 → 7,7 · BUSCAMOS / PERSONAS / PARA / VENTAS · gente que sabe abrir puertas ════════════════
+function buscamos(t) {
+  const pa = V.b1.palabras; const cols = [[C.azul, C.blanco], [C.coral, C.negro], [C.negro, C.lima], [C.lima, C.negro]];
+  let i = 0; while (i + 1 < pa.length && t >= pa[i + 1].t0 - 0.02) i++;
+  const [bg, fg] = cols[i]; fondo(bg);
+  etiqueta("D-CODE PARTNERS", 330, bg === C.negro ? C.lima : fg, bg === C.negro ? "#ffffff14" : "#00000014", eOut(prog(t, pa[0].t0, pa[0].t0 + 0.2)));
+  // pila: las palabras ya dichas quedan arriba, pequeñas; la actual, enorme
+  const pal_ = pa.map((p) => p.w.replace(/[.,]/g, "").toUpperCase());
+  for (let j = 0; j < i; j++) M.texto(c, pal_[j], 540, 470 + j * 92, { f: A(84), color: fg, al: "center", alpha: 0.35 });
+  const px = ajusta(pal_[i], A, 930, 330);
+  cartel(pal_[i], 540, 960, px, fg, pa[i].t0, t, { desde: 1.35 });
+  // subrayado que crece en VENTAS
+  if (i === 3) { const k = eOut5(prog(t, pa[3].t0 + 0.1, pa[3].t0 + 0.45)); c.fillStyle = C.negro; c.fillRect(540 - 430 * k, 1150, 860 * k, 18); }
+}
+function puertas(t) {
+  // «Gente que sabe abrir puertas.»: dos hojas de puerta que se abren y dejan pasar la luz
+  fondo(C.negro); const pa = V.b2.palabras; const tA = pal("b2", "abrir").t0;
+  const k = eIO(prog(t, tA - 0.05, tA + 0.6));
+  const px0 = 540, py0 = 1080, pw = 520, ph = 760;
+  // luz detrás
+  const g = c.createLinearGradient(0, py0 - ph / 2, 0, py0 + ph / 2); g.addColorStop(0, C.lima); g.addColorStop(1, "#f6ffcf");
+  c.fillStyle = g; c.fillRect(px0 - pw / 2, py0 - ph / 2, pw, ph);
+  // haz de luz en el suelo
+  c.save(); c.globalAlpha = 0.35 * k; c.fillStyle = C.lima; c.beginPath(); c.moveTo(px0 - pw / 2, py0 + ph / 2); c.lineTo(px0 + pw / 2, py0 + ph / 2);
+  c.lineTo(px0 + pw, H); c.lineTo(px0 - pw, H); c.closePath(); c.fill(); c.restore();
+  // hojas (se abren en perspectiva: se estrechan hacia los lados)
+  [-1, 1].forEach((s) => { const wh = (pw / 2) * (1 - 0.82 * k); const x = s < 0 ? px0 - pw / 2 : px0 + pw / 2 - wh;
+    c.fillStyle = "#1c1c20"; c.fillRect(x, py0 - ph / 2 - 10 * k, wh, ph + 20 * k);
+    c.fillStyle = "#2c2c33"; c.beginPath(); c.arc(s < 0 ? x + wh - 28 : x + 28, py0, 10 * (1 - k * 0.8), 0, 7); c.fill(); });
+  c.strokeStyle = "#333"; c.lineWidth = 6; c.strokeRect(px0 - pw / 2 - 3, py0 - ph / 2 - 3, pw + 6, ph + 6);
+  cartel("GENTE QUE SABE", 540, 380, 118, C.blanco, pa[0].t0, t, { desde: 1.08 });
+  cartel("ABRIR PUERTAS.", 540, 520, 138, C.lima, tA, t, { desde: 1.15 });
+}
+
+// ════════════════ 7,7 → 14,1 · qué vas a vender: tres tarjetas ════════════════
+function tarjetas(t) {
+  fondo(C.crema);
+  const pa = V.c1.palabras; const kV = eOut5(prog(t, pa[0].t0, pa[0].t0 + 0.2));
+  M.texto(c, "VAS A VENDER", 540, 380, { f: A(104), color: C.negro, al: "center", alpha: kV });
+  const defs = [
+    { t0: pal("c1", "automatización").t0, col: C.azul, fg: C.blanco, tit: ["AUTOMATIZACIÓN"], dib: miniFlujo },
+    { t0: pal("c2", "inteligencia").t0, col: C.negro, fg: C.lima, tit: ["INTELIGENCIA", "ARTIFICIAL"], dib: miniIA },
+    { t0: pal("c3", "sistemas").t0, col: C.coral, fg: C.negro, tit: ["SISTEMAS", "A MEDIDA"], dib: miniSistema },
+  ];
+  const activa = defs.reduce((a, d, i) => (t >= d.t0 - 0.05 ? i : a), -1);
+  defs.forEach((d, i) => {
+    if (t < d.t0 - 0.05) return;
+    const k = muelle(prog(t, d.t0 - 0.05, d.t0 + 0.4), 2.6, 6), e = eOut5(prog(t, d.t0 - 0.05, d.t0 + 0.12));
+    const atras = activa - i;                                  // las anteriores se apilan detrás, más pequeñas
+    const y = 1200 - atras * 225 - (1 - e) * -500, s = 1 - atras * 0.08, rot = [-0.035, 0.03, -0.015][i] * (atras ? 2 : 1);
+    c.save(); c.translate(540, y); c.rotate(rot); c.scale(s * lerp(1.08, 1, k), s * lerp(1.08, 1, k));
+    c.fillStyle = "#00000026"; M.rr(c, -400 + 12, -330 + 18, 800, 660, 36); c.fill();
+    c.fillStyle = d.col; M.rr(c, -400, -330, 800, 660, 36); c.fill();
+    if (!atras) d.dib(t - d.t0, d.fg);
+    d.tit.forEach((l, j) => { const px = ajusta(l, A, 700, 104); M.texto(c, l, -350, -225 + j * 108, { f: A(px), color: d.fg, registrar: !atras }); });
+    c.restore();
+  });
+  // «para empresas.»
+  const tE = pal("c3", "empresas").t0; const kE = eOut5(prog(t, tE - 0.05, tE + 0.2));
+  if (kE > 0) etiqueta("PARA EMPRESAS", 1605, C.lima, C.negro, kE);
+}
+function miniFlujo(dt, fg) {        // nodos que se completan solos
+  const ns = [[-250, 110], [0, 110], [250, 110]];
+  ns.forEach(([x, y], i) => { const k = eOut5(prog(dt, 0.2 + i * 0.35, 0.45 + i * 0.35));
+    if (i) { c.strokeStyle = fg; c.lineWidth = 6; c.globalAlpha = 0.5 + 0.5 * k; c.beginPath(); c.moveTo(ns[i - 1][0] + 60, y); c.lineTo(lerp(ns[i - 1][0] + 60, x - 60, k), y); c.stroke(); c.globalAlpha = 1; }
+    c.strokeStyle = fg; c.lineWidth = 6; c.beginPath(); c.arc(x, y, 56, 0, 7); c.stroke();
+    if (k > 0) { c.fillStyle = fg; c.globalAlpha = k; c.beginPath(); c.arc(x, y, 56, 0, 7); c.fill(); c.globalAlpha = 1;
+      c.strokeStyle = C.azul; c.lineWidth = 9; c.beginPath(); c.moveTo(x - 22, y + 2); c.lineTo(x - 5, y + 20); c.lineTo(x + 26, y - 18); c.stroke(); }
+    M.texto(c, ["Pedido", "Factura", "Aviso"][i], x, y + 118, { f: R(700, 36), color: fg, al: "center" }); });
+}
+function miniIA(dt, fg) {           // pregunta → respuesta que se escribe
+  M.rr(c, -340, 20, 680, 90, 45); c.strokeStyle = fg; c.lineWidth = 4; c.stroke();
+  const q = "¿Qué clientes me deben?"; const n = Math.min(q.length, Math.floor(prog(dt, 0.05, 0.6) * q.length));
+  M.texto(c, q.slice(0, n), -300, 78, { f: R(600, 38), color: fg });
+  const ka = prog(dt, 0.7, 1.4);
+  [560, 480, 380].forEach((w, i) => { const k = eOut(clamp(ka * 3 - i)); c.fillStyle = fg; c.globalAlpha = 0.85; M.rr(c, -340, 150 + i * 46, w * k, 24, 12); c.fill(); c.globalAlpha = 1; });
+}
+function miniSistema(dt, fg) {      // bloques que encajan en una retícula
+  for (let i = 0; i < 8; i++) { const col = i % 4, fila = Math.floor(i / 4); const k = eOut5(prog(dt, 0.1 + i * 0.1, 0.4 + i * 0.1));
+    const x = -330 + col * 170, y = 40 + fila * 130; c.globalAlpha = k; c.fillStyle = i === 5 ? C.blanco : fg;
+    M.rr(c, x, y - (1 - k) * 60, 150, 110, 16); c.fill(); c.globalAlpha = 1; }
+}
+
+// ════════════════ 14,1 → 21,4 · el reparto: TU PARTE | LA NUESTRA · no necesitas programar ════════════════
+function reparto(t) {
+  const tD2 = V.d2.t0, tD3 = V.d3.t0;
+  if (t < tD3 - 0.05) {
+    // pantalla partida en horizontal: arriba lo tuyo, abajo lo nuestro; el corte es el del ticket
+    const kS = eOut5(prog(t, tD2 - 0.1, tD2 + 0.3));   // la mitad de abajo entra
+    const yCorte = lerp(H, 1040, kS);
+    fondo(C.lima);
+    const pa = V.d1.palabras; const oy = lerp(330, 0, kS);
+    c.save(); c.translate(0, oy);
+    cartel("TU PARTE", 540, 420, 150, C.negro, pal("d1", "parte").t0, t);
+    const items = [["encontrar", "Encontrar la oportunidad"], ["conseguir", "Conseguir el cliente"]];
+    items.forEach(([w, s], i) => { const tt = pal("d1", w).t0; const k = eOut5(prog(t, tt - 0.05, tt + 0.25));
+      const y = 600 + i * 120; c.save(); c.globalAlpha = k; c.translate((1 - k) * -60, 0);
+      c.fillStyle = C.negro; c.beginPath(); c.arc(150, y - 14, 30, 0, 7); c.fill();
+      M.texto(c, String(i + 1), 150, y, { f: A(40), color: C.lima, al: "center", registrar: false });
+      M.texto(c, s, 210, y, { f: R(800, 58), color: C.negro }); c.restore(); });
+    c.restore();
+    // mitad de abajo: LA NUESTRA (azul)
+    c.fillStyle = C.azul; c.fillRect(0, yCorte, W, H - yCorte);
+    if (kS > 0) {
+      c.save(); c.beginPath(); c.rect(0, yCorte, W, H); c.clip();
+      cartel("LA NUESTRA", 540, 1210, 150, C.blanco, pal("d2", "nuestra").t0, t);
+      const tC = pal("d2", "construirlo").t0; const kC = eOut5(prog(t, tC - 0.05, tC + 0.25));
+      c.save(); c.globalAlpha = kC; M.texto(c, "Construirlo.", 540, 1390, { f: R(800, 72), color: C.blanco, al: "center" }); c.restore();
+      M.logo(c, 540 - 60, 1450, 100, C.blanco, C.lima, prog(t, tC, tC + 0.5), prog(t, tC + 0.3, tC + 0.5));
+      c.restore();
+    }
+    c.fillStyle = C.negro; c.fillRect(0, yCorte - 6, W, 12);   // la línea de corte
+  } else {
+    // «No necesitas saber programar.»
+    fondo(C.negro); const pa = V.d3.palabras;
+    cartel("NO NECESITAS", 540, 560, 130, C.blanco, pa[0].t0, t, { desde: 1.1 });
+    cartel("SABER PROGRAMAR.", 540, 700, ajusta("SABER PROGRAMAR.", A, 930, 130), C.blanco, pal("d3", "saber").t0, t, { desde: 1.1 });
+    // </> tachado
+    const tP = pal("d3", "programar").t0; const k = muelle(prog(t, tP - 0.05, tP + 0.4), 3, 6);
+    c.save(); c.translate(540, 1080); c.scale(lerp(0.6, 1, k), lerp(0.6, 1, k)); c.globalAlpha = clamp(k * 2);
+    M.texto(c, "</>", 0, 0, { f: MONO(800, 230), color: "#3a3a40", al: "center", base: "middle", registrar: false });
+    const kx = eIO(prog(t, tP + 0.2, tP + 0.45)); c.strokeStyle = C.coral; c.lineWidth = 22; c.lineCap = "round";
+    c.beginPath(); c.moveTo(-260, 90); c.lineTo(lerp(-260, 260, kx), lerp(90, -90, kx)); c.stroke(); c.restore();
+  }
+}
+
+// ════════════════ 21,4 → 24,9 · la rotura y el 50 % ════════════════
+function cincuenta(t) {
+  const pa = V.d4.palabras;
+  if (t < T50) {
+    // tensión: negro, las palabras entran una a una y un contador sube hasta 50
+    fondo(C.negro);
+    const lin = [["Y TE", pa[0].t0], ["LLEVAS", pal("d4", "llevas").t0], ["EL", pal("d4", "el").t0]];
+    lin.forEach(([s, t0], i) => cartel(s, 540, 520 + i * 150, 140, C.blanco, t0, t, { desde: 1.1 }));
+    const kc = prog(t, pal("d4", "el").t0 - 0.2, T50); const n = Math.floor(eIn(kc) * 49);
+    if (kc > 0) M.texto(c, `${n}%`, 540, 1250, { f: A(200), color: "#ffffff30", al: "center", base: "middle", registrar: false });
+  } else {
+    const dt = t - T50;
+    fondo(dt < 0.07 ? C.blanco : C.lima);
+    // 50 % enorme, con un golpe de cámara
+    const k = muelle(prog(dt, 0, 0.45), 2.5, 5.5); const sh = dt < 0.3 ? (hash(Math.floor(dt * 60)) - 0.5) * 30 * (1 - dt / 0.3) : 0;
+    c.save(); c.translate(540 + sh, 900); c.scale(lerp(1.6, 1, k), lerp(1.6, 1, k));
+    M.texto(c, "50%", 0, 0, { f: A(ajusta("50%", A, 920, 560)), color: C.negro, al: "center", base: "middle" }); c.restore();
+    const tC = pal("d4", "de").t0; const kL = eOut5(prog(t, tC - 0.05, tC + 0.25));
+    c.save(); c.globalAlpha = kL; M.texto(c, "DE LO QUE", 540, 1300, { f: A(96), color: C.negro, al: "center" });
+    M.texto(c, "CONSIGAS.", 540, 1420, { f: A(128), color: C.coral, al: "center", alpha: eOut5(prog(t, pal("d4", "consigas").t0 - 0.05, pal("d4", "consigas").t0 + 0.2)) }); c.restore();
+    etiqueta("PARA TI · EN COMISIÓN", 380, C.lima, C.negro, eOut(prog(dt, 0.25, 0.5)));
+  }
+}
+
+// ════════════════ 24,9 → 33 · ¿te interesa? · escríbenos · vende con D-Code ════════════════
+function llamada(t) {
+  const tE2 = V.e2.t0, tE3 = V.e3.t0;
+  if (t < tE2 - 0.05) {
+    fondo(C.azul); const pa = V.e1.palabras;
+    cartel("¿TE INTERESA?", 540, 800, ajusta("¿TE INTERESA?", A, 930, 190), C.blanco, pal("e1", "interesa").t0 - 0.12, t);
+    const tC = pal("e1", "contamos").t0; const k = eOut5(prog(t, tC - 0.05, tC + 0.25));
+    c.save(); c.globalAlpha = k; M.texto(c, "Te contamos", 540, 1010 + (1 - k) * 20, { f: R(800, 72), color: C.lima, al: "center" });
+    M.texto(c, "cómo funciona.", 540, 1100 + (1 - k) * 20, { f: R(800, 72), color: C.lima, al: "center" }); c.restore();
+    return;
+  }
+  fondo(C.negro);
+  // ESCRÍBENOS + las dos vías; el correo se queda fijo hasta el final (≥ 3 s)
+  cartel("ESCRÍBENOS", 540, 470, 170, C.blanco, V.e2.palabras[0].t0, t, { desde: 1.15 });
+  const tI = pal("e2", "instagram").t0, tC = pal("e2", "correo").t0;
+  const kI = eOut5(prog(t, tI - 0.08, tI + 0.2)), kC = eOut5(prog(t, tC - 0.08, tC + 0.2));
+  // fila 1: mensaje directo (avión de papel genérico)
+  c.save(); c.globalAlpha = kI; c.translate((1 - kI) * -60, 0);
+  M.rr(c, 90, 640, 900, 150, 75); c.fillStyle = "#ffffff12"; c.fill();
+  c.save(); c.translate(190, 715); c.rotate(-0.4); c.strokeStyle = C.lima; c.lineWidth = 7; c.lineJoin = "round";
+  c.beginPath(); c.moveTo(-40, 0); c.lineTo(42, -34); c.lineTo(10, 40); c.lineTo(0, 8); c.closePath(); c.moveTo(0, 8); c.lineTo(42, -34); c.stroke(); c.restore();
+  M.texto(c, "Por mensaje en Instagram", 270, 734, { f: R(800, 54), color: C.blanco }); c.restore();
+  // fila 2: correo (dato real de contacto de D-Code, sin inventar otro)
+  c.save(); c.globalAlpha = kC; c.translate((1 - kC) * -60, 0);
+  M.rr(c, 90, 830, 900, 150, 75); c.fillStyle = C.lima; c.fill();
+  c.save(); c.translate(190, 905); c.strokeStyle = C.negro; c.lineWidth = 7; c.lineJoin = "round"; c.strokeRect(-40, -28, 80, 56);
+  c.beginPath(); c.moveTo(-40, -28); c.lineTo(0, 6); c.lineTo(40, -28); c.stroke(); c.restore();
+  const mail = "dcodedepartment@gmail.com"; M.texto(c, mail, 270, 925, { f: R(800, ajusta(mail, (px) => R(800, px), 690, 54)), color: C.negro }); c.restore();
+  // «Vende con D-Code Partners.»
+  const kM = eOut5(prog(t, tE3 - 0.05, tE3 + 0.3));
+  if (kM > 0) {
+    M.texto(c, "VENDE CON", 540, 1210 + (1 - kM) * 30, { f: A(96), color: C.gris, al: "center", alpha: kM });
+    const tD = pal("e3", "d-code").t0; const kL = prog(t, tD - 0.1, tD + 0.5);
+    const fM = R(800, 78); const wM = M.ancho(c, "D-Code Partners", fM, -1); const al = 96, tot = al * 1.2 + 30 + wM, x0 = 540 - tot / 2;
+    M.logo(c, x0, 1290, al, C.blanco, C.pixel, kL, prog(t, tD + 0.25, tD + 0.45));
+    M.texto(c, "D-Code Partners", x0 + al * 1.2 + 30, 1290 + al * 0.74, { f: fM, color: C.blanco, alpha: eOut5(prog(t, tD, tD + 0.3)), track: -1 });
+  }
+  // sello final: 50 % sobre la composición
+  const ks = prog(t, G.sello_final - 0.08, G.sello_final);
+  if (ks > 0) { const e = t < G.sello_final ? eIn(ks) : 1; c.save(); c.translate(840, 1540); c.rotate(-0.22); const s = lerp(2.6, 1, e); c.scale(s, s); c.globalAlpha = e;
+    c.strokeStyle = C.coral; c.lineWidth = 8; c.beginPath(); c.arc(0, 0, 96, 0, 7); c.stroke(); c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke();
+    M.texto(c, "50%", 0, 26, { f: A(82), color: C.coral, al: "center" }); c.restore(); }
+}
+
+// ════════════════ fotograma ════════════════
+window.pintaFrame = (n) => {
+  const t = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
+  if (t < V.b1.t0 - 0.02) trato(t);
+  else if (t < V.b2.t0 - 0.02) buscamos(t);
+  else if (t < V.c1.t0 - 0.02) puertas(t);
+  else if (t < V.d1.t0 - 0.02) tarjetas(t);
+  else if (t < V.d4.t0 - 0.02) reparto(t);
+  else if (t < V.e1.t0 - 0.02) cincuenta(t);
+  else llamada(t);
+  // la cinta se frena al final: la imagen baja un poco y se oscurece con ella
+  const kf = prog(t, G.fin, G.fin + 0.55);
+  if (kf > 0 && kf < 1) { c.fillStyle = `rgba(0,0,0,${0.35 * Math.sin(kf * Math.PI)})`; c.fillRect(0, 0, W, H); }
+  M.grano(c, W, H, n, 0.06);
+};
+
+(async () => {
+  const fu = "../comun/fuentes/";
+  await M.cargar([["Anton", fu + "anton.woff2"], ["Archivo", fu + "archivo-wdth.woff2", { weight: "100 900", stretch: "62% 125%" }],
+                  ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }], ["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }]]);
+  window.pintaFrame(0); window.LISTO = true;
+})();
+</script></body></html>
