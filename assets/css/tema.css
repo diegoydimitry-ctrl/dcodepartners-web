@@ -224,14 +224,9 @@ html[data-theme="light"] .tema-btn:focus-visible{ outline-color:#2f5fe0; }
   .tema-btn-t{ max-width:0; overflow:hidden; opacity:0; transition:max-width .32s cubic-bezier(.2,.8,.2,1), opacity .2s ease, margin .32s cubic-bezier(.2,.8,.2,1); }
   .tema-btn:hover .tema-btn-t, .tema-btn:focus-visible .tema-btn-t{ max-width:160px; opacity:1; margin:0 13px 0 10px; }
 }
-/* La cabecera deja sitio al botón donde el logo quedaría debajo. */
-@media (min-width:941px) and (max-width:1279px){
-  #site-header .nav-wrap{ padding-left:74px; }
-}
 @media (max-width:940px){
   .tema-btn{ height:44px; min-width:44px; top:calc((var(--header-h, 76px) - 44px) / 2); padding:0 3px; }
   .tema-btn-i{ width:36px; height:36px; }
-  #site-header .nav-wrap{ padding-left:66px; }
 }
 @media (hover:none){
   .tema-btn:hover .tema-btn-t{ max-width:0; opacity:0; margin:0; }
