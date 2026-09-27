@@ -9,19 +9,35 @@
 # con un encadenado corto. Por eso suenan y se ven como la pieza larga.
 set -euo pipefail
 cd "$(dirname "$0")"
-FF=node_modules/ffmpeg-static/ffmpeg
+FF=${FFMPEG:-ffmpeg}
+FFP=${FFPROBE:-ffprobe}
 SAL=..
 
-echo "── máster 4K ──"
+# La banda sale de rend-audio.mjs sin normalizar. Aquí se lleva a -14 LUFS, que
+# es a lo que normaliza YouTube: así la pieza entra sin que le toquen el volumen.
+# Dos pasadas y con el «target_offset» que devuelve la medición, porque con una
+# sola loudnorm se queda cerca del objetivo pero no en él. El pico se pide a
+# -1,6 y no a -1,0: el AAC lo sube al codificar, y midiendo el mp4 final con
+# -1,0 pedido salía a -0,4 dBFS. Con -1,6 aterriza donde tiene que aterrizar.
+if [ ! -f banda-norm.wav ] || [ banda.wav -nt banda-norm.wav ]; then
+  echo "── normalizando la banda a −14 LUFS (dos pasadas) ──"
+  MED=$("$FF" -hide_banner -nostats -i banda.wav -af "loudnorm=I=-14:TP=-1.6:LRA=11:print_format=json" -f null - 2>&1 | sed -n '/^{/,/^}/p')
+  LEE () { printf '%s' "$MED" | sed -n "s/.*\"$1\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p" | head -1; }
+  "$FF" -y -loglevel error -i banda.wav \
+    -af "loudnorm=I=-14:TP=-1.6:LRA=11:measured_I=$(LEE input_i):measured_TP=$(LEE input_tp):measured_LRA=$(LEE input_lra):measured_thresh=$(LEE input_thresh):offset=$(LEE target_offset):linear=true" \
+    -ar 48000 -ac 2 -c:a pcm_s16le banda-norm.wav
+fi
+
+echo "── máster de alta (el ancho con el que se rindieron los fotogramas) ──"
 "$FF" -y -loglevel error -framerate 30 -i frames/f%05d.png -i banda-norm.wav \
   -map 0:v -map 1:a -t 45 \
   -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -profile:v high -level 5.1 \
   -x264-params "keyint=60:min-keyint=30:bframes=3" \
   -c:a aac -b:a 320k -ar 48000 -ac 2 \
-  -movflags +faststart -r 30 dcode-youtube-ad-45s-4k.mp4
+  -movflags +faststart -r 30 dcode-youtube-ad-45s-alta.mp4
 
 echo "── máster 1080p (entrega) ──"
-"$FF" -y -loglevel error -i dcode-youtube-ad-45s-4k.mp4 \
+"$FF" -y -loglevel error -i dcode-youtube-ad-45s-alta.mp4 \
   -vf "scale=1920:1080:flags=lanczos" \
   -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p -profile:v high -level 4.2 \
   -x264-params "keyint=60:min-keyint=30:bframes=3" \
@@ -65,9 +81,9 @@ echo "── bumper de 6 s ──"
 corta "$SAL/dcode-youtube-ad-6s.mp4" "0:3.6" "42.4:2.4"
 
 echo "── resultado ──"
-for f in "$SAL/dcode-youtube-ad-45s-master.mp4" "$SAL/dcode-youtube-ad-20s.mp4" "$SAL/dcode-youtube-ad-6s.mp4" dcode-youtube-ad-45s-4k.mp4; do
+for f in "$SAL/dcode-youtube-ad-45s-master.mp4" "$SAL/dcode-youtube-ad-20s.mp4" "$SAL/dcode-youtube-ad-6s.mp4" dcode-youtube-ad-45s-alta.mp4; do
   [ -f "$f" ] && printf "%-46s %7s  %s\n" "$(basename "$f")" \
     "$(du -h "$f" | cut -f1)" \
-    "$(node_modules/ffprobe-static/bin/linux/x64/ffprobe -v error -select_streams v:0 \
+    "$("$FFP" -v error -select_streams v:0 \
         -show_entries stream=width,height,r_frame_rate:format=duration -of csv=p=0:s=x "$f" | tr '\n' ' ')"
 done

@@ -17,13 +17,14 @@ const SALIDA = resolve(process.argv[4] ?? `${AQUI}/frames`);
 mkdirSync(SALIDA, { recursive: true });
 
 const nav = await chromium.launch({
-  executablePath: "/opt/pw-browsers/chromium",
-  args: ["--force-color-profile=srgb", "--disable-lcd-text", "--font-render-hinting=none"],
+  executablePath: process.env.CHROMIUM || "/opt/pw-browsers/chromium",
+  args: ["--force-color-profile=srgb", "--disable-lcd-text", "--font-render-hinting=none", "--no-sandbox"],
 });
-const ctx = await nav.newContext({ viewport: { width: 3840, height: 2160 }, deviceScaleFactor: 1 });
+const ANCHO = Number(process.env.ANCHO || 3840), ALTO = Math.round(ANCHO * 9 / 16);
+const ctx = await nav.newContext({ viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 1 });
 const p = await ctx.newPage();
 p.on("pageerror", (e) => console.error("PAGEERROR:", String(e).slice(0, 300)));
-await p.goto("file://" + resolve(AQUI, "escena.html"), { waitUntil: "load" });
+await p.goto("file://" + resolve(AQUI, "escena.html") + "?w=" + ANCHO, { waitUntil: "load" });
 await p.waitForFunction(() => window.LISTO === true, null, { timeout: 60000 });
 
 const META = await p.evaluate(() => window.META);

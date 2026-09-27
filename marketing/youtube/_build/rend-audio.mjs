@@ -2,7 +2,7 @@ import { chromium } from "playwright";
 import { writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path"; import { fileURLToPath } from "node:url";
 const AQUI = dirname(fileURLToPath(import.meta.url));
-const nav = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args:["--autoplay-policy=no-user-gesture-required"] });
+const nav = await chromium.launch({ executablePath: process.env.CHROMIUM || "/opt/pw-browsers/chromium", args:["--autoplay-policy=no-user-gesture-required","--no-sandbox"] });
 const p = await (await nav.newContext()).newPage();
 p.on("pageerror", e => console.error("ERR:", String(e).slice(0,400)));
 p.on("console", m => { if (m.type()==="error") console.error("C:", m.text().slice(0,200)); });

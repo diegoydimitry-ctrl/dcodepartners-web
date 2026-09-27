@@ -14,6 +14,8 @@ resultados, ningún número de clientes y ningún plazo: nada de eso está medid
 | `../dcode-youtube-ad-6s.mp4` | 6,000 s | Bumper (no se puede saltar) |
 | `miniatura-el-bucle.png` / `.jpg` | 1280×720 | Miniatura. El JPG pesa 84 KB, muy por debajo de los 2 MB que acepta YouTube |
 
+> **Revisión 2 (27/09/2026):** los tres vídeos se han vuelto a montar. Qué cambia y por qué, en `../DOCUMENTATION.md` §1 bis.
+
 ## 2 · Verificación antes de subir (medida el 27/09/2026)
 
 | Comprobación | Máster 45 s | Corte 20 s | Bumper 6 s |
@@ -22,13 +24,16 @@ resultados, ningún número de clientes y ningún plazo: nada de eso está medid
 | Fotogramas | 1350 | 582 | 180 |
 | ¿Cuadra con duración × 30 fps? | **Sí, exacto** | **Sí, exacto** | **Sí, exacto** |
 | Resolución y cadencia | 1920×1080 · 30 fps | igual | igual |
-| Vídeo | H.264 High · 2,79 Mbps | 2,83 Mbps | 1,79 Mbps |
-| Audio | AAC-LC 48 kHz estéreo · 312 kbps | 258 kbps | 255 kbps |
-| Peso | 17,48 MB | 7,52 MB | 1,55 MB |
+| Vídeo | H.264 High · 3,35 Mbps | 3,28 Mbps | 2,69 Mbps |
+| Audio | AAC-LC 48 kHz estéreo · 312 kbps | 259 kbps | 255 kbps |
+| Peso | 20,6 MB | 8,6 MB | 2,2 MB |
 | Decodificación completa | sin errores | sin errores | sin errores |
 
-**Sonoridad del máster:** −14,4 LUFS integrados, −1,0 dBFS de pico real, rango 7,2 LU. YouTube normaliza a
+**Sonoridad del máster:** −14,3 LUFS integrados, −1,3 dBFS de pico real, rango 7,0 LU. YouTube normaliza a
 −14 LUFS: la pieza ya está ahí, así que no le van a bajar el volumen.
+
+> Medido en la revisión 2. El pico se pide a −1,6 dBFS antes de codificar y no a −1,0: el AAC lo sube al
+> codificar, y pidiendo −1,0 el mp4 final salía a −0,4 dBFS, por encima de lo que conviene entregar.
 
 **Sobre los «congelados» y los «negros»:** los detectores automáticos marcan cuatro congelados cortos y tres
 tramos oscuros. Ninguno es un fallo. El congelado del segundo 12,4 es **el giro del anuncio** —la imagen se para

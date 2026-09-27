@@ -43,6 +43,38 @@ frase cambiada a «Un asistente que responde con tus datos».
 
 ---
 
+## 1 bis · Revisión 2 (27/09/2026)
+
+Dirección: «el vídeo no llama suficientemente la atención» y «revisar todos los recuadros negros y rellenar los
+que aparecen vacíos». Las dos cosas apuntaban al mismo sitio, y se han resuelto juntas.
+
+**Los recuadros estaban vacíos de verdad, y eran tres sitios.**
+
+1. *La hoja de cálculo del acto 1* dibujaba **barras grises en vez de palabras**. Ahora lleva columnas escritas
+   —`#`, `concepto`, `estado`, `importe`— con conceptos corrientes de cualquier administración (Factura,
+   Albarán, Pedido, Recibo, Abono, Cuota, Gasto, Nómina) y su estado en color. En el primer segundo se LEE qué
+   se está copiando, que es lo que hacía falta para que el gesto se entienda sin sonido y sin marca.
+2. *El formulario de destino* tenía cinco campos pedidos cada 62 px desde el 78, dentro de una ventana de 232 px
+   de alto: **el tercero —el activo, donde se pega— caía fuera y el bucle rompía antes de dibujarlo**. El dato
+   pegado no se veía nunca. Ahora son tres campos —Referencia, Proveedor, Importe— y entra el gesto completo,
+   con el importe pegado siendo **el de la fila que se acaba de copiar**, no un número suelto.
+3. *Las 54 celdas del acto 3* llevaban dos barras grises: 54 recuadros vacíos justo en el momento en que se
+   cuenta que todo queda conectado. Ahora cada una dice una pieza real de una empresa (Facturas, Cobros,
+   Pedidos, Clientes, Agenda, Avisos, Informes, Contratos, Proveedores, Presupuestos, Stock, Incidencias,
+   Visitas, Tareas, Documentos, Correo, Llamadas, Nóminas, Albaranes, Compras, Recibos, Turnos, Cierres,
+   Firmas), repartidas con un paso primo para que no se lean como patrón. El fondo desenfocado del acto 5
+   también, por coherencia.
+
+**Y dos cosas para el gancho**, que es lo que se juega en los cinco segundos antes del botón de saltar:
+
+- La primera frase entra en el **segundo 0,45** en vez del 1,55, y más grande.
+- Aparece un **contador**: «EL MISMO GESTO ×N». No es una estadística: cuenta las repeticiones que se están
+  viendo en pantalla, ventana por ventana. Sube solo, late cuando sube y le da al ojo algo que seguir mientras
+  el caos crece. Para el segundo 11 va por varios centenares.
+
+Nada de esto mueve un solo tiempo del montaje: la banda sonora, el corte en seco del segundo 12 y los cortes de
+20 s y 6 s siguen encajando exactamente igual.
+
 ## 2 · Concepto
 
 > Una tarea se repite. Al principio parece normal. Al cabo de diez segundos
@@ -82,7 +114,7 @@ nada que no sea comprobable.
 
 | t | En pantalla |
 |---|---|
-| 1,55 | ¿Cuánto tiempo pierdes haciendo esto cada día? |
+| 0,45 | ¿Cuánto tiempo pierdes haciendo esto cada día? |
 | 4,75 | Copiar de un sitio a otro. |
 | 6,15 | Responder lo mismo otra vez. |
 | 7,45 | Buscar el dato que ya existe. |
