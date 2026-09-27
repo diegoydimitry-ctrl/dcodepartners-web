@@ -1,0 +1,91 @@
+{
+ "lufs": -17.421466600705713,
+ "pico_dbfs": -2.059519339530856,
+ "frases": [
+  {
+   "id": "a1",
+   "voz_fondo_lu": 7.2,
+   "wer": 0.0,
+   "oido": "Cierras un proyecto."
+  },
+  {
+   "id": "a2",
+   "voz_fondo_lu": 6.7,
+   "wer": 0.0,
+   "oido": "La mitad es tuya."
+  },
+  {
+   "id": "b1",
+   "voz_fondo_lu": 7.2,
+   "wer": 0.0,
+   "oido": "Buscamos personas para ventas."
+  },
+  {
+   "id": "b2",
+   "voz_fondo_lu": 9.4,
+   "wer": 0.0,
+   "oido": "Gente que sabe abrir puertas."
+  },
+  {
+   "id": "c1",
+   "voz_fondo_lu": 9.0,
+   "wer": 0.0,
+   "oido": "vas a vender automatización."
+  },
+  {
+   "id": "c2",
+   "voz_fondo_lu": 12.4,
+   "wer": 0.0,
+   "oido": "Inteligencia artificial."
+  },
+  {
+   "id": "c3",
+   "voz_fondo_lu": 9.3,
+   "wer": 0.0,
+   "oido": "y sistemas a medida para empresas."
+  },
+  {
+   "id": "d1",
+   "voz_fondo_lu": 8.2,
+   "wer": 0.0,
+   "oido": "Tu parte, encontrar la oportunidad y conseguir el cliente."
+  },
+  {
+   "id": "d2",
+   "voz_fondo_lu": 8.3,
+   "wer": 0.0,
+   "oido": "La nuestra construirlo."
+  },
+  {
+   "id": "d3",
+   "voz_fondo_lu": 11.8,
+   "wer": 0.0,
+   "oido": "No necesitas saber programar."
+  },
+  {
+   "id": "d4",
+   "voz_fondo_lu": 6.1,
+   "wer": 0.0,
+   "oido": "y te llevas el 50% de lo que consigas."
+  },
+  {
+   "id": "e1",
+   "voz_fondo_lu": 10.9,
+   "wer": 0.0,
+   "oido": "Te interesa, te contamos cómo funciona."
+  },
+  {
+   "id": "e2",
+   "voz_fondo_lu": 10.4,
+   "wer": 0.0,
+   "oido": "Escríbenos por Instagram o por correo."
+  },
+  {
+   "id": "e3",
+   "voz_fondo_lu": 8.4,
+   "wer": 0.0,
+   "oido": "Vende con decodos de compañeros"
+  }
+ ],
+ "silencios": []
+}

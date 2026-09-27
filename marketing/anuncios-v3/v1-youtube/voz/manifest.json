@@ -1,0 +1,139 @@
+{
+ "voz": "em_alex",
+ "sr": 48000,
+ "frases": [
+  {
+   "id": "h1",
+   "texto": "Copiar.",
+   "dur": 0.704,
+   "oido": "copiar",
+   "wer": 0.0
+  },
+  {
+   "id": "h2",
+   "texto": "Pegar.",
+   "dur": 0.661,
+   "oido": "pegar",
+   "wer": 0.0
+  },
+  {
+   "id": "h3",
+   "texto": "Responder.",
+   "dur": 0.853,
+   "oido": "responder.",
+   "wer": 0.0
+  },
+  {
+   "id": "h4",
+   "texto": "Buscar.",
+   "dur": 0.747,
+   "oido": "Buscar",
+   "wer": 0.0
+  },
+  {
+   "id": "h5",
+   "texto": "Otra vez.",
+   "dur": 0.853,
+   "oido": "otra vez.",
+   "wer": 0.0
+  },
+  {
+   "id": "l1",
+   "texto": "Esto no es trabajo.",
+   "dur": 1.387,
+   "oido": "Esto no es trabajo.",
+   "wer": 0.0
+  },
+  {
+   "id": "l2",
+   "texto": "Es ruido.",
+   "dur": 0.939,
+   "oido": "es ruido.",
+   "wer": 0.0
+  },
+  {
+   "id": "l3",
+   "texto": "Datos que se copian a mano.",
+   "dur": 1.707,
+   "oido": "Datos que se copian a mano.",
+   "wer": 0.0
+  },
+  {
+   "id": "l4",
+   "texto": "Herramientas que no se hablan.",
+   "dur": 1.707,
+   "oido": "herramientas que no se hablan.",
+   "wer": 0.0
+  },
+  {
+   "id": "l5",
+   "texto": "Y la misma pregunta, cada día, a la misma persona.",
+   "dur": 3.115,
+   "oido": "y la misma pregunta cada día a la misma persona.",
+   "wer": 0.0
+  },
+  {
+   "id": "l6",
+   "texto": "En D-Code Partners convertimos ese ruido en un sistema.",
+   "dur": 3.349,
+   "oido": "En Decode Partners, convertimos ese ruido en un sistema.",
+   "wer": 0.0
+  },
+  {
+   "id": "l7",
+   "texto": "Analizamos cómo trabaja tu empresa.",
+   "dur": 2.24,
+   "oido": "Analizamos cómo trabaja tu empresa.",
+   "wer": 0.0
+  },
+  {
+   "id": "l8",
+   "texto": "Diseñamos el sistema.",
+   "dur": 1.6,
+   "oido": "Diseñamos el sistema.",
+   "wer": 0.0
+  },
+  {
+   "id": "l9",
+   "texto": "Y lo conectamos todo: procesos, datos y herramientas.",
+   "dur": 3.243,
+   "oido": "y lo conectamos todo, procesos, datos y herramientas.",
+   "wer": 0.0
+  },
+  {
+   "id": "l10",
+   "texto": "Con automatización e inteligencia artificial.",
+   "dur": 2.965,
+   "oido": "con automatización e inteligencia artificial.",
+   "wer": 0.0
+  },
+  {
+   "id": "l11",
+   "texto": "No se trata de usar inteligencia artificial.",
+   "dur": 2.816,
+   "oido": "no se trata de usar inteligencia artificial.",
+   "wer": 0.0
+  },
+  {
+   "id": "l12",
+   "texto": "Se trata de que tu empresa funcione mejor.",
+   "dur": 2.645,
+   "oido": "Se trata de que tu empresa funcione mejor.",
+   "wer": 0.0
+  },
+  {
+   "id": "l13",
+   "texto": "D-Code Partners.",
+   "dur": 1.259,
+   "oido": "decode partners",
+   "wer": 0.0
+  },
+  {
+   "id": "l14",
+   "texto": "Sistemas inteligentes para empresas.",
+   "dur": 2.197,
+   "oido": "sistemas inteligentes para empresas.",
+   "wer": 0.0
+  }
+ ]
+}

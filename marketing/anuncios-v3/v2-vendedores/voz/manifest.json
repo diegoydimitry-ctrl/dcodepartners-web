@@ -1,0 +1,104 @@
+{
+ "voz": "ef_dora",
+ "sr": 48000,
+ "frases": [
+  {
+   "id": "a1",
+   "texto": "Cierras un proyecto.",
+   "dur": 1.408,
+   "oido": "Cierras un proyecto.",
+   "wer": 0.0
+  },
+  {
+   "id": "a2",
+   "texto": "La mitad es tuya.",
+   "dur": 1.173,
+   "oido": "La mitad es tuya.",
+   "wer": 0.0
+  },
+  {
+   "id": "b1",
+   "texto": "Buscamos personas para ventas.",
+   "dur": 1.877,
+   "oido": "Buscamos personas para ventas.",
+   "wer": 0.0
+  },
+  {
+   "id": "b2",
+   "texto": "Gente que sabe abrir puertas.",
+   "dur": 1.707,
+   "oido": "Gente que sabe abrir puertas.",
+   "wer": 0.0
+  },
+  {
+   "id": "c1",
+   "texto": "Vas a vender automatización,",
+   "dur": 1.835,
+   "oido": "vas a vender automatización.",
+   "wer": 0.0
+  },
+  {
+   "id": "c2",
+   "texto": "inteligencia artificial,",
+   "dur": 1.493,
+   "oido": "Inteligencia artificial.",
+   "wer": 0.0
+  },
+  {
+   "id": "c3",
+   "texto": "y sistemas a medida para empresas.",
+   "dur": 2.069,
+   "oido": "y sistemas a medida para empresas.",
+   "wer": 0.0
+  },
+  {
+   "id": "d1",
+   "texto": "Tu parte: encontrar la oportunidad y conseguir el cliente.",
+   "dur": 3.243,
+   "oido": "Tu parte, encontrar la oportunidad y conseguir el cliente.",
+   "wer": 0.0
+  },
+  {
+   "id": "d2",
+   "texto": "La nuestra: construirlo.",
+   "dur": 1.493,
+   "oido": "la nuestra construirlo.",
+   "wer": 0.0
+  },
+  {
+   "id": "d3",
+   "texto": "No necesitas saber programar.",
+   "dur": 1.813,
+   "oido": "No necesitas saber programar.",
+   "wer": 0.0
+  },
+  {
+   "id": "d4",
+   "texto": "Y te llevas el 50 % de lo que consigas.",
+   "dur": 2.923,
+   "oido": "y te llevas el 50% de lo que consigas.",
+   "wer": 0.0
+  },
+  {
+   "id": "e1",
+   "texto": "¿Te interesa? Te contamos cómo funciona.",
+   "dur": 2.325,
+   "oido": "Te interesa, te contamos cómo funciona.",
+   "wer": 0.0
+  },
+  {
+   "id": "e2",
+   "texto": "Escríbenos por Instagram, o por correo.",
+   "dur": 2.24,
+   "oido": "Escríbenos por Instagram o por correo.",
+   "wer": 0.0
+  },
+  {
+   "id": "e3",
+   "texto": "Vende con D-Code Partners.",
+   "dur": 1.664,
+   "oido": "Vende con decode partners.",
+   "wer": 0.0
+  }
+ ]
+}

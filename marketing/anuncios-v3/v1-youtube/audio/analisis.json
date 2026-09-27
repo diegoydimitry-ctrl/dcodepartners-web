@@ -1,0 +1,130 @@
+{
+ "lufs": -16.231471196150864,
+ "pico_dbfs": -2.059519339530856,
+ "frases": [
+  {
+   "id": "h1",
+   "voz_fondo_lu": 6.5,
+   "wer": 0.0,
+   "oido": "copiar"
+  },
+  {
+   "id": "h2",
+   "voz_fondo_lu": 11.7,
+   "wer": 0.0,
+   "oido": "pegar"
+  },
+  {
+   "id": "h3",
+   "voz_fondo_lu": 10.4,
+   "wer": 0.0,
+   "oido": "responder"
+  },
+  {
+   "id": "h4",
+   "voz_fondo_lu": 12.9,
+   "wer": 0.0,
+   "oido": "Buscar"
+  },
+  {
+   "id": "h5",
+   "voz_fondo_lu": 9.4,
+   "wer": 0.0,
+   "oido": "Otra vez."
+  },
+  {
+   "id": "l1",
+   "voz_fondo_lu": 9.8,
+   "wer": 0.0,
+   "oido": "Esto no es trabajo."
+  },
+  {
+   "id": "l2",
+   "voz_fondo_lu": 8.4,
+   "wer": 0.0,
+   "oido": "es ruido."
+  },
+  {
+   "id": "l3",
+   "voz_fondo_lu": 18.4,
+   "wer": 0.0,
+   "oido": "Datos que se copian a mano."
+  },
+  {
+   "id": "l4",
+   "voz_fondo_lu": 17.1,
+   "wer": 0.0,
+   "oido": "herramientas que no se hablan."
+  },
+  {
+   "id": "l5",
+   "voz_fondo_lu": 15.9,
+   "wer": 0.0,
+   "oido": "y la misma pregunta cada día a la misma persona."
+  },
+  {
+   "id": "l6",
+   "voz_fondo_lu": 7.0,
+   "wer": 0.0,
+   "oido": "En the Code Partners, convertimos ese ruido en un sistema."
+  },
+  {
+   "id": "l7",
+   "voz_fondo_lu": 9.4,
+   "wer": 0.0,
+   "oido": "analizamos cómo trabaja tu empresa."
+  },
+  {
+   "id": "l8",
+   "voz_fondo_lu": 9.8,
+   "wer": 0.0,
+   "oido": "Diseñamos el sistema."
+  },
+  {
+   "id": "l9",
+   "voz_fondo_lu": 9.7,
+   "wer": 0.0,
+   "oido": "y lo conectamos todo, procesos, datos y herramientas."
+  },
+  {
+   "id": "l10",
+   "voz_fondo_lu": 10.4,
+   "wer": 0.0,
+   "oido": "con automatización e inteligencia artificial."
+  },
+  {
+   "id": "l11",
+   "voz_fondo_lu": 20.0,
+   "wer": 0.0,
+   "oido": "no se trata de usar inteligencia artificial."
+  },
+  {
+   "id": "l12",
+   "voz_fondo_lu": 9.7,
+   "wer": 0.0,
+   "oido": "Se trata de que tu empresa funcione mejor."
+  },
+  {
+   "id": "l13",
+   "voz_fondo_lu": 13.9,
+   "wer": 0.0,
+   "oido": "Decode partners"
+  },
+  {
+   "id": "l14",
+   "voz_fondo_lu": 16.8,
+   "wer": 0.0,
+   "oido": "sistemas inteligentes para empresas."
+  }
+ ],
+ "silencios": [
+  [
+   4.3,
+   4.8
+  ],
+  [
+   42.5,
+   43.0
+  ]
+ ]
+}

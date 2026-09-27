@@ -1,0 +1,4 @@
+# regenerables con audio.py / render.py
+*/audio/*.wav
+*/render/
+__pycache__/
