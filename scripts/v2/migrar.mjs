@@ -172,7 +172,7 @@ function bloques(main) {
       if (x) { out.push({ tipo: "enlace", href: n.getAttribute("href"), t: x, d: "" }); return; }
       return;
     }
-    if (t === "img") { const src = n.getAttribute("src"); const alt = n.getAttribute("alt"); if (src && alt) out.push({ tipo: "img", src, alt, w: n.getAttribute("width"), h: n.getAttribute("height") }); return; }
+    if (t === "img") { const src = n.getAttribute("src"); const alt = n.getAttribute("alt"); if (src && alt) out.push({ tipo: "img", src, alt, w: n.getAttribute("width"), h: n.getAttribute("height"), retrato: /fundador|founder|equipo|team|retrato|eje-foto|sineriz|sosenko/i.test(src + " " + clases(n).join(" ")) }); return; }
     // acordeón de preguntas: la pregunta y su respuesta, como <details> accesible
     if (tiene(n, /^(accordion-item|faq-item)$/)) {
       const q = n.querySelector(".accordion-title, .faq-q, summary, button");
@@ -221,7 +221,7 @@ function pintar(b) {
     case "pregunta": return `<details class="pregunta"${b.id ? ` id="${b.id}"` : ""}><summary>${b.q}</summary><div class="pregunta-r">${b.h}</div></details>`;
     case "enlace": return `<a class="fila-enlace" href="${b.href}"><span class="fe-t">${b.t}</span>${b.d ? `<span class="fe-d">${b.d}</span>` : ""}${FLECHA}</a>`;
     case "botones": return `<div class="acc">${b.lista.map((x, i) => `<a class="boton${i === 0 ? " boton--principal" : ""}" href="${x.href}">${x.t}${i === 0 ? " " + FLECHA : ""}</a>`).join("")}</div>`;
-    case "img": return `<figure class="figura"><img src="${b.src}" alt="${b.alt}"${b.w ? ` width="${b.w}"` : ""}${b.h ? ` height="${b.h}"` : ""} loading="lazy" decoding="async"></figure>`;
+    case "img": return `<figure class="figura${b.retrato ? " figura--retrato" : ""}"><img src="${b.src}" alt="${b.alt}"${b.w ? ` width="${b.w}"` : ""}${b.h ? ` height="${b.h}"` : ""} loading="lazy" decoding="async"></figure>`;
     default: return "";
   }
 }
@@ -230,7 +230,12 @@ function pintar(b) {
 function agrupar(bs) {
   const out = []; let grupo = [];
   const cierra = () => { if (grupo.length >= 3) out.push(`<div class="puntos">${grupo.map(pintar).join("")}</div>`); else grupo.forEach((b) => out.push(pintar(b))); grupo = []; };
-  for (const b of bs) { if (b.tipo === "punto") grupo.push(b); else { cierra(); out.push(pintar(b)); } }
+  for (let i = 0; i < bs.length; i++) {
+    const b = bs[i];
+    // «01» suelto y, detrás, su título: un paso numerado
+    if (b.tipo === "p" && /^\d{1,2}$/.test(b.h.trim()) && bs[i + 1] && /^h[34]$/.test(bs[i + 1].tipo)) { cierra(); out.push(`<div class="paso"><span class="paso-n">${b.h.trim()}</span>${pintar(bs[i + 1])}</div>`); i++; continue; }
+    if (b.tipo === "punto") grupo.push(b); else { cierra(); out.push(pintar(b)); }
+  }
   cierra(); return out.join("\n");
 }
 
