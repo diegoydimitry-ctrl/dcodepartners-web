@@ -10,7 +10,7 @@
 .pag-cab .lead { max-width: 36em; }
 .pag-cab p:not(.lead):not(.etiqueta) { color: var(--tinta-2); max-width: 60ch; }
 .pag-cab a:not(.boton) { text-decoration-color: var(--linea-3); }
-.migas ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 var(--e-4); font-family: var(--f-mono); font-stretch: 82%; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); }
+.migas ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 var(--e-4); font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); }
 .migas li + li::before { content: "/"; margin-right: 8px; opacity: .5; }
 .migas a { text-decoration: none; color: var(--tinta-2); }
 .migas a:hover { color: var(--tinta); }

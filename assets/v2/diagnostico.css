@@ -1,11 +1,11 @@
 /* DIAGNÓSTICO · hoja de toma de datos en blanco y negro: casillas, no tarjetas */
 .dx { border: 1px solid var(--linea-2); border-radius: var(--radio-2); }
 .dx-cab { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--linea); flex-wrap: wrap; }
-.dx-marca { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: .66rem; letter-spacing: .09em; text-transform: uppercase; color: var(--tinta-2); }
+.dx-marca { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .09em; text-transform: uppercase; color: var(--tinta-2); }
 .dx-marca svg { width: 20px; height: auto; }
 .dx-m-a { fill: var(--aire); }
 .dx-pasos { display: flex; list-style: none; padding: 0; margin: 0; counter-reset: p; }
-.dx-pasos li { counter-increment: p; display: inline-flex; gap: 6px; padding: 4px 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); border-bottom: 1px solid transparent; }
+.dx-pasos li { counter-increment: p; display: inline-flex; gap: 6px; padding: 4px 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); border-bottom: 1px solid transparent; }
 .dx-pasos li::before { content: counter(p, decimal-leading-zero); }
 .dx-pasos li.is-on { color: var(--tinta); border-bottom-color: var(--tinta); }
 .dx-pasos li.is-hecho { color: var(--tinta-2); }
@@ -26,7 +26,7 @@
 @media (hover: hover) and (pointer: fine) { .dx-area:hover { background: var(--bg-2); } }
 .dx-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: var(--e-6); flex-wrap: wrap; }
 .dx-nav-d { margin-left: auto; }
-.dx-sel { font-family: var(--f-mono); font-stretch: 82%; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
+.dx-sel { font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
 .dx-sel b { color: var(--tinta); font-weight: 560; }
 .dx-atras, .dx-otra { border: 0; background: none; color: var(--tinta-2); text-decoration: underline; text-underline-offset: .3em; text-decoration-color: var(--linea-3); padding: 8px 0; }
 .boton:disabled { opacity: .3; pointer-events: none; }
@@ -40,16 +40,16 @@
 .dx-opt { position: relative; }
 .dx-opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .dx-opt span { display: inline-flex; gap: 6px; min-height: 42px; align-items: center; padding: 0 16px; border: 1px solid var(--linea-2); border-radius: 999px; font-weight: 520; transition: border-color var(--t-rapida) ease, background-color var(--t-rapida) ease, color var(--t-rapida) ease; }
-.dx-opt small { font-family: var(--f-mono); font-stretch: 82%; font-size: .64rem; color: var(--tinta-3); }
+.dx-opt small { font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; color: var(--tinta-3); }
 .dx-opt input:checked + span { background: var(--tinta); color: var(--bg); border-color: var(--tinta); }
 .dx-opt input:checked + span small { color: inherit; opacity: .7; }
 .dx-opt input:focus-visible + span { outline: 2px solid var(--aire); outline-offset: 2px; }
 .dx-libre-caja { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 6px 0 16px; border: 1px solid var(--linea-2); border-radius: 999px; }
-.dx-libre-t { font-family: var(--f-mono); font-stretch: 82%; font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
+.dx-libre-t { font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
 .dx-libre { width: 80px; height: 32px; border: 0; background: transparent; }
 .dx-libre.es-puesta { font-weight: 600; }
 .dx-res-cab { margin-bottom: var(--e-4); }
-.dx-est { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-stretch: 82%; font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
+.dx-est { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
 .dx-est i { width: 6px; height: 6px; border-radius: 50%; background: var(--tinta-3); }
 .dx-res-t em { font-style: normal; color: var(--tinta); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
 .dx-res-g { display: grid; gap: var(--e-6); margin-top: var(--e-6); }
@@ -57,12 +57,12 @@
 .dx-kpi { padding: 16px 14px 16px 0; border-bottom: 1px solid var(--linea); }
 .dx-kpi:nth-child(odd) { border-right: 1px solid var(--linea); }
 .dx-kpi:nth-child(even) { padding-left: 16px; }
-.dx-kpi-k { font-family: var(--f-mono); font-stretch: 82%; font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
+.dx-kpi-k { font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
 .dx-kpi-n { font-size: 2.1rem; font-weight: 560; letter-spacing: -.04em; line-height: 1.1; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .dx-kpi-n small { font-size: .9rem; font-weight: 450; margin-left: 4px; color: var(--tinta-3); letter-spacing: 0; }
 .dx-kpi-d { font-size: .86rem; color: var(--tinta-3); }
 .dx-barras { margin-top: var(--e-5); display: grid; gap: 10px; }
-.dx-barras-k, .dx-sis-k { font-family: var(--f-mono); font-stretch: 82%; font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
+.dx-barras-k, .dx-sis-k { font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-3); }
 .dx-barra { display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
 .dx-barra-n, .dx-barra-v { font-size: .88rem; color: var(--tinta-2); }
 .dx-pista { display: flex; height: 10px; background: var(--bg-3); border-radius: 999px; overflow: hidden; }

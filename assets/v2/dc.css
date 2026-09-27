@@ -25,7 +25,7 @@
   --linea-3: rgba(255, 255, 255, .34);
   --tinta: #fff;
   --tinta-2: #a1a1a1;
-  --tinta-3: #6b6b6b;
+  --tinta-3: #8c8c8c;
   --inversa: #fff;          /* el botón principal: el color contrario al fondo */
   --sobre-inversa: #000;
   --aire: #5b8cff;          /* el píxel azul del logotipo: la IA. Único color. */
@@ -49,7 +49,7 @@
   --t-lead: clamp(1.06rem, 1rem + .3vw, 1.25rem);
   --t-texto: 1rem;
   --t-peq: .88rem;
-  --t-rotulo: .66rem;
+  --t-rotulo: .72rem;
   --t-dato: .78rem;
 
   --e-1: 4px; --e-2: 8px; --e-3: 12px; --e-4: 16px; --e-5: 24px; --e-6: 32px; --e-7: 48px; --e-8: 64px; --e-9: 96px; --e-10: 144px; --e-11: 200px;
@@ -82,7 +82,7 @@
   --linea-3: rgba(0, 0, 0, .34);
   --tinta: #000;
   --tinta-2: #5c5c5c;
-  --tinta-3: #8c8c8c;
+  --tinta-3: #6b6b6b;
   --inversa: #000;
   --sobre-inversa: #fff;
   --aire: #2f5fe8;
@@ -186,7 +186,7 @@ strong, b { font-weight: 650; color: var(--tinta); }
 .marca { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--tinta); flex: none; }
 .marca svg { width: 32px; height: auto; }
 .marca-n { font-weight: 620; font-stretch: 100%; font-size: 1.06rem; letter-spacing: -.02em; line-height: 1; }
-.marca-n small { display: block; margin-top: 4px; font-family: var(--f-mono); font-stretch: 82%; font-size: .56rem; font-weight: 520; letter-spacing: .28em; color: var(--tinta-3); }
+.marca-n small { display: block; margin-top: 4px; font-family: var(--f-mono); font-stretch: 82%; font-size: .6rem; font-weight: 520; letter-spacing: .28em; color: var(--tinta-3); }
 .nav { margin-left: auto; }
 .nav > ul { display: flex; align-items: center; gap: 2px; list-style: none; padding: 0; margin: 0; }
 .nav a, .nav button.nav-b { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px; border: 0; background: none; color: var(--tinta-2); font-size: .95rem; font-weight: 540; text-decoration: none; border-radius: var(--radio); transition: color var(--t-rapida) ease, background-color var(--t-rapida) ease; }
@@ -198,7 +198,7 @@ strong, b { font-weight: 650; color: var(--tinta); }
 .ctrl { width: 40px; height: 40px; display: inline-grid; place-items: center; border: 1px solid var(--linea-2); border-radius: 999px; background: none; color: var(--tinta-2); transition: color var(--t-rapida) ease, border-color var(--t-rapida) ease; }
 .ctrl:hover { color: var(--tinta); border-color: var(--linea-3); }
 .ctrl svg { width: 18px; height: 18px; }
-.idioma { display: inline-flex; height: 40px; align-items: center; border: 1px solid var(--linea-2); border-radius: 999px; overflow: hidden; font-family: var(--f-mono); font-stretch: 82%; font-size: .68rem; letter-spacing: .08em; }
+.idioma { display: inline-flex; height: 40px; align-items: center; border: 1px solid var(--linea-2); border-radius: 999px; overflow: hidden; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .08em; }
 .idioma a { padding: 0 10px; height: 100%; display: inline-grid; place-items: center; text-decoration: none; color: var(--tinta-3); }
 .idioma a[aria-current="true"] { color: var(--tinta); }
 .menu-b { display: none; }
@@ -210,7 +210,7 @@ strong, b { font-weight: 650; color: var(--tinta); }
 .plano-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--e-6); list-style: none; padding: 0; margin: 0; }
 .plano-lista a { display: grid; grid-template-columns: 34px 1fr; gap: 2px 12px; padding: 14px 0; border-top: 1px solid var(--linea); text-decoration: none; }
 .plano-lista a:hover .plano-t { text-decoration: underline; text-underline-offset: .25em; }
-.plano-num { grid-row: span 2; font-family: var(--f-mono); font-stretch: 82%; font-size: .68rem; color: var(--tinta-3); padding-top: 4px; }
+.plano-num { grid-row: span 2; font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; color: var(--tinta-3); padding-top: 4px; }
 .plano-t { font-weight: 560; color: var(--tinta); transition: color var(--t-rapida) ease; }
 .plano-d { font-size: .88rem; color: var(--tinta-3); line-height: 1.4; }
 
@@ -226,7 +226,7 @@ strong, b { font-weight: 650; color: var(--tinta); }
 .hoja-cab { display: flex; align-items: center; justify-content: space-between; height: 56px; }
 .hoja nav ul { list-style: none; padding: 0; margin: var(--e-6) 0; }
 .hoja nav a { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-top: 1px solid var(--linea); text-decoration: none; font-size: 1.7rem; font-weight: 540; letter-spacing: -.035em; }
-.hoja nav a small { font-family: var(--f-mono); font-size: .66rem; font-stretch: 82%; font-weight: 500; color: var(--tinta-3); letter-spacing: .08em; }
+.hoja nav a small { font-family: var(--f-mono); font-size: .72rem; font-stretch: 82%; font-weight: 500; color: var(--tinta-3); letter-spacing: .08em; }
 .hoja-pie { margin-top: auto; display: grid; gap: var(--e-4); }
 
 /* ---------------------------------------------------------------- entrada */

@@ -1,71 +1,41 @@
-# Preview local: D-Code Partners, remodelación completa (rev. 3)
+# PREVIEW — dcodepartners.com · dirección «Piezas» (blanco y negro)
 
-Rama `claude/dcode-full-redesign`. Parte de `e99d61f`, que es lo que sirve producción. La explicación completa está en `REDESIGN_FULL.md`.
+| | |
+|---|---|
+| URL (sigue a la rama) | https://dcodepartners-web-git-web-dcp-cowork4-d-code-partners.vercel.app |
+| Rama | `web/dcp-cowork4` (parte de `8ff5f5b`) |
+| Commit | el último de la rama (ver `git log`) |
+| Production | **Sin tocar.** Sigue en `diseno/dcode-design-system` (`e99d61f`) |
 
+## Cómo probarla (5 minutos)
+1. **Portada `/`**: baja despacio. Las piezas sueltas se unen y al final se enciende el píxel azul. Cuatro frases en total.
+2. Cambia a **modo claro** (sol, arriba a la derecha): la misma escena, con sombra real sobre blanco.
+3. **Tócalo**: pulsa la captura de Finance o cualquiera de los cinco botones; la demo se abre en un visor (Escape la cierra).
+4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
+5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
+6. **Diagnóstico** (`/diagnostico`): tres preguntas y el resultado con tus horas y tu coste por hora.
+7. Cualquier interior: `/departamentos/finanzas`, `/servicios/automatizaciones`, `/metodo`, `/faq`, `/aviso-legal`.
+8. **EN**: `/en` y el selector ES/EN de la cabecera.
+9. En el **móvil**: la escena arriba, el texto abajo; menú a pantalla completa.
+10. Con **movimiento reducido** activado en el sistema: la pieza montada, quieta, y los capítulos uno debajo de otro.
+
+## Páginas principales
+`/` · `/que-hacemos` · `/servicios/*` (5) · `/departamentos/*` (8) · `/sistema-financiero` · `/precios` · `/metodo` · `/diagnostico` · `/contacto` · `/casos-exito` · `/cambios-en-proceso` · `/garantias` · `/faq` · `/conocenos` · `/blog` (+3) · legales (6). Todas en `/en/…`.
+
+## Escenas 3D
+Una: **las piezas** (portada). Render Blender Cycles → `assets/v2/img/piezas/{1100,700}/NNN.webp`. Para regenerarla:
 ```bash
-git fetch origin claude/dcode-full-redesign
-git checkout claude/dcode-full-redesign
-npm install          # solo para las herramientas de pruebas
-npx serve .          # abre http://localhost:3000 (con URLs limpias)
+pip install bpy==4.2.0   # Python 3.11
+python3.11 scripts/v2/logo3d/escena.py --out ~/logo-render --muestras 40 --res 1100
+python3 scripts/v2/logo3d/empaquetar.py ~/logo-render
 ```
 
-Con Python (`python3 -m http.server 8080`) las URLs llevan `.html`.
-
-## Qué mirar
-
-- **`/` y `/en`, el héroe (estudio):**
-  - Pulsa un módulo (Finance, D-Code OS, IA, Automatizaciones, Integraciones o Web) o un área: la cámara va a esa pieza y la ficha dice qué es.
-  - Arrastra para girar la pieza; los mandos de la derecha giran, acercan y centran.
-- **«Qué hacemos»:** baja despacio. La pieza se queda fija y cambia con cada uno de los nueve pasos.
-- **Interiores:** la misma pieza, enfocada en lo que trata la página.
-- **`/precios`:**
-  - «Qué es cada cosa» (Finance, D-Code OS y los servicios).
-  - Packs con lo que llevan.
-- **Contraste:**
-  - En oscuro, las cajas y las demos son blancas.
-  - En claro, oscuras.
-
-## Añadir o retocar una escena
-
-1. La escena es una sola: `assets/js/escenas/e-sistema.js`. Sus modos son `estudio`, `pasos`, `metodo`, `casos`, `todo` y los focos (`finance`, `os`, `ia`, `auto`, `integ`, `web`, `nucleo`, `panel`, las 6 áreas y `produccion`, `soporte` y `direccion`).
-2. En el HTML: `<div class="esc esc-hero" data-escena="sistema" data-modo="…" aria-hidden="true"></div>`.
-3. Míralo aislado en `scripts/escenas/estudio.html?e=sistema&modo=…&paso=…&foco=…&tema=claro` (solo en local; no se despliega).
-4. Regenera sus pósteres: el mismo estudio con `&tr=1&calidad=alta`, captura con fondo transparente (680×860 los interiores) y conversión a WebP en `assets/img/escenas/poster/sistema-<modo>-<oscuro|claro>.webp`.
-
-## Antes de commitear
-
+## Construir el sitio
 ```bash
-npm run update-asset-versions
-npm run check:tema && npm run check:portada && npm run check:enlaces && npm run check:superficie
-npm run check:kb    # si cambia el texto de una página: npm run generate-kb
+npm install
+npm run build:v2     # migra interiores, construye portada/precios/contacto/diagnóstico, demos, precios, sitemap y auditoría SEO
 ```
+Fuentes del contenido: `scripts/v2/paginas/*` (portada, precios, contacto), `scripts/v2/migrar.mjs` (interiores desde su texto de producción), `catalogo.json` y `precios.json` (cifras), `scripts/v2/plantilla.mjs` (cabecera, menú y pie comunes).
 
-Esta rama no hace merge ni deploy a producción.
-
-## Medidas
-
-Chromium headless sin GPU (SwiftShader), servidor local sin gzip, portada. Las cifras de carga son fiables; el primer fotograma y los FPS son varias veces peores que en un equipo con GPU.
-
-| | Rama 1440 | Rama 390 | Producción `e99d61f` 1440 |
-|---|---|---|---|
-| FCP | 1,08–1,20 s | 0,66 s | 2,06 s |
-| LCP | 1,1–1,6 s (póster del héroe) | 0,66 s (texto) | 2,62 s |
-| CLS | 0,002 | 0,006 | 0 |
-| Escenas vivas al entrar | 1 | 1 | — |
-| Llamadas de dibujo / triángulos (calidad baja) | 100 / 43 k | 100 / 43 k | — |
-
-**Pesos (gzip):**
-- Three.js r180: 179 KB, pedido en idle, después del primer pintado.
-- Motor: 7,8 KB.
-- Escena única: unos 7 KB.
-- Pósteres: 38 en WebP con alfa, 684 KB en total y unos 18 KB de media; cada página pide el suyo.
-
-**QA:**
-- **Barrido:** 179 combinaciones, sin ningún error JS, desborde horizontal ni imagen rota.
-  - 74 páginas a 1440 y 390 px.
-  - Las dos portadas a 375, 430, 768, 1024 y 1920 px.
-  - 6 páginas en claro.
-  - 3 páginas con movimiento reducido y sin WebGL.
-- **Avisos:** solo las URLs limpias de la demo de Finance (`/sistema-financiero/app`), que el servidor local no resuelve y Vercel sí.
-- **Pruebas de producción en verde:** `check:tema`, `check:portada`, `check:enlaces`, `check:superficie`, `check:consentimiento`, `check:chat`, `check:estado`, `check-instruments`, `check:kb`, `check:precios`, `check:og`, `check:que-hacemos` y `check:en-curso`.
-- **Sin comprobar aquí:** `check:webs`, `check:fichas` y `check:capturas` necesitan `sharp`, que no está instalado en este entorno.
+## Cambios importantes
+Ver `DESIGN_ENGINEERING_AUDIT.md`, `DESIGN_AUDIT.md`, `SEO_AUDIT.md` y `PERFORMANCE_AUDIT.md`.

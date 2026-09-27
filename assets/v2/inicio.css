@@ -82,7 +82,7 @@
 .demo svg { width: 16px; height: 16px; transition: transform var(--t-media) var(--ease-out); }
 .demo:active { transform: scale(.97); }
 @media (hover: hover) and (pointer: fine) { .demo:hover { border-color: var(--tinta); } .demo:hover svg { transform: translateX(3px); } }
-.tocalo-aviso { margin-top: var(--e-5); }
+.tocalo-aviso { margin-top: var(--e-5); font-family: var(--f-texto); text-transform: none; letter-spacing: 0; font-size: .86rem; }
 
 .visor { width: min(1440px, 96vw); height: min(920px, 92vh); max-width: none; max-height: none; padding: 0; border: 1px solid var(--linea-2); border-radius: var(--radio-2); background: var(--bg); color: var(--tinta); overflow: hidden; }
 .visor[open] { display: grid; grid-template-rows: auto 1fr; animation: visor-in 280ms var(--ease-out); }

@@ -27,7 +27,7 @@
 .cfg-op[aria-pressed="true"], .cfg-chip[aria-pressed="true"] { background: var(--tinta); color: var(--bg); border-color: var(--tinta); }
 @media (hover: hover) and (pointer: fine) { .cfg-op:hover, .cfg-chip:hover { border-color: var(--tinta); } }
 .cfg-vivo { display: flex; flex-wrap: wrap; gap: 6px; }
-.cfg-vivo-p { font-family: var(--f-mono); font-stretch: 82%; font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-2); border: 1px solid var(--linea-2); border-radius: 999px; padding: 4px 10px; }
+.cfg-vivo-p { font-family: var(--f-mono); font-stretch: 82%; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-2); border: 1px solid var(--linea-2); border-radius: 999px; padding: 4px 10px; }
 .cfg-pie { display: flex; justify-content: space-between; gap: 12px; }
 .cfg-pie .btn, .cfg-enviar, .cfg-reinicia { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--linea-3); background: none; color: var(--tinta); font-weight: 540; }
 .cfg-pie .btn-primary, .cfg-enviar { background: var(--tinta); color: var(--bg); border-color: var(--tinta); margin-left: auto; }
