@@ -39,13 +39,13 @@ const PAGINAS = [
   {
     lang: "es", ruta: "/", archivo: "index.html", ...META_INICIO.es,
     css: ["/assets/v2/inicio.css"], jsonld: [ORG, WEB("es")],
-    preload: ['<link rel="modulepreload" href="/assets/v2/js/inicio.js">', '<link rel="preload" as="image" href="/assets/v2/img/piezas/1100/001.webp" media="(min-width: 761px)">'],
+    preload: ['<link rel="modulepreload" href="/assets/v2/js/inicio.js">', '<link rel="modulepreload" href="/assets/v2/js/piezas3d.js" fetchpriority="low">'],
     cuerpo: () => inicio("es"), scripts: ["/assets/v2/js/inicio.js"],
   },
   {
     lang: "en", ruta: "/en", archivo: "en/index.html", ...META_INICIO.en,
     css: ["/assets/v2/inicio.css"], jsonld: [ORG, WEB("en")],
-    preload: ['<link rel="modulepreload" href="/assets/v2/js/inicio.js">', '<link rel="preload" as="image" href="/assets/v2/img/piezas/1100/001.webp" media="(min-width: 761px)">'],
+    preload: ['<link rel="modulepreload" href="/assets/v2/js/inicio.js">', '<link rel="modulepreload" href="/assets/v2/js/piezas3d.js" fetchpriority="low">'],
     cuerpo: () => inicio("en"), scripts: ["/assets/v2/js/inicio.js"],
   },
   ...["es", "en"].map((lang) => ({

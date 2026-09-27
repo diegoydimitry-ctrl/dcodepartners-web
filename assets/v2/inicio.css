@@ -9,8 +9,10 @@
 .piezas-fijo { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .piezas-luz { position: absolute; inset: 0; background: var(--foco-escena); }
 .piezas-lienzo, .piezas-poster { position: absolute; inset: 0; width: 100%; height: 100%; }
-.piezas-poster { object-fit: contain; object-position: 72% 50%; transition: opacity 500ms ease; }
-.is-escena .piezas-poster { opacity: 0; }
+/* El póster (logotipo montado) solo existe para movimiento reducido, sin WebGL o sin JS. */
+.piezas-poster { display: none; object-fit: contain; object-position: 72% 50%; }
+.piezas-lienzo { opacity: 0; transition: opacity 1100ms var(--ease-out); }
+.is-escena .piezas-lienzo { opacity: 1; }
 .piezas-texto { position: relative; height: 100%; display: grid; align-items: center; }
 .cap { grid-area: 1 / 1; max-width: 34rem; opacity: 0; transform: translateY(16px); filter: blur(6px); transition: opacity 520ms var(--ease-out), transform 620ms var(--ease-out), filter 520ms var(--ease-out); pointer-events: none; }
 .cap.is-activo { opacity: 1; transform: none; filter: none; pointer-events: auto; }
@@ -36,7 +38,7 @@
    pieza montada y los tres capítulos, uno debajo de otro. */
 .sin-js .piezas, .piezas.is-quieta { height: auto; }
 .sin-js .piezas-fijo, .piezas.is-quieta .piezas-fijo { position: relative; height: auto; min-height: 100svh; }
-.sin-js .piezas-poster, .piezas.is-quieta .piezas-poster { position: relative; height: 70svh; opacity: 1; }
+.sin-js .piezas-poster, .piezas.is-quieta .piezas-poster { display: block; position: relative; height: 70svh; opacity: 1; }
 .sin-js .piezas-lienzo, .piezas.is-quieta .piezas-lienzo { display: none; }
 .sin-js .piezas-texto, .piezas.is-quieta .piezas-texto { display: grid; gap: var(--e-8); padding-bottom: var(--ritmo-normal); }
 .sin-js .cap, .piezas.is-quieta .cap { grid-area: auto; opacity: 1; transform: none; filter: none; pointer-events: auto; }

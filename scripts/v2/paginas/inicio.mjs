@@ -87,7 +87,7 @@ export function inicio(lang) {
   <div class="piezas-fijo">
     <div class="piezas-luz" aria-hidden="true"></div>
     <canvas class="piezas-lienzo" data-piezas-lienzo role="img" aria-label="${c.escenaAlt}"></canvas>
-    <picture><source srcset="/assets/v2/img/piezas/1100/072.webp" media="(prefers-reduced-motion: reduce)"><source srcset="/assets/v2/img/piezas/700/001.webp" media="(max-width: 760px)"><img class="piezas-poster" data-piezas-poster src="/assets/v2/img/piezas/1100/001.webp" alt="" width="1100" height="1100" fetchpriority="high" decoding="async"></picture>
+    <picture><source srcset="/assets/v2/img/piezas/700/072.webp" media="(max-width: 760px)"><img class="piezas-poster" data-piezas-poster src="/assets/v2/img/piezas/1100/072.webp" alt="" width="1100" height="1100" loading="lazy" decoding="async"></picture>
     <div class="marco piezas-texto">
       <div class="cap cap--0 is-activo" data-cap="0">
         <h1 class="display" id="h-inicio">${c.h1}</h1>
