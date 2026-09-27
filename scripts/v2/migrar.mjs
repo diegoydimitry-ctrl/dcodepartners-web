@@ -62,7 +62,14 @@ function inline(n) {
   const t = n.rawTagName?.toLowerCase();
   if (!t || ["svg", "script", "style", "button", "noscript", "template", "canvas", "img", "picture", "video", "iframe", "input", "select", "textarea"].includes(t)) return "";
   if (n.getAttribute?.("aria-hidden") === "true") return "";
-  const dentro = n.childNodes.map(inline).join("");
+  // Dos elementos seguidos sin espacio entre ellos eran celdas de un diseño (spans en rejilla):
+  // al pasarlos a texto corrido se pegaban («AltaF-2026-0140Anterior…»). Se separan con un espacio.
+  let dentro = "";
+  n.childNodes.forEach((c, i) => {
+    const ant = n.childNodes[i - 1];
+    if (i && c.nodeType === 1 && ant?.nodeType === 1 && !/^(br)$/i.test(c.rawTagName) && !/^(br)$/i.test(ant.rawTagName)) dentro += " ";
+    dentro += inline(c);
+  });
   if (t === "br") return "<br>";
   if (t === "span" && n.getAttribute("data-precio") !== undefined) {
     const k = n.getAttribute("data-precio");
@@ -94,6 +101,29 @@ function bloques(main) {
     const filas = n.querySelectorAll("tr").map((tr) => tr.childNodes.filter((c) => c.nodeType === 1 && /t[hd]/i.test(c.rawTagName)).map((c) => ({ th: /th/i.test(c.rawTagName), h: limpio(c) })));
     return `<div class="tabla"><table>${filas.map((f) => `<tr>${f.map((c) => `<${c.th ? "th" : "td"}>${c.h}</${c.th ? "th" : "td"}>`).join("")}</tr>`).join("")}</table></div>`;
   }
+  const celdas = (li) => li.childNodes.filter((c) => c.nodeType === 1 && c.getAttribute("aria-hidden") !== "true");
+  const sinTexto = (li) => !li.childNodes.some((c) => c.nodeType === 3 && c.rawText.trim());
+  function estructurada(n) {
+    const lis = n.childNodes.filter((c) => c.nodeType === 1 && c.rawTagName.toLowerCase() === "li");
+    // una lista de tarjetas-enlace (áreas, servicios…): cada una, fila enlazada con su título y su frase
+    if (lis.length >= 2 && lis.every((li) => sinTexto(li) && celdas(li).length === 1 && celdas(li)[0].rawTagName.toLowerCase() === "a" && celdas(li)[0].childNodes.filter((c) => c.nodeType === 1).length >= 2)) {
+      return { tipo: "enlaces", items: lis.map((li) => { const a = celdas(li)[0]; const cs = a.childNodes.filter((c) => c.nodeType === 1 && !/^(svg|i)$/i.test(c.rawTagName) && !/^(ver|see)\b/i.test(c.text.trim()));
+        return { href: reescribir(a.getAttribute("href") || "#"), t: texto(cs[0]), d: cs.slice(1).map(texto).join(" ") }; }) };
+    }
+    if (lis.length < 2 || !lis.every((li) => sinTexto(li) && celdas(li).length >= 2 && celdas(li).every((c) => /^(span|b|strong|em|i|code|small|time|p)$/i.test(c.rawTagName)))) return null;
+    const cl = clases(n).join(" ");
+    // la cadena de registros de VERI*FACTU: tipo, número, huella anterior y huella propia
+    if (/vf-eslabones/.test(cl)) return { tipo: "cadena", items: lis.map((li) => ({ tipo: texto(li.querySelector(".vf-e-tipo")), anula: tiene(li.querySelector(".vf-e-tipo"), /es-anula/), num: texto(li.querySelector(".vf-e-num")), h: li.querySelectorAll(".vf-e-h").map((h) => ({ k: texto(h.querySelector("em")), v: texto(h.querySelector("code")) })) })) };
+    // una hoja de ruta por pasos: número, título, descripción y estado
+    if (/vf-track/.test(cl)) return { tipo: "ruta", items: lis.map((li) => ({ n: texto(li.querySelector(".vf-paso-n")), t: texto(li.querySelector(".vf-paso-t")), d: texto(li.querySelector(".vf-paso-d")), e: texto(li.querySelector(".vf-paso-e")), actual: tiene(li, /es-actual/) })) };
+    // título (b) y descripción (span): una lista de puntos; si el título lleva número delante, se separa
+    if (lis.every((li) => /^(b|strong)$/i.test(celdas(li)[0].rawTagName))) return { tipo: "puntos", ord: n.rawTagName.toLowerCase() === "ol", items: lis.map((li) => {
+      const [b, ...r] = celdas(li); const num = b.childNodes.find((c) => c.nodeType === 1 && /^\d+$/.test(c.text.trim()));
+      return { n: num ? num.text.trim() : "", t: esc(b.childNodes.filter((c) => c !== num).map((c) => c.text).join("").replace(/\s+/g, " ").trim()), d: r.map(limpio).join(" ") };
+    }) };
+    // registros con varias celdas (movimientos de un extracto…): una tabla
+    return { tipo: "html", h: `<div class="tabla tabla--registros"><table>${lis.map((li) => `<tr>${celdas(li).map((c) => `<td>${limpio(c)}</td>`).join("")}</tr>`).join("")}</table></div>` };
+  }
   function lista(n, ord) {
     const lis = n.childNodes.filter((c) => c.nodeType === 1 && c.rawTagName.toLowerCase() === "li");
     const items = lis.map((li) => {
@@ -113,9 +143,10 @@ function bloques(main) {
     if (tiene(n, /^(breadcrumbs?|sr-only|visually-hidden|skip)/) && t !== "h1" && t !== "h2") { if (tiene(n, /breadcrumb/)) out.push({ tipo: "migas", items: n.querySelectorAll("li a, li[aria-current]").map((a) => ({ href: a.getAttribute("href"), t: texto(a) })) }); return; }
     if (tiene(n, /^(eyebrow|kicker|v6-kicker|ph-kicker|tag|overline)$/)) { const x = limpio(n); if (x) out.push({ tipo: "etiqueta", h: x }); return; }
     if (tiene(n, /^(badge|trust-badge|ph-prueba-badge)$/)) return;
+    if (tiene(n, /^vf-col-t$/)) { const x = limpio(n); if (x) out.push({ tipo: "h3", h: x }); return; }
     if (/^h[1-4]$/.test(t)) { const x = limpio(n); if (x) out.push({ tipo: t, h: x, id: n.getAttribute("id") }); return; }
     if (t === "p") { const x = limpio(n); if (x) out.push({ tipo: tiene(n, /lead|intro|sub/) ? "lead" : "p", h: x }); return; }
-    if (t === "ul" || t === "ol") { const x = lista(n, t === "ol"); if (x) out.push({ tipo: "lista", h: x }); return; }
+    if (t === "ul" || t === "ol") { const e = estructurada(n); if (e) { out.push(e); return; } const x = lista(n, t === "ol"); if (x) out.push({ tipo: "lista", h: x }); return; }
     if (t === "table") { out.push({ tipo: "html", h: tabla(n) }); return; }
     if (t === "blockquote") { out.push({ tipo: "cita", h: limpio(n) }); return; }
     if (t === "dl") { out.push({ tipo: "html", h: `<dl class="dl">${n.childNodes.filter((c) => c.nodeType === 1).map((c) => `<${c.rawTagName.toLowerCase()}>${limpio(c)}</${c.rawTagName.toLowerCase()}>`).join("")}</dl>` }); return; }
@@ -182,6 +213,10 @@ function pintar(b) {
     case "lista": return b.h;
     case "html": return b.h;
     case "cita": return `<blockquote>${b.h}</blockquote>`;
+    case "enlaces": return `<div class="enlaces">${b.items.map((x) => pintar({ tipo: "enlace", ...x })).join("")}</div>`;
+    case "cadena": return `<figure class="cadena"><ol class="cadena-l">${b.items.map((it, i) => `<li class="eslabon${it.anula ? " eslabon--anula" : ""}" style="--i:${i}"><span class="eslabon-tipo">${it.tipo}</span><strong class="eslabon-num">${it.num}</strong><dl class="eslabon-h">${it.h.map((h, j) => `<div${j ? ' class="es-propia"' : ""}><dt>${h.k}</dt><dd><code>${h.v}</code></dd></div>`).join("")}</dl></li>`).join("")}</ol></figure>`;
+    case "ruta": return `<ol class="ruta">${b.items.map((it) => `<li class="ruta-p${it.actual ? " es-actual" : ""}"${it.actual ? ' aria-current="step"' : ""}><span class="ruta-n">${it.n}</span><span class="ruta-e">${it.e}</span><p class="ruta-t">${it.t}</p><p class="ruta-d">${it.d}</p></li>`).join("")}</ol>`;
+    case "puntos": return `<${b.ord ? "ol" : "ul"} class="puntos-l">${b.items.map((it) => `<li>${it.n ? `<span class="pl-n">${it.n}</span>` : ""}<p class="pl-t">${it.t}</p>${it.d ? `<p class="pl-d">${it.d}</p>` : ""}</li>`).join("")}</${b.ord ? "ol" : "ul"}>`;
     case "punto": return `<div class="punto"><p class="punto-t">${b.t}</p>${b.h ? `<div class="punto-d">${b.h}</div>` : ""}</div>`;
     case "pregunta": return `<details class="pregunta"${b.id ? ` id="${b.id}"` : ""}><summary>${b.q}</summary><div class="pregunta-r">${b.h}</div></details>`;
     case "enlace": return `<a class="fila-enlace" href="${b.href}"><span class="fe-t">${b.t}</span>${b.d ? `<span class="fe-d">${b.d}</span>` : ""}${FLECHA}</a>`;
@@ -189,6 +224,14 @@ function pintar(b) {
     case "img": return `<figure class="figura"><img src="${b.src}" alt="${b.alt}"${b.w ? ` width="${b.w}"` : ""}${b.h ? ` height="${b.h}"` : ""} loading="lazy" decoding="async"></figure>`;
     default: return "";
   }
+}
+
+/* Tres o más «puntos» seguidos (título + texto) se leen mejor como rejilla que como columna. */
+function agrupar(bs) {
+  const out = []; let grupo = [];
+  const cierra = () => { if (grupo.length >= 3) out.push(`<div class="puntos">${grupo.map(pintar).join("")}</div>`); else grupo.forEach((b) => out.push(pintar(b))); grupo = []; };
+  for (const b of bs) { if (b.tipo === "punto") grupo.push(b); else { cierra(); out.push(pintar(b)); } }
+  cierra(); return out.join("\n");
 }
 
 /* ---------------------------------------------------------- composición
@@ -223,12 +266,14 @@ function componer(bs, { lectura }) {
     ${cab.map((b, i) => `<div class="aparece" style="--i:${i + 2}">${pintar(b.tipo === "p" && i === 0 ? { ...b, tipo: "lead" } : b)}</div>`).join("\n    ")}
   </div>
 </header>`;
+  let num = 0;
   const capsHtml = caps.map((c) => {
     const tieneCab = c.cab.length > 0;
+    const n = tieneCab && !lectura && c.cuerpo.length ? String(++num).padStart(2, "0") : "";
     return `<section class="capitulo${lectura ? " capitulo--lectura" : ""}${tieneCab ? "" : " capitulo--suelto"}">
   <div class="marco capitulo-in">
-    ${tieneCab ? `<div class="capitulo-cab">${c.cab.map(pintar).join("")}</div>` : ""}
-    <div class="capitulo-cuerpo prosa">${c.cuerpo.map(pintar).join("\n")}</div>
+    ${tieneCab ? `<div class="capitulo-cab">${n ? `<p class="cap-num" aria-hidden="true">${n}</p>` : ""}${c.cab.map(pintar).join("")}</div>` : ""}
+    <div class="capitulo-cuerpo prosa">${agrupar(c.cuerpo)}</div>
   </div>
 </section>`;
   }).join("\n");
