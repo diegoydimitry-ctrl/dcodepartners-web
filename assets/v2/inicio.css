@@ -1,0 +1,101 @@
+/* ==========================================================================
+   PORTADA · blanco y negro
+   1. Las piezas (secuencia fotorrealista fijada al scroll)
+   2. Lo que instalamos · 3. Tócalo · 4. Hablemos
+   ========================================================================== */
+
+/* ------------------------------------------------------------ 1 · piezas */
+.piezas { position: relative; height: 420vh; }
+.piezas-fijo { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.piezas-luz { position: absolute; inset: 0; background: var(--foco-escena); }
+.piezas-lienzo, .piezas-poster { position: absolute; inset: 0; width: 100%; height: 100%; }
+.piezas-poster { object-fit: contain; object-position: 72% 50%; transition: opacity 500ms ease; }
+.is-escena .piezas-poster { opacity: 0; }
+.piezas-texto { position: relative; height: 100%; display: grid; align-items: center; }
+.cap { grid-area: 1 / 1; max-width: 34rem; opacity: 0; transform: translateY(16px); filter: blur(6px); transition: opacity 520ms var(--ease-out), transform 620ms var(--ease-out), filter 520ms var(--ease-out); pointer-events: none; }
+.cap.is-activo { opacity: 1; transform: none; filter: none; pointer-events: auto; }
+.cap--0 { max-width: 40rem; }
+.cap--0 .display { max-width: 9.5ch; }
+.cap .lead { margin-top: var(--e-5); max-width: 28em; }
+.cap-n { color: var(--tinta-3); margin-bottom: var(--e-4); }
+.caps { display: contents; list-style: none; padding: 0; margin: 0; }
+.acc { margin-top: var(--e-6); display: flex; flex-wrap: wrap; gap: var(--e-3); }
+.bajar { position: absolute; left: var(--margen); bottom: 28px; display: inline-flex; align-items: center; gap: 12px; transition: opacity 400ms ease; }
+.bajar i { width: 1px; height: 36px; background: linear-gradient(var(--tinta-3), transparent); animation: bajar 2.4s var(--ease-in-out) infinite; transform-origin: top; }
+@keyframes bajar { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.is-bajado .bajar { opacity: 0; }
+
+@media (max-width: 760px) {
+  .piezas-poster { object-position: 50% 12%; }
+  .piezas-texto { align-items: end; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+  .cap .lead { margin-top: var(--e-4); }
+  .bajar { display: none; }
+}
+
+/* Sin JavaScript o con movimiento reducido: nada se fija ni se anima. La
+   pieza montada y los tres capítulos, uno debajo de otro. */
+.sin-js .piezas, .piezas.is-quieta { height: auto; }
+.sin-js .piezas-fijo, .piezas.is-quieta .piezas-fijo { position: relative; height: auto; min-height: 100svh; }
+.sin-js .piezas-poster, .piezas.is-quieta .piezas-poster { position: relative; height: 70svh; opacity: 1; }
+.sin-js .piezas-lienzo, .piezas.is-quieta .piezas-lienzo { display: none; }
+.sin-js .piezas-texto, .piezas.is-quieta .piezas-texto { display: grid; gap: var(--e-8); padding-bottom: var(--ritmo-normal); }
+.sin-js .cap, .piezas.is-quieta .cap { grid-area: auto; opacity: 1; transform: none; filter: none; pointer-events: auto; }
+.sin-js .caps, .piezas.is-quieta .caps { display: grid; gap: var(--e-8); }
+.sin-js .bajar, .piezas.is-quieta .bajar { display: none; }
+@media (prefers-reduced-motion: reduce) { .cap { transition: opacity 200ms ease; transform: none; filter: none; } .bajar i { animation: none; } }
+
+/* ------------------------------------------------------ 2 · lo que instalamos
+   Una lista: nombre, una frase, precio. Nada más. */
+.productos .h2 { max-width: 12ch; }
+.lista { list-style: none; padding: 0; margin: var(--e-8) 0 0; border-top: 1px solid var(--linea-2); }
+.fila { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr) 24px; gap: var(--col-gap); align-items: baseline; padding: 28px 0; border-bottom: 1px solid var(--linea-2); text-decoration: none; }
+.fila-n { font-size: var(--t-h3); font-weight: 560; letter-spacing: -.02em; }
+.fila-d { color: var(--tinta-2); }
+.fila-p { display: grid; text-align: right; }
+.precio-v { font-weight: 560; color: var(--tinta); }
+.precio-d { font-size: .82rem; color: var(--tinta-3); }
+.fila-a { color: var(--tinta-3); align-self: center; }
+.fila-a svg { width: 20px; height: 20px; transition: transform var(--t-media) var(--ease-out), color var(--t-rapida) ease; }
+.fila-n, .fila-d { transition: transform 500ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .fila:hover .fila-n { transform: translateX(8px); }
+  .fila:hover .fila-a svg { transform: translateX(4px); color: var(--tinta); }
+}
+.nota { margin-top: var(--e-5); max-width: 62ch; }
+.productos .enlace { margin-top: var(--e-5); }
+@media (max-width: 800px) {
+  .fila { grid-template-columns: minmax(0, 1fr) auto; row-gap: 6px; padding: 22px 0; }
+  .fila-d { grid-column: 1 / -1; grid-row: 2; }
+  .fila-p { grid-column: 2; grid-row: 1; }
+  .fila-a { display: none; }
+}
+
+/* ---------------------------------------------------------------- 3 · tócalo
+   El producto de verdad, grande y nítido. Las demás demos, en una línea. */
+.tocalo-cab { display: grid; gap: var(--e-4); }
+.tocalo .h2 { max-width: 14ch; }
+.pantalla { display: block; width: 100%; margin-top: var(--e-8); padding: 0; border: 0; background: #f4f5f7; border-radius: var(--radio-2); overflow: hidden; box-shadow: 0 0 0 1px var(--linea-2), 0 80px 120px -60px rgba(0,0,0,.55); cursor: zoom-in; }
+.pantalla img { width: 100%; transition: transform 1200ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .pantalla:hover img { transform: scale(1.012); } }
+.demos { list-style: none; padding: 0; margin: var(--e-6) 0 0; display: flex; flex-wrap: wrap; gap: var(--e-2); }
+.demo { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border: 1px solid var(--linea-2); border-radius: 999px; background: none; font-weight: 520; transition: border-color var(--t-rapida) ease, background-color var(--t-rapida) ease, transform var(--t-rapida) var(--ease-out); }
+.demo svg { width: 16px; height: 16px; transition: transform var(--t-media) var(--ease-out); }
+.demo:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .demo:hover { border-color: var(--tinta); } .demo:hover svg { transform: translateX(3px); } }
+.tocalo-aviso { margin-top: var(--e-5); }
+
+.visor { width: min(1440px, 96vw); height: min(920px, 92vh); max-width: none; max-height: none; padding: 0; border: 1px solid var(--linea-2); border-radius: var(--radio-2); background: var(--bg); color: var(--tinta); overflow: hidden; }
+.visor[open] { display: grid; grid-template-rows: auto 1fr; animation: visor-in 280ms var(--ease-out); }
+.visor::backdrop { background: rgba(0, 0, 0, .7); backdrop-filter: blur(8px); }
+.visor-cab { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 8px 8px 18px; border-bottom: 1px solid var(--linea); }
+.visor-tel { display: none; }
+.visor iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+@keyframes visor-in { from { opacity: 0; transform: translateY(12px) scale(.985); } }
+@media (max-width: 760px) { .visor { width: 100vw; height: 100dvh; border-radius: 0; } .visor-tel { display: block; } }
+@media (prefers-reduced-motion: reduce) { .visor[open] { animation: none; } }
+
+/* ------------------------------------------------------------- 4 · hablemos */
+.fin { border-top: 1px solid var(--linea); }
+.fin .lead { margin-top: var(--e-5); }
+.fin-mas { list-style: none; padding: 0; margin: var(--e-8) 0 0; display: flex; flex-wrap: wrap; gap: var(--e-3) var(--e-6); }
+.fin-mas .enlace { font-weight: 480; color: var(--tinta-2); }

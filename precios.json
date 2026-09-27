@@ -36,12 +36,31 @@
       "en": "From €750",
       "detalle_es": "según el alcance",
       "detalle_en": "depending on scope"
+    },
+    "os": {
+      "es": "Desde 2.900 €",
+      "en": "From €2,900",
+      "detalle_es": "de implantación, según cuántos sistemas",
+      "detalle_en": "setup, depending on how many systems",
+      "_fuente": "catalogo.json → productos[id=os].precio / precio_detalle"
     }
   },
   "planes": {
     "$nota": "Escalera de /sistema-financiero. Referencia de mercado (septiembre 2026): Holded 15/29/59/99/199 €/mes, Quipu 17/30/59 €/mes. La entrada se queda en el mismo escalón que la de ellos; lo que cambia es que aquí el sistema es propio y se implanta.",
-    "finance": { "implantacion": "390 €", "mes": "29 €", "gente": "hasta 3 personas" },
-    "inteligencia": { "implantacion": "690 €", "mes": "79 €", "gente": "hasta 10 personas" },
-    "medida": { "implantacion": "desde 1.500 €", "mes": "desde 190 €", "gente": "sin límite de personas" }
+    "finance": {
+      "implantacion": "390 €",
+      "mes": "29 €",
+      "gente": "hasta 3 personas"
+    },
+    "inteligencia": {
+      "implantacion": "690 €",
+      "mes": "79 €",
+      "gente": "hasta 10 personas"
+    },
+    "medida": {
+      "implantacion": "desde 1.500 €",
+      "mes": "desde 190 €",
+      "gente": "sin límite de personas"
+    }
   }
 }

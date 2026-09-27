@@ -46,7 +46,10 @@
     "build:og": "node scripts/build-og.mjs",
     "check:og": "node scripts/build-og.mjs --check",
     "perf:aparatos": "node perf/aparatos.mjs",
-    "perf:peso": "node perf/peso-aparatos.mjs"
+    "perf:peso": "node perf/peso-aparatos.mjs",
+    "build:v2": "node scripts/v2/migrar.mjs && node scripts/v2/build.mjs && node scripts/v2/demos.mjs && node scripts/build-precios.mjs && node scripts/v2/sitemap.mjs && node scripts/v2/seo-audit.mjs",
+    "v2:piezas": "python3 scripts/v2/logo3d/empaquetar.py ~/logo-render",
+    "seo:audit": "node scripts/v2/seo-audit.mjs"
   },
   "dependencies": {
     "resend": "^4.0.0"

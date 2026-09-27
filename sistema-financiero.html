@@ -1,59 +1,43 @@
 <!DOCTYPE html>
-<html lang="es">
-<head> <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script>(function(){var r=document.documentElement,t;try{t=localStorage.getItem('dcp-tema')}catch(e){}r.setAttribute('data-theme',t==='light'?'light':'dark');try{if(matchMedia('(pointer:coarse)').matches)r.classList.add('cielo-quieto')}catch(e){}})();</script>
-<title>D-Code Finance — Facturar, cobrar y saber lo que hay</title>
+<html lang="es" class="sin-js" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('dcp-tema')}catch(e){}r.setAttribute('data-theme',t==='light'?'light':'dark');r.classList.remove('sin-js');})();</script>
+<title>D-Code Finance | Software de facturación y cobros con IA</title>
 <meta name="description" content="D-Code Finance: facturas, cobros, gastos, presupuestos y un asistente de IA financiera en un único sistema. Explora una demo interactiva con datos ficticios.">
-<meta name="author" content="D-Code Partners">
-<meta name="theme-color" content="#06080d">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dcodepartners.com/sistema-financiero">
 <link rel="alternate" hreflang="es" href="https://dcodepartners.com/sistema-financiero">
 <link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/sistema-financiero">
-<link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero"> <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
+<link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero">
+<meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#e7e8e5" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="manifest" href="/assets/site.webmanifest">
-<link rel="preload" href="/assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/spacegrotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/jetbrainsmono-variable.woff2" as="font" type="font/woff2" crossorigin> <meta property="og:type" content="website">
+<meta property="og:type" content="website">
 <meta property="og:site_name" content="D-Code Partners">
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
-<meta property="og:title" content="D-Code Finance — Facturar, cobrar y saber lo que hay">
-<meta property="og:description" content="Facturas, cobros, gastos, presupuestos y un asistente de IA financiera en un único sistema. Demo interactiva con datos ficticios.">
+<meta property="og:title" content="D-Code Finance | Software de facturación y cobros con IA">
+<meta property="og:description" content="D-Code Finance: facturas, cobros, gastos, presupuestos y un asistente de IA financiera en un único sistema. Explora una demo interactiva con datos ficticios.">
 <meta property="og:url" content="https://dcodepartners.com/sistema-financiero">
 <meta property="og:image" content="https://dcodepartners.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="D-Code Finance — Facturar, cobrar y saber lo que hay">
-<meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png"> <link rel="stylesheet" href="/assets/css/styles.css?v=c2865b030e">
-<link rel="stylesheet" href="/assets/css/dcp5.css?v=922a5e2c08">
-<link rel="stylesheet" href="/assets/css/dcp7.css?v=f8070ca76d">
-<link rel="stylesheet" href="/assets/css/dcp8.css?v=470b51a96f">
-<link rel="stylesheet" href="/assets/css/galaxia.css?v=e2f2b58369">
-<link rel="stylesheet" href="/assets/css/tema-claro.css?v=907cd26c12" media="not all" data-claro><script>(function(){var l=document.querySelector('link[data-claro]');if(l&&document.documentElement.getAttribute('data-theme')==='light')l.media='all';})();</script>
-<link rel="preload" href="/assets/fonts/instrumentsans-variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/dcode-ds.css?v=69d93fb9f0">
-<link rel="stylesheet" href="/assets/css/tema.css?v=f7647989ed">
-<link rel="stylesheet" href="/assets/css/superficies.css?v=fa92822b55"> <script type="application/ld+json">
-{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://dcodepartners.com/" }, { "@type": "ListItem", "position": 2, "name": "D-Code Finance", "item": "https://dcodepartners.com/sistema-financiero" } ]
-}
-</script>
-<script type="application/ld+json">
-{ "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "D-Code Finance", "applicationCategory": "FinanceApplication", "description": "Sistema financiero para pymes: facturación, cobros, gastos, presupuestos y un asistente de IA financiera.", "provider": { "@type": "Organization", "name": "D-Code Partners", "url": "https://dcodepartners.com/" }
-}
-</script> <!-- Consentimiento y analitica: SOLO en el dominio real.
-     Fuera de el (Previews de Vercel, local) no se carga ninguno de los dos, y
-     por dos razones distintas. CookieYes tiene registrado dcodepartners.com:
-     en cualquier otro dominio no levanta el banner y avisa por consola de que
-     la URL no es la suya, asi que en un Preview no hay consentimiento que dar
-     ni banner que probar. Y Google Analytics contaba las visitas de Preview en
-     la misma propiedad que las reales, que es ensuciar el dato de produccion
-     con nuestras propias comprobaciones.
-     El orden se conserva y se endurece: analitica SOLO despues de que
-     CookieYes haya cargado, nunca en paralelo. Si CookieYes no carga, la
-     analitica tampoco. -->
+<meta name="twitter:title" content="D-Code Finance | Software de facturación y cobros con IA">
+<meta name="twitter:description" content="D-Code Finance: facturas, cobros, gastos, presupuestos y un asistente de IA financiera en un único sistema. Explora una demo interactiva con datos ficticios.">
+<meta name="twitter:image" content="https://dcodepartners.com/assets/og-image.png">
+<link rel="preload" href="/assets/v2/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="/assets/v2/dc.css">
+<link rel="stylesheet" href="/assets/v2/interior.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://dcodepartners.com/"},{"@type":"ListItem","position":2,"name":"D-Code Finance","item":"https://dcodepartners.com/sistema-financiero"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"D-Code Finance","applicationCategory":"FinanceApplication","description":"Sistema financiero para pymes: facturación, cobros, gastos, presupuestos y un asistente de IA financiera.","provider":{"@type":"Organization","name":"D-Code Partners","url":"https://dcodepartners.com/"}}</script>
+
 <script>
 (function () {
   var host = location.hostname;
@@ -76,365 +60,167 @@
 })();
 </script>
 </head>
-<body class="v7">
-<div class="gx" aria-hidden="true"><i class="gx-polvo"></i><i class="gx-banda"></i><i class="gx-lejos"></i><i class="gx-medio"></i><i class="gx-brillo gx-brillo-a"></i><i class="gx-brillo gx-brillo-b"></i></div>
-<div class="nav-corte" aria-hidden="true"></div>
-<div class="field field--inst" data-inst="finance" data-idea="El circuito"></div> <a class="skip-link" href="#main-content">Saltar al contenido</a> <button type="button" class="tema-btn" data-tema-btn><span class="tema-btn-i" aria-hidden="true"><svg class="t-luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.4 14.6A8.6 8.6 0 0 1 9.4 3.6a.5.5 0 0 0-.66-.6A9.4 9.4 0 1 0 21 15.26a.5.5 0 0 0-.6-.66Z" fill="currentColor"/><circle cx="17.2" cy="5.6" r="1.1" fill="currentColor" opacity=".7"/><circle cx="20.2" cy="9.4" r=".7" fill="currentColor" opacity=".55"/></svg><svg class="t-sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.6v2.3M12 19.1v2.3M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M2.6 12h2.3M19.1 12h2.3M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" fill="none"/></svg></span><span class="tema-btn-t"><span class="t-a-claro">Modo claro</span><span class="t-a-oscuro">Modo oscuro</span></span></button> <div class="glow-orb o1"></div>
-<div class="glow-orb o2"></div>
-<div class="glow-orb o3"></div> <header id="site-header"> <div class="container nav-wrap"> <a href="/" class="logo"> <svg class="logo-mark" width="34" height="29" viewBox="0 0 120 100" role="img" aria-label="D-Code Partners" focusable="false"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="#5b8cff"/></svg> <span class="logo-word">D-Code<span class="logo-sub">PARTNERS</span></span> </a> <nav class="main-nav" id="main-nav" aria-label="Principal"> <ul> <li><a href="/metodo">Método</a></li> <li class="has-mega"> <a href="/que-hacemos" class="nav-link-btn mega-trigger">Qué hacemos <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a> <div class="mega-menu" role="menu"> <a class="mega-item" href="/sistema-financiero" role="menuitem"><span><strong>Facturar, cobrar y saber lo que hay, sin hojas de cálculo</strong><span>Software financiero</span></span></a> <a class="mega-item" href="/servicios/paginas-web" role="menuitem"><span><strong>Tu web hecha o rehecha, y hablando con tus sistemas</strong><span>Páginas web</span></span></a> <a class="mega-item" href="/servicios/automatizaciones" role="menuitem"><span><strong>Lo que se repite cada semana deja de hacerse a mano</strong><span>Automatizaciones</span></span></a> <a class="mega-item" href="/servicios/agentes-de-ia" role="menuitem"><span><strong>Atienden por web y WhatsApp con los datos de tu negocio</strong><span>Chatbots y agentes de IA</span></span></a> <a class="mega-item" href="/departamentos/comercial" role="menuitem"><span><strong>Un solo cliente, un solo dato, y ninguna venta olvidada</strong><span>CRM y ficha de cliente</span></span></a> <a class="mega-item" href="/servicios/sistemas-a-medida" role="menuitem"><span><strong>Lo que ninguna herramienta comprada hace como tú lo necesitas</strong><span>Aplicaciones a medida</span></span></a> <a class="mega-item" href="/servicios/integraciones" role="menuitem"><span><strong>Tus herramientas hablándose, con los permisos mínimos</strong><span>Integraciones</span></span></a> <a class="mega-item" href="/precios#g-os" role="menuitem"><span><strong>El panel desde el que se ve y se dirige todo lo demás</strong><span>D-Code OS</span></span></a> <a class="mega-item wide" href="/que-hacemos" role="menuitem">Ver todo lo que construimos →</a> </div> </li> <li><a href="/precios">Precios</a></li> <li><a href="/sistema-financiero" aria-current="page">Finance</a></li> <li><a href="/cambios-en-proceso">En curso</a></li> <li class="nav-cta-mobile"><a href="/contacto" class="btn btn-primary">Hablemos</a></li></ul> </nav> <div class="nav-right"> <div class="lang-switch" role="group" aria-label="Idioma / Language"> <a href="/sistema-financiero" hreflang="es" lang="es" data-lang="es" aria-current="true">ES</a> <a href="/en/sistema-financiero" hreflang="en" lang="en" data-lang="en">EN</a> </div> <a href="/contacto" class="btn btn-primary btn-sm">Hablemos</a> <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav"><span></span></button> </div> </div>
-</header> <main id="main-content"> <div class="container"> <nav class="breadcrumbs" aria-label="Ruta de navegación"> <ol><li><a href="/">Inicio</a></li><li class="sep">/</li><li aria-current="page">D-Code Finance</li></ol> </nav> </div> <section class="page-hero esc-con" data-amb="violeta"><div class="esc esc-hero" data-escena="sistema" data-modo="finance" aria-hidden="true"></div> <div class="container"> <span class="eyebrow">Software propio</span> <h1 class="h-title">Un sistema financiero al que le preguntas qué está pasando en tu empresa.</h1> <p class="lead">Facturas, cobros, gastos y proyectos en el mismo sitio — y algo que lo lee y te contesta. Lo de abajo es la aplicación, con datos inventados.</p> <div class="hero4-ctas"> <a href="#demo" class="btn btn-primary">Probarla aquí mismo</a> <a href="/contacto" class="btn btn-ghost">Hablemos de implantarlo</a> </div> </div> </section> <section class="section-sm edge-top" id="demo" data-amb="cian"> <div class="container">
-<div class="demo-host fdemo-pantalla fdemo-scope" data-fdemo-lazy
-     data-fdemo-css="/assets/css/finance-demo.css?v=5dd6d5544b"
-     data-fdemo-js="/assets/js/finance-demo-data.js?v=d252d2af96,/assets/js/finance-demo.js?v=57284c3b76">
-  <p class="demo-aviso"><span class="demo-tag">DEMO · datos ficticios</span> No es una captura: es la aplicación, usándose sola. Tócala y la llevas tú. Los nombres y los importes son inventados.</p>
-  <div data-fdemo-mount data-mode="embedded"></div>
-        <div class="demo-movil">
-          <p class="demo-movil-k">La aplicación, en un vistazo</p>
-          <h3 class="demo-movil-t">Aquí se lee; para tocarla, un ordenador.</h3>
-          <p class="demo-movil-p">Veinticinco pantallas y tablas de ocho columnas se ven peor apretadas en un móvil. Te lo contamos aquí y lo abres delante de un teclado.</p>
-          <ul class="demo-movil-l">
-            <li><b>El panel</b><span>Empieza por una frase que dice qué está pasando —cuánto has cobrado, cuánto te deben, qué se te ha ido de plazo— y debajo las cifras que la sostienen.</span></li>
-            <li><b>Le sueltas un documento y lo coloca</b><span>Un PDF con veinte facturas dentro sale convertido en veinte facturas dadas de alta, cada una con su número, su proveedor y su importe, y cada una en su pantalla.</span></li>
-            <li><b>Le preguntas en tu idioma</b><span>Quién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura concreta de la que sale.</span></li>
-            <li><b>Veinticinco pantallas</b><span>Facturas, cobros, por facturar, gastos, pagos, duplicados, documentos, presupuestos, pedidos, albaranes, clientes, proveedores, proyectos, tesorería, radar, objetivos, histórico, impuestos, gestoría, VERI*FACTU, auditoría, usuarios y ajustes.</span></li>
-          </ul>
-          <a class="btn btn-primary demo-movil-b" href="#planes">Ver los planes</a>
-        </div>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="cab" data-cab>
+  <div class="marco cab-in">
+    <a class="marca" href="/" aria-label="D-Code Partners"><svg viewBox="0 0 120 100" aria-hidden="true" focusable="false"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="var(--aire)"/></svg><span class="marca-n" aria-hidden="true">D-Code<small>PARTNERS</small></span></a>
+    <nav class="nav" aria-label="Principal">
+      <ul>
+        <li><button type="button" class="nav-b" aria-expanded="false" aria-controls="plano" data-plano-b>Qué hacemos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></li>
+        <li><a href="/sistema-financiero" aria-current="page">Finance</a></li>
+        <li><a href="/precios">Precios</a></li>
+        <li><a href="/metodo">Método</a></li>
+      </ul>
+    </nav>
+    <div class="cab-der">
+      <button type="button" class="ctrl" data-tema aria-label="Cambiar entre modo oscuro y claro"><svg class="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button>
+      <div class="idioma" role="group" aria-label="Idioma / Language"><a href="/sistema-financiero" hreflang="es" lang="es" aria-current="true">ES</a><a href="/en/sistema-financiero" hreflang="en" lang="en">EN</a></div>
+      <a class="boton boton--principal boton--peq" href="/contacto">Reservar una llamada</a>
+      <button type="button" class="ctrl menu-b" data-menu aria-label="Abrir menú" aria-expanded="false" aria-controls="hoja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+    </div>
+  </div>
+  <div class="plano" id="plano" data-plano>
+    <div class="marco plano-in">
+      <div><p class="etiqueta">Lo que se instala</p><p class="texto" style="margin-top:16px">Cada pieza resuelve un trabajo concreto y se conecta con las demás. Nada se vende suelto si no hace falta.</p><p style="margin-top:24px"><a class="enlace" href="/que-hacemos">Ver todo lo que construimos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p></div>
+      <ul class="plano-lista"><li><a href="/servicios/automatizaciones"><span class="plano-num">01</span><span class="plano-t">Automatizaciones</span><span class="plano-d">Lo que se repite cada semana, hecho solo</span></a></li><li><a href="/servicios/agentes-de-ia"><span class="plano-num">02</span><span class="plano-t">Agentes de IA</span><span class="plano-d">Atienden y responden con tus datos</span></a></li><li><a href="/servicios/integraciones"><span class="plano-num">03</span><span class="plano-t">Integraciones</span><span class="plano-d">Tus herramientas hablándose</span></a></li><li><a href="/servicios/sistemas-a-medida"><span class="plano-num">04</span><span class="plano-t">Sistemas a medida</span><span class="plano-d">Lo que ninguna herramienta comprada hace</span></a></li><li><a href="/sistema-financiero"><span class="plano-num">05</span><span class="plano-t">D-Code Finance</span><span class="plano-d">Facturar, cobrar y saber lo que hay</span></a></li><li><a href="/precios#g-os"><span class="plano-num">06</span><span class="plano-t">D-Code OS</span><span class="plano-d">La capa que conecta tus sistemas</span></a></li><li><a href="/servicios/paginas-web"><span class="plano-num">07</span><span class="plano-t">Páginas web</span><span class="plano-d">Hecha, rehecha o conectada</span></a></li><li><a href="/que-hacemos"><span class="plano-num">08</span><span class="plano-t">Por área de la empresa</span><span class="plano-d">Comercial, operaciones, finanzas…</span></a></li></ul>
+    </div>
+  </div>
+</header>
+<div class="hoja" id="hoja" data-hoja role="dialog" aria-modal="true" aria-label="Principal" hidden>
+  <div class="hoja-cab"><a class="marca" href="/" aria-label="D-Code Partners"><svg viewBox="0 0 120 100" aria-hidden="true" focusable="false"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="var(--aire)"/></svg><span class="marca-n" aria-hidden="true">D-Code<small>PARTNERS</small></span></a><button type="button" class="ctrl" data-menu-cerrar aria-label="Cerrar menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <nav aria-label="Principal"><ul>
+    <li><a href="/servicios/automatizaciones">Automatizaciones <small>01</small></a></li><li><a href="/servicios/agentes-de-ia">Agentes de IA <small>02</small></a></li><li><a href="/servicios/integraciones">Integraciones <small>03</small></a></li><li><a href="/servicios/sistemas-a-medida">Sistemas a medida <small>04</small></a></li><li><a href="/sistema-financiero">D-Code Finance <small>05</small></a></li><li><a href="/precios#g-os">D-Code OS <small>06</small></a></li><li><a href="/servicios/paginas-web">Páginas web <small>07</small></a></li><li><a href="/que-hacemos">Por área de la empresa <small>08</small></a></li>
+    <li><a href="/precios">Precios <small>09</small></a></li>
+    <li><a href="/metodo">Método <small>10</small></a></li>
+    <li><a href="/casos-exito">Casos <small>11</small></a></li>
+  </ul></nav>
+  <div class="hoja-pie">
+    <a class="boton boton--principal" href="/contacto">Reservar una llamada <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+    <div style="display:flex;gap:12px"><button type="button" class="ctrl" data-tema aria-label="Cambiar entre modo oscuro y claro"><svg class="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button><div class="idioma" role="group" aria-label="Idioma / Language"><a href="/sistema-financiero" hreflang="es" lang="es" aria-current="true">ES</a><a href="/en/sistema-financiero" hreflang="en" lang="en">EN</a></div></div>
+  </div>
 </div>
-</div> </section> <section class="section lit" style="--lx:30%;--ly:44%" data-amb="violeta"> <div class="container"> <div class="head"> <span class="eyebrow">Qué resuelve</span> <h2 class="h-title">El dinero deja de depender de que alguien se acuerde.</h2> </div> <div class="outs"> <div class="out"><b>Se factura solo</b><span>Desde el presupuesto aceptado o desde el proyecto, con numeración correlativa y PDF.</span></div> <div class="out"><b>Se cobra antes</b><span>Los recordatorios escalan por su cuenta y el pendiente se ve por antigüedad.</span></div> <div class="out"><b>El gasto no sorprende</b><span>Control por categoría y aviso al superar el presupuesto del mes.</span></div> </div> </div> </section> <!-- ====== FICHA TÉCNICA — la amplitud real, sin catorce tarjetas ====== -->
-  <!--estado:vf-bloque-->
-  <section class="section-air edge-top vf" id="verifactu" data-amb="violeta" data-vf-estado="preparado" aria-labelledby="vf-t">
-    <div class="container">
-      <div class="vf-grid">
-        <div class="vf-intro rise">
-          <span class="eyebrow">Registro fiscal · VERI*FACTU</span>
-          <p class="vf-sello" data-vf="1"><i aria-hidden="true"></i><span>Preparado para VERI*FACTU</span></p>
-          <h2 class="h-title" id="vf-t">Cada factura, registrada y encadenada desde que se emite.</h2>
-          <p class="lead">D-Code Finance lleva el registro de facturación encadenado e inalterable desde la emisión: cada factura genera su registro, con una huella que enlaza con la del anterior, y cada anulación deja el suyo. El siguiente paso es la remisión a la AEAT. Cuando esté probada, esta página lo dirá.</p>
-        </div>
-        <figure class="vf-cadena rise">
-          <ol class="vf-eslabones" aria-label="Cuatro registros encadenados, de ejemplo">
-            <li class="vf-eslabon" style="--i:0"><span class="vf-e-tipo">Alta</span><b class="vf-e-num">F-2026-0140</b><span class="vf-e-h"><em>Anterior</em><code>81A9EBFA…4E79</code></span><span class="vf-e-h vf-e-h--esta"><em>Huella</em><code>F4EBA6FB…F411</code></span><span class="vf-e-ok" aria-hidden="true"></span></li>
-            <li class="vf-eslabon" style="--i:1"><span class="vf-e-tipo">Alta</span><b class="vf-e-num">F-2026-0141</b><span class="vf-e-h"><em>Anterior</em><code>F4EBA6FB…F411</code></span><span class="vf-e-h vf-e-h--esta"><em>Huella</em><code>F019647E…1C5D</code></span><span class="vf-e-ok" aria-hidden="true"></span></li>
-            <li class="vf-eslabon" style="--i:2"><span class="vf-e-tipo es-anula">Anulación</span><b class="vf-e-num">F-2026-0141</b><span class="vf-e-h"><em>Anterior</em><code>F019647E…1C5D</code></span><span class="vf-e-h vf-e-h--esta"><em>Huella</em><code>E648C98A…FB56</code></span><span class="vf-e-ok" aria-hidden="true"></span></li>
-            <li class="vf-eslabon" style="--i:3"><span class="vf-e-tipo">Alta</span><b class="vf-e-num">F-2026-0142</b><span class="vf-e-h"><em>Anterior</em><code>E648C98A…FB56</code></span><span class="vf-e-h vf-e-h--esta"><em>Huella</em><code>4936B030…36A3</code></span><span class="vf-e-ok" aria-hidden="true"></span></li>
-          </ol>
-          <figcaption>Ilustración con datos ficticios y huellas SHA-256 reales. Cada registro guarda la huella del anterior: si alguien tocara uno, la cadena se rompería justo ahí.</figcaption>
-        </figure>
-      </div>
-      <ol class="vf-track" aria-label="Los cuatro estados de VERI*FACTU en D-Code Finance">
-        <li class="vf-paso es-actual" aria-current="step"><span class="vf-paso-n">01</span><b class="vf-paso-t">Preparado para VERI*FACTU</b><span class="vf-paso-d">Registro, huella y cadena de cada factura, dentro del sistema.</span><span class="vf-paso-e">Estado actual</span></li>
-        <li class="vf-paso es-siguiente"><span class="vf-paso-n">02</span><b class="vf-paso-t">Integración VERI*FACTU en validación</b><span class="vf-paso-d">Registros remitidos al entorno de pruebas de la AEAT, con sus respuestas revisadas.</span><span class="vf-paso-e">Siguiente</span></li>
-        <li class="vf-paso es-despues"><span class="vf-paso-n">03</span><b class="vf-paso-t">VERI*FACTU integrado</b><span class="vf-paso-d">Remisión validada de extremo a extremo con la especificación oficial.</span><span class="vf-paso-e">Después</span></li>
-        <li class="vf-paso es-despues"><span class="vf-paso-n">04</span><b class="vf-paso-t">VERI*FACTU operativo</b><span class="vf-paso-d">Remisión real en producción y declaración responsable firmada.</span><span class="vf-paso-e">Después</span></li>
-      </ol>
-      <div class="vf-dos">
-        <div class="vf-col vf-col--hoy">
-          <p class="vf-col-t">Lo que ya hace</p>
-          <ul class="vf-l">
-            <li><b>Registro de alta</b> al emitir cada factura, y <b>de anulación</b> al anularla.</li>
-            <li><b>Huella encadenada:</b> cada registro guarda la del anterior, en una sola cadena por empresa emisora.</li>
-            <li><b>Sin huecos silenciosos:</b> si el registro no se puede encadenar, la factura no se emite.</li>
-            <li><b>Comprobación de la cadena</b> en pantalla: huecos, duplicados, bifurcaciones y eslabones rotos.</li>
-            <li><b>Registro de eventos</b> del sistema (art. 9.1 del RD 1007/2023), encadenados entre sí.</li>
-          </ul>
-        </div>
-        <div class="vf-col vf-col--luego">
-          <p class="vf-col-t">Lo que llega con los siguientes pasos</p>
-          <ul class="vf-l">
-            <li>La remisión de cada registro a la AEAT, primero en su entorno de pruebas.</li>
-            <li>La huella y el formato del registro, contrastados con la especificación oficial.</li>
-            <li>El código QR de cotejo, impreso en cada factura.</li>
-            <li>La remisión en producción y la declaración responsable del sistema, firmada.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="vf-pie">
-        <p class="vf-cal"><b>Plazo de adaptación</b> Sociedades, antes del 1 de enero de 2027; resto de obligados, antes del 1 de julio de 2027. Fuente: <a href="https://sede.agenciatributaria.gob.es/Sede/iva/sistemas-informaticos-facturacion-verifactu/nota-informativa-ampliacion-plazo-adaptacion-facturacion.html" rel="noopener" target="_blank">nota informativa de la AEAT</a> sobre el Real Decreto-ley 15/2025, de 2 de diciembre (consultada el 21/09/2026).</p>
-        <p class="vf-nota">Este estado no se escribe a mano: sale de un registro que solo cambia cuando el equipo de D-Code Finance aporta la prueba de cada paso. Última revisión: 21/09/2026.</p>
-      </div>
+<main id="contenido">
+<header class="pag-cab">
+  <div class="marco">
+    <nav class="migas" aria-label="Ruta"><ol role="list"><li><a href="/">Inicio</a></li><li aria-current="page">D-Code Finance</li></ol></nav>
+    <p class="etiqueta aparece">Software propio</p>
+    <h1 class="h1 aparece" style="--i:1">Un sistema financiero al que le preguntas qué está pasando en tu empresa.</h1>
+    <div class="aparece" style="--i:2"><p class="lead">Facturas, cobros, gastos y proyectos en el mismo sitio — y algo que lo lee y te contesta. Lo de abajo es la aplicación, con datos inventados.</p></div>
+    <div class="aparece" style="--i:3"><div class="acc"><a class="boton boton--principal" href="#demo">Probarla aquí mismo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="boton" href="/contacto">Hablemos de implantarlo</a></div></div>
+    <div class="aparece" style="--i:4"><p>DEMO · datos ficticios No es una captura: es la aplicación, usándose sola. Tócala y la llevas tú. Los nombres y los importes son inventados.</p></div>
+    <div class="aparece" style="--i:5"><p>La aplicación, en un vistazo</p></div>
+  </div>
+</header>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><h2 class="h2">Aquí se lee; para tocarla, un ordenador.</h2></div>
+    <div class="capitulo-cuerpo prosa"><p>Veinticinco pantallas y tablas de ocho columnas se ven peor apretadas en un móvil. Te lo contamos aquí y lo abres delante de un teclado.</p>
+<ul><li><strong>El panel</strong>Empieza por una frase que dice qué está pasando —cuánto has cobrado, cuánto te deben, qué se te ha ido de plazo— y debajo las cifras que la sostienen.</li><li><strong>Le sueltas un documento y lo coloca</strong>Un PDF con veinte facturas dentro sale convertido en veinte facturas dadas de alta, cada una con su número, su proveedor y su importe, y cada una en su pantalla.</li><li><strong>Le preguntas en tu idioma</strong>Quién me debe, qué está fuera de plazo, qué debería mirar hoy. Contesta con la cifra y con la factura concreta de la que sale.</li><li><strong>Veinticinco pantallas</strong>Facturas, cobros, por facturar, gastos, pagos, duplicados, documentos, presupuestos, pedidos, albaranes, clientes, proveedores, proyectos, tesorería, radar, objetivos, histórico, impuestos, gestoría, VERI*FACTU, auditoría, usuarios y ajustes.</li></ul>
+<div class="acc"><a class="boton boton--principal" href="#planes">Ver los planes <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><p class="etiqueta">Qué resuelve</p><h2 class="h2">El dinero deja de depender de que alguien se acuerde.</h2></div>
+    <div class="capitulo-cuerpo prosa"><div class="punto"><p class="punto-t"><strong>Se factura solo</strong></p><div class="punto-d">Desde el presupuesto aceptado o desde el proyecto, con numeración correlativa y PDF.</div></div>
+<div class="punto"><p class="punto-t"><strong>Se cobra antes</strong></p><div class="punto-d">Los recordatorios escalan por su cuenta y el pendiente se ve por antigüedad.</div></div>
+<div class="punto"><p class="punto-t"><strong>El gasto no sorprende</strong></p><div class="punto-d">Control por categoría y aviso al superar el presupuesto del mes.</div></div>
+<p class="etiqueta">Registro fiscal · VERI*FACTU</p>
+<p>Preparado para VERI*FACTU</p></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><h2 class="h2" id="vf-t">Cada factura, registrada y encadenada desde que se emite.</h2><p class="lead">D-Code Finance lleva el registro de facturación encadenado e inalterable desde la emisión: cada factura genera su registro, con una huella que enlaza con la del anterior, y cada anulación deja el suyo. El siguiente paso es la remisión a la AEAT. Cuando esté probada, esta página lo dirá.</p></div>
+    <div class="capitulo-cuerpo prosa"><ol><li>Alta<strong>F-2026-0140</strong><em>Anterior</em><code>81A9EBFA…4E79</code><em>Huella</em><code>F4EBA6FB…F411</code></li><li>Alta<strong>F-2026-0141</strong><em>Anterior</em><code>F4EBA6FB…F411</code><em>Huella</em><code>F019647E…1C5D</code></li><li>Anulación<strong>F-2026-0141</strong><em>Anterior</em><code>F019647E…1C5D</code><em>Huella</em><code>E648C98A…FB56</code></li><li>Alta<strong>F-2026-0142</strong><em>Anterior</em><code>E648C98A…FB56</code><em>Huella</em><code>4936B030…36A3</code></li></ol>
+<p>Ilustración con datos ficticios y huellas SHA-256 reales. Cada registro guarda la huella del anterior: si alguien tocara uno, la cadena se rompería justo ahí.</p>
+<ol><li>01<strong>Preparado para VERI*FACTU</strong>Registro, huella y cadena de cada factura, dentro del sistema.Estado actual</li><li>02<strong>Integración VERI*FACTU en validación</strong>Registros remitidos al entorno de pruebas de la AEAT, con sus respuestas revisadas.Siguiente</li><li>03<strong>VERI*FACTU integrado</strong>Remisión validada de extremo a extremo con la especificación oficial.Después</li><li>04<strong>VERI*FACTU operativo</strong>Remisión real en producción y declaración responsable firmada.Después</li></ol>
+<p>Lo que ya hace</p>
+<ul><li><strong>Registro de alta</strong> al emitir cada factura, y <strong>de anulación</strong> al anularla.</li><li><strong>Huella encadenada:</strong> cada registro guarda la del anterior, en una sola cadena por empresa emisora.</li><li><strong>Sin huecos silenciosos:</strong> si el registro no se puede encadenar, la factura no se emite.</li><li><strong>Comprobación de la cadena</strong> en pantalla: huecos, duplicados, bifurcaciones y eslabones rotos.</li><li><strong>Registro de eventos</strong> del sistema (art. 9.1 del RD 1007/2023), encadenados entre sí.</li></ul>
+<p>Lo que llega con los siguientes pasos</p>
+<ul><li>La remisión de cada registro a la AEAT, primero en su entorno de pruebas.</li><li>La huella y el formato del registro, contrastados con la especificación oficial.</li><li>El código QR de cotejo, impreso en cada factura.</li><li>La remisión en producción y la declaración responsable del sistema, firmada.</li></ul>
+<p><strong>Plazo de adaptación</strong> Sociedades, antes del 1 de enero de 2027; resto de obligados, antes del 1 de julio de 2027. Fuente: <a href="https://sede.agenciatributaria.gob.es/Sede/iva/sistemas-informaticos-facturacion-verifactu/nota-informativa-ampliacion-plazo-adaptacion-facturacion.html" rel="noopener" target="_blank">nota informativa de la AEAT</a> sobre el Real Decreto-ley 15/2025, de 2 de diciembre (consultada el 21/09/2026).</p>
+<p>Este estado no se escribe a mano: sale de un registro que solo cambia cuando el equipo de D-Code Finance aporta la prueba de cada paso. Última revisión: 21/09/2026.</p></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><p class="etiqueta">La superficie del sistema</p><h2 class="h2">Catorce piezas que ya funcionan juntas.</h2><p class="lead">No es una pantalla de facturas con gráficos alrededor: es el circuito completo del dinero de una empresa, construido pieza a pieza.</p></div>
+    <div class="capitulo-cuerpo prosa"><div class="punto"><p class="punto-t"><strong>Facturación</strong></p><div class="punto-d">Series y numeración correlativa, rectificativas enlazadas al original y PDF generado por el propio sistema.</div></div>
+<div class="punto"><p class="punto-t"><strong>Cobros</strong></p><div class="punto-d">Antigüedad de la deuda por tramos, recordatorios que escalan solos y cobros parciales sobre una misma factura.</div></div>
+<div class="punto"><p class="punto-t"><strong>Gastos</strong></p><div class="punto-d">Alta desde documento con revisión humana, categorías, proveedores y control de presupuesto.</div></div>
+<div class="punto"><p class="punto-t"><strong>Cuentas por pagar</strong></p><div class="punto-d">Vencimientos, próximos pagos y estado de cada gasto hasta que queda saldado.</div></div>
+<div class="punto"><p class="punto-t"><strong>Presupuestos</strong></p><div class="punto-d">Del presupuesto aceptado a la factura, con cantidades pendientes y sin facturar dos veces lo mismo.</div></div>
+<div class="punto"><p class="punto-t"><strong>Pedidos y albaranes</strong></p><div class="punto-d">Conversión entre documentos manteniendo qué queda pendiente en cada línea.</div></div>
+<div class="punto"><p class="punto-t"><strong>Proyectos</strong></p><div class="punto-d">Rentabilidad real por proyecto, devengada y de caja, no solo facturación.</div></div>
+<div class="punto"><p class="punto-t"><strong>Tesorería</strong></p><div class="punto-d">Saldo del periodo con cobros previstos y pagos previstos sobre la misma línea de tiempo.</div></div>
+<div class="punto"><p class="punto-t"><strong>Recurrentes</strong></p><div class="punto-d">Plantillas de facturación periódica y control de qué periodos ya se han emitido.</div></div>
+<div class="punto"><p class="punto-t"><strong>Radar</strong></p><div class="punto-d">Detección de anomalías explicables: gastos nuevos, desaparecidos, importes fuera de rango, concentración.</div></div>
+<div class="punto"><p class="punto-t"><strong>Documentos</strong></p><div class="punto-d">Subida y descarga mediadas por la aplicación, con registro de cada acceso.</div></div>
+<div class="punto"><p class="punto-t"><strong>Consulta</strong></p><div class="punto-d">Preguntas en lenguaje natural sobre los datos, respondidas citando de dónde sale cada cifra.</div></div>
+<div class="punto"><p class="punto-t"><strong>Búsqueda</strong></p><div class="punto-d">Un solo buscador sobre facturas, gastos, clientes, proveedores, presupuestos y proyectos.</div></div>
+<div class="punto"><p class="punto-t"><strong>Actividad</strong></p><div class="punto-d">Historial de lo que ha pasado en cada factura y cada gasto, con quién y cuándo.</div></div>
+<p class="etiqueta">La siguiente pieza</p>
+<p>Conciliación bancaria · Próximamente</p></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><h2 class="h2" id="conc-t">El extracto del banco, cruzado con lo que ya tienes.</h2><p class="lead">Hoy, saber qué ha entrado de verdad en el banco obliga a repasar el extracto línea a línea contra las facturas. La conciliación hará ese cruce dentro de D-Code Finance, con los clientes, las facturas y los gastos que ya tiene, y dejará a la vista solo lo que no cuadre.</p></div>
+    <div class="capitulo-cuerpo prosa"><ul><li>Subirás el extracto del banco como fichero.</li><li>Cada cobro se cruzará con su factura, y cada cargo con su gasto.</li><li>Lo que no cuadre se quedará señalado para que lo mires, en vez de asignarse a ojo.</li><li>Y Pregunta a Finanzas podrá decirte qué movimientos siguen sin identificar.</li></ul>
+<p>Todavía no está en el sistema: es la siguiente pieza de D-Code Finance. Cuando cambie de estado, esta página lo dirá, y los planes también.</p>
+<p>Extracto · septiembre3 cuadran · 2 para revisar</p>
+<ul><li>02/09Transferencia · Vandria Logística<strong>+2.420,00 €</strong>→ F-2026-0131Cuadra</li><li>04/09Recibo · Nubalia Cloud<strong>−186,34 €</strong>→ Gasto G-0412Cuadra</li><li>09/09Transferencia · Estudio Orbe<strong>+1.210,00 €</strong>→ F-2026-0137Cuadra</li><li>12/09Cargo tarjeta · TPV 88213<strong>−64,90 €</strong>Sin identificarPara revisar</li><li>15/09Transferencia sin concepto<strong>+300,00 €</strong>Sin identificarPara revisar</li></ul>
+<p>Así funcionará · ilustración con datos ficticios.</p></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><p class="etiqueta">Tres formas de tenerlo</p><h2 class="h2">El mismo sistema. Cambia cu&#225;nto trabaja por ti.</h2><p class="lead"><strong>Te enviamos un formulario.</strong> Lo completas y, una vez validado, tu sistema queda en marcha en 1 d&#237;a. En Finance a medida, primero dise&#241;amos contigo la soluci&#243;n; cuando la apruebas, hacemos la implantaci&#243;n.</p></div>
+    <div class="capitulo-cuerpo prosa"><p><a href="/precios#g-finance">Ver los tres planes y su precio &#8594;</a></p>
+<details class="pregunta"><summary>01 <strong>Finance</strong> El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar. Dejas de preguntar en qu&#233; estado est&#225; cada factura: lo dice la pantalla. Dejas de descubrir un impagado dos meses tarde. Dejas de armar los libros del IVA a mano cada trimestre. Ver precio en Precios hasta 3 personas</summary><div class="pregunta-r"><p><a href="/precios#g-finance">El precio, en Precios </a></p><ul><li>El d&#237;a a d&#237;a: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos.</li><li>El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos.</li><li>Tesorer&#237;a semana a semana y a 30, 60 y 90 d&#237;as, con escenario base o prudente.</li><li>Radar: siete reglas con su umbral escrito, para que nada se descubra tarde.</li><li>Tus series de factura, tus impuestos y tus formas de pago.</li><li>Libros de IVA en CSV, emitidas y recibidas, para tu gestor&#237;a.</li><li>En marcha en 1 d&#237;a, una vez validado el formulario, con tus datos anteriores dentro. No se empieza vac&#237;o.</li></ul><p>Ficha t&#233;cnica</p><dl class="dl"><dt>Registro fiscal</dt><dd>Preparado para VERI*FACTU Registro de facturación encadenado e inalterable desde la emisión: cada factura queda enlazada a la anterior con su huella, y una pantalla comprueba que la cadena está entera. La remisión a la AEAT es el siguiente paso. <a href="#verifactu">En qué punto está</a></dd><dt>Permisos</dt><dd>Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo <em>y</em> por acci&#243;n.</dd><dt>Aislamiento</dt><dd>Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n.</dd><dt>Rastro</dt><dd>Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde la propia factura o el propio gasto.</dd><dt>Acceso</dt><dd>No hay alta p&#250;blica: la cuenta la creamos nosotros y se invita a cada persona. Una cuenta suspendida deja de entrar en el momento.</dd><dt>Base de datos</dt><dd>PostgreSQL. Los datos son tuyos y salen en CSV cuando quieras.</dd></dl><p><strong>No incluye</strong> campos ni flujos propios de tu negocio, ni conexiones con otras herramientas.</p><div class="acc"><a class="boton boton--principal" href="/contacto?plan=finance">Hablar de este plan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div><p>Media hora, sin compromiso. Te decimos si te encaja o si no.</p></div></details>
+<details class="pregunta"><summary>02 <strong>Finance con inteligencia</strong> Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus n&#250;meros. Dejas de teclear facturas de proveedor: se las sueltas y entran solas. Dejas de abrir tres pantallas para responder &#171;&#191;cu&#225;nto nos deben?&#187;. Dejas de perder el ticket que alguien fotografi&#243; y no envi&#243; nunca. Ver precio en Precios hasta 10 personas</summary><div class="pregunta-r"><p><a href="/precios#g-finance">El precio, en Precios </a></p><ul><li><strong>Le sueltas un documento y lo coloca.</strong> Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas dadas de alta, cada una con su n&#250;mero, su base, su cuota y su proveedor &#8212; en borrador, listas para revisar, no en una bandeja para teclear.</li><li><strong>Cada campo trae de d&#243;nde sale.</strong> De qu&#233; p&#225;gina del PDF y de qu&#233; l&#237;nea, para que se pueda revisar sin abrir el documento.</li><li>Da igual la forma: PDF, Excel, CSV o una foto hecha con el m&#243;vil. Una factura suelta acaba en Gastos y un albar&#225;n, en Albaranes.</li><li><strong>Pregunta a Finanzas:</strong> le escribes en tu idioma &#8212;qui&#233;n me debe, qu&#233; est&#225; fuera de plazo, qu&#233; deber&#237;a mirar hoy&#8212; y contesta con la cifra y con la factura concreta de la que sale.</li><li>Lo que no sabe, lo dice. No hay respuesta inventada: si el dato no est&#225;, contesta que no est&#225;.</li><li>Todo lo del plan anterior, con sus veinticinco pantallas.</li><li><strong>Conciliación bancaria</strong> Próximamente Cruzará el extracto del banco con tus facturas y tus gastos, y dejará señalado lo que no cuadre. <a href="#conciliacion">Cómo funcionará</a></li></ul><p>Ficha t&#233;cnica</p><dl class="dl"><dt>Qu&#233; formatos lee</dt><dd>PDF con texto, PDF escaneado, JPG, PNG, WEBP, CSV y XLSX.</dd><dt>C&#243;mo lo coloca</dt><dd>Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja en la pantalla que le toca, en borrador. T&#250; confirmas. Hasta que no confirmas no se guarda nada.</dd><dt>Lo que hace con lo dudoso</dt><dd>Lo que no consigue leer no se lo inventa: lo marca y lo deja aparte para que lo mires.</dd><dt>Trazabilidad</dt><dd>Cada respuesta cita sus fuentes y las consultas con las que se ha calculado. No hay ninguna cifra sin origen.</dd></dl><p><strong>No incluye</strong> campos ni flujos propios de tu negocio. Las conexiones van por la API, y montarlas se presupuesta aparte.</p><div class="acc"><a class="boton boton--principal" href="/contacto?plan=finance-ia">Hablar de este plan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div><p>Media hora, sin compromiso. Te decimos si te encaja o si no.</p></div></details>
+<details class="pregunta"><summary>03 <strong>Finance a medida</strong> El sistema, la inteligencia y adem&#225;s vuestros campos, vuestros flujos y vuestras conexiones. Dejas de adaptar c&#243;mo trabaj&#225;is a lo que permite un programa. Dejas de copiar datos de una herramienta a otra. Dejas de esperar a que alguien saque el informe que pediste. Ver precio en Precios sin l&#237;mite de personas</summary><div class="pregunta-r"><p><a href="/precios#g-finance">El precio, en Precios </a></p><ul><li><strong>Primero, el dise&#241;o.</strong> Dise&#241;amos contigo la soluci&#243;n y, cuando la apruebas, hacemos la implantaci&#243;n.</li><li>Campos, estados y flujos propios de vuestra operaci&#243;n.</li><li>Conexiones con las herramientas que ya us&#225;is, construidas sobre la API del sistema.</li><li>Paneles e informes hechos para vuestras decisiones, no gen&#233;ricos.</li><li>Evoluci&#243;n: cuando la empresa cambia, el sistema cambia con ella.</li><li>Media hora al mes para mirar juntos lo que el sistema registra y ajustar.</li><li>Todo lo de los dos planes anteriores.</li></ul><p>Ficha t&#233;cnica</p><dl class="dl"><dt>API</dt><dd>REST en <code>/api/v1</code>, con clave por empresa en la cabecera <code>Authorization</code>. Facturas, gastos, documentos, presupuestos, pedidos, objetivos y auditor&#237;a. Pasa por los mismos permisos y el mismo aislamiento que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol.</dd></dl><p><strong>No incluye</strong> nada de lo anterior: esto es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pid&#225;is.</p><div class="acc"><a class="boton boton--principal" href="/contacto?plan=finance-medida">Hablar de este plan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div><p>Media hora, sin compromiso. Te decimos si te encaja o si no.</p></div></details>
+<p>La comparativa fila a fila es una tabla grande: se ve en un ordenador o una tableta. Arriba tienes lo esencial de cada plan.</p>
+<p>Los tres planes, fila a fila</p>
+<div class="tabla"><table><tr><th>Qué incluye</th><th>Finance</th><th>Finance con inteligencia</th><th>Finance a medida</th></tr><tr><th>Facturas, cobros, gastos y pagos</th><td></td><td></td><td></td></tr><tr><th>Presupuestos, pedidos, albaranes y proyectos</th><td></td><td></td><td></td></tr><tr><th>Tesorería a 30, 60 y 90 días y radar de avisos</th><td></td><td></td><td></td></tr><tr><th>Libros de IVA en CSV para tu gestoría</th><td></td><td></td><td></td></tr><tr><th>Registro fiscal</th><td>Preparado para VERI*FACTU <a href="#verifactu">Qué significa</a></td></tr><tr><th>Lectura de documentos: PDF, foto, Excel o CSV</th><td>—</td><td></td><td></td></tr><tr><th>Pregunta a Finanzas</th><td>—</td><td></td><td></td></tr><tr><th>Conciliación bancaria</th><td>—</td><td>Próximamente</td></tr><tr><th>Campos, flujos y paneles propios</th><td>—</td><td>—</td><td></td></tr><tr><th>Conexiones con tus herramientas</th><td>—</td><td>Se presupuestan aparte</td><td></td></tr><tr><th>Personas</th><td>Hasta 3</td><td>Hasta 10</td><td>Sin límite</td></tr><tr><th>Puesta en marcha</th><td>En 1 día, una vez validado el formulario</td><td>Primero el diseño, que apruebas; después la implantación</td></tr></table></div>
+<p>IVA aparte y sin permanencia. La implantaci&#243;n se paga una vez: completas el formulario, lo validamos y en 1 d&#237;a tienes el sistema funcionando, con tus clientes, tus facturas y tus gastos anteriores dentro y tus series y tus impuestos configurados. En Finance a medida, antes va el dise&#241;o que apruebas.</p></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><p class="etiqueta">Con qu&#233; se conecta</p><h2 class="h2">Todo entra y sale por el mismo sitio.</h2><p class="lead">Una API REST en <code>/api/v1</code>, con una clave por empresa y los mismos permisos que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol. Por ah&#237; pasa cualquier conexi&#243;n, y por eso no hace falta un conector distinto para cada cosa.</p></div>
+    <div class="capitulo-cuerpo prosa"><div class="punto"><p class="punto-t"><strong>Tu programa de facturaci&#243;n</strong></p><div class="punto-d">Holded, A3, Sage, Contasol o el que uses. Se traen clientes, facturas y gastos para empezar, y despu&#233;s se decide si conviven o si uno sustituye al otro. <em>Migraci&#243;n incluida</em></div></div>
+<div class="punto"><p class="punto-t"><strong>Tu hoja de c&#225;lculo</strong></p><div class="punto-d">Esa que no piensas abandonar. Entra por importaci&#243;n y sale por exportaci&#243;n, en CSV, sin pedirte que cambies de costumbre. <em>Lista</em></div></div>
+<div class="punto"><p class="punto-t"><strong>Tu gestor&#237;a</strong></p><div class="punto-d">Libros de IVA emitidas y recibidas en CSV, cuando toque, sin que nadie tenga que armar nada a mano. <em>Lista</em></div></div>
+<div class="punto"><p class="punto-t"><strong>Tu banco</strong></p><div class="punto-d">El extracto entrará como fichero y se cruzará con tus facturas y tus gastos. Lo que no cuadre se marcará en vez de asignarse a ojo. <em>Próximamente</em></div></div>
+<div class="punto"><p class="punto-t"><strong>Make, Zapier, n8n</strong></p><div class="punto-d">Hablan justo el lenguaje de la API, as&#237; que lo que ya tengas montado sigue funcionando y puede leer y escribir aqu&#237;. <em>V&#237;a API</em></div></div>
+<div class="punto"><p class="punto-t"><strong>Lo que no est&#233; en esta lista</strong></p><div class="punto-d">Se mira contra lo que la otra herramienta deja hacer de verdad. Si se puede, se dice cu&#225;nto cuesta; si no se puede, se dice antes de empezar y no despu&#233;s. <em>Caso por caso</em></div></div></div>
+  </div>
+</section>
+<section class="capitulo">
+  <div class="marco capitulo-in">
+    <div class="capitulo-cab"><p class="etiqueta">Pruébalo</p><h2 class="h2">Recórrelo entero, sin que nadie te lo enseñe.</h2><p class="lead">Entorno de demostración con datos inventados. Sin registro y sin conexión a ningún sistema real.</p></div>
+    <div class="capitulo-cuerpo prosa"><div class="acc"><a class="boton boton--principal" href="#demo">Subir a la demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="boton" href="/contacto">Reservar una llamada</a></div></div>
+  </div>
+</section>
+</main>
+<footer class="pie">
+  <div class="marco">
+    <div class="pie-g">
+      <div class="pie-marca"><a class="marca" href="/" aria-label="D-Code Partners"><svg viewBox="0 0 120 100" aria-hidden="true" focusable="false"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="var(--aire)"/></svg><span class="marca-n" aria-hidden="true">D-Code<small>PARTNERS</small></span></a><p>Construimos el sistema que conecta tu empresa: automatizaciones, agentes de IA e integraciones, sobre tus datos. Madrid, España.</p><p style="margin-top:12px"><a href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a></p></div>
+      <nav aria-label="Qué hacemos"><h2 class="rotulo">Qué hacemos</h2><ul><li><a href="/que-hacemos">Todo lo que hacemos</a></li><li><a href="/servicios/automatizaciones">Automatizaciones</a></li><li><a href="/servicios/agentes-de-ia">Agentes de IA</a></li><li><a href="/servicios/integraciones">Integraciones</a></li><li><a href="/servicios/sistemas-a-medida">Sistemas a medida</a></li><li><a href="/servicios/paginas-web">Páginas web</a></li><li><a href="/sistema-financiero">D-Code Finance</a></li></ul></nav>
+      <nav aria-label="Por área"><h2 class="rotulo">Por área</h2><ul><li><a href="/departamentos/comercial">Comercial</a></li><li><a href="/departamentos/marketing">Marketing</a></li><li><a href="/departamentos/clientes">Clientes</a></li><li><a href="/departamentos/produccion">Operaciones</a></li><li><a href="/departamentos/finanzas">Finanzas</a></li><li><a href="/departamentos/soporte">Soporte</a></li><li><a href="/departamentos/administracion">Administración</a></li><li><a href="/departamentos/direccion">Dirección</a></li></ul></nav>
+      <nav aria-label="Empresa"><h2 class="rotulo">Empresa</h2><ul><li><a href="/metodo">Método</a></li><li><a href="/garantias">Garantías y proceso</a></li><li><a href="/conocenos">Conócenos</a></li><li><a href="/casos-exito">Casos internos</a></li><li><a href="/cambios-en-proceso">En curso</a></li><li><a href="/blog">Blog</a></li><li><a href="/precios">Precios</a></li><li><a href="/faq">Preguntas frecuentes</a></li><li><a href="/contacto">Contacto</a></li></ul></nav>
+      <nav aria-label="Legal"><h2 class="rotulo">Legal</h2><ul><li><a href="/privacidad">Privacidad</a></li><li><a href="/aviso-legal">Aviso legal</a></li><li><a href="/cookies">Cookies</a></li><li><a href="/seguridad">Seguridad de la información</a></li><li><a href="/condiciones-contratacion">Condiciones de contratación</a></li><li><a href="/acuerdo-encargado-tratamiento">Encargado de tratamiento</a></li></ul></nav>
     </div>
-  </section>
-  <!--/estado:vf-bloque-->
+    <div class="pie-base"><p class="rotulo">© 2026 D-Code Partners · Madrid</p><p class="rotulo">Precios sin IVA · Sin permanencia</p></div>
+  </div>
+</footer>
+<div class="chat-widget" id="chat-widget"> <div class="chat-window" role="dialog" aria-label="Asistente D-Code Partners" aria-hidden="true">  <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"> <div class="chat-msg bot">Hola. Dime a qué se dedica tu empresa y te digo qué construiríamos y cuánto costaría.</div> </div> <div class="chat-quick-replies" id="chat-quick-replies"> <button type="button" class="chat-quick-question">¿Qué hacéis exactamente?</button> <button type="button" class="chat-quick-question">¿Cuánto cuesta empezar?</button> <button type="button" class="chat-quick-question">Quiero ver una demo</button> </div> <form class="chat-input-row" id="chat-form"> <label for="chat-input" class="sr-only">Escribe tu mensaje</label> <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." autocomplete="off" maxlength="600"> <button type="submit" aria-label="Enviar mensaje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button> </form> </div> <button class="chat-bubble" id="chat-bubble" aria-expanded="false" aria-controls="chat-widget" aria-label="Abrir asistente D-Code Partners"> <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg> <span class="cb-dot"></span> </button>
+</div>
+<script type="module" src="/assets/v2/js/sitio.js"></script>
 
-  <section class="section-air edge-top" data-amb="cian">
-    <div class="container">
-      <div class="head rise">
-        <span class="eyebrow">La superficie del sistema</span>
-        <h2 class="h-title">Catorce piezas que ya funcionan juntas.</h2>
-        <p class="lead">No es una pantalla de facturas con gráficos alrededor: es el circuito completo del dinero de una empresa, construido pieza a pieza.</p>
-      </div>
-      <div class="specs" data-stagger data-comp="circuito">
-        <div class="spec rise"><b>Facturación</b><span>Series y numeración correlativa, rectificativas enlazadas al original y PDF generado por el propio sistema.</span></div>
-        <div class="spec rise"><b>Cobros</b><span>Antigüedad de la deuda por tramos, recordatorios que escalan solos y cobros parciales sobre una misma factura.</span></div>
-        <div class="spec rise"><b>Gastos</b><span>Alta desde documento con revisión humana, categorías, proveedores y control de presupuesto.</span></div>
-        <div class="spec rise"><b>Cuentas por pagar</b><span>Vencimientos, próximos pagos y estado de cada gasto hasta que queda saldado.</span></div>
-        <div class="spec rise"><b>Presupuestos</b><span>Del presupuesto aceptado a la factura, con cantidades pendientes y sin facturar dos veces lo mismo.</span></div>
-        <div class="spec rise"><b>Pedidos y albaranes</b><span>Conversión entre documentos manteniendo qué queda pendiente en cada línea.</span></div>
-        <div class="spec rise"><b>Proyectos</b><span>Rentabilidad real por proyecto, devengada y de caja, no solo facturación.</span></div>
-        <div class="spec rise"><b>Tesorería</b><span>Saldo del periodo con cobros previstos y pagos previstos sobre la misma línea de tiempo.</span></div>
-        <div class="spec rise"><b>Recurrentes</b><span>Plantillas de facturación periódica y control de qué periodos ya se han emitido.</span></div>
-        <div class="spec rise"><b>Radar</b><span>Detección de anomalías explicables: gastos nuevos, desaparecidos, importes fuera de rango, concentración.</span></div>
-        <div class="spec rise"><b>Documentos</b><span>Subida y descarga mediadas por la aplicación, con registro de cada acceso.</span></div>
-        <div class="spec rise"><b>Consulta</b><span>Preguntas en lenguaje natural sobre los datos, respondidas citando de dónde sale cada cifra.</span></div>
-        <div class="spec rise"><b>Búsqueda</b><span>Un solo buscador sobre facturas, gastos, clientes, proveedores, presupuestos y proyectos.</span></div>
-        <div class="spec rise"><b>Actividad</b><span>Historial de lo que ha pasado en cada factura y cada gasto, con quién y cuándo.</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!--estado:conc-bloque-->
-  <section class="section-air edge-top conc" id="conciliacion" data-amb="cian" data-conc-estado="planificada" aria-labelledby="conc-t">
-    <div class="container">
-      <div class="conc-grid">
-        <div class="conc-intro rise">
-          <span class="eyebrow">La siguiente pieza</span>
-          <p class="vf-sello" data-conc="1"><i aria-hidden="true"></i><span>Conciliación bancaria · Próximamente</span></p>
-          <h2 class="h-title" id="conc-t">El extracto del banco, cruzado con lo que ya tienes.</h2>
-          <p class="lead">Hoy, saber qué ha entrado de verdad en el banco obliga a repasar el extracto línea a línea contra las facturas. La conciliación hará ese cruce dentro de D-Code Finance, con los clientes, las facturas y los gastos que ya tiene, y dejará a la vista solo lo que no cuadre.</p>
-          <ul class="conc-l">
-            <li>Subirás el extracto del banco como fichero.</li>
-            <li>Cada cobro se cruzará con su factura, y cada cargo con su gasto.</li>
-            <li>Lo que no cuadre se quedará señalado para que lo mires, en vez de asignarse a ojo.</li>
-            <li>Y Pregunta a Finanzas podrá decirte qué movimientos siguen sin identificar.</li>
-          </ul>
-          <p class="conc-nota">Todavía no está en el sistema: es la siguiente pieza de D-Code Finance. Cuando cambie de estado, esta página lo dirá, y los planes también.</p>
-        </div>
-        <figure class="conc-fig rise">
-          <p class="conc-fig-t"><span>Extracto · septiembre</span><span>3 cuadran · 2 para revisar</span></p>
-          <ul class="conc-movs">
-              <li class="conc-mov es-cuadra"><span class="conc-mov-f">02/09</span><span class="conc-mov-c">Transferencia · Vandria Logística</span><b class="conc-mov-i">+2.420,00 €</b><span class="conc-mov-x">→ F-2026-0131</span><span class="conc-mov-e">Cuadra</span></li>
-              <li class="conc-mov es-cuadra"><span class="conc-mov-f">04/09</span><span class="conc-mov-c">Recibo · Nubalia Cloud</span><b class="conc-mov-i">−186,34 €</b><span class="conc-mov-x">→ Gasto G-0412</span><span class="conc-mov-e">Cuadra</span></li>
-              <li class="conc-mov es-cuadra"><span class="conc-mov-f">09/09</span><span class="conc-mov-c">Transferencia · Estudio Orbe</span><b class="conc-mov-i">+1.210,00 €</b><span class="conc-mov-x">→ F-2026-0137</span><span class="conc-mov-e">Cuadra</span></li>
-              <li class="conc-mov es-suelto"><span class="conc-mov-f">12/09</span><span class="conc-mov-c">Cargo tarjeta · TPV 88213</span><b class="conc-mov-i">−64,90 €</b><span class="conc-mov-x">Sin identificar</span><span class="conc-mov-e">Para revisar</span></li>
-              <li class="conc-mov es-suelto"><span class="conc-mov-f">15/09</span><span class="conc-mov-c">Transferencia sin concepto</span><b class="conc-mov-i">+300,00 €</b><span class="conc-mov-x">Sin identificar</span><span class="conc-mov-e">Para revisar</span></li>
-          </ul>
-          <figcaption>Así funcionará · ilustración con datos ficticios.</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-  <!--/estado:conc-bloque-->
-
-  <!-- ══════════ LOS TRES PLANES ══════════
-       Plegados a propósito: tres listas abiertas son tres metros de página
-       que nadie compara. <details> es un desplegable de verdad —sin
-       JavaScript, accesible con teclado y encontrable por el buscador del
-       navegador aunque esté cerrado—.
-
-       Cada «Ficha técnica» está comprobada contra el repositorio del
-       producto. Lo que no existe, no está. Los precios tampoco: dependen
-       del tamaño de la operación y se cierran por escrito. -->
-  <section class="section-air edge-top" id="planes" data-amb="violeta">
-    <div class="container">
-      <div class="head rise">
-        <span class="eyebrow">Tres formas de tenerlo</span>
-        <h2 class="h-title">El mismo sistema. Cambia cu&#225;nto trabaja por ti.</h2>
-        <p class="lead"><b>Te enviamos un formulario.</b> Lo completas y, una vez validado, tu sistema queda en marcha en 1 d&#237;a. En Finance a medida, primero dise&#241;amos contigo la soluci&#243;n; cuando la apruebas, hacemos la implantaci&#243;n.</p>
-      </div>
-
-      <p class="precio-ref rise"><a href="/precios#g-finance">Ver los tres planes y su precio &#8594;</a></p>
-
-      <div class="planes">
-
-        <details class="plan rise">
-          <summary>
-            <span class="plan-n">01</span>
-            <span class="plan-head">
-<b class="plan-t">Finance</b>
-<span class="plan-d">El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar.</span>
-</span>
-            <ul class="plan-quita">
-              <li>Dejas de preguntar en qu&#233; estado est&#225; cada factura: lo dice la pantalla.</li>
-              <li>Dejas de descubrir un impagado dos meses tarde.</li>
-              <li>Dejas de armar los libros del IVA a mano cada trimestre.</li>
-            </ul>
-            <span class="plan-precio-link">Ver precio en Precios</span>
-<p class="plan-gente">hasta 3 personas</p>
-<span class="plan-mas" aria-hidden="true">Ver qu&#233; incluye</span>
-          </summary>
-          <p class="plan-precio-ir"><a href="/precios#g-finance">El precio, en Precios <span aria-hidden="true">&#8594;</span></a></p>
-          <div class="plan-body">
-            <ul class="plan-l">
-              <li>El d&#237;a a d&#237;a: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos.</li>
-              <li>El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos.</li>
-              <li>Tesorer&#237;a semana a semana y a 30, 60 y 90 d&#237;as, con escenario base o prudente.</li>
-              <li>Radar: siete reglas con su umbral escrito, para que nada se descubra tarde.</li>
-              <li>Tus series de factura, tus impuestos y tus formas de pago.</li>
-              <li>Libros de IVA en CSV, emitidas y recibidas, para tu gestor&#237;a.</li>
-              <li>En marcha en 1 d&#237;a, una vez validado el formulario, con tus datos anteriores dentro. No se empieza vac&#237;o.</li>
-              <!--estado:conc-plan-finance--><!--/estado:conc-plan-finance-->
-            </ul>
-<div class="plan-tec">
-              <span class="plan-tec-t">Ficha t&#233;cnica</span>
-              <dl>
-                <dt>Registro fiscal</dt><dd><!--estado:vf-ficha--><span class="estado-chip" data-vf="1">Preparado para VERI*FACTU</span> Registro de facturación encadenado e inalterable desde la emisión: cada factura queda enlazada a la anterior con su huella, y una pantalla comprueba que la cadena está entera. La remisión a la AEAT es el siguiente paso. <a href="#verifactu">En qué punto está</a><!--/estado:vf-ficha--></dd>
-                <dt>Permisos</dt><dd>Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo <i>y</i> por acci&#243;n.</dd>
-                <dt>Aislamiento</dt><dd>Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n.</dd>
-                <dt>Rastro</dt><dd>Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde la propia factura o el propio gasto.</dd>
-                <dt>Acceso</dt><dd>No hay alta p&#250;blica: la cuenta la creamos nosotros y se invita a cada persona. Una cuenta suspendida deja de entrar en el momento.</dd>
-                <dt>Base de datos</dt><dd>PostgreSQL. Los datos son tuyos y salen en CSV cuando quieras.</dd>
-              </dl>
-            </div>
-            
-            <p class="plan-no"><b>No incluye</b> campos ni flujos propios de tu negocio, ni conexiones con otras herramientas.</p>
-            <div class="plan-cta">
-              <a class="btn btn-primary" href="/contacto?plan=finance">Hablar de este plan</a>
-              <span class="plan-cta-n">Media hora, sin compromiso. Te decimos si te encaja o si no.</span>
-            </div>
-          </div>
-        </details>
-
-        <details class="plan plan--destacado rise">
-          <summary>
-            <span class="plan-n">02</span>
-            <span class="plan-head">
-<b class="plan-t">Finance con inteligencia</b>
-<span class="plan-d">Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus n&#250;meros.</span>
-</span>
-            <ul class="plan-quita">
-              <li>Dejas de teclear facturas de proveedor: se las sueltas y entran solas.</li>
-              <li>Dejas de abrir tres pantallas para responder &#171;&#191;cu&#225;nto nos deben?&#187;.</li>
-              <li>Dejas de perder el ticket que alguien fotografi&#243; y no envi&#243; nunca.</li>
-            </ul>
-            <span class="plan-precio-link">Ver precio en Precios</span>
-<p class="plan-gente">hasta 10 personas</p>
-<span class="plan-mas" aria-hidden="true">Ver qu&#233; incluye</span>
-          </summary>
-          <p class="plan-precio-ir"><a href="/precios#g-finance">El precio, en Precios <span aria-hidden="true">&#8594;</span></a></p>
-          <div class="plan-body">
-            <ul class="plan-l">
-              <li><b>Le sueltas un documento y lo coloca.</b> Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas dadas de alta, cada una con su n&#250;mero, su base, su cuota y su proveedor &#8212; en borrador, listas para revisar, no en una bandeja para teclear.</li>
-              <li><b>Cada campo trae de d&#243;nde sale.</b> De qu&#233; p&#225;gina del PDF y de qu&#233; l&#237;nea, para que se pueda revisar sin abrir el documento.</li>
-              <li>Da igual la forma: PDF, Excel, CSV o una foto hecha con el m&#243;vil. Una factura suelta acaba en Gastos y un albar&#225;n, en Albaranes.</li>
-              <li><b>Pregunta a Finanzas:</b> le escribes en tu idioma &#8212;qui&#233;n me debe, qu&#233; est&#225; fuera de plazo, qu&#233; deber&#237;a mirar hoy&#8212; y contesta con la cifra y con la factura concreta de la que sale.</li>
-              <li>Lo que no sabe, lo dice. No hay respuesta inventada: si el dato no est&#225;, contesta que no est&#225;.</li>
-              <li>Todo lo del plan anterior, con sus veinticinco pantallas.</li>
-              <!--estado:conc-plan-finance-ia--><li><b>Conciliación bancaria</b> <span class="estado-chip" data-conc="1">Próximamente</span> Cruzará el extracto del banco con tus facturas y tus gastos, y dejará señalado lo que no cuadre. <a href="#conciliacion">Cómo funcionará</a></li><!--/estado:conc-plan-finance-ia-->
-            </ul>
-<div class="plan-tec">
-              <span class="plan-tec-t">Ficha t&#233;cnica</span>
-              <dl>
-                <dt>Qu&#233; formatos lee</dt><dd>PDF con texto, PDF escaneado, JPG, PNG, WEBP, CSV y XLSX.</dd>
-                <dt>C&#243;mo lo coloca</dt><dd>Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja en la pantalla que le toca, en borrador. T&#250; confirmas. Hasta que no confirmas no se guarda nada.</dd>
-                <dt>Lo que hace con lo dudoso</dt><dd>Lo que no consigue leer no se lo inventa: lo marca y lo deja aparte para que lo mires.</dd>
-                <dt>Trazabilidad</dt><dd>Cada respuesta cita sus fuentes y las consultas con las que se ha calculado. No hay ninguna cifra sin origen.</dd>
-              </dl>
-            </div>
-            
-            <p class="plan-no"><b>No incluye</b> campos ni flujos propios de tu negocio. Las conexiones van por la API, y montarlas se presupuesta aparte.</p>
-            <div class="plan-cta">
-              <a class="btn btn-primary" href="/contacto?plan=finance-ia">Hablar de este plan</a>
-              <span class="plan-cta-n">Media hora, sin compromiso. Te decimos si te encaja o si no.</span>
-            </div>
-          </div>
-        </details>
-
-        <details class="plan rise">
-          <summary>
-            <span class="plan-n">03</span>
-            <span class="plan-head">
-<b class="plan-t">Finance a medida</b>
-<span class="plan-d">El sistema, la inteligencia y adem&#225;s vuestros campos, vuestros flujos y vuestras conexiones.</span>
-</span>
-            <ul class="plan-quita">
-              <li>Dejas de adaptar c&#243;mo trabaj&#225;is a lo que permite un programa.</li>
-              <li>Dejas de copiar datos de una herramienta a otra.</li>
-              <li>Dejas de esperar a que alguien saque el informe que pediste.</li>
-            </ul>
-            <span class="plan-precio-link">Ver precio en Precios</span>
-<p class="plan-gente">sin l&#237;mite de personas</p>
-<span class="plan-mas" aria-hidden="true">Ver qu&#233; incluye</span>
-          </summary>
-          <p class="plan-precio-ir"><a href="/precios#g-finance">El precio, en Precios <span aria-hidden="true">&#8594;</span></a></p>
-          <div class="plan-body">
-            <ul class="plan-l">
-              <li><b>Primero, el dise&#241;o.</b> Dise&#241;amos contigo la soluci&#243;n y, cuando la apruebas, hacemos la implantaci&#243;n.</li>
-              <li>Campos, estados y flujos propios de vuestra operaci&#243;n.</li>
-              <li>Conexiones con las herramientas que ya us&#225;is, construidas sobre la API del sistema.</li>
-              <li>Paneles e informes hechos para vuestras decisiones, no gen&#233;ricos.</li>
-              <li>Evoluci&#243;n: cuando la empresa cambia, el sistema cambia con ella.</li>
-              <li>Media hora al mes para mirar juntos lo que el sistema registra y ajustar.</li>
-              <li>Todo lo de los dos planes anteriores.</li>
-              <!--estado:conc-plan-finance-medida--><!--/estado:conc-plan-finance-medida-->
-            </ul>
-<div class="plan-tec">
-              <span class="plan-tec-t">Ficha t&#233;cnica</span>
-              <dl>
-                <dt>API</dt><dd>REST en <code>/api/v1</code>, con clave por empresa en la cabecera <code>Authorization</code>. Facturas, gastos, documentos, presupuestos, pedidos, objetivos y auditor&#237;a. Pasa por los mismos permisos y el mismo aislamiento que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol.</dd>
-                
-                
-              </dl>
-            </div>
-          
-            <p class="plan-no"><b>No incluye</b> nada de lo anterior: esto es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pid&#225;is.</p>
-            <div class="plan-cta">
-              <a class="btn btn-primary" href="/contacto?plan=finance-medida">Hablar de este plan</a>
-              <span class="plan-cta-n">Media hora, sin compromiso. Te decimos si te encaja o si no.</span>
-            </div>
-          </div>
-        </details>
-
-      </div>
-      <!--estado:comparativa-->
-      <p class="cmp-movil">La comparativa fila a fila es una tabla grande: se ve en un ordenador o una tableta. Arriba tienes lo esencial de cada plan.</p>
-      <div class="cmp rise">
-        <p class="cmp-t">Los tres planes, fila a fila</p>
-        <div class="cmp-scroll" tabindex="0" role="region" aria-label="Comparativa de los tres planes">
-          <table class="cmp-tabla">
-            <colgroup><col class="cmp-c0"><col><col class="es-destacado"><col></colgroup>
-            <thead><tr><th scope="col"><span class="sr-only">Qué incluye</span></th><th scope="col">Finance</th><th scope="col" class="es-destacado">Finance con inteligencia</th><th scope="col">Finance a medida</th></tr></thead>
-            <tbody>
-            <tr><th scope="row">Facturas, cobros, gastos y pagos</th><td data-p="Finance"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance con inteligencia"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Presupuestos, pedidos, albaranes y proyectos</th><td data-p="Finance"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance con inteligencia"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Tesorería a 30, 60 y 90 días y radar de avisos</th><td data-p="Finance"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance con inteligencia"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Libros de IVA en CSV para tu gestoría</th><td data-p="Finance"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance con inteligencia"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Registro fiscal</th><td data-p="Los tres planes" colspan="3" class="c3 cmp-estado"><span class="estado-chip" data-vf="1">Preparado para VERI*FACTU</span> <a href="#verifactu">Qué significa</a></td></tr>
-            <tr><th scope="row">Lectura de documentos: PDF, foto, Excel o CSV</th><td data-p="Finance"><span class="cmp-no" role="img" aria-label="No incluido">—</span></td><td data-p="Finance con inteligencia"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Pregunta a Finanzas</th><td data-p="Finance"><span class="cmp-no" role="img" aria-label="No incluido">—</span></td><td data-p="Finance con inteligencia"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Conciliación bancaria</th><td data-p="Finance"><span class="cmp-no" role="img" aria-label="No incluido">—</span></td><td data-p="Finance con inteligencia · Finance a medida" colspan="2" class="c2 cmp-estado"><span class="estado-chip" data-conc="1">Próximamente</span></td></tr>
-            <tr><th scope="row">Campos, flujos y paneles propios</th><td data-p="Finance"><span class="cmp-no" role="img" aria-label="No incluido">—</span></td><td data-p="Finance con inteligencia"><span class="cmp-no" role="img" aria-label="No incluido">—</span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Conexiones con tus herramientas</th><td data-p="Finance"><span class="cmp-no" role="img" aria-label="No incluido">—</span></td><td data-p="Finance con inteligencia"><span class="cmp-txt">Se presupuestan aparte</span></td><td data-p="Finance a medida"><span class="cmp-si" role="img" aria-label="Incluido"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span></td></tr>
-            <tr><th scope="row">Personas</th><td data-p="Finance"><span class="cmp-txt">Hasta 3</span></td><td data-p="Finance con inteligencia"><span class="cmp-txt">Hasta 10</span></td><td data-p="Finance a medida"><span class="cmp-txt">Sin límite</span></td></tr>
-            <tr><th scope="row">Puesta en marcha</th><td data-p="Finance · Finance con inteligencia" colspan="2" class="c2"><span class="cmp-txt">En 1 día, una vez validado el formulario</span></td><td data-p="Finance a medida"><span class="cmp-txt">Primero el diseño, que apruebas; después la implantación</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!--/estado:comparativa-->
-      <p class="planes-pie">IVA aparte y sin permanencia. La implantaci&#243;n se paga una vez: completas el formulario, lo validamos y en 1 d&#237;a tienes el sistema funcionando, con tus clientes, tus facturas y tus gastos anteriores dentro y tus series y tus impuestos configurados. En Finance a medida, antes va el dise&#241;o que apruebas.</p>
-    </div>
-  </section>
-
-
-  <!-- ══════════ CON QU&#201; SE CONECTA ══════════
-       Antes esto era un &#171;lo que no vamos a prometerte&#187;: cierto, y le&#237;do por un
-       cliente, una pega antes de empezar. La misma verdad contada al derecho
-       es un apartado que dice por d&#243;nde entra y sale el dato, y que distingue
-       lo que est&#225; hecho de lo que se estudia. -->
-  <section class="section-air edge-top" id="conexiones" data-amb="cian">
-    <div class="container">
-      <div class="head rise">
-        <span class="eyebrow">Con qu&#233; se conecta</span>
-        <h2 class="h-title">Todo entra y sale por el mismo sitio.</h2>
-        <p class="lead">Una API REST en <code>/api/v1</code>, con una clave por empresa y los mismos permisos que la aplicaci&#243;n: una clave no puede hacer nada que no pueda hacer su rol. Por ah&#237; pasa cualquier conexi&#243;n, y por eso no hace falta un conector distinto para cada cosa.</p>
-      </div>
-      <div class="conexiones" data-stagger>
-        <div class="conexion rise"><b>Tu programa de facturaci&#243;n</b><span>Holded, A3, Sage, Contasol o el que uses. Se traen clientes, facturas y gastos para empezar, y despu&#233;s se decide si conviven o si uno sustituye al otro.</span><i class="conexion-e es-lista">Migraci&#243;n incluida</i></div>
-        <div class="conexion rise"><b>Tu hoja de c&#225;lculo</b><span>Esa que no piensas abandonar. Entra por importaci&#243;n y sale por exportaci&#243;n, en CSV, sin pedirte que cambies de costumbre.</span><i class="conexion-e es-lista">Lista</i></div>
-        <div class="conexion rise"><b>Tu gestor&#237;a</b><span>Libros de IVA emitidas y recibidas en CSV, cuando toque, sin que nadie tenga que armar nada a mano.</span><i class="conexion-e es-lista">Lista</i></div>
-        <!--estado:conc-conexion--><div class="conexion rise"><b>Tu banco</b><span>El extracto entrará como fichero y se cruzará con tus facturas y tus gastos. Lo que no cuadre se marcará en vez de asignarse a ojo.</span><i class="conexion-e es-estudio">Próximamente</i></div><!--/estado:conc-conexion-->
-        <div class="conexion rise"><b>Make, Zapier, n8n</b><span>Hablan justo el lenguaje de la API, as&#237; que lo que ya tengas montado sigue funcionando y puede leer y escribir aqu&#237;.</span><i class="conexion-e es-lista">V&#237;a API</i></div>
-        <div class="conexion rise"><b>Lo que no est&#233; en esta lista</b><span>Se mira contra lo que la otra herramienta deja hacer de verdad. Si se puede, se dice cu&#225;nto cuesta; si no se puede, se dice antes de empezar y no despu&#233;s.</span><i class="conexion-e es-estudio">Caso por caso</i></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-band" data-amb="verde"> <div class="container"> <span class="eyebrow">Pruébalo</span> <h2 class="h-title" style="margin-top:16px;">Recórrelo entero, sin que nadie te lo enseñe.</h2> <p class="lead" style="margin:16px auto 0;">Entorno de demostración con datos inventados. Sin registro y sin conexión a ningún sistema real.</p> <div class="hero4-ctas"> <a href="#demo" class="btn btn-primary">Subir a la demo</a> <a href="/contacto" class="btn btn-ghost">Reservar una llamada</a> </div> </div> </section>
-</main> <footer> <div class="container"> <div class="footer-top"> <div class="footer-brand"> <a href="/" class="footer-logo"> <svg class="logo-mark" width="30" height="26" viewBox="0 0 120 100" role="img" aria-label="D-Code Partners" focusable="false"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="#5b8cff"/></svg> <span>D-Code Partners</span> </a> <p>Analizamos cómo trabaja tu empresa y construimos el sistema que necesita. Madrid, España.</p> </div> <div class="footer-col"> <h2>Qué hacemos</h2> <ul> <li><a href="/que-hacemos">Todo lo que hacemos</a></li> <li><a href="/departamentos/marketing">Marketing</a></li> <li><a href="/departamentos/comercial">Comercial</a></li> <li><a href="/departamentos/clientes">Clientes</a></li> <li><a href="/departamentos/produccion">Operaciones</a></li> <li><a href="/departamentos/finanzas">Finanzas</a></li> <li><a href="/departamentos/soporte">Soporte</a></li> <li><a href="/departamentos/administracion">Administración</a></li> <li><a href="/departamentos/direccion">Dirección</a></li> </ul> </div> <div class="footer-col"> <h2>Empresa</h2> <ul> <li><a href="/metodo">Método D-Code</a></li> <li><a href="/garantias">Garantías y proceso</a></li><li><a href="/conocenos">Conócenos</a></li><li><a href="/casos-exito">Casos internos</a></li> <li><a href="/cambios-en-proceso">Cambios en proceso</a></li> <li><a href="/sistema-financiero">D-Code Finance</a></li> <li><a href="/blog">Blog</a></li> </ul> </div> <div class="footer-col"> <h2>Recursos</h2> <ul> <li><a href="/precios">Precios</a></li> <li><a href="/faq">Preguntas frecuentes</a></li> <li><a href="/contacto">Contacto</a></li> </ul> </div> <div class="footer-col"> <h2>Legal</h2> <ul> <li><a href="/privacidad">Política de Privacidad</a></li> <li><a href="/aviso-legal">Aviso Legal</a></li> <li><a href="/cookies">Política de Cookies</a></li> <li><a href="/seguridad">Seguridad de la Información</a></li> <li><a href="/condiciones-contratacion">Condiciones de Contratación</a></li> <li><a href="/acuerdo-encargado-tratamiento">Acuerdo de Encargado de Tratamiento</a></li> </ul> </div> </div> <div class="footer-bottom"> <span>© 2026 D-Code Partners. Todos los derechos reservados.</span> <span>Confidencialidad y profesionalismo en cada proyecto.</span> </div> </div>
-</footer> <div class="chat-widget" id="chat-widget"> <div class="window chat-window" role="dialog" aria-label="Asistente D-Code Partners" aria-hidden="true"> <div class="window-bar"> <span class="window-dots"><span></span><span></span><span></span></span> <span class="window-title">asistente_dcode.chat</span> </div> <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"> <div class="chat-msg bot">Esto es D-Code Finance. Puedo contarte qué hace, qué no hace todavía y cuánto cuesta.</div> </div> <div class="chat-quick-replies" id="chat-quick-replies"> <button type="button" class="chat-quick-question">¿Qué incluye Finance?</button> <button type="button" class="chat-quick-question">¿Y lo de VERI*FACTU?</button> <button type="button" class="chat-quick-question">¿Cuánto cuesta?</button> </div> <form class="chat-input-row" id="chat-form"> <label for="chat-input" class="sr-only">Escribe tu mensaje</label> <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." autocomplete="off" maxlength="600"> <button type="submit" aria-label="Enviar mensaje"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button> </form> </div> <button class="chat-bubble" id="chat-bubble" aria-expanded="false" aria-controls="chat-widget" aria-label="Abrir asistente D-Code Partners"> <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg> <span class="cb-dot"></span> </button>
-</div> <script src="/assets/js/main.js?v=4c4a98979c" defer></script>
-<script type="dcp/cerca" data-src="/assets/js/main-b.js?v=985954cece" data-cuando="#contact-form"></script> <script src="/assets/js/dcp5.js?v=2fb9c80dc7" defer></script><script src="/assets/js/dcp7.js?v=ab7a9e2a35" defer></script><link rel="preload" as="script" href="/assets/js/dcp8.js?v=59c31344e4" media="(pointer:fine)"><script type="dcp/raton" data-src="/assets/js/dcp8.js?v=59c31344e4"></script><script type="dcp/cerca" data-src="/assets/js/dcp9.js?v=dca114e356" data-cuando="[data-comp]"></script> <script src="/assets/js/tema.js?v=7a708b174d" defer></script>
-<script type="module" src="/assets/js/escenas/app.js?v=b5d113bf55"></script>
 </body>
 </html>

@@ -1,0 +1,34 @@
+/* PRECIOS · filas, no tarjetas: nombre, para quién, qué, precio y el desplegable */
+.indice ul { list-style: none; padding: 0; margin: var(--e-5) 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.indice a { display: inline-flex; min-height: 38px; align-items: center; padding: 0 14px; border: 1px solid var(--linea-2); border-radius: 999px; text-decoration: none; font-size: .9rem; color: var(--tinta-2); transition: border-color var(--t-rapida) ease, color var(--t-rapida) ease; }
+.indice a:hover { color: var(--tinta); border-color: var(--tinta); }
+.cat { padding-block: var(--ritmo-normal); border-bottom: 1px solid var(--linea); scroll-margin-top: 80px; }
+.cat-in { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--e-7) var(--col-gap); align-items: start; }
+.cat-cab { display: grid; gap: var(--e-4); position: sticky; top: 104px; }
+.cat-cab .h2 { font-size: clamp(1.8rem, 1.2rem + 1.8vw, 3rem); }
+.cat-cab .lead { font-size: 1.02rem; }
+.prods > li { display: block; }
+.prods { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--linea-2); }
+.prod { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px var(--col-gap); padding: 24px 0; border-bottom: 1px solid var(--linea-2); }
+.prod-cab { grid-column: 1; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.prod-estado { border: 1px solid var(--linea-2); border-radius: 999px; padding: 2px 8px; }
+.prod-estado[data-estado="proximamente"] { opacity: .6; }
+.prod-para { grid-column: 1; color: var(--tinta-3); font-size: .9rem; }
+.prod-que { grid-column: 1; color: var(--tinta-2); max-width: 52ch; }
+.prod-precio { grid-column: 2; grid-row: 1 / span 3; text-align: right; display: grid; gap: 2px; align-content: start; }
+.prod-precio .precio-v { font-size: 1.15rem; }
+.prod-precio .precio-d { display: block; }
+.prod > .peq { grid-column: 1; }
+.prod-mas { grid-column: 1 / -1; }
+.prod-mas summary { cursor: pointer; color: var(--tinta-2); font-size: .92rem; width: max-content; }
+.prod-mas summary:hover { color: var(--tinta); }
+.prod-mas[open] { display: grid; gap: 10px; }
+.prod-mas ul { padding-left: 1.1em; display: grid; gap: 6px; color: var(--tinta-2); margin: 6px 0 0; font-size: .94rem; }
+.prod-no { opacity: .75; }
+.prod-acc { grid-column: 1 / -1; }
+.prod-acc .enlace { font-size: .92rem; }
+.pasos-compra { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--col-gap); border-top: 1px solid var(--linea-2); }
+.pasos-compra li { padding-top: 16px; display: grid; gap: 6px; font-size: 1.05rem; }
+.pasos-compra .dato { color: var(--tinta-3); }
+@media (max-width: 900px) { .cat-in { grid-template-columns: 1fr; } .cat-cab { position: static; } .pasos-compra { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
+@media (max-width: 560px) { .prod { grid-template-columns: 1fr; } .prod-precio { grid-column: 1; grid-row: auto; text-align: left; } }

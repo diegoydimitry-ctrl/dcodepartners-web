@@ -76,6 +76,7 @@ for (const f of paginas(RAIZ)) {
     ['finance', 'finance-1', ['precio_mes', 'precio'], ['es', 'detalle_es']],
     ['medida', 'medida-1', ['precio'], ['es']],
     ['agentes', 'agente-1', ['precio'], ['es']],
+    ['os', 'os', ['precio'], ['es']],
   ];
   for (const [clave, id, campos] of pares) {
     const prod = dePrecio(id);

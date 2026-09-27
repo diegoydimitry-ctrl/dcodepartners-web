@@ -1,0 +1,273 @@
+#!/usr/bin/env node
+/* ==========================================================================
+   MIGRACIÓN DE PÁGINAS INTERIORES AL SISTEMA NUEVO
+   --------------------------------------------------------------------------
+   Toma cada página tal como estaba en producción (commit de partida de la
+   rama) y conserva TODO su contenido —títulos, textos, listas, tablas,
+   preguntas, enlaces, datos estructurados, meta— pero lo vuelve a componer
+   con el sistema blanco y negro: sin las once hojas de estilo antiguas, sin
+   decoración, con la tipografía y el ritmo nuevos.
+   Nada de texto se inventa ni se reescribe aquí.
+   Uso: node scripts/v2/migrar.mjs [ruta.html ...]   (sin argumentos: todas)
+   ========================================================================== */
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
+import { parse } from "node-html-parser";
+import { pagina, FLECHA } from "./plantilla.mjs";
+
+const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const BASE = "8ff5f5b";
+const viejo = (f) => execSync(`git -C "${RAIZ}" show ${BASE}:${f}`, { encoding: "utf8", maxBuffer: 1 << 26 });
+
+export const MIGRADAS = [
+  "metodo.html", "garantias.html", "seguridad.html", "conocenos.html", "casos-exito.html", "cambios-en-proceso.html", "faq.html",
+  "privacidad.html", "aviso-legal.html", "cookies.html", "condiciones-contratacion.html", "acuerdo-encargado-tratamiento.html",
+  "blog/index.html", "blog/automatizacion-vs-agentes-ia.html", "blog/procesos-que-puedes-automatizar-ya.html", "blog/que-es-la-automatizacion-con-ia.html",
+  "departamentos/administracion.html", "departamentos/clientes.html", "departamentos/comercial.html", "departamentos/direccion.html",
+  "departamentos/finanzas.html", "departamentos/marketing.html", "departamentos/produccion.html", "departamentos/soporte.html",
+  "que-hacemos.html", "servicios/agentes-de-ia.html", "servicios/automatizaciones.html", "servicios/integraciones.html", "servicios/paginas-web.html", "servicios/sistemas-a-medida.html",
+  "sistema-financiero.html", "404.html",
+];
+
+/* Títulos que describen la página real (lo que hace cada una), no «Sección — Marca». */
+const TITULOS = {
+  "departamentos/administracion.html": ["Automatizar la administración de tu empresa: documentos, plazos y avisos | D-Code", "Automating company administration: documents, deadlines and alerts | D-Code"],
+  "departamentos/clientes.html": ["Atención al cliente automatizada con IA y seguimiento | D-Code Partners", "Automated customer care with AI and follow-up | D-Code Partners"],
+  "departamentos/comercial.html": ["CRM y seguimiento comercial automatizado para empresas | D-Code", "CRM and automated sales follow-up for companies | D-Code"],
+  "departamentos/direccion.html": ["Panel de dirección con datos reales de tu empresa | D-Code Partners", "Management dashboard with your company's real data | D-Code"],
+  "departamentos/finanzas.html": ["Automatizar facturación, cobros y gastos en tu empresa | D-Code", "Automating invoicing, collections and expenses | D-Code Partners"],
+  "departamentos/marketing.html": ["Captación de leads automatizada desde tu web y anuncios | D-Code", "Automated lead capture from your website and ads | D-Code"],
+  "departamentos/produccion.html": ["Automatizar operaciones: trabajos, partes y plazos | D-Code", "Automating operations: jobs, work orders and deadlines | D-Code"],
+  "departamentos/soporte.html": ["Soporte automatizado con IA, también fuera de horario | D-Code", "Automated AI support, also out of hours | D-Code Partners"],
+  "servicios/agentes-de-ia.html": ["Agentes de IA y chatbots con los datos de tu negocio | D-Code", "AI agents and chatbots on your business data | D-Code Partners"],
+  "servicios/automatizaciones.html": ["Automatización de procesos para empresas | D-Code Partners", "Business process automation for companies | D-Code Partners"],
+  "servicios/integraciones.html": ["Integraciones entre tus herramientas: CRM, ERP, correo | D-Code", "Integrations between your tools: CRM, ERP, email | D-Code"],
+  "servicios/paginas-web.html": ["Páginas web conectadas con tus sistemas | D-Code Partners", "Websites connected to your systems | D-Code Partners"],
+  "servicios/sistemas-a-medida.html": ["Software y sistemas a medida para empresas | D-Code Partners", "Custom software and systems for companies | D-Code Partners"],
+  "que-hacemos.html": ["Qué hacemos: automatización, IA, integraciones y software | D-Code", "What we build: automation, AI, integrations and software | D-Code"],
+  "sistema-financiero.html": ["D-Code Finance | Software de facturación y cobros con IA", "D-Code Finance | Invoicing and collections software with AI"],
+  "cambios-en-proceso.html": ["Qué estamos construyendo ahora | D-Code Partners", "What we are building right now | D-Code Partners"],
+  "casos-exito.html": ["Casos internos: los sistemas que usamos en D-Code Partners", "In-house cases: the systems we use at D-Code Partners"],
+};
+const LEGAL = /privacidad|aviso-legal|cookies|condiciones|acuerdo-encargado|seguridad/;
+
+/* ---------------------------------------------------------------- limpieza */
+const INLINE = new Set(["a", "b", "strong", "em", "i", "code", "br", "small", "abbr", "time", "sup", "sub", "kbd", "mark", "u", "s"]);
+const esc = (s) => s.replace(/&(?![a-z#0-9]+;)/gi, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function inline(n) {
+  if (n.nodeType === 3) return n.rawText;
+  if (n.nodeType !== 1) return "";
+  const t = n.rawTagName?.toLowerCase();
+  if (!t || ["svg", "script", "style", "button", "noscript", "template", "canvas", "img", "picture", "video", "iframe", "input", "select", "textarea"].includes(t)) return "";
+  if (n.getAttribute?.("aria-hidden") === "true") return "";
+  const dentro = n.childNodes.map(inline).join("");
+  if (t === "br") return "<br>";
+  if (t === "span" && n.getAttribute("data-precio") !== undefined) {
+    const k = n.getAttribute("data-precio");
+    return `<span data-precio="${k}"${n.getAttribute("data-precio-detalle") !== undefined ? " data-precio-detalle" : ""}>${dentro}</span>`;
+  }
+  if (!INLINE.has(t)) return dentro;
+  if (t === "a") {
+    const href = reescribir(n.getAttribute("href") || "#");
+    const ext = /^https?:/.test(href) && !href.includes("dcodepartners.com");
+    return `<a href="${href.replace(/"/g, "&quot;")}"${ext ? ' rel="noopener" target="_blank"' : ""}>${dentro}</a>`;
+  }
+  if (t === "i" || t === "em") return `<em>${dentro}</em>`;
+  if (t === "b" || t === "strong") return `<strong>${dentro}</strong>`;
+  return `<${t}>${dentro}</${t}>`;
+}
+/* Anclas de la portada anterior que ya no existen: se mandan a su sitio nuevo. */
+export const reescribir = (h) => h.replace(/^(\/en)?\/#sistemas(-[a-z]+)?$/, (m, en) => (en || "") + "/#tocalo").replace(/^(\/en)?\/#diagnostico$/, (m, en) => (en || "") + "/diagnostico").replace(/^(\/en)?\/#(dcode-os|que-hacemos|proceso|confianza|que-puedes-tener|contacto|problema|inicio)$/, (m, en, k) => (en || "") + ({ "dcode-os": "/#tocalo", "que-hacemos": "/que-hacemos", proceso: "/metodo", confianza: "/garantias", "que-puedes-tener": "/precios", contacto: "/contacto", problema: "/", inicio: "/" })[k]);
+const limpio = (n) => inline(n).replace(/\s+/g, " ").trim();
+const texto = (n) => esc((n.text || "").replace(/\s+/g, " ").trim());
+const clases = (n) => (n.getAttribute?.("class") || "").split(/\s+/);
+const tiene = (n, re) => clases(n).some((c) => re.test(c));
+
+/* ------------------------------------------------------ lectura en bloques
+   Recorre el <main> antiguo y produce una lista plana de bloques con tipo. */
+function bloques(main) {
+  const out = [];
+  const hijos = (n) => n.childNodes.filter((c) => c.nodeType === 1 || (c.nodeType === 3 && c.rawText.trim()));
+  function tabla(n) {
+    const filas = n.querySelectorAll("tr").map((tr) => tr.childNodes.filter((c) => c.nodeType === 1 && /t[hd]/i.test(c.rawTagName)).map((c) => ({ th: /th/i.test(c.rawTagName), h: limpio(c) })));
+    return `<div class="tabla"><table>${filas.map((f) => `<tr>${f.map((c) => `<${c.th ? "th" : "td"}>${c.h}</${c.th ? "th" : "td"}>`).join("")}</tr>`).join("")}</table></div>`;
+  }
+  function lista(n, ord) {
+    const lis = n.childNodes.filter((c) => c.nodeType === 1 && c.rawTagName.toLowerCase() === "li");
+    const items = lis.map((li) => {
+      const sub = li.querySelector("ul, ol");
+      const txt = limpio(parse(li.toString().replace(sub ? sub.toString() : "\u0000", "")).firstChild);
+      return `<li>${txt}${sub ? lista(sub, sub.rawTagName.toLowerCase() === "ol") : ""}</li>`;
+    }).filter((x) => x !== "<li></li>");
+    if (!items.length) return "";
+    return `<${ord ? "ol" : "ul"}>${items.join("")}</${ord ? "ol" : "ul"}>`;
+  }
+  function visitar(n, ctx = {}) {
+    if (n.nodeType === 3) { const t = n.rawText.trim(); if (t && ctx.suelto) out.push({ tipo: "p", h: esc(t) }); return; }
+    if (n.nodeType !== 1) return;
+    const t = n.rawTagName.toLowerCase();
+    if (["script", "style", "svg", "noscript", "template", "canvas", "button", "form", "dialog", "iframe", "video"].includes(t)) return;
+    if (n.getAttribute("aria-hidden") === "true" && !/^h[1-4]$/.test(t)) return;
+    if (tiene(n, /^(breadcrumbs?|sr-only|visually-hidden|skip)/) && t !== "h1" && t !== "h2") { if (tiene(n, /breadcrumb/)) out.push({ tipo: "migas", items: n.querySelectorAll("li a, li[aria-current]").map((a) => ({ href: a.getAttribute("href"), t: texto(a) })) }); return; }
+    if (tiene(n, /^(eyebrow|kicker|v6-kicker|ph-kicker|tag|overline)$/)) { const x = limpio(n); if (x) out.push({ tipo: "etiqueta", h: x }); return; }
+    if (tiene(n, /^(badge|trust-badge|ph-prueba-badge)$/)) return;
+    if (/^h[1-4]$/.test(t)) { const x = limpio(n); if (x) out.push({ tipo: t, h: x, id: n.getAttribute("id") }); return; }
+    if (t === "p") { const x = limpio(n); if (x) out.push({ tipo: tiene(n, /lead|intro|sub/) ? "lead" : "p", h: x }); return; }
+    if (t === "ul" || t === "ol") { const x = lista(n, t === "ol"); if (x) out.push({ tipo: "lista", h: x }); return; }
+    if (t === "table") { out.push({ tipo: "html", h: tabla(n) }); return; }
+    if (t === "blockquote") { out.push({ tipo: "cita", h: limpio(n) }); return; }
+    if (t === "dl") { out.push({ tipo: "html", h: `<dl class="dl">${n.childNodes.filter((c) => c.nodeType === 1).map((c) => `<${c.rawTagName.toLowerCase()}>${limpio(c)}</${c.rawTagName.toLowerCase()}>`).join("")}</dl>` }); return; }
+    if (t === "details") {
+      const s = n.querySelector("summary"); const q = s ? limpio(s) : "";
+      const resto = parse(n.innerHTML.replace(s ? s.toString() : "\u0000", ""));
+      const sub = []; const guarda = out.length;
+      hijos(resto).forEach((c) => visitar(c, { suelto: true }));
+      const cuerpo = out.splice(guarda).map(pintar).join("");
+      out.push({ tipo: "pregunta", q, h: cuerpo });
+      return;
+    }
+    if (t === "a" && tiene(n, /^(btn|button|cta)/)) {
+      const x = texto(n); if (!x) return;
+      const ult = out[out.length - 1], b = { href: n.getAttribute("href"), t: x };
+      if (ult && ult.tipo === "botones") ult.lista.push(b); else out.push({ tipo: "botones", lista: [b] });
+      return;
+    }
+    if (t === "a" && !ctx.enTexto) {
+      // una tarjeta-enlace: su título y su texto, como fila enlazada
+      const tit = n.querySelector("h2, h3, h4, strong, b"); const x = texto(n);
+      if (tit && x) { const tt = texto(tit); out.push({ tipo: "enlace", href: n.getAttribute("href"), t: tt, d: x.replace(tt, "").trim() }); return; }
+      if (x) { out.push({ tipo: "enlace", href: n.getAttribute("href"), t: x, d: "" }); return; }
+      return;
+    }
+    if (t === "img") { const src = n.getAttribute("src"); const alt = n.getAttribute("alt"); if (src && alt) out.push({ tipo: "img", src, alt, w: n.getAttribute("width"), h: n.getAttribute("height") }); return; }
+    // acordeón de preguntas: la pregunta y su respuesta, como <details> accesible
+    if (tiene(n, /^(accordion-item|faq-item)$/)) {
+      const q = n.querySelector(".accordion-title, .faq-q, summary, button");
+      const r = n.querySelector(".accordion-panel, .faq-a") || n;
+      const guarda = out.length;
+      if (r.childNodes.some((c) => c.nodeType === 3 && c.rawText.trim())) out.push({ tipo: "p", h: limpio(r) });
+      else hijos(r).forEach((c) => visitar(c, { suelto: true }));
+      const cuerpo = out.splice(guarda).map(pintar).join("");
+      out.push({ tipo: "pregunta", q: q ? texto(q) : "", h: cuerpo, id: n.getAttribute("id") });
+      return;
+    }
+    // un contenedor con texto suelto y solo elementos en línea: es un párrafo
+    const soloLinea = n.childNodes.every((c) => c.nodeType === 3 || (c.nodeType === 1 && (INLINE.has(c.rawTagName.toLowerCase()) || c.rawTagName.toLowerCase() === "span")));
+    if (soloLinea && n.childNodes.some((c) => c.nodeType === 3 && c.rawText.trim())) { const x = limpio(n); if (x) out.push({ tipo: "p", h: x }); return; }
+    // un elemento compuesto por un título corto (b/strong) y su texto: un «punto»
+    const c = hijos(n);
+    const primero = c[0];
+    if (c.length >= 2 && primero?.nodeType === 1 && /^(b|strong)$/i.test(primero.rawTagName) && c.slice(1).every((x) => x.nodeType === 3 || /^(span|p|ul|ol|small|em|i|div)$/i.test(x.rawTagName))) {
+      const titulo = limpio(primero);
+      const resto = c.slice(1).map((x) => (x.nodeType === 3 ? esc(x.rawText.trim()) : /^(ul|ol)$/i.test(x.rawTagName) ? lista(x, /ol/i.test(x.rawTagName)) : limpio(x))).filter(Boolean).join(" ");
+      out.push({ tipo: "punto", t: titulo, h: resto });
+      return;
+    }
+    c.forEach((x) => visitar(x, ctx));
+  }
+  hijos(main).forEach((x) => visitar(x));
+  return out;
+}
+
+function pintar(b) {
+  switch (b.tipo) {
+    case "h2": return `<h2 class="h2"${b.id ? ` id="${b.id}"` : ""}>${b.h}</h2>`;
+    case "h3": return `<h3 class="h3"${b.id ? ` id="${b.id}"` : ""}>${b.h}</h3>`;
+    case "h4": return `<h4 class="h4">${b.h}</h4>`;
+    case "etiqueta": return `<p class="etiqueta">${b.h}</p>`;
+    case "lead": return `<p class="lead">${b.h}</p>`;
+    case "p": return `<p>${b.h}</p>`;
+    case "lista": return b.h;
+    case "html": return b.h;
+    case "cita": return `<blockquote>${b.h}</blockquote>`;
+    case "punto": return `<div class="punto"><p class="punto-t">${b.t}</p>${b.h ? `<div class="punto-d">${b.h}</div>` : ""}</div>`;
+    case "pregunta": return `<details class="pregunta"${b.id ? ` id="${b.id}"` : ""}><summary>${b.q}</summary><div class="pregunta-r">${b.h}</div></details>`;
+    case "enlace": return `<a class="fila-enlace" href="${b.href}"><span class="fe-t">${b.t}</span>${b.d ? `<span class="fe-d">${b.d}</span>` : ""}${FLECHA}</a>`;
+    case "botones": return `<div class="acc">${b.lista.map((x, i) => `<a class="boton${i === 0 ? " boton--principal" : ""}" href="${x.href}">${x.t}${i === 0 ? " " + FLECHA : ""}</a>`).join("")}</div>`;
+    case "img": return `<figure class="figura"><img src="${b.src}" alt="${b.alt}"${b.w ? ` width="${b.w}"` : ""}${b.h ? ` height="${b.h}"` : ""} loading="lazy" decoding="async"></figure>`;
+    default: return "";
+  }
+}
+
+/* ---------------------------------------------------------- composición
+   Cabecera de página (migas, etiqueta, h1, entradilla, botones) y, después,
+   un capítulo por cada h2: título a la izquierda, contenido a la derecha. */
+function componer(bs, { lectura }) {
+  const i1 = bs.findIndex((b) => b.tipo === "h1");
+  const antes = i1 >= 0 ? bs.slice(0, i1) : [];
+  const migas = antes.find((b) => b.tipo === "migas") || bs.find((b) => b.tipo === "migas");
+  const etiqueta = [...antes].reverse().find((b) => b.tipo === "etiqueta");
+  let k = i1 + 1; const cab = [];
+  while (k < bs.length && ["lead", "p", "botones", "etiqueta"].includes(bs[k].tipo) && cab.length < 4) { if (bs[k].tipo !== "etiqueta") cab.push(bs[k]); k++; }
+  const h1 = i1 >= 0 ? bs[i1].h : "";
+  const cuerpo = bs.slice(Math.max(k, 0)).filter((b) => b.tipo !== "migas");
+  // jerarquía: ningún h3 antes del primer h2 (no se salta de h1 a h3)
+  for (const b of cuerpo) { if (b.tipo === "h2") break; if (b.tipo === "h3") b.tipo = "h2"; }
+  // capítulos por h2
+  const caps = []; let actual = { cab: [], cuerpo: [] };
+  for (let i = 0; i < cuerpo.length; i++) {
+    const b = cuerpo[i];
+    if (b.tipo === "etiqueta" && cuerpo[i + 1]?.tipo === "h2") { if (actual.cab.length || actual.cuerpo.length) caps.push(actual); actual = { cab: [b], cuerpo: [] }; continue; }
+    if (b.tipo === "h2") { if (actual.cab.some((x) => x.tipo === "h2") || actual.cuerpo.length) { caps.push(actual); actual = { cab: [], cuerpo: [] }; } actual.cab.push(b); if (cuerpo[i + 1]?.tipo === "lead") { actual.cab.push(cuerpo[++i]); } continue; }
+    actual.cuerpo.push(b);
+  }
+  if (actual.cab.length || actual.cuerpo.length) caps.push(actual);
+  const migasHtml = migas && migas.items.filter((m) => m.href).length ? `<nav class="migas" aria-label="Ruta"><ol role="list">${migas.items.map((m, i) => (m.href ? `<li><a href="${m.href}">${m.t}</a></li>` : `<li aria-current="page">${m.t}</li>`)).join("")}</ol></nav>` : "";
+  const cabHtml = `<header class="pag-cab">
+  <div class="marco">
+    ${migasHtml}
+    ${etiqueta ? `<p class="etiqueta aparece">${etiqueta.h}</p>` : ""}
+    <h1 class="h1 aparece" style="--i:1">${h1}</h1>
+    ${cab.map((b, i) => `<div class="aparece" style="--i:${i + 2}">${pintar(b.tipo === "p" && i === 0 ? { ...b, tipo: "lead" } : b)}</div>`).join("\n    ")}
+  </div>
+</header>`;
+  const capsHtml = caps.map((c) => {
+    const tieneCab = c.cab.length > 0;
+    return `<section class="capitulo${lectura ? " capitulo--lectura" : ""}${tieneCab ? "" : " capitulo--suelto"}">
+  <div class="marco capitulo-in">
+    ${tieneCab ? `<div class="capitulo-cab">${c.cab.map(pintar).join("")}</div>` : ""}
+    <div class="capitulo-cuerpo prosa">${c.cuerpo.map(pintar).join("\n")}</div>
+  </div>
+</section>`;
+  }).join("\n");
+  return cabHtml + "\n" + capsHtml;
+}
+
+/* ------------------------------------------------------------------ head */
+function meta(doc) {
+  const m = (sel, attr = "content") => doc.querySelector(sel)?.getAttribute(attr) || "";
+  return {
+    titulo: (doc.querySelector("title")?.text || "").trim(),
+    descripcion: m('meta[name="description"]'),
+    noindex: /noindex/.test(m('meta[name="robots"]')),
+    jsonld: doc.querySelectorAll('script[type="application/ld+json"]').map((s) => { try { return JSON.parse(s.text); } catch { return null; } }).filter(Boolean),
+    imagen: (m('meta[property="og:image"]') || "").replace("https://dcodepartners.com", "") || undefined,
+  };
+}
+
+export function migrar(rel) {
+  const res = [];
+  for (const lang of ["es", "en"]) {
+    const archivo = (lang === "en" ? "en/" : "") + rel;
+    let html; try { html = viejo(archivo); } catch { continue; }
+    const doc = parse(html, { comment: false });
+    const main = doc.querySelector("main") || doc.querySelector("body") || doc;
+    const bs = bloques(main);
+    const ruta = "/" + (lang === "en" ? "en/" : "") + rel.replace(/(index)?\.html$/, "").replace(/\/$/, "");
+    const m = meta(doc);
+    if (TITULOS[rel]) m.titulo = TITULOS[rel][lang === "en" ? 1 : 0];
+    const lectura = LEGAL.test(rel) || rel.startsWith("blog/") && rel !== "blog/index.html";
+    const p = { lang, ruta: ruta === "/en/" ? "/en" : ruta.replace(/\/$/, "") || "/", ...m, css: ["/assets/v2/interior.css"], claseBody: lectura ? "es-lectura" : "" };
+    if (rel === "404.html") { p.ruta = lang === "en" ? "/en/404" : "/404"; p.noindex = true; p.sinEn = false; }
+    fs.writeFileSync(path.join(RAIZ, archivo), pagina(p, componer(bs, { lectura })));
+    res.push(archivo);
+  }
+  return res;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const lista = process.argv.slice(2).length ? process.argv.slice(2) : MIGRADAS;
+  for (const r of lista) console.log("  " + migrar(r).join("  "));
+}
