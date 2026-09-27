@@ -213,10 +213,10 @@ export function montar(lienzo, { movil = false, claro = false } = {}) {
     renderer.setPixelRatio(dpr); renderer.setSize(W, H, false);
     cam.aspect = W / H;
     // Tamaño del logotipo: en ancho, a la derecha y grande; en móvil, arriba.
-    const ancho = W > 760;
+    const ancho = W >= 1100 && W / H > 1; // lado a lado solo si caben texto y logotipo; si no, apilado
     // «lado» = alto en píxeles del logotipo montado. A distancia ~3 y 30° de campo, el
     // logotipo (1 m) ocupa ~0,55 del alto con zoom 1.
-    const lado = ancho ? Math.min(H * 0.52, W * 0.34) : Math.min(W * 0.5, H * 0.28); // el logotipo es 1,2 veces más ancho que alto
+    const lado = ancho ? Math.min(H * 0.52, W * 0.34) : Math.min(W * 0.5, H * (W > H ? 0.36 : 0.28)); // el logotipo es 1,2 veces más ancho que alto
     zoomBase = lado / H / 0.55;
     // Desplazamiento del centro óptico (no se mueve la cámara, se mueve el encuadre)
     if (ancho) cam.setViewOffset(W, H, -W * 0.2, 0, W, H); else cam.setViewOffset(W, H, W * 0.05, H * 0.2, W, H);
