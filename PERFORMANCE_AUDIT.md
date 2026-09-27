@@ -25,4 +25,4 @@ Medido el 27/09/2026 con `~/tools/perf.mjs` (Playwright + Chromium 141): **CPU �
 ## Lo que NO se ha medido aquí
 - **FPS e INP en hardware real** (el entorno no tiene GPU). HIPÓTESIS: el héroe dibuja como mucho dos imágenes por fotograma en un canvas 2D, sin WebGL; en un móvil medio debería ir a la frecuencia de la pantalla.
 - Core Web Vitals de campo (CrUX): no hay datos de esta rama publicada.
-- Peso final de la secuencia completa (72 fotogramas): se añade al terminar el render.
+- Peso final de la secuencia (72 fotogramas, medido con `du`/`os.path.getsize`): **escritorio 1100 px = 4.575 KB (63,5 KB/fotograma)**; **móvil 700 px = 2.583 KB (35,9 KB/fotograma)**. En móvil, con ahorro de datos o red 2G/3G se cargan 1 de cada 2: **1.326 KB (37 fotogramas)**. La carga es progresiva y posterior al primer pintado, así que no cuenta para FCP/LCP (el póster, sí: 1 fotograma).

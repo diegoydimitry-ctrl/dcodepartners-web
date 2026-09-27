@@ -33,7 +33,11 @@ if (sec) {
     // Orden de carga: extremos y 1 de cada 8, después cada 4, cada 2 y el resto.
     const orden = [];
     const pon = (i) => { if (i >= 0 && i < N && !orden.includes(i)) orden.push(i); };
-    pon(0); pon(N - 1); for (const paso of [8, 4, 2, 1]) for (let i = 0; i < N; i += paso) pon(i);
+    // En móvil, con ahorro de datos o red lenta, 1 de cada 2 (36 fotogramas, ~1,3 MB): el fundido
+    // entre vecinos basta y la mitad de datos importa más que la mitad de fotogramas.
+    const red = navigator.connection || {};
+    const minimo = movil || red.saveData || /(^|-)2g|3g/.test(red.effectiveType || "") ? 2 : 1;
+    pon(0); pon(N - 1); for (const paso of [8, 4, 2, 1]) if (paso >= minimo) for (let i = 0; i < N; i += paso) pon(i);
     let cola = 0;
     const cargar = async () => {
       while (cola < orden.length) {
