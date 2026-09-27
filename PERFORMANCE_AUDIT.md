@@ -18,7 +18,16 @@ Medido el 27/09/2026 con `~/tools/perf.mjs` (Playwright + Chromium 141): **CPU �
 \* En la portada «después», los KB incluyen los fotogramas de la escena que se descargan **después** del primer pintado durante los 3 s de la medición (carga progresiva); no bloquean nada.
 
 ### Fluidez del 3D (medida en el navegador del equipo de Dirección, GTX 1060, Chrome, 803 px)
-Recorrido completo de la sección en 6 s con `requestAnimationFrame`: se mide en cuanto la Preview del commit del 3D esté publicada (la medida de 59 fps / p95 16,8 ms tomada antes era aún de la secuencia de fotogramas y no cuenta). Móvil real: **NO MEDIDO**.
+Recorrido completo de la sección en 6 s, intervalos entre `requestAnimationFrame` (Preview `96f9aa9`):
+
+| | Secuencia de fotogramas (`3d50b45`) | **3D en tiempo real** |
+|---|---|---|
+| fps medio | 59 | **60** |
+| p95 / p99 | 16,8 / 33,3 ms | **16,8 / 16,8 ms** |
+| fotogramas > 33 ms | 5 (máx. 83 ms) | **0** (máx. 16,8 ms) |
+| Peso de la escena | 4.575 KB (escritorio) | **141 KB** transferidos |
+
+Móvil real y GPU integrada: **NO MEDIDO** (la escena baja sola la resolución si pasa de 21 ms por fotograma).
 
 ## Por qué
 - 11 hojas de estilo y 8 scripts por página → 1 hoja común (`dc.css`) + la de la página, y 1 módulo común (`sitio.js`, 4 KB).

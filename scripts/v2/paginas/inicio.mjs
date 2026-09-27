@@ -130,7 +130,7 @@ export function inicio(lang) {
   </div>
 </section>
 
-<section class="bloque bloque--drama fin" id="hablemos" aria-labelledby="h-fin">
+<section class="bloque bloque--aire fin" id="hablemos" aria-labelledby="h-fin">
   <div class="marco">
     <h2 class="display aparece" id="h-fin">${f.h2}</h2>
     <p class="lead aparece" style="--i:1">${f.sub}</p>
