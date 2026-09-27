@@ -1,0 +1,4 @@
+# Los fotogramas intermedios se regeneran con render.mjs: no se versionan.
+frames/
+out/banda.wav
+out/banda-norm.wav

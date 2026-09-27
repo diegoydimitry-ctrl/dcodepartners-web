@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<title>D-Code · anuncio de Instagram · vendedores</title>
+<!--
+  Anuncio vertical (1080x1920, 30 fps, 24 s) para captar personas que vendan D-Code Partners.
+
+  Mismo contrato que marketing/youtube/_build/escena.html, para poder reutilizar su cadena de render:
+    window.META        { W, H, FPS, FRAMES }
+    window.LISTO       true cuando las fuentes están cargadas
+    window.pintaFrame(n)  pinta el fotograma n y nada más: el mismo n da siempre la misma imagen
+
+  No se inventan condiciones comerciales. Todo lo que afirma la pieza está dado:
+  la comisión del 50 %, el mes de servicio real antes de facturar, las zonas desde las que ya se vende
+  y la dirección de la web. No aparece ningún dato personal de nadie del equipo.
+-->
+<style>
+  @font-face{font-family:Inter;src:url(../../assets/fonts/inter-variable.woff2)format('woff2');font-weight:100 900;font-display:block}
+  @font-face{font-family:'Instrument Serif';src:url(../../assets/fonts/instrumentserif-italic.woff2)format('woff2');font-style:italic;font-display:block}
+  @font-face{font-family:'JetBrains Mono';src:url(../../assets/fonts/jetbrainsmono-variable.woff2)format('woff2');font-weight:100 800;font-display:block}
+  html,body{margin:0;background:#05070c}
+  #c{display:block}
+</style>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+const W = 1080, H = 1920, FPS = 30, FRAMES = 720;
+window.META = { W, H, FPS, FRAMES };
+
+const c = document.getElementById('c');
+const x = c.getContext('2d', { alpha: false });
+
+const BG='#05070c', INK='#ffffff', INK2='#98a3b5', BLUE='#5b8cff', LINE='rgba(255,255,255,.055)';
+
+/* ---------- utilidades deterministas ---------- */
+const cl=(v,a=0,b=1)=>v<a?a:v>b?b:v;
+const easeOut=t=>1-Math.pow(1-cl(t),3);
+const easeInOut=t=>{t=cl(t);return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+// ventana temporal: 0 antes de "ini", sube en "sube", 1, baja en "baja" antes de "fin"
+const win=(f,ini,fin,sube=12,baja=12)=>{
+  if(f<ini||f>fin)return 0;
+  return Math.min(easeOut((f-ini)/sube), easeOut((fin-f)/baja));
+};
+// ruido determinista (sin Math.random: el fotograma n debe ser siempre idéntico)
+const rnd=i=>{const s=Math.sin(i*127.1+i*i*0.017)*43758.5453;return s-Math.floor(s)};
+
+function txt(s,cx,y,{size=54,weight=600,color=INK,font='Inter',align='center',ls=0,alpha=1,italic=false}={}){
+  x.save(); x.globalAlpha*=alpha;
+  x.font=`${italic?'italic ':''}${weight} ${size}px "${font}", sans-serif`;
+  x.fillStyle=color; x.textAlign=align; x.textBaseline='alphabetic';
+  if(ls){ // letter-spacing manual: canvas no lo aplica de forma fiable en headless
+    const chars=[...s]; const wTot=chars.reduce((a,ch)=>a+x.measureText(ch).width+ls,0)-ls;
+    let px = align==='center'? cx-wTot/2 : align==='right'? cx-wTot : cx;
+    x.textAlign='left';
+    for(const ch of chars){ x.fillText(ch,px,y); px+=x.measureText(ch).width+ls; }
+  } else x.fillText(s,cx,y);
+  x.restore();
+}
+// Párrafo centrado con ancho máximo. Devuelve el alto ocupado.
+function parrafo(lineas,cx,y,o={}){
+  const lh=o.lh||(o.size||54)*1.24;
+  lineas.forEach((l,i)=>{
+    if(typeof l==='string') txt(l,cx,y+i*lh,o);
+    else txt(l.t,cx,y+i*lh,Object.assign({},o,l));
+  });
+  return lineas.length*lh;
+}
+
+/* ---------- retícula técnica de fondo ---------- */
+function reticula(f,alpha=1){
+  x.save(); x.globalAlpha=alpha; x.strokeStyle=LINE; x.lineWidth=1;
+  const p=90, desp=(f*0.16)%p;
+  for(let i=-1;i*p<W+p;i++){x.beginPath();x.moveTo(i*p+desp,0);x.lineTo(i*p+desp,H);x.stroke();}
+  for(let j=-1;j*p<H+p;j++){x.beginPath();x.moveTo(0,j*p+desp*0.5);x.lineTo(W,j*p+desp*0.5);x.stroke();}
+  x.restore();
+}
+function halo(cx,cy,r,color,a){
+  const g=x.createRadialGradient(cx,cy,0,cx,cy,r);
+  g.addColorStop(0,color.replace(')',`,${a})`).replace('rgb','rgba'));
+  g.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=g; x.fillRect(cx-r,cy-r,r*2,r*2);
+}
+
+/* ---------- logotipo oficial (mismo trazado que la web) ---------- */
+const MARCA={
+  rects:[[26,1,16,16],[1,27,13,13],[35,26,13,13],[2,64,12,12],[35,64,13,13],[26,83,16,16],[102,43,16,16]],
+  paths:['M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z',
+         'M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z'],
+  pixel:[16,45,15,15]
+};
+const P2D=MARCA.paths.map(d=>new Path2D(d));
+function rr(ctx,X,Y,w,h,r){ctx.beginPath();ctx.moveTo(X+r,Y);ctx.arcTo(X+w,Y,X+w,Y+h,r);ctx.arcTo(X+w,Y+h,X,Y+h,r);ctx.arcTo(X,Y+h,X,Y,r);ctx.arcTo(X,Y,X+w,Y,r);ctx.closePath();}
+function marca(cx,cy,escala,alpha=1,pixelBrillo=1){
+  x.save(); x.globalAlpha*=alpha;
+  x.translate(cx-60*escala,cy-50*escala); x.scale(escala,escala);
+  x.fillStyle=INK;
+  for(const[a,b,w,h]of MARCA.rects){rr(x,a,b,w,h,2);x.fill();}
+  for(const p of P2D)x.fill(p);
+  const[px,py,pw,ph]=MARCA.pixel;
+  x.save(); x.globalAlpha*=pixelBrillo; x.shadowColor=BLUE; x.shadowBlur=18/escala*escala*1.2;
+  x.fillStyle=BLUE; rr(x,px,py,pw,ph,2); x.fill(); x.restore();
+  x.restore();
+}
+
+/* ---------- 1 · las empresas que pierden horas ---------- */
+function escenaProblema(f){
+  const a=win(f,0,120,1,26); if(!a)return;
+  x.save(); x.globalAlpha=a;
+  // rejilla de ventanas apagadas; unas pocas parpadean
+  const cols=6, rows=11, cw=150, ch=112, ox=(W-cols*cw)/2, oy=250;
+  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+    const k=j*cols+i, r=rnd(k);
+    const viva=r>0.78;
+    const pulso=viva?0.45+0.4*Math.sin(f*0.09+k):0.10+0.05*r;
+    x.fillStyle=`rgba(${viva?'91,140,255':'150,165,190'},${pulso*0.30})`;
+    rr(x,ox+i*cw+10,oy+j*ch+10,cw-20,ch-20,7); x.fill();
+    x.strokeStyle=`rgba(255,255,255,${0.04+0.05*r})`; x.lineWidth=1; x.stroke();
+    // "filas" de datos dentro de cada ventana
+    x.fillStyle=`rgba(255,255,255,${0.05+0.09*r})`;
+    for(let l=0;l<3;l++) x.fillRect(ox+i*cw+24,oy+j*ch+34+l*18,(cw-58)*(0.4+0.55*rnd(k*3+l)),4);
+  }
+  x.restore();
+  // velo para que el texto respire
+  const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,'rgba(5,7,12,.96)');
+  g.addColorStop(.32,'rgba(5,7,12,.55)'); g.addColorStop(.72,'rgba(5,7,12,.82)'); g.addColorStop(1,'rgba(5,7,12,.99)');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+
+  const t=win(f,14,120,20,22);
+  txt('AHÍ FUERA',540,470,{size:26,weight:700,color:BLUE,font:'JetBrains Mono',ls:7,alpha:t});
+  parrafo(['Hay empresas perdiendo','horas cada día'],540,600,{size:76,weight:680,alpha:t,lh:92});
+  parrafo([{t:'en trabajo que ya no',italic:true,font:'Instrument Serif',weight:400,color:INK2},
+           {t:'debería hacer nadie.',italic:true,font:'Instrument Serif',weight:400,color:INK2}],540,730,{size:74,alpha:t,lh:88});
+}
+
+/* ---------- 2 · tú las conoces ---------- */
+function escenaTuLasConoces(f){
+  const a=win(f,118,246,22,24); if(!a)return;
+  halo(540,860,720,'rgb(91,140,255)',0.10*a);
+  const t=win(f,126,246,22,24);
+  parrafo(['Tú ya las conoces.'],540,900,{size:92,weight:700,alpha:t});
+  parrafo([{t:'Nosotros construimos',color:INK2},{t:'el sistema que se las devuelve.',color:INK2}],
+          540,1030,{size:52,weight:450,alpha:win(f,150,246,20,24),lh:66});
+}
+
+/* ---------- 3 · qué vende esa persona ---------- */
+const PIEZAS=[['Automatizaciones','el trabajo repetitivo, hecho solo'],
+              ['Agentes de IA','atienden, redactan y responden'],
+              ['Integraciones','las herramientas dejan de estar sueltas'],
+              ['Software propio','lo que no existe, se construye']];
+function escenaQueVende(f){
+  const a=win(f,244,430,22,24); if(!a)return;
+  x.save(); x.globalAlpha=a;
+  txt('LO QUE VAS A VENDER',540,300,{size:25,weight:700,color:BLUE,font:'JetBrains Mono',ls:7});
+  parrafo(['No una herramienta suelta.',{t:'Un sistema entero.',italic:true,font:'Instrument Serif',weight:400}],
+          540,420,{size:64,weight:660,lh:82});
+  // cuatro módulos que entran y se conectan a un núcleo
+  const cy0=760, gap=200;
+  PIEZAS.forEach((p,i)=>{
+    const ent=win(f,268+i*20,430,18,20);
+    const dy=(1-easeOut(ent))*46;
+    x.save(); x.globalAlpha=ent;
+    const Y=cy0+i*gap+dy;
+    x.strokeStyle='rgba(255,255,255,.10)'; x.lineWidth=1.5;
+    x.fillStyle='rgba(255,255,255,.028)';
+    rr(x,120,Y-64,840,124,18); x.fill(); x.stroke();
+    // punto azul con latido
+    const pul=0.55+0.45*Math.sin(f*0.13+i*1.6);
+    x.save(); x.shadowColor=BLUE; x.shadowBlur=26*pul; x.fillStyle=BLUE;
+    x.beginPath(); x.arc(182,Y-2,9,0,7); x.fill(); x.restore();
+    txt(p[0],224,Y-8,{size:42,weight:640,align:'left'});
+    txt(p[1],224,Y+38,{size:29,weight:420,color:INK2,align:'left'});
+    x.restore();
+  });
+  x.restore();
+}
+
+/* ---------- 4 · cómo funciona la relación ---------- */
+const PASOS=[['Tú abres la conversación','Detectas la empresa y nos la presentas'],
+             ['Nosotros lo construimos','Análisis, sistema, implantación y mantenimiento'],
+             ['El cliente paga al ver resultados','Un mes de servicio real antes de facturar']];
+function escenaRelacion(f){
+  const a=win(f,428,576,22,24); if(!a)return;
+  x.save(); x.globalAlpha=a;
+  txt('CÓMO FUNCIONA',540,330,{size:25,weight:700,color:BLUE,font:'JetBrains Mono',ls:7});
+  parrafo(['Tú vendes.',{t:'Nosotros respondemos.',italic:true,font:'Instrument Serif',weight:400,color:INK2}],
+          540,450,{size:70,weight:680,lh:88});
+  const y0=760;
+  PASOS.forEach((p,i)=>{
+    const ent=win(f,452+i*22,576,18,20);
+    x.save(); x.globalAlpha=ent;
+    const Y=y0+i*250+(1-easeOut(ent))*34;
+    // número
+    x.strokeStyle=BLUE; x.lineWidth=2; x.globalAlpha=ent*0.8;
+    x.beginPath(); x.arc(190,Y+6,40,0,7); x.stroke(); x.globalAlpha=ent;
+    txt(String(i+1),190,Y+21,{size:40,weight:700,color:BLUE,font:'JetBrains Mono'});
+    txt(p[0],258,Y-4,{size:42,weight:640,align:'left'});
+    txt(p[1],258,Y+44,{size:28,weight:420,color:INK2,align:'left'});
+    if(i<2){ x.strokeStyle='rgba(91,140,255,.32)'; x.lineWidth=2; x.setLineDash([6,10]);
+      x.beginPath(); x.moveTo(190,Y+52); x.lineTo(190,Y+196); x.stroke(); x.setLineDash([]); }
+    x.restore();
+  });
+  x.restore();
+}
+
+/* ---------- 5 · la cifra ---------- */
+function escenaCifra(f){
+  const a=win(f,574,700,16,18); if(!a)return;
+  const t=win(f,580,700,20,18);
+  halo(540,940,860,'rgb(91,140,255)',0.17*t);
+  x.save(); x.globalAlpha=a;
+  txt('TU PARTE',540,650,{size:27,weight:700,color:BLUE,font:'JetBrains Mono',ls:8,alpha:t});
+  // el número entra con escala
+  const e=easeInOut(cl((f-586)/26));
+  x.save(); x.translate(540,1010); x.scale(0.82+0.18*e,0.82+0.18*e); x.globalAlpha=t;
+  x.font='800 300px "Inter", sans-serif'; x.textAlign='center'; x.textBaseline='alphabetic';
+  x.shadowColor='rgba(91,140,255,.55)'; x.shadowBlur=70; x.fillStyle=INK;
+  x.fillText('50', -78, 0);
+  x.shadowBlur=0; x.fillStyle=BLUE; x.font='800 150px "Inter", sans-serif';
+  x.fillText('%', 202, -14);
+  x.restore();
+  parrafo(['de cada venta, en comisión.'],540,1160,{size:54,weight:620,alpha:win(f,606,700,18,18)});
+  parrafo([{t:'Vendes desde donde estés.',color:INK2}],
+          540,1270,{size:42,weight:440,alpha:win(f,624,700,18,18)});
+  x.restore();
+}
+
+/* ---------- 6 · perfil, zonas y contacto ---------- */
+function escenaCierre(f){
+  const a=win(f,698,720,18,1); if(!a)return;
+  x.save(); x.globalAlpha=a;
+  const t=win(f,704,720,16,1);
+  txt('QUIÉN ENCAJA',540,470,{size:25,weight:700,color:BLUE,font:'JetBrains Mono',ls:7,alpha:t});
+  parrafo(['Gente que sepa','abrir una puerta.'],540,600,{size:76,weight:680,alpha:t,lh:92});
+  parrafo([{t:'La tecnología la ponemos nosotros.',color:INK2}],540,720,{size:40,weight:440,alpha:win(f,710,720,14,1)});
+  const z=win(f,712,720,12,1);
+  txt('YA SE VENDE DESDE  ·  MADRID  ·  MÁLAGA  ·  ASTURIAS',540,860,
+      {size:23,weight:600,color:INK2,font:'JetBrains Mono',ls:3,alpha:z});
+  marca(540,1230,3.05,t,0.75+0.25*Math.sin(f*0.16));
+  txt('dcodepartners.com',540,1460,{size:46,weight:640,color:INK,font:'JetBrains Mono',ls:1,alpha:win(f,714,720,12,1)});
+  x.restore();
+}
+
+/* ---------- fotograma ---------- */
+window.pintaFrame=function(f){
+  x.fillStyle=BG; x.fillRect(0,0,W,H);
+  reticula(f, f<250?0.85:0.5);
+  escenaProblema(f);
+  escenaTuLasConoces(f);
+  escenaQueVende(f);
+  escenaRelacion(f);
+  escenaCifra(f);
+  escenaCierre(f);
+  // viñeteado
+  const g=x.createRadialGradient(540,960,420,540,960,1180);
+  g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(0,0,0,.55)');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  // grano fino, estable por fotograma
+  x.save(); x.globalAlpha=0.028;
+  for(let i=0;i<1400;i++){
+    const r=rnd(i+f*0.37);
+    x.fillStyle=r>.5?'#ffffff':'#000000';
+    x.fillRect((rnd(i*2.1+f)*W)|0,(rnd(i*3.7+f*1.3)*H)|0,2,2);
+  }
+  x.restore();
+};
+
+(async()=>{
+  await document.fonts.load('700 100px "Inter"');
+  await document.fonts.load('italic 400 100px "Instrument Serif"');
+  await document.fonts.load('700 40px "JetBrains Mono"');
+  await document.fonts.ready;
+  window.pintaFrame(0);
+  window.LISTO=true;
+})();
+</script>
+</html>
