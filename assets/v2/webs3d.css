@@ -46,11 +46,11 @@
 .w3-cartel { position: absolute; inset: 0; display: grid; align-content: end; gap: 8px; padding: 28px; pointer-events: none; }
 .w3-cartel-l { font-size: 26px; line-height: 1; } .w3-cartel-s { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
 .w3-cartel-h { font-size: 22px; line-height: 1.1; max-width: 18ch; opacity: .85; }
-.w3-cartel--vandria { background: linear-gradient(180deg, #f2ede4 55%, #e2d8c6); color: #1c2420; font-family: "W3 Serif", serif; }
-.w3-cartel--orbe { background: radial-gradient(70% 60% at 60% 30%, #4a2c1e, #16100d 70%); color: #f1e6d6; font-family: "W3 Serif", serif; }
-.w3-cartel--brio { background: linear-gradient(180deg, #15181c 0 34px, #d9dde1 34px 62%, #f3f4f5 62%); color: #15181c; font-family: "W3 Grotesk", sans-serif; }
+.w3-cartel--vandria { background: #e2d8c6 linear-gradient(180deg, #f2ede4 55%, #e2d8c6); color: #1c2420; font-family: "W3 Serif", serif; }
+.w3-cartel--orbe { background: #16100d radial-gradient(70% 60% at 60% 30%, #4a2c1e, #16100d 70%); color: #f1e6d6; font-family: "W3 Serif", serif; }
+.w3-cartel--brio { background: #f3f4f5 linear-gradient(180deg, #15181c 0 34px, #d9dde1 34px 62%, #f3f4f5 62%); color: #15181c; font-family: "W3 Grotesk", sans-serif; }
 .w3-cartel--brio .w3-cartel-l { letter-spacing: .12em; font-weight: 700; }
-.w3-cartel--sonrisa { background: linear-gradient(180deg, #f5f9f7 60%, #e2efeb); color: #16322e; font-family: "W3 Inter", sans-serif; }
+.w3-cartel--sonrisa { background: #e2efeb linear-gradient(180deg, #f5f9f7 60%, #e2efeb); color: #16322e; font-family: "W3 Inter", sans-serif; }
 .w3-ventana.is-viva .w3-cartel { display: none; }
 .w3-ventana:not(.is-viva) .w3-vista { visibility: hidden; }
 .w3-mando { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--e-4); margin-top: var(--e-4); }
