@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 import { parse } from "node-html-parser";
 import { pagina, FLECHA } from "./plantilla.mjs";
+import { seccionDemoFinance } from "./paginas/demos-portada.mjs";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const BASE = "8ff5f5b";
@@ -332,6 +333,48 @@ function meta(doc) {
   };
 }
 
+
+/* ---------------------------------------------------------------- Finance, mínima (rev. 29/09/2026)
+   Dirección: «enseña solo lo imprescindible». La primera vista responde a tres preguntas —qué es, qué resuelve, qué
+   puedo hacer— y la demo se toca ahí mismo. El resto del contenido (VERI*FACTU, las piezas, la conciliación, los
+   planes, las conexiones) sigue en la página, entero e indexable, pero plegado: se abre si se pide. Se quitan la nota
+   «para tocarla, un ordenador» (la demo ya está en la página) y el capítulo «Pruébalo» (duplicaba el botón de arriba). */
+const FIN = {
+  es: { lead: "Facturas, cobros, gastos y proyectos en el mismo sitio — y algo que lo lee y te contesta.",
+    tres: [["Qué es", "Tu facturación, tus cobros y tus gastos en un solo sitio, con el registro VERI*FACTU al día."],
+      ["Qué resuelve", "El dinero deja de depender de que alguien se acuerde."],
+      ["Qué puedes hacer", "Soltarle un PDF con veinte facturas y que las dé de alta. Preguntarle quién te debe."]],
+    mas: "Más detalle", masSub: "Solo si lo necesitas.", planes: "Ver los planes", hablar: "Hablemos de implantarlo" },
+  en: { lead: "Invoices, collections, expenses and projects in one place — and something that reads it all and answers.",
+    tres: [["What it is", "Your invoicing, collections and expenses in one place, with the VERI*FACTU record kept up to date."],
+      ["What it solves", "Money stops depending on someone remembering."],
+      ["What you can do", "Drop a PDF with twenty invoices in it and have them recorded. Ask who owes you."]],
+    mas: "More detail", masSub: "Only if you need it.", planes: "See the plans", hablar: "Let us talk about putting it in" },
+};
+function financeMinimo(cuerpo, lang) {
+  const t = FIN[lang]; const doc = parse(cuerpo, { comment: false });
+  const cab = doc.querySelector("header.pag-cab .marco");
+  const divs = cab.childNodes.filter((n) => n.nodeType === 1 && n.rawTagName === "div");
+  divs[0]?.querySelector("p.lead")?.set_content(t.lead);
+  divs.slice(2).forEach((d) => d.remove());   // «DEMO · datos ficticios…» y «La aplicación, en un vistazo»
+  const secs = doc.querySelectorAll("section.capitulo");
+  const plegados = secs.slice(1, 7).map((s) => {
+    const cabC = s.querySelector(".capitulo-cab"), cuerpoC = s.querySelector(".capitulo-cuerpo");
+    const et = cabC.querySelector(".etiqueta")?.text.trim() || "", h2 = cabC.querySelector("h2"), lead = cabC.querySelector(".lead");
+    const id = h2.getAttribute("id");
+    return `<details class="fin-d"><summary><span class="fin-d-t"${id ? ` id="${id}"` : ""}>${h2.innerHTML}</span>${et ? `<span class="fin-d-e">${et}</span>` : ""}<span class="fin-d-m" aria-hidden="true"></span></summary>
+  <div class="fin-d-c">${lead ? `<p class="lead">${lead.innerHTML}</p>` : ""}${cuerpoC.innerHTML}</div></details>`;
+  });
+  const tres = `<section class="capitulo fin-tres" aria-label="${lang === "en" ? "In short" : "En resumen"}"><div class="marco"><ul class="fin-tres-l" role="list">${t.tres.map(([k, v]) => `<li><p class="etiqueta">${k}</p><p class="fin-tres-t">${v}</p></li>`).join("")}</ul></div></section>`;
+  const mas = `<section class="capitulo fin-mas" aria-labelledby="h-mas"><div class="marco"><div class="fin-mas-cab"><h2 class="h2" id="h-mas">${t.mas}</h2><p class="lead">${t.masSub}</p></div>
+  <div class="fin-mas-l">${plegados.join("\n")}</div>
+  <div class="acc fin-acc"><a class="boton boton--principal" href="${lang === "en" ? "/en" : ""}/precios">${t.planes} ${FLECHA}</a><a class="boton" href="${lang === "en" ? "/en" : ""}/contacto">${t.hablar}</a></div></div></section>`;
+  secs.forEach((s) => s.remove());
+  const hdr = doc.querySelector("header.pag-cab");
+  hdr.insertAdjacentHTML("afterend", tres + seccionDemoFinance(lang) + mas);
+  return doc.toString();
+}
+
 export function migrar(rel) {
   const res = [];
   for (const lang of ["es", "en"]) {
@@ -350,6 +393,11 @@ export function migrar(rel) {
     const lectura = LEGAL.test(rel) || rel.startsWith("blog/") && rel !== "blog/index.html";
     const p = { lang, ruta: ruta === "/en/" ? "/en" : ruta.replace(/\/$/, "") || "/", ...m, css: ["/assets/v2/interior.css"], claseBody: lectura ? "es-lectura" : "" };
     if (rel === "404.html") { p.ruta = lang === "en" ? "/en/404" : "/404"; p.noindex = true; p.sinEn = false; }
+    if (rel === "sistema-financiero.html") {
+      p.css = ["/assets/v2/interior.css", "/assets/v2/finance.css"]; p.extraHead = '<noscript><link rel="stylesheet" href="/assets/v2/demos.css"></noscript>';
+      fs.writeFileSync(path.join(RAIZ, archivo), pagina(p, financeMinimo(componer(bs, { lectura }), lang), ["/assets/v2/js/finance.js"]));
+      res.push(archivo); continue;
+    }
     fs.writeFileSync(path.join(RAIZ, archivo), pagina(p, componer(bs, { lectura })));
     res.push(archivo);
   }

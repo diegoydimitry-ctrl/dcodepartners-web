@@ -147,3 +147,39 @@ export function seccionDemos(lang) {
   </div>
 </section>`;
 }
+
+/* La demo de Finance sola, para su página (rev. 29/09): el mismo producto que en «Tócalo», sin las otras pestañas.
+   Lleva su propio visor para «Abrir la aplicación completa». */
+export function seccionDemoFinance(lang) {
+  const d = DEMOS[lang]; const x = d.lista.find((y) => y.id === "finance");
+  const T = lang === "en" ? { h: "Try it: drop the invoices.", sub: "Made-up data. Nothing is connected to a real system." } : { h: "Pruébalo: suelta las facturas.", sub: "Datos inventados. Nada está conectado a un sistema real." };
+  return `<section class="capitulo fin-demo" aria-labelledby="demo">
+  <div class="marco">
+    <div class="fin-demo-cab"><h2 class="h2" id="demo">${T.h}</h2><p class="lead">${T.sub}</p></div>
+    <div class="dm dm--solo" data-demos data-lang="${lang}">
+      <div class="dm-pest" role="tablist" aria-label="Demo" hidden><button type="button" role="tab" class="dm-p" id="dm-p-${x.id}" aria-controls="dm-${x.id}" aria-selected="true" tabindex="0" data-dm-pest="${x.id}">${x.pest}</button></div>
+      <div class="dm-panel dm-panel--${x.id}" id="dm-${x.id}" role="tabpanel" aria-labelledby="dm-p-${x.id}" data-dm="${x.id}">
+        <div class="dm-guion">
+          <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">${x.marca[0]}</span><span><b>${x.marca[1]}</b><span class="dm-ctx">${x.ctx}</span></span></p>
+          <h3 class="dm-t">${x.t}</h3>
+          <p class="dm-prob">${x.prob}</p>
+        </div>
+        <div class="dm-lienzo" data-dm-lienzo role="group" aria-label="${x.pest}"></div>
+        <div class="dm-mando">
+          <ol class="dm-fases" aria-hidden="true">${d.fases.map((f, k) => `<li data-fase="${k}"${k < 2 ? ' class="is-hecha"' : ""}>${f}</li>`).join("")}</ol>
+          <div class="dm-acciones" data-dm-acciones>
+            <button type="button" class="boton boton--principal dm-acc" data-dm-acc="1">${x.acc}</button>
+            <button type="button" class="boton dm-acc" data-dm-acc="2" hidden>${x.acc2}</button>
+          </div>
+          <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">${x.res}</span></p>
+          <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>${d.reiniciar}</button><button type="button" class="enlace" data-demo-abrir="${x.app}">${d.completa} ${FLECHA}</button></div>
+        </div>
+      </div>
+    </div>
+    <dialog class="visor" data-visor aria-label="Demo">
+      <div class="visor-cab"><p class="rotulo" data-visor-t></p><p class="rotulo visor-tel">${d.pantalla}</p><button type="button" class="ctrl" data-visor-cerrar aria-label="${d.cerrar}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <iframe data-visor-marco title="Demo"></iframe>
+    </dialog>
+  </div>
+</section>`;
+}

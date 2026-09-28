@@ -1,0 +1,43 @@
+/* D-Code Finance · página mínima (29/09/2026): la demo de Finance ahí mismo (su CSS y su código solo cuando la
+   sección se acerca), el visor de la aplicación completa y los detalles plegados que se abren si se enlazan. */
+const $ = (s, r = document) => r.querySelector(s);
+const EN = document.documentElement.lang === "en";
+
+const demos = $("[data-demos]");
+if (demos) {
+  let css;
+  const cssDemos = () => css || (css = new Promise((ok) => {
+    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css";
+    l.onload = l.onerror = () => ok(); document.head.appendChild(l);
+  }));
+  const cargar = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demo", e));
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); cargar(); } }, { rootMargin: "700px 0px" });
+    io.observe(demos);
+  } else cargar();
+}
+
+const visor = $("[data-visor]");
+if (visor) {
+  const marco = $("[data-visor-marco]", visor), titulo = $("[data-visor-t]", visor);
+  const APP = [EN ? "/en/sistema-financiero/app" : "/sistema-financiero/app", "D-Code Finance"];
+  let volver = null;
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-demo-abrir]"); if (!b) return;
+    e.preventDefault(); volver = b;
+    titulo.textContent = APP[1] + (EN ? " · demo, invented data" : " · demo, datos inventados");
+    if (marco.getAttribute("src") !== APP[0]) marco.src = APP[0];
+    marco.title = APP[1]; visor.showModal();
+  });
+  $("[data-visor-cerrar]", visor).addEventListener("click", () => visor.close());
+  visor.addEventListener("click", (e) => { if (e.target === visor) visor.close(); });
+  visor.addEventListener("close", () => volver && volver.focus());
+}
+
+// Enlaces a #planes, #verifactu, #conciliacion…: el detalle plegado se abre y se baja a él
+function abrirAncla() {
+  const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
+  const t = document.getElementById(id); const d = t && t.closest("details");
+  if (d && !d.open) { d.open = true; requestAnimationFrame(() => t.scrollIntoView({ block: "start" })); }
+}
+addEventListener("hashchange", abrirAncla); abrirAncla();

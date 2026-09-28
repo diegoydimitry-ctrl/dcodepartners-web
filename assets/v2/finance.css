@@ -1,0 +1,46 @@
+/* ==========================================================================
+   D-CODE FINANCE · página mínima (29/09/2026)
+   Primera vista: qué es, qué resuelve, qué puedes hacer. Después, la demo para tocar. El resto, plegado.
+   ========================================================================== */
+.fin-tres { padding-block: var(--ritmo-compacto); }
+.fin-tres-l { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--col-gap); }
+.fin-tres-l li { display: grid; gap: var(--e-3); align-content: start; padding-top: var(--e-4); border-top: 1px solid var(--linea-2); }
+.fin-tres-t { font-size: clamp(1.1rem, 0.98rem + 0.45vw, 1.35rem); line-height: 1.35; letter-spacing: -0.01em; color: var(--tinta); max-width: 30ch; }
+
+.fin-demo { padding-block: var(--ritmo-normal); }
+.fin-demo-cab { display: grid; gap: var(--e-3); margin-bottom: var(--e-6); }
+.fin-demo-cab .h2 { font-size: clamp(1.7rem, 1.2rem + 1.7vw, 2.9rem); max-width: 20ch; }
+.fin-demo .dm { margin: 0; }
+
+.fin-mas { padding-block: var(--ritmo-normal); }
+.fin-mas-cab { display: grid; gap: var(--e-3); margin-bottom: var(--e-5); }
+.fin-mas-cab .h2 { font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem); }
+.fin-mas-l { border-top: 1px solid var(--linea-2); }
+.fin-d { border-bottom: 1px solid var(--linea-2); }
+.fin-d > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto 28px; align-items: center; gap: var(--e-4); padding: var(--e-5) 0; min-height: 44px; }
+.fin-d > summary::-webkit-details-marker { display: none; }
+.fin-d-t { font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.25rem); color: var(--tinta); letter-spacing: -0.01em; scroll-margin-top: 110px; }
+.fin-d-e { font-family: var(--f-mono); font-stretch: 82%; font-size: var(--t-rotulo); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); white-space: nowrap; }
+.fin-d-m { position: relative; width: 14px; height: 14px; justify-self: end; }
+.fin-d-m::before, .fin-d-m::after { content: ""; position: absolute; left: 0; top: 6.5px; width: 14px; height: 1.5px; background: var(--tinta-2); transition: transform var(--t-media) var(--ease-out); }
+.fin-d-m::after { transform: rotate(90deg); }
+.fin-d[open] .fin-d-m::after { transform: rotate(0deg); }
+@media (hover: hover) and (pointer: fine) { .fin-d > summary:hover .fin-d-t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; } }
+.fin-d > summary:focus-visible { outline: 2px solid var(--aire); outline-offset: 4px; }
+.fin-d-c { display: grid; gap: var(--e-5); padding: 0 0 var(--e-7); max-width: 78ch; }
+.fin-d-c .ancla { display: block; height: 0; }
+.fin-acc { margin-top: var(--e-7); }
+
+@media (max-width: 760px) {
+  .fin-tres-l { grid-template-columns: minmax(0, 1fr); gap: var(--e-5); }
+  .fin-d > summary { grid-template-columns: minmax(0, 1fr) 20px; }
+  .fin-d-e { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .fin-d-m::before, .fin-d-m::after { transition: none; } }
+
+/* primera vista: el titular en dos o tres líneas (no cinco), para que las tres respuestas y el botón quepan arriba */
+.pag-cab .h1 { max-width: 24ch; font-size: clamp(2.3rem, 1.5rem + 3.1vw, 4.5rem); }
+.pag-cab { padding-bottom: var(--e-7); }
+.fin-tres { border-bottom: 0; padding-top: var(--e-7); }
+/* la demo sola: sin fila de pestañas */
+.dm--solo .dm-pest { display: none; }
