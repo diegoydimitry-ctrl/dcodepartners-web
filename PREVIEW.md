@@ -5,7 +5,7 @@
 | URL (sigue a la rama) | https://dcodepartners-web-git-web-dcp-cowork4-d-code-partners.vercel.app |
 | Rama | `web/dcp-cowork4` (parte de `8ff5f5b`) |
 | Commit | el último de la rama (ver `git log`) |
-| Production | 28/09 11:10: publicada `42b53f2` por petición expresa de Dirección (`dpl_AZqAhyAtf32KTYe86VAD2ntZJpyr`). **28/09 21:38: redeploy a producción desde la cuenta de Vercel del equipo** de `47231fc` de esta rama (`dpl_5FWeFUtfgByEJbgArsgwFbu1TX8r`; no lo hizo Cowork 4, que solo sube commits a la rama). Rollback a la anterior: `dpl_AZqAhyAtf32KTYe86VAD2ntZJpyr` |
+| Production | 28/09 11:10: publicada `42b53f2` por petición expresa de Dirección (`dpl_AZqAhyAtf32KTYe86VAD2ntZJpyr`). **28/09 21:38: redeploy a producción desde la cuenta de Vercel del equipo** de `47231fc` de esta rama (`dpl_5FWeFUtfgByEJbgArsgwFbu1TX8r`; no lo hizo Cowork 4, que solo sube commits a la rama). Rollback a la anterior: `dpl_AZqAhyAtf32KTYe86VAD2ntZJpyr`. **28/09 23:04: nuevo redeploy a producción desde la cuenta del equipo, ahora de `850eaf5`** (`dpl_89yYhrC7xj8rnt1GWoMhLk5dZbpa`: `47231fc` + color de fondo de los carteles de las webs de ejemplo + este archivo). Dirección confirmó el 29/09 que el redeploy es suyo. Finance mínimo (`5f36a02`) **no** está en producción: solo en la Preview de la rama |
 
 ## Cómo probarla (5 minutos)
 1. **Portada `/`**: baja despacio. Las piezas sueltas flotan, se unen y al final se enciende el píxel azul. Mueve el ratón: la luz del estudio se desliza por la cerámica. Cuatro frases en total.
@@ -22,7 +22,7 @@
 4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
 5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
 6. **Diagnóstico** (`/diagnostico`): tres preguntas y el resultado con tus horas y tu coste por hora.
-7. **Finance** (`/sistema-financiero`), capítulo «Cada factura, registrada y encadenada»: la cadena de registros y la hoja de ruta de VERI*FACTU.
+7. **Finance** (`/sistema-financiero`, rev. 29/09 `5f36a02`): la primera vista se entiende en segundos (titular, una frase, dos botones); debajo, tres respuestas cortas (qué es · qué resuelve · qué puedes hacer) y la demo para tocar ahí mismo («Suelta las facturas»). Todo lo demás (planes, VERI*FACTU, seguridad…) está plegado en «Más detalle»; los enlaces con ancla (`#planes`) abren su apartado.
 8. Cualquier interior (fíjate en el número de capítulo: su línea se llena al leer; y al cambiar de página, el fundido): `/departamentos/finanzas`, `/servicios/automatizaciones`, `/metodo`, `/faq`, `/aviso-legal`.
 8. **EN**: `/en` y el selector ES/EN de la cabecera.
 9. En el **móvil**: la escena arriba, el texto abajo; menú a pantalla completa. Las demos de «Tócalo» tienen su versión vertical (no la de escritorio encogida); los capítulos largos se pliegan con «Seguir leyendo»; el pie va en acordeón; el botón del chat se aparta al bajar y vuelve al subir.
