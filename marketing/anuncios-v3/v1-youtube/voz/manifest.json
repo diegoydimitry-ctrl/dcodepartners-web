@@ -1,139 +1,1672 @@
 {
- "voz": "em_alex",
+ "motor": "supertonic-3",
+ "sid": 6,
  "sr": 48000,
  "frases": [
   {
-   "id": "h1",
-   "texto": "Copiar.",
-   "dur": 0.704,
-   "oido": "copiar",
-   "wer": 0.0
+   "id": "a1",
+   "texto": "Hay un trabajo en tu empresa que nadie ve.",
+   "dur": 2.03,
+   "oido": "Hay un trabajo en tu empresa que nadie ve.",
+   "wer": 0.0,
+   "var_st": 3.44,
+   "f0": 83,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 2.181,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 2.04,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.377,
+     "wer": 0.0,
+     "f0": 83,
+     "var_st": 2.54,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 2.151,
+     "wer": 0.0,
+     "f0": 83,
+     "var_st": 1.26,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.03,
+     "wer": 0.0,
+     "f0": 83,
+     "var_st": 3.44,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.076,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.71,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.128,
+     "wer": 0.0,
+     "f0": 80,
+     "var_st": 2.1,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.966,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 1.99,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.049,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 1.91,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.022,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 2.89,
+     "oido": "Hay un trabajo en tu empresa que nadie ve."
+    }
+   ]
   },
   {
-   "id": "h2",
-   "texto": "Pegar.",
-   "dur": 0.661,
-   "oido": "pegar",
-   "wer": 0.0
+   "id": "a2",
+   "texto": "Y puede estar costándote un sueldo entero.",
+   "dur": 2.04,
+   "oido": "y puede estar costándote un sueldo entero",
+   "wer": 0.0,
+   "var_st": 2.01,
+   "f0": 93,
+   "vel": 1.05,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 2.244,
+     "wer": 0.0,
+     "f0": 97,
+     "var_st": 1.84,
+     "oido": "y puede estar costándote un sueldo entero."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.261,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 1.58,
+     "oido": "y puede estar costándote un sueldo entero."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 2.261,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 1.16,
+     "oido": "y puede estar costándote un sueldo entero."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.03,
+     "wer": 0.0,
+     "f0": 94,
+     "var_st": 1.25,
+     "oido": "y puede estar costándote un sueldo entero"
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.977,
+     "wer": 0.143,
+     "f0": 87,
+     "var_st": 1.4,
+     "oido": "y puede estar costándote un sueldo ent"
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.115,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 1.28,
+     "oido": "y puede estar costándote un sueldo entero"
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.223,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.26,
+     "oido": "y puede estar costándote un sueldo entero."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.04,
+     "wer": 0.0,
+     "f0": 93,
+     "var_st": 2.01,
+     "oido": "y puede estar costándote un sueldo entero"
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.959,
+     "wer": 0.143,
+     "f0": 89,
+     "var_st": 1.52,
+     "oido": "y puede estar costándote un sueldo ent"
+    }
+   ]
   },
   {
-   "id": "h3",
-   "texto": "Responder.",
-   "dur": 0.853,
-   "oido": "responder.",
-   "wer": 0.0
+   "id": "a3",
+   "texto": "En treinta segundos te digo cuál es... y cómo quitártelo de encima.",
+   "dur": 4.316,
+   "oido": "En 30 segundos te digo cuál es y cómo quitártelo de encima.",
+   "wer": 0.083,
+   "var_st": 4.15,
+   "f0": 95,
+   "vel": 0.95,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 4.531,
+     "wer": 0.25,
+     "f0": 88,
+     "var_st": 2.23,
+     "oido": "En 30 segundos te digo cuáles y cómo quitártelo de encima."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 4.316,
+     "wer": 0.083,
+     "f0": 95,
+     "var_st": 4.15,
+     "oido": "En 30 segundos te digo cuál es y cómo quitártelo de encima."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 4.333,
+     "wer": 0.083,
+     "f0": 91,
+     "var_st": 4.21,
+     "oido": "En 30 segundos te digo cuál es y cómo quitártelo de encima."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 4.021,
+     "wer": 0.083,
+     "f0": 83,
+     "var_st": 1.9,
+     "oido": "En 30 segundos te digo cuál es y cómo quitártelo de encima."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 4.19,
+     "wer": 0.083,
+     "f0": 91,
+     "var_st": 4.03,
+     "oido": "En 30 segundos te digo cuál es, y cómo quitártelo de encima."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 4.154,
+     "wer": 0.25,
+     "f0": 87,
+     "var_st": 2.13,
+     "oido": "En 30 segundos te digo cuáles y cómo quitártelo de encima."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 3.915,
+     "wer": 0.25,
+     "f0": 95,
+     "var_st": 3.75,
+     "oido": "En 30 segundos te digo cuáles y cómo quitártelo de encima."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 4.023,
+     "wer": 0.083,
+     "f0": 93,
+     "var_st": 2.24,
+     "oido": "En 30 segundos te digo cuál es y cómo quitártelo de encima."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 4.02,
+     "wer": 0.083,
+     "f0": 88,
+     "var_st": 5.02,
+     "oido": "En 30 segundos te digo cuál es y cómo quitártelo de encima."
+    }
+   ]
   },
   {
-   "id": "h4",
-   "texto": "Buscar.",
-   "dur": 0.747,
-   "oido": "Buscar",
-   "wer": 0.0
+   "id": "h",
+   "texto": "Copiar. Pegar. Responder. Buscar. Otra vez.",
+   "dur": 2.497,
+   "oido": "copiar, pegar, responder, buscar otra vez.",
+   "wer": 0.0,
+   "var_st": 4.09,
+   "f0": 92,
+   "vel": 1.15,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.546,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 0.75,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.535,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 1.24,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.5,
+     "wer": 0.0,
+     "f0": 92,
+     "var_st": 1.75,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 2.365,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.63,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 2.349,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 2.29,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 2.361,
+     "wer": 0.0,
+     "f0": 84,
+     "var_st": 1.59,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.15,
+     "toma": 0,
+     "dur": 2.14,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 0.65,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.15,
+     "toma": 1,
+     "dur": 2.497,
+     "wer": 0.0,
+     "f0": 92,
+     "var_st": 4.09,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    },
+    {
+     "vel": 1.15,
+     "toma": 2,
+     "dur": 2.576,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 1.19,
+     "oido": "copiar, pegar, responder, buscar otra vez."
+    }
+   ]
   },
   {
-   "id": "h5",
-   "texto": "Otra vez.",
-   "dur": 0.853,
-   "oido": "otra vez.",
-   "wer": 0.0
-  },
-  {
-   "id": "l1",
+   "id": "b1",
    "texto": "Esto no es trabajo.",
-   "dur": 1.387,
+   "dur": 1.136,
    "oido": "Esto no es trabajo.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 1.75,
+   "f0": 86,
+   "vel": 0.95,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 0.98,
+     "wer": 0.5,
+     "f0": 90,
+     "var_st": 0.6,
+     "oido": "Esto es nuestro trabajo."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.136,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 1.75,
+     "oido": "Esto no es trabajo."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.07,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 0.7,
+     "oido": "Esto no es trabajo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.107,
+     "wer": 0.5,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "Esto es nuestro trabajo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.011,
+     "wer": 0.5,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "Esto es nuestro trabajo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 0.954,
+     "wer": 0.5,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "Esto es nuestro trabajo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.026,
+     "wer": 0.5,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "Esto es nuestro trabajo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 0.966,
+     "wer": 0.5,
+     "f0": 86,
+     "var_st": 0.97,
+     "oido": "Esto es nuestro trabajo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 0.932,
+     "wer": 0.5,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "Esto es nuestro trabajo."
+    }
+   ]
   },
   {
-   "id": "l2",
+   "id": "b2",
    "texto": "Es ruido.",
-   "dur": 0.939,
-   "oido": "es ruido.",
-   "wer": 0.0
+   "dur": 0.682,
+   "oido": "Es ruido.",
+   "wer": 0.0,
+   "var_st": 2.86,
+   "f0": 91,
+   "vel": 0.9,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.9,
+     "toma": 0,
+     "dur": 0.682,
+     "wer": 0.0,
+     "f0": 91,
+     "var_st": 2.86,
+     "oido": "Es ruido."
+    },
+    {
+     "vel": 0.9,
+     "toma": 1,
+     "dur": 0.609,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 2.23,
+     "oido": "es ruido"
+    },
+    {
+     "vel": 0.9,
+     "toma": 2,
+     "dur": 0.589,
+     "wer": 0.5,
+     "f0": 88,
+     "var_st": 1.4,
+     "oido": "He ruido"
+    },
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 0.689,
+     "wer": 0.0,
+     "f0": 84,
+     "var_st": 1.52,
+     "oido": "es ruido"
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 0.659,
+     "wer": 0.0,
+     "f0": 82,
+     "var_st": 2.07,
+     "oido": "es ruido"
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 0.743,
+     "wer": 0.0,
+     "f0": 93,
+     "var_st": 2.6,
+     "oido": "es ruido."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 0.613,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 1.78,
+     "oido": "es ruido"
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 0.771,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 2.0,
+     "oido": "es ruido."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 0.542,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 2.08,
+     "oido": "Es ruido"
+    }
+   ]
   },
   {
-   "id": "l3",
-   "texto": "Datos que se copian a mano.",
-   "dur": 1.707,
-   "oido": "Datos que se copian a mano.",
-   "wer": 0.0
+   "id": "p1",
+   "texto": "Datos copiados a mano.",
+   "dur": 1.367,
+   "oido": "Datos copiados a mano.",
+   "wer": 0.0,
+   "var_st": 2.53,
+   "f0": 93,
+   "vel": 1.05,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 1.333,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 2.03,
+     "oido": "Datos copiados a mano"
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.333,
+     "wer": 0.0,
+     "f0": 81,
+     "var_st": 2.09,
+     "oido": "datos copiados a mano."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.403,
+     "wer": 0.0,
+     "f0": 76,
+     "var_st": 1.79,
+     "oido": "datos copiados a mano."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.378,
+     "wer": 0.0,
+     "f0": 79,
+     "var_st": 1.91,
+     "oido": "datos copiados a mano."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.228,
+     "wer": 0.0,
+     "f0": 80,
+     "var_st": 1.49,
+     "oido": "datos copiados a mano."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.326,
+     "wer": 0.0,
+     "f0": 76,
+     "var_st": 2.01,
+     "oido": "Datos copiados a mano"
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.194,
+     "wer": 0.0,
+     "f0": 80,
+     "var_st": 2.33,
+     "oido": "datos copiados a mano."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.327,
+     "wer": 0.0,
+     "f0": 74,
+     "var_st": 1.8,
+     "oido": "datos copiados a mano."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.367,
+     "wer": 0.0,
+     "f0": 93,
+     "var_st": 2.53,
+     "oido": "Datos copiados a mano."
+    }
+   ]
   },
   {
-   "id": "l4",
+   "id": "p2",
    "texto": "Herramientas que no se hablan.",
-   "dur": 1.707,
+   "dur": 1.445,
    "oido": "herramientas que no se hablan.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 3.46,
+   "f0": 87,
+   "vel": 0.95,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 1.445,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 3.46,
+     "oido": "herramientas que no se hablan."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.452,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 2.47,
+     "oido": "herramientas que no se hablan."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.315,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.33,
+     "oido": "herramientas que no se hablan"
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.385,
+     "wer": 0.0,
+     "f0": 95,
+     "var_st": 2.58,
+     "oido": "herramientas que no se hablan."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.391,
+     "wer": 0.0,
+     "f0": 81,
+     "var_st": 2.69,
+     "oido": "herramientas que no se hablan."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.367,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 2.43,
+     "oido": "herramientas que no se hablan."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.281,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 2.51,
+     "oido": "herramientas que no se hablan"
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.315,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 2.01,
+     "oido": "herramientas que no se hablan"
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.217,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 0.76,
+     "oido": "herramientas que no se hablan"
+    }
+   ]
   },
   {
-   "id": "l5",
-   "texto": "Y la misma pregunta, cada día, a la misma persona.",
-   "dur": 3.115,
-   "oido": "y la misma pregunta cada día a la misma persona.",
-   "wer": 0.0
+   "id": "p3",
+   "texto": "La misma pregunta, cada día, a la misma persona.",
+   "dur": 3.121,
+   "oido": "La misma pregunta, cada día a la misma persona.",
+   "wer": 0.0,
+   "var_st": 2.36,
+   "f0": 88,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 3.245,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 1.85,
+     "oido": "La misma pregunta, cada día a la misma persona."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 3.149,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 2.28,
+     "oido": "La misma pregunta, cada día a la misma persona."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 3.034,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 2.12,
+     "oido": "La misma pregunta, cada día a la misma persona."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.917,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 2.15,
+     "oido": "La misma pregunta, cada día a la misma persona."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.993,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 1.78,
+     "oido": "La misma pregunta, cada día, a la misma persona."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 3.121,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 2.36,
+     "oido": "La misma pregunta, cada día a la misma persona."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.831,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 1.44,
+     "oido": "La misma pregunta, cada día a la misma persona."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.731,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 2.32,
+     "oido": "La misma pregunta cada día a la misma persona."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.707,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 2.13,
+     "oido": "La misma pregunta cada día a la misma persona."
+    }
+   ]
   },
   {
-   "id": "l6",
+   "id": "c1",
    "texto": "En D-Code Partners convertimos ese ruido en un sistema.",
-   "dur": 3.349,
+   "dur": 3.225,
    "oido": "En Decode Partners, convertimos ese ruido en un sistema.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 2.76,
+   "f0": 94,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 3.494,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 2.21,
+     "oido": "En the Code Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 3.33,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 1.81,
+     "oido": "En Decode Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 3.329,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.86,
+     "oido": "En Decode Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 3.173,
+     "wer": 0.5,
+     "f0": 88,
+     "var_st": 3.49,
+     "oido": "En Decor Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.964,
+     "wer": 0.0,
+     "f0": 99,
+     "var_st": 2.51,
+     "oido": "En Decode Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 3.225,
+     "wer": 0.0,
+     "f0": 94,
+     "var_st": 2.76,
+     "oido": "En Decode Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.877,
+     "wer": 0.0,
+     "f0": 93,
+     "var_st": 2.7,
+     "oido": "En Decode Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 3.006,
+     "wer": 0.5,
+     "f0": 88,
+     "var_st": 2.38,
+     "oido": "En Deco Partners, convertimos ese ruido en un sistema."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 3.075,
+     "wer": 0.0,
+     "f0": 91,
+     "var_st": 2.51,
+     "oido": "En The Code Partners, convertimos ese ruido en un sistema."
+    }
+   ]
   },
   {
-   "id": "l7",
+   "id": "c2",
    "texto": "Analizamos cómo trabaja tu empresa.",
-   "dur": 2.24,
+   "dur": 2.401,
    "oido": "Analizamos cómo trabaja tu empresa.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 3.44,
+   "f0": 100,
+   "vel": 0.95,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 2.128,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 1.65,
+     "oido": "analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.401,
+     "wer": 0.0,
+     "f0": 100,
+     "var_st": 3.44,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 2.047,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 3.06,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.988,
+     "wer": 0.0,
+     "f0": 96,
+     "var_st": 2.47,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.018,
+     "wer": 0.0,
+     "f0": 94,
+     "var_st": 2.91,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.15,
+     "wer": 0.0,
+     "f0": 91,
+     "var_st": 2.51,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.89,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.76,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.837,
+     "wer": 0.0,
+     "f0": 84,
+     "var_st": 1.85,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.902,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 1.55,
+     "oido": "Analizamos cómo trabaja tu empresa."
+    }
+   ]
   },
   {
-   "id": "l8",
+   "id": "c3",
    "texto": "Diseñamos el sistema.",
-   "dur": 1.6,
+   "dur": 1.187,
    "oido": "Diseñamos el sistema.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 1.88,
+   "f0": 83,
+   "vel": 1.05,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 1.245,
+     "wer": 0.0,
+     "f0": 94,
+     "var_st": 0.76,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.286,
+     "wer": 0.0,
+     "f0": 91,
+     "var_st": 0.85,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.344,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 0.99,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.194,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 1.13,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.171,
+     "wer": 0.0,
+     "f0": 100,
+     "var_st": 1.22,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.263,
+     "wer": 0.0,
+     "f0": 83,
+     "var_st": 0.66,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.187,
+     "wer": 0.0,
+     "f0": 83,
+     "var_st": 1.88,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.194,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 0.43,
+     "oido": "Diseñamos el sistema."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.238,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 0.82,
+     "oido": "Diseñamos el sistema."
+    }
+   ]
   },
   {
-   "id": "l9",
-   "texto": "Y lo conectamos todo: procesos, datos y herramientas.",
-   "dur": 3.243,
-   "oido": "y lo conectamos todo, procesos, datos y herramientas.",
-   "wer": 0.0
+   "id": "c4",
+   "texto": "Y lo conectamos todo.",
+   "dur": 1.271,
+   "oido": "y lo conectamos todo.",
+   "wer": 0.0,
+   "var_st": 1.91,
+   "f0": 80,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 1.222,
+     "wer": 0.0,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.176,
+     "wer": 0.0,
+     "f0": 106,
+     "var_st": 1.51,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.176,
+     "wer": 0.0,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.271,
+     "wer": 0.0,
+     "f0": 80,
+     "var_st": 1.91,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.17,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 1.31,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.285,
+     "wer": 0.0,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.292,
+     "wer": 0.0,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.422,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.15,
+     "oido": "y lo conectamos todo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.173,
+     "wer": 0.0,
+     "f0": 81,
+     "var_st": 1.31,
+     "oido": "y lo conectamos todo."
+    }
+   ]
   },
   {
-   "id": "l10",
-   "texto": "Con automatización e inteligencia artificial.",
-   "dur": 2.965,
-   "oido": "con automatización e inteligencia artificial.",
-   "wer": 0.0
+   "id": "c5",
+   "texto": "Lo repetitivo, lo hace la automatización.",
+   "dur": 2.724,
+   "oido": "Lo repetitivo, lo hace la automatización.",
+   "wer": 0.0,
+   "var_st": 4.86,
+   "f0": 100,
+   "vel": 0.95,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 2.53,
+     "wer": 0.0,
+     "f0": 174,
+     "var_st": 1.09,
+     "oido": "Lo repetitivo, lo hace la automatización."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.482,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 0.79,
+     "oido": "Lo repetitivo, lo hace la automatización."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 2.724,
+     "wer": 0.0,
+     "f0": 100,
+     "var_st": 4.86,
+     "oido": "Lo repetitivo, lo hace la automatización."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.302,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 3.42,
+     "oido": "Lo repetitivo lo hace la automatización."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.54,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 3.13,
+     "oido": "Lo repetitivo lo hace la automatización."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.209,
+     "wer": 0.0,
+     "f0": 95,
+     "var_st": 1.26,
+     "oido": "Lo repetitivo lo hace la automatización."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.238,
+     "wer": 0.0,
+     "f0": 91,
+     "var_st": 1.36,
+     "oido": "Lo repetitivo lo hace la automatización."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.592,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 2.83,
+     "oido": "Lo repetitivo, lo hace la automatización."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.371,
+     "wer": 0.0,
+     "f0": 90,
+     "var_st": 4.19,
+     "oido": "Lo repetitivo lo hace la automatización."
+    }
+   ]
   },
   {
-   "id": "l11",
-   "texto": "No se trata de usar inteligencia artificial.",
-   "dur": 2.816,
-   "oido": "no se trata de usar inteligencia artificial.",
-   "wer": 0.0
+   "id": "c6",
+   "texto": "Lo que requiere pensar, la inteligencia artificial.",
+   "dur": 2.828,
+   "oido": "lo que requiere pensar la inteligencia artificial.",
+   "wer": 0.0,
+   "var_st": 4.09,
+   "f0": 86,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 2.795,
+     "wer": 0.0,
+     "f0": 88,
+     "var_st": 1.48,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.778,
+     "wer": 0.0,
+     "f0": 92,
+     "var_st": 2.07,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 2.877,
+     "wer": 0.0,
+     "f0": 99,
+     "var_st": 2.79,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.828,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 4.09,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.673,
+     "wer": 0.0,
+     "f0": 83,
+     "var_st": 1.39,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.715,
+     "wer": 0.0,
+     "f0": 82,
+     "var_st": 0.89,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.638,
+     "wer": 0.0,
+     "f0": 82,
+     "var_st": 2.22,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.645,
+     "wer": 0.0,
+     "f0": 95,
+     "var_st": 2.17,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.534,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 2.22,
+     "oido": "lo que requiere pensar la inteligencia artificial."
+    }
+   ]
   },
   {
-   "id": "l12",
-   "texto": "Se trata de que tu empresa funcione mejor.",
-   "dur": 2.645,
-   "oido": "Se trata de que tu empresa funcione mejor.",
-   "wer": 0.0
+   "id": "c7",
+   "texto": "Y tu equipo, por fin, a lo que importa.",
+   "dur": 2.007,
+   "oido": "y tu equipo por fin a lo que importa.",
+   "wer": 0.0,
+   "var_st": 3.16,
+   "f0": 104,
+   "vel": 0.95,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 1.926,
+     "wer": 0.0,
+     "f0": 86,
+     "var_st": 2.33,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.007,
+     "wer": 0.0,
+     "f0": 104,
+     "var_st": 3.16,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.827,
+     "wer": 0.0,
+     "f0": 82,
+     "var_st": 2.15,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.809,
+     "wer": 0.0,
+     "f0": 87,
+     "var_st": 1.57,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.902,
+     "wer": 0.0,
+     "f0": 81,
+     "var_st": 1.83,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.142,
+     "wer": 0.0,
+     "f0": 85,
+     "var_st": 2.17,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.803,
+     "wer": 0.0,
+     "f0": 82,
+     "var_st": 1.83,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.687,
+     "wer": 0.0,
+     "f0": 81,
+     "var_st": 1.52,
+     "oido": "y tu equipo por fin a lo que importa."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.821,
+     "wer": 0.0,
+     "f0": 81,
+     "var_st": 1.45,
+     "oido": "y tu equipo por fin a lo que importa."
+    }
+   ]
   },
   {
-   "id": "l13",
+   "id": "c8",
    "texto": "D-Code Partners.",
-   "dur": 1.259,
-   "oido": "decode partners",
-   "wer": 0.0
+   "dur": 1.17,
+   "oido": "decode partners.",
+   "wer": 0.0,
+   "var_st": 1.08,
+   "f0": 84,
+   "vel": 0.95,
+   "tomas": 6,
+   "alternativas": [
+    {
+     "vel": 0.9,
+     "toma": 0,
+     "dur": 1.225,
+     "wer": 1.0,
+     "f0": 82,
+     "var_st": 2.41,
+     "oido": "Decor de partners."
+    },
+    {
+     "vel": 0.9,
+     "toma": 1,
+     "dur": 0.932,
+     "wer": 1.0,
+     "f0": 88,
+     "var_st": 1.22,
+     "oido": "Decor de partners."
+    },
+    {
+     "vel": 0.9,
+     "toma": 2,
+     "dur": 1.135,
+     "wer": 0.0,
+     "f0": 0,
+     "var_st": 0.0,
+     "oido": "decode partners."
+    },
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 0.973,
+     "wer": 3.0,
+     "f0": 92,
+     "var_st": 1.55,
+     "oido": "DECO DE P"
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.17,
+     "wer": 0.0,
+     "f0": 84,
+     "var_st": 1.08,
+     "oido": "decode partners."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 0.858,
+     "wer": 0.0,
+     "f0": 92,
+     "var_st": 0.21,
+     "oido": "decode partners."
+    }
+   ]
   },
   {
-   "id": "l14",
+   "id": "c9",
    "texto": "Sistemas inteligentes para empresas.",
-   "dur": 2.197,
+   "dur": 2.304,
    "oido": "sistemas inteligentes para empresas.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 3.84,
+   "f0": 111,
+   "vel": 0.9,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 0.9,
+     "toma": 0,
+     "dur": 2.343,
+     "wer": 0.0,
+     "f0": 98,
+     "var_st": 2.41,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 0.9,
+     "toma": 1,
+     "dur": 2.309,
+     "wer": 0.0,
+     "f0": 89,
+     "var_st": 2.62,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 0.9,
+     "toma": 2,
+     "dur": 2.304,
+     "wer": 0.0,
+     "f0": 111,
+     "var_st": 3.84,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 2.255,
+     "wer": 0.0,
+     "f0": 93,
+     "var_st": 2.98,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 2.117,
+     "wer": 0.0,
+     "f0": 93,
+     "var_st": 2.78,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 2.076,
+     "wer": 0.0,
+     "f0": 97,
+     "var_st": 2.03,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.18,
+     "wer": 0.0,
+     "f0": 95,
+     "var_st": 1.53,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.033,
+     "wer": 0.0,
+     "f0": 91,
+     "var_st": 1.71,
+     "oido": "sistemas inteligentes para empresas."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.131,
+     "wer": 0.0,
+     "f0": 96,
+     "var_st": 2.28,
+     "oido": "sistemas inteligentes para empresas."
+    }
+   ]
   }
  ]
 }

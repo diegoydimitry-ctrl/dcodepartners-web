@@ -1,0 +1,72 @@
+{
+ "lufs": -14.01878469597367,
+ "pico_dbfs": -2.059519339530856,
+ "frases": [
+  {
+   "id": "v1",
+   "voz_fondo_lu": 6.4,
+   "wer": 0.0,
+   "oido": "Buscamos comerciales en toda España."
+  },
+  {
+   "id": "v2",
+   "voz_fondo_lu": 13.8,
+   "wer": 0.0,
+   "oido": "sin estudios, sin experiencia."
+  },
+  {
+   "id": "v3",
+   "voz_fondo_lu": 12.3,
+   "wer": 0.0,
+   "oido": "y te llevas el 50% de cada venta."
+  },
+  {
+   "id": "v4",
+   "voz_fondo_lu": 11.0,
+   "wer": 0.0,
+   "oido": "que vendes automatización e inteligencia artificial para empresas."
+  },
+  {
+   "id": "v5",
+   "voz_fondo_lu": 14.1,
+   "wer": 0.0,
+   "oido": "Tú consigues el cliente."
+  },
+  {
+   "id": "v6",
+   "voz_fondo_lu": 15.9,
+   "wer": 0.0,
+   "oido": "Nosotros lo construimos todo."
+  },
+  {
+   "id": "v7",
+   "voz_fondo_lu": 14.8,
+   "wer": 0.0,
+   "oido": "No necesitas saber programar."
+  },
+  {
+   "id": "v8",
+   "voz_fondo_lu": 11.2,
+   "wer": 0.0,
+   "oido": "y trabajas desde tu ciudad."
+  },
+  {
+   "id": "v9",
+   "voz_fondo_lu": 12.5,
+   "wer": 0.0,
+   "oido": "Te interesa escríbenos por Instagram o por correo."
+  },
+  {
+   "id": "v10",
+   "voz_fondo_lu": 12.6,
+   "wer": 0.0,
+   "oido": "Vende con de Code Partners."
+  }
+ ],
+ "silencios": [
+  [
+   26.85,
+   27.25
+  ]
+ ]
+}

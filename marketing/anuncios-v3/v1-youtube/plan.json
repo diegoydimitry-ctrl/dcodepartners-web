@@ -1,0 +1,102 @@
+{
+ "frases": [
+  {
+   "id": "a1",
+   "en": 0.35
+  },
+  {
+   "id": "a2",
+   "hueco": 0.28
+  },
+  {
+   "id": "a3",
+   "hueco": 0.38
+  },
+  {
+   "id": "h",
+   "hueco": 0.22
+  },
+  {
+   "id": "b1",
+   "hueco": 0.5
+  },
+  {
+   "id": "b2",
+   "hueco": 0.3
+  },
+  {
+   "id": "p1",
+   "hueco": 0.55,
+   "elastico": true
+  },
+  {
+   "id": "p2",
+   "hueco": 0.3,
+   "elastico": true
+  },
+  {
+   "id": "p3",
+   "hueco": 0.3,
+   "elastico": true
+  },
+  {
+   "id": "c1",
+   "hueco": 0.5
+  },
+  {
+   "id": "c2",
+   "hueco": 0.45,
+   "elastico": true
+  },
+  {
+   "id": "c3",
+   "hueco": 0.3,
+   "elastico": true
+  },
+  {
+   "id": "c4",
+   "hueco": 0.3,
+   "elastico": true
+  },
+  {
+   "id": "c5",
+   "hueco": 0.45,
+   "elastico": true
+  },
+  {
+   "id": "c6",
+   "hueco": 0.3,
+   "elastico": true
+  },
+  {
+   "id": "c7",
+   "hueco": 0.32
+  },
+  {
+   "id": "c8",
+   "hueco": 1.2
+  },
+  {
+   "id": "c9",
+   "hueco": 0.25
+  }
+ ],
+ "ancla": {
+  "desde": "a3",
+  "hasta": "c7",
+  "segundos": 29.45
+ },
+ "marcas": {
+  "silencio0": "h.t1+0.06",
+  "silencio1": "b1.t0+-0.06",
+  "golpe": "c1.t0+-0.45",
+  "cuenta0": "a3.t0+0.5",
+  "cuenta_fin": "c7.t0+0.55",
+  "producto": "c7.t0+-0.2",
+  "cierre": "c8.t0+-0.6"
+ },
+ "cola": 1.6,
+ "fijos": {
+  "bpm": 120
+ }
+}

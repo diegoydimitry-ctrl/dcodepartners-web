@@ -1,309 +1,217 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>LA MITAD · D-Code Partners</title>
+<html lang="es"><head><meta charset="utf-8"><title>SE BUSCAN COMERCIALES · D-Code Partners</title>
 <style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
 <body><canvas id="c" width="1080" height="1920"></canvas>
 <script src="../comun/motor.js"></script>
 <script>
 "use strict";
-// LA MITAD — anuncio de captación de vendedores (9:16). Todo el anuncio es un trato partido en dos.
-// Todo el texto vive entre y=270 y y=1650 (lo demás lo tapa la interfaz de Reels) y a 64 px de los lados.
+// SE BUSCAN COMERCIALES — Reels / Stories (9:16). Un solo sistema visual: negro tinta, crema y UN acento naranja.
+// El mensaje entero (buscamos comerciales · toda España · sin estudios ni experiencia · 50 %) se entiende en los
+// primeros 7 segundos y queda fijo en una cinta superior para quien entra a mitad de vídeo.
+// Todo el texto vive entre y=270 y y=1650 (lo demás lo tapa la interfaz) y a 64 px de los lados.
 const W = 1080, H = 1920, FPS = 30;
-const D = window.DATOS, MT = D.montaje, G = D.golpes;
+const D = window.DATOS, MT = D.montaje;
 const V = Object.fromEntries(MT.voz.map((f) => [f.id, f]));
 window.META = { W, H, fps: FPS, duracion: MT.duracion, segura: [64, 270, 1016, 1650], minpx: 30 };
 const c = document.getElementById("c").getContext("2d");
 const { clamp, lerp, prog, eOut, eOut5, eIn, eIO, muelle, hash } = M;
-const C = { crema: "#f3eee4", negro: "#0b0b0c", azul: "#2448ff", lima: "#d6ff3d", coral: "#ff4a2a", blanco: "#ffffff", gris: "#8c8a85", pixel: "#5b8cff" };
+const C = { tinta: "#0d0d0f", tinta2: "#18181c", crema: "#f3eee4", tenue: "#8d887e", naranja: "#ff5b1f", pixel: "#5b8cff" };
 const A = (px) => `400 ${px}px "Anton"`;
 const R = (p, px) => `${p} ${px}px "Archivo"`;
 const MONO = (p, px) => M.fuente(p, px, "JetBrains Mono");
-const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "").startsWith(w));
-const T50 = G.cincuenta, TAJO = G.tajo;
+const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "").startsWith(w)) || V[id].palabras[0];
+const ajusta = (s, fam, anchoMax, pxMax) => Math.min(pxMax, (100 * anchoMax) / M.ancho(c, s, fam(100)));
+const T50 = MT.cincuenta, TCTA = MT.cta, TMARCA = MT.marca;
 
-// tamaño que hace que un texto quepa en un ancho
-function ajusta(s, fam, anchoMax, pxMax, track = 0) { const w = M.ancho(c, s, fam(100), track * 100 / pxMax); return Math.min(pxMax, (100 * anchoMax) / w); }
-// palabra cartel: entra con golpe (escala 1,25 → 1 con muelle) centrada en (x, y)
+function fondo(col = C.tinta) { c.fillStyle = col; c.fillRect(0, 0, W, H); }
 function cartel(s, x, y, px, color, t0, t, o = {}) {
-  const k = muelle(prog(t, t0 - 0.02, t0 + 0.32), 3, 6), e = eOut5(prog(t, t0 - 0.02, t0 + 0.08));
-  if (e <= 0) return;
-  c.save(); c.translate(x, y); const s_ = lerp(o.desde ?? 1.25, 1, k); c.scale(s_, s_);
-  M.texto(c, s, 0, 0, { f: (o.fam || A)(px), color, al: "center", base: "middle", alpha: e * (o.alpha ?? 1), track: o.track ?? 0 });
+  const k = muelle(prog(t, t0 - 0.03, t0 + 0.3), 3, 6), e = eOut5(prog(t, t0 - 0.03, t0 + 0.06));
+  if (e <= 0) return 0;
+  c.save(); c.translate(x, y); const s_ = lerp(o.desde ?? 1.18, 1, k); c.scale(s_, s_);
+  M.texto(c, s, 0, 0, { f: (o.fam || A)(px), color, al: o.al || "center", base: "middle", alpha: e * (o.alpha ?? 1), track: o.track ?? 0 });
+  c.restore(); return e;
+}
+const vis = (t, t0, t1, ent = 0.12, sal = 0.14) => Math.min(eOut5(prog(t, t0 - 0.02, t0 + ent)), 1 - eIn(prog(t, t1 - sal, t1)));
+
+// ─── mapa de España (península, Baleares y Canarias en recuadro) ───
+const PEN = [[-9.3,43.0],[-8.9,43.4],[-8.2,43.7],[-7.0,43.55],[-5.8,43.6],[-4.5,43.4],[-3.4,43.45],[-2.0,43.35],[-1.8,43.38],[-1.4,43.05],[-0.7,42.8],[0.7,42.85],[1.4,42.6],[2.1,42.45],[3.2,42.35],[3.2,41.9],[2.4,41.5],[1.0,41.1],[0.7,40.7],[-0.1,40.0],[-0.3,39.5],[0.2,38.8],[-0.5,38.3],[-0.7,37.6],[-1.3,37.55],[-1.9,36.95],[-2.2,36.7],[-3.5,36.72],[-4.4,36.7],[-5.3,36.2],[-5.6,36.0],[-6.2,36.4],[-6.4,36.8],[-7.4,37.2],[-7.5,37.6],[-7.0,38.2],[-7.3,38.8],[-7.0,39.5],[-7.5,39.7],[-6.9,40.2],[-6.9,41.0],[-6.2,41.6],[-6.6,41.95],[-8.2,41.9],[-8.9,41.9],[-8.9,42.5]];
+const MALL = [[2.35,39.55],[2.7,39.95],[3.25,39.75],[3.45,39.6],[3.1,39.3],[2.75,39.35]];
+const CIUDADES = [[-3.7,40.42],[2.17,41.39],[-0.38,39.47],[-5.98,37.39],[-4.42,36.72],[-2.93,43.26],[-5.66,43.54],[-0.88,41.65],[-8.41,43.36],[-1.13,37.99],[-4.72,41.65],[-0.48,38.35],[-3.6,37.18],[2.65,39.57],[-6.97,38.88],[-5.85,43.36],[-2.45,42.46],[-3.8,43.46]];
+function proy(lon, lat, cx, cy, k) { return [cx + (lon + 3.0) * 0.766 * k, cy + (40.0 - lat) * k]; }
+function mapa(t, cx, cy, k, t0, alpha = 1, pulso = 0) {
+  if (alpha <= 0) return;
+  c.save(); c.globalAlpha *= alpha;
+  const traza = (pts) => { c.beginPath(); pts.forEach(([lo, la], i) => { const [x, y] = proy(lo, la, cx, cy, k); i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.closePath(); };
+  const kd = prog(t, t0, t0 + 0.7);
+  for (const P of [PEN, MALL]) { c.save(); traza(P); c.clip();
+    const paso = 17; for (let x = cx - 6.5 * 0.766 * k; x < cx + 6.5 * 0.766 * k; x += paso) for (let y = cy - 4.2 * k; y < cy + 4.5 * k; y += paso) {
+      const a = clamp(kd * 1.6 - (x - (cx - 5 * k)) / (10 * k)); if (a <= 0) continue;
+      c.fillStyle = `rgba(243,238,228,${0.28 * a})`; c.beginPath(); c.arc(x, y, 2.6, 0, 7); c.fill(); }
+    c.restore(); traza(P); c.strokeStyle = `rgba(243,238,228,${0.55 * kd})`; c.lineWidth = 2.5; c.stroke(); }
+  const [bx, by] = [cx - 5.6 * 0.766 * k, cy + 3.2 * k];
+  c.strokeStyle = `rgba(243,238,228,${0.35 * kd})`; c.lineWidth = 2; c.strokeRect(bx, by, 170, 80);
+  [[20, 45], [52, 50], [80, 40], [108, 38], [140, 30]].forEach(([dx, dy], i) => { c.fillStyle = `rgba(243,238,228,${0.5 * kd})`; c.beginPath(); c.ellipse(bx + dx, by + dy, 11 - i, 7, 0.3, 0, 7); c.fill(); });
+  CIUDADES.forEach(([lo, la], i) => { const [x, y] = proy(lo, la, cx, cy, k); const kc = prog(t, t0 + 0.25 + i * 0.05, t0 + 0.45 + i * 0.05);
+    if (kc <= 0) return; const lat = pulso ? 0.5 + 0.5 * Math.sin(t * 5 + i) : 0; const ph = (t * 1.2 + i * 0.13) % 1;
+    c.fillStyle = `rgba(255,91,31,${0.25 * (1 - ph)})`; c.beginPath(); c.arc(x, y, 10 + ph * 34, 0, 7); c.fill();
+    c.fillStyle = C.naranja; c.beginPath(); c.arc(x, y, (7 + 3 * lat) * eOut5(kc), 0, 7); c.fill(); });
   c.restore();
 }
-function fondo(col) { c.fillStyle = col; c.fillRect(0, 0, W, H); }
-function etiqueta(s, y, col, bg, alpha = 1) {   // pastilla pequeña de contexto
-  const f = MONO(700, 30); const w = M.ancho(c, s, f, 4) + 56;
-  c.save(); c.globalAlpha *= alpha; M.rr(c, 540 - w / 2, y - 30, w, 60, 30); c.fillStyle = bg; c.fill();
-  M.texto(c, s, 540, y + 11, { f, color: col, al: "center", track: 4 }); c.restore();
-}
 
-// ════════════════ 0 → 3,4 · el trato: un proyecto cerrado se parte en dos ════════════════
-function ticket(x, y, rot, t, mitad = 0, corte = 0) {
-  const reg = !mitad;
-  // mitad: 0 entero, -1 solo la izquierda, 1 solo la derecha; corte: separación
-  const w = 760, h = 980;
-  c.save(); c.translate(x, y); c.rotate(rot);
-  if (mitad) { c.beginPath(); if (mitad < 0) c.rect(-w, -h, w - 0 + 0, h * 2); else c.rect(0, -h, w, h * 2); c.clip(); }
-  c.fillStyle = "#00000022"; M.rr(c, -w / 2 + 14, -h / 2 + 22, w, h, 26); c.fill();
-  c.fillStyle = C.blanco; M.rr(c, -w / 2, -h / 2, w, h, 26); c.fill();
-  M.texto(c, "PROYECTO", -w / 2 + 60, -h / 2 + 130, { f: A(110), color: C.negro, registrar: reg });
-  M.texto(c, "Nº 047", w / 2 - 60, -h / 2 + 128, { f: MONO(700, 40), color: C.gris, al: "right", registrar: reg });
-  c.fillStyle = "#e6e2d8"; c.fillRect(-w / 2 + 60, -h / 2 + 175, w - 120, 4);
-  const filas = [["SERVICIO", "Automatización + IA"], ["CLIENTE", "Empresa de tu zona"], ["QUIÉN LO VENDE", "Tú"], ["QUIÉN LO CONSTRUYE", "D-Code"]];
-  filas.forEach(([k, v], i) => { const yy = -h / 2 + 270 + i * 120;
-    M.texto(c, k, -w / 2 + 60, yy, { f: MONO(700, 32), color: C.gris, track: 2, registrar: reg });
-    M.texto(c, v, -w / 2 + 60, yy + 56, { f: R(700, 46), color: C.negro, registrar: reg }); });
-  // línea de corte punteada en el centro (el trato ya viene partido por la mitad)
-  c.save(); c.setLineDash([16, 14]); c.strokeStyle = "#c9c4b8"; c.lineWidth = 4; c.beginPath(); c.moveTo(0, -h / 2 + 200); c.lineTo(0, h / 2 - 40); c.stroke(); c.restore();
-  // sello CERRADO
-  const ks = prog(t, G.cerrado - 0.08, G.cerrado);
-  if (ks > 0) { const e = t < G.cerrado ? eIn(ks) : 1; c.save(); c.translate(0, h / 2 - 170); c.rotate(-0.12); const s = lerp(2.4, 1, e); c.scale(s, s);
-    c.globalAlpha = e; c.strokeStyle = C.coral; c.lineWidth = 9; M.rr(c, -250, -72, 500, 144, 18); c.stroke();
-    M.texto(c, "CERRADO", 0, 38, { f: A(118), color: C.coral, al: "center", track: 6, registrar: reg }); c.restore(); }
+// ─── cinta superior fija: el mensaje entero, siempre a la vista ───
+function cinta(t) {
+  const a = eOut(prog(t, V.v2.t0 - 0.2, V.v2.t0 + 0.2)) * (1 - eIn(prog(t, TMARCA - 0.2, TMARCA + 0.2)));
+  if (a <= 0) return;
+  const s = "SE BUSCAN COMERCIALES  ·  TODA ESPAÑA  ·  SIN ESTUDIOS NI EXPERIENCIA  ·  50 % DE CADA VENTA  ·  ";
+  const f = MONO(700, 30); const w = M.ancho(c, s, f, 2); const off = (t * 90) % w;
+  c.save(); c.globalAlpha = a; c.fillStyle = C.naranja; c.fillRect(0, 282, W, 58);
+  c.beginPath(); c.rect(64, 282, W - 128, 58); c.clip();
+  for (let x = 64 - off; x < W; x += w) M.texto(c, s, x, 322, { f, color: C.tinta, track: 2, registrar: false });
   c.restore();
 }
-function trato(t) {
-  fondo(C.crema);
-  const kIn = eOut5(prog(t, 0, 0.14));          // primer fotograma: el ticket cae con el sello
-  const [pa1] = [V.a1.palabras];
-  if (t < TAJO) {
-    const sac = t < 0.14 ? (1 - kIn) * 0.08 : 0;
-    ticket(540, 1010 + (1 - kIn) * -160, -0.03 + sac, t);
-    // «CIERRAS UN PROYECTO.»
-    const f1 = A(96);
-    cartel("CIERRAS", 540, 360, 110, C.negro, pa1[0].t0, t, { desde: 1.1 });
-    cartel("UN PROYECTO.", 540, 470, 110, C.negro, pa1[1].t0, t, { desde: 1.1 });
-  } else {
-    // el tajo: una línea blanca cruza, el ticket se abre en dos
-    const kc = eOut5(prog(t, TAJO, TAJO + 0.45)), dt = t - TAJO;
-    if (dt < 0.12) { fondo(C.blanco); }
-    else fondo(C.lima);
-    ticket(540 - kc * 760, 1060 + kc * 160, -0.03 - kc * 0.16, t, -1);
-    ticket(540 + kc * 760, 1060 + kc * 160, -0.03 + kc * 0.16, t, 1);
-    // (las dos mitades salen de cuadro: queda solo el 50 %)
-    // la derecha: 50 %
-    const k50 = muelle(prog(t, TAJO + 0.05, TAJO + 0.5), 3, 6);
-    c.save(); c.translate(540, 1080); c.rotate(-0.04); c.scale(lerp(0.4, 1, k50), lerp(0.4, 1, k50));
-    M.texto(c, "50%", 0, 0, { f: A(360), color: C.negro, al: "center", base: "middle", alpha: clamp(k50 * 2) }); c.restore();
-    M.texto(c, "PARA TI", 540, 1420, { f: A(110), color: C.coral, al: "center", alpha: eOut5(prog(t, TAJO + 0.35, TAJO + 0.6)) });
-    // «LA MITAD ES TUYA.»
-    const pa = V.a2.palabras;
-    cartel("LA MITAD", 540, 380, 150, C.negro, pa[0].t0, t);
-    cartel("ES TUYA.", 540, 530, 150, C.negro, pa[2].t0, t);
-    // línea del tajo
-    if (dt < 0.2) { const k = eOut5(prog(dt, 0, 0.12)); c.save(); c.globalAlpha = 1 - prog(dt, 0.1, 0.2); c.translate(540, 1010); c.rotate(0.06);
-      c.fillStyle = C.negro; c.fillRect(-4, -1000 * k, 8, 2000 * k); c.restore(); }
-  }
-}
 
-// ════════════════ 3,4 → 7,7 · BUSCAMOS / PERSONAS / PARA / VENTAS · gente que sabe abrir puertas ════════════════
-function buscamos(t) {
-  const pa = V.b1.palabras; const cols = [[C.azul, C.blanco], [C.coral, C.negro], [C.negro, C.lima], [C.lima, C.negro]];
-  let i = 0; while (i + 1 < pa.length && t >= pa[i + 1].t0 - 0.02) i++;
-  const [bg, fg] = cols[i]; fondo(bg);
-  etiqueta("D-CODE PARTNERS", 330, bg === C.negro ? C.lima : fg, bg === C.negro ? "#ffffff14" : "#00000014", eOut(prog(t, pa[0].t0, pa[0].t0 + 0.2)));
-  // pila: las palabras ya dichas quedan arriba, pequeñas; la actual, enorme
-  const pal_ = pa.map((p) => p.w.replace(/[.,]/g, "").toUpperCase());
-  for (let j = 0; j < i; j++) M.texto(c, pal_[j], 540, 470 + j * 92, { f: A(84), color: fg, al: "center", alpha: 0.35 });
-  const px = ajusta(pal_[i], A, 930, 330);
-  cartel(pal_[i], 540, 960, px, fg, pa[i].t0, t, { desde: 1.35 });
-  // subrayado que crece en VENTAS
-  if (i === 3) { const k = eOut5(prog(t, pa[3].t0 + 0.1, pa[3].t0 + 0.45)); c.fillStyle = C.negro; c.fillRect(540 - 430 * k, 1150, 860 * k, 18); }
+// ════════════════ escenas ════════════════
+function e1(t) {                // Buscamos comerciales en toda España — y desde el fotograma 0, la oferta entera
+  const a = vis(t, -1, V.v2.t0); if (a <= 0) return;
+  c.save(); c.globalAlpha = a;
+  const pop = (t0, dur = 0.16) => eOut5(prog(t, t0, t0 + dur));
+  cartel("BUSCAMOS", 540, 420, 130, C.crema, 0.0, t, { desde: 1.2 });
+  const tC = pal("v1", "comerciales").t0, tE = pal("v1", "toda").t0;
+  const kC = pop(0.05); const pulso = 1 + 0.05 * Math.exp(-Math.max(0, t - tC) * 6) * (t > tC ? 1 : 0);
+  c.save(); c.translate(540, 600); c.scale(lerp(1.1, 1, muelle(prog(t, 0.05, 0.4), 3, 6)) * pulso, lerp(1.1, 1, muelle(prog(t, 0.05, 0.4), 3, 6)) * pulso);
+  M.texto(c, "COMERCIALES", 0, 0, { f: A(ajusta("COMERCIALES", A, 840, 250)), color: C.naranja, al: "center", base: "middle", alpha: kC }); c.restore();
+  // requisitos (ninguno) y alcance, en pastillas
+  const pill = (txt, x, y, t0, lleno) => { const k = pop(t0); if (k <= 0) return; const f = A(62); const w = M.ancho(c, txt, f) + 64;
+    c.save(); c.globalAlpha *= k; c.translate(0, (1 - k) * 30); M.rr(c, x - w / 2, y - 52, w, 104, 52);
+    if (lleno) { c.fillStyle = C.crema; c.fill(); } else { c.strokeStyle = C.crema; c.lineWidth = 4; c.stroke(); }
+    M.texto(c, txt, x, y + 2, { f, color: lleno ? C.tinta : C.crema, al: "center", base: "middle" }); c.restore(); };
+  pill("SIN ESTUDIOS", 300, 800, 0.15); pill("SIN EXPERIENCIA", 745, 800, 0.2);
+  const kE = t > tE ? 1 + 0.1 * Math.exp(-(t - tE) * 6) : 1;
+  c.save(); c.translate(540, 930); c.scale(kE, kE); c.translate(-540, -930); pill("EN TODA ESPAÑA", 540, 930, 0.25, true); c.restore();
+  // la cifra
+  const k5 = pop(0.3, 0.25);
+  if (k5 > 0) { c.save(); c.globalAlpha *= k5; c.translate(0, (1 - k5) * 40);
+    M.rr(c, 110, 1060, 860, 420, 36); c.fillStyle = C.naranja; c.fill();
+    M.texto(c, "50%", 540, 1250, { f: A(250), color: C.tinta, al: "center", base: "middle" });
+    M.texto(c, "DE CADA VENTA, PARA TI", 540, 1410, { f: A(70), color: C.tinta, al: "center", base: "middle" }); c.restore(); }
+  c.restore();
 }
-function puertas(t) {
-  // «Gente que sabe abrir puertas.»: dos hojas de puerta que se abren y dejan pasar la luz
-  fondo(C.negro); const pa = V.b2.palabras; const tA = pal("b2", "abrir").t0;
-  const k = eIO(prog(t, tA - 0.05, tA + 0.6));
-  const px0 = 540, py0 = 1080, pw = 520, ph = 760;
-  // luz detrás
-  const g = c.createLinearGradient(0, py0 - ph / 2, 0, py0 + ph / 2); g.addColorStop(0, C.lima); g.addColorStop(1, "#f6ffcf");
-  c.fillStyle = g; c.fillRect(px0 - pw / 2, py0 - ph / 2, pw, ph);
-  // haz de luz en el suelo
-  c.save(); c.globalAlpha = 0.35 * k; c.fillStyle = C.lima; c.beginPath(); c.moveTo(px0 - pw / 2, py0 + ph / 2); c.lineTo(px0 + pw / 2, py0 + ph / 2);
-  c.lineTo(px0 + pw, H); c.lineTo(px0 - pw, H); c.closePath(); c.fill(); c.restore();
-  // hojas (se abren en perspectiva: se estrechan hacia los lados)
-  [-1, 1].forEach((s) => { const wh = (pw / 2) * (1 - 0.82 * k); const x = s < 0 ? px0 - pw / 2 : px0 + pw / 2 - wh;
-    c.fillStyle = "#1c1c20"; c.fillRect(x, py0 - ph / 2 - 10 * k, wh, ph + 20 * k);
-    c.fillStyle = "#2c2c33"; c.beginPath(); c.arc(s < 0 ? x + wh - 28 : x + 28, py0, 10 * (1 - k * 0.8), 0, 7); c.fill(); });
-  c.strokeStyle = "#333"; c.lineWidth = 6; c.strokeRect(px0 - pw / 2 - 3, py0 - ph / 2 - 3, pw + 6, ph + 6);
-  cartel("GENTE QUE SABE", 540, 380, 118, C.blanco, pa[0].t0, t, { desde: 1.08 });
-  cartel("ABRIR PUERTAS.", 540, 520, 138, C.lima, tA, t, { desde: 1.15 });
-}
-
-// ════════════════ 7,7 → 14,1 · qué vas a vender: tres tarjetas ════════════════
-function tarjetas(t) {
-  fondo(C.crema);
-  const pa = V.c1.palabras; const kV = eOut5(prog(t, pa[0].t0, pa[0].t0 + 0.2));
-  M.texto(c, "VAS A VENDER", 540, 380, { f: A(104), color: C.negro, al: "center", alpha: kV });
-  const defs = [
-    { t0: pal("c1", "automatización").t0, col: C.azul, fg: C.blanco, tit: ["AUTOMATIZACIÓN"], dib: miniFlujo },
-    { t0: pal("c2", "inteligencia").t0, col: C.negro, fg: C.lima, tit: ["INTELIGENCIA", "ARTIFICIAL"], dib: miniIA },
-    { t0: pal("c3", "sistemas").t0, col: C.coral, fg: C.negro, tit: ["SISTEMAS", "A MEDIDA"], dib: miniSistema },
-  ];
-  const activa = defs.reduce((a, d, i) => (t >= d.t0 - 0.05 ? i : a), -1);
-  defs.forEach((d, i) => {
-    if (t < d.t0 - 0.05) return;
-    const k = muelle(prog(t, d.t0 - 0.05, d.t0 + 0.4), 2.6, 6), e = eOut5(prog(t, d.t0 - 0.05, d.t0 + 0.12));
-    const atras = activa - i;                                  // las anteriores se apilan detrás, más pequeñas
-    const y = 1200 - atras * 225 - (1 - e) * -500, s = 1 - atras * 0.08, rot = [-0.035, 0.03, -0.015][i] * (atras ? 2 : 1);
-    c.save(); c.translate(540, y); c.rotate(rot); c.scale(s * lerp(1.08, 1, k), s * lerp(1.08, 1, k));
-    c.fillStyle = "#00000026"; M.rr(c, -400 + 12, -330 + 18, 800, 660, 36); c.fill();
-    c.fillStyle = d.col; M.rr(c, -400, -330, 800, 660, 36); c.fill();
-    if (!atras) d.dib(t - d.t0, d.fg);
-    d.tit.forEach((l, j) => { const px = ajusta(l, A, 700, 104); M.texto(c, l, -350, -225 + j * 108, { f: A(px), color: d.fg, registrar: !atras }); });
-    c.restore();
+function e2(t) {                // Sin estudios. Sin experiencia.
+  const a = vis(t, V.v2.t0, V.v3.t0); if (a <= 0) return;
+  c.save(); c.globalAlpha = a;
+  const p = V.v2.palabras; const tS2 = (p[2] || p[p.length - 1]).t0;
+  const x = 120, y = 430, w = 840, h = 420; M.rr(c, x, y, w, h, 28); c.fillStyle = C.tinta2; c.fill(); c.strokeStyle = "#2a2a30"; c.lineWidth = 2; c.stroke();
+  M.texto(c, "REQUISITOS", x + 50, y + 80, { f: MONO(700, 34), color: C.tenue, track: 6 });
+  [["Título universitario", p[1].t1 + 0.1], ["Experiencia en ventas", p[p.length - 1].t1 + 0.08], ["Saber programar", p[p.length - 1].t1 + 0.35]].forEach(([s, tt], i) => {
+    const yy = y + 170 + i * 90; const k = eIO(prog(t, tt, tt + 0.28));
+    M.texto(c, s, x + 50, yy, { f: R(700, 50), color: k > 0.5 ? "#6e6a63" : C.crema });
+    if (k > 0) { const ww = M.ancho(c, s, R(700, 50)); c.fillStyle = C.naranja; c.fillRect(x + 44, yy - 20, (ww + 14) * k, 8); }
   });
-  // «para empresas.»
-  const tE = pal("c3", "empresas").t0; const kE = eOut5(prog(t, tE - 0.05, tE + 0.2));
-  if (kE > 0) etiqueta("PARA EMPRESAS", 1605, C.lima, C.negro, kE);
+  cartel("SIN ESTUDIOS.", 540, 1060, 150, C.crema, p[0].t0, t);
+  cartel("SIN EXPERIENCIA.", 540, 1230, ajusta("SIN EXPERIENCIA.", A, 940, 150), C.naranja, tS2, t);
+  c.restore();
 }
-function miniFlujo(dt, fg) {        // nodos que se completan solos
-  const ns = [[-250, 110], [0, 110], [250, 110]];
-  ns.forEach(([x, y], i) => { const k = eOut5(prog(dt, 0.2 + i * 0.35, 0.45 + i * 0.35));
-    if (i) { c.strokeStyle = fg; c.lineWidth = 6; c.globalAlpha = 0.5 + 0.5 * k; c.beginPath(); c.moveTo(ns[i - 1][0] + 60, y); c.lineTo(lerp(ns[i - 1][0] + 60, x - 60, k), y); c.stroke(); c.globalAlpha = 1; }
-    c.strokeStyle = fg; c.lineWidth = 6; c.beginPath(); c.arc(x, y, 56, 0, 7); c.stroke();
-    if (k > 0) { c.fillStyle = fg; c.globalAlpha = k; c.beginPath(); c.arc(x, y, 56, 0, 7); c.fill(); c.globalAlpha = 1;
-      c.strokeStyle = C.azul; c.lineWidth = 9; c.beginPath(); c.moveTo(x - 22, y + 2); c.lineTo(x - 5, y + 20); c.lineTo(x + 26, y - 18); c.stroke(); }
-    M.texto(c, ["Pedido", "Factura", "Aviso"][i], x, y + 118, { f: R(700, 36), color: fg, al: "center" }); });
-}
-function miniIA(dt, fg) {           // pregunta → respuesta que se escribe
-  M.rr(c, -340, 20, 680, 90, 45); c.strokeStyle = fg; c.lineWidth = 4; c.stroke();
-  const q = "¿Qué clientes me deben?"; const n = Math.min(q.length, Math.floor(prog(dt, 0.05, 0.6) * q.length));
-  M.texto(c, q.slice(0, n), -300, 78, { f: R(600, 38), color: fg });
-  const ka = prog(dt, 0.7, 1.4);
-  [560, 480, 380].forEach((w, i) => { const k = eOut(clamp(ka * 3 - i)); c.fillStyle = fg; c.globalAlpha = 0.85; M.rr(c, -340, 150 + i * 46, w * k, 24, 12); c.fill(); c.globalAlpha = 1; });
-}
-function miniSistema(dt, fg) {      // bloques que encajan en una retícula
-  for (let i = 0; i < 8; i++) { const col = i % 4, fila = Math.floor(i / 4); const k = eOut5(prog(dt, 0.1 + i * 0.1, 0.4 + i * 0.1));
-    const x = -330 + col * 170, y = 40 + fila * 130; c.globalAlpha = k; c.fillStyle = i === 5 ? C.blanco : fg;
-    M.rr(c, x, y - (1 - k) * 60, 150, 110, 16); c.fill(); c.globalAlpha = 1; }
-}
-
-// ════════════════ 14,1 → 21,4 · el reparto: TU PARTE | LA NUESTRA · no necesitas programar ════════════════
-function reparto(t) {
-  const tD2 = V.d2.t0, tD3 = V.d3.t0;
-  if (t < tD3 - 0.05) {
-    // pantalla partida en horizontal: arriba lo tuyo, abajo lo nuestro; el corte es el del ticket
-    const kS = eOut5(prog(t, tD2 - 0.1, tD2 + 0.3));   // la mitad de abajo entra
-    const yCorte = lerp(H, 1040, kS);
-    fondo(C.lima);
-    const pa = V.d1.palabras; const oy = lerp(330, 0, kS);
-    c.save(); c.translate(0, oy);
-    cartel("TU PARTE", 540, 420, 150, C.negro, pal("d1", "parte").t0, t);
-    const items = [["encontrar", "Encontrar la oportunidad"], ["conseguir", "Conseguir el cliente"]];
-    items.forEach(([w, s], i) => { const tt = pal("d1", w).t0; const k = eOut5(prog(t, tt - 0.05, tt + 0.25));
-      const y = 600 + i * 120; c.save(); c.globalAlpha = k; c.translate((1 - k) * -60, 0);
-      c.fillStyle = C.negro; c.beginPath(); c.arc(150, y - 14, 30, 0, 7); c.fill();
-      M.texto(c, String(i + 1), 150, y, { f: A(40), color: C.lima, al: "center", registrar: false });
-      M.texto(c, s, 210, y, { f: R(800, 58), color: C.negro }); c.restore(); });
-    c.restore();
-    // mitad de abajo: LA NUESTRA (azul)
-    c.fillStyle = C.azul; c.fillRect(0, yCorte, W, H - yCorte);
-    if (kS > 0) {
-      c.save(); c.beginPath(); c.rect(0, yCorte, W, H); c.clip();
-      cartel("LA NUESTRA", 540, 1210, 150, C.blanco, pal("d2", "nuestra").t0, t);
-      const tC = pal("d2", "construirlo").t0; const kC = eOut5(prog(t, tC - 0.05, tC + 0.25));
-      c.save(); c.globalAlpha = kC; M.texto(c, "Construirlo.", 540, 1390, { f: R(800, 72), color: C.blanco, al: "center" }); c.restore();
-      M.logo(c, 540 - 60, 1450, 100, C.blanco, C.lima, prog(t, tC, tC + 0.5), prog(t, tC + 0.3, tC + 0.5));
-      c.restore();
-    }
-    c.fillStyle = C.negro; c.fillRect(0, yCorte - 6, W, 12);   // la línea de corte
-  } else {
-    // «No necesitas saber programar.»
-    fondo(C.negro); const pa = V.d3.palabras;
-    cartel("NO NECESITAS", 540, 560, 130, C.blanco, pa[0].t0, t, { desde: 1.1 });
-    cartel("SABER PROGRAMAR.", 540, 700, ajusta("SABER PROGRAMAR.", A, 930, 130), C.blanco, pal("d3", "saber").t0, t, { desde: 1.1 });
-    // </> tachado
-    const tP = pal("d3", "programar").t0; const k = muelle(prog(t, tP - 0.05, tP + 0.4), 3, 6);
-    c.save(); c.translate(540, 1080); c.scale(lerp(0.6, 1, k), lerp(0.6, 1, k)); c.globalAlpha = clamp(k * 2);
-    M.texto(c, "</>", 0, 0, { f: MONO(800, 230), color: "#3a3a40", al: "center", base: "middle", registrar: false });
-    const kx = eIO(prog(t, tP + 0.2, tP + 0.45)); c.strokeStyle = C.coral; c.lineWidth = 22; c.lineCap = "round";
-    c.beginPath(); c.moveTo(-260, 90); c.lineTo(lerp(-260, 260, kx), lerp(90, -90, kx)); c.stroke(); c.restore();
+function e3(t) {                // Y te llevas el 50 % de cada venta.  (el único momento con fondo naranja)
+  const a = vis(t, V.v3.t0, V.v4.t0, 0.06); if (a <= 0) return;
+  const p5 = pal("v3", "50").t0;
+  c.save(); c.globalAlpha = a;
+  if (t < p5 - 0.06) cartel("Y TE LLEVAS EL", 540, 900, 150, C.crema, V.v3.t0, t, { desde: 1.08 });
+  else {
+    const dt = t - p5; fondo(dt < 0.07 ? C.crema : C.naranja);
+    M.texto(c, "Y TE LLEVAS EL", 540, 470, { f: A(96), color: C.tinta, al: "center", base: "middle" });
+    const kk = muelle(prog(dt, 0, 0.45), 2.5, 5.5); const sh = dt < 0.25 ? (hash(Math.floor(dt * 60)) - 0.5) * 24 * (1 - dt / 0.25) : 0;
+    c.save(); c.translate(540 + sh, 880); c.scale(lerp(1.3, 1, kk), lerp(1.3, 1, kk));
+    M.texto(c, "50%", 0, 0, { f: A(ajusta("50%", A, 700, 460)), color: C.tinta, al: "center", base: "middle" }); c.restore();
+    cartel("DE CADA VENTA", 540, 1270, 120, C.tinta, pal("v3", "cada").t0, t, { desde: 1.1 });
+    const kc = eOut(prog(t, p5 + 0.3, p5 + 0.6));
+    c.save(); c.globalAlpha *= kc; M.rr(c, 250, 1400, 580, 70, 35); c.fillStyle = C.tinta; c.fill();
+    M.texto(c, "PARA TI, EN COMISIÓN", 540, 1447, { f: MONO(700, 32), color: C.naranja, al: "center", track: 3 }); c.restore();
   }
+  c.restore();
 }
-
-// ════════════════ 21,4 → 24,9 · la rotura y el 50 % ════════════════
-function cincuenta(t) {
-  const pa = V.d4.palabras;
-  if (t < T50) {
-    // tensión: negro, las palabras entran una a una y un contador sube hasta 50
-    fondo(C.negro);
-    const lin = [["Y TE", pa[0].t0], ["LLEVAS", pal("d4", "llevas").t0], ["EL", pal("d4", "el").t0]];
-    lin.forEach(([s, t0], i) => cartel(s, 540, 520 + i * 150, 140, C.blanco, t0, t, { desde: 1.1 }));
-    const kc = prog(t, pal("d4", "el").t0 - 0.2, T50); const n = Math.floor(eIn(kc) * 49);
-    if (kc > 0) M.texto(c, `${n}%`, 540, 1250, { f: A(200), color: "#ffffff30", al: "center", base: "middle", registrar: false });
-  } else {
-    const dt = t - T50;
-    fondo(dt < 0.07 ? C.blanco : C.lima);
-    // 50 % enorme, con un golpe de cámara
-    const k = muelle(prog(dt, 0, 0.45), 2.5, 5.5); const sh = dt < 0.3 ? (hash(Math.floor(dt * 60)) - 0.5) * 30 * (1 - dt / 0.3) : 0;
-    c.save(); c.translate(540 + sh, 900); c.scale(lerp(1.6, 1, k), lerp(1.6, 1, k));
-    M.texto(c, "50%", 0, 0, { f: A(ajusta("50%", A, 920, 560)), color: C.negro, al: "center", base: "middle" }); c.restore();
-    const tC = pal("d4", "de").t0; const kL = eOut5(prog(t, tC - 0.05, tC + 0.25));
-    c.save(); c.globalAlpha = kL; M.texto(c, "DE LO QUE", 540, 1300, { f: A(96), color: C.negro, al: "center" });
-    M.texto(c, "CONSIGAS.", 540, 1420, { f: A(128), color: C.coral, al: "center", alpha: eOut5(prog(t, pal("d4", "consigas").t0 - 0.05, pal("d4", "consigas").t0 + 0.2)) }); c.restore();
-    etiqueta("PARA TI · EN COMISIÓN", 380, C.lima, C.negro, eOut(prog(dt, 0.25, 0.5)));
-  }
+function e4(t) {                // ¿Qué vendes? Automatización e inteligencia artificial para empresas.
+  const a = vis(t, V.v4.t0, V.v5.t0); if (a <= 0) return;
+  c.save(); c.globalAlpha = a;
+  cartel("¿QUÉ VENDES?", 540, 470, 150, C.crema, V.v4.t0, t);
+  [["automatización", "AUTOMATIZACIÓN", "Tareas que se hacen solas"], ["inteligencia", "INTELIGENCIA ARTIFICIAL", "Asistentes que responden por ti"]].forEach(([w, s, sub], i) => {
+    const tt = pal("v4", w).t0; const k = eOut5(prog(t, tt - 0.08, tt + 0.2)); if (k <= 0) return;
+    const y = 640 + i * 300; c.save(); c.translate((1 - k) * 80, 0); c.globalAlpha *= k;
+    M.rr(c, 90, y, 900, 250, 30); c.fillStyle = C.tinta2; c.fill(); c.fillStyle = C.naranja; c.fillRect(90, y + 30, 10, 190);
+    M.texto(c, s, 140, y + 120, { f: A(ajusta(s, A, 800, 96)), color: C.crema });
+    M.texto(c, sub, 142, y + 190, { f: R(600, 42), color: C.tenue }); c.restore(); });
+  const tE = pal("v4", "empresas").t0; const ke = eOut5(prog(t, tE - 0.1, tE + 0.2));
+  c.save(); c.globalAlpha *= ke; M.texto(c, "PARA EMPRESAS", 540, 1310, { f: A(96), color: C.naranja, al: "center" }); c.restore();
+  c.restore();
 }
-
-// ════════════════ 24,9 → 33 · ¿te interesa? · escríbenos · vende con D-Code ════════════════
-function llamada(t) {
-  const tE2 = V.e2.t0, tE3 = V.e3.t0;
-  if (t < tE2 - 0.05) {
-    fondo(C.azul); const pa = V.e1.palabras;
-    cartel("¿TE INTERESA?", 540, 800, ajusta("¿TE INTERESA?", A, 930, 190), C.blanco, pal("e1", "interesa").t0 - 0.12, t);
-    const tC = pal("e1", "contamos").t0; const k = eOut5(prog(t, tC - 0.05, tC + 0.25));
-    c.save(); c.globalAlpha = k; M.texto(c, "Te contamos", 540, 1010 + (1 - k) * 20, { f: R(800, 72), color: C.lima, al: "center" });
-    M.texto(c, "cómo funciona.", 540, 1100 + (1 - k) * 20, { f: R(800, 72), color: C.lima, al: "center" }); c.restore();
-    return;
+function e5(t) {                // Tú consigues el cliente. Nosotros lo construimos todo.
+  const a = vis(t, V.v5.t0, V.v7.t0); if (a <= 0) return;
+  c.save(); c.globalAlpha = a;
+  const fila = (y, quien, que, t0, col) => { const k = eOut5(prog(t, t0 - 0.06, t0 + 0.22)); if (k <= 0) return;
+    c.save(); c.globalAlpha *= k; c.translate(0, (1 - k) * 40);
+    M.texto(c, quien, 90, y, { f: A(170), color: col });
+    M.texto(c, que, 94, y + 100, { f: R(700, 60), color: C.crema }); c.restore(); };
+  fila(620, "TÚ", "consigues el cliente.", V.v5.t0, C.naranja);
+  const kl = eIO(prog(t, V.v6.t0 - 0.15, V.v6.t0 + 0.2)); c.fillStyle = "#2c2c32"; c.fillRect(90, 800, 900 * kl, 4);
+  fila(1010, "NOSOTROS", "lo construimos todo.", V.v6.t0, C.crema);
+  const kL = prog(t, V.v6.t0 + 0.3, V.v6.t0 + 0.9); M.logo(c, 90, 1200, 90, C.crema, C.pixel, kL, clamp(kL * 2 - 1));
+  M.texto(c, "D-Code Partners", 210, 1268, { f: R(800, 50), color: C.crema, alpha: eOut(prog(t, V.v6.t0 + 0.5, V.v6.t0 + 0.8)) });
+  c.restore();
+}
+function e6(t) {                // No necesitas saber programar. Y trabajas desde tu ciudad.
+  const a = vis(t, V.v7.t0, TCTA); if (a <= 0) return;
+  c.save(); c.globalAlpha = a;
+  const tP = pal("v7", "programar").t0;
+  const k1 = 1 - eIn(prog(t, V.v8.t0 - 0.2, V.v8.t0 + 0.05));
+  if (k1 > 0) { c.save(); c.globalAlpha *= k1;
+    cartel("NO NECESITAS", 540, 640, 130, C.crema, V.v7.t0, t, { desde: 1.08 });
+    cartel("SABER PROGRAMAR.", 540, 790, ajusta("SABER PROGRAMAR.", A, 940, 130), C.crema, pal("v7", "saber").t0, t, { desde: 1.08 });
+    const k = muelle(prog(t, tP - 0.05, tP + 0.4), 3, 6); c.save(); c.translate(540, 1180); c.scale(lerp(0.8, 1.35, k), lerp(0.8, 1.35, k)); c.globalAlpha *= clamp(k * 2);
+    M.texto(c, "</>", 0, 0, { f: MONO(800, 230), color: "#55555e", al: "center", base: "middle", registrar: false });
+    const kx = eIO(prog(t, tP + 0.15, tP + 0.4)); c.strokeStyle = C.naranja; c.lineWidth = 22; c.lineCap = "round";
+    c.beginPath(); c.moveTo(-260, 90); c.lineTo(lerp(-260, 260, kx), lerp(90, -90, kx)); c.stroke(); c.restore(); c.restore(); }
+  if (t > V.v8.t0 - 0.15) {
+    cartel("DESDE TU CIUDAD.", 540, 470, ajusta("DESDE TU CIUDAD.", A, 940, 140), C.crema, V.v8.t0, t, { desde: 1.1 });
+    mapa(t, 540, 1030, 62, V.v8.t0 - 0.2, eOut(prog(t, V.v8.t0 - 0.2, V.v8.t0 + 0.2)), 1);
   }
-  fondo(C.negro);
-  // ESCRÍBENOS + las dos vías; el correo se queda fijo hasta el final (≥ 3 s)
-  cartel("ESCRÍBENOS", 540, 470, 170, C.blanco, V.e2.palabras[0].t0, t, { desde: 1.15 });
-  const tI = pal("e2", "instagram").t0, tC = pal("e2", "correo").t0;
-  const kI = eOut5(prog(t, tI - 0.08, tI + 0.2)), kC = eOut5(prog(t, tC - 0.08, tC + 0.2));
-  // fila 1: mensaje directo (avión de papel genérico)
-  c.save(); c.globalAlpha = kI; c.translate((1 - kI) * -60, 0);
-  M.rr(c, 90, 640, 900, 150, 75); c.fillStyle = "#ffffff12"; c.fill();
-  c.save(); c.translate(190, 715); c.rotate(-0.4); c.strokeStyle = C.lima; c.lineWidth = 7; c.lineJoin = "round";
-  c.beginPath(); c.moveTo(-40, 0); c.lineTo(42, -34); c.lineTo(10, 40); c.lineTo(0, 8); c.closePath(); c.moveTo(0, 8); c.lineTo(42, -34); c.stroke(); c.restore();
-  M.texto(c, "Por mensaje en Instagram", 270, 734, { f: R(800, 54), color: C.blanco }); c.restore();
-  // fila 2: correo (dato real de contacto de D-Code, sin inventar otro)
-  c.save(); c.globalAlpha = kC; c.translate((1 - kC) * -60, 0);
-  M.rr(c, 90, 830, 900, 150, 75); c.fillStyle = C.lima; c.fill();
-  c.save(); c.translate(190, 905); c.strokeStyle = C.negro; c.lineWidth = 7; c.lineJoin = "round"; c.strokeRect(-40, -28, 80, 56);
-  c.beginPath(); c.moveTo(-40, -28); c.lineTo(0, 6); c.lineTo(40, -28); c.stroke(); c.restore();
-  const mail = "dcodedepartment@gmail.com"; M.texto(c, mail, 270, 925, { f: R(800, ajusta(mail, (px) => R(800, px), 690, 54)), color: C.negro }); c.restore();
-  // «Vende con D-Code Partners.»
-  const kM = eOut5(prog(t, tE3 - 0.05, tE3 + 0.3));
+  c.restore();
+}
+function e7(t) {                // ¿Te interesa? Escríbenos… + Vende con D-Code Partners.
+  const a = eOut5(prog(t, TCTA - 0.02, TCTA + 0.12)); if (a <= 0) return;
+  c.save(); c.globalAlpha = a;
+  const tI = pal("v9", "instagram").t0, tC = pal("v9", "correo").t0, tE = pal("v9", "escríbenos").t0;
+  cartel("¿TE INTERESA?", 540, 450, ajusta("¿TE INTERESA?", A, 940, 160), C.crema, TCTA, t);
+  cartel("ESCRÍBENOS", 540, 610, 96, C.naranja, tE, t, { desde: 1.08 });
+  const fila = (y, k, dibIcono, texto, lleno) => { if (k <= 0) return; c.save(); c.globalAlpha *= k; c.translate((1 - k) * -60, 0);
+    M.rr(c, 90, y, 900, 140, 70); c.fillStyle = lleno ? C.naranja : "#1d1d22"; c.fill();
+    dibIcono(185, y + 70, lleno ? C.tinta : C.naranja);
+    M.texto(c, texto, 260, y + 88, { f: R(800, ajusta(texto, (px) => R(800, px), 690, 52)), color: lleno ? C.tinta : C.crema }); c.restore(); };
+  fila(700, eOut5(prog(t, tI - 0.1, tI + 0.2)), (x, y, col) => { c.save(); c.translate(x, y); c.rotate(-0.4); c.strokeStyle = col; c.lineWidth = 7; c.lineJoin = "round";
+      c.beginPath(); c.moveTo(-40, 0); c.lineTo(42, -34); c.lineTo(10, 40); c.lineTo(0, 8); c.closePath(); c.moveTo(0, 8); c.lineTo(42, -34); c.stroke(); c.restore(); },
+    "Mensaje por Instagram", false);
+  fila(870, eOut5(prog(t, tC - 0.1, tC + 0.2)), (x, y, col) => { c.save(); c.translate(x, y); c.strokeStyle = col; c.lineWidth = 7; c.lineJoin = "round"; c.strokeRect(-40, -28, 80, 56);
+      c.beginPath(); c.moveTo(-40, -28); c.lineTo(0, 6); c.lineTo(40, -28); c.stroke(); c.restore(); },
+    "dcodedepartment@gmail.com", true);
+  const kM = eOut5(prog(t, TMARCA - 0.05, TMARCA + 0.3));
   if (kM > 0) {
-    M.texto(c, "VENDE CON", 540, 1210 + (1 - kM) * 30, { f: A(96), color: C.gris, al: "center", alpha: kM });
-    const tD = pal("e3", "d-code").t0; const kL = prog(t, tD - 0.1, tD + 0.5);
+    M.texto(c, "VENDE CON", 540, 1170 + (1 - kM) * 30, { f: A(96), color: C.tenue, al: "center", alpha: kM });
+    const tD = pal("v10", "d-code").t0; const kL = prog(t, tD - 0.1, tD + 0.5);
     const fM = R(800, 78); const wM = M.ancho(c, "D-Code Partners", fM, -1); const al = 96, tot = al * 1.2 + 30 + wM, x0 = 540 - tot / 2;
-    M.logo(c, x0, 1290, al, C.blanco, C.pixel, kL, prog(t, tD + 0.25, tD + 0.45));
-    M.texto(c, "D-Code Partners", x0 + al * 1.2 + 30, 1290 + al * 0.74, { f: fM, color: C.blanco, alpha: eOut5(prog(t, tD, tD + 0.3)), track: -1 });
+    M.logo(c, x0, 1240, al, C.crema, C.pixel, kL, prog(t, tD + 0.25, tD + 0.45));
+    M.texto(c, "D-Code Partners", x0 + al * 1.2 + 30, 1240 + al * 0.74, { f: fM, color: C.crema, alpha: eOut5(prog(t, tD, tD + 0.3)), track: -1 });
+    const ts = V.v10.t1 + 0.35; const ks = prog(t, ts - 0.08, ts);                         // sello final
+    if (ks > 0) { const e = t < ts ? eIn(ks) : 1; c.save(); c.translate(540, 1450); c.rotate(-0.06); const s = lerp(2.0, 1, e); c.scale(s, s); c.globalAlpha *= e;
+      c.strokeStyle = C.naranja; c.lineWidth = 7; M.rr(c, -300, -60, 600, 120, 16); c.stroke();
+      M.texto(c, "50 % DE CADA VENTA", 0, 22, { f: A(64), color: C.naranja, al: "center", track: 2 }); c.restore(); }
   }
-  // sello final: 50 % sobre la composición
-  const ks = prog(t, G.sello_final - 0.08, G.sello_final);
-  if (ks > 0) { const e = t < G.sello_final ? eIn(ks) : 1; c.save(); c.translate(840, 1540); c.rotate(-0.22); const s = lerp(2.6, 1, e); c.scale(s, s); c.globalAlpha = e;
-    c.strokeStyle = C.coral; c.lineWidth = 8; c.beginPath(); c.arc(0, 0, 96, 0, 7); c.stroke(); c.beginPath(); c.arc(0, 0, 82, 0, 7); c.stroke();
-    M.texto(c, "50%", 0, 26, { f: A(82), color: C.coral, al: "center" }); c.restore(); }
+  c.restore();
 }
 
-// ════════════════ fotograma ════════════════
 window.pintaFrame = (n) => {
   const t = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
-  if (t < V.b1.t0 - 0.02) trato(t);
-  else if (t < V.b2.t0 - 0.02) buscamos(t);
-  else if (t < V.c1.t0 - 0.02) puertas(t);
-  else if (t < V.d1.t0 - 0.02) tarjetas(t);
-  else if (t < V.d4.t0 - 0.02) reparto(t);
-  else if (t < V.e1.t0 - 0.02) cincuenta(t);
-  else llamada(t);
-  // la cinta se frena al final: la imagen baja un poco y se oscurece con ella
-  const kf = prog(t, G.fin, G.fin + 0.55);
-  if (kf > 0 && kf < 1) { c.fillStyle = `rgba(0,0,0,${0.35 * Math.sin(kf * Math.PI)})`; c.fillRect(0, 0, W, H); }
-  M.grano(c, W, H, n, 0.06);
+  fondo();
+  e1(t); e2(t); e3(t); e4(t); e5(t); e6(t); e7(t);
+  cinta(t);
+  M.grano(c, W, H, n, 0.05);
 };
 
 (async () => {

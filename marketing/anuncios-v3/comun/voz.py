@@ -36,6 +36,7 @@ def recorta(x, sr, umbral_db=-52, margen=0.075):
 def norm(t):
     t = unicodedata.normalize("NFD", t.lower()); t = "".join(c for c in t if unicodedata.category(c) != "Mn")
     t = re.sub(r"50\s*%", " cincuenta por ciento ", t).replace("d-code", "dicode")
+    t = re.sub(r"\b30\b", " treinta ", t); t = re.sub(r"\b50\b", " cincuenta ", t)
     t = re.sub(r"\b(decode|de code|dicode|di code|dicoud)\b", "dicode", t)
     return re.sub(r"[^a-z0-9ñ ]+", " ", t).split()
 

@@ -1,104 +1,920 @@
 {
- "voz": "ef_dora",
+ "motor": "supertonic-3",
+ "sid": 0,
  "sr": 48000,
  "frases": [
   {
-   "id": "a1",
-   "texto": "Cierras un proyecto.",
-   "dur": 1.408,
-   "oido": "Cierras un proyecto.",
-   "wer": 0.0
+   "id": "v1",
+   "texto": "Buscamos comerciales en toda España.",
+   "dur": 2.192,
+   "oido": "Buscamos comerciales en toda España.",
+   "wer": 0.0,
+   "var_st": 3.25,
+   "f0": 195,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.088,
+     "wer": 0.0,
+     "f0": 172,
+     "var_st": 2.52,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.42,
+     "wer": 0.0,
+     "f0": 185,
+     "var_st": 2.82,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.192,
+     "wer": 0.0,
+     "f0": 195,
+     "var_st": 3.25,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.408,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 3.21,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.415,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 3.08,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.31,
+     "wer": 0.0,
+     "f0": 190,
+     "var_st": 3.06,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 2.263,
+     "wer": 0.0,
+     "f0": 183,
+     "var_st": 2.33,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 2.122,
+     "wer": 0.0,
+     "f0": 193,
+     "var_st": 2.9,
+     "oido": "Buscamos comerciales en toda España."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 2.301,
+     "wer": 0.0,
+     "f0": 207,
+     "var_st": 3.09,
+     "oido": "Buscamos comerciales en toda España."
+    }
+   ]
   },
   {
-   "id": "a2",
-   "texto": "La mitad es tuya.",
-   "dur": 1.173,
-   "oido": "La mitad es tuya.",
-   "wer": 0.0
+   "id": "v2",
+   "texto": "Sin estudios. Sin experiencia.",
+   "dur": 2.19,
+   "oido": "sin estudios, sin experiencia.",
+   "wer": 0.0,
+   "var_st": 3.14,
+   "f0": 178,
+   "vel": 1.1,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.99,
+     "wer": 0.25,
+     "f0": 180,
+     "var_st": 3.94,
+     "oido": "sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.996,
+     "wer": 0.25,
+     "f0": 180,
+     "var_st": 2.78,
+     "oido": "sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.059,
+     "wer": 0.25,
+     "f0": 189,
+     "var_st": 3.06,
+     "oido": "Sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.962,
+     "wer": 0.25,
+     "f0": 181,
+     "var_st": 3.19,
+     "oido": "sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.135,
+     "wer": 0.25,
+     "f0": 188,
+     "var_st": 3.12,
+     "oido": "sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.995,
+     "wer": 0.25,
+     "f0": 194,
+     "var_st": 2.58,
+     "oido": "sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 2.073,
+     "wer": 0.25,
+     "f0": 182,
+     "var_st": 3.02,
+     "oido": "Sin estudio, sin experiencia."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 1.917,
+     "wer": 0.0,
+     "f0": 175,
+     "var_st": 3.05,
+     "oido": "sin estudios, sin experiencia."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 2.19,
+     "wer": 0.0,
+     "f0": 178,
+     "var_st": 3.14,
+     "oido": "sin estudios, sin experiencia."
+    }
+   ]
   },
   {
-   "id": "b1",
-   "texto": "Buscamos personas para ventas.",
-   "dur": 1.877,
-   "oido": "Buscamos personas para ventas.",
-   "wer": 0.0
+   "id": "v3",
+   "texto": "Y te llevas el 50 % de cada venta.",
+   "dur": 2.774,
+   "oido": "y te llevas el 50% de cada venta.",
+   "wer": 0.0,
+   "var_st": 3.26,
+   "f0": 204,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 2.774,
+     "wer": 0.0,
+     "f0": 204,
+     "var_st": 3.26,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 2.971,
+     "wer": 0.0,
+     "f0": 198,
+     "var_st": 2.28,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.855,
+     "wer": 0.0,
+     "f0": 192,
+     "var_st": 2.63,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 2.856,
+     "wer": 0.0,
+     "f0": 192,
+     "var_st": 2.93,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 2.688,
+     "wer": 0.0,
+     "f0": 192,
+     "var_st": 2.19,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 2.657,
+     "wer": 0.0,
+     "f0": 190,
+     "var_st": 2.79,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 2.432,
+     "wer": 0.0,
+     "f0": 180,
+     "var_st": 1.67,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 2.868,
+     "wer": 0.0,
+     "f0": 203,
+     "var_st": 2.7,
+     "oido": "y te llevas el 50% de cada venta."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 3.002,
+     "wer": 0.0,
+     "f0": 197,
+     "var_st": 2.92,
+     "oido": "y te llevas el 50% de cada venta."
+    }
+   ]
   },
   {
-   "id": "b2",
-   "texto": "Gente que sabe abrir puertas.",
-   "dur": 1.707,
-   "oido": "Gente que sabe abrir puertas.",
-   "wer": 0.0
+   "id": "v4",
+   "texto": "¿Qué vendes? Automatización e inteligencia artificial para empresas.",
+   "dur": 3.968,
+   "oido": "que vendes automatización e inteligencia artificial para empresas.",
+   "wer": 0.0,
+   "var_st": 2.84,
+   "f0": 183,
+   "vel": 1.1,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 4.375,
+     "wer": 0.0,
+     "f0": 180,
+     "var_st": 1.89,
+     "oido": "que vendes automatización e inteligencia artificial para empresas."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 4.445,
+     "wer": 0.0,
+     "f0": 195,
+     "var_st": 2.53,
+     "oido": "¿Qué vendes? Automatización e Inteligencia Artificial para Empresas."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 4.363,
+     "wer": 0.0,
+     "f0": 182,
+     "var_st": 1.66,
+     "oido": "que vendes, automatización e inteligencia artificial para empresas."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 4.247,
+     "wer": 0.0,
+     "f0": 181,
+     "var_st": 1.89,
+     "oido": "que vendes, automatización e inteligencia artificial para empresas."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 4.225,
+     "wer": 0.0,
+     "f0": 187,
+     "var_st": 2.62,
+     "oido": "Que vendes, automatización e inteligencia artificial para empresas."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 4.22,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 2.24,
+     "oido": "¿Qué vendes? Automatización e Inteligencia Artificial para empresas."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 3.968,
+     "wer": 0.0,
+     "f0": 183,
+     "var_st": 2.84,
+     "oido": "que vendes automatización e inteligencia artificial para empresas."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 3.902,
+     "wer": 0.0,
+     "f0": 188,
+     "var_st": 2.51,
+     "oido": "que vendes, automatización e inteligencia artificial para empresas."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 3.854,
+     "wer": 0.0,
+     "f0": 185,
+     "var_st": 2.83,
+     "oido": "que vendes automatización e inteligencia artificial para empresas."
+    }
+   ]
   },
   {
-   "id": "c1",
-   "texto": "Vas a vender automatización,",
-   "dur": 1.835,
-   "oido": "vas a vender automatización.",
-   "wer": 0.0
+   "id": "v5",
+   "texto": "Tú consigues el cliente.",
+   "dur": 1.545,
+   "oido": "Tú consigues el cliente.",
+   "wer": 0.0,
+   "var_st": 4.11,
+   "f0": 177,
+   "vel": 1.05,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.573,
+     "wer": 0.0,
+     "f0": 177,
+     "var_st": 1.8,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.613,
+     "wer": 0.0,
+     "f0": 180,
+     "var_st": 1.66,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.63,
+     "wer": 0.0,
+     "f0": 181,
+     "var_st": 4.06,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.647,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 3.19,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.567,
+     "wer": 0.0,
+     "f0": 177,
+     "var_st": 2.64,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.545,
+     "wer": 0.0,
+     "f0": 177,
+     "var_st": 4.11,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 1.554,
+     "wer": 0.0,
+     "f0": 178,
+     "var_st": 2.99,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 1.529,
+     "wer": 0.0,
+     "f0": 197,
+     "var_st": 3.0,
+     "oido": "Tú consigues el cliente."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 1.48,
+     "wer": 0.0,
+     "f0": 177,
+     "var_st": 1.88,
+     "oido": "Tú consigues el cliente."
+    }
+   ]
   },
   {
-   "id": "c2",
-   "texto": "inteligencia artificial,",
-   "dur": 1.493,
-   "oido": "Inteligencia artificial.",
-   "wer": 0.0
+   "id": "v6",
+   "texto": "Nosotros lo construimos todo.",
+   "dur": 1.705,
+   "oido": "Nosotros lo construimos todo.",
+   "wer": 0.0,
+   "var_st": 4.39,
+   "f0": 183,
+   "vel": 1.05,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.889,
+     "wer": 0.0,
+     "f0": 185,
+     "var_st": 1.81,
+     "oido": "nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.882,
+     "wer": 0.0,
+     "f0": 194,
+     "var_st": 3.62,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 2.018,
+     "wer": 0.0,
+     "f0": 196,
+     "var_st": 2.49,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.906,
+     "wer": 0.0,
+     "f0": 193,
+     "var_st": 3.0,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.937,
+     "wer": 0.0,
+     "f0": 187,
+     "var_st": 3.25,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.705,
+     "wer": 0.0,
+     "f0": 183,
+     "var_st": 4.39,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 1.705,
+     "wer": 0.0,
+     "f0": 183,
+     "var_st": 1.56,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 1.84,
+     "wer": 0.0,
+     "f0": 185,
+     "var_st": 2.74,
+     "oido": "Nosotros lo construimos todo."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 1.682,
+     "wer": 0.0,
+     "f0": 248,
+     "var_st": 3.54,
+     "oido": "Nosotros lo construimos todo."
+    }
+   ]
   },
   {
-   "id": "c3",
-   "texto": "y sistemas a medida para empresas.",
-   "dur": 2.069,
-   "oido": "y sistemas a medida para empresas.",
-   "wer": 0.0
-  },
-  {
-   "id": "d1",
-   "texto": "Tu parte: encontrar la oportunidad y conseguir el cliente.",
-   "dur": 3.243,
-   "oido": "Tu parte, encontrar la oportunidad y conseguir el cliente.",
-   "wer": 0.0
-  },
-  {
-   "id": "d2",
-   "texto": "La nuestra: construirlo.",
-   "dur": 1.493,
-   "oido": "la nuestra construirlo.",
-   "wer": 0.0
-  },
-  {
-   "id": "d3",
+   "id": "v7",
    "texto": "No necesitas saber programar.",
-   "dur": 1.813,
+   "dur": 1.724,
    "oido": "No necesitas saber programar.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 3.81,
+   "f0": 187,
+   "vel": 1.05,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.97,
+     "wer": 0.0,
+     "f0": 188,
+     "var_st": 3.36,
+     "oido": "No necesitas saber programar."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.897,
+     "wer": 0.0,
+     "f0": 185,
+     "var_st": 3.42,
+     "oido": "no necesitas saber programar."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.782,
+     "wer": 0.0,
+     "f0": 184,
+     "var_st": 3.19,
+     "oido": "No necesitas saber programar."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.997,
+     "wer": 0.0,
+     "f0": 189,
+     "var_st": 3.12,
+     "oido": "No necesitas saber programar."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.724,
+     "wer": 0.0,
+     "f0": 187,
+     "var_st": 3.81,
+     "oido": "No necesitas saber programar."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.839,
+     "wer": 0.0,
+     "f0": 193,
+     "var_st": 3.26,
+     "oido": "No necesitas saber programar."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 2.031,
+     "wer": 0.0,
+     "f0": 196,
+     "var_st": 3.58,
+     "oido": "No necesitas saber programar."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 1.89,
+     "wer": 0.0,
+     "f0": 201,
+     "var_st": 3.02,
+     "oido": "no necesitas saber programar."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 1.892,
+     "wer": 0.25,
+     "f0": 185,
+     "var_st": 3.37,
+     "oido": "No necesita saber programar."
+    }
+   ]
   },
   {
-   "id": "d4",
-   "texto": "Y te llevas el 50 % de lo que consigas.",
-   "dur": 2.923,
-   "oido": "y te llevas el 50% de lo que consigas.",
-   "wer": 0.0
+   "id": "v8",
+   "texto": "Y trabajas desde tu ciudad.",
+   "dur": 1.746,
+   "oido": "y trabajas desde tu ciudad.",
+   "wer": 0.0,
+   "var_st": 2.82,
+   "f0": 198,
+   "vel": 1.0,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.617,
+     "wer": 0.0,
+     "f0": 178,
+     "var_st": 1.66,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.635,
+     "wer": 0.0,
+     "f0": 179,
+     "var_st": 1.18,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.746,
+     "wer": 0.0,
+     "f0": 198,
+     "var_st": 2.82,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 1.605,
+     "wer": 0.0,
+     "f0": 182,
+     "var_st": 1.63,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 1.698,
+     "wer": 0.0,
+     "f0": 188,
+     "var_st": 2.55,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 1.449,
+     "wer": 0.0,
+     "f0": 193,
+     "var_st": 2.46,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 1.555,
+     "wer": 0.0,
+     "f0": 182,
+     "var_st": 1.2,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 1.489,
+     "wer": 0.0,
+     "f0": 182,
+     "var_st": 1.62,
+     "oido": "y trabajas desde tu ciudad."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 1.491,
+     "wer": 0.0,
+     "f0": 187,
+     "var_st": 1.79,
+     "oido": "y trabajas desde tu ciudad."
+    }
+   ]
   },
   {
-   "id": "e1",
-   "texto": "¿Te interesa? Te contamos cómo funciona.",
-   "dur": 2.325,
-   "oido": "Te interesa, te contamos cómo funciona.",
-   "wer": 0.0
+   "id": "v9",
+   "texto": "¿Te interesa? Escríbenos por Instagram, o por correo.",
+   "dur": 2.977,
+   "oido": "te interesa escríbenos por Instagram o por correo.",
+   "wer": 0.0,
+   "var_st": 3.45,
+   "f0": 186,
+   "vel": 1.1,
+   "tomas": 9,
+   "alternativas": [
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 3.198,
+     "wer": 0.0,
+     "f0": 189,
+     "var_st": 2.73,
+     "oido": "te interesa escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 3.124,
+     "wer": 0.0,
+     "f0": 192,
+     "var_st": 3.03,
+     "oido": "Te interesa, escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 3.32,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 2.6,
+     "oido": "Te interesa, escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 0,
+     "dur": 3.043,
+     "wer": 0.0,
+     "f0": 187,
+     "var_st": 3.3,
+     "oido": "¿Te interesa? Escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 1,
+     "dur": 3.17,
+     "wer": 0.0,
+     "f0": 192,
+     "var_st": 2.59,
+     "oido": "Te interesa, escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.05,
+     "toma": 2,
+     "dur": 3.044,
+     "wer": 0.0,
+     "f0": 190,
+     "var_st": 2.76,
+     "oido": "Te interesa, escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.1,
+     "toma": 0,
+     "dur": 2.977,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 3.45,
+     "oido": "te interesa escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.1,
+     "toma": 1,
+     "dur": 3.019,
+     "wer": 0.0,
+     "f0": 178,
+     "var_st": 2.51,
+     "oido": "te interesa escríbenos por Instagram o por correo."
+    },
+    {
+     "vel": 1.1,
+     "toma": 2,
+     "dur": 2.873,
+     "wer": 0.0,
+     "f0": 181,
+     "var_st": 3.03,
+     "oido": "Te interesa escríbenos por Instagram o por correo."
+    }
+   ]
   },
   {
-   "id": "e2",
-   "texto": "Escríbenos por Instagram, o por correo.",
-   "dur": 2.24,
-   "oido": "Escríbenos por Instagram o por correo.",
-   "wer": 0.0
-  },
-  {
-   "id": "e3",
+   "id": "v10",
    "texto": "Vende con D-Code Partners.",
-   "dur": 1.664,
+   "dur": 1.592,
    "oido": "Vende con decode partners.",
-   "wer": 0.0
+   "wer": 0.0,
+   "var_st": 2.68,
+   "f0": 186,
+   "vel": 0.95,
+   "tomas": 6,
+   "alternativas": [
+    {
+     "vel": 0.95,
+     "toma": 0,
+     "dur": 1.592,
+     "wer": 0.0,
+     "f0": 186,
+     "var_st": 2.68,
+     "oido": "Vende con decode partners."
+    },
+    {
+     "vel": 0.95,
+     "toma": 1,
+     "dur": 1.658,
+     "wer": 0.0,
+     "f0": 189,
+     "var_st": 1.76,
+     "oido": "Vende con Decode Partners."
+    },
+    {
+     "vel": 0.95,
+     "toma": 2,
+     "dur": 1.735,
+     "wer": 0.0,
+     "f0": 177,
+     "var_st": 0.93,
+     "oido": "Vende con decode partners."
+    },
+    {
+     "vel": 1.0,
+     "toma": 0,
+     "dur": 1.649,
+     "wer": 0.0,
+     "f0": 192,
+     "var_st": 1.56,
+     "oido": "Vende con Decode Partners."
+    },
+    {
+     "vel": 1.0,
+     "toma": 1,
+     "dur": 1.709,
+     "wer": 0.5,
+     "f0": 183,
+     "var_st": 1.54,
+     "oido": "Vende con Decor Partners."
+    },
+    {
+     "vel": 1.0,
+     "toma": 2,
+     "dur": 1.726,
+     "wer": 0.0,
+     "f0": 182,
+     "var_st": 2.05,
+     "oido": "Vende con Decode Partners."
+    }
+   ]
   }
  ]
 }

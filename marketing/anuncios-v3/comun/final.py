@@ -12,7 +12,8 @@ img, mez = os.path.join(base, "render", "imagen.mp4"), os.path.join(base, "audio
 dest = os.path.join(ent, f"{nombre}.mp4")
 
 def corre(a): return subprocess.run(a, capture_output=True, text=True)
-filt = "loudnorm=I=-14:TP=-1.6:LRA=11"
+objetivo = float(sys.argv[3]) if len(sys.argv) > 3 else -14.0   # corrección opcional si el AAC se queda corto
+filt = f"loudnorm=I={objetivo}:TP=-1.6:LRA=11"
 r = corre(["ffmpeg", "-hide_banner", "-i", mez, "-af", filt + ":print_format=json", "-f", "null", "-"])
 m = json.loads(r.stderr[r.stderr.rindex("{"):r.stderr.rindex("}") + 1])
 f2 = (f"{filt}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"

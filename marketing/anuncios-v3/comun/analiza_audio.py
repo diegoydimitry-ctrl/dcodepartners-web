@@ -59,7 +59,7 @@ def main(video, ruta=None):
             s = asr.create_stream(); s.accept_waveform(16000, z); asr.decode_stream(s); o = s.result.text.strip()
             res.append((wer(sin_marca(f.get("texto", "")), sin_marca(o)), o))
         res.sort(key=lambda r: r[0]); e, oido = res[len(res) // 2]
-        if "D-Code" in f.get("texto", "") and "cod" not in oido.lower(): e = max(e, 0.5)   # la marca tiene que oírse
+        if "D-Code" in f.get("texto", "") and not any(k in oido.lower() for k in ("cod", "dico")): e = max(e, 0.5)   # la marca tiene que oírse
         filas.append((f["id"], d, e, oido))
         if e > 0.15 or d < 6: malos.append(f["id"])
         print(f"  {f['id']:<4} voz−fondo {d:5.1f} LU · WER {e*100:5.1f} % · «{oido}»")

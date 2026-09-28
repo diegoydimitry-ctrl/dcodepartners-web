@@ -5,27 +5,148 @@
 <script src="../comun/motor.js"></script>
 <script>
 "use strict";
-// RUIDO — anuncio de YouTube (16:9). Cada fotograma es función de t; los tiempos salen de la voz (montaje.json)
-// y de la banda sonora (audio/cortes.json).
+// RUIDO v4 — anuncio de YouTube (16:9). Cada fotograma es función de t; todos los tiempos salen de la voz
+// (montaje.json, generado por comun/monta.py) y de la banda sonora (audio/cortes.json).
+//
+// Estructura (psicología aplicada, ver README): 0–5 s un hueco de información con pérdida personal
+// («un trabajo que nadie ve… que puede costarte un sueldo»); 5 s: bucle abierto con plazo («en 30 segundos te
+// digo cuál es») y una cuenta atrás que se queda en pantalla hasta que se cumple la promesa.
 const W = 1920, H = 1080, FPS = 30;
 const D = window.DATOS, MT = D.montaje, CT = D.cortes;
 const V = Object.fromEntries(MT.voz.map((f) => [f.id, f]));
-const [SIL0, SIL1] = CT.silencio, G0 = CT.golpe, [R0, R1] = CT.rotura, FIN = CT.fin_groove, TICK = CT.tick;
+// alias de las palabras del gancho (una sola toma de voz: «Copiar. Pegar. Responder. Buscar. Otra vez.»)
+(() => { const p = V.h.palabras; const ids = ["h1", "h2", "h3", "h4"];
+  ids.forEach((id, i) => { V[id] = { t0: p[i].t0, t1: p[i + 1].t0 }; }); V.h5 = { t0: p[4].t0, t1: V.h.t1 }; })();
+const SIL0 = MT.silencio0, SIL1 = MT.silencio1, G0 = MT.golpe, C0 = MT.cuenta0, CF = MT.cuenta_fin, PROD = MT.producto, FIN = MT.cierre;
+const PR0 = V.p1.t0 - 0.1;                  // arranca el problema (RUIDO se sostiene hasta aquí)
+const TICK = V.c8.t0 - 0.05;                // el píxel se posa en el logotipo
+const HOOK = V.h.t0 - 0.03;                 // fin del gancho nuevo → microplanos
+const SKIP = 5.0;                           // el botón «saltar» aparece a los 5 s
 window.META = { W, H, fps: FPS, duracion: MT.duracion, segura: [96, 54, 1824, 1026], minpx: 24 };
 const c = document.getElementById("c").getContext("2d");
 const { clamp, lerp, prog, eOut, eOut5, eIn, eIO, eExpo, muelle, ventana, hash } = M;
 
 const C = { negro: "#09090b", panel: "#141418", panel2: "#1b1b21", linea: "#2a2a32", texto: "#f2f2f4", tenue: "#8b8b97",
             rojo: "#ff3d2e", claro: "#f3f4f6", tarjeta: "#ffffff", tinta: "#0c0e13", gris: "#d9dce3", gris2: "#6b7280",
-            azul: "#2f6bff", pixel: "#5b8cff" };
+            azul: "#2f6bff", pixel: "#5b8cff", ambar: "#ffb020", naranja: "#ff6a1a" };
 const F = (p, px) => M.fuente(p, px, "Inter Tight");
 const SERIF = (px) => `italic 400 ${px}px "Instrument Serif"`;
 const MONO = (p, px) => M.fuente(p, px, "JetBrains Mono");
-const palabra = (id, i) => V[id].palabras[i];
-const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "").startsWith(w));
+const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "").startsWith(w)) || V[id].palabras[0];
+const ajusta = (s, f, anchoMax, pxMax, track = 0) => Math.min(pxMax, pxMax * anchoMax / M.ancho(c, s, f(pxMax), track));
 
-// ════════════════════════════ 1 · GANCHO: microplanos de trabajo cotidiano ════════════════════════════
-// Interfaces genéricas (sin marcas de terceros), dibujadas en oscuro, encuadres cerrados.
+// ════════════════════════════ 0 · GANCHO NUEVO: el trabajo que nadie ve ════════════════════════════
+// Negro profundo + un solo color cálido (ámbar/naranja: los tonos cálidos saturados son los de mayor activación).
+function fondoCalido(t, fuerza = 1) {
+  c.fillStyle = "#070709"; c.fillRect(0, 0, W, H);
+  const x = 960 + Math.sin(t * 0.7) * 260, y = 560 + Math.cos(t * 0.5) * 120;
+  const g = c.createRadialGradient(x, y, 0, x, y, 900); g.addColorStop(0, `rgba(255,120,20,${0.16 * fuerza})`); g.addColorStop(1, "rgba(255,120,20,0)");
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+}
+// palabra que golpea: escala con muelle + estela (dos copias desplazadas que se apagan en 4 fotogramas)
+function golpe(s, x, y, px, t0, t, o = {}) {
+  const dt = t - t0; if (dt < -0.02) return 0;
+  const k = muelle(prog(dt, -0.02, 0.34), 3, 6), e = eOut5(prog(dt, -0.02, 0.06));
+  const f = o.f || F(900, px), col = o.color || C.texto;
+  c.save(); c.translate(x, y); const s_ = lerp(o.desde ?? 1.28, 1, k); c.scale(s_, s_);
+  if (dt < 0.14) for (let q = 1; q <= 2; q++) M.texto(c, s, 0, q * 18 * (1 - dt / 0.14), { f, color: C.naranja, al: o.al || "center", alpha: 0.35 / q, track: o.track ?? -4, registrar: false });
+  if (o.contorno) { c.font = f; c.letterSpacing = `${o.track ?? -4}px`; c.lineWidth = 6; c.strokeStyle = col; c.globalAlpha = e * (o.alpha ?? 1);
+    const w = c.measureText(s).width; c.fillStyle = col; c.globalAlpha *= 0.28; c.fillText(s, o.al === "left" ? 0 : -w / 2, 0); c.globalAlpha /= 0.28;
+    c.setLineDash([14, 8]); c.lineDashOffset = -t * 60; c.strokeText(s, o.al === "left" ? 0 : -w / 2, 0);
+    M.CAJAS.push({ s, x0: x - w / 2, y0: y - px * 0.75, x1: x + w / 2, y1: y + px * 0.1, px }); }
+  else M.texto(c, s, 0, 0, { f, color: col, al: o.al || "center", alpha: e * (o.alpha ?? 1), track: o.track ?? -4 });
+  c.restore(); return e;
+}
+function intro(t, n) {
+  fondoCalido(t, eOut(prog(t, 0, 0.5)));
+  // fotograma 0: una rendija de luz ámbar se abre de lado a lado (anamórfica) con el golpe de sonido
+  const kr = prog(t, 0, 0.45);
+  if (kr < 1) { const w = W * eOut5(kr), a = 1 - eIn(kr);
+    const g = c.createLinearGradient(960 - w / 2, 0, 960 + w / 2, 0); g.addColorStop(0, "rgba(255,176,32,0)"); g.addColorStop(0.5, `rgba(255,190,80,${a})`); g.addColorStop(1, "rgba(255,176,32,0)");
+    c.fillStyle = g; c.fillRect(0, 536 - 6 * (1 - kr), W, 12 * (1 - kr) + 2);
+    c.fillStyle = `rgba(255,150,40,${0.25 * a})`; c.fillRect(0, 420, W, 240 * (1 - kr)); }
+  const a1 = V.a1.palabras, a2 = V.a2.palabras, a3 = V.a3.palabras;
+  // ── a1: HAY UN TRABAJO / EN TU EMPRESA / QUE NADIE VE.
+  const salida1 = eIn(prog(t, V.a2.t0 - 0.12, V.a2.t0 + 0.1));
+  if (salida1 < 1) {
+    c.save(); c.globalAlpha = 1 - salida1; c.translate(0, -salida1 * 60);
+    const L = [[0, 3, 330], [3, 6, 520], [6, 9, 710]];   // [desde, hasta, y] sobre las 9 palabras
+    L.forEach(([i0, i1, y]) => {
+      const ws = a1.slice(i0, i1).map((p) => p.w.replace(/[.,]/g, "").toUpperCase()); const f = F(900, 150);
+      const anchos = ws.map((w) => M.ancho(c, w + " ", f, -4)); let x = 960 - anchos.reduce((a, b) => a + b, 0) / 2;
+      ws.forEach((w, j) => { const p = a1[i0 + j]; const invisible = i0 === 6 && j >= 1;   // «NADIE VE» se vuelve invisible
+        const ca = anchos[j];
+        if (t < p.t0 - 0.02) M.texto(c, w, x, y, { f, color: C.texto, alpha: 0.12, track: -4, registrar: false });   // la frase entera, en fantasma, desde el fotograma 0
+        if (invisible) { const kv = eIO(prog(t, p.t0 + 0.25, p.t0 + 0.7));
+          golpe(w, x + (ca - M.ancho(c, " ", f, -4)) / 2, y, 150, p.t0, t, { color: C.ambar, contorno: kv > 0.02, alpha: kv > 0.02 ? 0.35 + 0.65 * Math.abs(Math.sin(t * 40)) * (1 - kv) + 0.3 * kv : 1 }); }
+        else golpe(w, x + (ca - M.ancho(c, " ", f, -4)) / 2, y, 150, p.t0, t);
+        x += ca; });
+    });
+    c.restore();
+  }
+  // ── a2: Y PUEDE ESTAR COSTÁNDOTE → rodillo de euros → UN SUELDO ENTERO.
+  const salida2 = eIn(prog(t, V.a3.t0 - 0.15, V.a3.t0 + 0.08));
+  if (t > V.a2.t0 - 0.05 && salida2 < 1) {
+    c.save(); c.globalAlpha = 1 - salida2;
+    const tC = pal("a2", "cost").t0, tU = pal("a2", "un").t0 ?? V.a2.t1 - 0.8;
+    const cab = "Y PUEDE ESTAR COSTÁNDOTE"; const kc = eOut5(prog(t, V.a2.t0 - 0.03, V.a2.t0 + 0.2));
+    M.texto(c, cab, 960, 300 + (1 - kc) * 24, { f: F(800, 72), color: C.texto, al: "center", alpha: kc, track: 2 });
+    // rodillo: dígitos que giran a toda velocidad (tragaperras), de «costándote» a «un»
+    if (t >= tC - 0.1 && t < tU + 0.05) {
+      const k = prog(t, tC - 0.1, tU); const f = M.fuente(800, 230, "JetBrains Mono");
+      c.save(); c.beginPath(); c.rect(0, 452, W, 236); c.clip();                  // los dígitos solo dentro de la ventana del rodillo
+      const sl = ["€", "", "", ".", "", "", ""]; const x0 = 960 - 3.3 * 150;
+      for (let i = 0; i < 7; i++) { const x = x0 + i * 150;
+        if (sl[i]) { M.texto(c, sl[i], x, 640, { f, color: C.ambar, al: "center", alpha: 0.9, registrar: false }); continue; }
+        const vel = 60 - i * 4; const fase = (t * vel + i * 3.7);
+        for (let q = -1; q <= 1; q++) { const d = ((Math.floor(fase) + q) % 10 + 10) % 10; const off = (fase % 1) * 180 - q * 180;
+          M.texto(c, String(d), x, 640 + off, { f, color: C.ambar, al: "center", alpha: (q === 0 ? 0.95 : 0.3) * (1 - Math.abs(off) / 260), registrar: false }); }
+      }
+      c.save(); const gr = c.createLinearGradient(0, 400, 0, 760); gr.addColorStop(0, "#070709"); gr.addColorStop(0.3, "rgba(7,7,9,0)"); gr.addColorStop(0.7, "rgba(7,7,9,0)"); gr.addColorStop(1, "#070709");
+      c.fillStyle = gr; c.fillRect(0, 400, W, 360); c.restore(); c.restore();
+      c.strokeStyle = "rgba(255,176,32,0.35)"; c.lineWidth = 2; c.strokeRect(960 - 3.3 * 150 - 90, 452, 7 * 150 + 30, 236);
+    }
+    // UN SUELDO ENTERO. (el rodillo se para y se convierte en la frase)
+    if (t >= tU - 0.03) {
+      const tE = pal("a2", "entero").t0;
+      golpe("UN SUELDO", 960, 640, 230, tU, t, { color: C.ambar, desde: 1.4 });
+      golpe("ENTERO.", 960, 820, 150, tE, t, { color: C.texto });
+    }
+    c.restore();
+  }
+  // ── a3: EN 30 SEGUNDOS / te digo cuál es… / y cómo quitártelo de encima.
+  if (t > V.a3.t0 - 0.05) {
+    const tT = pal("a3", "treinta").t0, tD = pal("a3", "digo").t0, tY = pal("a3", "cómo").t0 ?? V.a3.t1 - 1.2;
+    const k1 = eOut5(prog(t, V.a3.t0 - 0.03, V.a3.t0 + 0.22));
+    const xt = 820;
+    M.texto(c, "EN 30", xt, 430 + (1 - k1) * 30, { f: F(900, 170), color: C.texto, alpha: k1, track: -6 });
+    M.texto(c, "SEGUNDOS", xt, 590 + (1 - k1) * 30, { f: F(900, 170), color: C.ambar, alpha: eOut5(prog(t, tT, tT + 0.22)), track: -6 });
+    const k2 = eOut5(prog(t, tD - 0.25, tD + 0.1));
+    M.texto(c, "te digo cuál es…", xt + 6, 700 + (1 - k2) * 20, { f: F(600, 64), color: C.texto, alpha: k2 });
+    const k3 = eOut5(prog(t, tY - 0.1, tY + 0.2));
+    M.texto(c, "y cómo quitártelo de encima.", xt + 6, 790 + (1 - k3) * 20, { f: SERIF(84), color: C.ambar, alpha: k3 });
+  }
+}
+
+// ════════════════════════════ cuenta atrás (bucle abierto: se queda hasta cumplir la promesa) ════════════════════════════
+function cuenta(t) {
+  if (t < C0 - 0.05 || t > CF + 0.7) return;
+  if (t >= SIL0 - 0.05 && t < SIL1) return;                     // en el silencio no hay nada
+  const rest = Math.max(0, 30 - (t - C0) * 30 / (CF - C0));     // 30 → 0 exactamente entre «treinta» y el remate
+  const kv = prog(t, V.a3.t1 + 0.05, V.a3.t1 + 0.55);            // viaja del centro a la esquina
+  const cx = lerp(470, 1738, eIO(kv)), cy = lerp(540, 124, eIO(kv)), r = lerp(210, 52, eIO(kv));
+  const claro = t >= G0 && t < PROD - 0.1;
+  const aparece = eOut5(prog(t, C0 - 0.05, C0 + 0.3));
+  const fin = prog(t, CF, CF + 0.6);
+  c.save(); c.globalAlpha = aparece * (1 - fin); c.translate(cx, cy); const s = 1 + eOut(fin) * 1.5; c.scale(s, s);
+  c.lineWidth = r * 0.12; c.strokeStyle = claro ? "#d5d9e2" : "rgba(255,255,255,0.14)"; c.beginPath(); c.arc(0, 0, r, 0, 7); c.stroke();
+  c.strokeStyle = claro ? C.naranja : C.ambar; c.lineCap = "round"; c.beginPath(); c.arc(0, 0, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * rest / 30); c.stroke();
+  const num = String(Math.ceil(rest - 1e-6)).padStart(2, "0");
+  M.texto(c, num, 0, r * 0.3, { f: M.fuente(800, r * 0.82, "JetBrains Mono"), color: claro ? C.tinta : C.texto, al: "center", registrar: kv > 0.95 || kv === 0 });
+  c.restore();
+}
+
+// ════════════════════════════ 1 · MICROPLANOS: copiar, pegar, responder, buscar, otra vez ════════════════════════════
 function ui_marco(x, y, w, h, titulo) {
   M.rr(c, x, y, w, h, 18); c.fillStyle = C.panel; c.fill(); c.strokeStyle = C.linea; c.lineWidth = 2; c.stroke();
   if (titulo) M.texto(c, titulo, x + 28, y + 50, { f: MONO(500, 22), color: C.tenue, track: 2, registrar: false });
@@ -87,10 +208,9 @@ const PLANOS = [
     for (let k = 0; k < 3; k++) { const a = ((t * 1.4 + k / 3) % 1); c.strokeStyle = `rgba(255,255,255,${0.25 * (1 - a)})`; c.lineWidth = 4;
       c.beginPath(); c.arc(960, 430, 140 + a * 260, 0, 7); c.stroke(); }
     c.fillStyle = "#2b2f3a"; c.beginPath(); c.arc(960, 430, 140, 0, 7); c.fill();
-    M.texto(c, "C", 960, 480, { f: F(700, 130), color: C.texto, al: "center", registrar: false });
     M.texto(c, "Cliente", 960, 700, { f: F(700, 76), color: C.texto, al: "center", registrar: false });
     M.texto(c, "Llamada entrante… (4ª hoy)", 960, 770, { f: F(400, 40), color: C.tenue, al: "center", registrar: false });
-    [[760, "#e5484d"], [1160, "#30a46c"]].forEach(([x, col]) => { c.fillStyle = col; c.beginPath(); c.arc(x, 930, 70, 0, 7); c.fill(); });
+    [[760, "#e5484d"], [1160, "#30a46c"]].forEach(([x, col]) => { c.fillStyle = col; c.beginPath(); c.arc(x, 880, 56, 0, 7); c.fill(); });
   },
   function menu(t, r) {                       // copiar / pegar, con el cursor
     c.fillStyle = "#121216"; c.fillRect(0, 0, W, H); lineas(140, 120, 1100, 9, 100, r);
@@ -203,16 +323,16 @@ function palabrasGancho(t) {
 // ════════════════════════════ 2 · «Esto no es trabajo. Es ruido.» ════════════════════════════
 function frase(t) {
   c.fillStyle = C.negro; c.fillRect(0, 0, W, H);
-  const pa = V.l1.palabras; const dim = eOut(prog(t, V.l2.t0 - 0.1, V.l2.t0 + 0.2));
+  const pa = V.b1.palabras; const dim = eOut(prog(t, V.b2.t0 - 0.1, V.b2.t0 + 0.2));
   let x = 0; const f = F(600, 110); const tot = pa.reduce((s, p) => s + M.ancho(c, p.w + " ", f, -2), 0);
-  const salida = prog(t, 7.25, 7.75);
+  const salida = prog(t, PR0 - 0.15, PR0 + 0.35);
   pa.forEach((p) => {
     const k = eOut5(prog(t, p.t0 - 0.03, p.t0 + 0.22)); const w = M.ancho(c, p.w + " ", f, -2);
     M.texto(c, p.w, 960 - tot / 2 + x, lerp(560, 330, eIO(dim)) + (1 - k) * 40, { f, color: C.texto, alpha: k * (1 - dim * 0.65) * (1 - salida), track: -2 });
     x += w;
   });
-  if (t >= V.l2.t0 - 0.02) {
-    const dt = t - V.l2.t0, k = muelle(prog(dt, 0, 0.4));
+  if (t >= V.b2.t0 - 0.02) {
+    const dt = t - V.b2.t0, k = muelle(prog(dt, 0, 0.4));
     M.texto(c, "Es", 960, 520 - (1 - eOut(prog(dt, 0, 0.15))) * 30, { f: F(500, 80), color: C.tenue, al: "center", alpha: eOut(prog(dt, 0, 0.15)) * (1 - salida) });
     // RUIDO: vibra; al principio con desgarro fuerte, luego un temblor que no se va
     const fuerza = 0.25 + 1.2 * Math.exp(-dt * 5);
@@ -236,8 +356,8 @@ const ISLAS = [
 ];
 // saltos de la persona: isla de destino en cada palabra de l3, l4, l5
 const SALTOS = (() => {
-  const s = [{ t: 7.6, i: 1 }]; const seq = [4, 0, 1, 4, 2, 3, 5, 2, 0, 4, 3, 1, 2, 5, 0, 4, 2, 3, 1, 5, 2, 4, 0];
-  let k = 0; ["l3", "l4", "l5"].forEach((id) => V[id].palabras.forEach((p) => s.push({ t: p.t0, i: seq[k++ % seq.length] })));
+  const s = [{ t: PR0 + 0.2, i: 1 }]; const seq = [4, 0, 1, 4, 2, 3, 5, 2, 0, 4, 3, 1, 2, 5, 0, 4, 2, 3, 1, 5, 2, 4, 0];
+  let k = 0; ["p1", "p2", "p3"].forEach((id) => V[id].palabras.forEach((p) => s.push({ t: p.t0, i: seq[k++ % seq.length] })));
   return s;
 })();
 function posPersona(t) {
@@ -247,6 +367,10 @@ function posPersona(t) {
   const k = eIO(prog(t, a.t, a.t + 0.22)); const x = lerp(prev.x, pa.x, k), y = lerp(prev.y, pa.y, k) - Math.sin(k * Math.PI) * 120;
   return [x, y, i0];
 }
+const CONTENIDO = [[["Pedido nuevo", "auto"], ["Presupuesto", "enviado"], ["Consulta", "respondida"]],
+  [["F-0187", "emitida"], ["F-0188", "cobrada"], ["F-0189", "programada"]], [["Cliente", "avisado"], ["Equipo", "al día"], ["Dudas", "resueltas"]],
+  [["Ficha única", "sin duplicar"], ["Historial", "completo"], ["Próx. acción", "hoy"]], [["Datos", "sincronizados"], ["Informe", "listo"], ["Copias a mano", "0"]],
+  [["Citas", "sin choques"], ["Recordatorios", "auto"], ["Seguimiento", "hecho"]]];
 function isla(ix, x, y, esc, alpha, t, limpio = 0) {
   const I = ISLAS[ix]; const w = 330, h = 210;
   c.save(); c.translate(x, y); c.scale(esc, esc); c.globalAlpha *= alpha;
@@ -257,7 +381,13 @@ function isla(ix, x, y, esc, alpha, t, limpio = 0) {
   M.texto(c, I.id, -w / 2 + 26, -h / 2 + 48, { f: MONO(600, 28), color: oscuro > 0.5 ? C.tenue : C.gris2, track: 2 });
   icono(ix, w / 2 - 44, -h / 2 + 36, oscuro > 0.5 ? C.tenue : C.azul);
   const r = M.rng(ix * 5 + 1);
-  for (let i = 0; i < 3; i++) { M.rr(c, -w / 2 + 26, -h / 2 + 84 + i * 34, (w - 52) * (0.4 + 0.6 * r()), 14, 7); c.fillStyle = oscuro > 0.5 ? "#2a2a33" : "#e8eaef"; c.fill(); }
+  // el contenido «resuelto» solo aparece cuando llega la automatización (antes, la tarjeta aún es un esqueleto)
+  const kRes = oscuro > 0.5 ? 0 : eOut(prog(t, V.c5.t0 + ix * 0.08, V.c5.t0 + 0.4 + ix * 0.08));
+  if (kRes < 1) for (let i = 0; i < 3; i++) { c.globalAlpha = alpha * (1 - kRes); M.rr(c, -w / 2 + 26, -h / 2 + 84 + i * 34, (w - 52) * (0.4 + 0.6 * r()), 14, 7); c.fillStyle = oscuro > 0.5 ? "#2a2a33" : "#e8eaef"; c.fill(); }
+  c.globalAlpha = alpha;
+  if (kRes > 0) CONTENIDO[ix].slice(0, 2).forEach(([a, b], i) => { const yy = -h / 2 + 102 + i * 44; c.globalAlpha = alpha * kRes;
+    M.texto(c, `${a} · ${b}`, -w / 2 + 26, yy, { f: F(600, 23), color: i === 0 ? C.tinta : C.gris2, registrar: false });
+    c.fillStyle = "#eef0f4"; c.fillRect(-w / 2 + 26, yy + 14, w - 52, 1.5); });
   c.restore();
 }
 // iconos de línea de cada herramienta (dibujados, genéricos)
@@ -273,13 +403,13 @@ function icono(ix, x, y, col) {
 }
 function problema(t, n) {
   c.fillStyle = C.negro; c.fillRect(0, 0, W, H);
-  const cam = eIO(prog(t, 7.4, 15.3)); const esc = lerp(0.96, 1.1, cam);
+  const cam = eIO(prog(t, PR0, G0 - 0.1)); const esc = lerp(0.96, 1.1, cam);
   c.save(); c.translate(960, 540); c.scale(esc, esc); c.rotate(lerp(-0.01, 0.015, cam)); c.translate(-960, -540);
-  const aparece = (i) => eOut(prog(t, 7.4 + i * 0.07, 7.9 + i * 0.07));
+  const aparece = (i) => eOut(prog(t, PR0 + i * 0.07, PR0 + 0.5 + i * 0.07));
   // enlaces rotos (l4: «herramientas que no se hablan»)
-  const tH = pal("l4", "hablan").t0;
+  const tH = pal("p2", "hablan").t0;
   [[0, 1], [1, 2], [3, 4], [4, 5], [0, 3], [1, 4]].forEach(([a, b], j) => {
-    const k = prog(t, V.l4.t0 + j * 0.12, V.l4.t0 + 0.5 + j * 0.12); if (k <= 0) return;
+    const k = prog(t, V.p2.t0 + j * 0.12, V.p2.t0 + 0.5 + j * 0.12); if (k <= 0) return;
     const A = ISLAS[a], B = ISLAS[b]; const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
     c.save(); c.setLineDash([14, 14]); c.strokeStyle = t > tH ? "#ff3d2e88" : "#ffffff44"; c.lineWidth = 3;
     const corta = t > tH ? 0.38 : 0.5;
@@ -290,9 +420,9 @@ function problema(t, n) {
   });
   ISLAS.forEach((I, i) => isla(i, I.x + Math.sin(t * 0.9 + i) * 8, I.y + Math.cos(t * 0.7 + i * 2) * 8, 1, aparece(i), t));
   // datos que se copian a mano (l3): una ficha viaja de FACTURAS a EXCEL, una y otra vez
-  if (t > V.l3.t0 - 0.2 && t < V.l4.t0 + 0.4) {
+  if (t > V.p1.t0 - 0.2 && t < V.p2.t0 + 0.4) {
     for (let q = 0; q < 3; q++) {
-      const k = ((t - V.l3.t0) * 0.9 + q / 3) % 1; if (t - V.l3.t0 + q / 3 < 0) continue;
+      const k = ((t - V.p1.t0) * 0.9 + q / 3) % 1; if (t - V.p1.t0 + q / 3 < 0) continue;
       const A = ISLAS[1], B = ISLAS[4]; const x = lerp(A.x, B.x, eIO(k)), y = lerp(A.y, B.y, eIO(k)) - Math.sin(k * Math.PI) * 80;
       M.rr(c, x - 70, y - 22, 140, 44, 10); c.fillStyle = "#26262e"; c.fill(); c.strokeStyle = C.rojo; c.lineWidth = 2; c.stroke();
       M.texto(c, "2026-0187", x, y + 9, { f: MONO(600, 20), color: C.texto, al: "center", registrar: false });
@@ -300,31 +430,31 @@ function problema(t, n) {
   }
   // l5: la misma pregunta, a la misma persona — globos que se acumulan sobre ella
   const [px, py] = posPersona(t);
-  if (t > V.l5.t0) {
-    const nq = Math.floor(prog(t, V.l5.t0, V.l5.t1) * 11) + 1;
+  if (t > V.p3.t0) {
+    const nq = Math.floor(prog(t, V.p3.t0, V.p3.t1) * 11) + 1;
     for (let q = 0; q < nq; q++) {
-      const a = hash(q * 3.1) * Math.PI * 2, rr = 150 + hash(q * 7.7) * 110, k = eOut5(prog(t, V.l5.t0 + q * 0.27, V.l5.t0 + q * 0.27 + 0.2));
+      const a = hash(q * 3.1) * Math.PI * 2, rr = 150 + hash(q * 7.7) * 110, k = eOut5(prog(t, V.p3.t0 + q * 0.27, V.p3.t0 + q * 0.27 + 0.2));
       const x = px + Math.cos(a) * rr * k, y = py + Math.sin(a) * rr * 0.7 * k - 30;
       const s = ["¿Dónde está…?", "¿Me lo pasas?", "¿Cuál es el bueno?", "¿Quién lo tiene?"][q % 4];
-      const w = M.ancho(c, s, F(600, 26)) + 36;
-      c.globalAlpha = k * 0.95; M.rr(c, x - w / 2, y - 24, w, 48, 24); c.fillStyle = "#2b2b34"; c.fill(); c.strokeStyle = "#ff3d2e99"; c.lineWidth = 2; c.stroke();
-      M.texto(c, s, x, y + 9, { f: F(600, 26), color: C.texto, al: "center", registrar: false }); c.globalAlpha = 1;
+      const w = M.ancho(c, s, F(600, 30)) + 40;
+      c.globalAlpha = k * 0.95; M.rr(c, x - w / 2, y - 27, w, 54, 27); c.fillStyle = "#2b2b34"; c.fill(); c.strokeStyle = "#ff3d2e99"; c.lineWidth = 2; c.stroke();
+      M.texto(c, s, x, y + 10, { f: F(600, 30), color: C.texto, al: "center", registrar: false }); c.globalAlpha = 1;
     }
   }
   // el rastro: el camino de la persona, que se enreda salto a salto
   c.save(); c.strokeStyle = "#ff3d2eaa"; c.lineWidth = 3; c.beginPath(); let prim = true;
-  for (let tt = 7.6; tt <= t; tt += 1 / 60) { const [x, y] = posPersona(tt); if (prim) { c.moveTo(x, y); prim = false; } else c.lineTo(x, y); }
+  for (let tt = PR0 + 0.2; tt <= t; tt += 1 / 60) { const [x, y] = posPersona(tt); if (prim) { c.moveTo(x, y); prim = false; } else c.lineTo(x, y); }
   c.stroke(); c.restore();
   c.fillStyle = "#ff3d2e40"; c.beginPath(); c.arc(px, py, 30 + 6 * Math.sin(t * 6), 0, 7); c.fill();
   c.fillStyle = C.rojo; c.beginPath(); c.arc(px, py, 14, 0, 7); c.fill();
   c.restore();
   // reloj: el día pasa (arriba a la derecha)
   const dias = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"];
-  const kd = prog(t, V.l5.t0, V.l5.t1); const d = Math.min(4, Math.floor(kd * 5));
-  const hora = t < V.l5.t0 ? 9 + (t - 7.4) * 0.8 : 9 + ((kd * 5) % 1) * 9.5;
-  M.texto(c, `${dias[t < V.l5.t0 ? 0 : d]} · ${String(Math.floor(hora)).padStart(2, "0")}:${String(Math.floor((hora % 1) * 60)).padStart(2, "0")}`, 1790, 110,
-          { f: MONO(600, 30), color: C.tenue, al: "right", alpha: eOut(prog(t, 7.6, 8)), track: 2 });
-  subtitulo(t, ["l3", "l4", "l5"], { "mano": 1, "hablan": 1, "persona": 1, "misma": 1, "a": 0 });
+  const kd = prog(t, V.p3.t0, V.p3.t1); const d = Math.min(4, Math.floor(kd * 5));
+  const hora = t < V.p3.t0 ? 9 + (t - PR0) * 0.8 : 9 + ((kd * 5) % 1) * 9.5;
+  M.texto(c, `${dias[t < V.p3.t0 ? 0 : d]} · ${String(Math.floor(hora)).padStart(2, "0")}:${String(Math.floor((hora % 1) * 60)).padStart(2, "0")}`, 1640, 112,
+          { f: MONO(600, 30), color: C.tenue, al: "right", alpha: eOut(prog(t, PR0 + 0.2, PR0 + 0.6)), track: 2 });
+  subtitulo(t, ["p1", "p2", "p3"], { "mano": 1, "hablan": 1, "persona": 1, "misma": 1, "a": 0 });
   M.vineta(c, W, H, 0.35 + 0.35 * cam, "40,0,0");
 }
 // subtítulo cinético: la frase activa, palabra a palabra, con las palabras clave en rojo
@@ -336,7 +466,7 @@ function subtitulo(t, ids, clave, oscuro = true) {
   pa.forEach((p) => {
     const k = eOut5(prog(t, p.t0 - 0.04, p.t0 + 0.16)); const w = M.ancho(c, p.w + " ", f, -1);
     const lim = p.w.toLowerCase().replace(/[^\wáéíóúñ]/g, "");
-    const rojo = clave[lim] && (lim !== "misma" || id === "l5");
+    const rojo = clave[lim] && (lim !== "misma" || id === "p3");
     M.texto(c, p.w, x, 980 + (1 - k) * 18, { f, color: rojo ? C.rojo : (oscuro ? C.texto : C.tinta), alpha: k * sal, track: -1 }); x += w;
   });
 }
@@ -353,13 +483,13 @@ function sistema(t, n) {
   for (let x = 0; x <= W; x += 60) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); }
   for (let y = 0; y <= H; y += 60) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
   const kOrden = eIO(prog(t, G0 + 0.05, G0 + 1.1));        // las islas encajan
-  const kLado = eIO(prog(t, V.l7.t0 - 0.35, V.l7.t0 + 0.25)); // la retícula deja sitio al verbo
+  const kLado = eIO(prog(t, V.c2.t0 - 0.35, V.c2.t0 + 0.25)); // la retícula deja sitio al verbo
   const pos = (i) => { const I = ISLAS[i]; const [ax, ay] = REJ[i], [bx, by] = REJ2[i];
     return [lerp(I.x, lerp(ax, bx, kLado), kOrden), lerp(I.y, lerp(ay, by, kLado), kOrden)]; };
   const esc = lerp(1, 1.0, kLado);
   // conexiones: se trazan en l9 («lo conectamos todo»); antes, solo la retícula punteada del diseño
   const aristas = [[0, 1], [1, 2], [3, 4], [4, 5], [0, 3], [1, 4], [2, 5]];
-  const tCon = V.l9.t0, tDis = V.l8.t0;
+  const tCon = V.c4.t0, tDis = V.c3.t0;
   aristas.forEach(([a, b], j) => {
     const [ax, ay] = pos(a), [bx, by] = pos(b);
     const kd = eOut(prog(t, tDis + j * 0.06, tDis + 0.5 + j * 0.06));
@@ -369,7 +499,7 @@ function sistema(t, n) {
     if (kc > 0) { c.strokeStyle = C.azul; c.lineWidth = 4; c.beginPath(); c.moveTo(ax, ay); c.lineTo(lerp(ax, bx, kc), lerp(ay, by, kc)); c.stroke(); }
   });
   // nodo central (la IA): aparece con «inteligencia artificial» (l10) y se conecta a todas
-  const tIA = pal("l10", "inteligencia").t0; const kIA = muelle(prog(t, tIA - 0.1, tIA + 0.5));
+  const tIA = pal("c6", "inteligencia").t0; const kIA = muelle(prog(t, tIA - 0.1, tIA + 0.5));
   const [nx, ny] = NODO();
   if (kIA > 0) {
     ISLAS.forEach((_, i) => { const [x, y] = pos(i); const k = eOut(prog(t, tIA + i * 0.05, tIA + 0.4 + i * 0.05));
@@ -390,43 +520,43 @@ function sistema(t, n) {
   if (kIA > 0) { c.save(); c.translate(nx, ny); c.scale(kIA, kIA); c.fillStyle = C.pixel; c.fillRect(-34, -34, 68, 68);
     M.texto(c, "IA", 0, 13, { f: F(800, 34), color: "#fff", al: "center", registrar: false }); c.restore(); }
   // análisis (l7): una línea de escaneo recorre las tarjetas y deja un diagnóstico en cada una
-  const tA = V.l7.t0;
-  if (t > tA && t < V.l9.t0 + 0.3) {
+  const tA = V.c2.t0;
+  if (t > tA && t < V.c4.t0 + 0.3) {
     const k = prog(t, tA, tA + 1.6); const xs = lerp(650, 1800, eIO(k));
     if (k < 1) { c.fillStyle = "#2f6bff22"; c.fillRect(xs - 60, 120, 60, 720); c.fillStyle = C.azul; c.fillRect(xs, 120, 4, 720); }
     const diag = ["copia manual", "sin conectar", "pregunta repetida", "datos duplicados", "a mano cada mes", "sin avisos"];
     ISLAS.forEach((_, i) => { const [x, y] = pos(i); if (xs < x - 60) return;
-      const ke = eOut(prog(xs, x - 60, x + 40)) * (1 - eIn(prog(t, V.l9.t0, V.l9.t0 + 0.3)));
+      const ke = eOut(prog(xs, x - 60, x + 40)) * (1 - eIn(prog(t, V.c4.t0, V.c4.t0 + 0.3)));
       const s = diag[i]; const w = M.ancho(c, s, F(600, 26)) + 34;
       c.globalAlpha = ke; M.rr(c, x - w / 2, y + 62 * esc, w, 44, 22); c.fillStyle = "#fff1ef"; c.fill(); c.strokeStyle = C.rojo; c.lineWidth = 2; c.stroke();
       M.texto(c, s, x, y + 62 * esc + 31, { f: F(600, 26), color: "#c2261a", al: "center" }); c.globalAlpha = 1; });
   }
   // conectamos: procesos · datos · herramientas se encienden sobre las tarjetas
   ["procesos", "datos", "herramientas"].forEach((w, j) => {
-    const p = pal("l9", w); const k = eOut(prog(t, p.t0 - 0.05, p.t0 + 0.2)) * (1 - eIn(prog(t, 30.9, 31.3)));
-    if (k <= 0) return; const [x, y] = [[860, 190], [1240, 860], [1620, 190]][j];
+    const p = { t0: V.c4.t0 + 0.35 + j * 0.3 }; const k = eOut(prog(t, p.t0 - 0.05, p.t0 + 0.2)) * (1 - eIn(prog(t, PROD - 0.45, PROD - 0.1)));
+    if (k <= 0) return; const [x, y] = [[860, 885], [1240, 885], [1620, 885]][j];
     const s = w.toUpperCase(); const ww = M.ancho(c, s, MONO(700, 26), 3) + 40;
     c.globalAlpha = k; M.rr(c, x - ww / 2, y - 30, ww, 50, 25); c.fillStyle = C.azul; c.fill();
     M.texto(c, s, x, y + 5, { f: MONO(700, 26), color: "#fff", al: "center", track: 3 }); c.globalAlpha = 1;
   });
   // automatización: tareas que se completan solas (l10)
-  const tAu = pal("l10", "automatización").t0;
+  const tAu = pal("c5", "automatiza").t0;
   ["✓ Factura enviada", "✓ Datos sincronizados", "✓ Cliente avisado", "✓ Informe listo"].forEach((s, j) => {
-    const k = eOut5(prog(t, tAu + j * 0.35, tAu + 0.3 + j * 0.35)) * (1 - eIn(prog(t, 30.9, 31.3)));
+    const k = eOut5(prog(t, tAu + j * 0.35, tAu + 0.3 + j * 0.35)) * (1 - eIn(prog(t, PROD - 0.45, PROD - 0.1)));
     if (k <= 0) return; const x = 1240 + [-380, 380, -380, 380][j], y = 515 + [-28, -28, 28, 28][j];
     const w = M.ancho(c, s, F(600, 26)) + 36;
     c.globalAlpha = k; M.rr(c, x - w / 2, y - 22 + (1 - k) * 20, w, 44, 22); c.fillStyle = "#e9f0ff"; c.fill(); c.strokeStyle = C.azul; c.lineWidth = 2; c.stroke();
     M.texto(c, s, x, y + 9 + (1 - k) * 20, { f: F(600, 26), color: "#1d4ed8", al: "center" }); c.globalAlpha = 1;
   });
   // titulares
-  if (t < V.l7.t0 - 0.3) cabecera(t);
+  if (t < V.c2.t0 - 0.3) cabecera(t);
   verbos(t);
 }
 function cabecera(t) {   // «D-Code Partners convierte ese ruido en un sistema»
-  const kSal = 1 - eIn(prog(t, V.l7.t0 - 0.6, V.l7.t0 - 0.3));
-  const pb = V.l6.palabras; const tM = pb[1].t0, tR = pal("l6", "ruido").t0, tS = pal("l6", "sistema").t0;
+  const kSal = 1 - eIn(prog(t, V.c2.t0 - 0.6, V.c2.t0 - 0.3));
+  const pb = V.c1.palabras; const tM = pb[1].t0, tR = pal("c1", "ruido").t0, tS = pal("c1", "sistema").t0;
   M.texto(c, "D-CODE PARTNERS", 960, 150, { f: MONO(700, 30), color: C.azul, al: "center", track: 6, alpha: eOut(prog(t, tM - 0.05, tM + 0.25)) * kSal });
-  const k1 = eOut5(prog(t, pal("l6", "convertimos").t0 - 0.05, pal("l6", "convertimos").t0 + 0.25));
+  const k1 = eOut5(prog(t, pal("c1", "convertimos").t0 - 0.05, pal("c1", "convertimos").t0 + 0.25));
   const f = F(700, 84); const a = "convertimos ese ", b = "ruido", d = " en un ", e = "sistema.";
   const fS = SERIF(112);
   const wA = M.ancho(c, a, f, -2), wB = M.ancho(c, b, f, -2), wD = M.ancho(c, d, f, -2), wE = M.ancho(c, e, fS);
@@ -441,111 +571,141 @@ function cabecera(t) {   // «D-Code Partners convierte ese ruido en un sistema�
   c.save(); c.translate(x + wE / 2, y); c.scale(lerp(0.7, 1, kS), lerp(0.7, 1, kS));
   M.texto(c, e, 0, 0, { f: fS, color: C.azul, al: "center", alpha: clamp(kS * 1.4) * kSal }); c.restore();
 }
-function verbos(t) {     // columna izquierda: ANALIZAMOS / DISEÑAMOS / CONECTAMOS  (+ AUTOMATIZACIÓN · IA)
-  const sal = 1 - eIn(prog(t, 30.9, 31.3)); if (sal <= 0) return;
-  const filas = [["l7", "Analizamos", "cómo trabaja tu empresa"], ["l8", "Diseñamos", "el sistema"], ["l9", "Conectamos", "procesos, datos y herramientas"],
-                 ["l10", "+ Automatización", "e inteligencia artificial"]];
+
+
+function verbos(t) {     // columna izquierda: el método. Cada verbo se ajusta al ancho de la columna (no pisa las tarjetas)
+  const sal = 1 - eIn(prog(t, PROD - 0.45, PROD - 0.1)); if (sal <= 0) return;
+  const filas = [["c2", "Analizamos", "cómo trabaja tu empresa"], ["c3", "Diseñamos", "el sistema"], ["c4", "Conectamos", "procesos, datos y herramientas"],
+                 ["c5", "Automatizamos", "todo lo repetitivo"], ["c6", "+ IA", "para lo que requiere pensar"]];
+  const COL = 540;                                  // ancho máximo: de x=130 a x=670 (las tarjetas empiezan en 695)
   filas.forEach(([id, v, sub], i) => {
     const t0 = V[id].t0; if (t < t0 - 0.05) return;
     const k = muelle(prog(t, t0 - 0.05, t0 + 0.45)), ke = eOut5(prog(t, t0 - 0.05, t0 + 0.2));
-    const activo = t < (filas[i + 1] ? V[filas[i + 1][0]].t0 : 99);
-    const y = 330 + i * 150;
+    const activo = t < (filas[i + 1] ? V[filas[i + 1][0]].t0 : PROD);
+    const y = 272 + i * 136; const s = v.toUpperCase(); const px = ajusta(s, (p) => F(900, p), COL, 78, -2);
     c.save(); c.translate(130 - (1 - ke) * 40, y);
-    M.texto(c, v.toUpperCase(), 0, 0, { f: F(900, i === 3 ? 64 : 80), color: activo ? C.tinta : "#aab0bd", alpha: ke * sal, track: -2 });
-    M.texto(c, sub, 2, 50, { f: F(500, 34), color: activo ? C.azul : "#aab0bd", alpha: eOut(prog(t, t0 + 0.15, t0 + 0.45)) * sal });
+    M.texto(c, s, 0, 0, { f: F(900, px), color: activo ? (i === 4 ? C.azul : C.tinta) : "#aab0bd", alpha: ke * sal, track: -2 });
+    M.texto(c, sub, 2, 46, { f: F(500, ajusta(sub, (p) => F(500, p), COL, 32)), color: activo ? C.azul : "#aab0bd", alpha: eOut(prog(t, t0 + 0.15, t0 + 0.45)) * sal });
     c.restore();
-    if (activo) { c.fillStyle = C.azul; c.globalAlpha = sal; c.fillRect(96, y - 62, 10 * k, 118); c.globalAlpha = 1; }
+    if (activo) { c.fillStyle = C.azul; c.globalAlpha = sal; c.fillRect(96, y - 58, 10 * k, 112); c.globalAlpha = 1; }
   });
 }
 
-// ════════════════════════════ 5 · No es «usar IA»: es que funcione mejor ════════════════════════════
-const CAPTURAS = {};
-function recorte(im, sx, sy, sw, sh, dx, dy, dw, dh, r = 26, alpha = 1) {
-  c.save(); c.globalAlpha *= alpha; M.rr(c, dx, dy, dw, dh, r); c.clip(); c.drawImage(im, sx, sy, sw, sh, dx, dy, dw, dh); c.restore();
-  c.save(); c.globalAlpha *= alpha * 0.9; M.rr(c, dx, dy, dw, dh, r); c.strokeStyle = "#ffffff26"; c.lineWidth = 2; c.stroke(); c.restore();
+// ════════════════════════════ 5 · Y tu equipo, por fin, a lo que importa (interfaces diseñadas) ════════════════════════════
+// No son capturas: son interfaces de producto dibujadas para el anuncio (vidrio, luz, profundidad).
+function vidrio(x, y, w, h, r, o = {}) {
+  c.save();
+  c.shadowColor = "rgba(0,0,0,0.55)"; c.shadowBlur = 70; c.shadowOffsetY = 30;
+  M.rr(c, x, y, w, h, r); c.fillStyle = o.fondo || "rgba(20,26,48,0.78)"; c.fill(); c.restore();
+  c.save(); M.rr(c, x, y, w, h, r); c.clip();
+  const g = c.createLinearGradient(x, y, x, y + h); g.addColorStop(0, "rgba(255,255,255,0.10)"); g.addColorStop(0.35, "rgba(255,255,255,0.02)"); g.addColorStop(1, "rgba(255,255,255,0)");
+  c.fillStyle = g; c.fillRect(x, y, w, h); c.restore();
+  M.rr(c, x + 0.5, y + 0.5, w - 1, h - 1, r); c.strokeStyle = "rgba(255,255,255,0.16)"; c.lineWidth = 1.5; c.stroke();
+}
+function check(x, y, r, k, col = "#35d07f") {
+  c.save(); c.fillStyle = col; c.globalAlpha *= clamp(k * 2); c.beginPath(); c.arc(x, y, r * lerp(0.6, 1, eOut5(k)), 0, 7); c.fill();
+  c.strokeStyle = "#07130c"; c.lineWidth = r * 0.22; c.lineCap = "round"; c.lineJoin = "round"; const kk = clamp(k * 1.6 - 0.3);
+  c.beginPath(); c.moveTo(x - r * 0.42, y + r * 0.02); c.lineTo(x - r * 0.12, y + r * 0.32); if (kk > 0.5) c.lineTo(lerp(x - r * 0.12, x + r * 0.45, (kk - 0.5) * 2), lerp(y + r * 0.32, y - r * 0.3, (kk - 0.5) * 2)); c.stroke(); c.restore();
+}
+function tarjetaHoy(x, y, t, t0) {   // D-Code OS · Hoy: todo al día
+  const w = 640, h = 430; vidrio(x, y, w, h, 30);
+  M.logo(c, x + 34, y + 30, 26, "#ffffff", C.pixel);
+  M.texto(c, "D-Code OS  ·  Hoy", x + 78, y + 52, { f: F(600, 24), color: "#c9cfe0", registrar: false });
+  M.texto(c, "Todo al día.", x + 34, y + 130, { f: F(800, 60), color: "#ffffff", track: -1.5, registrar: false });
+  const filas = [["Facturas enviadas", "automático"], ["Clientes avisados", "automático"], ["Informe de la semana", "listo"], ["Datos sincronizados", "en tiempo real"]];
+  filas.forEach(([a, b], i) => { const k = prog(t, t0 + 0.15 + i * 0.18, t0 + 0.5 + i * 0.18); const yy = y + 190 + i * 56;
+    c.globalAlpha = clamp(k * 3); c.fillStyle = "rgba(255,255,255,0.05)"; M.rr(c, x + 28, yy - 30, w - 56, 46, 12); c.fill(); c.globalAlpha = 1;
+    check(x + 56, yy - 7, 13, k);
+    M.texto(c, a, x + 84, yy + 2, { f: F(600, 26), color: "#e8ecf7", alpha: clamp(k * 3), registrar: false });
+    M.texto(c, b, x + w - 46, yy + 2, { f: MONO(500, 20), color: "#7f8aa8", al: "right", alpha: clamp(k * 3), registrar: false }); });
+}
+function tarjetaIA(x, y, t, t0) {     // pregunta en lenguaje natural → respuesta
+  const w = 520, h = 300; vidrio(x, y, w, h, 28, { fondo: "rgba(30,38,70,0.8)" });
+  M.texto(c, "Asistente", x + 30, y + 46, { f: F(600, 22), color: "#9fb0e0", registrar: false });
+  c.fillStyle = C.pixel; c.fillRect(x + w - 50, y + 30, 18, 18);
+  const q = "¿Qué tengo pendiente hoy?"; const nq = Math.floor(clamp(prog(t, t0 + 0.1, t0 + 0.7)) * q.length);
+  M.rr(c, x + w - 30 - 380, y + 74, 380, 56, 28); c.fillStyle = "#2f6bff"; c.fill();
+  M.texto(c, q.slice(0, nq), x + w - 30 - 360, y + 110, { f: F(600, 24), color: "#fff", registrar: false });
+  const r1 = "Solo dos decisiones.", r2 = "Lo demás ya está hecho."; const ka = prog(t, t0 + 0.8, t0 + 1.5);
+  M.rr(c, x + 30, y + 150, 400, 110, 24); c.fillStyle = "rgba(255,255,255,0.08)"; c.globalAlpha = clamp(ka * 4); c.fill(); c.globalAlpha = 1;
+  M.texto(c, r1.slice(0, Math.floor(clamp(ka * 2) * r1.length)), x + 52, y + 196, { f: F(700, 26), color: "#fff", registrar: false });
+  M.texto(c, r2.slice(0, Math.floor(clamp(ka * 2 - 1) * r2.length)), x + 52, y + 236, { f: F(500, 24), color: "#b9c3de", registrar: false });
+}
+function tarjetaFlujo(x, y, t, t0) {  // automatizaciones activas: pulsos que recorren un flujo
+  const w = 520, h = 230; vidrio(x, y, w, h, 28);
+  M.texto(c, "Automatizaciones activas", x + 30, y + 46, { f: F(600, 22), color: "#9fb0e0", registrar: false });
+  const ns = [[x + 70, y + 140], [x + 200, y + 140], [x + 330, y + 140], [x + 450, y + 140]];
+  c.strokeStyle = "rgba(255,255,255,0.18)"; c.lineWidth = 3; c.beginPath(); c.moveTo(...ns[0]); ns.forEach((p) => c.lineTo(...p)); c.stroke();
+  ns.forEach(([a, b], i) => { c.fillStyle = i === 3 ? "#35d07f" : "#1f2a4d"; c.strokeStyle = C.pixel; c.lineWidth = 2.5; c.beginPath(); c.arc(a, b, 22, 0, 7); c.fill(); c.stroke(); });
+  for (let q = 0; q < 3; q++) { const k = ((t - t0) * 0.7 + q / 3) % 1; if (t < t0) break; const xx = lerp(ns[0][0], ns[3][0], k);
+    c.fillStyle = C.ambar; c.shadowColor = C.ambar; c.shadowBlur = 16; c.beginPath(); c.arc(xx, y + 140, 7, 0, 7); c.fill(); c.shadowBlur = 0; }
+  ["Pedido", "Factura", "Aviso", "Hecho"].forEach((s, i) => M.texto(c, s, ns[i][0], y + 196, { f: F(500, 20), color: "#8f9bbd", al: "center", registrar: false }));
+}
+function fondoProducto(t) {
+  const g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#060913"); g.addColorStop(1, "#0d1531"); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  const luz = (x, y, r, col) => { const gg = c.createRadialGradient(x, y, 0, x, y, r); gg.addColorStop(0, col); gg.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = gg; c.fillRect(0, 0, W, H); };
+  luz(1350 + Math.sin(t * 0.6) * 60, 420, 700, "rgba(47,107,255,0.30)"); luz(1650, 900, 520, "rgba(255,150,40,0.16)");
 }
 function producto(t, n) {
-  c.fillStyle = "#07080b"; c.fillRect(0, 0, W, H);
-  // 30,9 → 31,4: la cámara entra en el nodo IA y se abre la pantalla real
-  const kIn = eIO(prog(t, 30.9, 31.45));
-  const im = CAPTURAS["fin-panel"];
-  if (t < R1) {
-    // pantalla real de fondo, muy cerca y en movimiento lento (panel financiero)
-    const pan = prog(t, 30.9, R1);
-    const sx = lerp(600, 760, pan), sy = lerp(330, 420, pan), sw = 1650, sh = 928;
-    c.filter = `blur(${lerp(0, 7, kIn)}px)`;
-    recorte(im, sx, sy, sw, sh, lerp(960, 0, kIn) - lerp(34, 0, kIn), lerp(470, 0, kIn) - lerp(34, 0, kIn) + 70 * (1 - kIn), lerp(68, W, kIn), lerp(68, H, kIn), lerp(8, 0, kIn), 1);
-    c.filter = "none"; c.fillStyle = `rgba(7,8,11,${lerp(0, 0.8, kIn)})`; c.fillRect(0, 0, W, H);
-    // «No se trata de usar inteligencia artificial.»
-    const pa = V.l11.palabras; const kA = eOut(prog(t, pa[0].t0 - 0.05, pa[0].t0 + 0.3));
-    M.texto(c, "No se trata de", 960, 400, { f: F(500, 64), color: C.tenue, al: "center", alpha: kA });
-    const tU = pal("l11", "usar").t0; const kU = eOut5(prog(t, tU - 0.05, tU + 0.3));
-    const s = "usar inteligencia artificial."; const f = F(800, 104);
-    M.texto(c, s, 960, 560 + (1 - kU) * 30, { f, color: C.texto, al: "center", alpha: kU, track: -3 });
-    const tT = V.l11.palabras[V.l11.palabras.length - 1].t1 - 0.1; const kT = eIO(prog(t, tT, tT + 0.35));
-    if (kT > 0) { const w = M.ancho(c, s, f, -3); c.save(); c.translate(960 - w / 2 - 20, 525); c.rotate(-0.02);
-      c.fillStyle = C.rojo; c.fillRect(0, 0, (w + 40) * kT, 12); c.restore(); }
-  } else {
-    // 34,4: la base vuelve. Pantallas reales, recortes cerrados, cortando a cada compás
-    const pl = [["os-hoy", 260, 150, 1500, 700], ["fin-panel", 280, 180, 1500, 620], ["pa-procesos", 230, 180, 1520, 900], ["fin-cobros", 280, 160, 1500, 800]];
-    const b = Math.floor((t - R1) / 1.0) % pl.length; const dt = (t - R1) % 1.0;
-    const [nom, sx, sy, sw, sh] = pl[b]; const ims = CAPTURAS[nom];
-    const z = 1 + dt * 0.04; const dw = 1040 * z, dh = dw * sh / sw;
-    c.save(); c.translate(1400, 540); c.rotate(-0.035); recorte(ims, sx, sy, sw, sh, -dw / 2, -dh / 2, dw, dh, 24, 1); c.restore();
-    const g = c.createLinearGradient(0, 0, 1100, 0); g.addColorStop(0, "rgba(7,8,11,0.96)"); g.addColorStop(0.75, "rgba(7,8,11,0.55)"); g.addColorStop(1, "rgba(7,8,11,0)");
-    c.fillStyle = g; c.fillRect(0, 0, W, H);
-    const pa = V.l12.palabras; const k1 = eOut5(prog(t, pa[0].t0 - 0.05, pa[0].t0 + 0.25));
-    M.texto(c, "Se trata de que", 130, 430 + (1 - k1) * 20, { f: F(500, 64), color: C.tenue, alpha: k1 });
-    M.texto(c, "tu empresa", 130, 530 + (1 - k1) * 20, { f: F(800, 96), color: C.texto, alpha: eOut5(prog(t, pal("l12", "tu").t0 - 0.05, pal("l12", "tu").t0 + 0.25)), track: -2 });
-    const tF = pal("l12", "funcione").t0; const kF = muelle(prog(t, tF - 0.05, tF + 0.5));
-    c.save(); c.translate(130, 690); c.scale(lerp(0.85, 1, kF), lerp(0.85, 1, kF));
-    M.texto(c, "funcione mejor.", 0, 0, { f: SERIF(170), color: C.pixel, alpha: clamp(kF * 1.5) }); c.restore();
-    M.texto(c, "Pantallas reales de producto · datos de demostración", 130, 1000, { f: MONO(500, 24), color: "#9aa0ad", alpha: 0.9, track: 1 });
-  }
+  fondoProducto(t);
+  const t0 = PROD; const ke = eOut5(prog(t, t0, t0 + 0.6));
+  // composición en profundidad: las tarjetas entran desde abajo con desfase y flotan (parallax)
+  const fl = (i) => Math.sin(t * 1.3 + i * 1.7) * 8;
+  c.save(); c.translate(0, (1 - ke) * 140); c.globalAlpha = ke;
+  tarjetaIA(1290, 110 + fl(1), t, t0 + 0.2);
+  tarjetaFlujo(1360, 560 + fl(2), t, t0 + 0.35);
+  tarjetaHoy(700, 440 + fl(0), t, t0 + 0.05);
+  c.restore();
+  // texto: Y tu equipo, / por fin, / a lo que importa.
+  const tY = V.c7.palabras[0].t0, tP = pal("c7", "fin").t0, tA = pal("c7", "importa").t0 - 0.35;
+  const k1 = eOut5(prog(t, tY - 0.05, tY + 0.25)), k2 = eOut5(prog(t, tP - 0.25, tP + 0.05)), k3 = muelle(prog(t, tA - 0.05, tA + 0.5));
+  M.texto(c, "Y tu equipo,", 130, 360 + (1 - k1) * 24, { f: F(700, 76), color: "#ffffff", alpha: k1, track: -2 });
+  M.texto(c, "por fin,", 130, 450 + (1 - k2) * 24, { f: F(700, 76), color: "#9fb0e0", alpha: k2, track: -2 });
+  c.save(); c.translate(128, 600); c.scale(lerp(0.9, 1, k3), lerp(0.9, 1, k3));
+  M.texto(c, "a lo que", 0, 0, { f: SERIF(120), color: C.ambar, alpha: clamp(k3 * 1.5) });
+  M.texto(c, "importa.", 0, 120, { f: SERIF(150), color: C.ambar, alpha: clamp(k3 * 1.5) }); c.restore();
+  M.texto(c, "Interfaz ilustrativa", 130, 1000, { f: MONO(500, 24), color: "#6c7797", alpha: ke * 0.9, track: 1 });
 }
 
 // ════════════════════════════ 6 · Cierre: todo se recoge en un píxel azul ════════════════════════════
 function cierre(t, n) {
-  const k = eIn(prog(t, FIN, TICK));                 // se recoge
-  const fondo = t >= TICK - 0.5 / FPS ? 1 : 0;            // corte seco a blanco en el «tic»
-  c.fillStyle = C.claro; c.fillRect(0, 0, W, H);
-  if (fondo < 1) { c.globalAlpha = 1 - fondo; c.fillStyle = "#07080b"; c.fillRect(0, 0, W, H); c.globalAlpha = 1; }
-  // composición final: logo + marca, centrada
+  const k = eIn(prog(t, FIN, TICK));
   const alto = 180, fM = F(800, 124), wM = M.ancho(c, "D-Code Partners", fM, -3);
   const wLogo = alto * 1.2, gap = 60, tot = wLogo + gap + wM, x0 = 960 - tot / 2, y0 = 400;
-  const [px, py] = [x0 + (16 + 7.5) / 100 * alto, y0 + (45 + 7.5) / 100 * alto];   // centro del píxel del logo
-  if (t < TICK) {
-    // la última pantalla se encoge hacia el centro y se vuelve un píxel azul que viaja a su sitio
-    const s = lerp(1, 0.0, k); const im = CAPTURAS["os-hoy"];
-    if (s > 0.02) { c.save(); c.translate(lerp(960, px, k), lerp(540, py, k)); c.rotate(lerp(-0.035, 0, k));
-      recorte(im, 260, 150, 1500, 800, -700 * s, -373 * s, 1400 * s, 746 * s, 24 * s, 1 - k * 0.3);
-      c.globalAlpha = k; c.fillStyle = C.pixel; c.fillRect(-700 * s, -373 * s, 1400 * s, 746 * s); c.restore(); c.globalAlpha = 1; }
-    const lado = lerp(60, 15 / 100 * alto, k); c.globalAlpha = k; c.fillStyle = C.pixel;
+  const [px, py] = [x0 + (16 + 7.5) / 100 * alto, y0 + (45 + 7.5) / 100 * alto];
+  if (t < TICK - 0.5 / FPS) {
+    fondoProducto(t);
+    // la composición entera se encoge hacia el píxel del logotipo
+    const s = lerp(1, 0.0, k);
+    if (s > 0.02) { c.save(); c.translate(lerp(960, px, k), lerp(540, py, k)); c.scale(s, s); c.translate(-1130, -560);
+      c.globalAlpha = 1 - k * 0.2; tarjetaIA(1290, 110, t, PROD); tarjetaFlujo(1360, 560, t, PROD); tarjetaHoy(700, 440, t, PROD); c.restore(); c.globalAlpha = 1; }
+    const lado = lerp(40, 15 / 100 * alto, k); c.globalAlpha = eOut(k); c.fillStyle = C.pixel;
     c.fillRect(lerp(960, px, k) - lado / 2, lerp(540, py, k) - lado / 2, lado, lado); c.globalAlpha = 1;
   } else {
+    c.fillStyle = C.claro; c.fillRect(0, 0, W, H);        // corte seco a blanco en el «tic»
     const kl = prog(t, TICK, TICK + 0.7);
-    // onda del «tic» al posarse el píxel
     const ko = prog(t, TICK, TICK + 0.6); if (ko < 1) { c.strokeStyle = `rgba(91,140,255,${1 - ko})`; c.lineWidth = 3; c.beginPath(); c.arc(px, py, 10 + ko * 160, 0, 7); c.stroke(); }
     M.logo(c, x0, y0, alto, C.tinta, C.pixel, kl, 1);
-    const tM = V.l13.t0; const kM = eOut5(prog(t, tM, tM + 0.35));
+    const tM = V.c8.t0; const kM = eOut5(prog(t, tM, tM + 0.35));
     c.save(); c.beginPath(); c.rect(x0 + wLogo + gap - 10, y0 - 40, wM + 40, alto + 80); c.clip();
     M.texto(c, "D-Code Partners", x0 + wLogo + gap - (1 - kM) * 60, y0 + alto * 0.72, { f: fM, color: C.tinta, alpha: kM, track: -3 }); c.restore();
-    // lema, palabra a palabra con la voz
-    const pa = V.l14.palabras; const fL = F(500, 52); const totL = pa.reduce((s, p) => s + M.ancho(c, p.w + " ", fL, -1), 0); let x = 960 - totL / 2;
+    const pa = V.c9.palabras; const fL = F(500, 52); const totL = pa.reduce((s, p) => s + M.ancho(c, p.w + " ", fL, -1), 0); let x = 960 - totL / 2;
     pa.forEach((p) => { const kk = eOut5(prog(t, p.t0 - 0.05, p.t0 + 0.25)); M.texto(c, p.w, x, 740 + (1 - kk) * 16, { f: fL, color: C.gris2, alpha: kk, track: -1 }); x += M.ancho(c, p.w + " ", fL, -1); });
-    const kU = eOut(prog(t, V.l14.t0 + 0.9, V.l14.t0 + 1.4));
-    M.texto(c, "dcodepartners.com", 960, 860, { f: MONO(600, 40), color: C.azul, al: "center", alpha: kU, track: 2 });
+    const kU = eOut(prog(t, V.c9.t0 + 0.6, V.c9.t0 + 1.0));
+    c.save(); c.globalAlpha = kU; const fu = F(700, 44), tx = "Cuéntanos tu caso  →  dcodepartners.com"; const wu = M.ancho(c, tx, fu) + 90;
+    M.rr(c, 960 - wu / 2, 830 + (1 - kU) * 20, wu, 96, 48); c.fillStyle = C.azul; c.fill();
+    M.texto(c, tx, 960, 894 + (1 - kU) * 20, { f: fu, color: "#ffffff", al: "center" }); c.restore();
   }
 }
 
-// ════════════════════════════ firma de esquina (marca presente desde el principio) ════════════════════════════
+// ════════════════════════════ firma de esquina: después del segundo 5 (el logo antes del «saltar» sube los saltos) ════════════════════════════
 function firma(t) {
-  let a = eOut(prog(t, 0.45, 0.8));
-  if (t >= SIL0 - 0.08 && t < SIL1 + 0.3) a = 0;                        // en el silencio no hay nada
-  if (t > SIL1 + 0.3) a = eOut(prog(t, SIL1 + 0.3, SIL1 + 0.8));
-  if (t > FIN) a *= 1 - eIn(prog(t, FIN, FIN + 0.3));                  // el cierre ya es la marca
+  let a = eOut(prog(t, SKIP + 0.2, SKIP + 0.6));
+  if (t >= SIL0 - 0.08 && t < SIL1 + 0.3) a = 0;
+  if (t > SIL1 + 0.3 && t > SKIP) a = Math.min(a, eOut(prog(t, SIL1 + 0.3, SIL1 + 0.8)));
+  if (t > FIN) a *= 1 - eIn(prog(t, FIN, FIN + 0.3));
   if (a <= 0) return;
-  const claro = t >= G0 && t < 30.9;
+  const claro = t >= G0 && t < PROD - 0.1;
   c.save(); c.globalAlpha = a * 0.9;
   M.logo(c, 96, 58, 34, claro ? C.tinta : "#ffffff", C.pixel);
   M.texto(c, "D-Code Partners", 96 + 34 * 1.2 + 14, 58 + 26, { f: F(650, 26), color: claro ? C.tinta : "#ffffff", track: -0.5 });
@@ -555,29 +715,28 @@ function firma(t) {
 // ════════════════════════════ fotograma ════════════════════════════
 window.pintaFrame = (n) => {
   const t = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
-  if (t < SIL0) gancho(t, n);
+  if (t < HOOK) intro(t, n);
+  else if (t < SIL0) gancho(t, n);
   else if (t < SIL1) { c.fillStyle = "#000"; c.fillRect(0, 0, W, H); return; }
-  else if (t < 7.4) frase(t);
-  else if (t < G0 - 0.12) { problema(t, n); if (t < 7.75) { c.globalAlpha = 1 - eOut(prog(t, 7.4, 7.75)); frase(t); c.globalAlpha = 1; } }
+  else if (t < PR0) frase(t);
+  else if (t < G0 - 0.12) { problema(t, n); if (t < PR0 + 0.35) { c.globalAlpha = 1 - eOut(prog(t, PR0, PR0 + 0.35)); frase(t); c.globalAlpha = 1; } }
   else if (t < G0) { c.fillStyle = "#000"; c.fillRect(0, 0, W, H); }
-  else if (t < 30.9) sistema(t, n);
+  else if (t < PROD) sistema(t, n);
   else if (t < FIN) producto(t, n);
   else cierre(t, n);
-  // destello del golpe de transformación y del regreso de la base
   const fl = Math.max(1 - prog(t, G0, G0 + 0.3), 0) * (t >= G0 ? 1 : 0);
   if (fl > 0) { c.fillStyle = `rgba(255,255,255,${fl})`; c.fillRect(0, 0, W, H); }
-  const fl2 = t >= R1 && t < R1 + 0.2 ? 1 - prog(t, R1, R1 + 0.2) : 0;
-  if (fl2 > 0) { c.fillStyle = `rgba(91,140,255,${fl2 * 0.5})`; c.fillRect(0, 0, W, H); }
+  const fl2 = t >= CF && t < CF + 0.25 ? 1 - prog(t, CF, CF + 0.25) : 0;       // la cuenta llega a cero: destello cálido
+  if (fl2 > 0) { c.fillStyle = `rgba(255,176,32,${fl2 * 0.35})`; c.fillRect(0, 0, W, H); }
+  cuenta(t);
   firma(t);
-  M.grano(c, W, H, n, t >= G0 && t < 30.9 || t > TICK ? 0.035 : 0.075);
+  M.grano(c, W, H, n, t >= G0 && t < PROD || t > TICK ? 0.035 : 0.07);
 };
 
 (async () => {
   const fu = "../comun/fuentes/";
-  const ims = await M.cargar([["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }], ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }],
-    ["Instrument Serif", fu + "instrument-serif-italic.woff2", { style: "italic" }]],
-    Object.fromEntries(["fin-panel", "fin-cobros", "os-hoy", "pa-procesos"].map((k) => [k, `../../youtube/_assets/capturas/${k}.png`])));
-  Object.assign(CAPTURAS, ims);
+  await M.cargar([["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }], ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }],
+    ["Instrument Serif", fu + "instrument-serif-italic.woff2", { style: "italic" }]]);
   window.pintaFrame(0); window.LISTO = true;
 })();
 </script></body></html>

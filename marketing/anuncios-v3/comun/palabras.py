@@ -13,8 +13,11 @@ import numpy as np, soundfile as sf
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
+LEIDAS = {"50": 3, "%": 3, "30": 3, "d-code": 2, "dcode": 2}   # cómo se dicen en voz alta
+
 def silabas(p):
     p = p.lower()
+    if p in LEIDAS: return LEIDAS[p]
     grupos = re.findall(r"[aeiouáéíóúü]+", p)
     n = 0
     for g in grupos:   # los hiatos cuentan doble, los diptongos una
@@ -41,7 +44,7 @@ def main(video):
         h0 = activo[0] * 0.01 if len(activo) else 0.0
         h1 = activo[-1] * 0.01 + 0.03 if len(activo) else dur
         ws = [w for w in re.split(r"\s+", f["texto"].strip()) if w]
-        pesos = np.array([silabas(re.sub(r"[^\wáéíóúñü%]", "", w)) or 1 for w in ws], float)
+        pesos = np.array([silabas(re.sub(r"[^\wáéíóúñü%-]", "", w)) or 1 for w in ws], float)
         cum = np.concatenate([[0], np.cumsum(pesos)]) / pesos.sum()
         out = []
         for i, w in enumerate(ws):

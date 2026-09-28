@@ -1,130 +1,124 @@
 {
- "lufs": -16.231471196150864,
+ "lufs": -17.438881627116242,
  "pico_dbfs": -2.059519339530856,
  "frases": [
   {
-   "id": "h1",
-   "voz_fondo_lu": 6.5,
+   "id": "a1",
+   "voz_fondo_lu": 5.8,
    "wer": 0.0,
-   "oido": "copiar"
+   "oido": "Hay un trabajo en tu empresa que nadie ve."
   },
   {
-   "id": "h2",
-   "voz_fondo_lu": 11.7,
+   "id": "a2",
+   "voz_fondo_lu": 11.3,
    "wer": 0.0,
-   "oido": "pegar"
+   "oido": "y puede estar costándote un sueldo entero"
   },
   {
-   "id": "h3",
-   "voz_fondo_lu": 10.4,
+   "id": "a3",
+   "voz_fondo_lu": 18.9,
    "wer": 0.0,
-   "oido": "responder"
+   "oido": "En 30 segundos te digo cuál es, y cómo quitártelo de encima."
   },
   {
-   "id": "h4",
-   "voz_fondo_lu": 12.9,
+   "id": "h",
+   "voz_fondo_lu": 6.4,
    "wer": 0.0,
-   "oido": "Buscar"
+   "oido": "copiar, pegar, responder, buscar otra vez."
   },
   {
-   "id": "h5",
-   "voz_fondo_lu": 9.4,
-   "wer": 0.0,
-   "oido": "Otra vez."
-  },
-  {
-   "id": "l1",
-   "voz_fondo_lu": 9.8,
+   "id": "b1",
+   "voz_fondo_lu": 11.1,
    "wer": 0.0,
    "oido": "Esto no es trabajo."
   },
   {
-   "id": "l2",
-   "voz_fondo_lu": 8.4,
+   "id": "b2",
+   "voz_fondo_lu": 11.3,
    "wer": 0.0,
-   "oido": "es ruido."
+   "oido": "Es ruido."
   },
   {
-   "id": "l3",
-   "voz_fondo_lu": 18.4,
+   "id": "p1",
+   "voz_fondo_lu": 17.2,
    "wer": 0.0,
-   "oido": "Datos que se copian a mano."
+   "oido": "datos copiados a mano."
   },
   {
-   "id": "l4",
-   "voz_fondo_lu": 17.1,
+   "id": "p2",
+   "voz_fondo_lu": 17.9,
    "wer": 0.0,
    "oido": "herramientas que no se hablan."
   },
   {
-   "id": "l5",
-   "voz_fondo_lu": 15.9,
+   "id": "p3",
+   "voz_fondo_lu": 12.9,
    "wer": 0.0,
-   "oido": "y la misma pregunta cada día a la misma persona."
+   "oido": "La misma pregunta, cada día a la misma persona."
   },
   {
-   "id": "l6",
-   "voz_fondo_lu": 7.0,
+   "id": "c1",
+   "voz_fondo_lu": 9.9,
    "wer": 0.0,
-   "oido": "En the Code Partners, convertimos ese ruido en un sistema."
+   "oido": "En Decode Partners, convertimos ese ruido en un sistema."
   },
   {
-   "id": "l7",
-   "voz_fondo_lu": 9.4,
+   "id": "c2",
+   "voz_fondo_lu": 8.1,
    "wer": 0.0,
-   "oido": "analizamos cómo trabaja tu empresa."
+   "oido": "Analizamos cómo trabaja tu empresa."
   },
   {
-   "id": "l8",
-   "voz_fondo_lu": 9.8,
+   "id": "c3",
+   "voz_fondo_lu": 9.1,
    "wer": 0.0,
    "oido": "Diseñamos el sistema."
   },
   {
-   "id": "l9",
-   "voz_fondo_lu": 9.7,
+   "id": "c4",
+   "voz_fondo_lu": 10.7,
    "wer": 0.0,
-   "oido": "y lo conectamos todo, procesos, datos y herramientas."
+   "oido": "y lo conectamos todo."
   },
   {
-   "id": "l10",
-   "voz_fondo_lu": 10.4,
+   "id": "c5",
+   "voz_fondo_lu": 9.2,
    "wer": 0.0,
-   "oido": "con automatización e inteligencia artificial."
+   "oido": "Lo repetitivo, lo hace la automatización."
   },
   {
-   "id": "l11",
-   "voz_fondo_lu": 20.0,
+   "id": "c6",
+   "voz_fondo_lu": 8.2,
    "wer": 0.0,
-   "oido": "no se trata de usar inteligencia artificial."
+   "oido": "lo que requiere pensar la inteligencia artificial."
   },
   {
-   "id": "l12",
-   "voz_fondo_lu": 9.7,
+   "id": "c7",
+   "voz_fondo_lu": 9.4,
    "wer": 0.0,
-   "oido": "Se trata de que tu empresa funcione mejor."
+   "oido": "y tu equipo por fin a lo que importa."
   },
   {
-   "id": "l13",
-   "voz_fondo_lu": 13.9,
+   "id": "c8",
+   "voz_fondo_lu": 14.0,
    "wer": 0.0,
-   "oido": "Decode partners"
+   "oido": "Dico de partners"
   },
   {
-   "id": "l14",
-   "voz_fondo_lu": 16.8,
+   "id": "c9",
+   "voz_fondo_lu": 15.8,
    "wer": 0.0,
    "oido": "sistemas inteligentes para empresas."
   }
  ],
  "silencios": [
   [
-   4.3,
-   4.8
+   12.15,
+   12.55
   ],
   [
-   42.5,
-   43.0
+   43.65,
+   44.2
   ]
  ]
 }

@@ -1,111 +1,106 @@
 {
- "voz": "em_alex",
- "velocidad": 0.98,
- "notas": "Casting medido con Whisper: «Reenviar» es ininteligible en esta voz (6 variantes) y se sustituye por «Responder». Las palabras del gancho van a velocidad 1.0: a 1.08 se come la r final. La coma tras «En» separa la marca; sin ella se oye «indicó de partners».",
+ "voz_st": {
+  "sid": 6,
+  "velocidades": [
+   0.95,
+   1.0,
+   1.05
+  ],
+  "tomas": 3,
+  "pasos": 24
+ },
+ "nota": "Voz: Supertonic 3, estilo 6 (masculina grave, ~90 Hz). Frases completas; el casting elige la toma más expresiva que se entiende.",
  "frases": [
   {
-   "id": "h1",
-   "tts": "Copiar.",
-   "texto": "Copiar.",
-   "velocidad": 1.0
+   "id": "a1",
+   "texto": "Hay un trabajo en tu empresa que nadie ve."
   },
   {
-   "id": "h2",
-   "tts": "¡Pegar!",
-   "texto": "Pegar.",
-   "velocidad": 0.95
+   "id": "a2",
+   "texto": "Y puede estar costándote un sueldo entero."
   },
   {
-   "id": "h3",
-   "tts": "Responder.",
-   "texto": "Responder.",
-   "velocidad": 1.0
+   "id": "a3",
+   "texto": "En treinta segundos te digo cuál es... y cómo quitártelo de encima."
   },
   {
-   "id": "h4",
-   "tts": "¡Buscar!",
-   "texto": "Buscar.",
-   "velocidad": 0.95
+   "id": "h",
+   "texto": "Copiar. Pegar. Responder. Buscar. Otra vez.",
+   "velocidades": [
+    1.05,
+    1.1,
+    1.15
+   ]
   },
   {
-   "id": "h5",
-   "tts": "Otra vez.",
-   "texto": "Otra vez.",
-   "velocidad": 1.0
-  },
-  {
-   "id": "l1",
-   "tts": "Esto no es trabajo.",
+   "id": "b1",
    "texto": "Esto no es trabajo."
   },
   {
-   "id": "l2",
-   "tts": "Es ruido.",
+   "id": "b2",
    "texto": "Es ruido.",
-   "velocidad": 0.92
+   "velocidades": [
+    0.9,
+    0.95,
+    1.0
+   ]
   },
   {
-   "id": "l3",
-   "tts": "Datos que se copian a mano.",
-   "texto": "Datos que se copian a mano."
+   "id": "p1",
+   "texto": "Datos copiados a mano."
   },
   {
-   "id": "l4",
-   "tts": "Herramientas que no se hablan.",
+   "id": "p2",
    "texto": "Herramientas que no se hablan."
   },
   {
-   "id": "l5",
-   "tts": "Y la misma pregunta, cada día, a la misma persona.",
-   "texto": "Y la misma pregunta, cada día, a la misma persona."
+   "id": "p3",
+   "texto": "La misma pregunta, cada día, a la misma persona."
   },
   {
-   "id": "l6",
-   "tts": "En, Dicoud Partners, convertimos ese ruido en un sistema.",
-   "texto": "En D-Code Partners convertimos ese ruido en un sistema.",
-   "velocidad": 0.97
+   "id": "c1",
+   "texto": "En D-Code Partners convertimos ese ruido en un sistema."
   },
   {
-   "id": "l7",
-   "tts": "Analizamos cómo trabaja tu empresa.",
+   "id": "c2",
    "texto": "Analizamos cómo trabaja tu empresa."
   },
   {
-   "id": "l8",
-   "tts": "Diseñamos el sistema.",
+   "id": "c3",
    "texto": "Diseñamos el sistema."
   },
   {
-   "id": "l9",
-   "tts": "Y lo conectamos todo: procesos, datos y herramientas.",
-   "texto": "Y lo conectamos todo: procesos, datos y herramientas."
+   "id": "c4",
+   "texto": "Y lo conectamos todo."
   },
   {
-   "id": "l10",
-   "tts": "Con automatización e inteligencia artificial.",
-   "texto": "Con automatización e inteligencia artificial."
+   "id": "c5",
+   "texto": "Lo repetitivo, lo hace la automatización."
   },
   {
-   "id": "l11",
-   "tts": "No se trata de usar inteligencia artificial.",
-   "texto": "No se trata de usar inteligencia artificial."
+   "id": "c6",
+   "texto": "Lo que requiere pensar, la inteligencia artificial."
   },
   {
-   "id": "l12",
-   "tts": "Se trata de que tu empresa funcione mejor.",
-   "texto": "Se trata de que tu empresa funcione mejor."
+   "id": "c7",
+   "texto": "Y tu equipo, por fin, a lo que importa."
   },
   {
-   "id": "l13",
-   "tts": "Dicoud Partners.",
+   "id": "c8",
    "texto": "D-Code Partners.",
-   "velocidad": 0.94
+   "velocidades": [
+    0.9,
+    0.95
+   ]
   },
   {
-   "id": "l14",
-   "tts": "Sistemas inteligentes para empresas.",
+   "id": "c9",
    "texto": "Sistemas inteligentes para empresas.",
-   "velocidad": 0.95
+   "velocidades": [
+    0.9,
+    0.95,
+    1.0
+   ]
   }
  ]
 }

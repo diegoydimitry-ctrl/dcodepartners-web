@@ -1,84 +1,60 @@
 {
- "voz": "ef_dora",
- "velocidad": 1.05,
- "notas": "Casting medido con Whisper: el «Tú» aislado se pierde siempre, así que el reparto se dice «Tu parte / La nuestra». La marca solo se entiende como «Vende con, Dicode Partners.» (la coma la separa); en cualquier otra posición se oye «Tico de» o «Indicó de».",
+ "voz_st": {
+  "sid": 0,
+  "velocidades": [
+   1.0,
+   1.05,
+   1.1
+  ],
+  "tomas": 3,
+  "pasos": 24
+ },
+ "nota": "Voz: Supertonic 3, estilo 0 (femenina, ~190 Hz, la más expresiva de las femeninas). Frases completas.",
  "frases": [
   {
-   "id": "a1",
-   "tts": "Cierras un proyecto.",
-   "texto": "Cierras un proyecto.",
-   "velocidad": 1.0
+   "id": "v1",
+   "texto": "Buscamos comerciales en toda España."
   },
   {
-   "id": "a2",
-   "tts": "La mitad es tuya.",
-   "texto": "La mitad es tuya.",
-   "velocidad": 1.0
+   "id": "v2",
+   "texto": "Sin estudios. Sin experiencia."
   },
   {
-   "id": "b1",
-   "tts": "Buscamos personas para ventas.",
-   "texto": "Buscamos personas para ventas.",
-   "velocidad": 1.0
+   "id": "v3",
+   "texto": "Y te llevas el 50 % de cada venta.",
+   "tts": "Y te llevas el cincuenta por ciento de cada venta."
   },
   {
-   "id": "b2",
-   "tts": "Gente que sabe abrir puertas.",
-   "texto": "Gente que sabe abrir puertas.",
-   "velocidad": 1.08
+   "id": "v4",
+   "texto": "¿Qué vendes? Automatización e inteligencia artificial para empresas."
   },
   {
-   "id": "c1",
-   "tts": "Vas a vender automatización,",
-   "texto": "Vas a vender automatización,"
+   "id": "v5",
+   "texto": "Tú consigues el cliente."
   },
   {
-   "id": "c2",
-   "tts": "inteligencia artificial,",
-   "texto": "inteligencia artificial,"
+   "id": "v6",
+   "texto": "Nosotros lo construimos todo."
   },
   {
-   "id": "c3",
-   "tts": "y sistemas a medida para empresas.",
-   "texto": "y sistemas a medida para empresas."
-  },
-  {
-   "id": "d1",
-   "tts": "Tu parte: encontrar la oportunidad y conseguir el cliente.",
-   "texto": "Tu parte: encontrar la oportunidad y conseguir el cliente."
-  },
-  {
-   "id": "d2",
-   "tts": "La nuestra: construirlo.",
-   "texto": "La nuestra: construirlo.",
-   "velocidad": 1.0
-  },
-  {
-   "id": "d3",
-   "tts": "No necesitas saber programar.",
+   "id": "v7",
    "texto": "No necesitas saber programar."
   },
   {
-   "id": "d4",
-   "tts": "Y te llevas el cincuenta por ciento de lo que consigas.",
-   "texto": "Y te llevas el 50 % de lo que consigas.",
-   "velocidad": 1.02
+   "id": "v8",
+   "texto": "Y trabajas desde tu ciudad."
   },
   {
-   "id": "e1",
-   "tts": "¿Te interesa? Te contamos cómo funciona.",
-   "texto": "¿Te interesa? Te contamos cómo funciona."
+   "id": "v9",
+   "texto": "¿Te interesa? Escríbenos por Instagram, o por correo."
   },
   {
-   "id": "e2",
-   "tts": "Escríbenos por Instagram, o por correo.",
-   "texto": "Escríbenos por Instagram, o por correo."
-  },
-  {
-   "id": "e3",
-   "tts": "Vende con Dicoud Partners.",
+   "id": "v10",
    "texto": "Vende con D-Code Partners.",
-   "velocidad": 1.0
+   "velocidades": [
+    0.95,
+    1.0
+   ]
   }
  ]
 }
