@@ -92,3 +92,22 @@ if (visor) {
   visor.addEventListener("click", (e) => { if (e.target === visor) visor.close(); });
   visor.addEventListener("close", () => volver && volver.focus());
 }
+
+/* Demos: ni su CSS ni su código bloquean la primera pintura. El CSS se pide
+   en cuanto la página está en reposo (la sección queda muy por debajo del
+   pliegue); el código, cuando la sección se acerca. Sin JS: <noscript>. */
+const demos = $("[data-demos]");
+if (demos) {
+  let css;
+  const cssDemos = () => css || (css = new Promise((ok) => {
+    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css";
+    l.onload = l.onerror = () => ok(); document.head.appendChild(l);
+  }));
+  const reposo = window.requestIdleCallback || ((f) => setTimeout(f, 1200));
+  addEventListener("load", () => reposo(cssDemos), { once: true });
+  const cargarDemos = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demos", e));
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); cargarDemos(); } }, { rootMargin: "600px 0px" });
+    io.observe(demos);
+  } else cargarDemos();
+}

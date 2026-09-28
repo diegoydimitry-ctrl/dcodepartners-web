@@ -2,6 +2,7 @@
    Las cifras comerciales NO se escriben aquí: las rellena build:precios desde
    precios.json (data-precio). El resto del contenido sale de producción. */
 import { FLECHA } from "../plantilla.mjs";
+import { seccionDemos } from "./demos-portada.mjs";
 
 const C = {
   es: {
@@ -113,22 +114,7 @@ export function inicio(lang) {
   </div>
 </section>
 
-<section class="bloque bloque--aire tocalo" id="tocalo" aria-labelledby="h-tocalo">
-  <div class="marco">
-    <div class="tocalo-cab"><h2 class="h2 aparece" id="h-tocalo">${t.h2}</h2><p class="lead aparece" style="--i:1">${t.sub}</p></div>
-    <button type="button" class="pantalla aparece" data-demo-abrir="finance" aria-label="${t.demos[0][1]}">
-      <picture><source srcset="/assets/img/demos/finance-light-2800.webp" media="(min-width: 900px)"><img src="/assets/img/demos/finance-light-700.webp" alt="${t.alt}" width="1400" height="875" loading="lazy" decoding="async"></picture>
-    </button>
-    <ul class="demos" role="list">
-      ${t.demos.map(([id, n]) => `<li><button type="button" class="demo" data-demo-abrir="${id}">${n} ${FLECHA}</button></li>`).join("")}
-    </ul>
-    <p class="rotulo tocalo-aviso">${t.aviso}</p>
-    <dialog class="visor" data-visor aria-label="Demo">
-      <div class="visor-cab"><p class="rotulo" data-visor-t></p><p class="rotulo visor-tel">${t.pantalla}</p><button type="button" class="ctrl" data-visor-cerrar aria-label="${t.cerrar}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-      <iframe data-visor-marco title="Demo"></iframe>
-    </dialog>
-  </div>
-</section>
+${seccionDemos(lang)}
 
 <section class="bloque bloque--aire fin" id="hablemos" aria-labelledby="h-fin">
   <div class="marco">

@@ -38,13 +38,13 @@ const WEB = (lang) => ({ "@context": "https://schema.org", "@type": "WebSite", "
 const PAGINAS = [
   {
     lang: "es", ruta: "/", archivo: "index.html", ...META_INICIO.es,
-    css: ["/assets/v2/inicio.css"], jsonld: [ORG, WEB("es")],
+    css: ["/assets/v2/inicio.css"], extraHead: '<noscript><link rel="stylesheet" href="/assets/v2/demos.css"></noscript>', jsonld: [ORG, WEB("es")],
     preload: ['<link rel="modulepreload" href="/assets/v2/js/inicio.js">', '<link rel="modulepreload" href="/assets/v2/js/piezas3d.js" fetchpriority="low">'],
     cuerpo: () => inicio("es"), scripts: ["/assets/v2/js/inicio.js"],
   },
   {
     lang: "en", ruta: "/en", archivo: "en/index.html", ...META_INICIO.en,
-    css: ["/assets/v2/inicio.css"], jsonld: [ORG, WEB("en")],
+    css: ["/assets/v2/inicio.css"], extraHead: '<noscript><link rel="stylesheet" href="/assets/v2/demos.css"></noscript>', jsonld: [ORG, WEB("en")],
     preload: ['<link rel="modulepreload" href="/assets/v2/js/inicio.js">', '<link rel="modulepreload" href="/assets/v2/js/piezas3d.js" fetchpriority="low">'],
     cuerpo: () => inicio("en"), scripts: ["/assets/v2/js/inicio.js"],
   },

@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="/assets/v2/inicio.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://dcodepartners.com/#organizacion","name":"D-Code Partners","alternateName":"D-Code","url":"https://dcodepartners.com/","logo":"https://dcodepartners.com/assets/logo/dcode-icon-sm.png","image":"https://dcodepartners.com/assets/og-image.png","email":"dcodedepartment@gmail.com","sameAs":["https://www.instagram.com/d_codepartners/","https://www.facebook.com/profile.php?id=61593223960437"],"address":{"@type":"PostalAddress","addressLocality":"Madrid","addressCountry":"ES"},"founder":[{"@type":"Person","name":"Diego Siñeriz","sameAs":"https://www.linkedin.com/in/diego-si%C3%B1eriz-b45319427/"},{"@type":"Person","name":"Dimitry Sosenko"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://dcodepartners.com/#web","url":"https://dcodepartners.com/","name":"D-Code Partners","inLanguage":"es","publisher":{"@id":"https://dcodepartners.com/#organizacion"}}</script>
-
+<noscript><link rel="stylesheet" href="/assets/v2/demos.css"></noscript>
 <script>
 (function () {
   var host = location.hostname;
@@ -140,13 +140,97 @@
 
 <section class="bloque bloque--aire tocalo" id="tocalo" aria-labelledby="h-tocalo">
   <div class="marco">
-    <div class="tocalo-cab"><h2 class="h2 aparece" id="h-tocalo">No te lo contamos. Tócalo.</h2><p class="lead aparece" style="--i:1">Cuatro sistemas funcionando, con datos inventados.</p></div>
-    <button type="button" class="pantalla aparece" data-demo-abrir="finance" aria-label="D-Code Finance">
-      <picture><source srcset="/assets/img/demos/finance-light-2800.webp" media="(min-width: 900px)"><img src="/assets/img/demos/finance-light-700.webp" alt="Panel de D-Code Finance con datos inventados: cobrado, pendiente de cobro y vencido" width="1400" height="875" loading="lazy" decoding="async"></picture>
-    </button>
-    <ul class="demos" role="list">
-      <li><button type="button" class="demo" data-demo-abrir="finance">D-Code Finance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></li><li><button type="button" class="demo" data-demo-abrir="comercial">Comercial <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></li><li><button type="button" class="demo" data-demo-abrir="operaciones">Operaciones <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></li><li><button type="button" class="demo" data-demo-abrir="atencion">Atención al cliente <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></li><li><button type="button" class="demo" data-demo-abrir="os">D-Code OS <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></li>
-    </ul>
+    <div class="tocalo-cab"><h2 class="h2 aparece" id="h-tocalo">No te lo contamos. Tócalo.</h2><p class="lead aparece" style="--i:1">Cinco sistemas, un minuto cada uno. Los datos son inventados; lo que hacen, no.</p></div>
+    <div class="dm" data-demos data-lang="es">
+      <div class="dm-pest" role="tablist" aria-label="Demos">
+        <button type="button" role="tab" class="dm-p" id="dm-p-finance" aria-controls="dm-finance" aria-selected="true" tabindex="0" data-dm-pest="finance"><span class="dm-p-n">01</span>Finance</button><button type="button" role="tab" class="dm-p" id="dm-p-comercial" aria-controls="dm-comercial" aria-selected="false" tabindex="-1" data-dm-pest="comercial"><span class="dm-p-n">02</span>Comercial</button><button type="button" role="tab" class="dm-p" id="dm-p-operaciones" aria-controls="dm-operaciones" aria-selected="false" tabindex="-1" data-dm-pest="operaciones"><span class="dm-p-n">03</span>Operaciones</button><button type="button" role="tab" class="dm-p" id="dm-p-atencion" aria-controls="dm-atencion" aria-selected="false" tabindex="-1" data-dm-pest="atencion"><span class="dm-p-n">04</span>Atención</button><button type="button" role="tab" class="dm-p" id="dm-p-os" aria-controls="dm-os" aria-selected="false" tabindex="-1" data-dm-pest="os"><span class="dm-p-n">05</span>D-Code OS</button>
+      </div>
+      <article class="dm-panel dm-panel--finance" id="dm-finance" role="tabpanel" aria-labelledby="dm-p-finance" data-dm="finance">
+        <div class="dm-guion">
+          <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">TN</span><span><b>Talleres Norte</b><span class="dm-ctx">Taller mecánico · 14 personas · martes, 9:10</span></span></p>
+          <h3 class="dm-t">23 facturas de proveedor esperan en el correo.</h3>
+          <p class="dm-prob">Pasarlas a mano lleva dos horas cada semana. Y alguna se escapa: un IVA mal puesto se descubre en el cierre del trimestre.</p>
+        </div>
+        <div class="dm-lienzo" data-dm-lienzo aria-hidden="true"></div>
+        <div class="dm-mando">
+          <ol class="dm-fases" aria-hidden="true"><li data-fase="0" class="is-hecha">Contexto</li><li data-fase="1" class="is-hecha">Problema</li><li data-fase="2">Tú</li><li data-fase="3">El sistema</li><li data-fase="4">Resultado</li></ol>
+          <div class="dm-acciones" data-dm-acciones>
+            <button type="button" class="boton boton--principal dm-acc" data-dm-acc="1">Suelta las facturas</button>
+            <button type="button" class="boton dm-acc" data-dm-acc="2" hidden>Revisar la que no cuadra</button>
+          </div>
+          <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">23 facturas registradas en 38 segundos. Tú revisaste una. La tesorería de la semana ya cuenta con ellas.</span></p>
+          <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>Otra vez</button><button type="button" class="enlace" data-demo-abrir="finance">Abrir la aplicación completa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
+        </div>
+      </article>
+      <article class="dm-panel dm-panel--comercial" id="dm-comercial" role="tabpanel" aria-labelledby="dm-p-comercial" data-dm="comercial" hidden>
+        <div class="dm-guion">
+          <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">AI</span><span><b>Alba Interiorismo</b><span class="dm-ctx">Estudio de interiorismo · 3 comerciales · viernes, 18:40</span></span></p>
+          <h3 class="dm-t">Entra un lead por la web un viernes por la tarde.</h3>
+          <p class="dm-prob">Hoy lo vería alguien el lunes. Para entonces ya habrá pedido presupuesto a otros dos estudios.</p>
+        </div>
+        <div class="dm-lienzo" data-dm-lienzo aria-hidden="true"></div>
+        <div class="dm-mando">
+          <ol class="dm-fases" aria-hidden="true"><li data-fase="0" class="is-hecha">Contexto</li><li data-fase="1" class="is-hecha">Problema</li><li data-fase="2">Tú</li><li data-fase="3">El sistema</li><li data-fase="4">Resultado</li></ol>
+          <div class="dm-acciones" data-dm-acciones>
+            <button type="button" class="boton boton--principal dm-acc" data-dm-acc="1">Que entre el lead</button>
+            <button type="button" class="boton dm-acc" data-dm-acc="2" hidden>Aprobar y enviar</button>
+          </div>
+          <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">Primera respuesta en un minuto, no en dos días. El lead tiene dueña, respuesta y seguimiento en la agenda.</span></p>
+          <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>Otra vez</button><button type="button" class="enlace" data-demo-abrir="comercial">Abrir la aplicación completa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
+        </div>
+      </article>
+      <article class="dm-panel dm-panel--operaciones" id="dm-operaciones" role="tabpanel" aria-labelledby="dm-p-operaciones" data-dm="operaciones" hidden>
+        <div class="dm-guion">
+          <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">CL</span><span><b>Climatec</b><span class="dm-ctx">Instalaciones de climatización · 8 técnicos · lunes, 8:00</span></span></p>
+          <h3 class="dm-t">El cliente acaba de aceptar el presupuesto P-118.</h3>
+          <p class="dm-prob">Convertirlo en trabajo planificado lleva dos días de hojas y llamadas. Los retrasos se ven el día de la instalación.</p>
+        </div>
+        <div class="dm-lienzo" data-dm-lienzo aria-hidden="true"></div>
+        <div class="dm-mando">
+          <ol class="dm-fases" aria-hidden="true"><li data-fase="0" class="is-hecha">Contexto</li><li data-fase="1" class="is-hecha">Problema</li><li data-fase="2">Tú</li><li data-fase="3">El sistema</li><li data-fase="4">Resultado</li></ol>
+          <div class="dm-acciones" data-dm-acciones>
+            <button type="button" class="boton boton--principal dm-acc" data-dm-acc="1">Aceptar el presupuesto</button>
+            <button type="button" class="boton dm-acc" data-dm-acc="2" hidden>Simular: el material llega tarde</button>
+          </div>
+          <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">Planificado en tres segundos. El retraso se vio dos días antes y el cliente ya tiene su nueva fecha.</span></p>
+          <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>Otra vez</button><button type="button" class="enlace" data-demo-abrir="operaciones">Abrir la aplicación completa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
+        </div>
+      </article>
+      <article class="dm-panel dm-panel--atencion" id="dm-atencion" role="tabpanel" aria-labelledby="dm-p-atencion" data-dm="atencion" hidden>
+        <div class="dm-guion">
+          <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">CS</span><span><b>Clínica Sonrisa</b><span class="dm-ctx">Clínica dental · 2 recepcionistas · sábado, 22:15</span></span></p>
+          <h3 class="dm-t">Alguien escribe fuera de horario.</h3>
+          <p class="dm-prob">Hasta el lunes nadie contesta, y cuatro de cada diez no vuelven a escribir.</p>
+        </div>
+        <div class="dm-lienzo" data-dm-lienzo aria-hidden="true"></div>
+        <div class="dm-mando">
+          <ol class="dm-fases" aria-hidden="true"><li data-fase="0" class="is-hecha">Contexto</li><li data-fase="1" class="is-hecha">Problema</li><li data-fase="2">Tú</li><li data-fase="3">El sistema</li><li data-fase="4">Resultado</li></ol>
+          <div class="dm-acciones" data-dm-acciones>
+            <button type="button" class="boton boton--principal dm-acc" data-dm-acc="1">Elige qué pregunta</button>
+            
+          </div>
+          <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">Respondido en segundos, con la agenda real. Lo delicado lo decide una persona el lunes a primera hora.</span></p>
+          <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>Otra vez</button><button type="button" class="enlace" data-demo-abrir="atencion">Abrir la aplicación completa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
+        </div>
+      </article>
+      <article class="dm-panel dm-panel--os" id="dm-os" role="tabpanel" aria-labelledby="dm-p-os" data-dm="os" hidden>
+        <div class="dm-guion">
+          <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">OS</span><span><b>Toda la empresa</b><span class="dm-ctx">La misma empresa, vista entera</span></span></p>
+          <h3 class="dm-t">Siete herramientas. Nadie ve el conjunto.</h3>
+          <p class="dm-prob">Cada una guarda su parte. Saber qué ha pasado hoy obliga a abrir siete pestañas y preguntar a tres personas.</p>
+        </div>
+        <div class="dm-lienzo" data-dm-lienzo aria-hidden="true"></div>
+        <div class="dm-mando">
+          <ol class="dm-fases" aria-hidden="true"><li data-fase="0" class="is-hecha">Contexto</li><li data-fase="1" class="is-hecha">Problema</li><li data-fase="2">Tú</li><li data-fase="3">El sistema</li><li data-fase="4">Resultado</li></ol>
+          <div class="dm-acciones" data-dm-acciones>
+            <button type="button" class="boton boton--principal dm-acc" data-dm-acc="1">Conectar con D-Code OS</button>
+            <button type="button" class="boton dm-acc" data-dm-acc="2" hidden>¿Qué ha pasado hoy?</button>
+          </div>
+          <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">Todo lo que pasa, en un solo sitio y con su rastro: quién, cuándo y por qué. Y un parte del día escrito solo.</span></p>
+          <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>Otra vez</button><button type="button" class="enlace" data-demo-abrir="os">Abrir la aplicación completa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
+        </div>
+      </article>
+    </div>
     <p class="rotulo tocalo-aviso">Demostración · empresas ficticias · ningún sistema real conectado.</p>
     <dialog class="visor" data-visor aria-label="Demo">
       <div class="visor-cab"><p class="rotulo" data-visor-t></p><p class="rotulo visor-tel">Mejor en un ordenador.</p><button type="button" class="ctrl" data-visor-cerrar aria-label="Cerrar la demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
