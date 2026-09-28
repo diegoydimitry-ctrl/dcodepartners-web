@@ -22,7 +22,12 @@
 .cfg-rej--chips { display: flex; flex-wrap: wrap; }
 .cfg-op, .cfg-chip { min-height: 48px; padding: 10px 16px; border: 1px solid var(--linea-2); border-radius: 12px; background: none; color: var(--tinta); text-align: left; transition: border-color var(--t-rapida) ease, background-color var(--t-rapida) ease, color var(--t-rapida) ease, transform var(--t-rapida) var(--ease-out); }
 .cfg-chip { border-radius: 999px; }
-.cfg-op b, .cfg-chip b { font-weight: 520; }
+.cfg-op b, .cfg-chip b { font-weight: 560; color: inherit; }
+/* opción con título y explicación: una debajo de otra, nunca pegadas en la misma línea */
+.cfg-op { display: grid; align-content: start; gap: 4px; }
+.cfg-op b { display: block; overflow-wrap: anywhere; hyphens: auto; }
+.cfg-op span { display: block; font-size: .9rem; line-height: 1.45; color: var(--tinta-2); }
+.cfg-op[aria-pressed="true"] span { color: color-mix(in oklab, var(--bg) 72%, var(--tinta)); }
 .cfg-op:active, .cfg-chip:active { transform: scale(.98); }
 .cfg-op[aria-pressed="true"], .cfg-chip[aria-pressed="true"] { background: var(--tinta); color: var(--bg); border-color: var(--tinta); }
 @media (hover: hover) and (pointer: fine) { .cfg-op:hover, .cfg-chip:hover { border-color: var(--tinta); } }

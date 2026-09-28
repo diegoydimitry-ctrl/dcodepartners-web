@@ -132,7 +132,11 @@ button { cursor: pointer; }
 .rotulo, .dato { font-family: var(--f-mono); font-stretch: 82%; text-transform: uppercase; }
 .rotulo { font-size: var(--t-rotulo); font-weight: 520; letter-spacing: .09em; color: var(--tinta-3); line-height: 1.4; }
 .dato { font-size: var(--t-dato); font-weight: 460; letter-spacing: .03em; font-variant-numeric: tabular-nums; }
-strong, b { font-weight: 650; color: var(--tinta); }
+strong, b { font-weight: 650; }
+/* El negrito se enciende (tinta plena) solo dentro de texto corrido. Dentro de un botón, una opción
+   elegida o cualquier cosa invertida hereda el color de su contenedor: si no, blanco sobre blanco. */
+:where(p, li, dd, dt, td, th, figcaption, blockquote, .lead, .prosa) :is(strong, b) { color: var(--tinta); }
+:is(button, .boton, [aria-pressed="true"], [aria-selected="true"], .is-on, .is-activo) :is(strong, b) { color: inherit; }
 
 /* Etiqueta de instalación: el componente que da identidad a todo el sistema */
 .etiqueta {
