@@ -16,8 +16,8 @@ def W(fid, palabra):
     return next((p["t0"] for p in V[fid]["palabras"] if p["w"].lower().strip(",.:¿?%").startswith(palabra.lower())), V[fid]["t0"])
 OUT = os.path.join(AQUI, "audio"); os.makedirs(OUT, exist_ok=True)
 BEAT = 60 / M["bpm"]; COMPAS = 4 * BEAT
-T0B = V["v2"]["t0"] - 0.1                            # arranca la base (la primera frase va sola: voz + golpes)
-T50 = W("v3", "50"); ROT0 = V["v3"]["t0"] - 0.15     # rotura: de «Y te llevas…» al «50»
+T0B = V["v1"]["t1"] - 0.05                           # la base arranca al terminar la primera frase (sin aire muerto)
+T50 = W("v3", "50"); ROT0 = V["v3a"]["t0"] - 0.15    # rotura: de «Y lo mejor…» al «50»
 T_FIN = V["v10"]["t1"] + 0.12
 def hz(m): return 440 * 2 ** ((m - 69) / 12)
 
@@ -66,14 +66,13 @@ while tb < T_FIN: compas_base(tb, idx); tb += COMPAS; idx += 1
 acentos = []
 for p in V["v1"]["palabras"]:
     sfx.pon(pico(hp(bombo(0.25, 260, 90, 1.0, 0.6, 2.5), 60), 1.0), p["t0"] - 0.06, 0.12); acentos.append(p["t0"])
-pv2 = V["v2"]["palabras"]                              # «SIN ESTUDIOS / SIN EXPERIENCIA»: tachones al acabar cada palabra
-for i, tt in enumerate((pv2[1]["t1"] + 0.1, pv2[-1]["t1"] + 0.08, pv2[-1]["t1"] + 0.35)):
+tR = V["v2b"]["t0"]                                    # «No. No te hace falta.»: los tres requisitos se tachan
+for i, tt in enumerate((tR + 0.05, tR + 0.35, tR + 0.65)):
     sfx.pon(pico(barrido(ruido(0.3), 5000, 1500, "bp", 3, 12) * env_ad(0.3, 0.01, None, 3), 0.8), tt, 0.2, 0.3 * (-1) ** i)
 for w in ("automatización", "inteligencia"):
     t = W("v4", w); sfx.pon(whoosh(0.3, 700, 6000, -0.6, 0.6), t - 0.28, 0.3); acentos.append(t)
 for fid in ("v5", "v6"):
     t = V[fid]["t0"]; sfx.pon(whoosh(0.35, 500, 5000, -0.9 if fid == "v5" else 0.9, 0.0), t - 0.3, 0.3); acentos.append(t)
-t = W("v7", "programar"); sfx.pon(pico(clic(), 1.0), t + 0.2, 0.3)
 for pal_ in ("instagram", "correo"):
     t = W("v9", pal_); sfx.pon(pico(aviso(1318.5 if pal_ == "instagram" else 1568), 1.0), t, 0.22, 0.2); acentos.append(t)
 t = V["v10"]["t1"] - 0.02; sfx.pon(pico(impacto(1.4, 1.0), 1.0), t, 0.4)
@@ -82,6 +81,14 @@ sfx.pon(pico(sello(), 1.0), V["v10"]["t1"] + 0.35, 0.4)
 f = n_(0.6)
 for P in (mus, sfx): P.x[-f:] *= np.linspace(1, 0, f)[:, None]
 
+# pausas humanas: entre cada pregunta y su respuesta la música se retira (la pausa se oye como pausa)
+for q, r in (("v2", "v2b"), ("v4q", "v4"), ("v9q", "v9")):
+    a, b = n_(V[q]["t1"] - 0.05), n_(V[r]["t0"] + 0.15); f = n_(0.12)
+    g = np.ones(len(mus.x)); g[a:b] = db(-7); g[a - f:a] = np.linspace(1, db(-7), f); g[b:b + f] = np.linspace(db(-7), 1, f)
+    mus.x *= g[:, None]
+# la marca, limpia: la base se aparta mientras se dice «D-Code Partners»
+a, b = n_(V["v10"]["t0"] - 0.1), n_(V["v10"]["t1"] + 0.05); f = n_(0.15)
+g = np.ones(len(mus.x)); g[a:b] = db(-16); g[a - f:a] = np.linspace(1, db(-16), f); g[b:b + f] = np.linspace(db(-16), 1, f); mus.x *= g[:, None]
 e = envolvente(voz.x, 0.008, 0.2)
 mus.x *= (1 - (1 - db(-14)) * np.clip(e * 1.6, 0, 1))[:, None]
 sfx.x *= (1 - (1 - db(-9)) * np.clip(e * 1.6, 0, 1))[:, None]

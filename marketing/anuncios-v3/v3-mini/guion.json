@@ -1,0 +1,5 @@
+{"video":"v3-mini","formato":"YouTube 16:9 (1920×1080), 5–10 s","motor":"Qwen3-TTS","voz":"Bodega (masculina, español de España)",
+ "frases":[{"id":"m1","texto":"¿Sigues haciendo esto a mano?","papel":"gancho"},
+           {"id":"m2","texto":"D-Code Partners.","papel":"marca"},
+           {"id":"m3","texto":"Tu empresa, en automático.","papel":"propuesta"}],
+ "cierre_en_pantalla":"dcodepartners.com · Automatización e IA para empresas"}

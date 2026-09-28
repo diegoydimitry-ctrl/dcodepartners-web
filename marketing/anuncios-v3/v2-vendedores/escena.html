@@ -27,7 +27,7 @@ function fondo(col = C.tinta) { c.fillStyle = col; c.fillRect(0, 0, W, H); }
 function cartel(s, x, y, px, color, t0, t, o = {}) {
   const k = muelle(prog(t, t0 - 0.03, t0 + 0.3), 3, 6), e = eOut5(prog(t, t0 - 0.03, t0 + 0.06));
   if (e <= 0) return 0;
-  c.save(); c.translate(x, y); const s_ = lerp(o.desde ?? 1.18, 1, k); c.scale(s_, s_);
+  c.save(); c.translate(x, y); const w_ = M.ancho(c, s, (o.fam || A)(px), o.track ?? 0), s_ = lerp(Math.min(o.desde ?? 1.18, Math.max(1, 930 / w_)), 1, k); c.scale(s_, s_);
   M.texto(c, s, 0, 0, { f: (o.fam || A)(px), color, al: o.al || "center", base: "middle", alpha: e * (o.alpha ?? 1), track: o.track ?? 0 });
   c.restore(); return e;
 }
@@ -76,7 +76,7 @@ function e1(t) {                // Buscamos comerciales en toda España — y de
   c.save(); c.globalAlpha = a;
   const pop = (t0, dur = 0.16) => eOut5(prog(t, t0, t0 + dur));
   cartel("BUSCAMOS", 540, 420, 130, C.crema, 0.0, t, { desde: 1.2 });
-  const tC = pal("v1", "comerciales").t0, tE = pal("v1", "toda").t0;
+  const tC = pal("v1", "comerciales").t0, tE = V.v1.t1 - 0.1;
   const kC = pop(0.05); const pulso = 1 + 0.05 * Math.exp(-Math.max(0, t - tC) * 6) * (t > tC ? 1 : 0);
   c.save(); c.translate(540, 600); c.scale(lerp(1.1, 1, muelle(prog(t, 0.05, 0.4), 3, 6)) * pulso, lerp(1.1, 1, muelle(prog(t, 0.05, 0.4), 3, 6)) * pulso);
   M.texto(c, "COMERCIALES", 0, 0, { f: A(ajusta("COMERCIALES", A, 840, 250)), color: C.naranja, al: "center", base: "middle", alpha: kC }); c.restore();
@@ -96,29 +96,39 @@ function e1(t) {                // Buscamos comerciales en toda España — y de
     M.texto(c, "DE CADA VENTA, PARA TI", 540, 1410, { f: A(70), color: C.tinta, al: "center", base: "middle" }); c.restore(); }
   c.restore();
 }
-function e2(t) {                // Sin estudios. Sin experiencia.
-  const a = vis(t, V.v2.t0, V.v3.t0); if (a <= 0) return;
+// «…» mientras la pregunta espera respuesta (la pausa también se ve)
+function puntos(t, x, y, t0, t1) { if (t < t0 || t > t1) return;
+  for (let i = 0; i < 3; i++) { const k = 0.35 + 0.65 * Math.max(0, Math.sin((t - t0) * 7 - i * 0.9));
+    c.fillStyle = C.naranja; c.globalAlpha *= 1; c.beginPath(); c.arc(x + (i - 1) * 46, y, 11 * k + 4, 0, 7); c.fill(); } }
+function e2(t) {                // ¿Necesitas estudios? ¿Experiencia? — (pausa) — No. No te hace falta.
+  const a = vis(t, V.v2.t0, V.v3a.t0); if (a <= 0) return;
   c.save(); c.globalAlpha = a;
-  const p = V.v2.palabras; const tS2 = (p[2] || p[p.length - 1]).t0;
+  const tR = V.v2b.t0;   // la respuesta
   const x = 120, y = 430, w = 840, h = 420; M.rr(c, x, y, w, h, 28); c.fillStyle = C.tinta2; c.fill(); c.strokeStyle = "#2a2a30"; c.lineWidth = 2; c.stroke();
   M.texto(c, "REQUISITOS", x + 50, y + 80, { f: MONO(700, 34), color: C.tenue, track: 6 });
-  [["Título universitario", p[1].t1 + 0.1], ["Experiencia en ventas", p[p.length - 1].t1 + 0.08], ["Saber programar", p[p.length - 1].t1 + 0.35]].forEach(([s, tt], i) => {
+  [["Título universitario", tR + 0.05], ["Experiencia en ventas", tR + 0.35], ["Saber programar", tR + 0.65]].forEach(([s, tt], i) => {
     const yy = y + 170 + i * 90; const k = eIO(prog(t, tt, tt + 0.28));
     M.texto(c, s, x + 50, yy, { f: R(700, 50), color: k > 0.5 ? "#6e6a63" : C.crema });
     if (k > 0) { const ww = M.ancho(c, s, R(700, 50)); c.fillStyle = C.naranja; c.fillRect(x + 44, yy - 20, (ww + 14) * k, 8); }
   });
-  cartel("SIN ESTUDIOS.", 540, 1060, 150, C.crema, p[0].t0, t);
-  cartel("SIN EXPERIENCIA.", 540, 1230, ajusta("SIN EXPERIENCIA.", A, 940, 150), C.naranja, tS2, t);
+  // la pregunta, mientras se hace (y la pausa): se va cuando llega la respuesta
+  const kq = 1 - eIn(prog(t, tR - 0.12, tR + 0.05));
+  if (kq > 0) { c.save(); c.globalAlpha *= kq; cartel("¿ESTUDIOS?", 540, 1060, 150, C.tenue, V.v2.t0, t, { desde: 1.08 });
+    cartel("¿EXPERIENCIA?", 540, 1230, ajusta("¿EXPERIENCIA?", A, 940, 150), C.tenue, pal("v2", "experiencia").t0, t, { desde: 1.08 }); puntos(t, 540, 1420, V.v2.t1, tR); c.restore(); }
+  if (t >= tR - 0.03) {
+  cartel("SIN ESTUDIOS.", 540, 1060, 150, C.crema, tR, t);
+  cartel("SIN EXPERIENCIA.", 540, 1230, ajusta("SIN EXPERIENCIA.", A, 940, 150), C.naranja, tR + 0.3, t);
+  }
   c.restore();
 }
 function e3(t) {                // Y te llevas el 50 % de cada venta.  (el único momento con fondo naranja)
-  const a = vis(t, V.v3.t0, V.v4.t0, 0.06); if (a <= 0) return;
+  const a = vis(t, V.v3a.t0, V.v4q.t0, 0.06); if (a <= 0) return;
   const p5 = pal("v3", "50").t0;
   c.save(); c.globalAlpha = a;
-  if (t < p5 - 0.06) cartel("Y TE LLEVAS EL", 540, 900, 150, C.crema, V.v3.t0, t, { desde: 1.08 });
+  if (t < p5 - 0.06) { cartel("Y LO MEJOR…", 540, 820, 150, C.crema, V.v3a.t0, t, { desde: 1.08 }); cartel("TE LLEVAS EL", 540, 1000, 110, C.naranja, V.v3.t0, t, { desde: 1.08 }); }
   else {
     const dt = t - p5; fondo(dt < 0.07 ? C.crema : C.naranja);
-    M.texto(c, "Y TE LLEVAS EL", 540, 470, { f: A(96), color: C.tinta, al: "center", base: "middle" });
+    M.texto(c, "TE LLEVAS EL", 540, 470, { f: A(96), color: C.tinta, al: "center", base: "middle" });
     const kk = muelle(prog(dt, 0, 0.45), 2.5, 5.5); const sh = dt < 0.25 ? (hash(Math.floor(dt * 60)) - 0.5) * 24 * (1 - dt / 0.25) : 0;
     c.save(); c.translate(540 + sh, 880); c.scale(lerp(1.3, 1, kk), lerp(1.3, 1, kk));
     M.texto(c, "50%", 0, 0, { f: A(ajusta("50%", A, 700, 460)), color: C.tinta, al: "center", base: "middle" }); c.restore();
@@ -130,9 +140,10 @@ function e3(t) {                // Y te llevas el 50 % de cada venta.  (el únic
   c.restore();
 }
 function e4(t) {                // ¿Qué vendes? Automatización e inteligencia artificial para empresas.
-  const a = vis(t, V.v4.t0, V.v5.t0); if (a <= 0) return;
+  const a = vis(t, V.v4q.t0, V.v5.t0); if (a <= 0) return;
   c.save(); c.globalAlpha = a;
-  cartel("¿QUÉ VENDES?", 540, 470, 150, C.crema, V.v4.t0, t);
+  cartel("¿QUÉ VENDERÍAS?", 540, 470, ajusta("¿QUÉ VENDERÍAS?", A, 940, 150), C.crema, V.v4q.t0, t);
+  puntos(t, 540, 900, V.v4q.t1, V.v4.t0);
   [["automatización", "AUTOMATIZACIÓN", "Tareas que se hacen solas"], ["inteligencia", "INTELIGENCIA ARTIFICIAL", "Asistentes que responden por ti"]].forEach(([w, s, sub], i) => {
     const tt = pal("v4", w).t0; const k = eOut5(prog(t, tt - 0.08, tt + 0.2)); if (k <= 0) return;
     const y = 640 + i * 300; c.save(); c.translate((1 - k) * 80, 0); c.globalAlpha *= k;
@@ -144,13 +155,13 @@ function e4(t) {                // ¿Qué vendes? Automatización e inteligencia
   c.restore();
 }
 function e5(t) {                // Tú consigues el cliente. Nosotros lo construimos todo.
-  const a = vis(t, V.v5.t0, V.v7.t0); if (a <= 0) return;
+  const a = vis(t, V.v5.t0, TCTA); if (a <= 0) return;
   c.save(); c.globalAlpha = a;
   const fila = (y, quien, que, t0, col) => { const k = eOut5(prog(t, t0 - 0.06, t0 + 0.22)); if (k <= 0) return;
     c.save(); c.globalAlpha *= k; c.translate(0, (1 - k) * 40);
     M.texto(c, quien, 90, y, { f: A(170), color: col });
     M.texto(c, que, 94, y + 100, { f: R(700, 60), color: C.crema }); c.restore(); };
-  fila(620, "TÚ", "consigues el cliente.", V.v5.t0, C.naranja);
+  fila(620, "TÚ", "encuentras al cliente.", V.v5.t0, C.naranja);
   const kl = eIO(prog(t, V.v6.t0 - 0.15, V.v6.t0 + 0.2)); c.fillStyle = "#2c2c32"; c.fillRect(90, 800, 900 * kl, 4);
   fila(1010, "NOSOTROS", "lo construimos todo.", V.v6.t0, C.crema);
   const kL = prog(t, V.v6.t0 + 0.3, V.v6.t0 + 0.9); M.logo(c, 90, 1200, 90, C.crema, C.pixel, kL, clamp(kL * 2 - 1));
@@ -158,6 +169,7 @@ function e5(t) {                // Tú consigues el cliente. Nosotros lo constru
   c.restore();
 }
 function e6(t) {                // No necesitas saber programar. Y trabajas desde tu ciudad.
+  if (!V.v7) return;       // v5: esta escena ya no está en el guion (se quitó para dar pausas a la voz)
   const a = vis(t, V.v7.t0, TCTA); if (a <= 0) return;
   c.save(); c.globalAlpha = a;
   const tP = pal("v7", "programar").t0;
@@ -180,6 +192,7 @@ function e7(t) {                // ¿Te interesa? Escríbenos… + Vende con D-C
   c.save(); c.globalAlpha = a;
   const tI = pal("v9", "instagram").t0, tC = pal("v9", "correo").t0, tE = pal("v9", "escríbenos").t0;
   cartel("¿TE INTERESA?", 540, 450, ajusta("¿TE INTERESA?", A, 940, 160), C.crema, TCTA, t);
+  puntos(t, 540, 800, V.v9q.t1, V.v9.t0);
   cartel("ESCRÍBENOS", 540, 610, 96, C.naranja, tE, t, { desde: 1.08 });
   const fila = (y, k, dibIcono, texto, lleno) => { if (k <= 0) return; c.save(); c.globalAlpha *= k; c.translate((1 - k) * -60, 0);
     M.rr(c, 90, y, 900, 140, 70); c.fillStyle = lleno ? C.naranja : "#1d1d22"; c.fill();
@@ -199,7 +212,7 @@ function e7(t) {                // ¿Te interesa? Escríbenos… + Vende con D-C
     M.logo(c, x0, 1240, al, C.crema, C.pixel, kL, prog(t, tD + 0.25, tD + 0.45));
     M.texto(c, "D-Code Partners", x0 + al * 1.2 + 30, 1240 + al * 0.74, { f: fM, color: C.crema, alpha: eOut5(prog(t, tD, tD + 0.3)), track: -1 });
     const ts = V.v10.t1 + 0.35; const ks = prog(t, ts - 0.08, ts);                         // sello final
-    if (ks > 0) { const e = t < ts ? eIn(ks) : 1; c.save(); c.translate(540, 1450); c.rotate(-0.06); const s = lerp(2.0, 1, e); c.scale(s, s); c.globalAlpha *= e;
+    if (ks > 0) { const e = t < ts ? eIn(ks) : 1; c.save(); c.translate(540, 1450); c.rotate(-0.06); const s = lerp(1.5, 1, e); c.scale(s, s); c.globalAlpha *= e;
       c.strokeStyle = C.naranja; c.lineWidth = 7; M.rr(c, -300, -60, 600, 120, 16); c.stroke();
       M.texto(c, "50 % DE CADA VENTA", 0, 22, { f: A(64), color: C.naranja, al: "center", track: 2 }); c.restore(); }
   }

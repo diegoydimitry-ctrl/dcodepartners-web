@@ -1,0 +1,25 @@
+{
+ "lufs": -14.136834978068713,
+ "pico_dbfs": -2.059519339530856,
+ "frases": [
+  {
+   "id": "m1",
+   "voz_fondo_lu": 26.5,
+   "wer": 0.0,
+   "oido": "¿Sigues haciendo esto a mano?"
+  },
+  {
+   "id": "m2",
+   "voz_fondo_lu": 12.8,
+   "wer": 0.0,
+   "oido": "D-Cod Partners"
+  },
+  {
+   "id": "m3",
+   "voz_fondo_lu": 15.9,
+   "wer": 0.0,
+   "oido": "tu empresa en automático."
+  }
+ ],
+ "silencios": []
+}

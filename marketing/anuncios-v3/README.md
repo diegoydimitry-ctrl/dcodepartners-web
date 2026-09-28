@@ -1,19 +1,17 @@
-# D-Code Partners · dos anuncios (v4, 28/09/2026)
+# D-Code Partners · anuncios (v5, 28/09/2026)
 
-Esta versión recoge los cambios pedidos sobre la v3: una voz nueva en los dos vídeos, un gancho nuevo para el de
-YouTube, el fin de la contradicción sobre la IA, interfaces diseñadas en lugar de capturas y un anuncio de
-vendedores que se entiende desde el primer segundo, con una paleta contenida.
+Esta ronda cambia **la voz y el ritmo de COMERCIALES** (v5) y añade **un mini de YouTube** nuevo. El vídeo largo de
+YouTube (RUIDO, v4) se conserva sin cambios.
 
-| | **1 · RUIDO** (YouTube) | **2 · SE BUSCAN COMERCIALES** (Reels/Stories) |
-|---|---|---|
-| Formato | 16:9 · 1920×1080 · 30 fps · 44,6 s | 9:16 · 1080×1920 · 30 fps · 27,2 s |
-| Idea | Hay un trabajo en tu empresa que nadie ve (el ruido); D-Code lo convierte en un sistema | Buscamos comerciales en toda España: sin estudios, sin experiencia, 50 % de cada venta |
-| Voz | Masculina grave (~90 Hz), Supertonic 3, estilo 6 | Femenina (~190 Hz), Supertonic 3, estilo 0 |
-| Música | 0–5 s casi sin música, latido y golpes → oficina → dron → electrónica 120 BPM | Trap 140 BPM que se para antes del «50 %» y vuelve en el «50» |
-| Paleta | Negro + ámbar en el gancho; rojo en el problema; blanco/azul en el sistema | Negro tinta + crema + **un solo acento naranja** |
-| Entrega | `v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4` | `v2-vendedores/entrega/dcode-comerciales-9x16.mp4` |
+| | **1 · RUIDO** (YouTube, v4) | **2 · COMERCIALES v5** (Reels/Stories) | **3 · EN AUTOMÁTICO** (mini YouTube) |
+|---|---|---|---|
+| Formato | 16:9 · 1920×1080 · 30 fps · 44,6 s | 9:16 · 1080×1920 · 30 fps · **43,4 s** | 16:9 · 1920×1080 · 30 fps · **8,5 s** |
+| Idea | Hay un trabajo en tu empresa que nadie ve; D-Code lo convierte en un sistema | Buscamos comerciales en toda España: sin estudios, sin experiencia, 50 % de cada venta | ¿Sigues haciendo esto a mano? → D-Code Partners → tu empresa, en automático |
+| Voz | Supertonic 3 (sin cambios) | **Qwen3-TTS · voz «Bodega»**, masculina, español de España | Qwen3-TTS · «Bodega» |
+| Sonoridad entregada | −14,3 LUFS · −1,4 dBTP | **−14,3 LUFS · −1,2 dBTP** | **−14,0 LUFS · −1,6 dBTP** |
+| Entrega | `v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4` | `v2-vendedores/entrega/dcode-comerciales-v5-9x16.mp4` | `v3-mini/entrega/dcode-en-automatico-youtube-16x9.mp4` |
 
----
+La v4 de COMERCIALES (`dcode-comerciales-9x16.mp4`) se deja en el repositorio como versión anterior.
 
 ## 1 · Investigación aplicada (qué se ha hecho y por qué)
 
@@ -63,22 +61,52 @@ claro: lo repetitivo lo hace la automatización y lo que requiere pensar, la IA.
 **Cuenta atrás:** marca 30 → 0 entre «segundos» (5,6 s) y «por fin» (36,6 s). Son 31,0 s reales: va un 3 % más
 lenta que un reloj, algo que no se percibe.
 
-## 3 · SE BUSCAN COMERCIALES — guion final
+## 3 · COMERCIALES v5 — guion final (tiempos reales)
+
+**Qué cambia respecto a la v4.** La voz sonaba robótica, rápida y se preguntaba y respondía a sí misma sin respirar.
+Ahora el guion es una **conversación**: PREGUNTA → PAUSA HUMANA (0,55–0,85 s) → RESPUESTA. La voz **no se ha
+acelerado**: el vídeo se ha alargado (27 → 43 s) para que quepan las pausas, que es lo que pedía el encargo.
+Para no alargarlo más se quitaron tres frases secundarias («En toda España» hablado —sigue escrito en pantalla—,
+«No hace falta saber programar» y «Desde tu ciudad»). Estética, estructura, marca y el mensaje del 50 % se mantienen.
 
 | t (s) | Voz | Imagen |
 |---|---|---|
-| 0,0–2,3 | «Buscamos comerciales en toda España.» | **La oferta entera en 0,4 s:** BUSCAMOS / **COMERCIALES** · SIN ESTUDIOS · SIN EXPERIENCIA · EN TODA ESPAÑA · **50 % DE CADA VENTA, PARA TI** |
-| 2,6–4,8 | «Sin estudios. Sin experiencia.» | Tarjeta «REQUISITOS» con los tres tachados |
-| 5,1–7,8 | «Y te llevas el 50 % de cada venta.» | En el «50» exacto el fondo pasa a naranja (la única vez): **50 %** · DE CADA VENTA · PARA TI, EN COMISIÓN |
-| 8,3–12,2 | «¿Qué vendes? Automatización e inteligencia artificial para empresas.» | Dos tarjetas con lo que se vende |
-| 12,6–16,0 | «Tú consigues el cliente. Nosotros lo construimos todo.» | TÚ / NOSOTROS + logotipo |
-| 16,4–20,1 | «No necesitas saber programar. Y trabajas desde tu ciudad.» | «</>» tachado → mapa de España con las ciudades latiendo (Baleares y Canarias incluidas) |
-| 20,5–27,2 | «¿Te interesa? Escríbenos por Instagram, o por correo.» · «Vende con D-Code Partners.» | Mensaje por Instagram · **dcodedepartment@gmail.com** (fijo 6,7 s) · marca · sello «50 % DE CADA VENTA» |
+| 0,25–2,65 | «Estamos buscando comerciales.» | La oferta entera desde el fotograma 0: BUSCAMOS / COMERCIALES · SIN ESTUDIOS · SIN EXPERIENCIA · EN TODA ESPAÑA · 50 % DE CADA VENTA |
+| 3,20–6,64 | «¿Necesitas estudios? ¿Experiencia?» | Tarjeta REQUISITOS; «¿ESTUDIOS?» «¿EXPERIENCIA?» en gris y **tres puntos** mientras la pregunta espera |
+| *pausa 0,8* | — | la música baja 7 dB: la pausa se oye |
+| 7,44–10,00 | «No. No te hace falta.» | Los tres requisitos se tachan · SIN ESTUDIOS. **SIN EXPERIENCIA.** |
+| 10,55–11,75 | «Y lo mejor…» | «Y LO MEJOR…» (la base se filtra y se para) |
+| 12,20–15,87 | «Te llevas el 50 % de cada venta.» | En el «50» exacto (13,21 s) pantalla naranja: TE LLEVAS EL **50 %** |
+| 16,47–19,43 | «¿Y qué venderías, exactamente?» | ¿QUÉ VENDERÍAS? + tres puntos en la pausa |
+| 20,27–25,64 | «Soluciones de automatización e inteligencia artificial para empresas.» | AUTOMATIZACIÓN · INTELIGENCIA ARTIFICIAL · PARA EMPRESAS |
+| 26,19–31,87 | «Tú encuentras al cliente.» · «Nosotros nos encargamos de construirlo todo.» | TÚ / NOSOTROS + logotipo |
+| 32,47–33,43 | «¿Te interesa?» | ¿TE INTERESA? + tres puntos |
+| 34,18–38,10 | «Escríbenos por Instagram, o por correo, y te lo contamos.» | Mensaje por Instagram · dcodedepartment@gmail.com |
+| 38,65–41,53 | «Vende con D-Code Partners.» | VENDE CON + logotipo; la base baja 16 dB para que la marca se oiga limpia · sello «50 % DE CADA VENTA» |
 
-Desde el segundo 2,4 hay una **cinta fija arriba** con el mensaje completo: *SE BUSCAN COMERCIALES · TODA ESPAÑA ·
-SIN ESTUDIOS NI EXPERIENCIA · 50 % DE CADA VENTA*. Así lo entiende también quien entra a mitad de vídeo.
+**QA medido sobre la mezcla** (`entrega/qa-audio-v5.json`, Whisper small sobre la mezcla, no sobre la voz sola):
+error por palabra **0 %** en las 12 frases; voz por encima del fondo **7,6–23,6 LU** (la más justa, el «50 %», con
+la caja registradora); único silencio > 0,35 s, el final (42,95–43,45 s). Texto: todo dentro de zona segura en los
+1.303 fotogramas.
 
-## 4 · Revisión independiente
+## 4 · EN AUTOMÁTICO — mini de YouTube (8,5 s)
+
+Lenguaje distinto del vídeo largo: **papel claro, tinta y un solo azul, el del píxel del logotipo**, que es el
+protagonista (cursor, transición y marca).
+
+| t (s) | Voz | Imagen |
+|---|---|---|
+| 0,08–2,47 | «¿Sigues haciendo esto a mano?» | GANCHO: doce tareas manuales amontonadas («Copiar y pegar», «factura_FINAL(2).xls», «Pasar datos al CRM»…) y un cursor que no para de hacer clic. **La marca aparece arriba a la derecha en el segundo 1.** |
+| 2,55–2,85 | — | El píxel azul del logotipo crece hasta llenar la pantalla |
+| 2,82–4,58 | «D-Code Partners.» | …y vuelve a su sitio en el logotipo grande: **D-Code Partners** · AUTOMATIZACIÓN + IA PARA EMPRESAS |
+| 4,88–6,89 | «Tu empresa, en automático.» | Las MISMAS doce tareas, en orden, se completan solas en cascada (12 A MANO → 12 EN AUTOMÁTICO), una nota por tarea |
+| 7,07–8,50 | — | Cierre: logotipo + **dcodepartners.com** · «Automatización e IA para empresas» |
+
+**QA medido** (`v3-mini/entrega/qa-audio.json`): error por palabra 0 % en las 3 frases; voz sobre el fondo
+12,8–26,5 LU; sin silencios muertos; −14,0 LUFS; todo el texto dentro de zona segura.
+
+
+## 4b · Revisión independiente (v4)
 
 Un agente que no participó en el montaje revisó los dos vídeos fotograma a fotograma contra lo que se pidió. Se
 corrigió lo que señaló:
@@ -96,7 +124,25 @@ Queda sin tocar una observación que no me corresponde decidir:
 - Usa dcodedepartment@gmail.com, el único contacto que D-Code ya tenía. El revisor opina que un correo con
   dominio propio daría más confianza. No se ha inventado otro.
 
-## 5 · Voces: qué se intentó, qué se usa y qué se ha medido
+## 5 · Voces
+
+### v5 (COMERCIALES y mini): Qwen3-TTS, voz «Bodega»
+- **Motor:** Qwen3-TTS, demo oficial de Qwen en Hugging Face (con API, sin cuota ZeroGPU). Las tomas se generaron
+  en el navegador del ordenador de Dirección, se descargaron a *Descargas* (autorizado en la conversación) y se
+  importaron con `comun/importa_voz.py`, que recorta silencios y pasa a 48 kHz.
+- **Por qué «Bodega» (masculina):** es la única voz del motor con acento de **España** medido. Prueba θ/s: las
+  frases con c/z dan +6,4 dB de fricción aguda frente a +1,8 dB de la voz de referencia latinoamericana. La única
+  femenina «de España» sonaba infantil y las demás no distinguen /θ/. El encargo de esta ronda pide «español de
+  España, profesional, natural» sin fijar género; en la ronda anterior se había pedido mujer. **Si tiene que ser
+  mujer, hace falta una locutora o una voz de ElevenLabs** (PENDIENTE de decisión, no bloquea).
+- **Casting:** varias tomas por frase (3–4). Se midió error de Whisper, sílabas por segundo y variación de tono, y
+  se eligió a oído dentro de las correctas. Se descartaron tomas lentas o exclamativas que el automático prefería
+  (v2, v3, v4, v8 y v9 elegidas a mano). Tabla completa en `v2-vendedores/voz/manifest.json` y `v3-mini/voz/manifest.json`.
+- **Límite honesto:** no puedo escuchar. Está medido que se entiende sobre la mezcla y el ritmo (pausas reales,
+  4–5 sílabas/s); que suene humana es un juicio que tiene que confirmar Dirección.
+
+### v4 (RUIDO): Supertonic 3
+
 
 - **Lo que se intentó primero:**
   - ElevenLabs y HuggingFace están bloqueados desde este entorno.
@@ -131,6 +177,6 @@ VOZ_MODELOS=<whisper> python3 comun/analiza_audio.py v1-youtube
 PLAYWRIGHT=… CHROMIUM=… node comun/render.mjs v1-youtube
 python3 comun/final.py v1-youtube dcode-ruido-youtube-16x9
 ```
-Igual con `v2-vendedores` / `dcode-comerciales-9x16`. Todo el sonido está sintetizado en
+Igual con `v2-vendedores` / `dcode-comerciales-v5-9x16` y `v3-mini` / `dcode-en-automatico-youtube-16x9` (en la v5 la voz no se sintetiza aquí: se importa con `python3 comun/importa_voz.py <vídeo> elecciones.json`). Todo el sonido está sintetizado en
 `comun/sintesis.py`. No hay música, samples ni imágenes de terceros: en la v4 no queda ninguna captura; las
 interfaces se dibujan en la escena.

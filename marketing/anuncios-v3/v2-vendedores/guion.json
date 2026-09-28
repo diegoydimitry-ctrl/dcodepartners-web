@@ -1,60 +1,67 @@
 {
- "voz_st": {
-  "sid": 0,
-  "velocidades": [
-   1.0,
-   1.05,
-   1.1
-  ],
-  "tomas": 3,
-  "pasos": 24
- },
- "nota": "Voz: Supertonic 3, estilo 0 (femenina, ~190 Hz, la más expresiva de las femeninas). Frases completas.",
+ "motor": "Qwen3-TTS (demo oficial de Qwen en Hugging Face)",
+ "voz": "Bodega — masculina, español de España",
+ "nota": "v5: guion conversacional. Pregunta → pausa humana → respuesta. Tomas elegidas por casting (voz/manifest.json).",
  "frases": [
   {
    "id": "v1",
-   "texto": "Buscamos comerciales en toda España."
+   "texto": "Estamos buscando comerciales."
+  },
+  {
+   "id": "v1b",
+   "texto": "En toda España."
   },
   {
    "id": "v2",
-   "texto": "Sin estudios. Sin experiencia."
+   "texto": "¿Necesitas estudios? ¿Experiencia?"
+  },
+  {
+   "id": "v2b",
+   "texto": "No. No te hace falta."
+  },
+  {
+   "id": "v3a",
+   "texto": "Y lo mejor…"
   },
   {
    "id": "v3",
-   "texto": "Y te llevas el 50 % de cada venta.",
-   "tts": "Y te llevas el cincuenta por ciento de cada venta."
+   "texto": "Te llevas el 50 % de cada venta."
+  },
+  {
+   "id": "v4q",
+   "texto": "¿Y qué venderías, exactamente?"
   },
   {
    "id": "v4",
-   "texto": "¿Qué vendes? Automatización e inteligencia artificial para empresas."
+   "texto": "Soluciones de automatización e inteligencia artificial para empresas."
   },
   {
    "id": "v5",
-   "texto": "Tú consigues el cliente."
+   "texto": "Tú encuentras al cliente."
   },
   {
    "id": "v6",
-   "texto": "Nosotros lo construimos todo."
+   "texto": "Nosotros nos encargamos de construirlo todo."
   },
   {
    "id": "v7",
-   "texto": "No necesitas saber programar."
+   "texto": "No hace falta saber programar."
   },
   {
    "id": "v8",
-   "texto": "Y trabajas desde tu ciudad."
+   "texto": "Y puedes hacerlo desde tu ciudad."
+  },
+  {
+   "id": "v9q",
+   "texto": "¿Te interesa?"
   },
   {
    "id": "v9",
-   "texto": "¿Te interesa? Escríbenos por Instagram, o por correo."
+   "texto": "Escríbenos por Instagram, o por correo, y te lo contamos."
   },
   {
    "id": "v10",
-   "texto": "Vende con D-Code Partners.",
-   "velocidades": [
-    0.95,
-    1.0
-   ]
+   "texto": "Vende con D-Code Partners."
   }
  ]
 }

@@ -2,51 +2,59 @@
  "frases": [
   {
    "id": "v1",
-   "en": 0.12
+   "en": 0.25
   },
   {
    "id": "v2",
-   "hueco": 0.25
+   "hueco": 0.55
+  },
+  {
+   "id": "v2b",
+   "hueco": 0.8
+  },
+  {
+   "id": "v3a",
+   "hueco": 0.55
   },
   {
    "id": "v3",
-   "hueco": 0.3
+   "hueco": 0.45
+  },
+  {
+   "id": "v4q",
+   "hueco": 0.6
   },
   {
    "id": "v4",
-   "hueco": 0.45
+   "hueco": 0.85
   },
   {
    "id": "v5",
-   "hueco": 0.35
+   "hueco": 0.55
   },
   {
    "id": "v6",
-   "hueco": 0.2
+   "hueco": 0.4
   },
   {
-   "id": "v7",
-   "hueco": 0.35
-  },
-  {
-   "id": "v8",
-   "hueco": 0.2
+   "id": "v9q",
+   "hueco": 0.6
   },
   {
    "id": "v9",
-   "hueco": 0.45
+   "hueco": 0.75
   },
   {
    "id": "v10",
-   "hueco": 0.35
+   "hueco": 0.55
   }
  ],
  "marcas": {
   "cincuenta": "v3.t0",
-  "cta": "v9.t0",
+  "cta": "v9q.t0",
   "marca": "v10.t0"
  },
- "cola": 1.8,
+ "cola": 1.9,
  "fijos": {
   "bpm": 140
  }

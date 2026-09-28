@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>EN AUTOMÁTICO · D-Code Partners</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script src="../comun/motor.js"></script>
+<script>
+"use strict";
+// EN AUTOMÁTICO — mini de YouTube (16:9, ~8 s). Lenguaje distinto del vídeo largo (RUIDO): papel claro, tinta y
+// UN azul, el del píxel del logotipo, que hace de protagonista. El píxel es el cursor, es la transición y es la marca.
+//   0,0–2,5  GANCHO    papel: doce tareas manuales amontonadas, un cursor que no para de hacer clic.
+//                      La marca (logo pequeño) ya está arriba a la derecha desde el segundo 1.
+//   2,5–4,8  MARCA     el píxel azul del logo crece hasta llenar la pantalla y vuelve a su sitio en el logo grande.
+//   4,8–7,0  PROPUESTA las MISMAS doce tareas, ahora en orden, se completan solas en cascada.
+//   7,0–8,5  CIERRE    logo + dcodepartners.com.
+const W = 1920, H = 1080, FPS = 30;
+const D = window.DATOS, MT = D.montaje, G = D.golpes || { clics: [], checks: [] };
+const V = Object.fromEntries(MT.voz.map((f) => [f.id, f]));
+window.META = { W, H, fps: FPS, duracion: MT.duracion, segura: [96, 54, 1824, 1026], minpx: 24 };
+const c = document.getElementById("c").getContext("2d");
+const { clamp, lerp, prog, eOut, eOut5, eIn, eIO, muelle, hash } = M;
+const C = { papel: "#f4f1ea", papel2: "#ffffff", tinta: "#0c0d10", tinta2: "#17181d", gris: "#8a867d", azul: "#2f6bff", pixel: "#5b8cff" };
+const A = (px) => `400 ${px}px "Anton"`;
+const R = (p, px) => `${p} ${px}px "Archivo"`;
+const I = (p, px) => `${p} ${px}px "Inter Tight"`;
+const MONO = (p, px) => M.fuente(p, px, "JetBrains Mono");
+const pal = (id, w) => V[id].palabras.find((p) => p.w.toLowerCase().replace(/[^\wáéíóúñü-]/g, "").startsWith(w)) || V[id].palabras[0];
+const T_MARCA = V.m2.t0 - 0.28, T_PROP = V.m3.t0 - 0.12, T_FIN = V.m3.t1 + 0.18;
+
+const TAREAS = ["Copiar y pegar", "factura_FINAL(2).xls", "Reenviar el email", "Pasar datos al CRM", "Llamar para confirmar",
+  "Actualizar el Excel", "Buscar el PDF", "Revisar pedidos", "Apuntar a mano", "Responder lo mismo", "Cuadrar la caja", "Hacer el informe"];
+// rejilla: 4 × 3 bajo el titular
+const TX0 = 96, TY0 = 452, TW = 408, TH = 168, GX = 32, GY = 23;
+const celda = (i) => ({ x: TX0 + (i % 4) * (TW + GX), y: TY0 + Math.floor(i / 4) * (TH + GY) });
+
+function fondo(col) { c.fillStyle = col; c.fillRect(0, 0, W, H); }
+
+// Tarjeta de tarea. estado 0 = pendiente (a mano), 1 = hecha sola.
+function tarjeta(i, x, y, rot, alpha, kHecho, oscuro) {
+  c.save(); c.translate(x + TW / 2, y + TH / 2); c.rotate(rot); c.globalAlpha *= alpha; c.translate(-TW / 2, -TH / 2);
+  if (!oscuro) { c.shadowColor = "rgba(20,18,10,0.10)"; c.shadowBlur = 24; c.shadowOffsetY = 8; }
+  c.fillStyle = oscuro ? C.tinta2 : C.papel2; M.rr(c, 0, 0, TW, TH, 18); c.fill(); c.shadowColor = "transparent";
+  if (kHecho > 0) { c.save(); c.globalAlpha *= kHecho; c.strokeStyle = C.azul; c.lineWidth = 3; M.rr(c, 1.5, 1.5, TW - 3, TH - 3, 17); c.stroke(); c.restore(); }
+  const fg = oscuro ? "#e9e5dc" : C.tinta;
+  M.texto(c, `TAREA ${String(i + 1).padStart(2, "0")}`, 28, 46, { f: MONO(600, 26), color: C.gris, track: 2 });
+  M.texto(c, TAREAS[i], 28, 100, { f: I(650, 34), color: fg, alpha: 1 - 0.45 * kHecho });
+  // estado
+  const hecho = kHecho > 0.5;
+  const txt = hecho ? "AUTOMÁTICO" : "A MANO";
+  c.fillStyle = hecho ? C.azul : (oscuro ? "#2a2b31" : "#ebe6db"); const wp = M.ancho(c, txt, MONO(700, 26), 1.5) + 36 + (hecho ? 30 : 0);
+  M.rr(c, 28, 118, wp, 36, 18); c.fill();
+  M.texto(c, txt, 46 + (hecho ? 30 : 0), 144, { f: MONO(700, 26), color: hecho ? "#fff" : C.gris, track: 1.5 });
+  if (hecho) { c.strokeStyle = "#fff"; c.lineWidth = 4; c.lineCap = "round"; c.lineJoin = "round"; const k = eOut(clamp((kHecho - 0.5) * 2));
+    c.beginPath(); c.moveTo(44, 136); c.lineTo(44 + 7 * Math.min(1, k * 2), 136 + 7 * Math.min(1, k * 2));
+    if (k > 0.5) c.lineTo(51 + 13 * (k - 0.5) * 2, 143 - 16 * (k - 0.5) * 2); c.stroke(); }
+  c.restore();
+}
+
+// logo + nombre en una línea (x = borde izquierdo o derecho según `al`)
+function lockup(x, y, alto, colTinta, kL, kP, kTxt, al = "left", colTxt = colTinta) {
+  const f = R(800, alto * 0.78), wT = M.ancho(c, "D-Code Partners", f, -1), wL = alto * 1.2, gap = alto * 0.32, tot = wL + gap + wT;
+  const x0 = al === "right" ? x - tot : al === "center" ? x - tot / 2 : x;
+  M.logo(c, x0, y, alto, colTinta, C.pixel, kL, kP);
+  if (kTxt > 0) M.texto(c, "D-Code Partners", x0 + wL + gap, y + alto * 0.76, { f, color: colTxt, alpha: kTxt, track: -1 });
+  const [a, b, w] = M.LOGO.pixel, s = alto / 100;
+  return { x0, px: x0 + a * s, py: y + b * s, pw: w * s };
+}
+
+// cursor (flecha)
+function cursor(x, y, s = 1, col = C.tinta) {
+  c.save(); c.translate(x, y); c.scale(s, s); c.fillStyle = col; c.strokeStyle = "#fff"; c.lineWidth = 3;
+  c.beginPath(); c.moveTo(0, 0); c.lineTo(0, 44); c.lineTo(11, 33); c.lineTo(19, 51); c.lineTo(27, 47); c.lineTo(19, 30); c.lineTo(34, 30); c.closePath();
+  c.stroke(); c.fill(); c.restore();
+}
+
+// ─── 1 · GANCHO ───
+const ESQ = { x: 1824, y: 64, alto: 58 };                      // marca pequeña, arriba a la derecha
+function gancho(t) {
+  if (t > T_MARCA + 0.3) return;
+  fondo(C.papel);
+  // titular palabra a palabra con la voz
+  const pals = [["¿SIGUES", "sigues"], ["HACIENDO", "haciendo"], ["ESTO", "esto"], ["A MANO?", "mano"]];
+  let x = 96; const f = A(150);
+  pals.forEach(([s, w], i) => {
+    const t0 = pal("m1", w).t0 - 0.06, k = muelle(prog(t, t0, t0 + 0.28), 3, 6), e = eOut5(prog(t, t0, t0 + 0.08));
+    const linea = i < 2 ? 0 : 1; if (i === 2) x = 96;
+    const wS = M.ancho(c, s, f) + 34;
+    if (e > 0) { c.save(); c.translate(x, 230 + linea * 160 + (1 - k) * 40); c.globalAlpha *= e;
+      M.texto(c, s, 0, 0, { f, color: i === 3 ? C.azul : C.tinta }); c.restore(); }
+    x += wS;
+  });
+  // tareas amontonándose
+  for (let i = 0; i < 12; i++) {
+    const t0 = 0.05 + hash(i + 3) * 0.9, k = muelle(prog(t, t0, t0 + 0.35), 2.6, 6);
+    if (k <= 0) continue;
+    const { x: cx, y: cy } = celda(i);
+    // sacudida al recibir clic
+    let sac = 0; for (const tc of G.clics) if (tc.i === i && t >= tc.t && t < tc.t + 0.18) sac = (1 - (t - tc.t) / 0.18) * Math.sin((t - tc.t) * 90);
+    const rot = (hash(i + 11) - 0.5) * 0.06 + sac * 0.03, dx = (hash(i + 21) - 0.5) * 34, dy = (hash(i + 31) - 0.5) * 22 + (1 - k) * 20;
+    tarjeta(i, cx + dx, cy + dy, rot, clamp(k * 1.5), 0, false);
+  }
+  // cursor que va de tarea en tarea
+  const cl = G.clics; if (cl.length && t >= cl[0].t - 0.25) {
+    let j = cl.findIndex((q) => q.t > t); if (j < 0) j = cl.length; const a = cl[Math.max(0, j - 1)], b = cl[Math.min(cl.length - 1, j)];
+    const pA = celda(a.i), pB = celda(b.i), k = j === 0 || a === b ? 0 : eIO(prog(t, a.t + 0.03, b.t - 0.02));
+    const px = lerp(pA.x, pB.x, k) + TW * 0.62, py = lerp(pA.y, pB.y, k) + TH * 0.55;
+    const pul = cl.some((q) => t >= q.t && t < q.t + 0.08) ? 0.86 : 1;
+    cursor(px, py, 1.25 * pul);
+  }
+  // la marca ya está desde el segundo 1
+  const kL = prog(t, 0.95, 1.55);
+  if (kL > 0) lockup(ESQ.x, ESQ.y, ESQ.alto, C.tinta, kL, prog(t, 1.4, 1.6), eOut5(prog(t, 1.25, 1.6)), "right");
+}
+
+// ─── 2 · MARCA: el píxel crece, llena la pantalla y vuelve a su sitio en el logo grande ───
+function marca(t) {
+  if (t < T_MARCA || t > T_PROP + 0.25) return;
+  const alto = Math.min(230, 1500 / (1.52 + M.ancho(c, "D-Code Partners", R(800, 78), -1) / 100)), tD = pal("m2", "d-code").t0, tP = pal("m2", "partners").t0;
+  const fT = R(800, alto * 0.78), wT = M.ancho(c, "D-Code Partners", fT, -1), tot = alto * 1.2 + alto * 0.32 + wT, x0 = 960 - tot / 2, y0 = 540 - alto / 2 - 40;
+  const s = alto / 100, [pa, pb, pw] = M.LOGO.pixel;
+  const esq = { x: ESQ.x - (ESQ.alto * 1.2 + ESQ.alto * 0.32 + M.ancho(c, "D-Code Partners", R(800, ESQ.alto * 0.78), -1)) + pa * ESQ.alto / 100,
+                y: ESQ.y + pb * ESQ.alto / 100, w: pw * ESQ.alto / 100 };
+  const dst = { x: x0 + pa * s, y: y0 + pb * s, w: pw * s };
+  const k1 = eIn(prog(t, T_MARCA, T_MARCA + 0.22));           // del píxel pequeño a pantalla completa
+  const k2 = eOut5(prog(t, T_MARCA + 0.3, T_MARCA + 0.62));   // de pantalla completa al píxel del logo grande
+  if (t >= T_MARCA + 0.22) fondo(C.tinta);
+  let r;
+  if (k2 <= 0) { const ex = lerp(esq.w, 2400, k1), cx = lerp(esq.x + esq.w / 2, 960, k1), cy = lerp(esq.y + esq.w / 2, 540, k1); r = { x: cx - ex / 2, y: cy - ex / 2, w: ex, h: ex }; }
+  else r = { x: lerp(-240, dst.x, k2), y: lerp(-660, dst.y, k2), w: lerp(2400, dst.w, k2), h: lerp(2400, dst.w, k2) };
+  const kL = prog(t, tD - 0.12, tD + 0.45);
+  if (t >= T_MARCA + 0.22) {
+    c.save(); const sal = eIn(prog(t, T_PROP - 0.05, T_PROP + 0.2)); c.globalAlpha *= 1 - sal;
+    M.logo(c, x0, y0, alto, "#f4f1ea", C.pixel, kL, 0);
+    const kT = eOut5(prog(t, tD, tD + 0.25));
+    if (kT > 0) M.texto(c, "D-Code", x0 + alto * 1.52, y0 + alto * 0.76, { f: fT, color: "#f4f1ea", alpha: kT, track: -1 });
+    const kP = eOut5(prog(t, tP - 0.05, tP + 0.2)), wD = M.ancho(c, "D-Code ", fT, -1);
+    if (kP > 0) { c.save(); c.translate(0, (1 - kP) * 24); M.texto(c, "Partners", x0 + alto * 1.52 + wD, y0 + alto * 0.76, { f: fT, color: "#f4f1ea", alpha: kP, track: -1 }); c.restore(); }
+    const kS = eOut5(prog(t, tP + 0.35, tP + 0.7));
+    if (kS > 0) M.texto(c, "AUTOMATIZACIÓN  +  IA  PARA  EMPRESAS", 960, y0 + alto + 130, { f: MONO(600, 34), color: C.pixel, al: "center", alpha: kS, track: 6 });
+    c.restore();
+  }
+  if (k2 < 1 || t < T_PROP) { c.fillStyle = C.pixel; c.fillRect(r.x, r.y, r.w, r.h); }
+}
+
+// ─── 3 · PROPUESTA: las mismas tareas, ahora solas ───
+function propuesta(t) {
+  if (t < T_PROP) return;
+  const kIn = eOut5(prog(t, T_PROP, T_PROP + 0.3));
+  if (t < T_FIN + 0.3) {
+    fondo(C.tinta);
+    const tT = pal("m3", "tu").t0, tE = pal("m3", "en").t0;
+    const f = A(150);
+    const k1 = muelle(prog(t, tT - 0.08, tT + 0.25), 3, 6), k2 = muelle(prog(t, tE - 0.08, tE + 0.25), 3, 6);
+    if (k1 > 0) M.texto(c, "TU EMPRESA,", 96, 230 + (1 - k1) * 40, { f, color: "#f4f1ea", alpha: clamp(k1 * 2) });
+    if (k2 > 0) M.texto(c, "EN AUTOMÁTICO.", 96, 390 + (1 - k2) * 40, { f, color: C.pixel, alpha: clamp(k2 * 2) });
+    lockup(ESQ.x, ESQ.y, ESQ.alto, "#f4f1ea", 1, 1, 1, "right");
+    // contador
+    const hechas = G.checks.filter((q) => t >= q.t).length;
+    M.texto(c, `${String(12 - hechas).padStart(2, "0")} A MANO`, 1824, 250, { f: MONO(700, 34), color: hechas === 12 ? C.gris : "#f4f1ea", al: "right", track: 3 });
+    M.texto(c, `${String(hechas).padStart(2, "0")} EN AUTOMÁTICO`, 1824, 300, { f: MONO(700, 34), color: C.pixel, al: "right", track: 3 });
+    for (let i = 0; i < 12; i++) {
+      const { x, y } = celda(i), q = G.checks.find((z) => z.i === i);
+      const kH = q ? prog(t, q.t - 0.02, q.t + 0.22) : 0;
+      const ent = eOut5(prog(t, T_PROP + i * 0.012, T_PROP + 0.28 + i * 0.012));
+      tarjeta(i, x, y + (1 - ent) * 30, 0, ent, kH, true);
+    }
+  }
+  // ─── 4 · CIERRE ───
+  const kC = eIO(prog(t, T_FIN, T_FIN + 0.32));
+  if (kC > 0) {
+    c.save(); c.beginPath(); c.rect(0, H * (1 - kC), W, H * kC); c.clip();
+    fondo(C.papel);
+    const kS = eOut5(prog(t, T_FIN + 0.15, T_FIN + 0.5));
+    lockup(960, 330 + (1 - kS) * 30, 190, C.tinta, prog(t, T_FIN + 0.05, T_FIN + 0.45), 1, kS, "center");
+    const kU = eOut5(prog(t, T_FIN + 0.35, T_FIN + 0.7));
+    if (kU > 0) {
+      M.texto(c, "dcodepartners.com", 960, 720 + (1 - kU) * 20, { f: MONO(700, 64), color: C.tinta, al: "center", alpha: kU, track: 1 });
+      M.texto(c, "Automatización e IA para empresas", 960, 800 + (1 - kU) * 20, { f: I(500, 36), color: C.gris, al: "center", alpha: kU });
+      const w = M.ancho(c, "dcodepartners.com", MONO(700, 64), 1);
+      c.fillStyle = C.azul; c.fillRect(960 - w / 2, 748, w * eOut5(prog(t, T_FIN + 0.5, T_FIN + 0.95)), 6);
+    }
+    c.restore();
+  }
+}
+
+window.pintaFrame = (n) => {
+  const t = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
+  fondo(C.papel);
+  gancho(t); marca(t); propuesta(t);
+  M.grano(c, W, H, n, 0.035);
+};
+
+(async () => {
+  const fu = "../comun/fuentes/";
+  await M.cargar([["Anton", fu + "anton.woff2"], ["Archivo", fu + "archivo-wdth.woff2", { weight: "100 900", stretch: "62% 125%" }],
+                  ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }], ["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }]]);
+  window.pintaFrame(0); window.LISTO = true;
+})();
+</script></body></html>

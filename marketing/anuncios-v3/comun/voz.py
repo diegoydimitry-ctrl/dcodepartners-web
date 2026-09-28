@@ -38,6 +38,7 @@ def norm(t):
     t = re.sub(r"50\s*%", " cincuenta por ciento ", t).replace("d-code", "dicode")
     t = re.sub(r"\b30\b", " treinta ", t); t = re.sub(r"\b50\b", " cincuenta ", t)
     t = re.sub(r"\b(decode|de code|dicode|di code|dicoud)\b", "dicode", t)
+    t = t.replace("v", "b")   # en español b y v suenan igual: Whisper escribe «bende» por «vende»
     return re.sub(r"[^a-z0-9ñ ]+", " ", t).split()
 
 def wer(ref, hyp):

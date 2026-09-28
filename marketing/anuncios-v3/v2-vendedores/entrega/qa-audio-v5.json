@@ -1,0 +1,84 @@
+{
+ "lufs": -16.875346633220758,
+ "pico_dbfs": -2.059519339530856,
+ "frases": [
+  {
+   "id": "v1",
+   "voz_fondo_lu": 8.8,
+   "wer": 0.0,
+   "oido": "Estamos buscando comerciales."
+  },
+  {
+   "id": "v2",
+   "voz_fondo_lu": 9.4,
+   "wer": 0.0,
+   "oido": "¿Necesitas estudios? ¿Experiencia?"
+  },
+  {
+   "id": "v2b",
+   "voz_fondo_lu": 12.7,
+   "wer": 0.0,
+   "oido": "No, no te hace falta."
+  },
+  {
+   "id": "v3a",
+   "voz_fondo_lu": 11.7,
+   "wer": 0.0,
+   "oido": "Y lo mejor..."
+  },
+  {
+   "id": "v3",
+   "voz_fondo_lu": 7.6,
+   "wer": 0.0,
+   "oido": "te llevas el 50% de cada venta."
+  },
+  {
+   "id": "v4q",
+   "voz_fondo_lu": 9.3,
+   "wer": 0.0,
+   "oido": "y que venderías exactamente."
+  },
+  {
+   "id": "v4",
+   "voz_fondo_lu": 11.1,
+   "wer": 0.0,
+   "oido": "Soluciones de automatización e inteligencia artificial para empresas."
+  },
+  {
+   "id": "v5",
+   "voz_fondo_lu": 13.9,
+   "wer": 0.0,
+   "oido": "Tu encuentras al cliente."
+  },
+  {
+   "id": "v6",
+   "voz_fondo_lu": 11.3,
+   "wer": 0.0,
+   "oido": "Nosotros nos encargamos de construirlo todo."
+  },
+  {
+   "id": "v9q",
+   "voz_fondo_lu": 12.5,
+   "wer": 0.0,
+   "oido": "¿Te interesa?"
+  },
+  {
+   "id": "v9",
+   "voz_fondo_lu": 11.1,
+   "wer": 0.0,
+   "oido": "Escrivenos por Instagram o por correo y te lo contamos."
+  },
+  {
+   "id": "v10",
+   "voz_fondo_lu": 23.6,
+   "wer": 0.0,
+   "oido": "Vende con decode partners."
+  }
+ ],
+ "silencios": [
+  [
+   42.95,
+   43.45
+  ]
+ ]
+}
