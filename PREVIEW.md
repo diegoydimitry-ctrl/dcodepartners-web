@@ -12,13 +12,14 @@
 2. Cambia a **modo claro** (sol, arriba a la derecha): la misma escena, con sombra de contacto sobre blanco.
 3. Baja hasta el **pie**: Instagram, LinkedIn y Facebook.
 3. **Tócalo**: cinco demos (Finance, Comercial, Operaciones, Atención, D-Code OS). Pulsa el botón de cada una y mira el lienzo; al final, «Otra vez». «Abrir la aplicación completa» abre la demo entera en un visor (Escape la cierra).
+4. **Webs de ejemplo en 3D** (`/servicios/paginas-web`, capítulo 01, y `/que-hacemos`, «Páginas web»): cuatro webs ficticias en un escenario 3D. Elige una abajo (o pulsa una de los lados), bájala por dentro, entra en una ficha, reserva mesa o cita, usa el buscador técnico de Visqa. «Ver a pantalla completa» la abre a todo el ancho. En el móvil son marcos de teléfono que se deslizan con el dedo.
 4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
 5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
 6. **Diagnóstico** (`/diagnostico`): tres preguntas y el resultado con tus horas y tu coste por hora.
 7. **Finance** (`/sistema-financiero`), capítulo «Cada factura, registrada y encadenada»: la cadena de registros y la hoja de ruta de VERI*FACTU.
 8. Cualquier interior (fíjate en el número de capítulo: su línea se llena al leer; y al cambiar de página, el fundido): `/departamentos/finanzas`, `/servicios/automatizaciones`, `/metodo`, `/faq`, `/aviso-legal`.
 8. **EN**: `/en` y el selector ES/EN de la cabecera.
-9. En el **móvil**: la escena arriba, el texto abajo; menú a pantalla completa.
+9. En el **móvil**: la escena arriba, el texto abajo; menú a pantalla completa. Las demos de «Tócalo» tienen su versión vertical (no la de escritorio encogida); los capítulos largos se pliegan con «Seguir leyendo»; el pie va en acordeón; el botón del chat se aparta al bajar y vuelve al subir.
 10. Con **movimiento reducido** activado en el sistema: la pieza montada, quieta, y los capítulos uno debajo de otro.
 
 ## Páginas principales

@@ -13,6 +13,8 @@
 
 .w3 { --w3-ancho: min(880px, 62vw); position: relative; margin-top: var(--e-6); }
 .w3[data-webs3d] { visibility: visible; height: auto; overflow: visible; }
+/* cada web de ejemplo tiene sus colores: que el tema de D-Code (claro/oscuro) no tiña sus negritas */
+.w3-vista :is(b, strong), .w3-dialogo-cuerpo :is(b, strong) { color: inherit; }
 .w3-escena { position: relative; height: clamp(540px, 46vw, 660px); perspective: 2200px; perspective-origin: 50% 30%; }
 .w3-mundo { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(calc(var(--py, 0) * 1.6deg)) rotateY(calc(var(--px, 0) * -2.4deg)); transition: transform 600ms var(--ease-out); }
 /* suelo: una superficie oscura con la luz del escenario, donde se apoyan las sombras */

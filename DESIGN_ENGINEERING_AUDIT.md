@@ -91,6 +91,45 @@ Sustituyen a «captura de Finance + cinco botones». Cada una, un producto con i
 
 Lenguaje: blanco y negro; lo que hace **el sistema** va en azul; lo que haces **tú**, con el botón principal. Todo el texto está en el HTML (indexable y legible sin JS). Pestañas ARIA con teclado; «Otra vez» reinicia; en móvil y tableta, texto → lienzo → mandos para ver lo que pasa al pulsar. «Abrir la aplicación completa» mantiene el visor anterior.
 
+## 4 quater. Ronda del 28/09 (tarde): responsive por formato, webs de ejemplo en 3D, demo de lubricantes
+
+Brief: «misma web + mucha mejor experiencia + mejores demos + responsive profesional». Lo que funciona en PC y empeora en el móvil **no se muestra igual en el móvil**.
+
+### Responsive: una composición por formato
+| Formato | Qué cambia |
+|---|---|
+| Teléfono (≤ 640 px) | Las cinco demos usan un renderizador propio, vertical y compacto (cifra grande, lista corta, barra de 5 tiempos), no la maqueta de escritorio encogida. Capítulos largos plegados con «Seguir leyendo» (solo si miden ≥ 1,5 pantallas). Tablas de ≥ 3 columnas → fichas. Planes → resumen en la pregunta y detalle al abrir. Pie en acordeón. Chat en 44 px que se aparta al bajar y vuelve al subir |
+| Tableta (641–1023 px) | Demos a una columna con lienzo de 480 px (el de Comercial se cortaba a 420). Webs de ejemplo en carrusel con menos giro |
+| Escritorio | Sin cambios de identidad |
+
+`/sistema-financiero` en móvil: 16.908 px → 10.757 px de alto.
+
+### «Cuatro webs de verdad. Entra en ellas.» (sustituye a «Cuatro ejemplos», las 4 capturas planas)
+- Cuatro webs de empresas **ficticias**, cada una con su identidad (tipografía, color, composición): **Vandria Hogar** (inmobiliaria, Costa del Sol), **Orbe** (restaurante), **Visqa Lubricantes** (fabricante de lubricantes técnicos, Avilés; sustituye a la empresa de talleres) y **Clínica Sonrisa**. Ninguna marca real.
+- Escritorio: escenario CSS 3D (perspectiva, profundidad, luz de cristal que sigue al puntero, reflejo en el suelo). La elegida, al frente y **usable**: se baja, se navega (ficha, catálogo, volver), se reserva mesa o cita, se usa el buscador técnico. Las otras, a los lados e inertes.
+- Por qué CSS 3D y no WebGL: el texto de cada web se lee nítido y funciona (enlaces, formularios, teclado, lector de pantalla); WebGL obligaría a pintar las webs como texturas.
+- Tableta: carrusel con menos profundidad. Teléfono: **sin 3D**, marcos de teléfono en fila (scroll-snap), cada web se maqueta sola a ese ancho (container queries).
+- Pantalla completa: la web elegida en un `<dialog>` a todo el ancho (sin ids repetidos en la copia).
+- Imágenes: renderizadas por D-Code en Blender (`scripts/v2/renders/`): la gama de Visqa y su garrafa de 5 L, la mesa de Orbe y la casa de Vandria de día (exterior, salón y cocina). 6 WebP, 162 KB en total, pedidas solo al acercarse.
+- Carga: la hoja `webs3d.css` llega sin bloquear (`media="print"` que se activa al acercarse) y el alto de la sección se reserva en `interior.css` → CLS 0. Medido en `/servicios/paginas-web` (390 px, CPU ×4, 4G lenta): con la hoja bloqueante, FCP 1.372 ms / LCP 2.300 ms; **diferida, FCP 1.016 ms / LCP 1.384 ms / load 1.409 ms** (antes de esta sección: 928 / 1.496 / 1.391 ms).
+- FPS del cambio de ventana en GPU real: **NO MEDIDO** (el panel del navegador del equipo estaba oculto: `requestAnimationFrame` detenido). HIPÓTESIS: son transformaciones y opacidad de 4 capas compuestas, sin pintar; deberían ir a la frecuencia de la pantalla.
+
+### Demo Finance: Visqa Lubricantes
+La demo de Finance usa ahora a Visqa: 23 facturas de proveedor (aceite base, aditivos, envases, portes). La que hay que revisar es un porte con IVA al 10 % (el transporte de mercancías va al 21 %); al corregirla, 1.240 € → 1.364 €.
+
+### Enlaces
+Las anclas de la web anterior (`#planes`, `#verifactu`, `#conciliacion`, `#demo`, `/#sistemas`, `#sistemas-finance`, `#diagnostico`) se conservan en los títulos nuevos o llevan a su página: `check:enlaces` pasa de 19 avisos a **0**.
+
+### QA de esta ronda
+| Prueba | Resultado |
+|---|---|
+| Solapes (texto que se pisa, bajo la cabecera, desbordamiento) | **0** en 70 rutas × 9 anchos (375, 390, 430, 768, 820, 1024, 1280, 1440, 1920). El detector ahora descarta lo recortado por un contenedor con scroll y las ventanas inertes |
+| axe WCAG 2.1 AA | 0 tras corregir 2 contrastes de las webs de ejemplo (botón de Orbe 3,9 → 5,2:1; rótulo de Vandria 3,2 → 4,8:1) y la jerarquía de títulos de las demos a pantalla completa (h3 → h2) |
+| Enlaces internos, idiomas, sitemap, JSON-LD | 0 errores, 0 avisos |
+| SEO | 84 páginas, 0 fallos |
+| Consola | 0 errores en las demos (5 × 2 anchos) y en las webs de ejemplo |
+| `check:chat` y `check:tema` | Fallan igual en `b8970ba`: comprueban la portada antigua (rev. 3), que ya no existe. No aplican |
+
 ## 4 bis. Interiores: del texto migrado a componentes
 
 La migración del contenido de producción aplanaba los diseños antiguos: celdas en línea que quedaban pegadas («AltaF-2026-0140Anterior81A9…»), el pie antiguo convertido en capítulos (Cambios en proceso), listas de tarjetas convertidas en viñetas. Se corrige en `scripts/v2/migrar.mjs`, reconociendo la estructura y no la página:
@@ -130,7 +169,7 @@ Y como red de seguridad, un espacio entre dos elementos contiguos sin espacio en
 - Rendimiento: ver **PERFORMANCE_AUDIT.md** (portada en móvil lento: primer pintado 5,96 s → 1,06 s).
 - SEO: ver **SEO_AUDIT.md** (84 páginas, 0 fallos).
 - Accesibilidad: un H1 por página, jerarquía sin saltos, foco visible, `aria-live` en diagnóstico y formulario, diálogo nativo para las demos, contraste AA tras el detector, objetivos ≥ 40 px, menú móvil con foco atrapado y Escape.
-- Responsive: capturas en 390 y 1440 sin desbordamiento horizontal (medido: `scrollWidth − innerWidth = 0` en todas las páginas capturadas).
+- Responsive: 70 rutas × 9 anchos (375 → 1920) sin solapes ni desbordamiento horizontal (28/09, §4 quater).
 
 ## 7. Problemas de la Preview anterior que desaparecen
 
