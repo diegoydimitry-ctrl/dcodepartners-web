@@ -5,7 +5,7 @@
 | URL (sigue a la rama) | https://dcodepartners-web-git-web-dcp-cowork4-d-code-partners.vercel.app |
 | Rama | `web/dcp-cowork4` (parte de `8ff5f5b`) |
 | Commit | el último de la rama (ver `git log`) |
-| Production | Se publicó **una vez**, por petición expresa de Dirección (28/09 11:10), desde `42b53f2` (arreglo del configurador). Desde entonces, **sin tocar**: lo posterior está solo en la Preview. Rollback: `dpl_EC1c3BqRJykCBctkXMQSeyC5hzB1` (`e658c31`) |
+| Production | 28/09 11:10: publicada `42b53f2` por petición expresa de Dirección (`dpl_AZqAhyAtf32KTYe86VAD2ntZJpyr`). **28/09 21:38: redeploy a producción desde la cuenta de Vercel del equipo** de `47231fc` de esta rama (`dpl_5FWeFUtfgByEJbgArsgwFbu1TX8r`; no lo hizo Cowork 4, que solo sube commits a la rama). Rollback a la anterior: `dpl_AZqAhyAtf32KTYe86VAD2ntZJpyr` |
 
 ## Cómo probarla (5 minutos)
 1. **Portada `/`**: baja despacio. Las piezas sueltas flotan, se unen y al final se enciende el píxel azul. Mueve el ratón: la luz del estudio se desliza por la cerámica. Cuatro frases en total.
