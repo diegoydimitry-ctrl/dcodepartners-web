@@ -71,7 +71,10 @@ for (const lang of ["es", "en"]) {
   // 2 · D-Code OS: la sección tal cual, con sus hojas y su script
   const a = antigua.lastIndexOf("<section", antigua.indexOf('id="dcode-os"'));
   const b = antigua.lastIndexOf("<section", antigua.indexOf('id="proceso"'));
-  const seccion = antigua.slice(a, b);
+  // sus enlaces a la portada antigua (#sistemas-finance, #diagnostico) llevan ahora a las páginas nuevas, fuera del visor
+  const seccion = antigua.slice(a, b)
+    .replace(/href="#sistemas-finance"/g, `href="${pre}/sistema-financiero" target="_top"`)
+    .replace(/href="#diagnostico"/g, `href="${pre}/diagnostico" target="_top"`);
   const hojas = ["styles.css", "dcp5.css", "dcp6.css", "dcode-os.css", "dcode-ds.css", "superficies.css"].map((h) => `<link rel="stylesheet" href="/assets/css/${h}${version("assets/css/" + h)}">`).join("\n");
   escribir(`${lang === "en" ? "en/" : ""}demos/os.html`, `${cabeza(lang, "os", `${pre}/demos/os`, hojas + `<style>.os-cab{display:none!important}body{background:#07080a}.v6-block{padding:32px 0!important;min-height:auto!important}</style>`)}
 <body data-theme="dark">

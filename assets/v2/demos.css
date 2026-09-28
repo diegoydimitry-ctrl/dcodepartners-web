@@ -51,6 +51,7 @@
 .dm-lienzo { position: relative; min-height: 560px; border-radius: 18px; background: color-mix(in oklab, var(--tinta) 3.5%, var(--bg)); box-shadow: inset 0 0 0 1px var(--linea-2); overflow: hidden; overflow: clip; isolation: isolate; }
 .sin-js .dm-lienzo { display: none; }
 @media (max-width: 960px) { .dm-lienzo { min-height: 420px; } }
+@media (min-width: 641px) and (max-width: 960px) { .dm-lienzo { min-height: 480px; } }
 .dm-sis { color: var(--aire); }
 .dm-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--linea-2); font-family: var(--f-mono); font-stretch: 82%; font-size: .7rem; letter-spacing: .05em; text-transform: uppercase; color: var(--tinta-2); white-space: nowrap; }
 .dm-chip--sis { border-color: color-mix(in oklab, var(--aire) 55%, transparent); color: var(--tinta); }
@@ -188,3 +189,63 @@
 @media (max-width: 640px) { .cm-cuerpo { overflow: visible; } }
 @media (max-width: 640px) { .fz.is-rev { grid-template-rows: 0 minmax(0, 1fr); } .fz.is-rev .fz-mesa { visibility: hidden; border: 0; } .dm-lienzo { min-height: 460px; } }
 @media (max-width: 760px) { .os-feed:has(.os-parte:not([hidden])) .os-ev { display: none; } }
+
+/* ---------------------------------------------------------------- MÓVIL (≤ 640 px)
+   Otra composición, no la de escritorio encogida: una columna, una cifra grande, una sola transformación a la vista y
+   como mucho tres líneas de detalle. El lienzo mide lo que su contenido (nada de 460 px fijos con huecos). */
+@media (max-width: 640px) {
+  .dm-panel { padding-top: var(--e-5); row-gap: var(--e-3); }
+  .dm-t { font-size: 1.45rem; }
+  .dm-prob { font-size: .95rem; }
+  .dm--movil .dm-lienzo { min-height: 0; }
+  .dm--movil .dm-panel--atencion .dm-lienzo { min-height: 430px; }
+  /* las cinco fases, como una barra de cinco tramos (las etiquetas, para lectores de pantalla ya van en el texto) */
+  .dm-fases { gap: 4px; font-size: 0; }
+  .dm-fases li { flex: 1; height: 3px; border-radius: 2px; background: var(--linea-2); gap: 0; }
+  .dm-fases li::before { display: none; }
+  .dm-fases li.is-hecha { background: var(--tinta-3); }
+  .dm-fases li.is-ahora { background: var(--aire); }
+  .dm-acciones .boton { flex: 1 1 100%; justify-content: center; }
+}
+.mv { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 18px; }
+.mv > * { min-width: 0; }
+.dm-panel.is-fin .dm-acciones { display: none; }
+.mv-cifra { display: grid; gap: 2px; }
+.mv-cifra b { font-size: 3.2rem; line-height: 1; font-weight: 560; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.mv-cifra span { color: var(--tinta-2); font-size: .92rem; }
+.mv-barra { height: 4px; border-radius: 2px; background: var(--linea-2); overflow: hidden; }
+.mv-barra i { display: block; height: 100%; background: var(--aire); transform: scaleX(0); transform-origin: left; transition: transform 120ms linear; }
+.mv-filas, .mv-pasos, .mv-ev { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.mv-filas li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea-2); font-size: .9rem; }
+.mv-filas li > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mv-filas .mv-mal { color: var(--tinta); }
+.mv-rev { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 0; }
+.mv-rev > div { padding: 10px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea-2); display: grid; gap: 2px; }
+.mv-rev b { font-size: 1.3rem; font-weight: 560; }
+.mv-rev .boton { grid-column: span 2; justify-content: center; }
+.mv-pie { display: flex; justify-content: space-between; align-items: baseline; font-size: .9rem; color: var(--tinta-2); }
+.mv-pie b { color: var(--tinta); font-size: 1.05rem; }
+.mv-pasos li { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--linea-2); font-size: .92rem; }
+.mv-pasos li b { font-weight: 540; }
+.mv-pasos li.es-tu b::after { content: " · tú"; color: var(--tinta-3); font-weight: 400; }
+.mv-compara { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mv-compara div { padding: 10px 12px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--linea-2); display: grid; gap: 2px; }
+.mv-compara b { font-size: 1.25rem; font-weight: 560; letter-spacing: -.02em; }
+.mv-compara .es-ahora { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--aire) 60%, transparent); }
+.mv-semana { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.mv-dia { display: grid; gap: 6px; justify-items: center; }
+.mv-dia i { display: grid; place-items: center; font-style: normal; font-family: var(--f-mono); font-stretch: 82%; font-size: .62rem; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta); width: 100%; height: 64px; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--linea-2); transition: background-color 400ms ease, box-shadow 400ms ease; }
+.mv-dia.es-visita i { background: color-mix(in oklab, var(--tinta) 10%, var(--bg)); }
+.mv-dia.es-obra i { background: color-mix(in oklab, var(--aire) 22%, var(--bg)); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--aire) 70%, transparent); }
+.mv-dia.es-movido i { box-shadow: inset 0 0 0 2px var(--aire); }
+.mv-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 26px; }
+.mv-chips .dm-chip { white-space: normal; }
+.mv-nodos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.mv-nodos li { padding: 6px 10px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--linea-2); font-size: .82rem; color: var(--tinta-2); transition: box-shadow 300ms ease, color 300ms ease; }
+.mv-nodos li.is-on { color: var(--tinta); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--aire) 70%, transparent); }
+.mv-centro { justify-self: start; padding: 8px 14px; border-radius: 12px; background: var(--tinta); color: var(--bg); font-weight: 600; font-size: .86rem; opacity: .3; transition: opacity 400ms ease; }
+.mv-centro.is-on { opacity: 1; }
+.mv-ev li { display: grid; gap: 2px; padding: 9px 0; border-bottom: 1px solid var(--linea-2); font-size: .9rem; }
+.mv-parte { display: grid; gap: 6px; font-size: .92rem; }
+.mv-parte .dm-chip { justify-self: start; }
+@media (prefers-reduced-motion: reduce) { .mv-barra i, .mv-dia i, .mv-nodos li, .mv-centro { transition: none; } }

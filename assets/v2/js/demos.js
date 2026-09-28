@@ -22,7 +22,7 @@ function corrida() {
 /* ------------------------------------------------------------- textos */
 const T = {
   es: {
-    fz: { vacio: "Nada registrado todavía", bandeja: "Bandeja vacía", cab: "Facturas recibidas", sem: "Semana 40", pie: "Pagos previstos esta semana", mal: "No cuadra", ok: "Revisada", leido: "Leído en la factura", habitual: "Lo habitual con este proveedor", corregir: "Corregir a 21 %", correcto: "Es correcto así", nota: "IVA al 10 % en recambios. Con este proveedor siempre es el 21 %." },
+    fz: { vacio: "Nada registrado todavía", bandeja: "Bandeja vacía", cab: "Facturas recibidas", sem: "Semana 40", pie: "Pagos previstos esta semana", mal: "No cuadra", ok: "Revisada", leido: "Leído en la factura", habitual: "Lo habitual con este proveedor", corregir: "Corregir a 21 %", correcto: "Es correcto así", nota: "IVA al 10 % en un porte. El transporte de mercancías siempre va al 21 %." , movil: { antes: "facturas en el correo", hecho: "registradas", mal: "Transportes Cierzo · IVA al 10 % en un porte", ahora: "tesorería de la semana al día" } },
     cm: { hoy: "Hoy", con: "Con el sistema", dias: "2 días hábiles", min: "1 minuto", lead: ["María Gómez", "Reforma de cocina · Pozuelo de Alarcón", "«Queremos reformar la cocina antes de Navidad. Presupuesto aproximado: 20.000 €.»"],
       pasos: [["18:40:02", "Clasificado", "Reforma de cocina · prioridad alta: presupuesto y plazo claros"], ["18:40:03", "Asignado a Laura", "Zona oeste · 4 proyectos abiertos, la que menos carga tiene"], ["18:40:05", "Respuesta preparada", "Con dos huecos reales de su agenda"]],
       borrador: "Hola, María:\nGracias por escribirnos. Para una cocina antes de Navidad lo mejor es ver el espacio cuanto antes. ¿Te viene bien el martes a las 10:00 o el miércoles a las 17:30?\n— Laura · Alba Interiorismo",
@@ -43,7 +43,7 @@ const T = {
       parte: ["Parte del día", "1 lead nuevo prioritario, ya respondido. 23 facturas registradas; una la revisaste tú. 1 cobro conciliado. 1 retraso resuelto dos días antes. Nada pendiente para hoy.", "Escrito por la IA con los datos de arriba; cada línea enlaza a su rastro."] },
   },
   en: {
-    fz: { vacio: "Nothing recorded yet", bandeja: "Inbox empty", cab: "Invoices received", sem: "Week 40", pie: "Payments due this week", mal: "Doesn't add up", ok: "Reviewed", leido: "Read on the invoice", habitual: "Usual with this supplier", corregir: "Correct to 21%", correcto: "It's right as is", nota: "10% VAT on spare parts. With this supplier it's always 21%." },
+    fz: { vacio: "Nothing recorded yet", bandeja: "Inbox empty", cab: "Invoices received", sem: "Week 40", pie: "Payments due this week", mal: "Doesn't add up", ok: "Reviewed", leido: "Read on the invoice", habitual: "Usual with this supplier", corregir: "Correct to 21%", correcto: "It's right as is", nota: "10% VAT on a haulage invoice. Goods transport is always 21%.", movil: { antes: "invoices in the inbox", hecho: "recorded", mal: "Transportes Cierzo · 10% VAT on haulage", ahora: "this week's cash flow up to date" } },
     cm: { hoy: "Today", con: "With the system", dias: "2 working days", min: "1 minute", lead: ["María Gómez", "Kitchen renovation · Pozuelo de Alarcón", "“We'd like to renovate the kitchen before Christmas. Budget around €20,000.”"],
       pasos: [["18:40:02", "Classified", "Kitchen renovation · high priority: clear budget and deadline"], ["18:40:03", "Assigned to Laura", "West area · 4 open projects, the lightest workload"], ["18:40:05", "Reply drafted", "With two real slots from her calendar"]],
       borrador: "Hi María,\nThanks for writing to us. For a kitchen before Christmas, it's best to see the space soon. Would Tuesday at 10:00 or Wednesday at 17:30 work for you?\n— Laura · Alba Interiors",
@@ -66,7 +66,7 @@ const T = {
 };
 
 /* Facturas de la demo: proveedor, concepto, total. La 15 es la que no cuadra. */
-const FACTURAS = [["Recambios Oviedo", "Pastillas y discos", 1240], ["Lubricantes Cantábrico", "Aceite 5W30 ×60 l", 486.2], ["Neumáticos Astur", "Neumáticos ×8", 912], ["Electro Gijón", "Baterías ×6", 702.6], ["Suministros Levante", "Material de taller", 318.45], ["Talleres Rías", "Rectificado de culata", 590], ["Pinturas Norte", "Pintura y barniz", 1103.8], ["Herramientas Siero", "Llave dinamométrica", 214.9], ["Recambios Oviedo", "Filtros ×40", 356], ["Gas Industrial Avilés", "Botellas de gas", 142.3], ["Limpiezas Nalón", "Limpieza septiembre", 480], ["Telefonía Norte", "Líneas y fibra", 96.8], ["Seguros Principado", "Cuota trimestral", 1320], ["Cantábrico Energía", "Electricidad agosto", 684.15], ["Recambios Oviedo", "Embragues ×3", 1240], ["Neumáticos Astur", "Neumáticos ×4", 456], ["Grúas Mieres", "Traslado de vehículo", 165], ["Papelería Centro", "Material de oficina", 58.4], ["Lubricantes Cantábrico", "Anticongelante", 132.6], ["Electro Gijón", "Diagnosis: licencia", 390], ["Suministros Levante", "Guantes y trapos", 74.2], ["Asesoría Llanes", "Asesoría septiembre", 290], ["Agua Oviedo", "Agua agosto", 38.9]];
+const FACTURAS = [["Bases Cantábrico", "Aceite base SN 150 · 20 t", 18420], ["Aditivos Nalón", "Paquete de aditivos 5W30", 6840.5], ["Envases Siero", "Bidones 20 l ×600", 2952], ["Etiquetas Llanes", "Etiquetas ×12.000", 702.6], ["Laboratorio Avilés", "Análisis de lote L-2609", 318.45], ["Palés Navia", "Palés europeos ×80", 1104], ["Tapones Gozón", "Tapones con precinto ×20.000", 1103.8], ["Carretillas Mieres", "Revisión carretilla", 214.9], ["Envases Siero", "Garrafas 5 l ×2.000", 3356], ["Gas Industrial Avilés", "Nitrógeno", 142.3], ["Limpiezas Nalón", "Limpieza septiembre", 480], ["Telefonía Norte", "Líneas y fibra", 96.8], ["Seguros Principado", "Cuota trimestral", 1320], ["Cantábrico Energía", "Electricidad agosto", 2684.15], ["Transportes Cierzo", "Portes a Burgos ×3", 1240], ["Transportes Cierzo", "Porte a León", 456], ["Aditivos Nalón", "Antidesgaste ZDDP", 1165], ["Papelería Centro", "Material de oficina", 58.4], ["Bases Cantábrico", "Aceite base SN 500 · 4 t", 4132.6], ["Etiquetas Llanes", "Fichas técnicas impresas", 390], ["Suministros Levante", "Guantes y trapos", 74.2], ["Asesoría Llanes", "Asesoría septiembre", 290], ["Agua Avilés", "Agua agosto", 38.9]];
 const MAL = 14;
 
 /* ================================================================ FINANCE */
@@ -89,7 +89,7 @@ function finance(panel, t, en) {
         const arriba = [...pila.querySelectorAll(".fz-hoja:not(.is-ida)")].pop(); if (arriba) { arriba.classList.add("is-ida"); setTimeout(() => arriba.remove(), 420); }
         if (i < FACTURAS.length - 5) pila.insertBefore(h(hoja(i + 5)), pila.firstChild);
         const [p, con, imp] = FACTURAS[i]; total += imp;
-        const f = h(`<li class="fz-fila dm-entra${i === MAL ? " is-mal" : ""}"><span><b>${p}</b><span class="dm-mono">${con}</span></span>${i === MAL ? `<span class="dm-chip dm-chip--sis" data-marca>${t.mal}</span>` : `<span class="dm-chip">${i % 3 ? "Material" : en ? "Services" : "Servicios"}</span>`}<span class="imp">${euros(imp, en)}</span></li>`);
+        const f = h(`<li class="fz-fila dm-entra${i === MAL ? " is-mal" : ""}"><span><b>${p}</b><span class="dm-mono">${con}</span></span>${i === MAL ? `<span class="dm-chip dm-chip--sis" data-marca>${t.mal}</span>` : `<span class="dm-chip">${[0, 1, 2, 3, 5, 6, 8, 16, 18].includes(i) ? (en ? "Materials" : "Materia prima") : en ? "Services" : "Servicios"}</span>`}<span class="imp">${euros(imp, en)}</span></li>`);
         filas.insertBefore(f, filas.firstChild);
         while (filas.children.length > 9) filas.lastElementChild.remove();
         cuenta.textContent = `${i + 1} / 23`; tot.textContent = euros(total, en);
@@ -108,7 +108,7 @@ function finance(panel, t, en) {
       rev.querySelector("[data-r]").focus({ preventScroll: true });
       const corrige = await new Promise((ok) => rev.addEventListener("click", (e) => { const r = e.target.closest("[data-r]"); if (r) ok(r.dataset.r === "1"); }));
       const mal = L.querySelector(".is-mal"); if (mal) { mal.classList.remove("is-mal"); const m = mal.querySelector("[data-marca]"); if (m) { m.className = "dm-chip dm-chip--ok"; m.textContent = t.ok; }
-        // 1.240 € con IVA al 10 % son 1.127,27 de base; al 21 % el total es 1.364,00 €
+        // 1.240 € con IVA al 10 % son 1.127,27 € de base; al 21 % el total es 1.364,00 €
         if (corrige) { total += 124; mal.querySelector(".imp").textContent = euros(1364, en); } }
       rev.replaceWith(h(`<div class="fz-pie dm-entra"><span>${t.pie}</span><b>${euros(total, en)}</b></div>`));
       fin();
@@ -273,11 +273,92 @@ function os(panel, t) {
   };
 }
 
+/* ================================================================ MÓVIL
+   En el teléfono no se enseña la composición de escritorio (mesa + libro + tabla): se cuenta la MISMA historia en
+   vertical, con una sola transformación a la vista, un número grande y como mucho tres líneas de detalle. */
+function financeMovil(panel, t, en) {
+  const L = panel.querySelector("[data-dm-lienzo]"); const m = t.movil; let total = 0;
+  const pinta = () => { total = 0;
+    L.innerHTML = `<div class="mv mv-fz"><div class="mv-cifra"><b data-n>23</b><span data-n-t>${m.antes}</span></div><div class="mv-barra"><i data-barra></i></div>
+      <ol class="mv-filas" data-filas></ol><div class="mv-pie"><span>${t.pie}</span><b data-total>${euros(0, en)}</b></div></div>`; };
+  pinta();
+  return {
+    async a1(c) {
+      const n = L.querySelector("[data-n]"), nt = L.querySelector("[data-n-t]"), barra = L.querySelector("[data-barra]"), filas = L.querySelector("[data-filas]"), tot = L.querySelector("[data-total]");
+      nt.textContent = m.hecho; n.textContent = "0";
+      for (let i = 0; i < FACTURAS.length; i++) {
+        await c.espera(i < 2 ? 380 : 70);
+        const [p, con, imp] = FACTURAS[i]; total += imp;
+        n.textContent = String(i + 1); barra.style.transform = `scaleX(${(i + 1) / FACTURAS.length})`; tot.textContent = euros(total, en);
+        if (i !== MAL) { filas.insertBefore(h(`<li class="dm-entra"><span>${p}</span><span class="dm-mono">${euros(imp, en)}</span></li>`), filas.firstChild); while (filas.children.length > 2) filas.lastElementChild.remove(); }
+      }
+      filas.insertBefore(h(`<li class="mv-mal dm-entra" data-mal><span>${m.mal}</span><span class="dm-chip dm-chip--sis">${t.mal}</span></li>`), filas.firstChild);
+      return "espera2";
+    },
+    async a2(c, fin) {
+      const mal = L.querySelector("[data-mal]");
+      const rev = h(`<div class="mv-rev dm-entra"><div><span class="dm-mono">${t.leido}</span><b>10 %</b></div><div><span class="dm-mono">${t.habitual}</span><b>21 %</b></div>
+        <button type="button" class="boton boton--principal" data-r="1">${t.corregir}</button><button type="button" class="boton" data-r="0">${t.correcto}</button></div>`);
+      mal.after(rev); rev.querySelector("[data-r]").focus({ preventScroll: true });
+      const corrige = await new Promise((ok) => rev.addEventListener("click", (e) => { const r = e.target.closest("[data-r]"); if (r) ok(r.dataset.r === "1"); }));
+      if (corrige) total += 124;
+      rev.remove(); mal.classList.remove("mv-mal"); mal.lastElementChild.className = "dm-chip dm-chip--ok"; mal.lastElementChild.textContent = t.ok;
+      L.querySelector("[data-total]").textContent = euros(total, en);
+      L.querySelector("[data-n-t]").textContent = m.ahora;
+      fin();
+    },
+    reset() { pinta(); },
+  };
+}
+function comercialMovil(panel, t) {
+  const L = panel.querySelector("[data-dm-lienzo]");
+  const pinta = () => { L.innerHTML = `<div class="mv mv-cm"><div class="mv-cifra"><b data-hora>18:40</b><span>${t.lead[0]} · ${t.lead[1]}</span></div><ol class="mv-pasos" data-pasos></ol>
+      <div class="mv-compara"><div><span class="dm-mono">${t.hoy}</span><b>${t.dias}</b></div><div data-con><span class="dm-mono">${t.con}</span><b>—</b></div></div></div>`; };
+  const paso = (p, tu) => h(`<li class="dm-entra${tu ? " es-tu" : ""}"><span class="dm-mono">${p[0].slice(0, 5)}</span><b class="${tu ? "" : "dm-sis"}">${p[1]}</b></li>`);
+  pinta();
+  return {
+    async a1(c) { const ps = L.querySelector("[data-pasos]"); for (const p of t.pasos) { await c.espera(700); ps.appendChild(paso(p)); } return "espera2"; },
+    async a2(c, fin) { const ps = L.querySelector("[data-pasos]"); ps.appendChild(paso(t.envio[0], true)); L.querySelector("[data-hora]").textContent = "18:41";
+      const con = L.querySelector("[data-con]"); con.classList.add("es-ahora"); con.querySelector("b").textContent = t.min; fin(); },
+    reset() { pinta(); },
+  };
+}
+function operacionesMovil(panel, t) {
+  const L = panel.querySelector("[data-dm-lienzo]");
+  const dia = (d, k) => `<div class="mv-dia" data-d="${k}"><span class="dm-mono">${d}</span><i></i></div>`;
+  const pinta = () => { L.innerHTML = `<div class="mv mv-op"><div class="mv-cifra"><b data-estado>P-118</b><span>${t.semana}</span></div><div class="mv-semana">${t.dias.map(dia).join("")}</div><div class="mv-chips" data-pie></div></div>`; };
+  const marca = (ks, cls, txt) => ks.forEach((k) => { const d = L.querySelector(`[data-d="${k}"]`); if (!d) return; d.classList.add(cls); if (txt !== undefined) d.querySelector("i").textContent = txt; });
+  const chip = (x) => h(`<span class="dm-chip dm-chip--sis dm-entra">${x}</span>`);
+  pinta();
+  return {
+    async a1(c) { await c.espera(300); marca([0], "es-visita", t.nuevo[0][4].split(" ")[0]); await c.espera(300); marca([2, 3], "es-obra", "P-118"); const pie = L.querySelector("[data-pie]"); for (const x of [t.chips[2], t.chips[3]]) { await c.espera(260); pie.appendChild(chip(x)); } return "espera2"; },
+    async a2(c, fin) { const pie = L.querySelector("[data-pie]"); pie.innerHTML = ""; pie.appendChild(chip(t.retraso[0])); await c.espera(600);
+      L.querySelectorAll(".es-obra").forEach((x) => { x.classList.remove("es-obra"); x.querySelector("i").textContent = ""; }); marca([3, 4], "es-obra", "P-118"); marca([3, 4], "es-movido");
+      for (const x of [t.retraso[2], t.retraso[3]]) { await c.espera(360); pie.appendChild(chip(x)); } fin(); },
+    reset() { pinta(); },
+  };
+}
+function osMovil(panel, t) {
+  const L = panel.querySelector("[data-dm-lienzo]");
+  const pinta = () => { L.innerHTML = `<div class="mv mv-os"><ul class="mv-nodos" data-nodos>${t.nodos.map((x) => `<li>${x}</li>`).join("")}</ul><div class="mv-centro">${t.centro}</div><ol class="mv-ev" data-ev><li class="dm-mono">${t.sin}</li></ol><div data-parte></div></div>`; };
+  pinta();
+  return {
+    async a1(c) { const ns = [...L.querySelectorAll("[data-nodos] li")]; for (const n of ns) { await c.espera(140); n.classList.add("is-on"); }
+      L.querySelector(".mv-centro").classList.add("is-on"); const ev = L.querySelector("[data-ev]"); ev.innerHTML = "";
+      for (const [n, a] of t.ev.slice(0, 3)) { await c.espera(600); ev.appendChild(h(`<li class="dm-entra"><span class="dm-mono">${t.nodos[n]}</span><b>${a}</b></li>`)); } return "espera2"; },
+    async a2(c, fin) { L.querySelector("[data-parte]").appendChild(h(`<div class="mv-parte dm-entra"><span class="dm-chip dm-chip--sis">${t.parte[0]}</span><p>${t.parte[1]}</p></div>`)); fin(); },
+    reset() { pinta(); },
+  };
+}
+const MOVIL = { finance: financeMovil, comercial: comercialMovil, operaciones: operacionesMovil, os: osMovil };
+
 const CONSTRUYE = { finance, comercial, operaciones, atencion, os };
 const CLAVE = { finance: "fz", comercial: "cm", operaciones: "op", atencion: "at", os: "os" };
 
 /* ============================================================ el escenario */
 export function montarDemos(raiz) {
+  const ENMOVIL = matchMedia("(max-width: 640px)").matches;
+  raiz.classList.toggle("dm--movil", ENMOVIL);
   const en = raiz.dataset.lang === "en";
   const TX = T[en ? "en" : "es"];
   const pest = [...raiz.querySelectorAll("[data-dm-pest]")];
@@ -292,7 +373,7 @@ export function montarDemos(raiz) {
     const otra = panel.querySelector("[data-dm-otra]");
     const fase = (k) => fases.forEach((li, i) => { li.classList.toggle("is-hecha", i < k); li.classList.toggle("is-ahora", i === k); });
     let ctl = corrida();
-    const demo = CONSTRUYE[id](panel, TX[CLAVE[id]], en);
+    const demo = ((ENMOVIL && MOVIL[id]) || CONSTRUYE[id])(panel, TX[CLAVE[id]], en);
     demo.fase = fase;
     const fin = () => { fase(4); panel.classList.add("is-fin"); if (b2) b2.hidden = true; if (b1) b1.hidden = true; otra.hidden = false; };
     const empezar = () => { panel.classList.remove("is-fin"); otra.hidden = true; if (b1) { b1.hidden = false; b1.disabled = false; } if (b2) b2.hidden = true; fase(2); };

@@ -224,7 +224,7 @@ export function pie(lang) {
   <div class="marco">
     <div class="pie-g">
       <div class="pie-marca"><a class="marca" href="${L(lang, "/")}" aria-label="D-Code Partners">${LOGO}<span class="marca-n" aria-hidden="true">D-Code<small>PARTNERS</small></span></a><p>${esc(t.frase)}</p><p style="margin-top:12px"><a href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a></p></div>
-      ${t.cols.map(([h, ls]) => `<nav aria-label="${esc(h)}"><h2 class="rotulo">${esc(h)}</h2><ul>${ls.map(([r, n]) => `<li><a href="${L(lang, r)}">${esc(n)}</a></li>`).join("")}</ul></nav>`).join("\n      ")}
+      ${t.cols.map(([h, ls]) => `<nav aria-label="${esc(h)}"><details class="pie-col" open><summary><h2 class="rotulo">${esc(h)}</h2></summary><ul>${ls.map(([r, n]) => `<li><a href="${L(lang, r)}">${esc(n)}</a></li>`).join("")}</ul></details></nav>`).join("\n      ")}
     </div>
     ${redes(lang)}
     <div class="pie-base"><p class="rotulo">${t.base}</p><p class="rotulo">${t.baseDer}</p></div>

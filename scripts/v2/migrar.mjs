@@ -98,8 +98,18 @@ function bloques(main) {
   const out = [];
   const hijos = (n) => n.childNodes.filter((c) => c.nodeType === 1 || (c.nodeType === 3 && c.rawText.trim()));
   function tabla(n) {
-    const filas = n.querySelectorAll("tr").map((tr) => tr.childNodes.filter((c) => c.nodeType === 1 && /t[hd]/i.test(c.rawTagName)).map((c) => ({ th: /th/i.test(c.rawTagName), h: limpio(c) })));
-    return `<div class="tabla"><table>${filas.map((f) => `<tr>${f.map((c) => `<${c.th ? "th" : "td"}>${c.h}</${c.th ? "th" : "td"}>`).join("")}</tr>`).join("")}</table></div>`;
+    // Las marcas de «incluido / no incluido» eran iconos (role="img" + aria-label): se conservan como marca accesible.
+    const celda = (c) => {
+      const h = limpio(c); if (h) return h;
+      const ic = c.querySelector('[role="img"][aria-label]'); if (!ic) return "";
+      const lab = ic.getAttribute("aria-label"); const no = /^no\b|not /i.test(lab);
+      return `<span class="t-${no ? "no" : "si"}" role="img" aria-label="${esc(lab)}"></span>`;
+    };
+    const filas = n.querySelectorAll("tr").map((tr) => tr.childNodes.filter((c) => c.nodeType === 1 && /t[hd]/i.test(c.rawTagName)).map((c) => ({ th: /th/i.test(c.rawTagName), h: celda(c) })));
+    // Cabecera (primera fila toda de th): en el teléfono cada fila se lee como una ficha con su etiqueta.
+    const cab = filas[0]?.every((c) => c.th) ? filas[0].map((c) => c.h.replace(/<[^>]+>/g, "").trim()) : null;
+    const varias = cab && cab.length >= 3;
+    return `<div class="tabla${varias ? " tabla--fichas" : ""}"><table>${filas.map((f, i) => `<tr${varias && i === 0 ? ' class="t-cab"' : ""}>${f.map((c, k) => `<${c.th ? "th" : "td"}${varias && i > 0 && k > 0 ? ` data-l="${esc(cab[k] || "")}"` : ""}>${c.h}</${c.th ? "th" : "td"}>`).join("")}</tr>`).join("")}</table></div>`;
   }
   const celdas = (li) => li.childNodes.filter((c) => c.nodeType === 1 && c.getAttribute("aria-hidden") !== "true");
   const sinTexto = (li) => !li.childNodes.some((c) => c.nodeType === 3 && c.rawText.trim());
@@ -140,6 +150,9 @@ function bloques(main) {
     const t = n.rawTagName.toLowerCase();
     if (["script", "style", "svg", "noscript", "template", "canvas", "button", "form", "dialog", "iframe", "video"].includes(t)) return;
     if (n.getAttribute("aria-hidden") === "true" && !/^h[1-4]$/.test(t)) return;
+    // el id de una sección antigua (#planes, #verifactu…): se conserva como ancla en el título que la abre
+    const idSec = n.getAttribute("id");
+    if (idSec && /^(section|article|div|aside)$/.test(t) && !/^(contenido|main|hoja|plano|chat)/.test(idSec)) out.push({ tipo: "ancla", id: idSec });
     if (tiene(n, /^(breadcrumbs?|sr-only|visually-hidden|skip)/) && t !== "h1" && t !== "h2") { if (tiene(n, /breadcrumb/)) out.push({ tipo: "migas", items: n.querySelectorAll("li a, li[aria-current]").map((a) => ({ href: a.getAttribute("href"), t: texto(a) })) }); return; }
     if (tiene(n, /^(eyebrow|kicker|v6-kicker|ph-kicker|tag|overline)$/)) { const x = limpio(n); if (x) out.push({ tipo: "etiqueta", h: x }); return; }
     if (tiene(n, /^(badge|trust-badge|ph-prueba-badge)$/)) return;
@@ -161,15 +174,15 @@ function bloques(main) {
     }
     if (t === "a" && tiene(n, /^(btn|button|cta)/)) {
       const x = texto(n); if (!x) return;
-      const ult = out[out.length - 1], b = { href: n.getAttribute("href"), t: x };
+      const ult = out[out.length - 1], b = { href: reescribir(n.getAttribute("href") || "#"), t: x };
       if (ult && ult.tipo === "botones") ult.lista.push(b); else out.push({ tipo: "botones", lista: [b] });
       return;
     }
     if (t === "a" && !ctx.enTexto) {
       // una tarjeta-enlace: su título y su texto, como fila enlazada
       const tit = n.querySelector("h2, h3, h4, strong, b"); const x = texto(n);
-      if (tit && x) { const tt = texto(tit); out.push({ tipo: "enlace", href: n.getAttribute("href"), t: tt, d: x.replace(tt, "").trim() }); return; }
-      if (x) { out.push({ tipo: "enlace", href: n.getAttribute("href"), t: x, d: "" }); return; }
+      if (tit && x) { const tt = texto(tit); out.push({ tipo: "enlace", href: reescribir(n.getAttribute("href") || "#"), t: tt, d: x.replace(tt, "").trim() }); return; }
+      if (x) { out.push({ tipo: "enlace", href: reescribir(n.getAttribute("href") || "#"), t: x, d: "" }); return; }
       return;
     }
     if (t === "img") { const src = n.getAttribute("src"); const alt = n.getAttribute("alt"); if (src && alt) out.push({ tipo: "img", src, alt, w: n.getAttribute("width"), h: n.getAttribute("height"), retrato: /fundador|founder|equipo|team|retrato|eje-foto|sineriz|sosenko/i.test(src + " " + clases(n).join(" ")) }); return; }
@@ -203,6 +216,7 @@ function bloques(main) {
 }
 
 function pintar(b) {
+  if (b.tipo === "ancla") return `<span class="ancla" id="${b.id}"></span>`;
   switch (b.tipo) {
     case "h2": return `<h2 class="h2"${b.id ? ` id="${b.id}"` : ""}>${b.h}</h2>`;
     case "h3": return `<h3 class="h3"${b.id ? ` id="${b.id}"` : ""}>${b.h}</h3>`;
@@ -218,7 +232,16 @@ function pintar(b) {
     case "ruta": return `<ol class="ruta">${b.items.map((it) => `<li class="ruta-p${it.actual ? " es-actual" : ""}"${it.actual ? ' aria-current="step"' : ""}><span class="ruta-n">${it.n}</span><span class="ruta-e">${it.e}</span><p class="ruta-t">${it.t}</p><p class="ruta-d">${it.d}</p></li>`).join("")}</ol>`;
     case "puntos": return `<${b.ord ? "ol" : "ul"} class="puntos-l">${b.items.map((it) => `<li>${it.n ? `<span class="pl-n">${it.n}</span>` : ""}<p class="pl-t">${it.t}</p>${it.d ? `<p class="pl-d">${it.d}</p>` : ""}</li>`).join("")}</${b.ord ? "ol" : "ul"}>`;
     case "punto": return `<div class="punto"><p class="punto-t">${b.t}</p>${b.h ? `<div class="punto-d">${b.h}</div>` : ""}</div>`;
-    case "pregunta": return `<details class="pregunta"${b.id ? ` id="${b.id}"` : ""}><summary>${b.q}</summary><div class="pregunta-r">${b.h}</div></details>`;
+    case "pregunta": {
+      // Un plan («01 <strong>Finance</strong> Descripción larga…»): el número, el nombre y la primera frase arriba; el
+      // resto dentro. Sin esto el resumen era una fila de tres columnas estrujadas en el teléfono.
+      const m = /^(\d{2})\s*(<strong>[\s\S]*?<\/strong>)\s*([\s\S]*)$/.exec(b.q);
+      if (m) {
+        const corte = m[3].search(/\.\s/); const primera = corte > 0 ? m[3].slice(0, corte + 1) : m[3]; const resto = corte > 0 ? m[3].slice(corte + 1).trim() : "";
+        return `<details class="pregunta pregunta--plan"${b.id ? ` id="${b.id}"` : ""}><summary><span class="pq-n">${m[1]}</span><span class="pq-t">${m[2]}<span class="pq-d">${primera}</span></span></summary><div class="pregunta-r">${resto ? `<p>${resto}</p>` : ""}${b.h}</div></details>`;
+      }
+      return `<details class="pregunta"${b.id ? ` id="${b.id}"` : ""}><summary><span class="pq-t">${b.q}</span></summary><div class="pregunta-r">${b.h}</div></details>`;
+    }
     case "enlace": return `<a class="fila-enlace" href="${b.href}"><span class="fe-t">${b.t}</span>${b.d ? `<span class="fe-d">${b.d}</span>` : ""}${FLECHA}</a>`;
     case "botones": return `<div class="acc">${b.lista.map((x, i) => `<a class="boton${i === 0 ? " boton--principal" : ""}" href="${x.href}">${x.t}${i === 0 ? " " + FLECHA : ""}</a>`).join("")}</div>`;
     case "img": return `<figure class="figura${b.retrato ? " figura--retrato" : ""}"><img src="${b.src}" alt="${b.alt}"${b.w ? ` width="${b.w}"` : ""}${b.h ? ` height="${b.h}"` : ""} loading="lazy" decoding="async"></figure>`;
@@ -243,6 +266,18 @@ function agrupar(bs) {
    Cabecera de página (migas, etiqueta, h1, entradilla, botones) y, después,
    un capítulo por cada h2: título a la izquierda, contenido a la derecha. */
 function componer(bs, { lectura }) {
+  const vistos = new Set(bs.filter((b) => b.id && b.tipo !== "ancla").map((b) => b.id));
+  for (let i = 0; i < bs.length; i++) {
+    if (bs[i].tipo !== "ancla" || bs[i].fija) continue;
+    const id = bs[i].id;
+    if (vistos.has(id)) { bs.splice(i--, 1); continue; }
+    vistos.add(id);
+    const j = bs.findIndex((x, k) => k > i && k <= i + 4 && /^h[23]$/.test(x.tipo));
+    if (j < 0 || bs.slice(i + 1, j).some((x) => x.tipo === "ancla" || x.tipo === "h1")) continue;
+    if (!bs[j].id) { bs[j].id = id; bs.splice(i--, 1); continue; }
+    // el título ya tiene id: el ancla va al principio del cuerpo de ese capítulo (tras el título y su entradilla)
+    const [a] = bs.splice(i, 1); a.fija = true; const tras = bs[j] && bs[j].tipo === "lead" ? j + 1 : j; bs.splice(tras, 0, a); i--;
+  }
   const i1 = bs.findIndex((b) => b.tipo === "h1");
   const antes = i1 >= 0 ? bs.slice(0, i1) : [];
   const migas = antes.find((b) => b.tipo === "migas") || bs.find((b) => b.tipo === "migas");

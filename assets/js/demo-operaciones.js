@@ -236,7 +236,7 @@
         '<span class="sd-fila-m">' + pillEstado(app, o.e) + '<span style="display:flex;gap:4px;align-items:center"><span class="sd-mono sd-t3">' + esc(dia) + '</span>' + (o.t || []).map(av).join('') + '</span></span></button></li>';
     }).join('');
     var sel = otSel(app);
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(tr.k) + '</p><h3 class="sd-h-t">' + esc(tr.t) + '</h3><p class="sd-h-d">' + esc(tr.d) + '</p></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(tr.k) + '</p><h2 class="sd-h-t">' + esc(tr.t) + '</h2><p class="sd-h-d">' + esc(tr.d) + '</p></div>' +
       '<div class="sd-h-a"><button type="button" class="sd-btn sd-btn--ia" data-a="simular">' + I.camion + esc(tr.simular) + '</button></div></div>' +
       '<div class="sd-split' + (S.ui.hoja ? ' is-hoja' : '') + '"><div class="sd-card"><ul class="sd-lista">' + filas + '</ul></div>' +
       '<div class="sd-hoja' + (app.nuevos.hoja ? ' is-abre' : '') + '"><button type="button" class="sd-btn sd-volver" data-a="volver">← ' + esc(tr.volver) + '</button>' + (sel ? detalle(app, sel) : '') + '</div></div>';
@@ -303,7 +303,7 @@
         S.prop.razones.map(function (r) { return '<li style="font-size:12.5px;display:flex;gap:8px"><span style="color:var(--sd-ia)">•</span>' + esc(r) + '</li>'; }).join('') + '</ul></div>' +
         (S.prop.ok ? '' : '<div><button type="button" class="sd-btn sd-btn--pri" data-a="aprobar">' + I.ok + esc(pl.aprobar) + '</button></div>') + '</div></div>';
     }
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(pl.k) + '</p><h3 class="sd-h-t">' + esc(pl.t) + '</h3><p class="sd-h-d">' + esc(pl.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(pl.k) + '</p><h2 class="sd-h-t">' + esc(pl.t) + '</h2><p class="sd-h-d">' + esc(pl.d) + '</p></div></div>' +
       '<div class="sd-plan" tabindex="0" role="region" aria-label="' + esc(app.t.pant.plan) + '"><div class="sd-plan-c">' + esc(pl.tec) + '</div>' + t.dias.map(function (d) { return '<div class="sd-plan-c">' + esc(d) + '</div>'; }).join('') + filas + '</div>' + prop;
   }
 
@@ -316,7 +316,7 @@
     var ped = S.pedidos.map(function (p) {
       return '<li class="sd-fila' + app.esNuevo(p.id) + '" style="cursor:default" data-k="' + p.id + '"><span class="sd-canal">' + I.camion + '</span><span style="min-width:0"><span class="sd-fila-t" style="display:block">' + esc(p.id) + ' · ' + esc(p.x) + '</span><span class="sd-fila-d" style="display:block">' + esc(p.prov) + '</span></span><span class="sd-fila-m">' + (p.tarde ? '<span class="sd-pill sd-pill--warn"><i></i>' + esc(ma.llega) + ' ' + esc(p.llega) + '</span>' : '<span class="sd-pill sd-pill--auto">' + esc(ma.llega) + ' ' + esc(p.llega) + '</span>') + '</span></li>';
     }).join('');
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(ma.k) + '</p><h3 class="sd-h-t">' + esc(ma.t) + '</h3><p class="sd-h-d">' + esc(ma.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(ma.k) + '</p><h2 class="sd-h-t">' + esc(ma.t) + '</h2><p class="sd-h-d">' + esc(ma.d) + '</p></div></div>' +
       '<div class="sd-grid2"><div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">OT-2419 · ' + esc(t.ot.nombre) + '</p></div><ul class="sd-lista">' + mat + '</ul></div>' +
       '<div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">' + esc(ma.pedidos) + '</p></div><ul class="sd-lista">' + ped + '</ul></div></div>';
   }
@@ -327,7 +327,7 @@
     var barras = [11, 9, 12, 10, 2, 1, 1, 0.5];
     var g = barras.map(function (v, i) { return '<i class="' + (i < 4 ? 'is-a' : 'is-d') + '" style="height:' + Math.max(4, v / 12 * 100) + '%;animation-delay:' + (i * 60) + 'ms" title="' + v + '"></i>'; }).join('');
     var l = barras.map(function (v, i) { return '<span>' + p.gl + (i + 1) + '</span>'; }).join('');
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(p.k) + '</p><h3 class="sd-h-t">' + esc(p.t) + '</h3><p class="sd-h-d">' + esc(p.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(p.k) + '</p><h2 class="sd-h-t">' + esc(p.t) + '</h2><p class="sd-h-d">' + esc(p.d) + '</p></div></div>' +
       '<div class="sd-kpis">' + kp(p.k1, app.en ? '96%' : '96 %', esc(p.k1d)) + kp(p.k2, '2 h', p.k2d) + kp(p.k3, '0', esc(p.k3d)) + kp(p.k4, '0', esc(p.k4d)) + '</div>' +
       '<div class="sd-grid2"><div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">' + esc(p.g) + '</p><span class="sd-pill sd-pill--acc">' + esc(p.marca) + ': ' + p.gl + '5</span></div><div class="sd-card-b"><div class="sd-barras">' + g + '</div><div class="sd-barras-l">' + l + '</div></div></div>' +
       '<div class="sd-card sd-solo-esc"><div class="sd-card-h"><p class="sd-card-t">' + esc(app.u.act) + '</p></div><div class="sd-card-b" style="padding-top:4px"><ul class="sd-lista">' +

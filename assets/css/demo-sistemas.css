@@ -41,7 +41,7 @@
    Dentro de la aplicación el texto es oscuro sobre claro: se hereda. Con
    :where(.sd) la regla pesa lo mismo que «p» (y va después), así que
    cualquier clase de aquí sigue mandando sobre ella. */
-:where(.sd) p, :where(.sd) h3, :where(.sd) li, :where(.sd) small, :where(.sd) label{ color:inherit; }
+:where(.sd) p, :where(.sd) h2, :where(.sd) h3, :where(.sd) li, :where(.sd) small, :where(.sd) label{ color:inherit; }
 /* La letra se hereda con peso de clase; el color, sin peso: si no, «.sd button»
    ganaba a .sd-btn--pri y los botones azules salían con texto oscuro (2,9:1). */
 .sd button{ font:inherit; }

@@ -262,6 +262,20 @@ strong, b { font-weight: 650; }
 .pie-base { margin-top: var(--e-9); padding-top: var(--e-5); border-top: 1px solid var(--linea); display: flex; flex-wrap: wrap; gap: var(--e-4); justify-content: space-between; }
 .pie-marca p { margin-top: var(--e-4); max-width: 30ch; color: var(--tinta-3); font-size: .95rem; }
 @media (max-width: 900px) { .pie-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pie-marca { grid-column: 1 / -1; } }
+/* columnas del pie: en escritorio, títulos normales; en el teléfono, cuatro desplegables (el pie pasa de dos pantallas a una) */
+.pie-col > summary { list-style: none; cursor: default; }
+.pie-col > summary::-webkit-details-marker { display: none; }
+@media (max-width: 560px) {
+  .pie-g { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .pie-marca { margin-bottom: var(--e-6); }
+  .pie-col { border-top: 1px solid var(--linea); }
+  .pie-col > summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 52px; }
+  .pie-col > summary h2 { margin: 0; }
+  .pie-col > summary::after { content: ""; width: 9px; height: 9px; border-right: 1.5px solid var(--tinta-3); border-bottom: 1.5px solid var(--tinta-3); transform: rotate(45deg) translateY(-3px); transition: transform var(--t-rapida) var(--ease-out); }
+  .pie-col[open] > summary::after { transform: rotate(225deg) translateY(-2px); }
+  .pie-col ul { padding-bottom: var(--e-5); }
+  .pie-redes { margin-top: var(--e-6); }
+}
 
 /* icono del tema: en oscuro se ofrece el sol (ir a claro) y al revés */
 [data-theme="dark"] .i-luna, [data-theme="light"] .i-sol { display: none; }
@@ -272,6 +286,15 @@ strong, b { font-weight: 650; }
 .chat-widget { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 40; display: grid; justify-items: end; gap: 12px; }
 .chat-bubble { width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--linea-2); background: var(--bg); color: var(--tinta); display: grid; place-items: center; position: relative; box-shadow: 0 12px 30px -12px rgba(0,0,0,.5); transition: transform var(--t-rapida) var(--ease-out), border-color var(--t-rapida) ease; }
 .chat-bubble:hover { border-color: var(--tinta); }
+.chat-widget { transition: transform 320ms var(--ease-out), opacity 240ms ease; }
+@media (max-width: 760px) {
+  /* más pequeño y más discreto en el teléfono: se ve, pero no compite con el contenido */
+  .chat-widget { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
+  .chat-bubble { width: 44px; height: 44px; background: color-mix(in oklab, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 8px 20px -10px rgba(0,0,0,.45); }
+  .chat-bubble svg { width: 18px; height: 18px; }
+  .chat-widget.is-apartado { transform: translateY(calc(100% + 24px)); opacity: 0; pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) { .chat-widget { transition: none; } }
 .chat-bubble:active { transform: scale(.95); }
 .chat-bubble svg { width: 20px; height: 20px; grid-area: 1 / 1; }
 .chat-bubble .icon-close { display: none; }

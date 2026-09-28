@@ -48,7 +48,7 @@
     "perf:aparatos": "node perf/aparatos.mjs",
     "perf:peso": "node perf/peso-aparatos.mjs",
     "build:3d": "esbuild scripts/v2/escena/piezas.js --bundle --minify --format=esm --target=es2020 --legal-comments=eof --outfile=assets/v2/js/piezas3d.js",
-    "build:v2": "npm run -s build:3d && node scripts/v2/migrar.mjs && node scripts/v2/build.mjs && node scripts/v2/demos.mjs && node scripts/build-precios.mjs && node scripts/v2/sitemap.mjs && node scripts/v2/seo-audit.mjs",
+    "build:v2": "npm run -s build:3d && node scripts/v2/migrar.mjs && node scripts/v2/webs3d-inyectar.mjs && node scripts/v2/build.mjs && node scripts/v2/demos.mjs && node scripts/build-precios.mjs && node scripts/v2/sitemap.mjs && node scripts/v2/seo-audit.mjs",
     "v2:piezas": "python3 scripts/v2/logo3d/empaquetar.py ~/logo-render",
     "seo:audit": "node scripts/v2/seo-audit.mjs"
   },

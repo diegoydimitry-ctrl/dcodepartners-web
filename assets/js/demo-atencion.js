@@ -239,7 +239,7 @@
         '<span class="sd-fila-m">' + pillEst(app, c.est) + '<span class="sd-mono sd-t3">' + esc(c.hace) + '</span></span></button></li>';
     }).join('');
     var sel = conv(app, S.ui.sel);
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(b.k) + '</p><h3 class="sd-h-t">' + esc(b.t) + '</h3><p class="sd-h-d">' + esc(b.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(b.k) + '</p><h2 class="sd-h-t">' + esc(b.t) + '</h2><p class="sd-h-d">' + esc(b.d) + '</p></div></div>' +
       '<div class="sd-split' + (S.ui.hoja ? ' is-hoja' : '') + '"><div class="sd-card"><ul class="sd-lista">' + filas + '</ul></div>' +
       '<div class="sd-hoja' + (app.nuevos.hoja ? ' is-abre' : '') + '"><button type="button" class="sd-btn sd-volver" data-a="volver">← ' + esc(b.volver) + '</button>' + (sel ? detalle(app, sel) : '') + '</div></div>';
   }
@@ -291,7 +291,7 @@
       return '<div class="sd-bur ' + (m.de === 'yo' ? 'sd-bur--yo' : 'sd-bur--ia') + app.esNuevo('m' + i) + '"' + (m.de === 'ia' ? ' style="align-self:flex-start"' : '') + '>' + (m.de === 'ia' ? '<span class="sd-bur-k">' + esc(app.t.b.asis) + '</span>' : '') + m.x +
         (m.persona ? '<span class="sd-pill sd-pill--acc" style="margin-top:6px">' + I.persona.replace('<svg', '<svg style="width:12px;height:12px"') + esc(app.t.act.persona) + '</span>' : '') + '</div>';
     }).join('') + (S.escribe ? '<span class="sd-escribe" aria-hidden="true"><i></i><i></i><i></i></span>' : '');
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(q.k) + '</p><h3 class="sd-h-t">' + esc(q.t) + '</h3><p class="sd-h-d">' + esc(q.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(q.k) + '</p><h2 class="sd-h-t">' + esc(q.t) + '</h2><p class="sd-h-d">' + esc(q.d) + '</p></div></div>' +
       '<div class="sd-card"><div class="sd-card-b" style="min-height:250px"><div class="sd-chat" role="log" aria-live="polite">' + chat + '</div></div>' +
       '<div class="sd-card-b" style="border-top:1px solid var(--sd-b);display:grid;grid-template-columns:minmax(0,1fr);gap:10px">' +
         '<div style="display:flex;gap:6px;flex-wrap:wrap">' + q.sug.map(function (s, i) { return '<button type="button" class="sd-btn sd-sug" data-a="sug" data-v="' + i + '">' + esc(s) + '</button>'; }).join('') + '</div>' +
@@ -335,7 +335,7 @@
 
   function pSaber(app) {
     var s = app.t.s;
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(s.k) + '</p><h3 class="sd-h-t">' + esc(s.t) + '</h3><p class="sd-h-d">' + esc(s.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(s.k) + '</p><h2 class="sd-h-t">' + esc(s.t) + '</h2><p class="sd-h-d">' + esc(s.d) + '</p></div></div>' +
       '<div class="sd-grid2"><div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">' + esc(s.fk) + '</p></div><ul class="sd-lista">' +
         s.fuentes.map(function (x, i) { return '<li class="sd-fila' + app.esNuevo('f' + i) + '" style="cursor:default"><span class="sd-canal">' + I[x[2]] + '</span><span class="sd-fila-t" style="white-space:normal">' + esc(x[0]) + '</span><span class="sd-pill sd-pill--auto">' + esc(x[1]) + '</span></li>'; }).join('') + '</ul></div>' +
       '<div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">' + esc(s.lk) + '</p><span class="sd-canal" style="background:var(--sd-badbg);color:var(--sd-bad)">' + I.candado + '</span></div><div class="sd-card-b" style="padding-top:4px">' +
@@ -348,7 +348,7 @@
     var barras = [23, 27, 21, 25, 6, 4, 3, 2];
     var g = barras.map(function (v, i) { return '<i class="' + (i < 4 ? 'is-a' : 'is-d') + '" style="height:' + (v / 27 * 100) + '%;animation-delay:' + (i * 60) + 'ms" title="' + v + '"></i>'; }).join('');
     var l = barras.map(function (v, i) { return '<span>' + p.gl + (i + 1) + '</span>'; }).join('');
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(p.k) + '</p><h3 class="sd-h-t">' + esc(p.t) + '</h3><p class="sd-h-d">' + esc(p.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(p.k) + '</p><h2 class="sd-h-t">' + esc(p.t) + '</h2><p class="sd-h-d">' + esc(p.d) + '</p></div></div>' +
       '<div class="sd-kpis">' + kp(p.k1, app.en ? '64%' : '64 %', esc(p.k1d)) + kp(p.k2, '38 s', p.k2d) + kp(p.k3, app.en ? '36%' : '36 %', esc(p.k3d)) + kp(p.k4, app.en ? '100%' : '100 %', esc(p.k4d)) + '</div>' +
       '<div class="sd-grid2"><div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">' + esc(p.g) + '</p><span class="sd-pill sd-pill--acc">' + esc(p.marca) + ': ' + p.gl + '5</span></div><div class="sd-card-b"><div class="sd-barras">' + g + '</div><div class="sd-barras-l">' + l + '</div></div></div>' +
       '<div class="sd-card sd-solo-esc"><div class="sd-card-h"><p class="sd-card-t">' + esc(app.u.act) + '</p></div><div class="sd-card-b" style="padding-top:4px"><ul class="sd-lista">' +

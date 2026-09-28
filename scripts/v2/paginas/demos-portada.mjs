@@ -18,9 +18,9 @@ export const DEMOS = {
     cerrar: "Cerrar la demo", pantalla: "Mejor en un ordenador.",
     lista: [
       {
-        id: "finance", pest: "Finance", marca: ["TN", "Talleres Norte"], ctx: "Taller mecánico · 14 personas · martes, 9:10",
+        id: "finance", pest: "Finance", marca: ["VQ", "Visqa Lubricantes"], ctx: "Fabricante de lubricantes técnicos · Avilés · 22 personas · martes, 9:10",
         t: "23 facturas de proveedor esperan en el correo.",
-        prob: "Pasarlas a mano lleva dos horas cada semana. Y alguna se escapa: un IVA mal puesto se descubre en el cierre del trimestre.",
+        prob: "Aceite base, aditivos, envases, portes: pasarlas a mano lleva dos horas cada semana. Y alguna se escapa: un IVA mal puesto se descubre en el cierre del trimestre.",
         acc: "Suelta las facturas", acc2: "Revisar la que no cuadra",
         res: "23 facturas registradas en 38 segundos. Tú revisaste una. La tesorería de la semana ya cuenta con ellas.",
         app: "finance",
@@ -69,9 +69,9 @@ export const DEMOS = {
     cerrar: "Close the demo", pantalla: "Better on a computer.",
     lista: [
       {
-        id: "finance", pest: "Finance", marca: ["TN", "Talleres Norte"], ctx: "Car workshop · 14 people · Tuesday, 9:10",
+        id: "finance", pest: "Finance", marca: ["VQ", "Visqa Lubricants"], ctx: "Technical lubricant maker · Avilés · 22 people · Tuesday, 9:10",
         t: "23 supplier invoices are waiting in the inbox.",
-        prob: "Typing them in takes two hours every week. And one always slips: a wrong VAT rate shows up at quarter end.",
+        prob: "Base oil, additives, packaging, haulage: typing them in takes two hours every week. And one always slips: a wrong VAT rate shows up at quarter end.",
         acc: "Drop the invoices", acc2: "Review the one that doesn't add up",
         res: "23 invoices recorded in 38 seconds. You reviewed one. This week's cash flow already counts them.",
         app: "finance",

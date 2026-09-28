@@ -341,7 +341,7 @@
         '<span class="sd-fila-m">' + estado + '<span class="sd-mono sd-t3">' + esc(x.hace) + '</span></span></button></li>';
     }).join('');
     var sel = entrada(app, S.ui.sel);
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(e.k) + '</p><h3 class="sd-h-t">' + esc(e.t) + '</h3><p class="sd-h-d">' + esc(e.d) + '</p></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(e.k) + '</p><h2 class="sd-h-t">' + esc(e.t) + '</h2><p class="sd-h-d">' + esc(e.d) + '</p></div>' +
       '<div class="sd-h-a"><button type="button" class="sd-btn sd-btn--ia" data-a="simular">' + I.mas + esc(e.simular) + '</button></div></div>' +
       '<div class="sd-split' + (sel && S.ui.hoja ? ' is-hoja' : '') + '">' +
         '<div class="sd-card"><ul class="sd-lista">' + filas + '</ul></div>' +
@@ -404,7 +404,7 @@
         (i < 4 ? '<button type="button" class="sd-btn sd-btn--pri" data-a="mover" data-v="' + ab.id + '">' + I.flecha + esc(o.mover) + '</button>' :
           '<a class="sd-btn" href="#sistemas" data-demo="operaciones">' + I.llave + esc(o.verOps) + '</a><a class="sd-btn" href="#sistemas" data-demo="finance">' + I.euro + esc(o.verFin) + '</a>') + '</div></div>';
     }
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(o.k) + '</p><h3 class="sd-h-t">' + esc(o.t) + '</h3><p class="sd-h-d">' + esc(o.d) + '</p></div><div class="sd-h-a"><span class="sd-pill sd-pill--acc" style="height:28px;font-size:12.5px">' + esc(o.total) + ': ' + app.eur(total) + '</span></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(o.k) + '</p><h2 class="sd-h-t">' + esc(o.t) + '</h2><p class="sd-h-d">' + esc(o.d) + '</p></div><div class="sd-h-a"><span class="sd-pill sd-pill--acc" style="height:28px;font-size:12.5px">' + esc(o.total) + ': ' + app.eur(total) + '</span></div></div>' +
       '<div class="sd-kanban">' + cols + '</div>' + panel;
   }
 
@@ -415,7 +415,7 @@
       return '<li class="sd-fila' + app.esNuevo('ag' + i) + '" style="cursor:default" data-k="ag' + i + '"><span class="sd-canal">' + ico + '</span><span style="min-width:0"><span class="sd-fila-t" style="display:block">' + esc(x.x) + '</span><span class="sd-fila-d" style="display:block">' + esc(a[x.tipo]) + (x.auto ? ' · ' + esc(a.auto) : '') + '</span></span>' +
         '<span class="sd-fila-m"><span class="sd-mono" style="font-weight:600">' + esc(x.d) + ' ' + esc(x.h) + '</span>' + av(x.q) + '</span></li>';
     }).join('');
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(a.k) + '</p><h3 class="sd-h-t">' + esc(a.t) + '</h3><p class="sd-h-d">' + esc(a.d) + '</p></div></div><div class="sd-card"><ul class="sd-lista">' + filas + '</ul></div>';
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(a.k) + '</p><h2 class="sd-h-t">' + esc(a.t) + '</h2><p class="sd-h-d">' + esc(a.d) + '</p></div></div><div class="sd-card"><ul class="sd-lista">' + filas + '</ul></div>';
   }
 
   function pPanel(app) {
@@ -426,7 +426,7 @@
     var g = barras.map(function (v, i) { return '<i class="' + (i < 4 ? 'is-a' : 'is-d') + '" style="height:' + v + '%;animation-delay:' + (i * 60) + 'ms" title="' + v + ' %"></i>'; }).join('');
     var l = barras.map(function (v, i) { return '<span>' + p.gl + (i + 1) + '</span>'; }).join('');
     var ult = S.act.slice(0, 4).map(function (a) { return '<li class="sd-check" style="align-items:flex-start"><span class="sd-mono sd-t3" style="flex:none">' + esc(a.h) + '</span><span style="font-size:12.5px">' + a.x + '</span></li>'; }).join('');
-    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(p.k) + '</p><h3 class="sd-h-t">' + esc(p.t) + '</h3><p class="sd-h-d">' + esc(p.d) + '</p></div></div>' +
+    return '<div class="sd-h"><div><p class="sd-h-k">' + esc(p.k) + '</p><h2 class="sd-h-t">' + esc(p.t) + '</h2><p class="sd-h-d">' + esc(p.d) + '</p></div></div>' +
       '<div class="sd-kpis">' + kp(p.k1, app.en ? '2 min' : '2 min', p.k1d) + kp(p.k2, '0', esc(p.k2d)) + kp(p.k3, app.en ? '100%' : '100 %', esc(p.k3d)) + kp(p.k4, app.eur(total), esc(p.k4d)) + '</div>' +
       '<div class="sd-grid2"><div class="sd-card"><div class="sd-card-h"><p class="sd-card-t">' + esc(p.g) + '</p><span class="sd-pill sd-pill--acc">' + esc(p.marca) + ': ' + p.gl + '5</span></div><div class="sd-card-b"><div class="sd-barras">' + g + '</div><div class="sd-barras-l">' + l + '</div></div></div>' +
       '<div class="sd-card sd-solo-esc"><div class="sd-card-h"><p class="sd-card-t">' + esc(p.ult) + '</p></div><div class="sd-card-b" style="padding-top:4px"><ul class="sd-lista">' + ult + '</ul></div></div></div>';

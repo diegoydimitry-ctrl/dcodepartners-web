@@ -61,6 +61,12 @@
 .pregunta:last-of-type { border-bottom: 1px solid var(--linea); }
 .pregunta summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; color: var(--tinta); font-size: 1.06rem; font-weight: 520; letter-spacing: -.01em; }
 .pregunta summary::-webkit-details-marker { display: none; }
+.pregunta summary .pq-t { flex: 1; min-width: 0; }
+.pregunta--plan summary { align-items: baseline; }
+.pregunta--plan .pq-n { flex: none; width: 3rem; font-family: var(--f-mono); font-stretch: 82%; font-size: var(--t-rotulo); color: var(--tinta-3); }
+.pregunta--plan .pq-t strong { display: block; font-weight: 560; }
+.pregunta--plan .pq-d { display: block; margin-top: 4px; color: var(--tinta-2); font-size: .95rem; font-weight: 400; letter-spacing: 0; }
+@media (max-width: 640px) { .pregunta--plan .pq-n { width: 2.2rem; } }
 .pregunta summary::after { content: "+"; font-weight: 300; font-size: 1.4rem; line-height: 1; color: var(--tinta-3); transition: transform var(--t-media) var(--ease-out); }
 .pregunta[open] summary::after { transform: rotate(45deg); }
 .pregunta-r { display: grid; gap: var(--e-3); padding: 0 0 20px; color: var(--tinta-2); }
@@ -69,6 +75,21 @@
 .tabla table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .tabla th, .tabla td { text-align: left; padding: 12px 12px 12px 0; border-bottom: 1px solid var(--linea); vertical-align: top; }
 .tabla th { color: var(--tinta); font-weight: 560; }
+/* marcas de incluido / no incluido de las tablas comparativas */
+.t-si, .t-no { display: inline-block; width: 16px; height: 16px; vertical-align: -3px; }
+.t-si { border-radius: 50%; background: var(--tinta); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat; border-radius: 0; }
+.t-no { position: relative; }
+.t-no::before { content: ""; position: absolute; left: 3px; right: 3px; top: 7px; height: 1.5px; background: var(--tinta-3); }
+/* en el teléfono, una tabla de tres o más columnas se lee fila a fila, como fichas con su etiqueta */
+@media (max-width: 640px) {
+  .tabla--fichas { overflow: visible; border-top: 0; }
+  .tabla--fichas table, .tabla--fichas tbody, .tabla--fichas tr, .tabla--fichas th, .tabla--fichas td { display: block; width: auto; }
+  .tabla--fichas tr.t-cab { display: none; }
+  .tabla--fichas tr { padding: 14px 0; border-bottom: 1px solid var(--linea); }
+  .tabla--fichas tr > :first-child { border: 0; padding: 0 0 8px; font-weight: 560; color: var(--tinta); }
+  .tabla--fichas td { border: 0; padding: 4px 0; display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 12px; align-items: start; }
+  .tabla--fichas td::before { content: attr(data-l); color: var(--tinta-3); font-size: .86rem; }
+}
 .dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; }
 .dl dt { color: var(--tinta); font-weight: 560; }
 .figura img { border-radius: var(--radio-2); }
@@ -195,3 +216,23 @@
 /* retratos: en blanco y negro, como el resto; el color vuelve al pasar */
 .figura--retrato img { filter: grayscale(1) contrast(1.06); transition: filter 600ms var(--ease-out); border-radius: var(--radio-2); max-width: 360px; }
 @media (hover: hover) and (pointer: fine) { .figura--retrato:hover img { filter: none; } }
+
+/* capítulos plegados en el teléfono (ver sitio.js) */
+@media (max-width: 640px) {
+  .capitulo-cuerpo.is-plegado { max-height: var(--alto, 70vh); overflow: hidden; position: relative; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+  .seguir-leyendo { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; margin-top: var(--e-3); padding: 0 20px; border: 1px solid var(--linea-2); border-radius: 999px; background: none; color: var(--tinta); font: inherit; font-size: .95rem; font-weight: 500; }
+  .seguir-leyendo svg { width: 18px; height: 18px; }
+  .seguir-leyendo:active { transform: scale(.98); }
+}
+@media (max-width: 640px) { .tabla--registros td:nth-child(2) { white-space: normal; } .tabla--registros td { font-size: .86rem; padding-right: 8px; } }
+
+/* capítulo con una pieza que necesita todo el ancho (las webs de ejemplo en 3D): cabecera arriba, pieza debajo */
+.capitulo:has(.capitulo-cuerpo--ancho) .capitulo-in { grid-template-columns: minmax(0, 1fr); gap: var(--e-5); }
+.capitulo:has(.capitulo-cuerpo--ancho) .capitulo-cab { position: static; max-width: 46rem; }
+.capitulo:has(.capitulo-cuerpo--ancho) .h2 { max-width: 20ch; }
+.ancla { display: block; height: 0; }
+/* webs de ejemplo en 3D: su hoja llega sin bloquear; mientras, se reserva el alto que tendrá (sin saltos de maquetación) */
+[data-webs3d] { visibility: hidden; height: 807px; overflow: hidden; }
+@media (max-width: 1279px) { [data-webs3d] { height: 765px; } }
+@media (max-width: 1023px) { [data-webs3d] { height: 903px; } }
+@media (max-width: 640px) { [data-webs3d] { height: 697px; } }
