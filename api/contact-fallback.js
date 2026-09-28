@@ -1,4 +1,5 @@
 const { Resend } = require('resend');
+const { emailCliente, emailInterno } = require('./_lib/emails-lead');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -38,7 +39,7 @@ module.exports = async function handler(req, res) {
     return res.status(429).json({ success: false, error: 'Demasiadas solicitudes. Inténtalo de nuevo en un minuto.' });
   }
 
-  const { nombre, empresa, email, telefono, mensaje, turnstileToken } = req.body || {};
+  const { nombre, empresa, email, telefono, mensaje, turnstileToken, idioma, pagina } = req.body || {};
 
   // Validación mínima: campos realmente obligatorios en el formulario
   // público (contacto.html) y presencia de un token de Turnstile — no se
@@ -53,40 +54,29 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    // Aviso interno: «NUEVA SOLICITUD DESDE LA WEB», con aviso de que llegó por la vía de respaldo.
+    const interno = emailInterno({ nombre, empresa, email, telefono, mensaje, idioma, pagina, via: 'respaldo' });
     await resend.emails.send({
-      from: 'D-Code Partners <contact@dcodepartners.com>',
+      from: 'Web D-Code Partners <contact@dcodepartners.com>',
       to: ['dcodedepartment@gmail.com'],
-      subject: `Nueva solicitud de ${nombre} (vía respaldo)`,
-      html: `
-        <h2>Nueva solicitud desde la web (envío de respaldo)</h2>
-        <p><strong>Nombre:</strong> ${nombre}</p>
-        <p><strong>Empresa:</strong> ${empresa || ''}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Teléfono:</strong> ${telefono || ''}</p>
-        <p><strong>Mensaje:</strong></p>
-        <p>${mensaje || ''}</p>
-      `,
+      replyTo: email,
+      subject: interno.asunto,
+      html: interno.html,
+      text: interno.text,
     });
+    // Al cliente: humano, sin etiquetas internas; si responde, llega al equipo.
+    const cliente = emailCliente({ nombre, idioma });
     await resend.emails.send({
       from: 'D-Code Partners <contact@dcodepartners.com>',
       to: email,
-      subject: 'Hemos recibido tu solicitud',
-      html: `
-        <div style="font-family:Arial,sans-serif;line-height:1.6;color:#333;max-width:600px;margin:auto;">
-          <h2 style="color:#2b2b2b;">¡Gracias por contactar con D-Code Partners!</h2>
-          <p>Hola <strong>${nombre}</strong>,</p>
-          <p>Hemos recibido correctamente tu solicitud y queremos agradecerte la confianza depositada en nosotros.</p>
-          <p>Nuestro equipo revisará la información que nos has enviado y preparará la mejor forma de ayudarte a automatizar y optimizar tu negocio.</p>
-          <p>En un plazo inferior a <strong>24 horas laborables</strong> nos pondremos en contacto contigo para conocer mejor tus necesidades y resolver cualquier duda.</p>
-          <hr style="margin:30px 0;">
-          <p>Un saludo,</p>
-          <p><strong>Equipo de D-Code Partners</strong><br>Automatización e Inteligencia Artificial para Empresas</p>
-        </div>
-      `,
+      replyTo: 'dcodedepartment@gmail.com',
+      subject: cliente.asunto,
+      html: cliente.html,
+      text: cliente.text,
     });
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('[contact-fallback] Error enviando emails de respaldo:', error);
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ success: false, error: 'No se pudo enviar el aviso.' });
   }
 };

@@ -171,11 +171,24 @@
     // Expuesta para que el bloque de envío real llame a esto en su
     // propia rama de éxito, sin que ese bloque necesite saber nada del
     // wizard de pasos — solo "hubo éxito, muéstralo bien".
-    var showFormSuccess = function () {
+    /* CONFIRMACIÓN HUMANA. Se dice a quién y a dónde: «Perfecto, Laura» y
+       «te escribiremos a laura@empresa.com». El foco va al titular (lo lee
+       el lector de pantalla) y la vista se centra en él. */
+    var showFormSuccess = function (datos) {
+      datos = datos || {};
+      var nombre = String(datos.nombre || '').trim().split(/\s+/)[0] || '';
+      var hueco = formSuccess.querySelector('[data-exito-nombre]');
+      if (hueco) hueco.textContent = nombre ? ', ' + nombre : '';
+      var correo = formSuccess.querySelector('[data-exito-email]');
+      var frase = formSuccess.querySelector('[data-exito-email-frase]');
+      if (correo && datos.email) correo.textContent = datos.email; else if (frase) frase.remove();
       stepForm.setAttribute('hidden', '');
       formSuccess.removeAttribute('hidden');
-      formSuccess.setAttribute('tabindex', '-1');
-      formSuccess.focus();
+      formSuccess.classList.add('is-llega');
+      var titular = formSuccess.querySelector('.exito-t') || formSuccess;
+      titular.setAttribute('tabindex', '-1');
+      titular.focus({ preventScroll: true });
+      try { formSuccess.scrollIntoView({ block: 'center', behavior: prefersReducedMotion ? 'auto' : 'smooth' }); } catch (e) { /* navegador antiguo */ }
     };
 
     showStep(1, false);
@@ -211,6 +224,7 @@
   };
 
   if (form && note) {
+    note.setAttribute('aria-live', 'polite');
     // URL de producción del nodo Webhook "lead-ia-360-v2". Es solo el path
     // configurado en el nodo (sin el webhookId): n8n solo antepone el
     // webhookId a la ruta cuando el parámetro "path" está vacío o es
@@ -251,6 +265,13 @@
       });
     };
 
+    var EN_ENVIO = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
+    /* Si el envío falla, se dice como una persona y se ofrece otra vía. El
+       detalle técnico va a la consola, no a la pantalla del cliente. */
+    var MENSAJE_FALLO = EN_ENVIO
+      ? 'We could not send your message. It is not your fault: try again in a minute, or write to us at dcodedepartment@gmail.com or call +34 680 22 34 39.'
+      : 'No hemos podido enviar tu mensaje. No es culpa tuya: inténtalo de nuevo en un minuto, o escríbenos a dcodedepartment@gmail.com o llámanos al 680 22 34 39.';
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       /* EL BOTON DE ENVIAR, NO EL PRIMERO QUE HAYA.
@@ -270,13 +291,17 @@
         return;
       }
       if (!turnstile.getResponse()) {
-        note.textContent = 'Completa la verificación anti-spam.';
+        note.textContent = EN_ENVIO ? 'Please complete the security check.' : 'Completa la verificación de seguridad.';
         note.className = 'form-note err';
         return;
       }
 
       button.disabled = true;
-      button.textContent = 'Enviando...';
+      button.classList.add('is-enviando');
+      form.setAttribute('aria-busy', 'true');
+      button.textContent = EN_ENVIO ? 'Sending your message…' : 'Enviando tu mensaje…';
+      note.textContent = '';
+      note.className = 'form-note';
 
       // Todo el cuerpo va en try/finally: si document.getElementById(...)
       // devolviera null por cualquier motivo inesperado, o cualquier otra
@@ -289,7 +314,12 @@
           email: document.getElementById('email').value,
           telefono: document.getElementById('telefono').value,
           mensaje: document.getElementById('mensaje').value,
-          turnstileToken: turnstile.getResponse()
+          turnstileToken: turnstile.getResponse(),
+          // Añadidos 28/09/2026 (Cowork 4). Compatibles: el workflow de n8n solo lee
+          // los campos que conoce. Sirven para que el correo al cliente salga en su
+          // idioma y el aviso interno diga desde qué página llegó.
+          idioma: EN_ENVIO ? 'en' : 'es',
+          pagina: location.pathname
         };
 
         var principal = await intentarEnvio(N8N_WEBHOOK_URL, datos);
@@ -314,20 +344,16 @@
         }
 
         if (resultado.ok) {
-          note.textContent = 'Solicitud enviada correctamente. Nos pondremos en contacto contigo muy pronto.';
-          note.className = 'form-note ok';
           form.reset();
           turnstile.reset();
-          setTimeout(function () {
-            note.textContent = '';
-            note.className = 'form-note';
-          }, 4000);
           // Panel de confirmación del wizard de pasos (DIR-048) — definido
           // más arriba en este archivo; se comprueba por si esta página no
           // tuviera el wizard por algún motivo, para no romper el envío.
-          if (typeof showFormSuccess === 'function') showFormSuccess();
+          if (typeof showFormSuccess === 'function') showFormSuccess(datos);
+          else { note.textContent = EN_ENVIO ? 'Message received. We will write to you as soon as we can.' : 'Mensaje recibido. Te escribiremos cuanto antes.'; note.className = 'form-note ok'; }
         } else {
-          note.textContent = 'Ha ocurrido un error al enviar la solicitud. Inténtalo de nuevo en unos minutos. (' + resultado.texto + ')';
+          console.error('[contact-form] Detalle del fallo:', resultado.texto);
+          note.textContent = MENSAJE_FALLO;
           note.className = 'form-note err';
           // Un token de Turnstile es de un solo uso: si el intento principal
           // llegó a consumirlo (p. ej. rechazado ya verificado o caducado),
@@ -335,11 +361,13 @@
           turnstile.reset();
         }
       } catch (err) {
-        note.textContent = 'No se pudo procesar el formulario. Recarga la página e inténtalo de nuevo.';
+        note.textContent = MENSAJE_FALLO;
         note.className = 'form-note err';
         console.error('[contact-form] Excepción inesperada al enviar el formulario:', err);
       } finally {
         button.disabled = false;
+        button.classList.remove('is-enviando');
+        form.removeAttribute('aria-busy');
         /* Y se devuelve SU texto, el que tenia. Antes escribia aqui
            "Solicitar mi Mes Gratuito": una oferta retirada de toda la web
            hace varias fases, que reaparecia en el boton en cuanto alguien

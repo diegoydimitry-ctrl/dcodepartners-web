@@ -78,11 +78,37 @@
 .form-note { color: var(--tinta-3); font-size: .9rem; }
 .form-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: var(--e-6); }
 .form-nav .boton--principal { margin-left: auto; }
-.form-success { display: grid; gap: 10px; }
+/* CONFIRMACIÓN: humana y con lo que pasa después. Entra como una respuesta, no como un aviso. */
+.form-success { display: grid; gap: var(--e-4); padding: var(--e-5) 0 var(--e-3); }
 .form-success[hidden] { display: none; }
-.form-success-icon { width: 10px; height: 10px; border-radius: 50%; background: var(--aire); }
-.form-success h2 { font-size: 1.6rem; font-weight: 560; letter-spacing: -.03em; }
-.form-success p { color: var(--tinta-2); }
+.exito-marca { display: flex; gap: 6px; margin-bottom: var(--e-2); }
+.exito-marca i { width: 12px; height: 12px; border-radius: 3px; background: var(--tinta); }
+.exito-marca i:last-child { background: var(--aire); box-shadow: 0 0 18px color-mix(in oklab, var(--aire) 70%, transparent); }
+.exito-t { font-size: clamp(1.8rem, 1.2rem + 2vw, 2.6rem); font-weight: 560; letter-spacing: -.035em; line-height: 1.05; max-width: 18ch; outline: none; }
+.exito-lead { color: var(--tinta-2); font-size: 1.08rem; max-width: 46ch; }
+.exito-lead strong { color: var(--tinta); font-weight: 560; overflow-wrap: anywhere; }
+.exito-pasos { list-style: none; padding: 0; margin: var(--e-3) 0 0; border-top: 1px solid var(--linea-2); }
+.exito-pasos li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--linea-2); }
+.exito-n { font-family: var(--f-mono); font-stretch: 82%; font-size: var(--t-rotulo); color: var(--tinta-3); padding-top: 3px; }
+.exito-pasos p { color: var(--tinta-2); }
+.exito-pasos b { display: block; color: var(--tinta); font-weight: 560; margin-bottom: 2px; }
+.exito-pie { color: var(--tinta-3); font-size: .92rem; }
+.exito-pie a { color: var(--tinta); }
+@media (prefers-reduced-motion: no-preference) {
+  .form-success.is-llega > * { animation: exito-entra 700ms var(--ease-out) both; }
+  .form-success.is-llega > :nth-child(2) { animation-delay: 60ms; } .form-success.is-llega > :nth-child(3) { animation-delay: 120ms; }
+  .form-success.is-llega > :nth-child(4) { animation-delay: 180ms; } .form-success.is-llega > :nth-child(5) { animation-delay: 260ms; } .form-success.is-llega > :nth-child(6) { animation-delay: 340ms; }
+  .form-success.is-llega .exito-marca i { animation: exito-pieza 700ms var(--ease-out) both; }
+  .form-success.is-llega .exito-marca i:nth-child(2) { animation-delay: 90ms; } .form-success.is-llega .exito-marca i:nth-child(3) { animation-delay: 180ms; }
+  @keyframes exito-entra { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes exito-pieza { from { opacity: 0; transform: translateX(-14px) scale(.8); } }
+}
+/* enviando: el botón lo dice y lo enseña */
+.form-nav-submit.is-enviando { position: relative; padding-left: 44px; cursor: progress; }
+.form-nav-submit.is-enviando::before { content: ""; position: absolute; left: 18px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: gira 800ms linear infinite; }
+@keyframes gira { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .form-nav-submit.is-enviando::before { animation: none; border-right-color: currentColor; opacity: .5; } }
+.form-note.err { color: var(--tinta); border-left: 2px solid var(--tinta); padding-left: 12px; }
 
 /* contacto directo */
 .contacto-lado { position: sticky; top: 104px; display: grid; gap: var(--e-6); }
