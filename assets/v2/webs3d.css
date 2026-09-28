@@ -23,7 +23,7 @@
   display: grid; grid-template-rows: 34px minmax(0, 1fr); border-radius: 14px; overflow: hidden; background: #0c0c0d; transform-style: preserve-3d;
   transform: translate3d(var(--x), 0, var(--z)) rotateY(var(--ry)); transition: transform 900ms cubic-bezier(.2, .8, .2, 1), opacity 600ms ease, filter 600ms ease;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, .07), 0 50px 90px -40px rgba(0, 0, 0, .75), 0 18px 30px -18px rgba(0, 0, 0, .5);
-  -webkit-box-reflect: below 16px linear-gradient(transparent 76%, rgba(255, 255, 255, .10)); cursor: pointer; }
+  cursor: pointer; }
 /* antes de que llegue el script (o sin él): la misma composición, calculada en CSS */
 .w3-ventana:nth-of-type(2) { --x: calc(var(--w3-ancho) * .72); --z: -420px; --ry: -34deg; z-index: 9; }
 .w3-ventana:nth-of-type(3) { --z: -1240px; z-index: 8; }
@@ -31,7 +31,9 @@
 .w3-ventana:nth-of-type(4) { --x: calc(var(--w3-ancho) * -.72); --z: -420px; --ry: 34deg; z-index: 9; }
 .w3-ventana:nth-of-type(1) { z-index: 10; }
 .w3-ventana.is-activa { cursor: auto; }
-.w3-ventana:not(.is-activa) { filter: brightness(.62) saturate(.8); }
+/* las de lado se oscurecen con un velo (una capa opaca: barato), no con filter (repinta la ventana entera) */
+.w3-velo { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity 600ms ease; border-radius: inherit; }
+.w3-ventana:not(.is-activa) .w3-velo { opacity: .42; }
 .w3-ventana.is-lejos { opacity: .0; pointer-events: none; }
 .w3-barra { display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #161617; border-bottom: 1px solid rgba(255, 255, 255, .06); }
 .w3-barra i { width: 10px; height: 10px; border-radius: 50%; background: #3a3a3c; }
@@ -39,9 +41,18 @@
 .w3-pantalla { position: relative; min-height: 0; container-type: inline-size; }
 .w3-vista { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 .w3-vista:focus-visible { outline: 2px solid var(--aire); outline-offset: -2px; }
-/* la luz: un brillo de cristal que se desliza con el puntero sobre la ventana activa */
-.w3-brillo { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, .03) 22%, transparent 42%); background-size: 180% 100%; background-position: calc(40% + var(--px, 0) * 20%) 0; mix-blend-mode: screen; transition: background-position 500ms var(--ease-out), opacity 600ms ease; }
-.w3-ventana:not(.is-activa) .w3-brillo { opacity: .5; }
+/* Solo la web elegida está viva (su DOM se crea al elegirla y se borra al dejarla): las demás enseñan su cartel,
+   un puñado de nodos con sus colores. Así el escenario pinta una web, no cuatro. */
+.w3-cartel { position: absolute; inset: 0; display: grid; align-content: end; gap: 8px; padding: 28px; pointer-events: none; }
+.w3-cartel-l { font-size: 26px; line-height: 1; } .w3-cartel-s { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+.w3-cartel-h { font-size: 22px; line-height: 1.1; max-width: 18ch; opacity: .85; }
+.w3-cartel--vandria { background: linear-gradient(180deg, #f2ede4 55%, #e2d8c6); color: #1c2420; font-family: "W3 Serif", serif; }
+.w3-cartel--orbe { background: radial-gradient(70% 60% at 60% 30%, #4a2c1e, #16100d 70%); color: #f1e6d6; font-family: "W3 Serif", serif; }
+.w3-cartel--brio { background: linear-gradient(180deg, #15181c 0 34px, #d9dde1 34px 62%, #f3f4f5 62%); color: #15181c; font-family: "W3 Grotesk", sans-serif; }
+.w3-cartel--brio .w3-cartel-l { letter-spacing: .12em; font-weight: 700; }
+.w3-cartel--sonrisa { background: linear-gradient(180deg, #f5f9f7 60%, #e2efeb); color: #16322e; font-family: "W3 Inter", sans-serif; }
+.w3-ventana.is-viva .w3-cartel { display: none; }
+.w3-ventana:not(.is-viva) .w3-vista { visibility: hidden; }
 .w3-mando { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--e-4); margin-top: var(--e-4); }
 .w3-lista { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; flex: 1 1 640px; border-top: 1px solid var(--linea-2); }
 .w3-t { display: grid; gap: 3px; text-align: left; padding: 14px 14px 12px 0; border: 0; background: none; color: var(--tinta-3); font: inherit; position: relative; }
@@ -80,68 +91,100 @@
   .w3-barra { justify-content: center; background: #0c0c0d; }
   .w3-barra i { display: none; }
   .w3-url { margin: 0; font-size: 10.5px; }
-  .w3-brillo { display: none; }
   .w3-lista { grid-template-columns: repeat(4, minmax(0, 1fr)); flex-basis: 100%; }
   .w3-t { padding: 10px 6px 8px 0; }
   .w3-t-n, .w3-t-c { display: none; }
   .w3-t-s { font-size: .62rem; }
   .w3-acc { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { .w3-ventana, .w3-mundo, .w3-brillo { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .w3-ventana, .w3-mundo, .w3-velo, .br-coche { transition: none; } }
 
-/* ====================================================================== VISQA · lubricantes (industrial) */
-.vq { --vq-bg: #0f1214; --vq-p: #161b1e; --vq-l: #262d32; --vq-t: #e8ecee; --vq-t2: #9aa4aa; --vq-a: #f2a900; background: var(--vq-bg); color: var(--vq-t); font: 400 15px/1.5 "W3 Grotesk", system-ui, sans-serif; min-height: 100%; }
-.vq a { color: inherit; text-decoration: none; }
-.vq-k { font: 500 10.5px/1.2 "W3 Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--vq-a); margin-bottom: 10px; }
-.vq-top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 22px; padding: 12px 22px; background: color-mix(in srgb, var(--vq-bg) 92%, transparent); border-bottom: 1px solid var(--vq-l); }
-.vq-logo { font-weight: 700; letter-spacing: .22em; font-size: 17px; display: flex; align-items: baseline; gap: 8px; }
-.vq-logo small { font: 500 9.5px/1 "W3 Mono", monospace; letter-spacing: .12em; color: var(--vq-t2); text-transform: uppercase; }
-.vq-top nav { display: flex; gap: 18px; font-size: 13px; color: var(--vq-t2); margin-left: auto; }
-.vq-top nav a:hover { color: var(--vq-t); }
-.vq-pro { background: var(--vq-a); color: #111 !important; font-weight: 600; font-size: 12.5px; padding: 8px 12px; border-radius: 3px; white-space: nowrap; }
-.vq-pro--l { display: inline-block; margin-top: 16px; padding: 12px 18px; font-size: 14px; }
-.vq-heroe { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 26px; align-items: center; padding: 30px 22px 26px; }
-.vq-heroe h3 { font-size: 34px; line-height: 1.02; font-weight: 600; letter-spacing: -.02em; margin: 0 0 12px; }
-.vq-heroe p { color: var(--vq-t2); font-size: 14.5px; }
-.vq-chips { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.vq-chips li { font: 500 10.5px/1 "W3 Mono", monospace; letter-spacing: .06em; padding: 7px 9px; border: 1px solid var(--vq-l); border-radius: 3px; color: var(--vq-t); }
-.vq-foto { margin: 0; border-radius: 6px; overflow: hidden; background: radial-gradient(80% 80% at 60% 40%, #262d32, #0f1214); aspect-ratio: 3 / 2; }
-.vq-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.vq-foto--p { aspect-ratio: 1; }
-.vq-buscador { margin: 0 22px 26px; padding: 18px; background: var(--vq-p); border: 1px solid var(--vq-l); border-radius: 6px; }
-.vq-filtros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.vq-filtros label { display: grid; gap: 6px; }
-.vq-filtros span { font: 500 10px/1 "W3 Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--vq-t2); }
-.vq-filtros select { appearance: none; width: 100%; background: var(--vq-bg); color: var(--vq-t); border: 1px solid var(--vq-l); border-radius: 3px; padding: 9px 10px; font: inherit; font-size: 13px; }
-.vq-res { margin: 14px 0 8px; font-size: 12.5px; color: var(--vq-t2); }
-.vq-res b { color: var(--vq-t); font-weight: 600; }
-.vq-prods { list-style: none; padding: 0; margin: 0; display: grid; }
-.vq-prods > li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; border-top: 1px solid var(--vq-l); }
-.vq-prods > li > a { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; }
-.vq-prods b { display: block; font-weight: 600; font-size: 14px; letter-spacing: .01em; }
-.vq-prods a span span { color: var(--vq-t2); font-size: 12.5px; }
-.vq-bote { width: 26px; height: 36px; border-radius: 5px 5px 4px 4px; background: linear-gradient(90deg, #d8dde0, #f4f6f7 40%, #b9c0c4); position: relative; justify-self: center; }
-.vq-bote::before { content: ""; position: absolute; left: 8px; right: 8px; top: -6px; height: 7px; border-radius: 2px; background: #1b1f22; }
-.vq-bote::after { content: ""; position: absolute; left: 3px; right: 3px; top: 12px; height: 14px; background: var(--vq-a); }
-.vq-bote--2::after { background: #3f8f7a; } .vq-bote--3 { width: 30px; } .vq-bote--3::after { background: #c4432f; }
-.vq-stock { font: 500 11px/1 "W3 Mono", monospace; color: var(--vq-t2); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.vq-stock i { width: 6px; height: 6px; border-radius: 50%; background: #4cc38a; box-shadow: 0 0 0 3px rgba(76, 195, 138, .18); }
-.vq-docs { display: flex; gap: 6px; }
-.vq-docs a { font: 500 10.5px/1 "W3 Mono", monospace; padding: 7px 8px; border: 1px solid var(--vq-l); border-radius: 3px; color: var(--vq-t2); }
-.vq-volver { display: inline-block; margin: 18px 22px 0; font-size: 13px; color: var(--vq-t2) !important; }
-.vq-ficha { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); gap: 26px; padding: 18px 22px 30px; }
-.vq-ficha h3 { font-size: 28px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 6px; }
-.vq-ficha > div > p { color: var(--vq-t2); font-size: 13.5px; }
-.vq-ficha table { width: 100%; border-collapse: collapse; margin: 16px 0 18px; font: 400 12.5px/1.4 "W3 Mono", monospace; }
-.vq-ficha th { text-align: left; font-weight: 400; color: var(--vq-t2); padding: 8px 0; border-bottom: 1px solid var(--vq-l); }
-.vq-ficha td { text-align: right; padding: 8px 0; border-bottom: 1px solid var(--vq-l); }
+/* ====================================================================== BRÍO · taller mecánico */
+.br { --br-bg: #f3f4f5; --br-p: #ffffff; --br-t: #15181c; --br-t2: #5d646c; --br-a: #ff5a1f; --br-a2: #c83d0b; --br-l: #dde0e3; --br-n: #15181c; background: var(--br-bg); color: var(--br-t); font: 400 15px/1.5 "W3 Inter", system-ui, sans-serif; min-height: 100%; }
+.br a { color: inherit; text-decoration: none; }
+.br-k { font: 600 10.5px/1.2 "W3 Grotesk", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--br-t2); margin: 0 0 10px; }
+.br-top { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 22px; padding: 12px 22px; background: color-mix(in srgb, var(--br-n) 94%, transparent); color: #fff; }
+.br-logo { font: 700 19px/1 "W3 Grotesk", sans-serif; letter-spacing: .12em; display: flex; align-items: baseline; gap: 9px; }
+.br-logo small { font: 500 10px/1 "W3 Inter", sans-serif; letter-spacing: .06em; color: #aab2bb; text-transform: none; }
+.br-top nav { display: flex; gap: 18px; font-size: 13px; color: #c3c9d0; margin-left: auto; }
+.br-cta { display: inline-flex; align-items: center; justify-content: center; background: var(--br-a2); color: #fff !important; font: 600 13px/1 "W3 Inter", sans-serif; padding: 10px 14px; border-radius: 8px; border: 0; white-space: nowrap; }
+.br-cta--l { width: 100%; padding: 13px; margin-top: 16px; font-size: 14px; }
+.br-sec { display: inline-flex; align-items: center; background: none; border: 1px solid var(--br-l); color: var(--br-t); font: 600 13px/1 "W3 Inter", sans-serif; padding: 10px 14px; border-radius: 8px; }
+.br-heroe { position: relative; }
+.br-foto { margin: 0; aspect-ratio: 16 / 8; background: linear-gradient(135deg, #d9dde1, #aeb5bc); overflow: hidden; }
+.br-foto img, .br-cita-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.br-heroe-t { position: relative; margin: -70px 22px 0; padding: 22px; background: var(--br-p); border-radius: 12px; box-shadow: 0 24px 50px -30px rgba(21, 24, 28, .45); max-width: 520px; }
+.br-heroe h3 { font: 600 30px/1.05 "W3 Grotesk", sans-serif; letter-spacing: -.02em; margin: 0 0 10px; }
+.br-heroe p { color: var(--br-t2); font-size: 14px; }
+.br-acc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.br-servicios { list-style: none; margin: 22px 22px 30px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.br-servicios li { display: grid; gap: 4px; padding: 12px; background: var(--br-p); border-radius: 10px; border: 1px solid var(--br-l); }
+.br-servicios b { font: 600 13.5px/1.2 "W3 Grotesk", sans-serif; }
+.br-servicios span { font-size: 12px; color: var(--br-t2); }
+.br-volver { display: inline-block; margin: 16px 22px 10px; font-size: 13px; color: var(--br-t2) !important; }
+.br-form { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: 22px; margin: 0 22px 30px; }
+.br-cita-foto { border-radius: 12px; overflow: hidden; aspect-ratio: 4 / 5; background: #cfd4d9; }
+.br-ops { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.br-ops button { border: 1px solid var(--br-l); background: var(--br-p); color: var(--br-t); border-radius: 8px; padding: 9px 12px; font: inherit; font-size: 13px; }
+.br-ops button[aria-pressed="true"] { background: var(--br-n); border-color: var(--br-n); color: #fff; }
+.br-ops button:disabled { opacity: .4; text-decoration: line-through; }
+.br-matricula { width: 100%; max-width: 220px; border: 2px solid var(--br-n); border-radius: 6px; padding: 8px 12px; font: 700 18px/1 "W3 Mono", monospace; letter-spacing: .12em; background: #fff; color: var(--br-t); }
+.br-ok { margin-top: 14px; padding: 14px; background: #fff; border-left: 3px solid var(--br-a); border-radius: 8px; }
+.br-ok b { display: block; font: 600 16px/1.25 "W3 Grotesk", sans-serif; }
+.br-ok p { color: var(--br-t2); font-size: 13.5px; margin: 6px 0 8px; }
+.br-ok a { font-weight: 600; font-size: 13.5px; color: var(--br-a2) !important; }
+/* «Sigue tu coche»: la pista del taller en 3D (un plano inclinado, cinco estaciones; el coche avanza por ella) */
+.br-sigue { margin: 0 22px 30px; }
+.br-sigue h3 { font: 600 24px/1.1 "W3 Grotesk", sans-serif; letter-spacing: -.015em; margin: 0 0 6px; min-height: 2.2em; }
+.br-pista { height: 150px; perspective: 700px; perspective-origin: 50% 0%; margin: 4px 0 8px; }
+.br-plano { position: relative; height: 120px; margin: 0 6%; transform: rotateX(56deg); transform-origin: 50% 0%; transform-style: preserve-3d;
+  background: linear-gradient(90deg, #dfe2e5, #eceef0 50%, #dfe2e5); border-radius: 10px; box-shadow: inset 0 0 0 1px var(--br-l); }
+.br-plano::before { content: ""; position: absolute; left: 6%; right: 6%; top: 50%; height: 3px; background: repeating-linear-gradient(90deg, #ffb18f 0 14px, transparent 14px 26px); transform: translateY(-50%); }
+.br-est { position: absolute; left: calc(6% + var(--i) * 22%); top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; transform-style: preserve-3d; }
+.br-est i { position: absolute; inset: 0; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px #c9ced3; transition: background-color 500ms, box-shadow 500ms; }
+.br-etq { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: -18px 5% 6px; text-align: center; font: 600 11px/1.2 "W3 Grotesk", sans-serif; color: var(--br-t2); }
+.br-sigue[data-paso="0"] .br-etq span:nth-child(1), .br-sigue[data-paso="1"] .br-etq span:nth-child(2), .br-sigue[data-paso="2"] .br-etq span:nth-child(3), .br-sigue[data-paso="3"] .br-etq span:nth-child(4), .br-sigue[data-paso="4"] .br-etq span:nth-child(5) { color: var(--br-a2); }
+.br-sigue[data-paso] .br-est:nth-child(-n + 1) i { background: var(--br-n); box-shadow: none; }
+.br-sigue[data-paso="1"] .br-est:nth-child(-n + 2) i, .br-sigue[data-paso="2"] .br-est:nth-child(-n + 3) i, .br-sigue[data-paso="3"] .br-est:nth-child(-n + 4) i, .br-sigue[data-paso="4"] .br-est i { background: var(--br-n); box-shadow: none; }
+.br-sigue[data-paso="2"] .br-est:nth-child(3) i, .br-sigue[data-paso="3"] .br-est:nth-child(4) i, .br-sigue[data-paso="4"] .br-est:nth-child(5) i { background: var(--br-a); box-shadow: 0 0 0 6px rgba(255, 90, 31, .22); }
+.br-coche { position: absolute; left: calc(6% + var(--p, 2) * 22%); top: 50%; width: 92px; height: 38px; margin: -38px 0 0 -46px; color: var(--br-n);
+  transform: rotateX(-56deg); transform-origin: 50% 100%; transition: left 1400ms cubic-bezier(.45, 0, .2, 1); }
+.br-coche-svg { width: 100%; height: 100%; display: block; }
+.br-sigue[data-paso="0"] { --p: 0; } .br-sigue[data-paso="1"] { --p: 1; } .br-sigue[data-paso="2"] { --p: 2; } .br-sigue[data-paso="3"] { --p: 3; } .br-sigue[data-paso="4"] { --p: 4; }
+.br-sigue .br-coche { left: calc(6% + var(--p) * 22%); }
+.br-hitos { list-style: none; padding: 0; margin: 6px 0 14px; display: grid; gap: 0; }
+.br-hitos li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-top: 1px solid var(--br-l); color: var(--br-t2); transition: color 500ms; }
+.br-hitos li span span { color: var(--br-t2); }
+.br-hitos li b { display: block; font: 600 13.5px/1.25 "W3 Grotesk", sans-serif; }
+.br-hitos li span span { font-size: 12.5px; color: var(--br-t2); }
+.br-h { font: 500 12px/1.6 "W3 Mono", monospace; color: var(--br-t2); }
+.br-sigue[data-paso="2"] .br-hitos li:nth-child(-n + 3), .br-sigue[data-paso="3"] .br-hitos li:nth-child(-n + 4), .br-sigue[data-paso="4"] .br-hitos li { color: var(--br-t); }
+.br-presu { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px; background: #fff; border-radius: 10px; border: 1px solid var(--br-l); }
+.br-presu > div { margin-right: auto; } .br-presu .br-k { margin: 0; } .br-presu b { font: 700 24px/1 "W3 Grotesk", sans-serif; }
+.br-aprobado { margin-top: 10px; font-size: 13px; color: var(--br-a2); font-weight: 600; }
+.br-avanzar { margin-top: 10px; }
+.br-panel { margin: 0 22px 30px; }
+.br-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.br-col { display: grid; gap: 8px; align-content: start; padding: 10px; background: #e6e8eb; border-radius: 10px; }
+.br-col > b { font: 600 12.5px/1.2 "W3 Grotesk", sans-serif; display: flex; justify-content: space-between; }
+.br-col > b span { color: var(--br-t2); }
+.br-tarjeta { display: grid; gap: 2px; padding: 10px; background: #fff; border-radius: 8px; font-size: 12.5px; }
+.br-tarjeta.es-tuyo { box-shadow: inset 3px 0 0 var(--br-a); }
+.br-mat { font: 700 12.5px/1 "W3 Mono", monospace; letter-spacing: .08em; }
+.br-w { color: var(--br-t2); font-size: 11.5px; }
+.br-auto { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.br-auto li { padding: 12px; background: var(--br-n); color: #fff; border-radius: 10px; display: grid; gap: 4px; }
+.br-auto b { font: 700 22px/1 "W3 Grotesk", sans-serif; color: #ffb18f; }
+.br-auto span { font-size: 12px; color: #c3c9d0; }
 @container (max-width: 560px) {
-  .vq-top { gap: 12px; padding: 10px 14px; } .vq-top nav { display: none; } .vq-pro { margin-left: auto; font-size: 11px; padding: 7px 9px; }
-  .vq-heroe { grid-template-columns: minmax(0, 1fr); padding: 20px 14px; gap: 16px; } .vq-heroe h3 { font-size: 26px; }
-  .vq-foto { order: -1; }
-  .vq-buscador { margin: 0 14px 20px; padding: 14px; } .vq-filtros { grid-template-columns: minmax(0, 1fr); }
-  .vq-prods > li { grid-template-columns: minmax(0, 1fr); } .vq-prods > li > a { grid-template-columns: 30px minmax(0, 1fr); } .vq-stock { grid-column: 2; } .vq-docs { padding-bottom: 12px; }
-  .vq-ficha { grid-template-columns: minmax(0, 1fr); padding: 14px; } .vq-volver { margin: 14px 14px 0; }
+  .br-top { gap: 12px; padding: 10px 14px; } .br-top nav { display: none; } .br-cta { margin-left: auto; }
+  .br-heroe .br-cta { margin-left: 0; } .br-foto { aspect-ratio: 4 / 3; } .br-heroe-t { margin: -40px 14px 0; padding: 16px; } .br-heroe h3 { font-size: 24px; }
+  .br-servicios { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 16px 14px 24px; }
+  .br-form { grid-template-columns: minmax(0, 1fr); margin: 0 14px 24px; } .br-cita-foto { aspect-ratio: 16 / 9; }
+  .br-volver { margin: 12px 14px 8px; } .br-sigue, .br-panel { margin: 0 14px 24px; } .br-sigue h3 { font-size: 20px; }
+  .br-pista { height: 120px; perspective: 520px; } .br-plano { height: 96px; margin: 0; } .br-etq { font-size: 10px; margin: -14px 1% 6px; }
+  .br-etq span { opacity: 0; } .br-sigue[data-paso="0"] .br-etq span:nth-child(1), .br-sigue[data-paso="1"] .br-etq span:nth-child(2), .br-sigue[data-paso="2"] .br-etq span:nth-child(3), .br-sigue[data-paso="3"] .br-etq span:nth-child(4), .br-sigue[data-paso="4"] .br-etq span:nth-child(5) { opacity: 1; white-space: nowrap; } .br-coche { width: 66px; height: 28px; margin: -28px 0 0 -33px; }
+  .br-cols { grid-template-columns: minmax(0, 1fr); } .br-auto { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ====================================================================== ORBE · restaurante */
@@ -263,3 +306,5 @@
 .w3 img { color: transparent; }
 
 .capitulo:has([data-webs3d]) { overflow-x: clip; }
+/* lo que las webs de ejemplo esconden (hidden) se esconde aunque su clase diga display */
+.w3 [data-sitio-vistas] [hidden], .w3-dialogo [hidden] { display: none !important; }

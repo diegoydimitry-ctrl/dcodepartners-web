@@ -1,8 +1,7 @@
 # Imágenes de las webs de ejemplo (rev. 28/09/2026): renders propios, sin fotos de banco ni marcas reales.
-#   visqa-gama   · la gama de Visqa (lubricantes, empresa ficticia): botella de 1 L, garrafa de 5 L y bidón de 20 L
-#   visqa-5l     · la garrafa de 5 L sola (ficha de producto)
+#   (rev. 28/09 tarde: la empresa de lubricantes se sustituyó por el taller Brío, que se renderiza con taller.py)
 #   orbe-mesa    · una mesa puesta al anochecer (restaurante Orbe, ficticio)
-# Uso: python3.11 scripts/v2/renders/productos.py --out <carpeta> [--muestras 64] [--solo visqa-gama,orbe-mesa]
+# Uso: python3.11 scripts/v2/renders/productos.py --out <carpeta> [--muestras 64] [--solo orbe-mesa]
 #      después: python3 scripts/v2/renders/empaquetar-webs.py <carpeta>   → assets/v2/img/webs/*.webp
 import bpy, bmesh, math, os, sys, argparse, random
 from mathutils import Vector, Matrix
@@ -12,38 +11,11 @@ ap = argparse.ArgumentParser(); ap.add_argument('--out', required=True); ap.add_
 ap.add_argument('--fuentes', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fuentes'))
 A = ap.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else sys.argv[1:])
 os.makedirs(A.out, exist_ok=True)
-QUIERO = set(A.solo.split(',')) if A.solo else {'visqa-gama', 'visqa-5l', 'orbe-mesa'}
+QUIERO = set(A.solo.split(',')) if A.solo else {'orbe-mesa'}
 
 def srgb(h):
     c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
     return tuple(x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c)
-
-# ------------------------------------------------------------------ etiquetas (PIL)
-def fuente(nombre, tam, peso=None):
-    f = ImageFont.truetype(os.path.join(A.fuentes, nombre), tam)
-    if peso is not None:
-        try: f.set_variation_by_axes([peso])
-        except Exception: pass
-    return f
-
-def etiqueta(ruta, producto, grado, volumen, lineas):
-    W, H = 1400, 1000
-    im = Image.new('RGB', (W, H), '#1b2023'); d = ImageDraw.Draw(im)
-    d.rectangle([0, 0, W, 150], fill='#f2a900')
-    d.text((60, 40), 'VISQA', font=fuente('spacegrotesk.ttf', 82, 700), fill='#111416')
-    d.text((W - 60, 58), 'LUBRICANTES TÉCNICOS', font=fuente('jetbrains.ttf', 30, 500), fill='#111416', anchor='ra')
-    d.text((60, 230), producto, font=fuente('spacegrotesk.ttf', 110, 700), fill='#f1f3f4')
-    d.text((60, 370), grado, font=fuente('spacegrotesk.ttf', 230, 700), fill='#f2a900')
-    y = 650
-    for l in lineas:
-        d.text((60, y), l, font=fuente('jetbrains.ttf', 34, 400), fill='#aeb6bb'); y += 52
-    d.text((W - 60, H - 70), volumen, font=fuente('spacegrotesk.ttf', 96, 700), fill='#f1f3f4', anchor='rs')
-    x = 60
-    rr = random.Random(3)
-    while x < 420:
-        w = rr.choice((3, 3, 5, 8)); d.rectangle([x, H - 150, x + w, H - 60], fill='#f1f3f4'); x += w + rr.choice((3, 4, 6))
-    im.save(ruta)
-    return ruta
 
 # ------------------------------------------------------------------ utilidades de escena
 def limpiar():
@@ -122,63 +94,6 @@ def mundo(color, fuerza):
 
 def render(nombre):
     sc = bpy.context.scene; sc.render.filepath = os.path.join(A.out, f'{nombre}.png'); bpy.ops.render.render(write_still=True); print('RENDER', nombre, flush=True)
-
-# ------------------------------------------------------------------ VISQA · envases
-def plastico(nombre, color):
-    return mat(nombre, color, rug=0.32, capa=0.35)
-
-def botella_1l(x, y, et):
-    grafito = plastico('grafito_1l', '#23282c')
-    cuerpo = caja('b1_cuerpo', (0.1, 0.062, 0.2), (x, y, 0.1), grafito, bisel=0.02, sub=2)
-    torno('b1_hombro', [(0.0, 0.0), (0.028, 0.0), (0.026, 0.012), (0.017, 0.03), (0.0, 0.03)], (x - 0.012, y, 0.196), grafito)
-    torno('b1_tapon', [(0.0, 0.0), (0.019, 0.0), (0.019, 0.028), (0.016, 0.03), (0.0, 0.03)], (x - 0.012, y, 0.224), mat('amb1', '#f2a900', 0.4, capa=0.2))
-    plano_etiqueta('b1_et', 0.086, 0.11, (x, y - 0.0322, 0.095), (math.pi / 2, 0, 0), et, 0.0015)
-
-def garrafa_5l(x, y, et, nombre='g5'):
-    grafito = plastico(f'grafito_{nombre}', '#23282c')
-    caja(f'{nombre}_cuerpo', (0.19, 0.12, 0.3), (x, y, 0.15), grafito, bisel=0.035, sub=2)
-    torno(f'{nombre}_cuello', [(0.0, 0.0), (0.03, 0.0), (0.028, 0.02), (0.0, 0.02)], (x + 0.055, y, 0.298), grafito)
-    torno(f'{nombre}_tapon', [(0.0, 0.0), (0.032, 0.0), (0.032, 0.034), (0.029, 0.036), (0.0, 0.036)], (x + 0.055, y, 0.316), mat(f'amb_{nombre}', '#f2a900', 0.4, capa=0.2))
-    tubo(f'{nombre}_asa', [(x - 0.085, y, 0.285), (x - 0.07, y, 0.33), (x - 0.02, y, 0.335), (x + 0.005, y, 0.29)], 0.012, grafito)
-    plano_etiqueta(f'{nombre}_et', 0.16, 0.2, (x, y - 0.0612, 0.14), (math.pi / 2, 0, 0), et, 0.002)
-
-def bidon_20l(x, y, et):
-    gris = plastico('gris_20l', '#2b3035')
-    caja('b20_cuerpo', (0.29, 0.24, 0.39), (x, y, 0.195), gris, bisel=0.03, sub=2)
-    for k in range(4): caja(f'b20_nervio_{k}', (0.292, 0.242, 0.012), (x, y, 0.06 + k * 0.09), gris, bisel=0.004)
-    torno('b20_tapon', [(0.0, 0.0), (0.04, 0.0), (0.04, 0.04), (0.036, 0.042), (0.0, 0.042)], (x + 0.08, y + 0.05, 0.388), mat('amb20', '#f2a900', 0.4, capa=0.2))
-    tubo('b20_asa', [(x - 0.11, y, 0.385), (x - 0.09, y, 0.45), (x + 0.0, y, 0.455), (x + 0.02, y, 0.39)], 0.016, gris)
-    plano_etiqueta('b20_et', 0.22, 0.2, (x, y - 0.1215, 0.2), (math.pi / 2, 0, 0), et, 0.0)
-
-def estudio_visqa():
-    sc = limpiar(); mundo('#0d1012', 0.35)
-    # peana de piedra negra y fondo de estudio curvo (sin esquina)
-    piedra = mat('piedra', '#141719', rug=0.28, capa=0.1)
-    caja('peana', (1.6, 0.8, 0.04), (0.05, 0.1, -0.02), piedra, bisel=0.004)
-    bpy.ops.mesh.primitive_plane_add(size=1); fondo = bpy.context.object; fondo.scale = (8, 8, 1); fondo.location = (0, 1.2, -0.04)
-    bm = bmesh.new(); bm.from_mesh(fondo.data); bm.free()
-    fondo.data.materials.append(mat('fondo', '#15191c', rug=0.8))
-    bpy.ops.mesh.primitive_plane_add(size=1); pared = bpy.context.object; pared.scale = (8, 3, 1); pared.rotation_euler = (math.pi / 2, 0, 0); pared.location = (0, 1.6, 1.4)
-    pared.data.materials.append(mat('pared', '#171b1e', rug=0.9))
-    luz_area('clave', (-0.9, -0.9, 1.1), (0.0, 0.1, 0.15), 0.9, 180, (1.0, 0.95, 0.9))
-    luz_area('recorte', (1.1, 0.7, 0.9), (0.0, 0.1, 0.2), 0.15, 90, (1.0, 0.85, 0.6), tam_y=1.2)
-    luz_area('relleno', (0.2, -1.4, 0.3), (0.0, 0.1, 0.15), 1.5, 30, (0.85, 0.9, 1.0))
-    luz_area('fondo_luz', (0.0, 1.2, 1.6), (0.0, 1.6, 0.8), 1.2, 60, (1.0, 0.8, 0.55))
-
-if QUIERO & {'visqa-gama', 'visqa-5l'}:
-    r1 = etiqueta(os.path.join(A.out, 'et-1l.png'), 'PRO SP', '0W-20', '1 L', ['Aceite de motor 100 % sintético', 'API SP · ILSAC GF-6A', 'Lote L-2609 · Avilés'])
-    r5 = etiqueta(os.path.join(A.out, 'et-5l.png'), 'PRO C3', '5W-30', '5 L', ['Aceite de motor 100 % sintético', 'ACEA C3 · API SP · VW 504.00/507.00', 'Lote L-2609 · Avilés'])
-    r20 = etiqueta(os.path.join(A.out, 'et-20l.png'), 'MAX HD', '10W-40', '20 L', ['Vehículo pesado · cambio largo', 'ACEA E7 · API CI-4', 'Lote L-2611 · Avilés'])
-    if 'visqa-gama' in QUIERO:
-        estudio_visqa()
-        e1, e5, e20 = mat_imagen('et1', r1), mat_imagen('et5', r5), mat_imagen('et20', r20)
-        bidon_20l(0.33, 0.18, e20); garrafa_5l(0.0, 0.05, e5); botella_1l(-0.25, -0.05, e1)
-        camara((0.05, -1.55, 0.42), (0.03, 0.08, 0.17), 58, 1.6, 4.0)
-        render('visqa-gama')
-    if 'visqa-5l' in QUIERO:
-        estudio_visqa(); garrafa_5l(0.0, 0.05, mat_imagen('et5b', r5), 'g5b')
-        camara((0.28, -0.9, 0.36), (0.0, 0.05, 0.16), 70, 0.95, 3.2, res=(1200, 1200))
-        render('visqa-5l')
 
 # ------------------------------------------------------------------ ORBE · mesa puesta al anochecer
 if 'orbe-mesa' in QUIERO:

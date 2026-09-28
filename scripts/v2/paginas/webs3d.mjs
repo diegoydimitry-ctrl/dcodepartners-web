@@ -1,8 +1,8 @@
 /* ==========================================================================
    WEBS DE EJEMPLO EN 3D (rev. 28/09/2026) · «Cuatro ejemplos de lo que sale»
    Cuatro webs de verdad (HTML, no capturas), cada una con su identidad, para
-   cuatro sectores: inmobiliaria, restaurante, industria (lubricantes) y
-   servicios (clínica). En escritorio viven en un escenario 3D (CSS 3D, sin
+   cuatro sectores: inmobiliaria, restaurante, taller mecánico y servicios
+   (clínica). En escritorio viven en un escenario 3D (CSS 3D, sin
    WebGL): se eligen, se acercan, se navegan y se bajan por dentro. En tableta,
    un carrusel plano con algo de profundidad. En el teléfono, cada web dentro de
    un marco de teléfono: la misma web, maquetada para móvil (container queries).
@@ -27,45 +27,68 @@ const T = {
 };
 
 /* ------------------------------------------------------------ las cuatro webs */
-function visqa(en) {
+function brio(en) {
   const P = en ? {
-    nav: ["Products", "Technical finder", "Distributors", "Data sheets"], pro: "Trade area",
-    h: "Technical lubricants for engines that cannot stop.", sub: "Formulated and filled in Avilés. Every batch with its own lab report.",
-    chips: ["ACEA C3", "API SP", "214 references"], buscar: "Technical finder", apl: "Application", vis: "Viscosity", nor: "Standard",
-    apls: ["Passenger car · petrol/diesel", "Heavy duty", "Industrial hydraulics", "Gear oils"], res: "3 products match", ficha: "Data sheet", fds: "SDS",
-    stock: "In stock", conecta: "Stock and data sheets come straight from the ERP: what you see is what is in the warehouse.",
-    prods: [["VISQA PRO C3 5W-30", "Full synthetic · low SAPS", "1,240 u."], ["VISQA PRO SP 0W-20", "Full synthetic · hybrids", "860 u."], ["VISQA MAX HD 10W-40", "Heavy duty · long drain", "310 drums"]],
-    det: "Product", tabla: [["Viscosity at 100 °C", "11.8 mm²/s"], ["Viscosity at 40 °C", "69 mm²/s"], ["Viscosity index", "168"], ["Pour point", "−39 °C"], ["TBN", "7.2 mg KOH/g"], ["Packs", "1 L · 5 L · 20 L · 208 L"]],
-    homol: "Specifications", pedido: "Trade order", volver: "Back to catalogue",
+    nav: ["Services", "Track your car", "The workshop"], cta: "Book", k: "Leganés · since 2004",
+    h: "Your car, ready when we say it will be.", sub: "Book in a minute, a quote on WhatsApp before we touch anything, and your car's status on your phone.", seguir: "Track your car",
+    servicios: [["Service and oil", "from €89"], ["Brakes", "from €120"], ["Tyres", "fitted in 30 min"], ["Diagnostics", "€35"], ["Pre-MOT check", "€25"]],
+    volver: "Back", p1: "1 · What's wrong?", p2: "2 · When will you bring it?", p3: "3 · Number plate", ops1: ["Service", "Brakes", "Tyres", "Strange noise", "Pre-MOT"], ops2: ["Tomorrow 8:30", "Tomorrow 12:00", "Thu 2 · 8:30", "Thu 2 · 16:00"],
+    conf: "Confirm booking", ok: "Booked · Thursday 2 · 8:30 · Brakes", okd: "We'll send you the quote on WhatsApp before we start. You can follow your car from here.", okl: "Track your car",
+    matr: "4821 KLM · Brakes", est: ["Checked in", "Diagnosis", "Quote", "Repair", "Ready"],
+    titulos: ["Checked in. We start with the diagnosis.", "Diagnosis done.", "Your quote is ready: approve it and we start.", "In the workshop: new pads and discs going on.", "Ready to collect. Your invoice is on WhatsApp."],
+    hitos: [["9:02", "Checked in at the workshop", "Photos of the car on arrival, sent to you"], ["9:40", "Diagnosis", "Front pads at 15%, discs worn"], ["9:44", "Quote sent on WhatsApp", "Front pads and discs · €186, parts and labour"], ["", "Repair", "You'll know when it starts"], ["", "Ready to collect", "Invoice and warranty on WhatsApp"]],
+    presu: "Quote", aprobar: "Approve €186", llamar: "I'd rather you called me", avanzar: "Simulate: the repair is finished", aprobado: "Approved by you on WhatsApp · 9:51",
+    tk: "Today in the workshop · what Javier, the workshop manager, sees", cols: [["Waiting for approval", [["1187 HBC", "Timing belt · €540", "sent 10:12"], ["5530 LRD", "Tyres ×2 · €164", "sent 10:30"]]], ["On the lift", [["4821 KLM", "Brakes · €186", "approved 9:51"], ["2294 JXS", "Service", "since 9:15"], ["7713 MMP", "Diagnostics", "since 10:02"]]], ["Ready", [["0906 KZT", "Air con", "customer told 11:05"]]]],
+    auto: [["6 / 6", "today's bookings confirmed by themselves"], ["5", "quotes approved on WhatsApp today"], ["12", "MOT reminders sent this week"]],
   } : {
-    nav: ["Productos", "Buscador técnico", "Distribuidores", "Fichas"], pro: "Área profesional",
-    h: "Lubricantes técnicos para motores que no pueden parar.", sub: "Formulados y envasados en Avilés. Cada lote, con su análisis de laboratorio.",
-    chips: ["ACEA C3", "API SP", "214 referencias"], buscar: "Buscador técnico", apl: "Aplicación", vis: "Viscosidad", nor: "Norma",
-    apls: ["Turismo · gasolina y diésel", "Vehículo pesado", "Hidráulico industrial", "Engranajes"], res: "3 productos cumplen", ficha: "Ficha técnica", fds: "FDS",
-    stock: "En almacén", conecta: "El stock y las fichas salen del ERP: lo que ves es lo que hay en el almacén.",
-    prods: [["VISQA PRO C3 5W-30", "Sintético · bajo SAPS", "1.240 u."], ["VISQA PRO SP 0W-20", "Sintético · híbridos", "860 u."], ["VISQA MAX HD 10W-40", "Vehículo pesado · cambio largo", "310 bidones"]],
-    det: "Producto", tabla: [["Viscosidad a 100 °C", "11,8 mm²/s"], ["Viscosidad a 40 °C", "69 mm²/s"], ["Índice de viscosidad", "168"], ["Punto de congelación", "−39 °C"], ["TBN", "7,2 mg KOH/g"], ["Envases", "1 L · 5 L · 20 L · 208 L"]],
-    homol: "Homologaciones", pedido: "Pedido profesional", volver: "Volver al catálogo",
+    nav: ["Servicios", "Sigue tu coche", "El taller"], cta: "Pedir cita", k: "Leganés · desde 2004",
+    h: "Tu coche, listo cuando te lo decimos.", sub: "Cita en un minuto, presupuesto por WhatsApp antes de tocar nada y el estado de tu coche en el móvil.", seguir: "Sigue tu coche",
+    servicios: [["Revisión y aceite", "desde 89 €"], ["Frenos", "desde 120 €"], ["Neumáticos", "montaje en 30 min"], ["Diagnosis", "35 €"], ["Pre-ITV", "25 €"]],
+    volver: "Volver", p1: "1 · ¿Qué le pasa?", p2: "2 · ¿Cuándo lo traes?", p3: "3 · Matrícula", ops1: ["Revisión", "Frenos", "Neumáticos", "Un ruido raro", "Pre-ITV"], ops2: ["Mañana 8:30", "Mañana 12:00", "Jue 2 · 8:30", "Jue 2 · 16:00"],
+    conf: "Confirmar cita", ok: "Cita confirmada · jueves 2 · 8:30 · Frenos", okd: "Antes de empezar te mandamos el presupuesto por WhatsApp. Y puedes seguir tu coche desde aquí.", okl: "Sigue tu coche",
+    matr: "4821 KLM · Frenos", est: ["Recibido", "Diagnóstico", "Presupuesto", "Reparación", "Listo"],
+    titulos: ["Recibido. Empezamos por el diagnóstico.", "Diagnóstico hecho.", "Tu presupuesto está listo: apruébalo y empezamos.", "En el taller: pastillas y discos nuevos.", "Listo para recoger. La factura, en tu WhatsApp."],
+    hitos: [["9:02", "Recibido en el taller", "Fotos del coche al llegar, enviadas a ti"], ["9:40", "Diagnóstico", "Pastillas delanteras al 15 %, discos gastados"], ["9:44", "Presupuesto enviado por WhatsApp", "Pastillas y discos delanteros · 186 €, piezas y mano de obra"], ["", "Reparación", "Te avisamos al empezar"], ["", "Listo para recoger", "Factura y garantía por WhatsApp"]],
+    presu: "Presupuesto", aprobar: "Aprobar 186 €", llamar: "Prefiero que me llaméis", avanzar: "Simular: termina la reparación", aprobado: "Aprobado por ti en WhatsApp · 9:51",
+    tk: "Hoy en el taller · lo que ve Javier, el jefe de taller", cols: [["Esperando aprobación", [["1187 HBC", "Correa de distribución · 540 €", "enviado 10:12"], ["5530 LRD", "Neumáticos ×2 · 164 €", "enviado 10:30"]]], ["En el elevador", [["4821 KLM", "Frenos · 186 €", "aprobado 9:51"], ["2294 JXS", "Revisión", "desde 9:15"], ["7713 MMP", "Diagnosis", "desde 10:02"]]], ["Listo", [["0906 KZT", "Aire acondicionado", "cliente avisado 11:05"]]]],
+    auto: [["6 / 6", "citas de hoy confirmadas solas"], ["5", "presupuestos aprobados hoy por WhatsApp"], ["12", "avisos de ITV enviados esta semana"]],
   };
-  return `<div class="vq" data-sitio-vistas>
-  <header class="vq-top"><span class="vq-logo">VISQA<small>${en ? "Lubricants" : "Lubricantes"}</small></span><nav>${P.nav.map((x, i) => `<a href="${i === 1 ? "#vq-buscar" : "#vq-inicio"}" data-ir="${i === 1 ? "buscar" : "inicio"}">${x}</a>`).join("")}</nav><a class="vq-pro" href="#vq-inicio" data-ir="inicio">${P.pro}</a></header>
-  <section data-vista="inicio" id="vq-inicio">
-    <div class="vq-heroe"><div class="vq-heroe-t"><p class="vq-k">Avilés · 1987</p><h3>${P.h}</h3><p>${P.sub}</p><ul class="vq-chips">${P.chips.map((c) => `<li>${c}</li>`).join("")}</ul></div>
-      <figure class="vq-foto"><img data-src="/assets/v2/img/webs/visqa-gama.webp" alt="${en ? "VISQA range: 1 L and 5 L bottles, a 20 L drum" : "Gama VISQA: botellas de 1 L y 5 L y un bidón de 20 L"}" width="1200" height="800"></figure></div>
-    <div class="vq-buscador" id="vq-buscar" data-vista-ancla="buscar"><p class="vq-k">${P.buscar}</p>
-      <div class="vq-filtros"><label><span>${P.apl}</span><select>${P.apls.map((a) => `<option>${a}</option>`).join("")}</select></label>
-        <label><span>${P.vis}</span><select><option>5W-30</option><option>0W-20</option><option>10W-40</option></select></label>
-        <label><span>${P.nor}</span><select><option>ACEA C3</option><option>API SP</option><option>ACEA E7</option></select></label></div>
-      <p class="vq-res"><b>${P.res}</b> · ${P.conecta}</p>
-      <ul class="vq-prods">${P.prods.map(([n, d, s], i) => `<li><a href="#vq-producto" data-ir="producto"><span class="vq-bote vq-bote--${i + 1}" aria-hidden="true"></span><span><b>${n}</b><span>${d}</span></span><span class="vq-stock"><i></i>${P.stock}: ${s}</span></a><span class="vq-docs"><a href="#vq-producto" data-ir="producto">${P.ficha}</a><a href="#vq-producto" data-ir="producto">${P.fds}</a></span></li>`).join("")}</ul></div>
+  const coche = `<svg class="br-coche-svg" viewBox="0 0 120 48" aria-hidden="true"><path d="M8 34c0-5 2-8 7-9l14-3 12-10c3-2 6-3 10-3h26c5 0 9 2 12 5l9 9 10 2c5 1 6 4 6 8v4H8z" fill="currentColor"/><path d="M45 14h16v10H36z M65 14h13c3 0 5 1 7 3l6 7H65z" fill="#dfe6ee" opacity=".9"/><circle cx="31" cy="38" r="8" fill="#15181c"/><circle cx="31" cy="38" r="3.4" fill="#aeb6bf"/><circle cx="92" cy="38" r="8" fill="#15181c"/><circle cx="92" cy="38" r="3.4" fill="#aeb6bf"/></svg>`;
+  return `<div class="br" data-sitio-vistas>
+  <header class="br-top"><span class="br-logo">BRÍO<small>${en ? "Car repair" : "Taller mecánico"}</small></span><nav>${P.nav.map((x, i) => `<a href="#${["br-inicio", "br-sigue", "br-taller"][i]}" data-ir="${["inicio", "sigue", "taller"][i]}">${x}</a>`).join("")}</nav><a class="br-cta" href="#br-cita" data-ir="cita">${P.cta}</a></header>
+  <section data-vista="inicio" id="br-inicio">
+    <div class="br-heroe"><figure class="br-foto"><img data-src="/assets/v2/img/webs/taller-1.webp" alt="${en ? "The workshop: a car on a two-post lift, another waiting" : "El taller: un coche en el elevador y otro esperando"}" width="1200" height="800"></figure>
+      <div class="br-heroe-t"><p class="br-k">${P.k}</p><h3>${P.h}</h3><p>${P.sub}</p><div class="br-acc"><a class="br-cta" href="#br-cita" data-ir="cita">${P.cta}</a><a class="br-sec" href="#br-sigue" data-ir="sigue">${P.seguir} →</a></div></div></div>
+    <ul class="br-servicios">${P.servicios.map(([a, b]) => `<li><b>${a}</b><span>${b}</span></li>`).join("")}</ul>
   </section>
-  <section data-vista="producto" id="vq-producto" hidden>
-    <a href="#vq-inicio" class="vq-volver" data-ir="inicio">← ${P.volver}</a>
-    <div class="vq-ficha"><figure class="vq-foto vq-foto--p"><img data-src="/assets/v2/img/webs/visqa-5l.webp" alt="VISQA PRO C3 5W-30, 5 L" width="800" height="800"></figure>
-      <div><p class="vq-k">${P.det}</p><h3>VISQA PRO C3 5W-30</h3><p>${P.prods[0][1]} · ${P.stock}: ${P.prods[0][2]}</p>
-        <table>${P.tabla.map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join("")}</table>
-        <p class="vq-k">${P.homol}</p><ul class="vq-chips"><li>ACEA C3</li><li>API SP</li><li>VW 504.00 / 507.00</li><li>MB 229.51</li></ul>
-        <a class="vq-pro vq-pro--l" href="#vq-inicio" data-ir="inicio">${P.pedido}</a></div></div>
+  <section data-vista="cita" id="br-cita" hidden>
+    <a href="#br-inicio" class="br-volver" data-ir="inicio">← ${P.volver}</a>
+    <div class="br-form" data-cita>
+      <div class="br-cita-foto"><img data-src="/assets/v2/img/webs/taller-2.webp" alt="${en ? "A car waiting in the workshop" : "Un coche esperando en el taller"}" width="800" height="560"></div>
+      <div><p class="br-k">${P.p1}</p><div class="br-ops">${P.ops1.map((o, i) => `<button type="button" aria-pressed="${i === 1}">${o}</button>`).join("")}</div>
+      <p class="br-k">${P.p2}</p><div class="br-ops">${P.ops2.map((o, i) => `<button type="button" aria-pressed="${i === 2}"${i === 1 ? " disabled" : ""}>${o}</button>`).join("")}</div>
+      <p class="br-k">${P.p3}</p><input class="br-matricula" value="4821 KLM" aria-label="${P.p3}" autocomplete="off">
+      <button type="button" class="br-cta br-cta--l" data-confirmar>${P.conf}</button>
+      <div class="br-ok" data-ok hidden role="status"><b>${P.ok}</b><p>${P.okd}</p><a href="#br-sigue" data-ir="sigue">${P.okl} →</a></div></div>
+    </div>
+  </section>
+  <section data-vista="sigue" id="br-sigue" hidden>
+    <a href="#br-inicio" class="br-volver" data-ir="inicio">← ${P.volver}</a>
+    <div class="br-sigue" data-br-sigue data-paso="2" data-titulos="${P.titulos.join("|")}">
+      <p class="br-k">${P.matr}</p><h3 data-br-titulo>${P.titulos[2]}</h3>
+      <div class="br-pista" aria-hidden="true"><div class="br-plano">${P.est.map((e, i) => `<span class="br-est" style="--i:${i}"><i></i></span>`).join("")}<div class="br-coche">${coche}</div></div></div>
+      <div class="br-etq" aria-hidden="true">${P.est.map((e) => `<span>${e}</span>`).join("")}</div>
+      <ol class="br-hitos">${P.hitos.map(([h, a, b], i) => `<li data-i="${i}"><span class="br-h">${h}</span><span><b>${a}</b><span>${b}</span></span></li>`).join("")}</ol>
+      <div class="br-presu" data-br-presu><div><span class="br-k">${P.presu}</span><b>186 €</b></div><button type="button" class="br-cta" data-br-aprobar>${P.aprobar}</button><button type="button" class="br-sec" data-br-llamar>${P.llamar}</button></div>
+      <button type="button" class="br-sec br-avanzar" data-br-avanzar hidden>${P.avanzar}</button>
+      <p class="br-aprobado" data-br-aprobado hidden>${P.aprobado}</p>
+    </div>
+  </section>
+  <section data-vista="taller" id="br-taller" hidden>
+    <a href="#br-inicio" class="br-volver" data-ir="inicio">← ${P.volver}</a>
+    <div class="br-panel"><p class="br-k">${P.tk}</p>
+      <div class="br-cols">${P.cols.map(([t, xs]) => `<div class="br-col"><b>${t} <span>${xs.length}</span></b>${xs.map(([m, q, w]) => `<div class="br-tarjeta${m === "4821 KLM" ? " es-tuyo" : ""}"><span class="br-mat">${m}</span><span>${q}</span><span class="br-w">${w}</span></div>`).join("")}</div>`).join("")}</div>
+      <ul class="br-auto">${P.auto.map(([n, t]) => `<li><b>${n}</b><span>${t}</span></li>`).join("")}</ul></div>
   </section>
 </div>`;
 }
@@ -148,10 +171,10 @@ function sonrisa(en) {
 }
 
 export const SITIOS = [
-  { id: "vandria", sector: ["Inmobiliaria", "Real estate"], nombre: "Vandria Hogar", dominio: "vandriahogar.es", con: ["CRM", "CRM"], html: vandria },
-  { id: "orbe", sector: ["Restaurante", "Restaurant"], nombre: "Orbe", dominio: "orbe-restaurante.es", con: ["Agenda de sala", "Floor plan"], html: orbe },
-  { id: "visqa", sector: ["Industria · lubricantes", "Industry · lubricants"], nombre: "Visqa Lubricantes", dominio: "visqa.es", con: ["ERP y almacén", "ERP and warehouse"], html: visqa },
-  { id: "sonrisa", sector: ["Servicios · clínica", "Services · clinic"], nombre: "Clínica Sonrisa", dominio: "clinicasonrisa.es", con: ["Agenda de la clínica", "Clinic calendar"], html: sonrisa },
+  { id: "vandria", sector: ["Inmobiliaria", "Real estate"], nombre: "Vandria Hogar", dominio: "vandriahogar.es", con: ["CRM", "CRM"], html: vandria, lema: ["Casas y pisos en la Costa del Sol.", "Homes on the Costa del Sol."] },
+  { id: "orbe", sector: ["Restaurante", "Restaurant"], nombre: "Orbe", dominio: "orbe-restaurante.es", con: ["Agenda de sala", "Floor plan"], html: orbe, lema: ["Cocina de temporada, a diez minutos de casa.", "Seasonal cooking, ten minutes from home."] },
+  { id: "brio", sector: ["Taller mecánico", "Car repair"], nombre: "Brío", dominio: "taller-brio.es", con: ["Agenda del taller y WhatsApp", "Workshop calendar and WhatsApp"], html: brio, lema: ["Tu coche, listo cuando te lo decimos.", "Your car, ready when we say it will be."] },
+  { id: "sonrisa", sector: ["Servicios · clínica", "Services · clinic"], nombre: "Clínica Sonrisa", dominio: "clinicasonrisa.es", con: ["Agenda de la clínica", "Clinic calendar"], html: sonrisa, lema: ["Cita en dos toques.", "Book in two taps."] },
 ];
 
 /** El cuerpo del capítulo (sustituye a las cuatro capturas). */
@@ -162,8 +185,12 @@ export function cuerpoWebs(lang) {
     <div class="w3-suelo" aria-hidden="true"></div>
     ${SITIOS.map((s, i) => `<article class="w3-ventana${i ? "" : " is-activa"}" data-w3-v="${i}" id="w3-${s.id}" aria-label="${s.nombre} · ${s.sector[k]}"${i ? ' aria-hidden="true" inert' : ""}>
       <div class="w3-barra" aria-hidden="true"><i></i><i></i><i></i><span class="w3-url">${s.dominio}</span></div>
-      <div class="w3-pantalla"><div class="w3-vista" tabindex="0">${s.html(en)}</div></div>
-      <div class="w3-brillo" aria-hidden="true"></div>
+      <div class="w3-pantalla">
+        <div class="w3-cartel w3-cartel--${s.id}" aria-hidden="true"><span class="w3-cartel-l">${s.nombre}</span><span class="w3-cartel-s">${s.sector[k]}</span><span class="w3-cartel-h">${s.lema[k]}</span></div>
+        <div class="w3-vista" tabindex="0"></div>
+        <template data-w3-plantilla>${s.html(en)}</template>
+      </div>
+      <div class="w3-velo" aria-hidden="true"></div>
     </article>`).join("\n    ")}
   </div></div>
   <div class="w3-mando">

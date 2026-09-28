@@ -18,17 +18,17 @@ export const DEMOS = {
     cerrar: "Cerrar la demo", pantalla: "Mejor en un ordenador.",
     lista: [
       {
-        id: "finance", pest: "Finance", marca: ["VQ", "Visqa Lubricantes"], ctx: "Fabricante de lubricantes técnicos · Avilés · 22 personas · martes, 9:10",
-        t: "23 facturas de proveedor esperan en el correo.",
-        prob: "Aceite base, aditivos, envases, portes: pasarlas a mano lleva dos horas cada semana. Y alguna se escapa: un IVA mal puesto se descubre en el cierre del trimestre.",
+        id: "finance", pest: "Finance", marca: ["BR", "Taller Brío"], ctx: "Taller mecánico · Leganés · 9 personas · martes, 9:10",
+        t: "Finance registra solas tus facturas de proveedor.",
+        prob: "El taller recibe 23 a la semana y hoy se teclean a mano: dos horas, y algún IVA mal puesto.",
         acc: "Suelta las facturas", acc2: "Revisar la que no cuadra",
-        res: "23 facturas registradas en 38 segundos. Tú revisaste una. La tesorería de la semana ya cuenta con ellas.",
+        res: "23 facturas registradas en 38 segundos. Tú solo miraste una.",
         app: "finance",
       },
       {
         id: "comercial", pest: "Comercial", marca: ["AI", "Alba Interiorismo"], ctx: "Estudio de interiorismo · 3 comerciales · viernes, 18:40",
         t: "Entra un lead por la web un viernes por la tarde.",
-        prob: "Hoy lo vería alguien el lunes. Para entonces ya habrá pedido presupuesto a otros dos estudios.",
+        prob: "Hoy lo vería alguien el lunes, cuando ya habrá pedido presupuesto a otros dos estudios.",
         acc: "Que entre el lead", acc2: "Aprobar y enviar",
         res: "Primera respuesta en un minuto, no en dos días. El lead tiene dueña, respuesta y seguimiento en la agenda.",
         app: "comercial",
@@ -36,7 +36,7 @@ export const DEMOS = {
       {
         id: "operaciones", pest: "Operaciones", marca: ["CL", "Climatec"], ctx: "Instalaciones de climatización · 8 técnicos · lunes, 8:00",
         t: "El cliente acaba de aceptar el presupuesto P-118.",
-        prob: "Convertirlo en trabajo planificado lleva dos días de hojas y llamadas. Los retrasos se ven el día de la instalación.",
+        prob: "Planificarlo lleva dos días de hojas y llamadas, y los retrasos se ven el mismo día.",
         acc: "Aceptar el presupuesto", acc2: "Simular: el material llega tarde",
         res: "Planificado en tres segundos. El retraso se vio dos días antes y el cliente ya tiene su nueva fecha.",
         app: "operaciones",
@@ -52,9 +52,9 @@ export const DEMOS = {
       {
         id: "os", pest: "D-Code OS", marca: ["OS", "Toda la empresa"], ctx: "La misma empresa, vista entera",
         t: "Siete herramientas. Nadie ve el conjunto.",
-        prob: "Cada una guarda su parte. Saber qué ha pasado hoy obliga a abrir siete pestañas y preguntar a tres personas.",
+        prob: "Saber qué ha pasado hoy obliga a abrir siete pestañas y preguntar a tres personas.",
         acc: "Conectar con D-Code OS", acc2: "¿Qué ha pasado hoy?",
-        res: "Todo lo que pasa, en un solo sitio y con su rastro: quién, cuándo y por qué. Y un parte del día escrito solo.",
+        res: "Todo lo que pasa, en un solo sitio y con su rastro. Y un parte del día escrito solo.",
         app: "os",
       },
     ],
@@ -69,17 +69,17 @@ export const DEMOS = {
     cerrar: "Close the demo", pantalla: "Better on a computer.",
     lista: [
       {
-        id: "finance", pest: "Finance", marca: ["VQ", "Visqa Lubricants"], ctx: "Technical lubricant maker · Avilés · 22 people · Tuesday, 9:10",
-        t: "23 supplier invoices are waiting in the inbox.",
-        prob: "Base oil, additives, packaging, haulage: typing them in takes two hours every week. And one always slips: a wrong VAT rate shows up at quarter end.",
+        id: "finance", pest: "Finance", marca: ["BR", "Brío Car Repair"], ctx: "Car repair workshop · Leganés · 9 people · Tuesday, 9:10",
+        t: "Finance records your supplier invoices by itself.",
+        prob: "The workshop gets 23 a week and today they're typed in by hand: two hours, and the odd wrong VAT rate.",
         acc: "Drop the invoices", acc2: "Review the one that doesn't add up",
-        res: "23 invoices recorded in 38 seconds. You reviewed one. This week's cash flow already counts them.",
+        res: "23 invoices recorded in 38 seconds. You only looked at one.",
         app: "finance",
       },
       {
         id: "comercial", pest: "Sales", marca: ["AI", "Alba Interiors"], ctx: "Interior design studio · 3 sales people · Friday, 18:40",
         t: "A lead comes in through the website on a Friday evening.",
-        prob: "Today someone would see it on Monday. By then they will have asked two other studios for a quote.",
+        prob: "Today someone would see it on Monday, when they'll already have asked two other studios.",
         acc: "Let the lead in", acc2: "Approve and send",
         res: "First reply in one minute, not two days. The lead has an owner, an answer and a follow-up in the calendar.",
         app: "comercial",
@@ -87,7 +87,7 @@ export const DEMOS = {
       {
         id: "operaciones", pest: "Operations", marca: ["CL", "Climatec"], ctx: "HVAC installers · 8 technicians · Monday, 8:00",
         t: "The customer has just accepted quote P-118.",
-        prob: "Turning it into planned work takes two days of spreadsheets and calls. Delays show up on installation day.",
+        prob: "Planning it takes two days of spreadsheets and calls, and delays show up on the day.",
         acc: "Accept the quote", acc2: "Simulate: the material is late",
         res: "Planned in three seconds. The delay was seen two days early and the customer already has the new date.",
         app: "operaciones",
@@ -103,9 +103,9 @@ export const DEMOS = {
       {
         id: "os", pest: "D-Code OS", marca: ["OS", "The whole company"], ctx: "The same company, seen whole",
         t: "Seven tools. Nobody sees the whole.",
-        prob: "Each keeps its own part. Knowing what happened today means opening seven tabs and asking three people.",
+        prob: "Knowing what happened today means opening seven tabs and asking three people.",
         acc: "Connect D-Code OS", acc2: "What happened today?",
-        res: "Everything that happens, in one place and with its trail: who, when and why. And a daily report written by itself.",
+        res: "Everything that happens, in one place and with its trail. And a daily report written by itself.",
         app: "os",
       },
     ],
@@ -127,7 +127,7 @@ export function seccionDemos(lang) {
           <h3 class="dm-t">${x.t}</h3>
           <p class="dm-prob">${x.prob}</p>
         </div>
-        <div class="dm-lienzo" data-dm-lienzo aria-hidden="true"></div>
+        <div class="dm-lienzo" data-dm-lienzo role="group" aria-label="${x.pest}"></div>
         <div class="dm-mando">
           <ol class="dm-fases" aria-hidden="true">${d.fases.map((f, k) => `<li data-fase="${k}"${k < 2 ? ' class="is-hecha"' : ""}>${f}</li>`).join("")}</ol>
           <div class="dm-acciones" data-dm-acciones>
