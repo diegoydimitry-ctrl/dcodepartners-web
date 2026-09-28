@@ -121,7 +121,7 @@ export function seccionDemos(lang) {
       <div class="dm-pest" role="tablist" aria-label="Demos">
         ${d.lista.map((x, i) => `<button type="button" role="tab" class="dm-p" id="dm-p-${x.id}" aria-controls="dm-${x.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-dm-pest="${x.id}"><span class="dm-p-n">0${i + 1}</span>${x.pest}</button>`).join("")}
       </div>
-      ${d.lista.map((x, i) => `<article class="dm-panel dm-panel--${x.id}" id="dm-${x.id}" role="tabpanel" aria-labelledby="dm-p-${x.id}" data-dm="${x.id}"${i ? " hidden" : ""}>
+      ${d.lista.map((x, i) => `<div class="dm-panel dm-panel--${x.id}" id="dm-${x.id}" role="tabpanel" aria-labelledby="dm-p-${x.id}" data-dm="${x.id}"${i ? " hidden" : ""}>
         <div class="dm-guion">
           <p class="dm-marca"><span class="dm-marca-i" aria-hidden="true">${x.marca[0]}</span><span><b>${x.marca[1]}</b><span class="dm-ctx">${x.ctx}</span></span></p>
           <h3 class="dm-t">${x.t}</h3>
@@ -137,7 +137,7 @@ export function seccionDemos(lang) {
           <p class="dm-res" data-dm-res aria-live="polite"><span class="dm-res-t">${x.res}</span></p>
           <div class="dm-pie"><button type="button" class="enlace dm-otra" data-dm-otra hidden>${d.reiniciar}</button><button type="button" class="enlace" data-demo-abrir="${x.app}">${d.completa} ${FLECHA}</button></div>
         </div>
-      </article>`).join("\n      ")}
+      </div>`).join("\n      ")}
     </div>
     <p class="rotulo tocalo-aviso">${d.aviso}</p>
     <dialog class="visor" data-visor aria-label="Demo">

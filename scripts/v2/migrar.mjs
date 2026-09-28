@@ -122,7 +122,7 @@ function bloques(main) {
       return { n: num ? num.text.trim() : "", t: esc(b.childNodes.filter((c) => c !== num).map((c) => c.text).join("").replace(/\s+/g, " ").trim()), d: r.map(limpio).join(" ") };
     }) };
     // registros con varias celdas (movimientos de un extracto…): una tabla
-    return { tipo: "html", h: `<div class="tabla tabla--registros"><table>${lis.map((li) => `<tr>${celdas(li).map((c) => `<td>${limpio(c)}</td>`).join("")}</tr>`).join("")}</table></div>` };
+    return { tipo: "html", h: `<div class="tabla tabla--registros" tabindex="0"><table>${lis.map((li) => `<tr>${celdas(li).map((c) => `<td>${limpio(c)}</td>`).join("")}</tr>`).join("")}</table></div>` };
   }
   function lista(n, ord) {
     const lis = n.childNodes.filter((c) => c.nodeType === 1 && c.rawTagName.toLowerCase() === "li");

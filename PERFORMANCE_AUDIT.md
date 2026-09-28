@@ -40,3 +40,14 @@ Móvil real y GPU integrada: **NO MEDIDO** (la escena baja sola la resolución s
 - **FPS e INP en hardware real** (el entorno no tiene GPU). HIPÓTESIS: el héroe dibuja como mucho dos imágenes por fotograma en un canvas 2D, sin WebGL; en un móvil medio debería ir a la frecuencia de la pantalla.
 - Core Web Vitals de campo (CrUX): no hay datos de esta rama publicada.
 - Peso final de la secuencia (72 fotogramas, medido con `du`/`os.path.getsize`): **escritorio 1100 px = 4.575 KB (63,5 KB/fotograma)**; **móvil 700 px = 2.583 KB (35,9 KB/fotograma)**. En móvil, con ahorro de datos o red 2G/3G se cargan 1 de cada 2: **1.326 KB (37 fotogramas)**. La carga es progresiva y posterior al primer pintado, así que no cuenta para FCP/LCP (el póster, sí: 1 fotograma).
+
+## 28/09/2026 — demos nuevas de la portada y web de Sánchez Rubio
+Mismo método (`perf.mjs`, 390 px, CPU ×4, 4G lenta, mediana de 5). «Antes» = `42b53f2`; «Después» = `a04c66b` + carga diferida del CSS.
+
+| Página | FCP / LCP | CLS | Peticiones hasta `load` |
+|---|---|---|---|
+| Portada antes | 1.072–1.092 ms | 0 | 9 |
+| Portada con demos, CSS bloqueante (descartado) | 1.188–1.236 ms (+120 ms) | 0 | 10 |
+| **Portada con demos, CSS diferido** | **1.088 ms** | **0** | 9 (+CSS y JS de las demos después) |
+
+Demos en uso (390 px, CPU ×4): 0 *long tasks*; p99 entre fotogramas 16,8 ms. Detalle en `DESIGN_ENGINEERING_AUDIT.md` §4.1.

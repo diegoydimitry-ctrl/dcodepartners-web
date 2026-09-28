@@ -64,6 +64,33 @@ Dependencias nuevas en producción: **ninguna**. Fuentes nuevas: Archivo y Marti
 
 No hay ningún otro objeto 3D en el sitio: el resto del peso lo llevan la tipografía y el producto real.
 
+### 4.1 ¿Más 3D? Evaluación del 28/09/2026 (brief de las 11:30)
+Pregunta para cada candidato: «¿Qué explica este 3D que una sección normal no explica igual de bien?». Si la respuesta es «nada», no entra («prefiero 2D excelente antes que 3D mediocre»).
+
+| Candidato | Qué contaría | Veredicto | Por qué |
+|---|---|---|---|
+| **Logotipo en piezas** (portada) | Herramientas sueltas → sistema → IA | **Se queda** (ya existía) | Es la tesis de la marca contada con un objeto; 60 fps, 141 KB, se para fuera de pantalla |
+| Factura de papel escaneada en 3D (demo Finance) | Papel → datos | **Descartado** | Lo que importa es la transformación (hoja → fila del libro → la que no cuadra), y en 2D se lee mejor: el texto es nítido y comparable. En 3D el papel sería el protagonista y los datos, secundarios. Coste: +1 escena, texturas de papel, y el chunk de three.js en una sección que hoy pesa 9,8 KB de JS |
+| Red de herramientas en 3D (D-Code OS) | Todo conectado a un centro | **Descartado** | Un grafo en 3D es la «geometría flotante» que el brief prohíbe; en 2D (SVG + pulsos que viajan al centro) se entiende a la primera y lleva la actividad real al lado |
+| Oficina/taller en 3D como escenario de las demos | Contexto | **Descartado** | Decorado sin información; riesgo de parecer demo técnica de three.js |
+
+Resultado: **una sola pieza 3D en todo el sitio**, con función narrativa; las cinco demos son 2D de producto.
+
+**Rendimiento de las demos (MEDIDO, 28/09, Playwright, 390 px, CPU ×4):** recorrer 4 demos completas = 0 *long tasks*, intervalo entre fotogramas p50 16,7 ms · p95 16,7 ms · p99 16,8 ms (60 fps), ningún fotograma > 50 ms. Peso: `demos.js` 9,8 KB gzip + `demos.css` 4,5 KB gzip, **fuera del camino crítico** (CSS en reposo tras `load`, JS cuando la sección se acerca). FCP/LCP de la portada sin cambios (1.088 ms frente a 1.072–1.092 ms antes). Con movimiento reducido: mismos pasos sin animación. Móvil real y GPU integrada: NO MEDIDO.
+
+## 4 ter. Demos de la portada (28/09/2026)
+Sustituyen a «captura de Finance + cinco botones». Cada una, un producto con identidad propia y datos verosímiles, en cinco tiempos visibles (Contexto · Problema · Tú · El sistema · Resultado):
+
+| Demo | Empresa ficticia | Tú haces | El sistema hace | Resultado |
+|---|---|---|---|---|
+| Finance | Talleres Norte (taller, 14 personas) | Sueltas 23 facturas; revisas la única que no cuadra (IVA 10 % vs 21 %) | Lee cada hoja, la registra, marca la anómala; al corregir recalcula el total (1.240 → 1.364 €) | 23 facturas en 38 s, tesorería al día |
+| Comercial | Alba Interiorismo | Dejas entrar un lead del viernes 18:40; apruebas la respuesta | Clasifica, asigna a quien tiene menos carga, redacta con huecos reales de su agenda | 1 minuto frente a 2 días hábiles |
+| Operaciones | Climatec (8 técnicos) | Aceptas el presupuesto P-118; simulas un retraso del proveedor | Planifica la semana sin solapes; ve el retraso el lunes, mueve la instalación y avisa al cliente | Planificado en 3 s; retraso resuelto 2 días antes |
+| Atención | Clínica Sonrisa, sábado 22:15 | Eliges la pregunta del paciente | Responde con la agenda y las tarifas reales; reserva; lo delicado lo pasa a recepción | Respondido en segundos; lo sensible, a una persona |
+| D-Code OS | La empresa entera | Conectas; preguntas qué ha pasado hoy | Recibe lo que pasa en 7 herramientas, con su rastro; escribe el parte del día | Todo en un sitio, con quién/cuándo/por qué |
+
+Lenguaje: blanco y negro; lo que hace **el sistema** va en azul; lo que haces **tú**, con el botón principal. Todo el texto está en el HTML (indexable y legible sin JS). Pestañas ARIA con teclado; «Otra vez» reinicia; en móvil y tableta, texto → lienzo → mandos para ver lo que pasa al pulsar. «Abrir la aplicación completa» mantiene el visor anterior.
+
 ## 4 bis. Interiores: del texto migrado a componentes
 
 La migración del contenido de producción aplanaba los diseños antiguos: celdas en línea que quedaban pegadas («AltaF-2026-0140Anterior81A9…»), el pie antiguo convertido en capítulos (Cambios en proceso), listas de tarjetas convertidas en viñetas. Se corrige en `scripts/v2/migrar.mjs`, reconociendo la estructura y no la página:

@@ -5,13 +5,13 @@
 | URL (sigue a la rama) | https://dcodepartners-web-git-web-dcp-cowork4-d-code-partners.vercel.app |
 | Rama | `web/dcp-cowork4` (parte de `8ff5f5b`) |
 | Commit | el último de la rama (ver `git log`) |
-| Production | **Sin tocar.** Sigue en `diseno/dcode-design-system` (`e99d61f`) |
+| Production | Se publicó **una vez**, por petición expresa de Dirección (28/09 11:10), desde `42b53f2` (arreglo del configurador). Desde entonces, **sin tocar**: lo posterior está solo en la Preview. Rollback: `dpl_EC1c3BqRJykCBctkXMQSeyC5hzB1` (`e658c31`) |
 
 ## Cómo probarla (5 minutos)
 1. **Portada `/`**: baja despacio. Las piezas sueltas flotan, se unen y al final se enciende el píxel azul. Mueve el ratón: la luz del estudio se desliza por la cerámica. Cuatro frases en total.
 2. Cambia a **modo claro** (sol, arriba a la derecha): la misma escena, con sombra de contacto sobre blanco.
 3. Baja hasta el **pie**: Instagram, LinkedIn y Facebook.
-3. **Tócalo**: pulsa la captura de Finance o cualquiera de los cinco botones; la demo se abre en un visor (Escape la cierra).
+3. **Tócalo**: cinco demos (Finance, Comercial, Operaciones, Atención, D-Code OS). Pulsa el botón de cada una y mira el lienzo; al final, «Otra vez». «Abrir la aplicación completa» abre la demo entera en un visor (Escape la cierra).
 4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
 5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
 6. **Diagnóstico** (`/diagnostico`): tres preguntas y el resultado con tus horas y tu coste por hora.
