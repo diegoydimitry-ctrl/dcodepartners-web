@@ -11,8 +11,14 @@
 1. **Portada `/`**: baja despacio. Las piezas sueltas flotan, se unen y al final se enciende el píxel azul. Mueve el ratón: la luz del estudio se desliza por la cerámica. Cuatro frases en total.
 2. Cambia a **modo claro** (sol, arriba a la derecha): la misma escena, con sombra de contacto sobre blanco.
 3. Baja hasta el **pie**: Instagram, LinkedIn y Facebook.
-3. **Tócalo**: cinco demos (Finance, Comercial, Operaciones, Atención, D-Code OS). Pulsa el botón de cada una y mira el lienzo; al final, «Otra vez». «Abrir la aplicación completa» abre la demo entera en un visor (Escape la cierra).
-4. **Webs de ejemplo en 3D** (`/servicios/paginas-web`, capítulo 01, y `/que-hacemos`, «Páginas web»): cuatro webs ficticias en un escenario 3D. Elige una abajo (o pulsa una de los lados), bájala por dentro, entra en una ficha, reserva mesa o cita, usa el buscador técnico de Visqa. «Ver a pantalla completa» la abre a todo el ancho. En el móvil son marcos de teléfono que se deslizan con el dedo.
+3. **Tócalo**: cinco demos, cada una con su propia escena 3D (y solo la elegida está viva):
+   - **Finance** (taller Brío): «Suelta las facturas» → vuelan de la bandeja al libro; «Revisar la que no cuadra» (neumáticos al 10 % en vez del 21 %) y corrígela. «Ver las 23» despliega el detalle.
+   - **Comercial**: «Que entre el lead» → la ficha avanza por los carriles del embudo; «Aprobar y enviar» la respuesta redactada.
+   - **Operaciones**: la semana como una mesa inclinada; «Aceptar el presupuesto» (los bloques caen en su sitio) y «Simular: el material llega tarde».
+   - **Atención**: elige la pregunta del paciente; la conversación va delante y, detrás, las fuentes que el sistema consulta (se iluminan las que usa).
+   - **D-Code OS**: tres capas que se separan al «Conectar con D-Code OS»; «¿Qué ha pasado hoy?» escribe el parte del día.
+   «Otra vez» reinicia; «Abrir la aplicación completa» abre la demo entera en un visor (Escape la cierra).
+4. **Webs de ejemplo en 3D** (`/servicios/paginas-web`, capítulo 01, y `/que-hacemos`, «Páginas web»): cuatro webs ficticias en un escenario 3D (Vandria, Orbe, **Brío — taller mecánico**, Clínica Sonrisa). Elige una abajo (o pulsa una de los lados), bájala por dentro, entra en una ficha, reserva mesa o cita. En **Brío**: pide cita (servicio, hora, matrícula), entra en «Sigue tu coche», aprueba el presupuesto y mira avanzar el coche por la pista del taller; «Taller» enseña el panel del jefe de taller (trabajos por columnas y lo que se automatiza). «Ver a pantalla completa» la abre a todo el ancho. En el móvil son marcos de teléfono que se deslizan con el dedo. Solo la web que miras está montada; las demás son un cartel ligero hasta que las eliges.
 4. **Precios** (`/precios`): todo sale de `catalogo.json`; «Qué incluye» despliega el detalle.
 5. **Contacto** (`/contacto`): configurador de cinco pasos y formulario por pasos. El envío real solo funciona en el dominio con Turnstile; en la Preview la verificación puede no cargar.
 6. **Diagnóstico** (`/diagnostico`): tres preguntas y el resultado con tus horas y tu coste por hora.

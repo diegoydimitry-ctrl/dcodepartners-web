@@ -121,6 +121,8 @@
 .br-servicios li { display: grid; gap: 4px; padding: 12px; background: var(--br-p); border-radius: 10px; border: 1px solid var(--br-l); }
 .br-servicios b { font: 600 13.5px/1.2 "W3 Grotesk", sans-serif; }
 .br-servicios span { font-size: 12px; color: var(--br-t2); }
+.br-credito { margin: -18px 22px 22px; font-size: 11px; color: var(--br-t2); }
+.br-credito a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .br-volver { display: inline-block; margin: 16px 22px 10px; font-size: 13px; color: var(--br-t2) !important; }
 .br-form { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: 22px; margin: 0 22px 30px; }
 .br-cita-foto { border-radius: 12px; overflow: hidden; aspect-ratio: 4 / 5; background: #cfd4d9; }

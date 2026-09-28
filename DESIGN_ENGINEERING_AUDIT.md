@@ -93,6 +93,8 @@ Lenguaje: blanco y negro; lo que hace **el sistema** va en azul; lo que haces **
 
 ## 4 quater. Ronda del 28/09 (tarde): responsive por formato, webs de ejemplo en 3D, demo de lubricantes
 
+> Visqa (lubricantes) y su demo de Finance se retiraron en la ronda siguiente: ver §4 quinquies (taller Brío).
+
 Brief: «misma web + mucha mejor experiencia + mejores demos + responsive profesional». Lo que funciona en PC y empeora en el móvil **no se muestra igual en el móvil**.
 
 ### Responsive: una composición por formato
@@ -129,6 +131,76 @@ Las anclas de la web anterior (`#planes`, `#verifactu`, `#conciliacion`, `#demo`
 | SEO | 84 páginas, 0 fallos |
 | Consola | 0 errores en las demos (5 × 2 anchos) y en las webs de ejemplo |
 | `check:chat` y `check:tema` | Fallan igual en `b8970ba`: comprueban la portada antigua (rev. 3), que ya no existe. No aplican |
+
+## 4 quinquies. Ronda del 28/09 (noche): una escena 3D por demo, taller Brío, Finance mínimo, solo lo activo vivo
+
+Orden: «cada demo, una experiencia interactiva con su propio 3D; taller en lugar de lubricantes; Finance con menos
+información; la sección tiene que ir fluida». Regla aplicada: si un efecto no mejora la experiencia, fuera.
+
+### Demos de la portada (rev. 3): cada una con su escena
+Todo CSS 3D con `transform` y `opacity` (lo que la GPU compone sin repintar); sin WebGL, sin librerías, sin bucles
+continuos. La escena cuenta lo que hace el producto, no decora:
+
+| Demo | Escena | Qué se toca |
+|---|---|---|
+| Finance | Las facturas salen volando de la bandeja (una pila en perspectiva) y caen en el libro; la que no cuadra se queda delante | «Suelta las facturas», «Revisar la que no cuadra», corregir; «Ver las 23» (detalle solo si se pide) |
+| Comercial | El embudo tendido en el suelo (`rotateX(40deg)`): la ficha del lead avanza por los carriles y el borrador de respuesta se levanta | «Que entre el lead», «Aprobar y enviar» |
+| Operaciones | La semana como mesa de trabajo inclinada: los trabajos caen en su hueco y, con el retraso, uno se levanta y se mueve | «Aceptar el presupuesto», «Simular: el material llega tarde» |
+| Atención | La conversación delante y, detrás, en profundidad, las fuentes que el asistente consulta (se iluminan las que usa) | Elegir la pregunta del paciente; elegir hueco |
+| D-Code OS | Tres capas apiladas (tus herramientas → D-Code OS → tu día) que se separan al conectar | «Conectar con D-Code OS», «¿Qué ha pasado hoy?» |
+
+- **Solo vive la demo abierta**: al cambiar de pestaña, la anterior se para (esperas canceladas) y su lienzo se vacía.
+  Antes, cada demo visitada se quedaba montada (el DOM crecía de 690 a 877 nodos en un recorrido); ahora se mantiene
+  en 638–651.
+- **Teléfono**: la misma escena, más ligera: sin vuelos (las facturas se cuentan por lotes de 4), inclinación menor,
+  sin sombras grandes.
+- **Movimiento reducido**: los mismos pasos, sin vuelos ni esperas.
+
+### Finance: primera vista mínima
+Responde solo a tres preguntas: **qué es** («Finance registra solas tus facturas de proveedor»), **qué resuelve**
+(«El taller recibe 23 a la semana y hoy se teclean a mano: dos horas, y algún IVA mal puesto») y **qué puedo hacer**
+(un botón). Resultado en una línea («23 facturas registradas en 38 segundos. Tú solo miraste una»). Fuera de la primera
+vista: la tabla de facturas recibidas con todas sus filas, el pie de pagos previstos de la semana y el párrafo largo del
+problema (la tabla sigue disponible tras «Ver las 23»). Empresa: **Taller
+Brío** (Leganés, 9 personas); la factura que no cuadra, neumáticos al 10 % (van al 21 %): 512 € → 563,20 €.
+
+### Webs de ejemplo: Brío (taller mecánico) sustituye a Visqa (lubricantes)
+Brío es un taller creíble y pequeño, no un ERP: **Inicio** (servicios y precio orientativo), **Cita** (servicio, hora,
+matrícula; confirmación), **Sigue tu coche** (la pista del taller en 3D con cinco estaciones —recepción, diagnóstico,
+presupuesto, reparación, listo—, hitos con hora, presupuesto que se aprueba o se pide llamada; el coche avanza) y
+**Taller** (el panel del jefe de taller: trabajos por columnas y lo que se automatiza: citas confirmadas solas,
+presupuestos aprobados por WhatsApp, avisos de ITV). Fotos renderizadas por D-Code (`scripts/v2/renders/taller.py`):
+coche «CarConcept» (CC BY 4.0, atribuido al pie de Brío; ver `scripts/v2/renders/CREDITOS.md`).
+
+### Webs de ejemplo: rendimiento
+- **Una web viva a la vez**: el HTML de cada web vive en un `<template>`; se crea al elegirla y se borra al dejarla
+  (tras girar hacia el lado). En su lugar, un **cartel** de pocos nodos (nombre, sector y lema). Las imágenes se piden al
+  despertar la web que las usa. En el teléfono, despierta la que queda centrada y duerme la que sale.
+- **Eliminado**: el reflejo en el suelo (`-webkit-box-reflect`, pintaba cada ventana dos veces) y los filtros de las
+  ventanas de lado (sustituidos por un velo de opacidad).
+
+### Medido (28/09, 18:15–18:25; render de Sánchez Rubio en pausa para no competir por la CPU)
+Chromium sin GPU, CPU ×4. «Antes» = `c4d4b43` (la Preview de las 17:00); «después» = `a166268`.
+
+| | Antes | Después |
+|---|---|---|
+| Webs de ejemplo, 1440 px (cambiar 4 veces de web + puntero 1 s): intervalo entre fotogramas p50 / p95 | 83,4 / 316,7 ms | **16,7 / 50,1 ms** |
+| — fotogramas > 50 ms · tareas largas (máx.) | 81 · 23 (423 ms) | **26 · 2 (148 ms)** |
+| — trabajo del hilo principal · nodos | 4,30 s · 825 | **2,53 s · 614** |
+| Webs de ejemplo, 390 px: p95 · fotogramas > 50 ms | 33,4 ms · 4 | **16,8 ms · 2** |
+| Demos en uso (cada una, 1440 y 390): tareas largas · p95 | 0 · 16,7 ms | 0 · 16,7 ms |
+| Demo D-Code OS, 1440: trabajo del hilo | 3,44 s | **0,99 s** |
+| Demo Comercial, 390: trabajo del hilo | 0,62 s | 1,08 s (escena nueva; sigue sin tareas largas) |
+| Portada 390 (4G lenta): FCP / load | 1.148 / 1.718 ms | 1.196 / 1.693 ms (igual: ruido ±50 ms) |
+| `/servicios/paginas-web` 390: FCP / LCP · KB · peticiones | 1.052 / 1.392 ms · 595 · 19 | 1.140 / 1.448 ms · **522 · 16** |
+
+Entrar en la sección (bajar 8.000 px hasta «Tócalo») da 13–15 tareas largas en las dos versiones: la traza las atribuye
+a composición en software (GPUTask 8,4 s + Commit 7,4 s; JavaScript 0,2 s), porque el entorno no tiene GPU. No son las
+demos. FPS en GPU real: **NO MEDIDO** (el panel del navegador del equipo estaba oculto).
+
+### Eliminado en esta ronda
+Visqa (web, demo de Finance, renders y sus fuentes de Blender), el reflejo y los filtros del escenario de webs, los
+lienzos 2D anteriores de las cinco demos, el montaje acumulado de demos, la tabla y el pie de tesorería siempre visibles de Finance.
 
 ## 4 bis. Interiores: del texto migrado a componentes
 

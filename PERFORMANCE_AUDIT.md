@@ -51,3 +51,24 @@ Mismo método (`perf.mjs`, 390 px, CPU ×4, 4G lenta, mediana de 5). «Antes» =
 | **Portada con demos, CSS diferido** | **1.088 ms** | **0** | 9 (+CSS y JS de las demos después) |
 
 Demos en uso (390 px, CPU ×4): 0 *long tasks*; p99 entre fotogramas 16,8 ms. Detalle en `DESIGN_ENGINEERING_AUDIT.md` §4.1.
+
+## 28/09/2026 (noche) — demos con escena 3D propia y webs de ejemplo que duermen
+«Antes» = `c4d4b43` (Preview de las 17:00); «después» = `a166268`. Mismo servidor local; el render de Sánchez Rubio,
+**en pausa** durante las medidas (dos CPU compartidas).
+
+**Carga** (`perf.mjs`, CPU ×4, 4G lenta, mediana de 3):
+
+| Página | Ancho | FCP antes → después | LCP antes → después | CLS | KB · peticiones antes → después |
+|---|---|---|---|---|---|
+| Portada | 390 | 1.148 → 1.196 ms | 1.148 → 1.196 ms | 0 | 794 · 10 → 796 · 10 |
+| Portada | 1440 | 1.208 → 1.184 ms | 1.208 → 1.184 ms | 0,013 | 794 · 10 → 796 · 10 |
+| `/servicios/paginas-web` | 390 | 1.052 → 1.140 ms | 1.392 → 1.448 ms | 0 | 595 · 19 → **522 · 16** |
+| `/servicios/paginas-web` | 1440 | 1.128 → 1.104 ms | 1.404 → 1.408 ms | 0,017 | 265 · 8 → 274 · 8 |
+
+Diferencias de ±90 ms en uno u otro sentido: ruido del entorno. La carga no empeora; en el móvil baja lo transferido
+(solo se piden las imágenes de la web activa).
+
+**Uso** (`interaccion.mjs` / `demos-inter.mjs`, Chromium sin GPU, CPU ×4): ver la tabla de
+`DESIGN_ENGINEERING_AUDIT.md` §4 quinquies. Resumen: webs de ejemplo en escritorio, p95 entre fotogramas
+**316,7 → 50,1 ms** y tareas largas **23 → 2**; demos en uso, 0 tareas largas y p95 16,7 ms en las cinco, antes y después,
+con el DOM estable (solo una montada).

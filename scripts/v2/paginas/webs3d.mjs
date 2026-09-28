@@ -60,6 +60,7 @@ function brio(en) {
     <div class="br-heroe"><figure class="br-foto"><img data-src="/assets/v2/img/webs/taller-1.webp" alt="${en ? "The workshop: a car on a two-post lift, another waiting" : "El taller: un coche en el elevador y otro esperando"}" width="1200" height="800"></figure>
       <div class="br-heroe-t"><p class="br-k">${P.k}</p><h3>${P.h}</h3><p>${P.sub}</p><div class="br-acc"><a class="br-cta" href="#br-cita" data-ir="cita">${P.cta}</a><a class="br-sec" href="#br-sigue" data-ir="sigue">${P.seguir} →</a></div></div></div>
     <ul class="br-servicios">${P.servicios.map(([a, b]) => `<li><b>${a}</b><span>${b}</span></li>`).join("")}</ul>
+    <p class="br-credito">${en ? "Car in the photos" : "Coche de las fotos"}: «CarConcept», Eric Chadwick / Darmstadt Graphics Group · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener license">CC BY 4.0</a> · ${en ? "modified, rendered by D-Code" : "modificado, render de D-Code"}</p>
   </section>
   <section data-vista="cita" id="br-cita" hidden>
     <a href="#br-inicio" class="br-volver" data-ir="inicio">← ${P.volver}</a>
