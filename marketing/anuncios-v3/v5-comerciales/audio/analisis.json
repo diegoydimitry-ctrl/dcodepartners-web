@@ -1,0 +1,43 @@
+{
+ "lufs": -14.469076274642584,
+ "pico_dbfs": -2.059519339530856,
+ "frases": [
+  {
+   "id": "c1",
+   "voz_fondo_lu": 19.9,
+   "wer": 0.0,
+   "oido": "¿Te gusta vender y encontrar oportunidades?"
+  },
+  {
+   "id": "c2",
+   "voz_fondo_lu": 15.3,
+   "wer": 0.167,
+   "oido": "Bendicode Partners estamos creciendo y buscamos comerciales."
+  },
+  {
+   "id": "c3",
+   "voz_fondo_lu": 16.4,
+   "wer": 0.0,
+   "oido": "tu conectas con el cliente y cierras la venta"
+  },
+  {
+   "id": "c4",
+   "voz_fondo_lu": 16.3,
+   "wer": 0.0,
+   "oido": "nosotros construimos la solución."
+  },
+  {
+   "id": "c5",
+   "voz_fondo_lu": 11.5,
+   "wer": 0.0,
+   "oido": "y tú, recibes el 50% de cada venta."
+  },
+  {
+   "id": "c6",
+   "voz_fondo_lu": 23.3,
+   "wer": 0.0,
+   "oido": "¿Hablamos"
+  }
+ ],
+ "silencios": []
+}

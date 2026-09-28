@@ -1,0 +1,8 @@
+{
+ "motor": "ElevenLabs · Eleven Multilingual v2 · una sola toma continua del guion completo",
+ "voz": "Martin Osborne – Polished and Energetic (masculina, español de España)",
+ "ajustes": {"velocidad": 1.0, "estabilidad": 0.4, "similitud": 0.75, "exageracion_de_estilo": 0.3},
+ "texto_generado": "¿Te gusta vender y encontrar oportunidades? En D-Code Partners estamos creciendo, y buscamos comerciales. Tú conectas con el cliente y cierras la venta. Nosotros construimos la solución. Y tú recibes el cincuenta por ciento de cada venta. ¿Hablamos?",
+ "sr": 48000,
+ "nota": "toma-original.mp3 es el audio tal cual sale de ElevenLabs; toma.wav es la misma toma en WAV (48 kHz, mono) y es la que suena en el vídeo. Los cN.wav son cortes exactos solo para medir tiempos por palabra. No se ha acelerado ni recortado nada."
+}

@@ -1,17 +1,18 @@
-# D-Code Partners · anuncios (v7, 28/09/2026)
+# D-Code Partners · anuncios (v8, 28/09/2026)
 
-| | **1 · RUIDO** (YouTube, v4) | **2 · ¿SABES VENDER?** (captación de comerciales) | **3 · EN AUTOMÁTICO v2** (mini YouTube) |
+| | **1 · RUIDO** (YouTube, v4) | **2 · ¿HABLAMOS?** (captación de comerciales) | **3 · EN AUTOMÁTICO v2** (mini YouTube) |
 |---|---|---|---|
-| Formato | 16:9 · 1920×1080 · 30 fps · 44,6 s | 9:16 · 1080×1920 · 30 fps · **18,4 s** | 16:9 · 1920×1080 · 30 fps · 7,4 s |
-| Estado | Aprobado, sin cambios | **Nuevo, hecho desde cero** (sustituye al anuncio de vendedores v4–v6, retirado) | Aprobado, **no se toca** |
-| Voz | Supertonic 3 | ElevenLabs v3 · «Marciano Rajoy – Realistic and Commercial» | ElevenLabs v3 · «Jesus – Firm, Deep and Reassuring» |
-| Sonoridad entregada | −14,3 LUFS · −1,4 dBTP | −14,1 LUFS · −1,3 dBTP | −14,2 LUFS · −1,5 dBTP |
-| Entrega | `v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4` | `v4-comerciales/entrega/dcode-sabes-vender-9x16.mp4` | `v3-mini/entrega/dcode-en-automatico-v2-youtube-16x9.mp4` |
+| Formato | 16:9 · 1920×1080 · 30 fps · 44,6 s | 9:16 · 1080×1920 · 30 fps · **18,0 s** | 16:9 · 1920×1080 · 30 fps · 7,4 s |
+| Estado | Aprobado, sin cambios | **Versión final sobre el guion definitivo de Dirección** (sustituye a «¿Sabes vender?», retirado) | Aprobado, **no se toca** |
+| Voz | Supertonic 3 | ElevenLabs Multilingual v2 · «Martin Osborne – Polished and Energetic» (castellano, distinción medida) | ElevenLabs v3 · «Jesus – Firm, Deep and Reassuring» |
+| Sonoridad entregada | −14,3 LUFS · −1,4 dBTP | −14,0 LUFS · −1,5 dBTP | −14,2 LUFS · −1,5 dBTP |
+| Entrega | `v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4` | `v5-comerciales/entrega/dcode-hablamos-comerciales-9x16.mp4` | `v3-mini/entrega/dcode-en-automatico-v2-youtube-16x9.mp4` |
 | Subtítulos | `…-16x9.srt` | `…-9x16.srt` | `…-v2-youtube-16x9.srt` |
 
-- **¿SABES VENDER?:** la investigación, el concepto, el guion, el casting de voces y el QA están en **`v4-comerciales/NOTA-CREATIVA.md`**.
-- **`v2-vendedores/`:** es el anuncio retirado (ver su `RETIRADO.md`). Sus entregables se han quitado y siguen en el historial.
+- **¿HABLAMOS?:** guion, voz (casting y medida del acento), decisiones creativas y QA en **`v5-comerciales/NOTA-CREATIVA.md`**.
+- **Retirados:** `v2-vendedores/` y `v4-comerciales/` (ver su `RETIRADO.md`). Sus entregables se han quitado y siguen en el historial.
 - **Textos para publicar:** en `PUBLICACION.md`.
+- **Voz nueva sobre un vídeo ya montado:** `comun/retoma.py <vídeo> <toma>` parte una toma continua en frases y rehace los tiempos de `montaje.json`; después, `comun/palabras.py`.
 
 ## 1 · Investigación aplicada (qué se ha hecho y por qué)
 

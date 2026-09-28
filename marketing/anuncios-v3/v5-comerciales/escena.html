@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>¿HABLAMOS? · Captación de comerciales · D-Code Partners</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../comun/motor.js"></script>
+<script>
+"use strict";
+// Captación de comerciales · versión final (Reels / TikTok / Shorts / Meta · 9:16 · ~17 s).
+// Guion de Dirección en seis frases; cada frase es una escena y cada escena sale antes de que entre la siguiente.
+// Sistema visual: tinta, papel y UN azul (el píxel del logotipo). Motivo: LA RED — una rejilla de puntos casi
+// invisible sobre la que se encienden oportunidades, crece una línea, se conectan «tú» y el cliente, y que al final
+// se parte en dos en el 50 %. El producto que se enseña es real (capturas de D-Code Finance y D-Code OS).
+// Todo lo importante vive entre y=290 y y=1360 (arriba el perfil; abajo, los botones de la app).
+const W = 1080, H = 1920, FPS = 30;
+const D = window.DATOS, MT = D.montaje;
+const V = Object.fromEntries(MT.voz.map((f) => [f.id, f]));
+window.META = { W, H, fps: FPS, duracion: MT.duracion, segura: [64, 290, 1016, 1360], minpx: 28 };
+const c = document.getElementById("c").getContext("2d");
+const { clamp, lerp, prog, eOut, eOut5, eIn, eIO, muelle } = M;
+const C = { tinta: "#0b0c10", tinta2: "#12141a", papel: "#f2f0ea", gris: "#8b8f99", grisP: "#6d6a63", azul: "#2f6bff", pixel: "#5b8cff", blanco: "#ffffff" };
+const AR = (p, px) => `${p} ${px}px "Archivo"`;
+const IT = (p, px) => `${p} ${px}px "Inter Tight"`;
+const MO = (p, px) => M.fuente(p, px, "JetBrains Mono");
+const X0 = 88, XA = W - 88, ANCHO = XA - X0;
+const limpia = (s) => s.toLowerCase().replace(/[^\wáéíóúñü%-]/g, "");
+const pal = (id, w) => (V[id].palabras || []).find((p) => limpia(p.w).startsWith(w))?.t0 ?? V[id].t0;
+const cabe = (s, fam, pxMax, ancho = ANCHO) => Math.min(pxMax, (100 * ancho) / M.ancho(c, s, fam(100)));
+let IMG = {};
+
+// ─── límites de escena: cada una termina 0,12 s antes de su siguiente frase; la salida dura 0,24 s ───
+const B = (id) => V[id].t0 - 0.12;
+const E = { e1: [-1, B("c2")], e2: [B("c2"), B("c3")], e3: [B("c3"), B("c4")], e4: [B("c4"), B("c5")], e5: [B("c5"), B("c6")], e6: [B("c6"), MT.duracion + 1] };
+const SALE = 0.24;
+const sal = (e) => E[e][1] - SALE;
+const entra = (e, t) => Math.max(E[e][0], t);            // nada entra antes de que la escena anterior se haya ido
+
+function fondo(col) { c.fillStyle = col; c.fillRect(0, 0, W, H); }
+// Revelado con máscara: la línea sube desde su línea base (persiana), sin rebote; sale igual, hacia arriba.
+function linea(s, x, y, px, fam, color, t0, t, o = {}) {
+  const k = eOut5(prog(t, t0, t0 + (o.dur ?? 0.4)));
+  if (k <= 0) return 0;
+  const ks = o.sal != null ? eIn(prog(t, o.sal, o.sal + SALE)) : 0;
+  if (ks >= 1) return 0;
+  const f = fam(px), alto = px * 1.12;
+  c.save(); c.beginPath(); c.rect(0, y - px * 0.95, W, alto + px * 0.12); c.clip();
+  const dy = (1 - k) * alto - ks * alto;
+  M.texto(c, s, x, y + dy, { f, color, al: o.al || "left", alpha: (o.alpha ?? 1) * (1 - ks), track: o.track ?? 0 });
+  c.restore();
+  return M.ancho(c, s, f, o.track ?? 0);
+}
+function etiqueta(s, x, y, color, t0, t, o = {}) {
+  const k = eOut(prog(t, t0, t0 + 0.3)); if (k <= 0) return;
+  const ks = o.sal != null ? prog(t, o.sal, o.sal + 0.2) : 0; if (ks >= 1) return;
+  M.texto(c, s, x, y + (1 - k) * 10, { f: MO(600, o.px || 28), color, al: o.al || "left", alpha: k * (1 - ks), track: 3 });
+}
+function hilo(x0, y0, x1, y1, t0, t1, t, grosor = 6, color = C.azul) {
+  const k = eIO(prog(t, t0, t1)); if (k <= 0) return;
+  c.save(); c.strokeStyle = color; c.lineWidth = grosor; c.lineCap = "butt";
+  c.beginPath(); c.moveTo(x0, y0); c.lineTo(lerp(x0, x1, k), lerp(y0, y1, k)); c.stroke(); c.restore();
+}
+function lockup(x, y, alto, colT, kL, kP, kTxt) {
+  const f = AR(700, alto * 0.62), wL = alto * 1.2, gap = alto * 0.34;
+  M.logo(c, x, y, alto, colT, C.pixel, kL, kP);
+  if (kTxt > 0) M.texto(c, "D-Code Partners", x + wL + gap, y + alto * 0.72, { f, color: colT, alpha: kTxt, track: -0.5 });
+}
+const salida = (e, t) => eIn(prog(t, sal(e), E[e][1]));   // 0 → 1 durante la salida de la escena
+
+// ─── LA RED: rejilla de puntos de fondo (72 px) ───
+const PASO = 72, GX0 = (W - Math.floor(W / PASO) * PASO) / 2 + PASO / 2;
+const nodo = (i, j) => [GX0 + i * PASO, 36 + j * PASO];
+function red(t) {
+  const kFin = 1 - eIn(prog(t, E.e5[0] - 0.1, E.e5[0] + 0.3));          // la red se apaga cuando llega el dinero
+  if (kFin <= 0) return;
+  c.save(); c.fillStyle = C.papel; c.globalAlpha = 0.075 * kFin;
+  for (let x = GX0; x < W; x += PASO) for (let y = 36; y < H; y += PASO) { c.beginPath(); c.arc(x, y, 2, 0, 7); c.fill(); }
+  c.restore();
+}
+
+// ─── 1 · GANCHO: ¿TE GUSTA VENDER Y ENCONTRAR OPORTUNIDADES? ───
+// «¿TE GUSTA» está en el fotograma 0. En «oportunidades» se encienden nodos de la red: las oportunidades.
+// (solo en zonas sin texto: la franja alta y=324 y la baja y=1260–1332)
+const OPOS = [[3, 17], [11, 4], [7, 18], [13, 17], [1, 18], [8, 4], [10, 18], [5, 17]].map(([i, j]) => nodo(i, j));
+function gancho(t) {
+  if (t > E.e1[1]) return;
+  const s = sal("e1"), f = (p) => AR(900, p);
+  const px = cabe("¿TE GUSTA", f, 200);
+  const y1 = 640;
+  linea("¿TE GUSTA", X0, y1, px, f, C.papel, -1, t, { sal: s });
+  linea("VENDER", X0, y1 + px * 1.0, px, f, C.papel, pal("c1", "vender") - 0.12, t, { sal: s, dur: 0.32 });
+  const tY = pal("c1", "encontrar") - 0.12, tO = pal("c1", "oportunidades") - 0.1;
+  linea("Y ENCONTRAR", X0, y1 + px * 2.0 + 30, 72, (p) => AR(800, p), C.gris, tY, t, { sal: s });
+  const pxO = cabe("OPORTUNIDADES?", f, 150);
+  linea("OPORTUNIDADES?", X0, y1 + px * 2.0 + 30 + pxO * 1.02, pxO, f, C.pixel, tO, t, { sal: s });
+  etiqueta("D-CODE PARTNERS  ·  EQUIPO COMERCIAL", X0, 420, C.gris, 0.3, t, { sal: s });
+  // nodos que se encienden (uno cada 90 ms) con un anillo que se abre una vez
+  const kS = salida("e1", t);
+  OPOS.forEach(([x, y], i) => {
+    const t0 = tO + 0.05 + i * 0.09, k = eOut5(prog(t, t0, t0 + 0.25)); if (k <= 0) return;
+    c.save(); c.globalAlpha = (1 - kS);
+    c.fillStyle = C.pixel; c.beginPath(); c.arc(x, y, 6 * k, 0, 7); c.fill();
+    const kr = prog(t, t0, t0 + 0.8);
+    if (kr < 1) { c.strokeStyle = C.pixel; c.lineWidth = 2; c.globalAlpha *= (1 - kr) * 0.8; c.beginPath(); c.arc(x, y, 6 + 30 * eOut(kr), 0, 7); c.stroke(); }
+    c.restore();
+  });
+}
+
+// ─── 2 · OPORTUNIDAD: D-Code Partners · estamos creciendo · buscamos comerciales ───
+// En «creciendo» una línea sube por los nodos de la red, de izquierda a derecha.
+const SUBE = [[1, 18], [4, 17], [6, 17], [8, 16], [10, 15], [13, 14]].map(([i, j]) => nodo(i, j));
+function oportunidad(t) {
+  if (t < E.e2[0] || t > E.e2[1]) return;
+  const s = sal("e2"), kS = salida("e2", t), f = (p) => AR(900, p);
+  const tD = pal("c2", "d-code");
+  const px = cabe("COMERCIALES.", f, 150), y1 = 780;
+  const tC = pal("c2", "creciendo"), tB = pal("c2", "buscamos"), tE = entra("e2", pal("c2", "estamos") - 0.1);
+  // la marca entra grande mientras se dice «D-Code Partners» y sube a su sitio cuando empieza «estamos»
+  const kM = eIO(prog(t, tE - 0.3, tE + 0.05));
+  c.save(); c.globalAlpha *= 1 - kS;
+  lockup(X0, lerp(760, 400, kM), lerp(118, 62, kM), C.papel, prog(t, E.e2[0], tD + 0.3), prog(t, tD + 0.15, tD + 0.35), eOut5(prog(t, E.e2[0] + 0.05, tD + 0.25)));
+  c.restore();
+  linea("ESTAMOS", X0, y1, px, f, C.papel, tE, t, { sal: tB - 0.3 });
+  linea("CRECIENDO.", X0, y1 + px * 1.02, px, f, C.papel, tC - 0.1, t, { sal: tB - 0.26 });
+  linea("BUSCAMOS", X0, y1, px, f, C.papel, tB - 0.04, t, { sal: s });
+  linea("COMERCIALES.", X0, y1 + px * 1.02, px, f, C.pixel, pal("c2", "comerciales") - 0.1, t, { sal: s });
+  etiqueta("EN TODA ESPAÑA", X0, y1 + px * 2.02 + 14, C.gris, pal("c2", "comerciales") + 0.3, t, { sal: s });
+  // crecimiento: la línea une nodos que suben; en el último, un cuadrado azul (el píxel de la marca)
+  const kc = prog(t, tC - 0.12, tC + 0.8);
+  if (kc > 0) {
+    c.save(); c.globalAlpha *= 1 - kS; c.strokeStyle = C.azul; c.lineWidth = 6; c.lineJoin = "round"; c.lineCap = "round";
+    const seg = SUBE.slice(1).map((p, i) => Math.hypot(p[0] - SUBE[i][0], p[1] - SUBE[i][1])); const tot = seg.reduce((a, b) => a + b, 0);
+    let quedan = tot * eIO(kc); c.beginPath(); c.moveTo(...SUBE[0]);
+    for (let i = 1; i < SUBE.length && quedan > 0; i++) { const k = Math.min(1, quedan / seg[i - 1]);
+      c.lineTo(lerp(SUBE[i - 1][0], SUBE[i][0], k), lerp(SUBE[i - 1][1], SUBE[i][1], k)); quedan -= seg[i - 1]; }
+    c.stroke();
+    let acum = 0;
+    SUBE.forEach(([x, y], i) => { const alcanzado = i === 0 ? 0 : (acum += seg[i - 1]) / tot; const kn = eOut5(prog(eIO(kc), alcanzado - 0.001, alcanzado + 0.08));
+      if (kn <= 0) return; const ult = i === SUBE.length - 1; c.fillStyle = ult ? C.azul : C.pixel;
+      if (ult) { const r = 15 * kn; c.fillRect(x - r, y - r, r * 2, r * 2); } else { c.beginPath(); c.arc(x, y, 7 * kn, 0, 7); c.fill(); } });
+    c.restore();
+  }
+}
+
+// ─── 3 · TU PAPEL: tú conectas con el cliente y cierras la venta ───
+// Dos nodos (TÚ y CLIENTE) se unen en «conectas»; debajo, la oportunidad avanza por sus fases hasta «CIERRE».
+function papel(t) {
+  if (t < E.e3[0] || t > E.e3[1]) return;
+  const s = sal("e3"), kS = salida("e3", t), f = (p) => AR(900, p);
+  etiqueta("TU PAPEL", X0, 420, C.gris, entra("e3", pal("c3", "tú") - 0.1), t, { sal: s });
+  const px = cabe("TÚ CONECTAS", f, 140), y1 = 600;
+  linea("TÚ CONECTAS", X0, y1, px, f, C.papel, entra("e3", pal("c3", "tú") - 0.08), t, { sal: s });
+  linea("Y CIERRAS.", X0, y1 + px * 1.02, px, f, C.pixel, pal("c3", "cierras") - 0.12, t, { sal: s });
+  // nodos
+  const yN = 960, xa = X0 + 70, xb = XA - 70, tCo = pal("c3", "conectas"), tCl = pal("c3", "cliente");
+  const kA = eOut5(prog(t, entra("e3", tCo - 0.25), tCo + 0.1)), kB = eOut5(prog(t, tCl - 0.25, tCl + 0.1));
+  const kL = prog(t, tCo, tCl + 0.1);
+  c.save(); c.globalAlpha *= 1 - kS;
+  if (kL > 0) {   // la conexión: línea fina que se dibuja y un pulso que la recorre
+    const x = lerp(xa + 70, xb - 70, eIO(kL));
+    c.strokeStyle = "rgba(91,140,255,0.55)"; c.lineWidth = 4; c.setLineDash([2, 12]); c.lineCap = "round";
+    c.beginPath(); c.moveTo(xa + 70, yN); c.lineTo(x, yN); c.stroke(); c.setLineDash([]);
+    const kp = prog(t, tCl, tCl + 0.6);
+    if (kp > 0 && kp < 1) { c.fillStyle = C.pixel; c.beginPath(); c.arc(lerp(xa + 70, xb - 70, eIO(kp)), yN, 9, 0, 7); c.fill(); }
+    if (kp >= 1) { c.strokeStyle = C.azul; c.lineWidth = 6; c.beginPath(); c.moveTo(xa + 70, yN); c.lineTo(xb - 70, yN); c.stroke(); }
+  }
+  if (kA > 0) { c.fillStyle = C.azul; c.beginPath(); c.arc(xa, yN, 68 * kA, 0, 7); c.fill();
+    M.texto(c, "TÚ", xa, yN + 17, { f: AR(900, 48), color: C.blanco, al: "center", alpha: kA }); }
+  if (kB > 0) { c.strokeStyle = C.papel; c.lineWidth = 4; c.beginPath(); c.arc(xb, yN, 66 * kB, 0, 7); c.stroke();
+    // edificio mínimo: la empresa
+    c.globalAlpha *= kB; c.fillStyle = C.papel; c.fillRect(xb - 20, yN - 26, 40, 50);
+    c.fillStyle = C.tinta; for (let r = 0; r < 3; r++) for (let q = 0; q < 2; q++) c.fillRect(xb - 12 + q * 16, yN - 18 + r * 14, 8, 8);
+    c.globalAlpha /= kB; }
+  M.texto(c, "CLIENTE", xb, yN + 118, { f: MO(600, 28), color: C.gris, al: "center", alpha: kB, track: 3 });
+  M.texto(c, "TÚ", xa, yN + 118, { f: MO(600, 28), color: C.gris, al: "center", alpha: kA * 0, track: 3, registrar: false });
+  c.restore();
+  // la oportunidad avanza: CONTACTO → REUNIÓN → PROPUESTA → CIERRE
+  const fases = ["CONTACTO", "REUNIÓN", "PROPUESTA", "CIERRE"], yF = 1210, tV = pal("c3", "venta");
+  const kF = eOut5(prog(t, tCl + 0.05, tCl + 0.35));
+  if (kF > 0) {
+    c.save(); c.globalAlpha *= kF * (1 - kS); c.translate(0, (1 - kF) * 16);
+    const cw = ANCHO / 4, kAv = eIO(prog(t, tCl + 0.2, tV + 0.1));
+    c.fillStyle = "rgba(242,240,234,0.14)"; c.fillRect(X0, yF, ANCHO, 6);
+    c.fillStyle = C.azul; c.fillRect(X0, yF, ANCHO * kAv, 6);
+    fases.forEach((n, i) => {
+      const hecho = kAv >= (i + 1) / 4 - 0.001, x = X0 + i * cw;
+      const fin = i === 3 && hecho;
+      M.texto(c, n, x, yF + 64, { f: MO(fin ? 800 : 600, 28), color: fin ? C.pixel : hecho ? C.papel : C.gris, track: 1 });
+    });
+    const kOk = muelle(prog(t, tV, tV + 0.4), 1.4, 7);
+    if (kOk > 0) {    // sello de venta cerrada
+      const xc = XA - 30, yc = yF - 60, r = 30 * clamp(kOk * 1.3);
+      c.fillStyle = C.azul; c.beginPath(); c.arc(xc, yc, r, 0, 7); c.fill();
+      c.strokeStyle = C.blanco; c.lineWidth = 6; c.lineCap = "round"; c.lineJoin = "round"; c.globalAlpha *= clamp(kOk * 2);
+      c.beginPath(); c.moveTo(xc - 12, yc + 1); c.lineTo(xc - 3, yc + 10); c.lineTo(xc + 13, yc - 9); c.stroke();
+      M.texto(c, "VENTA CERRADA", xc - 50, yc + 10, { f: MO(700, 28), color: C.papel, al: "right", track: 2 });
+    }
+    c.restore();
+  }
+}
+
+// ─── 4 · QUÉ HACE D-CODE: nosotros construimos la solución (capturas reales) ───
+function solucion(t) {
+  if (t < E.e4[0] || t > E.e4[1]) return;
+  const s = sal("e4"), kS = salida("e4", t), f = (p) => AR(900, p);
+  const tN = entra("e4", pal("c4", "nosotros") - 0.1), tCo = pal("c4", "construimos"), tSo = pal("c4", "solución");
+  etiqueta("LO QUE HAY DETRÁS", X0, 420, C.gris, tN, t, { sal: s });
+  const px = cabe("NOSOTROS", f, 150);
+  linea("NOSOTROS", X0, 590, px, f, C.papel, tN, t, { sal: s });
+  linea("construimos la solución.", X0, 590 + 78, 56, (p) => IT(600, p), C.pixel, tCo - 0.1, t, { sal: s });
+  // dos pantallas reales, una tras otra, que se construyen con máscara de abajo arriba y derivan despacio
+  const cartas = [["fin", "D-CODE FINANCE", 770, tCo + 0.05], ["os", "D-CODE OS", 1085, tSo - 0.05]];
+  cartas.forEach(([k, et, y, t0]) => {
+    const im = IMG[k]; if (!im) return;
+    const kk = eOut5(prog(t, t0, t0 + 0.5)); if (kk <= 0) return;
+    const w = ANCHO, h = Math.round(w * im.height / im.width), deriva = -18 * prog(t, t0, E.e4[1] + 0.3);
+    const yy = y + deriva + (1 - kk) * 40;
+    c.save(); c.globalAlpha *= (1 - kS) * clamp(kk * 1.4);
+    M.rr(c, X0, yy, w, h * kk, 16); c.clip();
+    c.drawImage(im, X0, yy, w, h);
+    c.restore();
+    c.save(); c.globalAlpha *= (1 - kS) * kk; c.strokeStyle = "rgba(242,240,234,0.16)"; c.lineWidth = 2; M.rr(c, X0, yy, w, h * kk, 16); c.stroke(); c.restore();
+    // etiqueta de producto sobre la captura
+    const kE = eOut(prog(t, t0 + 0.2, t0 + 0.45));
+    if (kE > 0) { c.save(); c.globalAlpha *= (1 - kS) * kE; const fw = M.ancho(c, et, MO(700, 28), 3) + 36;
+      c.fillStyle = C.azul; M.rr(c, XA - fw - 16, yy + 16, fw, 48, 10); c.fill();
+      M.texto(c, et, XA - 16 - fw / 2, yy + 50, { f: MO(700, 28), color: C.blanco, al: "center", track: 3 }); c.restore(); }
+  });
+}
+
+// ─── 5 · EL DINERO: y tú recibes el 50 % de cada venta ───
+// La línea cae por el centro y parte la pantalla: la mitad derecha se llena de azul y el «50%» queda cruzado.
+function dinero(t) {
+  if (t < E.e5[0] || t > E.e5[1]) return;
+  const t50 = pal("c5", "50") - 0.1, s = sal("e5") + 0.02;
+  const kLin = eIO(prog(t, t50 - 0.2, t50 - 0.02));            // cae cuando el titular ya se ha apartado
+  const kMit = eOut5(prog(t, t50 - 0.02, t50 + 0.34));
+  const kSal = eIn(prog(t, s - 0.04, E.e5[1]));
+  if (kMit > 0) { c.fillStyle = C.azul; const x = lerp(W, W / 2, kMit) + kSal * W / 2; c.fillRect(x, 0, W - x, H); }
+  if (kLin > 0 && kSal < 1) { c.fillStyle = C.azul; c.fillRect(W / 2 - 3 + kSal * W / 2, 0, 6, H * kLin); }
+  // «Y TÚ RECIBES» entra grande y, cuando llega la cifra, sube y se hace titular pequeño
+  const kq = eIO(prog(t, t50 - 0.55, t50 - 0.2));             // el titular sube antes de que caiga la línea
+  const f = (p) => AR(900, p);
+  const pxq = lerp(cabe("Y TÚ RECIBES", f, 140), 52, kq), yq = lerp(860, 450, kq);
+  c.save(); c.globalAlpha *= 1 - kSal;
+  linea("Y TÚ RECIBES", X0, yq, pxq, f, C.papel, entra("e5", pal("c5", "y") - 0.08), t, {});
+  c.restore();
+  const k5 = muelle(prog(t, t50, t50 + 0.42), 1.6, 7);
+  if (k5 > 0 && kSal < 1) {
+    const s5 = "50%", px5 = cabe(s5, f, 400, 900), f5 = f(px5), w = M.ancho(c, s5, f5, -10), x = W / 2 - w / 2, y = 1020, esc = lerp(1.1, 1, k5);
+    for (const [clipX, clipW, col] of [[0, W / 2, C.papel], [W / 2, W / 2, C.tinta]]) {
+      c.save(); c.beginPath(); c.rect(clipX, 0, clipW, H); c.clip();
+      c.translate(W / 2, y - 140); c.scale(esc, esc); c.translate(-W / 2, -(y - 140));
+      M.texto(c, s5, x, y, { f: f5, color: col, alpha: clamp(k5 * 1.6) * (1 - kSal), track: -10 });
+      c.restore();
+    }
+  }
+  const tc = pal("c5", "cada") - 0.08;
+  c.save(); c.globalAlpha *= 1 - Math.min(1, kSal * 2.2); c.translate(kSal * W / 4, 0);
+  linea("DE CADA", W / 2 + 40, 1170, 66, (p) => AR(800, p), C.tinta, tc, t, {});
+  linea("VENTA.", W / 2 + 40, 1242, 66, (p) => AR(900, p), C.blanco, pal("c5", "venta") - 0.08, t, {});
+  c.restore();
+}
+
+// ─── 6 · LLAMADA: ¿hablamos? (el papel sube desde abajo) ───
+function llamada(t) {
+  const tP = E.e6[0] - 0.16;             // el papel empieza a subir mientras el azul se retira (sin fotogramas vacíos)
+  if (t < tP) return;
+  const k = eIO(prog(t, tP, tP + 0.36)), y = H * (1 - k);
+  c.save(); c.beginPath(); c.rect(0, y, W, H - y); c.clip();
+  fondo(C.papel);
+  const f = (p) => AR(900, p), px = cabe("¿HABLAMOS?", f, 200);
+  const tH = pal("c6", "hablamos") - 0.1;
+  const wH = linea("¿HABLAMOS?", X0, 640, px, f, C.tinta, tH, t, {});
+  hilo(X0, 640 + 46, X0 + (wH || 0), 640 + 46, tH + 0.3, tH + 0.7, t, 8, C.azul);
+  const tc = tH + 0.45;
+  const filas = [["ig", "@d_codepartners", "Instagram · mensaje directo"], ["mail", "dcodedepartment@gmail.com", "Correo"]];
+  filas.forEach(([ic, s, sub], i) => {
+    const t0 = tc + i * 0.16, kk = eOut5(prog(t, t0, t0 + 0.4)); if (kk <= 0) return;
+    const yy = 880 + i * 124;
+    c.save(); c.globalAlpha *= kk; c.translate(0, (1 - kk) * 16);
+    c.strokeStyle = C.tinta; c.lineWidth = 3.5;
+    if (ic === "ig") { M.rr(c, X0, yy - 44, 52, 52, 15); c.stroke(); c.beginPath(); c.arc(X0 + 26, yy - 18, 12, 0, 7); c.stroke(); c.fillStyle = C.tinta; c.beginPath(); c.arc(X0 + 40, yy - 32, 3.2, 0, 7); c.fill(); }
+    else { c.strokeRect(X0, yy - 40, 52, 40); c.beginPath(); c.moveTo(X0, yy - 40); c.lineTo(X0 + 26, yy - 18); c.lineTo(X0 + 52, yy - 40); c.stroke(); }
+    M.texto(c, s, X0 + 78, yy - 4, { f: IT(700, 46), color: C.tinta });
+    M.texto(c, sub, X0 + 78, yy + 36, { f: MO(500, 28), color: C.grisP, track: 1 });
+    c.restore();
+  });
+  const tl = tc + 0.4, kl = eOut5(prog(t, tl, tl + 0.4));
+  if (kl > 0) {
+    c.save(); c.globalAlpha *= kl; c.fillStyle = "rgba(11,12,16,0.14)"; c.fillRect(X0, 1150, ANCHO, 2); c.restore();
+    lockup(X0, 1196, 56, C.tinta, prog(t, tl, tl + 0.5), prog(t, tl + 0.35, tl + 0.5), kl);
+    M.texto(c, "COMERCIALES · 50 % DE CADA VENTA", X0, 1322, { f: MO(600, 28), color: C.grisP, alpha: kl, track: 2 });
+  }
+  c.restore();
+}
+
+window.pintaFrame = (n) => {
+  const t = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
+  fondo(C.tinta);
+  red(t);
+  gancho(t); oportunidad(t); papel(t); solucion(t); dinero(t); llamada(t);
+  M.vineta(c, W, H, 0.28);
+  M.grano(c, W, H, n, 0.04);
+};
+
+(async () => {
+  const fu = "../comun/fuentes/";
+  IMG = await M.cargar([["Archivo", fu + "archivo-wdth.woff2", { weight: "100 900", stretch: "62% 125%" }],
+                        ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }], ["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }]],
+                       { fin: "img/finance.jpg", os: "img/os.jpg" });
+  window.pintaFrame(0); window.LISTO = true;
+})();
+</script></body></html>

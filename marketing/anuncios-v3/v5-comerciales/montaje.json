@@ -1,0 +1,247 @@
+{
+ "video": "v5-comerciales",
+ "fps": 30,
+ "bpm": 118,
+ "voz": [
+  {
+   "id": "c1",
+   "t0": 0.28,
+   "t1": 2.41,
+   "texto": "¿Te gusta vender y encontrar oportunidades?",
+   "palabras": [
+    {
+     "w": "¿Te",
+     "t0": 0.28,
+     "t1": 0.42
+    },
+    {
+     "w": "gusta",
+     "t0": 0.42,
+     "t1": 0.66
+    },
+    {
+     "w": "vender",
+     "t0": 0.66,
+     "t1": 0.95
+    },
+    {
+     "w": "y",
+     "t0": 0.95,
+     "t1": 1.04
+    },
+    {
+     "w": "encontrar",
+     "t0": 1.04,
+     "t1": 1.52
+    },
+    {
+     "w": "oportunidades?",
+     "t0": 1.52,
+     "t1": 2.36
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "t0": 2.93,
+   "t1": 6.48,
+   "texto": "En D-Code Partners estamos creciendo, y buscamos comerciales.",
+   "palabras": [
+    {
+     "w": "En",
+     "t0": 2.93,
+     "t1": 3.1
+    },
+    {
+     "w": "D-Code",
+     "t0": 3.1,
+     "t1": 3.47
+    },
+    {
+     "w": "Partners",
+     "t0": 3.47,
+     "t1": 3.78
+    },
+    {
+     "w": "estamos",
+     "t0": 3.78,
+     "t1": 4.43
+    },
+    {
+     "w": "creciendo,",
+     "t0": 4.43,
+     "t1": 4.85
+    },
+    {
+     "w": "y",
+     "t0": 4.85,
+     "t1": 5.15
+    },
+    {
+     "w": "buscamos",
+     "t0": 5.15,
+     "t1": 5.81
+    },
+    {
+     "w": "comerciales.",
+     "t0": 5.81,
+     "t1": 6.43
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "t0": 6.91,
+   "t1": 9.14,
+   "texto": "Tú conectas con el cliente y cierras la venta.",
+   "palabras": [
+    {
+     "w": "Tú",
+     "t0": 6.92,
+     "t1": 7.06
+    },
+    {
+     "w": "conectas",
+     "t0": 7.06,
+     "t1": 7.49
+    },
+    {
+     "w": "con",
+     "t0": 7.49,
+     "t1": 7.684
+    },
+    {
+     "w": "el",
+     "t0": 7.684,
+     "t1": 7.86
+    },
+    {
+     "w": "cliente",
+     "t0": 7.86,
+     "t1": 8.06
+    },
+    {
+     "w": "y",
+     "t0": 8.06,
+     "t1": 8.18
+    },
+    {
+     "w": "cierras",
+     "t0": 8.18,
+     "t1": 8.66
+    },
+    {
+     "w": "la",
+     "t0": 8.66,
+     "t1": 8.73
+    },
+    {
+     "w": "venta.",
+     "t0": 8.73,
+     "t1": 9.06
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "t0": 9.46,
+   "t1": 11.35,
+   "texto": "Nosotros construimos la solución.",
+   "palabras": [
+    {
+     "w": "Nosotros",
+     "t0": 9.46,
+     "t1": 9.97
+    },
+    {
+     "w": "construimos",
+     "t0": 9.97,
+     "t1": 10.59
+    },
+    {
+     "w": "la",
+     "t0": 10.59,
+     "t1": 10.8
+    },
+    {
+     "w": "solución.",
+     "t0": 10.8,
+     "t1": 11.3
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "t0": 11.66,
+   "t1": 15.03,
+   "texto": "Y tú recibes el 50 % de cada venta.",
+   "palabras": [
+    {
+     "w": "Y",
+     "t0": 11.66,
+     "t1": 11.85
+    },
+    {
+     "w": "tú",
+     "t0": 11.85,
+     "t1": 12.33
+    },
+    {
+     "w": "recibes",
+     "t0": 12.33,
+     "t1": 12.76
+    },
+    {
+     "w": "el",
+     "t0": 12.76,
+     "t1": 12.86
+    },
+    {
+     "w": "50",
+     "t0": 12.86,
+     "t1": 13.42
+    },
+    {
+     "w": "%",
+     "t0": 13.42,
+     "t1": 14.06
+    },
+    {
+     "w": "de",
+     "t0": 14.06,
+     "t1": 14.25
+    },
+    {
+     "w": "cada",
+     "t0": 14.25,
+     "t1": 14.56
+    },
+    {
+     "w": "venta.",
+     "t0": 14.56,
+     "t1": 14.97
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "t0": 15.52,
+   "t1": 16.09,
+   "texto": "¿Hablamos?",
+   "palabras": [
+    {
+     "w": "¿Hablamos?",
+     "t0": 15.52,
+     "t1": 16.07
+    }
+   ]
+  }
+ ],
+ "toma": {
+  "archivo": "voz/toma.wav",
+  "en": 0.15,
+  "dur": 16.196
+ },
+ "duracion": 17.99,
+ "nota_tiempos": "Tiempos por palabra: reparto por sílabas imantado a ataques (comun/palabras.py) y anclas medidas a mano sobre las fricativas de la toma en «recibes», «50» y «cierras»."
+}

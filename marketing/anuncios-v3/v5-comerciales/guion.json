@@ -1,0 +1,46 @@
+{
+ "video": "v5-comerciales",
+ "titulo": "¿Hablamos? · captación de comerciales",
+ "formato": "9:16 · 1080×1920 · 30 fps · 18,0 s",
+ "voz": "ElevenLabs Multilingual v2 · Martin Osborne – Polished and Energetic",
+ "estructura": "HOOK → OPORTUNIDAD → PAPEL DEL COMERCIAL → QUÉ HACE D-CODE → 50 % → CTA",
+ "frases": [
+  {
+   "id": "c1",
+   "texto": "¿Te gusta vender y encontrar oportunidades?",
+   "t0": 0.28,
+   "t1": 2.41
+  },
+  {
+   "id": "c2",
+   "texto": "En D-Code Partners estamos creciendo, y buscamos comerciales.",
+   "t0": 2.93,
+   "t1": 6.48
+  },
+  {
+   "id": "c3",
+   "texto": "Tú conectas con el cliente y cierras la venta.",
+   "t0": 6.91,
+   "t1": 9.14
+  },
+  {
+   "id": "c4",
+   "texto": "Nosotros construimos la solución.",
+   "t0": 9.46,
+   "t1": 11.35
+  },
+  {
+   "id": "c5",
+   "texto": "Y tú recibes el 50 % de cada venta.",
+   "t0": 11.66,
+   "t1": 15.03
+  },
+  {
+   "id": "c6",
+   "texto": "¿Hablamos?",
+   "t0": 15.52,
+   "t1": 16.09
+  }
+ ],
+ "duracion": 17.99
+}
