@@ -25,8 +25,10 @@ voz, mus, sfx = Pista(DUR), Pista(DUR), Pista(DUR)
 for f in M["voz"]:
     x, _ = sf.read(os.path.join(AQUI, "voz", f"{f['id']}.wav"), dtype="float32")
     y = cadena_voz(x, hpf=110, presencia=(3400, 2.5), aire=1.5, ratio=3.0, umbral=-22, sala=0.025)
-    voz.pon(y, f["t0"], 1.0)
+    voz.pon(y, f["t0"], db(4))   # la voz manda: +4 dB sobre la base (ronda v6, voz de ElevenLabs)
 
+# las crestas de la voz (oclusivas de ElevenLabs v3) se recortan para que la voz pueda sonar alta sin picos
+voz.x = compresor(voz.x, umbral_db=-14, ratio=8, ataque=0.002, suelta=0.08, ganancia_db=5)
 sfx.pon(pico(impacto(0.7, 1.2), 1.0), 0.0, 0.45); sfx.pon(whoosh(0.3, 7000, 900, -0.8, 0.8), 0.0, 0.25)
 
 prog_ = [(48, [60, 63, 67]), (44, [60, 63, 68]), (51, [58, 63, 67]), (46, [58, 62, 65])]
@@ -81,9 +83,9 @@ sfx.pon(pico(sello(), 1.0), V["v10"]["t1"] + 0.35, 0.4)
 f = n_(0.6)
 for P in (mus, sfx): P.x[-f:] *= np.linspace(1, 0, f)[:, None]
 
-# pausas humanas: entre cada pregunta y su respuesta la música se retira (la pausa se oye como pausa)
+# pausas humanas: durante cada pregunta y la pausa que la sigue la música se retira (la pregunta se entiende y la pausa se oye)
 for q, r in (("v2", "v2b"), ("v4q", "v4"), ("v9q", "v9")):
-    a, b = n_(V[q]["t1"] - 0.05), n_(V[r]["t0"] + 0.15); f = n_(0.12)
+    a, b = n_(V[q]["t0"] - 0.1), n_(V[r]["t0"] + 0.15)   # la pregunta y su pausa, con la base retirada; f = n_(0.12)
     g = np.ones(len(mus.x)); g[a:b] = db(-7); g[a - f:a] = np.linspace(1, db(-7), f); g[b:b + f] = np.linspace(db(-7), 1, f)
     mus.x *= g[:, None]
 # la marca, limpia: la base se aparta mientras se dice «D-Code Partners»
@@ -92,7 +94,7 @@ g = np.ones(len(mus.x)); g[a:b] = db(-16); g[a - f:a] = np.linspace(1, db(-16), 
 e = envolvente(voz.x, 0.008, 0.2)
 mus.x *= (1 - (1 - db(-14)) * np.clip(e * 1.6, 0, 1))[:, None]
 sfx.x *= (1 - (1 - db(-9)) * np.clip(e * 1.6, 0, 1))[:, None]
-mezcla = master(voz.x + mus.x * 0.75 + sfx.x * 0.62)
+mezcla = master(limitador(voz.x + mus.x * 0.75 + sfx.x * 0.62, 9.0))   # crestas −9 dB: −14 LUFS sin pasar de −1 dBTP
 escribe(os.path.join(OUT, "mezcla.wav"), mezcla)
 for nom, P in (("voz", voz), ("musica", mus), ("efectos", sfx)): escribe(os.path.join(OUT, f"pista-{nom}.wav"), P.x)
 json.dump({"acentos": sorted(acentos), "cincuenta": T50, "fin": T_FIN}, open(os.path.join(OUT, "golpes.json"), "w"), indent=1)

@@ -1,11 +1,11 @@
 {
- "motor": "Qwen3-TTS (demo oficial de Qwen en Hugging Face)",
- "voz": "Bodega — masculina, español de España",
- "nota": "v5: guion conversacional. Pregunta → pausa humana → respuesta. Tomas elegidas por casting (voz/manifest.json).",
+ "motor": "ElevenLabs · Eleven v3 (etiquetas [confident] / [curious])",
+ "voz": "Jesus – Firm, Deep and Reassuring (masculina, grave, español de España)",
+ "nota": "v6: voz nueva (ElevenLabs v3, «Jesus», grave y firme) a ritmo natural de anuncio (5–7 sílabas/s); ~1 s de pausa entre ideas para que se procese lo dicho. Guion conversacional de la v5.",
  "frases": [
   {
    "id": "v1",
-   "texto": "Estamos buscando comerciales."
+   "texto": "Estamos buscando comerciales en toda España."
   },
   {
    "id": "v1b",

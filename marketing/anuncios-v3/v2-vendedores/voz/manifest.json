@@ -1,157 +1,115 @@
 {
- "motor": "Qwen3-TTS (demo oficial de Qwen en Hugging Face, API)",
- "voz": "Bodega — masculina, español de España",
+ "motor": "ElevenLabs · Eleven v3",
+ "voz": "Jesus – Firm, Deep and Reassuring (masculina, español de España, castellano)",
  "sr": 48000,
  "frases": [
   {
    "id": "v1",
-   "texto": "Estamos buscando comerciales.",
-   "toma": "v1_2",
+   "texto": "Estamos buscando comerciales en toda España.",
+   "toma": "v1_g2",
    "wer": 0.0,
-   "var_st": 3.88,
-   "sps": 4.17,
-   "oido": "Estamos buscando comerciales.",
-   "dur": 2.401
-  },
-  {
-   "id": "v1b",
-   "texto": "En toda España.",
-   "toma": "v1b_2",
-   "wer": 0.0,
-   "var_st": 2.77,
-   "sps": 3.75,
-   "oido": "en toda España.",
-   "dur": 1.601
+   "sps": 7.56,
+   "oido": "Estamos buscando comerciales en toda España.",
+   "dur": 2.116
   },
   {
    "id": "v2",
    "texto": "¿Necesitas estudios? ¿Experiencia?",
-   "toma": "v2_0",
+   "toma": "v2_r1",
    "wer": 0.0,
-   "var_st": 3.75,
-   "sps": 3.21,
-   "oido": "¿Necesitas estudios? ¿Experiencia?",
-   "dur": 3.441
+   "sps": 3.98,
+   "oido": "Necesitas estudios, experiencia",
+   "dur": 2.769
   },
   {
    "id": "v2b",
    "texto": "No. No te hace falta.",
-   "toma": "v2b_0",
+   "toma": "v2b_g1",
    "wer": 0.0,
-   "var_st": 4.9,
-   "sps": 2.75,
+   "sps": 3.96,
    "oido": "No, no te hace falta.",
-   "dur": 2.555
+   "dur": 1.785
   },
   {
    "id": "v3a",
    "texto": "Y lo mejor…",
-   "toma": "v3a_2",
+   "toma": "v3a_g2",
    "wer": 0.0,
-   "var_st": 2.88,
-   "sps": 2.5,
-   "oido": "y lo mejor...",
-   "dur": 1.201
+   "sps": 1.91,
+   "oido": "y lo mejor",
+   "dur": 1.567
   },
   {
    "id": "v3",
    "texto": "Te llevas el 50 % de cada venta.",
-   "toma": "v3_1",
+   "toma": "v3_g2",
    "wer": 0.0,
-   "var_st": 3.36,
-   "sps": 4.1,
+   "sps": 6.38,
    "oido": "te llevas el 50% de cada venta.",
-   "dur": 3.669
+   "dur": 2.351
   },
   {
    "id": "v4q",
    "texto": "¿Y qué venderías, exactamente?",
-   "toma": "v4q_1",
+   "toma": "v4q_g1",
    "wer": 0.0,
-   "var_st": 7.29,
-   "sps": 3.05,
-   "oido": "y que venderías exactamente.",
-   "dur": 2.958
+   "sps": 4.79,
+   "oido": "y qué venderías exactamente.",
+   "dur": 1.881
   },
   {
    "id": "v4",
    "texto": "Soluciones de automatización e inteligencia artificial para empresas.",
-   "toma": "v4_2",
+   "toma": "v4_g2",
    "wer": 0.0,
-   "var_st": 3.28,
-   "sps": 4.85,
+   "sps": 6.73,
    "oido": "Soluciones de automatización e inteligencia artificial para empresas.",
-   "dur": 5.361
+   "dur": 3.866
   },
   {
    "id": "v5",
    "texto": "Tú encuentras al cliente.",
-   "toma": "v5_2",
+   "toma": "v5_g2",
    "wer": 0.0,
-   "var_st": 2.77,
-   "sps": 4.0,
-   "oido": "tu encuentras al cliente.",
-   "dur": 1.76
+   "sps": 4.47,
+   "oido": "tú encuentras al cliente.",
+   "dur": 1.567
   },
   {
    "id": "v6",
    "texto": "Nosotros nos encargamos de construirlo todo.",
-   "toma": "v6_1",
+   "toma": "v6_r1",
    "wer": 0.0,
-   "var_st": 3.42,
-   "sps": 3.98,
-   "oido": "Nosotros nos encargamos de construirlo todo.",
-   "dur": 3.521
-  },
-  {
-   "id": "v7",
-   "texto": "No hace falta saber programar.",
-   "toma": "v7_2",
-   "wer": 0.0,
-   "var_st": 3.21,
-   "sps": 3.79,
-   "oido": "No hace falta saber programar.",
-   "dur": 2.641
-  },
-  {
-   "id": "v8",
-   "texto": "Y puedes hacerlo desde tu ciudad.",
-   "toma": "v8_2",
-   "wer": 0.0,
-   "var_st": 2.02,
-   "sps": 3.9,
-   "oido": "y puedes hacerlo desde tu ciudad.",
-   "dur": 2.561
+   "sps": null,
+   "oido": null,
+   "dur": 2.847
   },
   {
    "id": "v9q",
    "texto": "¿Te interesa?",
-   "toma": "w9q_2",
+   "toma": "v9q_g2",
    "wer": 0.0,
-   "var_st": 1.61,
-   "sps": 5.2,
+   "sps": 3.83,
    "oido": "¿Te interesa?",
-   "dur": 0.961
+   "dur": 1.306
   },
   {
    "id": "v9",
    "texto": "Escríbenos por Instagram, o por correo, y te lo contamos.",
-   "toma": "v9_1",
+   "toma": "v9_g1",
    "wer": 0.0,
-   "var_st": 3.6,
-   "sps": 4.34,
+   "sps": 5.12,
    "oido": "Escríbenos por Instagram o por correo y te lo contamos.",
-   "dur": 3.921
+   "dur": 3.318
   },
   {
    "id": "v10",
    "texto": "Vende con D-Code Partners.",
-   "toma": "w10b_3",
+   "toma": "v10_g1",
    "wer": 0.0,
-   "var_st": 3.87,
-   "sps": 2.44,
+   "sps": 3.31,
    "oido": "Vende con decode partners.",
-   "dur": 2.877
+   "dur": 2.116
   }
  ]
 }

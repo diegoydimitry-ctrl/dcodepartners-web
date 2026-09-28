@@ -33,8 +33,10 @@ checks = [{"t": round(t_a + (t_b - t_a) * (k / 11) ** 0.85, 3), "i": orden[k]} f
 voz, mus, sfx = Pista(DUR), Pista(DUR), Pista(DUR)
 for f in M["voz"]:
     x, _ = sf.read(os.path.join(AQUI, "voz", f"{f['id']}.wav"), dtype="float32")
-    voz.pon(cadena_voz(x, hpf=110, presencia=(3400, 2.5), aire=1.5, ratio=3.0, umbral=-22, sala=0.025), f["t0"], 1.0)
+    voz.pon(cadena_voz(x, hpf=110, presencia=(3400, 2.5), aire=1.5, ratio=3.0, umbral=-22, sala=0.025), f["t0"], db(4))   # la voz manda (+4 dB)
 
+# las crestas de la voz (oclusivas de ElevenLabs v3) se recortan para que la voz pueda sonar alta sin picos
+voz.x = compresor(voz.x, umbral_db=-14, ratio=8, ataque=0.002, suelta=0.08)
 # 1 · gancho: trabajo a mano
 for k, q in enumerate(clics):
     sfx.pon(pico(clic(), 1.0), q["t"], 0.32, 0.4 * (-1) ** k)
@@ -47,14 +49,14 @@ mus.pon(pico(subida(T_MARCA - 0.9, 250, 7000), 0.8), 0.9, 0.18)
 
 # 2 · marca
 sfx.pon(whoosh(0.35, 600, 7000, 0.8, -0.2), T_MARCA - 0.05, 0.4)
-sfx.pon(pico(impacto(1.6, 1.2), 1.0), T_MARCA + 0.22, 0.5)
-sfx.pon(pico(caida_sub(1.0, 75, 30), 1.0), T_MARCA + 0.22, 0.45)
+sfx.pon(pico(impacto(1.6, 1.2), 1.0), T_MARCA + 0.22, 0.3)
+sfx.pon(pico(caida_sub(1.0, 75, 30), 1.0), T_MARCA + 0.22, 0.22)
 sfx.pon(reverb(pico(campana(hz(81), 1.6), 0.6), ir, 0.4), W("m2", "partners"), 0.10, 0.2)
 
 # 3 · propuesta: pulso + escala ascendente por cada tarea completada
 tb, n = T_PROP, 0
 while tb < T_FIN + 0.1:
-    mus.pon(pico(bombo(0.35, 170, 48, 1.0, 0.8, 1.8), 1.0), tb, 0.42)
+    mus.pon(pico(bombo(0.35, 170, 48, 1.0, 0.8, 1.8), 1.0), tb, 0.28)
     mus.pon(pico(hat(False, 10000), 0.5), tb + BEAT / 2, 0.14, 0.3)
     if n % 2 == 1:
         cp = palmada(); mus.pon(reverb(pico(cp, 1.0), ir, 0.15), tb, 0.3, 0.05)
@@ -80,7 +82,7 @@ mus.x *= g[:, None]
 e = envolvente(voz.x, 0.008, 0.2)
 mus.x *= (1 - (1 - db(-14)) * np.clip(e * 1.6, 0, 1))[:, None]
 sfx.x *= (1 - (1 - db(-9)) * np.clip(e * 1.6, 0, 1))[:, None]
-mezcla = master(voz.x + mus.x * 0.75 + sfx.x * 0.62)
+mezcla = master(limitador(voz.x + mus.x * 0.75 + sfx.x * 0.62, 9.0))   # crestas −9 dB: −14 LUFS sin pasar de −1 dBTP
 escribe(os.path.join(OUT, "mezcla.wav"), mezcla)
 for nom, P in (("voz", voz), ("musica", mus), ("efectos", sfx)): escribe(os.path.join(OUT, f"pista-{nom}.wav"), P.x)
 json.dump({"clics": clics, "checks": checks, "marca": T_MARCA, "fin": T_FIN}, open(os.path.join(OUT, "golpes.json"), "w"), indent=1)

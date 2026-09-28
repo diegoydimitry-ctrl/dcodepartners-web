@@ -1,37 +1,34 @@
 {
- "motor": "Qwen3-TTS (demo oficial de Qwen en Hugging Face, API)",
- "voz": "Bodega — masculina, español de España",
+ "motor": "ElevenLabs · Eleven v3",
+ "voz": "Jesus – Firm, Deep and Reassuring (masculina, español de España, castellano)",
  "sr": 48000,
  "frases": [
   {
    "id": "m1",
    "texto": "¿Sigues haciendo esto a mano?",
-   "toma": "n1a_1",
+   "toma": "m1_g2",
    "wer": 0.0,
-   "var_st": 5.88,
-   "sps": 4.19,
+   "sps": 6.38,
    "oido": "¿Sigues haciendo esto a mano?",
-   "dur": 2.394
+   "dur": 1.567
   },
   {
    "id": "m2",
    "texto": "D-Code Partners.",
-   "toma": "m2_0",
+   "toma": "m2_g2",
    "wer": 0.0,
-   "var_st": 2.33,
-   "sps": 2.27,
-   "oido": "decod partners.",
-   "dur": 1.761
+   "sps": 3.06,
+   "oido": "decode partners.",
+   "dur": 1.306
   },
   {
    "id": "m3",
    "texto": "Tu empresa, en automático.",
-   "toma": "k1_3",
+   "toma": "m3_g2",
    "wer": 0.0,
-   "var_st": 3.98,
-   "sps": 5.0,
+   "sps": 5.4,
    "oido": "tu empresa en automático.",
-   "dur": 2.001
+   "dur": 1.862
   }
  ]
 }

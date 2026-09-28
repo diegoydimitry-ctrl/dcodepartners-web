@@ -327,3 +327,20 @@ def master(x, techo=0.93):
     y = hp(x, 28)
     y = pico(y, 1.0) * 1.25
     return np.tanh(y) * techo
+
+def limitador(x, reduccion_db=6.0, anticipa=0.005, suelta=0.08):
+    """Limitador con anticipación: baja las crestas `reduccion_db` sin tocar el resto (ganancia mínima de la ventana
+    de anticipación, suelta exponencial). Para voces muy dinámicas (ElevenLabs v3), que si no obligan a dejar la
+    mezcla por debajo de −14 LUFS para respetar el pico real."""
+    m = np.abs(x).max(1) if x.ndim == 2 else np.abs(x)
+    techo = m.max() * db(-reduccion_db)
+    g = np.minimum(1.0, techo / np.maximum(m, 1e-9))
+    from scipy.ndimage import minimum_filter1d
+    g = minimum_filter1d(g, size=max(1, int(anticipa * SR)) * 2 + 1)
+    r = math.exp(-1 / (suelta * SR)); out = np.empty_like(g); v = 1.0
+    for i0 in range(0, len(g), 256):            # suelta por bloques (vectorizado dentro del bloque)
+        blk = g[i0:i0 + 256]
+        for j, gv in enumerate(blk):
+            v = gv if gv < v else r * v + (1 - r) * gv
+            out[i0 + j] = v
+    return x * out[:, None] if x.ndim == 2 else x * out
