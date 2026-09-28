@@ -1,0 +1,56 @@
+{
+ "motor": "ElevenLabs · Eleven v3 · una sola toma continua del guion (etiqueta [confident])",
+ "voz": "Marciano Rajoy – Realistic and Commercial (masculina, joven, español de España)",
+ "sr": 48000,
+ "nota": "Una sola toma continua (voz/toma.wav). Los cN.wav son cortes exactos de esa toma, solo para calcular tiempos por palabra; el audio del vídeo usa la toma entera.",
+ "frases": [
+  {
+   "id": "c1",
+   "texto": "¿Sabes vender?",
+   "toma": "marB_g1",
+   "dur": 0.795
+  },
+  {
+   "id": "c2",
+   "texto": "En D-Code Partners estamos creciendo, y buscamos comerciales.",
+   "toma": "marB_g1",
+   "dur": 3.389
+  },
+  {
+   "id": "c3",
+   "texto": "¿Tu comisión?",
+   "toma": "marB_g1",
+   "dur": 0.638
+  },
+  {
+   "id": "c4",
+   "texto": "El 50 % de cada venta.",
+   "toma": "marB_g1",
+   "dur": 2.338
+  },
+  {
+   "id": "c5",
+   "texto": "Vendes automatización e inteligencia artificial para empresas.",
+   "toma": "marB_g1",
+   "dur": 3.081
+  },
+  {
+   "id": "c6",
+   "texto": "Nosotros lo construimos.",
+   "toma": "marB_g1",
+   "dur": 1.358
+  },
+  {
+   "id": "c7",
+   "texto": "Tú cierras.",
+   "toma": "marB_g1",
+   "dur": 0.702
+  },
+  {
+   "id": "c8",
+   "texto": "Escríbenos hoy.",
+   "toma": "marB_g1",
+   "dur": 0.783
+  }
+ ]
+}

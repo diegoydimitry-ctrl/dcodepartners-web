@@ -9,25 +9,26 @@ Todo está listo para subir. **No se ha publicado nada**: publicar lo hace Direc
 
 ---
 
-## 1 · COMERCIALES (Instagram Reels / Stories · 9:16 · 39,5 s)
+## 1 · ¿SABES VENDER? · captación de comerciales (Reels / TikTok / Shorts / Meta · 9:16 · 18,4 s)
 
-**Fichero:** `v2-vendedores/entrega/dcode-comerciales-v6-9x16.mp4`, con los subtítulos `…-v6-9x16.srt`.
-- Instagram genera sus propios subtítulos. Este .srt es por si se sube a otra red o se quieren revisar.
-- El texto clave ya está en pantalla.
+**Fichero:** `v4-comerciales/entrega/dcode-sabes-vender-9x16.mp4`, con los subtítulos `…-9x16.srt`.
+- Todo lo importante está en pantalla, así que se entiende también sin sonido.
+- El .srt es para TikTok, YouTube y Meta cuando se suben subtítulos propios.
+- Las decisiones creativas y la investigación están en `v4-comerciales/NOTA-CREATIVA.md`.
+- Sustituye al anuncio anterior de vendedores (v4–v6), que se ha **retirado**.
 
 **Texto del post:**
-> Buscamos comerciales en toda España. 🇪🇸
-> Sin estudios. Sin experiencia.
-> Tú encuentras al cliente; nosotros construimos la solución: automatización e inteligencia artificial para empresas.
-> Y te llevas el 50 % de cada venta.
+> ¿Sabes vender? En D-Code Partners estamos creciendo y buscamos comerciales en toda España.
+> Vendes automatización e inteligencia artificial para empresas —asistentes de llamadas, automatización de procesos, D-Code Finance—. Nosotros lo construimos; tú cierras.
+> Tu comisión: el 50 % de cada venta.
 >
-> ¿Te interesa? Escríbenos por mensaje directo o a dcodedepartment@gmail.com y te lo contamos.
+> Escríbenos por mensaje directo o a dcodedepartment@gmail.com.
 >
-> #empleo #comerciales #ventas #trabajoremoto #inteligenciaartificial #automatizacion #españa
+> #empleo #comerciales #ventas #inteligenciaartificial #automatizacion #españa
 
-**Portada sugerida:** el fotograma 0 (BUSCAMOS COMERCIALES + 50 %). El mensaje entero se lee en la miniatura.
+**Portada sugerida:** el fotograma del 50 % (hacia los 7 s). O el del primer segundo, «¿SABES VENDER?», si se quiere que la portada haga de gancho.
 
-**Pendiente de decidir (negocio):** el 50 % es la cifra de este encargo («aproximadamente el 50 % de la venta en comisiones»). Si las condiciones del contrato comercial tienen matices (sobre qué importe, cuándo se cobra), el post y las respuestas a candidatos deben decirlos igual. Eso no se ha inventado aquí.
+**Pendiente de decidir (negocio):** el 50 % es la cifra de este encargo («aproximadamente el 50 % de la venta en comisiones»). Si el contrato comercial tiene matices (sobre qué importe se calcula, cuándo se cobra), las respuestas a los candidatos deben decirlos. Aquí no se han inventado.
 
 ## 2 · RUIDO (YouTube · 16:9 · 44,6 s)
 
@@ -60,8 +61,8 @@ Todo está listo para subir. **No se ha publicado nada**: publicar lo hace Direc
 
 | Vídeo | Formato | Sonoridad | Pico real | Voz entendida sobre la mezcla (Whisper) |
 |---|---|---|---|---|
-| COMERCIALES v6 | 1080×1920, 30 fps, 39,5 s | −14,0 LUFS | −1,4 dBTP | 11 de 12 frases al 0 %. «¿Experiencia?» sale transcrita «espereencia». La voz sola se transcribe bien, y la voz está 21 LU por encima del fondo en esa frase. **HIPÓTESIS:** es la pronunciación coloquial castellana de /ks/ ante consonante («esperiencia»), no un fallo de mezcla. |
+| ¿SABES VENDER? | 1080×1920, 30 fps, 18,4 s | −14,1 LUFS | −1,3 dBTP | Pieza completa al 0 % (marca incluida). La voz está al menos 11,4 LU por encima del fondo. |
 | EN AUTOMÁTICO v2 | 1920×1080, 30 fps, 7,4 s | −14,2 LUFS | −1,5 dBTP | 3 de 3 frases al 0 % |
 | RUIDO v4 | 1920×1080, 30 fps, 44,6 s | −14,3 LUFS | −1,4 dBTP | sin cambios desde la v4 |
 
-Los .srt se han validado leyéndolos con ffmpeg: 12, 3 y 18 subtítulos, sin solaparse.
+Los .srt se han validado leyéndolos con ffmpeg: 8, 3 y 18 subtítulos, sin solaparse.

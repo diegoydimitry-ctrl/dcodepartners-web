@@ -36,7 +36,7 @@ M.texto = (c, s, x, y, o = {}) => {
   const w = c.measureText(s).width;
   const x0 = al === "center" ? x - w / 2 : al === "right" ? x - w : x;
   c.textAlign = "left"; c.fillText(s, x0, y);
-  if (registrar && alpha > 0.35) {
+  if (registrar && c.globalAlpha > 0.35) {   // opacidad real (la del texto × la del grupo): lo invisible no cuenta
     const m = c.measureText(s); const tr = c.getTransform();
     const px = parseFloat(/(\d+(?:\.\d+)?)px/.exec(c.font)[1]);
     const p0 = tr.transformPoint(new DOMPoint(x0, y - m.actualBoundingBoxAscent));

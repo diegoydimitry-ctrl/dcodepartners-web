@@ -1,0 +1,59 @@
+{
+ "video": "v4-comerciales",
+ "titulo": "¿Sabes vender?",
+ "formato": "9:16 · 1080×1920 · 30 fps · ≤ 20 s",
+ "motor": "ElevenLabs · Eleven v3 · una toma continua con la etiqueta [confident]",
+ "voz": "Marciano Rajoy – Realistic and Commercial (masculina, joven, español de España)",
+ "texto_generado": "[confident] ¿Sabes vender? En D-Code Partners estamos creciendo, y buscamos comerciales. ¿Tu comisión? El cincuenta por ciento de cada venta. Vendes automatización e inteligencia artificial para empresas. Nosotros lo construimos. Tú cierras. Escríbenos hoy.",
+ "estructura": "GANCHO → PROPUESTA → DINERO → ACTIVIDAD → CTA",
+ "frases": [
+  {
+   "id": "c1",
+   "texto": "¿Sabes vender?",
+   "t0": 0.159,
+   "t1": 0.954
+  },
+  {
+   "id": "c2",
+   "texto": "En D-Code Partners estamos creciendo, y buscamos comerciales.",
+   "t0": 1.509,
+   "t1": 4.898
+  },
+  {
+   "id": "c3",
+   "texto": "¿Tu comisión?",
+   "t0": 5.308,
+   "t1": 5.946
+  },
+  {
+   "id": "c4",
+   "texto": "El 50 % de cada venta.",
+   "t0": 6.365,
+   "t1": 8.703
+  },
+  {
+   "id": "c5",
+   "texto": "Vendes automatización e inteligencia artificial para empresas.",
+   "t0": 9.16,
+   "t1": 12.241
+  },
+  {
+   "id": "c6",
+   "texto": "Nosotros lo construimos.",
+   "t0": 12.579,
+   "t1": 13.937
+  },
+  {
+   "id": "c7",
+   "texto": "Tú cierras.",
+   "t0": 14.352,
+   "t1": 15.054
+  },
+  {
+   "id": "c8",
+   "texto": "Escríbenos hoy.",
+   "t0": 15.38,
+   "t1": 16.163
+  }
+ ]
+}

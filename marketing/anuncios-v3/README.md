@@ -1,19 +1,17 @@
-# D-Code Partners · anuncios (v6, 28/09/2026)
+# D-Code Partners · anuncios (v7, 28/09/2026)
 
-Esta ronda **cambia la voz** de COMERCIALES y del mini: la anterior se oía dormida. La imagen de los dos vídeos es
-la misma que la de la ronda anterior, que gustó. El vídeo largo de YouTube (RUIDO, v4) se conserva sin cambios.
-
-| | **1 · RUIDO** (YouTube, v4) | **2 · COMERCIALES v6** (Reels/Stories) | **3 · EN AUTOMÁTICO v2** (mini YouTube) |
+| | **1 · RUIDO** (YouTube, v4) | **2 · ¿SABES VENDER?** (captación de comerciales) | **3 · EN AUTOMÁTICO v2** (mini YouTube) |
 |---|---|---|---|
-| Formato | 16:9 · 1920×1080 · 30 fps · 44,6 s | 9:16 · 1080×1920 · 30 fps · **39,5 s** | 16:9 · 1920×1080 · 30 fps · **7,4 s** |
-| Idea | Hay un trabajo en tu empresa que nadie ve; D-Code lo convierte en un sistema | Buscamos comerciales en toda España: sin estudios, sin experiencia, 50 % de cada venta | ¿Sigues haciendo esto a mano? → D-Code Partners → tu empresa, en automático |
-| Voz | Supertonic 3 (sin cambios) | **ElevenLabs v3 · «Jesus – Firm, Deep and Reassuring»**, masculina, grave, español de España | la misma |
-| Sonoridad entregada | −14,3 LUFS · −1,4 dBTP | **−14,0 LUFS · −1,4 dBTP** | **−14,2 LUFS · −1,5 dBTP** |
-| Entrega | `v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4` | `v2-vendedores/entrega/dcode-comerciales-v6-9x16.mp4` | `v3-mini/entrega/dcode-en-automatico-v2-youtube-16x9.mp4` |
-| Subtítulos | `…-16x9.srt` | `…-v6-9x16.srt` | `…-v2-youtube-16x9.srt` |
+| Formato | 16:9 · 1920×1080 · 30 fps · 44,6 s | 9:16 · 1080×1920 · 30 fps · **18,4 s** | 16:9 · 1920×1080 · 30 fps · 7,4 s |
+| Estado | Aprobado, sin cambios | **Nuevo, hecho desde cero** (sustituye al anuncio de vendedores v4–v6, retirado) | Aprobado, **no se toca** |
+| Voz | Supertonic 3 | ElevenLabs v3 · «Marciano Rajoy – Realistic and Commercial» | ElevenLabs v3 · «Jesus – Firm, Deep and Reassuring» |
+| Sonoridad entregada | −14,3 LUFS · −1,4 dBTP | −14,1 LUFS · −1,3 dBTP | −14,2 LUFS · −1,5 dBTP |
+| Entrega | `v1-youtube/entrega/dcode-ruido-youtube-16x9.mp4` | `v4-comerciales/entrega/dcode-sabes-vender-9x16.mp4` | `v3-mini/entrega/dcode-en-automatico-v2-youtube-16x9.mp4` |
+| Subtítulos | `…-16x9.srt` | `…-9x16.srt` | `…-v2-youtube-16x9.srt` |
 
-Las versiones anteriores (COMERCIALES v4 y v5; el mini con la voz anterior) se quedan en el repositorio. Los textos
-para publicar están en **`PUBLICACION.md`**.
+- **¿SABES VENDER?:** la investigación, el concepto, el guion, el casting de voces y el QA están en **`v4-comerciales/NOTA-CREATIVA.md`**.
+- **`v2-vendedores/`:** es el anuncio retirado (ver su `RETIRADO.md`). Sus entregables se han quitado y siguen en el historial.
+- **Textos para publicar:** en `PUBLICACION.md`.
 
 ## 1 · Investigación aplicada (qué se ha hecho y por qué)
 
@@ -63,32 +61,12 @@ claro: lo repetitivo lo hace la automatización y lo que requiere pensar, la IA.
 **Cuenta atrás:** marca 30 → 0 entre «segundos» (5,6 s) y «por fin» (36,6 s). Son 31,0 s reales: va un 3 % más
 lenta que un reloj, algo que no se percibe.
 
-## 3 · COMERCIALES v6 — guion final (tiempos reales)
+## 3 · ¿SABES VENDER? — ver `v4-comerciales/NOTA-CREATIVA.md`
 
-Es el guion conversacional de la v5 (pregunta → pausa → respuesta) con una voz nueva. Ahora la voz va a ritmo de
-anuncio (5–7 sílabas/s) y deja **alrededor de 1 s entre ideas** (0,9–1,0 s tras cada pregunta y entre bloques;
-0,6 s dentro de un mismo bloque), para que dé tiempo a entender lo dicho. La voz no se ha acelerado ni
-estirado: cada frase es una toma entera.
-
-| t (s) | Voz | Imagen |
-|---|---|---|
-| 0,25–2,37 | «Estamos buscando comerciales en toda España.» | La oferta entera desde el fotograma 0: BUSCAMOS / COMERCIALES · SIN ESTUDIOS · SIN EXPERIENCIA · EN TODA ESPAÑA · 50 % |
-| 3,27–6,04 | «¿Necesitas estudios? ¿Experiencia?» | Tarjeta REQUISITOS; «¿ESTUDIOS?» «¿EXPERIENCIA?» en gris y tres puntos mientras la pregunta espera (la base baja 7 dB) |
-| 7,04–8,82 | «No. No te hace falta.» | Se tachan los tres requisitos · SIN ESTUDIOS. **SIN EXPERIENCIA.** |
-| 9,72–11,29 | «Y lo mejor…» | «Y LO MEJOR…» (la base se filtra y se para) |
-| 11,89–14,24 | «Te llevas el 50 % de cada venta.» | En el «50» exacto, pantalla naranja: TE LLEVAS EL **50 %** |
-| 15,24–17,12 | «¿Y qué venderías, exactamente?» | ¿QUÉ VENDERÍAS? + tres puntos en la pausa |
-| 18,12–21,98 | «Soluciones de automatización e inteligencia artificial para empresas.» | AUTOMATIZACIÓN · INTELIGENCIA ARTIFICIAL · PARA EMPRESAS |
-| 22,98–24,55 | «Tú encuentras al cliente.» | TÚ / encuentras al cliente |
-| 25,15–28,00 | «Nosotros nos encargamos de construirlo todo.» | NOSOTROS / lo construimos todo + logotipo |
-| 29,00–30,30 | «¿Te interesa?» | ¿TE INTERESA? + tres puntos |
-| 31,30–34,62 | «Escríbenos por Instagram, o por correo, y te lo contamos.» | Mensaje por Instagram · dcodedepartment@gmail.com |
-| 35,52–37,64 | «Vende con D-Code Partners.» | VENDE CON + logotipo (la base baja 16 dB para la marca) · sello «50 % DE CADA VENTA» |
-
-**QA medido sobre la mezcla** (`entrega/qa-audio-v6.json`):
-- Voz por encima del fondo en todas las frases, 8,9 LU como mínimo (en el «50 %», con la caja registradora).
-- Error por palabra del 0 % en 11 de 12 frases. En «¿Experiencia?» Whisper escribe «espereencia», aunque la voz sola se transcribe bien. **HIPÓTESIS:** es la pronunciación coloquial castellana, no un fallo de mezcla.
-- Texto dentro de zona segura en los 1.186 fotogramas.
+Pieza nueva de 18,4 s: GANCHO → PROPUESTA → DINERO → ACTIVIDAD → CTA.
+- **Voz:** una sola toma continua.
+- **Imagen:** un único recurso gráfico, el hilo azul, que recorre toda la pieza; en el 50 % parte la pantalla en dos.
+- **Por qué se rehízo:** el anuncio de vendedores anterior (v4, v5 y v6, carpeta `v2-vendedores/`) fue rechazado. No se ha usado como base.
 
 ## 4 · EN AUTOMÁTICO — mini de YouTube (7,4 s)
 
@@ -124,7 +102,7 @@ Queda sin tocar una observación que no me corresponde decidir:
 
 ## 5 · Voces
 
-### v6 (COMERCIALES y mini): ElevenLabs v3, voz «Jesus – Firm, Deep and Reassuring»
+### Mini v2 (y la v6 retirada de COMERCIALES): ElevenLabs v3, voz «Jesus – Firm, Deep and Reassuring»
 - **Por qué otra voz:** Dirección oyó la de la v5 «medio dormida». La medición lo confirma: 4,1 sílabas/s y ~0,9 s muertos dentro de la misma frase.
 - **Cómo se eligió:** con la cuenta de ElevenLabs de D-Code (autorizado en la conversación), la misma frase de prueba, «¿Y qué venderías, exactamente? Soluciones de…», en 6 voces masculinas de España. Resultados:
 
@@ -200,6 +178,6 @@ PLAYWRIGHT=… CHROMIUM=… node comun/render.mjs v1-youtube
 python3 comun/final.py v1-youtube dcode-ruido-youtube-16x9              # 3.er argumento opcional: objetivo de loudnorm
 python3 comun/subtitulos.py v1-youtube entrega/dcode-ruido-youtube-16x9.srt
 ```
-Igual con `v2-vendedores` / `dcode-comerciales-v6-9x16` y `v3-mini` / `dcode-en-automatico-v2-youtube-16x9` (desde la v5 la voz no se sintetiza aquí: se importa con `python3 comun/importa_voz.py <vídeo> elecciones.json`). En la v6, con la voz de ElevenLabs, `final.py` se lanza con objetivo −13,3 (COMERCIALES) y −12,5 (mini): loudnorm se queda corto en piezas cortas o muy dinámicas, y así lo medido en el MP4 cae en −14,0 y −14,2 LUFS. La música y los efectos están sintetizados en
+Igual con `v3-mini` / `dcode-en-automatico-v2-youtube-16x9` (desde la v5 la voz no se sintetiza aquí: se importa con `python3 comun/importa_voz.py <vídeo> elecciones.json`). En la v6, con la voz de ElevenLabs, `final.py` se lanza con objetivo −13,3 (COMERCIALES) y −12,5 (mini): loudnorm se queda corto en piezas cortas o muy dinámicas, y así lo medido en el MP4 cae en −14,0 y −14,2 LUFS. **¿SABES VENDER?** (`v4-comerciales`) no usa `monta.py`: la voz es una sola toma, `voz/toma.wav`, y `montaje.json` guarda los tiempos de cada frase dentro de ella. Se reconstruye con `palabras.py` → `v4-comerciales/audio.py` → `render.mjs` → `final.py v4-comerciales dcode-sabes-vender-9x16 -14` → `subtitulos.py`. La música y los efectos están sintetizados en
 `comun/sintesis.py`. No hay música, samples ni imágenes de terceros: en la v4 no queda ninguna captura; las
 interfaces se dibujan en la escena.
