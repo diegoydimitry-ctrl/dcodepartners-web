@@ -93,7 +93,7 @@
 .fz3-filas li > span:first-child > span { color: var(--tinta-3); font-size: .8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fz3-mal { color: var(--tinta); }
 .fz3-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; color: var(--tinta-2); font-size: .9rem; }
-.fz3-total b { color: var(--tinta); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.fz3-total b { color: var(--tinta); font-size: 1.1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .fz3-mas summary { cursor: pointer; font-size: .9rem; color: var(--tinta-2); }
 .fz3-mas summary:hover { color: var(--tinta); }
 .fz3-todas { max-height: 240px; overflow-y: auto; margin-top: 8px; }
@@ -229,6 +229,16 @@
   .dm-acciones .boton { flex: 1 1 100%; justify-content: center; }
 }
 
+/* ---------------------------------------------------------------- TABLETA (641–960 px): lienzo de una columna
+   Las escenas de profundidad, un poco más recogidas: las fuentes de Atención y las capas de D-Code OS no se salen. */
+@media (min-width: 641px) and (max-width: 960px) {
+  .at3-fuentes { width: 33%; right: 6%; transform: rotateY(-20deg); }
+  .at3-fuente { padding: 12px 14px; font-size: .9rem; }
+  .at3-fuente.is-leida { transform: translateZ(40px) translateX(-24px); }
+  .at3-chat { width: 54%; }
+  .os3-pila { width: min(300px, 50%); top: 70%; } .os3-pila.is-abierta { --sep: 104px; }
+}
+
 /* ---------------------------------------------------------------- TELÉFONO: las mismas escenas, más ligeras
    Menos inclinación y menos profundidad (se leen mejor en pequeño), menos piezas a la vista y el lienzo del alto de
    lo que enseña. Lo que no aporta en 390 px (las fuentes de Atención en profundidad, el reloj de Comercial) se quita. */
@@ -243,12 +253,15 @@
   .fz3-todas li:nth-child(n + 3) { display: flex; }
   .fz3-total { font-size: .8rem; flex-wrap: wrap; }
   .fz3-rev { position: absolute; width: 92%; padding: 16px; }
-  .cm3 { min-height: 380px; } .cm3-reloj { padding: 12px 16px; } .cm3-escena { min-height: 200px; perspective: 600px; }
-  .cm3-suelo { left: 6%; right: 6%; gap: 4px; transform: rotateX(32deg); } .cm3-carril span { font-size: .52rem; top: 8px; letter-spacing: .02em; }
-  .cm3-lead { width: calc((100% - 12px) / 4); padding: 8px 6px; bottom: 10%; transform: translateX(calc(var(--k) * (100% + 4px))) translateZ(60px); }
+  .cm3 { min-height: 380px; } .cm3-reloj { padding: 12px 16px; } .cm3-escena { min-height: 230px; perspective: 900px; perspective-origin: 50% -10%; }
+  /* el embudo, más estrecho y menos inclinado: la ficha del cuarto carril ya no se sale del lienzo */
+  .cm3-suelo { left: 9%; right: 9%; top: 2%; height: 92%; gap: 4px; transform: rotateX(30deg); } .cm3-carril span { font-size: .52rem; top: 8px; letter-spacing: .02em; }
+  .cm3-lead { width: calc((100% - 12px) / 4); padding: 8px 6px; bottom: auto; top: 26%; transform: translateX(calc(var(--k) * (100% + 4px))) translateZ(60px); }
   .cm3-lead.is-dentro { transform: translateX(calc(var(--k) * (100% + 4px))) translateZ(2px); }
   .cm3-lead b { font-size: .7rem; } .cm3-lead span { display: none; } .cm3-lead em { font-size: .6rem; line-height: 1.25; }
-  .cm3-borrador { bottom: 88px; font-size: .82rem; } .cm3-compara { padding: 0 16px 16px; } .cm3-compara b { font-size: 1.15rem; }
+  /* el borrador sube sobre la comparación (que aún no dice nada) y no tapa la ficha */
+  .cm3-borrador { bottom: 12px; width: 92%; padding: 10px 12px; font-size: .78rem; line-height: 1.45; }
+  .cm3-compara { transition: opacity 300ms ease; } .cm3:has(.cm3-borrador.is-arriba:not(.is-enviado)) .cm3-compara { opacity: 0; } .cm3-compara { padding: 0 16px 16px; } .cm3-compara b { font-size: 1.15rem; }
   .op3 { min-height: 330px; } .op3-cab { padding: 12px 16px; } .op3-escena { min-height: 220px; }
   .op3-mesa { left: 2%; right: 2%; transform: rotateX(34deg); --q: 3.8rem; } .op3-fila { font-size: .72rem; padding-left: 8px; } .op3-b { font-size: .64rem; padding: 0 6px; }
   .op3-chips { padding: 0 16px 16px; }
@@ -256,7 +269,7 @@
   .at3-fuentes { display: none; }
   .at3-chat { position: relative; left: auto; top: auto; bottom: auto; width: auto; height: 440px; margin: 0; border-radius: 0; box-shadow: none; }
   .os3 { min-height: 420px; } .os3-escena { min-height: 330px; perspective: 1000px; }
-  .os3-pila { width: 64%; top: 66%; transform: translate(-50%, -50%) rotateX(54deg) rotateZ(-22deg); } .os3-pila.is-abierta { --sep: 112px; }
+  .os3-pila { width: 58%; top: 70%; transform: translate(-50%, -50%) rotateX(54deg) rotateZ(-22deg); } .os3-pila.is-abierta { --sep: 80px; }
   .os3-nodos { grid-template-columns: repeat(3, auto); gap: 5px; } .os3-nodos span { padding: 4px 6px; font-size: .6rem; } .os3-ev span { font-size: .6rem; padding: 4px 6px; } .os3-ev span:nth-child(n + 4) { display: none; }
   .os3-parte { margin: 0 16px 16px; }
   /* en el teléfono, las piezas que se mueven en 3D no llevan sombras grandes (cada sombra se vuelve a pintar al moverse) */
