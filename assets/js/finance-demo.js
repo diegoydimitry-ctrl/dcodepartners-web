@@ -4213,3 +4213,17 @@
   else init();
 
 })();
+
+/* Dentro del visor de la web (un marco del mismo origen), «Salir de la demo» cierra el visor en vez de cargar la
+   web dentro del marco. Abierta sola (p. ej. en un teléfono desde un enlace), el enlace funciona como siempre. */
+(function () {
+  if (window.parent === window) return;
+  // el visor ya tiene su «Salir» arriba: el de la app sobra y no se repite
+  document.documentElement.classList.add('fdemo-en-visor');
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('.fdemo-topbar-exit');
+    if (!a) return;
+    e.preventDefault();
+    try { window.parent.postMessage({ dcode: 'cerrar-demo' }, location.origin); } catch (err) { location.href = a.href; }
+  });
+})();

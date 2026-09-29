@@ -27,11 +27,13 @@ if (visor) {
     e.preventDefault(); volver = b;
     titulo.textContent = APP[1] + (EN ? " · demo, invented data" : " · demo, datos inventados");
     if (marco.getAttribute("src") !== APP[0]) marco.src = APP[0];
-    marco.title = APP[1]; visor.showModal();
+    marco.title = APP[1]; visor.showModal(); document.documentElement.classList.add("visor-abierto");
   });
   $("[data-visor-cerrar]", visor).addEventListener("click", () => visor.close());
   visor.addEventListener("click", (e) => { if (e.target === visor) visor.close(); });
-  visor.addEventListener("close", () => volver && volver.focus());
+  visor.addEventListener("close", () => { document.documentElement.classList.remove("visor-abierto"); volver && volver.focus(); });
+  // «Salir de la demo» dentro de la aplicación (en el marco) cierra el visor en vez de abrir la web dentro de él
+  addEventListener("message", (e) => { if (e.origin === location.origin && e.data && e.data.dcode === "cerrar-demo" && visor.open) visor.close(); });
 }
 
 // Enlaces a #planes, #verifactu, #conciliacion…: el detalle plegado se abre y se baja a él

@@ -274,3 +274,26 @@
   .fz3-hoja, .cm3-lead, .cm3-borrador, .op3-mesa, .op3-b, .fz3-rev, .os3-capa { box-shadow: 0 0 0 1px var(--linea-2) !important; }
   .fz3-hoja { box-shadow: 0 0 0 1px rgba(0, 0, 0, .08) !important; }
 }
+
+/* ------------------------------------------------------------ visor de la aplicación completa
+   En la portada y en /sistema-financiero (antes solo vivía en inicio.css y en /sistema-financiero salía sin estilo).
+   Escritorio: ventana grande sobre la página. Teléfono y tableta pequeña: pantalla completa, como una app, con «Salir». */
+.visor { width: min(1440px, 96vw); height: min(920px, 92vh); max-width: none; max-height: none; margin: auto; padding: 0; border: 1px solid var(--linea-2); border-radius: var(--radio-2); background: var(--bg); color: var(--tinta); overflow: hidden; }
+.visor[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); animation: visor-in 280ms var(--ease-out); }
+.visor::backdrop { background: rgba(0, 0, 0, .7); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.visor-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 18px; border-bottom: 1px solid var(--linea); min-width: 0; }
+.visor-cab .rotulo { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0; }
+.visor-salir { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; border-radius: var(--radio); border: 1px solid var(--linea-2); background: transparent; color: var(--tinta); font: inherit; font-size: .9rem; font-weight: 540; cursor: pointer; transition: border-color var(--t-rapida) ease, background var(--t-rapida) ease; }
+.visor-salir:hover { border-color: var(--tinta); }
+.visor-salir:focus-visible { outline: 2px solid var(--aire); outline-offset: 2px; }
+.visor-salir svg { width: 16px; height: 16px; }
+.visor iframe { display: block; width: 100%; height: 100%; border: 0; background: #06080d; }
+html.visor-abierto { overflow: hidden; }
+@keyframes visor-in { from { opacity: 0; transform: translateY(12px) scale(.985); } }
+@media (max-width: 760px), (max-height: 520px) {
+  .visor { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: 100vw; max-height: 100dvh; margin: 0; border: 0; border-radius: 0; }
+  .visor::backdrop { background: #000; }
+  .visor-cab { padding: max(6px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) 6px max(14px, env(safe-area-inset-left)); }
+  .visor-salir { height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) { .visor[open] { animation: none; } }

@@ -88,15 +88,6 @@
 @media (hover: hover) and (pointer: fine) { .demo:hover { border-color: var(--tinta); } .demo:hover svg { transform: translateX(3px); } }
 .tocalo-aviso { margin-top: var(--e-5); font-family: var(--f-texto); text-transform: none; letter-spacing: 0; font-size: .86rem; }
 
-.visor { width: min(1440px, 96vw); height: min(920px, 92vh); max-width: none; max-height: none; padding: 0; border: 1px solid var(--linea-2); border-radius: var(--radio-2); background: var(--bg); color: var(--tinta); overflow: hidden; }
-.visor[open] { display: grid; grid-template-rows: auto 1fr; animation: visor-in 280ms var(--ease-out); }
-.visor::backdrop { background: rgba(0, 0, 0, .7); backdrop-filter: blur(8px); }
-.visor-cab { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 8px 8px 18px; border-bottom: 1px solid var(--linea); }
-.visor-tel { display: none; }
-.visor iframe { width: 100%; height: 100%; border: 0; background: #fff; }
-@keyframes visor-in { from { opacity: 0; transform: translateY(12px) scale(.985); } }
-@media (max-width: 760px) { .visor { width: 100vw; height: 100dvh; border-radius: 0; } .visor-tel { display: block; } }
-@media (prefers-reduced-motion: reduce) { .visor[open] { animation: none; } }
 
 /* ------------------------------------------------------------- 4 · hablemos */
 .fin { border-top: 1px solid var(--linea); }

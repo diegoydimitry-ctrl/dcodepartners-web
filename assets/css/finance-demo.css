@@ -2299,3 +2299,5 @@ html[data-theme="dark"] .fdemo-scope{
 .fdemo-scope .fdemo-canal.c-remesa{ color:var(--dc-canal-remesa); }
 .fdemo-scope .fdemo-hoja-marco{ background:repeating-linear-gradient(135deg, var(--dc-hoja-a) 0 10px, var(--dc-hoja-b) 10px 20px); }
 .fdemo-scope .fdemo-topbar, .fdemo-scope .fdemo-sidebar{ background:var(--dc-surface); -webkit-backdrop-filter:none; backdrop-filter:none; }
+/* dentro del visor de la web: su propio «Salir» cierra; el de la app no se repite */
+.fdemo-en-visor .fdemo-topbar-exit { display: none; }

@@ -86,11 +86,13 @@ if (visor) {
     titulo.textContent = d[1] + (EN ? " · demo, invented data" : " · demo, datos inventados");
     if (marco.getAttribute("src") !== d[0]) marco.src = d[0];
     marco.title = d[1];
-    visor.showModal();
+    visor.showModal(); document.documentElement.classList.add("visor-abierto");
   });
   $("[data-visor-cerrar]", visor).addEventListener("click", () => visor.close());
   visor.addEventListener("click", (e) => { if (e.target === visor) visor.close(); });
-  visor.addEventListener("close", () => volver && volver.focus());
+  visor.addEventListener("close", () => { document.documentElement.classList.remove("visor-abierto"); volver && volver.focus(); });
+  // «Salir de la demo» dentro de la aplicación (en el marco) cierra el visor en vez de abrir la web dentro de él
+  addEventListener("message", (e) => { if (e.origin === location.origin && e.data && e.data.dcode === "cerrar-demo" && visor.open) visor.close(); });
 }
 
 /* Demos: ni su CSS ni su código bloquean la primera pintura. El CSS se pide
