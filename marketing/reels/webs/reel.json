@@ -1,9 +1,10 @@
 {
- "titulo": "5 webs que parecen del futuro",
+ "titulo": "5 webs que parecen del futuro (y el prompt para crear cada una)",
+ "motor": "reel-navegador.html",
  "fps": 60,
  "bpm": 120,
  "grabaciones": "../grabaciones",
- "nota": "Grabaciones reales del lienzo WebGL de cada web en el navegador del PC (29/09/2026), a 1080×1920, con ratón y scroll de trayectoria humana registrados; el cursor se dibuja con ese registro. Tramos pasados a 60 fps constantes con interpolación por compensación de movimiento (ffmpeg minterpolate), que rellena los fotogramas que el navegador no llegó a dibujar.",
+ "nota": "Cada web se abrió en el navegador del PC el 29/09/2026 y se capturó fotograma a fotograma mientras se hacía scroll y se movía el ratón de verdad (página entera: textos, secciones y 3D). Las capturas se pasan a 60 fps con interpolación por compensación de movimiento; Bruno Simon es la grabación directa del lienzo a 60 fps.",
  "gancho": {
   "lineas": [
    "5 WEBS QUE",
@@ -11,153 +12,198 @@
    "FUTURO"
   ],
   "acento": 2,
-  "hasta": 2.0
+  "hasta": 1.9,
+  "pie": "+ el prompt para crear cada una",
+  "pie_t": 0.4
  },
  "segmentos": [
   {
    "id": "w1",
    "tipo": "clip",
-   "fuente": "I60-shopify.mp4",
-   "in": 0.25,
-   "dur": 4.15,
-   "cursor": true,
-   "nombre": "Shopify Editions",
-   "frase": "Un catálogo convertido en un cuadro vivo",
-   "url": "shopify.com/editions",
-   "camara": [
+   "fuente": "scroll/C-igloo.mp4",
+   "in": 0,
+   "dur": 6.4,
+   "t_prompt": 3.9,
+   "nombre": "Igloo Inc.",
+   "frase": "Haces scroll y viajas por el hielo",
+   "url": "igloo.inc",
+   "prompt": "Crea una landing a pantalla completa con Three.js en la que la rueda del ratón mueve la cámara (sin scroll nativo). Escena 1: un iglú fotorrealista de bloques de hielo iluminado por dentro, en una montaña nevada con niebla, con materiales PBR y desenfoque de profundidad. Al bajar, la cámara se aleja, los bloques estallan con un glitch de aberración cromática y aparecen cristales de hielo flotantes que refractan un objeto en su interior, uno por proyecto. Interfaz tipo HUD en monoespaciada blanca, con líneas guía y textos que se descifran letra a letra.",
+   "teclas": [
     [
-     0,
-     "lleno",
-     0.5,
-     0.45,
-     1.0
-    ],
-    [
-     5.2,
-     "lleno",
-     0.55,
-     0.42,
-     1.1
+     4.08,
+     4.98
     ]
    ],
-   "desfase": 7.95,
-   "log": "WEB-shopify-1.json"
+   "cortinilla": [
+    3.8
+   ],
+   "cursor_ruta": [
+    [
+     0,
+     0.5375,
+     0.569
+    ],
+    [
+     3,
+     0.545,
+     0.575
+    ]
+   ]
   },
   {
    "id": "w2",
    "tipo": "clip",
-   "fuente": "I60-bruno.mp4",
-   "in": 1.35,
-   "dur": 3.9,
-   "nombre": "Bruno Simon",
-   "frase": "Un portfolio que es un videojuego",
-   "url": "bruno-simon.com",
-   "camara": [
+   "fuente": "scroll/C-lando.mp4",
+   "in": 0,
+   "dur": 5.8,
+   "t_prompt": 3.3,
+   "nombre": "Lando Norris",
+   "frase": "Pasas el ratón y aparece su casco",
+   "url": "landonorris.com",
+   "prompt": "Crea la web de [deportista] con Next.js, GSAP ScrollTrigger, Lenis y Three.js. Hero: su foto recortada a toda pantalla sobre fondo blanco roto con curvas topográficas; donde pasa el ratón, una máscara líquida con retardo descubre su casco en 3D. Al bajar, la foto se encoge hasta una tarjeta sobre fondo verde oliva oscuro, cruzan titulares gigantes en horizontal y se dibuja su firma en verde neón (#D4FF00). Después, un manifiesto que mezcla serif fina y grotesca gruesa, y una galería de fotos con parallax.",
+   "teclas": [
     [
-     0,
-     "lleno",
-     0.5,
-     0.5,
-     1.04
-    ],
-    [
-     4.8,
-     "lleno",
-     0.5,
-     0.48,
-     1.12
+     3.48,
+     4.38
     ]
    ],
-   "desfase": 4.05
+   "cortinilla": [
+    3.1999999999999997
+   ],
+   "cursor_ruta": [
+    [
+     0,
+     0.5875,
+     0.6236
+    ],
+    [
+     0.375,
+     0.5875,
+     0.6236
+    ],
+    [
+     1.04,
+     0.375,
+     0.4267
+    ],
+    [
+     1.3,
+     0.5375,
+     0.569
+    ]
+   ]
   },
   {
    "id": "w3",
    "tipo": "clip",
-   "fuente": "I60-oryzo.mp4",
-   "in": 0.25,
-   "dur": 4.8,
-   "cursor_fijo": [
-    0.39,
-    0.55
-   ],
-   "nombre": "Oryzo",
-   "frase": "Un posavasos con web de superproducción",
-   "url": "oryzo.ai",
-   "camara": [
+   "fuente": "scroll/C-shopify.mp4",
+   "in": 0,
+   "dur": 5.8,
+   "t_prompt": 3.3,
+   "nombre": "Shopify Editions",
+   "frase": "Un cuadro renacentista que cobra vida",
+   "url": "shopify.com/editions/winter2026",
+   "prompt": "Crea una landing de lanzamiento con Three.js y scroll suave (Lenis). Hero: un cuadro renacentista pintado, separado en capas con profundidad que se mueven con el ratón; dos figuras flotan y casi se tocan los dedos, como en «La creación de Adán», con zapatillas modernas y un monopatín que gira en 3D. Encima, una tarjeta de borde fino con título, subtítulo e índice de capítulos en números romanos. Al bajar, los dedos se tocan, un destello disuelve el cuadro en partículas y se abre un cielo nocturno con estrellas doradas.",
+   "teclas": [
     [
-     0,
-     "lleno",
-     0.5,
-     0.5,
-     1.0
-    ],
-    [
-     4.8,
-     "lleno",
-     0.5,
-     0.5,
-     1.06
+     3.48,
+     4.38
     ]
    ],
-   "desfase": 3.95
+   "cortinilla": [
+    3.1999999999999997
+   ],
+   "cursor_ruta": [
+    [
+     0,
+     0.1875,
+     0.328
+    ],
+    [
+     0.375,
+     0.1875,
+     0.328
+    ],
+    [
+     0.79,
+     0.8125,
+     0.4595
+    ],
+    [
+     1.05,
+     0.5375,
+     0.569
+    ]
+   ]
   },
   {
    "id": "w4",
    "tipo": "clip",
-   "fuente": "I60-lando.mp4",
-   "in": 0.25,
-   "dur": 4.6,
-   "cursor": true,
-   "nombre": "Lando Norris",
-   "frase": "Pasas el ratón y aparece su casco",
-   "url": "landonorris.com",
-   "camara": [
+   "fuente": "scroll/C-bruno.mp4",
+   "in": 0,
+   "dur": 5.8,
+   "t_prompt": 3.3,
+   "nombre": "Bruno Simon",
+   "frase": "Un portfolio que es un videojuego",
+   "url": "bruno-simon.com",
+   "prompt": "Crea un portfolio que sea un videojuego con Three.js y física (Rapier). Un mundo 3D pequeño, estilo juguete, de noche, con farolas, luz suave, sombras y una cámara en picado que sigue al coche. El visitante conduce con las flechas o WASD (y con controles táctiles en el móvil). Mi nombre en letras 3D que se pueden derribar, cada proyecto es una zona del mapa con su cartel, hay rampas, objetos que salen volando y explosiones. Sonido de motor y de choques, y una pantalla de carga para empezar.",
+   "teclas": [
     [
-     0,
-     "lleno",
-     0.5,
-     0.45,
-     1.0
-    ],
-    [
-     4.6,
-     "lleno",
-     0.5,
-     0.42,
-     1.08
+     3.48,
+     4.38
     ]
    ],
-   "desfase": 0.15,
-   "log": "WEB-lando-1.json"
+   "cortinilla": [
+    3.1999999999999997
+   ]
   },
   {
    "id": "w5",
    "tipo": "clip",
-   "fuente": "I60-henry.mp4",
-   "in": 0.2,
-   "dur": 3.6,
-   "cursor": true,
+   "fuente": "scroll/C-henry.mp4",
+   "in": 0,
+   "dur": 5.8,
+   "t_prompt": 3.3,
    "nombre": "Henry Heffernan",
-   "frase": "Un portfolio dentro de un PC del año 2000",
+   "frase": "Un portfolio dentro de un PC de los 90",
    "url": "henryheffernan.com",
-   "camara": [
+   "prompt": "Crea un portfolio 3D con Three.js: un estudio gris claro con un escritorio de oficina, un ordenador beige de los 90, una silla y una planta, con materiales realistas y una cámara que flota despacio. Al hacer clic, la cámara vuela hasta la pantalla CRT y dentro funciona un escritorio tipo Windows 95 hecho en HTML (CSS3DRenderer): ventanas que se arrastran, iconos de mis proyectos, currículum y algún juego. Cristal de monitor con polvo, curvatura y reflejo iridiscente, y sonido de teclado y de ventilador.",
+   "teclas": [
     [
-     0,
-     "lleno",
-     0.5,
-     0.5,
-     1.12
-    ],
-    [
-     3.6,
-     "lleno",
-     0.52,
-     0.5,
-     1.32
+     3.48,
+     4.38
     ]
    ],
-   "desfase": 0.35,
-   "log": "WEB-henry-1.json"
+   "cortinilla": [
+    3.1999999999999997
+   ],
+   "cursor_ruta": [
+    [
+     0,
+     0.62,
+     0.62
+    ],
+    [
+     0.7,
+     0.508,
+     0.394
+    ],
+    [
+     1.6,
+     0.508,
+     0.394
+    ],
+    [
+     2.6,
+     0.52,
+     0.52
+    ]
+   ],
+   "clics": [
+    {
+     "t": 0.78
+    }
+   ]
   }
  ],
  "cierre": {
@@ -167,7 +213,7 @@
    "SER PLANO."
   ],
   "acento": 2,
-  "sub": "Guárdalo para tu próxima web.",
-  "dur": 3.2
+  "sub": "Los 5 prompts: enlace en comentarios.",
+  "dur": 3.0
  }
 }

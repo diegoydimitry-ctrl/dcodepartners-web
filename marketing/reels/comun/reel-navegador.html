@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Reel webs · D-Code Partners</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../anuncios-v3/comun/motor.js"></script>
+<script>
+"use strict";
+// Motor del Reel «5 webs»: cada web se ve DENTRO DE UNA VENTANA DE NAVEGADOR (barra con su dirección), con el scroll
+// real capturado en el navegador del PC. Después de cada web aparece el prompt para recrearla, en una tarjeta tipo
+// «caja de chat» que cabe entera en pantalla. Todo es función del tiempo: pintaFrame(n) dibuja el fotograma n.
+const W = 1080, H = 1920;
+const D = window.DATOS, R = D.reel, MED = D.medios, FPS = R.fps || 60;
+const c = document.getElementById("c").getContext("2d");
+const { clamp, lerp, prog, eOut, eOut5, eIn, eIO } = M;
+const C = { fondo: "#0a0a0c", blanco: "#f4f3ef", gris: "#a9adb6", gris2: "#6f737c", azul: "#2f6bff", pixel: "#5b8cff" };
+const AR = (p, px) => `${p} ${px}px "Archivo"`, IT = (p, px) => `${p} ${px}px "Inter Tight"`, MO = (p, px) => M.fuente(p, px, "JetBrains Mono");
+const X0 = 72, ANCHO = W - 2 * X0;
+const cabe = (s, fam, pxMax, ancho = ANCHO) => Math.min(pxMax, (100 * ancho) / M.ancho(c, s, fam(100)));
+
+let t = 0; const SEG = R.segmentos.map((s, i) => { const o = { ...s, i, t0: t, t1: t + s.dur, m: MED[s.id] }; t += s.dur; return o; });
+const T_CIERRE = t, DUR = t + (R.cierre?.dur ?? 3), TOTAL = SEG.length, HOOK = R.gancho?.hasta ?? 0;
+window.META = { W, H, fps: FPS, duracion: DUR, segura: [60, 250, 1016, 1480], minpx: 28 };
+
+const IMG = new Map();
+function carga(url) {
+  if (IMG.has(url)) return IMG.get(url);
+  const p = new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ko(new Error("no carga " + url)); im.src = url; })
+    .then((im) => { IMG.set(url, im); return im; });
+  IMG.set(url, p); return p;
+}
+const fotograma = (s, tl) => carga(`${s.m.ruta}${String(clamp(Math.floor(tl * FPS) + 1, 1, s.m.n)).padStart(5, "0")}.jpg`);
+
+// ─── ventana de navegador ───
+const VX = 48, VW = 984, BARRA = 74, VR = 22;
+const VH = (w, h) => VW * h / w;                                      // alto del contenido a escala
+const VY = 548;                                                        // arriba de la ventana (barra incluida)
+function rectVentana(w, h) { return { x: VX, y: VY + BARRA, w: VW, h: VH(w, h) }; }
+
+const peq = document.createElement("canvas"); peq.width = 54; peq.height = 96; const pc = peq.getContext("2d");
+function fondoDesenfocado(im, alpha) {
+  pc.filter = "blur(3px) saturate(1.25)"; pc.drawImage(im, 0, 0, 54, 96); pc.filter = "none";
+  c.save(); c.globalAlpha = alpha; c.drawImage(peq, -40, -60, W + 80, H + 120);
+  c.fillStyle = "rgba(6,6,8,0.66)"; c.fillRect(0, 0, W, H); c.restore();
+}
+
+// v = 0: la web a pantalla completa (gancho) · v = 1: dentro de la ventana del navegador
+function pintaWeb(s, im, tl, v, entra) {
+  const w = s.m.w, h = s.m.h, rv = rectVentana(w, h);
+  const sc = [(w - h * W / H) / 2, 0, h * W / H, h], sv = [0, 0, w, h];         // origen: recorte 9:16 → web entera
+  const src = sc.map((a, j) => lerp(a, sv[j], v));
+  let dx = lerp(0, rv.x, v), dy = lerp(0, rv.y - BARRA, v), dw = lerp(W, rv.w, v), dh = lerp(H, rv.h + BARRA, v);
+  const e = lerp(1.03, 1, eOut5(clamp(entra / 0.45)));                          // asentamiento al entrar
+  dx += dw / 2 - dw * e / 2; dy += dh / 2 - dh * e / 2; dw *= e; dh *= e;
+  const bar = BARRA * v * e, r = VR * v;
+  if (v > 0.01) { c.save(); c.shadowColor = `rgba(0,0,0,${0.6 * v})`; c.shadowBlur = 80; c.shadowOffsetY = 28;
+    c.fillStyle = "#000"; M.rr(c, dx, dy, dw, dh, r); c.fill(); c.restore(); }
+  c.save(); M.rr(c, dx, dy, dw, dh, r); c.clip();
+  c.drawImage(im, ...src, dx, dy + bar, dw, dh - bar);
+  if (v > 0.01) barra(s, dx, dy, dw, bar, v);
+  c.restore();
+  if (v > 0.01) { c.save(); c.globalAlpha = 0.16 * v; c.strokeStyle = "#fff"; c.lineWidth = 1.5; M.rr(c, dx, dy, dw, dh, r); c.stroke(); c.restore(); }
+  return { x: dx, y: dy + bar, w: dw, h: dh - bar, src };
+}
+function barra(s, x, y, w, h, v) {
+  if (h < 2) return;
+  c.fillStyle = "#1b1c20"; c.fillRect(x, y, w, h);
+  c.fillStyle = "rgba(255,255,255,0.07)"; c.fillRect(x, y + h - 1.5, w, 1.5);
+  const cy = y + h / 2;
+  ["#ff5f57", "#febc2e", "#28c840"].forEach((col, j) => { c.beginPath(); c.arc(x + 34 + j * 26, cy, 8, 0, 7); c.fillStyle = col; c.globalAlpha = 0.9 * v; c.fill(); });
+  c.globalAlpha = 1;
+  const pw = 560, px = x + w / 2 - pw / 2 + 30;                                  // caja de la dirección
+  c.fillStyle = "#2a2b31"; M.rr(c, px, cy - 23, pw, 46, 23); c.fill();
+  c.save(); c.translate(px + 24, cy - 1); c.strokeStyle = C.gris; c.lineWidth = 2.2;   // candado
+  c.strokeRect(-7, -2, 14, 11); c.beginPath(); c.arc(0, -3, 5, Math.PI, 0); c.stroke(); c.restore();
+  M.texto(c, s.url, px + 44, cy + 10, { f: IT(500, 28), color: "#e6e7ea", alpha: v });
+}
+
+// ─── cursor (ruta en coordenadas de la web, 0–1) ───
+const FLECHA = new Path2D("M0 0 L0 23 L6.2 17.6 L10.4 26.8 L14.2 25.1 L10.1 16.1 L18 16.1 Z");
+function cursor(s, tl, r, alpha) {
+  const P = s.cursor_ruta; if (!P || alpha <= 0) return;
+  let i = 0; while (i < P.length - 1 && P[i + 1][0] <= tl) i++;
+  const a = P[i], b = P[Math.min(i + 1, P.length - 1)], k = b[0] > a[0] ? eIO(clamp((tl - a[0]) / (b[0] - a[0]))) : 0;
+  const x = lerp(a[1], b[1], k), y = lerp(a[2], b[2], k);
+  const [sx, sy, sw, sh] = r.src, px = r.x + (x * s.m.w - sx) / sw * r.w, py = r.y + (y * s.m.h - sy) / sh * r.h;
+  const clic = (s.clics || []).some((q) => tl >= q.t && tl < q.t + 0.14), e = clic ? 1.5 : 1.7;
+  c.save(); c.globalAlpha = alpha; c.translate(px, py); c.scale(e, e);
+  c.shadowColor = "rgba(0,0,0,0.35)"; c.shadowBlur = 4; c.shadowOffsetY = 1.5;
+  c.fillStyle = "#111"; c.fill(FLECHA); c.shadowColor = "transparent";
+  c.lineWidth = 1.6; c.strokeStyle = "#fff"; c.lineJoin = "round"; c.stroke(FLECHA); c.restore();
+  for (const q of s.clics || []) { const kk = prog(tl, q.t, q.t + 0.5); if (kk <= 0 || kk >= 1) continue;
+    c.save(); c.strokeStyle = C.blanco; c.lineWidth = 3; c.globalAlpha = (1 - kk) * 0.9 * alpha; c.beginPath(); c.arc(px, py, 14 + 40 * eOut(kk), 0, 7); c.stroke(); c.restore(); }
+}
+
+// ─── textos ───
+function linea(s, x, y, px, fam, color, t0, tt, o = {}) {
+  const k = eOut5(prog(tt, t0, t0 + (o.dur ?? 0.38))); if (k <= 0) return 0;
+  const ks = o.sal != null ? eIn(prog(tt, o.sal, o.sal + 0.22)) : 0; if (ks >= 1) return 0;
+  const f = fam(px), alto = px * 1.15;
+  c.save(); c.beginPath(); c.rect(0, y - px * 0.98, W, alto + px * 0.14); c.clip();
+  M.texto(c, s, x, y + (1 - k) * alto - ks * alto, { f, color, al: o.al || "left", alpha: 1 - ks, track: o.track ?? 0 });
+  c.restore(); return M.ancho(c, s, f, o.track ?? 0);
+}
+function sombraSuperior(a) {
+  if (a <= 0) return; const g = c.createLinearGradient(0, 0, 0, 760);
+  g.addColorStop(0, `rgba(0,0,0,${0.8 * a})`); g.addColorStop(0.6, `rgba(0,0,0,${0.45 * a})`); g.addColorStop(1, "rgba(0,0,0,0)");
+  c.fillStyle = g; c.fillRect(0, 0, W, 760);
+}
+function cabecera(s, tt) {
+  const ent = s.i === 0 ? HOOK + 0.05 : s.t0 + 0.08, sal = s.t1 - 0.24, num = String(s.i + 1).padStart(2, "0");
+  c.save(); c.shadowColor = "rgba(0,0,0,0.55)"; c.shadowBlur = 22; c.shadowOffsetY = 2;
+  linea(num, X0, 318, 34, (p) => MO(700, p), C.pixel, ent, tt, { sal, track: 2 });
+  linea(`/ ${String(TOTAL).padStart(2, "0")}`, X0 + 58, 318, 34, (p) => MO(500, p), C.gris, ent, tt, { sal, track: 2 });
+  const pxN = cabe(s.nombre, (p) => IT(700, p), 80);
+  linea(s.nombre, X0, 318 + 22 + pxN, pxN, (p) => IT(700, p), C.blanco, ent + 0.06, tt, { sal, track: -1 });
+  const pxF = cabe(s.frase, (p) => IT(500, p), 42);
+  linea(s.frase, X0, 318 + 22 + pxN + 16 + pxF, pxF, (p) => IT(500, p), "#d6d8de", ent + 0.14, tt, { sal });
+  c.restore();
+}
+
+// ─── tarjeta del prompt: una caja de chat con el texto «pegado», que cabe entera ───
+function trocea(txt, f, maxw) {
+  const out = []; for (const par of txt.split("\n")) { let l = "";
+    for (const p of par.split(" ")) { const q = l ? l + " " + p : p; if (M.ancho(c, q, f) > maxw && l) { out.push(l); l = p; } else l = q; }
+    out.push(l); } return out;
+}
+const CACHE_LIN = new Map();
+function tarjeta(s, tt) {
+  const tp = s.t0 + s.t_prompt, k = eOut5(prog(tt, tp, tp + 0.42)), ks = eIn(prog(tt, s.t1 - 0.26, s.t1 - 0.02));
+  if (k <= 0 || ks >= 1) return 0;
+  const PX = s.prompt_px || 38, LH = Math.round(PX * 1.42), f = IT(500, PX), CX = 48, CWd = 984, PAD = 46;
+  if (!CACHE_LIN.has(s.id)) CACHE_LIN.set(s.id, trocea(s.prompt, f, CWd - 2 * PAD));
+  const L = CACHE_LIN.get(s.id), total = L.join(" ").length;
+  const altoTxt = L.length * LH, CH = 112 + altoTxt + 132, CY = 560;
+  c.save(); c.globalAlpha = k * (1 - ks); c.translate(0, (1 - k) * 60 - ks * 30);
+  c.shadowColor = "rgba(0,0,0,0.6)"; c.shadowBlur = 90; c.shadowOffsetY = 30;
+  c.fillStyle = "rgba(22,23,28,0.97)"; M.rr(c, CX, CY, CWd, CH, 30); c.fill(); c.shadowColor = "transparent";
+  c.strokeStyle = "rgba(255,255,255,0.14)"; c.lineWidth = 1.5; M.rr(c, CX, CY, CWd, CH, 30); c.stroke();
+  // cabecera: etiqueta PROMPT + qué es
+  const fE = MO(700, 28), wE = M.ancho(c, "PROMPT", fE, 2) + 36;
+  c.fillStyle = "rgba(47,107,255,0.18)"; M.rr(c, CX + PAD, CY + 40, wE, 46, 23); c.fill();
+  M.texto(c, "PROMPT", CX + PAD + 18, CY + 73, { f: fE, color: C.pixel, track: 2 });
+  M.texto(c, s.prompt_titulo || "para crear una web así", CX + PAD + wE + 20, CY + 73, { f: IT(500, 30), color: C.gris });
+  // texto: aparece como si se pegara/teclease muy rápido
+  const kt = prog(tt, tp + 0.18, tp + 0.18 + (s.t_teclea ?? 0.9)); let quedan = Math.round(total * kt);
+  const y0 = CY + 112 + PX;
+  L.forEach((l, j) => { if (quedan <= 0) return; const parte = l.slice(0, quedan); quedan -= l.length + 1;
+    M.texto(c, parte, CX + PAD, y0 + j * LH, { f, color: C.blanco }); });
+  if (kt < 1 || (tt * 2) % 1 < 0.5) {                                             // cursor de texto
+    let n = Math.round(total * kt), j = 0; while (j < L.length - 1 && n > L[j].length) { n -= L[j].length + 1; j++; }
+    const xc = CX + PAD + M.ancho(c, L[j].slice(0, Math.max(0, n)), f);
+    c.fillStyle = C.pixel; c.fillRect(xc + 3, y0 + j * LH - PX * 0.8, 3, PX * 0.98);
+  }
+  // pie: dónde descargarlos + botón de enviar
+  const yP = CY + CH - 66;
+  c.fillStyle = "rgba(255,255,255,0.1)"; c.fillRect(CX + PAD, yP - 44, CWd - 2 * PAD, 1.5);
+  M.texto(c, s.prompt_pie || "Los 5 prompts: enlace en comentarios", CX + PAD, yP + 10, { f: MO(600, 28), color: C.gris, track: 0.5 });
+  const bx = CX + CWd - PAD - 26, by = yP + 1, kb = prog(tt, tp + 0.2 + (s.t_teclea ?? 0.9), tp + 0.5 + (s.t_teclea ?? 0.9));
+  c.fillStyle = kb > 0 ? C.azul : "#3a3b42"; c.beginPath(); c.arc(bx, by, 27, 0, 7); c.fill();
+  c.strokeStyle = "#fff"; c.lineWidth = 3.5; c.lineCap = "round"; c.lineJoin = "round";
+  c.beginPath(); c.moveTo(bx, by + 11); c.lineTo(bx, by - 11); c.moveTo(bx - 9, by - 2); c.lineTo(bx, by - 11); c.lineTo(bx + 9, by - 2); c.stroke();
+  c.restore();
+  return k * (1 - ks);
+}
+
+function gancho(tt) {
+  const G = R.gancho; if (!G || tt > G.hasta + 0.3) return;
+  const sal = G.hasta - 0.2, f = (p) => AR(900, p);
+  const px = Math.min(...G.lineas.map((l) => cabe(l, f, G.px || 150))), y0 = G.y ?? 640;
+  G.lineas.forEach((l, j) => linea(l, X0, y0 + j * px, px, f, j === G.acento ? C.pixel : C.blanco, (G.entradas?.[j]) ?? -1, tt, { sal, dur: 0.3 }));
+  if (G.pie) linea(G.pie, X0, y0 + G.lineas.length * px + 34, 46, (p) => IT(600, p), "#e6e7ea", G.pie_t ?? 0.45, tt, { sal });
+}
+function cierre(tt) {
+  if (tt < T_CIERRE - 0.05) return;
+  const Z = R.cierre, k = eIO(prog(tt, T_CIERRE - 0.05, T_CIERRE + 0.3));
+  c.save(); c.globalAlpha = k; c.fillStyle = C.fondo; c.fillRect(0, 0, W, H); c.restore();
+  const f = (p) => AR(900, p), px = Math.min(...Z.lineas.map((l) => cabe(l, f, Z.px || 120)));
+  Z.lineas.forEach((l, j) => linea(l, X0, 680 + j * px * 1.02, px, f, j === Z.acento ? C.pixel : C.blanco, T_CIERRE + 0.1 + j * 0.16, tt));
+  if (Z.sub) linea(Z.sub, X0, 680 + Z.lineas.length * px * 1.02 + 40, 42, (p) => IT(500, p), C.gris, T_CIERRE + 0.5, tt);
+  const tl = T_CIERRE + (Z.marca_t ?? 0.9), kl = eOut5(prog(tt, tl, tl + 0.45));
+  if (kl > 0) {
+    const alto = 46, fL = AR(700, alto * 0.62), txt = "D-Code Partners", wT = M.ancho(c, txt, fL, -0.5), tot = alto * 1.2 + alto * 0.34 + wT, x = W / 2 - tot / 2, y = 1290;
+    c.save(); c.globalAlpha = kl; c.translate(0, (1 - kl) * 10);
+    M.logo(c, x, y, alto, C.blanco, C.pixel, prog(tt, tl, tl + 0.5), prog(tt, tl + 0.3, tl + 0.5));
+    M.texto(c, txt, x + alto * 1.54, y + alto * 0.72, { f: fL, color: C.blanco, track: -0.5 });
+    M.texto(c, "dcodepartners.com", W / 2, y + 112, { f: MO(600, 30), color: C.gris, al: "center", track: 2 });
+    c.restore();
+  }
+}
+
+window.pintaFrame = async (n) => {
+  const tt = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
+  c.fillStyle = C.fondo; c.fillRect(0, 0, W, H);
+  const s = SEG.find((x) => tt >= x.t0 && tt < x.t1);
+  if (s) {
+    const tl = tt - s.t0, im = await fotograma(s, tl);
+    const v = s.i === 0 ? eIO(prog(tt, HOOK - 0.15, HOOK + 0.45)) : 1;          // el gancho, a pantalla completa
+    fondoDesenfocado(im, v);
+    const r = pintaWeb(s, im, tl, v, s.i === 0 ? 1 : tl);
+    const kp = eOut(prog(tl, s.t_prompt - 0.05, s.t_prompt + 0.35));            // fase del prompt: la web se apaga
+    cursor(s, tl, r, 1 - kp);
+    if (v < 1) { c.fillStyle = `rgba(0,0,0,${0.5 * (1 - v)})`; c.fillRect(0, 0, W, H); }
+    if (kp > 0) { c.fillStyle = `rgba(6,6,8,${0.74 * kp})`; c.fillRect(0, 0, W, H); }
+    sombraSuperior(v);
+    if (!(s.i === 0 && tt < HOOK)) cabecera(s, tt);
+    tarjeta(s, tt);
+  }
+  gancho(tt);
+  cierre(tt);
+  M.grano(c, W, H, n, 0.035);
+  return M.CAJAS;
+};
+
+(async () => {
+  const fu = "../../anuncios-v3/comun/fuentes/";
+  await M.cargar([["Archivo", fu + "archivo-wdth.woff2", { weight: "100 900", stretch: "62% 125%" }],
+                  ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }], ["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }]]);
+  window.LISTO = true;
+})();
+</script></body></html>

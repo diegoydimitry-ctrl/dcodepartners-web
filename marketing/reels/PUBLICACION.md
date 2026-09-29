@@ -29,28 +29,33 @@
 
 **Portada:** el «después» de Gemini a pantalla completa con «5 IA QUE DEBERÍAS CONOCER». La cuadrícula del perfil la recorta a 3:4, así que el texto va centrado.
 
-## Reel 2 · «5 webs que parecen del futuro» (27 s aprox. · 9:16)
+## Reel 2 · «5 webs que parecen del futuro + el prompt de cada una» (32,6 s · 9:16 · 60 fps)
 
 **Ficheros:**
 - `webs/entrega/dcode-reel-5-webs-futuro.mp4`: la versión final.
 - `…-sin-musica.mp4`: solo los efectos de sonido, para reeditar.
-- `webs/entrega/portada-9x16.png`: la portada.
+- `webs/entrega/portada-9x16.png` y `portada-3x4.png`: las portadas.
+- `webs/prompts/prompts-5-webs-del-futuro.pdf`: los 5 prompts para descargar (el enlace va en el primer comentario).
 
-**Cómo se ha grabado:** cada web se abrió de verdad en el navegador del PC el 29/09/2026 y se grabó lo que dibujaba la GPU en tiempo real, a 1080×1920. El ratón y el scroll siguen trayectorias humanas y el cursor que se ve es ese recorrido real. Solo se capturan las capas 3D (WebGL) de cada web: la interfaz HTML (menús, textos) no aparece.
+**Cómo se ha grabado:** cada web se abrió de verdad en el navegador del PC el 29/09/2026. Se capturó la página entera (textos, secciones y 3D) fotograma a fotograma mientras se hacía scroll y se movía el ratón de verdad, y se pasó a 60 fps con interpolación de movimiento. Bruno Simon es la grabación directa de su lienzo a 60 fps. Cada web se ve dentro de una ventana de navegador con su dirección, y después aparece el prompt para crear una web así, entero en pantalla.
 
 **Caption:**
-> 5 webs que parecen del futuro (y todas funcionan en tu navegador):
+> 5 webs que parecen del futuro (y el prompt para crear cada una):
 >
-> 01 · Shopify Editions Winter '26: un catálogo convertido en un cuadro vivo
-> 02 · Bruno Simon: un portfolio que es un videojuego
-> 03 · Oryzo (Lusion): un posavasos con web de superproducción
-> 04 · Lando Norris (OFF+BRAND): pasas el ratón y aparece su casco
-> 05 · Henry Heffernan: un portfolio dentro de un PC del año 2000
+> 01 · Igloo Inc. (Abeto): haces scroll y viajas por el hielo. Web del Año en Awwwards
+> 02 · Lando Norris (OFF+BRAND): pasas el ratón y aparece su casco
+> 03 · Shopify Editions Winter '26: un cuadro renacentista que cobra vida
+> 04 · Bruno Simon: un portfolio que es un videojuego
+> 05 · Henry Heffernan: un portfolio dentro de un PC de los 90
 >
-> Grabadas en tiempo real. ¿Cuál te ha volado la cabeza?
+> Los 5 prompts, listos para copiar: enlace en el primer comentario.
 > Guárdalo para tu próxima web.
 
-**Hashtags:** `#diseñoweb #webdesign #threejs #webgl #diseño`
+**Primer comentario (fijarlo):**
+> 📎 Los 5 prompts en PDF: [ENLACE]
+> Pégalos en Claude y cambia lo que va entre corchetes por lo tuyo.
+
+**Hashtags:** `#diseñoweb #webdesign #threejs #webgl #prompts`
 
 ---
 
@@ -84,8 +89,9 @@
 - **Lando Norris**:
   - [Awwwards Annual Awards 2025](https://www.awwwards.com/annual-awards/winners)
   - [OFF+BRAND](https://www.itsoffbrand.com/our-work/lando-norris)
-- **Oryzo**: [Awwwards](https://www.awwwards.com/sites/oryzo-ai), [Lusion](https://lusion.co/projects/oryzo_ai/), [BTS](https://blog.lusion.co/oryzo-bts-part-1-7-concept-and-creative-direction)
-- **Descartadas porque su 3D no se puede grabar desde la página** (se dibuja fuera del documento): Igloo Inc., NASA Eyes, lusion.co y Messenger.
+- **Igloo Inc.**: [Awwwards SOTD](https://www.awwwards.com/sites/igloo-inc), [Web del Año y Web de Desarrollo del Año, anunciado por Abeto](https://x.com/abeto_co/status/1900152588768579701), [Sites of the Year](https://www.awwwards.com/websites/sites_of_the_year/)
+- **Oryzo**: descartada por decisión de Dirección (29/09).
+- **Descartadas porque su 3D no se puede grabar desde la página** (se dibuja fuera del documento): NASA Eyes, lusion.co y Messenger. Igloo Inc. sí se ha podido capturar con capturas de pantalla del navegador.
 
 **Formato y algoritmo:**
 - [Hootsuite, algoritmo de Instagram (07/2026)](https://blog.hootsuite.com/instagram-algorithm/)

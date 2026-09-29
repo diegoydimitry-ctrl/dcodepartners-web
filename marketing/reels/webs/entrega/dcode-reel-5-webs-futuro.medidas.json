@@ -1,18 +1,18 @@
 [
  {
   "archivo": "dcode-reel-5-webs-futuro.mp4",
-  "duracion_s": 24.25,
+  "duracion_s": 32.6,
   "video": "1080×1920 60/1",
-  "lufs": -13.7,
-  "pico_dbtp": -2.2,
-  "mb": 78.3
+  "lufs": -13.8,
+  "pico_dbtp": -0.2,
+  "mb": 83.3
  },
  {
   "archivo": "dcode-reel-5-webs-futuro-sin-musica.mp4",
-  "duracion_s": 24.25,
+  "duracion_s": 32.6,
   "video": "1080×1920 60/1",
-  "lufs": -14.1,
-  "pico_dbtp": -1.6,
-  "mb": 77.5
+  "lufs": -13.9,
+  "pico_dbtp": -1.4,
+  "mb": 82.3
  }
 ]

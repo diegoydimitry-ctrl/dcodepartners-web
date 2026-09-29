@@ -13,8 +13,9 @@ const { chromium } = require(process.env.PLAYWRIGHT || "playwright");
 const AQUI = path.dirname(url.fileURLToPath(import.meta.url));
 const reel = process.argv[2]; const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
 const base = path.join(AQUI, "..", reel), out = path.join(base, "render"); fs.mkdirSync(out, { recursive: true });
-fs.copyFileSync(path.join(AQUI, "reel.html"), path.join(base, "escena.html"));
-const DATOS = { reel: JSON.parse(fs.readFileSync(path.join(base, "reel.json"), "utf8")), medios: JSON.parse(fs.readFileSync(path.join(base, "cache", "medios.json"), "utf8")) };
+const REEL = JSON.parse(fs.readFileSync(path.join(base, "reel.json"), "utf8"));
+fs.copyFileSync(path.join(AQUI, REEL.motor || "reel.html"), path.join(base, "escena.html"));   // motor propio si reel.json lo pide
+const DATOS = { reel: REEL, medios: JSON.parse(fs.readFileSync(path.join(base, "cache", "medios.json"), "utf8")) };
 const nav = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined,
   args: ["--allow-file-access-from-files", "--disable-web-security", "--force-color-profile=srgb", "--font-render-hinting=none"] });
 const pag = await nav.newPage();
