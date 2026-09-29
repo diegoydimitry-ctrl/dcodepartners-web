@@ -29,24 +29,28 @@
 
 **Portada:** el «después» de Gemini a pantalla completa con «5 IA QUE DEBERÍAS CONOCER». La cuadrícula del perfil la recorta a 3:4, así que el texto va centrado.
 
-## Reel 2 · «5 webs que parecen del futuro»
+## Reel 2 · «5 webs que parecen del futuro» (27 s aprox. · 9:16)
+
+**Ficheros:**
+- `webs/entrega/dcode-reel-5-webs-futuro.mp4`: la versión final.
+- `…-sin-musica.mp4`: solo los efectos de sonido, para reeditar.
+- `webs/entrega/portada-9x16.png`: la portada.
+
+**Cómo se ha grabado:** cada web se abrió de verdad en el navegador del PC el 29/09/2026 y se grabó lo que dibujaba la GPU en tiempo real, a 1080×1920. El ratón y el scroll siguen trayectorias humanas y el cursor que se ve es ese recorrido real. Solo se capturan las capas 3D (WebGL) de cada web: la interfaz HTML (menús, textos) no aparece.
 
 **Caption:**
 > 5 webs que parecen del futuro (y todas funcionan en tu navegador):
 >
-> 01 · Igloo Inc. (abeto × Bureaux): Site of the Year 2024
+> 01 · Shopify Editions Winter '26: un catálogo convertido en un cuadro vivo
 > 02 · Bruno Simon: un portfolio que es un videojuego
-> 03 · Lando Norris (OFF+BRAND): Site of the Year 2025
-> 04 · Oryzo (Lusion): un posavasos con web de lanzamiento
-> 05 · NASA Eyes on the Solar System (NASA/JPL)
+> 03 · Oryzo (Lusion): un posavasos con web de superproducción
+> 04 · Lando Norris (OFF+BRAND): pasas el ratón y aparece su casco
+> 05 · Henry Heffernan: un portfolio dentro de un PC del año 2000
 >
-> Grabadas en tiempo real en un PC normal. ¿Cuál te ha volado la cabeza?
+> Grabadas en tiempo real. ¿Cuál te ha volado la cabeza?
 > Guárdalo para tu próxima web.
 
-**Hashtags:**
-`#diseñoweb #webdesign #threejs #webgl #diseño`
-
-**Portada:** el primer fotograma de Igloo a pantalla completa con «5 WEBS QUE PARECEN DEL FUTURO».
+**Hashtags:** `#diseñoweb #webdesign #threejs #webgl #diseño`
 
 ---
 
@@ -74,13 +78,14 @@
 - **Project Genie**: solo con Google AI Ultra. [Wikipedia](https://en.wikipedia.org/wiki/Project_Genie_(website))
 
 **Webs:**
-- **Igloo Inc.**: [Awwwards, Sites of the Year 2024](https://www.awwwards.com/websites/sites_of_the_year/), [case study](https://www.awwwards.com/igloo-inc-case-study.html)
+- **Shopify Editions Winter '26**: [Awwwards SOTD/SOTM](https://www.awwwards.com/sites/the-renaissance-edition)
+- **Henry Heffernan**: [henryheffernan.com](https://henryheffernan.com)
 - **Bruno Simon**: [SOTD](https://www.awwwards.com/sites/brunos-portfolio), [Sites of the Month](https://www.awwwards.com/websites/sites_of_the_month/), [case study](https://www.awwwards.com/brunos-portfolio-case-study.html)
 - **Lando Norris**:
   - [Awwwards Annual Awards 2025](https://www.awwwards.com/annual-awards/winners)
   - [OFF+BRAND](https://www.itsoffbrand.com/our-work/lando-norris)
 - **Oryzo**: [Awwwards](https://www.awwwards.com/sites/oryzo-ai), [Lusion](https://lusion.co/projects/oryzo_ai/), [BTS](https://blog.lusion.co/oryzo-bts-part-1-7-concept-and-creative-direction)
-- **NASA Eyes on the Solar System**: [notas de versión, agosto de 2026](https://science.nasa.gov/blogs/eyes/2026/09/03/nasas-eyes-software-august-release-notes/)
+- **Descartadas porque su 3D no se puede grabar desde la página** (se dibuja fuera del documento): Igloo Inc., NASA Eyes, lusion.co y Messenger.
 
 **Formato y algoritmo:**
 - [Hootsuite, algoritmo de Instagram (07/2026)](https://blog.hootsuite.com/instagram-algorithm/)

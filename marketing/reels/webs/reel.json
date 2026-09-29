@@ -1,25 +1,165 @@
 {
  "titulo": "5 webs que parecen del futuro",
- "estado": "BORRADOR: los tiempos in/dur y los focos se ajustan al ver las grabaciones reales",
- "fps": 30, "bpm": 120,
+ "fps": 30,
+ "bpm": 120,
  "grabaciones": "../grabaciones",
- "gancho": {"lineas": ["5 WEBS QUE", "PARECEN DEL", "FUTURO"], "acento": 2, "hasta": 2.0},
+ "nota": "Grabaciones reales del lienzo WebGL de cada web en el navegador del PC (29/09/2026), a 1080×1920, con ratón y scroll de trayectoria humana registrados; el cursor se dibuja con ese registro.",
+ "gancho": {
+  "lineas": [
+   "5 WEBS QUE",
+   "PARECEN DEL",
+   "FUTURO"
+  ],
+  "acento": 2,
+  "hasta": 2.0
+ },
  "segmentos": [
-  {"id": "w1", "tipo": "clip", "fuente": "WEB-1-igloo.mp4", "in": 0, "dur": 5.0,
-   "nombre": "Igloo Inc.", "frase": "Una web tallada en hielo", "url": "igloo.inc", "credito": "abeto × Bureaux · Site of the Year 2024",
-   "camara": [[0, "lleno", 0.5, 0.5, 1.0], [2.3, "lleno", 0.5, 0.5, 1.05], [3.1, "ventana", 0.5, 0.5, 1.0], [5.0, "ventana", 0.5, 0.5, 1.06]], "audio_nativo_db": -8},
-  {"id": "w2", "tipo": "clip", "fuente": "WEB-2-bruno.mp4", "in": 0, "dur": 4.6,
-   "nombre": "Bruno Simon", "frase": "Un portfolio que es un videojuego", "url": "bruno-simon.com", "credito": "Site of the Month · ene. 2026",
-   "camara": [[0, "ventana", 0.5, 0.5, 1.0], [2.0, "ventana", 0.5, 0.5, 1.0], [2.8, "lleno", 0.5, 0.55, 1.0], [4.6, "lleno", 0.5, 0.55, 1.08]], "audio_nativo_db": -10},
-  {"id": "w3", "tipo": "clip", "fuente": "WEB-3-lando.mp4", "in": 0, "dur": 4.6,
-   "nombre": "Lando Norris", "frase": "La web de un campeón de F1", "url": "landonorris.com", "credito": "OFF+BRAND · Site of the Year 2025",
-   "camara": [[0, "lleno", 0.5, 0.45, 1.0], [2.2, "lleno", 0.5, 0.45, 1.0], [3.0, "ventana", 0.5, 0.5, 1.0], [4.6, "ventana", 0.5, 0.5, 1.05]]},
-  {"id": "w4", "tipo": "clip", "fuente": "WEB-4-oryzo.mp4", "in": 0, "dur": 4.6,
-   "nombre": "Oryzo", "frase": "Un posavasos con web de lanzamiento", "url": "oryzo.ai", "credito": "Lusion · Site of the Month abr. 2026",
-   "camara": [[0, "ventana", 0.5, 0.5, 1.0], [2.0, "ventana", 0.5, 0.5, 1.0], [2.8, "lleno", 0.5, 0.5, 1.0], [4.6, "lleno", 0.5, 0.5, 1.06]]},
-  {"id": "w5", "tipo": "clip", "fuente": "WEB-5-nasa.mp4", "in": 0, "dur": 5.0,
-   "nombre": "NASA Eyes", "frase": "El sistema solar real, en el navegador", "url": "eyes.nasa.gov", "credito": "NASA / JPL",
-   "camara": [[0, "lleno", 0.5, 0.5, 1.0], [2.4, "lleno", 0.5, 0.5, 1.1], [3.2, "ventana", 0.5, 0.5, 1.0], [5.0, "ventana", 0.5, 0.5, 1.05]]}
+  {
+   "id": "w1",
+   "tipo": "clip",
+   "fuente": "WEB-shopify-1.mp4",
+   "in": 8.5,
+   "dur": 5.0,
+   "cursor": true,
+   "nombre": "Shopify Editions",
+   "frase": "Un catálogo convertido en un cuadro vivo",
+   "url": "shopify.com/editions",
+   "camara": [
+    [
+     0,
+     "lleno",
+     0.5,
+     0.45,
+     1.0
+    ],
+    [
+     5.2,
+     "lleno",
+     0.55,
+     0.42,
+     1.1
+    ]
+   ]
+  },
+  {
+   "id": "w2",
+   "tipo": "clip",
+   "fuente": "WEB-bruno-1.mp4",
+   "in": 4.3,
+   "dur": 4.8,
+   "nombre": "Bruno Simon",
+   "frase": "Un portfolio que es un videojuego",
+   "url": "bruno-simon.com",
+   "camara": [
+    [
+     0,
+     "lleno",
+     0.5,
+     0.5,
+     1.04
+    ],
+    [
+     4.8,
+     "lleno",
+     0.5,
+     0.48,
+     1.12
+    ]
+   ]
+  },
+  {
+   "id": "w3",
+   "tipo": "clip",
+   "fuente": "WEB-oryzo-2.mp4",
+   "in": 4.2,
+   "dur": 4.8,
+   "cursor_fijo": [
+    0.39,
+    0.55
+   ],
+   "nombre": "Oryzo",
+   "frase": "Un posavasos con web de superproducción",
+   "url": "oryzo.ai",
+   "camara": [
+    [
+     0,
+     "lleno",
+     0.5,
+     0.5,
+     1.0
+    ],
+    [
+     4.8,
+     "lleno",
+     0.5,
+     0.5,
+     1.06
+    ]
+   ]
+  },
+  {
+   "id": "w4",
+   "tipo": "clip",
+   "fuente": "WEB-lando-1.mp4",
+   "in": 0.4,
+   "dur": 4.6,
+   "cursor": true,
+   "nombre": "Lando Norris",
+   "frase": "Pasas el ratón y aparece su casco",
+   "url": "landonorris.com",
+   "camara": [
+    [
+     0,
+     "lleno",
+     0.5,
+     0.45,
+     1.0
+    ],
+    [
+     4.6,
+     "lleno",
+     0.5,
+     0.42,
+     1.08
+    ]
+   ]
+  },
+  {
+   "id": "w5",
+   "tipo": "clip",
+   "fuente": "WEB-henry-1.mp4",
+   "in": 0.3,
+   "dur": 3.6,
+   "cursor": true,
+   "nombre": "Henry Heffernan",
+   "frase": "Un portfolio dentro de un PC del año 2000",
+   "url": "henryheffernan.com",
+   "camara": [
+    [
+     0,
+     "lleno",
+     0.5,
+     0.5,
+     1.12
+    ],
+    [
+     3.6,
+     "lleno",
+     0.52,
+     0.5,
+     1.32
+    ]
+   ]
+  }
  ],
- "cierre": {"lineas": ["INTERNET YA NO", "TIENE POR QUÉ", "SER PLANO."], "acento": 2, "sub": "Guárdalo para tu próxima web.", "dur": 3.2}
+ "cierre": {
+  "lineas": [
+   "INTERNET YA NO",
+   "TIENE POR QUÉ",
+   "SER PLANO."
+  ],
+  "acento": 2,
+  "sub": "Guárdalo para tu próxima web.",
+  "dur": 3.2
+ }
 }

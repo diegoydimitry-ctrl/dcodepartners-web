@@ -88,6 +88,22 @@ function aPantalla(cam, x, y, w, h, r) {
   return [dx + (x * w - sx) / sw * dw, dy + (y * h - sy) / sh * dh];
 }
 
+// ─── cursor real (registro de la grabación): flecha clásica con borde, se hunde un poco al hacer clic ───
+const FLECHA = new Path2D("M0 0 L0 23 L6.2 17.6 L10.4 26.8 L14.2 25.1 L10.1 16.1 L18 16.1 Z");
+function cursor(P, tl, cam, w, h, r) {
+  let i = 0; while (i < P.length - 1 && P[i + 1].t <= tl) i++;
+  const a = P[i], b = P[Math.min(i + 1, P.length - 1)], k = b.t > a.t ? clamp((tl - a.t) / (b.t - a.t)) : 0;
+  const x = lerp(a.x, b.x, k), y = lerp(a.y, b.y, k);
+  const [px, py] = aPantalla(cam, x, y, w, h, r);
+  if (px < r[0] - 5 || py < r[1] - 5 || px > r[0] + r[2] || py > r[1] + r[3]) return;
+  const clic = P.some((q) => q.c && tl >= q.t && tl < q.t + 0.14), e = clic ? 1.55 : 1.75;
+  c.save(); c.translate(px, py); c.scale(e, e);
+  c.shadowColor = "rgba(0,0,0,0.35)"; c.shadowBlur = 4; c.shadowOffsetY = 1.5;
+  c.fillStyle = "#111"; c.fill(FLECHA); c.shadowColor = "transparent";
+  c.lineWidth = 1.6; c.strokeStyle = "#fff"; c.lineJoin = "round"; c.stroke(FLECHA);
+  c.restore();
+}
+
 // ─── textos ───
 function linea(s, x, y, px, fam, color, t0, tt, o = {}) {        // persiana: sube desde su línea base
   const k = eOut5(prog(tt, t0, t0 + (o.dur ?? 0.38))); if (k <= 0) return 0;
@@ -101,14 +117,14 @@ function chip(s, x, y, tt, t0, sal, o = {}) {
   const k = eOut5(prog(tt, t0, t0 + 0.35)), ks = sal != null ? prog(tt, sal, sal + 0.2) : 0; if (k <= 0 || ks >= 1) return;
   const f = MO(600, o.px || 28), w = M.ancho(c, s, f, 1.5) + 44, al = o.al || "left", x0 = al === "center" ? x - w / 2 : x;
   c.save(); c.globalAlpha = k * (1 - ks); c.translate(0, (1 - k) * 12);
-  c.fillStyle = o.fondo || "rgba(255,255,255,0.10)"; M.rr(c, x0, y - 38, w, 54, 27); c.fill();
+  c.fillStyle = o.fondo || "rgba(12,12,16,0.55)"; M.rr(c, x0, y - 38, w, 54, 27); c.fill();
   c.strokeStyle = "rgba(255,255,255,0.16)"; c.lineWidth = 1.5; M.rr(c, x0, y - 38, w, 54, 27); c.stroke();
   M.texto(c, s, x0 + 22, y - 2, { f, color: o.color || C.blanco, track: 1.5 });
   c.restore();
 }
 function sombraSuperior(a) {                     // legibilidad del texto sobre la grabación a pantalla completa
   if (a <= 0) return; const g = c.createLinearGradient(0, 0, 0, 820);
-  g.addColorStop(0, `rgba(0,0,0,${0.78 * a})`); g.addColorStop(0.62, `rgba(0,0,0,${0.42 * a})`); g.addColorStop(1, "rgba(0,0,0,0)");
+  g.addColorStop(0, `rgba(0,0,0,${0.86 * a})`); g.addColorStop(0.55, `rgba(0,0,0,${0.55 * a})`); g.addColorStop(1, "rgba(0,0,0,0)");
   c.fillStyle = g; c.fillRect(0, 0, W, 820);
 }
 
@@ -116,11 +132,13 @@ function cabecera(G, tt) {
   const s = G.s, i = G.i, primero = i === 0;
   const ent = primero ? (R.gancho?.hasta ?? 2) + 0.05 : G.t0 + 0.08, sal = G.t1 - 0.24;
   const num = String(i + 1).padStart(2, "0");
+  c.save(); c.shadowColor = "rgba(0,0,0,0.55)"; c.shadowBlur = 22; c.shadowOffsetY = 2;   // legible sobre fondos claros
   linea(num, X0, 330, 34, (p) => MO(700, p), C.pixel, ent, tt, { sal, track: 2 });
-  linea(`/ ${String(TOTAL).padStart(2, "0")}`, X0 + 58, 330, 34, (p) => MO(500, p), C.gris2, ent, tt, { sal, track: 2 });
+  linea(`/ ${String(TOTAL).padStart(2, "0")}`, X0 + 58, 330, 34, (p) => MO(500, p), C.gris, ent, tt, { sal, track: 2 });
   const pxN = cabe(s.nombre, (p) => IT(700, p), 84);
   linea(s.nombre, X0, 330 + 24 + pxN, pxN, (p) => IT(700, p), C.blanco, ent + 0.06, tt, { sal, track: -1 });
-  if (s.frase) { const pxF = cabe(s.frase, (p) => IT(500, p), 46); linea(s.frase, X0, 330 + 24 + pxN + 18 + pxF, pxF, (p) => IT(500, p), C.gris, ent + 0.14, tt, { sal }); }
+  if (s.frase) { const pxF = cabe(s.frase, (p) => IT(500, p), 46); linea(s.frase, X0, 330 + 24 + pxN + 18 + pxF, pxF, (p) => IT(500, p), "#d6d8de", ent + 0.14, tt, { sal }); }
+  c.restore();
 }
 
 function gancho(tt) {
@@ -171,6 +189,7 @@ window.pintaFrame = async (n) => {
       const xEt = r[0] + 24, yEt = r[1] + 68, sal = s.dur - 0.24;       // etiqueta dentro de la imagen, arriba a la izquierda
       if (im.length < 2) {} else if (kw < 0.5) chip("ANTES", xEt, yEt, tl, 0.1, a0 + 0.2, { fondo: "rgba(0,0,0,0.55)" }); else chip("DESPUÉS", xEt, yEt, tl, a0 + 0.35, sal, { fondo: "rgba(0,0,0,0.55)", color: C.pixel });
     } else r = dibuja(im, cam, tl);
+    if (s.m.cursor && s.m.cursor.length) cursor(s.m.cursor, tl, cam, w, h, r);
     for (const k of s.clics || []) {                             // pulso en el punto real del clic (si se ha marcado)
       if (k.x == null) continue; const kk = prog(tl, k.t, k.t + 0.5); if (kk <= 0 || kk >= 1) continue;
       const [px, py] = aPantalla(cam, k.x, k.y, w, h, r);

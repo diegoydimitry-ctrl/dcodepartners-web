@@ -32,6 +32,20 @@ for s in R["segmentos"]:
         if s.get("recorte"): w, h = [int(v) for v in s["recorte"].split(":")[:2]]
         n = len([f for f in os.listdir(d) if f.endswith(".jpg")])
         medios[s["id"]] = {"tipo": "clip", "w": w, "h": h, "n": n, "ruta": f"cache/{s['id']}/"}
+        # cursor: el registro real de la «mano» durante la grabación (ms desde el inicio) → tramo del segmento, en 0–1
+        log = os.path.join(G, s["fuente"].rsplit(".", 1)[0] + ".json")
+        if s.get("cursor") and os.path.exists(log):
+            L = json.load(open(log))["log"]; ini = next((e for e in L if e.get("ev") == "inicio"), {})
+            vw, vh = ini.get("vw", w), ini.get("vh", h); pts = []; ult = None
+            for e in L:
+                if "x" not in e: continue
+                tt = e["t"] / 1000 - s["in"]
+                if tt < 0: ult = e; continue
+                if tt > s["dur"] + 0.3: break
+                pts.append({"t": round(tt, 3), "x": round(e["x"] / vw, 4), "y": round(e["y"] / vh, 4), "c": e["ev"] == "clic"})
+            if ult: pts.insert(0, {"t": 0, "x": round(ult["x"] / vw, 4), "y": round(ult["y"] / vh, 4), "c": False})
+            medios[s["id"]]["cursor"] = pts
+        if s.get("cursor_fijo"): medios[s["id"]]["cursor"] = [{"t": 0, "x": s["cursor_fijo"][0], "y": s["cursor_fijo"][1], "c": False}]
     elif s["tipo"] == "imagenes":
         imgs = []
         for i, f in enumerate(s["imagenes"]):
