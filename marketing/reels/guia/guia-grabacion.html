@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Guía de grabación · Reels D-Code</title>
+<style>
+@font-face{font-family:Inter;src:url(../../anuncios-v3/comun/fuentes/inter-tight.woff2)}
+@font-face{font-family:Mono;src:url(../../anuncios-v3/comun/fuentes/jetbrains-mono.woff2)}
+@font-face{font-family:Archivo;src:url(../../anuncios-v3/comun/fuentes/archivo-wdth.woff2);font-weight:100 900}
+@page{size:A4;margin:16mm 15mm}
+body{font-family:Inter,sans-serif;color:#15171d;font-size:10.5pt;line-height:1.42}
+h1{font-family:Archivo;font-weight:900;font-size:26pt;letter-spacing:-.5px;margin:0 0 2mm}
+h2{font-family:Archivo;font-weight:800;font-size:15pt;margin:9mm 0 2mm;padding-top:3mm;border-top:2px solid #15171d}
+h3{font-family:Archivo;font-weight:800;font-size:12pt;margin:6mm 0 1.5mm}
+.sub{color:#555;margin:0 0 5mm}
+.tag{font-family:Mono;font-size:8pt;letter-spacing:1.5px;color:#2f6bff;text-transform:uppercase}
+.caja{border:1px solid #d9d6ce;border-radius:6px;padding:3mm 4mm;margin:2mm 0 3mm;break-inside:avoid;background:#faf9f6}
+.prompt{font-family:Mono;font-size:8.8pt;background:#0b0c10;color:#f2f0ea;border-radius:5px;padding:2.5mm 3.5mm;margin:1.5mm 0;white-space:pre-wrap}
+ol,ul{margin:1mm 0 1mm 5mm;padding-left:3mm} li{margin:.6mm 0}
+table{border-collapse:collapse;width:100%;font-size:9.5pt;margin:2mm 0}
+td,th{border-bottom:1px solid #e3e0d8;padding:1.6mm 2mm;text-align:left;vertical-align:top} th{font-family:Mono;font-size:8pt;letter-spacing:1px;color:#666}
+.fuera{color:#b3261e}
+.clip{break-inside:avoid}
+code{font-family:Mono;font-size:8.8pt;background:#eeece6;padding:0 1mm;border-radius:2px}
+</style></head><body>
+
+<div class="tag">D-Code Partners · Reels · 29/09/2026</div>
+<h1>Guía de grabación</h1>
+<p class="sub">Todo lo que necesito que grabes para los dos Reels, en una sola sesión de ~60–75 min.
+10 grabaciones: 5 herramientas de IA y 5 webs. En cuanto me las dejes en <b>Descargas</b>, monto los dos vídeos: el diseño, los rótulos, la música y el sonido ya están preparados.</p>
+
+<h2>0 · Preparación (una vez, 10 min)</h2>
+<div class="caja">
+<b>OBS Studio</b> (gratis, obsproject.com):
+<ol>
+<li><b>Ajustes → Vídeo:</b> resolución base y de salida = la de tu monitor (1920×1080 vale; si tienes 1440p o 4K, mejor). <b>FPS: 60.</b></li>
+<li><b>Ajustes → Salida → Grabación:</b> formato <code>MP4</code> (o MKV y luego «Archivo → Remux»). Codificador por hardware (NVIDIA NVENC / AMD / Intel QuickSync), control <b>CQP 18</b>. Si solo aparece x264: <b>CRF 18</b>, preset «veryfast».</li>
+<li><b>Fuentes:</b> una sola, «Captura de pantalla» del monitor. <b>Audio de escritorio: activado</b> (se usa en ElevenLabs Music y en webs con sonido). <b>Micrófono: desactivado.</b></li>
+</ol>
+<b>Windows y Chrome:</b>
+<ul>
+<li>Activa «No molestar» (sin notificaciones). Barra de tareas en «ocultar automáticamente».</li>
+<li>Chrome con una sola pestaña. Barra de marcadores oculta (<code>Ctrl+Mayús+B</code>). Cierra el resto de programas pesados.</li>
+<li>Aceleración por hardware activada (Chrome → Configuración → Sistema).</li>
+<li><b>Herramientas de IA:</b> zoom de Chrome al <b>125 %</b> (<code>Ctrl +</code>) y ventana maximizada. <b>Webs:</b> zoom 100 % y pantalla completa (<code>F11</code>).</li>
+</ul>
+<b>Cómo mover el ratón (importante para que no parezca falso):</b> usa ratón, no trackpad. Movimientos lentos y decididos, sin temblar. Para 1 s antes y 1 s después de cada clic. Escribe los prompts a ritmo normal (no hace falta que sea perfecto).
+</div>
+<div class="caja">
+<b class="fuera">Qué debe quedar FUERA de pantalla:</b> correos, nombres y fotos de perfil (si aparecen, los tapo, pero mejor evitarlos), otras pestañas, notificaciones, datos de clientes, caras de personas en las fotos que subas, y cualquier contraseña.
+<br><b>Regla de oro:</b> empieza a grabar 2 s antes de tocar nada y para 2 s después. <b>No cortes las esperas</b> (las corto yo). Si una toma sale mal, repítela en el mismo archivo; me quedo con la buena.
+</div>
+
+<h2>1 · Reel IA — «5 herramientas de IA»</h2>
+<p>Cada herramienta: un archivo de vídeo. Además, en tres casos te pido el archivo original y el resultado (para enseñar el antes/después a máxima calidad).</p>
+
+<div class="clip"><h3>IA-1 · Gemini (Nano Banana 2) — «Edita cualquier foto con una frase»</h3>
+<div class="caja">
+<b>Antes:</b> con el móvil, haz una foto <b>horizontal</b> de un escritorio desordenado (papeles, cables, tazas; buena luz; sin personas ni pantallas con datos). Pásala al PC.
+<ol>
+<li>Graba. Abre <code>gemini.google.com</code> → chat nuevo.</li>
+<li>Adjunta la foto (clip «+» → Subir archivo). Espera a que se vea la miniatura.</li>
+<li>Escribe y envía:</li>
+</ol>
+<div class="prompt">Deja este escritorio perfectamente ordenado: solo el portátil, una lámpara y una planta, con luz cálida de atardecer entrando por la ventana. Mantén exactamente el mismo encuadre.</div>
+<ol start="4"><li>Espera al resultado sin mover el ratón. Cuando salga, haz clic en la imagen para verla grande y <b>quédate quieto 3 s</b>.</li>
+<li>Descarga la imagen generada.</li></ol>
+<b>Entrega:</b> <code>IA-1-gemini.mp4</code> + <code>IA-1-original.jpg</code> + <code>IA-1-resultado.png</code>. Duración: lo que tarde (~40–60 s).
+</div></div>
+
+<div class="clip"><h3>IA-2 · Meshy — «Convierte una foto en objeto 3D»</h3>
+<div class="caja">
+<b>Antes:</b> foto con el móvil de un objeto sobre un fondo liso (una zapatilla, una taza bonita o una figurita), en ángulo de 3/4, con buena luz y el objeto entero. Cuenta gratuita en <code>meshy.ai</code> (100 créditos/mes; cada conversión ≈ 20).
+<ol>
+<li>Graba. En Meshy abre <b>Image to 3D</b> y sube la foto.</li>
+<li>Pulsa <b>Generate</b>. Espera (≈1–2 min, no hace falta que muevas nada).</li>
+<li>Cuando aparezca el modelo 3D: <b>arrastra muy despacio</b> para girarlo una vuelta completa en ~6 s. Después, acerca un poco con la rueda y quédate quieto 2 s.</li>
+</ol>
+<b>Entrega:</b> <code>IA-2-meshy.mp4</code> + <code>IA-2-original.jpg</code>.
+</div></div>
+
+<div class="clip"><h3>IA-3 · Gemini Notebook (antes NotebookLM) — «Convierte un PDF en infografía»</h3>
+<div class="caja">
+<b>Antes:</b> ten a mano un PDF largo en español y sin datos personales. Por ejemplo, el manual de un electrodoméstico tuyo o un informe público de 30+ páginas.
+<ol>
+<li>Graba. Abre <code>notebooklm.google</code> → <b>Crear cuaderno</b> → sube el PDF.</li>
+<li>Cuando cargue, en el panel <b>Studio</b> pulsa el lápiz de <b>Infografía</b>: Idioma <b>Español</b>, Orientación <b>Vertical</b>. En la descripción escribe:</li>
+</ol>
+<div class="prompt">Infografía clara para público general con los 5 puntos clave</div>
+<ol start="3"><li>Genera y espera (≈2–3 min).</li>
+<li>Abre la infografía y haz <b>scroll lento</b> de arriba abajo en ~5 s.</li>
+<li>Descárgala.</li></ol>
+<b>Entrega:</b> <code>IA-3-notebook.mp4</code> + <code>IA-3-infografia.png</code>.
+</div></div>
+
+<div class="clip"><h3>IA-4 · Lovable — «Crea una app sin programar»</h3>
+<div class="caja">
+Cuenta gratuita en <code>lovable.dev</code> (5 créditos al día: haz la toma buena a la primera, o ensaya el día antes). Proyecto <b>privado</b>.
+<ol>
+<li>Graba. En la caja principal escribe y envía:</li>
+</ol>
+<div class="prompt">Crea una app en español para organizar la compra semanal de una familia: lista por categorías, marcar productos como comprados y un botón que sugiera recetas con lo que queda en la nevera. Diseño moderno y colores pastel.</div>
+<ol start="2"><li>Espera a que termine y aparezca la vista previa (1–3 min).</li>
+<li>En la vista previa: marca 2 productos como comprados (clic lento en cada uno) y pulsa el botón de recetas. ~10 s de uso.</li></ol>
+<b>Entrega:</b> <code>IA-4-lovable.mp4</code>.
+</div></div>
+
+<div class="clip"><h3>IA-5 · ElevenLabs Music — «Tu canción, con letra, en segundos»</h3>
+<div class="caja">
+Con tu cuenta de ElevenLabs (<code>elevenlabs.io/app/music</code>). Permite uso comercial citando la fuente. <b>Audio de escritorio activado en OBS.</b>
+<ol>
+<li>Graba. Escribe el prompt y genera:</li>
+</ol>
+<div class="prompt">Canción pop alegre en español, con guitarra española y palmas, sobre el atasco de la M-30 un lunes por la mañana. Voz masculina, letra divertida.</div>
+<ol start="2"><li>Cuando esté lista, dale al play y <b>déjala sonar 12 s</b> sin tocar nada.</li>
+<li>Descarga la canción (MP3).</li></ol>
+<b>Entrega:</b> <code>IA-5-musica.mp4</code> + <code>IA-5-cancion.mp3</code>.
+<br><b>Si no te deja</b> (créditos o plan): hazlo igual en <code>suno.com/create</code> con el mismo prompt y avísame.
+</div></div>
+
+<h2>2 · Reel WEBS — «5 webs que parecen del futuro»</h2>
+<p>Chrome a <b>pantalla completa (F11)</b>, zoom 100 %. Cookies: <b>rechazar</b> las no necesarias antes de empezar la toma buena. Haz un <b>ensayo sin grabar</b> de 1 min en cada web (así se cachea y la toma buena carga rápido). Luego graba 2 tomas seguidas en el mismo archivo.</p>
+
+<table>
+<tr><th>Archivo</th><th>Web</th><th>Qué hacer (en la toma)</th><th>Raw</th></tr>
+<tr><td><code>WEB-1-igloo.mp4</code></td><td><b>igloo.inc</b><br>Site of the Year 2024</td><td>Recarga la página (F5) con OBS grabando y deja correr la intro sin tocar. Luego <b>scroll muy lento</b>: un golpe de rueda cada 1,5 s, pasando 3 bloques de hielo. Al final, tecla <code>Fin</code> y pasa el ratón despacio por 3 enlaces del pie (2 s cada uno: las partículas cambian de forma).</td><td>~40 s</td></tr>
+<tr><td><code>WEB-2-bruno.mp4</code></td><td><b>bruno-simon.com</b><br>Site of the Month ene. 2026</td><td>Espera a que cargue. 2 s quieto. Conduce el coche con las <b>flechas</b>: acelera recto, choca contra objetos para que salgan volando y haz un giro amplio que enseñe el mundo. Si ves mensajes de usuarios en el suelo con algo raro, evita ese sitio.</td><td>~25 s</td></tr>
+<tr><td><code>WEB-3-lando.mp4</code></td><td><b>landonorris.com</b><br>Site of the Year 2025</td><td>Arriba del todo: mueve el ratón <b>lento de izquierda a derecha</b> por la cara (se revela el casco), 3 s; y de vuelta, 3 s. Después scroll lento hasta la sección de cascos y pasa el ratón por uno.</td><td>~25 s</td></tr>
+<tr><td><code>WEB-4-oryzo.mp4</code></td><td><b>oryzo.ai</b> (Lusion)<br>Site of the Month abr. 2026</td><td>Recarga y deja que se vea la escena inicial (la mano coge el posavasos). Mueve el ratón despacio sobre el objeto. Luego <b>4 golpes de rueda</b>, uno cada 2 s, para capturar las transiciones.</td><td>~25 s</td></tr>
+<tr><td><code>WEB-5-nasa.mp4</code></td><td><b>eyes.nasa.gov/apps/solar-system</b></td><td>Espera a que cargue. Busca <b>Saturn</b> y haz clic: <b>no toques nada</b> mientras la cámara vuela hasta el planeta. Después arrastra despacio para orbitar y acércate a los anillos con la rueda.</td><td>~25 s</td></tr>
+</table>
+<div class="caja"><b>Opcional (si tienes iPhone):</b> <code>WEB-3-lando-iphone.mp4</code>: en el iPhone, grabación de pantalla (Centro de control), abre landonorris.com, pulsa «TAP TO LOCK» y desliza el dedo despacio sobre el retrato. 10 s. En vertical queda espectacular.</div>
+
+<h2>3 · Entrega</h2>
+<div class="caja">
+<ul>
+<li>Deja todos los archivos en <b>Descargas</b> con esos nombres (o en una carpeta <code>Descargas\reels-grabaciones</code>) y dime «ya está». Los recojo yo.</li>
+<li>Si alguna herramienta o web no funciona, no pierdas tiempo: sáltala y dímelo; tengo alternativas verificadas (Kling, Google Flow, Perplexity Comet; webs: Messenger de abeto, Shopify Editions Winter ’26, Hubtown).</li>
+<li>No subas nada a Instagram: los montajes vuelven a ti para revisar antes de publicar.</li>
+</ul>
+</div>
+</body></html>

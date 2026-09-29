@@ -1,0 +1,33 @@
+{
+ "titulo": "5 herramientas de IA que deberías conocer en 2026",
+ "estado": "BORRADOR: los tiempos in/dur y los focos se ajustan al ver las grabaciones reales",
+ "fps": 30, "bpm": 120,
+ "grabaciones": "../grabaciones",
+ "gancho": {"lineas": ["5 IA QUE", "DEBERÍAS", "CONOCER"], "acento": 2, "hasta": 2.0, "pie": "La 3.ª te ahorra horas.", "pie_t": 0.45},
+ "segmentos": [
+  {"id": "g1a", "g": "gemini", "tipo": "imagenes", "imagenes": ["IA-1-original.jpg", "IA-1-resultado.png"], "dur": 3.4, "cortinilla": [2.2, 3.0],
+   "nombre": "Gemini · Nano Banana 2", "frase": "Edita cualquier foto con una frase", "url": "gemini.google.com",
+   "camara": [[0, "lleno", 0.5, 0.5, 1.0], [3.4, "lleno", 0.5, 0.5, 1.08]]},
+  {"id": "g1b", "g": "gemini", "tipo": "clip", "fuente": "IA-1-gemini.mp4", "in": 0, "dur": 2.6,
+   "camara": [[0, "ventana", 0.5, 0.5, 1.0], [2.6, "ventana", 0.5, 0.5, 1.1]]},
+  {"id": "g2a", "g": "meshy", "tipo": "imagenes", "imagenes": ["IA-2-original.jpg"], "dur": 1.0,
+   "nombre": "Meshy", "frase": "Convierte una foto en un objeto 3D", "url": "meshy.ai", "credito": "Meshy 7",
+   "camara": [[0, "ventana", 0.5, 0.5, 1.0]]},
+  {"id": "g2b", "g": "meshy", "tipo": "clip", "fuente": "IA-2-meshy.mp4", "in": 0, "dur": 4.0,
+   "camara": [[0, "ventana", 0.5, 0.5, 1.0], [1.2, "ventana", 0.55, 0.5, 1.5], [4.0, "ventana", 0.55, 0.5, 1.6]]},
+  {"id": "g3a", "g": "notebook", "tipo": "clip", "fuente": "IA-3-notebook.mp4", "in": 0, "dur": 1.4,
+   "nombre": "Gemini Notebook", "frase": "Convierte un PDF en una infografía", "url": "notebooklm.google",
+   "camara": [[0, "ventana", 0.5, 0.5, 1.0]]},
+  {"id": "g3b", "g": "notebook", "tipo": "imagenes", "imagenes": ["IA-3-infografia.png"], "dur": 3.4,
+   "camara": [[0, "lleno", 0.5, 0.05, 1.0], [3.4, "lleno", 0.5, 0.95, 1.0]]},
+  {"id": "g4a", "g": "lovable", "tipo": "clip", "fuente": "IA-4-lovable.mp4", "in": 0, "dur": 1.6,
+   "nombre": "Lovable", "frase": "Crea una app sin programar", "url": "lovable.dev",
+   "camara": [[0, "ventana", 0.5, 0.5, 1.3]], "teclas": [[0.1, 1.4]]},
+  {"id": "g4b", "g": "lovable", "tipo": "clip", "fuente": "IA-4-lovable.mp4", "in": 0, "dur": 3.6,
+   "camara": [[0, "ventana", 0.5, 0.5, 1.0], [1.0, "ventana", 0.7, 0.5, 1.6]], "clics": []},
+  {"id": "g5", "g": "musica", "tipo": "clip", "fuente": "IA-5-musica.mp4", "in": 0, "dur": 4.8, "audio_nativo_db": 0,
+   "nombre": "ElevenLabs Music", "frase": "Tu canción, con letra, en segundos", "url": "elevenlabs.io",
+   "camara": [[0, "ventana", 0.5, 0.5, 1.0], [4.8, "ventana", 0.5, 0.5, 1.15]], "clics": []}
+ ],
+ "cierre": {"lineas": ["GUÁRDALO.", "VAS A ACABAR", "USANDO ALGUNA."], "acento": 0, "sub": "Mándaselo a quien aún lo hace a mano.", "dur": 3.2}
+}

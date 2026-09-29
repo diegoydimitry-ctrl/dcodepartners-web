@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Reel · D-Code Partners</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="../../anuncios-v3/comun/motor.js"></script>
+<script>
+"use strict";
+// Motor de Reels con grabaciones reales (9:16). Todo es función del tiempo: pintaFrame(n) dibuja el fotograma n.
+// Cada segmento es una grabación (o un antes/después con imágenes reales) con una «cámara» por fotogramas clave:
+//   · "lleno":   la grabación llena la pantalla vertical (recorte 9:16 centrado en un foco, con zoom)
+//   · "ventana": la grabación entera como ventana flotante, con fondo desenfocado de la propia grabación
+// El paso entre modos es continuo (se interpolan el rectángulo de origen y el de destino).
+// Rótulos: gancho → «01 / 05 · nombre · qué hace» por segmento → cierre. Nada más.
+const W = 1080, H = 1920;
+const D = window.DATOS, R = D.reel, MED = D.medios, FPS = R.fps || 30;
+const c = document.getElementById("c").getContext("2d");
+const { clamp, lerp, prog, eOut, eOut5, eIn, eIO } = M;
+const C = { fondo: "#0a0a0c", blanco: "#f4f3ef", gris: "#a9adb6", gris2: "#6f737c", azul: "#2f6bff", pixel: "#5b8cff" };
+const AR = (p, px) => `${p} ${px}px "Archivo"`, IT = (p, px) => `${p} ${px}px "Inter Tight"`, MO = (p, px) => M.fuente(p, px, "JetBrains Mono");
+const X0 = 72, ANCHO = W - 2 * X0;
+const cabe = (s, fam, pxMax, ancho = ANCHO) => Math.min(pxMax, (100 * ancho) / M.ancho(c, s, fam(100)));
+
+// ─── línea de tiempo ───
+let t = 0; const SEG = R.segmentos.map((s) => { const o = { ...s, t0: t, t1: t + s.dur, m: MED[s.id] }; t += s.dur; return o; });
+const T_CIERRE = t, DUR = t + (R.cierre?.dur ?? 3);
+// grupos: varios segmentos seguidos pueden ser la misma herramienta/web (mismo rótulo, que no se repite)
+const GR = []; SEG.forEach((s) => { const g = s.g ?? s.id; let G = GR.find((x) => x.g === g);
+  if (!G) { G = { g, t0: s.t0, t1: s.t1, s, i: GR.length }; GR.push(G); } else G.t1 = s.t1; s.G = G; });
+const TOTAL = GR.length;
+window.META = { W, H, fps: FPS, duracion: DUR, segura: [60, 250, 1016, 1480], minpx: 28 };
+
+// ─── imágenes (fotogramas JPG de cache/) ───
+const IMG = new Map();
+function carga(url) {
+  if (IMG.has(url)) return IMG.get(url);
+  const p = new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ko(new Error("no carga " + url)); im.src = url; })
+    .then((im) => { IMG.set(url, im); return im; });
+  IMG.set(url, p); return p;
+}
+async function fotograma(s, tl) {
+  if (s.m.tipo === "clip") { const i = clamp(Math.floor(tl * FPS) + 1, 1, s.m.n); return carga(`${s.m.ruta}${String(i).padStart(5, "0")}.jpg`); }
+  return Promise.all(s.m.imagenes.map((im) => carga(im.ruta)));
+}
+
+// ─── cámara ───
+const CW = 984, CY = 945, CHMAX = 1040, RADIO = 26;
+function rects(modo, fx, fy, z, w, h) {
+  if (modo === "lleno") {
+    let sh = h / z, sw = sh * W / H; if (sw > w) { sw = w; sh = sw * H / W; }
+    const sx = clamp(fx * w - sw / 2, 0, w - sw), sy = clamp(fy * h - sh / 2, 0, h - sh);
+    return { s: [sx, sy, sw, sh], d: [0, 0, W, H], r: 0, v: 0 };
+  }
+  let dw = CW, dh = dw * h / w; if (dh > CHMAX) { dh = CHMAX; dw = dh * w / h; }
+  const sw = w / z, sh = h / z, sx = clamp(fx * w - sw / 2, 0, w - sw), sy = clamp(fy * h - sh / 2, 0, h - sh);
+  return { s: [sx, sy, sw, sh], d: [(W - dw) / 2, CY - dh / 2, dw, dh], r: RADIO, v: 1 };
+}
+function camara(s, tl, w, h) {
+  const K = s.camara || [[0, "ventana", 0.5, 0.5, 1]];
+  let i = 0; while (i < K.length - 1 && K[i + 1][0] <= tl) i++;
+  const a = K[i], b = K[Math.min(i + 1, K.length - 1)];
+  const ra = rects(a[1], a[2], a[3], a[4], w, h), rb = rects(b[1], b[2], b[3], b[4], w, h);
+  const k = b === a ? 0 : eIO(clamp((tl - a[0]) / (b[0] - a[0])));
+  const L = (p, q) => p.map((v, j) => lerp(v, q[j], k));
+  return { s: L(ra.s, rb.s), d: L(ra.d, rb.d), r: lerp(ra.r, rb.r, k), v: lerp(ra.v, rb.v, k) };
+}
+const peq = document.createElement("canvas"); peq.width = 54; peq.height = 96; const pc = peq.getContext("2d");
+function fondoDesenfocado(im, alpha) {           // barato y suave: la grabación reducida a 54×96 y ampliada
+  if (alpha <= 0) return;
+  pc.filter = "blur(3px) saturate(1.3)"; pc.drawImage(im, 0, 0, 54, 96); pc.filter = "none";
+  c.save(); c.globalAlpha = alpha; c.imageSmoothingQuality = "high"; c.drawImage(peq, -40, -60, W + 80, H + 120);
+  c.fillStyle = "rgba(6,6,8,0.62)"; c.fillRect(0, 0, W, H); c.restore();
+}
+function dibuja(im, cam, entra) {
+  let [dx, dy, dw, dh] = cam.d;
+  const e = lerp(1.035, 1, eOut5(clamp(entra / 0.4)));             // asentamiento suave al entrar el plano
+  dx = dx + dw / 2 - dw * e / 2; dy = dy + dh / 2 - dh * e / 2; dw *= e; dh *= e;
+  if (cam.v > 0.01) { c.save(); c.shadowColor = `rgba(0,0,0,${0.55 * cam.v})`; c.shadowBlur = 70; c.shadowOffsetY = 24;
+    c.fillStyle = "#000"; M.rr(c, dx, dy, dw, dh, cam.r); c.fill(); c.restore(); }
+  c.save(); M.rr(c, dx, dy, dw, dh, cam.r); c.clip();
+  c.drawImage(im, ...cam.s, dx, dy, dw, dh);
+  c.restore();
+  if (cam.v > 0.01) { c.save(); c.globalAlpha = 0.18 * cam.v; c.strokeStyle = "#fff"; c.lineWidth = 1.5; M.rr(c, dx, dy, dw, dh, cam.r); c.stroke(); c.restore(); }
+  return [dx, dy, dw, dh];
+}
+// punto de la grabación (0–1) → punto en pantalla, con la cámara actual
+function aPantalla(cam, x, y, w, h, r) {
+  const [sx, sy, sw, sh] = cam.s, [dx, dy, dw, dh] = r;
+  return [dx + (x * w - sx) / sw * dw, dy + (y * h - sy) / sh * dh];
+}
+
+// ─── textos ───
+function linea(s, x, y, px, fam, color, t0, tt, o = {}) {        // persiana: sube desde su línea base
+  const k = eOut5(prog(tt, t0, t0 + (o.dur ?? 0.38))); if (k <= 0) return 0;
+  const ks = o.sal != null ? eIn(prog(tt, o.sal, o.sal + 0.22)) : 0; if (ks >= 1) return 0;
+  const f = fam(px), alto = px * 1.15;
+  c.save(); c.beginPath(); c.rect(0, y - px * 0.98, W, alto + px * 0.14); c.clip();
+  M.texto(c, s, x, y + (1 - k) * alto - ks * alto, { f, color, al: o.al || "left", alpha: 1 - ks, track: o.track ?? 0 });
+  c.restore(); return M.ancho(c, s, f, o.track ?? 0);
+}
+function chip(s, x, y, tt, t0, sal, o = {}) {
+  const k = eOut5(prog(tt, t0, t0 + 0.35)), ks = sal != null ? prog(tt, sal, sal + 0.2) : 0; if (k <= 0 || ks >= 1) return;
+  const f = MO(600, o.px || 28), w = M.ancho(c, s, f, 1.5) + 44, al = o.al || "left", x0 = al === "center" ? x - w / 2 : x;
+  c.save(); c.globalAlpha = k * (1 - ks); c.translate(0, (1 - k) * 12);
+  c.fillStyle = o.fondo || "rgba(255,255,255,0.10)"; M.rr(c, x0, y - 38, w, 54, 27); c.fill();
+  c.strokeStyle = "rgba(255,255,255,0.16)"; c.lineWidth = 1.5; M.rr(c, x0, y - 38, w, 54, 27); c.stroke();
+  M.texto(c, s, x0 + 22, y - 2, { f, color: o.color || C.blanco, track: 1.5 });
+  c.restore();
+}
+function sombraSuperior(a) {                     // legibilidad del texto sobre la grabación a pantalla completa
+  if (a <= 0) return; const g = c.createLinearGradient(0, 0, 0, 820);
+  g.addColorStop(0, `rgba(0,0,0,${0.78 * a})`); g.addColorStop(0.62, `rgba(0,0,0,${0.42 * a})`); g.addColorStop(1, "rgba(0,0,0,0)");
+  c.fillStyle = g; c.fillRect(0, 0, W, 820);
+}
+
+function cabecera(G, tt) {
+  const s = G.s, i = G.i, primero = i === 0;
+  const ent = primero ? (R.gancho?.hasta ?? 2) + 0.05 : G.t0 + 0.08, sal = G.t1 - 0.24;
+  const num = String(i + 1).padStart(2, "0");
+  linea(num, X0, 330, 34, (p) => MO(700, p), C.pixel, ent, tt, { sal, track: 2 });
+  linea(`/ ${String(TOTAL).padStart(2, "0")}`, X0 + 58, 330, 34, (p) => MO(500, p), C.gris2, ent, tt, { sal, track: 2 });
+  const pxN = cabe(s.nombre, (p) => IT(700, p), 84);
+  linea(s.nombre, X0, 330 + 24 + pxN, pxN, (p) => IT(700, p), C.blanco, ent + 0.06, tt, { sal, track: -1 });
+  if (s.frase) { const pxF = cabe(s.frase, (p) => IT(500, p), 46); linea(s.frase, X0, 330 + 24 + pxN + 18 + pxF, pxF, (p) => IT(500, p), C.gris, ent + 0.14, tt, { sal }); }
+}
+
+function gancho(tt) {
+  const G = R.gancho; if (!G || tt > G.hasta + 0.3) return;
+  const sal = G.hasta - 0.2, f = (p) => AR(900, p);
+  const px = Math.min(...G.lineas.map((l) => cabe(l, f, G.px || 150)));
+  const y0 = G.y ?? 560;
+  G.lineas.forEach((l, j) => linea(l, X0, y0 + j * px * 1.0, px, f, j === G.acento ? C.pixel : C.blanco, (G.entradas?.[j]) ?? -1, tt, { sal, dur: 0.3 }));
+  if (G.pie) linea(G.pie, X0, y0 + G.lineas.length * px * 1.0 + 30, 44, (p) => IT(600, p), C.gris, G.pie_t ?? 0.5, tt, { sal });
+}
+
+function cierre(tt) {
+  if (tt < T_CIERRE - 0.05) return;
+  const Z = R.cierre, k = eIO(prog(tt, T_CIERRE - 0.05, T_CIERRE + 0.3));
+  c.save(); c.globalAlpha = k; c.fillStyle = C.fondo; c.fillRect(0, 0, W, H); c.restore();
+  const f = (p) => AR(900, p), px = Math.min(...Z.lineas.map((l) => cabe(l, f, Z.px || 120)));
+  Z.lineas.forEach((l, j) => linea(l, X0, 700 + j * px * 1.02, px, f, j === Z.acento ? C.pixel : C.blanco, T_CIERRE + 0.1 + j * 0.16, tt));
+  if (Z.sub) linea(Z.sub, X0, 700 + Z.lineas.length * px * 1.02 + 40, 44, (p) => IT(500, p), C.gris, T_CIERRE + 0.5, tt);
+  const tl = T_CIERRE + (Z.marca_t ?? 0.9), kl = eOut5(prog(tt, tl, tl + 0.45));
+  if (kl > 0) {
+    const alto = 46, fL = AR(700, alto * 0.62), txt = "D-Code Partners", wT = M.ancho(c, txt, fL, -0.5), tot = alto * 1.2 + alto * 0.34 + wT, x = W / 2 - tot / 2, y = 1290;
+    c.save(); c.globalAlpha = kl; c.translate(0, (1 - kl) * 10);
+    M.logo(c, x, y, alto, C.blanco, C.pixel, prog(tt, tl, tl + 0.5), prog(tt, tl + 0.3, tl + 0.5));
+    M.texto(c, txt, x + alto * 1.54, y + alto * 0.72, { f: fL, color: C.blanco, track: -0.5 });
+    M.texto(c, "dcodepartners.com", W / 2, y + 112, { f: MO(600, 30), color: C.gris, al: "center", track: 2 });
+    c.restore();
+  }
+}
+
+window.pintaFrame = async (n) => {
+  const tt = n / FPS; M.CAJAS.length = 0; c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1;
+  c.fillStyle = C.fondo; c.fillRect(0, 0, W, H);
+  const i = SEG.findIndex((s) => tt >= s.t0 && tt < s.t1);
+  if (i >= 0) {
+    const s = SEG[i], tl = tt - s.t0;
+    const im = await fotograma(s, tl);
+    const w = s.m.tipo === "clip" ? s.m.w : s.m.imagenes[0].w, h = s.m.tipo === "clip" ? s.m.h : s.m.imagenes[0].h;
+    const cam = camara(s, tl, w, h);
+    const base = Array.isArray(im) ? im[0] : im;
+    fondoDesenfocado(base, cam.v);
+    let r;
+    if (Array.isArray(im)) {                                     // antes / después: cortinilla con las imágenes reales
+      r = dibuja(im[0], cam, tl);
+      const [a0, a1] = s.cortinilla || [0.8, 1.6], kw = im.length > 1 ? eIO(prog(tl, a0, a1)) : 0;
+      if (kw > 0) { const [dx, dy, dw, dh] = r; c.save(); M.rr(c, dx, dy, dw, dh, cam.r); c.clip(); c.beginPath(); c.rect(dx, dy, dw * kw, dh); c.clip();
+        const [sx, sy, sw, sh] = cam.s, fx = im[1].width / w, fy = im[1].height / h; c.drawImage(im[1], sx * fx, sy * fy, sw * fx, sh * fy, dx, dy, dw, dh); c.restore();
+        if (kw < 1) { c.fillStyle = C.blanco; c.fillRect(dx + dw * kw - 3, dy, 6, dh); } }
+      const xEt = r[0] + 24, yEt = r[1] + 68, sal = s.dur - 0.24;       // etiqueta dentro de la imagen, arriba a la izquierda
+      if (im.length < 2) {} else if (kw < 0.5) chip("ANTES", xEt, yEt, tl, 0.1, a0 + 0.2, { fondo: "rgba(0,0,0,0.55)" }); else chip("DESPUÉS", xEt, yEt, tl, a0 + 0.35, sal, { fondo: "rgba(0,0,0,0.55)", color: C.pixel });
+    } else r = dibuja(im, cam, tl);
+    for (const k of s.clics || []) {                             // pulso en el punto real del clic (si se ha marcado)
+      if (k.x == null) continue; const kk = prog(tl, k.t, k.t + 0.5); if (kk <= 0 || kk >= 1) continue;
+      const [px, py] = aPantalla(cam, k.x, k.y, w, h, r);
+      c.save(); c.strokeStyle = C.blanco; c.lineWidth = 3; c.globalAlpha = (1 - kk) * 0.9; c.beginPath(); c.arc(px, py, 14 + 40 * eOut(kk), 0, 7); c.stroke(); c.restore();
+    }
+    sombraSuperior(1 - cam.v * 0.7);
+    const G = s.G, g0 = G.i === 0 ? (R.gancho?.hasta ?? 0) : G.t0;
+    if (!(G.i === 0 && tt < (R.gancho?.hasta ?? 0))) cabecera(G, tt);
+    const url = G.s.url, cred = G.s.credito, [dx, dy, dw, dh] = r;
+    if (url) { const yU = cam.v > 0.5 ? Math.min(1440, dy + dh + 70) : 1440; chip(url, X0, yU, tt, g0 + 0.3, G.t1 - 0.24, { px: 28 }); }
+    if (cred && cam.v > 0.5) { const k = eOut(prog(tt, g0 + 0.6, g0 + 0.9)) * (1 - prog(tt, G.t1 - 0.24, G.t1 - 0.04)) * clamp((cam.v - 0.5) * 2);
+      if (k > 0) M.texto(c, cred, W - X0, Math.min(1430, dy + dh + 58), { f: MO(500, 28), color: C.gris2, al: "right", alpha: k, track: 1 }); }
+  }
+  gancho(tt);
+  cierre(tt);
+  M.grano(c, W, H, n, 0.035);
+  return M.CAJAS;
+};
+
+(async () => {
+  const fu = "../../anuncios-v3/comun/fuentes/";
+  await M.cargar([["Archivo", fu + "archivo-wdth.woff2", { weight: "100 900", stretch: "62% 125%" }],
+                  ["JetBrains Mono", fu + "jetbrains-mono.woff2", { weight: "100 800" }], ["Inter Tight", fu + "inter-tight.woff2", { weight: "100 900" }]]);
+  window.LISTO = true;
+})();
+</script></body></html>
