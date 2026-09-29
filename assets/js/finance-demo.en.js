@@ -47,7 +47,7 @@
   ][VF_N - 1];
 
   var NAV_ITEMS = [
-    { id: 'dashboard', label: 'Dashboard', grupo: 'dia', icono: 'dashboard' },
+    { id: 'dashboard', label: 'Home', grupo: 'dia', icono: 'dashboard' },
     { id: 'tesoreria', label: 'Treasury', grupo: 'dia', icono: 'dashboard' },
     { id: 'facturas', label: 'Invoices', grupo: 'dia', icono: 'facturas' },
     { id: 'cobros', label: 'Collections', grupo: 'dia', icono: 'cobros' },
@@ -64,11 +64,11 @@
     { id: 'proyectos', label: 'Projects', grupo: 'negocio', icono: 'proyectos' },
     { id: 'radar', label: 'Radar', grupo: 'inteligencia', icono: 'dashboard' },
     { id: 'objetivos', label: 'Targets', grupo: 'inteligencia', icono: 'objetivos' },
-    { id: 'historico', label: 'History', grupo: 'inteligencia', icono: 'dashboard' },
+    { id: 'historico', label: 'Trend', grupo: 'inteligencia', icono: 'dashboard' },
     { id: 'ia', label: 'Ask Finance', grupo: 'inteligencia', icono: 'ia' },
     { id: 'auditoria', label: 'Audit', grupo: 'administracion', icono: 'auditoria' },
     { id: 'verifactu', label: 'Tax register', grupo: 'administracion', icono: 'auditoria' },
-    { id: 'usuarios', label: 'Users', grupo: 'administracion', icono: 'usuarios' },
+    { id: 'usuarios', label: 'People', grupo: 'administracion', icono: 'usuarios' },
     { id: 'impuestos', label: 'Taxes', grupo: 'administracion', icono: 'dashboard' },
     { id: 'gestoria', label: 'Your accountant', grupo: 'administracion', icono: 'facturas' },
     { id: 'configuracion', label: 'Settings', grupo: 'administracion', icono: 'configuracion' }
@@ -81,6 +81,27 @@
   // demo realmente tiene construidos (sin Proveedores/Auditoría/Usuarios/
   // Clientes D-Code, que existen en el producto real pero aún no tienen
   // vista propia aquí).
+  /* LOS MÓDULOS, como el menú actual del producto (dcode-finance,
+     src/lib/navegacion/modulos.ts, «navegación por módulos», la que viene por
+     defecto): siete entradas con sustantivos de negocio y, dentro de cada una,
+     sus pestañas. Las pantallas de la demo son las mismas de siempre; solo
+     cambia cómo se agrupan. Los tres módulos fiscales de la demo (impuestos,
+     registro fiscal y gestoría) van en Contabilidad, que es donde el producto
+     guarda lo fiscal. */
+  var MODULOS = [
+    { clave: 'inicio', titulo: 'Home', icono: 'dashboard', pestanas: [{ v: 'dashboard', e: 'Today' }] },
+    { clave: 'ventas', titulo: 'Sales', icono: 'facturas', pestanas: [{ v: 'facturas', e: 'Invoices' }, { v: 'por-facturar', e: 'Ready to invoice' }, { v: 'presupuestos', e: 'Quotes' }, { v: 'pedidos', e: 'Orders' }, { v: 'albaranes', e: 'Delivery notes' }, { v: 'clientes', e: 'Clients' }, { v: 'cobros', e: 'Collections' }] },
+    { clave: 'compras', titulo: 'Purchases', icono: 'gastos', pestanas: [{ v: 'gastos', e: 'Expenses' }, { v: 'proveedores', e: 'Suppliers' }, { v: 'pagos', e: 'Payments' }, { v: 'duplicados', e: 'Duplicates' }] },
+    { clave: 'tesoreria', titulo: 'Treasury', icono: 'cobros', pestanas: [{ v: 'tesoreria', e: 'Position' }] },
+    { clave: 'contabilidad', titulo: 'Accounting', icono: 'presupuestos', pestanas: [{ v: 'impuestos', e: 'Taxes' }, { v: 'verifactu', e: 'Tax register' }, { v: 'gestoria', e: 'Your accountant' }] },
+    { clave: 'analisis', titulo: 'Analysis', icono: 'objetivos', pestanas: [{ v: 'historico', e: 'Trend' }, { v: 'radar', e: 'Radar' }, { v: 'objetivos', e: 'Targets' }, { v: 'proyectos', e: 'Projects' }, { v: 'ia', e: 'Ask Finance' }] },
+    { clave: 'empresa', titulo: 'Company', icono: 'configuracion', pestanas: [{ v: 'configuracion', e: 'Settings' }, { v: 'usuarios', e: 'People' }, { v: 'documentos', e: 'Documents' }, { v: 'auditoria', e: 'Audit' }] }
+  ];
+  var GRUPOS_VIEJOS = ['Day to day', 'Business', 'Intelligence', 'Administration'];
+  function moduloDe(vista) {
+    return MODULOS.filter(function (m) { return m.pestanas.some(function (p) { return p.v === vista; }); })[0] || MODULOS[0];
+  }
+
   var NAV_GROUPS = [
     { clave: 'dia', titulo: 'Day to day' },
     { clave: 'negocio', titulo: 'Business' },
@@ -154,6 +175,7 @@
       '<div class="fdemo-shell">' +
       '<div class="fdemo-topbar">' +
       '<button class="fdemo-topbar-menu-btn" type="button" data-role="menu-btn" aria-label="Open menu">' + MENU_ICON + '</button>' +
+      '<p class="fdemo-topbar-sec" data-role="seccion"></p>' +
       '<div class="fdemo-topbar-right">' +
       /* EL RECORRIDO. Si no lo toca nadie, la demo se recorre sola los
          módulos; en cuanto alguien interactúa, se para y manda el usuario.
@@ -178,6 +200,10 @@
       '</div>' +
       '<div class="fdemo-tour-bar" data-role="tour-bar" aria-hidden="true"><i></i></div>' +
       '</div>' +
+      /* Las pestañas del módulo, como PestanasModulo.tsx: dentro del módulo se
+         navega arriba; entre módulos, en el menú. Si el módulo tiene una sola
+         pestaña no se pinta: una pestaña sola no es una elección. */
+      '<nav class="fdemo-pestanas" data-role="pestanas" aria-label="Module sections" hidden></nav>' +
       // La marca DEMO va en las DOS modalidades. Antes solo la llevaba la
       // pantalla completa, así que la instancia empotrada en la Home enseñaba
       // importes, clientes y vencimientos sin que nada visible dijera que son
@@ -251,29 +277,40 @@
         '</svg></span>' +
         '<div class="fdemo-brand-word"><span class="fdemo-brand-d">D-Code</span><span class="fdemo-brand-suffix">FINANCE</span></div>' +
         '</div>' +
-        '<div class="fdemo-nav-groups" data-role="nav-groups">' +
+        '<div class="fdemo-nav-groups fdemo-nav-mods" data-role="nav-groups">' +
         '<div class="fdemo-nav-indicator" data-role="nav-indicator"><span class="fdemo-nav-indicator-notch"></span></div>' +
-        NAV_GROUPS.map(function (g, gi) {
-          var entradas = NAV_ITEMS.filter(function (v) { return v.grupo === g.clave; });
-          if (!entradas.length) return '';
-          return (gi > 0 ? '<div class="fdemo-nav-divider"></div>' : '') +
-            '<p class="fdemo-nav-group-title">' + esc(g.titulo) + '</p>' +
-            '<div class="fdemo-nav-group-items">' +
-            entradas.map(function (v) {
-              return '<a href="#" class="fdemo-nav-item fdemo-nav-item--icon" data-role="nav" data-view="' + v.id + '">' +
-                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[v.icono] || NAV_ICONS[v.id] || '') + '</svg>' +
-                esc(v.label) + '</a>';
-            }).join('') +
+        MODULOS.map(function (m) {
+          return '<div class="fdemo-mod" data-mod="' + m.clave + '">' +
+            '<a href="#' + m.pestanas[0].v + '" class="fdemo-nav-item fdemo-nav-item--icon fdemo-mod-a" data-role="nav" data-view="' + m.pestanas[0].v + '" data-mod="' + m.clave + '">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[m.icono] || '') + '</svg>' +
+            esc(m.titulo) + '</a>' +
+            (m.pestanas.length > 1
+              ? '<div class="fdemo-mod-sub">' + m.pestanas.map(function (p) {
+                  return '<a href="#' + p.v + '" class="fdemo-mod-t" data-role="nav" data-view="' + p.v + '">' + esc(p.e) + '</a>';
+                }).join('') + '</div>'
+              : '') +
             '</div>';
         }).join('') +
         '</div>';
       navIndicatorEl = sidebarEl.querySelector('[data-role="nav-indicator"]');
     }
 
+    var pestanasEl = root.querySelector('[data-role="pestanas"]');
+    var seccionEl = root.querySelector('[data-role="seccion"]');
     function setActiveNav(viewId) {
-      sidebarEl.querySelectorAll('[data-role="nav"]').forEach(function (el) {
-        var active = el.getAttribute('data-view') === viewId;
+      var mod = moduloDe(viewId);
+      sidebarEl.querySelectorAll('.fdemo-mod').forEach(function (el) {
+        el.classList.toggle('is-open', el.getAttribute('data-mod') === mod.clave);
+      });
+      sidebarEl.querySelectorAll('.fdemo-mod-t').forEach(function (el) {
+        var aqui = el.getAttribute('data-view') === viewId;
+        el.classList.toggle('is-active', aqui);
+        if (aqui) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+      });
+      sidebarEl.querySelectorAll('.fdemo-mod-a').forEach(function (el) {
+        var active = el.getAttribute('data-mod') === mod.clave;
         el.classList.toggle('is-active', active);
+        if (active) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current');
         if (active && navIndicatorEl) {
           navIndicatorEl.style.transform = 'translateY(' + el.offsetTop + 'px)';
           navIndicatorEl.style.height = el.offsetHeight + 'px';
@@ -282,13 +319,43 @@
         // En un movil el menu es una tira horizontal: si el modulo activo se
         // queda fuera de la tira, nadie sabe donde esta. Se acerca solo, y sin
         // scrollIntoView, que arrastraria tambien la pagina.
+        var caja = el.parentNode;
         if (active && sidebarEl.scrollWidth > sidebarEl.clientWidth + 4) {
-          var izq = el.offsetLeft - 12;
-          var der = el.offsetLeft + el.offsetWidth + 12 - sidebarEl.clientWidth;
+          var izq = caja.offsetLeft - 12;
+          var der = caja.offsetLeft + caja.offsetWidth + 12 - sidebarEl.clientWidth;
           if (izq < sidebarEl.scrollLeft) sidebarEl.scrollLeft = izq;
           else if (der > sidebarEl.scrollLeft) sidebarEl.scrollLeft = der;
         }
       });
+      if (seccionEl) {
+        var pe = mod.pestanas.filter(function (p) { return p.v === viewId; })[0];
+        seccionEl.textContent = mod.pestanas.length > 1 && pe ? mod.titulo + ' · ' + pe.e : mod.titulo;
+      }
+      if (pestanasEl) {
+        if (mod.pestanas.length > 1) {
+          pestanasEl.hidden = false;
+          pestanasEl.innerHTML = '<ul>' + mod.pestanas.map(function (p) {
+            var aqui = p.v === viewId;
+            return '<li><a href="#' + p.v + '" class="fdemo-pestana' + (aqui ? ' is-active' : '') + '" data-role="nav" data-view="' + p.v + '"' + (aqui ? ' aria-current="page"' : '') + '>' + esc(p.e) + '</a></li>';
+          }).join('') + '</ul>';
+          var act = pestanasEl.querySelector('.is-active'), ul = pestanasEl.firstChild;
+          if (act && ul.scrollWidth > ul.clientWidth + 4) {
+            var i2 = act.parentNode.offsetLeft - 16, d2 = act.parentNode.offsetLeft + act.parentNode.offsetWidth + 16 - ul.clientWidth;
+            if (i2 < ul.scrollLeft) ul.scrollLeft = i2; else if (d2 > ul.scrollLeft) ul.scrollLeft = d2;
+          }
+        } else { pestanasEl.hidden = true; pestanasEl.innerHTML = ''; }
+      }
+    }
+    /* Adónde va la mano del recorrido cuando el paso es «ir a una pantalla»:
+       a su pestaña si se ve (arriba o en el menú), y si no, al módulo que la
+       contiene. Una pestaña escondida mide cero y la mano no llegaría. */
+    function destinoDeVista(v) {
+      var cands = ['.fdemo-pestanas [data-view="' + v + '"]', '.fdemo-mod-t[data-view="' + v + '"]', '.fdemo-mod-a[data-mod="' + moduloDe(v).clave + '"]'];
+      for (var k = 0; k < cands.length; k++) {
+        var el = root.querySelector(cands[k]);
+        if (el && el.getClientRects().length) return cands[k];
+      }
+      return cands[2];
     }
     function closeMobileMenu() { sidebarEl.classList.remove('is-open'); overlayEl.classList.remove('is-open'); }
 
@@ -341,6 +408,11 @@
          se ha recargado. Solo el cambio de pantalla vuelve arriba. */
       var y = mainEl.scrollTop;
       contentEl.innerHTML = renderer(r.id);
+      /* Las cabeceras de pantalla decían el GRUPO del menú viejo («Día a día»,
+         «Negocio»…). Con el menú por módulos eso ya no existe: la cabecera
+         dice el módulo, que es lo que la persona ve seleccionado a la izquierda. */
+      var cab = contentEl.querySelector('.fdemo-eyebrow');
+      if (cab && GRUPOS_VIEJOS.indexOf(cab.textContent) !== -1) cab.textContent = moduloDe(r.view).titulo;
       etiquetarTablas();
       ordenaTablas();
       pintaCampana();
@@ -445,124 +517,96 @@
         '</' + (o.vista ? 'a' : 'div') + '>';
     }
 
+    /* INICIO, como en el producto (dcode-finance, «Qué hay que hacer hoy», septiembre de 2026): primero la bandeja
+       de HOY —qué es, cuánto hay en juego, de dónde sale la cifra y qué hacer—, después «¿Cómo va la empresa?»:
+       preguntas con su respuesta y su origen, no indicadores. Lo que no se sabe se dice («Todavía no lo sé»), nunca
+       un cero. El análisis largo vive en Histórico, igual que en el producto. */
+    function preguntaTarjeta(q) {
+      var cuerpo = '<p class="fdemo-pq-p">' + esc(q.pregunta) + '</p>' +
+        (q.respuesta === null
+          ? '<p class="fdemo-pq-no">Not known yet</p>' + (q.motivo ? '<p class="fdemo-pq-n">' + esc(q.motivo) + '</p>' : '')
+          : '<p class="fdemo-pq-r t-' + (q.tono || 'neutro') + '">' + esc(q.respuesta) + '</p>' + (q.nota ? '<p class="fdemo-pq-n">' + esc(q.nota) + '</p>' : '')) +
+        '<p class="fdemo-pq-o">' + esc(q.origen) + '</p>';
+      return q.vista
+        ? '<a class="fdemo-pq es-link" href="#' + q.vista + '" data-action="nav" data-view="' + q.vista + '">' + cuerpo + '</a>'
+        : '<div class="fdemo-pq">' + cuerpo + '</div>';
+    }
+    function lineaHoy(e) {
+      return '<li><a class="fdemo-hoy-l u-' + e.urgencia + '" href="#' + e.vista + '" data-action="nav" data-view="' + e.vista + '">' +
+        '<span class="fdemo-hoy-pt" aria-hidden="true"></span>' +
+        '<span class="fdemo-hoy-c"><span class="fdemo-hoy-t">' + esc(e.titulo) + ' <span>· ' + e.cantidad + '</span></span>' +
+        '<span class="fdemo-hoy-d">' + esc(e.detalle) + '</span><span class="fdemo-hoy-o">' + esc(e.origen) + '</span></span>' +
+        (e.importe !== null ? '<span class="fdemo-hoy-i">' + EUR(e.importe) + '</span>' : '') +
+        '<span class="fdemo-hoy-a">' + esc(e.accion) + ' →</span></a></li>';
+    }
     RENDERERS.dashboard = function () {
-      var s = FS.getDashboardSnapshot(), ev = FS.getEvolucion();
-      var r = FS.getResumenEjecutivo(), prev = FS.getPrevision();
-      var ant = FS.getAntiguedad(), con = FS.getConcentracion();
-      var cobrados = ev.map(function (m) { return m.cobrado; });
-      var resultados = ev.map(function (m) { return m.resultado; });
-      var dif = s.resultadoMes - s.resultadoMesPrevio;
+      var s = FS.getDashboardSnapshot();
+      var fac = FS.listFacturas(), gas = FS.listGastos(), pres = FS.listPresupuestos();
+      var pend = function (f) { return FS.pendienteDe(f); };
+      var sum = function (xs, fn) { return xs.reduce(function (a, x) { return a + fn(x); }, 0); };
+      var emitidas = fac.filter(function (f) { return f.estado !== 'Draft' && pend(f) > 0; });
+      var vencidas = emitidas.filter(function (f) { return f.vencimiento > 0; });
+      var semana = emitidas.filter(function (f) { return f.vencimiento <= 0 && f.vencimiento >= -7; });
+      var sinPagar = gas.filter(function (g) { return !g.pagado; });
+      var pagosVencidos = sinPagar.filter(function (g) { return g.vencimiento > 0; });
+      var revisar = gas.filter(function (g) { return g.estadoRevision === 'Pending review'; });
+      var borradores = fac.filter(function (f) { return f.estado === 'Draft'; });
+      var plural = function (n, uno, varios) { return n + ' ' + (n === 1 ? uno : varios); };
 
-      // ── la frase de arriba ──
-      var narrativa =
-        '<div class="fdemo-narra n-' + r.principal.nivel + '">' +
-        '<span class="fdemo-narra-filo" aria-hidden="true"></span>' +
-        '<p class="fdemo-narra-p">' + esc(r.principal.texto) + '</p>' +
-        (r.frases.length ? '<ul class="fdemo-narra-l">' + r.frases.map(function (f) {
-          return '<li class="n-' + f.nivel + '"><span class="fdemo-narra-pt" aria-hidden="true"></span>' +
-                 '<a href="#' + f.vista + '">' + esc(f.texto) + '</a></li>';
-        }).join('') + '</ul>' : '') +
-        '</div>';
+      // ── la bandeja de hoy (solo entra lo que tiene algo que hacer) ──
+      var bandeja = [];
+      if (vencidas.length) bandeja.push({ urgencia: 'vencido', titulo: 'Overdue invoices', cantidad: vencidas.length, importe: sum(vencidas, pend),
+        detalle: 'Past their due date and not fully collected.', origen: 'issued invoices past their due date', accion: 'Chase', vista: 'cobros' });
+      if (pagosVencidos.length) bandeja.push({ urgencia: 'vencido', titulo: 'Overdue payments', cantidad: pagosVencidos.length, importe: sum(pagosVencidos, function (g) { return g.importe; }),
+        detalle: 'Expenses whose payment date has passed.', origen: 'expenses past due with no payment recorded', accion: 'Pay or reschedule', vista: 'pagos' });
+      if (semana.length) bandeja.push({ urgencia: 'pronto', titulo: 'Collections due this week', cantidad: semana.length, importe: sum(semana, pend),
+        detalle: 'Still on time: a reminder now saves chasing later.', origen: 'invoices due in the next 7 days', accion: 'Follow up', vista: 'cobros' });
+      if (borradores.length) bandeja.push({ urgencia: 'pronto', titulo: 'Draft invoices', cantidad: borradores.length, importe: sum(borradores, function (f) { return f.importe; }),
+        detalle: 'Ready but not issued: until they are issued, they cannot be collected.', origen: 'invoices in «Draft» status', accion: 'Issue', vista: 'facturas' });
+      if (revisar.length) bandeja.push({ urgencia: 'pendiente', titulo: 'Unreviewed expenses', cantidad: revisar.length, importe: sum(revisar, function (g) { return g.importe; }),
+        detalle: 'Until someone looks at them, they do not count as a closed cost.', origen: 'expenses in «Pending review»', accion: 'Review', vista: 'gastos' });
+      if (s.sinFacturar > 0) bandeja.push({ urgencia: 'pendiente', titulo: 'Accepted quotes not yet invoiced', cantidad: pres.filter(function (p) { return /acept|accept/i.test(p.estado || ''); }).length || 1, importe: s.sinFacturar,
+        detalle: 'The client already said yes: the invoice is missing.', origen: 'accepted quotes with no invoice yet', accion: 'Convert to invoice', vista: 'presupuestos' });
+      var TIT = { vencido: 'Overdue', pronto: 'This week', pendiente: 'Outstanding' };
+      var total = sum(bandeja, function (e) { return e.cantidad; });
+      var grupos = ['vencido', 'pronto', 'pendiente'].map(function (u) { return { u: u, es: bandeja.filter(function (e) { return e.urgencia === u; }) }; }).filter(function (g) { return g.es.length; });
+      var hoy = card(cardHead('Today', total ? plural(total, 'thing', 'things') + ' waiting, by urgency' : 'Nothing waiting'),
+        grupos.length
+          ? '<div class="fdemo-hoy">' + grupos.map(function (g) {
+              return '<section><h3 class="fdemo-eyebrow">' + TIT[g.u] + '</h3><ul>' + g.es.map(lineaHoy).join('') + '</ul></section>';
+            }).join('') + '</div>'
+          : '<p class="fdemo-hoy-vacio">Nothing overdue, nothing unissued and nothing unreviewed.</p>');
 
-      // ── el dinero ──
-      var dinero =
-        '<div class="fdemo-kpi-hero">' +
-        kpi2({ hero: 1, tono: 'positivo', label: 'Collected', valor: EUR(s.totalCobrado),
-              hint: 'money already received · all time', serie: cobrados, vista: 'cobros' }) +
-        kpi2({ hero: 1, tono: s.totalPendiente > 0 ? 'aviso' : 'neutro', label: 'Outstanding',
-              valor: EUR(s.totalPendiente),
-              hint: s.dso === null ? 'issued and not yet collected' : 'issued and not yet collected · median {d} days to get paid'.replace('{d}', s.dso), vista: 'cobros' }) +
-        kpi2({ hero: 1, tono: s.totalVencido > 0 ? 'critico' : 'neutro', label: 'Overdue',
-              valor: EUR(s.totalVencido),
-              delta: s.totalPendiente > 0 ? { sube: true, bueno: s.totalVencido === 0,
-                texto: Math.round((s.totalVencido / s.totalPendiente) * 1000) / 10 + ' % of outstanding' } : null,
-              hint: s.totalVencido > 0 ? 'past due · chase it' : 'nothing past due', vista: 'cobros' }) +
-        '</div>' +
-        '<div class="fdemo-kpi-tira">' +
-        kpi2({ tono: s.resultadoMes >= 0 ? 'positivo' : 'critico', label: 'Result this month',
-              valor: EUR(s.resultadoMes), serie: resultados,
-              delta: { sube: dif > 0 ? true : dif < 0 ? false : null, bueno: dif >= 0,
-                       texto: EUR(Math.abs(dif)) + ' vs last month' },
-              hint: 'invoiced minus spent, this month' }) +
-        (s.sinFacturar > 0 ? kpi2({ tono: 'aviso', label: 'Not invoiced', valor: EUR(s.sinFacturar),
-              hint: 'accepted but not yet invoiced', vista: 'presupuestos' }) : '') +
-        kpi2({ label: 'Invoiced', valor: EUR(s.totalFacturado), hint: 'all time', vista: 'facturas' }) +
-        kpi2({ label: 'Expenses', valor: EUR(s.totalGastos), hint: 'all time', vista: 'gastos' }) +
-        kpi2({ label: 'Invoiced − Expenses', valor: EUR(s.margen), hint: 'not profit · {p} not yet collected'.replace('{p}', EUR(s.totalPendiente)) }) +
-        kpi2({ label: 'Due in 30 days', valor: EUR(s.venceEn30), hint: 'excluding what is already overdue' }) +
-        kpi2({ label: 'Active projects', valor: String(s.proyectosActivos), hint: 'in progress right now', vista: 'proyectos' }) +
-        '</div>';
-
-      // ── la caja ──
-      var caja = card(
-        cardHead('Cash forecast · 30 days', 'net cash change: the bank balance is not in the system'),
-        '<div class="fdemo-card-body is-tight"><div class="fdemo-kpi-tira es-3">' +
-        kpi2({ tono: 'positivo', label: 'Coming in', valor: EUR(prev.entra), hint: 'invoices due in the next 30 days' }) +
-        kpi2({ tono: 'aviso', label: 'Going out', valor: EUR(prev.sale), hint: 'expenses due in the next 30 days' }) +
-        kpi2({ tono: prev.neto >= 0 ? 'positivo' : 'critico', label: 'Net', valor: EUR(prev.neto),
-              hint: prev.neto >= 0 ? 'more coming in than going out' : 'more going out than coming in' }) +
-        '</div></div>');
-
-      // ── qué mirar hoy ──
+      // ── radar: una línea, solo si tiene algo que decir ──
       var senales = FS.getSenales();
-      var hoy = senales.length
-        ? '<div class="fdemo-senales">' + senales.map(function (x) {
-            return '<article class="fdemo-senal p-' + x.p + '">' +
-              '<span class="fdemo-senal-filo" aria-hidden="true"></span>' +
-              '<div class="fdemo-senal-c"><p class="fdemo-senal-et">' + PRIO[x.p] + '</p>' +
-              '<p class="fdemo-senal-t">' + esc(x.titulo) + '</p>' +
-              '<p class="fdemo-senal-p">' + esc(x.porque) + '</p></div>' +
-              '<p class="fdemo-senal-n">' + esc(x.cifra) + '</p></article>';
-          }).join('') + '</div>'
-        : '<div class="fdemo-senal-ok"><span class="fdemo-senal-ok-filo"></span>Nothing urgent today.</div>';
+      var radar = senales.length
+        ? '<a class="fdemo-linea-aviso" href="#radar" data-action="nav" data-view="radar"><span><b>Financial radar:</b> ' +
+          esc(plural(senales.length, 'finding', 'findings') + ' — ' + senales[0].titulo) + '</span><span class="fdemo-linea-v">See →</span></a>'
+        : '';
 
-      // ── cómo va el negocio ──
-      var maxEv = Math.max.apply(null, ev.map(function (m) { return Math.max(m.cobrado, m.gastos); })) || 1;
-      var barras = '<div class="fdemo-barras" role="img" aria-label="Collections and expenses over the last twelve months">' +
-        ev.map(function (m) {
-          return '<div class="fdemo-barra-col"><div class="fdemo-barra-par">' +
-            '<i class="b-cob" style="height:' + ((m.cobrado / maxEv) * 100).toFixed(1) + '%" title="' + esc(m.etiqueta + ': ' + EUR(m.cobrado)) + '"></i>' +
-            '<i class="b-gas" style="height:' + ((m.gastos / maxEv) * 100).toFixed(1) + '%" title="' + esc(m.etiqueta + ': ' + EUR(m.gastos)) + '"></i>' +
-            '</div><span class="fdemo-barra-et">' + esc(m.etiqueta) + '</span></div>';
-        }).join('') + '</div>' +
-        '<div class="fdemo-leyenda"><span><i class="b-cob"></i>Collected</span><span><i class="b-gas"></i>Expenses</span></div>';
+      // ── ¿cómo va la empresa? ──
+      var deboTotal = sum(sinPagar, function (g) { return g.importe; });
+      var preguntas = [
+        { pregunta: 'Am I making money?', respuesta: EUR(s.resultadoMes), tono: s.resultadoMes > 0 ? 'positivo' : s.resultadoMes < 0 ? 'critico' : 'neutro',
+          nota: 'This month. Last month, ' + EUR(s.resultadoMesPrevio) + '.', origen: 'invoiced minus spent, by date, this month', vista: 'historico' },
+        { pregunta: 'How much do I have?', respuesta: null, motivo: 'No bank statement has been imported. The balance is declared by the bank: the system does not make it up.',
+          origen: 'balance declared in the imported statements', vista: 'tesoreria' },
+        { pregunta: 'Who owes me?', respuesta: EUR(s.totalPendiente), tono: s.totalVencido > 0 ? 'aviso' : 'neutro',
+          nota: s.totalVencido > 0 ? 'Of that, ' + EUR(s.totalVencido) + ' is already overdue.' : null, origen: 'issued invoices not yet fully collected', vista: 'cobros' },
+        { pregunta: 'What do I owe?', respuesta: EUR(deboTotal), tono: pagosVencidos.length ? 'aviso' : 'neutro',
+          nota: sinPagar.length ? plural(sinPagar.length, 'unpaid expense', 'unpaid expenses') + (pagosVencidos.length ? ', ' + pagosVencidos.length + ' overdue.' : '.') : null,
+          origen: 'recorded expenses not yet paid', vista: 'pagos' },
+        { pregunta: 'Is anything blocked with the tax agency (AEAT)?', respuesta: null, motivo: 'VERI*FACTU is switched off in this demo: no record is generated and nothing is sent.',
+          origen: 'VERI*FACTU records rejected or failed to send' },
+      ];
+      var empresa = '<div class="fdemo-pqs">' + preguntas.map(preguntaTarjeta).join('') + '</div>' +
+        '<p class="fdemo-pq-pie">Business analysis —trend, who you depend on, debt ageing— lives in ' +
+        '<a href="#historico" data-action="nav" data-view="historico">History</a>.</p>';
 
-      var deuda = card(cardHead('Debt ageing', 'How much you are owed and for how long'),
-        '<div class="fdemo-card-body"><p class="fdemo-total">' + EUR(ant.total) + '</p>' +
-        '<div class="fdemo-apilada">' + ant.tramos.map(function (t) {
-          return '<i class="n-' + t.nivel + '" style="width:' + t.pct + '%" title="' + esc(t.etiqueta) + '"></i>';
-        }).join('') + '</div>' +
-        '<ul class="fdemo-ley-v">' + ant.tramos.map(function (t) {
-          return '<li><span class="pt n-' + t.nivel + '"></span><span class="et">' + esc(t.etiqueta) + '</span>' +
-                 '<span class="nu">' + EUR(t.total) + '</span></li>';
-        }).join('') + '</ul></div>');
-
-      var conc = card(cardHead('Who your revenue depends on', 'Share of total invoiced, by client'),
-        '<div class="fdemo-card-body"><ul class="fdemo-conc">' + con.filas.map(function (f) {
-          return '<li><span class="nom">' + esc(f.cliente) + '</span>' +
-            '<span class="ba"><i style="width:' + f.pct + '%"></i></span>' +
-            '<span class="pc">' + f.pct + ' %</span></li>';
-        }).join('') + '</ul>' +
-        (con.riesgo ? '<p class="fdemo-nota-riesgo">{c} accounts for {p} % of your revenue. If they leave, that part of the business goes with them.</p>'.replace('{c}', esc(con.riesgo.cliente)).replace('{p}', con.riesgo.pct) : '') +
-        '</div>');
-
-      // ── registro ──
-      var act = FS.getActividad(8);
-      var actividad = card(cardHead('Recent activity', 'Latest invoices, expenses and collections'),
-        '<div>' + act.map(function (a) {
-          return '<a class="fdemo-activity-row" href="#' + a.vista + '/' + a.id + '">' +
-            '<div class="fdemo-activity-main"><div class="fdemo-activity-text">' + esc(a.texto) + ' · ' + EUR(a.importe) + '</div>' +
-            '<div class="fdemo-activity-meta">' + esc(a.tipo) + ' · ' + FDATE(a.fecha) + '</div></div>' +
-            pill(a.estado) + '</a>';
-        }).join('') + '</div>');
-
-      /* El boton de planes va AQUI, en la primera pantalla y a la altura del
-         titulo. Quien esta mirando el panel es quien esta decidiendo si esto
-         le vale: mandarle a buscar el precio al pie de la pagina es perderle. */
       var hrefPlanes = useHash ? (root.getAttribute('data-exit-href') || '/sistema-financiero') + '#planes' : '#planes';
       return '<div class="fdemo-panel">' +
-        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Overview</p>' +
-        '<h1 class="fdemo-page-title">Financial dashboard</h1></div>' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Home</p>' +
+        '<h1 class="fdemo-page-title">What needs doing today</h1></div>' +
         '<div class="fdemo-panel-acts">' +
         '<p class="fdemo-calc">calculated just now · ' + FDATE(s.fechaCalculo) + '</p>' +
         '<a class="fdemo-btn variant-primary fdemo-planes-b" href="' + hrefPlanes + '"' +
@@ -570,14 +614,8 @@
         '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">' +
         '<path d="M5 12h14m0 0-5-5m5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         'See plans and pricing</a></div></div>' +
-        narrativa +
-        seccion('The money', 'what has come in, what you are owed and what is past due', dinero, 0) +
-        seccion('Cash', 'what comes in and goes out over the next 30 days', caja, 1) +
-        seccion('What to look at today', 'what needs a decision, in order of urgency', hoy, 2) +
-        seccion('How the business is doing', 'trend, who you depend on and what you are owed',
-          card(cardHead('Monthly trend', 'Money collected vs money spent, month by month'), '<div class="fdemo-card-body">' + barras + '</div>') +
-          '<div class="fdemo-dos">' + deuda + conc + '</div>', 3) +
-        seccion('Log', 'the latest activity', actividad, 4) +
+        hoy + radar +
+        seccion('How is the business doing?', 'five questions, five answers, and where each one comes from', empresa, 1) +
         '</div>';
     };
 
@@ -2904,8 +2942,8 @@
     function cajonHtml() {
       if (!state.docCajon) return '';
       return '<div class="fdemo-cajon">' +
-        '<p class="fdemo-cajon-t">Prueba con uno de estos</p>' +
-        '<p class="fdemo-cajon-p">Del PDF digital saca los datos y te los deja revisables. De una foto o un escaneado guarda el documento y lo deja listo para rellenar.</p>' +
+        '<p class="fdemo-cajon-t">Try one of these</p>' +
+        '<p class="fdemo-cajon-p">From a digital PDF it pulls out the data and leaves it for you to check. From a photo or a scan it keeps the document and leaves it ready to fill in.</p>' +
         '<div class="fdemo-cajon-rej">' +
         DOCS.map(function (d) {
           return '<button type="button" class="fdemo-doc-op" data-action="doc-op" data-k="' + d.k + '">' +
@@ -3092,7 +3130,7 @@
         '<rect x="3.5" y="4.5" width="17" height="13.5" rx="2.5"/><circle cx="8.8" cy="10" r="1.7"/>' +
         '<path d="m4.5 16.5 4.6-4 3.6 3 2.7-2.3 4.1 3.3" stroke-linejoin="round"/></svg></span>' +
         '<span class="fdemo-ask-clip-c"><b>Sube fotos y archivos</b>' +
-        '<i>Foto del móvil, PDF, Excel o CSV \u00b7 hasta 10 MB</i></span>' +
+        '<i>Phone photo, PDF, Excel or CSV \u00b7 up to 10 MB</i></span>' +
         '<span class="fdemo-ask-clip-x" aria-hidden="true">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="m7 10 5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         '</span></button>' + cajonHtml() + '</div>' +
@@ -4122,7 +4160,7 @@
                   : paso.hace === 'remesa' ? '[data-action="doc-op"][data-k="remesa"]'
                   : paso.hace === 'alta' ? '[data-action="alta"]'
                   : paso.hace === 'abrir' ? '[data-action="adjuntar"]'
-                  : '[data-role="nav"][data-view="' + paso.v + '"]';
+                  : destinoDeVista(paso.v);
       llevaLaManoA(destino, aplica);
     }
 

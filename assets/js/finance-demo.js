@@ -45,7 +45,7 @@
   ][VF_N - 1];
 
   var NAV_ITEMS = [
-    { id: 'dashboard', label: 'Dashboard', grupo: 'dia', icono: 'dashboard' },
+    { id: 'dashboard', label: 'Inicio', grupo: 'dia', icono: 'dashboard' },
     { id: 'tesoreria', label: 'Tesorería', grupo: 'dia', icono: 'dashboard' },
     { id: 'facturas', label: 'Facturas', grupo: 'dia', icono: 'facturas' },
     { id: 'cobros', label: 'Cobros', grupo: 'dia', icono: 'cobros' },
@@ -62,11 +62,11 @@
     { id: 'proyectos', label: 'Proyectos', grupo: 'negocio', icono: 'proyectos' },
     { id: 'radar', label: 'Radar', grupo: 'inteligencia', icono: 'dashboard' },
     { id: 'objetivos', label: 'Objetivos', grupo: 'inteligencia', icono: 'objetivos' },
-    { id: 'historico', label: 'Histórico', grupo: 'inteligencia', icono: 'dashboard' },
+    { id: 'historico', label: 'Evolución', grupo: 'inteligencia', icono: 'dashboard' },
     { id: 'ia', label: 'Pregunta a Finanzas', grupo: 'inteligencia', icono: 'ia' },
     { id: 'auditoria', label: 'Auditoría', grupo: 'administracion', icono: 'auditoria' },
     { id: 'verifactu', label: 'Registro fiscal', grupo: 'administracion', icono: 'auditoria' },
-    { id: 'usuarios', label: 'Usuarios', grupo: 'administracion', icono: 'usuarios' },
+    { id: 'usuarios', label: 'Personas', grupo: 'administracion', icono: 'usuarios' },
     { id: 'impuestos', label: 'Impuestos', grupo: 'administracion', icono: 'dashboard' },
     { id: 'gestoria', label: 'Tu gestoría', grupo: 'administracion', icono: 'facturas' },
     { id: 'configuracion', label: 'Configuración', grupo: 'administracion', icono: 'configuracion' }
@@ -79,6 +79,27 @@
   // demo realmente tiene construidos (sin Proveedores/Auditoría/Usuarios/
   // Clientes D-Code, que existen en el producto real pero aún no tienen
   // vista propia aquí).
+  /* LOS MÓDULOS, como el menú actual del producto (dcode-finance,
+     src/lib/navegacion/modulos.ts, «navegación por módulos», la que viene por
+     defecto): siete entradas con sustantivos de negocio y, dentro de cada una,
+     sus pestañas. Las pantallas de la demo son las mismas de siempre; solo
+     cambia cómo se agrupan. Los tres módulos fiscales de la demo (impuestos,
+     registro fiscal y gestoría) van en Contabilidad, que es donde el producto
+     guarda lo fiscal. */
+  var MODULOS = [
+    { clave: 'inicio', titulo: 'Inicio', icono: 'dashboard', pestanas: [{ v: 'dashboard', e: 'Hoy' }] },
+    { clave: 'ventas', titulo: 'Ventas', icono: 'facturas', pestanas: [{ v: 'facturas', e: 'Facturas' }, { v: 'por-facturar', e: 'Por facturar' }, { v: 'presupuestos', e: 'Presupuestos' }, { v: 'pedidos', e: 'Pedidos' }, { v: 'albaranes', e: 'Albaranes' }, { v: 'clientes', e: 'Clientes' }, { v: 'cobros', e: 'Cobros' }] },
+    { clave: 'compras', titulo: 'Compras', icono: 'gastos', pestanas: [{ v: 'gastos', e: 'Gastos' }, { v: 'proveedores', e: 'Proveedores' }, { v: 'pagos', e: 'Pagos' }, { v: 'duplicados', e: 'Duplicados' }] },
+    { clave: 'tesoreria', titulo: 'Tesorería', icono: 'cobros', pestanas: [{ v: 'tesoreria', e: 'Posición' }] },
+    { clave: 'contabilidad', titulo: 'Contabilidad', icono: 'presupuestos', pestanas: [{ v: 'impuestos', e: 'Impuestos' }, { v: 'verifactu', e: 'Registro fiscal' }, { v: 'gestoria', e: 'Tu gestoría' }] },
+    { clave: 'analisis', titulo: 'Análisis', icono: 'objetivos', pestanas: [{ v: 'historico', e: 'Evolución' }, { v: 'radar', e: 'Radar' }, { v: 'objetivos', e: 'Objetivos' }, { v: 'proyectos', e: 'Proyectos' }, { v: 'ia', e: 'Pregunta a Finanzas' }] },
+    { clave: 'empresa', titulo: 'Empresa', icono: 'configuracion', pestanas: [{ v: 'configuracion', e: 'Configuración' }, { v: 'usuarios', e: 'Personas' }, { v: 'documentos', e: 'Documentos' }, { v: 'auditoria', e: 'Auditoría' }] }
+  ];
+  var GRUPOS_VIEJOS = ['Día a día', 'Negocio', 'Inteligencia', 'Administración'];
+  function moduloDe(vista) {
+    return MODULOS.filter(function (m) { return m.pestanas.some(function (p) { return p.v === vista; }); })[0] || MODULOS[0];
+  }
+
   var NAV_GROUPS = [
     { clave: 'dia', titulo: 'Día a día' },
     { clave: 'negocio', titulo: 'Negocio' },
@@ -146,6 +167,7 @@
       '<div class="fdemo-shell">' +
       '<div class="fdemo-topbar">' +
       '<button class="fdemo-topbar-menu-btn" type="button" data-role="menu-btn" aria-label="Abrir menu">' + MENU_ICON + '</button>' +
+      '<p class="fdemo-topbar-sec" data-role="seccion"></p>' +
       '<div class="fdemo-topbar-right">' +
       /* EL RECORRIDO. Si no lo toca nadie, la demo se recorre sola los
          módulos; en cuanto alguien interactúa, se para y manda el usuario.
@@ -170,6 +192,10 @@
       '</div>' +
       '<div class="fdemo-tour-bar" data-role="tour-bar" aria-hidden="true"><i></i></div>' +
       '</div>' +
+      /* Las pestañas del módulo, como PestanasModulo.tsx: dentro del módulo se
+         navega arriba; entre módulos, en el menú. Si el módulo tiene una sola
+         pestaña no se pinta: una pestaña sola no es una elección. */
+      '<nav class="fdemo-pestanas" data-role="pestanas" aria-label="Secciones del módulo" hidden></nav>' +
       // La marca DEMO va en las DOS modalidades. Antes solo la llevaba la
       // pantalla completa, así que la instancia empotrada en la Home enseñaba
       // importes, clientes y vencimientos sin que nada visible dijera que son
@@ -243,29 +269,40 @@
         '</svg></span>' +
         '<div class="fdemo-brand-word"><span class="fdemo-brand-d">D-Code</span><span class="fdemo-brand-suffix">FINANCE</span></div>' +
         '</div>' +
-        '<div class="fdemo-nav-groups" data-role="nav-groups">' +
+        '<div class="fdemo-nav-groups fdemo-nav-mods" data-role="nav-groups">' +
         '<div class="fdemo-nav-indicator" data-role="nav-indicator"><span class="fdemo-nav-indicator-notch"></span></div>' +
-        NAV_GROUPS.map(function (g, gi) {
-          var entradas = NAV_ITEMS.filter(function (v) { return v.grupo === g.clave; });
-          if (!entradas.length) return '';
-          return (gi > 0 ? '<div class="fdemo-nav-divider"></div>' : '') +
-            '<p class="fdemo-nav-group-title">' + esc(g.titulo) + '</p>' +
-            '<div class="fdemo-nav-group-items">' +
-            entradas.map(function (v) {
-              return '<a href="#" class="fdemo-nav-item fdemo-nav-item--icon" data-role="nav" data-view="' + v.id + '">' +
-                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[v.icono] || NAV_ICONS[v.id] || '') + '</svg>' +
-                esc(v.label) + '</a>';
-            }).join('') +
+        MODULOS.map(function (m) {
+          return '<div class="fdemo-mod" data-mod="' + m.clave + '">' +
+            '<a href="#' + m.pestanas[0].v + '" class="fdemo-nav-item fdemo-nav-item--icon fdemo-mod-a" data-role="nav" data-view="' + m.pestanas[0].v + '" data-mod="' + m.clave + '">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="fdemo-nav-icon" aria-hidden="true">' + (NAV_ICONS[m.icono] || '') + '</svg>' +
+            esc(m.titulo) + '</a>' +
+            (m.pestanas.length > 1
+              ? '<div class="fdemo-mod-sub">' + m.pestanas.map(function (p) {
+                  return '<a href="#' + p.v + '" class="fdemo-mod-t" data-role="nav" data-view="' + p.v + '">' + esc(p.e) + '</a>';
+                }).join('') + '</div>'
+              : '') +
             '</div>';
         }).join('') +
         '</div>';
       navIndicatorEl = sidebarEl.querySelector('[data-role="nav-indicator"]');
     }
 
+    var pestanasEl = root.querySelector('[data-role="pestanas"]');
+    var seccionEl = root.querySelector('[data-role="seccion"]');
     function setActiveNav(viewId) {
-      sidebarEl.querySelectorAll('[data-role="nav"]').forEach(function (el) {
-        var active = el.getAttribute('data-view') === viewId;
+      var mod = moduloDe(viewId);
+      sidebarEl.querySelectorAll('.fdemo-mod').forEach(function (el) {
+        el.classList.toggle('is-open', el.getAttribute('data-mod') === mod.clave);
+      });
+      sidebarEl.querySelectorAll('.fdemo-mod-t').forEach(function (el) {
+        var aqui = el.getAttribute('data-view') === viewId;
+        el.classList.toggle('is-active', aqui);
+        if (aqui) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+      });
+      sidebarEl.querySelectorAll('.fdemo-mod-a').forEach(function (el) {
+        var active = el.getAttribute('data-mod') === mod.clave;
         el.classList.toggle('is-active', active);
+        if (active) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current');
         if (active && navIndicatorEl) {
           navIndicatorEl.style.transform = 'translateY(' + el.offsetTop + 'px)';
           navIndicatorEl.style.height = el.offsetHeight + 'px';
@@ -274,13 +311,43 @@
         // En un movil el menu es una tira horizontal: si el modulo activo se
         // queda fuera de la tira, nadie sabe donde esta. Se acerca solo, y sin
         // scrollIntoView, que arrastraria tambien la pagina.
+        var caja = el.parentNode;
         if (active && sidebarEl.scrollWidth > sidebarEl.clientWidth + 4) {
-          var izq = el.offsetLeft - 12;
-          var der = el.offsetLeft + el.offsetWidth + 12 - sidebarEl.clientWidth;
+          var izq = caja.offsetLeft - 12;
+          var der = caja.offsetLeft + caja.offsetWidth + 12 - sidebarEl.clientWidth;
           if (izq < sidebarEl.scrollLeft) sidebarEl.scrollLeft = izq;
           else if (der > sidebarEl.scrollLeft) sidebarEl.scrollLeft = der;
         }
       });
+      if (seccionEl) {
+        var pe = mod.pestanas.filter(function (p) { return p.v === viewId; })[0];
+        seccionEl.textContent = mod.pestanas.length > 1 && pe ? mod.titulo + ' · ' + pe.e : mod.titulo;
+      }
+      if (pestanasEl) {
+        if (mod.pestanas.length > 1) {
+          pestanasEl.hidden = false;
+          pestanasEl.innerHTML = '<ul>' + mod.pestanas.map(function (p) {
+            var aqui = p.v === viewId;
+            return '<li><a href="#' + p.v + '" class="fdemo-pestana' + (aqui ? ' is-active' : '') + '" data-role="nav" data-view="' + p.v + '"' + (aqui ? ' aria-current="page"' : '') + '>' + esc(p.e) + '</a></li>';
+          }).join('') + '</ul>';
+          var act = pestanasEl.querySelector('.is-active'), ul = pestanasEl.firstChild;
+          if (act && ul.scrollWidth > ul.clientWidth + 4) {
+            var i2 = act.parentNode.offsetLeft - 16, d2 = act.parentNode.offsetLeft + act.parentNode.offsetWidth + 16 - ul.clientWidth;
+            if (i2 < ul.scrollLeft) ul.scrollLeft = i2; else if (d2 > ul.scrollLeft) ul.scrollLeft = d2;
+          }
+        } else { pestanasEl.hidden = true; pestanasEl.innerHTML = ''; }
+      }
+    }
+    /* Adónde va la mano del recorrido cuando el paso es «ir a una pantalla»:
+       a su pestaña si se ve (arriba o en el menú), y si no, al módulo que la
+       contiene. Una pestaña escondida mide cero y la mano no llegaría. */
+    function destinoDeVista(v) {
+      var cands = ['.fdemo-pestanas [data-view="' + v + '"]', '.fdemo-mod-t[data-view="' + v + '"]', '.fdemo-mod-a[data-mod="' + moduloDe(v).clave + '"]'];
+      for (var k = 0; k < cands.length; k++) {
+        var el = root.querySelector(cands[k]);
+        if (el && el.getClientRects().length) return cands[k];
+      }
+      return cands[2];
     }
     function closeMobileMenu() { sidebarEl.classList.remove('is-open'); overlayEl.classList.remove('is-open'); }
 
@@ -333,6 +400,11 @@
          se ha recargado. Solo el cambio de pantalla vuelve arriba. */
       var y = mainEl.scrollTop;
       contentEl.innerHTML = renderer(r.id);
+      /* Las cabeceras de pantalla decían el GRUPO del menú viejo («Día a día»,
+         «Negocio»…). Con el menú por módulos eso ya no existe: la cabecera
+         dice el módulo, que es lo que la persona ve seleccionado a la izquierda. */
+      var cab = contentEl.querySelector('.fdemo-eyebrow');
+      if (cab && GRUPOS_VIEJOS.indexOf(cab.textContent) !== -1) cab.textContent = moduloDe(r.view).titulo;
       etiquetarTablas();
       ordenaTablas();
       pintaCampana();
@@ -514,7 +586,7 @@
         { pregunta: '¿Quién me debe?', respuesta: EUR(s.totalPendiente), tono: s.totalVencido > 0 ? 'aviso' : 'neutro',
           nota: s.totalVencido > 0 ? 'De eso, ' + EUR(s.totalVencido) + ' ya está vencido.' : null, origen: 'facturas emitidas y todavía sin cobrar del todo', vista: 'cobros' },
         { pregunta: '¿Qué debo?', respuesta: EUR(deboTotal), tono: pagosVencidos.length ? 'aviso' : 'neutro',
-          nota: sinPagar.length ? plural(sinPagar.length, 'gasto', 'gastos') + ' sin pagar' + (pagosVencidos.length ? ', ' + pagosVencidos.length + ' vencidos.' : '.') : null,
+          nota: sinPagar.length ? plural(sinPagar.length, 'gasto sin pagar', 'gastos sin pagar') + (pagosVencidos.length ? ', ' + pagosVencidos.length + ' vencidos.' : '.') : null,
           origen: 'gastos registrados y todavía sin pago', vista: 'pagos' },
         { pregunta: '¿Hay algo bloqueado con la AEAT?', respuesta: null, motivo: 'En esta demo VERI*FACTU está desactivado: no se genera ningún registro ni se envía nada.',
           origen: 'registros VERI*FACTU rechazados o con error de envío' },
@@ -4081,7 +4153,7 @@
                   : paso.hace === 'remesa' ? '[data-action="doc-op"][data-k="remesa"]'
                   : paso.hace === 'alta' ? '[data-action="alta"]'
                   : paso.hace === 'abrir' ? '[data-action="adjuntar"]'
-                  : '[data-role="nav"][data-view="' + paso.v + '"]';
+                  : destinoDeVista(paso.v);
       llevaLaManoA(destino, aplica);
     }
 

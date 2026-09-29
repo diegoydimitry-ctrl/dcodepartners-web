@@ -77,6 +77,8 @@ cambia("/cuota mensual/.test(", "/cuota mensual|\\u2014 monthly/.test(");
 cambia("estado === 'cliente'", "estado === 'client'", 4);
 // Las retenciones se estiman sobre las categorías de servicios profesionales.
 cambia("/profesional|Subcontrat/i.test(", "/profesional|Subcontrat|Professional|Subcontract/i.test(");
+// Los presupuestos aceptados de la bandeja de Inicio: el estado inglés es «Accepted».
+cambia("/acept/i.test(p.estado", "/acept|accept/i.test(p.estado");
 // El origen de cada documento archivado.
 cambia("/asistente|PDF|Foto/.test(", "/asistente|PDF|Foto|assistant|Photo/.test(");
 // Los meses: en la ficha del cliente, en la curva de caja y en «Periodo: …».

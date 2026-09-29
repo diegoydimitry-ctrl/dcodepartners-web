@@ -2350,4 +2350,98 @@ html[data-theme="dark"] .fdemo-scope{
   .fdemo-hoy-pt{ display:none; }
   .fdemo-hoy-c{ flex-basis:100%; }
 }
-.fdemo-topbar-exit{ align-self:center; height:auto; }
+.fdemo-topbar-exit{ align-self:center; height:auto; box-sizing:border-box; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LA NAVEGACIÓN POR MÓDULOS — la del producto (SidebarModulos.tsx y
+   PestanasModulo.tsx de dcode-finance, septiembre de 2026)
+   ═══════════════════════════════════════════════════════════════════════
+   Siete módulos en el menú; el módulo en el que estás se abre y enseña sus
+   pestañas, los demás se quedan en una línea. Arriba del contenido, las
+   mismas pestañas en una tira: dentro del módulo se navega arriba, entre
+   módulos en el menú. Medidas copiadas del producto: fila de módulo de 38 px,
+   pestañas del menú de 36 px a 13 px, sangría de 26 px con un filete.      */
+.fdemo-scope{
+  --dc-nav-activa: linear-gradient(90deg, color-mix(in srgb, var(--dc-accent) 12%, transparent), color-mix(in srgb, var(--dc-accent) 3%, transparent));
+}
+html[data-theme="dark"] .fdemo-scope{
+  --dc-nav-activa: linear-gradient(90deg, color-mix(in srgb, var(--dc-accent) 15%, transparent), color-mix(in srgb, var(--dc-accent) 2%, transparent));
+}
+.fdemo-nav-mods{ display:flex; flex-direction:column; gap:3px; padding-top:12px; }
+.fdemo-mod{ display:flex; flex-direction:column; }
+.fdemo-nav-item.fdemo-mod-a{ min-height:38px; padding:0 12px; gap:12px; font-size:.875rem; border-radius:var(--dc-r-md, 10px); }
+.fdemo-nav-item.fdemo-mod-a.is-active{ background:var(--dc-nav-activa); }
+.fdemo-mod-sub{
+  display:none; flex-direction:column; gap:1px;
+  margin:4px 0 4px 26px; padding-left:12px;
+  border-left:1px solid var(--dc-border);
+}
+.fdemo-mod.is-open .fdemo-mod-sub{ display:flex; }
+.fdemo-mod-t{
+  display:flex; align-items:center; min-height:36px; padding:0 8px;
+  border-radius:var(--dc-r-sm, 8px);
+  font-size:13px; line-height:1.3; color:var(--dc-text-muted); text-decoration:none;
+  transition:background-color .15s, color .15s;
+}
+.fdemo-mod-t:hover{ background:var(--dc-surface-2); color:var(--dc-text); }
+.fdemo-mod-t.is-active{ font-weight:600; color:var(--dc-text); }
+/* El indicador deslizante sobra: el módulo activo ya lleva su tinte y su
+   marca de 2 px, y al abrirse las pestañas el indicador se quedaría atrás. */
+.fdemo-nav-mods .fdemo-nav-indicator{ display:none; }
+
+.fdemo-pestanas{
+  flex-shrink:0;
+  border-bottom:1px solid var(--dc-border);
+  background:color-mix(in srgb, var(--dc-surface) 60%, transparent);
+}
+.fdemo-pestanas[hidden]{ display:none; }
+.fdemo-pestanas ul{
+  display:flex; gap:4px; margin:0; padding:6px 12px; list-style:none;
+  overflow-x:auto; scrollbar-width:none;
+}
+.fdemo-pestanas ul::-webkit-scrollbar{ display:none; }
+.fdemo-pestanas li{ flex-shrink:0; }
+.fdemo-pestana{
+  display:flex; align-items:center; min-height:36px; padding:0 12px;
+  border-radius:var(--dc-r-md, 10px);
+  font-size:.875rem; font-weight:500; white-space:nowrap;
+  color:var(--dc-text-muted); text-decoration:none;
+  transition:background-color .15s, color .15s;
+}
+.fdemo-pestana:hover{ background:var(--dc-surface-2); color:var(--dc-text); }
+.fdemo-pestana.is-active{
+  background:var(--dc-surface-2); color:var(--dc-text); font-weight:600;
+  box-shadow:inset 0 -2px 0 var(--dc-accent);
+}
+@media (min-width:861px){
+  .fdemo-app.is-fullpage .fdemo-pestanas ul{ padding-inline:32px; }
+}
+@media (max-width:860px){
+  .fdemo-pestana{ min-height:44px; }
+  /* La tira de módulos del teléfono (versión empotrada) es una fila: los
+     módulos van en línea y sus pestañas viven en la tira de arriba. */
+  .fdemo-app.is-embedded .fdemo-mod{ flex:0 0 auto; }
+  .fdemo-app.is-embedded .fdemo-mod-sub{ display:none !important; }
+  .fdemo-app.is-embedded .fdemo-sidebar{ order:2; }
+  .fdemo-app.is-embedded .fdemo-pestanas{ order:3; }
+  .fdemo-app.is-embedded .fdemo-demo-banner{ order:4; }
+  .fdemo-app.is-embedded .fdemo-main{ order:5; }
+}
+
+/* En el teléfono, sin menú a la vista, la barra dice dónde estás: módulo ·
+   pestaña, como la Topbar del producto. */
+.fdemo-topbar-sec{ display:none; }
+@media (max-width:860px){
+  .fdemo-app.is-fullpage .fdemo-topbar-sec{
+    display:block; min-width:0; flex:1 1 auto; margin:0 4px 0 0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    font-family:var(--dc-font-display); font-size:15px; font-weight:600; color:var(--dc-text);
+  }
+}
+
+/* En pantalla completa el recorrido automático no existe (solo corre en la
+   demo empotrada), así que su indicador en la barra de un teléfono solo
+   quitaba sitio al título de la sección. */
+@media (max-width:860px){
+  .fdemo-app.is-fullpage .fdemo-tour{ display:none; }
+}
