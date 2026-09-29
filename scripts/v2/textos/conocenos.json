@@ -1,0 +1,15 @@
+{
+  "archivo": "conocenos.html",
+  "cambios": [
+    [">Quién construye tu sistema, y cómo piensa.<", ">Así pensamos quienes construimos tu sistema.<"],
+    [">Esto es lo que creemos, cómo trabajamos, y quién está detrás — en ese orden.<", ">Aquí te contamos lo que creemos, cómo trabajamos y quién está detrás, en ese orden.<"],
+    [">Una herramienta suelta resuelve una tarea y deja el resto igual: alguien tiene que seguir conectando los puntos. Construimos sistemas completos,", ">Una herramienta suelta resuelve una tarea y deja el resto igual, así que alguien tiene que seguir conectando los puntos. Nosotros construimos sistemas completos,"],
+    ["<strong>Resultados antes que promesas</strong> ", "<strong>Resultados antes que promesas.</strong> "],
+    ["<strong>Confidencialidad como norma</strong> ", "<strong>La confidencialidad es la norma.</strong> "],
+    ["<strong>Simplicidad técnica</strong> ", "<strong>Preferimos la simplicidad técnica.</strong> "],
+    [">Dos fundadores, cada uno al frente de una mitad del sistema.<", ">Somos dos fundadores y cada uno lleva una mitad del sistema.<"],
+    ["Especializado en Inteligencia Artificial aplicada a negocio y crecimiento medible: cómo traducir tecnología en resultados concretos para cada cliente.", "Está especializado en inteligencia artificial aplicada al negocio y al crecimiento medible, es decir, en convertir la tecnología en resultados concretos para cada cliente."],
+    [">Al frente de la arquitectura de los sistemas de automatización. Especializado en IA aplicada a procesos operativos y atención al cliente: cómo se construye un sistema que funciona de verdad en producción.<", ">Está al frente de la arquitectura de los sistemas de automatización. Está especializado en IA aplicada a procesos operativos y atención al cliente, y en construir sistemas que funcionan de verdad en el día a día de una empresa.<"],
+    [">Una llamada de 30 minutos basta para saber si podemos ayudarte y qué construiríamos y por dónde empezaríamos.<", ">Una llamada de 30 minutos basta para saber si podemos ayudarte, qué construiríamos y por dónde empezaríamos.<"]
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "archivo": "departamentos/administracion.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Representación simplificada del sistema — no son datos de un cliente real.<",
+      ">Es una representación simplificada del sistema y no usa datos de ningún cliente real.<"
+    ],
+    [
+      ">Mira cuatro sistemas funcionando, con datos inventados ",
+      ">Ver cuatro sistemas funcionando con datos inventados "
+    ],
+    [
+      ">Tu empresa vigilada, protegida y en orden.<",
+      ">Mantenemos tu empresa vigilada, protegida y en orden.<"
+    ],
+    [
+      "Hoy es la infraestructura que usamos para vigilarnos a nosotros mismos; extenderla a los sistemas de un cliente es una configuración concreta, no algo que ya esté desplegado fuera de D-Code.",
+      "Hoy la usamos para vigilar nuestros propios sistemas. Para aplicarla a los de un cliente hay que configurarla expresamente, porque todavía no está desplegada fuera de D-Code."
+    ],
+    [
+      ">Un panel que se organiza solo, no una bandeja de entrada que hay que vaciar a mano.<",
+      ">El panel se ordena solo, sin bandejas que vaciar a mano.<"
+    ],
+    [
+      "No en semanas — el propio sistema avisa en cuanto algo deja de funcionar.",
+      "El propio sistema avisa en cuanto algo deja de funcionar, sin esperar semanas."
+    ],
+    [
+      "Un punto de recuperación de datos disponible en todo momento.",
+      "Tienes un punto de recuperación de datos disponible en todo momento."
+    ],
+    [
+      "Solo necesitas tu estructura de carpetas definida — nada más.",
+      "Solo necesitas tener definida tu estructura de carpetas."
+    ],
+    [
+      "Pasa el ratón — o el foco del teclado — por una casilla para ver el detalle. Ejemplo ilustrativo, no son datos de un cliente real.",
+      "Pasa el ratón, o el foco del teclado, por una casilla para ver el detalle. Es un ejemplo ilustrativo y no usa datos de ningún cliente real."
+    ]
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "archivo": "servicios/sistemas-a-medida.html",
+  "cambios": [
+    [
+      ">Cuando lo que necesitas no se compra hecho.<",
+      ">Construimos lo que necesitas y no se vende hecho.<"
+    ],
+    [
+      "No una herramienta más: el sitio por donde pasa todo.",
+      "No es una herramienta más, sino el sitio por donde pasa todo."
+    ],
+    [
+      "<p class=\"pl-t\">Se empieza midiendo</p>",
+      "<p class=\"pl-t\">Empezamos midiendo</p>"
+    ],
+    [
+      ">Cuántas veces una persona hace de puente entre dos programas. Esa cifra es la que decide qué se construye primero.<",
+      ">Medimos cuántas veces una persona tiene que pasar datos a mano de un programa a otro. Esa cifra decide qué se construye primero.<"
+    ],
+    [
+      "<p class=\"pl-t\">Alcance y precio antes de tocar nada</p>",
+      "<p class=\"pl-t\">Fijamos alcance y precio antes de tocar nada</p>"
+    ],
+    [
+      ">Por escrito. Si cambia durante el camino, se vuelve a escribir.<",
+      ">Te los damos por escrito. Si algo cambia por el camino, también lo dejamos por escrito.<"
+    ],
+    [
+      "<p class=\"pl-t\">Por partes</p>",
+      "<p class=\"pl-t\">Lo construimos por partes</p>"
+    ],
+    [
+      "<p class=\"pl-t\">Tuyo al terminar</p>",
+      "<p class=\"pl-t\">Al terminar, todo es tuyo</p>"
+    ],
+    [
+      ">El código, los datos y los accesos, a tu nombre. Sin candado.<",
+      ">El código, los datos y los accesos quedan a tu nombre, sin nada que te ate a nosotros.<"
+    ],
+    [
+      ">Cuatro sistemas funcionando<",
+      ">Hay cuatro sistemas funcionando que puedes probar.<"
+    ],
+    [
+      ">En la portada hay cuatro que puedes abrir ahora mismo: finanzas, comercial, operaciones y atención. Empresa ficticia, sistema de verdad.<",
+      ">Están en la portada y puedes abrirlos ahora mismo: finanzas, comercial, operaciones y atención. La empresa es ficticia, pero el sistema es de verdad.<"
+    ],
+    [
+      ">Las otras cuatro cosas que construimos.<",
+      ">También construimos estas otras cuatro cosas.<"
+    ],
+    [
+      "<span class=\"fe-d\">Contestan con tus datos, no con lo que se inventen.</span>",
+      "<span class=\"fe-d\">Nuestros agentes contestan con tus datos, sin inventar.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Una web que habla con tus sistemas, no un folleto.</span>",
+      "<span class=\"fe-d\">Hacemos webs que trabajan con tus sistemas, no folletos.</span>"
+    ]
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "archivo": "servicios/automatizaciones.html",
+  "cambios": [
+    [
+      ">Una tarea que alguien hace todos los martes pasa a ejecutarse sola, con su control de errores y su aviso cuando algo no sale. Ni magia ni cajas negras: se ve qué hizo, cuándo y con qué datos.<",
+      ">Una tarea que alguien hace todos los martes pasa a ejecutarse sola, con control de errores y un aviso cuando algo falla. No hay cajas negras: siempre puedes ver qué hizo, cuándo y con qué datos.<"
+    ],
+    [
+      "<p class=\"pl-t\">Una tarea, un proceso o un flujo con IA</p>",
+      "<p class=\"pl-t\">Automatizamos tareas, procesos y flujos con IA</p>"
+    ],
+    [
+      ">Desde «cuando entre una factura, guárdala aquí» hasta un proceso entero encadenado.<",
+      ">Puede ser algo tan simple como «cuando entre una factura, guárdala aquí» o un proceso entero con varios pasos encadenados.<"
+    ],
+    [
+      "<p class=\"pl-t\">Con tus herramientas</p>",
+      "<p class=\"pl-t\">Funciona con las herramientas que ya usas</p>"
+    ],
+    [
+      ">Las que ya usáis. No hay que cambiar de programa para automatizar lo que hace ese programa.<",
+      ">No tienes que cambiar de programa para automatizar lo que hace ese programa.<"
+    ],
+    [
+      "<p class=\"pl-t\">Avisa cuando se rompe</p>",
+      "<p class=\"pl-t\">Te avisa si algo se rompe</p>"
+    ],
+    [
+      ">Y se rompe: el día que el otro cambia su API. Por eso el mantenimiento va aparte y se dice.<",
+      ">Tarde o temprano pasa, por ejemplo el día que otro programa cambia su forma de conectarse. Por eso el mantenimiento es un servicio aparte y te lo decimos desde el principio.<"
+    ],
+    [
+      "<p class=\"pl-t\">Queda documentado</p>",
+      "<p class=\"pl-t\">Cada automatización queda documentada</p>"
+    ],
+    [
+      ">Qué hace, qué toca y cómo apagarlo. Para que no dependa de que nos cojas el teléfono.<",
+      ">Explicamos por escrito qué hace, qué toca y cómo apagarla, para que no dependas de localizarnos por teléfono.<"
+    ],
+    [
+      ">Las otras cuatro cosas que construimos.<",
+      ">También construimos estas otras cuatro cosas.<"
+    ],
+    [
+      "<span class=\"fe-d\">Contestan con tus datos, no con lo que se inventen.</span>",
+      "<span class=\"fe-d\">Nuestros agentes contestan con tus datos, sin inventar.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Cuando lo que necesitas no se compra hecho.</span>",
+      "<span class=\"fe-d\">Construimos lo que necesitas y no se vende hecho.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Una web que habla con tus sistemas, no un folleto.</span>",
+      "<span class=\"fe-d\">Hacemos webs que trabajan con tus sistemas, no folletos.</span>"
+    ],
+    [
+      ">Míralo en el sistema comercial<",
+      ">Puedes verlo en la demo del sistema comercial.<"
+    ]
+  ]
+}

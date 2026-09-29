@@ -1,0 +1,57 @@
+{
+  "archivo": "servicios/agentes-de-ia.html",
+  "cambios": [
+    [
+      ">Contestan con tus datos, no con lo que se inventen.<",
+      ">Nuestros agentes de IA contestan con tus datos, sin inventar.<"
+    ],
+    [
+      "<p class=\"pl-t\">Sin inventar</p>",
+      "<p class=\"pl-t\">No se inventan las respuestas</p>"
+    ],
+    [
+      ">Si la respuesta no está en tus datos, lo dice y escala. Un agente que improvisa cuesta más clientes de los que ahorra.<",
+      ">Si la respuesta no está en tus datos, el agente lo dice y pasa la conversación a una persona. Un agente que improvisa te hace perder más clientes de los que te ahorra.<"
+    ],
+    [
+      "<p class=\"pl-t\">Escala con el contexto entero</p>",
+      "<p class=\"pl-t\">La persona recibe toda la conversación</p>"
+    ],
+    [
+      ">Quien recoge la conversación ve todo lo anterior, no un «hola, ¿en qué puedo ayudar?».<",
+      ">Quien atiende después ve todo lo que se habló antes, así que el cliente no tiene que empezar de cero.<"
+    ],
+    [
+      "<p class=\"pl-t\">Cuota fija</p>",
+      "<p class=\"pl-t\">Pagas una cuota fija</p>"
+    ],
+    [
+      ">No se paga por conversación. Si se usa mucho, mejor: para eso está.<",
+      ">No pagas por cada conversación. Si el agente se usa mucho, mejor, porque para eso está.<"
+    ],
+    [
+      "<p class=\"pl-t\">Queda el registro</p>",
+      "<p class=\"pl-t\">Todo queda registrado</p>"
+    ],
+    [
+      ">Cada respuesta, con su hora y su fuente. Se puede auditar y se puede corregir.<",
+      ">Cada respuesta se guarda con su hora y la fuente de la que salió, para que puedas revisarla y corregirla.<"
+    ],
+    [
+      ">El de esta web, sin ir a ninguna parte<",
+      ">Prueba el asistente de esta misma web.<"
+    ],
+    [
+      ">Las otras cuatro cosas que construimos.<",
+      ">También construimos estas otras cuatro cosas.<"
+    ],
+    [
+      "<span class=\"fe-d\">Cuando lo que necesitas no se compra hecho.</span>",
+      "<span class=\"fe-d\">Construimos lo que necesitas y no se vende hecho.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Una web que habla con tus sistemas, no un folleto.</span>",
+      "<span class=\"fe-d\">Hacemos webs que trabajan con tus sistemas, no folletos.</span>"
+    ]
+  ]
+}

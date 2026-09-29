@@ -1,0 +1,26 @@
+{
+  "archivo": "faq.html",
+  "cambios": [
+    ["Todo dentro de un modelo de trabajo que puedes conocer en ","Puedes ver cómo trabajamos en "],
+    ["¿Qué os diferencia de una agencia tradicional?","¿En qué se diferencia D-Code de una agencia tradicional?"],
+    ["¿Con qué tipo de empresas trabajáis?","¿Con qué tipo de empresas trabaja D-Code?"],
+    ["¿Puedo ver algo funcionando antes de hablar con vosotros?","¿Puedo ver algo funcionando antes de hablar con D-Code?"],
+    ["Se usan solos y, en cuanto tocas algo, los llevas tú.","Funcionan solos y, en cuanto tocas algo, pasas a manejarlos tú."],
+    [" en treinta segundos para ver dónde se os va el tiempo."," en treinta segundos para ver dónde pierde tiempo tu empresa."],
+    ["¿Qué procesos podéis automatizar?","¿Qué procesos se pueden automatizar?"],
+    ["Gestión documental, reporting, seguimiento comercial, facturación, onboarding de clientes y, en general, cualquier tarea repetitiva con reglas claras.","Se puede automatizar la gestión documental, los informes, el seguimiento comercial, la facturación, el alta de clientes nuevos y, en general, cualquier tarea repetitiva con reglas claras."],
+    ["¿Necesito conocimientos técnicos para trabajar con vosotros?","¿Necesito conocimientos técnicos para trabajar con D-Code?"],
+    ["¿Qué herramientas utilizáis?","¿Qué herramientas utiliza D-Code?"],
+    ["No forzamos el mismo stack para todos los clientes.","No imponemos las mismas herramientas a todos los clientes."],
+    ["¿También creáis o mejoráis páginas web?","¿D-Code también crea o mejora páginas web?"],
+    ["la diseñamos o la mejoramos nosotros mismos, pensada desde el principio para conectarse con el resto de tu sistema — CRM, automatizaciones y agentes de IA incluidos.","la diseñamos o la mejoramos nosotros mismos. La pensamos desde el principio para que se conecte con el resto de tu sistema, incluidos el CRM, las automatizaciones y los agentes de IA."],
+    ["La gestión de redes sociales y otros canales la abordamos del mismo modo: mediante automatización con IA, no como creación de contenido manual.","Las redes sociales y otros canales los gestionamos igual, con automatización e inteligencia artificial en lugar de crear el contenido a mano."],
+    ["¿Podéis integrar la IA con mi CRM o ERP?","¿Se puede conectar la IA con mi CRM o ERP?"],
+    ["¿Cómo medís los resultados?","¿Cómo se miden los resultados?"],
+    ["Qué se mide se decide contigo antes de construir nada.","Lo que se mide lo decidimos contigo antes de construir nada."],
+    ["Lo revisamos contigo contra lo que acordamos medir y lo ajustamos. Y no hay permanencia que te obligue a continuar.","Lo revisamos contigo, comparándolo con lo que acordamos medir, y lo ajustamos. Además, no hay permanencia que te obligue a continuar."],
+    ["Los sistemas que implementamos en tu operativa son tuyos; nuestro papel es diseñarlos,","Los sistemas que implementamos en tu empresa son tuyos. Nuestro papel es diseñarlos,"],
+    ["¿Firmáis acuerdo de confidencialidad (NDA)?","¿D-Code firma acuerdos de confidencialidad (NDA)?"],
+    ["Puedes ver el detalle en Garantías y Proceso.","Puedes ver el detalle en Garantías y proceso."]
+  ]
+}

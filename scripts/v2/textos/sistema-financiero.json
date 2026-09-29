@@ -1,0 +1,421 @@
+{
+  "archivo": "sistema-financiero.html",
+  "cambios": [
+    [
+      ">Facturas, cobros, gastos y proyectos en el mismo sitio — y algo que lo lee y te contesta.<",
+      ">Reúne tus facturas, cobros, gastos y proyectos en un solo sitio, y te responde cuando le preguntas por ellos.<"
+    ],
+    [
+      "href=\"#demo\">Probarla aquí mismo",
+      "href=\"#demo\">Probar la demo aquí mismo"
+    ],
+    [
+      ">Tu facturación, tus cobros y tus gastos en un solo sitio, con el registro VERI*FACTU al día.<",
+      ">Es un solo sitio para tu facturación, tus cobros y tus gastos, con el registro VERI*FACTU al día.<"
+    ],
+    [
+      ">El dinero deja de depender de que alguien se acuerde.<",
+      ">Facturar, cobrar y pagar dejan de depender de que alguien se acuerde.<"
+    ],
+    [
+      ">Soltarle un PDF con veinte facturas y que las dé de alta. Preguntarle quién te debe.<",
+      ">Puedes darle un PDF con veinte facturas para que las dé de alta, o preguntarle quién te debe.<"
+    ],
+    [
+      ">Pruébalo: suelta las facturas.<",
+      ">Prueba tú mismo cómo registra las facturas.<"
+    ],
+    [
+      ">Datos inventados. Nada está conectado a un sistema real.<",
+      ">Los datos son inventados y nada está conectado a un sistema real.<"
+    ],
+    [
+      "id=\"h-mas\">Más detalle</h2><p class=\"lead\">Solo si lo necesitas.<",
+      "id=\"h-mas\">Aquí tienes el detalle completo.</h2><p class=\"lead\">Cada apartado se abre por separado, para que leas solo lo que te interese.<"
+    ],
+    [
+      "<strong>Se factura solo</strong></p><div class=\"punto-d\">Desde el presupuesto aceptado o desde el proyecto, con numeración correlativa y PDF.<",
+      "<strong>Las facturas se hacen solas</strong></p><div class=\"punto-d\">Se generan desde el presupuesto aceptado o desde el proyecto, con numeración correlativa y su PDF.<"
+    ],
+    [
+      "<strong>Se cobra antes</strong></p><div class=\"punto-d\">Los recordatorios escalan por su cuenta y el pendiente se ve por antig",
+      "<strong>Cobras antes</strong></p><div class=\"punto-d\">Los recordatorios escalan por su cuenta y ves lo pendiente ordenado por antig"
+    ],
+    [
+      "<strong>El gasto no sorprende</strong></p><div class=\"punto-d\">Control por categoría y aviso al superar el presupuesto del mes.<",
+      "<strong>Los gastos no te sorprenden</strong></p><div class=\"punto-d\">Controlas el gasto por categoría y recibes un aviso cuando se supera el presupuesto del mes.<"
+    ],
+    [
+      "<p>Preparado para VERI*FACTU</p></div></details>",
+      "<p>D-Code Finance está preparado para VERI*FACTU.</p></div></details>"
+    ],
+    [
+      ">Cada factura, registrada y encadenada desde que se emite.<",
+      ">Cada factura queda registrada y encadenada desde que se emite.<"
+    ],
+    [
+      "desde la emisión: cada factura genera su registro, con una huella que enlaza con la del anterior, y cada anulación deja el suyo. El siguiente paso es la remisión a la AEAT. Cuando esté probada, esta página lo dirá.",
+      "desde la emisión. Cada factura genera su registro, con una huella que enlaza con la del registro anterior, y cada anulación deja también el suyo. El siguiente paso es la remisión a la AEAT; cuando esté probada, lo diremos en esta página."
+    ],
+    [
+      ">Ilustración con datos ficticios y huellas SHA-256 reales. Cada registro guarda la huella del anterior: si alguien tocara uno, la cadena se rompería justo ahí.<",
+      ">Es una ilustración con datos ficticios, pero las huellas SHA-256 son reales. Cada registro guarda la huella del anterior, así que si alguien modificara uno, la cadena se rompería justo en ese punto.<"
+    ],
+    [
+      ">Registro, huella y cadena de cada factura, dentro del sistema.<",
+      ">Cada factura tiene su registro, su huella y su cadena dentro del sistema.<"
+    ],
+    [
+      ">Registros remitidos al entorno de pruebas de la AEAT, con sus respuestas revisadas.<",
+      ">Los registros se remiten al entorno de pruebas de la AEAT y se revisan sus respuestas.<"
+    ],
+    [
+      ">Remisión validada de extremo a extremo con la especificación oficial.<",
+      ">La remisión queda validada de principio a fin con la especificación oficial.<"
+    ],
+    [
+      ">Remisión real en producción y declaración responsable firmada.<",
+      ">La remisión a la AEAT funciona en producción y la declaración responsable está firmada.<"
+    ],
+    [
+      "<h3 class=\"h3\">Lo que ya hace</h3>",
+      "<h3 class=\"h3\">Esto es lo que ya hace</h3>"
+    ],
+    [
+      "<li><strong>Registro de alta</strong> al emitir cada factura, y <strong>de anulación</strong> al anularla.</li>",
+      "<li><strong>Crea un registro de alta</strong> al emitir cada factura, y <strong>uno de anulación</strong> al anularla.</li>"
+    ],
+    [
+      "<strong>Huella encadenada:</strong> cada registro guarda la del anterior,",
+      "<strong>Encadena las huellas:</strong> cada registro guarda la huella del anterior,"
+    ],
+    [
+      "<strong>Sin huecos silenciosos:</strong> si el registro",
+      "<strong>No deja huecos sin avisar:</strong> si el registro"
+    ],
+    [
+      "<strong>Comprobación de la cadena</strong> en pantalla: huecos, duplicados,",
+      "<strong>Comprueba la cadena</strong> en pantalla y detecta huecos, duplicados,"
+    ],
+    [
+      "<strong>Registro de eventos</strong> del sistema (art. 9.1 del RD 1007/2023), encadenados entre sí.",
+      "<strong>Registra los eventos</strong> del sistema (art. 9.1 del RD 1007/2023), también encadenados entre sí."
+    ],
+    [
+      "<h3 class=\"h3\">Lo que llega con los siguientes pasos</h3>",
+      "<h3 class=\"h3\">Esto es lo que llega en los siguientes pasos</h3>"
+    ],
+    [
+      "<li>La remisión de cada registro a la AEAT, primero en su entorno de pruebas.</li>",
+      "<li>Cada registro se remitirá a la AEAT, primero en su entorno de pruebas.</li>"
+    ],
+    [
+      "<li>La huella y el formato del registro, contrastados con la especificación oficial.</li>",
+      "<li>La huella y el formato del registro se contrastarán con la especificación oficial.</li>"
+    ],
+    [
+      "<li>El código QR de cotejo, impreso en cada factura.</li>",
+      "<li>Cada factura llevará impreso el código QR de cotejo.</li>"
+    ],
+    [
+      "<li>La remisión en producción y la declaración responsable del sistema, firmada.</li>",
+      "<li>La remisión funcionará en producción y la declaración responsable del sistema estará firmada.</li>"
+    ],
+    [
+      "<strong>Plazo de adaptación</strong> Sociedades, antes del 1 de enero de 2027; resto de obligados, antes del 1 de julio de 2027.",
+      "<strong>Plazo de adaptación.</strong> Las sociedades deben adaptarse antes del 1 de enero de 2027, y el resto de obligados, antes del 1 de julio de 2027."
+    ],
+    [
+      ">Este estado no se escribe a mano: sale de un registro",
+      ">Este estado no se escribe a mano. Sale de un registro"
+    ],
+    [
+      ">Catorce piezas que ya funcionan juntas.<",
+      ">El sistema tiene catorce piezas que ya funcionan juntas.<"
+    ],
+    [
+      ">La superficie del sistema<",
+      ">Lo que incluye el sistema<"
+    ],
+    [
+      ">No es una pantalla de facturas con gráficos alrededor: es el circuito completo",
+      ">No es una pantalla de facturas con gráficos alrededor. Es el circuito completo"
+    ],
+    [
+      ">Series y numeración correlativa, rectificativas enlazadas al original y PDF generado por el propio sistema.<",
+      ">Lleva series y numeración correlativa, enlaza cada rectificativa con su factura original y genera el PDF.<"
+    ],
+    [
+      ">Antigüedad de la deuda por tramos, recordatorios que escalan solos y cobros parciales sobre una misma factura.<",
+      ">Ordena lo que te deben por tramos de antigüedad, con recordatorios que escalan solos y cobros parciales sobre una misma factura.<"
+    ],
+    [
+      ">Alta desde documento con revisión humana, categorías, proveedores y control de presupuesto.<",
+      ">Los gastos se dan de alta desde el documento, con revisión de una persona, y se controlan por categoría, proveedor y presupuesto.<"
+    ],
+    [
+      ">Vencimientos, próximos pagos y estado de cada gasto hasta que queda saldado.<",
+      ">Muestra vencimientos, próximos pagos y el estado de cada gasto hasta que queda saldado.<"
+    ],
+    [
+      ">Del presupuesto aceptado a la factura, con cantidades pendientes y sin facturar dos veces lo mismo.<",
+      ">Pasa del presupuesto aceptado a la factura, controla lo que queda pendiente y evita facturar dos veces lo mismo.<"
+    ],
+    [
+      ">Conversión entre documentos manteniendo qué queda pendiente en cada línea.<",
+      ">Convierte un documento en otro y mantiene lo que queda pendiente en cada línea.<"
+    ],
+    [
+      ">Rentabilidad real por proyecto, devengada y de caja, no solo facturación.<",
+      ">Calcula la rentabilidad real de cada proyecto, devengada y de caja, no solo lo facturado.<"
+    ],
+    [
+      ">Saldo del periodo con cobros previstos y pagos previstos sobre la misma línea de tiempo.<",
+      ">Muestra el saldo del periodo con los cobros y los pagos previstos sobre la misma línea de tiempo.<"
+    ],
+    [
+      ">Plantillas de facturación periódica y control de qué periodos ya se han emitido.<",
+      ">Usa plantillas para la facturación periódica y controla qué periodos ya se han emitido.<"
+    ],
+    [
+      ">Detección de anomalías explicables: gastos nuevos, desaparecidos, importes fuera de rango, concentración.<",
+      ">Detecta anomalías y explica cada una: gastos nuevos o que desaparecen, importes fuera de rango y concentración.<"
+    ],
+    [
+      ">Subida y descarga mediadas por la aplicación, con registro de cada acceso.<",
+      ">Los documentos se suben y se descargan siempre a través de la aplicación, que registra cada acceso.<"
+    ],
+    [
+      ">Preguntas en lenguaje natural sobre los datos, respondidas citando de dónde sale cada cifra.<",
+      ">Le preguntas por tus datos con tus propias palabras y te responde citando de dónde sale cada cifra.<"
+    ],
+    [
+      ">Un solo buscador sobre facturas, gastos, clientes, proveedores, presupuestos y proyectos.<",
+      ">Un solo buscador encuentra facturas, gastos, clientes, proveedores, presupuestos y proyectos.<"
+    ],
+    [
+      ">Historial de lo que ha pasado en cada factura y cada gasto, con quién y cuándo.<",
+      ">Guarda el historial de cada factura y cada gasto: qué ha pasado, quién lo hizo y cuándo.<"
+    ],
+    [
+      "<p>Conciliación bancaria · Próximamente</p>",
+      "<p>La conciliación bancaria llegará próximamente.</p>"
+    ],
+    [
+      ">El extracto del banco, cruzado con lo que ya tienes.<",
+      ">El extracto del banco se cruzará con lo que ya tienes.<"
+    ],
+    [
+      ">Hoy, saber qué ha entrado de verdad en el banco obliga a repasar",
+      ">Hoy, para saber qué ha entrado de verdad en el banco hay que repasar"
+    ],
+    [
+      "<li>Y Pregunta a Finanzas podrá decirte",
+      "<li>Pregunta a Finanzas también podrá decirte"
+    ],
+    [
+      ">Todavía no está en el sistema: es la siguiente pieza de D-Code Finance. Cuando cambie de estado, esta página lo dirá, y los planes también.<",
+      ">Todavía no está en el sistema, porque es la siguiente pieza de D-Code Finance. Cuando cambie de estado, lo diremos en esta página y en los planes.<"
+    ],
+    [
+      "<p>Extracto · septiembre 3 cuadran · 2 para revisar</p>",
+      "<p>Extracto de septiembre: 3 movimientos cuadran y 2 quedan para revisar.</p>"
+    ],
+    [
+      "<p>Así funcionará · ilustración con datos ficticios.</p>",
+      "<p>Así funcionará. Es una ilustración con datos ficticios.</p>"
+    ],
+    [
+      ">El mismo sistema. Cambia cu&#225;nto trabaja por ti.<",
+      ">Es el mismo sistema, pero cambia cuánto trabaja por ti.<"
+    ],
+    [
+      ">El sistema financiero sobre tus datos, con su configuraci&#243;n est&#225;ndar.<",
+      ">Es el sistema financiero con tus datos y su configuración estándar.<"
+    ],
+    [
+      "en qu&#233; estado est&#225; cada factura: lo dice la pantalla.",
+      "en qué estado está cada factura, porque lo ves en pantalla."
+    ],
+    [
+      " Ver precio en Precios hasta 3 personas</p>",
+      " Es para equipos de hasta 3 personas.</p>"
+    ],
+    [
+      " Ver precio en Precios hasta 10 personas</p>",
+      " Es para equipos de hasta 10 personas.</p>"
+    ],
+    [
+      " Ver precio en Precios sin l&#237;mite de personas</p>",
+      " No tiene límite de personas.</p>"
+    ],
+    [
+      ">El precio, en Precios </a>",
+      ">Ver el precio de este plan</a>"
+    ],
+    [
+      "<li>En marcha en 1 d&#237;a, una vez validado el formulario, con tus datos anteriores dentro. No se empieza vac&#237;o.</li>",
+      "<li>Queda en marcha en 1 día, una vez validado el formulario, con tus datos anteriores dentro, así que no empiezas de cero.</li>"
+    ],
+    [
+      "<dd>Preparado para VERI*FACTU Registro de facturación encadenado e inalterable desde la emisión: cada factura",
+      "<dd>Preparado para VERI*FACTU. Lleva el registro de facturación encadenado e inalterable desde la emisión: cada factura"
+    ],
+    [
+      ">En qué punto está</a>",
+      ">Ver en qué punto está</a>"
+    ],
+    [
+      "<dd>Siete roles &#8212;Owner, Administrador, Direcci&#243;n, Finanzas, Operaciones, Solo lectura y Superadmin&#8212; con permiso por m&#243;dulo",
+      "<dd>Hay siete roles (Owner, Administrador, Dirección, Finanzas, Operaciones, Solo lectura y Superadmin), con permisos por módulo"
+    ],
+    [
+      "<dd>Cada empresa en su propio espacio, comprobado en la misma capa que lee la base de datos: una consulta no puede salir de &#233;l ni por error de programaci&#243;n.</dd>",
+      "<dd>Cada empresa tiene su propio espacio, y eso se comprueba en la misma capa que lee la base de datos. Así, una consulta no puede salir de él ni por un error de programación.</dd>"
+    ],
+    [
+      "<dd>Qui&#233;n hizo qu&#233;, cu&#225;ndo y sobre qu&#233; registro. Se mira desde",
+      "<dd>Queda registrado quién hizo qué, cuándo y sobre qué registro. Se consulta desde"
+    ],
+    [
+      "<p>Media hora, sin compromiso. Te decimos si te encaja o si no.</p>",
+      "<p>Es una conversación de media hora, sin compromiso, en la que te decimos si te encaja o no.</p>"
+    ],
+    [
+      ">Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus n&#250;meros.<",
+      ">Incluye todo lo anterior y, además, lee tus documentos y te contesta con tus números.<"
+    ],
+    [
+      "Dejas de teclear facturas de proveedor: se las sueltas y entran solas.",
+      "Dejas de teclear facturas de proveedor, porque se las pasas y se registran solas."
+    ],
+    [
+      "<strong>Le sueltas un documento y lo coloca.</strong> Un PDF con veinte facturas de proveedor dentro sale convertido en veinte facturas",
+      "<strong>Le das un documento y lo coloca en su sitio.</strong> Un PDF con veinte facturas de proveedor se convierte en veinte facturas"
+    ],
+    [
+      "su proveedor &#8212; en borrador, listas para revisar, no en una bandeja para teclear.",
+      "su proveedor. Quedan en borrador, listas para revisar, en vez de esperar en una bandeja a que alguien las teclee."
+    ],
+    [
+      "<strong>Cada campo trae de d&#243;nde sale.</strong> De qu&#233; p&#225;gina del PDF y de qu&#233; l&#237;nea, para que se pueda revisar sin abrir el documento.",
+      "<strong>Cada campo indica de dónde sale:</strong> de qué página del PDF y de qué línea, para que puedas revisarlo sin abrir el documento."
+    ],
+    [
+      "<li>Da igual la forma: PDF,",
+      "<li>Da igual el formato: PDF,"
+    ],
+    [
+      "<li>Lo que no sabe, lo dice. No hay respuesta inventada:",
+      "<li>Si no sabe algo, te lo dice. No inventa respuestas:"
+    ],
+    [
+      "<li>Todo lo del plan anterior, con sus veinticinco pantallas.</li>",
+      "<li>Incluye todo lo del plan anterior, con sus veinticinco pantallas.</li>"
+    ],
+    [
+      "<strong>Conciliación bancaria</strong> Próximamente Cruzará el extracto",
+      "<strong>Conciliación bancaria, próximamente.</strong> Cruzará el extracto"
+    ],
+    [
+      ">Cómo funcionará</a>",
+      ">Ver cómo funcionará</a>"
+    ],
+    [
+      ">Qué significa</a>",
+      ">Ver qué significa</a>"
+    ],
+    [
+      "<dd>Saca cada registro con su origen &#8212; qu&#233; p&#225;gina, qu&#233; l&#237;nea &#8212; y lo deja",
+      "<dd>Extrae cada registro con su origen (qué página y qué línea) y lo deja"
+    ],
+    [
+      "T&#250; confirmas. Hasta que no confirmas no se guarda nada.",
+      "Nada se guarda hasta que tú lo confirmas."
+    ],
+    [
+      ">El sistema, la inteligencia y adem&#225;s vuestros campos, vuestros flujos y vuestras conexiones.<",
+      ">Incluye el sistema y la inteligencia, y además tus propios campos, flujos y conexiones.<"
+    ],
+    [
+      "Dejas de adaptar c&#243;mo trabaj&#225;is a lo que permite un programa.",
+      "Dejas de adaptar tu forma de trabajar a lo que permite un programa."
+    ],
+    [
+      "<li>Campos, estados y flujos propios de vuestra operaci&#243;n.</li>",
+      "<li>Campos, estados y flujos propios de tu forma de trabajar.</li>"
+    ],
+    [
+      "herramientas que ya us&#225;is, construidas",
+      "herramientas que ya usas, construidas"
+    ],
+    [
+      "<li>Paneles e informes hechos para vuestras decisiones, no gen&#233;ricos.</li>",
+      "<li>Paneles e informes pensados para tus decisiones, no genéricos.</li>"
+    ],
+    [
+      "<li>Todo lo de los dos planes anteriores.</li>",
+      "<li>Incluye todo lo de los dos planes anteriores.</li>"
+    ],
+    [
+      "<strong>No incluye</strong> nada de lo anterior: esto es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pid&#225;is.",
+      "<strong>Aquí no hay exclusiones:</strong> es el sistema entero. Lo que se presupuesta aparte es cada desarrollo nuevo que pidas."
+    ],
+    [
+      ">La comparativa fila a fila es una tabla grande: se ve en un ordenador o una tableta.",
+      ">La comparativa fila a fila es una tabla grande y se ve mejor en un ordenador o una tableta."
+    ],
+    [
+      "<p>Los tres planes, fila a fila</p>",
+      "<p>Así se comparan los tres planes, fila a fila.</p>"
+    ],
+    [
+      ">Primero el diseño, que apruebas; después la implantación<",
+      ">Primero se hace el diseño y, cuando lo apruebas, la implantación<"
+    ],
+    [
+      "<p>IVA aparte y sin permanencia. La implantaci&#243;n se paga una vez:",
+      "<p>Los precios no incluyen IVA y no hay permanencia. La implantación se paga una sola vez:"
+    ],
+    [
+      "En Finance a medida, antes va el dise&#241;o que apruebas.",
+      "En Finance a medida, antes se hace el diseño y tú lo apruebas."
+    ],
+    [
+      ">Todo entra y sale por el mismo sitio.<",
+      ">Todos los datos entran y salen por el mismo sitio.<"
+    ],
+    [
+      "<p class=\"lead\">Una API REST en <code>/api/v1</code>, con una clave por empresa y los mismos permisos que la aplicaci&#243;n: una clave",
+      "<p class=\"lead\">D-Code Finance tiene una API REST en <code>/api/v1</code>, con una clave por empresa y los mismos permisos que la aplicación, así que una clave"
+    ],
+    [
+      "<div class=\"punto-d\">Holded, A3, Sage, Contasol o el que uses.",
+      "<div class=\"punto-d\">Puede ser Holded, A3, Sage, Contasol o el que uses."
+    ],
+    [
+      "<div class=\"punto-d\">Esa que no piensas abandonar. Entra por importaci&#243;n y sale por exportaci&#243;n, en CSV, sin pedirte que cambies de costumbre.",
+      "<div class=\"punto-d\">Puedes seguir usándola. Los datos entran por importación y salen por exportación, en CSV, sin que tengas que cambiar de costumbre."
+    ],
+    [
+      "<div class=\"punto-d\">Libros de IVA emitidas y recibidas en CSV, cuando toque, sin que nadie tenga que armar nada a mano.",
+      "<div class=\"punto-d\">Recibe los libros de IVA de emitidas y recibidas en CSV cuando toque, sin que nadie tenga que armarlos a mano."
+    ],
+    [
+      ">Hablan justo el lenguaje de la API,",
+      ">Se entienden directamente con la API,"
+    ],
+    [
+      ">Se mira contra lo que la otra herramienta deja hacer de verdad. Si se puede, se dice cu&#225;nto cuesta; si no se puede, se dice antes de empezar y no despu&#233;s.",
+      ">Miramos qué permite hacer de verdad la otra herramienta. Si se puede conectar, te decimos cuánto cuesta, y si no se puede, te lo decimos antes de empezar y no después."
+    ],
+    [
+      "Finance registra solas tus facturas de proveedor.",
+      "Finance registra automáticamente las facturas de tus proveedores."
+    ],
+    [
+      ">Suelta las facturas<",
+      ">Pasar las facturas a Finance<"
+    ]
+  ]
+}

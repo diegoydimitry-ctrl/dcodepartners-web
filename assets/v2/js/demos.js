@@ -30,7 +30,7 @@ function corrida() {
 const T = {
   es: {
     fz: { antes: "facturas en el correo", hecho: "registradas", pie: "Pagos previstos esta semana", mal: "No cuadra", ok: "Revisada", leido: "En la factura", habitual: "Lo correcto", corregir: "Corregir a 21 %", correcto: "Es correcto así",
-      nota: "Neumáticos Sur facturó al 10 %. Los neumáticos van al 21 %.", mas: "Ver las 23", ahora: "semana al día", vacia: "Bandeja vacía" },
+      nota: "Neumáticos Sur facturó al 10 %. Los neumáticos van al 21 %.", mas: "Ver las 23", ahora: "facturas al día", vacia: "Bandeja vacía" },
     cm: { hoy: "Hoy", con: "Con el sistema", dias: "2 días hábiles", min: "1 minuto", carriles: ["Entra", "Clasificado", "Asignado", "Respondido"], lead: ["María Gómez", "Reforma de cocina · Pozuelo"],
       etiquetas: ["Web · 18:40", "Prioridad alta · presupuesto y plazo claros", "Laura · zona oeste, la que menos carga tiene", "Respuesta con dos huecos de su agenda"], horas: ["18:40:00", "18:40:02", "18:40:03", "18:40:05"],
       borrador: "Hola, María: para una cocina antes de Navidad lo mejor es ver el espacio cuanto antes. ¿Te viene bien el martes a las 10:00 o el miércoles a las 17:30? — Laura",
@@ -47,8 +47,8 @@ const T = {
       rastro: ["Consultado: agenda", "Fuente: tarifas 2026", "Tarea para recepción · lunes 9:00"],
       reserva: "Hecho: jueves 2 a las 18:15 con la Dra. Ruiz. Te llegará un SMS.", reservaR: "Reservado en la agenda · 22:16" },
     os: { capas: ["Tus herramientas", "D-Code OS", "Tu día"], nodos: ["Web", "WhatsApp", "Correo", "Holded", "Banco", "Agenda", "Excel"],
-      ev: ["Lead nuevo · asignado a Laura", "23 facturas · registradas", "Cita jueves 18:15 · en la agenda", "Cobro 2.420 € · conciliado"],
-      parte: ["Parte del día", "1 lead nuevo, ya respondido. 23 facturas registradas; una la revisaste tú. 1 cobro conciliado. Nada pendiente para hoy."] },
+      ev: ["Contacto nuevo · asignado a Laura", "23 facturas · registradas", "Cita jueves 18:15 · en la agenda", "Cobro 2.420 € · conciliado"],
+      parte: ["Parte del día", "1 contacto nuevo, ya respondido. 23 facturas registradas, de las que tú revisaste una. 1 cobro conciliado. No queda nada pendiente para hoy."] },
   },
   en: {
     fz: { antes: "invoices in the inbox", hecho: "recorded", pie: "Payments due this week", mal: "Doesn't add up", ok: "Reviewed", leido: "On the invoice", habitual: "Correct rate", corregir: "Correct to 21%", correcto: "It's right as is",

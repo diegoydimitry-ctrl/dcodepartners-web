@@ -1,0 +1,61 @@
+{
+  "archivo": "departamentos/finanzas.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Cobrar antes y ver el gasto cada día, no al cierre de mes.<",
+      ">Cobras antes y ves el gasto cada día, no al cierre de mes.<"
+    ],
+    [
+      "<p class=\"lead\">Factura desde el presupuesto aceptado, persigue los cobros y vigila el gasto — sobre D-Code Finance, el sistema que ya usamos en nuestras propias cuentas.</p>",
+      "<p class=\"lead\">Finanzas factura a partir del presupuesto aceptado, persigue los cobros y vigila el gasto. Funciona sobre D-Code Finance, el sistema que ya usamos en nuestras propias cuentas.</p>"
+    ],
+    [
+      ">Pruébalo funcionando: D-Code Finance, con datos inventados ",
+      ">Probar la demo de D-Code Finance con datos inventados "
+    ],
+    [
+      ">Dejarás de descubrir los impagos tarde y el gasto al cierre del mes.<",
+      ">Dejas de enterarte de los impagos y del gasto cuando ya es tarde.<"
+    ],
+    [
+      "Genera cada factura y vigila su estado hasta el cobro, escalando los avisos si no hay respuesta. Facturación, cobros, gastos y panel son un mismo circuito.",
+      "Finanzas genera cada factura y sigue su estado hasta el cobro, con avisos cada vez más firmes si no hay respuesta. Facturación, cobros, gastos y panel funcionan como un mismo circuito."
+    ],
+    [
+      "<strong>Facturas generadas en minutos</strong>",
+      "<strong>Las facturas se generan en minutos</strong>"
+    ],
+    [
+      "Se generan y se envían solas en minutos, no en días.",
+      "Se crean y se envían solas, sin esperar días."
+    ],
+    [
+      "Recordatorios automáticos que escalan solos hasta que se paga la factura.",
+      "Los recordatorios automáticos insisten solos hasta que se paga la factura."
+    ],
+    [
+      ">Finanzas está diseñado para cubrir las dos mitades de tu cuadro económico: lo que cobras y lo que gastas.<",
+      ">Finanzas controla a la vez lo que cobras y lo que gastas.<"
+    ]
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "archivo": "departamentos/direccion.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Representación simplificada del sistema — no son datos de un cliente real.<",
+      ">Es una representación simplificada del sistema y no usa datos de ningún cliente real.<"
+    ],
+    [
+      ">Mira cuatro sistemas funcionando, con datos inventados ",
+      ">Ver cuatro sistemas funcionando con datos inventados "
+    ],
+    [
+      ">Una decisión clara cada mañana, con datos reales.<",
+      ">Cada mañana tienes una decisión clara, basada en datos reales.<"
+    ],
+    [
+      "Dirección centraliza indicadores, genera informes periódicos y —en su forma completa— cruza señales externas del mercado con la salud interna del sistema, para proponer una única prioridad clara cada día.",
+      "Dirección reúne tus indicadores y genera informes periódicos. En su forma completa, además, cruza las señales del mercado con el estado interno del sistema y te propone una única prioridad clara cada día."
+    ],
+    [
+      "Hoy lo usamos para dirigir D-Code Partners; adaptarlo a los indicadores de un cliente es una configuración concreta, no algo ya desplegado fuera de D-Code.",
+      "Hoy lo usamos para dirigir D-Code Partners. Para adaptarlo a los indicadores de un cliente hay que configurarlo expresamente, porque todavía no está desplegado fuera de D-Code."
+    ],
+    [
+      "<li>Las decisiones se toman con la última conversación tenida, no con datos.</li>",
+      "<li>Las decisiones se toman según la última conversación, no con datos.</li>"
+    ],
+    [
+      ">El estado de toda la operación, resumido en un vistazo — no seis paneles distintos que revisar.<",
+      ">Ves de un vistazo cómo está toda la operación.<"
+    ],
+    [
+      "<p>Sin que nadie tenga que juntar manualmente lo que está pasando en cada área.</p>",
+      "<p>Nadie tiene que juntar a mano lo que está pasando en cada área.</p>"
+    ],
+    [
+      "<p>Informes periódicos y, en su forma completa, una decisión ejecutiva propuesta cada mañana.</p>",
+      "<p>Recibes informes periódicos y, en su forma completa, una propuesta de decisión cada mañana.</p>"
+    ],
+    [
+      "Se basan en datos actualizados, no en la última conversación tenida.",
+      "Las decisiones se basan en datos actualizados, no en la última conversación."
+    ],
+    [
+      "Así resume Dirección las señales del resto de áreas. Ejemplo ilustrativo, no son datos reales.",
+      "Así resume Dirección las señales del resto de áreas. Es un ejemplo ilustrativo y no usa datos reales."
+    ],
+    [
+      "<strong>Una prioridad clara cada mañana</strong>",
+      "<strong>Cada mañana tienes una prioridad clara</strong>"
+    ],
+    [
+      "Cada mañana hay una prioridad clara sobre qué hacer ese día.",
+      "Sabes desde primera hora qué es lo más importante de ese día."
+    ],
+    [
+      "<strong>Decisiones con datos, no con memoria</strong>",
+      "<strong>Decides con datos, no de memoria</strong>"
+    ],
+    [
+      "<strong>Riesgos y oportunidades detectados a tiempo</strong>",
+      "<strong>Los riesgos y las oportunidades se detectan a tiempo</strong>"
+    ],
+    [
+      "<div class=\"punto-d\">Se detectan antes de convertirse en un problema.</div>",
+      "<div class=\"punto-d\">Los ves antes de que se conviertan en un problema.</div>"
+    ],
+    [
+      ">Cada Departamento activo aporta sus propios datos<",
+      ">Cada área activa aporta sus propios datos<"
+    ]
+  ]
+}

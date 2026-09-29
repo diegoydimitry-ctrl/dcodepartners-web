@@ -1,0 +1,7 @@
+{
+  "archivo": "404.html",
+  "cambios": [
+    ["<h2 class=\"h2\">Página no encontrada</h2>", "<h2 class=\"h2\">No encontramos esta página.</h2>"],
+    ["href=\"/contacto\">Contactar</a>", "href=\"/contacto\">Contactar con nosotros</a>"]
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "archivo": "garantias.html",
+  "cambios": [
+    [
+      ">Lo que te garantizamos.<br>Por escrito, antes de empezar.<",
+      ">Te damos estas garantías por escrito,<br>antes de empezar.<"
+    ],
+    [
+      ">Cinco cosas que no dependen de cómo vaya el proyecto.<",
+      ">Estas cinco garantías no dependen de cómo vaya el proyecto.<"
+    ],
+    [
+      ">Sin permanencia.<",
+      ">Puedes cancelar cuando quieras.<"
+    ],
+    [
+      ">Confidencialidad.<",
+      ">Tus datos son confidenciales.<"
+    ],
+    [
+      ">Tus herramientas, no las nuestras.<",
+      ">Trabajamos con tus herramientas, no con las nuestras.<"
+    ],
+    [
+      ">Cómo se ordena todo esto.<",
+      ">Todo el proceso sigue un método.<"
+    ],
+    [
+      ">El recorrido completo —diagnóstico, diseño, construcción y medición— vive en una sola página para no duplicarlo aquí.<",
+      ">El recorrido completo (diagnóstico, diseño, construcción y medición) está explicado en la página del Método D-Code.<"
+    ],
+    [
+      ">Probado primero en nuestra propia empresa.<",
+      ">Lo probamos primero en nuestra propia empresa.<"
+    ],
+    [
+      ">Tres casos reales de D-Code Partners, incluido uno en el que la hipótesis inicial resultó estar equivocada.<",
+      ">Te contamos tres casos reales de D-Code Partners, incluido uno en el que nuestra hipótesis inicial resultó estar equivocada.<"
+    ]
+  ]
+}

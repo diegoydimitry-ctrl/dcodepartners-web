@@ -1,0 +1,17 @@
+{
+  "archivo": "demos/os.html",
+  "cambios": [
+    [">Los sistemas cambian.<br><span>D-Code OS los conecta.</span>", ">Tus sistemas trabajan por separado.<br><span>D-Code OS los conecta.</span>"],
+    [">La capa que conecta los sistemas de tu empresa: el dato entra una vez, el trabajo se mueve solo y todo queda trazado.<", ">Es la capa que conecta los sistemas de tu empresa. Cada dato se introduce una sola vez, el trabajo pasa solo de un sistema a otro y todo queda registrado.<"],
+    ["<p class=\"os-lema\">Todo tu negocio, conectado.</p>", "<p class=\"os-lema\">Todo tu negocio queda conectado.</p>"],
+    [">Son ejemplos: cualquier sistema que necesitéis se conecta a la capa.<", ">Son solo ejemplos. Cualquier sistema que necesites se puede conectar a la capa.<"],
+    [">Pulsa un módulo, un sistema del mapa o un paso del caso: la demo se para y mandas tú.<", ">Pulsa un módulo, un sistema del mapa o un paso del caso. La demo se detiene y pasas a manejarla tú.<"],
+    [">Aquí se lee; para tocarlo, un ordenador.<", ">Para usar la demo, ábrela en un ordenador.<"],
+    [">Un panel con el mapa de los sistemas, la actividad según ocurre y las decisiones de la IA. Apretado en un móvil se ve peor de lo que es.<", ">Es un panel con el mapa de los sistemas, la actividad en el momento en que ocurre y las decisiones de la IA. En la pantalla de un móvil se ve peor de lo que es.<"],
+    ["<span>Qué sistema habla con cuál y por dónde pasa cada dato.</span>", "<span>Muestra qué sistema habla con cuál y por dónde pasa cada dato.</span>"],
+    ["<b>La actividad, según pasa</b><span>Llamadas clasificadas, partes firmados, facturas preparadas.</span>", "<b>La actividad, al momento</b><span>Ves las llamadas clasificadas, los partes firmados y las facturas preparadas.</span>"],
+    ["<span>Lo que hace sola queda registrado; lo que importa espera a una persona.</span>", "<span>Lo que hace sola queda registrado, y lo importante espera a que lo apruebe una persona.</span>"],
+    [">Haz el diagnóstico</a>", ">Hacer el diagnóstico</a>"],
+    [">Demo ilustrativa · empresa ficticia · datos inventados. Ningún sistema real está conectado a esta página.<", ">Es una demo ilustrativa, con una empresa ficticia y datos inventados. Ningún sistema real está conectado a esta página.<"]
+  ]
+}

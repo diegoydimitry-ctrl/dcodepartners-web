@@ -1,0 +1,11 @@
+{
+  "archivo": "blog/index.html",
+  "cambios": [
+    ["<h1 class=\"h1 aparece\" style=\"--i:1\">Ideas sobre automatización e IA para empresas.</h1>", "<h1 class=\"h1 aparece\" style=\"--i:1\">Compartimos lo que sabemos sobre automatización e IA.</h1>"],
+    ["<p class=\"lead\">Artículos prácticos, sin humo, sobre cómo aplicar automatización e Inteligencia Artificial a negocios reales.</p>", "<p class=\"lead\">Escribimos artículos prácticos sobre cómo aplicar la automatización y la inteligencia artificial en negocios reales.</p>"],
+    ["<h2 class=\"h2\">Sin humo, sin jerga innecesaria.</h2>", "<h2 class=\"h2\">Te lo explicamos sin humo y sin jerga.</h2>"],
+    ["<span class=\"fe-d\">que-es-la-automati.md Fundamentos  Una introducción clara a qué cambia realmente cuando automatizas procesos con Inteligencia Artificial, sin promesas vacías ni jerga innecesaria.", "<span class=\"fe-d\">Fundamentos · Explicamos con claridad qué cambia de verdad cuando automatizas procesos con inteligencia artificial, sin promesas vacías ni jerga."],
+    ["<span class=\"fe-d\">automatizacion-vs-.md Estrategia  No son lo mismo, y elegir mal implica perder tiempo y dinero. Te contamos cómo decidir cuál necesita tu negocio primero.", "<span class=\"fe-d\">Estrategia · La automatización y los agentes de IA no son lo mismo, y elegir mal te hace perder tiempo y dinero. Te contamos cómo decidir qué necesita primero tu negocio."],
+    ["<span class=\"fe-d\">procesos-que-puede.md Práctico  Ejemplos concretos y realistas para identificar dónde estás perdiendo horas cada semana, sin necesidad de un gran proyecto de IA.", "<span class=\"fe-d\">Práctico · Te damos ejemplos concretos y realistas para que veas dónde pierdes horas cada semana, sin necesidad de un gran proyecto de IA."]
+  ]
+}

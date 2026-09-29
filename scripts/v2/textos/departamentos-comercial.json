@@ -1,0 +1,97 @@
+{
+  "archivo": "departamentos/comercial.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Representación simplificada del sistema — no son datos de un cliente real.<",
+      ">Es una representación simplificada del sistema y no usa datos de ningún cliente real.<"
+    ],
+    [
+      ">Pruébalo funcionando: Comercial, con datos inventados ",
+      ">Probar la demo de Comercial con datos inventados "
+    ],
+    [
+      "Comercial centraliza cada oportunidad, genera propuestas en minutos y avisa cada mañana de lo que toca — para que el pipeline deje de vivir en la cabeza de una sola persona.",
+      "Comercial reúne todas tus oportunidades en un solo sitio, genera propuestas en minutos y te avisa cada mañana de lo que hay que hacer. Así el seguimiento de las ventas deja de depender de lo que recuerde una sola persona."
+    ],
+    [
+      "<li>Nuevas oportunidades se detectan por sector, todos los días.</li>",
+      "<li>Cada día se detectan nuevas oportunidades, organizadas por sector.</li>"
+    ],
+    [
+      "<li>Las propuestas se generan en minutos, verificadas.</li>",
+      "<li>Las propuestas se generan en minutos y salen ya verificadas.</li>"
+    ],
+    [
+      "<li>Nada se queda sin seguimiento: el equipo lo sabe cada mañana.</li>",
+      "<li>Nada se queda sin seguimiento, porque el equipo sabe cada mañana qué tiene pendiente.</li>"
+    ],
+    [
+      ">Un radar que encuentra oportunidades, no una lista que hay que revisar.<",
+      ">El radar encuentra oportunidades sin que tengas que revisar listas.<"
+    ],
+    [
+      ">Marketing capta. Comercial cierra. Y lo que cierra, sigue su camino solo.<",
+      ">Marketing capta los contactos y Comercial cierra las ventas.<"
+    ],
+    [
+      "Sin tener que volver a cualificar nada, el equipo sabe si es prioritaria y la incorpora al pipeline.",
+      "El equipo no tiene que volver a cualificarla, porque ya sabe si es prioritaria, y la añade a su cartera de oportunidades."
+    ],
+    [
+      ">Cierra, y el dato sigue su camino solo<",
+      ">Al cerrar la venta, el resto se pone en marcha solo<"
+    ],
+    [
+      "En cuanto una propuesta se acepta, esa información no se vuelve a teclear: pone en marcha automáticamente a Clientes y Operaciones.",
+      "Cuando el cliente acepta una propuesta, nadie tiene que volver a teclear sus datos. Esa información pone en marcha automáticamente las áreas de Clientes y Operaciones."
+    ],
+    [
+      "<strong>Propuestas en minutos, no en días</strong>",
+      "<strong>Las propuestas salen en minutos, no en días</strong>"
+    ],
+    [
+      "los datos reales del prospecto, lista para enviar.",
+      "los datos reales del cliente potencial y queda lista para enviar."
+    ],
+    [
+      "<strong>El equipo sabe qué toca hoy</strong>",
+      "<strong>El equipo sabe qué tiene que hacer hoy</strong>"
+    ],
+    [
+      "Cada mañana queda claro qué leads y qué propuestas necesitan atención.",
+      "Cada mañana queda claro qué contactos y qué propuestas necesitan atención."
+    ],
+    [
+      "<strong>El pipeline deja de vivir en una cabeza</strong>",
+      "<strong>Las ventas dejan de depender de una sola persona</strong>"
+    ],
+    [
+      "El radar barre el sector cada día. Pasa el ratón — o el foco del teclado — sobre un punto destacado o una fase para ver cómo se corresponden.",
+      "El radar revisa el sector cada día. Pasa el ratón, o el foco del teclado, sobre un punto destacado o sobre una fase para ver qué relación hay entre ellos."
+    ],
+    [
+      "Que ninguna venta se pierda por falta de seguimiento.",
+      "Ninguna venta se pierde por falta de seguimiento."
+    ]
+  ]
+}

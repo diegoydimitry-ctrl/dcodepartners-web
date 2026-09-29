@@ -1,0 +1,81 @@
+{
+  "archivo": "departamentos/soporte.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Pruébalo funcionando: Atención al cliente, con datos inventados ",
+      ">Probar la demo de Atención al cliente con datos inventados "
+    ],
+    [
+      ">Respuesta rápida, también fuera de horario.<",
+      ">Tus clientes tienen respuesta rápida, también fuera de horario.<"
+    ],
+    [
+      "Soporte convierte cada email de soporte en un ticket priorizado con SLA calculado automáticamente, y complementa con un chat disponible 24 horas — hoy en revisión de seguridad antes de ampliar su acceso a datos de cliente.",
+      "Soporte convierte cada email en un ticket con su prioridad y su plazo de respuesta (SLA), calculados automáticamente. Además, un chat atiende las 24 horas. Ese chat está hoy en revisión de seguridad antes de ampliar su acceso a datos de clientes."
+    ],
+    [
+      "<li>Los emails de soporte llegan sin priorizar ni sin plazo.</li>",
+      "<li>Los emails de soporte llegan sin prioridad y sin plazo de respuesta.</li>"
+    ],
+    [
+      "<li>Fuera de horario, no hay ninguna atención.</li>",
+      "<li>Fuera de horario, nadie atiende a los clientes.</li>"
+    ],
+    [
+      "<li>Cada email se convierte en un ticket con prioridad y SLA.</li>",
+      "<li>Cada email se convierte en un ticket con su prioridad y su plazo de respuesta (SLA).</li>"
+    ],
+    [
+      ">Un ticket, en vivo, dentro de Soporte.<",
+      ">Así avanza un ticket dentro de Soporte.<"
+    ],
+    [
+      "Así avanza automáticamente un email de soporte real — ya operativo, no una función futura. El ticket recorre su estado solo, en bucle; es un ejemplo ilustrativo.",
+      "Este es el recorrido automático que sigue cada email de soporte, y ya está en funcionamiento. El ticket que ves es un ejemplo ilustrativo que se repite en bucle."
+    ],
+    [
+      "Ejemplo ilustrativo del recorrido automático de un ticket — no corresponde a un cliente real.",
+      "Es un ejemplo ilustrativo del recorrido automático de un ticket y no corresponde a ningún cliente real."
+    ],
+    [
+      ">Juntos cubren toda la experiencia después de la venta.<",
+      ">Clientes y Soporte cubren juntos todo lo que pasa después de la venta.<"
+    ],
+    [
+      "<p>Convierte cada consulta en un ticket priorizado, y el chat responde 24 horas con datos reales de ese mismo cliente.</p>",
+      "<p>Soporte convierte cada consulta en un ticket priorizado, y el chat responde las 24 horas con los datos reales de ese cliente.</p>"
+    ],
+    [
+      ">La misma base de cliente, sin duplicar nada<",
+      ">Las dos áreas comparten los mismos datos<"
+    ],
+    [
+      "Ambos comparten los datos del cliente, así que nadie tiene que explicar dos veces quién es o en qué punto está.",
+      "Así nadie tiene que explicar dos veces quién es el cliente ni en qué punto está."
+    ],
+    [
+      "<strong>Atención incluso fuera de horario</strong>",
+      "<strong>Tus clientes reciben atención fuera de horario</strong>"
+    ]
+  ]
+}

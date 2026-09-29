@@ -1,0 +1,65 @@
+{
+  "archivo": "departamentos/produccion.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Representación simplificada del sistema — no son datos de un cliente real.<",
+      ">Es una representación simplificada del sistema y no usa datos de ningún cliente real.<"
+    ],
+    [
+      ">Pruébalo funcionando: Operaciones, con datos inventados ",
+      ">Probar la demo de Operaciones con datos inventados "
+    ],
+    [
+      ">El caos se convierte en sistema. No en otra lista que revisar.<",
+      ">Operaciones ordena el trabajo sin darte otra lista que revisar.<"
+    ],
+    [
+      ">Un cliente se gana, y su proyecto y su relación con la empresa avanzan a la vez.<",
+      ">Cuando ganas un cliente, su proyecto y su seguimiento avanzan a la vez.<"
+    ],
+    [
+      ">Un cliente se gana y su proyecto nace solo<",
+      ">Al ganar un cliente, su proyecto se crea solo<"
+    ],
+    [
+      ">Operaciones reparte y vigila<",
+      ">Operaciones reparte las tareas y vigila el avance<"
+    ],
+    [
+      "<strong>Proyectos que se crean solos</strong>",
+      "<strong>Los proyectos se crean solos</strong>"
+    ],
+    [
+      "<strong>Reparto de carga equilibrado</strong>",
+      "<strong>El trabajo se reparte de forma equilibrada</strong>"
+    ],
+    [
+      "<strong>Retrasos detectados a tiempo</strong>",
+      "<strong>Los retrasos se detectan a tiempo</strong>"
+    ],
+    [
+      "Que cada trabajo arranque solo y cumpla su plazo.",
+      "Cada trabajo arranca solo y cumple su plazo."
+    ]
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "archivo": "contacto.html",
+  "cambios": [
+    ["<span class=\"form-step-eyebrow\">Quién lo pide</span>", "<span class=\"form-step-eyebrow\">Dinos quién eres</span>"],
+    [">Perfecto<span data-exito-nombre></span>. Tu mensaje ya está con nosotros.<", ">Gracias<span data-exito-nombre></span>. Ya hemos recibido tu mensaje.<"],
+    ["<b>Lo leemos</b> Lo lee una persona del equipo, no un sistema que responde por nosotros.", "<b>Lo leemos.</b> Lo lee una persona del equipo, no un sistema que responde por nosotros."],
+    ["<b>Te escribimos</b> Con preguntas concretas sobre cómo trabajáis hoy y dónde se os va el tiempo.", "<b>Te escribimos.</b> Te hacemos preguntas concretas sobre cómo trabaja hoy tu equipo y dónde se le va el tiempo."],
+    ["<b>Si encaja, hablamos</b> Una llamada de 30 minutos para contarte qué construiríamos y por dónde empezaríamos.", "<b>Si encaja, hablamos.</b> En una llamada de 30 minutos te contamos qué construiríamos y por dónde empezaríamos."]
+  ]
+}

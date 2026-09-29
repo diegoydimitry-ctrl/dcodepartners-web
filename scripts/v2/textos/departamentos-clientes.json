@@ -1,0 +1,69 @@
+{
+  "archivo": "departamentos/clientes.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Representación simplificada del sistema — no son datos de un cliente real.<",
+      ">Es una representación simplificada del sistema y no usa datos de ningún cliente real.<"
+    ],
+    [
+      ">Pruébalo funcionando: Atención al cliente, con datos inventados ",
+      ">Probar la demo de Atención al cliente con datos inventados "
+    ],
+    [
+      "Clientes da de alta, da la bienvenida y acompaña a cada cliente durante toda su vida contigo — con la misma calidad, sin importar quién del equipo esté ese día ni si alguien se acuerda de hacerlo.",
+      "Clientes da de alta a cada cliente, le da la bienvenida y lo acompaña mientras trabaje contigo. Lo hace siempre con la misma calidad, esté quien esté del equipo ese día y sin que nadie tenga que acordarse."
+    ],
+    [
+      ">Todo lo que hay que saber de un cliente, en un solo sitio — no en cinco pestañas distintas.<",
+      ">Toda la información de cada cliente está en un solo sitio.<"
+    ],
+    [
+      "Pasa el ratón — o el foco del teclado — por un nodo para ver qué reúne Clientes en cada uno.",
+      "Pasa el ratón, o el foco del teclado, por cada punto para ver qué información reúne Clientes en él."
+    ],
+    [
+      ">Comercial cierra la venta. Clientes se encarga de todo lo que viene después.<",
+      ">Cuando Comercial cierra la venta, Clientes se encarga del resto.<"
+    ],
+    [
+      "<strong>Bienvenida siempre igual</strong>",
+      "<strong>Todos tus clientes reciben la misma bienvenida</strong>"
+    ],
+    [
+      "<strong>Renovaciones avisadas con tiempo</strong>",
+      "<strong>Las renovaciones se avisan con tiempo</strong>"
+    ],
+    [
+      "<strong>Satisfacción medida a tiempo</strong>",
+      "<strong>La satisfacción se mide a tiempo</strong>"
+    ],
+    [
+      "Solo necesitas un criterio claro de cuándo un cliente pasa a estar activo — hoy, en cuanto se acepta una propuesta — y sus datos de contacto.",
+      "Solo necesitas los datos de contacto de tus clientes y un criterio claro para saber cuándo un cliente pasa a estar activo. Hoy ese momento es cuando acepta una propuesta."
+    ],
+    [
+      "Que cada cliente se sienta cuidado, sin depender de nadie en concreto.",
+      "Cada cliente se siente cuidado, sin depender de nadie en concreto."
+    ]
+  ]
+}

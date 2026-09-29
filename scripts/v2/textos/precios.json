@@ -1,0 +1,201 @@
+{
+  "archivo": "precios.html",
+  "cambios": [
+    [
+      ">Precios de referencia, sin letra pequeña. El alcance se cierra por escrito antes de empezar.<",
+      ">Estos son precios de referencia, sin letra pequeña. El alcance se cierra por escrito antes de empezar.<"
+    ],
+    [
+      ">El sistema financiero de tu empresa, sobre tus datos.<",
+      ">Es el sistema financiero de tu empresa y trabaja con tus datos.<"
+    ],
+    [
+      "<p class=\"prod-que\">El sistema financiero sobre tus datos, con su configuración estándar.</p>",
+      "<p class=\"prod-que\">Es el sistema financiero con tus datos y su configuración estándar.</p>"
+    ],
+    [
+      "<li>Radar: siete reglas con su umbral escrito</li>",
+      "<li>Radar: siete reglas de aviso, cada una con su umbral por escrito</li>"
+    ],
+    [
+      "<p class=\"prod-que\">Todo lo anterior y, encima, algo que lee tus documentos y te contesta con tus números.</p>",
+      "<p class=\"prod-que\">Incluye todo lo anterior y, además, lee tus documentos y responde a tus preguntas con tus propios números.</p>"
+    ],
+    [
+      "<li>Lectura de facturas de proveedor: se sueltan y entran solas</li>",
+      "<li>Lectura de facturas de proveedor: las arrastras y se registran solas</li>"
+    ],
+    [
+      "<p class=\"prod-que\">El sistema financiero con tus campos, tus flujos y tus conexiones.</p>",
+      "<p class=\"prod-que\">Es el sistema financiero adaptado a tus campos, tus flujos y tus conexiones.</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Una persona más dentro de tu Finance, con su rol y sus permisos.</p>",
+      "<p class=\"prod-que\">Añade una persona más a tu Finance, con su rol y sus permisos.</p>"
+    ],
+    [
+      ">La capa que conecta tus sistemas: el dato entra una vez.<",
+      ">Conecta tus sistemas para que cada dato entre una sola vez.<"
+    ],
+    [
+      "<p class=\"prod-que\">La capa que conecta los sistemas de tu empresa: el dato entra una vez, el trabajo se mueve solo y todo queda trazado.</p>",
+      "<p class=\"prod-que\">Es la capa que conecta los sistemas de tu empresa. Cada dato entra una sola vez, el trabajo pasa solo de un sitio a otro y todo queda registrado.</p>"
+    ],
+    [
+      "<li>La actividad según ocurre, con su rastro</li>",
+      "<li>La actividad en tiempo real, con el registro de cada paso</li>"
+    ],
+    [
+      "<li>Lo que la IA hace sola queda registrado; lo que importa espera a una persona</li>",
+      "<li>Lo que la IA hace sola queda registrado, y lo importante lo aprueba una persona</li>"
+    ],
+    [
+      ">Hoy se implanta caso a caso. Contratarlo por planes cerrados llegará; cuando llegue, lo dirá aquí.<",
+      ">Hoy lo implantamos caso a caso. Más adelante se podrá contratar por planes cerrados, y cuando sea posible lo indicaremos aquí.<"
+    ],
+    [
+      ">Lo que hoy se hace a mano cada semana, ejecutándose solo.<",
+      ">Lo que hoy se hace a mano cada semana pasa a hacerse solo.<"
+    ],
+    [
+      "<p class=\"prod-que\">Una tarea que hoy hace una persona a mano, ejecutándose sola y avisando si algo falla.</p>",
+      "<p class=\"prod-que\">Una tarea que hoy hace una persona a mano pasa a ejecutarse sola y avisa si algo falla.</p>"
+    ],
+    [
+      "<p class=\"prod-que\">De tres a cinco automatizaciones que se encadenan: lo que termina una dispara la siguiente.</p>",
+      "<p class=\"prod-que\">Son de tres a cinco automatizaciones encadenadas: cuando termina una, empieza la siguiente.</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Documentos que se leen solos, texto que se clasifica y decisiones que se proponen; lo que importa espera a una persona.</p>",
+      "<p class=\"prod-que\">La IA lee documentos, clasifica textos y propone decisiones. Lo importante siempre lo aprueba una persona.</p>"
+    ],
+    [
+      "<p class=\"prod-para\">Cuando lo montado tiene que seguir funcionando</p>",
+      "<p class=\"prod-para\">Cuando lo que ya está montado tiene que seguir funcionando</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Vigilancia de lo que ya está en marcha, arreglos cuando una herramienta cambia y ajustes pequeños.</p>",
+      "<p class=\"prod-que\">Vigilamos lo que ya está en marcha, lo arreglamos cuando una herramienta cambia y hacemos ajustes pequeños.</p>"
+    ],
+    [
+      ">Atienden, cualifican y responden con los datos de tu negocio.<",
+      ">Nuestros agentes atienden, valoran cada contacto y responden con los datos de tu negocio.<"
+    ],
+    [
+      "<p class=\"prod-para\">Quien recibe siempre las mismas preguntas por un sitio</p>",
+      "<p class=\"prod-para\">Quien recibe siempre las mismas preguntas por un solo canal</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Atiende, entiende y responde con los datos de tu negocio; escala a una persona cuando toca.</p>",
+      "<p class=\"prod-que\">Atiende, entiende y responde con los datos de tu negocio. Cuando hace falta, pasa la conversación a una persona.</p>"
+    ],
+    [
+      "<li>Escalado a persona con el contexto entero</li>",
+      "<li>Paso a una persona con toda la conversación</li>"
+    ],
+    [
+      "<p class=\"prod-para\">Quien atiende por varios sitios a la vez</p>",
+      "<p class=\"prod-para\">Quien atiende por varios canales a la vez</p>"
+    ],
+    [
+      "<p class=\"prod-que\">El mismo agente en varios canales, con la conversación entera y conectado a tus sistemas.</p>",
+      "<p class=\"prod-que\">Es el mismo agente en varios canales, conectado a tus sistemas y con toda la conversación a la vista.</p>"
+    ],
+    [
+      "<li>Conectado a tus sistemas: crea, consulta y actualiza</li>",
+      "<li>Conectado a tus sistemas para crear, consultar y actualizar datos</li>"
+    ],
+    [
+      "<li>Cualificación y enrutado</li>",
+      "<li>Valora cada contacto y lo pasa a quien corresponde</li>"
+    ],
+    [
+      "<li>Panel con lo que responde y lo que escala</li>",
+      "<li>Panel con lo que responde y lo que pasa a una persona</li>"
+    ],
+    [
+      ">Tu web hecha, rehecha o conectada con lo que ya usas.<",
+      ">Hacemos tu web, rehacemos la que tienes o la conectamos con lo que ya usas.<"
+    ],
+    [
+      "<p class=\"prod-para\">Quien no tiene web, o la que tiene no la enseña a nadie</p>",
+      "<p class=\"prod-para\">Quien no tiene web o tiene una que prefiere no enseñar</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Diseño, textos, velocidad y que se vea bien en un teléfono. Tuya, no una plantilla con tu logo encima.</p>",
+      "<p class=\"prod-que\">Nos ocupamos del diseño, los textos, la velocidad y de que se vea bien en un teléfono. Es tuya, no una plantilla con tu logo encima.</p>"
+    ],
+    [
+      "<li>Textos escritos contigo, no rellenos</li>",
+      "<li>Textos escritos contigo, no de relleno</li>"
+    ],
+    [
+      "<p class=\"prod-que\">El formulario entra en tu CRM, la cita en la agenda y el stock sale del almacén. Con chatbot si lo quieres.</p>",
+      "<p class=\"prod-que\">El formulario entra en tu CRM, la cita en la agenda y el stock sale del almacén. Si lo quieres, incluye un chatbot.</p>"
+    ],
+    [
+      "<li>Citas, reservas o pedidos contra tu sistema de verdad</li>",
+      "<li>Citas, reservas o pedidos que van directos a tu sistema real</li>"
+    ],
+    [
+      ">Tus herramientas hablándose, con los permisos mínimos.<",
+      ">Conectamos tus herramientas entre sí, con los permisos mínimos.<"
+    ],
+    [
+      "<p class=\"prod-que\">Tus dos herramientas hablándose en la dirección que haga falta, con los permisos mínimos.</p>",
+      "<p class=\"prod-que\">Tus dos herramientas se pasan los datos en la dirección que haga falta, con los permisos mínimos.</p>"
+    ],
+    [
+      "<p class=\"prod-para\">Empresas con un sistema que no se toca</p>",
+      "<p class=\"prod-para\">Empresas con un sistema que no se puede tocar</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Tu ERP, tu CRM o tu sistema de siempre conectado con el resto, sin tocarlo por dentro.</p>",
+      "<p class=\"prod-que\">Conectamos tu ERP, tu CRM o tu sistema de siempre con el resto, sin tocarlo por dentro.</p>"
+    ],
+    [
+      ">El sistema que tu empresa necesita y no existe comprado.<",
+      ">Construimos el sistema que tu empresa necesita y que no se puede comprar hecho.<"
+    ],
+    [
+      "<li>Media hora de llamada y un par de horas de quien hace ese trabajo</li>",
+      "<li>Media hora de llamada y un par de horas con la persona que hace ese trabajo</li>"
+    ],
+    [
+      "<li>Desarrollo por partes, dentro de las herramientas que ya usáis</li>",
+      "<li>Desarrollo por partes, dentro de las herramientas que ya usas</li>"
+    ],
+    [
+      ">Varias piezas juntas, más baratas que por separado.<",
+      ">Varias piezas juntas cuestan menos que por separado.<"
+    ],
+    [
+      "<p class=\"prod-para\">Primera vez que se ordena algo</p>",
+      "<p class=\"prod-para\">Empresas que ordenan su trabajo por primera vez</p>"
+    ],
+    [
+      "<p class=\"prod-que\">El sistema financiero en marcha y las dos tareas que más se repiten, automatizadas.</p>",
+      "<p class=\"prod-que\">Pones en marcha el sistema financiero y automatizas las dos tareas que más se repiten.</p>"
+    ],
+    [
+      "<p class=\"prod-para\">Empresas que ya venden y se les acumula el trabajo</p>",
+      "<p class=\"prod-para\">Empresas que ya venden y a las que se les acumula el trabajo</p>"
+    ],
+    [
+      "<p class=\"prod-que\">Finance con inteligencia, un proceso entero automatizado y un agente atendiendo.</p>",
+      "<p class=\"prod-que\">Incluye Finance con inteligencia, un proceso entero automatizado y un agente que atiende a tus clientes.</p>"
+    ],
+    [
+      "<p class=\"prod-que\">La capa que lo conecta todo, el sistema financiero, la automatización con IA, el agente multicanal y la conexión con lo que ya tienes.</p>",
+      "<p class=\"prod-que\">Incluye la capa que lo conecta todo, el sistema financiero, la automatización con IA, el agente multicanal y la conexión con lo que ya tienes.</p>"
+    ],
+    [
+      ">Hoy no se paga en la web. Nos lo pides, lo configuramos contigo y lo implantamos nosotros. La compra directa llegará; cuando llegue, lo dirá aquí.<",
+      ">Por ahora no se paga en la web. Nos lo pides, lo configuramos contigo y lo implantamos nosotros. Más adelante se podrá comprar directamente, y cuando sea posible lo indicaremos aquí.<"
+    ],
+    [
+      ">Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar. Precios sin IVA.<",
+      ">Son precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa, y lo cerramos por escrito antes de empezar. Los precios no incluyen IVA.<"
+    ]
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "archivo": "index.html",
+  "cambios": [
+    [
+      ">Tu empresa, en un solo sistema.<",
+      ">Conectamos tu empresa en un solo sistema.<"
+    ],
+    [
+      "<p class=\"lead\">Automatización, IA y software a medida.</p>",
+      "<p class=\"lead\">Lo hacemos con automatización, inteligencia artificial y software a medida.</p>"
+    ],
+    [
+      "href=\"/contacto\">Hablemos <svg",
+      "href=\"/contacto\">Reservar una llamada <svg"
+    ],
+    [
+      "href=\"#tocalo\">Tócalo</a>",
+      "href=\"#tocalo\">Ver las demos</a>"
+    ],
+    [
+      ">Hoy, piezas sueltas.<",
+      ">Hoy cada herramienta de tu empresa va por su lado.<"
+    ],
+    [
+      ">Ventas, clientes, facturas y operaciones. Cada una por su lado, y alguien copiando de una a otra.<",
+      ">Ventas, clientes, facturas y operaciones se llevan en sitios distintos, y alguien tiene que copiar los datos de uno a otro.<"
+    ],
+    [
+      ">Las unimos.<",
+      ">Nosotros las conectamos.<"
+    ],
+    [
+      ">Conectamos lo que ya usáis y automatizamos lo que se repite. El dato entra una vez.<",
+      ">Unimos las herramientas que ya usas y automatizamos las tareas que se repiten. Así cada dato se escribe una sola vez.<"
+    ],
+    [
+      ">Y le damos inteligencia.<",
+      ">Después le añadimos inteligencia artificial.<"
+    ],
+    [
+      ">Agentes de IA que leen, responden y proponen. Lo importante lo decide una persona.<",
+      ">Los agentes de IA leen, responden y proponen. Las decisiones importantes las toma una persona.<"
+    ],
+    [
+      ">Lo que instalamos.<",
+      ">Esto es lo que instalamos en tu empresa.<"
+    ],
+    [
+      ">Facturas, cobros, gastos y registro fiscal, en un sitio.<",
+      ">Lleva facturas, cobros, gastos y registro fiscal en un solo sitio.<"
+    ],
+    [
+      "class=\"fila-d\">La capa que conecta tus sistemas.<",
+      "class=\"fila-d\">Es la capa que conecta tus sistemas entre sí.<"
+    ],
+    [
+      ">Lo que tu equipo repite cada semana, hecho solo.<",
+      ">El trabajo que tu equipo repite cada semana pasa a hacerse solo.<"
+    ],
+    [
+      ">Contestan con tus datos y conectan lo que ya usáis.<",
+      ">Responden con los datos de tu empresa y conectan las herramientas que ya usas.<"
+    ],
+    [
+      "href=\"/precios\">Precios y packs <svg",
+      "href=\"/precios\">Ver precios y packs <svg"
+    ],
+    [
+      ">No te lo contamos. Tócalo.<",
+      ">Pruébalo tú antes de hablar con nosotros.<"
+    ],
+    [
+      ">Cinco sistemas, un minuto cada uno. Los datos son inventados; lo que hacen, no.<",
+      ">Aquí tienes cinco sistemas y cada uno se prueba en un minuto. Los datos son inventados, pero lo que hacen es real.<"
+    ],
+    [
+      ">El taller recibe 23 a la semana y hoy se teclean a mano: dos horas, y algún IVA mal puesto.<",
+      ">El taller recibe 23 a la semana y hoy las teclea a mano, lo que le cuesta dos horas y algún IVA mal puesto.<"
+    ],
+    [
+      ">Suelta las facturas<",
+      ">Pasar las facturas a Finance<"
+    ],
+    [
+      ">23 facturas registradas en 38 segundos. Tú solo miraste una.<",
+      ">Las 23 facturas quedan registradas en 38 segundos y tú solo has tenido que revisar una.<"
+    ],
+    [
+      ">Entra un lead por la web un viernes por la tarde.<",
+      ">Un cliente potencial escribe por la web un viernes por la tarde.<"
+    ],
+    [
+      ">Hoy lo vería alguien el lunes, cuando ya habrá pedido presupuesto a otros dos estudios.<",
+      ">Ahora mismo nadie lo vería hasta el lunes, y para entonces ya habrá pedido presupuesto a otros dos estudios.<"
+    ],
+    [
+      ">Que entre el lead<",
+      ">Recibir el contacto de la web<"
+    ],
+    [
+      ">Aprobar y enviar<",
+      ">Aprobar y enviar la respuesta<"
+    ],
+    [
+      ">Primera respuesta en un minuto, no en dos días. El lead tiene dueña, respuesta y seguimiento en la agenda.<",
+      ">El contacto recibe respuesta en un minuto en lugar de dos días. Ya tiene una comercial asignada y su seguimiento está en la agenda.<"
+    ],
+    [
+      ">Planificarlo lleva dos días de hojas y llamadas, y los retrasos se ven el mismo día.<",
+      ">Planificarlo lleva dos días entre hojas y llamadas, y los retrasos no se descubren hasta el mismo día.<"
+    ],
+    [
+      ">Simular: el material llega tarde<",
+      ">Simular que el material llega tarde<"
+    ],
+    [
+      ">Planificado en tres segundos. El retraso se vio dos días antes y el cliente ya tiene su nueva fecha.<",
+      ">El trabajo queda planificado en tres segundos. El retraso se detecta con dos días de margen y el cliente ya tiene su nueva fecha.<"
+    ],
+    [
+      ">Elige qué pregunta<",
+      ">Elegir una pregunta<"
+    ],
+    [
+      ">Respondido en segundos, con la agenda real. Lo delicado lo decide una persona el lunes a primera hora.<",
+      ">El asistente responde en segundos con la agenda real. Los casos delicados los revisa una persona el lunes a primera hora.<"
+    ],
+    [
+      ">Siete herramientas. Nadie ve el conjunto.<",
+      ">Hay siete herramientas y nadie ve el conjunto.<"
+    ],
+    [
+      ">¿Qué ha pasado hoy?<",
+      ">Preguntar qué ha pasado hoy<"
+    ],
+    [
+      ">Todo lo que pasa, en un solo sitio y con su rastro. Y un parte del día escrito solo.<",
+      ">Todo lo que pasa queda en un solo sitio y con su rastro. Además, el parte del día se escribe solo.<"
+    ],
+    [
+      "data-dm-otra hidden>Otra vez<",
+      "data-dm-otra hidden>Repetir la demo<"
+    ],
+    [
+      ">Demostración · empresas ficticias · ningún sistema real conectado.<",
+      ">Es una demostración: las empresas son ficticias y no hay ningún sistema real conectado.<"
+    ],
+    [
+      "id=\"h-fin\">Hablemos.<",
+      "id=\"h-fin\">Hablemos de tu empresa.<"
+    ],
+    [
+      ">Treinta minutos y sabrás qué se puede automatizar en tu empresa.<",
+      ">En una llamada de treinta minutos te diremos qué se puede automatizar.<"
+    ],
+    [
+      "Finance registra solas tus facturas de proveedor.",
+      "Finance registra automáticamente las facturas de tus proveedores."
+    ]
+  ]
+}

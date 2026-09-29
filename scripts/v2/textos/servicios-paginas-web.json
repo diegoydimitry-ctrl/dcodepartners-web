@@ -1,0 +1,69 @@
+{
+  "archivo": "servicios/paginas-web.html",
+  "cambios": [
+    [
+      ">Una web que habla con tus sistemas, no un folleto.<",
+      ">Hacemos webs que trabajan con tus sistemas, no folletos.<"
+    ],
+    [
+      ">Hacemos la tuya, rehacemos la que tienes o conectamos la que ya funciona. Lo que cambia respecto a una web normal: el formulario entra en tu CRM ya clasificado, la cita cae en la agenda y el stock sale del almacén.<",
+      ">Hacemos tu web nueva, rehacemos la que tienes o conectamos la que ya funciona. La diferencia con una web normal es que el formulario entra en tu CRM ya clasificado, la cita cae en la agenda y el stock sale del almacén.<"
+    ],
+    [
+      "<p class=\"pl-t\">Diseño propio</p>",
+      "<p class=\"pl-t\">El diseño es propio</p>"
+    ],
+    [
+      ">No una plantilla comprada con tu logo encima. Se nota, y lo nota quien entra.<",
+      ">No es una plantilla comprada con tu logo encima. Esa diferencia se nota, y la nota quien entra.<"
+    ],
+    [
+      "<p class=\"pl-t\">Rápida de verdad</p>",
+      "<p class=\"pl-t\">Carga rápido, y lo medimos</p>"
+    ],
+    [
+      ">Medida, no «nos parece que va bien». Y bien en un teléfono, que es por donde entra la mayoría.<",
+      ">Medimos la velocidad en lugar de fiarnos de que «parece que va bien». Y se ve bien en el teléfono, que es desde donde entra la mayoría.<"
+    ],
+    [
+      "<p class=\"pl-t\">Conectada</p>",
+      "<p class=\"pl-t\">Se conecta con lo que ya usas</p>"
+    ],
+    [
+      ">Al CRM, a la agenda, al almacén o a lo que tengas. Con chatbot si lo quieres.<",
+      ">La conectamos al CRM, a la agenda, al almacén o a lo que tengas. Si lo quieres, le añadimos un chatbot.<"
+    ],
+    [
+      "<p class=\"pl-t\">A tu nombre</p>",
+      "<p class=\"pl-t\">Todo queda a tu nombre</p>"
+    ],
+    [
+      ">Dominio, hosting y accesos. Si un día te vas, te llevas la web.<",
+      ">El dominio, el alojamiento y los accesos son tuyos. Si un día te vas, te llevas la web.<"
+    ],
+    [
+      ">Cuatro webs de verdad. Entra en ellas.<",
+      ">Entra en cuatro webs que funcionan de verdad.<"
+    ],
+    [
+      ">Maquetas nuestras, empresas inventadas, código de verdad: elige una, bájala, navega. Cada una se conecta con lo que la empresa ya usa.<",
+      ">Son maquetas nuestras de empresas inventadas, pero el código es real. Elige una, recórrela y navega por ella como lo haría un cliente. Cada una muestra cómo se conecta con lo que esa empresa ya usa.<"
+    ],
+    [
+      ">Webs de demostración · empresas ficticias · ningún sistema real conectado.<",
+      ">Son webs de demostración de empresas ficticias y no están conectadas a ningún sistema real.<"
+    ],
+    [
+      ">Las otras cuatro cosas que construimos.<",
+      ">También construimos estas otras cuatro cosas.<"
+    ],
+    [
+      "<span class=\"fe-d\">Cuando lo que necesitas no se compra hecho.</span>",
+      "<span class=\"fe-d\">Construimos lo que necesitas y no se vende hecho.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Contestan con tus datos, no con lo que se inventen.</span>",
+      "<span class=\"fe-d\">Nuestros agentes contestan con tus datos, sin inventar.</span>"
+    ]
+  ]
+}

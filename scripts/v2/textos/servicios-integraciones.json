@@ -1,0 +1,65 @@
+{
+  "archivo": "servicios/integraciones.html",
+  "cambios": [
+    [
+      ">Tu CRM, tu ERP, tu web y tus hojas, hablándose. Con los permisos mínimos necesarios, con reintentos cuando el otro lado falla y con rastro de lo que pasó.<",
+      ">Conectamos tu CRM, tu ERP, tu web y tus hojas de cálculo para que compartan los datos. Lo hacemos con los permisos mínimos necesarios, con reintentos cuando el otro lado falla y con un registro de lo que pasó.<"
+    ],
+    [
+      "<p class=\"pl-t\">También con el sistema de siempre</p>",
+      "<p class=\"pl-t\">Conectamos también tu sistema de siempre</p>"
+    ],
+    [
+      ">Ese que nadie quiere tocar. Se lee y se escribe por la vía que admita, sin modificarlo por dentro.<",
+      ">Ese programa que nadie quiere tocar se conecta por la vía que admita, para leer y escribir datos sin modificarlo por dentro.<"
+    ],
+    [
+      "<p class=\"pl-t\">Permisos mínimos</p>",
+      "<p class=\"pl-t\">Pedimos solo los permisos necesarios</p>"
+    ],
+    [
+      ">Una integración no necesita acceso a todo. Se pide lo justo y se deja escrito qué se pidió.<",
+      ">Una integración no necesita acceso a todo. Pedimos lo justo y dejamos por escrito qué se pidió.<"
+    ],
+    [
+      "<p class=\"pl-t\">Reintentos y rastro</p>",
+      "<p class=\"pl-t\">Si algo falla, no se pierde nada</p>"
+    ],
+    [
+      ">Si el otro lado se cae, se reintenta; si sigue cayéndose, avisa. Nada se pierde en silencio.<",
+      ">Si el otro programa se cae, la integración lo vuelve a intentar, y si sigue fallando, te avisa. Nada se pierde sin que te enteres.<"
+    ],
+    [
+      "<p class=\"pl-t\">En los dos sentidos si hace falta</p>",
+      "<p class=\"pl-t\">Funciona en uno o en los dos sentidos</p>"
+    ],
+    [
+      ">O en uno solo, que muchas veces es lo correcto y lo más barato.<",
+      ">Muchas veces lo correcto, y lo más barato, es que los datos vayan en un solo sentido.<"
+    ],
+    [
+      ">Finance, que es todo integración<",
+      ">Finance funciona gracias a sus integraciones.<"
+    ],
+    [
+      ">Banco, facturas, gastos y documentos en una sola pantalla. Eso por debajo son conexiones, y se puede abrir y mirar.<",
+      ">Reúne el banco, las facturas, los gastos y los documentos en una sola pantalla. Por debajo, todo eso son conexiones, y puedes abrir la demo para verlo.<"
+    ],
+    [
+      ">Las otras cuatro cosas que construimos.<",
+      ">También construimos estas otras cuatro cosas.<"
+    ],
+    [
+      "<span class=\"fe-d\">Cuando lo que necesitas no se compra hecho.</span>",
+      "<span class=\"fe-d\">Construimos lo que necesitas y no se vende hecho.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Contestan con tus datos, no con lo que se inventen.</span>",
+      "<span class=\"fe-d\">Nuestros agentes contestan con tus datos, sin inventar.</span>"
+    ],
+    [
+      "<span class=\"fe-d\">Una web que habla con tus sistemas, no un folleto.</span>",
+      "<span class=\"fe-d\">Hacemos webs que trabajan con tus sistemas, no folletos.</span>"
+    ]
+  ]
+}

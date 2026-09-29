@@ -1,0 +1,53 @@
+{
+  "archivos": "*",
+  "cambios": [
+    [
+      "<p class=\"etiqueta\">Lo que se instala</p>",
+      "<p class=\"etiqueta\">Lo que instalamos</p>"
+    ],
+    [
+      "se conecta con las demás. Nada se vende suelto si no hace falta.</p>",
+      "se conecta con las demás. Solo vendemos una pieza por separado cuando tiene sentido hacerlo.</p>"
+    ],
+    [
+      "class=\"plano-d\">Lo que se repite cada semana, hecho solo<",
+      "class=\"plano-d\">Las tareas de cada semana se hacen solas<"
+    ],
+    [
+      "class=\"plano-d\">Tus herramientas hablándose<",
+      "class=\"plano-d\">Tus herramientas se pasan los datos entre sí<"
+    ],
+    [
+      "class=\"plano-d\">Lo que ninguna herramienta comprada hace<",
+      "class=\"plano-d\">Hacemos el software que no puedes comprar<"
+    ],
+    [
+      "class=\"plano-d\">Facturar, cobrar y saber lo que hay<",
+      "class=\"plano-d\">Facturas, cobras y sabes cómo va tu dinero<"
+    ],
+    [
+      "class=\"plano-d\">La capa que conecta tus sistemas<",
+      "class=\"plano-d\">Conecta tus sistemas en una sola capa<"
+    ],
+    [
+      "class=\"plano-d\">Hecha, rehecha o conectada<",
+      "class=\"plano-d\">Creamos, rehacemos o conectamos tu web<"
+    ],
+    [
+      "class=\"plano-d\">Comercial, operaciones, finanzas…<",
+      "class=\"plano-d\">Mira lo que hacemos en cada área de tu empresa<"
+    ],
+    [
+      "<p>Construimos el sistema que conecta tu empresa: automatizaciones, agentes de IA e integraciones, sobre tus datos. Madrid, España.</p>",
+      "<p>Construimos el sistema que conecta tu empresa con automatizaciones, agentes de IA e integraciones que trabajan con tus datos. Estamos en Madrid, España.</p>"
+    ],
+    [
+      "href=\"/cambios-en-proceso\">En curso</a>",
+      "href=\"/cambios-en-proceso\">Cambios en proceso</a>"
+    ],
+    [
+      ">Treinta minutos y sabrás por dónde empezaríamos.<",
+      ">En una llamada de treinta minutos sabrás por dónde empezaríamos.<"
+    ]
+  ]
+}

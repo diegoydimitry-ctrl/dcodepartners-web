@@ -1,0 +1,15 @@
+{
+  "archivo": "diagnostico.html",
+  "cambios": [
+    ["<h1 class=\"h1\">¿Dónde se os va el tiempo?</h1>", "<h1 class=\"h1\">¿Dónde se le va el tiempo a tu equipo?</h1>"],
+    [">Tres toques y una estimación con vuestras horas y vuestro coste por hora. Orientativa, sin datos personales.<", ">Con tres respuestas te damos una estimación hecha con tus horas y tu coste por hora. Es orientativa y no te pide datos personales.<"],
+    [">¿Dónde se os va más tiempo?<", ">¿En qué áreas pierde más tiempo tu equipo?<"],
+    [">Elige una o varias áreas. Donde algo se hace a mano, se repite o depende de que alguien se acuerde.<", ">Elige una o varias áreas en las que algo se hace a mano, se repite o depende de que alguien se acuerde.<"],
+    ["Presupuestos y seguimientos que dependen de acordarse", "Presupuestos y seguimientos que dependen de que alguien se acuerde"],
+    [">¿Cuánto tiempo se os va a la semana, entre todos?<", ">¿Cuánto tiempo le dedica tu equipo a la semana?<"],
+    [">A ojo basta. Cuenta todo el equipo junto, no una persona.<", ">Basta con un cálculo a ojo. Cuenta el tiempo de todo el equipo junto, no el de una persona.<"],
+    [">Con la seguridad social incluida. Si no lo sabes, deja 25 €.<", ">Incluye la seguridad social. Si no lo sabes, deja 25 €.<"],
+    ["\"titulo\": \"Unas <em>{h} horas a la semana</em> se os van en estas áreas.", "\"titulo\": \"Tu equipo dedica unas <em>{h} horas a la semana</em> a estas áreas."],
+    ["En la revisión lo medimos con vuestra operación real:", "En la revisión lo medimos con tu operación real:"]
+  ]
+}

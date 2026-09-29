@@ -1,0 +1,29 @@
+{
+  "archivo": "metodo.html",
+  "cambios": [
+    [
+      ">Primero entender.<br>Después construir.<",
+      ">Primero entendemos tu empresa.<br>Después construimos.<"
+    ],
+    [
+      ">De la primera llamada al sistema funcionando.<",
+      ">Así pasamos de la primera llamada al sistema funcionando.<"
+    ],
+    [
+      "No es un cuestionario, es una lectura de cómo trabajáis.",
+      "No te pasamos un cuestionario: vemos de cerca cómo se trabaja en tu empresa."
+    ],
+    [
+      ">Revisamos con datos concretos —horas, tiempos de respuesta, procesos automatizados— comparados con tu situación de partida. Y ajustamos lo que haga falta.<",
+      ">Revisamos los resultados con datos concretos (horas, tiempos de respuesta, procesos automatizados) y los comparamos con tu situación de partida. Después ajustamos lo que haga falta.<"
+    ],
+    [
+      ">Tres cosas que descartamos de entrada.<",
+      ">Hay tres cosas que descartamos de entrada.<"
+    ],
+    [
+      ">Empecemos por mirar cómo trabajáis.<",
+      ">Empecemos por ver cómo trabaja tu empresa.<"
+    ]
+  ]
+}

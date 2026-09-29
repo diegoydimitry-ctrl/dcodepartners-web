@@ -1,0 +1,8 @@
+{
+  "archivo": "assets/v2/js/demos.js",
+  "cambios": [
+    ["\"Lead nuevo · asignado a Laura\"", "\"Contacto nuevo · asignado a Laura\""],
+    ["\"1 lead nuevo, ya respondido. 23 facturas registradas; una la revisaste tú. 1 cobro conciliado. Nada pendiente para hoy.\"", "\"1 contacto nuevo, ya respondido. 23 facturas registradas, de las que tú revisaste una. 1 cobro conciliado. No queda nada pendiente para hoy.\""],
+    ["ahora: \"semana al día\"", "ahora: \"facturas al día\""]
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "archivo": "que-hacemos.html",
+  "cambios": [
+    [
+      ">No vendemos herramientas sueltas.<br>Construimos el sistema.<",
+      ">No vendemos herramientas sueltas.<br>Construimos el sistema que conecta tu empresa.<"
+    ],
+    [
+      ">Miramos por dónde se os escapan el tiempo y el dinero, y construimos lo que lo corta. Cinco piezas que se combinan según lo que haga falta.<",
+      ">Miramos por dónde se le escapan a tu empresa el tiempo y el dinero, y construimos lo que lo evita. Trabajamos con cinco piezas que se combinan según lo que necesites.<"
+    ],
+    [
+      ">El sistema con el que trabaja tu empresa, construido a la medida de cómo trabajáis.<",
+      ">Construimos el sistema con el que trabaja tu empresa, a la medida de cómo trabaja tu equipo.<"
+    ],
+    [
+      "<li>Seguimos un cliente, un pedido y una factura de principio a fin y medimos dónde una persona hace de puente.</li>",
+      "<li>Seguimos un cliente, un pedido y una factura de principio a fin, y medimos dónde una persona tiene que pasar datos a mano de un programa a otro.</li>"
+    ],
+    [
+      "<li>Se construye por partes, dentro de las herramientas que ya usáis.</li>",
+      "<li>Se construye por partes, dentro de las herramientas que ya usas.</li>"
+    ],
+    [
+      "<li>Queda funcionando, con documentación y los accesos a tu nombre.</li>",
+      "<li>El sistema queda funcionando, con su documentación y los accesos a tu nombre.</li>"
+    ],
+    [
+      "<li>Una tarea suelta, un proceso entero o un flujo con IA que lee y clasifica.</li>",
+      "<li>Automatizamos una tarea suelta, un proceso entero o un flujo con IA que lee y clasifica lo que entra.</li>"
+    ],
+    [
+      "<li>Mantenimiento aparte y opcional: sin nadie detrás, se rompe el día que otro cambia su API.</li>",
+      "<li>El mantenimiento es aparte y opcional. Sin nadie que la vigile, una automatización se rompe el día que otro programa cambia su forma de conectarse.</li>"
+    ],
+    [
+      ">Atienden y responden con los datos de tu negocio, y escalan a una persona cuando toca.<",
+      ">Nuestros agentes atienden y responden con los datos de tu negocio, y pasan la conversación a una persona cuando hace falta.<"
+    ],
+    [
+      "<li>Web, WhatsApp o teléfono; uno o varios canales a la vez.</li>",
+      "<li>Atienden por la web, por WhatsApp o por teléfono, en uno o en varios canales a la vez.</li>"
+    ],
+    [
+      "<li>Cuota fija: no se paga por conversación.</li>",
+      "<li>Pagas una cuota fija, no por conversación.</li>"
+    ],
+    [
+      ">Tu CRM, tu ERP, tu web y tus hojas hablándose, con los permisos mínimos.<",
+      ">Conectamos tu CRM, tu ERP, tu web y tus hojas de cálculo para que compartan los datos, con los permisos mínimos.<"
+    ],
+    [
+      "<li>También con el sistema de siempre, sin tocarlo por dentro.</li>",
+      "<li>También conectamos tu sistema de siempre, sin modificarlo por dentro.</li>"
+    ],
+    [
+      "<li>La que ya tienes: se rehace o se arregla, sin empezar de cero si no hace falta.</li>",
+      "<li>Si ya tienes web, la rehacemos o la arreglamos sin empezar de cero cuando no hace falta.</li>"
+    ],
+    [
+      "<li>Conectada: el formulario entra en tu CRM, el stock sale del almacén, la cita entra en la agenda.</li>",
+      "<li>La conectamos con tus sistemas: el formulario entra en tu CRM, el stock sale del almacén y la cita entra en la agenda.</li>"
+    ],
+    [
+      "<li>Con chatbot si lo quieres, respondiendo con tus datos.</li>",
+      "<li>Si lo quieres, le añadimos un chatbot que responde con tus datos.</li>"
+    ],
+    [
+      ">Cuatro webs de verdad. Entra en ellas.<",
+      ">Entra en cuatro webs que funcionan de verdad.<"
+    ],
+    [
+      ">Maquetas nuestras, empresas inventadas, código de verdad: elige una, bájala, navega. Cada una se conecta con lo que la empresa ya usa.<",
+      ">Son maquetas nuestras de empresas inventadas, pero el código es real. Elige una, recórrela y navega por ella como lo haría un cliente. Cada una muestra cómo se conecta con lo que esa empresa ya usa.<"
+    ],
+    [
+      ">Webs de demostración · empresas ficticias · ningún sistema real conectado.<",
+      ">Son webs de demostración de empresas ficticias y no están conectadas a ningún sistema real.<"
+    ],
+    [
+      ">El mismo sistema, visto desde donde trabajas.<",
+      ">Mira el mismo sistema desde el área donde trabajas.<"
+    ],
+    [
+      ">Cada área es una puerta de entrada, no un producto aparte. Se empieza por la que más pesa.<",
+      ">Cada área es una forma de entrar en el sistema, no un producto aparte. Empezamos por la que más trabajo le da a tu empresa.<"
+    ],
+    [
+      ">Varias áreas, cada una con sus programas, sus hojas y su WhatsApp. Todas trabajan. Ninguna se habla con las demás.<",
+      ">Tu empresa tiene varias áreas, cada una con sus programas, sus hojas de cálculo y su WhatsApp. Todas trabajan, pero ninguna comparte información con las demás.<"
+    ],
+    [
+      ">Seguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona hace de puente.<",
+      ">Seguimos un cliente, un pedido y una factura de principio a fin, y medimos cuántas veces una persona tiene que pasar datos a mano de un programa a otro.<"
+    ],
+    [
+      ">Un solo dato para todas las áreas. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas.<",
+      ">Todas las áreas trabajan con los mismos datos. El cliente que entra por ventas es el mismo que atiende soporte y el que factura finanzas.<"
+    ],
+    [
+      ">Lo que termina un área dispara la siguiente: presupuesto aceptado, trabajo planificado, factura emitida. Sin teclear dos veces.<",
+      ">Cuando un área termina su parte, la siguiente empieza sola: el presupuesto aceptado se planifica y el trabajo hecho se factura. Nadie tiene que teclear nada dos veces.<"
+    ],
+    [
+      ">Todo deja rastro: horas a mano, tiempos de respuesta, tareas sin dueño. Son cifras, no impresiones.<",
+      ">Todo queda registrado: las horas de trabajo a mano, los tiempos de respuesta y las tareas sin responsable. Así hablamos con cifras, no con impresiones.<"
+    ],
+    [
+      ">Treinta minutos, y sabrás por dónde empezaríamos.<",
+      ">En una llamada de treinta minutos sabrás por dónde empezaríamos.<"
+    ]
+  ]
+}

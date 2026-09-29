@@ -1,0 +1,101 @@
+{
+  "archivo": "departamentos/marketing.html",
+  "cambios": [
+    [
+      "Es una parte del sistema que construimos cuando tu empresa la necesita: adaptada a cómo trabajáis, no un paquete cerrado.",
+      "Es una de las partes del sistema que construimos cuando tu empresa la necesita. La adaptamos a tu forma de trabajar, en lugar de venderte un paquete cerrado."
+    ],
+    [
+      "<strong>Hoy, sin sistema</strong>",
+      "<strong>Así se trabaja hoy, sin un sistema</strong>"
+    ],
+    [
+      "<strong>Con el sistema</strong>",
+      "<strong>Así se trabaja con el sistema</strong>"
+    ],
+    [
+      "<p class=\"etiqueta\">En cadena</p>",
+      "<p class=\"etiqueta\">Cómo encaja con otras áreas</p>"
+    ],
+    [
+      ">Qué obtiene tu empresa.<",
+      ">Esto es lo que consigue tu empresa.<"
+    ],
+    [
+      ">Representación simplificada del sistema — no son datos de un cliente real.<",
+      ">Es una representación simplificada del sistema y no usa datos de ningún cliente real.<"
+    ],
+    [
+      ">Pruébalo funcionando: Comercial, con datos inventados ",
+      ">Probar la demo de Comercial con datos inventados "
+    ],
+    [
+      "Marketing capta y cualifica cada contacto que llega a tu empresa, y audita tu presencia online con datos reales — para que tu equipo comercial siempre sepa a quién atender primero.",
+      "Marketing capta y cualifica cada contacto que llega a tu empresa y audita tu presencia online con datos reales. Así tu equipo comercial siempre sabe a quién atender primero."
+    ],
+    [
+      ">Dejas de depender del boca a boca y de las opiniones.<",
+      ">Dejas de depender del boca a boca y de la intuición.<"
+    ],
+    [
+      "<li>Los leads del formulario se leen cuando alguien tiene tiempo, no cuando entran.</li>",
+      "<li>Los contactos del formulario se leen cuando alguien tiene tiempo, no cuando entran.</li>"
+    ],
+    [
+      "<li>Nadie sabe qué prospecto merece una llamada urgente y cuál puede esperar.</li>",
+      "<li>Nadie sabe qué cliente potencial merece una llamada urgente y cuál puede esperar.</li>"
+    ],
+    [
+      "<li>Cada lead se cualifica en tiempo real, en cuanto entra.</li>",
+      "<li>Cada contacto se cualifica en tiempo real, en cuanto entra.</li>"
+    ],
+    [
+      "<li>Las recomendaciones llegan ya priorizadas y accionables.</li>",
+      "<li>Las recomendaciones llegan ordenadas por prioridad y listas para aplicar.</li>"
+    ],
+    [
+      ">Un embudo que se rellena solo, no una lista de leads sin cualificar.<",
+      ">El embudo se llena solo y cada contacto llega ya cualificado.<"
+    ],
+    [
+      ">Marketing capta. Comercial cierra. Juntos, cubren todo el embudo.<",
+      ">Marketing y Comercial cubren juntos todo el camino hasta la venta.<"
+    ],
+    [
+      "Si el contacto es prioritario, se avisa de inmediato — y Comercial ya tiene ese mismo dato listo en su pipeline.",
+      "Si el contacto es prioritario, el equipo recibe un aviso al momento. Comercial ya tiene ese mismo dato en su cartera de oportunidades."
+    ],
+    [
+      ">La misma información, sin reintroducir nada<",
+      ">Las dos áreas comparten la misma información<"
+    ],
+    [
+      "Ambos comparten los datos de cada oportunidad, así que nadie tiene que preguntar en qué punto está un lead.",
+      "Nadie tiene que volver a introducir datos ni preguntar en qué punto está cada contacto."
+    ],
+    [
+      "<strong>Leads siempre clasificados</strong>",
+      "<strong>Los contactos llegan siempre clasificados</strong>"
+    ],
+    [
+      "<strong>Tu web, una fuente constante</strong>",
+      "<strong>Tu web genera oportunidades de forma constante</strong>"
+    ],
+    [
+      "Se convierte en una fuente constante de oportunidades, no en una tarjeta de visita digital.",
+      "Deja de ser una simple tarjeta de visita digital."
+    ],
+    [
+      "<strong>Decisiones basadas en datos</strong>",
+      "<strong>Las prioridades se deciden con datos</strong>"
+    ],
+    [
+      "Solo necesitas un formulario web que podamos conectar — para la auditoría SEO, ni siquiera eso: basta con la URL a analizar. En la primera reunión te decimos qué encontramos y qué construiríamos.",
+      "Solo necesitas un formulario web que podamos conectar. Para la auditoría SEO ni siquiera eso, porque basta con la dirección de la web que quieres analizar. En la primera reunión te contamos qué hemos encontrado y qué construiríamos."
+    ],
+    [
+      "Que tu web no deje de traer oportunidades.",
+      "Tu web no deja de traer oportunidades."
+    ]
+  ]
+}

@@ -108,7 +108,7 @@ if (demos) {
   }));
   const reposo = window.requestIdleCallback || ((f) => setTimeout(f, 1200));
   addEventListener("load", () => reposo(cssDemos), { once: true });
-  const cargarDemos = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js?v=4ca7f54240")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demos", e));
+  const cargarDemos = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js?v=95968f9ee7")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demos", e));
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); cargarDemos(); } }, { rootMargin: "600px 0px" });
     io.observe(demos);

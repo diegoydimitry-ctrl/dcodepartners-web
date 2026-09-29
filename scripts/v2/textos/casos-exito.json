@@ -1,0 +1,17 @@
+{
+  "archivo": "casos-exito.html",
+  "cambios": [
+    [">Cada pieza que ofrecemos dirige primero una parte real de D-Code Partners. Estos son tres casos reales — con lo que funcionó y con lo que no salió como esperábamos.<", ">Cada pieza que ofrecemos la usamos primero para llevar una parte real de D-Code Partners. Aquí tienes tres casos reales, con lo que funcionó y con lo que no salió como esperábamos.<"],
+    [">De empresa detectada a propuesta enviada, sin que nadie tenga que acordarse de hacerlo<", ">Cada empresa detectada llega a propuesta sin que nadie tenga que acordarse<"],
+    ["en leads y dispara la generación de una propuesta con IA — que pasa por revisión humana antes de salir.<", "en contactos comerciales y prepara una propuesta con IA. Una persona revisa esa propuesta antes de que salga.<"],
+    [">Automatizar la detección y la propuesta no cierra la venta sola: crea la oportunidad de conversación.", ">Automatizar la detección y la propuesta no cierra la venta por sí solo, pero crea la oportunidad de empezar una conversación."],
+    [">Repartir el trabajo del equipo sin que nadie tenga que decidirlo cada hora<", ">El trabajo se reparte solo, sin que nadie lo decida cada hora<"],
+    [">Al cerrar un proyecto, el sistema lo crea solo; cada hora reparte las tareas pendientes según la carga real de cada persona; cada día avisa de lo que está a punto de vencer.<", ">Al cerrar un proyecto, el sistema lo crea solo. Cada hora reparte las tareas pendientes según la carga real de cada persona, y cada día avisa de lo que está a punto de vencer.<"],
+    [">Es el sistema que más usamos internamente hoy, precisamente porque automatiza reparto y plazos — el tipo de decisión pequeña y repetitiva que consume más tiempo del que parece.<", ">Hoy es el sistema que más usamos por dentro, precisamente porque automatiza el reparto y los plazos. Son decisiones pequeñas y repetitivas que consumen más tiempo del que parece.<"],
+    [">Cuando la hipótesis sobre un fallo no coincidía con lo que decían los datos<", ">Nuestra hipótesis sobre un fallo no coincidía con los datos<"],
+    ["señalando un workflow concreto como la causa probable", "señalando un flujo automatizado concreto como la causa probable"],
+    [">Estuvimos a punto de intervenir sobre ese workflow siguiendo esa hipótesis, sin haberla contrastado antes contra las ejecuciones reales.<", ">Estuvimos a punto de tocar ese flujo siguiendo esa hipótesis, sin haberla contrastado antes con las ejecuciones reales.<"],
+    [">En vez de actuar sobre la hipótesis, se auditaron las ejecuciones reales una por una — y la concentración real de errores estaba en dos workflows distintos a los señalados.<", ">En vez de actuar sobre la hipótesis, revisamos las ejecuciones reales una por una. Los errores se concentraban en realidad en otros dos flujos, distintos de los señalados.<"],
+    [">No es un caso de automatización, es un caso de disciplina: no corregimos un fallo hasta verificar su causa contra la evidencia directa, ni siquiera cuando la sospecha viene de nuestro propio sistema.<", ">Este no es un caso de automatización, sino de disciplina. No corregimos un fallo hasta comprobar su causa con pruebas directas, aunque la sospecha venga de nuestro propio sistema.<"]
+  ]
+}
