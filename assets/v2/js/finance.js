@@ -8,10 +8,10 @@ if (demos) {
   let css;
   const cssDemos = () => css || (css = new Promise((ok) => {
     if (document.querySelector('link[href^="/assets/v2/demos.css"]')) return ok(); // ya viene en la página, con su versión
-    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css";
+    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css?v=54d9def646"; // siempre con versión: la URL sin versión puede estar en la caché del navegador con la hoja vieja
     l.onload = l.onerror = () => ok(); document.head.appendChild(l);
   }));
-  const cargar = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demo", e));
+  const cargar = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js?v=4ca7f54240")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demo", e));
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); cargar(); } }, { rootMargin: "700px 0px" });
     io.observe(demos);

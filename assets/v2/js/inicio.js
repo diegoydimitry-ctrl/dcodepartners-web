@@ -51,7 +51,7 @@ if (sec) {
     leer(); actual = objetivo; pintarCap(actual);
 
     // El 3D, cuando el navegador tenga un respiro (el póster ya es el LCP).
-    const cargar = () => import("/assets/v2/js/piezas3d.js").then(({ montar }) => {
+    const cargar = () => import("/assets/v2/js/piezas3d.js?v=57444ef6c6").then(({ montar }) => {
       const raiz = document.documentElement;
       const claro = () => raiz.dataset.theme === "light";
       escena = montar(lienzo, { movil, claro: claro() });
@@ -103,12 +103,12 @@ if (demos) {
   let css;
   const cssDemos = () => css || (css = new Promise((ok) => {
     if (document.querySelector('link[href^="/assets/v2/demos.css"]')) return ok(); // ya viene en la página, con su versión
-    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css";
+    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css?v=54d9def646"; // siempre con versión: la URL sin versión puede estar en la caché del navegador con la hoja vieja
     l.onload = l.onerror = () => ok(); document.head.appendChild(l);
   }));
   const reposo = window.requestIdleCallback || ((f) => setTimeout(f, 1200));
   addEventListener("load", () => reposo(cssDemos), { once: true });
-  const cargarDemos = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demos", e));
+  const cargarDemos = () => Promise.all([cssDemos(), import("/assets/v2/js/demos.js?v=4ca7f54240")]).then(([, { montarDemos }]) => montarDemos(demos)).catch((e) => console.warn("demos", e));
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); cargarDemos(); } }, { rootMargin: "600px 0px" });
     io.observe(demos);
