@@ -33,13 +33,14 @@ for s in R["segmentos"]:
         n = len([f for f in os.listdir(d) if f.endswith(".jpg")])
         medios[s["id"]] = {"tipo": "clip", "w": w, "h": h, "n": n, "ruta": f"cache/{s['id']}/"}
         # cursor: el registro real de la «mano» durante la grabación (ms desde el inicio) → tramo del segmento, en 0–1
-        log = os.path.join(G, s["fuente"].rsplit(".", 1)[0] + ".json")
+        log = os.path.join(G, s.get("log", s["fuente"].rsplit(".", 1)[0] + ".json"))
+        base_t = s["in"] + s.get("desfase", 0)          # si la fuente es un tramo recortado de la grabación original
         if s.get("cursor") and os.path.exists(log):
             L = json.load(open(log))["log"]; ini = next((e for e in L if e.get("ev") == "inicio"), {})
             vw, vh = ini.get("vw", w), ini.get("vh", h); pts = []; ult = None
             for e in L:
                 if "x" not in e: continue
-                tt = e["t"] / 1000 - s["in"]
+                tt = e["t"] / 1000 - base_t
                 if tt < 0: ult = e; continue
                 if tt > s["dur"] + 0.3: break
                 pts.append({"t": round(tt, 3), "x": round(e["x"] / vw, 4), "y": round(e["y"] / vh, 4), "c": e["ev"] == "clic"})

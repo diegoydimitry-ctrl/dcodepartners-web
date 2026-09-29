@@ -26,7 +26,10 @@ await pag.waitForFunction(() => window.LISTO === true, null, { timeout: 60000 })
 const META = await pag.evaluate(() => window.META);
 await pag.setViewportSize({ width: META.W, height: META.H });
 const lienzo = await pag.$("canvas");
-const pinta = async (n) => { const cajas = await pag.evaluate((n) => window.pintaFrame(n), n); return { png: await lienzo.screenshot({ type: "png" }), cajas }; };
+// en el render completo se usa JPEG al 95 % (mucho más rápido que PNG y sin pérdida visible antes del x264 final)
+const RAPIDO = !(arg("--fotos") || arg("--portada"));
+const pinta = async (n) => { const cajas = await pag.evaluate((n) => window.pintaFrame(n), n);
+  return { png: await lienzo.screenshot(RAPIDO ? { type: "jpeg", quality: 95 } : { type: "png" }), cajas }; };
 const [sx0, sy0, sx1, sy1] = META.segura; const fallos = {};
 const revisa = (n, cajas) => { for (const b of cajas) { const fuera = b.x0 < sx0 - 1 || b.y0 < sy0 - 1 || b.x1 > sx1 + 1 || b.y1 > sy1 + 1, peq = b.px < META.minpx;
   if (fuera || peq) (fallos[`${b.s}${fuera ? " [fuera]" : ""}${peq ? ` [${b.px.toFixed(0)} px]` : ""}`] ||= []).push(n); } };
