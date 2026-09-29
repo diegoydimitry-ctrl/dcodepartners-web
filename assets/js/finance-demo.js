@@ -437,124 +437,96 @@
         '</' + (o.vista ? 'a' : 'div') + '>';
     }
 
+    /* INICIO, como en el producto (dcode-finance, «Qué hay que hacer hoy», septiembre de 2026): primero la bandeja
+       de HOY —qué es, cuánto hay en juego, de dónde sale la cifra y qué hacer—, después «¿Cómo va la empresa?»:
+       preguntas con su respuesta y su origen, no indicadores. Lo que no se sabe se dice («Todavía no lo sé»), nunca
+       un cero. El análisis largo vive en Histórico, igual que en el producto. */
+    function preguntaTarjeta(q) {
+      var cuerpo = '<p class="fdemo-pq-p">' + esc(q.pregunta) + '</p>' +
+        (q.respuesta === null
+          ? '<p class="fdemo-pq-no">Todavía no lo sé</p>' + (q.motivo ? '<p class="fdemo-pq-n">' + esc(q.motivo) + '</p>' : '')
+          : '<p class="fdemo-pq-r t-' + (q.tono || 'neutro') + '">' + esc(q.respuesta) + '</p>' + (q.nota ? '<p class="fdemo-pq-n">' + esc(q.nota) + '</p>' : '')) +
+        '<p class="fdemo-pq-o">' + esc(q.origen) + '</p>';
+      return q.vista
+        ? '<a class="fdemo-pq es-link" href="#' + q.vista + '" data-action="nav" data-view="' + q.vista + '">' + cuerpo + '</a>'
+        : '<div class="fdemo-pq">' + cuerpo + '</div>';
+    }
+    function lineaHoy(e) {
+      return '<li><a class="fdemo-hoy-l u-' + e.urgencia + '" href="#' + e.vista + '" data-action="nav" data-view="' + e.vista + '">' +
+        '<span class="fdemo-hoy-pt" aria-hidden="true"></span>' +
+        '<span class="fdemo-hoy-c"><span class="fdemo-hoy-t">' + esc(e.titulo) + ' <span>· ' + e.cantidad + '</span></span>' +
+        '<span class="fdemo-hoy-d">' + esc(e.detalle) + '</span><span class="fdemo-hoy-o">' + esc(e.origen) + '</span></span>' +
+        (e.importe !== null ? '<span class="fdemo-hoy-i">' + EUR(e.importe) + '</span>' : '') +
+        '<span class="fdemo-hoy-a">' + esc(e.accion) + ' →</span></a></li>';
+    }
     RENDERERS.dashboard = function () {
-      var s = FS.getDashboardSnapshot(), ev = FS.getEvolucion();
-      var r = FS.getResumenEjecutivo(), prev = FS.getPrevision();
-      var ant = FS.getAntiguedad(), con = FS.getConcentracion();
-      var cobrados = ev.map(function (m) { return m.cobrado; });
-      var resultados = ev.map(function (m) { return m.resultado; });
-      var dif = s.resultadoMes - s.resultadoMesPrevio;
+      var s = FS.getDashboardSnapshot();
+      var fac = FS.listFacturas(), gas = FS.listGastos(), pres = FS.listPresupuestos();
+      var pend = function (f) { return FS.pendienteDe(f); };
+      var sum = function (xs, fn) { return xs.reduce(function (a, x) { return a + fn(x); }, 0); };
+      var emitidas = fac.filter(function (f) { return f.estado !== 'Borrador' && pend(f) > 0; });
+      var vencidas = emitidas.filter(function (f) { return f.vencimiento > 0; });
+      var semana = emitidas.filter(function (f) { return f.vencimiento <= 0 && f.vencimiento >= -7; });
+      var sinPagar = gas.filter(function (g) { return !g.pagado; });
+      var pagosVencidos = sinPagar.filter(function (g) { return g.vencimiento > 0; });
+      var revisar = gas.filter(function (g) { return g.estadoRevision === 'Pendiente revisión'; });
+      var borradores = fac.filter(function (f) { return f.estado === 'Borrador'; });
+      var plural = function (n, uno, varios) { return n + ' ' + (n === 1 ? uno : varios); };
 
-      // ── la frase de arriba ──
-      var narrativa =
-        '<div class="fdemo-narra n-' + r.principal.nivel + '">' +
-        '<span class="fdemo-narra-filo" aria-hidden="true"></span>' +
-        '<p class="fdemo-narra-p">' + esc(r.principal.texto) + '</p>' +
-        (r.frases.length ? '<ul class="fdemo-narra-l">' + r.frases.map(function (f) {
-          return '<li class="n-' + f.nivel + '"><span class="fdemo-narra-pt" aria-hidden="true"></span>' +
-                 '<a href="#' + f.vista + '">' + esc(f.texto) + '</a></li>';
-        }).join('') + '</ul>' : '') +
-        '</div>';
+      // ── la bandeja de hoy (solo entra lo que tiene algo que hacer) ──
+      var bandeja = [];
+      if (vencidas.length) bandeja.push({ urgencia: 'vencido', titulo: 'Facturas vencidas', cantidad: vencidas.length, importe: sum(vencidas, pend),
+        detalle: 'Pasada la fecha de vencimiento y sin cobrar del todo.', origen: 'facturas emitidas con vencimiento pasado', accion: 'Reclamar', vista: 'cobros' });
+      if (pagosVencidos.length) bandeja.push({ urgencia: 'vencido', titulo: 'Pagos vencidos', cantidad: pagosVencidos.length, importe: sum(pagosVencidos, function (g) { return g.importe; }),
+        detalle: 'Gastos cuya fecha de pago ya ha pasado.', origen: 'gastos con vencimiento pasado y sin pago registrado', accion: 'Pagar o aplazar', vista: 'pagos' });
+      if (semana.length) bandeja.push({ urgencia: 'pronto', titulo: 'Cobros que vencen esta semana', cantidad: semana.length, importe: sum(semana, pend),
+        detalle: 'Todavía en plazo: un recordatorio ahora evita reclamar después.', origen: 'facturas con vencimiento en los próximos 7 días', accion: 'Hacer seguimiento', vista: 'cobros' });
+      if (borradores.length) bandeja.push({ urgencia: 'pronto', titulo: 'Facturas en borrador', cantidad: borradores.length, importe: sum(borradores, function (f) { return f.importe; }),
+        detalle: 'Preparadas y sin emitir: mientras no se emitan, no se cobran.', origen: 'facturas en estado «Borrador»', accion: 'Emitir', vista: 'facturas' });
+      if (revisar.length) bandeja.push({ urgencia: 'pendiente', titulo: 'Gastos sin revisar', cantidad: revisar.length, importe: sum(revisar, function (g) { return g.importe; }),
+        detalle: 'Hasta que alguien los mire, no cuentan como coste cerrado.', origen: 'gastos en «Pendiente revisión»', accion: 'Revisar', vista: 'gastos' });
+      if (s.sinFacturar > 0) bandeja.push({ urgencia: 'pendiente', titulo: 'Presupuestos aceptados sin facturar', cantidad: pres.filter(function (p) { return /acept/i.test(p.estado || ''); }).length || 1, importe: s.sinFacturar,
+        detalle: 'El cliente ya dijo que sí: falta la factura.', origen: 'presupuestos aceptados y todavía sin factura', accion: 'Convertir en factura', vista: 'presupuestos' });
+      var TIT = { vencido: 'Vencido', pronto: 'Esta semana', pendiente: 'Pendiente' };
+      var total = sum(bandeja, function (e) { return e.cantidad; });
+      var grupos = ['vencido', 'pronto', 'pendiente'].map(function (u) { return { u: u, es: bandeja.filter(function (e) { return e.urgencia === u; }) }; }).filter(function (g) { return g.es.length; });
+      var hoy = card(cardHead('Hoy', total ? plural(total, 'cosa', 'cosas') + ' esperando, por orden de urgencia' : 'No hay nada esperando'),
+        grupos.length
+          ? '<div class="fdemo-hoy">' + grupos.map(function (g) {
+              return '<section><h3 class="fdemo-eyebrow">' + TIT[g.u] + '</h3><ul>' + g.es.map(lineaHoy).join('') + '</ul></section>';
+            }).join('') + '</div>'
+          : '<p class="fdemo-hoy-vacio">Nada vencido, nada sin emitir y nada sin revisar.</p>');
 
-      // ── el dinero ──
-      var dinero =
-        '<div class="fdemo-kpi-hero">' +
-        kpi2({ hero: 1, tono: 'positivo', label: 'Cobrado', valor: EUR(s.totalCobrado),
-              hint: 'dinero que ya ha entrado · todo el histórico', serie: cobrados, vista: 'cobros' }) +
-        kpi2({ hero: 1, tono: s.totalPendiente > 0 ? 'aviso' : 'neutro', label: 'Pendiente de cobro',
-              valor: EUR(s.totalPendiente),
-              hint: s.dso === null ? 'emitido y todavía sin cobrar' : 'emitido y sin cobrar · se tarda {d} días de mediana'.replace('{d}', s.dso), vista: 'cobros' }) +
-        kpi2({ hero: 1, tono: s.totalVencido > 0 ? 'critico' : 'neutro', label: 'Vencido',
-              valor: EUR(s.totalVencido),
-              delta: s.totalPendiente > 0 ? { sube: true, bueno: s.totalVencido === 0,
-                texto: Math.round((s.totalVencido / s.totalPendiente) * 1000) / 10 + ' % de lo pendiente' } : null,
-              hint: s.totalVencido > 0 ? 'pasado de fecha · reclámalo' : 'nada pasado de fecha', vista: 'cobros' }) +
-        '</div>' +
-        '<div class="fdemo-kpi-tira">' +
-        kpi2({ tono: s.resultadoMes >= 0 ? 'positivo' : 'critico', label: 'Resultado del mes',
-              valor: EUR(s.resultadoMes), serie: resultados,
-              delta: { sube: dif > 0 ? true : dif < 0 ? false : null, bueno: dif >= 0,
-                       texto: EUR(Math.abs(dif)) + ' vs el mes anterior' },
-              hint: 'facturado menos gastado, este mes' }) +
-        (s.sinFacturar > 0 ? kpi2({ tono: 'aviso', label: 'Sin facturar', valor: EUR(s.sinFacturar),
-              hint: 'aceptado y aún sin factura', vista: 'presupuestos' }) : '') +
-        kpi2({ label: 'Facturado', valor: EUR(s.totalFacturado), hint: 'todo el histórico', vista: 'facturas' }) +
-        kpi2({ label: 'Gastos', valor: EUR(s.totalGastos), hint: 'todo el histórico', vista: 'gastos' }) +
-        kpi2({ label: 'Facturado − Gastos', valor: EUR(s.margen), hint: 'no es beneficio · {p} sin cobrar'.replace('{p}', EUR(s.totalPendiente)) }) +
-        kpi2({ label: 'Vence en 30 días', valor: EUR(s.venceEn30), hint: 'sin contar lo ya vencido' }) +
-        kpi2({ label: 'Proyectos activos', valor: String(s.proyectosActivos), hint: 'en curso ahora mismo', vista: 'proyectos' }) +
-        '</div>';
-
-      // ── la caja ──
-      var caja = card(
-        cardHead('Previsión de caja · 30 días', 'variación de caja: el saldo del banco no está en el sistema'),
-        '<div class="fdemo-card-body is-tight"><div class="fdemo-kpi-tira es-3">' +
-        kpi2({ tono: 'positivo', label: 'Va a entrar', valor: EUR(prev.entra), hint: 'facturas con fecha en los próximos 30 días' }) +
-        kpi2({ tono: 'aviso', label: 'Va a salir', valor: EUR(prev.sale), hint: 'gastos con vencimiento en los próximos 30 días' }) +
-        kpi2({ tono: prev.neto >= 0 ? 'positivo' : 'critico', label: 'Neto', valor: EUR(prev.neto),
-              hint: prev.neto >= 0 ? 'entra más de lo que sale' : 'sale más de lo que entra' }) +
-        '</div></div>');
-
-      // ── qué mirar hoy ──
+      // ── radar: una línea, solo si tiene algo que decir ──
       var senales = FS.getSenales();
-      var hoy = senales.length
-        ? '<div class="fdemo-senales">' + senales.map(function (x) {
-            return '<article class="fdemo-senal p-' + x.p + '">' +
-              '<span class="fdemo-senal-filo" aria-hidden="true"></span>' +
-              '<div class="fdemo-senal-c"><p class="fdemo-senal-et">' + PRIO[x.p] + '</p>' +
-              '<p class="fdemo-senal-t">' + esc(x.titulo) + '</p>' +
-              '<p class="fdemo-senal-p">' + esc(x.porque) + '</p></div>' +
-              '<p class="fdemo-senal-n">' + esc(x.cifra) + '</p></article>';
-          }).join('') + '</div>'
-        : '<div class="fdemo-senal-ok"><span class="fdemo-senal-ok-filo"></span>Hoy no hay nada urgente.</div>';
+      var radar = senales.length
+        ? '<a class="fdemo-linea-aviso" href="#radar" data-action="nav" data-view="radar"><span><b>Radar financiero:</b> ' +
+          esc(plural(senales.length, 'hallazgo', 'hallazgos') + ' — ' + senales[0].titulo) + '</span><span class="fdemo-linea-v">Ver →</span></a>'
+        : '';
 
-      // ── cómo va el negocio ──
-      var maxEv = Math.max.apply(null, ev.map(function (m) { return Math.max(m.cobrado, m.gastos); })) || 1;
-      var barras = '<div class="fdemo-barras" role="img" aria-label="Evolución de cobros y gastos de los últimos doce meses">' +
-        ev.map(function (m) {
-          return '<div class="fdemo-barra-col"><div class="fdemo-barra-par">' +
-            '<i class="b-cob" style="height:' + ((m.cobrado / maxEv) * 100).toFixed(1) + '%" title="' + esc(m.etiqueta + ': ' + EUR(m.cobrado)) + '"></i>' +
-            '<i class="b-gas" style="height:' + ((m.gastos / maxEv) * 100).toFixed(1) + '%" title="' + esc(m.etiqueta + ': ' + EUR(m.gastos)) + '"></i>' +
-            '</div><span class="fdemo-barra-et">' + esc(m.etiqueta) + '</span></div>';
-        }).join('') + '</div>' +
-        '<div class="fdemo-leyenda"><span><i class="b-cob"></i>Cobrado</span><span><i class="b-gas"></i>Gastos</span></div>';
+      // ── ¿cómo va la empresa? ──
+      var deboTotal = sum(sinPagar, function (g) { return g.importe; });
+      var preguntas = [
+        { pregunta: '¿Gano dinero?', respuesta: EUR(s.resultadoMes), tono: s.resultadoMes > 0 ? 'positivo' : s.resultadoMes < 0 ? 'critico' : 'neutro',
+          nota: 'Este mes. El mes anterior, ' + EUR(s.resultadoMesPrevio) + '.', origen: 'facturado menos gastado, por fecha, de este mes', vista: 'historico' },
+        { pregunta: '¿Cuánto tengo?', respuesta: null, motivo: 'No hay ningún extracto importado. El saldo lo declara el banco: el sistema no se lo inventa.',
+          origen: 'saldo declarado en los extractos importados', vista: 'tesoreria' },
+        { pregunta: '¿Quién me debe?', respuesta: EUR(s.totalPendiente), tono: s.totalVencido > 0 ? 'aviso' : 'neutro',
+          nota: s.totalVencido > 0 ? 'De eso, ' + EUR(s.totalVencido) + ' ya está vencido.' : null, origen: 'facturas emitidas y todavía sin cobrar del todo', vista: 'cobros' },
+        { pregunta: '¿Qué debo?', respuesta: EUR(deboTotal), tono: pagosVencidos.length ? 'aviso' : 'neutro',
+          nota: sinPagar.length ? plural(sinPagar.length, 'gasto', 'gastos') + ' sin pagar' + (pagosVencidos.length ? ', ' + pagosVencidos.length + ' vencidos.' : '.') : null,
+          origen: 'gastos registrados y todavía sin pago', vista: 'pagos' },
+        { pregunta: '¿Hay algo bloqueado con la AEAT?', respuesta: null, motivo: 'En esta demo VERI*FACTU está desactivado: no se genera ningún registro ni se envía nada.',
+          origen: 'registros VERI*FACTU rechazados o con error de envío' },
+      ];
+      var empresa = '<div class="fdemo-pqs">' + preguntas.map(preguntaTarjeta).join('') + '</div>' +
+        '<p class="fdemo-pq-pie">El análisis del negocio —evolución, de quién dependes, antigüedad de la deuda— está en ' +
+        '<a href="#historico" data-action="nav" data-view="historico">Histórico</a>.</p>';
 
-      var deuda = card(cardHead('Antigüedad de la deuda', 'Cuánto te deben y desde hace cuánto'),
-        '<div class="fdemo-card-body"><p class="fdemo-total">' + EUR(ant.total) + '</p>' +
-        '<div class="fdemo-apilada">' + ant.tramos.map(function (t) {
-          return '<i class="n-' + t.nivel + '" style="width:' + t.pct + '%" title="' + esc(t.etiqueta) + '"></i>';
-        }).join('') + '</div>' +
-        '<ul class="fdemo-ley-v">' + ant.tramos.map(function (t) {
-          return '<li><span class="pt n-' + t.nivel + '"></span><span class="et">' + esc(t.etiqueta) + '</span>' +
-                 '<span class="nu">' + EUR(t.total) + '</span></li>';
-        }).join('') + '</ul></div>');
-
-      var conc = card(cardHead('De quién depende tu facturación', 'Reparto del total facturado por cliente'),
-        '<div class="fdemo-card-body"><ul class="fdemo-conc">' + con.filas.map(function (f) {
-          return '<li><span class="nom">' + esc(f.cliente) + '</span>' +
-            '<span class="ba"><i style="width:' + f.pct + '%"></i></span>' +
-            '<span class="pc">' + f.pct + ' %</span></li>';
-        }).join('') + '</ul>' +
-        (con.riesgo ? '<p class="fdemo-nota-riesgo">{c} concentra el {p} % de tu facturación. Si se va, se va esa parte del negocio.</p>'.replace('{c}', esc(con.riesgo.cliente)).replace('{p}', con.riesgo.pct) : '') +
-        '</div>');
-
-      // ── registro ──
-      var act = FS.getActividad(8);
-      var actividad = card(cardHead('Actividad reciente', 'Facturas, gastos y cobros más recientes'),
-        '<div>' + act.map(function (a) {
-          return '<a class="fdemo-activity-row" href="#' + a.vista + '/' + a.id + '">' +
-            '<div class="fdemo-activity-main"><div class="fdemo-activity-text">' + esc(a.texto) + ' · ' + EUR(a.importe) + '</div>' +
-            '<div class="fdemo-activity-meta">' + esc(a.tipo) + ' · ' + FDATE(a.fecha) + '</div></div>' +
-            pill(a.estado) + '</a>';
-        }).join('') + '</div>');
-
-      /* El boton de planes va AQUI, en la primera pantalla y a la altura del
-         titulo. Quien esta mirando el panel es quien esta decidiendo si esto
-         le vale: mandarle a buscar el precio al pie de la pagina es perderle. */
       var hrefPlanes = useHash ? (root.getAttribute('data-exit-href') || '/sistema-financiero') + '#planes' : '#planes';
       return '<div class="fdemo-panel">' +
-        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Situación</p>' +
-        '<h1 class="fdemo-page-title">Panel financiero</h1></div>' +
+        '<div class="fdemo-panel-h"><div><p class="fdemo-eyebrow">Inicio</p>' +
+        '<h1 class="fdemo-page-title">Qué hay que hacer hoy</h1></div>' +
         '<div class="fdemo-panel-acts">' +
         '<p class="fdemo-calc">calculado ahora · ' + FDATE(s.fechaCalculo) + '</p>' +
         '<a class="fdemo-btn variant-primary fdemo-planes-b" href="' + hrefPlanes + '"' +
@@ -562,14 +534,8 @@
         '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">' +
         '<path d="M5 12h14m0 0-5-5m5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
         'Ver planes y precios</a></div></div>' +
-        narrativa +
-        seccion('El dinero', 'qué ha entrado, qué te deben y qué se ha pasado de fecha', dinero, 0) +
-        seccion('La caja', 'qué entra y qué sale en los próximos 30 días', caja, 1) +
-        seccion('Qué mirar hoy', 'lo que pide una decisión, por orden de urgencia', hoy, 2) +
-        seccion('Cómo va el negocio', 'tendencia, de quién dependes y qué te deben',
-          card(cardHead('Evolución mensual', 'Dinero cobrado frente a dinero gastado, mes a mes'), '<div class="fdemo-card-body">' + barras + '</div>') +
-          '<div class="fdemo-dos">' + deuda + conc + '</div>', 3) +
-        seccion('Registro', 'lo último que ha pasado', actividad, 4) +
+        hoy + radar +
+        seccion('¿Cómo va la empresa?', 'cinco preguntas, cinco respuestas, y de dónde sale cada una', empresa, 1) +
         '</div>';
     };
 

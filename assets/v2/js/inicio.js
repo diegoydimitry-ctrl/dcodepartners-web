@@ -102,6 +102,7 @@ const demos = $("[data-demos]");
 if (demos) {
   let css;
   const cssDemos = () => css || (css = new Promise((ok) => {
+    if (document.querySelector('link[href^="/assets/v2/demos.css"]')) return ok(); // ya viene en la página, con su versión
     const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "/assets/v2/demos.css";
     l.onload = l.onerror = () => ok(); document.head.appendChild(l);
   }));

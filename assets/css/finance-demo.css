@@ -17,7 +17,8 @@
    tokens noche del D-Code Design System, los mismos que usan la Web, la
    Partners App y el OS. */
 .fdemo-scope{
-  /* ── LOS TOKENS DEL PRODUCTO, TAL CUAL ──────────────────────────────
+  /* ── LOS TOKENS DEL PRODUCTO, TAL CUAL (actualizados al tema claro de Finance del 21/09/2026: lienzo gris frío,
+     tarjeta blanca con sombra corta, tinta #0e1726, acento #2554c7) ──────────────────────────────
      Copiados de dcode-finance/src/app/globals.css (:root). No son una
      interpretación: son los mismos números que sirve la aplicación. Los
      contrastes están medidos allí por contraste.test.ts, así que esta
@@ -26,45 +27,45 @@
      La elevación en claro se lee al revés que en oscuro: el lienzo es un
      gris cálido y la tarjeta es blanco puro. Ese salto de 1,10:1 es todo
      lo que separa una pieza apoyada de su fondo. */
-  --dc-bg:#f4f4f1;           /* lienzo */
+  --dc-bg:#f4f6fb;           /* lienzo */
   --dc-surface:#ffffff;      /* tarjeta, panel, barra lateral */
-  --dc-surface-2:#f0f0ec;    /* anidado: campos, filas activas, hover */
+  --dc-surface-2:#f6f8fc;    /* anidado: campos, filas activas, hover */
   --dc-surface-3:#ffffff;    /* flotante: menús, diálogos */
-  --dc-border:#e4e4df;
-  --dc-border-strong:#d3d3cc;
-  --dc-border-input:#83868f;
-  --dc-text:#15161a;
-  --dc-text-muted:#4a4d57;   /* --dc-text-2 del producto */
+  --dc-border:#e3e8f1;
+  --dc-border-strong:#d2d9e6;
+  --dc-border-input:#7c879c;
+  --dc-text:#0e1726;
+  --dc-text-muted:#3a465c;   /* --dc-text-2 del producto */
   /* Un punto más oscuros que en el producto: sobre las tarjetas tintadas
      (aviso, positivo, la franja de DEMOSTRACIÓN) se quedaban en 4,37–4,48:1,
      por debajo del 4,5:1 de WCAG AA. Medido con axe-core. */
-  --dc-text-faint:#5d616c;   /* --dc-text-3 del producto era #646874 */
+  --dc-text-faint:#566179;   /* --dc-text-3 del producto era #646874 */
   /* UN azul de acción. El degradado cian→violeta era la piel de la web,
      no un botón: en una tabla de importes competía con la única señal que
      debe destacar, que es el dinero. */
-  --dc-accent:#2f5fe0;
-  --dc-accent-cyan:#0a6e7a;
-  --dc-accent-violet:#6337c9;
-  --dc-brand-grad:linear-gradient(120deg,#2f5fe0,#244fc4);
-  --dc-success:#0d6f48;
-  --dc-success-bg:rgba(15,122,79,.08);
-  --dc-warning:#8f5400;
-  --dc-warning-bg:rgba(154,91,0,.09);
-  --dc-danger:#b0322a;
-  --dc-danger-bg:rgba(192,57,47,.08);
-  --dc-info:#2a56d0;
-  --dc-info-bg:rgba(47,95,224,.08);
-  --dc-neutral-bg:rgba(100,104,116,.1);
-  --dc-neutral:#5d616c;
+  --dc-accent:#2554c7;
+  --dc-accent-cyan:#0a6f91;
+  --dc-accent-violet:#6b46c9;
+  --dc-brand-grad:linear-gradient(120deg,#2554c7,#3553cf 55%,#6b46c9);
+  --dc-success:#0a734d;
+  --dc-success-bg:rgba(10,115,77,.09);
+  --dc-warning:#9a5800;
+  --dc-warning-bg:rgba(214,138,0,.12);
+  --dc-danger:#c02a37;
+  --dc-danger-bg:rgba(192,42,55,.08);
+  --dc-info:#2554c7;
+  --dc-info-bg:rgba(37,84,199,.08);
+  --dc-neutral-bg:rgba(58,70,92,.07);
+  --dc-neutral:#566179;
   /* El píxel central de la marca D-Code es el acento de cada producto.
      Finance es esmeralda. Es IDENTIDAD, nunca acción ni estado. */
   --dc-mark-accent:#0f7a4f;
   --dc-luz-alta:rgba(21,22,26,.06);
   --dc-luz-baja:rgba(21,22,26,.03);
   --dc-r-sm:6px; --dc-r-md:8px; --dc-r-lg:12px; --dc-r-xl:16px;
-  --dc-sombra-tarjeta:0 1px 2px rgba(16,24,40,.06);
-  --dc-sombra-flotante:0 12px 32px -12px rgba(16,24,40,.22), 0 0 0 1px var(--dc-border);
-  --dc-scrim:rgba(21,22,26,.42);
+  --dc-sombra-tarjeta:0 1px 2px rgba(14,23,38,.05), 0 4px 16px -8px rgba(14,23,38,.10);
+  --dc-sombra-flotante:0 24px 60px -24px rgba(14,23,38,.35), 0 0 0 1px var(--dc-border);
+  --dc-scrim:rgba(14,23,38,.45);
   /* Las tres familias del producto, repartidas por función y no por gusto:
      Inter lleva tabular de verdad (medido: «1111111111» y «8888888888» dan
      420 px las dos), así que los importes van en Inter; Space Grotesk es la
@@ -303,7 +304,7 @@
 .fdemo-card{
   border-radius:12px; border:1px solid var(--dc-border);
   background:var(--dc-surface);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
+  box-shadow:var(--dc-sombra-tarjeta);
 }
 .fdemo-card-head{
   display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
@@ -2252,16 +2253,16 @@ tr.is-quieta td{ background:var(--dc-surface-2); font-size:.8125rem; }
    páginas de la demo a pantalla completa no llevan tema: siguen en claro.
    ══════════════════════════════════════════════════════════════════════ */
 html[data-theme="dark"] .fdemo-scope{
-  --dc-bg:#0a0e19; --dc-surface:#10162a; --dc-surface-2:#161e35; --dc-surface-3:#141b31;
-  --dc-border:#243052; --dc-border-strong:#33406a; --dc-border-input:#6b7697;
-  --dc-text:#edf1f8; --dc-text-muted:#b6c0d6; --dc-text-faint:#9aa6c0;
-  --dc-accent:#7aa2ff; --dc-accent-cyan:#5fdcec; --dc-accent-violet:#b9a0ff;
-  --dc-brand-grad:linear-gradient(120deg,#6f98ff,#8f7dff);
-  --dc-success:#4fd6a0; --dc-success-bg:rgba(52,211,153,.13);
-  --dc-warning:#f3b862; --dc-warning-bg:rgba(245,180,84,.13);
-  --dc-danger:#ff8f86; --dc-danger-bg:rgba(255,120,110,.13);
-  --dc-info:#8fb0ff; --dc-info-bg:rgba(91,140,255,.15);
-  --dc-neutral-bg:rgba(150,160,190,.14); --dc-neutral:#aab4ca;
+  --dc-bg:#06080d; --dc-surface:#0e1320; --dc-surface-2:#141c30; --dc-surface-3:#1b2542;
+  --dc-border:#1e2536; --dc-border-strong:#2b3448; --dc-border-input:#6a7593;
+  --dc-text:#eef2fb; --dc-text-muted:#a7b0c4; --dc-text-faint:#8b94ab;
+  --dc-accent:#5b8cff; --dc-accent-cyan:#43e0ff; --dc-accent-violet:#9b6bff;
+  --dc-brand-grad:linear-gradient(120deg,#5b8cff,#6f86ff 55%,#9b6bff);
+  --dc-success:#34e7a4; --dc-success-bg:rgba(52,231,164,.10);
+  --dc-warning:#ffb454; --dc-warning-bg:rgba(255,180,84,.10);
+  --dc-danger:#ff6b6b; --dc-danger-bg:rgba(255,107,107,.10);
+  --dc-info:#5b8cff; --dc-info-bg:rgba(91,140,255,.10);
+  --dc-neutral-bg:rgba(167,176,196,.08); --dc-neutral:#aab4ca;
   --dc-mark-accent:#34d399;
   --dc-luz-alta:rgba(255,255,255,.06); --dc-luz-baja:rgba(255,255,255,.03);
   --dc-sombra-tarjeta:0 1px 2px rgba(0,0,0,.4);
@@ -2273,8 +2274,8 @@ html[data-theme="dark"] .fdemo-app.is-embedded{ box-shadow:0 30px 80px -34px rgb
 /* Lo que cambia entre paletas, en variables: una tarjeta puede llevar la
    paleta contraria a la de su fondo (superficies.css). */
 .fdemo-scope{
-  --dc-tint-blue:rgba(47,95,224,.06); --dc-tint-cyan:rgba(10,110,122,.06); --dc-tint-violet:rgba(99,55,201,.06);
-  --dc-tint-warning:rgba(154,91,0,.07); --dc-tint-danger:rgba(192,57,47,.06);
+  --dc-tint-blue:rgba(37,84,199,.06); --dc-tint-cyan:rgba(10,111,145,.06); --dc-tint-violet:rgba(107,70,201,.06);
+  --dc-tint-warning:rgba(214,138,0,.07); --dc-tint-danger:rgba(192,42,55,.06);
   --dc-btn-bg:var(--dc-brand-grad); --dc-on-acc:#fff; --dc-bur-bg:var(--dc-accent);
   --dc-toast-bg:#15161a; --dc-toast-fg:#fff; --dc-dias-bg:rgba(180,82,13,.12); --dc-dias-fg:#9a4309;
   --dc-canal-foto:#6337c9; --dc-canal-remesa:#b4520d; --dc-hoja-a:#e9e9e4; --dc-hoja-b:#e5e5df;
@@ -2301,3 +2302,52 @@ html[data-theme="dark"] .fdemo-scope{
 .fdemo-scope .fdemo-topbar, .fdemo-scope .fdemo-sidebar{ background:var(--dc-surface); -webkit-backdrop-filter:none; backdrop-filter:none; }
 /* dentro del visor de la web: su propio «Salir» cierra; el de la app no se repite */
 .fdemo-en-visor .fdemo-topbar-exit { display: none; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   INICIO · «Qué hay que hacer hoy» (como el producto, septiembre de 2026)
+   La bandeja de HOY y «¿Cómo va la empresa?»: preguntas con respuesta y origen.
+   ══════════════════════════════════════════════════════════════════════ */
+.fdemo-hoy{ display:flex; flex-direction:column; gap:16px; padding:14px 20px 20px; }
+.fdemo-hoy section{ display:flex; flex-direction:column; gap:8px; }
+.fdemo-hoy .fdemo-eyebrow{ margin:0; }
+.fdemo-hoy ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.fdemo-hoy-l{ display:flex; align-items:center; gap:14px; min-height:44px; padding:12px 16px; border:1px solid var(--dc-border); border-radius:var(--dc-r-md); color:inherit; text-decoration:none; transition:border-color .15s ease; }
+.fdemo-hoy-l:hover{ border-color:color-mix(in srgb, var(--dc-accent) 45%, transparent); }
+.fdemo-hoy-l.u-vencido{ border-color:color-mix(in srgb, var(--dc-danger) 40%, transparent); background:var(--dc-danger-bg); }
+.fdemo-hoy-l.u-pronto{ border-color:color-mix(in srgb, var(--dc-warning) 40%, transparent); background:var(--dc-warning-bg); }
+.fdemo-hoy-pt{ flex:none; width:3px; height:10px; border-radius:99px; background:var(--dc-text-faint); }
+.u-vencido .fdemo-hoy-pt{ background:var(--dc-danger); }
+.u-pronto .fdemo-hoy-pt{ width:8px; height:8px; border-radius:0; transform:rotate(45deg); background:var(--dc-warning); }
+.u-pendiente .fdemo-hoy-pt{ width:10px; height:4px; }
+.fdemo-hoy-c{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.fdemo-hoy-t{ font-size:.875rem; font-weight:500; color:var(--dc-text); }
+.fdemo-hoy-t span{ font-weight:400; color:var(--dc-text-muted); }
+.fdemo-hoy-d{ font-size:.75rem; line-height:1.5; color:var(--dc-text-muted); }
+.fdemo-hoy-o{ font-family:var(--dc-font-mono); font-size:.6875rem; color:var(--dc-text-faint); }
+.fdemo-hoy-i{ flex:none; font-variant-numeric:tabular-nums; font-weight:500; color:var(--dc-text); }
+.fdemo-hoy-a{ flex:none; font-size:.875rem; white-space:nowrap; color:var(--dc-accent); }
+.fdemo-hoy-vacio{ margin:0; padding:0 20px 20px; font-size:.875rem; color:var(--dc-text-muted); }
+.fdemo-linea-aviso{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:14px; padding:12px 16px; border:1px solid var(--dc-border); border-radius:var(--dc-r-md); background:var(--dc-surface); box-shadow:var(--dc-sombra-tarjeta); font-size:.875rem; color:var(--dc-text-muted); text-decoration:none; transition:border-color .15s ease; }
+.fdemo-linea-aviso b{ font-weight:500; color:var(--dc-text); }
+.fdemo-linea-aviso:hover{ border-color:color-mix(in srgb, var(--dc-accent) 45%, transparent); }
+.fdemo-linea-v{ flex:none; color:var(--dc-accent); }
+.fdemo-pqs{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; }
+.fdemo-pq{ display:flex; flex-direction:column; min-height:132px; padding:16px; border:1px solid var(--dc-border); border-radius:var(--dc-r-md); background:var(--dc-surface); box-shadow:var(--dc-sombra-tarjeta); color:inherit; text-decoration:none; transition:border-color .15s ease; }
+.fdemo-pq.es-link:hover{ border-color:color-mix(in srgb, var(--dc-accent) 45%, transparent); }
+.fdemo-pq-p{ margin:0; font-size:.875rem; font-weight:500; color:var(--dc-text-muted); }
+.fdemo-pq-r{ margin:4px 0 0; font-family:var(--dc-font-display); font-size:26px; line-height:1.2; font-weight:600; letter-spacing:-.01em; font-variant-numeric:tabular-nums; color:var(--dc-text); }
+.fdemo-pq-r.t-positivo{ color:var(--dc-success); } .fdemo-pq-r.t-aviso{ color:var(--dc-warning); } .fdemo-pq-r.t-critico{ color:var(--dc-danger); }
+.fdemo-pq-no{ margin:4px 0 0; font-size:1.125rem; font-weight:600; color:var(--dc-text-faint); }
+.fdemo-pq-n{ margin:4px 0 0; font-size:.75rem; line-height:1.5; color:var(--dc-text-muted); }
+.fdemo-pq-o{ margin:auto 0 0; padding-top:8px; font-family:var(--dc-font-mono); font-size:.6875rem; line-height:1.45; color:var(--dc-text-faint); }
+.fdemo-pq-pie{ margin:12px 0 0; font-size:.75rem; line-height:1.6; color:var(--dc-text-faint); }
+.fdemo-pq-pie a{ color:var(--dc-accent); }
+@media (max-width: 1024px){ .fdemo-pqs{ grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px){
+  .fdemo-pqs{ grid-template-columns:1fr; }
+  .fdemo-hoy{ padding:12px 14px 16px; }
+  .fdemo-hoy-l{ flex-wrap:wrap; align-items:flex-start; gap:6px 12px; }
+  .fdemo-hoy-pt{ display:none; }
+  .fdemo-hoy-c{ flex-basis:100%; }
+}
+.fdemo-topbar-exit{ align-self:center; height:auto; }
