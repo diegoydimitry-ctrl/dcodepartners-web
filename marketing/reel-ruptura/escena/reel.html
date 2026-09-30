@@ -409,7 +409,7 @@ function lineaLuz(a, b, col) {                                   // tubo de luz 
   sombraOS = puntoBrillo("rgba(70,110,255,1)", 1); sombraOS.scale.set(OS_W * 1.9, OS_H * 2.2, 1); sombraOS.position.set(0, 0, Z_OS - 0.5); sombraOS.material.opacity = 0.35; scene.add(sombraOS);
   // velo que oscurece todo menos el mapa del sistema
   { const c = document.createElement("canvas"); c.width = 700; c.height = 437; const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, 700, 437);
-    x.globalCompositeOperation = "destination-out"; x.filter = "blur(10px)"; x.beginPath(); x.roundRect(233 * 700 / 1050, 236 * 437 / 655, 410 * 700 / 1050, 344 * 437 / 655, 14); x.fill();
+    x.globalCompositeOperation = "destination-out"; x.filter = "blur(6px)"; x.beginPath(); x.roundRect(233 * 700 / 1050 - 34, 236 * 437 / 655 - 30, 410 * 700 / 1050 + 68, 344 * 437 / 655 + 62, 18); x.fill();
     const t = new THREE.CanvasTexture(c);
     veloOS = new THREE.Mesh(new THREE.PlaneGeometry(OS_W + 0.02, OS_H + 0.02), new THREE.MeshBasicMaterial({ color: "#05060a", alphaMap: t, transparent: true, opacity: 0, depthWrite: false }));
     veloOS.position.set(0, 0, Z_OS + 0.02); scene.add(veloOS); }
