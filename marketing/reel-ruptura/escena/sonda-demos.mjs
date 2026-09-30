@@ -1,0 +1,12 @@
+import { createRequire } from "module"; const require = createRequire(import.meta.url);
+const { chromium } = require("/home/claude/.npm-global/lib/node_modules/playwright/index.js");
+const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+p.on("pageerror", e => console.log("ERR", e.message));
+await p.goto("http://localhost:8765/index.html", { waitUntil: "networkidle" });
+const info = await p.evaluate(() => { const g = document.querySelector("#gal-p-finance"); const r = g?.getBoundingClientRect(); return { r, tabs: [...document.querySelectorAll(".gal-tab")].map(t => t.dataset.demo) }; });
+console.log(JSON.stringify(info));
+await p.click("#gal-t-comercial"); await p.waitForTimeout(1500);
+const el = await p.$("#gal-p-comercial"); await el.scrollIntoViewIfNeeded(); await p.waitForTimeout(800);
+await el.screenshot({ path: "/tmp/claude-0/-home-claude/37ca3770-da96-5b3c-b890-e1a05ba07bff/scratchpad/sonda-comercial.png" });
+console.log(await p.evaluate(() => [...document.querySelectorAll("#gal-p-comercial button")].map(b => b.innerText.trim()).filter(Boolean).slice(0, 20)));
+await b.close();

@@ -1,0 +1,5 @@
+node_modules/
+render/
+audio/*.wav
+entrega/*.mp4
+assets/demos/
