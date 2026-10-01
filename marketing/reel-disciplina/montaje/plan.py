@@ -39,6 +39,7 @@ A = {  # letra: (asset_id ElevenLabs, id Pexels, descripción)
  "AG": ("FFUfwYnHuLCIMvTXlSmC", 31993283, "silueta al amanecer"),
  "AH": ("ehraWOV3iprJuVnzvfdP", 15308529, "camino"),
 }
+# Descartados tras revisar los planos: P (logo de Nike visible) y U (encuadre confuso).
 # (inicio, fin, [planos], texto grande, texto pequeño)   *palabra* = destacada
 P = [
  (0.00, 2.40, ["A"], "NO TE FALTA *MOTIVACIÓN.*", "Cada vez que dices «mañana empiezo»…"),
@@ -51,9 +52,9 @@ P = [
  (21.41, 23.39, ["K"], "«Empiezo el *lunes.*»", ""),
  (23.39, 27.71, ["L", "M"], "Y esa negociación… la *pierdes* casi siempre.", ""),
  (27.71, 31.40, ["N", "O"], "La gente constante tampoco tiene *ganas.*", ""),
- (31.40, 35.65, ["P", "Q"], "La diferencia es que no decide *en el momento.*", ""),
- (35.65, 38.00, ["R"], "*Lo decidió antes.*", ""),
- (38.00, 44.00, ["S", "T", "U"], "Montando mi empresa, esto es lo que más me ha servido: *una frase.*", "Madrid · construyendo D-Code"),
+ (31.40, 35.65, ["Q"], "La diferencia es que no decide *en el momento.*", ""),
+ (35.65, 38.00, ["R"], "Lo decidió *antes.*", ""),
+ (38.00, 44.00, ["S", "T"], "Montando mi empresa, esto es lo que más me ha servido: *una frase.*", "Madrid · construyendo D-Code"),
  (44.00, 47.35, ["V"], "CUANDO *X* → HAGO *Y*", "«Cuando pase esto, hago esto.»"),
  (47.35, 51.86, ["W", "X"], "Cuando cierro el portátil → me pongo las *zapatillas.*", ""),
  (51.86, 56.36, ["Z", "Y"], "Cuando llego → lo primero, la tarea *difícil.*", ""),
