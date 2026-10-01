@@ -136,18 +136,24 @@ S.append(mono(
         <div class="prog"><div class="progb">{"".join("<i></i>" for _ in range(7))}{"".join("<u></u>" for _ in range(11))}</div><div class="prognum">37%</div></div>
         <div class="txtmono">Lo que haces hoy<br>no se nota hoy.<br>Se nota dentro<br>de cinco años.</div>''',
     rot=-1.6, sk=("Seguir", "Cancelar"), desplaza=(0, -6)))
-# 6 · D-Code — pantalla de encendido
-logo_lcd = svg_px(LOGO, 7, {"w": "#f2f4f8", "b": "#2f7cf6"})
+# 6 · Cierre: tu respuesta al mensaje del principio. D-Code aparece como la «operadora» del móvil.
+logo_op = svg_px(LOGO, 2, {"w": "#f2f4f8", "b": "#4b8dff"}, 'class="op-logo"')
+CHECK = ["..........xx", ".........xxx", "........xxx.", "xx.....xxx..", "xxx...xxx...", ".xxx.xxx....", "..xxxxx.....", "...xxx......"]
 S.append(f'''
 <section class="pg color fin">
-  <div class="foto">
+  <div class="foto" style="transform:rotate(1.4deg)">
     <div class="carcasa2">
-      <div class="scr arranque">
-        <div class="logo">{logo_lcd}</div>
-        <div class="marca">D-Code<small>PARTNERS</small></div>
-        <div class="carga"><i></i><i></i><i></i><i></i><i></i><i></i><u></u><u></u></div>
-        <div class="lema">Construimos sistemas.<br>Tú construye tu <b class="hl">disciplina</b>.</div>
-        <div class="sk2"><span>@d_codepartners</span><span>Empezar</span></div>
+      <div class="scr">
+        <div class="status"><span class="sig">{"".join(f'<i style="height:{6+k*5}px"></i>' for k in range(5))}</span>
+          <span class="op">{logo_op}D-Code</span>{svg_px(bateria(5), 3, {"x": "#e9edf5"}, 'class="bat"')}</div>
+        <div class="tit">{svg_px(CHECK, 5, {"x": "#10131c"})}<span>Mensaje enviado</span></div>
+        <div class="resp">
+          <div class="para">Para: <b>Tú, dentro de cinco años</b></div>
+          <div class="burbuja">Empiezo<br>hoy.</div>
+          <div class="entregado">✓✓ Entregado · 06:31</div>
+        </div>
+        <div class="firma">{svg_px(LOGO, 3, {"w": "#f2f4f8", "b": "#4b8dff"})}<div><strong>D-Code Partners</strong><span>@d_codepartners</span></div></div>
+        <div class="sk2"><span>Guardar</span><span>Enviar a alguien</span></div>
       </div>
       <div class="luces"><b>─</b><b>─</b><em>C</em><em class="ok">OK</em></div>
     </div>

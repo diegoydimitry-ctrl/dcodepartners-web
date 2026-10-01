@@ -87,12 +87,18 @@ html,body{margin:0;background:#000}
 .memb i{display:block;height:100%;background:linear-gradient(90deg,#F5B841,#ff5a3c)}
 .memt{font:600 40px "Barlow";color:#aab5cc;margin-top:12px}
 
-/* ───────── final D-Code ───────── */
-.fin .scr.arranque{background:radial-gradient(90% 70% at 50% 38%,#0f1d3a 0%,#060b16 70%);display:flex;flex-direction:column;align-items:center;padding-top:70px}
-.fin .logo{filter:drop-shadow(0 0 14px rgba(47,124,246,.45))}
-.fin .marca{margin-top:28px;color:#fff;font:700 96px/1 "Barlow";letter-spacing:-1px;text-align:center}
-.fin .marca small{display:block;font:600 34px "Barlow";letter-spacing:14px;color:#9fb0d0;margin-top:10px}
-.fin .carga{display:flex;gap:9px;margin-top:34px;padding:8px;border:4px solid #e9edf5}
-.fin .carga i,.fin .carga u{display:block;width:30px;height:30px}
-.fin .carga i{background:var(--ambar)}
-.fin .lema{margin-top:34px;color:#e9edf5;font:600 52px/1.18 "Barlow";text-align:center}
+/* ───────── final: respuesta enviada ───────── */
+.status .op{display:flex;align-items:center;gap:12px;font:700 40px "Barlow";letter-spacing:.5px}
+.fin .tit{gap:20px}
+.fin .resp{padding:36px 50px 0;display:flex;flex-direction:column}
+.fin .para{font:400 40px "Barlow";color:#9fb0d0}
+.fin .para b{font-weight:600;color:#dfe6f5}
+.fin .burbuja{position:relative;display:inline-block;margin-top:30px;padding:24px 44px 30px;border-radius:34px 34px 8px 34px;align-self:flex-end;
+  background:linear-gradient(180deg,#ffd27a,#F5B841 60%,#e5a22a);color:#10131c;font:700 128px/0.98 "Barlow";letter-spacing:-2px;
+  box-shadow:0 0 40px rgba(245,184,65,.35)}
+.fin .entregado{align-self:flex-end;margin-top:18px;font:600 38px "Barlow";color:#7fd39a}
+.fin .firma{position:absolute;left:50px;right:50px;bottom:128px;display:flex;align-items:center;gap:24px;
+  padding-top:24px;border-top:2px solid rgba(159,176,208,.25)}
+.fin .firma strong{display:block;font:700 46px/1 "Barlow";color:#fff}
+.fin .firma span{display:block;font:600 34px "Barlow";color:#9fb0d0;margin-top:6px}
+.fin .sk2 span:last-child{color:var(--ambar)}
