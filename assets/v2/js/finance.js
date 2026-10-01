@@ -5,33 +5,44 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const EN = document.documentElement.lang === "en";
 
 /* «Así entra una factura en Finance»: escena 3D (assets/v2/js/factura3d.js, fuente scripts/v2/escena/factura.js)
-   ligada al scroll; cada paso se sostiene un rato antes del siguiente. Movimiento reducido, sin WebGL o con
-   ahorro de datos: los cuatro pasos en texto, quietos. */
+   que se reproduce sola cuando la sección está a la vista (sin recorridos largos de scroll): llega la factura, la
+   IA la lee, sus campos salen como datos y queda registrada. Al terminar, «Ver otra vez». Movimiento reducido,
+   sin WebGL o con ahorro de datos: los cuatro pasos en texto, quietos. */
 const papel = $("[data-papel]");
 if (papel) {
   const reducido = matchMedia("(prefers-reduced-motion: reduce)").matches, ahorro = navigator.connection && navigator.connection.saveData;
   const webgl = (() => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; } })();
   if (reducido || ahorro || !webgl) papel.classList.add("is-quieta");
   else {
-    const pasos = $$("[data-paso]", papel), N = 3;
-    let escena = null, etapa = 0, actual = 0;
-    const leer = () => {
-      const r = papel.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
-      const x = p * N, k = Math.floor(x), f = x - k, g = Math.min(1, Math.max(0, (f - 0.3) / 0.55));
-      etapa = Math.min(N, k + g * g * (3 - 2 * g)); if (escena) escena.etapa(etapa);
-      const c = Math.min(N, Math.round(etapa)); if (c !== actual) { actual = c; pasos.forEach((el) => el.classList.toggle("is-activa", +el.dataset.paso === c)); }
+    const pasos = $$("[data-paso]", papel);
+    const otra = document.createElement("button"); otra.type = "button"; otra.className = "boton papel-otra"; otra.hidden = true; otra.textContent = EN ? "Watch it again" : "Ver otra vez";
+    $(".papel-pasos", papel).after(otra);
+    // guion: [segundo en que empieza, etapa]; entre dos marcas la etapa avanza en 0,8 s
+    const GUION = [[0, 0], [1.6, 1], [5.4, 2], [9.4, 3]], FIN = 13;
+    let escena = null, t0 = null, raf = 0, visto = false, actual = -1;
+    const etapaEn = (t) => { let e = 0; for (const [s, k] of GUION) { if (t >= s) e = Math.min(k, (k - 1) + Math.min(1, (t - s) / 0.8)); } return Math.max(0, e); };
+    const marcar = (e) => { const c = Math.round(e); if (c === actual) return; actual = c; pasos.forEach((el) => el.classList.toggle("is-activa", +el.dataset.paso === c)); };
+    const tic = (ahora) => {
+      raf = 0; if (t0 == null) t0 = ahora;
+      const t = (ahora - t0) / 1000, e = etapaEn(t); marcar(e); if (escena) escena.etapa(e);
+      if (t < FIN) raf = requestAnimationFrame(tic); else otra.hidden = false;
     };
-    addEventListener("scroll", leer, { passive: true }); addEventListener("resize", leer, { passive: true }); leer();
-    const montar = () => import("/assets/v2/js/factura3d.js?v=e81b2ec209").then(async ({ montar }) => {
+    const reproducir = () => { t0 = null; otra.hidden = true; if (!raf) raf = requestAnimationFrame(tic); };
+    otra.addEventListener("click", () => { if (escena) escena.etapa(0, true); reproducir(); });
+    const montar = () => import("/assets/v2/js/factura3d.js?v=e058a1c90d").then(async ({ montar }) => {
       const raiz = document.documentElement, claro = () => raiz.dataset.theme === "light";
       escena = await montar($("[data-papel-lienzo]", papel), { movil: matchMedia("(max-width: 760px)").matches, en: EN });
       escena.tema(claro()); new MutationObserver(() => escena.tema(claro())).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
-      escena.etapa(etapa, true);
+      escena.etapa(0, true);
       if (new URLSearchParams(location.search).has("depurar")) window.__factura = escena;
       requestAnimationFrame(() => requestAnimationFrame(() => papel.classList.add("is-escena")));
     }).catch((e) => { console.warn("factura", e); papel.classList.add("is-quieta"); });
-    // la escena se pide cuando la sección se acerca (está justo debajo del título: casi siempre al empezar)
-    if ("IntersectionObserver" in window) { const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); (window.requestIdleCallback || ((f) => setTimeout(f, 80)))(montar, { timeout: 700 }); } }, { rootMargin: "300px 0px" }); io.observe(papel); } else montar();
+    // se carga al acercarse y empieza cuando se ve más de la mitad (y solo la primera vez sola)
+    if ("IntersectionObserver" in window) {
+      let pedida = false;
+      new IntersectionObserver((es) => { for (const e of es) { if (e.isIntersecting && !pedida) { pedida = true; montar(); } } }, { rootMargin: "400px 0px" }).observe(papel);
+      new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting && !visto) { visto = true; const empezar = () => (escena ? reproducir() : setTimeout(empezar, 150)); empezar(); } }, { threshold: 0.55 }).observe($(".papel-fijo", papel));
+    } else { montar().then(reproducir); }
   }
 }
 

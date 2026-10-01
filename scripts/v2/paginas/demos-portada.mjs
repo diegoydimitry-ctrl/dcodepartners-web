@@ -114,7 +114,7 @@ export const DEMOS = {
 
 export function seccionDemos(lang) {
   const d = DEMOS[lang];
-  return `<section class="bloque bloque--aire tocalo" id="tocalo" aria-labelledby="h-tocalo">
+  return `<section class="bloque bloque--aire tocalo" id="tocalo" data-escena="anillo" data-lado="der" data-intensidad=".4" aria-labelledby="h-tocalo">
   <div class="marco">
     <div class="tocalo-cab"><h2 class="h2 aparece" id="h-tocalo">${d.h2}</h2><p class="lead aparece" style="--i:1">${d.sub}</p></div>
     <div class="dm" data-demos data-lang="${lang}">

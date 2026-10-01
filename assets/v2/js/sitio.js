@@ -169,3 +169,67 @@ if (!document.getElementById("contact-form") && document.getElementById("chat-wi
     if (document.readyState === "complete") plegar(); else addEventListener("load", plegar, { once: true });
   }
 }
+
+/* ------------------------------------------------------------ el fondo vivo
+   Una escena 3D fija detrás de toda la web (assets/v2/js/fondo3d.js, fuente
+   scripts/v2/escena/fondo.js). Cada sección pide una forma (data-escena), un
+   lado (data-lado: der · izq · centro · abajo) y una intensidad (data-intensidad);
+   las que no dicen nada reciben una según su tipo (los capítulos de las páginas
+   interiores, «al fondo»: lejos y apagada, porque su texto ocupa todo el ancho). Manda la sección que cruza el
+   centro de la pantalla. Se carga cuando el navegador tiene un respiro (el texto
+   es lo primero). Sin WebGL, con movimiento reducido, con ahorro de datos o en
+   aparatos con muy poca memoria, no hay fondo: la web se lee igual. */
+{
+  const reducido = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ahorro = navigator.connection && navigator.connection.saveData;
+  const poca = (navigator.deviceMemory || 8) <= 2;
+  const webgl = (() => { try { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); } catch (e) { return false; } })();
+  const main = document.querySelector("main");
+  if (main && !reducido && !ahorro && !poca && webgl && !document.body.classList.contains("sin-fondo")) {
+    const lectura = document.body.classList.contains("es-lectura");
+    const CICLO = ["helice", "ola", "columnas", "anillo", "cubo"];
+    let n = 0;
+    const secciones = [...main.querySelectorAll(":scope > header, :scope > section, :scope > div > section, :scope > article")].map((el) => {
+      const d = el.dataset;
+      let forma = d.escena, lado = d.lado || "der", intensidad = d.intensidad != null ? +d.intensidad : 1;
+      if (!forma) {
+        if (el.matches(".papel, .fin-demo") || el.querySelector("[data-demos], iframe, .webs3d, [data-webs3d]")) { forma = "polvo"; intensidad = 0.25; }
+        else if (lectura) { forma = "polvo"; intensidad = 0.55; }
+        else if (el.matches("header, .pag-cab")) { forma = "cubo"; intensidad = 0.9; }
+        else { forma = CICLO[n++ % CICLO.length]; lado = d.lado || "fondo"; intensidad = 0.6; }
+      }
+      return { el, forma, lado, intensidad };
+    });
+    if (secciones.length) {
+      const lienzo = document.createElement("canvas"); lienzo.className = "fondo-3d"; lienzo.setAttribute("aria-hidden", "true");
+      document.body.prepend(lienzo);
+      let escena = null, activa = null; const estrecho = matchMedia("(max-width: 900px)");
+      const elegir = () => {
+        const y = innerHeight * 0.5; let s = secciones[0];
+        for (const x of secciones) { const r = x.el.getBoundingClientRect(); if (r.top <= y && r.bottom > y) { s = x; break; } if (r.top > y) break; s = x; }
+        if (s === activa) return; activa = s;
+        // en el teléfono el texto ocupa todo el ancho: fuera de la primera pantalla, el fondo va a media luz
+        lienzo.style.opacity = String(estrecho.matches && s !== secciones[0] ? Math.min(s.intensidad, 0.45) : s.intensidad);
+        if (escena) escena.ir(s.forma, s.lado);
+      };
+      let pend = 0; addEventListener("scroll", () => { if (!pend) pend = requestAnimationFrame(() => { pend = 0; elegir(); }); }, { passive: true });
+      addEventListener("resize", elegir, { passive: true });
+      const cargar = () => import("/assets/v2/js/fondo3d.js?v=5dcb9a912b").then(({ montar }) => {
+        const raiz = document.documentElement, claro = () => raiz.dataset.theme === "light";
+        escena = montar(lienzo, { movil: matchMedia("(max-width: 760px)").matches || (navigator.deviceMemory || 8) <= 4 });
+        escena.tema(claro()); new MutationObserver(() => escena.tema(claro())).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+        activa = null; elegir();
+        if (new URLSearchParams(location.search).has("depurar")) window.__fondo = escena;
+        requestAnimationFrame(() => lienzo.classList.add("is-lista"));
+        // un clic en un hueco (no en un enlace, un botón, un campo ni una demo) dispersa las piezas cercanas
+        addEventListener("pointerdown", (e) => {
+          if (e.button !== 0 || !activa || activa.intensidad < 0.5) return;
+          if (e.target.closest("a, button, input, textarea, select, summary, label, iframe, dialog, [role=button], [role=tab], [contenteditable], .chat-widget, .cab, .hoja, p, h1, h2, h3, li")) return;
+          escena.dispersar(e.clientX, e.clientY);
+        });
+      }).catch((e) => { console.warn("fondo", e); lienzo.remove(); });
+      elegir();
+      addEventListener("load", () => (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(cargar, { timeout: 1500 }), { once: true });
+    }
+  }
+}

@@ -1,76 +1,33 @@
 /* ==========================================================================
    PORTADA · blanco y negro
-   1. El sistema (escena 3D fijada al scroll) · 1b. Así cambia el trabajo
+   1. Portada · 1a. Así montamos un sistema · 1b. Así cambia el trabajo
    2. Lo que instalamos · 3. Tócalo · 4. Hablemos
    ========================================================================== */
 
-/* ------------------------------------------------------------ 1 · el sistema
-   La escena ocupa toda la pantalla y manda; el texto es poco, abajo a la
-   izquierda, y cambia con cada capa. A la derecha, el raíl de capas. */
-.sistema { position: relative; height: 820vh; }
-.sistema-fijo { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-.sistema-luz { position: absolute; inset: 0; background: var(--foco-escena); }
-.sistema-lienzo, .sistema-poster { position: absolute; inset: 0; width: 100%; height: 100%; }
-.sistema-poster { display: none; object-fit: contain; object-position: 72% 50%; }
-.sistema-lienzo { opacity: 0; transition: opacity 1400ms var(--ease-out); cursor: grab; touch-action: pan-y; }
-.sistema-lienzo.is-arrastrando { cursor: grabbing; }
-.is-escena .sistema-lienzo { opacity: 1; }
-.sistema-texto { position: relative; height: 100%; display: grid; align-items: end; padding-bottom: clamp(56px, 11vh, 120px); pointer-events: none; }
-.capa { grid-area: 1 / 1; max-width: 30rem; opacity: 0; transform: translateY(18px); filter: blur(8px); transition: opacity 560ms var(--ease-out), transform 720ms var(--ease-out), filter 560ms var(--ease-out); }
-.capa.is-activa { opacity: 1; transform: none; filter: none; }
-.capa .acc, .capa a, .capa button { pointer-events: auto; }
-.capa--0 { max-width: 36rem; }
-.sistema-h1 { font-size: clamp(2.5rem, 4.9vw, 4.6rem); font-weight: 560; line-height: .98; letter-spacing: -.04em; max-width: 12ch; color: var(--tinta); text-wrap: balance; }
-.capa-t { font-size: clamp(1.9rem, 3.3vw, 3.1rem); font-weight: 560; line-height: 1.02; letter-spacing: -.035em; max-width: 14ch; color: var(--tinta); text-wrap: balance; }
-.capa .lead { margin-top: var(--e-4); max-width: 26em; }
-.capas { display: contents; list-style: none; padding: 0; margin: 0; }
+/* ------------------------------------------------------------ 1 · portada
+   Una pantalla. El texto abajo a la izquierda; el logotipo, montado con
+   piezas por el fondo vivo, a la derecha. */
+.portada { position: relative; min-height: 100vh; min-height: 100svh; display: grid; align-items: end; padding-block: 120px clamp(64px, 12vh, 132px); }
+.portada-in { position: relative; }
+.portada-h1 { font-size: clamp(2.6rem, 5.4vw, 5rem); font-weight: 560; line-height: .97; letter-spacing: -.04em; max-width: 11.5ch; color: var(--tinta); text-wrap: balance; }
+.portada .lead { margin-top: var(--e-5); max-width: 28em; }
 .acc { margin-top: var(--e-6); display: flex; flex-wrap: wrap; gap: var(--e-3); }
-.pista { position: absolute; right: var(--margen); bottom: clamp(56px, 11vh, 120px); display: inline-flex; align-items: center; gap: 12px; font-size: .86rem; color: var(--tinta-3); transition: opacity 500ms ease; }
-.pista i { width: 1px; height: 36px; background: linear-gradient(var(--tinta-3), transparent); animation: bajar 2.4s var(--ease-in-out) infinite; transform-origin: top; }
-@keyframes bajar { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-.is-bajado .pista { opacity: 0; }
+.pista { position: absolute; right: var(--margen); bottom: clamp(64px, 12vh, 132px); display: inline-flex; align-items: center; gap: 12px; margin: 0; font-size: .84rem; color: var(--tinta-3); }
+.pista i { width: 18px; height: 1px; background: var(--tinta-3); }
+@media (pointer: coarse), (max-width: 900px) { .pista { display: none; } }
+@media (max-width: 899px), (orientation: portrait) { .portada { padding-top: 52vh; } }
 
-/* El raíl: siete capas. Una raya por capa; la actual, más larga y con su nombre. */
-.rail { position: absolute; right: var(--margen); top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity 600ms var(--ease-out); }
-.is-bajado .rail { opacity: 1; }
-.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.rail button { display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 30px; padding: 0 0 0 16px; border: 0; background: none; color: var(--tinta-3); font: 500 .8rem/1 var(--f-texto); cursor: pointer; }
-.rail button::after { content: ""; width: 14px; height: 1px; background: currentColor; transition: width 500ms var(--ease-out), background-color 300ms ease; }
-.rail span { opacity: 0; transform: translateX(6px); transition: opacity 300ms ease, transform 400ms var(--ease-out); }
-.rail button[aria-current]::after { width: 34px; background: var(--tinta); }
-.rail button[aria-current] { color: var(--tinta); }
-.rail button[aria-current] span, .rail button:hover span, .rail button:focus-visible span { opacity: 1; transform: none; }
-.rail button:hover::after { width: 24px; }
-.rail button:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; border-radius: 4px; }
-
-/* Apilado (móvil, tableta y pantallas verticales): la escena arriba y el texto abajo. */
-@media (max-width: 1099px), (orientation: portrait) {
-  .sistema { height: 720vh; }
-  .sistema-poster { object-position: 50% 12%; }
-  .sistema-texto { padding-bottom: calc(36px + env(safe-area-inset-bottom)); }
-  .capa .lead { margin-top: var(--e-3); }
-  .pista { display: none; }
-  .rail { top: auto; bottom: auto; top: calc(72px + env(safe-area-inset-top)); right: auto; left: var(--margen); transform: none; }
-  .rail ol { grid-auto-flow: column; gap: 6px; }
-  .rail button { padding: 0; min-height: 24px; }
-  .rail button::after { width: 18px; }
-  .rail button[aria-current]::after { width: 34px; }
-  .rail span { display: none; }
-}
-
-/* Sin JavaScript o con movimiento reducido: nada se fija ni se anima. El logotipo
-   montado y las capas, una debajo de otra. */
-.sin-js .sistema, .sistema.is-quieta { height: auto; }
-.sin-js .sistema-fijo, .sistema.is-quieta .sistema-fijo { position: relative; height: auto; min-height: 100svh; }
-.sin-js .sistema-poster, .sistema.is-quieta .sistema-poster { display: block; position: relative; height: 62svh; opacity: 1; }
-.sin-js .sistema-lienzo, .sistema.is-quieta .sistema-lienzo, .sin-js .rail, .sistema.is-quieta .rail, .sin-js .pista, .sistema.is-quieta .pista { display: none; }
-.sin-js .sistema-texto, .sistema.is-quieta .sistema-texto { display: grid; gap: var(--e-9); padding-bottom: var(--ritmo-normal); pointer-events: auto; }
-.sin-js .capa, .sistema.is-quieta .capa { grid-area: auto; opacity: 1; transform: none; filter: none; }
-.sin-js .capas, .sistema.is-quieta .capas { display: grid; gap: var(--e-8) var(--col-gap); grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
-@media (prefers-reduced-motion: reduce) { .capa { transition: opacity 200ms ease; transform: none; filter: none; } .pista i { animation: none; } }
-
-/* El suelo de la escena se funde con la página al salir (sin borde duro). */
-.sistema-lienzo { -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); }
+/* ----------------------------------------------- 1a · así montamos un sistema
+   Seis capas, una frase cada una. A la derecha, la hélice del fondo vivo. */
+.montaje .h2 { max-width: 15ch; }
+.montaje-l { list-style: none; margin: var(--e-8) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e-7) var(--col-gap); max-width: 46rem; counter-reset: capa; }
+.montaje-l li { padding-top: var(--e-4); border-top: 1px solid var(--linea-2); }
+.montaje-n { display: flex; align-items: center; gap: 12px; font-size: var(--t-h3); font-weight: 560; letter-spacing: -.02em; color: var(--tinta); }
+.montaje-i { display: inline-flex; gap: 2px; }
+.montaje-i i { width: 5px; height: 5px; border-radius: 1px; background: var(--tinta); }
+.montaje-l p { margin-top: var(--e-3); color: var(--tinta-2); line-height: 1.55; max-width: 32ch; text-wrap: pretty; }
+.montaje-cierre { margin-top: var(--e-8); font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem); line-height: 1.35; letter-spacing: -.015em; color: var(--tinta); max-width: 30ch; }
+@media (max-width: 700px) { .montaje-l { grid-template-columns: 1fr; gap: var(--e-6); } }
 
 /* ------------------------------------------------- 1b · así cambia el trabajo
    Problema → lo que hacemos → después. La tinta va del gris al negro: lo

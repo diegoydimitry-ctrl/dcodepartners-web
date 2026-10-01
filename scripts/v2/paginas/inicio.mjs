@@ -1,6 +1,6 @@
 /* Portada (ES / EN) · blanco y negro, muy pocas palabras.
-   La escena «el sistema» (scripts/v2/escena/sistema.js) cuenta las capas de D-Code al bajar:
-   personas → procesos → datos → herramientas → IA → automatizaciones → el sistema (el logotipo).
+   El fondo vivo (scripts/v2/escena/fondo.js) acompaña toda la web: cada sección pide su forma con
+   data-escena (logo · hélice · ola · columnas · órbitas · cubo), su lado y su intensidad.
    Las cifras comerciales NO se escriben aquí: las rellena build:precios desde
    precios.json (data-precio). El resto del contenido sale de producción. */
 import { FLECHA } from "../plantilla.mjs";
@@ -15,19 +15,20 @@ const C = {
     h1: "Conectamos tu empresa en un solo sistema.",
     sub: "Lo hacemos con automatización, inteligencia artificial y software a medida.",
     cta: "Reservar una llamada", cta2: "Ver las demos",
-    pista: "Mueve el ratón y baja para ver cómo se monta.",
-    // La narrativa de la escena: cada capa del sistema, una frase que se entiende sola.
-    capas: [
-      ["Personas", "Todo empieza por las personas.", "Cada equipo trabaja a su manera, con sus hojas de cálculo, sus correos y sus prisas."],
-      ["Procesos", "Su trabajo sigue unos procesos.", "Los dibujamos tal como son en tu empresa, no como dice el manual."],
-      ["Datos", "Cada proceso genera datos.", "Hoy están repartidos. Los reunimos para que cada dato se escriba una sola vez."],
-      ["Herramientas", "Tus herramientas se conectan entre sí.", "Tu CRM, tu facturación y tu web se pasan los datos sin que nadie los copie."],
-      ["IA", "La inteligencia artificial lee y propone.", "Las decisiones importantes las sigue tomando una persona."],
-      ["Automatizaciones", "Lo que se repite pasa a hacerse solo.", "El sistema trabaja en segundo plano y te avisa cuando algo necesita tu atención."],
-      ["Sistema", "El resultado es un solo sistema: el tuyo.", "Lo construimos sobre tus datos y con las herramientas que ya usas."],
-    ],
-    capasNav: "Capas del sistema",
-    escenaAlt: "Cientos de piezas sueltas forman personas, procesos, datos, herramientas, inteligencia artificial y automatizaciones, y al final se unen en el logotipo de D-Code.",
+    pista: "Pulsa en un hueco y mira cómo se vuelve a montar.",
+    // Cómo montamos un sistema: seis capas, una frase cada una.
+    montaje: {
+      h2: "Así montamos un sistema en tu empresa.",
+      capas: [
+        ["Personas", "Empezamos por cómo trabaja cada equipo y qué le hace perder tiempo."],
+        ["Procesos", "Dibujamos sus procesos tal como son, no como dice el manual."],
+        ["Datos", "Reunimos los datos para que cada dato se escriba una sola vez."],
+        ["Herramientas", "Conectamos las herramientas que ya usas para que se pasen la información."],
+        ["Inteligencia artificial", "La añadimos donde lee, clasifica o propone; lo importante lo decide una persona."],
+        ["Automatizaciones", "Lo que se repite pasa a hacerse solo, y el sistema te avisa cuando algo necesita tu atención."],
+      ],
+      cierre: "El resultado no es otra herramienta: es un solo sistema que conecta tu empresa.",
+    },
     bajar: "Desliza",
     cambios: {
       h2: "Así cambia el trabajo en tu empresa.",
@@ -68,18 +69,19 @@ const C = {
     h1: "We connect your company in one system.",
     sub: "We do it with automation, artificial intelligence and custom software.",
     cta: "Book a call", cta2: "See the demos",
-    pista: "Move the mouse and scroll to watch it come together.",
-    capas: [
-      ["People", "It all starts with people.", "Every team works its own way, with its spreadsheets, its emails and its deadlines."],
-      ["Processes", "Their work follows processes.", "We map them as they really are in your company, not as the manual says."],
-      ["Data", "Every process produces data.", "Today it is scattered. We bring it together so each piece of data is written only once."],
-      ["Tools", "Your tools start talking to each other.", "Your CRM, your invoicing and your website pass data along without anyone copying it."],
-      ["AI", "Artificial intelligence reads and suggests.", "The important decisions are still made by a person."],
-      ["Automation", "What repeats starts running on its own.", "The system works in the background and tells you when something needs your attention."],
-      ["System", "The result is one system: yours.", "We build it on your data and with the tools you already use."],
-    ],
-    capasNav: "Layers of the system",
-    escenaAlt: "Hundreds of loose pieces form people, processes, data, tools, artificial intelligence and automation, and finally come together into the D-Code logo.",
+    pista: "Click on an empty spot and watch it come back together.",
+    montaje: {
+      h2: "This is how we build a system in your company.",
+      capas: [
+        ["People", "We start with how each team works and what wastes its time."],
+        ["Processes", "We map their processes as they really are, not as the manual says."],
+        ["Data", "We bring the data together so each piece is written only once."],
+        ["Tools", "We connect the tools you already use so they pass information along."],
+        ["Artificial intelligence", "We add it where it reads, classifies or suggests; a person decides what matters."],
+        ["Automation", "What repeats runs on its own, and the system tells you when something needs your attention."],
+      ],
+      cierre: "The result is not another tool: it is one system that connects your company.",
+    },
     bajar: "Scroll",
     cambios: {
       h2: "This is how work changes in your company.",
@@ -121,29 +123,26 @@ export function inicio(lang) {
   const L = (r) => (lang === "en" ? (r === "/" ? "/en" : r.startsWith("#") ? r : "/en" + r) : r);
   const p = c.productos, t = c.tocalo, f = c.fin;
   return `
-<section class="sistema" data-sistema aria-labelledby="h-inicio">
-  <div class="sistema-fijo">
-    <div class="sistema-luz" aria-hidden="true"></div>
-    <canvas class="sistema-lienzo" data-sistema-lienzo role="img" aria-label="${c.escenaAlt}"></canvas>
-    <picture><source srcset="/assets/v2/img/piezas/700/072.webp" media="(max-width: 760px)"><img class="sistema-poster" src="/assets/v2/img/piezas/1100/072.webp" alt="" width="1100" height="1100" loading="lazy" decoding="async"></picture>
-    <div class="marco sistema-texto">
-      <div class="capa capa--0 is-activa" data-capa="0">
-        <h1 class="sistema-h1" id="h-inicio">${c.h1}</h1>
-        <p class="lead">${c.sub}</p>
-        <div class="acc"><a class="boton boton--principal" href="${L("/contacto")}">${c.cta} ${FLECHA}</a><a class="boton" href="#tocalo">${c.cta2}</a></div>
-      </div>
-      <ol class="capas" role="list">
-        ${c.capas.map(([, h, d], i) => `<li class="capa" data-capa="${i + 1}"><h2 class="capa-t">${h}</h2><p class="lead">${d}</p>${i === c.capas.length - 1 ? `<div class="acc"><a class="boton boton--principal" href="${L("/contacto")}">${c.cta} ${FLECHA}</a><a class="boton" href="#tocalo">${c.cta2}</a></div>` : ""}</li>`).join("\n        ")}
-      </ol>
-      <p class="pista" aria-hidden="true"><i></i>${c.pista}</p>
-    </div>
-    <nav class="rail" aria-label="${c.capasNav}" data-rail>
-      <ol role="list">${c.capas.map(([n], i) => `<li><button type="button" data-ir="${i + 1}"><span>${n}</span></button></li>`).join("")}</ol>
-    </nav>
+<section class="portada" data-escena="logo" data-lado="der" aria-labelledby="h-inicio">
+  <div class="marco portada-in">
+    <h1 class="portada-h1" id="h-inicio">${c.h1}</h1>
+    <p class="lead">${c.sub}</p>
+    <div class="acc"><a class="boton boton--principal" href="${L("/contacto")}">${c.cta} ${FLECHA}</a><a class="boton" href="#tocalo">${c.cta2}</a></div>
+  </div>
+  <p class="pista" aria-hidden="true"><i></i>${c.pista}</p>
+</section>
+
+<section class="bloque bloque--aire montaje" id="montaje" data-escena="helice" data-lado="der" aria-labelledby="h-montaje">
+  <div class="marco">
+    <h2 class="h2 aparece" id="h-montaje">${c.montaje.h2}</h2>
+    <ol class="montaje-l" role="list">
+      ${c.montaje.capas.map(([n, d], i) => `<li class="aparece" style="--i:${i}"><h3 class="montaje-n"><span class="montaje-i" aria-hidden="true">${"<i></i>".repeat(i + 1)}</span>${n}</h3><p>${d}</p></li>`).join("\n      ")}
+    </ol>
+    <p class="montaje-cierre aparece">${c.montaje.cierre}</p>
   </div>
 </section>
 
-<section class="bloque bloque--aire cambios" id="cambios" aria-labelledby="h-cambios">
+<section class="bloque bloque--aire cambios" id="cambios" data-escena="ola" data-lado="abajo" data-intensidad=".4" aria-labelledby="h-cambios">
   <div class="marco">
     <h2 class="h2 aparece" id="h-cambios">${c.cambios.h2}</h2>
     <div class="cambios-cab" aria-hidden="true"><span></span>${c.cambios.cols.map((t) => `<span class="rotulo">${t}</span>`).join("")}</div>
@@ -153,7 +152,7 @@ export function inicio(lang) {
   </div>
 </section>
 
-<section class="bloque bloque--aire productos" id="productos" aria-labelledby="h-productos">
+<section class="bloque bloque--aire productos" id="productos" data-escena="columnas" data-lado="der" data-intensidad=".32" aria-labelledby="h-productos">
   <div class="marco">
     <h2 class="h2 aparece" id="h-productos">${p.h2}</h2>
     <ul class="lista" role="list">
@@ -166,7 +165,7 @@ export function inicio(lang) {
 
 ${seccionDemos(lang)}
 
-<section class="bloque bloque--aire fin" id="hablemos" aria-labelledby="h-fin">
+<section class="bloque bloque--aire fin" id="hablemos" data-escena="cubo" data-lado="der" data-intensidad=".6" aria-labelledby="h-fin">
   <div class="marco">
     <h2 class="display aparece" id="h-fin">${f.h2}</h2>
     <p class="lead aparece" style="--i:1">${f.sub}</p>

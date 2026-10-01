@@ -341,3 +341,11 @@ html:not(.vt-tema)::view-transition-new(root) { animation: vt-entra 380ms var(--
 @keyframes vt-sale { to { opacity: 0; transform: translateY(-8px); } }
 @keyframes vt-entra { from { opacity: 0; transform: translateY(14px); } }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+/* ------------------------------------------------------------ el fondo vivo
+   Fijo detrás de todo el contenido (encima del color de la página, debajo
+   de todo lo demás). Nunca recibe el puntero: la web se usa igual. La
+   intensidad la pone cada sección; el cambio es un fundido lento. */
+.fondo-3d { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0; transition: opacity 1200ms var(--ease-out); }
+.fondo-3d:not(.is-lista) { opacity: 0 !important; }
+@media print { .fondo-3d { display: none; } }

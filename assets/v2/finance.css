@@ -46,11 +46,11 @@
 .dm--solo .dm-pest { display: none; }
 
 /* ==========================================================================
-   Así entra una factura en Finance (escena 3D fijada al scroll)
+   Así entra una factura en Finance (escena 3D que se reproduce sola al verla)
    La escena manda; los cuatro pasos, abajo a la izquierda, cambian con ella.
    ========================================================================== */
-.papel { position: relative; height: 430vh; }
-.papel-fijo { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.papel { position: relative; }
+.papel-fijo { position: relative; height: 100vh; height: 100svh; min-height: 620px; max-height: 1000px; overflow: hidden; }
 .papel-luz { position: absolute; inset: 0; background: var(--foco-escena); }
 .papel-lienzo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1200ms var(--ease-out); cursor: grab; touch-action: pan-y;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 82%, transparent 100%); }
@@ -63,8 +63,9 @@
 .papel-paso h3 { font-size: clamp(1.35rem, 1.05rem + 1vw, 2rem); font-weight: 560; letter-spacing: -.03em; line-height: 1.1; color: var(--tinta); text-wrap: balance; }
 .papel-paso p { margin-top: var(--e-3); color: var(--tinta-2); font-size: var(--t-lead); line-height: 1.5; text-wrap: pretty; }
 .papel-nota { margin-top: var(--e-5); font-size: .82rem; color: var(--tinta-3); }
+.papel-otra { justify-self: start; margin-top: var(--e-4); pointer-events: auto; }
+.papel-otra[hidden] { display: none; }
 @media (max-width: 999px), (orientation: portrait) {
-  .papel { height: 380vh; }
   .papel-texto { padding-block: calc(var(--e-8) + 40px) calc(32px + env(safe-area-inset-bottom)); }
 }
 /* Sin JavaScript, sin WebGL o con movimiento reducido: los cuatro pasos, uno debajo de otro. */
