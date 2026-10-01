@@ -66,7 +66,7 @@
 .sin-js .sistema-lienzo, .sistema.is-quieta .sistema-lienzo, .sin-js .rail, .sistema.is-quieta .rail, .sin-js .pista, .sistema.is-quieta .pista { display: none; }
 .sin-js .sistema-texto, .sistema.is-quieta .sistema-texto { display: grid; gap: var(--e-9); padding-bottom: var(--ritmo-normal); pointer-events: auto; }
 .sin-js .capa, .sistema.is-quieta .capa { grid-area: auto; opacity: 1; transform: none; filter: none; }
-.sin-js .capas, .sistema.is-quieta .capas { display: grid; gap: var(--e-8); }
+.sin-js .capas, .sistema.is-quieta .capas { display: grid; gap: var(--e-8) var(--col-gap); grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
 @media (prefers-reduced-motion: reduce) { .capa { transition: opacity 200ms ease; transform: none; filter: none; } .pista i { animation: none; } }
 
 /* El suelo de la escena se funde con la página al salir (sin borde duro). */

@@ -61,7 +61,7 @@ function nube(n, r) {
   for (let i = 0; i < n; i++) {
     const u = r(), v = r(), w = Math.cbrt(r()) ** 1.4;
     const th = u * Math.PI * 2, ph = Math.acos(2 * v - 1);
-    pts.push([0.35 + Math.sin(ph) * Math.cos(th) * 1.75 * w, CENTRO.y + 0.12 + Math.cos(ph) * 0.95 * w, Math.sin(ph) * Math.sin(th) * 1.2 * w, 0.022 + r() * 0.03 * (1.2 - w * 0.5), r() < 0.14 ? 1 : 0]);
+    pts.push([0.6 + Math.sin(ph) * Math.cos(th) * 1.6 * w, CENTRO.y + 0.12 + Math.cos(ph) * 0.95 * w, Math.sin(ph) * Math.sin(th) * 1.2 * w, 0.022 + r() * 0.03 * (1.2 - w * 0.5), r() < 0.14 ? 1 : 0]);
   }
   volcar(e, ordenar(pts, (q) => q[0] + q[1] * 0.3));
   return e;

@@ -51,7 +51,7 @@ if (sec) {
     }));
 
     // El 3D, cuando el navegador tenga un respiro (el título ya es el LCP).
-    const cargar = () => import("/assets/v2/js/sistema3d.js?v=1ce441b390").then(({ montar }) => {
+    const cargar = () => import("/assets/v2/js/sistema3d.js?v=b96544fe8d").then(({ montar }) => {
       const raiz = document.documentElement;
       const claro = () => raiz.dataset.theme === "light";
       escena = montar(lienzo, { movil, claro: claro() });
