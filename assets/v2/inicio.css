@@ -1,52 +1,116 @@
 /* ==========================================================================
    PORTADA · blanco y negro
-   1. Las piezas (secuencia fotorrealista fijada al scroll)
+   1. El sistema (escena 3D fijada al scroll) · 1b. Así cambia el trabajo
    2. Lo que instalamos · 3. Tócalo · 4. Hablemos
    ========================================================================== */
 
-/* ------------------------------------------------------------ 1 · piezas */
-.piezas { position: relative; height: 420vh; }
-.piezas-fijo { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-.piezas-luz { position: absolute; inset: 0; background: var(--foco-escena); }
-.piezas-lienzo, .piezas-poster { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* El póster (logotipo montado) solo existe para movimiento reducido, sin WebGL o sin JS. */
-.piezas-poster { display: none; object-fit: contain; object-position: 72% 50%; }
-.piezas-lienzo { opacity: 0; transition: opacity 1100ms var(--ease-out); }
-.is-escena .piezas-lienzo { opacity: 1; }
-.piezas-texto { position: relative; height: 100%; display: grid; align-items: center; }
-.cap { grid-area: 1 / 1; max-width: 34rem; opacity: 0; transform: translateY(16px); filter: blur(6px); transition: opacity 520ms var(--ease-out), transform 620ms var(--ease-out), filter 520ms var(--ease-out); pointer-events: none; }
-.cap.is-activo { opacity: 1; transform: none; filter: none; pointer-events: auto; }
-.cap--0 { max-width: 40rem; }
-.cap--0 .display { max-width: 9.5ch; }
-.cap .lead { margin-top: var(--e-5); max-width: 28em; }
-.cap-n { color: var(--tinta-3); margin-bottom: var(--e-4); }
-.caps { display: contents; list-style: none; padding: 0; margin: 0; }
+/* ------------------------------------------------------------ 1 · el sistema
+   La escena ocupa toda la pantalla y manda; el texto es poco, abajo a la
+   izquierda, y cambia con cada capa. A la derecha, el raíl de capas. */
+.sistema { position: relative; height: 820vh; }
+.sistema-fijo { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.sistema-luz { position: absolute; inset: 0; background: var(--foco-escena); }
+.sistema-lienzo, .sistema-poster { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sistema-poster { display: none; object-fit: contain; object-position: 72% 50%; }
+.sistema-lienzo { opacity: 0; transition: opacity 1400ms var(--ease-out); cursor: grab; touch-action: pan-y; }
+.sistema-lienzo.is-arrastrando { cursor: grabbing; }
+.is-escena .sistema-lienzo { opacity: 1; }
+.sistema-texto { position: relative; height: 100%; display: grid; align-items: end; padding-bottom: clamp(56px, 11vh, 120px); pointer-events: none; }
+.capa { grid-area: 1 / 1; max-width: 30rem; opacity: 0; transform: translateY(18px); filter: blur(8px); transition: opacity 560ms var(--ease-out), transform 720ms var(--ease-out), filter 560ms var(--ease-out); }
+.capa.is-activa { opacity: 1; transform: none; filter: none; }
+.capa .acc, .capa a, .capa button { pointer-events: auto; }
+.capa--0 { max-width: 36rem; }
+.sistema-h1 { font-size: clamp(2.5rem, 4.9vw, 4.6rem); font-weight: 560; line-height: .98; letter-spacing: -.04em; max-width: 12ch; color: var(--tinta); text-wrap: balance; }
+.capa-t { font-size: clamp(1.9rem, 3.3vw, 3.1rem); font-weight: 560; line-height: 1.02; letter-spacing: -.035em; max-width: 14ch; color: var(--tinta); text-wrap: balance; }
+.capa .lead { margin-top: var(--e-4); max-width: 26em; }
+.capas { display: contents; list-style: none; padding: 0; margin: 0; }
 .acc { margin-top: var(--e-6); display: flex; flex-wrap: wrap; gap: var(--e-3); }
-.bajar { position: absolute; left: var(--margen); bottom: 28px; display: inline-flex; align-items: center; gap: 12px; transition: opacity 400ms ease; }
-.bajar i { width: 1px; height: 36px; background: linear-gradient(var(--tinta-3), transparent); animation: bajar 2.4s var(--ease-in-out) infinite; transform-origin: top; }
+.pista { position: absolute; right: var(--margen); bottom: clamp(56px, 11vh, 120px); display: inline-flex; align-items: center; gap: 12px; font-size: .86rem; color: var(--tinta-3); transition: opacity 500ms ease; }
+.pista i { width: 1px; height: 36px; background: linear-gradient(var(--tinta-3), transparent); animation: bajar 2.4s var(--ease-in-out) infinite; transform-origin: top; }
 @keyframes bajar { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-.is-bajado .bajar { opacity: 0; }
+.is-bajado .pista { opacity: 0; }
 
-/* Apilado (móvil, tableta y cualquier pantalla vertical): el 3D arriba, el texto abajo.
-   Mismo criterio que piezas.js (ancho < 1100 o vertical). */
+/* El raíl: siete capas. Una raya por capa; la actual, más larga y con su nombre. */
+.rail { position: absolute; right: var(--margen); top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity 600ms var(--ease-out); }
+.is-bajado .rail { opacity: 1; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.rail button { display: flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 30px; padding: 0 0 0 16px; border: 0; background: none; color: var(--tinta-3); font: 500 .8rem/1 var(--f-texto); cursor: pointer; }
+.rail button::after { content: ""; width: 14px; height: 1px; background: currentColor; transition: width 500ms var(--ease-out), background-color 300ms ease; }
+.rail span { opacity: 0; transform: translateX(6px); transition: opacity 300ms ease, transform 400ms var(--ease-out); }
+.rail button[aria-current]::after { width: 34px; background: var(--tinta); }
+.rail button[aria-current] { color: var(--tinta); }
+.rail button[aria-current] span, .rail button:hover span, .rail button:focus-visible span { opacity: 1; transform: none; }
+.rail button:hover::after { width: 24px; }
+.rail button:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; border-radius: 4px; }
+
+/* Apilado (móvil, tableta y pantallas verticales): la escena arriba y el texto abajo. */
 @media (max-width: 1099px), (orientation: portrait) {
-  .piezas-poster { object-position: 50% 12%; }
-  .piezas-texto { align-items: end; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
-  .cap .lead { margin-top: var(--e-4); }
-  .bajar { display: none; }
+  .sistema { height: 720vh; }
+  .sistema-poster { object-position: 50% 12%; }
+  .sistema-texto { padding-bottom: calc(36px + env(safe-area-inset-bottom)); }
+  .capa .lead { margin-top: var(--e-3); }
+  .pista { display: none; }
+  .rail { top: auto; bottom: auto; top: calc(72px + env(safe-area-inset-top)); right: auto; left: var(--margen); transform: none; }
+  .rail ol { grid-auto-flow: column; gap: 6px; }
+  .rail button { padding: 0; min-height: 24px; }
+  .rail button::after { width: 18px; }
+  .rail button[aria-current]::after { width: 34px; }
+  .rail span { display: none; }
 }
 
-/* Sin JavaScript o con movimiento reducido: nada se fija ni se anima. La
-   pieza montada y los tres capítulos, uno debajo de otro. */
-.sin-js .piezas, .piezas.is-quieta { height: auto; }
-.sin-js .piezas-fijo, .piezas.is-quieta .piezas-fijo { position: relative; height: auto; min-height: 100svh; }
-.sin-js .piezas-poster, .piezas.is-quieta .piezas-poster { display: block; position: relative; height: 70svh; opacity: 1; }
-.sin-js .piezas-lienzo, .piezas.is-quieta .piezas-lienzo { display: none; }
-.sin-js .piezas-texto, .piezas.is-quieta .piezas-texto { display: grid; gap: var(--e-8); padding-bottom: var(--ritmo-normal); }
-.sin-js .cap, .piezas.is-quieta .cap { grid-area: auto; opacity: 1; transform: none; filter: none; pointer-events: auto; }
-.sin-js .caps, .piezas.is-quieta .caps { display: grid; gap: var(--e-8); }
-.sin-js .bajar, .piezas.is-quieta .bajar { display: none; }
-@media (prefers-reduced-motion: reduce) { .cap { transition: opacity 200ms ease; transform: none; filter: none; } .bajar i { animation: none; } }
+/* Sin JavaScript o con movimiento reducido: nada se fija ni se anima. El logotipo
+   montado y las capas, una debajo de otra. */
+.sin-js .sistema, .sistema.is-quieta { height: auto; }
+.sin-js .sistema-fijo, .sistema.is-quieta .sistema-fijo { position: relative; height: auto; min-height: 100svh; }
+.sin-js .sistema-poster, .sistema.is-quieta .sistema-poster { display: block; position: relative; height: 62svh; opacity: 1; }
+.sin-js .sistema-lienzo, .sistema.is-quieta .sistema-lienzo, .sin-js .rail, .sistema.is-quieta .rail, .sin-js .pista, .sistema.is-quieta .pista { display: none; }
+.sin-js .sistema-texto, .sistema.is-quieta .sistema-texto { display: grid; gap: var(--e-9); padding-bottom: var(--ritmo-normal); pointer-events: auto; }
+.sin-js .capa, .sistema.is-quieta .capa { grid-area: auto; opacity: 1; transform: none; filter: none; }
+.sin-js .capas, .sistema.is-quieta .capas { display: grid; gap: var(--e-8); }
+@media (prefers-reduced-motion: reduce) { .capa { transition: opacity 200ms ease; transform: none; filter: none; } .pista i { animation: none; } }
+
+/* El suelo de la escena se funde con la página al salir (sin borde duro). */
+.sistema-lienzo { -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); }
+
+/* ------------------------------------------------- 1b · así cambia el trabajo
+   Problema → lo que hacemos → después. La tinta va del gris al negro: lo
+   de hoy se lee apagado; lo de después, con toda la tinta. La marca de cada
+   fila son nueve piezas sueltas que se ordenan al entrar en pantalla. */
+.cambios .h2 { max-width: 20ch; }
+.cambios-cab, .cambio { display: grid; grid-template-columns: minmax(0, 3.2fr) repeat(3, minmax(0, 4fr)); gap: var(--col-gap); }
+.cambios-cab { margin-top: var(--e-8); padding-bottom: var(--e-3); border-bottom: 1px solid var(--linea-2); }
+.cambios-lista { list-style: none; margin: 0; padding: 0; }
+.cambio { padding: 30px 0 34px; border-bottom: 1px solid var(--linea-2); align-items: start; }
+.cambio-n { display: inline-flex; align-items: center; gap: 14px; font-size: var(--t-h3); font-weight: 560; letter-spacing: -.02em; line-height: 1.15; text-decoration: none; color: var(--tinta); }
+.cambio-n svg { width: 18px; height: 18px; color: var(--tinta-3); transition: transform var(--t-media) var(--ease-out), color var(--t-rapida) ease; }
+@media (hover: hover) and (pointer: fine) { .cambio-n:hover svg { transform: translateX(4px); color: var(--tinta); } }
+.cambio-c { margin: 0; font-size: 1rem; line-height: 1.55; color: var(--tinta-3); text-wrap: pretty; }
+.cambio-c:nth-child(3) { color: var(--tinta-2); }
+.cambio-c--fin { color: var(--tinta); }
+.cambio-c .rotulo { display: none; }
+.cambio-marca { display: grid; grid-template-columns: repeat(3, 6px); gap: 2px; flex: none; }
+.cambio-marca i { width: 6px; height: 6px; border-radius: 1.5px; background: var(--tinta); }
+.cambio-marca i:nth-child(5) { background: var(--tinta-3); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cambio-marca i { animation: pieza-ordena linear both; animation-timeline: view(); animation-range: entry 20% cover 45%; }
+    .cambio-marca i:nth-child(1) { --dx: -9px; --dy: -7px; --r: 40deg; } .cambio-marca i:nth-child(2) { --dx: 4px; --dy: -12px; --r: -25deg; }
+    .cambio-marca i:nth-child(3) { --dx: 11px; --dy: -3px; --r: 60deg; } .cambio-marca i:nth-child(4) { --dx: -12px; --dy: 3px; --r: -50deg; }
+    .cambio-marca i:nth-child(5) { --dx: 2px; --dy: 1px; --r: 15deg; } .cambio-marca i:nth-child(6) { --dx: 13px; --dy: 6px; --r: 35deg; }
+    .cambio-marca i:nth-child(7) { --dx: -6px; --dy: 12px; --r: -70deg; } .cambio-marca i:nth-child(8) { --dx: 5px; --dy: 10px; --r: 20deg; }
+    .cambio-marca i:nth-child(9) { --dx: 12px; --dy: 13px; --r: -35deg; }
+    @keyframes pieza-ordena { from { transform: translate(var(--dx), var(--dy)) rotate(var(--r)) scale(.7); opacity: .45; } to { transform: none; opacity: 1; } }
+    .cambio-c { animation: cambio-tinta linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+    @keyframes cambio-tinta { from { opacity: .25; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  }
+}
+@media (max-width: 900px) {
+  .cambios-cab { display: none; }
+  .cambio { grid-template-columns: 1fr; gap: 14px; padding: 26px 0 30px; }
+  .cambio-n { margin-bottom: 4px; }
+  .cambio-c { display: grid; grid-template-columns: 6.4rem 1fr; gap: 12px; }
+  .cambio-c .rotulo { display: block; padding-top: .2em; }
+}
 
 /* ------------------------------------------------------ 2 · lo que instalamos
    Una lista: nombre, una frase, precio. Nada más. */
@@ -100,8 +164,6 @@
 .productos { padding-bottom: var(--ritmo-normal); }
 .tocalo { padding-top: var(--ritmo-normal); }
 
-/* El suelo de la escena se funde con la página al salir (sin borde duro). */
-.piezas-lienzo { -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); }
 
 /* El producto entra como un objeto: inclinado y algo más pequeño, y se endereza al llegar.
    Animación ligada al scroll en el hilo del compositor (sin JavaScript). */

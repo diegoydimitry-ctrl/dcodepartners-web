@@ -25,19 +25,19 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 import { HorizontalBlurShader } from "three/examples/jsm/shaders/HorizontalBlurShader.js";
 import { VerticalBlurShader } from "three/examples/jsm/shaders/VerticalBlurShader.js";
 
-const S = 0.01;        // 1 unidad del SVG del logotipo = 1 cm
-const PROF = 0.13;     // grosor
+export const S = 0.01;        // 1 unidad del SVG del logotipo = 1 cm
+export const PROF = 0.13;     // grosor
 const ALTURA = 0.34;   // el logotipo montado flota sobre el suelo
-const suave = (t) => { t = Math.min(1, Math.max(0, t)); return t * t * t * (t * (t * 6 - 15) + 10); };
+export const suave = (t) => { t = Math.min(1, Math.max(0, t)); return t * t * t * (t * (t * 6 - 15) + 10); };
 
 // Azar con semilla: la dispersión es siempre la misma (diseñada, no casual cada vez)
-function azar(semilla) { let a = semilla >>> 0; return () => { a += 0x6d2b79f5; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+export function azar(semilla) { let a = semilla >>> 0; return () => { a += 0x6d2b79f5; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
 /* ------------------------------------------------------------ geometría
    El logotipo (viewBox 120×100, y hacia abajo), igual que el SVG de la web. */
-const arco = (cx, cy, r, a0, a1, n = 28) => Array.from({ length: n + 1 }, (_, i) => [cx + r * Math.cos(a0 + ((a1 - a0) * i) / n), cy + r * Math.sin(a0 + ((a1 - a0) * i) / n)]);
-const CUBOS = [["p1", 26, 1, 16], ["p2", 1, 27, 13], ["p3", 35, 26, 13], ["p4", 2, 64, 12], ["p5", 35, 64, 13], ["p6", 26, 83, 16], ["p7", 102, 43, 16], ["ia", 16, 45, 15]];
-const ARCOS = [
+export const arco = (cx, cy, r, a0, a1, n = 28) => Array.from({ length: n + 1 }, (_, i) => [cx + r * Math.cos(a0 + ((a1 - a0) * i) / n), cy + r * Math.sin(a0 + ((a1 - a0) * i) / n)]);
+export const CUBOS = [["p1", 26, 1, 16], ["p2", 1, 27, 13], ["p3", 35, 26, 13], ["p4", 2, 64, 12], ["p5", 35, 64, 13], ["p6", 26, 83, 16], ["p7", 102, 43, 16], ["ia", 16, 45, 15]];
+export const ARCOS = [
   ["arco_sup", [[48, 1], [86, 1], ...arco(86, 33, 32, -Math.PI / 2, 0).slice(1), [118, 38], [102, 38], ...arco(86, 33, 16, 0, -Math.PI / 2).slice(0, -1), [86, 17], [48, 17]]],
   ["arco_inf", [[48, 99], [86, 99], ...arco(86, 67, 32, Math.PI / 2, 0).slice(1), [118, 63], [102, 63], ...arco(86, 67, 16, 0, Math.PI / 2).slice(0, -1), [86, 83], [48, 83]]],
 ];
@@ -88,11 +88,11 @@ function barrido(eje, ancho, fondo, rc) {
 }
 // Eje de cada arco en coordenadas del SVG (y hacia abajo): tramo recto, cuarto de círculo de
 // radio 24 y tramo corto. Las puntas se quedan 2 unidades cortas: el redondeo (rc = 2 cm) las completa.
-const EJES = {
+export const EJES = {
   arco_sup: { eje: [...Array.from({ length: 9 }, (_, i) => [50 + (36 * i) / 8, 9]), ...arco(86, 33, 24, -Math.PI / 2, 0, 32).slice(1), [110, 36]], c: [83, 19.5] },
   arco_inf: { eje: [...Array.from({ length: 9 }, (_, i) => [50 + (36 * i) / 8, 91]), ...arco(86, 67, 24, Math.PI / 2, 0, 32).slice(1), [110, 64]], c: [83, 81] },
 };
-function piezaArco(n) {
+export function piezaArco(n) {
   const { eje, c: [cx, cy] } = EJES[n];
   return { geo: barrido(eje.map(([x, y]) => [(x - cx) * S, -(y - cy) * S]), 16 * S, PROF, 0.02), cx, cy };
 }
@@ -100,7 +100,7 @@ function piezaArco(n) {
 /* --------------------------------------------------- entorno de estudio
    Una caja oscura con cajas de luz: son los reflejos que hacen que la
    cerámica negra parezca un objeto real fotografiado. */
-function estudio() {
+export function estudio() {
   const s = new Scene();
   s.add(new Mesh(new BoxGeometry(14, 14, 14), new MeshBasicMaterial({ color: new Color(0.012, 0.012, 0.014), side: BackSide })));
   const caja = (w, h, x, y, z, fuerza) => { const m = new Mesh(new PlaneGeometry(w, h), new MeshBasicMaterial({ color: new Color().setScalar(fuerza), side: DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0.8, 0); s.add(m); };
@@ -114,7 +114,7 @@ function estudio() {
 }
 
 // Micro-relieve: la cerámica no es un espejo perfecto. Ruido suave → mapa de normales.
-function microRelieve(n = 128) {
+export function microRelieve(n = 128) {
   const r = azar(11), alt = new Float32Array(n * n);
   for (let o = 0; o < 3; o++) { const paso = 2 ** (4 - o), amp = 1 / (o + 1), rej = []; for (let i = 0; i < (n / paso + 2) ** 2; i++) rej.push(r());
     const m = n / paso + 2; for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { const gx = x / paso, gy = y / paso, x0 = gx | 0, y0 = gy | 0, fx = gx - x0, fy = gy - y0; const v = (i, j) => rej[((y0 + j) % (m - 1)) * m + ((x0 + i) % (m - 1))]; const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy); alt[y * n + x] += amp * MathUtils.lerp(MathUtils.lerp(v(0, 0), v(1, 0), sx), MathUtils.lerp(v(0, 1), v(1, 1), sx), sy); } }
@@ -127,8 +127,7 @@ function microRelieve(n = 128) {
    Una cámara mira las piezas desde el suelo hacia arriba; su silueta (más
    oscura cuanto más cerca del suelo) se difumina dos veces y se pinta en un
    plano. Mismo principio que las sombras de las fotos de producto. */
-function sombraContacto(renderer, escena, res) {
-  const W = 4.4, H = 3.2, ALTO = 1.9;
+export function sombraContacto(renderer, escena, res, W = 4.4, H = 3.2, ALTO = 1.9) {
   const rt = new WebGLRenderTarget(res, res), rtB = new WebGLRenderTarget(res, res); rt.texture.generateMipmaps = rtB.texture.generateMipmaps = false;
   const plano = new Mesh(new PlaneGeometry(W, H).rotateX(Math.PI / 2), new MeshBasicMaterial({ map: rt.texture, transparent: true, depthWrite: false, opacity: 1, color: 0x000000 }));
   plano.material.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace("#include <map_fragment>", "vec4 sm = texture2D( map, vMapUv ); diffuseColor = vec4( vec3(0.0), sm.a * opacity );"); };

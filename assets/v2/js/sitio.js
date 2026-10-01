@@ -98,6 +98,31 @@ if (document.getElementById("contact-form")) cargarB();
     }, { passive: true });
   }
 }
+/* Asistente: una cabecera que dice quién responde y con qué, y tres preguntas rápidas que dependen de la página en
+   la que estás (en Finance, sobre Finance; en Precios, sobre precios…). Todo pasa por el mismo /api/chat: el script del
+   asistente (main-b.js) lee el texto de cada botón al pulsarlo, así que basta con cambiar el texto antes de que cargue. */
+{
+  const ventana = document.querySelector("#chat-widget .chat-window"), rapidas = [...document.querySelectorAll("#chat-quick-replies .chat-quick-question")];
+  const EN = document.documentElement.lang === "en", ruta = location.pathname.replace(/^\/en(?=\/|$)/, "").replace(/\.html$/, "") || "/";
+  if (ventana && !ventana.querySelector(".chat-cab")) {
+    const cab = document.createElement("div"); cab.className = "chat-cab";
+    cab.innerHTML = `<span class="chat-cab-marca" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>${EN ? "D-Code assistant" : "Asistente de D-Code"}</b><span>${EN ? "Answers with the information on this website." : "Responde con la información de esta web."}</span></span>`;
+    ventana.prepend(cab);
+  }
+  const P = EN ? {
+    "/sistema-financiero": ["How much does Finance cost?", "Can it read PDF invoices?", "Is it VERI*FACTU ready?"],
+    "/precios": ["What does the setup include?", "Is there a minimum term?", "I want a quote"],
+    "/servicios/agentes-de-ia": ["Does the agent make things up?", "Does it work on WhatsApp?", "How much does an agent cost?"],
+    "/departamentos": ["What would you build for my team?", "How much does it cost to start?", "I want to see a demo"],
+  } : {
+    "/sistema-financiero": ["¿Cuánto cuesta Finance?", "¿Lee las facturas en PDF?", "¿Está preparado para VERI*FACTU?"],
+    "/precios": ["¿Qué incluye la puesta en marcha?", "¿Hay permanencia?", "Quiero un presupuesto"],
+    "/servicios/agentes-de-ia": ["¿El agente se inventa respuestas?", "¿Funciona por WhatsApp?", "¿Cuánto cuesta un agente?"],
+    "/departamentos": ["¿Qué haríais en mi área?", "¿Cuánto cuesta empezar?", "Quiero ver una demo"],
+  };
+  const clave = Object.keys(P).find((k) => ruta === k || ruta.startsWith(k + "/"));
+  if (clave && rapidas.length === 3) rapidas.forEach((b, i) => { b.textContent = P[clave][i]; });
+}
 if (!document.getElementById("contact-form") && document.getElementById("chat-widget")) {
   const ric = window.requestIdleCallback || ((f) => setTimeout(f, 1200));
   addEventListener("load", () => ric(cargarB, { timeout: 3000 }), { once: true });

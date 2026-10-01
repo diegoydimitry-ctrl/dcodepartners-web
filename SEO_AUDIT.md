@@ -1,6 +1,6 @@
 # SEO_AUDIT — dcodepartners.com (rama web/dcp-cowork4)
 
-Generado por `node scripts/v2/seo-audit.mjs` el 2026-09-28 21:29 UTC sobre los ficheros que se despliegan.
+Generado por `node scripts/v2/seo-audit.mjs` el 2026-10-01 12:29 UTC sobre los ficheros que se despliegan.
 
 | | |
 |---|---|

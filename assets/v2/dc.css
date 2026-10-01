@@ -304,6 +304,18 @@ strong, b { font-weight: 650; }
 .chat-window { width: min(380px, calc(100vw - 32px)); max-height: min(560px, 70vh); display: none; grid-template-rows: 1fr auto auto; border: 1px solid var(--linea-2); border-radius: var(--radio-2); background: var(--bg); box-shadow: 0 40px 80px -30px rgba(0,0,0,.6); overflow: hidden; }
 .chat-widget.open .chat-window, .chat-window[aria-hidden="false"] { display: grid; animation: chat-in 220ms var(--ease-out); }
 @keyframes chat-in { from { opacity: 0; transform: translateY(8px) scale(.98); transform-origin: bottom right; } }
+.chat-window:has(> .chat-cab) { grid-template-rows: auto 1fr auto auto; }
+.chat-cab { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--linea); }
+.chat-cab b { display: block; font-size: .92rem; font-weight: 600; color: var(--tinta); }
+.chat-cab span span { display: block; font-size: .78rem; color: var(--tinta-3); margin-top: 2px; }
+.chat-cab-marca { display: grid; grid-template-columns: repeat(2, 7px); gap: 2px; flex: none; }
+.chat-cab-marca i { width: 7px; height: 7px; border-radius: 1.5px; background: var(--tinta); }
+.chat-cab-marca i:nth-child(4) { background: #2f64ff; }
+.chat-widget.open .chat-cab-marca i { animation: chat-piezas 900ms var(--ease-out) both; }
+.chat-widget.open .chat-cab-marca i:nth-child(1) { --dx: -6px; --dy: -5px; } .chat-widget.open .chat-cab-marca i:nth-child(2) { --dx: 6px; --dy: -4px; animation-delay: 60ms; }
+.chat-widget.open .chat-cab-marca i:nth-child(3) { --dx: -5px; --dy: 6px; animation-delay: 120ms; } .chat-widget.open .chat-cab-marca i:nth-child(4) { --dx: 6px; --dy: 5px; animation-delay: 180ms; }
+@keyframes chat-piezas { from { transform: translate(var(--dx), var(--dy)) rotate(45deg) scale(.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .chat-widget.open .chat-cab-marca i { animation: none; } }
 .chat-messages { overflow-y: auto; padding: 18px; display: grid; gap: 10px; align-content: start; font-size: .94rem; }
 .chat-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; line-height: 1.45; }
 .chat-msg.bot { background: var(--bg-3); color: var(--tinta); border-bottom-left-radius: 4px; }

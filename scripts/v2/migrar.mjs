@@ -17,6 +17,7 @@ import { execSync } from "node:child_process";
 import { parse } from "node-html-parser";
 import { pagina, FLECHA } from "./plantilla.mjs";
 import { seccionDemoFinance } from "./paginas/demos-portada.mjs";
+import { seccionPapel } from "./paginas/papel.mjs";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const BASE = "8ff5f5b";
@@ -371,7 +372,7 @@ function financeMinimo(cuerpo, lang) {
   <div class="acc fin-acc"><a class="boton boton--principal" href="${lang === "en" ? "/en" : ""}/precios">${t.planes} ${FLECHA}</a><a class="boton" href="${lang === "en" ? "/en" : ""}/contacto">${t.hablar}</a></div></div></section>`;
   secs.forEach((s) => s.remove());
   const hdr = doc.querySelector("header.pag-cab");
-  hdr.insertAdjacentHTML("afterend", tres + seccionDemoFinance(lang) + mas);
+  hdr.insertAdjacentHTML("afterend", seccionPapel(lang) + tres + seccionDemoFinance(lang) + mas);
   return doc.toString();
 }
 
