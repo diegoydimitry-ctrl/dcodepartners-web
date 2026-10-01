@@ -65,7 +65,7 @@ def md(t):
     return re.sub(r"\*(.+?)\*", r'<b class="hl">\1</b>', html.escape(t)).replace("\n", "<br>")
 
 # ───────────────────────── pantallas ─────────────────────────
-def mono(cont, rot=-2.0, sk=("Opción", "Salir"), arriba="", desplaza=(0, 0)):
+def mono(cont, rot=-2.0, sk=("Opción", "Salir"), arriba="", desplaza=(0, 0), sin_barras=False):
     """Móvil monocromo (LCD verde) fotografiado."""
     izq, der = sk
     return f'''
@@ -74,7 +74,7 @@ def mono(cont, rot=-2.0, sk=("Opción", "Salir"), arriba="", desplaza=(0, 0)):
     <div class="carcasa">
       <div class="lcd">
         <div class="lcd-in">
-          {barras_laterales("i")}{barras_laterales("d")}
+          {"" if sin_barras else barras_laterales("i")}{barras_laterales("d")}
           <div class="top">{arriba}</div>
           <div class="cuerpo">{cont}</div>
           <div class="sk"><span>{izq}</span><span>{der}</span></div>
