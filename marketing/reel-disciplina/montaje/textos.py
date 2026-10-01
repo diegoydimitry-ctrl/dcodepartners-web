@@ -31,9 +31,12 @@ html,body{{margin:0;background:#0b0b0c}}
 .sub{{position:absolute;left:100px;right:100px;top:1170px;font-family:"Inter Tight";font-weight:800;font-size:66px;line-height:1.12;color:#fff;text-align:center;letter-spacing:-1px}}
 .d{{color:#F5B841}}
 .flecha{{position:absolute;left:0;right:0;top:770px;font-family:"Inter Tight";font-weight:300;font-size:150px;line-height:1;color:#F5B841;text-align:center}}
-.peq{{position:absolute;left:120px;right:120px;top:1330px;font-family:"Inter Tight";font-weight:500;font-size:40px;line-height:1.25;color:#e9e9e9;text-align:center}}
+.peq{{position:absolute;left:120px;right:120px;top:1330px;font-family:"Inter Tight";font-weight:500;font-size:46px;line-height:1.25;color:#e9e9e9;text-align:center}}
 .tag{{position:absolute;left:0;right:0;top:1560px;font-family:"Inter Tight";font-weight:600;font-size:26px;letter-spacing:6px;color:#bdbdbd;text-align:center;text-transform:uppercase}}
 </style></head><body>
 {''.join(pags)}
 </body></html>"""
-open("textos.html", "w").write(doc); print(len(pags), "páginas")
+open("textos.html", "w").write(doc)
+sup = doc.replace("background:#0b0b0c", "background:transparent").replace(
+  "</style>", ".grande,.sub,.peq,.tag,.flecha{text-shadow:0 2px 18px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.35)}</style>")
+open("textos-superponer.html", "w").write(sup); print(len(pags), "páginas")
