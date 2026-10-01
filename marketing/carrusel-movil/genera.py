@@ -62,7 +62,7 @@ def barras_laterales(lado, n=5):
 def md(t):
     """*palabra* → resaltada."""
     import re
-    return re.sub(r"\*(.+?)\*", r'<b class="hl">\1</b>', html.escape(t)).replace("\n", "<br>")
+    return re.sub(r"\*(.+?)\*", r'<b class="hl">\1</b>', html.escape(t), flags=re.S).replace("\n", "<br>")
 
 # ───────────────────────── pantallas ─────────────────────────
 def mono(cont, rot=-2.0, sk=("Opción", "Salir"), arriba="", desplaza=(0, 0), sin_barras=False):

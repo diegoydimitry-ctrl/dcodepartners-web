@@ -23,29 +23,30 @@ S = []
 S.append(mono(
     f'''<div class="sobre tiembla">{svg_px(TEL, 12, {"x": "var(--px)"})}</div>
         <div class="titmono">LLAMADA ENTRANTE</div>
-        <div class="grande">TUS<br>EXCUSAS</div>''',
+        <div class="grande">TUS<br>EXCUSAS</div>
+        <div class="de">Ya van 3 esta semana</div>''',
     rot=-2.4, sk=("Contestar", "Rechazar"), arriba='<span class="reloj">06:30</span>'))
 # 2
 S.append(color("Te llama otra vez",
-    md("Las excusas siempre\nllaman cuando estás\n*cansado*, cuando hace\nfrío o cuando nadie\nte está mirando."),
+    md("Hace frío.\nEstás reventado.\nY esa vocecita te dice:\n«hoy no hace falta».\n\n*Esa voz te ha robado\nmás que nadie.*"),
     sk=("Contestar", "Colgar"), hora="06:31", icono=svg_px(TEL, 4, {"x": "#10131c"}, 'class="ico"'), rot=1.3))
 # 3
 S.append(mono(
     f'''<div class="campana">{svg_px(AVION, 10, {"x": "var(--px)"})}</div>
         <div class="titmono">MODO AVIÓN: ON</div>
-        <div class="txtmono">Sin notificaciones.<br>Sin opiniones.<br>Solo tú y lo que<br>tienes que hacer.</div>''',
-    rot=2.2, sk=("Atrás", "Seguir"), desplaza=(0, -8)))
+        <div class="txtmono">Nadie te debe nada.<br>Ni el mundo.<br>Ni tu jefe.<br>Ni la suerte.<br><span class="hl">Calla y a currar.</span></div>''',
+    rot=2.2, sk=("Atrás", "A currar"), desplaza=(0, -8)))
 # 4
 agenda = "".join(f'<div class="ag"><span class="h">{h}</span><span class="t">{t}</span><span class="ok">{svg_px(CHECK, 4, {"x": "#7fd39a"})}</span></div>'
-                 for h, t in (("06:30", "Entrenar"), ("08:00", "Lo difícil primero"), ("22:00", "Repetir mañana")))
+                 for h, t in (("06:30", "Entrenar (sin dormir)"), ("08:00", "Lo que más odio"), ("22:00", "Repetirlo mañana")))
 S.append(color("Agenda · Hoy",
-    f'<div class="agenda">{agenda}</div>' + md("Un día bueno\nno cambia nada.\n*Cien seguidos, sí.*"),
+    f'<div class="agenda">{agenda}</div>' + md("No me apetecía\nninguna.\n*Las hice todas.*"),
     sk=("Opciones", "Mañana"), hora="22:01", icono='<span class="ico-mem">31</span>', rot=-1.2, extra_cls="c4"))
 # 5
 S.append(mono(
     f'''<div class="titmono">SIN COBERTURA</div>
-        <div class="txtmono">Nadie va a entender<br>lo que construyes<br>hasta que esté<br>construido.</div>
-        <div class="de">Sigue igual.</div>''',
+        <div class="txtmono">Te van a llamar<br>exagerado.<br>Te dirán que<br>te relajes.</div>
+        <div class="de">Sonríe. Y sigue.</div>''',
     rot=-1.8, sk=("Reintentar", "Seguir"), desplaza=(0, -6), sin_barras=True))
 # 6 · CIERRE
 S.append(f'''
@@ -58,7 +59,7 @@ S.append(f'''
         <div class="tit"><span class="ico-mem">✕</span><span>Llamada rechazada</span></div>
         <div class="resp">
           <div class="para">Llamada de: <b>Tus excusas</b> · 00:00</div>
-          <div class="burbuja grande2">Hoy no.</div>
+          <div class="burbuja grande2">Hoy<br>tampoco.</div>
           <div class="entregado">✓✓ Respuesta enviada · 06:30</div>
         </div>
         <div class="firma">{svg_px(LOGO, 3, {"w": "#f2f4f8", "b": "#4b8dff"})}<div><strong>D-Code Partners</strong><span>@d_codepartners</span></div></div>
@@ -81,7 +82,9 @@ CSS = open("estilo.css").read() + """
 .fin .entregado.gris{align-self:flex-start;color:#ff8a7a}
 .titmono{white-space:nowrap}
 .mono .cuerpo .titmono{font-size:40px}
-.fin .burbuja.grande2{font-size:160px;padding:30px 56px 40px;margin-top:44px}
+.fin .burbuja.grande2{font-size:112px;padding:20px 48px 28px;margin-top:22px}
+.fin .resp{padding-top:26px}
+.mono .cuerpo .de{white-space:nowrap}
 """
 doc = f'<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Carrusel 2</title><style>{CSS}</style></head><body>{"".join(S)}</body></html>'
 open("carrusel2.html", "w").write(doc); print(len(S))
