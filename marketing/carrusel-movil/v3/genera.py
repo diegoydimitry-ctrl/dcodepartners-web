@@ -69,18 +69,18 @@ SOBRE = np.array([[c == "x" for c in r] for r in [
 # 1 · GANCHO — busca
 p1 = pantalla("p1", 132, 44, [
     ("bits", 2, SOBRE, {"x": 4}), ("t", 3, "1 MENSAJE NUEVO", {"x": 20}),
-    ("T", 15, "DE: TÚ.", {}),
-    ("t", 34, "(DENTRO DE 10 AÑOS)", {}),
+    ("T", 15, "DE: YO.", {}),
+    ("t", 34, "(EL DE DENTRO DE 10 AÑOS)", {}),
 ], 6, VERDE, NEGRO_LCD)
 # 2 · Nokia
 p2 = pantalla("p2", 96, 64, [
-    ("bar", 0, "TÚ · 2036", None), ("senal", 14, None, {"lado": "i"}), ("senal", 14, None, {"lado": "d"}),
-    ("t", 14, "SOY TÚ.", {}), ("t", 24, "EL DE 2036.", {}), ("t", 36, "NO VENGO A", {}), ("tb", 45, "ANIMARTE.", {"inv": True}),
+    ("bar", 0, "YO · 2036", None), ("senal", 14, None, {"lado": "i"}), ("senal", 14, None, {"lado": "d"}),
+    ("t", 14, "OYE, SOY YO.", {}), ("t", 24, "EL DE 2036.", {}), ("t", 36, "NO TE ESCRIBO", {}), ("tb", 45, "PARA ANIMARTE.", {"inv": True}),
     ("t", 57, "SIGUE", {}),
 ], 7, VERDE, NEGRO_LCD)
 # 3 · ladrillo
-p3 = pantalla("p3", 96, 34, [
-    ("t", 1, "CADA «MAÑANA", {}), ("t", 12, "EMPIEZO» ME", {}), ("tb", 23, "COSTÓ UN AÑO.", {}),
+p3 = pantalla("p3", 96, 45, [
+    ("t", 1, "¿TE ACUERDAS DEL", {}), ("t", 12, "«EMPIEZO EL", {}), ("t", 22, "LUNES»?", {}), ("tb", 34, "NUNCA LLEGÓ.", {"inv": True}),
 ], 6, AZULADO, (18, 30, 26), apagado=0.05)
 # 4 · tapa
 p4 = pantalla("p4", 96, 76, [
@@ -97,7 +97,7 @@ LB = logo_bits(26)
 p6 = pantalla("p6", 96, 64, [
     ("senal", 2, None, {"lado": "i"}), ("senal", 2, None, {"lado": "d"}),
     ("bits", 1, LB, {}), ("tb", 25, "D-CODE", {}),
-    ("t", 37, "RESPUESTA A TÚ:", {}), ("tb", 48, "VOY A POR TI.", {"inv": True}),
+    ("t", 37, "PARA: YO, 2036", {}), ("tb", 48, "VOY A POR TI.", {"inv": True}),
 ], 7, VERDE, NEGRO_LCD)
 print("pantallas listas")
 
