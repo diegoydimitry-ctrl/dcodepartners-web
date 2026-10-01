@@ -178,8 +178,8 @@ export function montar(lienzo, { movil = false } = {}) {
     const [x, y, z] = estrecha() ? [0, lado === "abajo" ? -1.4 : 0.55, lado === "fondo" ? -2.6 : 0] : LADOS[lado] || LADOS.der;
     objZ = z;
     const ancho = Math.tan((cam.fov / 2) * Math.PI / 180) * 6 * cam.aspect; // medio ancho visible a la distancia del centro
-    objX = estrecha() ? 0 : Math.sign(x) * Math.min(Math.abs(x), ancho * 0.52); objY = y;
-    objEscala = estrecha() ? Math.min(1, ancho / 1.7) * 0.85 : 1;
+    objX = estrecha() ? 0 : Math.sign(x) * Math.min(Math.abs(x), ancho * 0.5); objY = y;
+    objEscala = estrecha() ? Math.min(1, ancho / 1.7) * 0.85 : Math.min(1, ancho / 2.8); // en pantallas medianas, algo más pequeña para que quepa entera
   }
 
   /* -------------------------------------------------------------- bucle */

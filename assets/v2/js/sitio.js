@@ -214,7 +214,7 @@ if (!document.getElementById("contact-form") && document.getElementById("chat-wi
       };
       let pend = 0; addEventListener("scroll", () => { if (!pend) pend = requestAnimationFrame(() => { pend = 0; elegir(); }); }, { passive: true });
       addEventListener("resize", elegir, { passive: true });
-      const cargar = () => import("/assets/v2/js/fondo3d.js?v=5dcb9a912b").then(({ montar }) => {
+      const cargar = () => import("/assets/v2/js/fondo3d.js?v=d9c5a110d9").then(({ montar }) => {
         const raiz = document.documentElement, claro = () => raiz.dataset.theme === "light";
         escena = montar(lienzo, { movil: matchMedia("(max-width: 760px)").matches || (navigator.deviceMemory || 8) <= 4 });
         escena.tema(claro()); new MutationObserver(() => escena.tema(claro())).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
