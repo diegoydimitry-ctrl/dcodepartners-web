@@ -1,0 +1,56 @@
+name: medios-reel-disciplina
+# Descarga autorizada por Dimitry (01/10/2026): voz de ElevenLabs + planos de Pexels (licencia libre) para el Reel.
+on:
+  push:
+    branches: [medios/reel-disciplina]
+    paths: [encargo.txt]
+permissions:
+  contents: write
+jobs:
+  bajar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - name: Descargar y normalizar a 1080x1920
+        env:
+          UA: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36"
+        run: |
+          mkdir -p medios/clips tmp
+          : > medios/log.txt
+          while IFS='|' read -r tipo id url; do
+            [ -z "$tipo" ] && continue
+            case "$tipo" in \#*) continue;; esac
+            if [ "$tipo" = "audio" ]; then
+              code=$(curl -sSL -A "$UA" -o "medios/$id" -w '%{http_code}' "$url" || echo ERR)
+              echo "audio $id $code $(stat -c%s medios/$id 2>/dev/null)" >> medios/log.txt
+              continue
+            fi
+            f=tmp/$id.mp4; ok=0
+            code=$(curl -sSL -A "$UA" -H "Referer: https://www.pexels.com/" -o "$f" -w '%{http_code}' "https://www.pexels.com/download/video/$id/" || echo ERR)
+            if ffprobe -v error "$f" >/dev/null 2>&1; then ok=1; fi
+            if [ $ok = 0 ]; then
+              page=$(curl -sSL -A "$UA" "https://www.pexels.com/video/$id/" || true)
+              link=$(echo "$page" | grep -oE "https://videos\.pexels\.com/video-files/$id/[^\"' ]+\.mp4" | sort -u | head -1)
+              if [ -n "$link" ]; then curl -sSL -A "$UA" -o "$f" "$link" || true; ffprobe -v error "$f" >/dev/null 2>&1 && ok=1; code="$code/page"; else code="$code/nolink(${#page})"; fi
+            fi
+            if [ $ok = 1 ]; then
+              dims=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate:format=duration -of csv=p=0 "$f" | tr '\n' ' ')
+              if ffmpeg -nostdin -v error -y -t 7 -i "$f" -an -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30,format=yuv420p" -c:v libx264 -preset medium -crf 19 "medios/clips/$tipo.mp4"; then
+                echo "ok $tipo $id $code $dims" >> medios/log.txt
+              else echo "ffmpeg-fail $tipo $id $dims" >> medios/log.txt; fi
+            else
+              echo "FAIL $tipo $id $code" >> medios/log.txt
+            fi
+            rm -f "$f"
+          done < encargo.txt
+          cat medios/log.txt
+      - name: Subir a la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add medios
+          git commit -m "Medios del Reel: voz ElevenLabs y planos Pexels normalizados" || true
+          git push
