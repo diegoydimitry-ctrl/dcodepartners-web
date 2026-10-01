@@ -196,7 +196,7 @@ const IA_LOGO = (() => { const [, x, y, l] = CUBOS.find(([nm]) => nm === "ia"); 
    ojo, mirada y apertura. Entre etapas la cámara vuela por una curva suave. */
 const CAMARA = [
   { ojo: [0, 1.15, 4.4], mira: [0, 0.95, 0], fov: 32 },
-  { ojo: [0.15, 1.0, 4.4], mira: [0, 0.4, 0], fov: 30 },
+  { ojo: [0.3, 1.05, 4.9], mira: [0.1, 0.4, 0], fov: 30 },
   { ojo: [0.1, 2.6, 2.9], mira: [0, 0.3, 0], fov: 30 },
   { ojo: [2.0, 1.7, 2.7], mira: [0, 0.22, 0], fov: 30 },
   { ojo: [0, 1.1, 4.0], mira: [0, 0.95, 0.2], fov: 30 },
@@ -281,7 +281,7 @@ export function montar(lienzo, { movil = false, claro = false } = {}) {
     const b = lienzo.getBoundingClientRect(); W = Math.max(1, b.width); H = Math.max(1, b.height);
     renderer.setPixelRatio(dpr); renderer.setSize(W, H, false); cam.aspect = W / H;
     lado = W >= 1100 && W / H > 1; // texto a la izquierda y escena a la derecha; si no, escena arriba y texto abajo
-    if (lado) cam.setViewOffset(W, H, -W * 0.16, 0, W, H); else cam.setViewOffset(W, H, 0, H * (W / H < 0.8 ? 0.2 : 0.14), W, H);
+    if (lado) cam.setViewOffset(W, H, -W * 0.16, 0, W, H); else cam.setViewOffset(W, H, 0, H * (W / H < 0.8 ? 0.13 : 0.1), W, H);
     cam.updateProjectionMatrix(); pedir();
   };
 
