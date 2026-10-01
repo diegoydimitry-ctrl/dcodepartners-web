@@ -3,7 +3,7 @@ name: medios-reel-disciplina
 on:
   push:
     branches: [medios/reel-disciplina]
-    paths: [encargo.txt]
+    paths: [encargo.txt, guion.txt]
 permissions:
   contents: write
 jobs:
@@ -47,6 +47,25 @@ jobs:
             rm -f "$f"
           done < encargo.txt
           cat medios/log.txt
+      - name: Locución con Piper (voz española, modelo abierto) si hay guion
+        run: |
+          if [ -f guion.txt ]; then
+            pip install -q piper-tts
+            mkdir -p voces medios/voz-piper
+            base=https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES
+            for v in davefx/medium/es_ES-davefx-medium sharvard/medium/es_ES-sharvard-medium carlfm/x_low/es_ES-carlfm-x_low; do
+              n=$(basename $v); curl -sSL -o voces/$n.onnx $base/$v.onnx; curl -sSL -o voces/$n.onnx.json $base/$v.onnx.json
+            done
+            i=0
+            while IFS= read -r linea; do
+              [ -z "$linea" ] && continue; i=$((i+1)); nn=$(printf %02d $i)
+              echo "$linea" | piper --model voces/es_ES-davefx-medium.onnx --length_scale 0.92 --output_file medios/voz-piper/davefx_$nn.wav
+              echo "$linea" | piper --model voces/es_ES-sharvard-medium.onnx --speaker 0 --length_scale 0.92 --output_file medios/voz-piper/sharvard0_$nn.wav
+              echo "$linea" | piper --model voces/es_ES-sharvard-medium.onnx --speaker 1 --length_scale 0.92 --output_file medios/voz-piper/sharvard1_$nn.wav
+              echo "$linea" | piper --model voces/es_ES-carlfm-x_low.onnx --length_scale 0.92 --output_file medios/voz-piper/carlfm_$nn.wav
+            done < guion.txt
+            ls medios/voz-piper | wc -l >> medios/log.txt
+          fi
       - name: Subir a la rama
         run: |
           git config user.name "github-actions[bot]"
