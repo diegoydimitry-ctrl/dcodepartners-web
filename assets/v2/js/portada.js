@@ -114,7 +114,7 @@ if (raiz) {
   const sinMotor = REDUCIDO || ahorro || q.has("quieta");
   if (sinMotor) quieta();
   else {
-    const cargar = () => import("/assets/v2/js/mundo.js?v=e0b8d924bc").then(({ crearMundo, hayWebGL2 }) => {
+    const cargar = () => import("/assets/v2/js/mundo.js?v=bf4cb358be").then(({ crearMundo, hayWebGL2 }) => {
       if (!hayWebGL2()) return quieta();
       const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 1/1)").matches;
       const justo = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
@@ -140,7 +140,7 @@ if (raiz) {
       const cerca = (n) => Math.max(0, 1 - Math.abs(mundo.est.cap - n) * 2.6);
       mundo.alCuadro(() => {
         if (!anclar) return;
-        const a = cerca(1), b = cerca(2);
+        const a = cerca(1) * (1 - mundo.est.mano), b = cerca(2);
         dolores.forEach((li, k) => {
           if (a <= 0.001) { if (li.style.getPropertyValue("--o") !== "0") li.style.setProperty("--o", "0"); return; }
           mundo.hoja(DEST[k], o);

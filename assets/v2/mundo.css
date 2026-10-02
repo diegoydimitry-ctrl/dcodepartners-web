@@ -33,7 +33,7 @@
 .acto-in { position: relative; }
 .acto::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, rgba(3, 3, 3, .86) 0%, rgba(3, 3, 3, .58) 30%, rgba(3, 3, 3, 0) 58%); }
 .acto-texto { display: grid; gap: var(--e-5); justify-items: start; max-width: 33rem; }
-.acto-texto--ancho { max-width: 46rem; }
+.acto-texto--ancho { max-width: 38rem; }
 .acto-texto .h2 { font-size: clamp(2rem, 1.2rem + 2.6vw, 3.7rem); max-width: 13ch; text-wrap: balance; }
 .acto-texto .lead { max-width: 30em; color: color-mix(in oklab, var(--tinta) 78%, transparent); }
 .acto-n { display: flex; align-items: center; gap: 12px; font-family: var(--f-mono); font-stretch: 82%; font-size: var(--t-rotulo); letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); }
@@ -42,6 +42,7 @@
 .acto-mas { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--e-3) var(--e-6); }
 .acto-mas .enlace, .acto-texto > p > .enlace { color: var(--tinta); }
 .mundo [hidden] { display: none !important; }
+.mundo button.enlace { appearance: none; background: none; border-width: 0 0 1px; padding-inline: 0; font: inherit; font-weight: 560; color: var(--tinta); cursor: pointer; }
 .pixel { display: inline-block; width: 8px; height: 8px; border-radius: 1px; background: var(--aire); flex: none; }
 
 /* el texto entra cuando llega su capítulo (sin JS se ve siempre) */
@@ -151,7 +152,13 @@
 .garantias { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px var(--e-6); }
 .garantias a { display: inline-flex; gap: 10px; align-items: baseline; color: var(--tinta); text-decoration: none; font-size: .95rem; }
 .garantias a:hover { text-decoration: underline; text-underline-offset: .25em; }
-.acto--resultado::before { background: linear-gradient(90deg, rgba(3, 3, 3, .9) 0%, rgba(3, 3, 3, .7) 42%, rgba(3, 3, 3, 0) 70%); }
+.acto--resultado::before { background: linear-gradient(90deg, rgba(3, 3, 3, .92) 0%, rgba(3, 3, 3, .8) 44%, rgba(3, 3, 3, 0) 62%); }
+.acto--resultado .fila { grid-template-columns: minmax(0, 1fr) auto 20px; }
+.acto--resultado .fila-d { grid-column: 1; grid-row: 2; }
+.acto--resultado .fila-p { grid-row: 1 / span 2; grid-column: 2; }
+.acto--resultado .fila { padding: 16px 0; gap: 2px var(--col-gap); }
+.acto--resultado .fila-a { grid-row: 1 / span 2; grid-column: 3; }
+.acto--resultado .fila-d { font-size: .95rem; }
 
 /* ----------------------------------------------- 07 · demos y 08 · tuyo */
 .acto--demos { display: block; min-height: 0; padding-block: var(--ritmo-normal); }

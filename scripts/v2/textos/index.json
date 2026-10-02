@@ -2,48 +2,16 @@
   "archivo": "index.html",
   "cambios": [
     [
-      ">Tu empresa, en un solo sistema.<",
-      ">Conectamos tu empresa en un solo sistema.<"
-    ],
-    [
-      "<p class=\"lead\">Automatización, IA y software a medida.</p>",
-      "<p class=\"lead\">Lo hacemos con automatización, inteligencia artificial y software a medida.</p>"
-    ],
-    [
       "href=\"/contacto\">Hablemos <svg",
       "href=\"/contacto\">Reservar una llamada <svg"
-    ],
-    [
-      "href=\"#tocalo\">Tócalo</a>",
-      "href=\"#tocalo\">Ver las demos</a>"
-    ],
-    [
-      ">Hoy, piezas sueltas.<",
-      ">Hoy cada herramienta de tu empresa va por su lado.<"
     ],
     [
       ">Ventas, clientes, facturas y operaciones. Cada una por su lado, y alguien copiando de una a otra.<",
       ">Ventas, clientes, facturas y operaciones se llevan en sitios distintos, y alguien tiene que copiar los datos de uno a otro.<"
     ],
     [
-      ">Las unimos.<",
-      ">Nosotros las conectamos.<"
-    ],
-    [
-      ">Conectamos lo que ya usáis y automatizamos lo que se repite. El dato entra una vez.<",
-      ">Unimos las herramientas que ya usas y automatizamos las tareas que se repiten. Así cada dato se escribe una sola vez.<"
-    ],
-    [
       ">Y le damos inteligencia.<",
       ">Después le añadimos inteligencia artificial.<"
-    ],
-    [
-      ">Agentes de IA que leen, responden y proponen. Lo importante lo decide una persona.<",
-      ">Los agentes de IA leen, responden y proponen. Las decisiones importantes las toma una persona.<"
-    ],
-    [
-      ">Lo que instalamos.<",
-      ">Esto es lo que instalamos en tu empresa.<"
     ],
     [
       ">Facturas, cobros, gastos y registro fiscal, en un sitio.<",
@@ -144,14 +112,6 @@
     [
       ">Demostración · empresas ficticias · ningún sistema real conectado.<",
       ">Es una demostración: las empresas son ficticias y no hay ningún sistema real conectado.<"
-    ],
-    [
-      "id=\"h-fin\">Hablemos.<",
-      "id=\"h-fin\">Hablemos de tu empresa.<"
-    ],
-    [
-      ">Treinta minutos y sabrás qué se puede automatizar en tu empresa.<",
-      ">En una llamada de treinta minutos te diremos qué se puede automatizar.<"
     ],
     [
       "Finance registra solas tus facturas de proveedor.",

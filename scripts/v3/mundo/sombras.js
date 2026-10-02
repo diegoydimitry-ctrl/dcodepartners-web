@@ -55,7 +55,7 @@ void main() {
   float nl = dot(N, L);
   float cono = smoothstep(uCosExt, uCosInt, dot(-L, uLuzDir));
   float luz = (max(nl, 0.0) * 0.92 + max(-nl, 0.0) * 0.46) * cono * uLuzI;
-  luz += uAmb * (0.6 + 0.4 * N.y) + vB.y;
+  luz = (luz + uAmb * (0.6 + 0.4 * N.y) + max(vB.y, 0.0)) * (1.0 + min(vB.y, 0.0));
   vec3 V = normalize(uCam - vW);
   float brillo = pow(max(dot(reflect(-L, N), V), 0.0), 18.0) * cono * uLuzI * 0.22;
   papel *= mix(0.86, 1.0, smoothstep(0.0, 0.012, borde));   // el canto de la hoja
