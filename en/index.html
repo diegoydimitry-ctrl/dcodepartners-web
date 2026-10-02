@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="es-mundo sin-js" data-theme="dark">
+<html lang="en" class="es-maquina sin-js" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -37,7 +37,7 @@
 <link rel="modulepreload" href="/assets/v2/js/inicio.js?v=e44664ec46">
 <link rel="stylesheet" href="/assets/v2/dc.css?v=c4d8216e30">
 <link rel="stylesheet" href="/assets/v2/inicio.css?v=6c71e1c6e9">
-<link rel="stylesheet" href="/assets/v2/mundo.css?v=d7135ce00c">
+<link rel="stylesheet" href="/assets/v2/maquina.css?v=083869446e">
 <link rel="stylesheet" href="/assets/v2/demos.css?v=54d9def646">
 <script>
 (function () {
@@ -102,19 +102,20 @@
     <div style="display:flex;gap:12px"><button type="button" class="ctrl" data-tema aria-label="Switch between dark and light mode"><svg class="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button><div class="idioma" role="group" aria-label="Idioma / Language"><a href="/" hreflang="es" lang="es">ES</a><a href="/en" hreflang="en" lang="en" aria-current="true">EN</a></div></div>
   </div>
 </div>
-<main id="contenido" class="mundo" data-mundo>
-<div class="mundo-escena" aria-hidden="true"><canvas class="mundo-lienzo" data-mundo-lienzo></canvas><div class="mundo-velo"></div><div class="mundo-grano"></div></div>
-<nav class="mundo-indice" aria-label="Chapters"><ol role="list"><li><a href="#inicio" data-indice="0"><span>00</span><b>Start</b></a></li><li><a href="#hoy" data-indice="1"><span>01</span><b>Today</b></a></li><li><a href="#sistema" data-indice="2"><span>02</span><b>The connection</b></a></li><li><a href="#inteligencia" data-indice="3"><span>03</span><b>The intelligence</b></a></li><li><a href="#automatizacion" data-indice="4"><span>04</span><b>The automation</b></a></li><li><a href="#finance" data-indice="5"><span>05</span><b>D-Code Finance</b></a></li><li><a href="#resultado" data-indice="6"><span>06</span><b>The result</b></a></li><li><a href="#tocalo" data-indice="7"><span>07</span><b>Try it</b></a></li><li><a href="#hablemos" data-indice="8"><span>08</span><b>Yours</b></a></li></ol></nav>
+<main id="contenido" class="maq" data-maq data-grabado="BUILT FOR">
+<div class="maq-escena" aria-hidden="true"><canvas class="maq-lienzo" data-maq-lienzo></canvas><div class="maq-velo"></div><p class="maq-carga" data-maq-carga><span class="pixel"></span>Loading the scene</p></div>
+<nav class="maq-tira" aria-label="Chapters"><ol role="list"><li><a href="#inicio" data-indice="0"><span>00</span><b>Start</b></a></li><li><a href="#hoy" data-indice="1"><span>01</span><b>Today</b></a></li><li><a href="#sistema" data-indice="2"><span>02</span><b>The system</b></a></li><li><a href="#automatizacion" data-indice="3"><span>03</span><b>The automation</b></a></li><li><a href="#inteligencia" data-indice="4"><span>04</span><b>The intelligence</b></a></li><li><a href="#finance" data-indice="5"><span>05</span><b>D-Code Finance</b></a></li><li><a href="#resultado" data-indice="6"><span>06</span><b>The result</b></a></li><li><a href="#tocalo" data-indice="7"><span>07</span><b>Try it</b></a></li><li><a href="#hablemos" data-indice="8"><span>08</span><b>Yours</b></a></li></ol></nav>
+<div class="maq-pulso" data-maq-pulso aria-hidden="true"><i></i></div>
 
 <section class="acto acto--claro" id="inicio" data-acto="0" aria-labelledby="h-inicio">
   <div class="marco acto-in">
     <div class="claro-texto">
       <p class="etiqueta">D-Code Partners</p>
-      <h1 class="display" id="h-inicio">Intelligent systems for companies.</h1>
-      <p class="lead">We connect your people, your processes, your data and your tools into one system, with automation and artificial intelligence.</p>
+      <h1 class="display" id="h-inicio"><span class="linea"><span>Intelligent systems</span></span> <span class="linea"><span>for companies.</span></span></h1>
+      <p class="lead">Your company already has all the parts: people, processes, data and tools. We connect them into one system, with automation and artificial intelligence.</p>
       <div class="acc"><a class="boton boton--principal" href="/en/contacto">Book a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="boton" href="#hoy">See how it works</a></div>
     </div>
-    <p class="claro-pista" aria-hidden="true"><span></span>Scroll</p>
+    <p class="claro-pista" aria-hidden="true"><span></span>Scroll to assemble it</p>
   </div>
 </section>
 
@@ -122,10 +123,10 @@
   <div class="marco acto-in">
     <div class="acto-texto">
       <p class="acto-n"><span>01</span>Today</p>
-      <h2 class="h2" id="h-hoy">Today your company's work goes its own way.</h2>
-      <p class="lead">Sales, clients, invoices and operations live in different places, and someone has to copy the data from one to another.</p>
-      <ol class="dolores" role="list" data-dolores><li data-dolor="0"><span>The quote nobody got round to sending.</span></li><li data-dolor="1"><span>The invoice that was typed in by hand twice.</span></li><li data-dolor="2"><span>The client message that is still unanswered.</span></li><li data-dolor="3"><span>The spreadsheet only one person understands.</span></li></ol>
-      <p class="mano" data-mano aria-hidden="true"><span class="mano-p"></span><span data-mano-raton>Press and hold to bring order</span><span data-mano-tactil>Touch and hold to bring order</span></p>
+      <h2 class="h2" id="h-hoy">Today every part of your company works on its own.</h2>
+      <p class="lead">The invoicing program, the orders spreadsheet, the email and the client messages all work, but they do not talk to each other. Someone has to move the data from one place to another.</p>
+      <ul class="sueltas" role="list" data-sueltas><li data-suelta="0"><span>The orders spreadsheet</span></li><li data-suelta="1"><span>The invoices in PDF</span></li><li data-suelta="2"><span>The client messages</span></li><li data-suelta="3"><span>Everyone's own calendar</span></li></ul>
+      <p class="mano" data-mano aria-hidden="true"><span class="mano-p"></span><span data-mano-raton>Press and hold to see them fit</span><span data-mano-tactil>Touch and hold to see them fit</span></p>
     </div>
   </div>
 </section>
@@ -133,44 +134,45 @@
 <section class="acto acto--sistema" id="sistema" data-acto="2" aria-labelledby="h-sistema">
   <div class="marco acto-in">
     <div class="acto-texto">
-      <p class="acto-n"><span>02</span>The connection</p>
-      <h2 class="h2" id="h-sistema">We connect it all into one system.</h2>
-      <p class="lead">We join the tools you already use so every piece of data is entered only once and work moves from one area to the next on its own.</p>
+      <p class="acto-n"><span>02</span>The system</p>
+      <h2 class="h2" id="h-sistema">We assemble them into one system.</h2>
+      <p class="lead">We put each area in its place and join them together. The blue wheels are the connections we build: thanks to them, what happens in sales reaches operations, finance and management on its own.</p>
       <div class="areas" data-areas>
-        <p class="rotulo" id="areas-t">Pick an area to see what changes</p>
-        <div class="areas-pest" role="tablist" aria-labelledby="areas-t"><button type="button" role="tab" id="area-p-0" aria-controls="area-0" aria-selected="true" tabindex="0" data-area="0">Sales</button><button type="button" role="tab" id="area-p-1" aria-controls="area-1" aria-selected="false" tabindex="-1" data-area="1">Clients</button><button type="button" role="tab" id="area-p-2" aria-controls="area-2" aria-selected="false" tabindex="-1" data-area="2">Operations</button><button type="button" role="tab" id="area-p-3" aria-controls="area-3" aria-selected="false" tabindex="-1" data-area="3">Finance</button><button type="button" role="tab" id="area-p-4" aria-controls="area-4" aria-selected="false" tabindex="-1" data-area="4">Management</button></div>
-        <div class="area" role="tabpanel" id="area-0" aria-labelledby="area-p-0"><p>Every contact is recorded, followed up and gets its proposal in minutes.</p><a class="enlace" href="/en/departamentos/comercial">See the sales area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
-        <div class="area" role="tabpanel" id="area-1" aria-labelledby="area-p-1" hidden><p>Every client gets a fast reply, even after hours, and nobody is left unanswered.</p><a class="enlace" href="/en/departamentos/soporte">See the support area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
-        <div class="area" role="tabpanel" id="area-2" aria-labelledby="area-p-2" hidden><p>Every job starts on its own when a client is won, and delays are caught early.</p><a class="enlace" href="/en/departamentos/produccion">See the operations area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
-        <div class="area" role="tabpanel" id="area-3" aria-labelledby="area-p-3" hidden><p>The invoice comes out of the accepted quote and pending payments are chased automatically.</p><a class="enlace" href="/en/departamentos/finanzas">See the finance area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
-        <div class="area" role="tabpanel" id="area-4" aria-labelledby="area-p-4" hidden><p>Every morning you see how the company is doing, with the day's data.</p><a class="enlace" href="/en/departamentos/direccion">See the management area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <p class="rotulo" id="areas-t">Pick an area to see it up close</p>
+        <div class="areas-pest" role="tablist" aria-labelledby="areas-t"><button type="button" role="tab" id="area-p-0" aria-controls="area-0" aria-selected="true" tabindex="0" data-area="0" data-modulo="">All</button><button type="button" role="tab" id="area-p-1" aria-controls="area-1" aria-selected="false" tabindex="-1" data-area="1" data-modulo="ventas">Sales</button><button type="button" role="tab" id="area-p-2" aria-controls="area-2" aria-selected="false" tabindex="-1" data-area="2" data-modulo="clientes">Clients</button><button type="button" role="tab" id="area-p-3" aria-controls="area-3" aria-selected="false" tabindex="-1" data-area="3" data-modulo="operaciones">Operations</button><button type="button" role="tab" id="area-p-4" aria-controls="area-4" aria-selected="false" tabindex="-1" data-area="4" data-modulo="finanzas">Finance</button><button type="button" role="tab" id="area-p-5" aria-controls="area-5" aria-selected="false" tabindex="-1" data-area="5" data-modulo="direccion">Management</button></div>
+        <div class="area" role="tabpanel" id="area-0" aria-labelledby="area-p-0"><p>Five areas and an engine in a single machine. Pick an area to see what changes in it.</p><a class="enlace" href="/en/que-hacemos">See everything we do <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-1" aria-labelledby="area-p-1" hidden><p>Every contact is recorded, followed up and gets its proposal in minutes.</p><a class="enlace" href="/en/departamentos/comercial">See the sales area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-2" aria-labelledby="area-p-2" hidden><p>Every client gets a fast reply, even after hours, and nobody is left unanswered.</p><a class="enlace" href="/en/departamentos/soporte">See the support area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-3" aria-labelledby="area-p-3" hidden><p>Every job starts on its own when a client is won, and delays are caught early.</p><a class="enlace" href="/en/departamentos/produccion">See the operations area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-4" aria-labelledby="area-p-4" hidden><p>The invoice comes out of the accepted quote and pending payments are chased automatically.</p><a class="enlace" href="/en/departamentos/finanzas">See the finance area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-5" aria-labelledby="area-p-5" hidden><p>Every morning you see how the company is doing, with the day's data.</p><a class="enlace" href="/en/departamentos/direccion">See the management area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
       </div>
       <ul class="acto-mas" role="list"><li><a class="enlace" href="/en/servicios/integraciones">Integrations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li><li><a class="enlace" href="/en/servicios/sistemas-a-medida">Custom systems <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li><li><a class="enlace" href="/en/que-hacemos">All areas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li></ul>
     </div>
-    <ol class="leyenda" role="list" aria-hidden="true" data-leyenda><li data-leyenda-i="0"><span>It arrives in a mess</span></li><li data-leyenda-i="1"><span>The system reads it</span></li><li data-leyenda-i="2"><span>It leaves sorted</span></li></ol>
+    <ol class="modulos" role="list" aria-hidden="true" data-modulos><li data-modulo-i="ventas"><span>Sales</span></li><li data-modulo-i="clientes"><span>Clients</span></li><li data-modulo-i="operaciones"><span>Operations</span></li><li data-modulo-i="finanzas"><span>Finance</span></li><li data-modulo-i="direccion"><span>Management</span></li></ol>
   </div>
 </section>
 
-<section class="acto acto--ia" id="inteligencia" data-acto="3" aria-labelledby="h-ia">
+<section class="acto acto--auto" id="automatizacion" data-acto="3" aria-labelledby="h-auto">
   <div class="marco acto-in">
     <div class="acto-texto">
-      <p class="acto-n"><span>03</span>The intelligence</p>
-      <h2 class="h2" id="h-ia">Then we add artificial intelligence.</h2>
-      <p class="lead">AI agents read every document and every message, classify it and reply using your company's data. The important decisions are made by a person.</p>
-      <p class="nota-pixel"><span class="pixel" aria-hidden="true"></span>The blue pixel marks what has already been through the system.</p>
-      <p><a class="enlace" href="/en/servicios/agentes-de-ia">See the AI agents <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+      <p class="acto-n"><span>03</span>The automation</p>
+      <h2 class="h2" id="h-auto">What repeats every week runs on its own.</h2>
+      <p class="lead">Once assembled, the machine runs without anyone pushing it. Reminders, reports and alerts also go out when the office is closed. If something fails, it lets you know.</p>
+      <p class="hora"><time>03:12</time><span>It is three in the morning and the work keeps moving.</span></p>
+      <p><a class="enlace" href="/en/servicios/automatizaciones">See the automations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
     </div>
   </div>
 </section>
 
-<section class="acto acto--auto" id="automatizacion" data-acto="4" aria-labelledby="h-auto">
+<section class="acto acto--ia" id="inteligencia" data-acto="4" aria-labelledby="h-ia">
   <div class="marco acto-in">
     <div class="acto-texto">
-      <p class="acto-n"><span>04</span>The automation</p>
-      <h2 class="h2" id="h-auto">What repeats every week runs on its own.</h2>
-      <p class="lead">The system keeps working when nobody is in the office. If something fails, it lets you know.</p>
-      <p class="hora"><time>03:12</time><span>It is three in the morning and the work keeps moving.</span></p>
-      <p><a class="enlace" href="/en/servicios/automatizaciones">See the automations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+      <p class="acto-n"><span>04</span>The intelligence</p>
+      <h2 class="h2" id="h-ia">And it understands what you give it.</h2>
+      <p class="lead">AI agents read every document and every message, extract the data and reply with your company's information. The important decisions are still made by a person.</p>
+      <p class="nota-pixel"><span class="pixel" aria-hidden="true"></span>The loupe is reading a sample invoice.</p>
+      <p><a class="enlace" href="/en/servicios/agentes-de-ia">See the AI agents <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
     </div>
   </div>
 </section>
@@ -180,18 +182,23 @@
     <div class="acto-texto">
       <p class="acto-n"><span>05</span>D-Code Finance</p>
       <h2 class="h2" id="h-finance">Finance reads your invoices and answers with your numbers.</h2>
-      <p class="lead">You hand it a supplier invoice and the system records it on its own. Then you can ask about your payments, your collections and your cash flow.</p>
-      <div class="fz" data-fz>
-        <div class="fz-acc"><button type="button" class="boton boton--principal" data-fz-pasar>Run the invoice through Finance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button><button type="button" class="enlace" data-fz-otra hidden>Repeat</button></div>
+      <p class="lead">Hand it an invoice: it reads it, records it, schedules the payment and notifies management. Then you can ask about your payments, your collections and your cash flow.</p>
+      <div class="fz" data-fz data-fz-idioma="en">
+        <div class="fz-acc">
+          <label class="fz-importe"><span>Net amount of the invoice</span><span class="fz-caja"><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" maxlength="10" value="1,240.00" data-fz-base aria-describedby="fz-ayuda"><i aria-hidden="true">€</i></span></label>
+          <button type="button" class="boton boton--principal" data-fz-pasar>Run the invoice through Finance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button><button type="button" class="enlace" data-fz-otra hidden>Repeat</button>
+        </div>
+        <p class="peq fz-ayuda" id="fz-ayuda">Change the figure and try it with your own.</p>
         <div class="fz-registro" aria-live="polite">
           <p class="rotulo">Invoice record</p>
-          <p class="fz-vacio" data-fz-vacio>Nothing has been recorded yet.</p>
           <dl class="fz-campos"><div data-fz-campo="prov"><dt>Supplier</dt><dd><span>Suministros Arce, S.L.</span></dd></div><div data-fz-campo="num"><dt>Number</dt><dd><span>F-2026/0412</span></dd></div><div data-fz-campo="fecha"><dt>Date</dt><dd><span>28/09/2026</span></dd></div><div data-fz-campo="base"><dt>Net amount</dt><dd><span>€1,240.00</span></dd></div><div data-fz-campo="iva"><dt>VAT 21%</dt><dd><span>€260.40</span></dd></div><div data-fz-campo="total"><dt>Total</dt><dd><span>€1,500.40</span></dd></div><div data-fz-campo="vence"><dt>Due date</dt><dd><span>28/10/2026</span></dd></div></dl>
+          <p class="fz-vacio" data-fz-vacio>Nothing has been recorded yet.</p>
           <p class="fz-hecho" data-fz-hecho hidden><span class="pixel" aria-hidden="true"></span>Invoice recorded. Nobody typed it in.</p>
+          <p class="fz-hecho" data-fz-accion hidden><span class="pixel" aria-hidden="true"></span>Payment scheduled for 28/10/2026 and management notified.</p>
         </div>
         <div class="fz-preguntas" data-fz-preguntas hidden>
           <p class="rotulo">Now ask it</p>
-          <div class="fz-botones"><button type="button" class="fz-q" data-fz-q="0" data-fz-r="One: €1,500.40 to Suministros Arce, S.L., on 28 October.">Which payments are due in October?</button><button type="button" class="fz-q" data-fz-q="1" data-fz-r="€260.40, 21% on a net amount of €1,240.00.">How much VAT is on this invoice?</button></div>
+          <div class="fz-botones"><button type="button" class="fz-q" data-fz-q="0" data-fz-plantilla="One: {total} to Suministros Arce, S.L., on 28 October." data-fz-r="One: €1,500.40 to Suministros Arce, S.L., on 28 October.">Which payments are due in October?</button><button type="button" class="fz-q" data-fz-q="1" data-fz-plantilla="{iva}, 21% on a net amount of {base}." data-fz-r="€260.40, 21% on a net amount of €1,240.00.">How much VAT is on this invoice?</button></div>
           <p class="fz-respuesta" data-fz-respuesta aria-live="polite"></p>
         </div>
       </div>
@@ -205,8 +212,8 @@
   <div class="marco acto-in">
     <div class="acto-texto acto-texto--ancho">
       <p class="acto-n"><span>06</span>The result</p>
-      <h2 class="h2" id="h-resultado">Your company runs as one system.</h2>
-      <p class="lead">Every piece of data comes in once, every task has its place and you see the whole picture.</p>
+      <h2 class="h2" id="h-resultado">The complexity stays inside. You see what matters.</h2>
+      <p class="lead">When we finish, your company runs as one system: every piece of data comes in once, every task has its place and you look at a single screen.</p>
       <div id="productos">
         <p class="rotulo" id="h-productos">This is what we install</p>
         <ul class="lista" role="list">
@@ -328,9 +335,14 @@
   <div class="marco acto-in">
     <div class="acto-texto">
       <p class="acto-n"><span>08</span>Yours</p>
-      <h2 class="display" id="h-fin">Let's build yours.</h2>
-      <p class="lead">On a thirty-minute call we will tell you what can be automated in your company.</p>
-      <div class="acc"><a class="boton boton--principal" href="/en/contacto">Book a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+      <h2 class="display" id="h-fin">What shall we build for you?</h2>
+      <p class="lead">Type your company's name and tick what does not fit today. On a thirty-minute call we will tell you how we would assemble it.</p>
+      <div class="tuyo" data-tuyo>
+        <label class="tuyo-nombre"><span class="rotulo">Your company's name</span><input type="text" name="empresa" maxlength="26" autocomplete="organization" spellcheck="false" placeholder="Your company" data-tuyo-nombre></label>
+        <fieldset class="tuyo-piezas"><legend class="rotulo">What does not fit today?</legend><div><label><input type="checkbox" value="Sales" data-tuyo-pieza="0"><span>Sales</span></label><label><input type="checkbox" value="Customer service" data-tuyo-pieza="1"><span>Customer service</span></label><label><input type="checkbox" value="Operations" data-tuyo-pieza="2"><span>Operations</span></label><label><input type="checkbox" value="Invoicing and collections" data-tuyo-pieza="3"><span>Invoicing and collections</span></label><label><input type="checkbox" value="Reports for management" data-tuyo-pieza="4"><span>Reports for management</span></label></div></fieldset>
+        <div class="acc"><a class="boton boton--principal" href="/en/contacto" data-tuyo-cta>Book a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <p class="peq tuyo-privado">What you type here is only used to fill in the contact form.</p>
+      </div>
       <ul class="fin-mas" role="list"><li><a class="enlace" href="/en/metodo">How we work</a></li><li><a class="enlace" href="/en/que-hacemos">Everything we do</a></li><li><a class="enlace" href="/en/garantias">Guarantees</a></li><li><a class="enlace" href="/en/diagnostico">Free assessment</a></li></ul>
       <p class="tuyo-web">We built this website too. <a class="enlace" href="/en/servicios/paginas-web">We want one like it <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
     </div>
@@ -352,8 +364,8 @@
 </footer>
 <div class="chat-widget" id="chat-widget"> <div class="chat-window" role="dialog" aria-label="D-Code Partners Assistant" aria-hidden="true">  <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-relevant="additions"> <div class="chat-msg bot">Hello. Tell me what your company does and I will tell you what we would build and what it would cost.</div> </div> <div class="chat-quick-replies" id="chat-quick-replies"> <button type="button" class="chat-quick-question">What exactly do you do?</button> <button type="button" class="chat-quick-question">What does it cost to start?</button> <button type="button" class="chat-quick-question">I want to see a demo</button> </div> <form class="chat-input-row" id="chat-form"> <label for="chat-input" class="sr-only">Type your message</label> <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" maxlength="600"> <button type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button> </form> </div> <button class="chat-bubble" id="chat-bubble" aria-expanded="false" aria-controls="chat-widget" aria-label="Open D-Code Partners Assistant"> <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg> <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg> <span class="cb-dot"></span> </button>
 </div>
-<script type="module" src="/assets/v2/js/sitio.js?v=71550a2baa"></script>
+<script type="module" src="/assets/v2/js/sitio.js?v=31f83f2d20"></script>
 <script type="module" src="/assets/v2/js/inicio.js?v=e44664ec46"></script>
-<script type="module" src="/assets/v2/js/portada.js?v=ecaa50ca78"></script>
+<script type="module" src="/assets/v2/js/portada.js?v=c15ffcc26a"></script>
 </body>
 </html>
