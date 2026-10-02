@@ -22,9 +22,9 @@
    ========================================================================== */
 import { WebGLRenderer, Scene, PerspectiveCamera, Color, FogExp2, DirectionalLight, InstancedMesh, MeshStandardMaterial, MeshPhysicalMaterial, MeshBasicMaterial, Mesh, PlaneGeometry, SphereGeometry, Float32BufferAttribute, BackSide, PMREMGenerator, InstancedBufferAttribute, DynamicDrawUsage, CanvasTexture, SRGBColorSpace, NoColorSpace, Vector3, Quaternion, Euler, PCFShadowMap, DoubleSide, RepeatWrapping, ClampToEdgeWrapping, LinearFilter, LinearMipmapLinearFilter, NoToneMapping, Matrix4 } from "three";
 import { trazar, ACABADO, TONO, MODULOS } from "./trazado.js";
-import { platina as geoPlatina } from "./piezas.js";
+import { platina as geoPlatina, tornillo as geoTornillo } from "./piezas.js";
 import { crearRevelado } from "./post.js";
-import { dibujarFactura, dibujarCifras, dibujarGrabado, dibujarRotulos, CAMPOS } from "./papel.js";
+import { dibujarFactura, dibujarCifras, dibujarEsfera, dibujarRotulos, CAMPOS } from "./papel.js";
 
 export { CAMPOS, MODULOS };
 export const CAPITULOS = ["claro", "hoy", "sistema", "automatizacion", "inteligencia", "finance", "resultado", "demos", "tuyo"];
@@ -39,24 +39,31 @@ const TURNO = [0.22, 0.34, 0.46, 0.58, 0.7, 0.1, 0.92, 0.0];
    (h = pantalla apaisada, v = vertical). p = posición, m = adónde mira, d = desplazamiento del encuadre. */
 const CAPS = [
   { montaje: 0, marcha: 0, noche: 0, tapa: 0, doc: 0, expo: 1.0, giro: 1,
-    h: { p: [1.4, 0.5, 6.2], m: [0, 0.25, 0], fov: 40, foco: 5.0, ab: 0.55, d: [0, 0] }, v: { p: [0.6, 0.4, 8.6], m: [0, 0.3, 0], fov: 52, foco: 6.8, ab: 0.5, d: [0, 0] } },
+    h: { p: [1.4, 0.5, 6.2], m: [0, 0.25, 0], fov: 40, foco: 5.0, ab: 0.55, d: [0, 0] }, v: { p: [0.5, 0.9, 11.2], m: [0, 0.8, 0], fov: 52, foco: 9.4, ab: 0.34, d: [0, 0.34] } },
   { montaje: 0, marcha: 0, noche: 0, tapa: 0, doc: 0, expo: 1.0, giro: 0.12,
     h: { p: [-3.2, 1.2, 8.4], m: [1.4, 0.1, 0], fov: 36, foco: 7.6, ab: 0.5, d: [0.3, 0] }, v: { p: [-1.5, 1.0, 11.5], m: [0, 0.2, 0], fov: 52, foco: 10.4, ab: 0.45, d: [0, 0.42] } },
   { montaje: 1, marcha: 1, noche: 0, tapa: 0, doc: 0, expo: 1.0, giro: 0,
-    h: { p: [-5.5, -7.5, 17.5], m: [0.2, -0.1, 0], fov: 30, foco: 19.5, ab: 0.16, d: [0.34, 0] }, v: { p: [-4, -9, 25], m: [0, 0, 0], fov: 40, foco: 27, ab: 0.12, d: [0, 0.46] } },
+    h: { p: [-6.4, -10.4, 15.4], m: [0.3, -0.2, 0], fov: 30, foco: 19.6, ab: 0.2, d: [0.47, 0.02] }, v: { p: [-4, -9, 25], m: [0, 0, 0], fov: 40, foco: 27, ab: 0.12, d: [0, 0.46] } },
   { montaje: 1, marcha: 1, noche: 1, tapa: 0, doc: 0, expo: 0.9, giro: 0,
-    h: { p: [-7.4, -0.6, 2.5], m: [-2.4, 1.8, 0.3], fov: 34, foco: 5.3, ab: 0.5, d: [0.3, 0] }, v: { p: [-4.6, -4.6, 3.2], m: [-1.6, 0.4, 0.3], fov: 46, foco: 6.4, ab: 0.45, d: [0, 0.44] } },
+    h: { p: [5.6, -6.6, 5.4], m: [-0.6, 0.6, 0.2], fov: 32, foco: 10.6, ab: 0.34, d: [0.3, -0.04] }, v: { p: [3.6, -8.6, 6.4], m: [0, 0.2, 0.2], fov: 44, foco: 10.6, ab: 0.32, d: [0, 0.42] } },
   { montaje: 1, marcha: 0.35, noche: 0.25, tapa: 0, doc: 1, expo: 1.0, giro: 0,
     h: { p: [2.6, -5.6, 2.9], m: [0.5, -3.0, 0.35], fov: 32, foco: 3.9, ab: 0.5, d: [0.3, 0] }, v: { p: [5.0, -3.2, 3.4], m: [2.5, -0.6, 0.35], fov: 44, foco: 4.6, ab: 0.45, d: [0, 0.44] } },
   { montaje: 1, marcha: 0.35, noche: 0.25, tapa: 0, doc: 1, expo: 1.0, giro: 0,
-    h: { p: [0.5, -4.6, 7.6], m: [0.5, -2.0, 0.3], fov: 30, foco: 8.0, ab: 0.22, d: [0.44, 0] }, v: { p: [2.2, -2.6, 9.6], m: [2.2, -0.2, 0.3], fov: 40, foco: 9.9, ab: 0.2, d: [0, 0.5] } },
+    h: { p: [0.5, -4.6, 7.6], m: [0.5, -2.0, 0.3], fov: 30, foco: 8.0, ab: 0.22, d: [0.44, 0] }, v: { p: [2.9, -2.9, 6.9], m: [2.5, -0.62, 0.3], fov: 40, foco: 7.3, ab: 0.22, d: [0, 0.5] } },
   { montaje: 1, marcha: 1, noche: 0, tapa: 1, doc: 0, expo: 1.0, giro: 0,
-    h: { p: [3.5, -4.5, 20], m: [0, 0, 0.5], fov: 30, foco: 20.5, ab: 0.1, d: [0.42, 0] }, v: { p: [2, -6, 28], m: [0, 0, 0.5], fov: 40, foco: 28.5, ab: 0.08, d: [0, 0.5] } },
+    h: { p: [5.2, -8.4, 24.5], m: [0, 0, 0.5], fov: 30, foco: 26.2, ab: 0.08, d: [0.37, 0] }, v: { p: [2.6, -7.5, 38], m: [0, 0, 0.5], fov: 40, foco: 39, ab: 0.06, d: [0, 0.46] } },
   { montaje: 1, marcha: 1, noche: 0.6, tapa: 1, doc: 0, expo: 0.55, giro: 0,
     h: { p: [0, -2, 30], m: [0, 0, 0.5], fov: 30, foco: 12, ab: 0.5, d: [0, 0] }, v: { p: [0, -3, 40], m: [0, 0, 0.5], fov: 40, foco: 14, ab: 0.5, d: [0, 0] } },
   { montaje: 1, marcha: 1, noche: 0.15, tapa: 1, doc: 0, expo: 1.0, giro: 0,
-    h: { p: [-1.6, -3.0, 10.5], m: [0.3, 0, 0.6], fov: 30, foco: 10.6, ab: 0.24, d: [0.36, 0] }, v: { p: [-1.0, -3.4, 13.5], m: [0, 0, 0.6], fov: 42, foco: 13.6, ab: 0.2, d: [0, 0.46] } },
+    h: { p: [2.2, -1.6, 11.6], m: [4.0, 1.8, 0.7], fov: 30, foco: 11.8, ab: 0.2, d: [0.36, 0] }, v: { p: [-1.6, -1.6, 19.5], m: [0, 3.5, 0.7], fov: 42, foco: 20.2, ab: 0.14, d: [0, 0.5] } },
 ];
+
+/* La entrada: se empieza dentro de la máquina en marcha, pegado al muelle real; la cámara se retira y la máquina salta en piezas. */
+const ENTRADA = {
+  h: { p: [-3.3, -0.5, 3.2], m: [-0.62, 2.25, 0.3], fov: 34, foco: 4.5, ab: 0.42, d: [0, 0] },
+  v: { p: [-4.7, -2.9, 3.5], m: [-2.7, 0.25, 0.3], fov: 46, foco: 4.7, ab: 0.4, d: [0, 0] },
+};
+const marchaEntrada = (est) => (est.cap < 1 && est.intro < 1 ? (1 - fijar((est.intro - 0.3) / 0.25)) * (1 - fijar(est.cap * 3)) : 0);
 
 /* ---------------------------------------------------- el plató: de él salen los reflejos */
 function plato(renderer) {
@@ -72,7 +79,7 @@ function plato(renderer) {
   caja(14, 2.5, 0, -12, 8, 0.7);          // relleno bajo
   caja(10, 4, 0, 9, -12, 1.8);            // contraluz
   caja(1.3, 1.3, 7, 6, 14, 11);           // un punto duro para los destellos
-  caja(26, 14, 3, 4, 26, 0.75);           // un velo ancho de frente: de cara, los planos no se quedan negros
+  caja(26, 14, 3, 4, 26, 0.5);           // un velo ancho de frente: de cara, los planos no se quedan negros
   const pm = new PMREMGenerator(renderer), t = pm.fromScene(s, 0.025, 0.1, 100).texture; pm.dispose();
   s.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
   return t;
@@ -99,7 +106,7 @@ float alturaAcabado(float fin, vec3 p, out float rug) {
   else if (fin < 4.5) { vec2 c = p.xy / 0.34, l1 = fract(c) - 0.5, l2 = fract(c + 0.5) - 0.5; float d = min(length(l1), length(l2)) * 0.34; h = estrias(d * 1.6) * 0.9; rug = 0.3; }
   else if (fin < 5.5) { rug = 0.15; }
   else if (fin < 6.5) { rug = 0.17; }
-  else { float b = dot(p.xy, vec2(0.7071, 0.7071)) / 0.3, par = mod(floor(b), 2.0); vec2 dir = par < 0.5 ? vec2(0.8, -0.6) : vec2(0.6, -0.8); h = estrias(dot(p.xy, dir)) + smoothstep(0.4, 0.5, abs(fract(b) - 0.5)) * 1.2; rug = 0.27; }
+  else { float b = dot(p.xy, vec2(0.7071, 0.7071)) / 0.3, par = mod(floor(b), 2.0); vec2 dir = par < 0.5 ? vec2(0.8, -0.6) : vec2(0.6, -0.8); h = estrias(dot(p.xy, dir)) + smoothstep(0.42, 0.5, abs(fract(b) - 0.5)) * 0.5; rug = 0.3; }
   return h;
 }
 vec3 perturbar(vec3 pos, vec3 n, vec2 dH, float cara) {
@@ -111,7 +118,7 @@ vec2 grano(float fin, vec3 p) {
   if (fin > 0.5 && fin < 1.5) return vec2(1.0, 0.0);
   if (fin > 1.5 && fin < 2.5) return normalize(vec2(-p.y, p.x) + 1e-5);
   if (fin > 3.5 && fin < 4.5) { vec2 c = p.xy / 0.34, l1 = fract(c) - 0.5, l2 = fract(c + 0.5) - 0.5, l = dot(l1, l1) < dot(l2, l2) ? l1 : l2; return normalize(vec2(-l.y, l.x) + 1e-5); }
-  if (fin > 6.5) { float b = dot(p.xy, vec2(0.7071, 0.7071)) / 0.3, par = mod(floor(b), 2.0); return par < 0.5 ? vec2(0.6, 0.8) : vec2(0.8, 0.6); }
+  if (fin > 6.5) { float b = dot(p.xy, vec2(0.7071, 0.7071)) / 0.3, par = mod(floor(b), 2.0); return par < 0.5 ? vec2(0.66, 0.75) : vec2(0.75, 0.66); }
   return vec2(0.0);
 }
 // un metal estriado refleja como un haz de cilindros: se dobla la normal hacia ese cilindro
@@ -132,7 +139,7 @@ function acabar(mat, U) {
         diffuseColor.rgb *= elegido;
         if (abs(vFin.y - 6.0) < 0.5) diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.55, 0.75, 1.5) + vec3(0.0, 0.01, 0.05), uPulso);`)
       .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(0.1, rugA, plano);")
-      .replace("#include <normal_fragment_maps>", "#include <normal_fragment_maps>\nnormal = perturbar(-vViewPosition, normal, vec2(dFdx(hA), dFdy(hA)) * 0.0005 * plano, faceDirection);\nvec2 gr2 = grano(vFin.x, vObj); if (dot(gr2, gr2) > 0.5) normal = doblar(normal, normalize(vEjeU * gr2.x + vEjeV * gr2.y), normalize(vViewPosition), (vFin.x > 6.5 ? 0.5 : 0.78) * plano);")
+      .replace("#include <normal_fragment_maps>", "#include <normal_fragment_maps>\nnormal = perturbar(-vViewPosition, normal, vec2(dFdx(hA), dFdy(hA)) * 0.0005 * plano, faceDirection);\nvec2 gr2 = grano(vFin.x, vObj); if (dot(gr2, gr2) > 0.5) normal = doblar(normal, normalize(vEjeU * gr2.x + vEjeV * gr2.y), normalize(vViewPosition), (vFin.x > 6.5 ? 0.42 : 0.78) * plano);")
       .replace("#include <lights_fragment_end>", /* glsl */ `#include <lights_fragment_end>
         #ifdef USE_SHADOWMAP
           float som = mix(uOclusion, 1.0, getShadowMask()); reflectedLight.indirectSpecular *= som; reflectedLight.indirectDiffuse *= som;
@@ -152,7 +159,7 @@ export function crearMaquina(lienzo, op = {}) {
   escena.environment = plato(renderer); escena.environmentIntensity = 1;
   const camara = new PerspectiveCamera(32, 1, 0.3, 90);
   const sol = new DirectionalLight(0xffffff, 1.7); sol.position.set(-7, 10, 13); sol.castShadow = op.sombras !== false;
-  const sm = sol.shadow; sm.mapSize.set(op.mapaSombra || (movil ? 1024 : 2048), op.mapaSombra || (movil ? 1024 : 2048)); sm.camera.left = -9.5; sm.camera.right = 9.5; sm.camera.top = 9.5; sm.camera.bottom = -9.5; sm.camera.near = 4; sm.camera.far = 40; sm.bias = -0.0006; sm.normalBias = 0.012; sm.radius = 2.2;
+  const sm = sol.shadow; sm.mapSize.set(op.mapaSombra || (movil ? 1024 : 2048), op.mapaSombra || (movil ? 1024 : 2048)); sm.camera.left = -12; sm.camera.right = 12; sm.camera.top = 12; sm.camera.bottom = -12; sm.camera.near = 4; sm.camera.far = 44; sm.bias = -0.0006; sm.normalBias = 0.012; sm.radius = 2.2;
   escena.add(sol, sol.target);
 
   /* ----------------------------------------------------------- piezas */
@@ -205,30 +212,42 @@ export function crearMaquina(lienzo, op = {}) {
     diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.45, 0.62, 1.0), campo * leido * 0.85);
     totalEmissiveRadiance += vec3(0.1, 0.3, 1.0) * campo * leido * 0.25;`); };
   papel.position.set(d.x, d.y, d.z); papel.receiveShadow = true; papel.castShadow = true; papel.visible = false; escena.add(papel);
-  // la tapa: una platina con ventanas, y el grabado
-  const pl = info.platina, zT = info.z.alto + 0.52, mod = (n) => info.modulos[n];
-  const ventanas = [[mod("motor").x - 0.62, mod("motor").y - 1.32, 0.78], [mod("direccion").x, mod("direccion").y - 0.05, 1.5], [mod("finanzas").x + 0.6, mod("finanzas").y + 0.95, 0.0]];
-  const lienzoGrabado = dibujarGrabado(null, [{ t: "D-CODE", y: 256, px: 120, peso: 700, esp: 8 }]), texGrabado = new CanvasTexture(lienzoGrabado); texGrabado.colorSpace = NoColorSpace; texGrabado.anisotropy = 8;
-  const geoTapa = geoPlatina(pl.w + 0.3, pl.h + 0.3, 0.8, 0.12, ventanas.filter((v) => v[2] > 0));
-  const UT = { tGrabado: { value: texGrabado }, uCaja: { value: [0, 0, 1, 1] } };
-  const matTapa = new MeshStandardMaterial({ color: new Color(0.13, 0.135, 0.145), metalness: 1, roughness: 0.3 });
-  matTapa.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, UT); sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vObj; varying vec3 vObjN;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvObj = position; vObjN = normal;");
+  // la tapa: una platina con ventanas (el volante, el registro y el indicador) y la esfera grabada
+  const pl = info.platina, zT = info.z.alto + 0.52, mod = (n) => info.modulos[n], TW = pl.w + 0.3, TH = pl.h + 0.3;
+  const ventanas = [[mod("motor").x - 0.62, mod("motor").y - 1.32, 0.74], [mod("direccion").x, mod("direccion").y - 0.1, 1.46]];
+  const rects = [[mod("finanzas").x + 0.44, mod("finanzas").y + 0.95, 2.34, 0.44]];
+  // el bloque del nombre va donde no hay ventana: sobre ventas (apaisada) o entre ventas y clientes (vertical)
+  info.grabado = vertical ? { x: 0, y: mod("ventas").y + 0.1, w: 5.8 } : { x: mod("clientes").x - 0.25, y: mod("clientes").y - 0.2, w: 4.5 };
+  const esfera = { w: TW, h: TH, ventanas, rects, bloque: info.grabado, rotulo: idioma === "en" ? "BUILT FOR" : "CONSTRUIDO PARA", nombre: idioma === "en" ? "YOUR COMPANY" : "TU EMPRESA", pie: "D-CODE PARTNERS" };
+  const lienzoGrabado = dibujarEsfera(null, esfera), texGrabado = new CanvasTexture(lienzoGrabado); texGrabado.colorSpace = NoColorSpace; texGrabado.anisotropy = 8;
+  const geoTapa = geoPlatina(TW, TH, 0.8, 0.12, ventanas, rects.map((r) => [...r, 0.12]));
+  const UT = { tGrabado: { value: texGrabado }, uCaja: { value: [0, 0, TW, TH] } };
+  const matTapa = new MeshStandardMaterial({ color: new Color(0.115, 0.118, 0.128), metalness: 1, roughness: 0.3 });
+  matTapa.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, UT); sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vObj; varying vec3 vObjN; varying vec3 vEjeU; varying vec3 vEjeV;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvObj = position; vObjN = normal; vEjeU = normalize(normalMatrix * vec3(1.0, 0.0, 0.0)); vEjeV = normalize(normalMatrix * vec3(0.0, 1.0, 0.0));");
     sh.fragmentShader = sh.fragmentShader.replace("#include <common>", /* glsl */ `#include <common>
-      varying vec3 vObj; varying vec3 vObjN; uniform sampler2D tGrabado; uniform vec4 uCaja;
+      varying vec3 vObj; varying vec3 vObjN; varying vec3 vEjeU; varying vec3 vEjeV; uniform sampler2D tGrabado; uniform vec4 uCaja;
       float h11(float p) { p = fract(p * 0.1031); p *= p + 33.33; p *= p + p; return fract(p); }
       float n1(float x) { float i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f); return mix(h11(i), h11(i + 1.0), f); }
       float grab(vec2 p) { vec2 uv = (p - uCaja.xy) / uCaja.zw + 0.5; return (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) ? 0.0 : texture2D(tGrabado, uv).r; }
-      vec3 perturbar(vec3 pos, vec3 n, vec2 dH, float cara) { vec3 sx = dFdx(pos), sy = dFdy(pos), r1 = cross(sy, n), r2 = cross(n, sx); float det = dot(sx, r1) * cara; vec3 g = sign(det) * (dH.x * r1 + dH.y * r2); return normalize(abs(det) * n - g); }`)
+      vec3 perturbar(vec3 pos, vec3 n, vec2 dH, float cara) { vec3 sx = dFdx(pos), sy = dFdy(pos), r1 = cross(sy, n), r2 = cross(n, sx); float det = dot(sx, r1) * cara; vec3 g = sign(det) * (dH.x * r1 + dH.y * r2); return normalize(abs(det) * n - g); }
+      vec3 doblar(vec3 n, vec3 B, vec3 v, float cuanto) { vec3 c = cross(cross(B, v), B); float l = length(c); return l > 1e-4 ? normalize(mix(n, c / l, cuanto)) : n; }`)
       .replace("#include <color_fragment>", /* glsl */ `#include <color_fragment>
-        float plano = pow(abs(normalize(vObjN).z), 8.0), gr = grab(vObj.xy) * plano;
+        float plano = pow(abs(normalize(vObjN).z), 8.0) * step(0.0, vObjN.z), gr = grab(vObj.xy) * plano;
         float u = atan(vObj.y, vObj.x), au = fwidth(u);
-        float hT = (n1(u * 520.0) * clamp(1.0 - au * 700.0, 0.0, 1.0) + n1(u * 140.0) * 1.8 * clamp(1.0 - au * 190.0, 0.0, 1.0) + n1(u * 36.0) * 2.4) * length(vObj.xy) * 0.25 - gr * 26.0;
-        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.78, 0.8, 0.84), gr * 0.9);`)
-      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(0.12, mix(0.3, 0.42, gr), plano);")
-      .replace("#include <normal_fragment_maps>", "#include <normal_fragment_maps>\nnormal = perturbar(-vViewPosition, normal, vec2(dFdx(hT), dFdy(hT)) * 0.0006 * plano, faceDirection);"); };
+        float hT = (n1(u * 520.0) * clamp(1.0 - au * 700.0, 0.0, 1.0) + n1(u * 140.0) * 1.8 * clamp(1.0 - au * 190.0, 0.0, 1.0)) * length(vObj.xy) * 0.2 * (1.0 - gr) - gr * 34.0;
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.8, 0.82, 0.86), gr * 0.92);`)
+      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(0.1, mix(0.3, 0.2, gr), plano);")
+      .replace("#include <normal_fragment_maps>", "#include <normal_fragment_maps>\nnormal = perturbar(-vViewPosition, normal, vec2(dFdx(hT), dFdy(hT)) * 0.0006 * plano, faceDirection);\nvec2 rad = normalize(vObj.xy + 1e-5); normal = doblar(normal, normalize(vEjeU * rad.x + vEjeV * rad.y), normalize(vViewPosition), 0.7 * plano * (1.0 - gr));"); };
   const tapa = new Mesh(geoTapa, matTapa); tapa.castShadow = true; tapa.receiveShadow = true; tapa.visible = false; escena.add(tapa);
-  info.grabado = vertical ? { x: mod("ventas").x + info.celda / 2, y: mod("ventas").y - info.celda * 0.1, w: 6.6, h: 3.3 } : { x: mod("ventas").x + 0.4, y: mod("ventas").y - 0.2, w: 6.6, h: 3.3 };
-  UT.uCaja.value = [info.grabado.x, info.grabado.y, info.grabado.w, info.grabado.h];
+  const matAzul = new MeshStandardMaterial({ color: new Color(0.035, 0.085, 0.34), metalness: 1, roughness: 0.16 }), gT = geoTornillo();
+  for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const t = new Mesh(gT, matAzul); t.position.set(sx * (TW / 2 - 0.42), sy * (TH / 2 - 0.42), 0.075); t.scale.setScalar(1.7); t.rotation.z = sx * 0.7 + sy; t.castShadow = true; tapa.add(t); }
+
+  // el suelo del plató: una mesa oscura que recibe la sombra de la máquina y un charco de luz que se apaga hacia los bordes
+  const US = { uSuelo: { value: 0 } };
+  const matSuelo = new MeshStandardMaterial({ color: new Color(0.06, 0.062, 0.068), metalness: 0, roughness: 0.5, transparent: true });
+  matSuelo.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, US); sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec2 vSuelo;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvSuelo = position.xy;");
+    sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec2 vSuelo; uniform float uSuelo;").replace("#include <color_fragment>", "#include <color_fragment>\nfloat rs = length(vSuelo * vec2(0.8, 1.0)); diffuseColor.a *= uSuelo * smoothstep(24.0, 6.0, rs); diffuseColor.rgb *= mix(0.12, 1.0, pow(smoothstep(17.0, 2.5, rs), 1.6));"); };
+  const suelo = new Mesh(new PlaneGeometry(64, 64), matSuelo); suelo.position.z = -0.3; suelo.receiveShadow = true; suelo.visible = false; suelo.renderOrder = 2; escena.add(suelo);
 
   const revelado = crearRevelado(renderer, { muestras: op.muestras ?? (movil ? 0 : 4), tomas: op.tomas ?? (movil ? 14 : 36), nivelesHalo: movil ? 4 : 5 });
 
@@ -240,7 +259,7 @@ export function crearMaquina(lienzo, op = {}) {
   let escuchas = [];
 
   function medir() {
-    const dpr = Math.min(op.dpr || window.devicePixelRatio || 1, movil ? 2 : 2), w = lienzo.clientWidth || 1, h = lienzo.clientHeight || 1;
+    const dpr = op.captura && op.dpr ? op.dpr : Math.min(op.dpr || window.devicePixelRatio || 1, 2), w = lienzo.clientWidth || 1, h = lienzo.clientHeight || 1;
     let W = Math.round(w * dpr), H = Math.round(h * dpr); const tope = (op.pixeles || (movil ? 1.5e6 : 3.2e6)) * est.escalaPx;
     if (W * H > tope) { const k = Math.sqrt(tope / (W * H)); W = Math.round(W * k); H = Math.round(H * k); }
     est.ancho = W; est.alto = H; est.dpr = W / w; est.vertical = vertical;
@@ -258,12 +277,18 @@ export function crearMaquina(lienzo, op = {}) {
     // un área elegida: la cámara se acerca a su módulo
     if (est.selMezcla > 0.002) { const w = est.selMezcla * fijar(1 - Math.abs(est.cap - 2) * 1.7), tp = vertical ? [est.selX - 1.0, est.selY - 3.6, 10.5] : [est.selX - 2.4, est.selY - 3.4, 8.4], tm = [est.selX, est.selY, 0.3];
       for (let j = 0; j < 3; j++) { cam.p[j] = mezcla(cam.p[j], tp[j], w); cam.m[j] = mezcla(cam.m[j], tm[j], w); } cam.foco = mezcla(cam.foco, Math.hypot(tp[0] - tm[0], tp[1] - tm[1], tp[2] - tm[2]), w); cam.ab = mezcla(cam.ab, 0.32, w); cam.d[0] = mezcla(cam.d[0], vertical ? 0 : 0.3, w); }
+    // la entrada: de dentro de la máquina a la vista del principio
+    if (est.cap < 1 && est.intro < 1) { const E = ENTRADA[cx_], w = (1 - cubica(fijar((est.intro - 0.26) / 0.74))) * (1 - fijar(est.cap * 3)), ac = 1 - est.intro * 0.5, g = est.intro * 0.9, cg = Math.cos(g), sg = Math.sin(g);
+      // mientras está dentro, la cámara se acerca y rodea el muelle: desde el primer cuadro hay movimiento
+      const dx = (E.p[0] - E.m[0]) * ac, dy = (E.p[1] - E.m[1]) * ac, e = [E.m[0] + dx * cg - dy * sg, E.m[1] + dx * sg + dy * cg, E.m[2] + (E.p[2] - E.m[2]) * ac];
+      for (let j = 0; j < 3; j++) { cam.p[j] = mezcla(cam.p[j], e[j], w); cam.m[j] = mezcla(cam.m[j], E.m[j], w); }
+      cam.fov = mezcla(cam.fov, E.fov, w); cam.foco = mezcla(cam.foco, E.foco * ac, w); cam.ab = mezcla(cam.ab, E.ab, w); cam.d[0] = mezcla(cam.d[0], 0, w); cam.d[1] = mezcla(cam.d[1], 0, w); }
     if (est.libre) { const L = est.libre; for (const k of ["p", "m", "d"]) if (L[k]) for (let j = 0; j < L[k].length; j++) cam[k][j] = L[k][j]; for (const k of ["fov", "foco", "ab"]) if (L[k] !== undefined) cam[k] = L[k]; }
     if (est.forzar) for (const k in est.forzar) mz[k] = est.forzar[k];
     // el estallido del principio y el «mantén pulsado»
-    const montaje = Math.max(mz.montaje, est.mano, est.cap < 1 ? 1 - saleCubica(fijar(est.intro)) : 0);
+    const montaje = Math.max(mz.montaje, est.mano, est.cap < 1 ? 1 - saleCubica(fijar((est.intro - 0.34) / 0.66)) : 0);
     for (let m = 0; m < 8; m++) A[m] = fijar(montaje * 1.94 - TURNO[m]);
-    mz.montajeTotal = montaje; mz.marchaTotal = Math.max(mz.marcha, est.mano > 0.98 ? 1 : 0);
+    mz.montajeTotal = montaje; mz.marchaTotal = Math.max(mz.marcha, est.mano > 0.98 ? 1 : 0, marchaEntrada(est));
   }
 
   const M = new Matrix4(), me = M.elements, qa = [0, 0, 0, 1], qb = [0, 0, 0, 1];
@@ -332,8 +357,8 @@ export function crearMaquina(lienzo, op = {}) {
     // órbita con inercia: se arrastra y vuelve sola
     est.orbX += est.orbVX; est.orbY += est.orbVY; est.orbVX *= 0.9; est.orbVY *= 0.9; est.orbX *= 0.985; est.orbY *= 0.985;
     const ox_ = cam.p[0] - cam.m[0], oy_ = cam.p[1] - cam.m[1], oz_ = cam.p[2] - cam.m[2], rad = Math.hypot(ox_, oy_, oz_);
-    let az = Math.atan2(ox_, oz_) + est.orbX + (Math.sin(est.T * 0.21) * 0.012 + est.px * 0.05 * pv), el = Math.asin(oy_ / rad) + est.orbY + (Math.sin(est.T * 0.27 + 1) * 0.008 + est.py * 0.03 * pv); el = fijar(el, -1.35, 1.35);
-    const intro = est.cap < 1 ? (1 - saleCubica(fijar(est.intro))) * (1 - est.cap) : 0, R = rad * (1 + intro * 0.9);
+    let az = Math.atan2(ox_, oz_) + est.orbX + (Math.sin(est.T * 0.21) * 0.012 + est.px * 0.05 * pv * (est.pk || 1)), el = Math.asin(oy_ / rad) + est.orbY + (Math.sin(est.T * 0.27 + 1) * 0.008 + est.py * 0.03 * pv * (est.pk || 1)); el = fijar(el, -1.35, 1.35);
+    const R = rad;
     cam.e[0] = cam.m[0] + Math.sin(az) * Math.cos(el) * R; cam.e[1] = cam.m[1] + Math.sin(el) * R; cam.e[2] = cam.m[2] + Math.cos(az) * Math.cos(el) * R;
     camara.position.set(cam.e[0], cam.e[1], cam.e[2]); camara.up.set(0, 1, 0); camara.lookAt(cam.m[0], cam.m[1], cam.m[2]);
     camara.fov = cam.fov; camara.near = Math.max(0.2, R * 0.04); camara.far = R + 60; camara.updateProjectionMatrix();
@@ -345,12 +370,15 @@ export function crearMaquina(lienzo, op = {}) {
   function pintar(dt) {
     mezclar(); encuadrar(); simular(dt);
     // luz, noche, tapa, documento
-    const noche = mz.noche; escena.environmentIntensity = mezcla(1, 0.16, noche) * mz.expo; sol.intensity = mezcla(1.7, 0.9, noche); sol.color.setRGB(mezcla(1, 0.72, noche), mezcla(1, 0.8, noche), 1);
-    U.uNoche.value = noche; mats.joya.emissiveIntensity = mezcla(0.2, 1.1, noche); U.uSel.value = est.selMezcla > 0.02 ? est.sel : -1; U.uAtenua.value = mezcla(1, 0.2, est.selMezcla);
+    const noche = mz.noche; escena.environmentIntensity = mezcla(1, 0.2, noche) * mz.expo; sol.intensity = mezcla(2.1, 3.4, noche); sol.color.setRGB(mezcla(1, 0.62, noche), mezcla(1, 0.74, noche), 1);
+    // al anochecer la luz baja hasta quedar rasante: las sombras se alargan y el metal se queda en sus filos
+    sol.position.set(mezcla(-9.5, -13, noche), mezcla(9, 6.5, noche), mezcla(9.5, 1.9, noche));
+    U.uNoche.value = noche; mats.joya.emissiveIntensity = mezcla(0.2, 5.5, noche); U.uSel.value = est.selMezcla > 0.02 ? est.sel : -1; U.uAtenua.value = mezcla(1, 0.2, est.selMezcla);
     U.uPulso.value = fijar(1 - Math.abs(A[6] - 0.55) / 0.5) * (1 - fijar((mz.montajeTotal - 0.97) / 0.03)) * 0.9;
+    US.uSuelo.value = cubica(fijar((mz.montajeTotal - 0.55) / 0.4)) * mezcla(1, 0.1, mz.noche); suelo.visible = US.uSuelo.value > 0.004;
     papel.visible = mz.doc > 0.01; if (papel.visible) { const dd = info.documento; papel.position.set(dd.x, dd.y - (1 - saleCubica(mz.doc)) * 2.4, dd.z + (1 - mz.doc) * 0.5); UP.uLectura.value = est.lectura; UP.uCampos.value = est.campos; }
     tapa.visible = mz.tapa > 0.004; if (tapa.visible) { const e = cubica(fijar(mz.tapa)); tapa.position.set((1 - e) * -1.5, (1 - e) * 1.0, zT + (1 - e) * 9); tapa.rotation.set((1 - e) * 0.5, (1 - e) * -0.35, 0); }
-    const R = revelado.U, alto = est.alto; R.uFoco.value = cam.foco; R.uApertura.value = cam.ab * (est.forzar && est.forzar.ab !== undefined ? 1 : 1); R.uMaxDesenfoque.value = Math.max(4, alto * 0.024); R.uExposicion.value = mz.expo * 0.8; R.uHalo.value = mezcla(0.22, 0.6, noche); R.uVineta.value = 0.55; R.uGrano.value = 0.03;
+    const R = revelado.U, alto = est.alto, dist = camara.position.distanceTo(V.set(cam.m[0], cam.m[1], cam.m[2])), ent = 0; R.uFoco.value = cam.foco; void dist; void ent; R.uApertura.value = cam.ab * (est.forzar && est.forzar.ab !== undefined ? 1 : 1); R.uMaxDesenfoque.value = Math.max(4, alto * 0.024); R.uExposicion.value = mz.expo * 0.8; R.uHalo.value = mezcla(0.22, 0.7, noche); R.uVineta.value = 0.55; R.uGrano.value = 0.03;
     renderer.setRenderTarget(revelado.destino); renderer.render(escena, camara); revelado.revelar(camara, est.T);
   }
 
@@ -362,7 +390,7 @@ export function crearMaquina(lienzo, op = {}) {
     est.selMezcla += ((est.sel >= 0 ? 1 : 0) - est.selMezcla) * (1 - Math.exp(-dt * 4));
     if (est.sel >= 0) { const mo = info.modulos[MODULOS[est.sel]], k = est.selMezcla < 0.05 ? 1 : 1 - Math.exp(-dt * 4); est.selX += (mo.x - est.selX) * k; est.selY += (mo.y - est.selY) * k; }
     if (est.golpe >= 0) { est.golpe += dt; if (est.golpe > 0.7) est.golpe = -1; }
-    est.theta += dt * 0.55 * mz.marchaTotal * (mz.vel || 1);
+    est.theta += dt * 0.55 * mz.marchaTotal * (mz.vel || 1) * (1 + marchaEntrada(est) * 1.6);
     // la aguja: un muelle; las cifras: giran hasta su valor
     est.agujaV += ((est.agujaObj - est.aguja) * 40 - est.agujaV * 6.5) * dt; est.aguja += est.agujaV * dt;
     for (let k = 0; k < 6; k++) est.digitos[k] += (est.digObj[k] - est.digitos[k]) * (1 - Math.exp(-dt * (3.2 + k * 0.5)));
@@ -375,20 +403,21 @@ export function crearMaquina(lienzo, op = {}) {
   const api = {
     N, est, cam, info, capitulos: CAPITULOS, renderer, escena, camara,
     capitulo(c, ya) { est.capObj = fijar(c, 0, CAPS.length - 1); if (ya) est.cap = est.capObj; },
-    puntero(nx, ny, hay) { est.px = nx; est.py = ny; est.hayPuntero = !!hay; },
+    puntero(nx, ny, hay, fuerza = 1) { est.px = nx; est.py = ny; est.hayPuntero = !!hay; est.pk = fuerza; },
     arrastrar(dx, dy) { est.orbVX += -dx * 0.0016; est.orbVY += dy * 0.0012; },
     sostener(si) { est.manoObj = si ? 1 : 0; },
     intro(v) { est.intro = v; },
     area(m) { est.sel = m === null || m === undefined || m === "" ? -1 : typeof m === "number" ? m : MODULOS.indexOf(m); },
     golpe() { est.golpe = 0; },
     factura(datos) { dibujarFactura(idioma, movil ? 1.5 : 2.5, datos, factura); texFactura.needsUpdate = true; texMascara.needsUpdate = true; },
-    redibujar() { dibujarRotulos(NOMBRES[idioma], lienzoRotulos); texRotulos.needsUpdate = true; cifras.image = dibujarCifras(); cifras.needsUpdate = true; },
+    redibujar() { dibujarRotulos(NOMBRES[idioma], lienzoRotulos); texRotulos.needsUpdate = true; cifras.image = dibujarCifras(); cifras.needsUpdate = true; dibujarEsfera(lienzoGrabado, esfera); texGrabado.needsUpdate = true; },
     lectura(v, campos) { est.lectura = v; if (campos !== undefined) est.campos = campos; },
     registro(n) { const s = String(Math.round(n)).padStart(6, "0").slice(-6); for (let k = 0; k < 6; k++) est.digObj[k] = Math.ceil(est.digitos[k] / 10 - 0.001) * 10 + +s[k] + 10 * (1 + (k % 2)); },
     indicador(v) { est.agujaObj = fijar(v); },
-    grabar(lineas) { dibujarGrabado(lienzoGrabado, lineas); texGrabado.needsUpdate = true; },
+    grabar(o) { Object.assign(esfera, o); dibujarEsfera(lienzoGrabado, esfera); texGrabado.needsUpdate = true; },
     rodaje(libre, forzar) { est.libre = libre || null; est.forzar = forzar || null; },
     proyectar(x, y, z, o = {}) { V.set(x, y, z).project(camara); o.x = (V.x * 0.5 + 0.5) * lienzo.clientWidth; o.y = (1 - (V.y * 0.5 + 0.5)) * lienzo.clientHeight; o.visible = V.z < 1 && Math.abs(V.x) < 1.2 && Math.abs(V.y) < 1.2; return o; },
+    sitio(i) { return [hx[i], hy[i], hz[i]]; },
     pieza(i, o = {}) { return api.proyectar(posPieza[i * 3], posPieza[i * 3 + 1], posPieza[i * 3 + 2], o); },
     campo(u, v, o = {}) { const dd = info.documento; return api.proyectar(dd.x + (u - 0.5) * dd.w, dd.y + (v - 0.5) * dd.h, dd.z, o); },
     tambor(k, o = {}) { const p = info.tambores[k]; return api.proyectar(p.x, p.y, p.z + 0.3, o); },

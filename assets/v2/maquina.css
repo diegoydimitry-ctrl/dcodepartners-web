@@ -55,18 +55,18 @@
 }
 
 /* ----------------------------------------------------------- 00 · claro */
-.acto--claro { padding-block: 96px 72px; align-items: center; }
-.acto--claro::before { background: radial-gradient(58% 54% at 50% 51%, rgba(4, 4, 5, .9) 0%, rgba(4, 4, 5, .78) 42%, rgba(4, 4, 5, 0) 100%); opacity: 0; transition: opacity 1200ms ease; }
+.acto--claro { padding-block: 96px clamp(52px, 9vh, 104px); align-items: end; }
+.acto--claro::before { background: linear-gradient(180deg, rgba(4, 4, 5, 0) 34%, rgba(4, 4, 5, .58) 66%, rgba(4, 4, 5, .92) 100%), linear-gradient(90deg, rgba(4, 4, 5, .55) 0%, rgba(4, 4, 5, 0) 58%); opacity: 0; transition: opacity 1400ms ease; }
 .maq.is-abierta .acto--claro::before, .sin-js .acto--claro::before, .maq.is-quieta .acto--claro::before { opacity: 1; }
-.acto--claro .acto-in { display: grid; justify-items: center; }
-.claro-texto { display: grid; gap: clamp(16px, 2.4vh, 28px); justify-items: center; text-align: center; max-width: min(52rem, 96vh); }
-.claro-texto .display { font-size: clamp(2.6rem, min(10.6vh, 7.6vw), 7rem); line-height: .94; letter-spacing: -.05em; margin: 0; }
+.acto--claro .acto-in { display: grid; justify-items: start; }
+.claro-texto { display: grid; gap: clamp(14px, 2.2vh, 26px); justify-items: start; text-align: left; max-width: min(48rem, 64vw); }
+.claro-texto .display { font-size: clamp(2.8rem, min(11.4vh, 6.6vw), 6.6rem); line-height: .94; letter-spacing: -.05em; margin: 0; }
 .claro-texto .display .linea { display: block; overflow: hidden; padding-bottom: .08em; }
 .claro-texto .display .linea > span { display: block; }
-.claro-texto .lead { max-width: 31em; color: color-mix(in oklab, var(--tinta) 82%, transparent); font-size: clamp(1rem, .9rem + .35vw, 1.2rem); }
-.claro-texto .acc { justify-content: center; margin-top: var(--e-2); }
-.claro-pista { position: absolute; left: 50%; bottom: calc(-1 * clamp(40px, 8vh, 88px)); transform: translateX(-50%); display: grid; justify-items: center; gap: 10px; font-family: var(--f-mono); font-stretch: 82%; font-size: var(--t-rotulo); letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-3); white-space: nowrap; }
-.claro-pista span { width: 1px; height: 34px; background: linear-gradient(var(--tinta-3), transparent); transform-origin: top; }
+.claro-texto .lead { max-width: 33em; color: color-mix(in oklab, var(--tinta) 84%, transparent); font-size: clamp(1rem, .9rem + .35vw, 1.2rem); }
+.claro-texto .acc { justify-content: flex-start; margin-top: var(--e-2); }
+.claro-pista { position: absolute; right: 0; bottom: 4px; display: flex; align-items: center; gap: 12px; font-family: var(--f-mono); font-stretch: 82%; font-size: var(--t-rotulo); letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-2); white-space: nowrap; margin: 0; }
+.claro-pista span { width: 1px; height: 34px; background: linear-gradient(var(--tinta-2), transparent); transform-origin: top; }
 @media (prefers-reduced-motion: no-preference) {
   .claro-pista span { animation: pista 2.2s var(--ease-in-out) infinite; }
   @keyframes pista { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
@@ -76,8 +76,8 @@
   .maq.is-abierta .claro-texto .display .linea:nth-child(2) > span { transition-delay: 110ms; }
   :root:not(.sin-js) .maq:not(.is-quieta) .claro-texto > :not(.display), :root:not(.sin-js) .maq:not(.is-quieta) .claro-pista { opacity: 0; transform: translateY(14px); transition: opacity 900ms var(--ease-out), transform 1100ms var(--ease-out); }
   :root:not(.sin-js) .maq.is-abierta .claro-texto > :not(.display), :root:not(.sin-js) .maq.is-abierta .claro-pista { opacity: 1; transform: none; }
-  .maq.is-abierta .claro-texto .etiqueta { transition-delay: 60ms; } .maq.is-abierta .claro-texto .lead { transition-delay: 380ms; } .maq.is-abierta .claro-texto .acc { transition-delay: 520ms; } .maq.is-abierta .claro-pista { transition-delay: 1100ms; transform: translateX(-50%); }
-  :root:not(.sin-js) .maq:not(.is-quieta) .claro-pista { transform: translate(-50%, 14px); }
+  .maq.is-abierta .claro-texto .etiqueta { transition-delay: 60ms; } .maq.is-abierta .claro-texto .lead { transition-delay: 380ms; } .maq.is-abierta .claro-texto .acc { transition-delay: 520ms; } .maq.is-abierta .claro-pista { transition-delay: 1100ms; }
+
 }
 
 /* ------------------------------------------------------------- 01 · hoy */
@@ -238,18 +238,22 @@
   .acto::before { background: linear-gradient(180deg, rgba(4, 4, 5, 0) 22%, rgba(4, 4, 5, .74) 48%, rgba(4, 4, 5, .94) 100%); }
   .acto-texto { max-width: none; gap: var(--e-4); }
   .acto-texto .h2 { max-width: 15ch; }
-  .acto--claro { align-items: center; padding-block: 88px 64px; }
-  .acto--claro::before { background: radial-gradient(100% 44% at 50% 50%, rgba(4, 4, 5, .86) 0%, rgba(4, 4, 5, .76) 46%, rgba(4, 4, 5, 0) 100%); }
-  .claro-texto { max-width: 21rem; }
-  .claro-texto .display { font-size: clamp(2.3rem, 11.6vw, 3.5rem); }
-  .claro-texto .acc { flex-direction: column; align-items: stretch; width: 100%; max-width: 17rem; }
-  .claro-pista { bottom: -36px; }
+  .acto--claro { align-items: end; padding-block: 88px 44px; }
+  .acto--claro::before { background: linear-gradient(180deg, rgba(4, 4, 5, 0) 26%, rgba(4, 4, 5, .7) 54%, rgba(4, 4, 5, .95) 100%); }
+  .claro-texto { max-width: none; }
+  .claro-texto .display { font-size: clamp(2.5rem, 12.4vw, 3.7rem); }
+  .claro-texto .acc { flex-direction: column; align-items: stretch; width: 100%; }
+  .claro-pista { display: none; }
   .acto--finance, .acto--resultado { padding-top: 38svh; }
   .acto--resultado::before { background: linear-gradient(180deg, rgba(4, 4, 5, 0) 10%, rgba(4, 4, 5, .82) 36%, rgba(4, 4, 5, .95) 100%); }
   .fz-campos { grid-template-columns: minmax(0, 1fr); }
   .fz-campos > div, .fz-campos [data-fz-campo="prov"], .fz-campos [data-fz-campo="total"] { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); border-top: 1px solid var(--linea); }
   .fz-campos > div:first-child { border-top: 0; }
   .acto--demos { padding-block: var(--ritmo-compacto); }
+  .acto--resultado .fila { grid-template-columns: minmax(0, 1fr) auto; }
+  .acto--resultado .fila-d { grid-column: 1 / -1; grid-row: 2; }
+  .acto--resultado .fila-p { grid-row: 1; grid-column: 2; }
+  .acto--resultado .fila-p .precio-d { display: none; }
   .acto--tuyo .display { font-size: clamp(2.6rem, 13vw, 4rem); }
 }
 

@@ -9,7 +9,8 @@
    Es el mismo motor (/assets/v2/js/maquina.js), a menos resolución; solo pinta
    mientras la cabecera se ve. No se monta en el teléfono (la cabecera no tiene
    sitio libre y taparía el título), con el tema claro, con movimiento
-   reducido, con ahorro de datos ni sin WebGL2.
+   reducido, con ahorro de datos ni sin WebGL2: ahí (salvo con el tema claro)
+   la cabecera lleva una foto fija de ese mismo capítulo, que no cuesta nada.
    ========================================================================== */
 const cab = document.querySelector(".pag-cab");
 const ruta = (location.pathname.replace(/^\/en(?=\/|$)/, "").replace(/\.html$/, "").replace(/\/$/, "")) || "/";
@@ -30,21 +31,29 @@ const raiz = document.documentElement;
 const puede = () => raiz.dataset.theme !== "light" && !matchMedia("(max-width: 860px)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches && !(navigator.connection && navigator.connection.saveData);
 
 if (cab && plan) {
-  let maq = null, lienzo = null, visible = false, pedido = false;
-  const marcha = () => { if (!maq) return; const si = visible && puede() && !document.hidden; if (si && !maq.vivo) maq.iniciar(); else if (!si && maq.vivo) maq.parar(); if (lienzo) lienzo.hidden = !puede(); };
+  let maq = null, lienzo = null, visible = false, pedido = false, foto = null;
+  // la foto fija del capítulo, para quien no va a ver la escena
+  const FOTOS = ["claro", "hoy", "sistema", "automatizacion", "inteligencia", "finance", "resultado", "resultado", "tuyo"];
+  const ponerFoto = (si) => {
+    if (si && !foto) { foto = document.createElement("div"); foto.className = "cab-foto"; foto.setAttribute("aria-hidden", "true"); foto.style.backgroundImage = `url("/assets/v2/img/maquina/${FOTOS[plan[1]]}-${matchMedia("(max-width: 860px)").matches ? "v" : "h"}.webp")`; cab.prepend(foto); }
+    if (foto) foto.hidden = !si;
+  };
+  const sinEscena = () => raiz.dataset.theme !== "light" && !puede();
+  const marcha = () => { ponerFoto(sinEscena()); if (!maq) return; const si = visible && puede() && !document.hidden; if (si && !maq.vivo) maq.iniciar(); else if (!si && maq.vivo) maq.parar(); if (lienzo) lienzo.hidden = !puede(); };
   const montar = () => {
     if (pedido || !puede()) return; pedido = true;
-    import("/assets/v2/js/maquina.js?v=7d317a8f26").then(({ crearMaquina, hayWebGL2 }) => {
-      if (!hayWebGL2()) return;
+    import("/assets/v2/js/maquina.js?v=dd7bde5a98").then(({ crearMaquina, hayWebGL2 }) => {
+      if (!hayWebGL2()) { if (raiz.dataset.theme !== "light") ponerFoto(true); return; }
       lienzo = document.createElement("canvas"); lienzo.className = "cab3d"; lienzo.setAttribute("aria-hidden", "true"); cab.prepend(lienzo);
       maq = crearMaquina(lienzo, { intro: false, pixeles: 1.0e6, tomas: 20, muestras: 0, mapaSombra: 1024, idioma: raiz.lang === "en" ? "en" : "es" });
-      if (!maq) { lienzo.remove(); return; }
+      if (!maq) { lienzo.remove(); lienzo = null; if (raiz.dataset.theme !== "light") ponerFoto(true); return; }
       const [, cap, vista] = plan;
       maq.capitulo(cap, true);
       if (typeof vista === "string") { maq.area(vista); maq.est.selMezcla = 1; const mo = maq.info.modulos[vista]; maq.est.selX = mo.x; maq.est.selY = mo.y; maq.rodaje({ d: [0, 0] }); }
       else maq.rodaje(vista ? { ...vista, d: [0, 0] } : { d: [0, 0] });
       if (cap === 4 || cap === 5) maq.lectura(0.45, 1);
       if (cap === 5) maq.registro(150040);
+      if (cap === 8) { const e = (new URLSearchParams(location.search).get("empresa") || "").trim().slice(0, 28); if (e) maq.grabar({ nombre: e.toUpperCase() }); }
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => maq.redibujar());
       addEventListener("pointermove", (e) => { const r = cab.getBoundingClientRect(); if (e.clientY < r.bottom) maq.puntero((e.clientX / innerWidth) * 2 - 1, 1 - ((e.clientY - r.top) / r.height) * 2, true); }, { passive: true });
       let ancho = innerWidth; addEventListener("resize", () => { if (innerWidth !== ancho) { ancho = innerWidth; maq.medir(); } });
@@ -57,7 +66,8 @@ if (cab && plan) {
     }).catch(() => {});
   };
   new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) montar(); marcha(); }).observe(cab);
-  new MutationObserver(() => { if (puede()) montar(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+  new MutationObserver(() => { if (puede()) montar(); marcha(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+  marcha();
 }
 
 /* Contacto: si se llega desde el cierre de la portada, el formulario ya trae el nombre y lo que no encaja. */

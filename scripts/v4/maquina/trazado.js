@@ -16,7 +16,7 @@ import * as G from "./piezas.js";
 
 const TAU = Math.PI * 2;
 export const ACABADO = { pulido: 0, cepillado: 1, circular: 2, arenado: 3, perlado: 4, azulado: 5, negro: 6, ginebra: 7 };
-export const TONO = { rodio: [0.80, 0.81, 0.83], acero: [0.56, 0.58, 0.62], rutenio: [0.2, 0.205, 0.22], negro: [0.03, 0.03, 0.034], negro2: [0.1, 0.102, 0.11], azul: [0.035, 0.085, 0.34], latón: [0.7, 0.71, 0.74] };
+export const TONO = { rodio: [0.80, 0.81, 0.83], acero: [0.56, 0.58, 0.62], rutenio: [0.2, 0.205, 0.22], placa: [0.115, 0.118, 0.13], base: [0.05, 0.051, 0.056], negro: [0.03, 0.03, 0.034], negro2: [0.1, 0.102, 0.11], azul: [0.035, 0.085, 0.34], latón: [0.7, 0.71, 0.74] };
 export const MODULOS = ["ventas", "clientes", "operaciones", "finanzas", "direccion", "motor", "transmision", "platina"];
 const Z = { placa: 0.06, a: 0.2, b: 0.335, pin: 0.27, puente: 0.56, alto: 0.62 };
 const CELDA = 4.25;
@@ -80,14 +80,15 @@ export function trazar(vertical = false) {
     pies.push(apoyo([ejes[0].x + (o.dx0 || 0), ejes[0].y + (o.dy0 || 0)]));
     if (!o.unPie) pies.push(apoyo([ejes[ejes.length - 1].x + (o.dx1 || 0), ejes[ejes.length - 1].y + (o.dy1 || 0)], pies[0]));
     const cx = ejes.reduce((s, e) => s + e.x, pies.reduce((s, p) => s + p[0], 0)) / (ejes.length + pies.length), cy = ejes.reduce((s, e) => s + e.y, pies.reduce((s, p) => s + p[1], 0)) / (ejes.length + pies.length);
-    const circ = [...ejes.map((e) => [e.x - cx, e.y - cy, 0.14]), ...pies.map((p) => [p[0] - cx, p[1] - cy, 0.115])];
-    const tal = [...ejes.map((e) => [e.x - cx, e.y - cy, 0.062]), ...pies.map((p) => [p[0] - cx, p[1] - cy, 0.034])];
-    const clave = `puente${nPuente++}${vertical ? "v" : "h"}`; geo(clave, () => G.puente(circ, tal, 0.1, 0.022));
-    P(clave, { x: cx - ox, y: cy - oy, z: Z.puente, fin: o.fin ?? ACABADO.ginebra, tono: o.tono || TONO.acero, ord: 0.7 });
+    // el puente va de pie a pie pasando por los ejes: brazos, no una chapa
+    const cE = ejes.map((e) => [e.x - cx, e.y - cy, 0.165]), cP = pies.map((p) => [p[0] - cx, p[1] - cy, 0.13]), tE = ejes.map((e) => [e.x - cx, e.y - cy, 0.062]), tP = pies.map((p) => [p[0] - cx, p[1] - cy, 0.034]);
+    const circ = [cP[0], ...cE, ...cP.slice(1)], tal = [tP[0], ...tE, ...tP.slice(1)];
+    const clave = `puente${nPuente++}${vertical ? "v" : "h"}`; geo(clave, () => G.puenteBrazos(circ, tal, 0.1, 0.03));
+    P(clave, { x: cx - ox, y: cy - oy, z: Z.puente, fin: o.fin ?? ACABADO.cepillado, tono: o.tono || TONO.rodio, ord: 0.7 });
     for (const e of ejes) { zafiroEn(e.x, e.y, Z.puente + 0.022); P(geo("eje", () => G.eje(Z.puente - Z.placa + 0.02)), { x: e.x - ox, y: e.y - oy, z: Z.placa, tono: TONO.acero, ord: 0.22, tipo: "eje", dato: { rueda: e.i } }); }
     for (const p of pies) { pilarEn(p[0], p[1]); tornilloEn(p[0], p[1], Z.puente + 0.05); }
   };
-  const subplaca = (o = {}) => { const c = `placa${o.w || 3.9}x${o.h || 3.9}`; geo(c, () => G.platina(o.w || 3.9, o.h || 3.9, 0.42, 0.06)); P(c, { z: 0.03, fin: ACABADO.arenado, tono: TONO.rutenio, ord: 0.06 }).texto = mod + 1; for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) tornilloEn(ox + sx * 1.72, oy + sy * 1.72, Z.placa + 0.012, 0.12, 0.8); };
+  const subplaca = (o = {}) => { const c = `placa${o.w || 3.9}x${o.h || 3.9}`; geo(c, () => G.platina(o.w || 3.9, o.h || 3.9, 0.42, 0.06)); P(c, { z: 0.03, fin: ACABADO.arenado, tono: TONO.placa, ord: 0.06 }).texto = mod + 1; for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) tornilloEn(ox + sx * 1.72, oy + sy * 1.72, Z.placa + 0.012, 0.12, 0.8); };
 
   /* ---- dónde cae cada módulo ---- */
   const C = CELDA, sitio = vertical
@@ -101,7 +102,7 @@ export function trazar(vertical = false) {
   /* ---------------------------------------------------------- platina */
   mod = 7; ox = 0; oy = 0;
   const PW = vertical ? C * 2 + 0.55 : C * 3 + 0.55, PH = vertical ? C * 3 + 0.55 : C * 2 + 0.55;
-  P(geo("platina", () => G.platina(PW, PH, 0.7, 0.26)), { z: -0.13, fin: ACABADO.perlado, tono: TONO.negro2, ord: 0 });
+  P(geo("platina", () => G.platina(PW, PH, 0.7, 0.26)), { z: -0.13, fin: ACABADO.arenado, tono: TONO.base, ord: 0 });
   info.platina = { w: PW, h: PH };
   for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) tornilloEn(sx * (PW / 2 - 0.34), sy * (PH / 2 - 0.34), 0.012, 0.05, 1.5);
   P(geo("corona", G.corona), { x: PW / 2 + 0.14, y: PH * 0.24, z: Z.a, ry: Math.PI / 2, fin: ACABADO.pulido, tono: TONO.acero, ord: 0.8, tipo: "corona" });

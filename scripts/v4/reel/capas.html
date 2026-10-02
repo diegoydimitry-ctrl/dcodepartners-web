@@ -1,0 +1,44 @@
+<!doctype html><html lang="es"><meta charset="utf-8">
+<title>reel · rótulos</title>
+<!-- Los rótulos del Reel, sobre fondo transparente. Se graban aparte (scripts/v4/reel/capas.mjs) y se superponen
+     con ffmpeg: así hay una versión con texto y otra sin texto del mismo rodaje. 360×640 a 3× = 1080×1920.
+     Todo queda dentro de la zona que Instagram no tapa: de 90 a 417 px de alto y de 22 a 313 px de ancho. -->
+<style>
+@font-face { font-family: "Archivo"; src: url("/assets/v2/fonts/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+@font-face { font-family: "Martian Mono"; src: url("/assets/v2/fonts/martian-mono.woff2") format("woff2"); font-weight: 100 800; font-stretch: 75% 112.5%; }
+html, body { margin: 0; width: 360px; height: 640px; background: transparent; overflow: hidden; color: #fff; font-family: "Archivo", sans-serif; }
+.r { position: absolute; left: 0; right: 0; display: grid; justify-items: center; text-align: center; opacity: 0; will-change: transform, opacity; }
+.grande { font-size: 40px; line-height: .96; letter-spacing: -.05em; font-weight: 600; padding: 0 30px; text-wrap: balance; text-shadow: 0 2px 30px rgba(0,0,0,.8), 0 0 2px rgba(0,0,0,.5); }
+.media { font-size: 27px; line-height: 1.02; letter-spacing: -.04em; font-weight: 600; padding: 0 34px; text-wrap: balance; text-shadow: 0 2px 26px rgba(0,0,0,.95), 0 0 2px rgba(0,0,0,.6); }
+.grande::before, .media::before { content: ""; position: absolute; inset: -40px 0; z-index: -1; background: radial-gradient(closest-side, rgba(0,0,0,.6), rgba(0,0,0,.32) 60%, transparent); }
+.tag span { display: inline-flex; align-items: center; gap: 9px; padding: 10px 15px 10px 13px; border-radius: 999px; background: rgba(6,6,6,.82); border: 1px solid rgba(255,255,255,.24); font-family: "Martian Mono", monospace; font-stretch: 80%; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; }
+.tag span::before { content: ""; width: 7px; height: 7px; border-radius: 1px; background: #5b8cff; }
+.marca { grid-auto-flow: column; justify-content: center; align-items: center; gap: 11px; }
+.marca svg { width: 40px; height: 33px; }
+.marca b { font-size: 22px; letter-spacing: -.035em; font-weight: 600; }
+</style>
+<body></body>
+<script>
+// [desde, hasta, clase, y (px desde arriba), html] · cuadros a 30 fps sobre el montaje completo
+const TOTAL = 960;
+const LOGO = '<svg viewBox="0 0 120 100" aria-hidden="true"><g fill="#fff"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="#5b8cff"/></svg>';
+const ES = [
+  [82, 146, "grande", 96, "Esto es una web."],
+  [154, 207, "media", 98, "Tiene más de<br>300 piezas."],
+  [213, 282, "media", 98, "No hay ni un vídeo<br>ni un modelo 3D."],
+  [288, 371, "media", 98, "Todo está hecho<br>con código."],
+  [379, 446, "tag", 76, "<span>Y no es solo diseño: funciona</span>"],
+  [450, 522, "tag", 76, "<span>Lee la factura y la registra sola</span>"],
+  [528, 582, "media", 98, "Automatiza, entiende<br>documentos y avisa."],
+  [590, 657, "media", 98, "Lo complejo<br>queda dentro."],
+  [664, 724, "tag", 76, "<span>Escribe el nombre de tu empresa</span>"],
+  [728, 792, "tag", 76, "<span>La web lo graba en la máquina</span>"],
+  [822, 960, "grande", 262, "¿Quieres una<br>web así?"],
+  [852, 960, "marca", 362, LOGO + "<b>D-Code Partners</b>"],
+  [868, 960, "tag", 408, "<span>Escríbenos · dcodepartners.com</span>"],
+];
+const lista = ES.map(([a, b, c, y, h]) => { const e = document.createElement("div"); e.className = "r " + c; e.style.top = y + "px"; e.innerHTML = h; document.body.appendChild(e); return { a, b, e, fin: b >= TOTAL }; });
+const eo = (t) => 1 - Math.pow(1 - t, 3), cl = (x) => Math.min(1, Math.max(0, x));
+window.cuadro = (f) => { let hay = false; for (const r of lista) { const ent = eo(cl((f - r.a) / 10)), sal = r.fin ? 0 : cl((f - (r.b - 7)) / 7), o = f < r.a || f >= r.b ? 0 : ent * (1 - sal); r.e.style.opacity = o; r.e.style.transform = `translateY(${(1 - ent) * 14 - sal * 8}px)`; if (o > 0) hay = true; } return hay; };
+window.listo = document.fonts.ready.then(() => true);
+</script></html>

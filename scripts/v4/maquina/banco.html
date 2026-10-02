@@ -6,7 +6,9 @@
 <script type="module">
 import { crearMaquina } from "/assets/v2/js/maquina.js";
 const q = new URLSearchParams(location.search);
-const m = crearMaquina(document.getElementById("c"), { movil: q.has("movil"), intro: q.has("intro") ? undefined : false, captura: true, dpr: +q.get("dpr") || 1, muestras: q.has("muestras") ? +q.get("muestras") : undefined, tomas: q.has("tomas") ? +q.get("tomas") : undefined });
+// las mismas fuentes que la web: el grabado de la tapa y la factura se dibujan con ellas
+try { const fs = [new FontFace("Archivo", 'url("/assets/v2/fonts/archivo.woff2")', { weight: "100 900", stretch: "62% 125%" }), new FontFace("Martian Mono", 'url("/assets/v2/fonts/martian-mono.woff2")', { weight: "100 800", stretch: "75% 112.5%" })]; for (const f of fs) document.fonts.add(await f.load()); } catch (e) {}
+const m = crearMaquina(document.getElementById("c"), { movil: q.has("movil"), intro: q.has("intro") ? undefined : false, captura: true, dpr: +q.get("dpr") || 1, muestras: q.has("muestras") ? +q.get("muestras") : undefined, tomas: q.has("tomas") ? +q.get("tomas") : undefined, mapaSombra: +q.get("sombra") || undefined, pixeles: +q.get("pixeles") || undefined });
 window.m = m; m.capitulo(+q.get("cap") || 0, true);
 if (q.has("mano")) m.est.mano = m.est.manoObj = +q.get("mano") || 1;
 if (q.has("intro")) m.intro(+q.get("intro"));
@@ -19,6 +21,6 @@ addEventListener("resize", () => m.medir());
 addEventListener("pointermove", (e) => { m.puntero(e.clientX / innerWidth * 2 - 1, 1 - e.clientY / innerHeight * 2, true); if (e.buttons) m.arrastrar(e.movementX, e.movementY); });
 addEventListener("keydown", (e) => { if (e.key >= "0" && e.key <= "8") m.capitulo(+e.key); if (e.key === " ") m.sostener(true); });
 addEventListener("keyup", (e) => { if (e.key === " ") m.sostener(false); });
-document.getElementById("i").textContent = m.N + " piezas · " + (m.info.avisos.join(" · ") || "sin avisos");
+if (!q.has("sinrotulo")) document.getElementById("i").textContent = m.N + " piezas · " + (m.info.avisos.join(" · ") || "sin avisos");
 if (q.has("pasos")) { const k = +q.get("pasos"); for (let i = 0; i < k; i++) m.paso(1 / 30); window.listo = true; } else m.iniciar();
 </script></html>

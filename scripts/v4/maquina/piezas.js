@@ -104,10 +104,22 @@ export function puente(apoyos, taladros = [], grosor = 0.1, bisel = 0.02) {
   for (const [x, y, r] of taladros) s.holes.push(circulo(r, x, y));
   return extruir(s, grosor, bisel, 12, 0.75);
 }
-export function platina(w, h, r = 0.5, grosor = 0.2, taladros = []) {
+/* Un puente calado: en vez de una chapa, brazos que van de apoyo en apoyo (pie, ejes, pie). Deja ver las ruedas. */
+export function puenteBrazos(apoyos, taladros = [], grosor = 0.1, bisel = 0.02) {
+  if (apoyos.length < 2) return puente(apoyos, taladros, grosor, bisel);
+  const gs = [];
+  for (let i = 0; i < apoyos.length - 1; i++) {
+    const s = envolvente([apoyos[i], apoyos[i + 1]], 36);
+    for (const k of [i, i + 1]) if (taladros[k]) s.holes.push(circulo(taladros[k][2], taladros[k][0], taladros[k][1]));
+    gs.push(extruir(s, grosor, bisel, 12, 0.75));
+  }
+  return unir(gs);
+}
+export function platina(w, h, r = 0.5, grosor = 0.2, taladros = [], rects = []) {
   const s = new Shape(), x = w / 2, y = h / 2;
   s.moveTo(-x + r, -y); s.lineTo(x - r, -y); s.absarc(x - r, -y + r, r, -Math.PI / 2, 0, false); s.lineTo(x, y - r); s.absarc(x - r, y - r, r, 0, Math.PI / 2, false); s.lineTo(-x + r, y); s.absarc(-x + r, y - r, r, Math.PI / 2, Math.PI, false); s.lineTo(-x, -y + r); s.absarc(-x + r, -y + r, r, Math.PI, Math.PI * 1.5, false);
   for (const [tx, ty, tr] of taladros) s.holes.push(circulo(tr, tx, ty));
+  for (const [rx, ry, rw, rh, rr = 0.1] of rects) { const p = new Path(), a = rw / 2, b = rh / 2; p.moveTo(rx - a + rr, ry - b); p.absarc(rx - a + rr, ry - b + rr, rr, -Math.PI / 2, Math.PI, true); p.lineTo(rx - a, ry + b - rr); p.absarc(rx - a + rr, ry + b - rr, rr, Math.PI, Math.PI / 2, true); p.lineTo(rx + a - rr, ry + b); p.absarc(rx + a - rr, ry + b - rr, rr, Math.PI / 2, 0, true); p.lineTo(rx + a, ry - b + rr); p.absarc(rx + a - rr, ry - b + rr, rr, 0, -Math.PI / 2, true); p.closePath(); s.holes.push(p); }
   return extruir(s, grosor, 0.03, 14, 0.75);
 }
 export const palanca = (circ, taladros = [], grosor = 0.07) => puente(circ, taladros, grosor, 0.012);

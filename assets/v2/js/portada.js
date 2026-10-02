@@ -133,7 +133,7 @@ if (raiz) {
   if (tuyo) {
     const nombre = $("[data-tuyo-nombre]", tuyo), piezas = $$("[data-tuyo-pieza]", tuyo), cta = $("[data-tuyo-cta]", tuyo), base = cta.getAttribute("href");
     const destino = () => { const p = new URLSearchParams(), n = nombre.value.trim(), a = piezas.filter((c) => c.checked).map((c) => c.value); if (n) p.set("empresa", n); if (a.length) p.set("areas", a.join(", ")); const s = p.toString(); cta.setAttribute("href", s ? base + "?" + s : base); };
-    grabar = () => { if (!maq) return; const n = (nombre.value.trim() || nombre.placeholder).toUpperCase(); maq.grabar([{ t: raiz.dataset.grabado || "", y: 150, px: 34, mono: true, peso: 500, esp: 9 }, { t: n, y: 268, px: 132, peso: 700, esp: 2 }, { t: "D-CODE PARTNERS", y: 392, px: 30, mono: true, peso: 500, esp: 9 }]); };
+    grabar = () => { if (maq) maq.grabar({ rotulo: raiz.dataset.grabado || "", nombre: (nombre.value.trim() || nombre.placeholder).toUpperCase() }); };
     nombre.addEventListener("input", () => { grabar(); destino(); });
     piezas.forEach((c) => c.addEventListener("change", destino));
   }
@@ -145,8 +145,8 @@ if (raiz) {
   if (sinMotor) quieta();
   else {
     // si la escena tarda, el título no espera
-    const espera = setTimeout(() => raiz.classList.add("is-abierta"), 3200);
-    const cargar = () => import("/assets/v2/js/maquina.js?v=7d317a8f26").then(({ crearMaquina, hayWebGL2 }) => {
+    const espera = setTimeout(() => raiz.classList.add("is-abierta"), 4600);
+    const cargar = () => import("/assets/v2/js/maquina.js?v=dd7bde5a98").then(({ crearMaquina, hayWebGL2 }) => {
       if (!hayWebGL2()) { clearTimeout(espera); return quieta(); }
       const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 1/1)").matches;
       const justo = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
@@ -160,12 +160,12 @@ if (raiz) {
       const anclar = !movil && innerWidth >= 1100;
       raiz.classList.toggle("is-anclada", anclar);
 
-      // la entrada: la máquina, entera un instante, salta en pedazos hacia la cámara; después aparece el título
+      // la entrada: se empieza dentro de la máquina en marcha; la cámara se retira, la máquina salta en piezas y entonces aparece el título
       const abrir = () => { clearTimeout(espera); raiz.classList.add("is-abierta"); };
       if (cap > 0.3 || captura) { maq.intro(1); abrir(); }
       else {
-        const t0 = performance.now() + 650, dur = 2600; let abierto = false;
-        const paso = (ahora) => { const t = Math.min(1, Math.max(0, (ahora - t0) / dur)); maq.intro(t); if (!abierto && t > 0.4) { abierto = true; abrir(); } if (t < 1) requestAnimationFrame(paso); };
+        const t0 = performance.now() + 500, dur = 3800; let abierto = false;
+        const paso = (ahora) => { const t = Math.min(1, Math.max(0, (ahora - t0) / dur)); maq.intro(t); if (!abierto && t > 0.6) { abierto = true; abrir(); } if (t < 1) requestAnimationFrame(paso); };
         requestAnimationFrame(paso);
       }
 
@@ -211,6 +211,15 @@ if (raiz) {
         let x0 = 0, y0 = 0, eje = "";
         raiz.addEventListener("touchstart", (e) => { const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; eje = ""; }, { passive: true });
         raiz.addEventListener("touchmove", (e) => { const t = e.touches[0], dx = t.clientX - x0, dy = t.clientY - y0; if (!eje && Math.abs(dx) + Math.abs(dy) > 8) eje = Math.abs(dx) > Math.abs(dy) * 1.3 ? "x" : "y"; if (eje === "x") maq.arrastrar(dx * 1.6, 0); x0 = t.clientX; y0 = t.clientY; }, { passive: true });
+        // inclinar el teléfono mueve la escena (donde el navegador lo da sin pedir permiso; en iOS habría que pedirlo, y no se pide)
+        if ("DeviceOrientationEvent" in window && typeof DeviceOrientationEvent.requestPermission !== "function" && !REDUCIDO) {
+          let b0 = null, g0 = null; const tope = (v) => Math.max(-1, Math.min(1, v));
+          addEventListener("deviceorientation", (e) => {
+            if (e.beta == null || e.gamma == null) return; if (b0 === null) { b0 = e.beta; g0 = e.gamma; }
+            b0 += (e.beta - b0) * 0.015; g0 += (e.gamma - g0) * 0.015;   // el centro sigue despacio la postura de quien lo sujeta
+            maq.puntero(tope((e.gamma - g0) / 16), tope(-(e.beta - b0) / 16), true, 2.4);
+          }, { passive: true });
+        }
         const mano = $("[data-mano]", raiz);
         if (mano) {
           mano.addEventListener("pointerdown", (e) => { e.preventDefault(); sostener(true); mano.setPointerCapture(e.pointerId); });
@@ -221,7 +230,7 @@ if (raiz) {
       if (areas) maq.area(moduloElegido || null);
 
       // solo se pinta mientras la escena se ve y la pestaña está delante
-      const viva = () => { const dentro = raiz.getBoundingClientRect().bottom > 0, si = dentro && !document.hidden; if (si && !maq.vivo) maq.iniciar(); else if (!si && maq.vivo) maq.parar(); };
+      const viva = () => { if (captura) return; const dentro = raiz.getBoundingClientRect().bottom > 0, si = dentro && !document.hidden; if (si && !maq.vivo) maq.iniciar(); else if (!si && maq.vivo) maq.parar(); };
       addEventListener("scroll", viva, { passive: true }); document.addEventListener("visibilitychange", viva);
       let anchoPrevio = innerWidth, altoPrevio = innerHeight;
       addEventListener("resize", () => { if (innerWidth !== anchoPrevio || Math.abs(innerHeight - altoPrevio) > 130) { anchoPrevio = innerWidth; altoPrevio = innerHeight; maq.medir(); } });

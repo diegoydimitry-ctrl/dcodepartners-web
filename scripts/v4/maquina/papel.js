@@ -48,18 +48,37 @@ export function dibujarCifras() {
   return c;
 }
 
-/* El grabado de la tapa: el nombre que escribe el visitante. Blanco = grabado. */
-export function dibujarGrabado(c, lineas, { ancho = 1024, alto = 512 } = {}) {
-  if (!c) { c = document.createElement("canvas"); c.width = ancho; c.height = alto; }
-  const g = c.getContext("2d"); g.fillStyle = "#000"; g.fillRect(0, 0, c.width, c.height); g.fillStyle = "#fff"; g.textAlign = "center"; g.textBaseline = "middle";
-  lineas.forEach(({ t, y, px, mono, peso = 600, esp = 0 }) => {
-    let tam = px; g.font = `${peso} ${tam}px ${mono ? '"Martian Mono", ui-monospace, monospace' : '"Archivo", system-ui, sans-serif'}`;
-    if ("letterSpacing" in g) g.letterSpacing = esp + "px";
-    while (g.measureText(t).width > c.width * 0.9 && tam > 12) { tam -= 2; g.font = g.font.replace(/\d+px/, tam + "px"); }
-    g.fillText(t, c.width / 2, y);
-  });
+/* La esfera: todo lo que va grabado en la tapa (blanco = grabado). Se dibuja en las unidades de la tapa:
+   cercos y minutería de las ventanas, un filete en el borde y el bloque con el nombre de la empresa. */
+export function dibujarEsfera(c, { w, h, ventanas = [], rects = [], bloque, rotulo = "", nombre = "", pie = "D-CODE PARTNERS", etiquetas = [] }) {
+  const ppu = Math.min(2048 / w, 2048 / h, 150);
+  if (!c) c = document.createElement("canvas"); c.width = Math.round(w * ppu); c.height = Math.round(h * ppu);
+  const g = c.getContext("2d"), X = (x) => (x + w / 2) * ppu, Y = (y) => (h / 2 - y) * ppu, L = (l) => l * ppu;
+  g.fillStyle = "#000"; g.fillRect(0, 0, c.width, c.height); g.strokeStyle = "#fff"; g.fillStyle = "#fff"; g.lineCap = "butt";
+  const mono = (px, peso = 500) => `${peso} ${L(px)}px "Martian Mono", ui-monospace, Menlo, monospace`, grot = (px, peso = 700) => `${peso} ${L(px)}px "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif`;
+  const esp = (v) => { if ("letterSpacing" in g) g.letterSpacing = L(v) + "px"; };
+  // filete del borde
+  g.lineWidth = L(0.018); const m = 0.42, r = L(0.42); g.beginPath(); g.roundRect(X(-w / 2 + m), Y(h / 2 - m), L(w - 2 * m), L(h - 2 * m), r); g.stroke();
+  // ventanas redondas: cerco doble y minutería
+  for (const [x, y, rad] of ventanas) {
+    g.lineWidth = L(0.02); g.beginPath(); g.arc(X(x), Y(y), L(rad + 0.11), 0, 7); g.stroke(); g.lineWidth = L(0.008); g.beginPath(); g.arc(X(x), Y(y), L(rad + 0.34), 0, 7); g.stroke();
+    const n = rad > 1 ? 100 : 60; for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2, largo = k % 5 ? 0.07 : 0.14; g.lineWidth = L(k % 5 ? 0.008 : 0.016); g.beginPath(); g.moveTo(X(x + Math.cos(a) * (rad + 0.17)), Y(y + Math.sin(a) * (rad + 0.17))); g.lineTo(X(x + Math.cos(a) * (rad + 0.17 + largo)), Y(y + Math.sin(a) * (rad + 0.17 + largo))); g.stroke(); }
+  }
+  for (const [x, y, rw, rh] of rects) { g.lineWidth = L(0.02); g.beginPath(); g.roundRect(X(x - rw / 2 - 0.1), Y(y + rh / 2 + 0.1), L(rw + 0.2), L(rh + 0.2), L(0.16)); g.stroke(); }
+  g.textAlign = "center"; g.textBaseline = "middle";
+  for (const [t, x, y] of etiquetas) { g.font = mono(0.115); esp(0.04); g.fillText(t, X(x), Y(y)); }
+  // el bloque del nombre
+  if (bloque) {
+    const { x, y, w: bw } = bloque;
+    g.font = mono(0.2, 600); esp(0.07); g.fillText(rotulo, X(x), Y(y + 0.78));
+    let px = 0.86; esp(0.006); g.font = grot(px); while (g.measureText(nombre).width > L(bw) && px > 0.2) { px -= 0.03; g.font = grot(px); }
+    g.fillText(nombre, X(x), Y(y + 0.02));
+    g.lineWidth = L(0.012); g.beginPath(); g.moveTo(X(x - 0.5), Y(y - 0.54)); g.lineTo(X(x + 0.5), Y(y - 0.54)); g.stroke();
+    g.font = mono(0.18, 600); esp(0.07); g.fillText(pie, X(x), Y(y - 0.86));
+  }
+  esp(0);
   // los cantos del grabado, suavizados: si no, el relieve sale a escalones
-  try { const t = document.createElement("canvas"); t.width = c.width; t.height = c.height; const gt = t.getContext("2d"); gt.filter = "blur(1.6px)"; gt.drawImage(c, 0, 0); g.drawImage(t, 0, 0); } catch (e) {}
+  try { const t = document.createElement("canvas"); t.width = c.width; t.height = c.height; const gt = t.getContext("2d"); gt.filter = "blur(1.2px)"; gt.drawImage(c, 0, 0); g.drawImage(t, 0, 0); } catch (e) {}
   return c;
 }
 
