@@ -1,5 +1,9 @@
+# dcodepartners.com
+# Todo el sitio se puede rastrear. Las demos y la app de Finance no se bloquean aquí
+# a propósito: llevan <meta name="robots" content="noindex"> y Google tiene que poder
+# leerlas para ver esa etiqueta. /api/ son funciones del formulario y del asistente, no páginas.
 User-agent: *
-
 Allow: /
+Disallow: /api/
 
 Sitemap: https://dcodepartners.com/sitemap.xml

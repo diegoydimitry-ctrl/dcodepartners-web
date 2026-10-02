@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://dcodepartners.com/acuerdo-encargado-tratamiento</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/acuerdo-encargado-tratamiento"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
@@ -9,6 +10,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/acuerdo-encargado-tratamiento</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/acuerdo-encargado-tratamiento"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/acuerdo-encargado-tratamiento"/>
@@ -16,6 +18,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/aviso-legal</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/aviso-legal"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/aviso-legal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/aviso-legal"/>
@@ -23,13 +26,31 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/aviso-legal</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/aviso-legal"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/aviso-legal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/aviso-legal"/>
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://dcodepartners.com/blog/automatizacion-para-pymes</loc>
+    <lastmod>2026-10-02</lastmod>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/automatizacion-para-pymes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/automatizacion-para-pymes"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/automatizacion-para-pymes"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://dcodepartners.com/en/blog/automatizacion-para-pymes</loc>
+    <lastmod>2026-10-02</lastmod>
+    <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/automatizacion-para-pymes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/automatizacion-para-pymes"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/automatizacion-para-pymes"/>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://dcodepartners.com/blog/automatizacion-vs-agentes-ia</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/automatizacion-vs-agentes-ia"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/automatizacion-vs-agentes-ia"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/automatizacion-vs-agentes-ia"/>
@@ -37,6 +58,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/blog/automatizacion-vs-agentes-ia</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/automatizacion-vs-agentes-ia"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/automatizacion-vs-agentes-ia"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/automatizacion-vs-agentes-ia"/>
@@ -44,6 +66,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/blog</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog"/>
@@ -51,6 +74,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/blog</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog"/>
@@ -58,6 +82,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/blog/procesos-que-puedes-automatizar-ya</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/procesos-que-puedes-automatizar-ya"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/procesos-que-puedes-automatizar-ya"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/procesos-que-puedes-automatizar-ya"/>
@@ -65,6 +90,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/blog/procesos-que-puedes-automatizar-ya</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/procesos-que-puedes-automatizar-ya"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/procesos-que-puedes-automatizar-ya"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/procesos-que-puedes-automatizar-ya"/>
@@ -72,6 +98,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/blog/que-es-la-automatizacion-con-ia</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/que-es-la-automatizacion-con-ia"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/que-es-la-automatizacion-con-ia"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/que-es-la-automatizacion-con-ia"/>
@@ -79,6 +106,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/blog/que-es-la-automatizacion-con-ia</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/blog/que-es-la-automatizacion-con-ia"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/blog/que-es-la-automatizacion-con-ia"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/blog/que-es-la-automatizacion-con-ia"/>
@@ -86,6 +114,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/cambios-en-proceso</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cambios-en-proceso"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cambios-en-proceso"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cambios-en-proceso"/>
@@ -93,6 +122,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/cambios-en-proceso</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cambios-en-proceso"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cambios-en-proceso"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cambios-en-proceso"/>
@@ -100,6 +130,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/casos-exito</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/casos-exito"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/casos-exito"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/casos-exito"/>
@@ -107,6 +138,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/casos-exito</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/casos-exito"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/casos-exito"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/casos-exito"/>
@@ -114,6 +146,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/condiciones-contratacion</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/condiciones-contratacion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/condiciones-contratacion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/condiciones-contratacion"/>
@@ -121,6 +154,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/condiciones-contratacion</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/condiciones-contratacion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/condiciones-contratacion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/condiciones-contratacion"/>
@@ -128,6 +162,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/conocenos</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/conocenos"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/conocenos"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/conocenos"/>
@@ -135,6 +170,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/conocenos</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/conocenos"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/conocenos"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/conocenos"/>
@@ -142,6 +178,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/contacto</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/contacto"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/contacto"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/contacto"/>
@@ -149,6 +186,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/contacto</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/contacto"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/contacto"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/contacto"/>
@@ -156,6 +194,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/cookies</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cookies"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cookies"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cookies"/>
@@ -163,6 +202,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/cookies</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/cookies"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/cookies"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/cookies"/>
@@ -170,6 +210,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/administracion</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/administracion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/administracion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/administracion"/>
@@ -177,6 +218,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/administracion</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/administracion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/administracion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/administracion"/>
@@ -184,6 +226,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/clientes</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/clientes"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/clientes"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/clientes"/>
@@ -191,6 +234,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/clientes</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/clientes"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/clientes"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/clientes"/>
@@ -198,6 +242,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/comercial</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/comercial"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/comercial"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/comercial"/>
@@ -205,6 +250,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/comercial</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/comercial"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/comercial"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/comercial"/>
@@ -212,6 +258,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/direccion</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/direccion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/direccion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/direccion"/>
@@ -219,6 +266,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/direccion</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/direccion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/direccion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/direccion"/>
@@ -226,6 +274,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/finanzas</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/finanzas"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/finanzas"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/finanzas"/>
@@ -233,6 +282,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/finanzas</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/finanzas"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/finanzas"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/finanzas"/>
@@ -240,6 +290,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/marketing</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/marketing"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/marketing"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/marketing"/>
@@ -247,6 +298,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/marketing</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/marketing"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/marketing"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/marketing"/>
@@ -254,6 +306,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/produccion</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/produccion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/produccion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/produccion"/>
@@ -261,6 +314,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/produccion</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/produccion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/produccion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/produccion"/>
@@ -268,6 +322,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/departamentos/soporte</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/soporte"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/soporte"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/soporte"/>
@@ -275,6 +330,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/departamentos/soporte</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/departamentos/soporte"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/departamentos/soporte"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/departamentos/soporte"/>
@@ -282,6 +338,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/diagnostico</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/diagnostico"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/diagnostico"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/diagnostico"/>
@@ -289,6 +346,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/diagnostico</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/diagnostico"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/diagnostico"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/diagnostico"/>
@@ -296,6 +354,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/faq</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/faq"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/faq"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/faq"/>
@@ -303,6 +362,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/faq</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/faq"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/faq"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/faq"/>
@@ -310,6 +370,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/garantias</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/garantias"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/garantias"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/garantias"/>
@@ -317,6 +378,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/garantias</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/garantias"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/garantias"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/garantias"/>
@@ -324,6 +386,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/"/>
@@ -331,6 +394,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/"/>
@@ -338,6 +402,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/metodo</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/metodo"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/metodo"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/metodo"/>
@@ -345,6 +410,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/metodo</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/metodo"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/metodo"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/metodo"/>
@@ -352,6 +418,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/precios</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/precios"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/precios"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/precios"/>
@@ -359,6 +426,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/precios</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/precios"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/precios"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/precios"/>
@@ -366,6 +434,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/privacidad</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/privacidad"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/privacidad"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/privacidad"/>
@@ -373,6 +442,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/privacidad</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/privacidad"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/privacidad"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/privacidad"/>
@@ -380,6 +450,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/que-hacemos</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/que-hacemos"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/que-hacemos"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/que-hacemos"/>
@@ -387,6 +458,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/que-hacemos</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/que-hacemos"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/que-hacemos"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/que-hacemos"/>
@@ -394,6 +466,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/seguridad</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/seguridad"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/seguridad"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/seguridad"/>
@@ -401,6 +474,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/seguridad</loc>
+    <lastmod>2026-09-29</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/seguridad"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/seguridad"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/seguridad"/>
@@ -408,6 +482,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/servicios/agentes-de-ia</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-de-ia"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
@@ -415,6 +490,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/servicios/agentes-de-ia</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/agentes-de-ia"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/agentes-de-ia"/>
@@ -422,6 +498,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/servicios/automatizaciones</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/automatizaciones"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/automatizaciones"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/automatizaciones"/>
@@ -429,6 +506,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/servicios/automatizaciones</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/automatizaciones"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/automatizaciones"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/automatizaciones"/>
@@ -436,6 +514,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/servicios/integraciones</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/integraciones"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/integraciones"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/integraciones"/>
@@ -443,6 +522,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/servicios/integraciones</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/integraciones"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/integraciones"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/integraciones"/>
@@ -450,6 +530,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/servicios/paginas-web</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/paginas-web"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/paginas-web"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/paginas-web"/>
@@ -457,6 +538,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/servicios/paginas-web</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/paginas-web"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/paginas-web"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/paginas-web"/>
@@ -464,6 +546,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/servicios/sistemas-a-medida</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/sistemas-a-medida"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
@@ -471,6 +554,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/servicios/sistemas-a-medida</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/servicios/sistemas-a-medida"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/servicios/sistemas-a-medida"/>
@@ -478,6 +562,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/sistema-financiero</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/sistema-financiero"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/sistema-financiero"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero"/>
@@ -485,6 +570,7 @@
   </url>
   <url>
     <loc>https://dcodepartners.com/en/sistema-financiero</loc>
+    <lastmod>2026-10-02</lastmod>
     <xhtml:link rel="alternate" hreflang="es" href="https://dcodepartners.com/sistema-financiero"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://dcodepartners.com/en/sistema-financiero"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dcodepartners.com/sistema-financiero"/>

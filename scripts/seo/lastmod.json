@@ -1,0 +1,290 @@
+{
+ "acuerdo-encargado-tratamiento.html": {
+  "huella": "1206928d26fef16b",
+  "fecha": "2026-09-29"
+ },
+ "aviso-legal.html": {
+  "huella": "f6d79e8e6fd2a9cc",
+  "fecha": "2026-09-29"
+ },
+ "blog/automatizacion-para-pymes.html": {
+  "huella": "8d18ea8f53a5a248",
+  "fecha": "2026-10-02"
+ },
+ "blog/automatizacion-vs-agentes-ia.html": {
+  "huella": "705f06701e6aa2c6",
+  "fecha": "2026-10-02"
+ },
+ "blog/index.html": {
+  "huella": "5bf285496f4c68c0",
+  "fecha": "2026-10-02"
+ },
+ "blog/procesos-que-puedes-automatizar-ya.html": {
+  "huella": "f6c553a692d8f447",
+  "fecha": "2026-10-02"
+ },
+ "blog/que-es-la-automatizacion-con-ia.html": {
+  "huella": "99088c516240a54a",
+  "fecha": "2026-10-02"
+ },
+ "cambios-en-proceso.html": {
+  "huella": "136963a5dd2ba377",
+  "fecha": "2026-09-29"
+ },
+ "casos-exito.html": {
+  "huella": "4ec79bd818ec2e91",
+  "fecha": "2026-09-29"
+ },
+ "condiciones-contratacion.html": {
+  "huella": "e34482fd9040c0e4",
+  "fecha": "2026-09-29"
+ },
+ "conocenos.html": {
+  "huella": "206bca27b0c77c2b",
+  "fecha": "2026-09-29"
+ },
+ "contacto.html": {
+  "huella": "51816a973b4e4c93",
+  "fecha": "2026-09-29"
+ },
+ "cookies.html": {
+  "huella": "2666516192ed71fe",
+  "fecha": "2026-09-29"
+ },
+ "departamentos/administracion.html": {
+  "huella": "d719a760ee0fcbb4",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/clientes.html": {
+  "huella": "87530090dc50417c",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/comercial.html": {
+  "huella": "3826510497ddd6b7",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/direccion.html": {
+  "huella": "b8ef732313247ea3",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/finanzas.html": {
+  "huella": "f1cac59997ecb0ea",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/marketing.html": {
+  "huella": "fb7395492b4fa476",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/produccion.html": {
+  "huella": "35bd749e55bddf8e",
+  "fecha": "2026-10-02"
+ },
+ "departamentos/soporte.html": {
+  "huella": "0e0e548e9dceeaf7",
+  "fecha": "2026-10-02"
+ },
+ "diagnostico.html": {
+  "huella": "59072a86f8eef386",
+  "fecha": "2026-10-02"
+ },
+ "en/acuerdo-encargado-tratamiento.html": {
+  "huella": "cc2723f0e781990b",
+  "fecha": "2026-09-29"
+ },
+ "en/aviso-legal.html": {
+  "huella": "70903e1ceca348f9",
+  "fecha": "2026-09-29"
+ },
+ "en/blog/automatizacion-para-pymes.html": {
+  "huella": "dc07feb200a5d7d8",
+  "fecha": "2026-10-02"
+ },
+ "en/blog/automatizacion-vs-agentes-ia.html": {
+  "huella": "b082d2934648d52c",
+  "fecha": "2026-10-02"
+ },
+ "en/blog/index.html": {
+  "huella": "fcf7d113805f8b56",
+  "fecha": "2026-10-02"
+ },
+ "en/blog/procesos-que-puedes-automatizar-ya.html": {
+  "huella": "55771fdc7bb2de63",
+  "fecha": "2026-10-02"
+ },
+ "en/blog/que-es-la-automatizacion-con-ia.html": {
+  "huella": "79ebd4d7044e4701",
+  "fecha": "2026-10-02"
+ },
+ "en/cambios-en-proceso.html": {
+  "huella": "42438722a441bedb",
+  "fecha": "2026-09-29"
+ },
+ "en/casos-exito.html": {
+  "huella": "2ec12a942ddc04cc",
+  "fecha": "2026-09-29"
+ },
+ "en/condiciones-contratacion.html": {
+  "huella": "d25fb76a1c8a8820",
+  "fecha": "2026-09-29"
+ },
+ "en/conocenos.html": {
+  "huella": "b9c04a8a10977a6b",
+  "fecha": "2026-09-29"
+ },
+ "en/contacto.html": {
+  "huella": "39f5e638fa6c9058",
+  "fecha": "2026-09-29"
+ },
+ "en/cookies.html": {
+  "huella": "70faaffd8d92288c",
+  "fecha": "2026-09-29"
+ },
+ "en/departamentos/administracion.html": {
+  "huella": "f59e2291cf10cd05",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/clientes.html": {
+  "huella": "00258b036a8d76db",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/comercial.html": {
+  "huella": "d417110e06b0c2f4",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/direccion.html": {
+  "huella": "e71ae6957450a69d",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/finanzas.html": {
+  "huella": "8592e2905cf24e71",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/marketing.html": {
+  "huella": "517312f36aefb166",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/produccion.html": {
+  "huella": "b8c7d81fc9a6cca2",
+  "fecha": "2026-10-02"
+ },
+ "en/departamentos/soporte.html": {
+  "huella": "209ff6e322c7bf92",
+  "fecha": "2026-10-02"
+ },
+ "en/diagnostico.html": {
+  "huella": "8faeda629dd18e55",
+  "fecha": "2026-09-29"
+ },
+ "en/faq.html": {
+  "huella": "0ce97e5dbb7d9d58",
+  "fecha": "2026-10-02"
+ },
+ "en/garantias.html": {
+  "huella": "e5379a900d200180",
+  "fecha": "2026-09-29"
+ },
+ "en/index.html": {
+  "huella": "b992e7fc97cbcb6a",
+  "fecha": "2026-10-02"
+ },
+ "en/metodo.html": {
+  "huella": "0bad57f3796fddba",
+  "fecha": "2026-09-29"
+ },
+ "en/precios.html": {
+  "huella": "232656458184a912",
+  "fecha": "2026-10-02"
+ },
+ "en/privacidad.html": {
+  "huella": "13b4fed4509f8ac4",
+  "fecha": "2026-09-29"
+ },
+ "en/que-hacemos.html": {
+  "huella": "3afe557569a96760",
+  "fecha": "2026-10-02"
+ },
+ "en/seguridad.html": {
+  "huella": "cd6045b0caa14cbb",
+  "fecha": "2026-09-29"
+ },
+ "en/servicios/agentes-de-ia.html": {
+  "huella": "c118d22366991153",
+  "fecha": "2026-10-02"
+ },
+ "en/servicios/automatizaciones.html": {
+  "huella": "bd8da9d6294dd691",
+  "fecha": "2026-10-02"
+ },
+ "en/servicios/integraciones.html": {
+  "huella": "17495f49b32e0c01",
+  "fecha": "2026-10-02"
+ },
+ "en/servicios/paginas-web.html": {
+  "huella": "002b91a6161299dc",
+  "fecha": "2026-10-02"
+ },
+ "en/servicios/sistemas-a-medida.html": {
+  "huella": "b5d158c9e6706797",
+  "fecha": "2026-10-02"
+ },
+ "en/sistema-financiero.html": {
+  "huella": "82f78ad86cfb5712",
+  "fecha": "2026-10-02"
+ },
+ "faq.html": {
+  "huella": "2dbb4feeda5b42fa",
+  "fecha": "2026-10-02"
+ },
+ "garantias.html": {
+  "huella": "752be6deab5d08fc",
+  "fecha": "2026-09-29"
+ },
+ "index.html": {
+  "huella": "e00e69fe7d522169",
+  "fecha": "2026-10-02"
+ },
+ "metodo.html": {
+  "huella": "bf43b5035ddfa3e5",
+  "fecha": "2026-09-29"
+ },
+ "precios.html": {
+  "huella": "9e3e5ec5e1900483",
+  "fecha": "2026-10-02"
+ },
+ "privacidad.html": {
+  "huella": "34c8d7ae10e0b589",
+  "fecha": "2026-09-29"
+ },
+ "que-hacemos.html": {
+  "huella": "61176639644ecdbf",
+  "fecha": "2026-10-02"
+ },
+ "seguridad.html": {
+  "huella": "cdcbbc729f0fbf20",
+  "fecha": "2026-09-29"
+ },
+ "servicios/agentes-de-ia.html": {
+  "huella": "c7ee16648e65f6d8",
+  "fecha": "2026-10-02"
+ },
+ "servicios/automatizaciones.html": {
+  "huella": "d8358792db58085f",
+  "fecha": "2026-10-02"
+ },
+ "servicios/integraciones.html": {
+  "huella": "4bf1fb68b0e78c22",
+  "fecha": "2026-10-02"
+ },
+ "servicios/paginas-web.html": {
+  "huella": "129092100f37638a",
+  "fecha": "2026-10-02"
+ },
+ "servicios/sistemas-a-medida.html": {
+  "huella": "cf327d70e5ab0e6b",
+  "fecha": "2026-10-02"
+ },
+ "sistema-financiero.html": {
+  "huella": "a629e090888c2deb",
+  "fecha": "2026-10-02"
+ }
+}
