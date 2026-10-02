@@ -36,10 +36,10 @@ const CAPS = [
   { n: "sistema", h: { p: [-12.5, 7.6, 13.5], m: [0.6, 0.1, -1.8], fov: 31, foco: 19, ab: 0.2, d: [0.36, 0.06] }, v: { p: [-15, 15, 22], m: [0.2, 0, -1.6], fov: 43, foco: 30, ab: 0.14, d: [0, 0.5] },
     luz: { p: [-3, 17, 6], m: [0, 0, -1.5], ang: 43, i: 2.3, amb: 0.05 }, dens: 0.015, ts: 1, ojo: 0, obra: 1, noche: 0, bruma: 0.7, vel: 0.5, sombra: 0.7 },
   { n: "inteligencia", h: { p: [-5.0, 2.5, 2.9], m: [-2.75, 0.42, 0.05], fov: 33, foco: 4.0, ab: 0.5, d: [0.34, -0.02] }, v: { p: [-5.6, 3.5, 3.9], m: [-2.8, 0.42, 0], fov: 44, foco: 5.1, ab: 0.5, d: [0, 0.48] },
-    luz: { p: [-3.6, 5.5, 2.2], m: [-2.8, 0.4, 0], ang: 32, i: 2.1, amb: 0.035 }, dens: 0.03, ts: 1, ojo: 0, obra: 1, noche: 0.2, bruma: 0.8, vel: 0.2, sombra: 0.75 },
+    luz: { p: [-3.6, 5.5, 2.2], m: [-2.8, 0.4, 0], ang: 34, i: 2.4, amb: 0.05 }, dens: 0.03, ts: 1, ojo: 0, obra: 1, noche: 0.2, bruma: 0.8, vel: 0.2, sombra: 0.75 },
   { n: "automatizacion", h: { p: [-12.2, 3.1, 2.2], m: [3, 0.2, -0.6], fov: 38, foco: 9, ab: 0.3, d: [0.2, 0.06] }, v: { p: [-14, 5.4, 1.6], m: [3, 0.2, 0], fov: 50, foco: 11.5, ab: 0.26, d: [0, 0.5] },
     luz: { p: [9, 12, -8], m: [-3, 0, 0], ang: 46, i: 0.95, amb: 0.045 }, dens: 0.026, ts: 1, ojo: 0, obra: 1, noche: 1, bruma: 1.2, vel: 1.25, sombra: 0.5 },
-  { n: "finance", h: { p: [-0.2, 1.72, 13.6], m: [-0.2, 1.72, 9.5], fov: 30, foco: 4.1, ab: 0.34, d: [0.42, 0] }, v: { p: [0, 1.72, 15.4], m: [0, 1.72, 9.5], fov: 44, foco: 5.9, ab: 0.3, d: [0, 0.5] },
+  { n: "finance", h: { p: [-0.2, 1.72, 13.6], m: [-0.2, 1.72, 9.5], fov: 30, foco: 4.1, ab: 0.34, d: [0.42, 0] }, v: { p: [0, 1.72, 15.9], m: [0, 1.72, 9.5], fov: 44, foco: 6.4, ab: 0.3, d: [0, 0.5] },
     luz: { p: [2.6, 4.6, 15.5], m: [0, 1.7, 9.5], ang: 17, i: 2.0, amb: 0.025 }, dens: 0.03, ts: 1, ojo: 0, obra: 1, noche: 0.35, bruma: 0.9, vel: 0.3, sombra: 0.75 },
   { n: "resultado", h: { p: [0, 42, 5.5], m: [0, 0, -3.4], fov: 30, foco: 43, ab: 0.02, d: [0.52, 0] }, v: { p: [0, 62, 5], m: [0, 0, -3.4], fov: 40, foco: 62, ab: 0.02, d: [0, 0.6] },
     luz: { p: [0, 42, 2], m: [0, 0, -3], ang: 34, i: 1.9, amb: 0.14 }, dens: 0.003, ts: 1, ojo: 0, obra: 1, noche: 0, bruma: 0.1, vel: 0.5, sombra: 0.85 },
@@ -71,7 +71,7 @@ export function crearMundo(lienzo, op = {}) {
   const pHoja = programa(gl, HOJA_V, HOJA_F), pSombra = programa(gl, SOMBRA_V, SOMBRA_F), pSuelo = programa(gl, SUELO_V, SUELO_F), pCaja = programa(gl, CAJA_V, CAJA_F), pBruma = programa(gl, BRUMA_V, BRUMA_F(pasosBruma));
 
   /* ---------------------------------------------------------------- atlas */
-  const atlas = crearAtlas(op.idioma || "es", movil ? 0.5 : 1);
+  const atlas = crearAtlas(op.idioma || "es", op.atlasEscala || (movil ? 0.5 : 1));
   const tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlas.lienzo);
@@ -220,6 +220,9 @@ export function crearMundo(lienzo, op = {}) {
     let dx = mezcla(ca.luz.m[0], cb.luz.m[0], p) - luz.p[0], dy = mezcla(ca.luz.m[1], cb.luz.m[1], p) - luz.p[1], dz = mezcla(ca.luz.m[2], cb.luz.m[2], p) - luz.p[2]; const l = Math.hypot(dx, dy, dz) || 1; luz.dir[0] = dx / l; luz.dir[1] = dy / l; luz.dir[2] = dz / l;
     const ang = mezcla(ca.luz.ang, cb.luz.ang, p) * G; luz.ce = Math.cos(ang); luz.ci = Math.cos(ang * 0.62); luz.i = mezcla(ca.luz.i, cb.luz.i, p); luz.amb = mezcla(ca.luz.amb, cb.luz.amb, p);
     for (const k in mz) mz[k] = mezcla(ca[k], cb[k], p);
+    // rodaje: la cámara y los ajustes se pueden dirigir a mano (solo lo usa la captura del vídeo)
+    if (est.libre) { const L = est.libre; for (const k of ["p", "m", "d"]) if (L[k]) for (let j = 0; j < L[k].length; j++) cam[k][j] = L[k][j]; for (const k of ["fov", "foco", "ab"]) if (L[k] !== undefined) cam[k] = L[k]; }
+    if (est.forzar) for (const k in est.forzar) mz[k] = est.forzar[k];
     return { a, p };
   }
   function camara() {
@@ -238,6 +241,7 @@ export function crearMundo(lienzo, op = {}) {
     if ((w = peso(5)) > 0) f = mezcla(f, prof(FACTURA), w);
     if ((w = peso(8)) > 0) f = mezcla(f, prof(BLANCA), w);
     if (est.mano > 0.01) f = mezcla(f, est.vertical ? 6.6 : 7.2, est.mano * peso(1));
+    if (est.libre && est.libre.foco !== undefined) f = est.libre.foco;
     cam.focoReal = f;
   }
   function proyectar(x, y, z, o = {}) {
@@ -258,7 +262,7 @@ export function crearMundo(lienzo, op = {}) {
     const ojo = mz.ojo * cubica(fijar(est.intro, 0, 1));
     // el claro: un volumen en calma entre el centro de la sala y la cámara
     const ox = 0, oy = est.vertical ? 3.9 : 3.15, oz = 0, ax = e[0] - ox, ay = e[1] - oy, az = e[2] - oz, al = Math.hypot(ax, ay, az), ux = ax / al, uy = ay / al, uz = az / al;
-    const R0 = est.vertical ? 2.5 : 3.8;
+    const R0 = est.vertical ? 3.5 : 3.8;
     // el muro del «mantén pulsado»: un plano frente a la cámara donde cada hoja tiene su casilla
     const mano = est.mano, hayMano = mano > 0.002;
     let mxh = 0, myh = 0;
@@ -282,7 +286,7 @@ export function crearMundo(lienzo, op = {}) {
       let cx = Math.cos(th) * rr, cy = ty0[i] + 0.9 * Math.sin(t * tf2[i] + tp2[i]) + 0.3 * Math.sin(t * 0.9 + tp1[i] * 2), cz = Math.sin(th) * rr * 0.86;
       if (ojo > 0.001) {
         // un cono con vértice en la cámara: en pantalla es un círculo limpio alrededor del título
-        const wx = cx - ox, wy = cy - oy, wz = cz - oz, s = fijar(wx * ux + wy * uy + wz * uz, -16, al - 0.6), qx = wx - ux * s, qy = (wy - uy * s) * (est.vertical ? 0.62 : 1), qz = wz - uz * s, d = Math.hypot(qx, qy, qz) || 0.001;
+        const wx = cx - ox, wy = cy - oy, wz = cz - oz, s = fijar(wx * ux + wy * uy + wz * uz, -16, al - 0.6), qx = wx - ux * s, qy = (wy - uy * s) * (est.vertical ? 0.78 : 1), qz = wz - uz * s, d = Math.hypot(qx, qy, qz) || 0.001;
         const R = Math.max(0.35, R0 * (al - s) / al) * ojo;
         if (d < R) { const k = (R - d) / d * (0.6 + 0.4 * d / R); cx += qx * k; cy += qy * k; cz += qz * k; }
       }
@@ -401,7 +405,7 @@ export function crearMundo(lienzo, op = {}) {
     capitulo(c, ya) { est.capObj = fijar(c, 0, CAPS.length - 1); if (ya) { est.cap = est.capObj; est.capVel = 0; } },
     puntero(nx, ny, hay) { est.px = nx; est.py = ny; est.hayPuntero = hay; },
     sostener(si) { est.manoObj = si ? 1 : 0; },
-    intro(v) { est.intro = v; }, lectura(v, campos) { est.lectura = v; if (campos !== undefined) est.campos = campos; }, carril(l) { est.carril = l; },
+    intro(v) { est.intro = v; }, rodaje(libre, forzar) { est.libre = libre || null; est.forzar = forzar || null; }, lectura(v, campos) { est.lectura = v; if (campos !== undefined) est.campos = campos; }, carril(l) { est.carril = l; },
     proyectar, hoja(i, o = {}) { return proyectar(act[i * 3], act[i * 3 + 1], act[i * 3 + 2], o); },
     campo(i, u, v, o = {}) { const k = orden.indexOf(i) * 16, e = datos[k + 3]; return proyectar(datos[k] + (u - 0.5) * TW * e, datos[k + 1] + (v - 0.5) * TH * e, datos[k + 2], o); },
     carrilEn(l, x, o = {}) { return proyectar(x, 0.45, ZC(l), o); },

@@ -42,7 +42,7 @@
 .acto-mas { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--e-3) var(--e-6); }
 .acto-mas .enlace, .acto-texto > p > .enlace { color: var(--tinta); }
 .mundo [hidden] { display: none !important; }
-.mundo button.enlace { appearance: none; background: none; border-width: 0 0 1px; padding-inline: 0; font: inherit; font-weight: 560; color: var(--tinta); cursor: pointer; }
+.mundo button.enlace { appearance: none; background: none; border: 0; padding-inline: 0; font: inherit; font-weight: 560; color: var(--tinta); cursor: pointer; }
 .pixel { display: inline-block; width: 8px; height: 8px; border-radius: 1px; background: var(--aire); flex: none; }
 
 /* el texto entra cuando llega su capítulo (sin JS se ve siempre) */
@@ -119,10 +119,12 @@
 /* --------------------------------------------------------- 05 · finance */
 .acto--finance .acto-texto { max-width: 35rem; }
 .fz { display: grid; gap: var(--e-4); width: 100%; }
-.fz-acc { display: flex; align-items: center; gap: var(--e-5); flex-wrap: wrap; }
+.fz-acc { display: flex; align-items: center; gap: var(--e-5); flex-wrap: wrap; min-height: 48px; }   /* «Repetir» ocupa el sitio del botón: nada salta al terminar */
 .fz-registro { border: 1px solid var(--linea-2); border-radius: var(--radio-2); background: rgba(6, 6, 6, .72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 14px 16px 12px; display: grid; gap: 8px; }
-.fz-vacio { color: var(--tinta-3); font-size: .92rem; }
-.fz.is-leida .fz-vacio, .fz.is-leyendo .fz-vacio { display: none; }
+/* el registro enseña sus casillas vacías desde el principio: al pulsar no cambia de alto y el botón no se mueve bajo el dedo */
+.fz-vacio { order: 9; color: var(--tinta-3); font-size: .92rem; padding-top: 6px; border-top: 1px solid var(--linea); }
+.fz.is-leyendo .fz-vacio { visibility: hidden; }
+.fz.is-leida .fz-vacio { display: none; }
 .fz-campos { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--e-5); }
 .fz-campos > div { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--linea); min-height: 34px; }
 .fz-campos > div:nth-child(-n+2) { border-top: 0; }
@@ -133,7 +135,6 @@
 .fz-campos [data-fz-campo="total"] dd { font-size: 1rem; font-weight: 600; }
 .fz-campos dd span { opacity: 0; transition: opacity 260ms ease; }
 .fz-campos .is-lleno dd span { opacity: 1; }
-.fz:not(.is-leyendo):not(.is-leida) .fz-campos { display: none; }
 .fz-hecho { display: flex; gap: 10px; align-items: baseline; color: var(--tinta); font-size: .92rem; padding-top: 6px; border-top: 1px solid var(--linea); }
 .fz-ficha { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; padding: 3px 8px; border-radius: 4px; background: var(--aire); color: #000; font-family: var(--f-mono); font-stretch: 82%; font-size: .8rem; font-weight: 600; white-space: nowrap; will-change: transform, opacity; }
 .fz-preguntas { display: grid; gap: 10px; }
@@ -204,7 +205,7 @@
   .acto-texto { max-width: none; gap: var(--e-4); }
   .acto-texto .h2 { max-width: 15ch; }
   .acto--claro { align-items: center; padding-block: 88px 64px; }
-  .acto--claro::before { background: radial-gradient(70% 34% at 50% 50%, rgba(3, 3, 3, .55), rgba(3, 3, 3, 0)); }
+  .acto--claro::before { background: radial-gradient(96% 43% at 50% 49%, rgba(3, 3, 3, .88) 0%, rgba(3, 3, 3, .8) 46%, rgba(3, 3, 3, 0) 100%); }   /* en el teléfono el texto ocupa más que el claro: la calma la pone este velo */
   .claro-texto { max-width: 21rem; }
   .claro-texto .display { font-size: clamp(2.3rem, 11.4vw, 3.4rem); }
   .claro-texto .acc { flex-direction: column; align-items: stretch; width: 100%; max-width: 17rem; }

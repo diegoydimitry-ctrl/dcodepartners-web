@@ -181,7 +181,7 @@ void main() {
   vec4 a = uInv * vec4(vNdc, -1.0, 1.0), b = uInv * vec4(vNdc, 1.0, 1.0);
   vec3 ro = a.xyz / a.w, rd = normalize(b.xyz / b.w - ro);
   float paso = uLargo / float(${pasos});
-  float t = paso * ign(gl_FragCoord.xy), acc = 0.0;
+  float t = paso * (0.25 + 0.5 * ign(gl_FragCoord.xy)), acc = 0.0;
   for (int i = 0; i < ${pasos}; i++) {
     vec3 p = ro + rd * t;
     if (p.y > 0.0) { vec3 Lv = uLuzPos - p; float dl = length(Lv); acc += smoothstep(uCosExt, uCosInt, dot(-Lv / dl, uLuzDir)) / (1.0 + dl * dl * 0.012); }

@@ -144,3 +144,6 @@ if (!document.getElementById("contact-form") && document.getElementById("chat-wi
     if (document.readyState === "complete") plegar(); else addEventListener("load", plegar, { once: true });
   }
 }
+
+/* La sala de la portada en la cabecera de las páginas interiores: se pide cuando la página ya se ha pintado. */
+if (document.querySelector(".pag-cab")) (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(() => import("/assets/v2/js/cabecera3d.js?v=4585aab7a1").catch(() => {}), { timeout: 1500 });

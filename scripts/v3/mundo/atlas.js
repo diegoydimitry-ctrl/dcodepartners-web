@@ -43,9 +43,9 @@ export function crearAtlas(idioma = "es", escala = 1) {
       texto(T.prov, M, 118, 15, 700); campo(M - 3, 102, 196, 22); parrafo(M, 130, 150, 2, 11, 0.35);
       linea(M, 176, 316, 0.6); texto(T.concepto, M, 196, 10, 600, 0.6, true); texto(T.imp, W / escala - M, 196, 10, 600, 0.6, true, "right"); linea(M, 206, 316, 0.3);
       [["212,00", 150], ["486,50", 190], ["318,00", 170], ["223,50", 120]].forEach(([v, w], k) => { barra(M, 222 + k * 30, w, 6, 0.45); texto(v, W / escala - M, 230 + k * 30, 11, 500, 0.75, true, "right"); linea(M, 240 + k * 30, 316, 0.14); });
-      texto(T.base, 190, 372, 11, 500, 0.7); texto("1.240,00 €", W / escala - M, 372, 12, 500, 0.85, true, "right"); campo(264, 359, 88, 18);
-      texto(T.iva, 190, 396, 11, 500, 0.7); texto("260,40 €", W / escala - M, 396, 12, 500, 0.85, true, "right"); campo(278, 383, 74, 18);
-      barra(186, 410, 164, 2, 0.9); texto(T.total, 190, 440, 14, 800); texto("1.500,40 €", W / escala - M, 441, 17, 800, 0.95, true, "right"); campo(232, 422, 120, 26);
+      texto(T.base, 172, 372, 11, 500, 0.7); texto("1.240,00 €", W / escala - M, 372, 12, 500, 0.85, true, "right"); campo(264, 359, 88, 18);
+      texto(T.iva, 172, 396, 11, 500, 0.7); texto("260,40 €", W / escala - M, 396, 12, 500, 0.85, true, "right"); campo(278, 383, 74, 18);
+      barra(162, 410, 188, 2, 0.9); texto(T.total, 166, 440, 14, 800); texto("1.500,40 €", W / escala - M, 441, 17, 800, 0.95, true, "right"); campo(232, 422, 120, 26);
       texto(T.vence, M, 440, 10, 500, 0.6, true); campo(M - 3, 428, 128, 17); parrafo(M, 478, 316, 2, 11, 0.25);
     } else if (tipo === "presupuesto") {
       texto(T.presupuesto, M, 66, 22, 800); texto("P-118", W / escala - M, 64, 12, 500, 0.75, true, "right"); campo(W / escala - M - 46, 50, 48, 18);

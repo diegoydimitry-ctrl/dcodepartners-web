@@ -236,3 +236,11 @@
 @media (max-width: 1279px) { [data-webs3d] { height: 765px; } }
 @media (max-width: 1023px) { [data-webs3d] { height: 903px; } }
 @media (max-width: 640px) { [data-webs3d] { height: 697px; } }
+
+/* la sala de la portada en la cabecera (assets/v2/js/cabecera3d.js): una ventana a la derecha del título; nunca debajo del texto */
+.cab3d { position: absolute; top: 0; right: 0; bottom: 0; left: 46%; z-index: -1; width: 54%; height: 100%; display: block; opacity: 0; transition: opacity 1200ms var(--ease-out); pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .22) 24%, #000 58%), linear-gradient(180deg, #000 68%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .22) 24%, #000 58%), linear-gradient(180deg, #000 68%, transparent 100%); -webkit-mask-composite: source-in; mask-composite: intersect; }
+.cab3d.is-viva { opacity: .9; }
+.cab3d[hidden] { display: none; }
+.pag-cab:has(.cab3d.is-viva:not([hidden]))::before { opacity: 0; }
+@media (max-width: 860px) { .cab3d { display: none; } }

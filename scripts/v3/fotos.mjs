@@ -16,7 +16,7 @@ for (const [suf, w, h] of [["h", 1600, 1000], ["v", 800, 1400]]) {
   const pg = await b.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 });
   for (const [c, n] of NOMBRES.entries()) {
     if (!n) continue;
-    await pg.goto(`${base}/dev/v3/mundo.html?cap=${c}&pasos=3${w < h ? "&movil" : ""}`, { waitUntil: "load" });
+    await pg.goto(`${base}/scripts/v3/mundo/banco.html?cap=${c}&pasos=3${w < h ? "&movil" : ""}`, { waitUntil: "load" });
     await pg.waitForFunction("window.listo === true", null, { timeout: 180000 });
     const png = path.join(RAIZ, `assets/v2/img/mundo/${n}-${suf}.png`), webp = png.replace(".png", ".webp");
     await pg.screenshot({ path: png, clip: { x: 0, y: 0, width: w, height: h } });

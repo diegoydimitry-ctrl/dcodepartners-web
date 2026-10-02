@@ -114,12 +114,12 @@ if (raiz) {
   const sinMotor = REDUCIDO || ahorro || q.has("quieta");
   if (sinMotor) quieta();
   else {
-    const cargar = () => import("/assets/v2/js/mundo.js?v=bf4cb358be").then(({ crearMundo, hayWebGL2 }) => {
+    const cargar = () => import("/assets/v2/js/mundo.js?v=24812e9ff9").then(({ crearMundo, hayWebGL2 }) => {
       if (!hayWebGL2()) return quieta();
       const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 1/1)").matches;
       const justo = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-      const captura = q.has("captura");
-      mundo = crearMundo(lienzo, { movil, idioma: document.documentElement.lang === "en" ? "en" : "es", hojas: +q.get("hojas") || (movil ? (justo ? 650 : 900) : justo ? 1500 : 2400), reflejo: !movil && !justo, captura, dpr: +q.get("dpr") || undefined, pixeles: +q.get("pixeles") || undefined });
+      const captura = q.has("captura"), alta = q.has("reel");
+      mundo = crearMundo(lienzo, { movil, idioma: document.documentElement.lang === "en" ? "en" : "es", hojas: +q.get("hojas") || (movil ? (justo ? 650 : 900) : justo ? 1500 : 2400), reflejo: alta || (!movil && !justo), atlasEscala: alta ? 1 : undefined, captura, pasosBruma: alta ? 36 : undefined, dpr: +q.get("dpr") || undefined, pixeles: +q.get("pixeles") || undefined });
       if (!mundo) return quieta();
       window.__mundo = mundo;
       cap = leerCapitulo(); mundo.capitulo(cap, true);
