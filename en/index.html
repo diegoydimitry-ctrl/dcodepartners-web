@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="sin-js" data-theme="dark">
+<html lang="en" class="es-mundo sin-js" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -35,9 +35,9 @@
 <meta name="twitter:image:alt" content="D-Code Partners: automation and artificial intelligence for companies">
 <link rel="preload" href="/assets/v2/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="modulepreload" href="/assets/v2/js/inicio.js?v=e44664ec46">
-<link rel="modulepreload" href="/assets/v2/js/piezas3d.js?v=57444ef6c6" fetchpriority="low">
 <link rel="stylesheet" href="/assets/v2/dc.css?v=c4d8216e30">
 <link rel="stylesheet" href="/assets/v2/inicio.css?v=6c71e1c6e9">
+<link rel="stylesheet" href="/assets/v2/mundo.css?v=e64fcd208f">
 <link rel="stylesheet" href="/assets/v2/demos.css?v=54d9def646">
 <script>
 (function () {
@@ -102,46 +102,130 @@
     <div style="display:flex;gap:12px"><button type="button" class="ctrl" data-tema aria-label="Switch between dark and light mode"><svg class="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button><div class="idioma" role="group" aria-label="Idioma / Language"><a href="/" hreflang="es" lang="es">ES</a><a href="/en" hreflang="en" lang="en" aria-current="true">EN</a></div></div>
   </div>
 </div>
-<main id="contenido">
+<main id="contenido" class="mundo" data-mundo>
+<div class="mundo-escena" aria-hidden="true"><canvas class="mundo-lienzo" data-mundo-lienzo></canvas><div class="mundo-velo"></div><div class="mundo-grano"></div></div>
+<nav class="mundo-indice" aria-label="Chapters"><ol role="list"><li><a href="#inicio" data-indice="0"><span>00</span><b>Start</b></a></li><li><a href="#hoy" data-indice="1"><span>01</span><b>Today</b></a></li><li><a href="#sistema" data-indice="2"><span>02</span><b>The connection</b></a></li><li><a href="#inteligencia" data-indice="3"><span>03</span><b>The intelligence</b></a></li><li><a href="#automatizacion" data-indice="4"><span>04</span><b>The automation</b></a></li><li><a href="#finance" data-indice="5"><span>05</span><b>D-Code Finance</b></a></li><li><a href="#resultado" data-indice="6"><span>06</span><b>The result</b></a></li><li><a href="#tocalo" data-indice="7"><span>07</span><b>Try it</b></a></li><li><a href="#hablemos" data-indice="8"><span>08</span><b>Yours</b></a></li></ol></nav>
 
-<section class="piezas" data-piezas aria-labelledby="h-inicio">
-  <div class="piezas-fijo">
-    <div class="piezas-luz" aria-hidden="true"></div>
-    <canvas class="piezas-lienzo" data-piezas-lienzo role="img" aria-label="The pieces of the D-Code logo, scattered, come together into one system; at the end the blue pixel lights up."></canvas>
-    <picture><source srcset="/assets/v2/img/piezas/700/072.webp" media="(max-width: 760px)"><img class="piezas-poster" data-piezas-poster src="/assets/v2/img/piezas/1100/072.webp" alt="" width="1100" height="1100" loading="lazy" decoding="async"></picture>
-    <div class="marco piezas-texto">
-      <div class="cap cap--0 is-activo" data-cap="0">
-        <h1 class="display" id="h-inicio">Your company, in one system.</h1>
-        <p class="lead">Automation, AI and custom software.</p>
-        <div class="acc"><a class="boton boton--principal" href="/en/contacto">Let's talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="boton" href="#tocalo">Try it</a></div>
-      </div>
-      <ol class="caps" role="list">
-        <li class="cap" data-cap="1"><p class="cap-n dato">01</p><h2 class="h2">Today, loose pieces.</h2><p class="lead">Sales, customers, invoices and operations. Each on its own, and someone copying from one to the next.</p></li>
-        <li class="cap" data-cap="2"><p class="cap-n dato">02</p><h2 class="h2">We join them.</h2><p class="lead">We connect what you already use and automate what repeats. Data goes in once.</p></li>
-        <li class="cap" data-cap="3"><p class="cap-n dato">03</p><h2 class="h2">And give it intelligence.</h2><p class="lead">AI agents that read, answer and suggest. What matters is decided by a person.</p></li>
-      </ol>
-      <p class="bajar rotulo" aria-hidden="true">Scroll<i></i></p>
+<section class="acto acto--claro" id="inicio" data-acto="0" aria-labelledby="h-inicio">
+  <div class="marco acto-in">
+    <div class="claro-texto">
+      <p class="etiqueta">D-Code Partners</p>
+      <h1 class="display" id="h-inicio">Intelligent systems for companies.</h1>
+      <p class="lead">We connect your people, your processes, your data and your tools into one system, with automation and artificial intelligence.</p>
+      <div class="acc"><a class="boton boton--principal" href="/en/contacto">Book a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="boton" href="#hoy">See how it works</a></div>
+    </div>
+    <p class="claro-pista" aria-hidden="true"><span></span>Scroll</p>
+  </div>
+</section>
+
+<section class="acto acto--hoy" id="hoy" data-acto="1" aria-labelledby="h-hoy">
+  <div class="marco acto-in">
+    <div class="acto-texto">
+      <p class="acto-n"><span>01</span>Today</p>
+      <h2 class="h2" id="h-hoy">Today your company's work goes its own way.</h2>
+      <p class="lead">Sales, clients, invoices and operations live in different places, and someone has to copy the data from one to another.</p>
+      <ol class="dolores" role="list" data-dolores><li data-dolor="0"><span>The quote nobody got round to sending.</span></li><li data-dolor="1"><span>The invoice that was typed in by hand twice.</span></li><li data-dolor="2"><span>The client message that is still unanswered.</span></li><li data-dolor="3"><span>The spreadsheet only one person understands.</span></li></ol>
+      <p class="mano" data-mano aria-hidden="true"><span class="mano-p"></span><span data-mano-raton>Press and hold to bring order</span><span data-mano-tactil>Touch and hold to bring order</span></p>
     </div>
   </div>
 </section>
 
-<section class="bloque bloque--aire productos" id="productos" aria-labelledby="h-productos">
-  <div class="marco">
-    <h2 class="h2 aparece" id="h-productos">What we install.</h2>
-    <ul class="lista" role="list">
-      <li class="aparece" style="--i:0"><a class="fila" href="/en/sistema-financiero"><span class="fila-n">D-Code Finance</span><span class="fila-d">Invoices, collections, expenses and tax records, in one place.</span><span class="fila-p"><span class="precio-v" data-precio="finance">From €29/month</span><span class="precio-d" data-precio="finance" data-precio-detalle>plus €390 setup</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-      <li class="aparece" style="--i:1"><a class="fila" href="/en/precios#g-os"><span class="fila-n">D-Code OS</span><span class="fila-d">The layer that connects your systems.</span><span class="fila-p"><span class="precio-v" data-precio="os">From €2,900</span><span class="precio-d" data-precio="os" data-precio-detalle>setup, depending on how many systems</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-      <li class="aparece" style="--i:2"><a class="fila" href="/en/servicios/sistemas-a-medida"><span class="fila-n">Custom systems</span><span class="fila-d">What your team repeats every week, done on its own.</span><span class="fila-p"><span class="precio-v" data-precio="medida">From €1,500</span><span class="precio-d" data-precio="medida" data-precio-detalle>depending on scope</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-      <li class="aparece" style="--i:3"><a class="fila" href="/en/servicios/agentes-de-ia"><span class="fila-n">AI agents and integrations</span><span class="fila-d">They answer with your data and connect what you already use.</span><span class="fila-p"><span class="precio-v" data-precio="agentes">From €750</span><span class="precio-d" data-precio="agentes" data-precio-detalle>depending on scope</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-    </ul>
-    <p class="nota peq aparece" data-precio-aviso>Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts.</p>
-    <p class="aparece"><a class="enlace" href="/en/precios">Pricing and packs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+<section class="acto acto--sistema" id="sistema" data-acto="2" aria-labelledby="h-sistema">
+  <div class="marco acto-in">
+    <div class="acto-texto">
+      <p class="acto-n"><span>02</span>The connection</p>
+      <h2 class="h2" id="h-sistema">We connect it all into one system.</h2>
+      <p class="lead">We join the tools you already use so every piece of data is entered only once and work moves from one area to the next on its own.</p>
+      <div class="areas" data-areas>
+        <p class="rotulo" id="areas-t">Pick an area to see what changes</p>
+        <div class="areas-pest" role="tablist" aria-labelledby="areas-t"><button type="button" role="tab" id="area-p-0" aria-controls="area-0" aria-selected="true" tabindex="0" data-area="0">Sales</button><button type="button" role="tab" id="area-p-1" aria-controls="area-1" aria-selected="false" tabindex="-1" data-area="1">Clients</button><button type="button" role="tab" id="area-p-2" aria-controls="area-2" aria-selected="false" tabindex="-1" data-area="2">Operations</button><button type="button" role="tab" id="area-p-3" aria-controls="area-3" aria-selected="false" tabindex="-1" data-area="3">Finance</button><button type="button" role="tab" id="area-p-4" aria-controls="area-4" aria-selected="false" tabindex="-1" data-area="4">Management</button></div>
+        <div class="area" role="tabpanel" id="area-0" aria-labelledby="area-p-0"><p>Every contact is recorded, followed up and gets its proposal in minutes.</p><a class="enlace" href="/en/departamentos/comercial">See the sales area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-1" aria-labelledby="area-p-1" hidden><p>Every client gets a fast reply, even after hours, and nobody is left unanswered.</p><a class="enlace" href="/en/departamentos/soporte">See the support area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-2" aria-labelledby="area-p-2" hidden><p>Every job starts on its own when a client is won, and delays are caught early.</p><a class="enlace" href="/en/departamentos/produccion">See the operations area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-3" aria-labelledby="area-p-3" hidden><p>The invoice comes out of the accepted quote and pending payments are chased automatically.</p><a class="enlace" href="/en/departamentos/finanzas">See the finance area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+        <div class="area" role="tabpanel" id="area-4" aria-labelledby="area-p-4" hidden><p>Every morning you see how the company is doing, with the day's data.</p><a class="enlace" href="/en/departamentos/direccion">See the management area <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+      <ul class="acto-mas" role="list"><li><a class="enlace" href="/en/servicios/integraciones">Integrations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li><li><a class="enlace" href="/en/servicios/sistemas-a-medida">Custom systems <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li><li><a class="enlace" href="/en/que-hacemos">All areas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li></ul>
+    </div>
+    <ol class="leyenda" role="list" aria-hidden="true" data-leyenda><li data-leyenda-i="0"><span>It arrives in a mess</span></li><li data-leyenda-i="1"><span>The system reads it</span></li><li data-leyenda-i="2"><span>It leaves sorted</span></li></ol>
   </div>
 </section>
 
-<section class="bloque bloque--aire tocalo" id="tocalo" aria-labelledby="h-tocalo">
+<section class="acto acto--ia" id="inteligencia" data-acto="3" aria-labelledby="h-ia">
+  <div class="marco acto-in">
+    <div class="acto-texto">
+      <p class="acto-n"><span>03</span>The intelligence</p>
+      <h2 class="h2" id="h-ia">Then we add artificial intelligence.</h2>
+      <p class="lead">AI agents read every document and every message, classify it and reply using your company's data. The important decisions are made by a person.</p>
+      <p class="nota-pixel"><span class="pixel" aria-hidden="true"></span>The blue pixel marks what has already been through the system.</p>
+      <p><a class="enlace" href="/en/servicios/agentes-de-ia">See the AI agents <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+    </div>
+  </div>
+</section>
+
+<section class="acto acto--auto" id="automatizacion" data-acto="4" aria-labelledby="h-auto">
+  <div class="marco acto-in">
+    <div class="acto-texto">
+      <p class="acto-n"><span>04</span>The automation</p>
+      <h2 class="h2" id="h-auto">What repeats every week runs on its own.</h2>
+      <p class="lead">The system keeps working when nobody is in the office. If something fails, it lets you know.</p>
+      <p class="hora"><time>03:12</time><span>It is three in the morning and the work keeps moving.</span></p>
+      <p><a class="enlace" href="/en/servicios/automatizaciones">See the automations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+    </div>
+  </div>
+</section>
+
+<section class="acto acto--finance" id="finance" data-acto="5" aria-labelledby="h-finance">
+  <div class="marco acto-in">
+    <div class="acto-texto">
+      <p class="acto-n"><span>05</span>D-Code Finance</p>
+      <h2 class="h2" id="h-finance">Finance reads your invoices and answers with your numbers.</h2>
+      <p class="lead">You hand it a supplier invoice and the system records it on its own. Then you can ask about your payments, your collections and your cash flow.</p>
+      <div class="fz" data-fz>
+        <div class="fz-acc"><button type="button" class="boton boton--principal" data-fz-pasar>Run the invoice through Finance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button><button type="button" class="enlace" data-fz-otra hidden>Repeat</button></div>
+        <div class="fz-registro" aria-live="polite">
+          <p class="rotulo">Invoice record</p>
+          <p class="fz-vacio" data-fz-vacio>Nothing has been recorded yet.</p>
+          <dl class="fz-campos"><div data-fz-campo="prov"><dt>Supplier</dt><dd><span>Suministros Arce, S.L.</span></dd></div><div data-fz-campo="num"><dt>Number</dt><dd><span>F-2026/0412</span></dd></div><div data-fz-campo="fecha"><dt>Date</dt><dd><span>28/09/2026</span></dd></div><div data-fz-campo="base"><dt>Net amount</dt><dd><span>€1,240.00</span></dd></div><div data-fz-campo="iva"><dt>VAT 21%</dt><dd><span>€260.40</span></dd></div><div data-fz-campo="total"><dt>Total</dt><dd><span>€1,500.40</span></dd></div><div data-fz-campo="vence"><dt>Due date</dt><dd><span>28/10/2026</span></dd></div></dl>
+          <p class="fz-hecho" data-fz-hecho hidden><span class="pixel" aria-hidden="true"></span>Invoice recorded. Nobody typed it in.</p>
+        </div>
+        <div class="fz-preguntas" data-fz-preguntas hidden>
+          <p class="rotulo">Now ask it</p>
+          <div class="fz-botones"><button type="button" class="fz-q" data-fz-q="0" data-fz-r="One: €1,500.40 to Suministros Arce, S.L., on 28 October.">Which payments are due in October?</button><button type="button" class="fz-q" data-fz-q="1" data-fz-r="€260.40, 21% on a net amount of €1,240.00.">How much VAT is on this invoice?</button></div>
+          <p class="fz-respuesta" data-fz-respuesta aria-live="polite"></p>
+        </div>
+      </div>
+      <p class="nota peq">This is an example with invented data. Invoice reading and questions are part of Finance with intelligence.</p>
+      <ul class="acto-mas" role="list"><li><a class="enlace" href="/en/sistema-financiero">See D-Code Finance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li><li><button type="button" class="enlace" data-demo-abrir="finance">Open the full demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="acto acto--resultado productos" id="resultado" data-acto="6" aria-labelledby="h-resultado">
+  <div class="marco acto-in">
+    <div class="acto-texto acto-texto--ancho">
+      <p class="acto-n"><span>06</span>The result</p>
+      <h2 class="h2" id="h-resultado">Your company runs as one system.</h2>
+      <p class="lead">Every piece of data comes in once, every task has its place and you see the whole picture.</p>
+      <div id="productos">
+        <p class="rotulo" id="h-productos">This is what we install</p>
+        <ul class="lista" role="list">
+      <li ><a class="fila" href="/en/sistema-financiero"><span class="fila-n">D-Code Finance</span><span class="fila-d">Invoices, collections, expenses and tax records, in one place.</span><span class="fila-p"><span class="precio-v" data-precio="finance">From €29/month</span><span class="precio-d" data-precio="finance" data-precio-detalle>plus €390 setup</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+      <li ><a class="fila" href="/en/precios#g-os"><span class="fila-n">D-Code OS</span><span class="fila-d">The layer that connects your systems.</span><span class="fila-p"><span class="precio-v" data-precio="os">From €2,900</span><span class="precio-d" data-precio="os" data-precio-detalle>setup, depending on how many systems</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+      <li ><a class="fila" href="/en/servicios/sistemas-a-medida"><span class="fila-n">Custom systems</span><span class="fila-d">What your team repeats every week, done on its own.</span><span class="fila-p"><span class="precio-v" data-precio="medida">From €1,500</span><span class="precio-d" data-precio="medida" data-precio-detalle>depending on scope</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+      <li ><a class="fila" href="/en/servicios/agentes-de-ia"><span class="fila-n">AI agents and integrations</span><span class="fila-d">They answer with your data and connect what you already use.</span><span class="fila-p"><span class="precio-v" data-precio="agentes">From €750</span><span class="precio-d" data-precio="agentes" data-precio-detalle>depending on scope</span></span><span class="fila-a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+    </ul>
+    <p class="nota peq" data-precio-aviso>Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts.</p>
+    <p><a class="enlace" href="/en/precios">Pricing and packs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+      </div>
+      <ul class="garantias" role="list"><li><a href="/en/garantias"><span class="pixel" aria-hidden="true"></span>Scope and price in writing before we start</a></li><li><a href="/en/garantias"><span class="pixel" aria-hidden="true"></span>No lock-in</a></li><li><a href="/en/casos-exito"><span class="pixel" aria-hidden="true"></span>We ran it in our own company first</a></li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="acto acto--demos bloque tocalo" id="tocalo" data-acto="7" aria-labelledby="h-tocalo">
   <div class="marco">
-    <div class="tocalo-cab"><h2 class="h2 aparece" id="h-tocalo">Don't take our word for it. Try it.</h2><p class="lead aparece" style="--i:1">Five systems, one minute each. The data is invented; what they do is not.</p></div>
+    <div class="tocalo-cab"><h2 class="h2" id="h-tocalo">Don't take our word for it. Try it.</h2><p class="lead" style="--i:1">Five systems, one minute each. The data is invented; what they do is not.</p></div>
     <div class="dm" data-demos data-lang="en">
       <div class="dm-pest" role="tablist" aria-label="Demos">
         <button type="button" role="tab" class="dm-p" id="dm-p-finance" aria-controls="dm-finance" aria-selected="true" tabindex="0" data-dm-pest="finance"><span class="dm-p-n">01</span>Finance</button><button type="button" role="tab" class="dm-p" id="dm-p-comercial" aria-controls="dm-comercial" aria-selected="false" tabindex="-1" data-dm-pest="comercial"><span class="dm-p-n">02</span>Sales</button><button type="button" role="tab" class="dm-p" id="dm-p-operaciones" aria-controls="dm-operaciones" aria-selected="false" tabindex="-1" data-dm-pest="operaciones"><span class="dm-p-n">03</span>Operations</button><button type="button" role="tab" class="dm-p" id="dm-p-atencion" aria-controls="dm-atencion" aria-selected="false" tabindex="-1" data-dm-pest="atencion"><span class="dm-p-n">04</span>Service</button><button type="button" role="tab" class="dm-p" id="dm-p-os" aria-controls="dm-os" aria-selected="false" tabindex="-1" data-dm-pest="os"><span class="dm-p-n">05</span>D-Code OS</button>
@@ -240,12 +324,16 @@
   </div>
 </section>
 
-<section class="bloque bloque--aire fin" id="hablemos" aria-labelledby="h-fin">
-  <div class="marco">
-    <h2 class="display aparece" id="h-fin">Let's talk.</h2>
-    <p class="lead aparece" style="--i:1">Thirty minutes and you'll know what can be automated in your company.</p>
-    <div class="acc aparece" style="--i:2"><a class="boton boton--principal" href="/en/contacto">Book a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
-    <ul class="fin-mas aparece" role="list" style="--i:3"><li><a class="enlace" href="/en/metodo">How we work</a></li><li><a class="enlace" href="/en/que-hacemos">Everything we build</a></li><li><a class="enlace" href="/en/garantias">Guarantees</a></li></ul>
+<section class="acto acto--tuyo fin" id="hablemos" data-acto="8" aria-labelledby="h-fin">
+  <div class="marco acto-in">
+    <div class="acto-texto">
+      <p class="acto-n"><span>08</span>Yours</p>
+      <h2 class="display" id="h-fin">Let's build yours.</h2>
+      <p class="lead">On a thirty-minute call we will tell you what can be automated in your company.</p>
+      <div class="acc"><a class="boton boton--principal" href="/en/contacto">Book a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+      <ul class="fin-mas" role="list"><li><a class="enlace" href="/en/metodo">How we work</a></li><li><a class="enlace" href="/en/que-hacemos">Everything we do</a></li><li><a class="enlace" href="/en/garantias">Guarantees</a></li><li><a class="enlace" href="/en/diagnostico">Free assessment</a></li></ul>
+      <p class="tuyo-web">We built this website too. <a class="enlace" href="/en/servicios/paginas-web">We want one like it <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+    </div>
   </div>
 </section>
 </main>
@@ -266,5 +354,6 @@
 </div>
 <script type="module" src="/assets/v2/js/sitio.js?v=33083b722c"></script>
 <script type="module" src="/assets/v2/js/inicio.js?v=e44664ec46"></script>
+<script type="module" src="/assets/v2/js/portada.js?v=00858a6aeb"></script>
 </body>
 </html>
