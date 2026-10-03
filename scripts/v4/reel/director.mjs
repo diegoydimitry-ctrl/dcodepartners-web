@@ -10,6 +10,7 @@
    Uso: node scripts/v4/reel/director.mjs <carpeta de salida> [planos] [escala de la escena: 3 → 1080×1920]
         (necesita el sitio servido en BASE, por defecto http://localhost:8097)
         SALTO=6  → uno de cada seis cuadros (animática)   TOMAS=40 → calidad del desenfoque
+        SOLO_UI=1 → rehace solo la capa de la interfaz de los planos que la tienen (no vuelve a pintar la escena)
    ========================================================================== */
 import { chromium } from "playwright";
 import fs from "node:fs";
@@ -19,7 +20,7 @@ const BASE = process.env.BASE || "http://localhost:8097";
 const SAL = process.argv[2] || "reel-cuadros";
 const SOLO = (process.argv[3] || "").split(",").filter(Boolean);
 const DPR = +(process.argv[4] || 3);
-const SALTO = +(process.env.SALTO || 1), TOMAS = +(process.env.TOMAS || 28), UI = +(process.env.UI || 3);   // UI: escala de la capa de interfaz (3 → 1080×1920)
+const SOLO_UI = !!process.env.SOLO_UI, SALTO = +(process.env.SALTO || 1), TOMAS = +(process.env.TOMAS || 28), UI = +(process.env.UI || 3);   // UI: escala de la capa de interfaz (3 → 1080×1920)
 export const FPS = 30, W = 360, H = 640;
 const cl = (x) => Math.min(1, Math.max(0, x)), lerp = (a, b, t) => a + (b - a) * t, v3 = (a, b, t) => a.map((x, i) => lerp(x, b[i], t));
 const eio = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2), eo = (t) => 1 - Math.pow(1 - t, 3), ei = (t) => t * t * t;
@@ -49,15 +50,15 @@ export const PLANOS = [
   { n: "06-leva", cuadros: 30, limpio: true, cuadro: (f) => { const e = tr(f, 0, 30), m = [-2.5, -4.5, 0.35], p = v3([-0.4, -7.2, 2.3], [-0.9, -7.0, 2.0], e);
       return { cap: 2, capYa: true, intro: 1, libre: toma(p, m, 38, 0.5), forzar: { vel: 1.4 } }; } },
   // la noche: la luz se va y la máquina sigue
-  { n: "07-noche", cuadros: 60, limpio: true, cuadro: (f) => { const e = tr(f, 0, 60), m = [0, -0.4, 0.2], p = v3([-8.2, -6.0, 2.5], [-6.2, -8.2, 3.3], e);
-      return { cap: 2, capYa: true, intro: 1, libre: toma(p, m, 44, 0.3, [0, 0], 9.5), forzar: { noche: eio(tr(f, 2, 20)), expo: 0.9, vel: 1.5 } }; } },
+  { n: "07-noche", cuadros: 60, limpio: true, cuadro: (f) => { const e = tr(f, 0, 60), m = [0, 0.3, 0.2], p = v3([5.6, -8.8, 4.8], [3.8, -10.2, 6.2], e);
+      return { cap: 2, capYa: true, intro: 1, libre: toma(p, m, 44, 0.3, [0, 0], 11.2), forzar: { noche: eio(tr(f, 2, 20)), expo: 0.9, vel: 1.5 } }; } },
   // 12,5 s · NO ES SOLO DISEÑO: Finance, tocando
   { n: "08-finance", cuadros: 150, clase: "reel-finance", vistos: ["finance"], cuadro: (f, c) => ({
       ancla: "finance", click: f === 22 ? "[data-fz-pasar]" : null, libre: toma([2.95, -3.7, 6.5], [2.55, -0.92, 0.13], 40, 0.22, [0, 0.42]),
       dedo: f >= 6 && f < 40 ? { x: lerp(300, c.pasar.x, eo(tr(f, 6, 18))), y: lerp(600, c.pasar.y, eo(tr(f, 6, 18))), p: f >= 20 && f < 27 ? 1 : 0, o: tr(f, 6, 11) * (1 - tr(f, 32, 40)) } : null }) },
   // el registro: las cifras giran hasta el total
-  { n: "09-registro", cuadros: 30, limpio: true, cuadro: (f) => { const e = eo(tr(f, 0, 30)), m = [2.52, 0.95, 0.45], p = v3([2.2, -0.55, 3.5], [2.45, -0.15, 2.9], e);
-      return { cap: 5, capYa: true, intro: 1, lectura: 1, registro: f === 1 ? 150040 : null, libre: toma(p, m, 38, 0.5) }; } },
+  { n: "09-registro", cuadros: 30, limpio: true, cuadro: (f) => { const e = eo(tr(f, 0, 30)), m = [2.57, 0.9, 0.45], p = v3([2.45, -1.5, 5.9], [2.57, -1.15, 5.0], e);
+      return { cap: 5, capYa: true, intro: 1, lectura: 1, registro: f === 1 ? 150040 : null, rodar: f === 1 ? 4 : null, libre: toma(p, m, 38, 0.3) }; } },
   // el aviso: el martillo da en la campana
   { n: "10-golpe", cuadros: 30, limpio: true, cuadro: (f) => { const e = tr(f, 0, 30), m = [2.7, 5.0, 0.3], p = v3([3.5, 3.0, 2.9], [3.3, 3.3, 2.5], e);
       return { cap: 2, capYa: true, intro: 1, golpe: f === 4, libre: toma(p, m, 38, 0.45), forzar: { vel: 1.2 } }; } },
@@ -82,9 +83,10 @@ const CSS = `
   .reel-limpio .cab, .reel-limpio .maq > :not(.maq-escena), .reel-limpio .pie, .reel-limpio body > :not(main):not(script):not(style) { display: none !important; }
   * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
   /* la portada, con el texto dentro de la zona que Instagram no tapa */
-  .reel-claro .acto--claro { padding-bottom: 35svh !important; }
-  .reel-claro .acto--claro::before { opacity: 1 !important; background: linear-gradient(180deg, rgba(4,4,5,0) 20%, rgba(4,4,5,.66) 40%, rgba(4,4,5,.7) 64%, rgba(4,4,5,0) 88%) !important; }
+  .reel-claro .acto--claro { padding-bottom: 27svh !important; }
+  .reel-claro .acto--claro::before { opacity: 1 !important; background: linear-gradient(180deg, rgba(4,4,5,0) 22%, rgba(4,4,5,.66) 40%, rgba(4,4,5,.72) 72%, rgba(4,4,5,0) 92%) !important; }
   .reel-claro .claro-texto .acc, .reel-claro .claro-pista { display: none !important; }
+  .reel-claro .claro-texto .etiqueta { visibility: hidden !important; }
   .reel-claro .claro-texto .display { font-size: 2.9rem !important; }
   .reel-claro .acto .marco { padding-right: 40px !important; }
   /* Finance: el botón y el registro, compactos */
@@ -129,6 +131,7 @@ function enPagina() {
       if ("libre" in P) m.rodaje(P.libre, P.forzar || null);
       if (P.lectura != null) m.lectura(P.lectura, 1);
       if (P.registro != null) m.registro(P.registro);
+      if (P.rodar != null) for (let k = 0; k < 6; k++) m.est.digitos[k] = m.est.digObj[k] - P.rodar - k * 0.5;   // las cifras llegan en lo que dura el plano
       if (P.golpe) m.golpe();
       if (P.grabar != null) m.grabar({ nombre: (P.grabar || document.querySelector("[data-tuyo-nombre]").placeholder).toUpperCase() });
       if (P.click) document.querySelector(P.click).click();
@@ -189,10 +192,10 @@ async function rodar(b, plano) {
     await pg.clock.runFor(1000 / FPS);
     const P = plano.cuadro(f, c); P.vistos = plano.vistos || []; P.limpio = !!plano.limpio; if (process.env.SIN_DEDO) P.dedo = null;
     const nombre = `f${String(f).padStart(4, "0")}.jpg`, capa = `u${String(f).padStart(4, "0")}.png`, toca = f % SALTO === 0 || f === plano.cuadros - 1;
-    const graba = toca && !(fs.existsSync(path.join(dir, nombre)) && (plano.limpio || fs.existsSync(path.join(dir, capa))));
+    const graba = toca && !SOLO_UI && !(fs.existsSync(path.join(dir, nombre)) && (plano.limpio || fs.existsSync(path.join(dir, capa))));
     if (f === 0) await pg.evaluate(([P, f]) => { const m = window.__maquina, pintar = m.renderer.render; m.renderer.render = () => {}; try { window.__reel.cuadro(P, f, 0); } finally { m.renderer.render = pintar; } }, [{ ...P, click: null, golpe: false, teclear: null }, 0]);   // un cuadro de más, sin tiempo: el primero sale con la cámara ya en su sitio
     const tB = Date.now();
-    if (!graba) { await pg.evaluate(([P, f, DT]) => { const m = window.__maquina, pintar = m.renderer.render; m.renderer.render = () => {}; try { window.__reel.cuadro(P, f, DT); } finally { m.renderer.render = pintar; } }, [P, f, 1 / FPS]); continue; }
+    if (!graba) { await pg.evaluate(([P, f, DT]) => { const m = window.__maquina, pintar = m.renderer.render; m.renderer.render = () => {}; try { window.__reel.cuadro(P, f, DT); } finally { m.renderer.render = pintar; } }, [P, f, 1 / FPS]); if (SOLO_UI && toca && !plano.limpio) { await pg.screenshot({ path: path.join(dir, capa), omitBackground: true, timeout: 0 }); hechos++; } continue; }
     const datos = await pg.evaluate(([P, f, DT]) => { window.__reel.cuadro(P, f, DT); return document.querySelector("[data-maq-lienzo]").toDataURL("image/jpeg", 0.96); }, [P, f, 1 / FPS]);
     fs.writeFileSync(path.join(dir, nombre + ".tmp"), Buffer.from(datos.split(",")[1], "base64")); fs.renameSync(path.join(dir, nombre + ".tmp"), path.join(dir, nombre));
     if (!plano.limpio) await pg.screenshot({ path: path.join(dir, capa), omitBackground: true, timeout: 0 });
@@ -205,6 +208,6 @@ async function rodar(b, plano) {
 
 if (process.argv[1] && process.argv[1].endsWith("director.mjs")) {
   const b = await chromium.launch({ executablePath: process.env.CHROMIUM || "/opt/pw-browsers/chromium", args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
-  for (const p of PLANOS) if (!SOLO.length || SOLO.some((s) => p.n.startsWith(s))) await rodar(b, p);
+  for (const p of PLANOS) if ((!SOLO.length || SOLO.some((s) => p.n.startsWith(s))) && !(SOLO_UI && p.limpio)) await rodar(b, p);
   await b.close();
 }

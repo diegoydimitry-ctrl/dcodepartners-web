@@ -42,7 +42,7 @@ if (cab && plan) {
   const marcha = () => { ponerFoto(sinEscena()); if (!maq) return; const si = visible && puede() && !document.hidden; if (si && !maq.vivo) maq.iniciar(); else if (!si && maq.vivo) maq.parar(); if (lienzo) lienzo.hidden = !puede(); };
   const montar = () => {
     if (pedido || !puede()) return; pedido = true;
-    import("/assets/v2/js/maquina.js?v=dd7bde5a98").then(({ crearMaquina, hayWebGL2 }) => {
+    import("/assets/v2/js/maquina.js?v=09f1636f09").then(({ crearMaquina, hayWebGL2 }) => {
       if (!hayWebGL2()) { if (raiz.dataset.theme !== "light") ponerFoto(true); return; }
       lienzo = document.createElement("canvas"); lienzo.className = "cab3d"; lienzo.setAttribute("aria-hidden", "true"); cab.prepend(lienzo);
       maq = crearMaquina(lienzo, { intro: false, pixeles: 1.0e6, tomas: 20, muestras: 0, mapaSombra: 1024, idioma: raiz.lang === "en" ? "en" : "es" });

@@ -145,8 +145,8 @@ if (raiz) {
   if (sinMotor) quieta();
   else {
     // si la escena tarda, el título no espera
-    const espera = setTimeout(() => raiz.classList.add("is-abierta"), 4600);
-    const cargar = () => import("/assets/v2/js/maquina.js?v=dd7bde5a98").then(({ crearMaquina, hayWebGL2 }) => {
+    const espera = setTimeout(() => raiz.classList.add("is-abierta"), 2600);
+    const cargar = () => import("/assets/v2/js/maquina.js?v=09f1636f09").then(({ crearMaquina, hayWebGL2 }) => {
       if (!hayWebGL2()) { clearTimeout(espera); return quieta(); }
       const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 1/1)").matches;
       const justo = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
@@ -154,6 +154,8 @@ if (raiz) {
       maq = crearMaquina(lienzo, { movil, idioma: EN ? "en" : "es", captura, intro: true, dpr: +q.get("dpr") || undefined, pixeles: +q.get("pixeles") || (alta ? 9e6 : movil ? (justo ? 1.0e6 : 1.5e6) : justo ? 2.2e6 : 3.4e6), tomas: +q.get("tomas") || (alta ? 96 : movil ? 12 : justo ? 22 : 36), muestras: alta ? 4 : movil || justo ? 0 : 4, mapaSombra: alta ? 4096 : movil ? 1024 : 2048 });
       if (!maq) { clearTimeout(espera); return quieta(); }
       window.__maquina = maq;
+      // si el navegador se queda sin contexto gráfico (pasa en teléfonos con poca memoria), la portada pasa a las fotos fijas en vez de quedarse en negro
+      lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); try { maq.parar(); } catch (err) {} quieta(); }, { once: true });
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { maq.redibujar(); if (fz) fz.poner(fz.datos().base); grabar(); });
       cap = leerCapitulo(); maq.capitulo(cap, true);
       if (fz) fz.poner(fz.datos().base); grabar();
@@ -164,8 +166,8 @@ if (raiz) {
       const abrir = () => { clearTimeout(espera); raiz.classList.add("is-abierta"); };
       if (cap > 0.3 || captura) { maq.intro(1); abrir(); }
       else {
-        const t0 = performance.now() + 500, dur = 3800; let abierto = false;
-        const paso = (ahora) => { const t = Math.min(1, Math.max(0, (ahora - t0) / dur)); maq.intro(t); if (!abierto && t > 0.6) { abierto = true; abrir(); } if (t < 1) requestAnimationFrame(paso); };
+        const t0 = performance.now() + 350, dur = 3600; let abierto = false;
+        const paso = (ahora) => { const t = Math.min(1, Math.max(0, (ahora - t0) / dur)); maq.intro(t); if (!abierto && t > 0.4) { abierto = true; abrir(); } /* el título entra mientras las piezas aún vuelan */ if (t < 1) requestAnimationFrame(paso); };
         requestAnimationFrame(paso);
       }
 

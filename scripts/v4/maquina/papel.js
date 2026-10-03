@@ -44,7 +44,7 @@ export function dibujarCifras() {
   const n = 10, a = 96, c = document.createElement("canvas"); c.width = a * n; c.height = a;
   const g = c.getContext("2d"); g.fillStyle = "#0c0c0d"; g.fillRect(0, 0, c.width, c.height);
   g.fillStyle = "#e9e9ea"; g.textAlign = "center"; g.textBaseline = "middle"; g.font = `600 ${a * 0.74}px "Martian Mono", ui-monospace, Menlo, monospace`;
-  for (let k = 0; k < n; k++) { g.save(); g.translate(a * (k + 0.5), a / 2); g.rotate(-Math.PI / 2); g.fillText(String(k), 0, a * 0.04); g.restore(); g.fillStyle = "rgba(255,255,255,.16)"; g.fillRect(a * k, 0, 1, a); g.fillStyle = "#e9e9ea"; }
+  for (let k = 0; k < n; k++) { g.save(); g.translate(a * (k + 0.5), a / 2); g.rotate(-Math.PI / 2); g.scale(1, -1); /* en espejo: la tira se enrolla vista desde fuera */ g.fillText(String(k), 0, a * 0.04); g.restore(); g.fillStyle = "rgba(255,255,255,.16)"; g.fillRect(a * k, 0, 1, a); g.fillStyle = "#e9e9ea"; }
   return c;
 }
 

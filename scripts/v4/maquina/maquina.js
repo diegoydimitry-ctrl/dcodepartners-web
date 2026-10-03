@@ -43,7 +43,7 @@ const CAPS = [
   { montaje: 0, marcha: 0, noche: 0, tapa: 0, doc: 0, expo: 1.0, giro: 0.12,
     h: { p: [-3.2, 1.2, 8.4], m: [1.4, 0.1, 0], fov: 36, foco: 7.6, ab: 0.5, d: [0.3, 0] }, v: { p: [-1.5, 1.0, 11.5], m: [0, 0.2, 0], fov: 52, foco: 10.4, ab: 0.45, d: [0, 0.42] } },
   { montaje: 1, marcha: 1, noche: 0, tapa: 0, doc: 0, expo: 1.0, giro: 0,
-    h: { p: [-6.4, -10.4, 15.4], m: [0.3, -0.2, 0], fov: 30, foco: 19.6, ab: 0.2, d: [0.47, 0.02] }, v: { p: [-4, -9, 25], m: [0, 0, 0], fov: 40, foco: 27, ab: 0.12, d: [0, 0.46] } },
+    h: { p: [-6.9, -11.2, 16.6], m: [0.3, -0.2, 0], fov: 30, foco: 21.1, ab: 0.2, d: [0.5, 0.02] }, v: { p: [-4, -9, 25], m: [0, 0, 0], fov: 40, foco: 27, ab: 0.12, d: [0, 0.46] } },
   { montaje: 1, marcha: 1, noche: 1, tapa: 0, doc: 0, expo: 0.9, giro: 0,
     h: { p: [5.6, -6.6, 5.4], m: [-0.6, 0.6, 0.2], fov: 32, foco: 10.6, ab: 0.34, d: [0.3, -0.04] }, v: { p: [3.6, -8.6, 6.4], m: [0, 0.2, 0.2], fov: 44, foco: 10.6, ab: 0.32, d: [0, 0.42] } },
   { montaje: 1, marcha: 0.35, noche: 0.25, tapa: 0, doc: 1, expo: 1.0, giro: 0,
@@ -278,7 +278,8 @@ export function crearMaquina(lienzo, op = {}) {
     if (est.selMezcla > 0.002) { const w = est.selMezcla * fijar(1 - Math.abs(est.cap - 2) * 1.7), tp = vertical ? [est.selX - 1.0, est.selY - 3.6, 10.5] : [est.selX - 2.4, est.selY - 3.4, 8.4], tm = [est.selX, est.selY, 0.3];
       for (let j = 0; j < 3; j++) { cam.p[j] = mezcla(cam.p[j], tp[j], w); cam.m[j] = mezcla(cam.m[j], tm[j], w); } cam.foco = mezcla(cam.foco, Math.hypot(tp[0] - tm[0], tp[1] - tm[1], tp[2] - tm[2]), w); cam.ab = mezcla(cam.ab, 0.32, w); cam.d[0] = mezcla(cam.d[0], vertical ? 0 : 0.3, w); }
     // la entrada: de dentro de la máquina a la vista del principio
-    if (est.cap < 1 && est.intro < 1) { const E = ENTRADA[cx_], w = (1 - cubica(fijar((est.intro - 0.26) / 0.74))) * (1 - fijar(est.cap * 3)), ac = 1 - est.intro * 0.5, g = est.intro * 0.9, cg = Math.cos(g), sg = Math.sin(g);
+    if (est.cap < 1 && est.intro < 1) { const E = ENTRADA[cx_], w = (1 - saleCubica(fijar((est.intro - 0.3) / 0.55))) * (1 - fijar(est.cap * 3)),   // al saltar, la cámara sale despedida hacia atrás con las piezas
+      ac = 1 - est.intro * 0.5, g = est.intro * 0.9, cg = Math.cos(g), sg = Math.sin(g);
       // mientras está dentro, la cámara se acerca y rodea el muelle: desde el primer cuadro hay movimiento
       const dx = (E.p[0] - E.m[0]) * ac, dy = (E.p[1] - E.m[1]) * ac, e = [E.m[0] + dx * cg - dy * sg, E.m[1] + dx * sg + dy * cg, E.m[2] + (E.p[2] - E.m[2]) * ac];
       for (let j = 0; j < 3; j++) { cam.p[j] = mezcla(cam.p[j], e[j], w); cam.m[j] = mezcla(cam.m[j], E.m[j], w); }
@@ -316,7 +317,7 @@ export function crearMaquina(lienzo, op = {}) {
           if (p.dato.cabeza) { const ang = p.rz + giro; x += Math.cos(ang) * p.dato.largo; y += Math.sin(ang) * p.dato.largo; } break; }
         case "seguidor": case "cremallera": case "pinonLibre": { const L = p.dato.leva, s = ((((L.ang - (L.f0 + L.k0 * th)) / TAU) % 1) + 1) % 1, v = (L.k0 > 0 ? 1 - s : s) * (L.r1 - L.r0);
           if (p.tipo === "seguidor") giro = -Math.atan(v / p.dato.largo) * 1.0; else if (p.tipo === "cremallera") x += v * 0.9; else giro = -(v * 0.9) / p.dato.r; break; }
-        case "tambor": giro = est.digitos[p.dato.k] * (TAU / 10); ejeX = true; break;
+        case "tambor": giro = (est.digitos[p.dato.k] + 1) * (TAU / 10); ejeX = true; break;   // +1: la cifra que cuenta es la que mira al frente y arriba, la que se ve por la ventana de la tapa
         case "lupa": y += (0.5 - est.lectura) * 1.05 * mz.doc; break;
         case "aguja": giro = -est.aguja * 2.14; break;
         case "corona": giro = th * 0.6; break;
