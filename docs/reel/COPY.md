@@ -1,7 +1,7 @@
 # Reel «Esto es una web» · textos para publicar
 
 Archivos: `reel-dcode.mp4` (con rótulos), `reel-dcode-sin-texto.mp4` (sin rótulos, por si quieres poner los tuyos en Instagram) y `portada-reel.jpg` (portada, pensada para el recorte 3:4 de la cuadrícula del perfil).
-Los dos vídeos pesan unos 41 MB cada uno y no se guardan en el repositorio: se entregan aparte. Se pueden volver a generar con `scripts/v4/reel/` (el rodaje tarda unas cuatro horas en una máquina sin tarjeta gráfica).
+Los dos vídeos pesan unos 25 MB cada uno y no se guardan en el repositorio: se entregan aparte. Se pueden volver a generar con `scripts/v4/reel/` (el rodaje tarda unas cuatro horas en una máquina sin tarjeta gráfica).
 Formato: 1080 × 1920, 30 fps, 32 s, H.264 + AAC. El sonido está sintetizado entero: no lleva música ni muestras de terceros.
 
 ## Texto de la publicación

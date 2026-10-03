@@ -4,7 +4,7 @@ Rediseño completo de la web y Reel nuevo · 3 de octubre de 2026
 
 - **Rama:** `redesign/immersive-3d-v3` (no se ha tocado `main` ni Production y no hay ningún merge).
 - **Preview:** https://dcodepartners-web-git-redesign-immersive-3d-v3-d-code-partners.vercel.app
-- **Reel:** `reel-dcode.mp4` (con texto) y `reel-dcode-sin-texto.mp4`, entregados aparte (41 MB cada uno; no se guardan en el repositorio). La portada y los textos para publicar están en `docs/reel/portada-reel.jpg` y `docs/reel/COPY.md`.
+- **Reel:** `reel-dcode.mp4` (con texto) y `reel-dcode-sin-texto.mp4`, entregados aparte (25 MB cada uno; no se guardan en el repositorio). La portada y los textos para publicar están en `docs/reel/portada-reel.jpg` y `docs/reel/COPY.md`.
 
 La versión anterior («el mundo»: una sala con hojas de papel) se ha retirado entera. Esta no es un retoque de aquella: tiene otro concepto, otro motor 3D, otra entrada, otra narrativa y otro Reel.
 

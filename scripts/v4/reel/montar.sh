@@ -27,7 +27,7 @@ done
 # etalonaje: una curva suave que asienta los negros y da algo más de contraste
 TONO="curves=all='0/0 0.18/0.14 0.5/0.5 0.82/0.86 1/1'"
 SON="volume=-0.9dB,afade=t=in:d=0.02,afade=t=out:st=$(echo "$DUR - 1.2" | bc):d=1.2"
-VID=(-c:v libx264 -preset slow -crf "${CRF:-17}" -maxrate "${TOPE:-10M}" -bufsize 20M -profile:v high -level 4.2 -pix_fmt yuv420p -r 30 -g 60 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -movflags +faststart)
+VID=(-c:v libx264 -preset slow -crf "${CRF:-17}" -maxrate "${TOPE:-10M}" -bufsize "${BUFER:-20M}" -profile:v high -level 4.2 -pix_fmt yuv420p -r 30 -g 60 -color_primaries bt709 -color_trc bt709 -colorspace bt709 -movflags +faststart)
 AUD=(-c:a aac -b:a 256k -ar 48000 -ac 2)
 FIN="fade=t=out:st=$(echo "$DUR - 0.6" | bc):d=0.6"
 
