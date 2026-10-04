@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ÓRBITA UNO — configurador 3D (demo)</title>
+<!-- Web de demostración: marca y coche ficticios. Modelo «Car Concept» © Khronos Group, CC-BY 4.0 (logos retirados). Entornos HDR: Poly Haven, CC0. -->
+<script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js","three/addons/":"../node_modules/three/examples/jsm/"}}</script>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="ui">
+  <!-- ── la web ── -->
+  <header id="nav"><div class="marca"><i></i>ÓRBITA</div><nav><span>Modelos</span><span>Tecnología</span><span class="pill">Reservar</span></nav></header>
+  <section id="hero"><div class="eyebrow">NUEVO · 100 % ELÉCTRICO</div><h1>ÓRBITA<br>UNO</h1><p>1.020 CV · 0 a 100 en 2,1 s</p></section>
+  <div id="scrollhint"><div class="raton"><i></i></div><span>Desliza</span></div>
+  <div id="progreso"><i></i></div>
+  <section id="pintura" class="panel"><div class="ptit">Pintura</div><div class="muestras">
+    <div class="m" data-v="0"><i style="background:radial-gradient(circle at 35% 30%,#ff6a5c,#b3121a 55%,#4d0508)"></i><span>Carmín</span></div>
+    <div class="m" data-v="1"><i style="background:radial-gradient(circle at 35% 30%,#ffffff,#cfd6e6 50%,#8f98b5)"></i><span>Perla</span></div>
+    <div class="m" data-v="2"><i style="background:radial-gradient(circle at 35% 30%,#8b8f96,#2e3136 55%,#0c0d0f)"></i><span>Grafito</span></div>
+  </div></section>
+  <div id="puertas" class="boton"><b></b>Abrir puertas</div>
+  <section id="mundo" class="panel"><div class="seg"><span data-e="0">Estudio</span><span data-e="1">Atardecer</span><span data-e="2">Noche</span><i></i></div></section>
+  <section id="hud"><div class="vel"><b>0</b><span>km/h</span></div><div class="barra"><i></i></div></section>
+  <div id="cursor"><svg viewBox="0 0 24 24" width="74" height="74"><path d="M5 2l14 11-6.5.9 3.8 7.3-2.7 1.4-3.8-7.4L5 20z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg><i></i></div>
+  <!-- ── capa del vídeo (rótulos y cierre) ── -->
+  <div id="rotulo"></div>
+  <div id="gancho"><div class="g1">ESTO NO ES<br>UN VÍDEO.</div><div class="g2">ES UNA <em>WEB.</em></div></div>
+  <div id="cierre"><div class="frase">Hoy, esto<br>se puede <em>construir.</em></div>
+    <div class="firma"><img src="assets/logo512.png" alt=""><div class="nombre">D-Code <span>Partners</span></div></div></div>
+  <div id="negro"></div>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
