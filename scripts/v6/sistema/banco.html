@@ -7,7 +7,7 @@
 import { crearSistema } from "/assets/v2/js/sistema.js";
 const q = new URLSearchParams(location.search), n = (k) => q.get(k).split(",").map(Number);
 await document.fonts.load('700 40px Archivo');
-const s = crearSistema(document.getElementById("c"), { movil: q.has("movil"), pixeles: +q.get("pixeles") || 2.2e6, dpr: +q.get("dpr") || 1, intro: false });
+const s = crearSistema(document.getElementById("c"), { movil: q.has("movil"), pixeles: +q.get("pixeles") || 2.2e6, dpr: +q.get("dpr") || 1, intro: false, fino: !q.has("basto") });
 window.s = s; s.capitulo(+q.get("cap") || 0, true);
 const r = {}; for (const k of ["p", "m", "d"]) if (q.has(k)) r[k] = n(k); if (q.has("fov")) r.fov = +q.get("fov"); if (q.has("ab")) r.ab = +q.get("ab"); if (Object.keys(r).length) s.rodaje(r);
 for (const k of ["unido", "carril", "ritmo", "lente", "finance", "circuito", "tuyo", "lejos"]) if (q.has(k)) s.forzar(k, +q.get(k));

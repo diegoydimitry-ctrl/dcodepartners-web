@@ -146,7 +146,7 @@ if (raiz) {
   else {
     // si la escena tarda, el título no espera
     const espera = setTimeout(() => raiz.classList.add("is-abierta"), 2800);
-    const cargar = () => import("/assets/v2/js/sistema.js?v=7562f7b3c5").then(({ crearSistema, hayWebGL2 }) => {
+    const cargar = () => import("/assets/v2/js/sistema.js?v=cc7195734b").then(({ crearSistema, hayWebGL2 }) => {
       if (!hayWebGL2()) { clearTimeout(espera); return quieta(); }
       const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 1/1)").matches;
       const justo = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
