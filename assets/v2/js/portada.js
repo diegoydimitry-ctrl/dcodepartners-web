@@ -1,20 +1,17 @@
 /* ==========================================================================
-   D-CODE · portada «el salto» · la dirección de escena
+   D-CODE · portada «el sistema» · la dirección de escena
    --------------------------------------------------------------------------
    El contenido es HTML y está en la página desde el principio. Este módulo:
-     · traduce el scroll a capítulos (cada <section data-acto> es uno) y se lo
-       dice al mundo 3D (/assets/v2/js/salto.js, que se pide cuando la página
-       ya se ha pintado): el scroll lleva la cámara por el valle, bajo el agua,
-       por la tubería y por la central;
-     · dirige la entrada: primero se sale de la bruma del salto y después
-       aparece el título;
-     · cuelga de cada compuerta el nombre de su área;
+     · traduce el scroll a momentos del recorrido (cada <section data-acto> es
+       uno) y se lo dice a la escena 3D (/assets/v2/js/sistema.js, que se pide
+       cuando la página ya se ha pintado);
+     · cuelga de cada pieza su nombre;
      · atiende lo que se puede tocar: mover la cámara con el puntero o el dedo,
-       mantener pulsado para ver la presa construirse, elegir un área, pasar
+       mantener pulsado para ver las piezas conectarse, elegir una parte, pasar
        una factura por Finance con la cifra que se quiera, grabar un nombre en
-       el muro.
-   Movimiento reducido, ahorro de datos o sin WebGL2: no se carga el mundo y
-   cada capítulo enseña una fotografía fija de su escena. Todo sigue funcionando.
+       la pieza de tu empresa.
+   Movimiento reducido, ahorro de datos o sin WebGL2: no se carga la escena y
+   cada acto enseña una fotografía fija. Todo sigue funcionando.
    ========================================================================== */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -48,7 +45,7 @@ if (raiz) {
     if (mundo) mundo.capitulo(cap);
     const n = Math.round(cap);
     if (n !== actual) { actual = n; indice.forEach((a) => a.setAttribute("aria-current", String(+a.dataset.indice === n))); }
-    if (velo) velo.style.setProperty("--velo", cap > 6.55 && cap < 7.6 ? "0.55" : "0");
+    if (velo) velo.style.setProperty("--velo", cap > 6.55 && cap < 7.6 ? "0.7" : "0");
     raiz.classList.toggle("is-fuera", raiz.getBoundingClientRect().bottom < innerHeight * 0.6);
   }
   addEventListener("scroll", alScroll, { passive: true });
@@ -149,14 +146,14 @@ if (raiz) {
   else {
     // si la escena tarda, el título no espera
     const espera = setTimeout(() => raiz.classList.add("is-abierta"), 2800);
-    const cargar = () => import("/assets/v2/js/salto.js?v=ccdfa4f111").then(({ crearSalto, hayWebGL2 }) => {
+    const cargar = () => import("/assets/v2/js/sistema.js?v=7562f7b3c5").then(({ crearSistema, hayWebGL2 }) => {
       if (!hayWebGL2()) { clearTimeout(espera); return quieta(); }
       const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 1/1)").matches;
       const justo = (navigator.deviceMemory && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
       const captura = q.has("captura"), alta = q.has("reel");
-      mundo = crearSalto(lienzo, { movil, idioma: EN ? "en" : "es", dpr: +q.get("dpr") || undefined, pixeles: +q.get("pixeles") || (alta ? 9e6 : movil ? (justo ? 0.9e6 : 1.4e6) : justo ? 2.0e6 : 3.2e6), muestras: alta ? 4 : movil || justo ? 0 : 4 });
+      mundo = crearSistema(lienzo, { movil, idioma: EN ? "en" : "es", dpr: +q.get("dpr") || undefined, pixeles: +q.get("pixeles") || (alta ? 9e6 : movil ? (justo ? 1.0e6 : 1.6e6) : justo ? 2.2e6 : 3.6e6), muestras: alta ? 4 : movil || justo ? 0 : 4 });
       if (!mundo) { clearTimeout(espera); return quieta(); }
-      window.__salto = mundo;
+      window.__sistema = mundo;
       // si el navegador se queda sin contexto gráfico (pasa en teléfonos con poca memoria), la portada pasa a las fotos fijas en vez de quedarse en negro
       lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); try { mundo.parar(); } catch (err) {} quieta(); }, { once: true });
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { mundo.redibujar(); grabar(); });
@@ -169,8 +166,8 @@ if (raiz) {
       if (cap > 0.3 || captura) { mundo.intro(1); abrir(); }
       else {
         mundo.intro(0);
-        const t0 = performance.now() + 300, dur = 4200; let abierto = false;
-        const paso = (ahora) => { const t = Math.min(1, Math.max(0, (ahora - t0) / dur)); mundo.intro(t); if (!abierto && t > 0.36) { abierto = true; abrir(); } if (t < 1) requestAnimationFrame(paso); };
+        const t0 = performance.now() + 200, dur = 2600; let abierto = false;
+        const paso = (ahora) => { const t = Math.min(1, Math.max(0, (ahora - t0) / dur)); mundo.intro(t); if (!abierto && t > 0.2) { abierto = true; abrir(); } if (t < 1) requestAnimationFrame(paso); };
         requestAnimationFrame(paso);
       }
 
@@ -178,11 +175,11 @@ if (raiz) {
       const o = {};
       mundo.alCuadro(() => {
         if (!anclar) return;
-        const b = Math.max(0, 1 - Math.abs(mundo.est.cap - 2) * 2.6);
+        const b = Math.max(0, 1 - Math.max(0, Math.abs(mundo.est.cap - 2) - 0.25) * 2.6);
         rotulos.forEach((li) => {
           if (b <= 0.001) { if (li.style.getPropertyValue("--o") !== "0") li.style.setProperty("--o", "0"); return; }
           mundo.modulo(li.dataset.moduloI, o);
-          li.style.setProperty("--x", o.x.toFixed(1) + "px"); li.style.setProperty("--y", (o.y - 8).toFixed(1) + "px"); li.style.setProperty("--o", (o.visible ? b * b * (areaElegida && areaElegida !== li.dataset.moduloI ? 0.35 : 1) : 0).toFixed(3));
+          li.style.setProperty("--x", o.x.toFixed(1) + "px"); li.style.setProperty("--y", (o.y - 8).toFixed(1) + "px"); li.style.setProperty("--o", (o.visible ? b * b * mundo.unida(li.dataset.moduloI) * (areaElegida && areaElegida !== li.dataset.moduloI ? 0.35 : 1) : 0).toFixed(3));
         });
       });
 
@@ -241,7 +238,7 @@ if (raiz) {
         const t = performance.now(); if (ultimo) { suma += t - ultimo; n++; } ultimo = t;
         if (n === 70) { const ms = suma / n; n = 0; suma = 0; if (ms > 30 && nivel < 3) { nivel++; mundo.calidad(nivel); } }
       });
-    }).catch((e) => { console.warn("salto", e); clearTimeout(espera); quieta(); });
+    }).catch((e) => { console.warn("sistema", e); clearTimeout(espera); quieta(); });
     (window.requestIdleCallback || ((f) => setTimeout(f, 80)))(cargar, { timeout: 500 });
   }
   alScroll();
