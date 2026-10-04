@@ -110,7 +110,7 @@ const ANALITICA = `<script>
 
 /* Tema: se decide antes de pintar (sin parpadeo). Oscuro por defecto; la
    preferencia guardada manda. Si el almacenamiento falla, oscuro. */
-const TEMA = `<script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('dcp-tema')}catch(e){}r.setAttribute('data-theme',t==='light'?'light':'dark');r.classList.remove('sin-js');})();</script>`;
+const TEMA = `<script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('dcp-tema')}catch(e){}r.setAttribute('data-theme',t==='dark'?'dark':'light');r.classList.remove('sin-js');})();</script>`;
 
 export function cabeza(p) {
   const { lang, ruta, titulo, descripcion, imagen = "/assets/og-image" + (p.lang === "en" ? "-en" : "") + ".png", noindex = false, jsonld = [], css = [], preload = [], extraHead = "" } = p;
@@ -120,7 +120,7 @@ export function cabeza(p) {
 <link rel="alternate" hreflang="en" href="${en}">
 <link rel="alternate" hreflang="x-default" href="${es}">`;
   return `<!DOCTYPE html>
-<html lang="${lang}" class="sin-js" data-theme="dark">
+<html lang="${lang}" class="sin-js" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">

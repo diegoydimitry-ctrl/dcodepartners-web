@@ -21,49 +21,46 @@ import { fileURLToPath } from 'node:url';
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errores = [];
 
+/* Desde el rediseño «el banco de trabajo» (octubre de 2026) la portada es una
+   escena fotografiada que se recorre con el scroll. Lo que tiene que llevar,
+   en los dos idiomas: los nueve actos, el lienzo de la escena con sus dos
+   planos de HTML (la pantalla del portátil y la placa), la factura de Finance
+   que se puede probar, el nombre de la empresa y las demos. */
 const EXIGE = [
-  ['el panel de Finance', /<div class="v6-panel"/],
-  ['la captura para tema oscuro', /class="es-oscuro"[^>]*finance-dark\.webp/],
-  ['la captura para tema claro', /class="es-claro"[^>]*finance-light\.webp/],
+  ['el lienzo de la escena', /<canvas class="maq-lienzo" data-maq-lienzo>/],
+  ['el registro de Finance sobre la pantalla del portátil', /data-sobre="pantalla"/],
+  ['la placa con el nombre de la empresa', /data-sobre="chapa"/],
+  ['la factura que se puede pasar por Finance', /data-fz-pasar/],
+  ['el campo del nombre de la empresa', /data-tuyo-nombre/],
+  ['las demos', /id="tocalo"/],
+  ['la hoja de estilos de la escena', /\/assets\/v2\/escena\.css\?v=[0-9a-f]{10}/],
 ];
-const PROHIBE = [
-  ['la marca de partículas como formación del hero', /var FORM = \[F0,/],
-];
-/* Lo que NO puede volver al HTML de las portadas. El rótulo encima del
-   panel se comía la esquina de la pantalla y su segunda línea salía
-   cortada; la barra de navegador sobraba encima del software. */
 const FUERA = [
-  ['el rótulo encima del panel', /<p class="v6-panel-pie"/],
-  ['la barra de navegador sobre el panel', /<div class="v6-barra"/],
+  ['una hoja de estilos de una portada anterior', /\/assets\/v2\/(mundo|maquina|salto|sistema)\.css/],
 ];
 
-for (const p of ['index.html', 'en/index.html']) {
-  const h = fs.readFileSync(path.join(RAIZ, p), 'utf8');
-  for (const [que, re] of EXIGE) if (!re.test(h)) errores.push(`${p}: falta ${que}`);
-  for (const [que, re] of FUERA) if (re.test(h)) errores.push(`${p}: ha vuelto ${que}`);
-  /* Y la imagen que promete tiene que existir de verdad. */
-  for (const m of h.matchAll(/src="(\/assets\/img\/[^"]+)"/g)) {
-    if (!fs.existsSync(path.join(RAIZ, m[1].slice(1)))) errores.push(`${p}: ${m[1]} no existe`);
-  }
-}
-
-const js = fs.readFileSync(path.join(RAIZ, 'assets/js/dcp6.js'), 'utf8');
-for (const [que, re] of PROHIBE) if (re.test(js)) errores.push(`assets/js/dcp6.js: vuelve a dibujarse ${que}`);
-
-/* Las dos portadas tienen que decir lo mismo, no una cosa cada una. */
 const es = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
 const en = fs.readFileSync(path.join(RAIZ, 'en/index.html'), 'utf8');
-const cuenta = (h, re) => (h.match(re) || []).length;
-for (const [que, re] of [['imágenes del panel', /class="es-(oscuro|claro)"/g],
-                         ['secciones', /<section class="v6-/g]]) {
-  if (cuenta(es, re) !== cuenta(en, re)) {
-    errores.push(`las dos portadas no llevan las mismas ${que}: ES ${cuenta(es, re)}, EN ${cuenta(en, re)}`);
-  }
+for (const [p, h] of [['index.html', es], ['en/index.html', en]]) {
+  for (const [que, re] of EXIGE) if (!re.test(h)) errores.push(`${p}: falta ${que}`);
+  for (const [que, re] of FUERA) if (re.test(h)) errores.push(`${p}: sigue enlazada ${que}`);
+  const actos = [...h.matchAll(/data-acto="(\d)"/g)].map((m) => m[1]).join('');
+  if (actos !== '012345678') errores.push(`${p}: los actos no son los nueve del recorrido (${actos})`);
 }
+
+/* Las imágenes que la página va a pedir tienen que existir de verdad. */
+const datos = JSON.parse(fs.readFileSync(path.join(RAIZ, 'scripts/v7/datos.json'), 'utf8'));
+const dir = path.join(RAIZ, 'assets/v2/img/escena');
+const pide = [];
+for (const [s, fija, viaje] of [['h', 'h', 't'], ['v', 'v', 'u']]) {
+  for (const i of [0, 1, 2, 3, 4, 5, 6, 8]) pide.push(`${fija}-${i}.webp`);
+  for (const [c0, n] of datos.tr[s]) for (let k = 1; k < n; k++) pide.push(`${viaje}-${c0}-${String(k).padStart(2, '0')}.webp`);
+}
+for (const f of pide) if (!fs.existsSync(path.join(dir, f))) errores.push(`assets/v2/img/escena/${f} no existe`);
 
 if (errores.length) {
   console.error(`✗ check:portada — ${errores.length} problema(s):`);
   errores.forEach((e) => console.error('  ' + e));
   process.exit(1);
 }
-console.log('✓ check:portada — el panel de Finance está en las dos portadas, con sus dos capturas, y el hero ya no dibuja la marca');
+console.log(`✓ check:portada — las dos portadas llevan los nueve actos, la escena y sus ${pide.length} imágenes`);

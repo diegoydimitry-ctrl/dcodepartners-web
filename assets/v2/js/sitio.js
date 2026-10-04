@@ -146,4 +146,4 @@ if (!document.getElementById("contact-form") && document.getElementById("chat-wi
 }
 
 /* La sala de la portada en la cabecera de las páginas interiores: se pide cuando la página ya se ha pintado. */
-if (document.querySelector(".pag-cab")) (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(() => import("/assets/v2/js/cabecera3d.js?v=8d383f97fe").catch(() => {}), { timeout: 1500 });
+if (document.querySelector(".pag-cab")) (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(() => import("/assets/v2/js/cabecera3d.js?v=2b064f0ca4").catch(() => {}), { timeout: 1500 });

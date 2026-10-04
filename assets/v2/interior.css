@@ -237,16 +237,10 @@
 @media (max-width: 1023px) { [data-webs3d] { height: 903px; } }
 @media (max-width: 640px) { [data-webs3d] { height: 697px; } }
 
-/* la máquina de la portada en la cabecera (assets/v2/js/cabecera3d.js): una ventana a la derecha del título; nunca debajo del texto */
-.cab3d { position: absolute; top: 0; right: 0; bottom: 0; left: 46%; z-index: -1; width: 54%; height: 100%; display: block; opacity: 0; transition: opacity 1200ms var(--ease-out); pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .22) 24%, #000 58%), linear-gradient(180deg, #000 68%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .22) 24%, #000 58%), linear-gradient(180deg, #000 68%, transparent 100%); -webkit-mask-composite: source-in; mask-composite: intersect; }
-.cab3d.is-viva { opacity: .9; }
-.cab3d[hidden] { display: none; }
-.pag-cab:has(.cab3d.is-viva:not([hidden]))::before { opacity: 0; }
-@media (max-width: 860px) { .cab3d { display: none; } }
-/* sin escena (teléfono, movimiento reducido, ahorro de datos, sin WebGL2): la foto fija del mismo capítulo */
-.cab-foto { position: absolute; top: 0; right: 0; bottom: 0; left: 46%; z-index: -1; background: center / cover no-repeat; opacity: .85; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .22) 24%, #000 58%), linear-gradient(180deg, #000 68%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .22) 24%, #000 58%), linear-gradient(180deg, #000 68%, transparent 100%); -webkit-mask-composite: source-in; mask-composite: intersect; }
-.cab-foto[hidden] { display: none; }
-.pag-cab:has(.cab-foto:not([hidden]))::before { opacity: 0; }
-@media (max-width: 860px) { .cab-foto { left: 0; opacity: .36; -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .7) 55%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .7) 55%, transparent 100%); -webkit-mask-composite: source-over; mask-composite: add; } }
+/* la escena de la portada en la cabecera (assets/v2/js/cabecera3d.js): la fotografía del momento que toca, a la derecha del título. Solo con el tema claro y con sitio para ella: en el teléfono la cabecera es solo texto. */
+.cab-foto { position: absolute; top: 0; right: 0; bottom: 0; left: 52%; z-index: -1; background: right center / cover no-repeat; opacity: 0; transition: opacity 900ms var(--ease-out); pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .3) 22%, #000 50%), linear-gradient(180deg, transparent 0%, #000 22%, #000 70%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .3) 22%, #000 50%), linear-gradient(180deg, transparent 0%, #000 22%, #000 70%, transparent 100%); -webkit-mask-composite: source-in; mask-composite: intersect; }
+.cab-foto.is-vista { opacity: 1; }
+:root:not([data-theme="light"]) .cab-foto { display: none; }
+[data-theme="light"] .pag-cab:has(.cab-foto)::before { opacity: 0; }
+@media (max-width: 860px) { .cab-foto { display: none; } }
