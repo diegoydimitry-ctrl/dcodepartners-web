@@ -17,6 +17,7 @@ const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const nodo = (...a) => execFileSync("node", a, { cwd: RAIZ, stdio: "inherit" });
 const salida = path.join(RAIZ, "assets/v2/js/salto.js");
 await build({ entryPoints: [path.join(RAIZ, "scripts/v5/salto/salto.js")], bundle: true, minify: true, format: "esm", target: "es2020", legalComments: "none", outfile: salida, banner: { js: "/* D-Code · «El salto», el mundo de la portada. Fuente: scripts/v5/salto/ · incluye three.js (MIT, © three.js authors) */" } });
+await build({ entryPoints: [path.join(RAIZ, "scripts/v5/salto/obrero.js")], bundle: true, minify: true, format: "iife", target: "es2020", legalComments: "none", outfile: path.join(RAIZ, "assets/v2/js/salto-obra.js"), banner: { js: "/* D-Code · «El salto»: el hilo que calcula el valle. Fuente: scripts/v5/salto/ */" } });
 console.log(`salto.js: ${(fs.statSync(salida).size / 1024).toFixed(0)} KB · ${(zlib.gzipSync(fs.readFileSync(salida), { level: 9 }).length / 1024).toFixed(0)} KB comprimido`);
 if (process.argv.includes("--motor")) process.exit(0);
 nodo("scripts/v5/portada.mjs");

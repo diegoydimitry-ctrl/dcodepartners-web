@@ -50,3 +50,33 @@ export function datosRuido(n = 256) {
   }
   return d;
 }
+
+/* Textura de roca, repetible: bloques fracturados (celdas con su cara inclinada) y grietas entre ellos, a dos tamaños.
+   R: altura · G, B: pendiente de la altura · A: grieta (0 en la grieta, 1 en mitad del bloque) */
+export function datosRoca(n = 512) {
+  let s = 4242; const azar = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  const capa = (N) => { const c = new Float32Array(N * N * 2 * 5); for (let i = 0; i < N * N * 2; i++) { c[i * 5] = azar(); c[i * 5 + 1] = azar(); c[i * 5 + 2] = azar(); c[i * 5 + 3] = azar() * 2 - 1; c[i * 5 + 4] = azar() * 2 - 1; } return c; };
+  const N1 = 7, N2 = 23, C1 = capa(N1), C2 = capa(N2), sal = [0, 0];
+  const celdas = (u, v, N, C) => {
+    const M = N * 2, x = u * N, y = v * M, ix = Math.floor(x), iy = Math.floor(y); let f1 = 9, f2 = 9, alt = 0;   // el doble de celdas a lo alto: bloques tumbados, como estratos
+    for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) {
+      const cx = ix + i, cy = iy + j, k = ((((cy % M) + M) % M) * N + (((cx % N) + N) % N)) * 5, px = cx + C[k], py = cy + C[k + 1], dx = x - px, dy = y - py, d = Math.sqrt(dx * dx + dy * dy);
+      if (d < f1) { f2 = f1; f1 = d; alt = C[k + 2] * 0.5 + (dx * C[k + 3] + dy * C[k + 4]) * 0.7; } else if (d < f2) f2 = d;
+    }
+    sal[0] = alt; sal[1] = f2 - f1;
+  };
+  const h = new Float32Array(n * n), g = new Float32Array(n * n);
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+    const u = i / n, v = j / n, k = j * n + i;
+    celdas(u, v, N1, C1); const a1 = sal[0], g1 = Math.min(1, sal[1] / 0.09);
+    celdas(u, v, N2, C2); const a2 = sal[0], g2 = Math.min(1, sal[1] / 0.12);
+    const gr = Math.min(g1, 0.35 + 0.65 * g2);
+    h[k] = (0.5 + a1 * 0.42 + a2 * 0.2) * (0.7 + 0.3 * gr); g[k] = gr;
+  }
+  const d = new Uint8Array(n * n * 4), c8 = (v) => Math.max(0, Math.min(255, Math.round(v * 255)));
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+    const k = j * n + i, dx = h[j * n + ((i + 1) % n)] - h[j * n + ((i + n - 1) % n)], dy = h[((j + 1) % n) * n + i] - h[((j + n - 1) % n) * n + i];
+    d[k * 4] = c8(h[k]); d[k * 4 + 1] = c8(dx * 5 + 0.5); d[k * 4 + 2] = c8(dy * 5 + 0.5); d[k * 4 + 3] = c8(g[k]);
+  }
+  return d;
+}

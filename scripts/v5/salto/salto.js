@@ -10,12 +10,12 @@
    ========================================================================== */
 import { WebGLRenderer, Scene, Group, PerspectiveCamera, Mesh, BufferGeometry, BufferAttribute, Float32BufferAttribute, InstancedBufferGeometry, InstancedBufferAttribute, IcosahedronGeometry, PlaneGeometry, DataTexture, CanvasTexture, RGBAFormat, UnsignedByteType, RepeatWrapping, LinearFilter, LinearMipmapLinearFilter, Vector3, NoToneMapping } from "three";
 import { crearRevelado } from "./revelado.js";
-import { datosRuido, suave, mezcla } from "./ruido.js";
-import { crearMapa, datosTerreno, geometriaTerreno, horizonte, MAPA, SOL_AZ, COTA, PRESA } from "./terreno.js";
-import { geometriaRio, datosBruma } from "./agua.js";
+import { suave, mezcla } from "./ruido.js";
+import { MAPA, SOL_AZ, COTA, PRESA } from "./terreno.js";
+import { fabricar } from "./fabrica.js";
 import { matCielo, matTerreno, matRio, matBruma, matPresa, matObra, matHojas, matChorros, matEmbalse, matFaroles, matRayos, matMotas, matNave, matHaces } from "./materia.js";
-import { geometriaPresa, crearObra, geometriaHojas, geometriaChorros, lucesValle, bocaToma, arco, VANOS } from "./presa.js";
-import { geometriaNave, geometriaHaces, NAVE } from "./nave.js";
+import { bocaToma, arco, VANOS } from "./presa.js";
+import { NAVE } from "./nave.js";
 
 export const CAPITULOS = ["inicio", "hoy", "sistema", "automatizacion", "inteligencia", "finance", "resultado", "demos", "tuyo"];
 export const AREAS = ["ventas", "clientes", "operaciones", "finanzas", "direccion"];
@@ -25,7 +25,7 @@ export const hayWebGL2 = () => { try { return !!document.createElement("canvas")
 const LUZ = {
   madrugada: { az: "A", el: -3.5, sol: [1.25, 0.72, 0.44], alto: [0.036, 0.050, 0.078], bajo: [0.205, 0.190, 0.190], amb: [0.078, 0.090, 0.112], suelo: [0.020, 0.021, 0.024], niebla: [0.125, 0.132, 0.150], dens: 0.00062, alt: 150, halo: 1.25, nubes: 0.50, estrellas: 0.35, expo: 1.7, sat: 0.62, bancos: 0.7 },
   alba:      { az: "A", el: 6,    sol: [2.6, 1.75, 1.18],  alto: [0.085, 0.125, 0.200], bajo: [0.52, 0.47, 0.43],    amb: [0.150, 0.170, 0.210], suelo: [0.040, 0.040, 0.040], niebla: [0.27, 0.275, 0.29],   dens: 0.00048, alt: 170, halo: 1.0, nubes: 0.48, estrellas: 0.0, expo: 1.22, sat: 0.60, bancos: 0.55 },
-  manana:    { el: 47, sol: [2.5, 2.38, 2.2],   alto: [0.215, 0.275, 0.370], bajo: [0.66, 0.69, 0.72],    amb: [0.300, 0.335, 0.385], suelo: [0.090, 0.090, 0.085], niebla: [0.58, 0.61, 0.65],    dens: 0.00016, alt: 320, halo: 0.6, nubes: 0.42, estrellas: 0.0, expo: 0.9,  sat: 0.55, bancos: 0.1 },
+  manana:    { el: 32, sol: [2.5, 2.38, 2.2],   alto: [0.215, 0.275, 0.370], bajo: [0.66, 0.69, 0.72],    amb: [0.300, 0.335, 0.385], suelo: [0.090, 0.090, 0.085], niebla: [0.58, 0.61, 0.65],    dens: 0.00016, alt: 320, halo: 0.6, nubes: 0.42, estrellas: 0.0, expo: 0.9,  sat: 0.55, bancos: 0.1 },
   tarde:     { el: 24, sol: [2.7, 2.3, 1.85],   alto: [0.170, 0.215, 0.300], bajo: [0.66, 0.62, 0.57],    amb: [0.250, 0.270, 0.310], suelo: [0.080, 0.075, 0.068], niebla: [0.56, 0.55, 0.54],    dens: 0.00022, alt: 280, halo: 0.9, nubes: 0.46, estrellas: 0.0, expo: 0.98, sat: 0.58, bancos: 0.15 },
   anochecer: { el: -5, sol: [0.9, 0.42, 0.22],  alto: [0.022, 0.032, 0.058], bajo: [0.175, 0.135, 0.125], amb: [0.045, 0.054, 0.074], suelo: [0.012, 0.012, 0.014], niebla: [0.082, 0.082, 0.098], dens: 0.00042, alt: 200, halo: 1.0, nubes: 0.40, estrellas: 0.8, expo: 1.9,  sat: 0.70, bancos: 0.3 },
   noche:     { el: -16, sol: [0.2, 0.2, 0.3],   alto: [0.008, 0.011, 0.020], bajo: [0.030, 0.034, 0.048], amb: [0.020, 0.025, 0.036], suelo: [0.006, 0.006, 0.008], niebla: [0.026, 0.030, 0.042], dens: 0.00045, alt: 200, halo: 0.2, nubes: 0.34, estrellas: 1.0, expo: 2.3,  sat: 0.75, bancos: 0.3 },
@@ -58,58 +58,49 @@ export function crearSalto(lienzo, op = {}) {
   const movil = !!op.movil, en = op.idioma === "en";
   const revelado = crearRevelado(renderer, { muestras: op.muestras ?? 4, tomas: op.tomas ?? 12 });
 
-  const tRuido = new DataTexture(datosRuido(256), 256, 256, RGBAFormat, UnsignedByteType); tRuido.wrapS = tRuido.wrapT = RepeatWrapping; tRuido.magFilter = LinearFilter; tRuido.minFilter = LinearMipmapLinearFilter; tRuido.generateMipmaps = true; tRuido.needsUpdate = true;
   const u = (value) => ({ value });
-  const U = { uSol: u(new Vector3(0, 1, 0)), uSolCol: u(new Vector3()), uCieloAlto: u(new Vector3()), uCieloBajo: u(new Vector3()), uAmbCielo: u(new Vector3()), uAmbSuelo: u(new Vector3()), uNieblaCol: u(new Vector3()), uNieblaDens: u(0.001), uNieblaAlt: u(200), uTiempo: u(0), uNubes: u(0.4), uEstrellas: u(0), uHaloSol: u(1), uNivel: u(COTA.labio), uObra: u(0), uInterior: u(0), uBancos: u(0.5), uSolB: u(0), uBajoAgua: u(0), tRuido: u(tRuido) };
+  const U = { uSol: u(new Vector3(0, 1, 0)), uSolCol: u(new Vector3()), uCieloAlto: u(new Vector3()), uCieloBajo: u(new Vector3()), uAmbCielo: u(new Vector3()), uAmbSuelo: u(new Vector3()), uNieblaCol: u(new Vector3()), uNieblaDens: u(0.001), uNieblaAlt: u(200), uTiempo: u(0), uNubes: u(0.4), uEstrellas: u(0), uHaloSol: u(1), uNivel: u(COTA.labio), uObra: u(0), uInterior: u(0), uBancos: u(0.5), uSolB: u(0), uBajoAgua: u(0), tRuido: u(null) };
 
   const escena = new Scene(), fuera = new Group(), dentro = new Group(), camara = new PerspectiveCamera(36, 1, 1.2, 14000);
   escena.add(fuera, dentro); escena.matrixAutoUpdate = false; fuera.matrixAutoUpdate = false; dentro.matrixAutoUpdate = false;
-  const mapa = crearMapa();
   const malla = (geo, material, orden = 0, grupo = fuera) => { const m = new Mesh(geo, material); m.frustumCulled = false; m.matrixAutoUpdate = false; m.renderOrder = orden; grupo.add(m); return m; };
   const geoDe = (attrs, ind) => { const g = new BufferGeometry(); for (const [n, [a, t]] of Object.entries(attrs)) g.setAttribute(n, new BufferAttribute(a, t)); if (ind) g.setIndex(new BufferAttribute(ind, 1)); return g; };
   const manchas = (base, dat, tamDat, nombres) => { const g = new InstancedBufferGeometry(); g.setAttribute("position", new Float32BufferAttribute([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0], 3)); g.setIndex([0, 1, 2, 0, 2, 3]); g.setAttribute(nombres[0], new InstancedBufferAttribute(base, 3)); g.setAttribute(nombres[1], new InstancedBufferAttribute(dat, tamDat)); g.instanceCount = base.length / 3; return g; };
+  const textura = (datos, n, m = n, repetir = true) => { const t = new DataTexture(datos, n, m, RGBAFormat, UnsignedByteType); if (repetir) { t.wrapS = t.wrapT = RepeatWrapping; t.minFilter = LinearMipmapLinearFilter; t.generateMipmaps = true; } else t.minFilter = LinearFilter; t.magFilter = LinearFilter; t.needsUpdate = true; return t; };
 
-  /* ---------------------------------------------------------------- el valle */
-  malla(new IcosahedronGeometry(1, 3), matCielo(U), -10);
-  const tTerreno = new DataTexture(datosTerreno(mapa), MAPA.nx, MAPA.nz, RGBAFormat, UnsignedByteType); tTerreno.magFilter = LinearFilter; tTerreno.minFilter = LinearFilter; tTerreno.needsUpdate = true;
-  const uTerr = { tTerreno: u(tTerreno), uMapa: u([MAPA.x0, MAPA.z0, 1 / (MAPA.x1 - MAPA.x0), 1 / (MAPA.z1 - MAPA.z0)]) };
-  { const g = geometriaTerreno(mapa, movil ? 220 : 320, movil ? 300 : 440), geo = geoDe({ position: [g.pos, 3], aHor: [g.hor, 2] }, g.ind); geo.computeVertexNormals(); malla(geo, matTerreno(U, { uniforms: uTerr }), 0); }
-  const uRio = { uNatural: u(1), uCaudal: u(0) };
-  { const g = geometriaRio(mapa); malla(geoDe({ position: [g.pos, 3], aRio: [g.rio, 3], aHor: [g.hor, 2] }, g.ind), matRio(U, { uniforms: uRio }), 5); }
-  const uBruma = { uRocio: u(1), uHorRocio: u(0.5) };
-  { const b = datosBruma(movil ? 90 : 150); malla(manchas(b.base, b.dat, 4, ["aBase", "aDatos"]), matBruma(U, { uniforms: uBruma }), 20); }
-
-  /* ---------------------------------------------------------------- la presa */
+  const uTerr = { tRoca: u(null), tTerreno: u(null), uMapa: u([MAPA.x0, MAPA.z0, 1 / (MAPA.x1 - MAPA.x0), 1 / (MAPA.z1 - MAPA.z0)]) };
+  const uRio = { uNatural: u(1), uCaudal: u(0) }, uBruma = { uRocio: u(1), uHorRocio: u(0.5) };
   const uPresa = { uObraY: u(24), uPuertas: u([0, 0, 0, 0, 0]), uLuces: u(0), uFuerza: u(1), uGrabado: u(0), tGrabado: u(null), uPlaca: u([-36, 60, 72, 28.1]), uColorLuz: u(new Vector3(1.0, 0.66, 0.36)) };
-  { const g = geometriaPresa(mapa); malla(geoDe({ position: [g.pos, 3], aArco: [g.arc, 3], aTira: [g.tir, 4] }, g.ind), matPresa(U, { uniforms: uPresa }), 1); }
-  const obra = crearObra(mapa);
-  { const hor = new Float32Array(obra.pos.length / 3); for (let i = 0; i < hor.length; i++) hor[i] = horizonte(mapa, obra.pos[i * 3], obra.pos[i * 3 + 1] + 0.5, obra.pos[i * 3 + 2], false);
-    malla(geoDe({ position: [obra.pos, 3], normal: [obra.nor, 3], aMat: [obra.mat, 1], aHor: [hor, 1] }, obra.ind), matObra(U, { uniforms: uPresa }), 1); }
-  { const g = geometriaHojas(); malla(geoDe({ position: [g.pos, 3], normal: [g.nor, 3], aHoja: [g.hoja, 1] }, g.ind), matHojas(U, { uniforms: uPresa }), 1); }
-  { const g = new PlaneGeometry(1, 1, 1, 1); g.rotateX(-Math.PI / 2); g.scale(2400, 1, 2700); g.translate(0, 0, -1380); malla(g, matEmbalse(U, { uniforms: uTerr }), 2); }
-  { const g = geometriaChorros(mapa); malla(geoDe({ position: [g.pos, 3], aChorro: [g.cho, 3], aHor: [g.hor, 1] }, g.ind), matChorros(U, { uniforms: uPresa }), 6); }
-  { const n = obra.faroles.length, base = new Float32Array(n * 3), far = new Float32Array(n * 2); obra.faroles.forEach((f, i) => { base.set(f, i * 3); far[i * 2] = 4.2; far[i * 2 + 1] = 0.05 + 0.2 * ((i * 0.618) % 1); });
-    malla(manchas(base, far, 2, ["aBase", "aFarol"]), matFaroles(U, { uniforms: uPresa }), 30); }
-  const uValle = { uLuces: u(0), uObraY: u(9999), uFuerza: u(0.5), uColorLuz: u(new Vector3(1.0, 0.70, 0.40)) };
-  { const L = lucesValle(mapa, movil ? 900 : 1500); malla(manchas(L.base, L.dat, 2, ["aBase", "aFarol"]), matFaroles(U, { uniforms: uValle }), 30); }
-
-  /* ------------------------------------------------------------ bajo el agua */
+  const uValle = { uLuces: u(0), uObraY: u(9999), uFuerza: u(0.24), uColorLuz: u(new Vector3(1.0, 0.70, 0.40)) };
   const boca = bocaToma();
   const uAgua = { uBoca: u(new Vector3(...boca.p)), uBocaN: u(new Vector3(...boca.n)) };
-  { let s = 31; const azar = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
-    const nR = movil ? 26 : 44, bR = new Float32Array(nR * 3), dR = new Float32Array(nR * 2);
-    for (let i = 0; i < nR; i++) { bR.set([boca.p[0] - 34 + azar() * 60, 0, boca.p[2] - 4 - azar() * 86], i * 3); dR.set([3 + azar() * 7, azar()], i * 2); }
-    malla(manchas(bR, dR, 2, ["aBase", "aRayo"]), matRayos(U, { uniforms: uAgua }), 25);
-    const nM = movil ? 260 : 520, bM = new Float32Array(nM * 3), dM = new Float32Array(nM * 2);
-    for (let i = 0; i < nM; i++) { const d = 8 + azar() * 64, a = (azar() - 0.5) * 1.5, e = (azar() - 0.5) * 0.9; bM.set([boca.p[0] + (boca.n[0] * Math.cos(a) - boca.n[2] * Math.sin(a)) * d, boca.p[1] + Math.sin(e) * d * 0.6 + 2, boca.p[2] + (boca.n[2] * Math.cos(a) + boca.n[0] * Math.sin(a)) * d], i * 3); dM.set([0.07 + azar() * 0.16, azar()], i * 2); }
-    malla(manchas(bM, dM, 2, ["aBase", "aMota"]), matMotas(U, { uniforms: uAgua }), 26); }
+
+  /* El mundo se monta cuando llegan sus datos (los calcula otro hilo). */
+  let montado = false;
+  function montar(d) {
+    U.tRuido.value = textura(d.ruido, 256); uTerr.tRoca.value = textura(d.roca, 512); uTerr.tRoca.value.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); uTerr.tTerreno.value = textura(d.datosTerreno, MAPA.nx, MAPA.nz, false);
+    malla(new IcosahedronGeometry(1, 3), matCielo(U), -10);
+    malla(geoDe({ position: [d.terreno.pos, 3], normal: [d.terreno.nor, 3], aHor: [d.terreno.hor, 2] }, d.terreno.ind), matTerreno(U, { uniforms: uTerr }), 0);
+    malla(geoDe({ position: [d.rio.pos, 3], aRio: [d.rio.rio, 3], aHor: [d.rio.hor, 2] }, d.rio.ind), matRio(U, { uniforms: uRio }), 5);
+    malla(manchas(d.bruma.base, d.bruma.dat, 4, ["aBase", "aDatos"]), matBruma(U, { uniforms: uBruma }), 20);
+    malla(geoDe({ position: [d.presa.pos, 3], aArco: [d.presa.arc, 3], aTira: [d.presa.tir, 4] }, d.presa.ind), matPresa(U, { uniforms: uPresa }), 1);
+    malla(geoDe({ position: [d.obra.pos, 3], normal: [d.obra.nor, 3], aMat: [d.obra.mat, 1], aHor: [d.obra.hor, 1] }, d.obra.ind), matObra(U, { uniforms: uPresa }), 1);
+    malla(geoDe({ position: [d.hojas.pos, 3], normal: [d.hojas.nor, 3], aHoja: [d.hojas.hoja, 1] }, d.hojas.ind), matHojas(U, { uniforms: uPresa }), 1);
+    { const g = new PlaneGeometry(1, 1, 1, 1); g.rotateX(-Math.PI / 2); g.scale(2400, 1, 2700); g.translate(0, 0, -1380); malla(g, matEmbalse(U, { uniforms: uTerr }), 2); }
+    malla(geoDe({ position: [d.chorros.pos, 3], aChorro: [d.chorros.cho, 3], aHor: [d.chorros.hor, 1] }, d.chorros.ind), matChorros(U, { uniforms: uPresa }), 6);
+    malla(manchas(d.faroles.base, d.faroles.dat, 2, ["aBase", "aFarol"]), matFaroles(U, { uniforms: uPresa }), 30);
+    malla(manchas(d.valle.base, d.valle.dat, 2, ["aBase", "aFarol"]), matFaroles(U, { uniforms: uValle }), 30);
+    malla(manchas(d.rayos.base, d.rayos.dat, 2, ["aBase", "aRayo"]), matRayos(U, { uniforms: uAgua }), 25);
+    malla(manchas(d.motas.base, d.motas.dat, 2, ["aBase", "aMota"]), matMotas(U, { uniforms: uAgua }), 26);
+    malla(geoDe({ position: [d.nave.pos, 3], normal: [d.nave.nor, 3], aDat: [d.nave.dat, 2] }, d.nave.ind), matNave(U, { uniforms: uNave }), 0, dentro);
+    malla(geoDe({ position: [d.haces.pos, 3], aHaz: [d.haces.haz, 3] }, d.haces.ind), matHaces(U, { uniforms: uNave }), 10, dentro);
+    montado = true;
+  }
 
   /* ----------------------------------------------------------------- la nave */
   const lonaC = document.createElement("canvas"); lonaC.width = 1024; lonaC.height = 228; const tContador = new CanvasTexture(lonaC); tContador.minFilter = LinearFilter; tContador.generateMipmaps = false;
   const lonaR = document.createElement("canvas"); lonaR.width = 1024; lonaR.height = 102; const tRotulo = new CanvasTexture(lonaR); tRotulo.minFilter = LinearFilter; tRotulo.generateMipmaps = false;
   const uNave = { uOrigen: u(new Vector3(...NAVE.origen)), uGiro: u(0), uOnda: u(0), uActivo: u(0.2), tContador: u(tContador), tRotulo: u(tRotulo) };
-  { const g = geometriaNave(); malla(geoDe({ position: [g.pos, 3], normal: [g.nor, 3], aDat: [g.dat, 2] }, g.ind), matNave(U, { uniforms: uNave }), 0, dentro); }
-  { const g = geometriaHaces(); malla(geoDe({ position: [g.pos, 3], aHaz: [g.haz, 3] }, g.ind), matHaces(U, { uniforms: uNave }), 10, dentro); }
   const fuente = (px, peso = 800) => `${peso} ${px}px Archivo, "Helvetica Neue", Arial, sans-serif`;
   const dinero = (c) => { const s = (c / 100).toLocaleString(en ? "en-GB" : "es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }); return en ? "€" + s : s.replace(/^(\d)(\d{3},)/, "$1.$2") + " €"; };
   const contador = { valor: 0, meta: 0, desde: 0, t: 1, pintado: -1 };
@@ -221,6 +212,7 @@ export function crearSalto(lienzo, op = {}) {
     est.bajoAgua = !est.enNave && U.uNivel.value > 47 && z < -40 && Math.hypot(x, z - 40) > PRESA.R - 2 ? suave(U.uNivel.value + 0.25, U.uNivel.value - 1.1, y) : 0;
   }
   function pintar() {
+    if (!montado) return;
     mezclar(); encuadrar(); aplicarLuz(); U.uTiempo.value = est.T;
     fuera.visible = !est.enNave; dentro.visible = est.enNave;
     uNave.uOnda.value = est.onda; uNave.uActivo.value = est.activo; revelado.U.uFundido.value = est.fundido;
@@ -266,6 +258,16 @@ export function crearSalto(lienzo, op = {}) {
     liberar() { api.parar(); revelado.liberar(); renderer.dispose(); },
   };
   revelado.U.uApertura.value = 0; revelado.U.uHalo.value = 0.42; revelado.U.uVineta.value = 0.42; revelado.U.uGrano.value = 0.03;
-  medir(); mezclar();
+  medir();
+  api.listo = new Promise((hecho) => {
+    const aqui = () => { montar(fabricar({ movil })); hecho(api); };
+    if (op.obrero === false || typeof Worker === "undefined") return aqui();
+    try {
+      const w = new Worker(op.obrero || "/assets/v2/js/salto-obra.js?v=0000000000");
+      w.onmessage = (e) => { montar(e.data); w.terminate(); hecho(api); };
+      w.onerror = () => { w.terminate(); if (!montado) aqui(); };
+      w.postMessage({ movil });
+    } catch (e) { aqui(); }
+  });
   return api;
 }

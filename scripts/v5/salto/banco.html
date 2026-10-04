@@ -7,7 +7,7 @@
 import { crearSalto } from "/assets/v2/js/salto.js";
 const q = new URLSearchParams(location.search), n = (k) => q.get(k).split(",").map(Number);
 const s = crearSalto(document.getElementById("c"), { movil: q.has("movil"), pixeles: +q.get("pixeles") || 3.2e6, dpr: +q.get("dpr") || 1, muestras: q.has("muestras") ? +q.get("muestras") : 4 });
-window.s = s;
+window.s = s; await s.listo;
 s.capitulo(+q.get("cap") || 0, true);
 const r = {}; if (q.has("p")) r.p = n("p"); if (q.has("m")) r.m = n("m"); if (q.has("fov")) r.fov = +q.get("fov"); if (q.has("d")) r.d = n("d"); if (Object.keys(r).length) s.rodaje(r);
 if (q.has("el")) s.luz({ el: +q.get("el") });

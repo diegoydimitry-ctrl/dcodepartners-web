@@ -75,44 +75,49 @@ export const matTerreno = (U, mas) => mat(U, /* glsl */ `
 attribute vec2 aHor;
 varying vec3 vP, vN; varying vec2 vHor;
 void main() { vP = position; vN = normal; vHor = aHor; gl_Position = projectionMatrix * viewMatrix * vec4(position, 1.0); }`, /* glsl */ `
-uniform sampler2D tTerreno; uniform vec4 uMapa;
+uniform sampler2D tTerreno, tRoca; uniform vec4 uMapa;
 varying vec3 vP, vN; varying vec2 vHor;
+/* La roca se proyecta por los tres ejes y se mezcla según hacia dónde mira la superficie: así no se estira en las paredes. */
+vec4 roca3(vec3 p, vec3 w, float esc, out vec3 grad) {
+  vec4 a = texture2D(tRoca, p.zy * esc), b = texture2D(tRoca, p.xz * esc), c = texture2D(tRoca, p.xy * esc);
+  grad = vec3(0.0, a.b - 0.5, a.g - 0.5) * w.x + vec3(b.g - 0.5, 0.0, b.b - 0.5) * w.y + vec3(c.g - 0.5, c.b - 0.5, 0.0) * w.z;
+  return a * w.x + b * w.y + c * w.z;
+}
 void main() {
-  float dist = length(vP - cameraPosition), cerca = 1.0 - smoothstep(180.0, 800.0, dist);
+  float dist = length(vP - cameraPosition), cerca = 1.0 - smoothstep(140.0, 620.0, dist);
   vec4 tt = texture2D(tTerreno, (vP.xz - uMapa.xy) * uMapa.zw);
   vec3 Nm = vec3(tt.r * 2.0 - 1.0, 0.0, tt.g * 2.0 - 1.0); Nm.y = sqrt(max(1.0 - dot(Nm.xz, Nm.xz), 0.0));
   vec3 N = normalize(mix(Nm, normalize(vN), cerca * 0.7));
   float pend = 1.0 - N.y;
-  vec4 r0 = texture2D(tRuido, vP.xz * 0.0029), r1 = texture2D(tRuido, vP.xz * 0.0137), r2 = texture2D(tRuido, vP.xz * 0.071 + vP.y * 0.031), r3 = texture2D(tRuido, vP.xz * 0.37 + vP.y * 0.21);
-  vec2 g = (r1.gb - 0.5) * 0.7 + (r2.gb - 0.5) * 1.1 * (0.25 + cerca) + (r3.gb - 0.5) * 0.9 * cerca * cerca;
-  N = normalize(N + vec3(g.x, 0.0, g.y) * (0.3 + pend * 1.6));
-  // roca con estratos, derrubio, bosque oscuro y nieve arriba
-  // la pared: capas casi horizontales, fracturas verticales y chorreras oscuras
-  float lado = dot(vP.xz, vec2(0.71, 0.71));
-  vec4 capa = texture2D(tRuido, vec2(lado * 0.0045, vP.y * 0.052 + r1.r * 0.6)), frac = texture2D(tRuido, vec2(lado * 0.085, vP.y * 0.011 + r1.a * 0.3));
-  float grieta = pow(1.0 - abs(frac.r * 2.0 - 1.0), 5.0) * 0.55 + pow(1.0 - abs(capa.a * 2.0 - 1.0), 6.0) * 0.45;
-  float pared = smoothstep(0.30, 0.62, pend);
-  vec3 roca = mix(vec3(0.050, 0.052, 0.057), vec3(0.235, 0.232, 0.224), r2.r * 0.42 + r1.a * 0.36 + capa.r * 0.22 * pared);
-  roca *= (0.78 + 0.44 * r3.r * cerca) * (1.0 - 0.34 * grieta * pared * (0.35 + 0.65 * cerca)) * (1.0 - 0.20 * smoothstep(0.5, 0.9, frac.a) * pared);
-  vec3 tierra = mix(vec3(0.055, 0.060, 0.050), vec3(0.150, 0.150, 0.128), r1.a * 0.7 + r2.a * 0.3);
-  float esRoca = smoothstep(0.16, 0.34, pend + (r2.r - 0.5) * 0.14);
+  vec4 r0 = texture2D(tRuido, vP.xz * 0.0029), r1 = texture2D(tRuido, vP.xz * 0.0137);
+  vec3 w = pow(abs(N), vec3(5.0)); w /= w.x + w.y + w.z;
+  vec3 gLejos, gCerca;
+  vec4 lejos = roca3(vP, w, 1.0 / 150.0, gLejos), fina = roca3(vP + lejos.r * 3.0, w, 1.0 / 21.0, gCerca);
+  float esRoca = smoothstep(0.14, 0.32, pend + (lejos.r - 0.5) * 0.2);
+  N = normalize(N - gLejos * (0.7 + 1.0 * esRoca) - gCerca * 1.3 * cerca * (0.3 + 0.7 * esRoca));
+  // roca fracturada, derrubio, bosque oscuro y nieve arriba
+  float grieta = min(lejos.a, mix(1.0, fina.a, cerca));
+  vec3 roca = mix(vec3(0.060, 0.062, 0.067), vec3(0.250, 0.247, 0.238), lejos.r * 0.55 + r1.a * 0.25 + fina.r * 0.20 * cerca);
+  roca *= 0.74 + 0.26 * grieta;
+  vec3 tierra = mix(vec3(0.050, 0.055, 0.046), vec3(0.135, 0.136, 0.118), r1.a * 0.6 + fina.r * 0.4);
   vec3 alb = mix(tierra, roca, esRoca);
   float bosque = smoothstep(0.42, 0.66, r1.r * 0.3 + r0.r * 0.85) * (1.0 - smoothstep(0.16, 0.34, pend)) * smoothstep(20.0, 70.0, vP.y - cotaCauce(vP.z)) * (1.0 - smoothstep(380.0, 520.0, vP.y + r1.a * 80.0));
-  alb = mix(alb, vec3(0.016, 0.021, 0.018) * (0.55 + 0.9 * r2.a), bosque);
-  float nieve = smoothstep(470.0, 640.0, vP.y + (r1.r - 0.5) * 150.0 + (r0.r - 0.5) * 220.0) * smoothstep(0.62, 0.30, pend + (r2.r - 0.5) * 0.12);
+  alb = mix(alb, vec3(0.016, 0.021, 0.018) * (0.55 + 0.9 * fina.r), bosque);
+  float nieve = smoothstep(470.0, 640.0, vP.y + (r1.r - 0.5) * 150.0 + (r0.r - 0.5) * 220.0) * smoothstep(0.62, 0.30, pend + (lejos.r - 0.5) * 0.25);
   alb = mix(alb, vec3(0.78, 0.81, 0.85), nieve);
   // mojado: la franja que deja el embalse y la roca junto al salto
   float moj = smoothstep(uNivel + 3.0, uNivel - 1.0, vP.y) * step(vP.z, -40.0) * (1.0 - nieve);
   moj = max(moj, (1.0 - smoothstep(22.0, 90.0, length(vP.xz - vec2(0.0, -18.0)))) * 0.7);
   alb *= mix(1.0, 0.40, moj);
-  alb = mix(alb, vec3(0.11, 0.115, 0.105) * (0.7 + 0.5 * r2.r), uBajoAgua * step(vP.z, -40.0) * smoothstep(uNivel + 1.0, uNivel - 2.0, vP.y));
+  alb = mix(alb, vec3(0.11, 0.115, 0.105) * (0.7 + 0.5 * fina.r), uBajoAgua * step(vP.z, -40.0) * smoothstep(uNivel + 1.0, uNivel - 2.0, vP.y));
   float sombra = sombraDe(mix(vHor.x, vHor.y, uSolB));
   float nl = max(dot(N, uSol), 0.0);
-  vec3 luz = uSolCol * nl * sombra + luzAmbiente(N, tt.b);
+  float ocl = tt.b * (0.62 + 0.38 * grieta);
+  vec3 luz = uSolCol * nl * sombra + luzAmbiente(N, ocl);
   vec3 col = alb * luz;
   vec3 V = normalize(cameraPosition - vP);
   col += uSolCol * sombra * pow(max(dot(reflect(-uSol, N), V), 0.0), 24.0) * (0.10 * nieve + 0.25 * moj);
-  col += cieloBase(reflect(-V, N)) * moj * 0.10 * pow(1.0 - max(dot(N, V), 0.0), 3.0);   // la roca mojada devuelve el cielo
+  col += cieloBase(reflect(-V, N)) * (moj * 0.16 + 0.02 * esRoca) * pow(1.0 - max(dot(N, V), 0.0), 3.0);   // la roca mojada devuelve el cielo
   gl_FragColor = vec4(conNiebla(col, vP), 1.0);
 }`, mas);
 
@@ -132,13 +137,13 @@ void main() {
   float labio = smoothstep(-260.0, -36.0, vP.z) * step(vP.z, -30.0), revuelta = exp(-max(vP.z + 6.0, 0.0) / 210.0) * step(-22.0, vP.z);
   float vel = (3.0 + 7.0 * labio + 9.0 * revuelta + 16.0 * cae) * (0.4 + 0.6 * flujo);
   float x = vP.x;
-  float n1 = texture2D(tRuido, vec2(x * 0.017, v * 0.0052 - t * vel * 0.0052)).r, n2 = texture2D(tRuido, vec2(x * 0.047 + n1 * 0.15, v * 0.016 - t * vel * 0.016)).a, n3 = texture2D(tRuido, vec2(x * 0.13 - n2 * 0.1, v * 0.045 - t * vel * 0.045)).r;
-  // líneas de espuma: el ruido doblado sobre sí mismo
-  float l1 = 1.0 - abs(n1 * 2.0 - 1.0), l2 = 1.0 - abs(n2 * 2.0 - 1.0), l3 = 1.0 - abs(n3 * 2.0 - 1.0);
-  float bravo = 0.06 + 0.26 * labio + 0.72 * revuelta + smoothstep(0.72, 1.0, abs(u)) * 0.2;
+  float n1 = texture2D(tRuido, vec2(x * 0.023, v * 0.0034 - t * vel * 0.0034)).r, n2 = texture2D(tRuido, vec2(x * 0.071 + n1 * 0.2, v * 0.0105 - t * vel * 0.0105)).a, n3 = texture2D(tRuido, vec2(x * 0.24 - n2 * 0.15, v * 0.034 - t * vel * 0.034)).r, n4 = texture2D(tRuido, vec2(x * 0.71, v * 0.11 - t * vel * 0.11)).a;
+  float l3 = 1.0 - abs(n3 * 2.0 - 1.0);
+  float bravo = 0.05 + 0.26 * labio + 0.74 * revuelta + smoothstep(0.72, 1.0, abs(u)) * 0.2;
   bravo *= 0.12 + 0.88 * flujo;
-  float esp = pow(l1, 3.0) * 0.5 + pow(l2, 2.5) * 0.45 + pow(l3, 2.0) * 0.3 + (n1 - 0.5) * 0.5;
-  float espuma = smoothstep(0.42, 0.80, bravo * 1.15 + (esp - 0.55) * 0.75) * (0.82 + 0.18 * l3);
+  // vetas largas de espuma, más anchas cuanta más fuerza lleva el agua
+  float esp = n1 * 0.40 + n2 * 0.30 + n3 * 0.20 + n4 * 0.10;
+  float espuma = smoothstep(0.52, 0.86, esp + (bravo - 0.5) * 0.95) * (0.72 + 0.28 * n4);
   vec3 V = normalize(cameraPosition - vP);
   vec3 N = normalize(vec3((n2 - 0.5) * 0.5 + (n3 - 0.5) * 0.35, 1.0, (n1 - 0.5) * 0.4 + (n3 - 0.5) * 0.3));
   float fr = 0.03 + 0.97 * pow(1.0 - max(dot(N, V), 0.0), 5.0);
@@ -150,9 +155,9 @@ void main() {
   float a = smoothstep(1.0, 0.88 - 0.2 * n3, abs(u)) * smoothstep(0.0, 0.12, flujo);
   if (cae > 0.02) {
     // la caída: hebras verticales que se abren al bajar
-    float h1 = texture2D(tRuido, vec2(x * 0.11, v * 0.006 - t * 0.11)).r, h2 = texture2D(tRuido, vec2(x * 0.37 + 0.2, v * 0.017 - t * 0.33)).a, h3 = texture2D(tRuido, vec2(x * 0.045, v * 0.003 - t * 0.05)).a;
-    float hebra = h1 * 0.5 + h2 * 0.5;
-    vec3 velo = luzBlanca * (0.50 + 0.55 * hebra) * (0.75 + 0.5 * h3);
+    float h1 = texture2D(tRuido, vec2(x * 0.13, v * 0.006 - t * 0.11)).r, h2 = texture2D(tRuido, vec2(x * 0.53 + 0.2, v * 0.015 - t * 0.31)).a, h4 = texture2D(tRuido, vec2(x * 1.7, v * 0.03 - t * 0.6)).r, h3 = texture2D(tRuido, vec2(x * 0.045, v * 0.003 - t * 0.05)).a;
+    float hebra = h1 * 0.4 + h2 * 0.36 + h4 * 0.24;
+    vec3 velo = luzBlanca * (0.30 + 0.95 * smoothstep(0.3, 0.75, hebra)) * (0.75 + 0.5 * h3);
     col = mix(col, velo, cae);
     a *= mix(1.0, smoothstep(0.26, 0.56, hebra * 0.6 + h3 * 0.55 + flujo * 0.12), cae);
   }
@@ -183,7 +188,7 @@ void main() {
   float n = texture2D(tRuido, vUv * 0.19 + vSem * 3.7 + uTiempo * 0.008).r * 0.6 + texture2D(tRuido, vUv * 0.47 - vSem * 1.9 - uTiempo * 0.013).a * 0.4;
   float a = pow(1.0 - r, 1.5) * smoothstep(0.25, 0.8, n + (1.0 - r) * 0.5) * vA;
   vec3 rd = normalize(vP - cameraPosition);
-  vec3 col = uAmbCielo * 1.3 + uSolCol * (0.22 + 0.5 * pow(max(dot(rd, uSol), 0.0), 3.0)) * vSol;
+  vec3 col = uAmbCielo * 1.3 + uSolCol * (0.22 + 0.5 * pow(max(dot(rd, uSol), 0.0), 3.0)) * vSol + uCieloBajo * 0.55 * pow(max(dot(normalize(rd.xz), normalize(uSol.xz)), 0.0), 2.0) * uHaloSol;
   col = mix(col, colorNiebla(rd), cuantaNiebla(vP) * 0.8);
   gl_FragColor = vec4(col * a, a);
 }`, { transparent: true, depthWrite: false, blending: CustomBlending, blendSrc: OneFactor, blendDst: OneMinusSrcAlphaFactor, ...mas });
@@ -197,8 +202,8 @@ vec3 hormigon(float s, float y, vec3 P, float sucio) {
   vec3 c = vec3(0.335, 0.330, 0.320) * (0.80 + 0.22 * n1.r + 0.10 * tono + 0.10 * n3.r);
   float jv = abs(fract(s / 5.67 + 0.5) - 0.5) * 5.67, jh = abs(fract(y / 2.5 + 0.5) - 0.5) * 2.5;
   c *= 1.0 - 0.30 * smoothstep(0.11, 0.02, jv) - 0.22 * smoothstep(0.09, 0.02, jh);
-  float chorreon = smoothstep(0.50, 0.92, n2.a * 0.75 + n1.a * 0.4) * sucio;
-  c *= 1.0 - 0.50 * chorreon;
+  float chorreon = smoothstep(0.55, 0.95, n2.a * 0.6 + n1.a * 0.55) * sucio * smoothstep(0.25, 0.7, n1.r + n3.a * 0.2);
+  c *= 1.0 - 0.34 * chorreon;
   c += vec3(0.10) * smoothstep(0.62, 0.95, n2.r) * smoothstep(0.05, 0.6, jh) * sucio * 0.6;   // sales blancas
   return c;
 }`;
