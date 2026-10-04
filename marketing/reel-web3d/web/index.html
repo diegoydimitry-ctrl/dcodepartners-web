@@ -3,34 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ÓRBITA UNO — configurador 3D (demo)</title>
-<!-- Web de demostración: marca y coche ficticios. Modelo «Car Concept» © Khronos Group, CC-BY 4.0 (logos retirados). Entornos HDR: Poly Haven, CC0. -->
+<title>VELA — Vela Uno (tienda de demostración)</title>
+<!-- Tienda de demostración: marca ficticia. Modelo «Materials Variants Shoe» © Shopify, CC-BY 4.0 (glTF Sample Assets, Khronos). Entorno HDR: Poly Haven, CC0. -->
 <script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js","three/addons/":"../node_modules/three/examples/jsm/"}}</script>
 <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-<canvas id="gl"></canvas>
 <div id="ui">
+  <div id="fondo"></div>
+  <div id="palabra">UNO</div>
+  <canvas id="gl"></canvas>
   <!-- ── la web ── -->
-  <header id="nav"><div class="marca"><i></i>ÓRBITA</div><nav><span>Modelos</span><span>Tecnología</span><span class="pill">Reservar</span></nav></header>
-  <section id="hero"><div class="eyebrow">NUEVO · 100 % ELÉCTRICO</div><h1>ÓRBITA<br>UNO</h1><p>1.020 CV · 0 a 100 en 2,1 s</p></section>
-  <div id="scrollhint"><div class="raton"><i></i></div><span>Desliza</span></div>
-  <div id="progreso"><i></i></div>
-  <section id="pintura" class="panel"><div class="ptit">Pintura</div><div class="muestras">
-    <div class="m" data-v="0"><i style="background:radial-gradient(circle at 35% 30%,#ff6a5c,#b3121a 55%,#4d0508)"></i><span>Carmín</span></div>
-    <div class="m" data-v="1"><i style="background:radial-gradient(circle at 35% 30%,#ffffff,#cfd6e6 50%,#8f98b5)"></i><span>Perla</span></div>
-    <div class="m" data-v="2"><i style="background:radial-gradient(circle at 35% 30%,#8b8f96,#2e3136 55%,#0c0d0f)"></i><span>Grafito</span></div>
-  </div></section>
-  <div id="puertas" class="boton"><b></b>Abrir puertas</div>
-  <section id="mundo" class="panel"><div class="seg"><span data-e="0">Estudio</span><span data-e="1">Atardecer</span><span data-e="2">Noche</span><i></i></div></section>
-  <section id="hud"><div class="vel"><b>0</b><span>km/h</span></div><div class="barra"><i></i></div></section>
-  <div id="cursor"><svg viewBox="0 0 24 24" width="74" height="74"><path d="M5 2l14 11-6.5.9 3.8 7.3-2.7 1.4-3.8-7.4L5 20z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg><i></i></div>
-  <!-- ── capa del vídeo (rótulos y cierre) ── -->
-  <div id="rotulo"></div>
-  <div id="gancho"><div class="g1">ESTO NO ES<br>UN VÍDEO.</div><div class="g2">ES UNA <em>WEB.</em></div></div>
+  <header id="nav">
+    <svg class="menu" viewBox="0 0 48 48"><path d="M6 15h36M6 33h24" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+    <div class="marca">VELA</div>
+    <div id="cesta-ico"><svg viewBox="0 0 48 48"><path d="M10 17h28l-2.5 23h-23zM17 17v-3a7 7 0 0114 0v3" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/></svg><b id="globo">1</b></div>
+  </header>
+  <div id="gira"><svg viewBox="0 0 48 48"><path d="M39 28c-2.500 3.400-8.200 6-15 6-9 0-16-4.500-16-10s7-10 16-10c5.500 0 10.300 1.700 13.300 4.200M38 9v10H28" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Arrastra para girar · 360°</div>
+  <section id="panel">
+    <div class="fila1"><div><h1>Vela Uno</h1><p id="sub">Malla transpirable · <span id="colornombre">Rosa palo</span></p></div><div class="precio">129 €</div></div>
+    <div class="fila2"><span class="eti">Color</span><div id="colores">
+      <button data-v="0" style="--c:#1d7ea6"></button><button data-v="1" style="--c:#2a2f3d"></button><button data-v="2" style="--c:#c9532f"></button></div></div>
+    <div class="fila3"><span class="eti">Talla</span><div id="tallas"><button>39</button><button>40</button><button>41</button><button>42</button><button>43</button><button>44</button></div></div>
+    <button id="cta"><span>Añadir a la cesta</span></button>
+    <div class="confianza"><span>Envío gratis</span><i></i><span>Devolución 30 días</span><i></i><span>Pago seguro</span></div>
+  </section>
+  <img id="vuela" alt="">
+  <div id="velo"></div>
+  <section id="hoja">
+    <div class="asa"></div>
+    <div class="htit"><h2>Tu cesta</h2><span id="cierra">Cerrar</span></div>
+    <div class="item"><div class="mini"><img id="mini" alt=""></div>
+      <div class="dat"><b>Vela Uno</b><span id="itemdet">Rosa palo · Talla 42</span>
+        <div class="cant"><button id="menos">−</button><em id="cantn">1</em><button id="mas">+</button></div></div>
+      <div class="ip" id="itemp">129 €</div></div>
+    <div class="lin"><span>Envío</span><span>Gratis · llega el jueves</span></div>
+    <div class="lin tot"><span>Total</span><span id="total">129 €</span></div>
+    <button id="pagar"><span>Pagar</span></button>
+  </section>
+  <!-- ── capa del vídeo ── -->
+  <div id="paso"><b></b><span></span></div>
+  <div id="gancho"><div>Esto no es<br>una foto.</div><div>Es una <em>web.</em></div></div>
+  <div class="dedo" id="dedo1"></div><div class="dedo" id="dedo2"></div>
+  <div id="negro"></div>
   <div id="cierre"><div class="frase">Hoy, esto<br>se puede <em>construir.</em></div>
     <div class="firma"><img src="assets/logo512.png" alt=""><div class="nombre">D-Code <span>Partners</span></div></div></div>
-  <div id="negro"></div>
 </div>
 <script type="module" src="app.js"></script>
 </body>
