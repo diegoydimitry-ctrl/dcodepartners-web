@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Portada del reel</title>
+<style>
+@font-face{font-family:"Inter Tight";src:url(../assets/inter-tight.woff2);font-weight:100 900}
+@font-face{font-family:"Archivo";src:url(../assets/archivo-wdth.woff2);font-weight:100 900;font-stretch:62% 125%}
+html,body{margin:0;background:#000}
+#p{position:relative;width:1080px;height:1920px;overflow:hidden;background:#dfe3ec;color:#0c0d11;font-family:"Inter Tight",sans-serif}
+#p > *{position:absolute}
+img.f{left:0;top:120px;width:1080px;height:1920px;object-fit:cover}
+.t1{left:70px;top:330px;font:600 40px/1 "Inter Tight";letter-spacing:9px;text-transform:uppercase;color:#4b5060}
+.t2{left:64px;right:40px;top:400px;font:900 178px/0.94 "Archivo";font-stretch:112%;letter-spacing:-7px}
+.t2 em{font-style:normal;background:#0c0d11;color:#F5B841;padding:0 26px 8px;border-radius:28px;margin-left:-10px}
+.pie{left:0;right:0;top:1500px;display:flex;justify-content:center;align-items:center;gap:22px;font:800 50px "Archivo";font-stretch:110%;color:#0c0d11}
+.pie img{width:88px;height:88px;border-radius:22px}.pie span{font-weight:400;color:#4b5060}
+</style></head><body><div id="p">
+  <img class="f" src="../render/dragon/0047.jpg" alt="">
+  <div class="t1">No es un vídeo</div>
+  <div class="t2">Esto es<br>una <em>web.</em></div>
+  <div class="pie"><img src="../assets/logo512.png" alt="">D-Code <span>Partners</span></div>
+</div><script>window.META={fps:30,duracion:0.04,fotogramas:1};window.pintaFrame=async()=>true;document.fonts.ready.then(()=>{const i=document.querySelector('img.f');(i.complete?Promise.resolve():new Promise(r=>i.onload=r)).then(()=>{window.LISTO=true})});</script></body></html>
