@@ -1,79 +1,64 @@
-# Banda original del Reel «Esto no es una foto. Es una web.» (todo sintetizado aquí, sin samples de terceros).
-# Tono luminoso y limpio (mayor, 112 BPM): gancho con dos acentos, pulso que crece con cada función, toques de interfaz, y cierre que resuelve.
+# Banda original del reel de webs 3D (todo sintetizado aquí, sin samples de terceros). 120 BPM: cada corte y cada toque caen a pulso.
+#   0–2 gancho (cuatro golpes y subida) · 2–20 tres webs (base completa, golpe en cada cambio de web, toques de interfaz) · 20–23 escaparate · 23 cierre
 import os, sys, math
 import numpy as np
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(AQUI, "..", "anuncios-v3", "comun"))
 from sintesis import *
-DUR = 28.4; BPM = 112; B = 60 / BPM
-T_UI, TC, Z0, Z1, T_TALLA, T_CTA, T_CESTA, T_MAS, T_PAGAR, T_NEGRO, T_FRASE, T_FIRMA = 2.4, [8.2, 9.9], 11.9, 15.2, 17.0, 18.0, 19.7, 21.0, 22.2, 23.5, 24.2, 26.1
+DUR = 25.5; BPM = 120; B = 60 / BPM
+WEBS = [2, 8, 14]; T_ESC, T_FIN = 20, 23
+TOQUES = [4.0, 4.75, 7.4, 9.5, 10.0, 10.5, 11.0, 11.5, 16.0, 16.5, 17.0]
+ZOOMS = [5.5, 12.95, 17.4]
 mus, fx = Pista(DUR), Pista(DUR)
-ir = ir_sala(1.2, 7000, 0.010, 5); irg = ir_sala(3.2, 6000, 0.02, 13)
+ir = ir_sala(1.1, 7000, 0.010, 5); irg = ir_sala(3.0, 6000, 0.02, 13)
 def hz(m): return 440 * 2 ** ((m - 69) / 12)
 def pad(notas, t0, t1, g, fc, a=None):
-    d = t1 - t0; y = acorde([hz(m) for m in notas], d, fc=fc, a=a or min(0.8, d / 3), r=min(1.0, d / 2))
-    mus.pon(reverb(pico(y, 0.5), irg, 0.45), t0, g, 0, 0.8)
-def toque(f=1500):          # toque de interfaz: gota corta y limpia
+    d = t1 - t0; y = acorde([hz(m) for m in notas], d, fc=fc, a=a or min(0.6, d / 3), r=min(0.8, d / 2))
+    mus.pon(reverb(pico(y, 0.5), irg, 0.4), t0, g, 0, 0.8)
+def toque(f=1500):
     t = t_(n_(0.09)); return np.sin(2 * math.pi * f * t * (1 + 0.25 * np.exp(-t * 60))) * np.exp(-t * 55)
-def nivel(t):
-    if t < T_UI: return 0
-    if t < 7.4: return 0.45
-    if t < Z0: return 0.7
-    if t < Z1 + 0.9: return 0.35
-    if t < T_CESTA: return 0.8
-    return 1.0
-# ── gancho ──
-fx.pon(pico(impacto(1.2, 0.6), 1.0), 0.1, 0.22)
-fx.pon(reverb(pico(campana(hz(76), 1.2), 1.0), irg, 0.5), 0.1, 0.07)
-fx.pon(whoosh(1.0, 400, 5000, -0.7, 0.7), 1.25, 0.14)                                             # el dedo la gira
-fx.pon(pico(impacto(1.6, 0.8), 1.0), 1.25, 0.26); fx.pon(reverb(pico(campana(hz(83), 1.4), 1.0), irg, 0.5), 1.25, 0.07)
-mus.pon(pico(subida(1.0, 400, 9000), 0.7), T_UI - 1.0, 0.07)
-# ── cuerpo: mi mayor, luminoso ──
-PROG = [(40, [52, 59, 64, 68]), (37, [49, 56, 61, 64]), (45, [57, 61, 64, 69]), (47, [59, 63, 66, 71])]
-tb, j = T_UI, 0
-while tb < T_NEGRO - 0.05:
-    raiz, ac = PROG[j % 4]; comp = min(4 * B, T_NEGRO - tb); n = nivel(tb + 0.01); dentro = Z0 + 0.4 <= tb < Z1 + 0.6
-    pad(ac + ([ac[2] + 12] if n > 0.9 else []), tb, tb + comp, 0.07 + 0.05 * n, 900 if dentro else 1400 + 3200 * n)
-    bajo = saw(hz(raiz - 12), comp * 0.98) * env_ad(comp * 0.98, 0.02, None, 0.9)
-    mus.pon(pico(lp(bajo, 170 + 240 * n), 0.9), tb, 0.08 + 0.09 * n)
+# ── gancho: un golpe por plano ──
+for k in range(4):
+    fx.pon(pico(impacto(0.9, 0.6 + 0.12 * k), 1.0), k * B, 0.24 + 0.03 * k); fx.pon(pico(bombo(0.4, 130, 44, 0.9, 1.0, 1.6), 1.0), k * B, 0.3)
+    fx.pon(reverb(pico(campana(hz([64, 67, 71, 76][k]), 0.8), 1.0), irg, 0.4), k * B, 0.06)
+mus.pon(pico(subida(1.6, 300, 10000), 0.7), 0.4, 0.13)
+# ── cuerpo: la menor → fa → do → sol, base de baile limpia ──
+PROG = [(45, [57, 60, 64, 69]), (41, [53, 57, 60, 65]), (48, [55, 60, 64, 67]), (43, [55, 59, 62, 67])]
+tb, j = 2.0, 0
+while tb < T_ESC - 0.01:
+    raiz, ac = PROG[j % 4]; comp = 4 * B; web = sum(tb >= w for w in WEBS) - 1; n = 0.8 + 0.1 * web
+    pad(ac + [ac[2] + 12], tb, tb + comp, 0.085, 2600 + 900 * web)
     for q in range(16):
         tq = tb + q * B / 4
-        if tq >= T_NEGRO - 0.02: break
-        nq = nivel(tq); d = Z0 + 0.4 <= tq < Z1 + 0.6
-        if q % 4 == 0: mus.pon(pico(lp(bombo(0.36, 120, 46, 0.8, 1.0, 1.3), 260 if d else 16000), 1.0), tq, 0.17 + 0.17 * nq)
-        if q % 4 == 2 and nq > 0.4 and not d: mus.pon(pico(lp(saw(hz(raiz), 0.12) * env_ad(0.12, 0.004, None, 7), 500 + 800 * nq), 0.8), tq, 0.06 + 0.05 * nq)
-        mus.pon(pico(pluck(hz(ac[[0, 2, 3, 1, 2, 3, 1, 2][q % 8]] + 12), 0.2, 1000 if d else 2600 + 2600 * nq), 1.0), tq, 0.016 + 0.022 * nq, 0.5 * (-1) ** q)
-        if nq > 0.6 and q % 2 == 1 and not d: mus.pon(pico(hat(False, 9500), 0.5), tq, 0.018 + 0.03 * nq, 0.35)
-        if nq > 0.65 and q in (4, 12): mus.pon(reverb(pico(palmada(), 1.0), ir, 0.25), tq, 0.07 + 0.08 * nq)
+        if q % 4 == 0: mus.pon(pico(bombo(0.36, 125, 45, 0.9, 1.0, 1.5), 1.0), tq, 0.4)
+        if q % 4 == 2: mus.pon(pico(lp(saw(hz(raiz - 12), 0.2) * env_ad(0.2, 0.005, None, 5), 420), 0.9), tq, 0.2)          # bajo a contratiempo
+        if q in (4, 12): mus.pon(reverb(pico(palmada(), 1.0), ir, 0.22), tq, 0.15)
+        mus.pon(pico(hat(q % 4 == 2, 9500), 0.5), tq, 0.05 if q % 2 else 0.028, 0.3 * (-1) ** q)
+        mus.pon(pico(pluck(hz(ac[[0, 2, 3, 1, 2, 3, 1, 2][q % 8]] + 12 + (12 if web == 2 and q % 4 == 3 else 0)), 0.2, 4200 + 600 * web), 1.0), tq, 0.036, 0.5 * (-1) ** q)
     tb += comp; j += 1
-# ── giro con el dedo ──
-for a, b_, p in ((3.3, 4.6, 1), (4.9, 6.3, -1)): fx.pon(whoosh(b_ - a, 350, 3200, -0.7 * p, 0.7 * p), a, 0.09)
-# ── colores: toque + giro + nota ──
-for k, t in enumerate(TC):
-    fx.pon(pico(toque(1400 + 250 * k), 1.0), t, 0.14); fx.pon(whoosh(0.9, 500, 5200, -0.8 * (-1) ** k, 0.8 * (-1) ** k), t + 0.02, 0.15)
-    fx.pon(pico(impacto(1.2, 0.6), 1.0), t + 0.47, 0.18); fx.pon(reverb(pico(campana(hz([76, 80][k]), 1.0), 1.0), irg, 0.4), t + 0.47, 0.06)
-# ── zoom: la música se cierra y vuelve ──
-fx.pon(whoosh(1.2, 2500, 300, 0.0, 0.0), Z0, 0.13); fx.pon(pico(caida_sub(1.0, 70, 32), 1.0), Z0 + 0.3, 0.12)
-fx.pon(whoosh(0.9, 300, 4200, -0.4, 0.4), Z1 + 0.1, 0.13)
-# ── talla, cesta y pago ──
-fx.pon(pico(toque(1500), 1.0), T_TALLA, 0.14)
-fx.pon(pico(toque(1200), 1.0), T_CTA, 0.16); fx.pon(whoosh(0.6, 600, 5000, -0.2, 0.8), T_CTA + 0.12, 0.12)
-for k, m in enumerate((88, 92)): fx.pon(reverb(pico(campana(hz(m), 0.7), 1.0), ir, 0.3), T_CTA + 0.74 + k * 0.09, 0.07, 0.5)        # «plin» del globo
-fx.pon(pico(toque(1300), 1.0), T_CESTA, 0.14); fx.pon(whoosh(0.55, 300, 2400, 0, 0), T_CESTA + 0.08, 0.12)
-fx.pon(pico(toque(1700), 1.0), T_MAS, 0.15)
-fx.pon(pico(toque(1200), 1.0), T_PAGAR, 0.16)
-for k, m in enumerate((76, 80, 83, 88)): fx.pon(reverb(pico(campana(hz(m), 1.2), 1.0), irg, 0.4), T_PAGAR + 0.75 + k * 0.07, 0.07, 0.2 * (-1) ** k)   # pedido confirmado
-fx.pon(pico(impacto(1.4, 0.7), 1.0), T_PAGAR + 0.75, 0.2)
-# ── cierre ──
-for P in (mus, fx): P.corta(T_NEGRO + 0.25, DUR, 0.3)
-fx.pon(pico(caida_sub(0.9, 60, 28), 1.0), T_NEGRO, 0.16)
-fx.pon(pico(impacto(2.0, 0.9), 1.0), T_FRASE, 0.28)
-pad([52, 59, 64, 68, 71], T_FRASE, T_FIRMA + 0.2, 0.09, 1800, a=0.3)
-fx.pon(pico(impacto(2.4, 1.0), 1.0), T_FIRMA, 0.34)
-y = acorde([hz(m) for m in [40, 52, 59, 64, 68, 71, 76]], DUR - T_FIRMA, fc=4200, a=0.02, r=1.0)
-mus.pon(reverb(pico(y, 0.5), irg, 0.5), T_FIRMA, 0.2, 0, 0.9)
-mus.pon(reverb(pico(campana(hz(88), 1.6), 1.0), irg, 0.5), T_FIRMA, 0.07)
-x = master(limitador(mus.x, 4.0), 0.9) * 0.85 + master(fx.x, 0.9) * 0.8
+# ── cambio de web: barrido + golpe ──
+for k, w in enumerate(WEBS):
+    fx.pon(pico(impacto(1.8, 1.0), 1.0), w, 0.4); fx.pon(pico(caida_sub(0.9, 80, 34), 1.0), w, 0.2)
+    if k: fx.pon(whoosh(0.5, 400, 7000, -0.8, 0.8), w - 0.42, 0.18); mus.pon(pico(subida(1.0, 500, 9000), 0.7), w - 1.0, 0.07)
+# ── interfaz: toques y zooms ──
+for k, t in enumerate(TOQUES): fx.pon(pico(toque(1300 + 130 * (k % 4)), 1.0), t, 0.17); fx.pon(reverb(pico(campana(hz(76 + [0, 3, 7, 10][k % 4]), 0.6), 1.0), ir, 0.3), t + 0.02, 0.05, 0.4 * (-1) ** k)
+for t in ZOOMS: fx.pon(whoosh(0.7, 300, 5200, -0.5, 0.5), t, 0.16)
+fx.pon(whoosh(1.0, 400, 4000, -0.7, 0.7), 2.2, 0.1); fx.pon(whoosh(1.0, 400, 3000, 0.7, -0.7), 8.2, 0.09); fx.pon(whoosh(1.0, 400, 3500, -0.7, 0.7), 14.2, 0.09)      # arrastres
+fx.pon(whoosh(0.5, 600, 5000, -0.2, 0.8), 7.5, 0.12)                                                 # a la cesta
+# ── escaparate: se abre, sube ──
+for P in (mus,): P.corta(T_ESC + 0.02, DUR, 0.12)
+fx.pon(pico(impacto(2.6, 1.0), 1.0), T_ESC, 0.42); fx.pon(pico(caida_sub(1.4, 70, 28), 1.0), T_ESC, 0.22)
+pad([45, 57, 60, 64, 69, 72], T_ESC, T_FIN + 0.1, 0.13, 2400, a=0.25)
+for k in range(6): mus.pon(pico(bombo(0.4, 120, 44, 0.85, 1.0, 1.4), 1.0), T_ESC + k * B, 0.2 + 0.03 * k)
+for k, m in enumerate([69, 72, 76, 81, 84, 88]): mus.pon(reverb(pico(pluck(hz(m), 0.4, 5000), 1.0), irg, 0.4), T_ESC + 0.5 + k * B / 2, 0.06, 0.4 * (-1) ** k)
+mus.pon(pico(subida(1.6, 300, 10000), 0.7), T_FIN - 1.6, 0.12)
+# ── cierre: resuelve en do mayor ──
+for P in (mus, fx): P.corta(T_FIN + 0.02, DUR, 0.05)
+fx.pon(pico(impacto(2.4, 1.0), 1.0), T_FIN + 0.45, 0.42); fx.pon(pico(caida_sub(1.2, 65, 28), 1.0), T_FIN + 0.45, 0.2)
+y = acorde([hz(m) for m in [36, 48, 55, 60, 64, 67, 72]], DUR - T_FIN - 0.45, fc=4200, a=0.02, r=1.0)
+mus.pon(reverb(pico(y, 0.5), irg, 0.5), T_FIN + 0.45, 0.22, 0, 0.9)
+mus.pon(reverb(pico(campana(hz(84), 1.6), 1.0), irg, 0.5), T_FIN + 0.45, 0.08)
+x = master(limitador(mus.x, 4.0), 0.9) * 0.85 + master(fx.x, 0.9) * 0.75
 n = n_(0.5); x[-n:] *= np.linspace(1, 0, n)[:, None]
 os.makedirs(os.path.join(AQUI, "audio"), exist_ok=True)
 escribe(os.path.join(AQUI, "audio", "banda.wav"), master(x, 0.93)); print(f"banda: {DUR} s")

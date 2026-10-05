@@ -3,51 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VELA — Vela Uno (tienda de demostración)</title>
-<!-- Tienda de demostración: marca ficticia. Modelo «Materials Variants Shoe» © Shopify, CC-BY 4.0 (glTF Sample Assets, Khronos). Entorno HDR: Poly Haven, CC0. -->
+<title>Webs 3D de demostración — D-Code Partners</title>
+<!-- Tres webs de demostración (?s=vela · ?s=norda · ?s=orien). Marcas ficticias.
+     Modelos de glTF Sample Assets (Khronos), CC-BY 4.0: «Materials Variants Shoe» © Shopify · «Glam Velvet Sofa» © Wayfair · «Chronograph Watch» © Darmstadt Graphics Group (marcas retiradas). HDR: Poly Haven, CC0. -->
 <script type="importmap">{"imports":{"three":"../node_modules/three/build/three.module.js","three/addons/":"../node_modules/three/examples/jsm/"}}</script>
 <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 <div id="ui">
   <div id="fondo"></div>
-  <div id="palabra">UNO</div>
+  <div id="palabra"></div>
   <canvas id="gl"></canvas>
-  <!-- ── la web ── -->
+  <svg id="medidas" viewBox="0 0 1080 1920"></svg>
   <header id="nav">
     <svg class="menu" viewBox="0 0 48 48"><path d="M6 15h36M6 33h24" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-    <div class="marca">VELA</div>
-    <div id="cesta-ico"><svg viewBox="0 0 48 48"><path d="M10 17h28l-2.5 23h-23zM17 17v-3a7 7 0 0114 0v3" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/></svg><b id="globo">1</b></div>
+    <div class="marca"></div>
+    <div id="cesta-ico"><svg viewBox="0 0 48 48"><path d="M10 17h28l-2.500 23h-23zM17 17v-3a7 7 0 0114 0v3" fill="none" stroke="currentColor" stroke-width="3.600" stroke-linejoin="round" stroke-linecap="round"/></svg><b id="globo">1</b></div>
   </header>
-  <div id="gira"><svg viewBox="0 0 48 48"><path d="M39 28c-2.500 3.400-8.200 6-15 6-9 0-16-4.500-16-10s7-10 16-10c5.500 0 10.300 1.700 13.300 4.200M38 9v10H28" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Arrastra para girar · 360°</div>
+  <div id="gira"><svg viewBox="0 0 48 48"><path d="M39 28c-2.500 3.400-8.200 6-15 6-9 0-16-4.500-16-10s7-10 16-10c5.500 0 10.300 1.700 13.300 4.200M38 9v10H28" fill="none" stroke="currentColor" stroke-width="3.400" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Arrastra para girar · 360°</span></div>
   <section id="panel">
-    <div class="fila1"><div><h1>Vela Uno</h1><p id="sub">Malla transpirable · <span id="colornombre">Rosa palo</span></p></div><div class="precio">129 €</div></div>
-    <div class="fila2"><span class="eti">Color</span><div id="colores">
-      <button data-v="0" style="--c:#1d7ea6"></button><button data-v="1" style="--c:#2a2f3d"></button><button data-v="2" style="--c:#c9532f"></button></div></div>
-    <div class="fila3"><span class="eti">Talla</span><div id="tallas"><button>39</button><button>40</button><button>41</button><button>42</button><button>43</button><button>44</button></div></div>
-    <button id="cta"><span>Añadir a la cesta</span></button>
-    <div class="confianza"><span>Envío gratis</span><i></i><span>Devolución 30 días</span><i></i><span>Pago seguro</span></div>
+    <div class="fila1"><div><h1></h1><p id="sub"><span id="subfijo"></span> · <span id="colornombre"></span></p></div><div class="precio"></div></div>
+    <div class="fila2"><span class="eti" id="eti1"></span><div id="colores"></div></div>
+    <div class="fila3"><span class="eti" id="eti2"></span><div id="opciones"></div></div>
+    <button id="cta"><span></span></button>
+    <div class="confianza"></div>
   </section>
   <img id="vuela" alt="">
-  <div id="velo"></div>
-  <section id="hoja">
-    <div class="asa"></div>
-    <div class="htit"><h2>Tu cesta</h2><span id="cierra">Cerrar</span></div>
-    <div class="item"><div class="mini"><img id="mini" alt=""></div>
-      <div class="dat"><b>Vela Uno</b><span id="itemdet">Rosa palo · Talla 42</span>
-        <div class="cant"><button id="menos">−</button><em id="cantn">1</em><button id="mas">+</button></div></div>
-      <div class="ip" id="itemp">129 €</div></div>
-    <div class="lin"><span>Envío</span><span>Gratis · llega el jueves</span></div>
-    <div class="lin tot"><span>Total</span><span id="total">129 €</span></div>
-    <button id="pagar"><span>Pagar</span></button>
-  </section>
-  <!-- ── capa del vídeo ── -->
-  <div id="paso"><b></b><span></span></div>
-  <div id="gancho"><div>Esto no es<br>una foto.</div><div>Es una <em>web.</em></div></div>
   <div class="dedo" id="dedo1"></div><div class="dedo" id="dedo2"></div>
-  <div id="negro"></div>
-  <div id="cierre"><div class="frase">Hoy, esto<br>se puede <em>construir.</em></div>
-    <div class="firma"><img src="assets/logo512.png" alt=""><div class="nombre">D-Code <span>Partners</span></div></div></div>
 </div>
 <script type="module" src="app.js"></script>
 </body>

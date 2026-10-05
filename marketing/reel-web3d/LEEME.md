@@ -1,9 +1,13 @@
-# Reel «Esto no es una foto. Es una web.» (28,4 s · 1080×1920)
+# Reel «¿Y si tu web hiciera esto?» (25,5 s · 1080×1920)
 
-Tienda 3D de demostración (marca ficticia «VELA», zapatilla «Vela Uno») grabada fotograma a fotograma. Cierre: logo y nombre de D-Code Partners.
+Showreel de tres webs 3D de demostración (marcas ficticias) sobre un mismo motor, con cierre de D-Code Partners.
 
-- `web/` — la tienda (Three.js). En vivo funciona de verdad: arrastrar para girar, rueda o doble clic para acercar, color, talla, cesta, cantidad y pago simulado. `?auto` reproduce el guion del vídeo; `?captura` es el modo de render.
-- `render.cjs` — captura con Chromium (servir antes esta carpeta: `python3 -m http.server 8770 --bind 127.0.0.1`; calidad del vídeo: `EXTRA='&esc=1.5'`).
-- `banda.py` — banda sonora original sintetizada (sin samples de terceros).
+- `web/` — las webs: `index.html?s=vela` (zapatillas), `?s=norda` (mobiliario), `?s=orien` (relojería). En vivo: arrastrar para girar, rueda o doble clic para acercar, color, opciones (medidas en 3D en norda) y cesta. `?auto` reproduce el guion; `?captura` es el modo de render.
+- `montaje/` — une los clips: gancho, rótulos, escaparate de móviles y cierre.
+- `render.cjs` — captura con Chromium. Servir antes esta carpeta: `python3 -m http.server 8770 --bind 127.0.0.1`.
+  1. `node render.cjs --pagina "web/index.html?captura&s=vela&esc=1.5" --dir render/vela` (igual con norda y orien)
+  2. copias a media resolución en `render/<web>_m/` (ffmpeg `scale=540:960`)
+  3. `node render.cjs --pagina "montaje/index.html?captura" --salida render/imagen.mp4`
+- `banda.py` — banda sonora original sintetizada (sin samples de terceros), 120 BPM.
 
-Créditos obligatorios si se publica: modelo «Materials Variants Shoe» © Shopify, CC-BY 4.0 (glTF Sample Assets, Khronos). HDRI de estudio: Poly Haven, CC0.
+Créditos obligatorios al publicar (modelos de glTF Sample Assets, Khronos, CC-BY 4.0): «Materials Variants Shoe» © Shopify · «Glam Velvet Sofa» © Wayfair · «Chronograph Watch» © Darmstadt Graphics Group (marcas de terceros retiradas de la esfera). HDRI: Poly Haven, CC0.
