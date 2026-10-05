@@ -1,20 +1,22 @@
 /* ==========================================================================
-   D-CODE · portada «el banco de trabajo» · la dirección de escena
+   D-CODE · portada «el conjunto» · la dirección de escena
    --------------------------------------------------------------------------
-   El contenido es HTML y está en la página desde el principio. La escena es
-   una sola fotografía en movimiento: imágenes hechas con trazado de rayos
-   (scripts/v7/escena.py) que este módulo va enseñando según el scroll.
-     · cada <section data-acto> es un momento del recorrido; entre uno y otro
-       se pasan los fotogramas del viaje de la cámara y de las cosas;
-     · encima de la imagen van, con su misma perspectiva, dos trozos de HTML
-       de verdad: lo que Finance registra en la pantalla del portátil y el
-       nombre de tu empresa en la placa de la base;
-     · lo que se puede tocar: elegir una de las cuatro partes, pasar una
-       factura por Finance con la cifra que se quiera, escribir un nombre.
+   El contenido es HTML y está en la página desde el principio. Detrás van
+   cinco escenas fotografiadas (imágenes hechas con trazado de rayos,
+   scripts/v8/escenas.py) que este módulo enseña según el scroll, y cada una
+   explica una cosa: las placas que se alinean, los cabos que se trenzan, la
+   fila que cae sola, el líquido que toma forma y la llave que encaja.
+     · cada <section data-acto> es un momento; entre uno y otro se pasan los
+       fotogramas de lo que ocurre (o se funde una escena con la siguiente);
+     · cada cosa de la imagen lleva su nombre escrito encima (los rótulos),
+       colocado donde cae en la fotografía;
+     · lo que se puede tocar: elegir uno de los cuatro cabos, pasar una
+       factura por Finance (la llave entra y la cerradura gira) y escribir
+       un nombre, que queda grabado en la primera placa.
    Movimiento reducido o ahorro de datos: no hay viaje, cada acto enseña su
    fotografía. Sin JavaScript, lo mismo por CSS. Todo sigue funcionando.
    ========================================================================== */
-const DATOS = /*DATOS*/{"v":"3d5b4e25b0","fondo":"rgb(233, 233, 232)","tr":{"h":[[-1,10],[0,10],[1,16],[2,20],[3,20],[4,20],[5,20],[7,20]],"v":[[-1,8],[0,8],[1,14]]},"sobre":{"5h":{"pantalla":[[0.49368,0.2283],[0.90632,0.2283],[0.91167,0.68023],[0.48833,0.68023]]},"8h":{"chapa":[[0.62579,0.76695],[0.96764,0.6735],[0.96723,0.71653],[0.62592,0.81661]]},"5v":{"pantalla":[[0.24211,0.30896],[0.75789,0.30896],[0.76459,0.62672],[0.23541,0.62672]]},"8v":{"chapa":[[0.44646,0.6448],[0.83646,0.58585],[0.83594,0.61346],[0.44656,0.67659]]}},"cajas":{"h":{"movil":[0.3692,0.5371,0.441,0.758],"tableta":[0.4294,0.4224,0.6271,0.7085],"portatil":[0.598,0.2824,0.8874,0.6846],"factura":[0.8266,0.1777,0.9568,0.5682]},"v":{"movil":[0.1224,0.4965,0.2049,0.6405],"tableta":[0.1922,0.4225,0.4208,0.6085],"portatil":[0.3879,0.3318,0.7234,0.5941],"factura":[0.6536,0.2639,0.8045,0.5188]}}}/*FIN*/;
+const DATOS = /*DATOS*/{"v":"5a637c8e4b","tr":[[-1,20],[1,14],[2,11],[3,14],[7,8]],"sec":16,"noche":[0,6,7,8],"tono":{"0":[43,52,66],"1":[228,228,227],"2":[228,228,228],"3":[217,216,215],"4":[249,249,249],"5":[233,232,232],"6":[38,50,69],"7":[38,50,69],"8":[41,51,67]},"foco":{"0":0.645,"1":0.7,"2":0.72,"3":0.66,"4":0.72,"5":0.58,"6":0.61,"7":0.61,"8":0.72},"anclas":{"0":{"personas":[0.4826,0.2267],"procesos":[0.6215,0.245],"datos":[0.7289,0.2592],"herramientas":[0.8145,0.2705]},"1":{"procesos":[0.4438,0.352],"herramientas":[0.8205,0.3559],"personas":[0.5853,0.2428],"datos":[0.9468,0.5207]},"2":{"procesos":[0.4618,0.2786],"herramientas":[0.6367,0.2391],"personas":[0.5534,0.1853],"datos":[0.7276,0.3178],"sistema":[0.8616,0.9428]},"3":{"entra":[0.5857,0.569],"registra":[0.6975,0.5084],"programa":[0.8331,0.3718],"avisa":[0.9873,0.3424]},"4":{"entra":[0.9175,0.4944],"sale":[0.4373,0.5831],"iman":[0.572,0.0915]},"5":{"proveedor":[0.484,0.2593],"importe":[0.5447,0.2588],"iva":[0.6047,0.2583],"vencimiento":[0.6639,0.2578]},"6":{"luz":[0.6138,0.491]},"8":{"placa":[[0.5321,0.4329],[0.9505,0.447],[0.9497,0.7225],[0.5329,0.6675]]}}}/*FIN*/;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const raiz = $("[data-maq]");
@@ -23,6 +25,7 @@ const q = new URLSearchParams(location.search);
 const EN = document.documentElement.lang === "en";
 const tope = (v, a, b) => Math.min(b, Math.max(a, v));
 const suave = (a, b, x) => { const t = tope((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const dos = (k) => String(k).padStart(2, "0");
 
 /* De un rectángulo (w × h) a cuatro esquinas cualesquiera: la matriz que coloca un trozo de HTML sobre un plano de la fotografía. */
 function matriz(w, h, e) {
@@ -34,24 +37,24 @@ function matriz(w, h, e) {
 }
 
 /* ------------------------------------------------------------ la escena */
-function crearEscena(lienzo, plano, { movil, ligera }) {
+function crearEscena(lienzo, { movil, ligera }) {
   const ctx = lienzo.getContext("2d", { alpha: false });
   if (!ctx) return null;
-  const P = movil ? ["v", "u"] : ["h", "t"], TR = new Map(DATOS.tr[movil ? "v" : "h"]), FONDO = DATOS.fondo, LADO = movil ? 1 : 16 / 9;
+  const TR = new Map(DATOS.tr), SEC = DATOS.sec, LADO = 16 / 9;
   const mem = new Map(), cola = [];
   let W = 0, H = 0, dpr = 1, caja = { x: 0, y: 0, w: 1, h: 1 }, c = 0, sucio = true, enVuelo = 0, alPintar = null, alCargar = null;
+  let llave = 0, abierta = false;   // la secuencia de Finance: cuánto ha entrado la llave (0…1) y si la cerradura ya ha girado
   const url = (n) => `/assets/v2/img/escena/${n}.webp?v=${DATOS.v}`;
-  const fija = (i) => `${P[0]}-${i === 7 ? 6 : tope(i, 0, 8)}`;
+  // la fotografía de cada acto (el 7, las demos, se queda con la del 6)
+  const fija = (i) => (i === 5 && abierta ? "e-fin" : `h-${i === 7 ? 6 : tope(i, 0, 8)}`);
   // el fotograma k del tramo que empieza en el acto i (0 y n son las dos fotografías de los extremos)
-  const cuadro = (i, k) => { const n = TR.get(i); if (!n || k >= n) return fija(i + 1); if (k <= 0) return i < 0 ? `${P[1]}--1-01` : fija(i); return `${P[1]}-${i}-${String(k).padStart(2, "0")}`; };
-  // el gris del fondo del plató en la esquina de arriba a la izquierda de una imagen: con él se continúa la pared donde la fotografía no llega
-  const gota = document.createElement("canvas"); gota.width = gota.height = 1; const gctx = gota.getContext("2d", { willReadFrequently: true });
-  const techo = (im) => { try { gctx.drawImage(im, 0, 0, im.naturalWidth * 0.05, 3, 0, 0, 1, 1); const d = gctx.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2]]; } catch (err) { return null; } };
+  const cuadro = (i, k) => { const n = TR.get(i); if (!n || k >= n) return fija(i + 1); if (k <= 0) return i < 0 ? "t--1-01" : fija(i); return `t-${i}-${dos(k)}`; };
+  const deLlave = (k) => (k <= 0 ? "h-5" : k > SEC ? "e-fin" : `e-${dos(k)}`);
   const bajar = () => {
     while (enVuelo < 4 && cola.length) {
       const n = cola.shift(), e = mem.get(n); if (e.pedida) continue;
       e.pedida = true; enVuelo++; const im = new Image(); im.decoding = "async"; e.im = im;
-      im.onload = () => { e.ok = true; e.techo = techo(im); enVuelo--; sucio = true; if (alCargar) alCargar(n); bajar(); };
+      im.onload = () => { e.ok = true; enVuelo--; sucio = true; if (alCargar) alCargar(n); bajar(); };
       im.onerror = () => { enVuelo--; bajar(); };
       im.src = url(n);
     }
@@ -59,56 +62,69 @@ function crearEscena(lienzo, plano, { movil, ligera }) {
   const pedir = (n, antes) => { let e = mem.get(n); if (!e) { e = { ok: false, pedida: false, im: null }; mem.set(n, e); } if (!e.pedida) { const i = cola.indexOf(n); if (i >= 0) cola.splice(i, 1); antes ? cola.unshift(n) : cola.push(n); } return e; };
   const tramo = (i, antes) => { const n = TR.get(i); if (!n || ligera) return; const ns = []; for (let k = 1; k < n; k++) ns.push(cuadro(i, k)); (antes ? ns.reverse() : ns).forEach((x) => pedir(x, antes)); bajar(); };
   const lista = (n) => { const e = mem.get(n); return e && e.ok ? e.im : null; };
+  const esperar = (ns) => { ns.forEach((x) => pedir(x, true)); bajar(); return new Promise((si) => { const mira = () => { if (ns.every(lista)) { alCargar = null; si(true); } }; alCargar = mira; mira(); }); };
+  const deSecuencia = () => { const ns = ["e-fin"]; for (let k = 1; k <= SEC; k++) ns.push(deLlave(k)); return ns; };
+  // en el teléfono cada fotografía se encuadra hacia donde está lo que cuenta
+  const foco = (v) => { const i = tope(Math.floor(v), 0, 8), j = Math.min(8, i + 1), f = suave(0, 1, v - i); return DATOS.foco[i] + (DATOS.foco[j] - DATOS.foco[i]) * f; };
 
   function medir() {
     const r = lienzo.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height);
-    dpr = Math.min(window.devicePixelRatio || 1, 2, (movil ? 1200 : 2000) / W);
+    dpr = Math.min(window.devicePixelRatio || 1, 2, (movil ? 1300 : 2000) / W);
     lienzo.width = Math.round(W * dpr); lienzo.height = Math.round(H * dpr);
-    if (movil) { const l = Math.max(W, H); caja = { x: (W - l) / 2, y: (H - l) * 0.42, w: l, h: l }; }   // cuadrada, llenando el panel
+    encuadrar(); sucio = true;
+  }
+  function encuadrar() {
+    if (movil) { const h = Math.max(H, W), w = h * LADO; caja = { x: tope(W / 2 - foco(c) * w, W - w, 0), y: (H - h) / 2, w, h }; }   // a toda la altura del panel, recortada por los lados
     else { const h = Math.min(W / LADO, H), w = h * LADO; caja = { x: W - w, y: H - h, w, h }; }   // entera, sin recortar la escena, apoyada abajo y a la derecha
-    sucio = true;
+  }
+  // una imagen y, donde no llega al borde de la pantalla, su fondo continuado hacia arriba y hacia la izquierda
+  function poner(im, alfa) {
+    ctx.globalAlpha = alfa; const iw = im.naturalWidth, ih = im.naturalHeight;
+    ctx.drawImage(im, caja.x, caja.y, caja.w, caja.h);
+    if (caja.x > 0.5) ctx.drawImage(im, 0, 0, 2, ih, 0, caja.y, caja.x + 1, caja.h);
+    if (caja.y > 0.5) { ctx.drawImage(im, 0, 0, iw, 2, caja.x, 0, caja.w, caja.y + 1); if (caja.x > 0.5) ctx.drawImage(im, 0, 0, 2, 2, 0, 0, caja.x + 1, caja.y + 1); }
+    ctx.globalAlpha = 1;
   }
   function pintar() {
     sucio = false;
-    const i = tope(Math.floor(c), -1, 7), f = c - i, n = ligera ? 0 : TR.get(i) || 0;
     let A, B, a;
-    if (n) { const pos = f * n, k = Math.min(n - 1, Math.floor(pos)); A = cuadro(i, k); B = cuadro(i, k + 1); a = suave(0.12, 0.88, pos - k); }
-    else { A = fija(i); B = fija(i + 1); a = suave(0.15, 0.85, f); }
-    pedir(A, true); pedir(B, true); bajar();
-    let ia = lista(A), ib = lista(B);
-    if (!ia && !ib) { ia = lista(fija(Math.round(c))) || lista(fija(i)) || lista(fija(i + 1)); if (!ia) return false; a = 0; }
-    else if (!ia) { ia = ib; a = 0; } else if (!ib || A === B) a = 0;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.globalAlpha = 1; ctx.fillStyle = FONDO; ctx.fillRect(0, 0, W, H);
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(ia, caja.x, caja.y, caja.w, caja.h);
-    if (a > 0.004) { ctx.globalAlpha = a; ctx.drawImage(ib, caja.x, caja.y, caja.w, caja.h); ctx.globalAlpha = 1; }
-    // donde la fotografía no llega al borde de la pantalla, el plató continúa: la pared hacia arriba (con su mismo gris) y hacia la izquierda
-    if (caja.x > 1) { ctx.drawImage(ia, 0, 0, 2, ia.naturalHeight, 0, caja.y, caja.x + 1, caja.h); if (a > 0.004) { ctx.globalAlpha = a; ctx.drawImage(ib, 0, 0, 2, ib.naturalHeight, 0, caja.y, caja.x + 1, caja.h); ctx.globalAlpha = 1; } }
-    if (caja.y > 1) {
-      const ta = (mem.get(A) || {}).techo || mem.get(fija(Math.round(c)))?.techo || [209, 209, 209], tb = (a > 0.004 && (mem.get(B) || {}).techo) || ta, t = ta.map((v, k) => Math.round(v + (tb[k] - v) * a)), m = caja.h * 0.12;
-      const g = ctx.createLinearGradient(0, caja.y, 0, caja.y + m); g.addColorStop(0, `rgb(${t})`); g.addColorStop(1, `rgba(${t}, 0)`);
-      ctx.fillStyle = `rgb(${t})`; ctx.fillRect(0, 0, W, caja.y + 1); ctx.fillStyle = g; ctx.fillRect(0, caja.y, W, m);
+    if ((llave > 0) && !ligera && Math.abs(c - 5) < 0.02) { const pos = llave * (SEC + 1), k = Math.min(SEC, Math.floor(pos)); A = deLlave(k); B = deLlave(k + 1); a = suave(0.3, 0.7, pos - k); }   // fundido corto: la llave se mueve deprisa y a medio fundido se vería doble
+    else {
+      const i = tope(Math.floor(c), -1, 7), f = c - i, n = ligera ? 0 : TR.get(i) || 0;
+      if (n) { const pos = f * n, k = Math.min(n - 1, Math.floor(pos)); A = cuadro(i, k); B = cuadro(i, k + 1); a = suave(0.12, 0.88, pos - k); }
+      else { A = fija(i); B = fija(i + 1); a = suave(0.15, 0.85, f); }
+      pedir(A, true); pedir(B, true); bajar();
     }
+    let ia = lista(A), ib = lista(B);
+    if (!ia && !ib) { ia = lista(fija(Math.round(c))) || lista(fija(tope(Math.floor(c), 0, 8))) || lista(fija(tope(Math.ceil(c), 0, 8))); if (!ia) return false; a = 0; }
+    else if (!ia) { ia = ib; a = 0; } else if (!ib || A === B) a = 0;
+    if (movil) encuadrar();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.imageSmoothingQuality = "high";
+    poner(ia, 1); if (a > 0.004) poner(ib, a);
     if (alPintar) alPintar();
     return true;
   }
   return {
-    movil, get caja() { return caja; }, get c() { return c; },
+    movil, ligera, get caja() { return caja; }, get c() { return c; }, get ancho() { return W; }, get alto() { return H; }, get llave() { return abierta ? 1 : llave; },
     medir, pintar: () => (sucio ? pintar() : true),
     ir(v) { v = tope(v, -1, 8); if (v !== c) { c = v; sucio = true; } },
     // se piden primero las fotografías de cada acto y después los viajes, empezando por los que rodean al acto en que se está
     cargar(desde) {
       const orden = [0, 1, 2, 3, 4, 5, 6, 8].sort((a, b) => Math.abs(a - desde) - Math.abs(b - desde)); orden.forEach((i) => pedir(fija(i)));
       [...TR.keys()].filter((i) => i >= 0).sort((a, b) => Math.abs(a + 0.5 - desde) - Math.abs(b + 0.5 - desde)).forEach((i) => tramo(i));
+      if (!ligera) deSecuencia().forEach((n) => pedir(n)); else pedir("e-fin");
       bajar();
     },
-    entrada() { if (ligera || !TR.get(-1)) return Promise.resolve(false); const ns = []; for (let k = 1; k < TR.get(-1); k++) ns.push(cuadro(-1, k)); ns.push(fija(0)); ns.forEach((x) => pedir(x, true)); bajar(); return new Promise((si) => { const mira = () => { if (ns.every(lista)) { alCargar = null; si(true); } }; alCargar = mira; mira(); }); },
-    primera(i) { pedir(fija(i), true); bajar(); return new Promise((si) => { const mira = () => { if (lista(fija(i))) { alCargar = null; si(true); } }; alCargar = mira; mira(); }); },
-    cerca(i) { tramo(i, true); },
+    entrada() { if (ligera || !TR.get(-1)) return Promise.resolve(false); const ns = []; for (let k = 1; k < TR.get(-1); k++) ns.push(cuadro(-1, k)); ns.push(fija(0)); return esperar(ns); },
+    primera(i) { return esperar([fija(i)]); },
+    cerca(i) { tramo(i, true); if (i === 4 || i === 5) { (ligera ? ["e-fin"] : deSecuencia()).forEach((n) => pedir(n, true)); bajar(); } },
     alPintar(f) { alPintar = f; },
     // el fotograma entero más cercano: al dejar de mover el scroll la imagen se queda en una fotografía nítida, nunca a medio fundido entre dos
     rejilla(v) { const i = tope(Math.floor(v), -1, 7), n = ligera ? 1 : TR.get(i) || 1; return i + Math.round((v - i) * n) / n; },
-    lista: (n) => !!lista(n), fija,
+    // Finance: la llave entra en la cerradura (0…1) y, al terminar, la cerradura queda girada
+    secuencia() { return ligera ? esperar(["e-fin"]) : esperar(deSecuencia()); },
+    girar(t) { llave = tope(t, 0, 1); sucio = true; },
+    abrir(si) { abierta = !!si; if (si) llave = 0; sucio = true; },
     // dónde cae en la pantalla un punto de la fotografía (0…1)
     punto: (u, v) => [caja.x + u * caja.w, caja.y + v * caja.h],
   };
@@ -116,18 +132,19 @@ function crearEscena(lienzo, plano, { movil, ligera }) {
 
 if (raiz) {
   const actos = $$("[data-acto]", raiz);
-  const lienzo = $("[data-maq-lienzo]", raiz), plano = $("[data-esc-plano]", raiz), panel = $(".maq-escena", raiz);
-  const velo = $(".maq-velo", raiz);
+  const lienzo = $("[data-maq-lienzo]", raiz), plano = $("[data-esc-plano]", raiz);
+  const velo = $(".maq-velo", raiz), html = document.documentElement;
   const movil = matchMedia("(max-width: 860px), (max-aspect-ratio: 21/20)").matches;
   const ahorro = navigator.connection && navigator.connection.saveData;
   const captura = q.has("captura");
+  const NOCHE = new Set(DATOS.noche || []);
   let escena = null, cap = 0, visto = 0;
   raiz.classList.toggle("es-movil", movil);
 
   /* ---------------------------------------------- del scroll al capítulo */
-  // Dentro de un acto la escena se queda donde está (mientras se lee); la cámara viaja al pasar de un acto a otro.
+  // Dentro de un acto la escena se queda donde está (mientras se lee); cambia al pasar de un acto a otro.
   function leerCapitulo() {
-    const mitad = innerHeight * (movil ? 0.72 : 0.5), ancho = innerHeight * 0.9;
+    const mitad = innerHeight * (movil ? 0.66 : 0.5), ancho = innerHeight * (movil ? 0.36 : 0.8);
     let c = +actos[0].dataset.acto;
     for (let i = 0; i < actos.length - 1; i++) {
       const frontera = actos[i + 1].getBoundingClientRect().top, a = +actos[i].dataset.acto, b = +actos[i + 1].dataset.acto;
@@ -135,14 +152,21 @@ if (raiz) {
     }
     return c;
   }
+  const presencia = actos.map((el) => [$(":scope > .acto-in", el), +el.dataset.acto]).filter(([el]) => el);
   const indice = $$("[data-indice]", raiz);
   let actual = -1;
   function alScroll() {
     cap = leerCapitulo();
     const n = Math.round(cap);
-    if (n !== actual) { actual = n; indice.forEach((a) => a.setAttribute("aria-current", String(+a.dataset.indice === n))); if (escena) { escena.cerca(Math.min(7, n)); escena.cerca(Math.max(0, n - 1)); } }
+    if (n !== actual) {
+      actual = n; indice.forEach((a) => a.setAttribute("aria-current", String(+a.dataset.indice === n)));
+      html.classList.toggle("esc-noche", NOCHE.has(n));   // la cabecera y la tira de capítulos, con el texto claro sobre la escena oscura
+      if (escena) { escena.cerca(Math.min(7, n)); escena.cerca(Math.max(0, n - 1)); }
+    }
+    // el texto de un acto se retira cuando la escena empieza a ser la del siguiente: nunca queda texto de una luz sobre la imagen de la otra
+    if (!movil) for (const [el, a] of presencia) { const v = (1 - suave(0.26, 0.5, Math.abs(cap - a))).toFixed(3); if (el.__pres !== v) { el.__pres = v; el.style.opacity = v; el.style.pointerEvents = +v < 0.3 ? "none" : ""; } }
     const demos = cap > 6.55 && cap < 7.6;
-    if (velo) velo.style.setProperty("--velo", demos ? "0.82" : "0");
+    if (velo) velo.style.setProperty("--velo", demos ? "0.86" : "0");
     raiz.classList.toggle("is-demos", demos);
     raiz.classList.toggle("is-fuera", raiz.getBoundingClientRect().bottom < innerHeight * 0.6);
   }
@@ -155,33 +179,30 @@ if (raiz) {
     actos.forEach((a) => io.observe(a));
   } else actos.forEach((a) => a.classList.add("is-visto"));
 
-  /* ------------------------------------------------------------ las áreas */
-  const areas = $("[data-areas]", raiz), rotulos = $$("[data-modulo-i]", raiz), foco = $("[data-esc-foco]", raiz);
-  const COSA = { personas: "movil", procesos: "tableta", herramientas: "portatil", datos: "factura" };
-  let areaElegida = "", elegirArea = () => {};
+  /* ------------------------------------------------- los cuatro cabos */
+  const areas = $("[data-areas]", raiz);
+  const rotulos = $$("[data-rot]", raiz).map((li, i) => { const [a, k] = li.dataset.rot.split(":"); return { li, a: +a, k, i: +li.style.getPropertyValue("--i") || 0, p: (DATOS.anclas[a] || {})[k], w: 0, ver: false }; }).filter((r) => r.p);
+  let areaElegida = "";
   if (areas) {
     const pest = $$("[data-area]", areas);
-    elegirArea = (i, foco_) => {
-      pest.forEach((b, k) => { const si = k === i; b.setAttribute("aria-selected", String(si)); b.tabIndex = si ? 0 : -1; $("#area-" + k, areas).hidden = !si; if (si && foco_) b.focus(); });
+    const elegir = (i, conFoco) => {
+      pest.forEach((b, k) => { const si = k === i; b.setAttribute("aria-selected", String(si)); b.tabIndex = si ? 0 : -1; $("#area-" + k, areas).hidden = !si; if (si && conFoco) b.focus(); });
       areaElegida = pest[i].dataset.modulo || "";
-      rotulos.forEach((li) => li.classList.toggle("is-elegido", li.dataset.moduloI === areaElegida));
-      colocar();
+      // en la fotografía, el nombre del cabo elegido se queda encendido y los otros se apagan
+      rotulos.forEach((r) => { if (r.a === 2) { r.li.classList.toggle("is-elegido", !!areaElegida && r.k === areaElegida); r.li.classList.toggle("is-apagado", !!areaElegida && r.k !== areaElegida); } });
     };
     pest.forEach((b, i) => {
-      b.addEventListener("click", () => elegirArea(i));
-      b.addEventListener("keydown", (e) => { const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (d) { e.preventDefault(); elegirArea((i + d + pest.length) % pest.length, true); } });
+      b.addEventListener("click", () => elegir(i));
+      b.addEventListener("keydown", (e) => { const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (d) { e.preventDefault(); elegir((i + d + pest.length) % pest.length, true); } });
     });
-    // los nombres colgados de cada cosa también se pueden pulsar
-    $$("[data-modulo-b]", raiz).forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.moduloB; elegirArea(areaElegida === pest[i].dataset.modulo ? 0 : i); }));
   }
 
   /* --------------------------------------------------- Finance: la factura */
-  const fz = $("[data-fz]", raiz), sobreP = $('[data-sobre="pantalla"]', raiz);
+  const fz = $("[data-fz]", raiz);
   if (fz) {
     const ORDEN = ["prov", "num", "fecha", "base", "iva", "total", "vence"];
     const pasar = $("[data-fz-pasar]", fz), otra = $("[data-fz-otra]", fz), hecho = $("[data-fz-hecho]", fz), accion = $("[data-fz-accion]", fz), vacio = $("[data-fz-vacio]", fz), preguntas = $("[data-fz-preguntas]", fz), respuesta = $("[data-fz-respuesta]", fz), entrada = $("[data-fz-base]", fz);
     const filas = Object.fromEntries($$("[data-fz-campo]", fz).map((d) => [d.dataset.fzCampo, d]));
-    const enPantalla = Object.fromEntries($$("[data-esc-campo]", raiz).map((d) => [d.dataset.escCampo, d]));
     const dinero = (n) => { const s = n.toLocaleString(EN ? "en-GB" : "es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }); return EN ? "€" + s : s.replace(/^(\d)(\d{3},)/, "$1.$2") + " €"; };
     const leerCifra = (t) => { let s = String(t).replace(/[^\d.,]/g, ""); if (!s) return NaN; const dec = EN ? "." : ",", mil = EN ? "," : "."; if (s.includes(dec)) s = s.split(mil).join("").replace(dec, "."); else { const i = s.lastIndexOf(mil); s = i >= 0 && s.length - i - 1 !== 3 ? s.replace(mil, ".") : s.split(mil).join(""); } return parseFloat(s); };
     let datos = { base: 1240, iva: 260.4, total: 1500.4 }, enMarcha = 0;
@@ -189,71 +210,73 @@ if (raiz) {
       base = Math.min(99999.99, Math.max(1, Math.round(base * 100) / 100)); const iva = Math.round(base * 21) / 100, total = Math.round((base + iva) * 100) / 100;
       datos = { base, iva, total };
       const t = { base: dinero(base), iva: dinero(iva), total: dinero(total) };
-      for (const k of ["base", "iva", "total"]) { $("dd span", filas[k]).textContent = t[k]; if (enPantalla[k]) $("dd", enPantalla[k]).textContent = t[k]; }
+      for (const k of ["base", "iva", "total"]) $("dd span", filas[k]).textContent = t[k];
       $$("[data-fz-q]", fz).forEach((b) => { b.dataset.fzR = b.dataset.fzPlantilla.replace(/\{(\w+)\}/g, (_, k) => t[k]); });
       return t;
     };
-    const llenar = (k) => { filas[k].classList.add("is-lleno"); if (enPantalla[k]) enPantalla[k].classList.add("is-lleno"); };
-    const terminar = () => { fz.classList.remove("is-leyendo"); fz.classList.add("is-leida"); if (sobreP) { sobreP.classList.remove("is-leyendo"); sobreP.classList.add("is-leida"); } vacio.hidden = true; hecho.hidden = false; accion.hidden = false; preguntas.hidden = false; otra.hidden = false; pasar.hidden = true; };
+    const terminar = () => { fz.classList.remove("is-leyendo"); fz.classList.add("is-leida"); vacio.hidden = true; hecho.hidden = false; accion.hidden = false; preguntas.hidden = false; otra.hidden = false; pasar.hidden = true; pasar.disabled = false; };
     const leer = () => {
       const v = leerCifra(entrada.value); poner(isFinite(v) ? v : datos.base); entrada.value = dinero(datos.base).replace(/\s?€|€/g, "");
-      const turno = ++enMarcha, t0 = performance.now(), dur = REDUCIDO ? 500 : 2300, lanzados = new Set();
-      fz.classList.add("is-leyendo"); if (sobreP) sobreP.classList.add("is-leyendo"); pasar.disabled = true; entrada.disabled = true;
-      const paso = (ahora) => {
+      const turno = ++enMarcha, lanzados = new Set(), conLlave = escena && !escena.ligera && !REDUCIDO, dur = conLlave ? 3200 : 500;
+      fz.classList.add("is-leyendo"); pasar.disabled = true; entrada.disabled = true;
+      // la llave entra a la vez que se rellena el registro; si sus fotogramas tardan, no se espera por ellos
+      Promise.race([conLlave ? escena.secuencia() : Promise.resolve(false), new Promise((si) => setTimeout(() => si(false), 1600))]).then((hayLlave) => {
         if (turno !== enMarcha) return;
-        const t = Math.min(1, (ahora - t0) / dur);
-        if (sobreP) sobreP.style.setProperty("--lee", t.toFixed(3));
-        ORDEN.forEach((k, i) => { if (!lanzados.has(k) && t >= 0.1 + (i / ORDEN.length) * 0.84) { lanzados.add(k); llenar(k); } });
-        if (t < 1) requestAnimationFrame(paso); else setTimeout(() => { if (turno === enMarcha) { pasar.disabled = false; terminar(); } }, 320);
-      };
-      requestAnimationFrame(paso);
+        const t0 = performance.now();
+        const paso = (ahora) => {
+          if (turno !== enMarcha) return;
+          const t = Math.min(1, (ahora - t0) / dur);
+          if (hayLlave) escena.girar(t < 0.72 ? 0.7 * suave(0, 1, t / 0.72) : 0.7 + 0.3 * suave(0, 1, (t - 0.72) / 0.28));   // primero entra; después gira
+          ORDEN.forEach((k, i) => { if (!lanzados.has(k) && t >= 0.12 + (i / ORDEN.length) * 0.6) { lanzados.add(k); filas[k].classList.add("is-lleno"); } });
+          if (t < 1) requestAnimationFrame(paso); else { if (escena) escena.abrir(true); setTimeout(() => { if (turno === enMarcha) terminar(); }, 260); }
+        };
+        requestAnimationFrame(paso);
+      });
     };
     pasar.addEventListener("click", leer);
-    entrada.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); leer(); } });
+    entrada.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); if (!pasar.disabled && !pasar.hidden) leer(); } });
     entrada.addEventListener("change", () => { const v = leerCifra(entrada.value); if (isFinite(v)) { poner(v); entrada.value = dinero(datos.base).replace(/\s?€|€/g, ""); } });
     otra.addEventListener("click", () => {
-      enMarcha++; fz.classList.remove("is-leida", "is-leyendo"); if (sobreP) sobreP.classList.remove("is-leida", "is-leyendo");
-      [...Object.values(filas), ...Object.values(enPantalla)].forEach((f) => f.classList.remove("is-lleno"));
+      enMarcha++; fz.classList.remove("is-leida", "is-leyendo"); if (escena) escena.abrir(false);
+      Object.values(filas).forEach((f) => f.classList.remove("is-lleno"));
       vacio.hidden = false; hecho.hidden = true; accion.hidden = true; preguntas.hidden = true; otra.hidden = true; pasar.hidden = false; pasar.disabled = false; entrada.disabled = false; respuesta.textContent = ""; $$("[data-fz-q]", fz).forEach((b) => b.setAttribute("aria-pressed", "false"));
       entrada.focus(); entrada.select();
     });
     $$("[data-fz-q]", fz).forEach((b) => b.addEventListener("click", () => { $$("[data-fz-q]", fz).forEach((x) => x.setAttribute("aria-pressed", String(x === b))); respuesta.textContent = b.dataset.fzR; }));
   }
 
-  /* ------------------------------------------ el tuyo: el nombre en la placa */
-  const tuyo = $("[data-tuyo]", raiz), sobreC = $('[data-sobre="chapa"]', raiz);
+  /* -------------------------------------- el tuyo: el nombre en la placa */
+  const tuyo = $("[data-tuyo]", raiz), sobre = $('[data-sobre="placa"]', raiz);
   if (tuyo) {
     const nombre = $("[data-tuyo-nombre]", tuyo), piezas = $$("[data-tuyo-pieza]", tuyo), cta = $("[data-tuyo-cta]", tuyo), base = cta.getAttribute("href"), enPlaca = $("[data-esc-nombre]", raiz);
     const destino = () => { const p = new URLSearchParams(), n = nombre.value.trim(), a = piezas.filter((c) => c.checked).map((c) => c.value); if (n) p.set("empresa", n); if (a.length) p.set("areas", a.join(", ")); const s = p.toString(); cta.setAttribute("href", s ? base + "?" + s : base); };
-    const grabar = () => { if (!enPlaca) return; const t = (nombre.value.trim() || nombre.placeholder).toUpperCase(); enPlaca.textContent = t; enPlaca.style.setProperty("--n", String(Math.max(12, t.length))); };
+    const grabar = () => { if (!enPlaca) return; const t = (nombre.value.trim() || nombre.placeholder).toUpperCase(); enPlaca.textContent = t; enPlaca.style.setProperty("--n", String(Math.max(10, t.length))); };
     nombre.addEventListener("input", () => { grabar(); destino(); });
     piezas.forEach((c) => c.addEventListener("change", destino));
     grabar();
   }
 
   /* ----------------------------------- lo que va encima de la fotografía */
-  const BASE = { pantalla: [760, 475], chapa: [1756, 100] };
+  const PLACA = [1408, 400], ORDEN_PASADOR = { proveedor: 0, importe: 1, iva: 2, vencimiento: 3 };
   function colocar() {
     if (!escena) return;
-    const c = escena.c, s = escena.movil ? "v" : "h", pt = ([u, v]) => escena.punto(u, v);
-    for (const [el, clave, momento, margen] of [[sobreP, "pantalla", 5, 0.05], [sobreC, "chapa", 8, 0.05]]) {
-      if (!el) continue;
-      const d = DATOS.sobre[momento + s], ver = d && Math.abs(c - momento) < margen;
-      el.classList.toggle("is-puesto", !!ver);
-      if (ver) el.style.transform = matriz(BASE[clave][0], BASE[clave][1], d[clave].map(pt));
+    const c = escena.c, W = escena.ancho, H = escena.alto, arriba = movil ? 34 : 112;
+    // los nombres de las cosas, cada uno donde cae la suya en la fotografía; solo se leen con la escena quieta en su acto
+    for (const r of rotulos) {
+      const b = 1 - suave(0.05, 0.2, Math.abs(c - r.a));
+      if (b < 0.01) { if (r.ver) { r.li.style.opacity = "0"; r.ver = false; } continue; }
+      if (!r.w) r.w = r.li.offsetWidth || 1;
+      const [x0, y0] = escena.punto(r.p[0], r.p[1]), fuera = x0 < -6 || x0 > W + 6 || y0 > H + 6;
+      const x = tope(x0, r.w / 2 + 6, W - r.w / 2 - 6), y = Math.max(y0, arriba);
+      r.li.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; r.li.style.opacity = fuera ? "0" : b.toFixed(3); r.ver = true;
+      r.li.classList.toggle("is-borde", Math.abs(x - x0) > 3 || y !== y0);
+      if (r.a === 5) r.li.classList.toggle("is-ok", escena.llave >= 0.36 + 0.1 * ORDEN_PASADOR[r.k]);   // cada dato se enciende cuando su pasador encaja
     }
-    // los nombres de las cuatro partes, cada uno sobre la suya, y el foco sobre la elegida
-    const b = 1 - suave(0.04, 0.16, Math.abs(c - 2)), cajas = DATOS.cajas[s];
-    rotulos.forEach((li) => {
-      const k = cajas[COSA[li.dataset.moduloI]]; if (!k) return;
-      const [x, y] = escena.punto((k[0] + k[2]) / 2, k[1]);
-      li.style.setProperty("--x", x.toFixed(1) + "px"); li.style.setProperty("--y", (y - 10).toFixed(1) + "px"); li.style.setProperty("--o", b.toFixed(3));
-      li.classList.toggle("is-activo", b > 0.5);
-    });
-    if (foco) {
-      const k = areaElegida && cajas[COSA[areaElegida]];
-      if (k && b > 0.02) { const [x0, y0] = escena.punto(k[0], k[1]), [x1, y1] = escena.punto(k[2], k[3]), m = escena.caja.w * 0.012; foco.style.cssText = `left:${(x0 - m).toFixed(1)}px;top:${(y0 - m).toFixed(1)}px;width:${(x1 - x0 + m * 2).toFixed(1)}px;height:${(y1 - y0 + m * 2).toFixed(1)}px;opacity:${b.toFixed(3)}`; }
-      else foco.style.opacity = "0";
+    // el nombre de la empresa, grabado en la primera placa con su misma perspectiva
+    if (sobre) {
+      const d = DATOS.anclas[8] && DATOS.anclas[8].placa, ver = d && Math.abs(c - 8) < 0.05;
+      sobre.classList.toggle("is-puesto", !!ver);
+      if (ver) sobre.style.transform = matriz(PLACA[0], PLACA[1], d.map(([u, v]) => escena.punto(u, v)));
     }
   }
 
@@ -261,12 +284,12 @@ if (raiz) {
   const quieta = () => raiz.classList.add("is-quieta", "is-abierta");
   if (q.has("quieta") || !lienzo || !plano) quieta();
   else {
-    escena = crearEscena(lienzo, plano, { movil, ligera: REDUCIDO || ahorro || q.has("ligera") });
+    escena = crearEscena(lienzo, { movil, ligera: REDUCIDO || ahorro || q.has("ligera") });
     if (!escena) quieta();
     else {
       window.__escena = escena;
       escena.alPintar(colocar);
-      const medir = () => { if (movil) raiz.style.setProperty("--esc-alto", Math.round(Math.min(innerWidth, innerHeight * 0.5)) + "px"); escena.medir(); };
+      const medir = () => { if (movil) raiz.style.setProperty("--esc-alto", Math.round(Math.min(innerWidth, innerHeight * 0.5)) + "px"); escena.medir(); rotulos.forEach((r) => { r.w = 0; }); };
       medir(); cap = leerCapitulo(); visto = cap;
       let abierto = false, intro = null;
       const abrir = () => { if (!abierto) { abierto = true; raiz.classList.add("is-abierta"); } };
@@ -274,13 +297,13 @@ if (raiz) {
       const empezar = () => { raiz.classList.add("is-viva"); escena.cargar(cap); };
       if (cap > 0.3 || captura || REDUCIDO) { escena.ir(cap); escena.primera(Math.round(cap)).then(() => { clearTimeout(espera); abrir(); empezar(); if (captura) { escena.pintar(); window.__listo = true; } }); }
       else {
-        // la entrada: cada cosa llega al cuadro desde un sitio distinto; cuando ya están, aparece el título
+        // la entrada: las cuatro placas llegan desalineadas y se alinean; cuando la luz pasa, aparece el título
         escena.ir(-1);
         Promise.race([escena.entrada(), new Promise((si) => setTimeout(() => si(false), 2400))]).then((si) => {
           clearTimeout(espera);
           if (!si) { escena.ir(cap); escena.primera(0).then(empezar); abrir(); return; }
-          raiz.classList.add("is-viva"); intro = { t0: performance.now() + 120, dur: 2100 };
-          setTimeout(abrir, 700); setTimeout(() => escena.cargar(0), 900);
+          raiz.classList.add("is-viva"); intro = { t0: performance.now() + 160, dur: 2400 };
+          setTimeout(abrir, 900); setTimeout(() => escena.cargar(0), 1100);
         });
       }
       // el puntero mueve muy poco el encuadre, como quien se asoma
@@ -289,7 +312,7 @@ if (raiz) {
       let antes = performance.now();
       const cuadro = (ahora) => {
         const dt = Math.min(0.1, (ahora - antes) / 1000); antes = ahora;
-        if (intro) { const t = tope((ahora - intro.t0) / intro.dur, 0, 1); escena.ir(-1 + (1 - Math.pow(1 - t, 3))); visto = escena.c; if (t >= 1) { intro = null; visto = Math.min(cap, 0); } }
+        if (intro) { const t = tope((ahora - intro.t0) / intro.dur, 0, 1); escena.ir(-1 + t * t * (3 - 2 * t)); visto = escena.c; if (t >= 1) { intro = null; visto = Math.min(cap, 0); } }
         else {
           // la imagen sigue al scroll con un poco de inercia (sin ella con movimiento reducido)
           const meta = escena.rejilla(cap);
@@ -303,7 +326,7 @@ if (raiz) {
       requestAnimationFrame(cuadro);
       let anchoPrevio = innerWidth, altoPrevio = innerHeight;
       addEventListener("resize", () => { if (innerWidth !== anchoPrevio || Math.abs(innerHeight - altoPrevio) > 130) { anchoPrevio = innerWidth; altoPrevio = innerHeight; medir(); } });
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(colocar);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { rotulos.forEach((r) => { r.w = 0; }); colocar(); });
     }
   }
   alScroll();

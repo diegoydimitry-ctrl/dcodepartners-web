@@ -21,15 +21,17 @@ import { fileURLToPath } from 'node:url';
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errores = [];
 
-/* Desde el rediseño «el banco de trabajo» (octubre de 2026) la portada es una
-   escena fotografiada que se recorre con el scroll. Lo que tiene que llevar,
-   en los dos idiomas: los nueve actos, el lienzo de la escena con sus dos
-   planos de HTML (la pantalla del portátil y la placa), la factura de Finance
-   que se puede probar, el nombre de la empresa y las demos. */
+/* Desde el rediseño «el conjunto» (octubre de 2026) la portada son cinco
+   escenas fotografiadas que se recorren con el scroll. Lo que tiene que
+   llevar, en los dos idiomas: los nueve actos, el lienzo de la escena, los
+   rótulos que dicen qué es cada cosa de la imagen, la placa con el nombre de
+   la empresa, la factura de Finance que se puede probar y las demos. */
 const EXIGE = [
   ['el lienzo de la escena', /<canvas class="maq-lienzo" data-maq-lienzo>/],
-  ['el registro de Finance sobre la pantalla del portátil', /data-sobre="pantalla"/],
-  ['la placa con el nombre de la empresa', /data-sobre="chapa"/],
+  ['los rótulos de las cuatro partes sobre las placas', /data-rot="0:personas"[\s\S]*data-rot="0:herramientas"/],
+  ['los rótulos de los pasos de la automatización', /data-rot="3:entra"[\s\S]*data-rot="3:avisa"/],
+  ['los rótulos de los cuatro datos de la factura', /data-rot="5:proveedor"[\s\S]*data-rot="5:vencimiento"/],
+  ['la placa con el nombre de la empresa', /data-sobre="placa"/],
   ['la factura que se puede pasar por Finance', /data-fz-pasar/],
   ['el campo del nombre de la empresa', /data-tuyo-nombre/],
   ['las demos', /id="tocalo"/],
@@ -49,13 +51,11 @@ for (const [p, h] of [['index.html', es], ['en/index.html', en]]) {
 }
 
 /* Las imágenes que la página va a pedir tienen que existir de verdad. */
-const datos = JSON.parse(fs.readFileSync(path.join(RAIZ, 'scripts/v7/datos.json'), 'utf8'));
+const datos = JSON.parse(fs.readFileSync(path.join(RAIZ, 'scripts/v8/datos.json'), 'utf8'));
 const dir = path.join(RAIZ, 'assets/v2/img/escena');
-const pide = [];
-for (const [s, fija, viaje] of [['h', 'h', 't'], ['v', 'v', 'u']]) {
-  for (const i of [0, 1, 2, 3, 4, 5, 6, 8]) pide.push(`${fija}-${i}.webp`);
-  for (const [c0, n] of datos.tr[s]) for (let k = 1; k < n; k++) pide.push(`${viaje}-${c0}-${String(k).padStart(2, '0')}.webp`);
-}
+const pide = datos.imagenes.map((n) => `${n}.webp`);
+/* …y cada rótulo de la página tiene que tener dónde ponerse en su fotografía. */
+for (const [p, h] of [['index.html', es], ['en/index.html', en]]) for (const m of h.matchAll(/data-rot="(\d):([a-z]+)"/g)) if (!(datos.anclas[m[1]] || {})[m[2]]) errores.push(`${p}: el rótulo ${m[1]}:${m[2]} no tiene ancla en scripts/v8/datos.json`);
 for (const f of pide) if (!fs.existsSync(path.join(dir, f))) errores.push(`assets/v2/img/escena/${f} no existe`);
 
 if (errores.length) {
