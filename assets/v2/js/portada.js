@@ -260,14 +260,14 @@ if (raiz) {
   const PLACA = [1408, 400], ORDEN_PASADOR = { proveedor: 0, importe: 1, iva: 2, vencimiento: 3 };
   function colocar() {
     if (!escena) return;
-    const c = escena.c, W = escena.ancho, H = escena.alto, arriba = movil ? 34 : 112;
+    const c = escena.c, W = escena.ancho, H = escena.alto, arriba = movil ? 34 : 112;   // en el ordenador, por encima de esto está la cabecera
     // los nombres de las cosas, cada uno donde cae la suya en la fotografía; solo se leen con la escena quieta en su acto
     for (const r of rotulos) {
       const b = 1 - suave(0.05, 0.2, Math.abs(c - r.a));
       if (b < 0.01) { if (r.ver) { r.li.style.opacity = "0"; r.ver = false; } continue; }
       if (!r.w) r.w = r.li.offsetWidth || 1;
       const [x0, y0] = escena.punto(r.p[0], r.p[1]), fuera = x0 < -6 || x0 > W + 6 || y0 > H + 6;
-      const x = tope(x0, r.w / 2 + 6, W - r.w / 2 - 6), y = Math.max(y0, arriba);
+      const x = tope(x0, r.w / 2 + 6, W - r.w / 2 - 6), y = movil && r.a === 0 ? y0 : Math.max(y0, arriba);   // en el teléfono los nombres de las placas van por debajo de su canto
       r.li.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; r.li.style.opacity = fuera ? "0" : b.toFixed(3); r.ver = true;
       r.li.classList.toggle("is-borde", Math.abs(x - x0) > 3 || y !== y0);
       if (r.a === 5) r.li.classList.toggle("is-ok", escena.llave >= 0.36 + 0.1 * ORDEN_PASADOR[r.k]);   // cada dato se enciende cuando su pasador encaja
