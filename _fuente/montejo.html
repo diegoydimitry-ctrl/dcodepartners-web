@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Catering Montejo · Catering para empresas, bodas y eventos en Madrid</title>
+<meta name="description" content="Catering Montejo, cocina en Boadilla del Monte con servicio en toda la Comunidad de Madrid: coffee breaks y desayunos, cocktails, buffets, almuerzos en oficina, cenas de gala y bodas. Pide presupuesto.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/montejo/">
+<meta name="theme-color" content="#B0281C">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="Catering Montejo">
+<meta property="og:title" content="Catering Montejo · Más allá de comer">
+<meta property="og:description" content="Coffee breaks, cocktails, buffets, cenas de gala y bodas en toda la Comunidad de Madrid.">
+<meta property="og:image" content="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/montejo/og.jpg">
+<meta property="og:url" content="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/montejo/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Catering Montejo">
+<meta name="twitter:description" content="Catering para empresas, bodas y eventos en la Comunidad de Madrid.">
+<meta name="twitter:image" content="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/montejo/og.jpg">
+<link rel="preload" href="fuentes/archivo-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FoodEstablishment","name":"Catering Montejo","description":"Catering para empresas y particulares en la Comunidad de Madrid: coffee break y desayunos, cocktail, buffets, almuerzos en oficinas, cenas de gala y bodas.","address":{"@type":"PostalAddress","streetAddress":"C. Carreteros, 32, Nave 5 (Pol. Ind. Prado del Espino)","postalCode":"28660","addressLocality":"Boadilla del Monte","addressRegion":"Madrid","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":40.395839,"longitude":-3.842694},"telephone":"+34 619 39 45 06","areaServed":"Comunidad de Madrid","openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"09:00","closes":"22:00"}],"sameAs":["https://www.instagram.com/montejocatering/"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"8"}}
+</script>
+<style>
+@font-face{font-family:"Archivo";font-style:normal;font-weight:100 900;font-stretch:62% 125%;font-display:swap;src:url(fuentes/archivo-latin-standard-normal.woff2) format("woff2")}
+@font-face{font-family:"Archivo";font-style:italic;font-weight:100 900;font-stretch:62% 125%;font-display:swap;src:url(fuentes/archivo-latin-standard-italic.woff2) format("woff2")}
+
+/* Montejo: el rojo del pimentón como fondo, el blanco de las bandejas y la foto de evento tal cual, muy de cerca. */
+:root{
+  --rojo:#B0281C; --rojo-osc:#8A1E14; --papel:#F3F0EA; --tinta:#16130F; --gris:#6B655C; --mostaza:#E7B23C; --blanco:#FFFDF8;
+  --f:"Archivo","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --lado:clamp(18px,4.4vw,64px); --ancho:1360px; color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 17px/1.6 var(--f);font-stretch:100%;overflow-x:clip}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--mostaza);outline-offset:2px}
+h1,h2,h3{margin:0;font-weight:800;font-stretch:66%;line-height:.92;letter-spacing:-.005em;text-wrap:balance}
+p{margin:0}
+.caja{width:min(var(--ancho),100%);margin-inline:auto;padding-inline:var(--lado)}
+.aviso{background:var(--tinta);color:#d9d3c8;font-size:12.5px;text-align:center;padding:8px var(--lado)}
+
+/* portada roja */
+.portada{background:var(--rojo);color:var(--blanco);padding-top:18px;overflow:hidden}
+.portada .arriba{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:14.5px}
+.portada nav{display:flex;gap:26px}
+.portada nav a{text-decoration:none;opacity:.92}
+.portada nav a:hover{text-decoration:underline;text-underline-offset:5px}
+.palabra{font-weight:900;font-stretch:62%;text-transform:uppercase;font-size:clamp(72px,22vw,330px);line-height:.8;letter-spacing:-.02em;margin:clamp(28px,5vw,56px) 0 0;white-space:nowrap}
+.portada .bajo{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-top:clamp(22px,3vw,40px)}
+.portada .lema{font-size:clamp(24px,3vw,42px);font-weight:500;font-stretch:80%;line-height:1.08;max-width:22ch}
+.portada .lema small{display:block;font-size:14px;font-weight:400;font-stretch:100%;opacity:.8;margin-top:12px}
+.portada .acciones{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
+.boton{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 26px;font:700 15px/1 var(--f);font-stretch:100%;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:background-color .25s,color .25s,border-color .25s}
+.boton-blanco{background:var(--blanco);color:var(--rojo)}
+.boton-blanco:hover{background:var(--mostaza);color:var(--tinta)}
+.boton-borde{border-color:currentColor;color:inherit;background:transparent}
+.boton-borde:hover{background:rgba(255,255,255,.12)}
+.boton-rojo{background:var(--rojo);color:var(--blanco)}
+.boton-rojo:hover{background:var(--rojo-osc)}
+
+/* carril: las bandejas desfilan con el scroll */
+.carril{display:flex;gap:10px;margin-top:clamp(36px,5vw,64px);padding-bottom:10px;will-change:transform}
+.carril figure{margin:0;flex:0 0 clamp(180px,22vw,320px);aspect-ratio:3/4;overflow:hidden;background:var(--rojo-osc)}
+.carril img{width:100%;height:100%;object-fit:cover}
+
+.pase{display:none;position:relative;height:clamp(320px,40vw,600px);margin-top:clamp(20px,3vw,40px);cursor:grab;touch-action:pan-y;user-select:none}
+.pase.gl{display:block}
+.pase:active{cursor:grabbing}
+.pase canvas{display:block;width:100%;height:100%}
+.portada:has(.pase.gl) .carril{display:none}
+.pase-nota{position:absolute;right:var(--lado);bottom:8px;font-size:13px;opacity:.75;pointer-events:none}
+.cinetica{will-change:transform}
+.pliego .foto{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+/* índice de formatos */
+.indice{padding-block:clamp(80px,11vw,150px)}
+.indice .cab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+.indice h2{font-size:clamp(54px,9vw,140px);text-transform:uppercase}
+.indice .cab p{font-size:clamp(17px,1.5vw,20px);max-width:44ch;color:#3d3832}
+.lista{border-top:2px solid var(--tinta)}
+.fila{border-bottom:1px solid rgba(22,19,15,.25)}
+.fila button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:20px;padding:clamp(16px,2vw,26px) 0}
+.fila button:focus-visible{outline:3px solid var(--mostaza);outline-offset:2px}
+.fila .nombre{font-weight:800;font-stretch:66%;text-transform:uppercase;font-size:clamp(34px,5.6vw,84px);line-height:.95;transition:color .25s,letter-spacing .4s}
+.fila button:hover .nombre,.fila.abierta .nombre{color:var(--rojo)}
+.fila .signo{width:44px;height:44px;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:500;transition:transform .35s}
+.fila.abierta .signo{transform:rotate(45deg)}
+.fila .contenido{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.fila.abierta .contenido{grid-template-rows:1fr}
+.fila .contenido > div{overflow:hidden}
+.fila .dentro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(12px,1.6vw,24px);padding:4px 0 clamp(24px,3vw,40px)}
+.fila .dentro p{font-size:17px;color:#3d3832;max-width:36ch}
+.fila .dentro figure{margin:0;aspect-ratio:4/5;overflow:hidden}
+.fila .dentro img{width:100%;height:100%;object-fit:cover}
+
+/* al detalle: pliego negro */
+.detalle{background:var(--tinta);color:var(--papel);padding-block:clamp(80px,11vw,150px)}
+.detalle h2{font-size:clamp(54px,9vw,140px);text-transform:uppercase;color:var(--mostaza)}
+.pliego{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(10px,1.2vw,18px);margin-top:clamp(40px,6vw,80px)}
+.pliego figure{margin:0}
+.pliego .foto{overflow:hidden;background:#2a2620}
+.pliego img{width:100%;height:100%;object-fit:cover}
+.pliego figcaption{font-size:14px;color:#b9b1a4;margin-top:10px}
+.p1{grid-column:1/8}.p1 .foto{aspect-ratio:4/5}
+.p2{grid-column:8/13;align-self:end}.p2 .foto{aspect-ratio:3/4}
+.p3{grid-column:1/5}.p3 .foto{aspect-ratio:1}
+.p4{grid-column:5/9}.p4 .foto{aspect-ratio:1}
+.p5{grid-column:9/13}.p5 .foto{aspect-ratio:1}
+.detalle .texto{grid-column:8/13;font-size:clamp(18px,1.6vw,22px);line-height:1.5;align-self:start;color:#e9e3d8}
+
+/* empresas y bodas */
+.capitulo{padding-block:clamp(80px,11vw,150px)}
+.capitulo .rejilla{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,90px);align-items:start}
+.capitulo h2{font-size:clamp(48px,6.4vw,104px);text-transform:uppercase}
+.capitulo .entrada{font-size:clamp(17px,1.5vw,20px);color:#3d3832;max-width:42ch;margin-top:24px}
+.capitulo ul{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:0;border-top:1px solid rgba(22,19,15,.25)}
+.capitulo li{padding:14px 0;border-bottom:1px solid rgba(22,19,15,.25);font-weight:600;font-stretch:85%;font-size:20px}
+.resena{margin:0;background:var(--rojo);color:var(--blanco);padding:clamp(26px,3.4vw,48px)}
+.resena blockquote{margin:0;font-weight:600;font-stretch:80%;font-size:clamp(24px,2.6vw,36px);line-height:1.15}
+.resena figcaption{margin-top:18px;font-size:14px;opacity:.85}
+.fotos2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.fotos2 figure{margin:0;aspect-ratio:3/4;overflow:hidden}
+.fotos2 img{width:100%;height:100%;object-fit:cover}
+.bodas{background:var(--blanco)}
+.bodas .resena{background:var(--tinta)}
+
+/* alcance */
+.alcance{background:var(--mostaza);color:var(--tinta);padding-block:clamp(56px,8vw,110px)}
+.alcance .caja{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:end}
+.alcance h2{font-size:clamp(38px,4.8vw,80px);text-transform:uppercase}
+.alcance dl{margin:0;display:grid;gap:18px}
+.alcance dt{font-size:13.5px;font-weight:600}
+.alcance dd{margin:2px 0 0;font-size:18px}
+
+/* presupuesto */
+.presupuesto{background:var(--rojo);color:var(--blanco);padding-block:clamp(80px,11vw,150px)}
+.presupuesto .rejilla{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,90px);align-items:start}
+.presupuesto h2{font-size:clamp(48px,6.4vw,104px);text-transform:uppercase}
+.presupuesto .entrada{font-size:18px;max-width:38ch;margin-top:22px;opacity:.92}
+.presupuesto .directo{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+form{background:var(--blanco);color:var(--tinta);padding:clamp(22px,3vw,40px);display:grid;gap:16px}
+.campo{display:grid;gap:6px}
+.campo label{font-size:13.5px;font-weight:600}
+.campo input,.campo select,.campo textarea{width:100%;font:400 17px/1.4 var(--f);border:0;border-bottom:2px solid var(--tinta);background:transparent;padding:10px 0;border-radius:0;color:var(--tinta)}
+.campo textarea{min-height:84px;resize:vertical}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-bottom-color:var(--rojo)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.formatos{display:flex;flex-wrap:wrap;gap:8px}
+.formatos label{display:inline-flex}
+.formatos label{position:relative}
+.formatos input{position:absolute;inset:0;width:1px!important;height:1px;opacity:0;pointer-events:none;border:0;padding:0}
+.formatos span{display:inline-block;padding:10px 14px;border:2px solid var(--tinta);font-weight:600;font-size:14.5px;cursor:pointer;transition:background .2s,color .2s}
+.formatos input:checked + span{background:var(--tinta);color:var(--blanco)}
+.formatos input:focus-visible + span{outline:3px solid var(--mostaza);outline-offset:2px}
+form .envios{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+form .ayuda{font-size:13.5px;color:var(--gris)}
+.pie{background:var(--tinta);color:#c9c1b4;font-size:14px;padding:36px 0 calc(36px + env(safe-area-inset-bottom,0px))}
+.pie .caja{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 30px}
+
+/* barra fija tras la portada */
+.fija{position:fixed;top:0;left:0;right:0;z-index:30;background:var(--rojo);color:var(--blanco);transform:translateY(-110%);transition:transform .4s}
+.fija.ver{transform:none}
+.fija .caja{display:flex;justify-content:space-between;align-items:center;height:58px;gap:12px}
+.fija b{font-weight:900;font-stretch:62%;font-size:28px;text-transform:uppercase;letter-spacing:-.01em}
+.fija .boton{min-height:40px;padding:0 16px;font-size:14px}
+
+@media (max-width:900px){
+  .portada nav{display:none}
+  .portada .bajo,.indice .cab,.capitulo .rejilla,.alcance .caja,.presupuesto .rejilla{grid-template-columns:1fr}
+  .portada .acciones{justify-content:flex-start}
+  .fila .dentro{grid-template-columns:1fr 1fr}
+  .fila .dentro p{grid-column:1/-1}
+  .pliego .p1,.pliego .p2,.detalle .texto{grid-column:1/-1}
+  .p3{grid-column:1/7}.p4{grid-column:7/13}.p5{display:none}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .palabra{font-size:22vw}
+  .portada .acciones .boton{flex:1 1 100%}
+  .carril figure{flex-basis:46vw}
+  .dos{grid-template-columns:1fr}
+  .fila .signo{width:38px;height:38px;font-size:19px}
+  .fija b{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="aviso" role="note">Propuesta de web creada por D-Code Partners para Catering Montejo. No es la web oficial.</div>
+
+<div class="fija" id="fija" aria-hidden="true"><div class="caja"><b>Montejo</b><a class="boton boton-blanco" href="#presupuesto" tabindex="-1">Pedir presupuesto</a></div></div>
+
+<header class="portada" id="inicio">
+  <div class="caja">
+    <div class="arriba">
+      <span>Catering en Boadilla del Monte</span>
+      <nav aria-label="Secciones"><a href="#formatos">Formatos</a><a href="#empresas">Empresas</a><a href="#bodas">Bodas</a><a href="#presupuesto">Presupuesto</a></nav>
+    </div>
+    <h1 class="palabra" aria-label="Catering Montejo">Montejo</h1>
+    <div class="bajo">
+      <p class="lema">Una experiencia más allá que el simple hecho de comer.<small>Así lo cuentan en su Instagram. Catering para empresas y particulares en toda la Comunidad de Madrid.</small></p>
+      <div class="acciones"><a class="boton boton-blanco" href="#presupuesto">Pedir presupuesto</a><a class="boton boton-borde" href="tel:+34619394506">Llamar al 619 39 45 06</a></div>
+    </div>
+  </div>
+  <div class="pase" id="pase" aria-label="Bandejas de Catering Montejo en movimiento"><span class="pase-nota" aria-hidden="true">Arrastra la cinta</span></div>
+  <div class="carril" id="carril" aria-label="Bandejas de Catering Montejo">
+    <figure>{{img chupitos | (max-width: 560px) 46vw, 22vw | Vasitos de crema con lámina de jamón crujiente | | eager}}</figure>
+    <figure>{{img tartar | (max-width: 560px) 46vw, 22vw | Tartar de salmón con aguacate en vasitos | | eager}}</figure>
+    <figure>{{img bao | (max-width: 560px) 46vw, 22vw | Pan bao relleno de carne melosa | | eager}}</figure>
+    <figure>{{img caprese | (max-width: 560px) 46vw, 22vw | Bandeja de burrata con tomate asado y rúcula}}</figure>
+    <figure>{{img brochetas | (max-width: 560px) 46vw, 22vw | Brochetas de tomate cherry y mozzarella}}</figure>
+    <figure>{{img wraps | (max-width: 560px) 46vw, 22vw | Bandeja de wraps de salmón y espinacas}}</figure>
+    <figure>{{img burger-negra | (max-width: 560px) 46vw, 22vw | Minihamburguesas de pan negro}}</figure>
+    <figure>{{img brownies | (max-width: 560px) 46vw, 22vw | Bandeja de brownies cortados en dados}}</figure>
+    <figure>{{img zumos | (max-width: 560px) 46vw, 22vw | Botellas de zumo de naranja en un coffee break}}</figure>
+    <figure>{{img rollitos | (max-width: 560px) 46vw, 22vw | Rollitos de salmón dispuestos en hileras}}</figure>
+  </div>
+</header>
+
+<main>
+<section class="indice" id="formatos" aria-labelledby="t-formatos">
+  <div class="caja">
+    <div class="cab">
+      <h2 id="t-formatos">Formatos</h2>
+      <p>De la primera reunión de la mañana a la última copa de una boda. Elige formato y te preparamos la propuesta.</p>
+    </div>
+    <div class="lista">
+      <div class="fila abierta">
+        <button type="button" aria-expanded="true" aria-controls="fm-1"><span class="nombre">Coffee break y desayunos</span><span class="signo" aria-hidden="true">+</span></button>
+        <div class="contenido" id="fm-1"><div><div class="dentro">
+          <p>Café, zumos, bollería y bocados salados para jornadas, formaciones y reuniones de trabajo.</p>
+          <figure>{{img coffee-break | (max-width: 900px) 46vw, 28vw | Mesa de coffee break con bandejas de bocados y vasos}}</figure>
+          <figure>{{img galletas | (max-width: 900px) 46vw, 28vw | Cesta de pastas y galletas para el coffee break}}</figure>
+        </div></div></div>
+      </div>
+      <div class="fila">
+        <button type="button" aria-expanded="false" aria-controls="fm-2"><span class="nombre">Cocktail</span><span class="signo" aria-hidden="true">+</span></button>
+        <div class="contenido" id="fm-2"><div><div class="dentro">
+          <p>Bocados fríos y calientes servidos en pequeño formato, para comer de pie y seguir la conversación.</p>
+          <figure>{{img tostas-burrata | (max-width: 900px) 46vw, 28vw | Tostas con burrata y tomate asado}}</figure>
+          <figure>{{img vasitos | (max-width: 900px) 46vw, 28vw | Vasitos de crema fría con jamón}}</figure>
+        </div></div></div>
+      </div>
+      <div class="fila">
+        <button type="button" aria-expanded="false" aria-controls="fm-3"><span class="nombre">Buffet</span><span class="signo" aria-hidden="true">+</span></button>
+        <div class="contenido" id="fm-3"><div><div class="dentro">
+          <p>Bandejas generosas para que cada invitado elija, en el orden y la cantidad que quiera.</p>
+          <figure>{{img brochetas-rollitos | (max-width: 900px) 46vw, 28vw | Bandejas de brochetas y rollitos en un buffet}}</figure>
+          <figure>{{img hojaldres | (max-width: 900px) 46vw, 28vw | Hojaldres rellenos recién horneados}}</figure>
+        </div></div></div>
+      </div>
+      <div class="fila">
+        <button type="button" aria-expanded="false" aria-controls="fm-4"><span class="nombre">Almuerzo en la oficina</span><span class="signo" aria-hidden="true">+</span></button>
+        <div class="contenido" id="fm-4"><div><div class="dentro">
+          <p>Comida para el equipo sin salir de la oficina, lista para servir en la sala de reuniones.</p>
+          <figure>{{img roast-beef | (max-width: 900px) 46vw, 28vw | Bocados de rosbif con salsa}}</figure>
+          <figure>{{img ensaladas | (max-width: 900px) 46vw, 28vw | Ensaladas individuales en copa}}</figure>
+        </div></div></div>
+      </div>
+      <div class="fila">
+        <button type="button" aria-expanded="false" aria-controls="fm-5"><span class="nombre">Cena de gala</span><span class="signo" aria-hidden="true">+</span></button>
+        <div class="contenido" id="fm-5"><div><div class="dentro">
+          <p>Para eventos de empresa y noches especiales que piden algo más que un picoteo.</p>
+          <figure>{{img bandeja | (max-width: 900px) 46vw, 28vw | Bandeja de bocados emplatados en serie}}</figure>
+          <figure>{{img postre-oreo | (max-width: 900px) 46vw, 28vw | Postres individuales de crema y galleta}}</figure>
+        </div></div></div>
+      </div>
+      <div class="fila">
+        <button type="button" aria-expanded="false" aria-controls="fm-6"><span class="nombre">Bodas y celebraciones</span><span class="signo" aria-hidden="true">+</span></button>
+        <div class="contenido" id="fm-6"><div><div class="dentro">
+          <p>El catering completo del gran día, con una propuesta pensada para vosotros.</p>
+          <figure>{{img tartar | (max-width: 900px) 46vw, 28vw | Tartar de salmón y aguacate en vasitos}}</figure>
+          <figure>{{img brazo | (max-width: 900px) 46vw, 28vw | Rollos dulces de bizcocho y frambuesa}}</figure>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="detalle" id="detalle" aria-labelledby="t-detalle">
+  <div class="caja">
+    <h2 id="t-detalle">Al detalle</h2>
+    <div class="pliego">
+      <figure class="p1"><div class="foto">{{img caprese | (max-width: 900px) 100vw, 56vw | Burrata, tomate asado y rúcula en bandeja}}</div><figcaption>Burrata con tomate asado y rúcula.</figcaption></figure>
+      <div class="p2" style="display:grid;gap:28px">
+        <p class="texto" style="grid-column:auto">Se cuida igual el primer bocado que el número cien: la misma medida, el mismo corte, la misma presentación en toda la bandeja.</p>
+        <figure><div class="foto">{{img bao | (max-width: 900px) 100vw, 38vw | Pan bao relleno de carne melosa}}</div><figcaption>Bao de carne melosa.</figcaption></figure>
+      </div>
+      <figure class="p3"><div class="foto">{{img chupitos | (max-width: 900px) 50vw, 30vw | Vasitos de crema con jamón crujiente}}</div><figcaption>Crema fría con jamón crujiente.</figcaption></figure>
+      <figure class="p4"><div class="foto">{{img burger-negra | (max-width: 900px) 50vw, 30vw | Minihamburguesas de pan negro}}</div><figcaption>Minihamburguesas de pan negro.</figcaption></figure>
+      <figure class="p5"><div class="foto">{{img brochetas | 30vw | Brochetas de cherry y mozzarella}}</div><figcaption>Brochetas de cherry y mozzarella.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="capitulo" id="empresas" aria-labelledby="t-empresas">
+  <div class="caja rejilla">
+    <div>
+      <h2 id="t-empresas">Empresas</h2>
+      <p class="entrada">Desayunos corporativos, coffee breaks, cocktails y comidas para equipos. Puntualidad, cantidades bien calculadas y la misma calidad la primera vez y la decimocuarta.</p>
+      <ul><li>Desayunos y coffee breaks</li><li>Almuerzos en oficinas</li><li>Cocktails y finger food</li><li>Cenas de gala</li></ul>
+    </div>
+    <div>
+      <figure class="resena"><blockquote>«…los hemos contratado 14 veces en 2017, nunca han fallado, desayunos corporativos, cocktails, finger food…»</blockquote><figcaption>Reseña de una empresa cliente en Google</figcaption></figure>
+      <div class="fotos2"><figure>{{img mesa-cafe | (max-width: 900px) 50vw, 22vw | Mesa de coffee break montada con termos y bandejas}}</figure><figure>{{img zumos-hielo | (max-width: 900px) 50vw, 22vw | Zumos de naranja sobre hielo}}</figure></div>
+    </div>
+  </div>
+</section>
+
+<section class="capitulo bodas" id="bodas" aria-labelledby="t-bodas">
+  <div class="caja rejilla">
+    <div>
+      <figure class="resena"><blockquote>«Me han realizado el catering de mi boda y la experiencia no podía haber sido mejor. La comida fantástica, todos mis invitados encantados.»</blockquote><figcaption>Reseña de un novio en Google</figcaption></figure>
+      <div class="fotos2"><figure>{{img tartar | (max-width: 900px) 50vw, 22vw | Tartar de salmón y aguacate}}</figure><figure>{{img dulces | (max-width: 900px) 50vw, 22vw | Bandejas de dulces y bocados}}</figure></div>
+    </div>
+    <div>
+      <h2 id="t-bodas">Bodas y celebraciones</h2>
+      <p class="entrada">Bodas y celebraciones de particulares con una propuesta a vuestra medida, desde el aperitivo hasta el postre.</p>
+      <ul><li>Propuesta culinaria personalizada</li><li>Cocktail, buffet o banquete</li><li>Servicio en el lugar que elijáis</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="alcance" aria-labelledby="t-alcance">
+  <div class="caja">
+    <h2 id="t-alcance">Cocina en Boadilla. Servicio en toda la Comunidad de Madrid.</h2>
+    <dl>
+      <div><dt>Cocina</dt><dd>C. Carreteros, 32, nave 5<br>Pol. Ind. Prado del Espino, 28660 Boadilla del Monte</dd></div>
+      <div><dt>Atención</dt><dd>Lunes a sábado, de 9:00 a 22:00</dd></div>
+      <div><dt>En Google</dt><dd>5,0 de valoración en 8 reseñas</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="presupuesto" id="presupuesto" aria-labelledby="t-presupuesto">
+  <div class="caja rejilla">
+    <div>
+      <h2 id="t-presupuesto">Pide presupuesto</h2>
+      <p class="entrada">Cuéntanos el formato, la fecha y cuántas personas sois. Con eso te preparamos una propuesta a medida.</p>
+      <div class="directo"><a class="boton boton-blanco" href="tel:+34619394506">Llamar al 619 39 45 06</a><a class="boton boton-borde" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.395839,-3.842694" target="_blank" rel="noopener">Cómo llegar</a></div>
+    </div>
+    <form id="form" novalidate>
+      <fieldset class="campo" style="border:0;padding:0;margin:0"><legend style="font-size:13.5px;font-weight:600;margin-bottom:8px">Formato</legend>
+        <div class="formatos">
+          <label><input type="radio" name="formato" value="Coffee break y desayuno" checked><span>Coffee break</span></label>
+          <label><input type="radio" name="formato" value="Cocktail"><span>Cocktail</span></label>
+          <label><input type="radio" name="formato" value="Buffet"><span>Buffet</span></label>
+          <label><input type="radio" name="formato" value="Almuerzo en oficina"><span>Almuerzo</span></label>
+          <label><input type="radio" name="formato" value="Cena de gala"><span>Cena de gala</span></label>
+          <label><input type="radio" name="formato" value="Boda o celebración"><span>Boda</span></label>
+        </div>
+      </fieldset>
+      <div class="dos">
+        <div class="campo"><label for="f-fecha">Fecha</label><input id="f-fecha" name="fecha" type="date"></div>
+        <div class="campo"><label for="f-pers">Personas</label><input id="f-pers" name="personas" type="number" min="1" inputmode="numeric" placeholder="40"></div>
+      </div>
+      <div class="dos">
+        <div class="campo"><label for="f-lugar">Lugar del evento</label><input id="f-lugar" name="lugar" placeholder="Municipio o empresa"></div>
+        <div class="campo"><label for="f-nombre">Tu nombre</label><input id="f-nombre" name="nombre" autocomplete="name"></div>
+      </div>
+      <div class="campo"><label for="f-notas">Algo más</label><textarea id="f-notas" name="notas" placeholder="Horario, alergias, si necesitas montaje…"></textarea></div>
+      <div class="envios"><button class="boton boton-rojo" type="submit" data-canal="wa">Enviar por WhatsApp</button><button class="boton boton-borde" type="submit" data-canal="sms" style="color:var(--tinta)">Enviar por SMS</button></div>
+      <p class="ayuda" id="f-ayuda" aria-live="polite">El mensaje se prepara con tus datos y se abre en tu aplicación para que lo envíes al 619 39 45 06.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="pie">
+  <div class="caja">
+    <span>Catering Montejo · Boadilla del Monte</span>
+    <a href="https://www.instagram.com/montejocatering/" target="_blank" rel="noopener">Instagram</a>
+    <span>Propuesta de diseño de D-Code Partners. Sin cookies ni seguimiento.</span>
+  </div>
+</footer>
+
+<script type="module" src="pase.js"></script>
+<script>
+(function(){
+  var d=document, reducir=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // carril de bandejas: se desplaza con el scroll mientras la portada está a la vista
+  var carril=d.getElementById('carril'), portada=d.getElementById('inicio'), fija=d.getElementById('fija');
+  function mover(){
+    var r=portada.getBoundingClientRect();
+    if(!reducir && r.bottom>0){ var max=Math.max(0,carril.scrollWidth-innerWidth); var p=Math.min(1,Math.max(0,-r.top/Math.max(1,r.height)))*1.6; carril.style.transform='translateX('+(-Math.min(max,p*max*0.6))+'px)'; }
+    var v=r.bottom<0; fija.classList.toggle('ver',v); fija.setAttribute('aria-hidden',v?'false':'true'); fija.querySelector('a').tabIndex=v?0:-1;
+  }
+  addEventListener('scroll',mover,{passive:true}); mover();
+  // la palabra MONTEJO ocupa exactamente el ancho de la caja
+  var pal=d.querySelector('.palabra');
+  function ajustar(){ pal.style.fontSize=''; var cw=pal.clientWidth, sw=pal.scrollWidth; if(sw>0){ var fs=parseFloat(getComputedStyle(pal).fontSize); pal.style.fontSize=(fs*cw/sw*0.995)+'px'; } }
+  ajustar(); if(d.fonts&&d.fonts.ready) d.fonts.ready.then(ajustar); addEventListener('resize',function(){ clearTimeout(ajustar.t); ajustar.t=setTimeout(ajustar,120); });
+  // tipografía cinética: los grandes titulares se desplazan con el scroll
+  var cin=[].slice.call(d.querySelectorAll('.indice h2,.detalle h2,.capitulo h2,.presupuesto h2'));
+  cin.forEach(function(h,i){ h.classList.add('cinetica'); h.dataset.dir=i%2?'-1':'1'; });
+  function cinetica(){ if(reducir) return; var vh=innerHeight; cin.forEach(function(h){ var r=h.getBoundingClientRect(); if(r.bottom<0||r.top>vh) return; var k=(r.top+r.height/2-vh/2)/vh; h.style.transform='translateX('+(k*-90*Number(h.dataset.dir))+'px)'; }); }
+  addEventListener('scroll',cinetica,{passive:true}); cinetica();
+  // inclinación 3D de las fotos del pliego al pasar el ratón
+  if(!reducir && matchMedia('(hover: hover)').matches){ d.querySelectorAll('.pliego .foto').forEach(function(f){ f.parentElement.style.perspective='900px';
+    f.addEventListener('pointermove',function(e){ var r=f.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; f.style.transform='rotateY('+(x*10)+'deg) rotateX('+(-y*10)+'deg) scale(1.02)'; });
+    f.addEventListener('pointerleave',function(){ f.style.transform=''; }); }); }
+  // índice de formatos (acordeón)
+  d.querySelectorAll('.fila button').forEach(function(b){ b.addEventListener('click',function(){ var f=b.parentElement, abrir=!f.classList.contains('abierta'); f.classList.toggle('abierta',abrir); b.setAttribute('aria-expanded',abrir?'true':'false'); }); });
+  // presupuesto: compone el mensaje y lo abre en WhatsApp o SMS
+  var form=d.getElementById('form'), canal='wa';
+  form.querySelectorAll('[data-canal]').forEach(function(b){ b.addEventListener('click',function(){ canal=b.getAttribute('data-canal'); }); });
+  form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var g=function(n){ var e=form.elements[n]; return ((e&&e.value)||'').trim(); };
+    var t='Hola, quería pedir presupuesto a Catering Montejo.\nFormato: '+g('formato')+'\nFecha: '+(g('fecha')||'por concretar')+'\nPersonas: '+(g('personas')||'por concretar')+'\nLugar: '+(g('lugar')||'por concretar')+(g('notas')?'\nNotas: '+g('notas'):'')+(g('nombre')?'\n'+g('nombre'):'');
+    var url=canal==='wa'?'https://wa.me/34619394506?text='+encodeURIComponent(t):'sms:+34619394506?&body='+encodeURIComponent(t);
+    d.getElementById('f-ayuda').textContent='Mensaje preparado. Si no se abre la aplicación, llama al 619 39 45 06.';
+    if(canal==='wa') window.open(url,'_blank','noopener'); else location.href=url;
+  });
+})();
+</script>
+</body>
+</html>

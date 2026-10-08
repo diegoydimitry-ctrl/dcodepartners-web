@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Base Café · Café de especialidad, desayunos y sushi en Boadilla del Monte</title>
+<meta name="description" content="La Base Café, en el centro deportivo BeOne de Boadilla del Monte: café de especialidad, matcha, desayunos y meriendas, opciones sin gluten y sushi los jueves y viernes. Pet friendly.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/la-base/">
+<meta name="theme-color" content="#55A08C">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="La Base Café">
+<meta property="og:title" content="La Base Café · Aquí el tiempo sabe mejor">
+<meta property="og:description" content="Café de especialidad, desayunos y sushi los jueves y viernes en Boadilla del Monte.">
+<meta property="og:image" content="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/la-base/og.jpg">
+<meta property="og:url" content="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/la-base/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="La Base Café">
+<meta name="twitter:description" content="Aquí el tiempo sabe mejor. Café de especialidad en Boadilla del Monte.">
+<meta name="twitter:image" content="https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/la-base/og.jpg">
+<link rel="preload" href="fuentes/bricolage-grotesque-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CafeOrCoffeeShop","name":"La Base Cafe","slogan":"Aquí el tiempo sabe mejor","description":"Cafetería de especialidad en el centro deportivo BeOne de Boadilla del Monte: café de especialidad, matcha, desayunos y meriendas, opciones sin gluten y sushi los jueves y viernes.","address":{"@type":"PostalAddress","streetAddress":"C. Luigi Boccherini, 5","postalCode":"28660","addressLocality":"Boadilla del Monte","addressRegion":"Madrid","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":40.4040995,"longitude":-3.8858131},"telephone":"+34 624 54 23 62","priceRange":"1–10 €","servesCuisine":["Café","Desayunos","Sushi"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"20:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"09:00","closes":"14:00"}],"sameAs":["https://www.instagram.com/labase_cafe/"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"77"}}
+</script>
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-stretch:75% 100%;font-display:swap;src:url(fuentes/bricolage-grotesque-latin-standard-normal.woff2) format("woff2")}
+
+/* La Base: el azulejo verde azulado de su barra, la madera de roble de sus mesas y su logotipo. */
+:root{
+  --azulejo:#55A08C; --azulejo-osc:#2C6A5C; --azulejo-claro:#DCEBE5; --pizarra:#2F3A40; --roble:#CFAF86; --blanco:#F4F6F3; --matcha:#A9BE6B;
+  --f:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --lado:clamp(18px,4.6vw,64px); --ancho:1320px; --radio:22px; color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--blanco);color:var(--pizarra);font:400 17px/1.6 var(--f);overflow-x:clip}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--azulejo-osc);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;font-weight:750;font-stretch:84%;line-height:.98;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0}
+.caja{width:min(var(--ancho),100%);margin-inline:auto;padding-inline:var(--lado)}
+.aviso{background:var(--pizarra);color:#dfe6e2;font-size:12.5px;text-align:center;padding:8px var(--lado)}
+
+/* cabecera */
+.cabecera{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--blanco) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(47,58,64,.08)}
+.cabecera .caja{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:750;font-stretch:84%;font-size:20px;letter-spacing:-.01em}
+.logo img{width:38px;height:38px}
+.cabecera nav{display:flex;gap:26px;font-size:15.5px}
+.cabecera nav a{text-decoration:none}
+.cabecera nav a:hover{color:var(--azulejo-osc);text-decoration:underline;text-underline-offset:5px}
+.estado{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;padding:8px 14px;border-radius:999px;background:var(--azulejo-claro);color:var(--azulejo-osc);white-space:nowrap}
+.estado i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.estado.cerrado{background:#ECE6DE;color:#7A5A3A}
+
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 26px;border-radius:999px;font:650 16px/1 var(--f);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:background-color .25s,color .25s,border-color .25s,transform .2s}
+.boton:active{transform:scale(.98)}
+.boton-azulejo{background:var(--azulejo-osc);color:#fff}
+.boton-azulejo:hover{background:var(--pizarra)}
+.boton-linea{border-color:var(--pizarra);color:var(--pizarra);background:transparent}
+.boton-linea:hover{background:var(--pizarra);color:#fff}
+
+/* portada: muro de azulejos */
+.portada{padding-block:clamp(32px,5vw,72px) clamp(64px,8vw,110px)}
+.portada .caja{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(28px,5vw,80px);align-items:center}
+.portada h1{font-size:clamp(54px,8.2vw,128px);font-stretch:78%;font-weight:800;margin-top:22px}
+.portada .entrada{font-size:clamp(18px,1.6vw,21px);max-width:34ch;margin-top:24px;color:#4a575d}
+.portada .acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.muro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px;background:var(--azulejo);border-radius:var(--radio);transform:rotate(-1.2deg)}
+.muro figure{margin:0;aspect-ratio:1;overflow:hidden;border-radius:10px;background:var(--azulejo-osc);position:relative}
+.muro img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .9s ease}
+.muro img.sale{opacity:0}
+
+.taza{position:relative;aspect-ratio:1/1.02;border-radius:var(--radio);overflow:hidden;cursor:grab;touch-action:pan-y;user-select:none;
+  background:radial-gradient(70% 60% at 50% 38%,#7BBBA8 0%,var(--azulejo) 55%,#468a78 100%);}
+.taza::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.14) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.14) 2px,transparent 2px);background-size:25% 25%;background-position:-1px -1px;pointer-events:none}
+.taza:active{cursor:grabbing}
+.taza canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.taza-foto{position:absolute;inset:0}
+.taza-foto img{width:100%;height:100%;object-fit:cover}
+.taza.gl .taza-foto{display:none}
+.taza-nota{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);font-size:13.5px;font-weight:600;color:#fff;background:rgba(44,106,92,.55);padding:6px 12px;border-radius:999px;opacity:0;transition:opacity .5s;pointer-events:none}
+.taza.gl .taza-nota{opacity:1}
+.banda{padding-bottom:clamp(64px,8vw,110px)}
+.banda .muro{grid-template-columns:repeat(9,minmax(0,1fr));transform:none;perspective:900px}
+.banda .muro figure{transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.banda .muro figure.gira{transform:rotateY(90deg)}
+/* un día */
+.dia{background:var(--pizarra);color:#EEF2EF;padding-block:clamp(80px,10vw,140px);border-radius:var(--radio) var(--radio) 0 0}
+.dia h2{font-size:clamp(44px,6vw,92px)}
+.momentos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);margin-top:clamp(36px,5vw,64px)}
+.momento{display:grid;gap:14px;align-content:start}
+.momento .hora{font-size:clamp(38px,4vw,60px);font-weight:300;font-stretch:76%;letter-spacing:-.03em;color:var(--matcha);font-variant-numeric:tabular-nums}
+.momento .foto{aspect-ratio:4/5;overflow:hidden;border-radius:16px}
+.momento img{width:100%;height:100%;object-fit:cover}
+.momento h3{font-size:clamp(24px,2.2vw,30px)}
+.momento p{color:#C3CDC9;font-size:16px}
+
+/* carta */
+.carta{padding-block:clamp(80px,10vw,140px)}
+.carta .cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px 40px;margin-bottom:clamp(28px,4vw,48px)}
+.carta h2{font-size:clamp(44px,6vw,92px)}
+.carta .nota{color:#5c686d;font-size:15px;max-width:36ch}
+.pestanas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.pestanas button{min-height:46px;padding:0 18px;border-radius:999px;border:2px solid var(--pizarra);background:transparent;color:var(--pizarra);font:600 15px/1 var(--f);cursor:pointer}
+.pestanas button[aria-selected="true"]{background:var(--pizarra);color:#fff}
+.platos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:clamp(14px,1.6vw,22px)}
+.plato{margin:0;display:grid;gap:12px;align-content:start}
+.plato .foto{aspect-ratio:4/3;overflow:hidden;border-radius:16px;background:var(--azulejo-claro)}
+.plato img{width:100%;height:100%;object-fit:cover}
+.plato h3{font-size:22px;font-stretch:90%;letter-spacing:-.01em}
+.plato p{font-size:15.5px;color:#55636a}
+.plato .marca{font-size:13px;font-weight:600;color:var(--azulejo-osc);background:var(--azulejo-claro);padding:4px 10px;border-radius:999px;justify-self:start}
+.panel[hidden]{display:none}
+
+/* sushi */
+.sushi{background:var(--azulejo);color:#fff;border-radius:var(--radio);margin-inline:clamp(8px,1.4vw,20px);overflow:hidden}
+.sushi .caja{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center;padding-block:clamp(64px,8vw,110px)}
+.sushi h2{font-size:clamp(48px,7vw,108px);font-stretch:76%}
+.sushi .entrada{font-size:clamp(18px,1.5vw,20px);margin-top:20px;max-width:36ch;color:#EAF4F0}
+.bandejas{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:0;border-top:1px solid rgba(255,255,255,.35)}
+.bandejas li{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.35);display:grid;gap:4px}
+.bandejas b{font-size:20px;font-weight:700}
+.bandejas span{font-size:15.5px;color:#E2F0EA}
+.sushi .boton{margin-top:28px;background:#fff;color:var(--azulejo-osc)}
+.sushi .boton:hover{background:var(--pizarra);color:#fff}
+.sushi .fotos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sushi .fotos figure{margin:0;border-radius:16px;overflow:hidden;aspect-ratio:3/4}
+.sushi .fotos figure:first-child{transform:translateY(28px)}
+.sushi .fotos img{width:100%;height:100%;object-fit:cover}
+
+/* café para casa y extras */
+.extras{padding-block:clamp(80px,10vw,140px)}
+.extras .rejilla{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(14px,1.6vw,22px)}
+.tarjeta{border-radius:var(--radio);overflow:hidden;background:#fff;display:grid;grid-template-rows:auto 1fr}
+.tarjeta .foto{aspect-ratio:4/3;overflow:hidden}
+.tarjeta img{width:100%;height:100%;object-fit:cover}
+.tarjeta .txt{padding:22px 22px 26px;display:grid;gap:10px;align-content:start}
+.tarjeta h3{font-size:clamp(26px,2.4vw,34px)}
+.tarjeta p{font-size:16px;color:#55636a}
+.tarjeta.grande .foto{aspect-ratio:4/3.4}
+
+/* reseña */
+.resena{padding-block:clamp(40px,6vw,80px) clamp(80px,10vw,140px)}
+.resena figure{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(18px,3vw,48px);align-items:start}
+.resena .nota{font-size:clamp(64px,9vw,140px);font-weight:300;font-stretch:76%;line-height:.85;color:var(--azulejo-osc);letter-spacing:-.04em}
+.resena .nota small{display:block;font-size:15px;font-weight:600;letter-spacing:0;color:#5c686d;margin-top:10px}
+.resena blockquote{margin:0;font-size:clamp(28px,3.6vw,52px);font-weight:600;font-stretch:82%;line-height:1.08;letter-spacing:-.015em}
+.resena figcaption{margin-top:14px;font-size:15px;color:#5c686d}
+
+/* visítanos */
+.visita{background:var(--roble);color:var(--pizarra);border-radius:var(--radio) var(--radio) 0 0;padding-block:clamp(72px,9vw,130px)}
+.visita .caja{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:start}
+.visita h2{font-size:clamp(44px,6vw,92px)}
+.visita .dir{font-size:clamp(20px,1.8vw,24px);margin-top:20px;line-height:1.4}
+.horario{width:100%;border-collapse:collapse;margin-top:26px;font-size:17px}
+.horario th,.horario td{text-align:left;padding:12px 0;border-bottom:1px solid rgba(47,58,64,.22);font-weight:400}
+.horario td{text-align:right;font-variant-numeric:tabular-nums}
+.horario tr.hoy th,.horario tr.hoy td{font-weight:700}
+.horario tr.hoy th::after{content:" (hoy)";font-weight:400}
+.visita .acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.visita .fotos{display:grid;gap:12px}
+.visita figure{margin:0;border-radius:16px;overflow:hidden}
+.visita .f1{aspect-ratio:4/3}
+.visita figure img{width:100%;height:100%;object-fit:cover}
+.visita figcaption{font-size:14px;margin-top:8px}
+.pie{background:var(--pizarra);color:#C9D2CE;font-size:14px;padding:34px 0 calc(34px + env(safe-area-inset-bottom,0px))}
+.pie .caja{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 30px}
+
+/* acceso rápido en móvil */
+.rapido{display:none}
+
+@media (max-width:980px){
+  .cabecera nav{display:none}
+  .portada .caja,.sushi .caja,.visita .caja{grid-template-columns:1fr}
+  .momentos{grid-template-columns:1fr 1fr}
+  .extras .rejilla{grid-template-columns:1fr 1fr}
+  .extras .grande{grid-column:1/-1}
+}
+@media (max-width:620px){
+  body{font-size:16px}
+  .cabecera .caja{height:60px}
+  .logo span{display:none}
+  .portada{padding-top:22px}
+  .portada .acciones .boton{flex:1 1 calc(50% - 6px);padding:0 14px}
+  .muro{transform:none;gap:6px;padding:6px}
+  .banda .muro{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .momentos{grid-template-columns:1fr;gap:34px}
+  .momento{grid-template-columns:110px 1fr;column-gap:16px;align-items:start}
+  .momento .hora{grid-column:1/-1}
+  .momento .foto{grid-row:span 2;aspect-ratio:1}
+  .extras .rejilla{grid-template-columns:1fr}
+  .resena figure{grid-template-columns:1fr}
+  .sushi .fotos figure:first-child{transform:none}
+  .rapido{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--pizarra);padding:8px;border-radius:20px;box-shadow:0 12px 30px rgba(20,30,30,.28);transform:translateY(150%);transition:transform .45s}
+  .rapido.ver{transform:none}
+  .rapido a{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:14px;color:#fff;text-decoration:none;font-weight:650;font-size:15px}
+  .rapido a:first-child{background:var(--azulejo-osc)}
+  .pie{padding-bottom:110px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="aviso" role="note">Propuesta de web creada por D-Code Partners para La Base Café. No es la web oficial.</div>
+
+<header class="cabecera">
+  <div class="caja">
+    <a class="logo" href="#inicio"><img src="img/simbolo.png" alt="" width="38" height="38"><span>La Base Café</span></a>
+    <nav aria-label="Secciones"><a href="#dia">Un día aquí</a><a href="#carta">Carta</a><a href="#sushi">Sushi</a><a href="#visitanos">Visítanos</a></nav>
+    <span class="estado" id="estado" aria-live="polite"><i></i><span>Horario</span></span>
+  </div>
+</header>
+
+<main>
+<section class="portada" id="inicio" aria-labelledby="t-inicio">
+  <div class="caja">
+    <div>
+      <img src="img/logo-labase.png" alt="La Base Café" width="198" height="206" style="width:84px;height:auto">
+      <h1 id="t-inicio">Aquí el tiempo sabe mejor.</h1>
+      <p class="entrada">Café de especialidad, desayunos de verdad y sushi los jueves y viernes. En el centro deportivo BeOne de Boadilla del Monte.</p>
+      <div class="acciones"><a class="boton boton-azulejo" href="#carta">Ver carta</a><a class="boton boton-linea" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.4040995,-3.8858131" target="_blank" rel="noopener">Cómo llegar</a></div>
+    </div>
+    <div class="taza" id="taza" aria-label="Taza de La Base en 3D. Puedes girarla arrastrando.">
+      <div class="taza-foto">{{img iced-latte | (max-width: 980px) 90vw, 46vw | Café con hielo en vaso con el logotipo de La Base | | eager}}</div>
+      <span class="taza-nota" aria-hidden="true">Gírala con el dedo</span>
+    </div>
+  </div>
+</section>
+
+<section class="banda" aria-label="La Base en fotos">
+  <div class="caja">
+    <div class="muro" id="muro" aria-label="Fotos de La Base Café">
+      <figure>{{img iced-latte | (max-width: 620px) 33vw, 17vw | Café con hielo en vaso con el logotipo de La Base}}</figure>
+      <figure>{{img tostada-salmon | (max-width: 620px) 33vw, 17vw | Tostada de salmón y aguacate}}</figure>
+      <figure>{{img matcha | (max-width: 620px) 33vw, 17vw | Taza de matcha latte}}</figure>
+      <figure>{{img barra | (max-width: 620px) 33vw, 17vw | Barra de azulejos verdes de La Base Café}}</figure>
+      <figure>{{img espresso | (max-width: 620px) 33vw, 17vw | Espresso en taza de La Base}}</figure>
+      <figure>{{img sushi-salmon | (max-width: 620px) 33vw, 17vw | Tabla de sushi de salmón}}</figure>
+      <figure>{{img cinnamon | (max-width: 620px) 33vw, 17vw | Rollo de canela glaseado}}</figure>
+      <figure>{{img capuchino | (max-width: 620px) 33vw, 17vw | Capuchino con arte latte en forma de corazón}}</figure>
+      <figure>{{img terraza | (max-width: 620px) 33vw, 17vw | Terraza de La Base Café al atardecer}}</figure>
+    </div>
+  </div>
+</section>
+
+<section class="dia" id="dia" aria-labelledby="t-dia">
+  <div class="caja">
+    <h2 id="t-dia">Un día en La Base</h2>
+    <div class="momentos">
+      <article class="momento"><span class="hora">8:00</span><div class="foto">{{img capuchino | (max-width: 620px) 110px, (max-width: 980px) 46vw, 23vw | Capuchino recién hecho}}</div><h3>El primer café</h3><p>Café de especialidad para tomar aquí o llevártelo por el camino.</p></article>
+      <article class="momento"><span class="hora">Mañanas</span><div class="foto">{{img tostada-huevo | (max-width: 620px) 110px, (max-width: 980px) 46vw, 23vw | Tostada con huevo y aguacate}}</div><h3>Desayunos</h3><p>Tostadas de pan payés o de cereales, tortilla con ventresca y yogur con granola casera.</p></article>
+      <article class="momento"><span class="hora">Jue y vie</span><div class="foto">{{img sushi-tabla | (max-width: 620px) 110px, (max-width: 980px) 46vw, 23vw | Niguiris y rolls sobre tabla de madera}}</div><h3>Sushi</h3><p>Niguiris y rolls para comer aquí o llevar en bandeja.</p></article>
+      <article class="momento"><span class="hora">Tardes</span><div class="foto">{{img matcha-latte | (max-width: 620px) 110px, (max-width: 980px) 46vw, 23vw | Iced matcha latte}}</div><h3>Meriendas</h3><p>Matcha de grado ceremonial, smoothies al momento y algo dulce de la vitrina.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="carta" id="carta" aria-labelledby="t-carta">
+  <div class="caja">
+    <div class="cab">
+      <h2 id="t-carta">La carta</h2>
+      <p class="nota">Una selección de su carta. Precios y novedades del día, en la barra.</p>
+    </div>
+    <div class="pestanas" role="tablist" aria-label="Secciones de la carta">
+      <button type="button" role="tab" id="tb-1" aria-controls="pn-1" aria-selected="true">Desayunos y meriendas</button>
+      <button type="button" role="tab" id="tb-2" aria-controls="pn-2" aria-selected="false">Café</button>
+      <button type="button" role="tab" id="tb-3" aria-controls="pn-3" aria-selected="false">Bebidas</button>
+    </div>
+    <div class="panel platos" id="pn-1" role="tabpanel" aria-labelledby="tb-1">
+      <figure class="plato"><div class="foto">{{img tostada-salmon-2 | (max-width: 620px) 100vw, 30vw | Tostada de salmón noruego y aguacate}}</div><h3>Tostada de salmón y aguacate</h3><p>Pan payés o de cereales con aguacate y salmón noruego.</p></figure>
+      <figure class="plato"><div class="foto">{{img tostada-huevo | (max-width: 620px) 100vw, 30vw | Tortilla con ventresca y aguacate sobre tostada}}</div><span class="marca">Opción proteica</span><h3>Tortilla con ventresca y aguacate</h3><p>Huevos camperos, ventresca, aguacate y tomates cherry.</p></figure>
+      <figure class="plato"><div class="foto">{{img yogur | (max-width: 620px) 100vw, 30vw | Yogur con fruta de temporada y granola}}</div><h3>Yogur con fruta y granola casera</h3><p>Fruta de temporada y granola de avena, nueces pecanas, semillas de calabaza y coco.</p></figure>
+      <figure class="plato"><div class="foto">{{img croissant-salmon | (max-width: 620px) 100vw, 30vw | Croissant relleno de salmón}}</div><h3>Croissant de salmón</h3><p>Croissant de mantequilla con queso crema y salmón noruego.</p></figure>
+      <figure class="plato"><div class="foto">{{img tostada-jamon | (max-width: 620px) 100vw, 30vw | Tostada de tomate, aceite y jamón}}</div><h3>Tostada de aceite, tomate y jamón</h3><p>Un clásico: pan payés, tomate natural, aceite de oliva y jamón.</p></figure>
+      <figure class="plato"><div class="foto">{{img vitrina-singluten | (max-width: 620px) 100vw, 30vw | Vitrina de repostería con opciones sin gluten}}</div><span class="marca">Sin gluten</span><h3>La vitrina</h3><p>Repostería casera, con opciones sin gluten y sin azúcar.</p></figure>
+    </div>
+    <div class="panel platos" id="pn-2" role="tabpanel" aria-labelledby="tb-2" hidden>
+      <figure class="plato"><div class="foto">{{img espresso | (max-width: 620px) 100vw, 30vw | Espresso en taza de La Base}}</div><h3>Café en el local</h3><p>Para tomarlo aquí, disfrutando del ambiente.</p></figure>
+      <figure class="plato"><div class="foto">{{img iced-latte | (max-width: 620px) 100vw, 30vw | Café con hielo para llevar}}</div><h3>Café para llevar</h3><p>Para disfrutarlo por el camino.</p></figure>
+      <figure class="plato"><div class="foto">{{img cafe-especialidad | (max-width: 620px) 100vw, 30vw | Bolsas de café de especialidad de La Base}}</div><h3>Café de especialidad para casa</h3><p>Molido o en grano, normal o descafeinado.</p></figure>
+    </div>
+    <div class="panel platos" id="pn-3" role="tabpanel" aria-labelledby="tb-3" hidden>
+      <figure class="plato"><div class="foto">{{img matcha-iced | (max-width: 620px) 100vw, 30vw | Iced matcha latte en vaso de cristal}}</div><h3>Iced matcha latte</h3><p>Con matcha orgánica de grado ceremonial, de Japón.</p></figure>
+      <figure class="plato"><div class="foto">{{img smoothie | (max-width: 620px) 100vw, 30vw | Smoothie rojo con fruta}}</div><h3>Smoothie natural</h3><p>Elaborado al momento con fruta y verdura.</p></figure>
+      <figure class="plato"><div class="foto">{{img zumos | (max-width: 620px) 100vw, 30vw | Botellas de zumo cold pressed}}</div><h3>Zumos premium</h3><p>Gama de zumos cold pressed naturales, con frutas y verduras.</p></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sushi" id="sushi" aria-labelledby="t-sushi">
+  <div class="caja">
+    <div>
+      <h2 id="t-sushi">Jueves y viernes, sushi.</h2>
+      <p class="entrada">No te quedes sin probarlo: encarga tu bandeja y pásate a recogerla, o quédate a comerla aquí.</p>
+      <ul class="bandejas">
+        <li><b>Salmón Lover</b><span>6 niguiris de salmón y 6 piezas de roll de salmón con aguacate.</span></li>
+        <li><b>Menú Madrid</b><span>Para los más atrevidos: variedad de niguiris y rolls.</span></li>
+        <li><b>Menú Londres</b><span>Otra selección de la casa. Pregunta en barra.</span></li>
+        <li><b>Bandejas especiales</b><span>Dinos lo que te gusta y diseñamos tu bandeja a medida.</span></li>
+      </ul>
+      <a class="boton" href="tel:+34624542362">Encargar por teléfono</a>
+    </div>
+    <div class="fotos">
+      <figure>{{img sushi-bandeja | (max-width: 980px) 50vw, 25vw | Bandeja redonda de sushi variado con flor}}</figure>
+      <figure>{{img sushi-mesa | (max-width: 980px) 50vw, 25vw | Tabla de niguiris sobre la mesa}}</figure>
+    </div>
+  </div>
+</section>
+
+<section class="extras" aria-labelledby="t-extras">
+  <div class="caja">
+    <h2 id="t-extras" class="solo" style="font-size:clamp(40px,5vw,72px);margin-bottom:clamp(28px,4vw,48px)">Hecho para quedarse</h2>
+    <div class="rejilla">
+      <article class="tarjeta grande"><div class="foto">{{img sala | (max-width: 980px) 100vw, 40vw | Sala de La Base Café con mesas de madera}}</div><div class="txt"><h3>Un lugar de encuentro</h3><p>Mesas de madera, luz natural y terraza. Para venir antes o después del gimnasio, o solo a por el café.</p></div></article>
+      <article class="tarjeta"><div class="foto">{{img vitrina | (max-width: 980px) 50vw, 28vw | Vitrina con bollería y cartel sin gluten}}</div><div class="txt"><h3>Sin gluten</h3><p>Opciones sin gluten en la vitrina, señaladas para elegir con tranquilidad.</p></div></article>
+      <article class="tarjeta"><div class="foto">{{img merienda | (max-width: 980px) 50vw, 28vw | Matcha, café y tarta en una mesa}}</div><div class="txt"><h3>Pet friendly</h3><p>Los perros son bienvenidos, dentro y en la terraza.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="resena" aria-label="Opiniones">
+  <div class="caja">
+    <figure>
+      <p class="nota">4,9<small>77 reseñas en Google</small></p>
+      <div><blockquote>«La calidad del café y el te matcha es brutal. La leche y la mantequilla espectacular.»</blockquote><figcaption>Reseña en Google</figcaption></div>
+    </figure>
+  </div>
+</section>
+
+<section class="visita" id="visitanos" aria-labelledby="t-visita">
+  <div class="caja">
+    <div>
+      <h2 id="t-visita">Visítanos</h2>
+      <p class="dir">C. Luigi Boccherini, 5<br>28660 Boadilla del Monte<br>Dentro del centro deportivo BeOne Fitness &amp; Sport, con parking gratuito.</p>
+      <table class="horario" id="horario">
+        <tbody>
+          <tr data-dias="1,2,3,4,5"><th scope="row">Lunes a viernes</th><td>8:00 – 20:30</td></tr>
+          <tr data-dias="6"><th scope="row">Sábado</th><td>9:00 – 14:00</td></tr>
+          <tr data-dias="0"><th scope="row">Domingo</th><td>Cerrado</td></tr>
+        </tbody>
+      </table>
+      <div class="acciones">
+        <a class="boton boton-azulejo" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.4040995,-3.8858131" target="_blank" rel="noopener">Cómo llegar</a>
+        <a class="boton boton-linea" href="tel:+34624542362">Llamar al 624 54 23 62</a>
+        <a class="boton boton-linea" href="https://www.instagram.com/labase_cafe/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="fotos">
+      <figure class="f1">{{img fachada | (max-width: 980px) 100vw, 46vw | Entrada de La Base Café en el edificio de BeOne Fitness and Sport}}</figure>
+      <figcaption>La entrada, en la planta baja de BeOne.</figcaption>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="pie">
+  <div class="caja">
+    <span>La Base Café · Boadilla del Monte</span>
+    <a href="https://www.instagram.com/labase_cafe/" target="_blank" rel="noopener">@labase_cafe</a>
+    <span>Propuesta de diseño de D-Code Partners. Sin cookies ni seguimiento.</span>
+  </div>
+</footer>
+
+<nav class="rapido" id="rapido" aria-label="Accesos rápidos"><a href="#carta">Carta</a><a href="https://www.google.com/maps/dir/?api=1&amp;destination=40.4040995,-3.8858131" target="_blank" rel="noopener">Llegar</a><a href="tel:+34624542362">Llamar</a></nav>
+
+<script type="module" src="taza.js"></script>
+<script>
+(function(){
+  var d=document, reducir=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // abierto ahora, según la hora de Madrid
+  var H={1:[480,1230],2:[480,1230],3:[480,1230],4:[480,1230],5:[480,1230],6:[540,840],0:null};
+  function madrid(){ var p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()); var o={}; p.forEach(function(x){o[x.type]=x.value;}); var dias={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}; return {dia:dias[o.weekday],min:(+o.hour%24)*60+(+o.minute)}; }
+  function hhmm(m){ return Math.floor(m/60)+':'+String(m%60).padStart(2,'0'); }
+  function estado(){
+    var t=madrid(), h=H[t.dia], el=d.getElementById('estado'), txt=el.querySelector('span'), abierto=h&&t.min>=h[0]&&t.min<h[1];
+    if(abierto){ txt.textContent='Abierto hasta las '+hhmm(h[1]); }
+    else { var k=t.dia, n=0, prox=null; if(h&&t.min<h[0]) prox={d:k,m:h[0]}; while(!prox&&n<7){ k=(k+1)%7; n++; if(H[k]) prox={d:k,m:H[k][0]}; }
+      var nom=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'][prox.d]; txt.textContent='Cerrado · abre '+(prox.d===t.dia?'hoy':(n===1?'mañana':'el '+nom))+' a las '+hhmm(prox.m); }
+    el.classList.toggle('cerrado',!abierto);
+    d.querySelectorAll('#horario tr').forEach(function(tr){ tr.classList.toggle('hoy',tr.getAttribute('data-dias').split(',').indexOf(String(t.dia))>-1); });
+  }
+  estado(); setInterval(estado,60000);
+  // carta por pestañas
+  var tabs=[].slice.call(d.querySelectorAll('[role=tab]'));
+  function elegir(t){ tabs.forEach(function(x){ var on=x===t; x.setAttribute('aria-selected',on?'true':'false'); x.tabIndex=on?0:-1; d.getElementById(x.getAttribute('aria-controls')).hidden=!on; }); }
+  tabs.forEach(function(t,i){ t.tabIndex=i?-1:0; t.addEventListener('click',function(){ elegir(t); }); t.addEventListener('keydown',function(e){ var k=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0; if(k){ var n=tabs[(i+k+tabs.length)%tabs.length]; elegir(n); n.focus(); e.preventDefault(); } }); });
+  // el muro de azulejos: cada pocos segundos una pieza gira en 3D y enseña otra foto
+  var extra=['poke','cookies','tostada-tomate','smoothie','sushi-bandeja','cafe-bolsa','yogur','matcha-iced'];
+  if(!reducir){ var muro=d.getElementById('muro'), figs=muro.querySelectorAll('figure'), i=0;
+    setInterval(function(){ if(d.hidden) return; var f=figs[(i*4+1)%figs.length], img=f.querySelector('img'), n=extra[i%extra.length]; i++;
+      var pre=new Image(); pre.src='img/'+n+'-640.webp';
+      pre.onload=function(){ f.classList.add('gira'); setTimeout(function(){ var viejo=img.getAttribute('src').replace(/^img\//,'').replace(/-\d+\.webp$/,''); img.removeAttribute('srcset'); img.src=pre.src; extra[extra.indexOf(n)]=viejo; f.classList.remove('gira'); },700); }; },2600); }
+  // accesos rápidos en móvil tras la portada
+  var rap=d.getElementById('rapido'), por=d.getElementById('inicio');
+  addEventListener('scroll',function(){ rap.classList.toggle('ver',por.getBoundingClientRect().bottom<0); },{passive:true});
+})();
+</script>
+</body>
+</html>

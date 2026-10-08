@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+# Demos de propuesta: no indexar. En producción, sustituir por Allow y declarar el sitemap.
+# Sitemap: https://dcodepartners-web-git-demo-boadilla-d-code-partners.vercel.app/sitemap.xml
