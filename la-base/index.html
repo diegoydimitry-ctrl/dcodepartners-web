@@ -89,6 +89,15 @@ p{margin:0}
 .banda .muro{grid-template-columns:repeat(9,minmax(0,1fr));transform:none;perspective:900px}
 .banda .muro figure{transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
 .banda .muro figure.gira{transform:rotateY(90deg)}
+.pila{position:relative;aspect-ratio:1/1.08;perspective:1400px;touch-action:pan-y;cursor:pointer;
+  background:radial-gradient(70% 60% at 50% 42%,#7BBBA8 0%,var(--azulejo) 55%,#468a78 100%);border-radius:var(--radio);overflow:hidden}
+.pila::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.14) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.14) 2px,transparent 2px);background-size:25% 25%;pointer-events:none}
+.pila .escenario{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.pila figure{position:absolute;left:50%;top:50%;width:62%;aspect-ratio:3/4;margin:0;border-radius:16px;overflow:hidden;background:#fff;border:8px solid #fff;
+  box-shadow:0 30px 60px rgba(18,52,45,.35),0 8px 18px rgba(18,52,45,.2);transition:transform .9s cubic-bezier(.2,.75,.2,1),opacity .6s}
+.pila figure img{width:100%;height:100%;object-fit:cover;border-radius:9px}
+.pila figure.vuela{transform:translate(-50%,-50%) translate3d(70%,-30%,160px) rotateY(-28deg) rotateZ(14deg)!important;opacity:0}
+.taza{display:none}
 /* un día */
 .dia{background:var(--pizarra);color:#EEF2EF;padding-block:clamp(80px,10vw,140px);border-radius:var(--radio) var(--radio) 0 0}
 .dia h2{font-size:clamp(44px,6vw,92px)}
@@ -177,7 +186,7 @@ p{margin:0}
 @media (max-width:980px){
   .cabecera nav{display:none}
   .portada .caja,.sushi .caja,.visita .caja{grid-template-columns:1fr}
-  .taza{max-width:600px;width:100%;margin-inline:auto}
+  .pila{max-width:560px;width:100%;margin-inline:auto}
   .momentos{grid-template-columns:1fr 1fr}
   .extras .rejilla{grid-template-columns:1fr 1fr}
   .extras .grande{grid-column:1/-1}
@@ -226,9 +235,13 @@ p{margin:0}
       <p class="entrada">Café de especialidad, desayunos de verdad y sushi los jueves y viernes. En el centro deportivo BeOne de Boadilla del Monte.</p>
       <div class="acciones"><a class="boton boton-azulejo" href="#carta">Ver carta</a><a class="boton boton-linea" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.4040995,-3.8858131" target="_blank" rel="noopener">Cómo llegar</a></div>
     </div>
-    <div class="taza" id="taza" aria-label="Taza de La Base en 3D. Puedes girarla arrastrando.">
-      <div class="taza-foto"><img src="img/iced-latte-1024.webp" srcset="img/iced-latte-640.webp 640w, img/iced-latte-1024.webp 1024w" sizes="(max-width: 980px) 90vw, 46vw" width="1024" height="1536" alt="Café con hielo en vaso con el logotipo de La Base" loading="eager" decoding="async" fetchpriority="high"></div>
-      <span class="taza-nota" aria-hidden="true">Gírala con el dedo</span>
+    <div class="pila" id="pila" aria-label="Fotos de La Base Café">
+      <figure><img src="img/iced-latte-1024.webp" srcset="img/iced-latte-640.webp 640w, img/iced-latte-1024.webp 1024w" sizes="(max-width: 980px) 80vw, 34vw" width="1024" height="1536" alt="Café con hielo en vaso con el logotipo de La Base" loading="eager" decoding="async" fetchpriority="high"></figure>
+      <figure><img src="img/tostada-salmon-1280.webp" srcset="img/tostada-salmon-640.webp 640w, img/tostada-salmon-1280.webp 1280w, img/tostada-salmon-1920.webp 1920w" sizes="(max-width: 980px) 80vw, 34vw" width="1920" height="2560" alt="Tostada de salmón y aguacate" loading="eager" decoding="async" fetchpriority="high"></figure>
+      <figure><img src="img/barra-1280.webp" srcset="img/barra-640.webp 640w, img/barra-1280.webp 1280w, img/barra-1920.webp 1920w" sizes="(max-width: 980px) 80vw, 34vw" width="1920" height="2560" alt="Barra de azulejos verdes de La Base Café" loading="lazy" decoding="async"></figure>
+      <figure><img src="img/matcha-latte-1280.webp" srcset="img/matcha-latte-640.webp 640w, img/matcha-latte-1280.webp 1280w, img/matcha-latte-1920.webp 1920w" sizes="(max-width: 980px) 80vw, 34vw" width="1920" height="2560" alt="Iced matcha latte" loading="lazy" decoding="async"></figure>
+      <figure><img src="img/sushi-salmon-1024.webp" srcset="img/sushi-salmon-640.webp 640w, img/sushi-salmon-1024.webp 1024w" sizes="(max-width: 980px) 80vw, 34vw" width="1024" height="1536" alt="Tabla de sushi de salmón" loading="lazy" decoding="async"></figure>
+      <figure><img src="img/capuchino-1280.webp" srcset="img/capuchino-640.webp 640w, img/capuchino-1280.webp 1280w, img/capuchino-1920.webp 1920w" sizes="(max-width: 980px) 80vw, 34vw" width="1920" height="2560" alt="Capuchino con corazón de leche" loading="lazy" decoding="async"></figure>
     </div>
   </div>
 </section>
@@ -369,7 +382,6 @@ p{margin:0}
 
 <nav class="rapido" id="rapido" aria-label="Accesos rápidos"><a href="#carta">Carta</a><a href="https://www.google.com/maps/dir/?api=1&amp;destination=40.4040995,-3.8858131" target="_blank" rel="noopener">Llegar</a><a href="tel:+34624542362">Llamar</a></nav>
 
-<script type="module" src="taza.js"></script>
 <script>
 (function(){
   var d=document, reducir=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -396,6 +408,16 @@ p{margin:0}
     setInterval(function(){ if(d.hidden) return; var f=figs[(i*4+1)%figs.length], img=f.querySelector('img'), n=extra[i%extra.length]; i++;
       var pre=new Image(); pre.src='img/'+n+'-640.webp';
       pre.onload=function(){ f.classList.add('gira'); setTimeout(function(){ var viejo=img.getAttribute('src').replace(/^img\//,'').replace(/-\d+\.webp$/,''); img.removeAttribute('srcset'); img.src=pre.src; extra[extra.indexOf(n)]=viejo; f.classList.remove('gira'); },700); }; },2600); }
+  // pila de fotos en 3D: se inclina con el puntero y pasa a la siguiente foto cada pocos segundos o al tocar
+  (function(){ var pila=d.getElementById('pila'); if(!pila) return; var figs=[].slice.call(pila.querySelectorAll('figure')), esc=d.createElement('div'); esc.className='escenario'; figs.forEach(function(f){ esc.appendChild(f); }); pila.appendChild(esc);
+    var orden=figs.slice();
+    function colocar(){ orden.forEach(function(f,k){ var r=[-4,5,-9,8,-6,10][k%6]; f.style.zIndex=String(100-k); f.style.transform='translate(-50%,-50%) translate3d('+(k*14)+'px,'+(k*-10)+'px,'+(-k*70)+'px) rotateZ('+(k?r:-3)+'deg)'; f.style.opacity=k>3?'0':'1'; }); }
+    function siguiente(){ var f=orden[0]; f.classList.add('vuela'); setTimeout(function(){ f.classList.remove('vuela'); orden.push(orden.shift()); colocar(); },650); }
+    colocar(); var temp=reducir?null:setInterval(function(){ if(!d.hidden) siguiente(); },3600);
+    pila.addEventListener('click',function(){ siguiente(); if(temp){ clearInterval(temp); temp=setInterval(function(){ if(!d.hidden) siguiente(); },3600); } });
+    if(!reducir){ pila.addEventListener('pointermove',function(e){ var r=pila.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; esc.style.transform='rotateY('+(x*18)+'deg) rotateX('+(-y*14)+'deg)'; });
+      pila.addEventListener('pointerleave',function(){ esc.style.transform=''; }); }
+  })();
   // accesos rápidos en móvil tras la portada
   var rap=d.getElementById('rapido'), por=d.getElementById('inicio');
   addEventListener('scroll',function(){ rap.classList.toggle('ver',por.getBoundingClientRect().bottom<0); },{passive:true});
