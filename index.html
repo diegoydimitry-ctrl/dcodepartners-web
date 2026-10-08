@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kizás Lounge · Cócteles y cachimbas en TresAguas, Alcorcón</title>
+<meta name="description" content="Kizás Lounge: coctelería, cachimbas premium y artistas invitados cada semana en el C.C. TresAguas (Alcorcón, Madrid). Abierto todos los días desde las 18:00. Reserva por teléfono o Instagram.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Kizás Lounge · El quizás más tentador">
+<meta property="og:description" content="Cócteles, cachimbas y música en directo en el C.C. TresAguas, Alcorcón. Todos los días desde las 18:00.">
+<meta property="og:image" content="assets/og-kizas.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a080c">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BarOrPub","name":"Kizás Lounge","description":"Coctelería y lounge bar con cachimbas, terraza y artistas invitados cada semana.","telephone":"+34 642 33 87 88","priceRange":"10–20 €","servesCuisine":"Cócteles","address":{"@type":"PostalAddress","streetAddress":"Av. de América, 7-9, C.C. TresAguas, planta 0","postalCode":"28922","addressLocality":"Alcorcón","addressRegion":"Madrid","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":40.3585608,"longitude":-3.8327736},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"18:00"}],"sameAs":["https://www.instagram.com/kizasloungebar/"],"hasMenu":"https://cartakizaslounge.netlify.app/"}
+</script>
+<link rel="preload" href="assets/fuentes/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fuentes/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* fuentes servidas desde el propio sitio (licencia SIL OFL): sin peticiones a terceros */
+@font-face{font-family:"Manrope";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fuentes/manrope-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fuentes/manrope-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fuentes/manrope-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fuentes/manrope-latin-700-normal.woff2") format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:300;font-display:swap;src:url("assets/fuentes/cormorant-garamond-latin-300-normal.woff2") format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fuentes/cormorant-garamond-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fuentes/cormorant-garamond-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:300;font-display:swap;src:url("assets/fuentes/cormorant-garamond-latin-300-italic.woff2") format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400;font-display:swap;src:url("assets/fuentes/cormorant-garamond-latin-400-italic.woff2") format("woff2")}
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fuentes/cinzel-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fuentes/cinzel-latin-600-normal.woff2") format("woff2")}
+/* Concepto: «cortina de humo» — escenas a sangre que se abren al bajar, sobre la noche y el terciopelo azul de sus fotos; el oro del logo solo marca lo importante. */
+:root{
+  --noche:#0a080c; --noche-2:#121019; --terciopelo:#0f1a2e; --oro:#d9b26b; --oro-claro:#f1d6a0;
+  --crema:#f3ebdf; --humo:#a39d95; --linea:rgba(241,214,160,.16); --velo:rgba(10,8,12,.72);
+  --f-titulo:"Cormorant Garamond","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --f-marca:"Cinzel","Trajan Pro","Times New Roman",serif;
+  --f-texto:"Manrope","Segoe UI",system-ui,-apple-system,sans-serif;
+  --ancho:1240px; --lado:clamp(18px,5vw,64px); --bloque:clamp(88px,13vw,168px);
+  --barra-alto:0px; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--noche);color:var(--crema);font:400 16px/1.65 var(--f-texto);overflow-x:hidden;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--oro-claro);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-titulo);font-weight:300;line-height:1.02;letter-spacing:-.01em;margin:0;text-wrap:balance}
+p{margin:0}
+.envoltorio{width:min(var(--ancho),100%);margin-inline:auto;padding-inline:var(--lado)}
+.marca-caps{font:600 .74rem/1 var(--f-marca);letter-spacing:.32em;text-transform:uppercase;color:var(--oro)}
+.solo-lectores{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* botones */
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:.7em;min-height:54px;padding:0 1.9em;border-radius:999px;font:700 .8rem/1 var(--f-texto);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background .35s,color .35s,border-color .35s,transform .35s;white-space:nowrap}
+.boton:active{transform:scale(.98)}
+.boton-oro{background:var(--oro);color:#17110a}
+.boton-oro:hover{background:var(--oro-claro)}
+.boton-linea{border-color:rgba(241,214,160,.5);color:var(--crema);background:transparent}
+.boton-linea:hover{border-color:var(--oro-claro);color:var(--oro-claro)}
+.enlace-flecha{display:inline-flex;align-items:center;gap:.6em;font:700 .76rem/1 var(--f-texto);letter-spacing:.2em;text-transform:uppercase;color:var(--oro-claro);text-decoration:none;border-bottom:1px solid var(--linea);padding-bottom:.6em;transition:gap .3s,border-color .3s}
+.enlace-flecha:hover{gap:1em;border-color:var(--oro)}
+
+/* aviso de demo */
+.aviso-demo{background:rgba(23,20,28,.92);color:var(--humo);font:500 .72rem/1.35 var(--f-texto);text-align:center;padding:.5rem var(--lado);border-bottom:1px solid var(--linea);max-height:60px;overflow:hidden;transition:max-height .5s,padding .5s,opacity .4s}
+.cabecera.solida .aviso-demo{max-height:0;padding-block:0;opacity:0;border-color:transparent}
+.aviso-demo b{color:var(--oro-claro);font-weight:600}
+
+/* cabecera */
+.cabecera{position:fixed;inset:0 0 auto;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .5s,backdrop-filter .5s,transform .5s,border-color .5s;border-bottom:1px solid transparent}
+.cabecera.solida{background:rgba(10,8,12,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--linea)}
+.cabecera .envoltorio{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo img{width:30px;height:auto}
+.logo span{font:600 .95rem/1 var(--f-marca);letter-spacing:.28em}
+.menu{display:flex;align-items:center;gap:clamp(18px,2.4vw,36px)}
+.menu a{font:600 .74rem/1 var(--f-texto);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:rgba(243,235,223,.82);transition:color .3s}
+.menu a:hover{color:var(--oro-claro)}
+.cabecera .boton{min-height:44px;padding:0 1.4em;font-size:.72rem}
+.boton-menu{display:none;width:48px;height:48px;border:1px solid var(--linea);border-radius:50%;background:transparent;color:var(--crema);cursor:pointer;place-items:center}
+.boton-menu i{display:block;width:18px;height:1.5px;background:currentColor;position:relative}
+.boton-menu i::before,.boton-menu i::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:currentColor}
+.boton-menu i::before{top:-6px}.boton-menu i::after{top:6px}
+.panel-menu{position:fixed;inset:0;z-index:70;background:var(--noche);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 20px) var(--lado) calc(env(safe-area-inset-bottom,0px) + 28px);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.panel-menu.abierto{opacity:1;visibility:visible}
+.panel-menu .fila{display:flex;justify-content:space-between;align-items:center;height:56px}
+.panel-menu nav{display:flex;flex-direction:column;gap:6px;margin-top:6vh}
+.panel-menu nav a{font:300 clamp(2.4rem,11vw,3.4rem)/1.12 var(--f-titulo);text-decoration:none;color:var(--crema)}
+.panel-menu nav a em{font-style:italic;color:var(--oro)}
+.panel-menu .pie-menu{margin-top:auto;display:grid;gap:14px;color:var(--humo);font-size:.9rem}
+.cerrar{width:48px;height:48px;border-radius:50%;border:1px solid var(--linea);background:transparent;color:var(--crema);font-size:1.4rem;cursor:pointer}
+
+/* portada */
+.portada{position:relative;min-height:min(100svh,980px);display:grid;place-items:center;text-align:center;overflow:hidden;isolation:isolate}
+.portada video,.portada .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:saturate(.6) contrast(1.08);transform:scale(1.08);will-change:transform}
+.portada::after{content:"";position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(120% 70% at 50% 45%,rgba(10,8,12,.28) 0%,rgba(10,8,12,.7) 62%,var(--noche) 100%),
+  linear-gradient(180deg,rgba(10,8,12,.55) 0%,transparent 26%,transparent 60%,var(--noche) 100%);}
+.portada .contenido{padding:140px var(--lado) 120px;display:grid;justify-items:center;gap:22px;max-width:980px}
+.portada .simbolo{width:clamp(54px,7vw,76px);filter:drop-shadow(0 6px 24px rgba(217,178,107,.25));animation:aparece 1.6s .2s both cubic-bezier(.2,.7,.2,1)}
+.portada h1{font-size:clamp(3.3rem,10.5vw,8.6rem);font-weight:300;line-height:.92}
+.portada h1 em{display:block;font-style:italic;color:var(--oro-claro);font-weight:300}
+.portada h1 .linea{display:block;animation:sube 1.4s both cubic-bezier(.2,.7,.2,1)}
+.portada h1 .linea:nth-child(2){animation-delay:.18s}
+.portada .lema{max-width:34ch;color:rgba(243,235,223,.84);font-size:clamp(1rem,1.6vw,1.15rem);animation:aparece 1.4s .55s both}
+.portada .acciones{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:10px;animation:aparece 1.4s .7s both}
+.portada .estado{position:absolute;left:0;right:0;bottom:28px;display:flex;justify-content:center;gap:10px;align-items:center;font:500 .78rem/1 var(--f-texto);letter-spacing:.16em;text-transform:uppercase;color:var(--humo)}
+.portada .estado i{width:7px;height:7px;border-radius:50%;background:var(--oro);box-shadow:0 0 0 0 rgba(217,178,107,.6);animation:late 2.4s infinite}
+@keyframes sube{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+@keyframes late{0%{box-shadow:0 0 0 0 rgba(217,178,107,.55)}70%{box-shadow:0 0 0 12px rgba(217,178,107,0)}100%{box-shadow:0 0 0 0 rgba(217,178,107,0)}}
+
+/* secciones comunes */
+.seccion{padding-block:var(--bloque);position:relative}
+.cabeza{display:grid;gap:18px;margin-bottom:clamp(40px,6vw,72px)}
+.cabeza h2{font-size:clamp(2.6rem,6.4vw,5.2rem)}
+.cabeza h2 em{font-style:italic;color:var(--oro-claro)}
+.cabeza p{max-width:52ch;color:var(--humo);font-size:1.05rem}
+
+/* experiencia */
+.experiencia{background:linear-gradient(180deg,var(--noche) 0%,var(--noche-2) 100%)}
+.quizas{display:grid;gap:clamp(2px,1vw,10px);margin-bottom:clamp(48px,7vw,88px)}
+.quizas p{font:300 clamp(2.4rem,7.2vw,6.2rem)/1 var(--f-titulo);letter-spacing:-.015em}
+.quizas p:nth-child(2){padding-left:clamp(0px,9vw,140px)}
+.quizas p:nth-child(3){padding-left:clamp(0px,18vw,280px)}
+.quizas em{font-style:italic;color:var(--oro-claro)}
+.experiencia .dos{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,6vw,96px);align-items:end}
+.experiencia .dos > p{font-size:clamp(1.05rem,1.4vw,1.2rem);color:rgba(243,235,223,.86);max-width:46ch}
+.datos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--linea)}
+.datos div{padding:20px 0;border-bottom:1px solid var(--linea);display:grid;gap:6px}
+.datos div:nth-child(odd){padding-right:18px}
+.datos dt{font:600 .68rem/1 var(--f-marca);letter-spacing:.28em;text-transform:uppercase;color:var(--oro)}
+.datos dd{margin:0;font:400 1.02rem/1.35 var(--f-texto)}
+
+/* cócteles */
+.cocteles{background:var(--terciopelo);overflow:hidden}
+.cocteles::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 50% at 85% 0%,rgba(241,214,160,.08),transparent 70%),radial-gradient(60% 40% at 0% 100%,rgba(0,0,0,.45),transparent 70%);pointer-events:none}
+.cocteles .cabeza{grid-template-columns:1fr auto;align-items:end}
+.precio-unico{display:grid;justify-items:end;gap:6px;text-align:right}
+.precio-unico b{font:300 clamp(3.4rem,8vw,6rem)/.9 var(--f-titulo);color:var(--oro-claro)}
+.precio-unico span{font:600 .7rem/1.3 var(--f-marca);letter-spacing:.24em;text-transform:uppercase;color:var(--humo)}
+.carrusel{--sangre:max(var(--lado),calc((100vw - var(--ancho)) / 2 + var(--lado)));display:grid;grid-auto-flow:column;grid-auto-columns:clamp(250px,27vw,340px);gap:clamp(14px,2vw,26px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:22px;margin-inline:calc(50% - 50vw);padding-inline:var(--sangre);scroll-padding-inline:var(--sangre);overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--oro) transparent}
+.carrusel::-webkit-scrollbar{height:3px}.carrusel::-webkit-scrollbar-thumb{background:var(--oro)}
+.coctel{scroll-snap-align:start;display:grid;gap:16px;margin:0}
+.coctel .foto{aspect-ratio:4/5;overflow:hidden;border-radius:2px;background:#0b1424}
+.coctel img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.coctel:hover img{transform:scale(1.05)}
+.coctel h3{font-size:1.9rem;font-weight:400}
+.coctel p{color:rgba(243,235,223,.72);font-size:.94rem;max-width:30ch}
+.nota-carta{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between;margin-top:28px;color:var(--humo);font-size:.92rem}
+.controles{display:flex;gap:10px}
+.controles button{width:48px;height:48px;border-radius:50%;border:1px solid var(--linea);background:transparent;color:var(--crema);cursor:pointer;font-size:1.1rem;transition:border-color .3s,color .3s}
+.controles button:hover{border-color:var(--oro);color:var(--oro-claro)}
+
+/* carta completa */
+.carta{background:var(--noche-2)}
+.pestanas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px}
+.pestanas button{min-height:44px;padding:0 1.3em;border-radius:999px;border:1px solid var(--linea);background:transparent;color:rgba(243,235,223,.78);font:600 .72rem/1 var(--f-texto);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.pestanas button[aria-selected="true"]{background:var(--crema);color:var(--noche);border-color:var(--crema)}
+.hoja{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(28px,4vw,64px)}
+.grupo h3{font:600 .72rem/1 var(--f-marca);letter-spacing:.28em;text-transform:uppercase;color:var(--oro);margin-bottom:14px}
+.grupo .sub{color:var(--humo);font-size:.88rem;margin:-6px 0 14px}
+.fila-carta{display:grid;grid-template-columns:minmax(0,auto) 1fr auto;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(241,214,160,.08)}
+.fila-carta span:first-child{font-weight:500}
+.fila-carta i{border-bottom:1px dotted rgba(241,214,160,.28);transform:translateY(-4px)}
+.fila-carta b{font:500 1rem/1 var(--f-texto);font-variant-numeric:tabular-nums;color:var(--oro-claro)}
+.fila-carta small{grid-column:1/-1;color:var(--humo);font-size:.84rem;margin-top:-4px}
+.marcas{color:rgba(243,235,223,.74);font-size:.94rem;line-height:1.7}
+.oferta{border:1px solid var(--linea);padding:26px;display:grid;gap:10px;border-radius:2px}
+.oferta b{font:300 3rem/1 var(--f-titulo);color:var(--oro-claro)}
+.oferta h4{margin:0;font:400 1.6rem/1.1 var(--f-titulo)}
+.letra-pequena{color:var(--humo);font-size:.84rem;margin-top:28px;max-width:70ch}
+.panel-carta[hidden]{display:none}
+.panel-carta{animation:aparece .5s both}
+
+/* cachimbas */
+.cachimbas{background:radial-gradient(80% 60% at 100% 0%,rgba(217,178,107,.07),transparent 60%),var(--noche)}
+.cachimbas .dos{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(36px,6vw,96px);align-items:start}
+.base{display:flex;flex-wrap:wrap;gap:12px 30px;align-items:baseline;padding:22px 0;border-block:1px solid var(--linea);margin-bottom:34px}
+.base b{font:300 3.4rem/1 var(--f-titulo);color:var(--oro-claro)}
+.base span{color:var(--humo);font-size:.94rem}
+.familias{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 40px}
+.familia h3{font:400 1.9rem/1 var(--f-titulo);margin-bottom:4px}
+.familia .tono{font:600 .64rem/1.4 var(--f-marca);letter-spacing:.22em;text-transform:uppercase;color:var(--oro);margin-bottom:14px;display:block}
+.familia ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.familia li{display:grid;gap:1px}
+.familia li b{font-weight:600;font-size:.95rem;letter-spacing:.02em}
+.familia li span{color:var(--humo);font-size:.88rem}
+.familia li.nuevo b::after{content:"Nuevo";margin-left:10px;font:700 .58rem/1 var(--f-texto);letter-spacing:.16em;text-transform:uppercase;color:#17110a;background:var(--oro);padding:4px 7px;border-radius:999px;vertical-align:2px}
+.sabor{position:sticky;top:110px;display:grid;gap:16px;max-width:320px;justify-self:end}
+.sabor .foto{border-radius:2px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.sabor h3{font-size:2.2rem}
+.sabor p{color:var(--humo);font-size:.95rem}
+
+/* espacio */
+.espacio{background:var(--noche);padding-bottom:calc(var(--bloque) * .7)}
+.mosaico{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:clamp(64px,7.5vw,108px);gap:clamp(10px,1.4vw,18px)}
+.mosaico figure{margin:0;position:relative;overflow:hidden;border-radius:2px;background:#16131b}
+.mosaico img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.mosaico figure.visto img{transform:scale(1)}
+.mosaico figcaption{position:absolute;left:14px;bottom:12px;font:600 .62rem/1 var(--f-marca);letter-spacing:.24em;text-transform:uppercase;color:var(--crema);text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.m1{grid-column:1/6;grid-row:span 6}.m2{grid-column:6/13;grid-row:span 4}.m3{grid-column:6/9;grid-row:span 4}.m4{grid-column:9/13;grid-row:span 4}.m5{grid-column:1/6;grid-row:span 2}
+.cita{margin-top:clamp(48px,7vw,90px);display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;max-width:820px}
+.cita blockquote{margin:0;font:300 italic clamp(1.6rem,3.2vw,2.5rem)/1.2 var(--f-titulo)}
+.cita cite{display:block;margin-top:14px;font:600 .66rem/1.4 var(--f-marca);letter-spacing:.22em;font-style:normal;text-transform:uppercase;color:var(--humo)}
+.cita .comilla{font:300 6rem/.7 var(--f-titulo);color:var(--oro)}
+
+/* eventos */
+.eventos{background:linear-gradient(180deg,var(--noche) 0%,#0d0b12 100%)}
+.lista-eventos{border-top:1px solid var(--linea)}
+.evento{display:grid;grid-template-columns:minmax(120px,.6fr) 1.4fr 1fr;gap:clamp(14px,3vw,48px);align-items:baseline;padding:clamp(22px,3vw,34px) 0;border-bottom:1px solid var(--linea);transition:padding .4s}
+.evento:hover{padding-left:12px}
+.evento .cuando{font:600 .68rem/1.4 var(--f-marca);letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+.evento h3{font-size:clamp(1.8rem,3.6vw,2.8rem);font-weight:300}
+.evento p{color:var(--humo);font-size:.95rem}
+.celebra{margin-top:clamp(48px,7vw,88px);display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;padding:clamp(28px,4vw,48px);border:1px solid var(--linea);background:radial-gradient(90% 120% at 0% 0%,rgba(217,178,107,.09),transparent 60%)}
+.celebra h3{font-size:clamp(1.9rem,3.6vw,2.8rem);margin-bottom:10px}
+.celebra p{color:var(--humo);max-width:56ch}
+.celebra .acciones{display:flex;flex-wrap:wrap;gap:12px}
+
+/* reservas */
+.reservas{position:relative;overflow:hidden;isolation:isolate;text-align:center}
+.reservas .fondo{position:absolute;inset:0;z-index:-2;background:url("assets/coctel-dark.webp") center/cover;filter:blur(2px) saturate(.8);transform:scale(1.1)}
+.reservas::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 70% at 50% 50%,rgba(10,8,12,.72),var(--noche) 100%)}
+.reservas h2{font-size:clamp(3rem,9vw,7rem)}
+.reservas h2 em{font-style:italic;color:var(--oro-claro)}
+.reservas .lema{color:rgba(243,235,223,.84);max-width:44ch;margin:18px auto 40px}
+.canales{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:760px;margin-inline:auto;text-align:left}
+.canal{display:grid;gap:12px;padding:26px;border:1px solid var(--linea);background:rgba(10,8,12,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.canal .tipo{font:600 .66rem/1 var(--f-marca);letter-spacing:.26em;text-transform:uppercase;color:var(--oro)}
+.canal .valor{font:400 2rem/1.1 var(--f-titulo);user-select:all}
+.canal .fila-botones{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.canal .boton{min-height:46px;padding:0 1.3em;font-size:.7rem}
+.copiado{min-height:1.2em;font-size:.82rem;color:var(--oro-claro)}
+
+/* instagram */
+.instagram{background:var(--noche);padding-bottom:calc(var(--bloque) * .6)}
+.ig-cabeza{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px;margin-bottom:34px}
+.ig-cabeza h2{font-size:clamp(2.2rem,5vw,3.8rem)}
+.ig-cabeza h2 span{font-style:italic;color:var(--oro-claro)}
+.rejilla-ig{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.rejilla-ig a{display:block;aspect-ratio:1;overflow:hidden;position:relative;background:#16131b}
+.rejilla-ig img{width:100%;height:100%;object-fit:cover;transition:transform .9s,opacity .4s}
+.rejilla-ig a:hover img{transform:scale(1.06);opacity:.75}
+
+/* ubicación */
+.ubicacion{background:var(--noche-2)}
+.ubicacion .dos{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,88px);align-items:stretch}
+.direccion{font:300 clamp(2rem,4vw,3.2rem)/1.08 var(--f-titulo);margin:8px 0 26px}
+.tabla-info{display:grid;gap:0;border-top:1px solid var(--linea)}
+.tabla-info div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--linea)}
+.tabla-info dt{font:600 .66rem/1.6 var(--f-marca);letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+.tabla-info dd{margin:0}
+.tabla-info a{text-decoration:none;border-bottom:1px solid var(--linea)}
+.ubicacion .acciones{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.plano{position:relative;min-height:420px;border:1px solid var(--linea);overflow:hidden;background:#0d0c12}
+.plano canvas{position:absolute;inset:0;width:100%;height:100%}
+.plano .pin{position:absolute;left:50%;top:calc(50% - 20px);transform:translate(-50%,-62%);display:grid;justify-items:center;gap:10px;pointer-events:none}
+.plano .pin img{width:46px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.6))}
+.plano .pin span{font:600 .62rem/1 var(--f-marca);letter-spacing:.26em;text-transform:uppercase;background:var(--noche);border:1px solid var(--linea);padding:9px 12px;white-space:nowrap}
+.plano .coords{position:absolute;left:16px;bottom:14px;font:500 .74rem/1.4 var(--f-texto);letter-spacing:.08em;color:var(--humo);font-variant-numeric:tabular-nums}
+.plano .cargar-mapa{position:absolute;left:50%;bottom:52px;transform:translateX(-50%);background:rgba(10,8,12,.8);min-height:46px;font-size:.7rem}
+.plano .aviso-mapa{position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:.72rem;color:#7d7871;padding:0 16px}
+.plano .coords{display:none}
+.plano iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.35) contrast(1.05)}
+.plano .leyenda{position:absolute;right:16px;top:14px;font:500 .72rem/1.5 var(--f-texto);color:var(--humo);text-align:right}
+
+/* pie */
+.pie{background:#070609;border-top:1px solid var(--linea);padding-block:72px calc(40px + env(safe-area-inset-bottom,0px))}
+.pie .rejilla{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px}
+.pie .logo-pie{display:grid;gap:16px;justify-items:start}
+.pie .logo-pie img{width:118px}
+.pie h4{margin:0 0 14px;font:600 .64rem/1 var(--f-marca);letter-spacing:.26em;text-transform:uppercase;color:var(--oro)}
+.pie p,.pie li{color:var(--humo);font-size:.92rem}
+.pie ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.pie a{text-decoration:none}.pie a:hover{color:var(--oro-claro)}
+.pie .legal{margin-top:56px;padding-top:24px;border-top:1px solid var(--linea);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 28px;color:#7d7871;font-size:.8rem}
+.pie .legal b{color:var(--humo);font-weight:600}
+
+/* barra móvil de reserva */
+.barra-movil{display:none}
+
+/* hoja de reserva */
+.hoja-reserva{position:fixed;inset:0;z-index:80;display:grid;align-items:end;justify-items:center;background:rgba(5,4,7,.66);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.hoja-reserva.abierta{opacity:1;visibility:visible}
+.hoja-reserva .caja{width:min(560px,100%);background:var(--noche-2);border:1px solid var(--linea);border-bottom:0;padding:30px var(--lado) calc(30px + env(safe-area-inset-bottom,0px));display:grid;gap:18px;transform:translateY(30px);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.hoja-reserva.abierta .caja{transform:none}
+.hoja-reserva .fila{display:flex;justify-content:space-between;align-items:center}
+.hoja-reserva h2{font-size:2.3rem}
+.hoja-reserva .opcion{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:18px;border:1px solid var(--linea);text-decoration:none;transition:border-color .3s,background .3s}
+.hoja-reserva .opcion:hover{border-color:var(--oro);background:rgba(217,178,107,.05)}
+.hoja-reserva .opcion svg{width:24px;height:24px;color:var(--oro)}
+.hoja-reserva .opcion b{display:block;font-weight:600}
+.hoja-reserva .opcion small{color:var(--humo)}
+.hoja-reserva .nota{color:var(--humo);font-size:.84rem}
+
+/* aparición al hacer scroll (solo con JS y sin «reducir movimiento») */
+.anima .r{opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.anima .r.visto{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.portada video{display:none}}
+
+/* responsive */
+@media (max-width:1000px){
+  .menu{display:none}.boton-menu{display:grid}
+  .experiencia .dos,.cachimbas .dos,.ubicacion .dos{grid-template-columns:1fr}
+  .sabor{position:static;max-width:340px;justify-self:start}
+  .pie .rejilla{grid-template-columns:1fr 1fr}
+  .rejilla-ig{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:720px){
+  .cabecera .boton{display:none}
+  .cabecera .envoltorio{height:64px}
+  .portada .contenido{padding-top:110px}
+  .portada .acciones .boton{flex:1 1 100%}
+  .cocteles .cabeza{grid-template-columns:1fr}.precio-unico{justify-items:start;text-align:left}
+  .familias{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 18px}
+  .familia h3{font-size:1.6rem}
+  .familia .tono{letter-spacing:.14em}
+  .evento{grid-template-columns:1fr;gap:8px}
+  .celebra{grid-template-columns:1fr}
+  .canales{grid-template-columns:1fr}
+  .mosaico{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto}
+  .mosaico figure{grid-column:auto!important;grid-row:auto!important;aspect-ratio:3/4}
+  .mosaico .m1,.mosaico .m2{grid-column:1/-1!important;aspect-ratio:4/3}
+  .mosaico .m5{grid-column:1/-1!important;aspect-ratio:16/9}
+  .tabla-info div{grid-template-columns:1fr;gap:4px}
+  .pie .rejilla{grid-template-columns:1fr}
+  .datos{grid-template-columns:1fr}.datos div:nth-child(odd){padding-right:0}
+  .plano{min-height:320px}
+  .sabor{grid-template-columns:118px 1fr;column-gap:18px;row-gap:6px;align-items:center;max-width:none}
+  .sabor .foto{grid-row:span 4;align-self:start}
+  .sabor h3{font-size:1.8rem}
+  .barra-movil{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:45;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(10,8,12,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--linea);transform:translateY(110%);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  .barra-movil.visible{transform:none}
+  .barra-movil .boton{min-height:50px;padding:0 1em;font-size:.72rem}
+  body{padding-bottom:0}
+  .pie{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+}
+</style>
+</head>
+<body>
+<header class="cabecera" id="cabecera">
+  <div class="aviso-demo" role="note"><b>Propuesta de diseño</b> de D-Code Partners para Kizás Lounge · No es la web oficial del local</div>
+  <div class="envoltorio">
+    <a class="logo" href="#inicio" aria-label="Kizás Lounge, inicio"><img src="assets/logo-simbolo.png" alt="" width="30" height="35"><span>KIZÁS</span></a>
+    <nav class="menu" aria-label="Principal">
+      <a href="#experiencia">El lounge</a><a href="#carta">Carta</a><a href="#cachimbas">Cachimbas</a><a href="#eventos">Eventos</a><a href="#visitanos">Visítanos</a>
+    </nav>
+    <button class="boton boton-oro" type="button" data-reservar>Reservar mesa</button>
+    <button class="boton-menu" type="button" id="abrir-menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="panel-menu"><i></i></button>
+  </div>
+</header>
+
+<div class="panel-menu" id="panel-menu" aria-hidden="true">
+  <div class="fila"><a class="logo" href="#inicio" data-cerrar-menu><img src="assets/logo-simbolo.png" alt="" width="30" height="35"><span>KIZÁS</span></a><button class="cerrar" type="button" data-cerrar-menu aria-label="Cerrar menú">×</button></div>
+  <nav aria-label="Menú móvil">
+    <a href="#experiencia" data-cerrar-menu>El <em>lounge</em></a><a href="#carta" data-cerrar-menu>La <em>carta</em></a><a href="#cachimbas" data-cerrar-menu>Cachimbas</a><a href="#espacio" data-cerrar-menu>El espacio</a><a href="#eventos" data-cerrar-menu>Eventos</a><a href="#visitanos" data-cerrar-menu>Visítanos</a>
+  </nav>
+  <div class="pie-menu"><button class="boton boton-oro" type="button" data-reservar data-cerrar-menu>Reservar mesa</button><span>C.C. TresAguas · Alcorcón · Todos los días desde las 18:00</span></div>
+</div>
+
+<main>
+<!-- PORTADA -->
+<section class="portada" id="inicio" aria-label="Portada">
+  <img class="poster" src="assets/humo-poster.jpg" alt="" aria-hidden="true">
+  <video id="humo" muted loop playsinline preload="auto" poster="assets/humo-poster.jpg" aria-hidden="true"><source src="assets/humo.mp4" type="video/mp4"></video>
+  <div class="contenido">
+    <img class="simbolo" src="assets/logo-simbolo.png" alt="Símbolo de Kizás Lounge" width="76" height="88">
+    <span class="marca-caps">Lounge · Cocktails · Smoke</span>
+    <h1><span class="linea">El quizás</span><em class="linea">más tentador</em></h1>
+    <p class="lema">Cócteles, cachimbas y música en directo en el C.C. TresAguas, Alcorcón.</p>
+    <div class="acciones"><button class="boton boton-oro" type="button" data-reservar>Reservar mesa</button><a class="boton boton-linea" href="#carta">Ver carta</a></div>
+  </div>
+  <div class="estado"><i></i>Abrimos todos los días a las 18:00</div>
+</section>
+
+<!-- EXPERIENCIA -->
+<section class="seccion experiencia" id="experiencia" aria-labelledby="t-experiencia">
+  <div class="envoltorio">
+    <h2 class="solo-lectores" id="t-experiencia">Kizás Lounge</h2>
+    <div class="quizas">
+      <p class="r">Quizás <em>una copa.</em></p>
+      <p class="r">Quizás <em>una cachimba.</em></p>
+      <p class="r">Quizás <em>la noche entera.</em></p>
+    </div>
+    <div class="dos">
+      <p class="r">Kizás es un lounge para llegar sin prisa y quedarse. Cócteles clásicos y de autor, cachimbas premium y una noche que cambia cada semana con artistas invitados, flamenco y sesiones de DJ.</p>
+      <dl class="datos r">
+        <div><dt>Horario</dt><dd>Todos los días desde las 18:00</dd></div>
+        <div><dt>Dónde</dt><dd>C.C. TresAguas, planta 0</dd></div>
+        <div><dt>Fuera</dt><dd>Con terraza exterior</dd></div>
+        <div><dt>Grupos</dt><dd>Celebraciones de hasta 100 personas</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- CÓCTELES -->
+<section class="seccion cocteles" id="carta" aria-labelledby="t-cocteles">
+  <div class="envoltorio">
+    <div class="cabeza">
+      <div>
+        <span class="marca-caps r">La carta</span>
+        <h2 class="r" id="t-cocteles" style="margin-top:18px">Cócteles <em>de la casa</em></h2>
+        <p class="r" style="margin-top:18px">Clásicos y de autor. Todos se pueden pedir sin alcohol.</p>
+      </div>
+      <div class="precio-unico r"><b>8 €</b><span>Todos los cócteles</span></div>
+    </div>
+    <div class="carrusel" id="carrusel" tabindex="0" aria-label="Cócteles de la carta">
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-pink.webp" alt="Cóctel Pink Love, rosado con hielo picado y flor" width="900" height="900"></div><figcaption><h3>Pink Love</h3><p>Ron blanco, crema de coco, zumo de piña y granadina.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-blue.webp" alt="Cóctel Blue Ocean, azul intenso con hierbabuena" width="900" height="900"></div><figcaption><h3>Blue Ocean</h3><p>Vodka, blue curaçao, zumo de limón y Sprite.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-vampiro.webp" alt="Cóctel Vampiro, rojo en vaso tallado" width="900" height="900"></div><figcaption><h3>Vampiro</h3><p>Ron blanco, crema de fresa, granadina y zumo de naranja.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-dark.webp" alt="Cóctel Dark Jagger junto a una botella de Jägermeister" width="900" height="900"></div><figcaption><h3>Dark Jagger</h3><p>Jägermeister, crema de fresa, blue curaçao y Sprite.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-mojito.webp" alt="Mojito clásico con lima y hierbabuena" width="900" height="900"></div><figcaption><h3>Mojito</h3><p>Ron blanco, lima, azúcar, hierbabuena fresca y soda.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-mojitossabores.webp" alt="Tres mojitos de sabores: fresa, mango y coco" width="900" height="900"></div><figcaption><h3>Mojitos de sabores</h3><p>Fresa, mango, fruta de la pasión y coco.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-pina.webp" alt="Piña colada con piña y cereza" width="900" height="900"></div><figcaption><h3>Piña Colada</h3><p>Ron blanco, crema de coco y zumo de piña.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-lobo.webp" alt="Cóctel Lobo, verde intenso con menta" width="900" height="900"></div><figcaption><h3>Lobo</h3><p>Ron blanco, menta, licor de manzana verde y Sprite.</p></figcaption></figure>
+      <figure class="coctel"><div class="foto"><img loading="lazy" src="assets/coctel-mango.webp" alt="Cóctel Mango Loco, anaranjado con menta" width="900" height="900"></div><figcaption><h3>Mango Loco</h3><p>Ron blanco, crema de mango y zumo de mango.</p></figcaption></figure>
+    </div>
+    <div class="nota-carta">
+      <a class="enlace-flecha" href="#carta-completa">Ver carta completa <span aria-hidden="true">→</span></a>
+      <div class="controles"><button type="button" data-mover="-1" aria-label="Cócteles anteriores">←</button><button type="button" data-mover="1" aria-label="Más cócteles">→</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- CARTA COMPLETA -->
+<section class="seccion carta" id="carta-completa" aria-labelledby="t-carta">
+  <div class="envoltorio">
+    <div class="cabeza">
+      <span class="marca-caps r">Carta completa</span>
+      <h2 class="r" id="t-carta">Para <em>pedir</em> sin mirar el móvil</h2>
+    </div>
+    <div class="pestanas" role="tablist" aria-label="Secciones de la carta">
+      <button type="button" role="tab" id="tab-copas" aria-selected="true" aria-controls="p-copas">Copas y botellas</button>
+      <button type="button" role="tab" id="tab-cervezas" aria-selected="false" aria-controls="p-cervezas">Cerveza y vino</button>
+      <button type="button" role="tab" id="tab-ofertas" aria-selected="false" aria-controls="p-ofertas">Ofertas</button>
+      <button type="button" role="tab" id="tab-refrescos" aria-selected="false" aria-controls="p-refrescos">Refrescos</button>
+    </div>
+
+    <div class="panel-carta" id="p-copas" role="tabpanel" aria-labelledby="tab-copas">
+      <div class="hoja">
+        <div class="grupo"><h3>Copas</h3>
+          <div class="fila-carta"><span>Copa balón</span><i></i><b>9 €</b></div>
+          <div class="fila-carta"><span>Vaso de sidra</span><i></i><b>7 €</b></div>
+          <div class="fila-carta"><span>Chupito</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Con Monster</span><i></i><b>+1 €</b></div>
+        </div>
+        <div class="grupo"><h3>Premium</h3>
+          <div class="fila-carta"><span>Copa balón premium</span><i></i><b>12 €</b></div>
+          <div class="fila-carta"><span>Combinado premium</span><i></i><b>9 €</b></div>
+          <h3 style="margin-top:28px">Botellas</h3>
+          <div class="fila-carta"><span>Botella</span><i></i><b>60 €</b></div>
+          <div class="fila-carta"><span>Botella premium</span><i></i><b>80 €</b><small>Con 8 refrescos incluidos.</small></div>
+        </div>
+        <div class="grupo"><h3>Marcas</h3>
+          <p class="marcas"><b>Ginebras</b> · Beefeater, Puerto de Indias, Seagram's, Tanqueray, Bombay Sapphire (premium)<br><b>Rones</b> · Barceló, Brugal, Legendario<br><b>Vodkas y licores</b> · Absolut, Jägermeister, Malibú<br><b>Whiskys</b> · Ballantine's, DYC, J&amp;B, Red Label, Black Label (premium)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-carta" id="p-cervezas" role="tabpanel" aria-labelledby="tab-cervezas" hidden>
+      <div class="hoja">
+        <div class="grupo"><h3>De grifo</h3><p class="sub">Doble · Jarra</p>
+          <div class="fila-carta"><span>Estrella Galicia</span><i></i><b>3 € · 4 €</b></div>
+          <div class="fila-carta"><span>Cerveza con limón</span><i></i><b>3 € · 4 €</b></div>
+        </div>
+        <div class="grupo"><h3>Tercios</h3>
+          <div class="fila-carta"><span>Estrella Galicia</span><i></i><b>3,50 €</b></div>
+          <div class="fila-carta"><span>1906</span><i></i><b>4 €</b></div>
+          <div class="fila-carta"><span>Estrella Galicia 0,0 Tostada</span><i></i><b>3,50 €</b></div>
+          <div class="fila-carta"><span>Coronita</span><i></i><b>4 €</b></div>
+        </div>
+        <div class="grupo"><h3>Vinos</h3>
+          <div class="fila-carta"><span>Copa de blanco Alma</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Botella de blanco Alma</span><i></i><b>15 €</b></div>
+          <div class="fila-carta"><span>Tinto de verano</span><i></i><b>4 €</b></div>
+          <div class="fila-carta"><span>Calimocho</span><i></i><b>4 €</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-carta" id="p-ofertas" role="tabpanel" aria-labelledby="tab-ofertas" hidden>
+      <div class="hoja">
+        <div class="oferta"><span class="marca-caps">Para compartir</span><h4>Combo copas</h4><p>Cachimba + 2 copas</p><b>25 €</b></div>
+        <div class="oferta"><span class="marca-caps">Para compartir</span><h4>Combo cócteles</h4><p>Cachimba + 2 cócteles</p><b>26 €</b></div>
+      </div>
+      <p class="letra-pequena">Pídela como oferta al camarero: no se puede aplicar después en caja. Ofertas servidas en vaso de sidra; en copa de balón se cobra el precio de carta.</p>
+    </div>
+
+    <div class="panel-carta" id="p-refrescos" role="tabpanel" aria-labelledby="tab-refrescos" hidden>
+      <div class="hoja">
+        <div class="grupo"><h3>Refrescos</h3>
+          <div class="fila-carta"><span>Coca-Cola / Zero</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Fanta naranja / limón</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Aquarius</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Nestea</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Sprite</span><i></i><b>3 €</b></div>
+          <div class="fila-carta"><span>Tónica</span><i></i><b>3 €</b></div>
+        </div>
+        <div class="grupo"><h3>Y además</h3>
+          <div class="fila-carta"><span>Monster</span><i></i><b>4 €</b><small>Clásico, blanco, strawberry y mango.</small></div>
+          <div class="fila-carta"><span>Zumos</span><i></i><b>3 €</b><small>Naranja, piña y mango.</small></div>
+          <div class="fila-carta"><span>Agua mineral</span><i></i><b>2 €</b></div>
+          <div class="fila-carta"><span>Agua con gas</span><i></i><b>3 €</b></div>
+        </div>
+      </div>
+    </div>
+    <p class="letra-pequena">Precios de la <a href="https://cartakizaslounge.netlify.app/" target="_blank" rel="noopener" style="color:var(--oro-claro)">carta digital oficial de Kizás Lounge</a>. Disfruta con responsabilidad: venta de alcohol solo a mayores de 18 años.</p>
+  </div>
+</section>
+
+<!-- CACHIMBAS -->
+<section class="seccion cachimbas" id="cachimbas" aria-labelledby="t-cachimbas">
+  <div class="envoltorio">
+    <div class="cabeza">
+      <span class="marca-caps r">Smoke</span>
+      <h2 class="r" id="t-cachimbas">Cachimbas, <em>sin prisa</em></h2>
+      <p class="r">Diecisiete sabores en cuatro familias. Si dudas, pide recomendación en barra.</p>
+    </div>
+    <div class="dos">
+      <div>
+        <div class="base r"><b>13 €</b><span>Base fría para una fumada más fresca · Bazooka +1,50 €</span></div>
+        <div class="familias">
+          <div class="familia r"><h3>Frutales</h3><span class="tono">Suaves, frescos y fáciles</span>
+            <ul><li><b>Snowy Fucsia</b><span>Frambuesa helada y menta</span></li><li><b>Big Blue</b><span>Arándanos</span></li><li><b>Magic Love</b><span>Fruta de la pasión, melón, especias y menta</span></li><li><b>Grapio Night</b><span>Uva dulce</span></li><li><b>Skimo P'App</b><span>Piña helada</span></li><li><b>Purple</b><span>Pomelo, fresa y frambuesa</span></li></ul></div>
+          <div class="familia r"><h3>Exóticos</h3><span class="tono">Tropicales y mezclas especiales</span>
+            <ul><li><b>Yellow</b><span>Limón ácido y refrescante</span></li><li><b>Sexy Sheba</b><span>Mango y maracuyá</span></li><li><b>Lady Killer</b><span>Melón, mango, arándanos y menta</span></li><li><b>Pomeya</b><span>Pomelo, lima, maracuyá y hielo</span></li></ul></div>
+          <div class="familia r"><h3>Intensos</h3><span class="tono">Frescor fuerte y clásicos</span>
+            <ul><li><b>Big Green</b><span>Menta fresca</span></li><li><b>The Double Crunch</b><span>Doble manzana</span></li><li><b>Big Boy</b><span>Sandía helada con menta</span></li></ul></div>
+          <div class="familia r"><h3>Dulces</h3><span class="tono">Cremosos y golosos</span>
+            <ul><li><b>White Cake</b><span>Tarta de queso</span></li><li><b>Capo di Capi</b><span>Cola y vainilla</span></li><li class="nuevo"><b>Kaffayayo</b><span>Coco, vainilla y almendras</span></li></ul></div>
+        </div>
+      </div>
+      <aside class="sabor r" aria-labelledby="t-sabor">
+        <div class="foto"><img loading="lazy" src="assets/sabor-del-mes-octubre.webp" alt="Cartel del sabor del mes de octubre: Kaffayayo de Hookain, coco, almendra y vainilla" width="720" height="1280"></div>
+        <span class="marca-caps">Sabor del mes · Octubre</span>
+        <h3 id="t-sabor">Kaffayayo</h3>
+        <p>De Hookain. Coco, almendra y vainilla: cremoso, dulce y tropical.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- EL ESPACIO -->
+<section class="seccion espacio" id="espacio" aria-labelledby="t-espacio">
+  <div class="envoltorio">
+    <div class="cabeza">
+      <span class="marca-caps r">El espacio</span>
+      <h2 class="r" id="t-espacio">Luz baja, <em>buena compañía</em></h2>
+    </div>
+    <div class="mosaico">
+      <figure class="m1"><img loading="lazy" src="assets/local-barra.jpg" alt="Barra de Kizás Lounge con cócteles de colores y botellas iluminadas" width="994" height="750"><figcaption>La barra</figcaption></figure>
+      <figure class="m2"><img loading="lazy" src="assets/entrada-marmol.jpg" alt="Logotipo dorado de Kizás Lounge sobre mármol negro" width="1536" height="1024"></figure>
+      <figure class="m3"><img loading="lazy" src="assets/local-mojitos.jpg" alt="Dos mojitos en una mesa del local" width="556" height="750"><figcaption>Mojitos</figcaption></figure>
+      <figure class="m4"><img loading="lazy" src="assets/local-mesa-picoteo.jpg" alt="Bandeja con cerveza y aperitivos en una mesa" width="818" height="750"><figcaption>En la mesa</figcaption></figure>
+      <figure class="m5"><img loading="lazy" src="assets/local-coctel-bandeja.jpg" alt="Cócteles servidos en bandeja" width="556" height="750"><figcaption>Servido</figcaption></figure>
+    </div>
+    <div class="cita r"><span class="comilla" aria-hidden="true">“</span><div><blockquote>Un sitio para venir sin prisa, disfrutar de una buena copa y alargar la noche.</blockquote><cite>Kizás Lounge, en Instagram</cite></div></div>
+  </div>
+</section>
+
+<!-- EVENTOS -->
+<section class="seccion eventos" id="eventos" aria-labelledby="t-eventos">
+  <div class="envoltorio">
+    <div class="cabeza">
+      <span class="marca-caps r">Eventos</span>
+      <h2 class="r" id="t-eventos">Cada semana, <em>otra noche</em></h2>
+      <p class="r">La programación cambia cada semana. Las fechas se anuncian en Instagram.</p>
+    </div>
+    <div class="lista-eventos">
+      <article class="evento r"><span class="cuando">Cada semana</span><h3>Artistas invitados</h3><p>Música en directo para acompañar la noche.</p></article>
+      <article class="evento r"><span class="cuando">En directo</span><h3>Noches de flamenco</h3><p>Cante y guitarra en el lounge.</p></article>
+      <article class="evento r"><span class="cuando">Cabina</span><h3>Sesiones de DJ</h3><p>Ambiente lounge que sube con la noche.</p></article>
+      <article class="evento r"><span class="cuando">Kizzas Night</span><h3>Afrobeats · Reggaeton · Hits</h3><p>Noches especiales con DJ invitado. La última, con Dary.</p></article>
+    </div>
+    <div class="celebra r">
+      <div><h3>Tu celebración, <em style="font-style:italic;color:var(--oro-claro)">aquí</em></h3><p>Cumpleaños, afterworks, despedidas y fiestas de empresa para grupos de hasta 100 personas. Cuéntanos qué quieres celebrar y preparamos la noche.</p></div>
+      <div class="acciones"><button class="boton boton-oro" type="button" data-reservar>Organizar evento</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVAS -->
+<section class="seccion reservas" id="reservas" aria-labelledby="t-reservas">
+  <div class="fondo" aria-hidden="true"></div>
+  <div class="envoltorio">
+    <span class="marca-caps r">Reservas</span>
+    <h2 class="r" id="t-reservas" style="margin-top:18px">Guarda <em>tu mesa</em></h2>
+    <p class="lema r">Reserva por teléfono o por mensaje directo en Instagram. Para grupos y eventos, escríbenos con la fecha y el número de personas.</p>
+    <div class="canales">
+      <div class="canal r"><span class="tipo">Teléfono</span><span class="valor" id="numero">642 33 87 88</span>
+        <div class="fila-botones"><a class="boton boton-oro" href="tel:+34642338788">Llamar</a><button class="boton boton-linea" type="button" data-copiar="+34 642 33 87 88">Copiar número</button></div><span class="copiado" aria-live="polite"></span></div>
+      <div class="canal r"><span class="tipo">Instagram</span><span class="valor">@kizasloungebar</span>
+        <div class="fila-botones"><a class="boton boton-oro" href="https://ig.me/m/kizasloungebar" target="_blank" rel="noopener">Enviar mensaje</a><a class="boton boton-linea" href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener">Ver perfil</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="seccion instagram" id="instagram" aria-labelledby="t-ig">
+  <div class="envoltorio">
+    <div class="ig-cabeza">
+      <div><span class="marca-caps r">Instagram</span><h2 class="r" id="t-ig" style="margin-top:16px">@kizasloungebar <span>la noche, antes</span></h2></div>
+      <a class="boton boton-linea r" href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener">Seguir en Instagram</a>
+    </div>
+    <div class="rejilla-ig r">
+      <a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener" aria-label="Ver Kizás Lounge en Instagram"><img loading="lazy" src="assets/coctel-mojitossabores.webp" alt="Mojitos de sabores"></a>
+      <a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener" aria-label="Ver Kizás Lounge en Instagram"><img loading="lazy" src="assets/local-barra.jpg" alt="La barra"></a>
+      <a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener" aria-label="Ver Kizás Lounge en Instagram"><img loading="lazy" src="assets/sabor-del-mes-octubre.webp" alt="Sabor del mes"></a>
+      <a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener" aria-label="Ver Kizás Lounge en Instagram"><img loading="lazy" src="assets/coctel-blue.webp" alt="Blue Ocean"></a>
+      <a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener" aria-label="Ver Kizás Lounge en Instagram"><img loading="lazy" src="assets/local-mojitos.jpg" alt="Mojitos"></a>
+      <a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener" aria-label="Ver Kizás Lounge en Instagram"><img loading="lazy" src="assets/cerveza-estrella.webp" alt="Tercio de Estrella Galicia"></a>
+    </div>
+  </div>
+</section>
+
+<!-- UBICACIÓN -->
+<section class="seccion ubicacion" id="visitanos" aria-labelledby="t-visitanos">
+  <div class="envoltorio">
+    <div class="dos">
+      <div>
+        <span class="marca-caps r">Visítanos</span>
+        <h2 class="direccion r" id="t-visitanos">Av. de América, 7-9<br>C.C. TresAguas · Alcorcón</h2>
+        <dl class="tabla-info r">
+          <div><dt>Horario</dt><dd>Todos los días desde las 18:00</dd></div>
+          <div><dt>Teléfono</dt><dd><a href="tel:+34642338788">642 33 87 88</a></dd></div>
+          <div><dt>Planta</dt><dd>Planta 0 del centro comercial, con terraza exterior</dd></div>
+          <div><dt>Metro</dt><dd>Línea 12 (MetroSur), parada Parque Lisboa</dd></div>
+          <div><dt>Cercanías</dt><dd>Línea C-5, estación San José de Valderas</dd></div>
+        </dl>
+        <div class="acciones r"><a class="boton boton-oro" href="https://www.google.com/maps/dir/?api=1&amp;destination=40.3585608,-3.8327736" target="_blank" rel="noopener">Cómo llegar</a><a class="boton boton-linea" href="https://www.google.com/maps/search/?api=1&amp;query=KIZ%C3%81S%20LOUNGE%20Alcorc%C3%B3n" target="_blank" rel="noopener">Abrir en Google Maps</a></div>
+      </div>
+      <div class="plano r" id="plano-caja">
+        <canvas id="plano" aria-hidden="true"></canvas>
+        <span class="leyenda">Alcorcón · Madrid<br>28922</span>
+        <span class="pin"><img src="assets/logo-simbolo.png" alt="" width="46" height="53"><span>Kizás Lounge</span></span>
+        <span class="coords">40,3586° N · 3,8328° O</span>
+        <button class="boton boton-linea cargar-mapa" type="button" id="cargar-mapa">Ver mapa interactivo</button>
+        <p class="aviso-mapa">El mapa lo sirve Google Maps y solo se carga si lo pides.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="pie">
+  <div class="envoltorio">
+    <div class="rejilla">
+      <div class="logo-pie"><img src="assets/logo-completo.png" alt="Kizás Lounge" width="118" height="122" style="height:auto"><p>El quizás más tentador.</p></div>
+      <div><h4>Dónde</h4><p>Av. de América, 7-9<br>C.C. TresAguas, planta 0<br>28922 Alcorcón, Madrid</p></div>
+      <div><h4>Cuándo</h4><p>Todos los días<br>desde las 18:00</p></div>
+      <div><h4>Contacto</h4><ul><li><a href="tel:+34642338788">642 33 87 88</a></li><li><a href="https://www.instagram.com/kizasloungebar/" target="_blank" rel="noopener">Instagram</a></li><li><button class="enlace-flecha" style="background:none;border:0;border-bottom:1px solid var(--linea);padding:0 0 .5em;cursor:pointer" type="button" data-reservar>Reservar mesa</button></li></ul></div>
+    </div>
+    <div class="legal"><span><b>+18</b> · Disfruta con responsabilidad</span><span>Sin cookies ni formularios: no recogemos datos personales. El mapa de Google solo se carga si lo pides.</span><span>Propuesta de diseño de D-Code Partners · No es la web oficial de Kizás Lounge</span></div>
+  </div>
+</footer>
+
+<div class="barra-movil" id="barra-movil"><button class="boton boton-oro" type="button" data-reservar>Reservar</button><a class="boton boton-linea" href="#carta">Carta</a></div>
+
+<div class="hoja-reserva" id="hoja-reserva" role="dialog" aria-modal="true" aria-labelledby="t-hoja" aria-hidden="true">
+  <div class="caja">
+    <div class="fila"><h2 id="t-hoja">Reservar mesa</h2><button class="cerrar" type="button" data-cerrar-hoja aria-label="Cerrar">×</button></div>
+    <a class="opcion" href="tel:+34642338788"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z"/></svg><span><b>Llamar</b><small>642 33 87 88</small></span><span aria-hidden="true">→</span></a>
+    <a class="opcion" href="https://ig.me/m/kizasloungebar" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span><b>Mensaje por Instagram</b><small>@kizasloungebar</small></span><span aria-hidden="true">→</span></a>
+    <button class="boton boton-linea" type="button" data-copiar="+34 642 33 87 88">Copiar el número</button><span class="copiado" aria-live="polite"></span>
+    <p class="nota">Kizás gestiona las reservas por teléfono y por mensaje directo. Abrimos todos los días desde las 18:00.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var d=document, raiz=d.documentElement, reducir=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // vídeo de portada: solo si se puede reproducir silenciado
+  var v=d.getElementById('humo');
+  if(v&&!reducir){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
+  // cabecera sólida y barra móvil
+  var cab=d.getElementById('cabecera'), barra=d.getElementById('barra-movil'), portada=d.getElementById('inicio');
+  function alDesplazar(){ var y=window.scrollY||0, h=portada.offsetHeight;
+    cab.classList.toggle('solida', y>40);
+    barra.classList.toggle('visible', y>h*0.7);
+    if(!reducir&&y<h){ var e=1.08+y/h*0.08; v.style.transform='translateY('+(y*0.25)+'px) scale('+e+')'; }
+  }
+  window.addEventListener('scroll',alDesplazar,{passive:true}); alDesplazar();
+  // menú móvil
+  var panel=d.getElementById('panel-menu'), abrir=d.getElementById('abrir-menu');
+  function menu(on){ panel.classList.toggle('abierto',on); panel.setAttribute('aria-hidden',on?'false':'true'); abrir.setAttribute('aria-expanded',on?'true':'false'); d.body.style.overflow=on?'hidden':''; }
+  abrir.addEventListener('click',function(){menu(true)});
+  d.querySelectorAll('[data-cerrar-menu]').forEach(function(el){el.addEventListener('click',function(){menu(false)})});
+  // hoja de reserva
+  var hoja=d.getElementById('hoja-reserva'), ultimo=null;
+  function reserva(on){ hoja.classList.toggle('abierta',on); hoja.setAttribute('aria-hidden',on?'false':'true'); d.body.style.overflow=on?'hidden':'';
+    if(on){ ultimo=d.activeElement; setTimeout(function(){ hoja.querySelector('.opcion').focus(); },60); } else if(ultimo){ ultimo.focus(); } }
+  d.querySelectorAll('[data-reservar]').forEach(function(b){ b.addEventListener('click',function(){ reserva(true); }); });
+  d.querySelectorAll('[data-cerrar-hoja]').forEach(function(b){ b.addEventListener('click',function(){ reserva(false); }); });
+  hoja.addEventListener('click',function(e){ if(e.target===hoja) reserva(false); });
+  d.addEventListener('keydown',function(e){ if(e.key==='Escape'){ reserva(false); menu(false); } });
+  // copiar número
+  d.querySelectorAll('[data-copiar]').forEach(function(b){ b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copiar'), aviso=b.parentElement.parentElement.querySelector('.copiado')||b.nextElementSibling;
+    function ok(){ if(aviso) aviso.textContent='Número copiado: '+t; }
+    function manual(){ var n=d.getElementById('numero'); if(n){ var r=d.createRange(); r.selectNodeContents(n); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); } if(aviso) aviso.textContent='Selecciona y copia: '+t; }
+    try{ navigator.clipboard.writeText(t).then(ok,manual); }catch(err){ manual(); }
+  }); });
+  // carrusel de cócteles
+  var car=d.getElementById('carrusel');
+  d.querySelectorAll('[data-mover]').forEach(function(b){ b.addEventListener('click',function(){ var f=car.querySelector('.coctel'); var paso=(f?f.getBoundingClientRect().width:300)+20; car.scrollBy({left:paso*Number(b.getAttribute('data-mover')),behavior:reducir?'auto':'smooth'}); }); });
+  // pestañas de la carta
+  var tabs=[].slice.call(d.querySelectorAll('[role="tab"]'));
+  function elige(t){ tabs.forEach(function(x){ var on=x===t; x.setAttribute('aria-selected',on?'true':'false'); x.tabIndex=on?0:-1; d.getElementById(x.getAttribute('aria-controls')).hidden=!on; }); }
+  tabs.forEach(function(t,i){ t.tabIndex=i?-1:0; t.addEventListener('click',function(){ elige(t); });
+    t.addEventListener('keydown',function(e){ var k=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0; if(k){ var n=tabs[(i+k+tabs.length)%tabs.length]; elige(n); n.focus(); e.preventDefault(); } }); });
+  // aparición al hacer scroll
+  if('IntersectionObserver' in window && !reducir){
+    raiz.classList.add('anima');
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visto'); io.unobserve(e.target); } }); },{rootMargin:'0px 0px -6% 0px',threshold:.08});
+    d.querySelectorAll('.r, .mosaico figure').forEach(function(el){ io.observe(el); });
+  } else { d.querySelectorAll('.mosaico figure').forEach(function(f){ f.classList.add('visto'); }); }
+  // plano: retícula abstracta con el punto del local (decorativa; el mapa real se carga bajo petición)
+  var cv=d.getElementById('plano');
+  function plano(){ var r=cv.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2); cv.width=r.width*dpr; cv.height=r.height*dpr; var c=cv.getContext('2d'); c.scale(dpr,dpr);
+    var w=r.width,h=r.height,cx=w/2,cy=h/2-20; c.fillStyle='#0d0c12'; c.fillRect(0,0,w,h);
+    c.strokeStyle='rgba(241,214,160,.055)'; c.lineWidth=1;
+    for(var x=(cx%32);x<w;x+=32){ c.beginPath(); c.moveTo(x,0); c.lineTo(x,h); c.stroke(); }
+    for(var y=(cy%32);y<h;y+=32){ c.beginPath(); c.moveTo(0,y); c.lineTo(w,y); c.stroke(); }
+    for(var i=1;i<6;i++){ c.strokeStyle='rgba(241,214,160,'+(0.2-i*0.03)+')'; c.beginPath(); c.arc(cx,cy,i*46,0,Math.PI*2); c.stroke(); }
+    var g=c.createRadialGradient(cx,cy,0,cx,cy,150); g.addColorStop(0,'rgba(217,178,107,.25)'); g.addColorStop(1,'rgba(217,178,107,0)'); c.fillStyle=g; c.fillRect(0,0,w,h);
+  }
+  var bm=d.getElementById('cargar-mapa');
+  if(bm) bm.addEventListener('click',function(){ var f=d.createElement('iframe'); f.title='Mapa de Google con la ubicación de Kizás Lounge'; f.loading='lazy'; f.referrerPolicy='no-referrer-when-downgrade';
+    f.src='https://www.google.com/maps?q=KIZ%C3%81S+LOUNGE,+Av.+de+Am%C3%A9rica+7-9,+28922+Alcorc%C3%B3n&ll=40.3585608,-3.8327736&z=17&hl=es&output=embed';
+    d.getElementById('plano-caja').appendChild(f); bm.remove(); var a=d.querySelector('.aviso-mapa'); if(a) a.remove(); });
+  if(cv){ plano(); window.addEventListener('resize',function(){ clearTimeout(cv._t); cv._t=setTimeout(plano,150); }); }
+})();
+</script>
+</body>
+</html>
