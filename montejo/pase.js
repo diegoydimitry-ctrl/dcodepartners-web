@@ -48,7 +48,7 @@ function iniciar() {
       if (uImgAsp > tileAsp) { uv.x = (uv.x - 0.5) * tileAsp / uImgAsp + 0.5; } else { uv.y = (uv.y - 0.5) * uImgAsp / tileAsp + 0.5; }
       vec3 c = texture2D(uTex, uv).rgb;
       c *= 1.0 - vLado * 0.45;
-      vec3 rojo = vec3(0.69, 0.157, 0.11);
+      vec3 rojo = vec3(0.09, 0.196, 0.165);
       c = mix(c, rojo, (1.0 - uListo));
       gl_FragColor = vec4(c, 1.0);
       #include <colorspace_fragment>
