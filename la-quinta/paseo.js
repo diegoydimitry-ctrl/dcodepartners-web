@@ -125,7 +125,6 @@ function iniciar() {
   let p = 0, pSuave = 0, visible = true, t0 = performance.now();
   new IntersectionObserver((es) => { visible = es[0].isIntersecting; }).observe(escena);
 
-  window.__paseo = { planos, cam, renderer };
   function cuadro(now) {
     requestAnimationFrame(cuadro);
     if (!visible || document.hidden) return;
