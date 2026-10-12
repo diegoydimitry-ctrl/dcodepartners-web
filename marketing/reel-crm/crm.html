@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Reel CRM — D-Code Partners</title>
+<meta name="viewport" content="width=1080">
+<style>
+@font-face{font-family:"Geist";src:url(fuentes/geist.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:"GeistMono";src:url(fuentes/geist-mono.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:"Bricolage";src:url(fuentes/bricolage.woff2) format("woff2");font-weight:200 800}
+:root{--ink:#101218;--ink2:#5A5F6E;--ink3:#979DAC;--linea:rgba(16,18,24,.07);
+  --azul:#2A6BFF;--lila:#9D8CFF;--cielo:#7CC4FF;--lima:#C9F25B;--melo:#FFB894;--coral:#FF7A59}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:100%;overflow:hidden;background:#EBEDF3;font-family:"Geist";color:var(--ink);-webkit-font-smoothing:antialiased}
+body{position:relative}
+.capa{position:absolute;inset:0;pointer-events:none}
+/* fondo aurora */
+#fondo{background:#EBEDF3;overflow:hidden}
+#fondo i{position:absolute;border-radius:50%;width:1500px;height:1500px;left:0;top:0;opacity:.9}
+#fondo i:nth-child(1){background:radial-gradient(closest-side,rgba(157,140,255,.55),rgba(157,140,255,0))}
+#fondo i:nth-child(2){background:radial-gradient(closest-side,rgba(124,196,255,.55),rgba(124,196,255,0))}
+#fondo i:nth-child(3){background:radial-gradient(closest-side,rgba(201,242,91,.42),rgba(201,242,91,0))}
+#fondo i:nth-child(4){background:radial-gradient(closest-side,rgba(255,184,148,.45),rgba(255,184,148,0))}
+#velo{background:#fff}
+#grano{opacity:.05;mix-blend-mode:multiply}
+
+/* mundo 3D */
+#escala{position:absolute;inset:0}
+#vista{position:absolute;inset:0;perspective:2000px}
+#mundo{position:absolute;left:540px;top:0;width:0;height:0;transform-style:preserve-3d}
+.panel{position:absolute;width:940px;height:1250px;left:-470px;top:-625px;border-radius:60px;padding:46px 48px;
+  transform-style:preserve-3d;backface-visibility:hidden}
+.panel>.vidrio{position:absolute;inset:0;border-radius:60px;background:linear-gradient(165deg,rgba(255,255,255,.86),rgba(255,255,255,.6));
+  border:2px solid rgba(255,255,255,.95);box-shadow:0 60px 140px -30px rgba(38,40,90,.28),0 10px 30px -10px rgba(38,40,90,.12)}
+.panel>:where(:not(.vidrio)){position:relative}
+.tarjeta{background:rgba(255,255,255,.92);border-radius:34px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 14px 40px -18px rgba(30,34,70,.22),0 0 0 1.5px rgba(16,18,24,.035)}
+h3{font:600 30px "Geist";letter-spacing:-.4px}
+.mono{font-family:"GeistMono";font-feature-settings:"tnum"}
+.chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:20px;font:600 22px "Geist";white-space:nowrap}
+.chip.lima{background:var(--lima);color:#1d2a00}
+.chip.gris{background:rgba(16,18,24,.06);color:var(--ink2)}
+.av{display:grid;place-items:center;border-radius:50%;color:#fff;font:600 22px "Geist";letter-spacing:.3px;flex:none}
+.g1{background:linear-gradient(135deg,#2A6BFF,#9D8CFF)}.g2{background:linear-gradient(135deg,#7CC4FF,#2A6BFF)}
+.g3{background:linear-gradient(135deg,#FFB894,#FF7A59)}.g4{background:linear-gradient(135deg,#C9F25B,#5FC27A);color:#173000}
+.g5{background:linear-gradient(135deg,#9D8CFF,#FF9EC4)}.g6{background:linear-gradient(135deg,#101218,#4a5068)}
+
+/* P0 · panel principal */
+.barra{display:flex;align-items:center;gap:20px;height:72px}
+.marca-app{display:flex;align-items:center;gap:14px;font:650 28px "Geist";letter-spacing:-.3px}
+.marca-app i{width:44px;height:44px;border-radius:14px;background:linear-gradient(140deg,var(--azul),var(--lila));position:relative}
+.marca-app i::after{content:"";position:absolute;width:14px;height:14px;border-radius:5px;background:#fff;left:15px;top:15px}
+.busca{flex:1;height:64px;border-radius:32px;background:rgba(16,18,24,.05);display:flex;align-items:center;gap:12px;padding:0 24px;color:var(--ink3);font:500 24px "Geist"}
+.busca svg{width:26px;height:26px}
+.saludo{margin-top:34px}
+.saludo h2{font:600 60px/1.04 "Bricolage";letter-spacing:-1.6px}
+.saludo p{margin-top:12px;color:var(--ink2);font:500 26px "Geist"}
+.kpis{display:flex;gap:22px;margin-top:34px}
+.kpi{position:relative;flex:1;height:214px;padding:26px 26px;display:flex;flex-direction:column}
+.kpi span{color:var(--ink2);font:500 22px "Geist"}
+ .kpi b{font:600 42px/1 "GeistMono";letter-spacing:-2.4px;white-space:nowrap;margin-top:16px}
+.kpi .chip{margin-top:auto;align-self:flex-start;height:36px;font-size:20px}
+.kpi svg.spark{position:absolute;right:22px;bottom:26px;width:110px;height:44px}
+.kpi svg.anillo{position:absolute;right:22px;bottom:22px;width:74px;height:74px}
+.grafica{margin-top:22px;height:404px;padding:28px 30px}
+.grafica .cab{display:flex;align-items:center;gap:16px}
+.seg{margin-left:auto;display:flex;background:rgba(16,18,24,.05);border-radius:22px;padding:5px}
+.seg span{height:38px;padding:0 18px;border-radius:19px;display:grid;place-items:center;font:550 20px "Geist";color:var(--ink2)}
+.seg span.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(16,18,24,.1)}
+#b3d{height:48px;padding:0 20px;border-radius:24px;border:0;background:var(--ink);color:#fff;font:600 21px "Geist";display:flex;align-items:center;gap:8px}
+#b3d svg{width:22px;height:22px}
+#linea{position:absolute;left:30px;top:96px;width:784px;height:250px;overflow:visible}
+.meses{position:absolute;left:30px;right:30px;bottom:20px;display:flex;justify-content:space-between;color:var(--ink3);font:500 18px "Geist"}
+#tip{position:absolute;padding:12px 18px;border-radius:18px;background:var(--ink);color:#fff;font:500 20px "Geist";white-space:nowrap;box-shadow:0 16px 30px -10px rgba(16,18,24,.4)}
+#tip b{font:600 24px "GeistMono";display:block;margin-top:2px;letter-spacing:-.5px}
+.hoy{margin-top:22px;height:262px;padding:24px 30px}
+.fila{display:flex;align-items:center;gap:18px;height:62px;margin-top:6px}
+.fila .av{width:50px;height:50px;font-size:19px}
+.fila b{font:600 24px "Geist";letter-spacing:-.2px}
+.fila small{display:block;color:var(--ink2);font:500 19px "Geist";margin-top:2px}
+.fila .hora{margin-left:auto;font:550 22px "GeistMono";color:var(--ink2)}
+
+/* P1 · gráfica 3D */
+.cab2{display:flex;align-items:flex-end;justify-content:space-between}
+.cab2 h2{font:600 56px/1 "Bricolage";letter-spacing:-1.5px}
+.cab2 p{color:var(--ink2);font:500 24px "Geist";margin-top:10px}
+.leyenda{display:flex;gap:22px;margin-top:26px;color:var(--ink2);font:500 21px "Geist"}
+.leyenda i{display:inline-block;width:16px;height:16px;border-radius:6px;margin-right:9px;vertical-align:-1px}
+#lienzo3d{position:absolute;left:0;top:220px;width:940px;height:760px}
+#tag{position:absolute;padding:14px 20px;border-radius:20px;background:#fff;box-shadow:0 18px 40px -12px rgba(16,18,24,.3);font:500 20px "Geist";color:var(--ink2);white-space:nowrap}
+#tag b{display:block;font:600 30px "GeistMono";color:var(--ink);letter-spacing:-1px}
+#tag::after{content:"";position:absolute;left:50%;bottom:-9px;width:18px;height:18px;background:#fff;transform:translateX(-50%) rotate(45deg);border-radius:3px}
+.stats{position:absolute;left:48px;right:48px;bottom:46px;display:flex;gap:18px}
+.stats>div{flex:1;padding:22px 24px;border-radius:28px;background:rgba(255,255,255,.9);box-shadow:0 10px 30px -16px rgba(30,34,70,.25)}
+.stats span{color:var(--ink2);font:500 20px "Geist"}
+.stats b{display:block;margin-top:8px;font:600 34px "GeistMono";letter-spacing:-1.2px}
+
+/* P2 · oportunidades */
+.cols{position:absolute;left:48px;right:48px;top:250px;bottom:46px}
+.colcab{position:absolute;top:0;width:264px}
+.colcab b{font:600 26px "Geist";display:flex;align-items:center;gap:10px}
+.colcab b i{display:inline-grid;place-items:center;min-width:34px;height:30px;border-radius:15px;background:rgba(16,18,24,.06);font:600 18px "GeistMono";color:var(--ink2);padding:0 9px}
+.colcab span{display:block;margin-top:8px;font:600 28px "GeistMono";letter-spacing:-1px;color:var(--ink2)}
+.colfondo{position:absolute;top:96px;bottom:0;width:264px;border-radius:30px;background:rgba(16,18,24,.035)}
+.op{position:absolute;width:248px;height:170px;padding:20px 20px;border-radius:26px;background:#fff;box-shadow:0 12px 30px -16px rgba(30,34,70,.3),0 0 0 1.5px rgba(16,18,24,.04)}
+.op .av{width:44px;height:44px;font-size:17px;position:absolute;right:18px;top:18px}
+.op b{display:block;font:600 22px/1.15 "Geist";letter-spacing:-.2px;width:150px}
+.op small{display:block;color:var(--ink3);font:500 17px "Geist";margin-top:5px}
+.op .val{position:absolute;left:20px;bottom:42px;font:600 28px "GeistMono";letter-spacing:-1px}
+.op .prob{position:absolute;left:20px;right:20px;bottom:22px;height:8px;border-radius:4px;background:rgba(16,18,24,.07);overflow:hidden}
+.op .prob i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cielo),var(--azul))}
+.op.gan .prob i{background:linear-gradient(90deg,#9be36a,var(--lima))}
+.op .ok{position:absolute;right:16px;bottom:52px;opacity:0}
+.chispa{position:absolute;width:12px;height:12px;border-radius:4px}
+.prev{position:absolute;left:48px;right:48px;top:150px;display:flex;align-items:center;gap:16px;color:var(--ink2);font:500 22px "Geist"}
+.prev .barra-p{flex:1;height:14px;border-radius:7px;background:rgba(16,18,24,.07);overflow:hidden}
+.prev .barra-p i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,var(--azul),var(--lila))}
+
+/* P3 · cliente */
+.ficha{display:flex;align-items:center;gap:30px}
+.ficha .av{width:132px;height:132px;font:600 46px "Bricolage";letter-spacing:-1px}
+.ficha h2{font:600 60px/1 "Bricolage";letter-spacing:-1.8px}
+.ficha .tags{display:flex;gap:10px;margin-top:16px}
+#lienzoDona{position:absolute;left:24px;top:210px;width:440px;height:440px}
+#dnum{position:absolute;left:24px;top:210px;width:440px;height:440px;display:grid;place-items:center;text-align:center}
+#dnum b{font:600 104px/1 "GeistMono";letter-spacing:-6px;display:block}
+#dnum span{font:500 19px "Geist";color:var(--ink2);display:block;margin-top:4px}
+.datos{position:absolute;left:500px;right:48px;top:256px;display:flex;flex-direction:column;gap:18px}
+.datos>div{padding:20px 24px;border-radius:26px;background:rgba(255,255,255,.9);box-shadow:0 10px 30px -18px rgba(30,34,70,.3)}
+.datos span{color:var(--ink2);font:500 19px "Geist"}
+.datos b{display:block;margin-top:6px;font:600 28px "Geist";letter-spacing:-.4px}
+.datos b.mono{font-family:"GeistMono";letter-spacing:-1px}
+.actividad{position:absolute;left:48px;right:48px;top:705px;height:330px;padding:24px 28px}
+.act{display:flex;align-items:center;gap:18px;height:62px;margin-top:4px}
+.act .ic{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;flex:none}
+.act .ic svg{width:24px;height:24px}
+.act b{font:550 23px "Geist"}
+.act time{margin-left:auto;color:var(--ink3);font:500 19px "Geist"}
+#bArranque{position:absolute;left:48px;right:48px;bottom:62px;height:92px;border-radius:46px;background:var(--azul);color:#fff;font:600 28px "Geist";display:flex;align-items:center;justify-content:center;gap:14px;box-shadow:0 20px 40px -14px rgba(42,107,255,.6)}
+
+/* P4 · agenda */
+.vistas{display:flex;background:rgba(16,18,24,.05);border-radius:22px;padding:5px}
+.vistas span{height:40px;padding:0 18px;border-radius:19px;display:grid;place-items:center;font:550 20px "Geist";color:var(--ink2)}
+.vistas span.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(16,18,24,.1)}
+.semana{position:absolute;left:48px;right:48px;top:200px;bottom:46px}
+.dia{position:absolute;top:0;height:76px;text-align:center}
+.dia span{display:block;color:var(--ink3);font:550 19px "Geist"}
+.dia b{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;font:600 26px "GeistMono";margin-top:2px}
+.dia.hoyd b{background:var(--ink);color:#fff}
+.horas{position:absolute;left:0;top:96px;width:80px}
+.horas div{position:absolute;left:0;color:var(--ink3);font:500 18px "GeistMono"}
+.rej{position:absolute;left:80px;right:0;height:1.5px;background:rgba(16,18,24,.06)}
+.ev{position:absolute;border-radius:20px;padding:14px 14px 0 18px;overflow:hidden;font:600 20px/1.15 "Geist";letter-spacing:-.2px}
+.ev::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px}
+.ev small{display:block;font:500 18px/1.2 "Geist";margin-top:5px;opacity:.75}
+.ev.cielo{background:#E2F1FF;color:#0B3A66}.ev.cielo::before{background:var(--cielo)}
+.ev.lila{background:#EEEAFF;color:#2E2380}.ev.lila::before{background:var(--lila)}
+.ev.melo{background:#FFEDE3;color:#7A2E10}.ev.melo::before{background:var(--melo)}
+.ev.azul{background:var(--azul);color:#fff;box-shadow:0 18px 36px -14px rgba(42,107,255,.7)}.ev.azul::before{background:#fff;opacity:.5}
+#ahora{position:absolute;height:3px;background:var(--coral);border-radius:2px}
+#ahora::before{content:"";position:absolute;left:-7px;top:-5.5px;width:14px;height:14px;border-radius:50%;background:var(--coral)}
+
+/* capas de pantalla */
+#pill{position:absolute;left:50%;top:0;height:92px;padding:0 34px 0 26px;border-radius:46px;display:flex;align-items:center;gap:18px;white-space:nowrap;
+  background:rgba(255,255,255,.88);border:2px solid #fff;box-shadow:0 24px 60px -20px rgba(38,40,90,.35);font:600 38px "Geist";letter-spacing:-.6px}
+#pill .punto{width:22px;height:22px;border-radius:50%;background:var(--azul);position:relative;flex:none}
+#pill .punto::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:3px solid var(--azul);opacity:var(--o,0);transform:scale(var(--s,1))}
+#pill .caret{display:inline-block;width:3px;height:40px;background:var(--azul);margin-left:4px;vertical-align:-7px}
+#cursor{position:absolute;left:0;top:0;width:60px;height:60px;transform-origin:8px 6px;filter:drop-shadow(0 8px 10px rgba(16,18,24,.28))}
+#onda{position:absolute;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:4px solid var(--azul);opacity:0}
+#toast{position:absolute;left:50%;height:104px;padding:0 34px 0 22px;border-radius:52px;display:flex;align-items:center;gap:18px;background:var(--ink);color:#fff;font:550 28px "Geist";white-space:nowrap;box-shadow:0 30px 60px -20px rgba(16,18,24,.55)}
+#toast .ic{width:60px;height:60px;border-radius:50%;background:var(--lima);display:grid;place-items:center}
+#todo{position:absolute;left:0;right:0;text-align:center;font:600 76px/1 "Bricolage";letter-spacing:-2.4px}
+#final{position:absolute;inset:0}
+#icono{position:absolute;left:220px;width:640px;height:640px}
+#sombraIcono{position:absolute;left:290px;width:500px;height:90px;border-radius:50%;background:radial-gradient(closest-side,rgba(30,34,80,.32),rgba(30,34,80,0))}
+#marcaD{position:absolute;left:0;right:0;text-align:center;font:700 92px "Bricolage";letter-spacing:-3px}
+#marcaD span{font-weight:400;color:var(--ink2)}
+#lema{position:absolute;left:0;right:0;text-align:center;color:var(--ink2);font:500 36px "Geist"}
+#cta>div{position:absolute;left:40px;right:40px;text-align:center}
+#c1{font:600 82px/1.05 "Bricolage";letter-spacing:-2.6px}
+#c2{font:500 60px "Geist";color:var(--ink2)}
+#c3{font:800 300px/1 "Bricolage";letter-spacing:-14px;background:linear-gradient(100deg,#2A6BFF 10%,#9D8CFF 60%,#7CC4FF);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:20px}
+#c4{font:500 44px/1.25 "Geist";color:var(--ink2)}
+#portadaTit{position:absolute;left:60px;right:60px;text-align:center;font:700 112px/1 "Bricolage";letter-spacing:-4px;display:none}
+#portadaTit span{background:linear-gradient(100deg,#2A6BFF,#9D8CFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+</style></head>
+<body>
+<div id="fondo" class="capa"><i></i><i></i><i></i><i></i></div>
+<svg id="grano" class="capa" width="1080" height="1920"><filter id="fg"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1 0"/></filter><rect width="100%" height="100%" filter="url(#fg)"/></svg>
+
+<div id="escala" class="capa"><div id="vista"><div id="mundo">
+
+<!-- P0 · panel principal -->
+<section class="panel" id="p0"><div class="vidrio"></div>
+  <header class="barra bloque">
+    <div class="marca-app"><i></i>Tu empresa</div>
+    <div class="busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Buscar clientes, tareas…</div>
+    <div class="av g6" style="width:64px;height:64px">LM</div>
+  </header>
+  <div class="saludo bloque"><h2>Buenos días, Laura</h2><p>3 reuniones hoy · 2 propuestas por cerrar</p></div>
+  <div class="kpis">
+    <div class="kpi tarjeta bloque"><span>Ingresos · oct</span><b class="mono" id="k1">0 €</b><em class="chip lima">↑ 18%</em>
+      <svg class="spark" viewBox="0 0 110 44"><path d="M2 38 C14 34 18 30 28 31 S44 22 54 24 S70 14 80 15 S98 6 108 4" fill="none" stroke="#2A6BFF" stroke-width="4" stroke-linecap="round"/></svg></div>
+    <div class="kpi tarjeta bloque"><span>Clientes activos</span><b class="mono" id="k2">0</b><em class="chip lima">↑ 24</em>
+      <svg class="spark" viewBox="0 0 110 44"><path d="M2 34 C12 36 20 26 30 28 S46 30 56 20 S74 18 84 12 S100 10 108 6" fill="none" stroke="#9D8CFF" stroke-width="4" stroke-linecap="round"/></svg></div>
+    <div class="kpi tarjeta bloque"><span>Tasa de cierre</span><b class="mono" id="k3">0%</b><em class="chip gris">meta 35%</em>
+      <svg class="anillo" viewBox="0 0 74 74"><circle cx="37" cy="37" r="30" fill="none" stroke="rgba(16,18,24,.07)" stroke-width="9"/><circle id="anillo" cx="37" cy="37" r="30" fill="none" stroke="#2A6BFF" stroke-width="9" stroke-linecap="round" transform="rotate(-90 37 37)" stroke-dasharray="188.5" stroke-dashoffset="188.5"/></svg></div>
+  </div>
+  <div class="tarjeta grafica bloque">
+    <div class="cab"><h3>Ventas</h3><div class="seg"><span class="on">Mes</span><span>Trim.</span><span>Año</span></div>
+      <button id="b3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg>3D</button></div>
+    <svg id="linea" viewBox="0 0 784 250">
+      <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A6BFF" stop-opacity=".26"/><stop offset="1" stop-color="#2A6BFF" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#7CC4FF"/><stop offset=".6" stop-color="#2A6BFF"/><stop offset="1" stop-color="#9D8CFF"/></linearGradient>
+        <clipPath id="clipA"><rect id="clipR" x="0" y="-20" width="0" height="300"/></clipPath></defs>
+      <g stroke="rgba(16,18,24,.06)" stroke-width="1.5"><path d="M0 40H784M0 110H784M0 180H784"/></g>
+      <g clip-path="url(#clipA)"><path id="area" fill="url(#ga)"/><path id="trazo" fill="none" stroke="url(#gl)" stroke-width="6" stroke-linecap="round"/></g>
+      <line id="guia" y1="0" y2="250" stroke="rgba(16,18,24,.15)" stroke-width="2" stroke-dasharray="6 7" opacity="0"/>
+      <circle id="punto" r="11" fill="#fff" stroke="#2A6BFF" stroke-width="6" opacity="0"/>
+      <circle id="halo" r="11" fill="#2A6BFF" opacity="0"/>
+    </svg>
+    <div class="meses"><span>Ene</span><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Sep</span><span>Oct</span></div>
+    <div id="tip">Septiembre<b>121.300 €</b></div>
+  </div>
+  <div class="tarjeta hoy bloque"><h3>Hoy</h3>
+    <div class="fila"><div class="av g1">CA</div><div><b>Clínica Arce</b><small>Llamada de seguimiento</small></div><span class="hora">10:30</span></div>
+    <div class="fila"><div class="av g3">GN</div><div><b>Grupo Nácar</b><small>Demo del producto</small></div><span class="hora">12:00</span></div>
+    <div class="fila"><div class="av g4">VA</div><div><b>Viveros Almenara</b><small>Renovación de contrato</small></div><span class="hora">17:00</span></div>
+  </div>
+</section>
+
+<!-- P1 · ventas en 3D -->
+<section class="panel" id="p1"><div class="vidrio"></div>
+  <div class="cab2"><div><h2>Ventas por línea</h2><p>Marzo – Octubre 2026</p></div><span class="chip lima">↑ 18% vs 2025</span></div>
+  <div class="leyenda"><span><i style="background:#2A6BFF"></i>Servicios</span><span><i style="background:#9D8CFF"></i>Suscripciones</span><span><i style="background:#7CC4FF"></i>Productos</span><span><i style="background:#B7E04A"></i>Formación</span></div>
+  <canvas id="lienzo3d" width="940" height="760"></canvas>
+  <div id="tag">Octubre · servicios<b>53.800 €</b></div>
+  <div class="stats"><div><span>Total 2026</span><b id="s1">0 €</b></div><div><span>Mejor mes</span><b>Octubre</b></div><div><span>Previsión</span><b id="s3">0 €</b></div></div>
+</section>
+
+<!-- P2 · oportunidades -->
+<section class="panel" id="p2"><div class="vidrio"></div>
+  <div class="cab2"><div><h2>Oportunidades</h2></div><div class="vistas"><span class="on">Tablero</span><span>Lista</span></div></div>
+  <div class="prev"><span>Pipeline</span><b class="mono" style="color:var(--ink);font-size:26px">186.500 €</b><div class="barra-p"><i id="prevBar" style="width:46%"></i></div><b class="mono" id="prevPct" style="color:var(--ink)">46%</b></div>
+  <div class="cols" id="cols"></div>
+</section>
+
+<!-- P3 · cliente -->
+<section class="panel" id="p3"><div class="vidrio"></div>
+  <div class="ficha"><div class="av g1">CA</div><div><h2>Clínica Arce</h2><div class="tags"><span class="chip lima" id="tagGanado">✓ Cliente</span><span class="chip gris">Salud</span><span class="chip gris">Madrid</span></div></div></div>
+  <canvas id="lienzoDona" width="440" height="440"></canvas>
+  <div id="dnum"><div><b id="dval">0</b><span>Salud de la cuenta</span></div></div>
+  <div class="datos"><div><span>Valor del contrato</span><b class="mono">24.000 €</b></div><div><span>Contacto</span><b>Marta Gil · Directora</b></div><div><span>Siguiente paso</span><b>Reunión de arranque</b></div></div>
+  <div class="tarjeta actividad"><h3>Actividad</h3>
+    <div class="act" data-i="0"><div class="ic" style="background:var(--lima)"><svg viewBox="0 0 24 24" fill="none" stroke="#1d2a00" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><b>Oportunidad ganada · 24.000 €</b><time>ahora</time></div>
+    <div class="act" data-i="1"><div class="ic" style="background:#EEEAFF"><svg viewBox="0 0 24 24" fill="none" stroke="#5B4BD6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><b>Propuesta firmada</b><time>hace 1 h</time></div>
+    <div class="act" data-i="2"><div class="ic" style="background:#E2F1FF"><svg viewBox="0 0 24 24" fill="none" stroke="#1F6FC2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></div><b>Llamada · 12 min</b><time>ayer</time></div>
+    <div class="act" data-i="3"><div class="ic" style="background:#FFEDE3"><svg viewBox="0 0 24 24" fill="none" stroke="#C2531F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div><b>Email abierto 3 veces</b><time>lun</time></div>
+  </div>
+  <div id="bArranque">Programar arranque <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+</section>
+
+<!-- P4 · agenda -->
+<section class="panel" id="p4"><div class="vidrio"></div>
+  <div class="cab2"><div><h2>Octubre</h2><p>Semana del 12 al 16</p></div><div class="vistas"><span>Día</span><span class="on">Semana</span><span>Mes</span></div></div>
+  <div class="semana" id="semana"></div>
+</section>
+
+</div></div></div>
+
+<div id="pill"><span class="punto"></span><span id="pilltxt"></span><span class="caret"></span></div>
+<div id="toast"><div class="ic"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1d2a00" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>Invitación enviada a 3 asistentes</div>
+<div id="todo">Todo en un solo sitio.</div>
+<div id="final"><div id="sombraIcono"></div><canvas id="icono" width="640" height="640"></canvas><div id="marcaD">D-Code <span>Partners</span></div><div id="lema">CRM a medida para tu empresa</div></div>
+<div id="cta"><div id="c1">¿Quieres un CRM así?</div><div id="c2">Comenta</div><div id="c3">CRM</div><div id="c4">y te enseñamos cómo<br>sería el tuyo.</div></div>
+<div id="portadaTit">¿Quieres un CRM<br><span>de este nivel?</span></div>
+<div id="onda"></div>
+<svg id="cursor" viewBox="0 0 60 60"><path d="M8 6 L8 46 L18.5 36.5 L25.5 52 L32.5 49 L25.5 34 L40 33 Z" fill="#fff" stroke="#101218" stroke-width="3" stroke-linejoin="round"/></svg>
+
+<script type="module" src="crm.js"></script>
+</body></html>
