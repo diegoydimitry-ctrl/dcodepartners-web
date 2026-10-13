@@ -113,9 +113,42 @@ def air(dur, amp=0.012):
     return out
 
 
+def thud(dur=0.55, amp=0.27):
+    """Golpe grave único de apertura — un único impacto en t=0,0, no un
+    patrón recurrente. Frecuencia que cae rápido (tipo "boom" de tráiler,
+    pero contenido, sin saturar) para dar un tirón de atención en el
+    primer fotograma, sincronizado con el gancho visual de ad7.html."""
+    n = int(dur * SR)
+    out = []
+    ph = 0.0
+    for i in range(n):
+        t = i / SR
+        f = 85.0 + 120.0 * math.exp(-18.0 * t)
+        ph += TWO_PI * f / SR
+        env = math.exp(-6.2 * t)
+        out.append(math.sin(ph) * env * amp)
+    return out
+
+
+def crack(dur=0.06, amp=0.11):
+    """Transitorio breve de ruido — da definición al ataque del golpe."""
+    n = int(dur * SR)
+    out = []
+    for i in range(n):
+        t = i / SR
+        e = math.exp(-60.0 * t)
+        out.append((rnd() * 2 - 1) * e * amp)
+    return out
+
+
 # ──────────────────────────── arreglo ────────────────────────────
 
 def render_arrangement():
+    # 0,00 · el gancho — un único golpe grave bajo la primera imagen,
+    # antes de que entre la voz (0,30 s) — ver thud()/crack() arriba
+    add(0.0, thud(0.55, 0.15))
+    add(0.0, crack(0.06, 0.07))
+
     # 0,00–6,63 · el gancho — una nota, el aire casi vacío
     add(0.0, air(6.63, 0.010))
     add(0.55, piano(note(-12), 5.4, 0.15))
@@ -197,8 +230,8 @@ def mixdown(path):
     for i in range(N):
         t = i / SR
         d = duck_gain(t)
-        if t < 0.3:
-            d *= t / 0.3
+        if t < 0.015:
+            d *= t / 0.015  # solo evita un clic digital en la muestra 0, no difumina el golpe de apertura
         if t > DUR - 1.2:
             d *= max(0.0, (DUR - t) / 1.2)
         L[i] *= d

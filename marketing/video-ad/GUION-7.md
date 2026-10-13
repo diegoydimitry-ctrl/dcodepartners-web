@@ -114,30 +114,26 @@ acontecimientos reales"). Se preguntó al usuario cómo resolverlo y se
 eligió **fotografía fija generada + movimiento de cámara (Ken Burns)**
 en vez de cualquier alternativa que simulara vídeo real.
 
-**Las 7 fotografías (`assets/stock-ad7/`)** están generadas con Canva
-(`generate-image`, B/N, estilo editorial/documental) — no son archivo
-real ni representan ningún hecho, cliente o lugar concreto de D-Code.
-Limitación técnica real y no disimulada: el generador solo devuelve
-miniaturas de **112×199 px** sin pasar por un diseño completo de Canva
-(mismo límite ya documentado en GUION-6.md § 5). El usuario marcó esta
-calidad como insuficiente tras ver el primer corte. Se intentó
-sustituirlas por imágenes generadas con Figma (`generate_image`, hasta
-2048 px — 768×1376 reales, ~48× más píxeles que las de Canva; ya
-generadas y pagadas en este proyecto de Figma: `G45xPgLkidOCGkmLSEYb9g`),
-pero la descarga está bloqueada por la política de red del entorno
-(`www.figma.com` denegado) y el cambio de "Allowed domains" que hizo el
-usuario no se propagó dentro de esta sesión. **Pendiente**: reintentar
-la descarga (puede bastar con reabrir la sesión) y sustituir las 7
-imágenes sin tocar el resto del montaje — los nodos ya existen en Figma,
-no hace falta volver a generarlos ni gastar más crédito.
+**Las 7 fotografías (`assets/stock-ad7/`)** están generadas con Figma
+(`generate_image`, modelo `gemini-3.1-flash-image`, B/N, estilo
+editorial/documental), a **768×1376 px reales** — no son archivo real
+ni representan ningún hecho, cliente o lugar concreto de D-Code. Primera
+versión de esta pieza usaba Canva (`generate-image`), que solo devuelve
+miniaturas de 112×199 px sin pasar por un diseño completo — el usuario
+marcó esa calidad como insuficiente, así que se regeneraron las 7 con
+Figma (~48× más píxeles). La descarga directa de `www.figma.com` está
+bloqueada por la política de red del entorno, así que se obtuvieron con
+`get_screenshot` en modo `enableBase64Response` (pensado justo para
+entornos con la salida de red restringida): la imagen llega incrustada
+en la propia respuesta de la herramienta en vez de como una URL que
+descargar, así que nunca pasa por la red bloqueada.
 
-Mientras tanto se reforzó el tratamiento de postproducción sobre las
-imágenes actuales: doble pasada de contraste (base + una capa en modo
-`overlay` que simula nitidez sin añadir resolución real), grano de 35 mm
-en dos capas (fino + grueso, no ruido uniforme) y menos zoom Ken Burns
-que en la primera versión (para no sumar ampliación encima de la ya
-necesaria). Mejora el acabado, pero no sustituye a tener más píxeles de
-origen — ver "pendiente" arriba.
+Con esta resolución ya no hace falta disimular nada: el tratamiento de
+postproducción es solo un grado de color discreto (B/N, contraste leve
+`contrast(1.10) brightness(0.98)`) y un grano fino de unificación —
+nada de blur ni de "nitidez falsa" (la primera versión sí llevaba ambos,
+para esconder el origen de 112×199 px; ya no son necesarios y se
+retiraron).
 
 **Música (`audio7.py`)** — sintetizada desde cero en Python puro (sin
 muestras, sin librerías externas), igual que el resto de la serie: pista
@@ -154,11 +150,39 @@ haría falta:
 
 1. **Banco de vídeo con licencia verificable** (o grabación propia) para
    sustituir las 7 fotografías por vídeo real de las mismas escenas.
-2. **Resolver el acceso a Figma** (arriba) para al menos multiplicar por
-   ~48 la resolución real de las 7 fotos sin cambiar nada más del montaje.
-3. **Locución grabada por una voz humana real**, si se prefiere a la
+2. **Locución grabada por una voz humana real**, si se prefiere a la
    síntesis — el guion y los tiempos de § 2 ya están listos para
    doblarse tal cual.
+
+---
+
+## 4bis. El gancho de apertura
+
+Petición explícita del usuario: "que haga que la gente se quede a ver
+el vídeo". Tres elementos trabajan juntos en el primer segundo, sin
+caer en plantilla genérica ni en teatralidad:
+
+1. **Tipografía de impacto** — solo la primera frase ("No te falta
+   tiempo.") se muestra grande y centrada (58 px, Space Grotesk), no
+   como el subtítulo discreto del resto del vídeo. Es un único
+   asentamiento de escala (1,05 → 1,00, `easeOutQuint`, sin rebote), no
+   una animación recurrente — a partir de la segunda frase el texto
+   vuelve al estilo de subtítulo normal, en el tercio inferior.
+2. **Golpe de audio** — un único impacto grave (`thud()` + `crack()` en
+   audio7.py), en t=0,0, antes incluso de que entre la voz (0,30 s).
+   Sube y baja de tono en 0,5 s, discreto en volumen (no compite con la
+   mezcla general) pero perceptible al sonar en silencio casi total.
+3. **Asentamiento de cámara** — un único micro-zoom de entrada
+   (`kb.snap` en `kenBurns()`, 1,035 → 1,00 en 0,22 s) en la primera
+   escena, sincronizado con el golpe de audio. No es un zoom recurrente
+   ni "constante" (prohibido en el encargo original) — ocurre una sola
+   vez, en el primer fotograma, y después el Ken Burns sigue su curso
+   lento y continuo habitual.
+
+Los tres elementos caen en la misma décima de segundo: imagen + golpe +
+texto grande, con la voz entrando justo después. El resto del vídeo
+sigue el lenguaje sereno y sin adornos del resto de la pieza — el gancho
+es exclusivamente de apertura, no se repite en ningún otro corte.
 
 ---
 
@@ -199,7 +223,7 @@ de Séneca.
 | `out/dcode-ad7-portada-9x16.png` | Portada vertical del Reel |
 | `voces/ad7/01.mp3` … `07.mp3` | Clips de locución sin editar (ElevenLabs, voz Arconte) |
 | `out/banda-sonora-7.wav` | Música y efectos por separado, sin voz |
-| `assets/stock-ad7/*.jpg` | Las 7 fotografías generadas (Canva, B/N) |
+| `assets/stock-ad7/*.png` | Las 7 fotografías generadas (Figma, 768×1376, B/N) |
 
 ---
 

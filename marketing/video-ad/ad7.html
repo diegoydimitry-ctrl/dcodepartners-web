@@ -117,22 +117,14 @@ function background(){
   g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
 }
 function grain(t){
-  // grano de 35 mm determinista, dos capas — fino y grueso — para que se
-  // lea como textura de película real, no como ruido digital uniforme
-  const rngFine = makeRng(Math.floor(t * 24) * 7919 + 101);
-  g.save(); g.globalAlpha = 0.07; g.globalCompositeOperation = 'overlay';
-  for (let i = 0; i < 260; i++){
-    const gx = rngFine() * W, gy = rngFine() * H, s = 1 + rngFine() * 1.6;
-    g.fillStyle = rngFine() > 0.5 ? '#fff' : '#000';
+  // grano fino determinista — textura de película sutil, unifica el
+  // acabado de las 7 fotos sin disimular nada (ya son nítidas de origen)
+  const rng = makeRng(Math.floor(t * 24) * 7919 + 101);
+  g.save(); g.globalAlpha = 0.035; g.globalCompositeOperation = 'overlay';
+  for (let i = 0; i < 140; i++){
+    const gx = rng() * W, gy = rng() * H, s = 1 + rng() * 1.4;
+    g.fillStyle = rng() > 0.5 ? '#fff' : '#000';
     g.fillRect(gx, gy, s, s);
-  }
-  g.restore();
-  const rngCoarse = makeRng(Math.floor(t * 24) * 4397 + 503);
-  g.save(); g.globalAlpha = 0.045; g.globalCompositeOperation = 'overlay';
-  for (let i = 0; i < 40; i++){
-    const gx = rngCoarse() * W, gy = rngCoarse() * H, s = 2.5 + rngCoarse() * 4;
-    g.fillStyle = rngCoarse() > 0.5 ? '#fff' : '#000';
-    g.beginPath(); g.arc(gx, gy, s, 0, Math.PI * 2); g.fill();
   }
   g.restore();
 }
@@ -151,19 +143,23 @@ function vignette(strength = 0.74){
  * "movimiento de cámara" de la pieza, siempre sutil (zoom ≤ 15%, paneo
  * ≤ 35% del margen disponible), nunca un zoom ni un corte brusco.
  *
- * Las imágenes de origen son miniaturas de 112×199 px (límite del
- * generador — ver GUION-7.md § 5): se tratan con un desenfoque mínimo +
- * grano + B/N + contraste para que la ampliación se lea como textura de
- * archivo documental en vez de como una ampliación digital de baja
- * resolución. Es una decisión de postproducción explícita, no un intento
- * de disimular el origen (que queda documentado igualmente).
+ * Las imágenes de origen son fotografías reales de 768×1376 px (Figma
+ * `generate_image`, ~48× más resolución que la primera versión de este
+ * anuncio, generada con Canva a 112×199 px — ver GUION-7.md § 5). Con
+ * esta resolución ya no hace falta disimular nada: solo un grado de
+ * color discreto (B/N, contraste leve) y un grano fino para que las 7
+ * fotos compartan una misma textura "de película", sin blur ni trucos
+ * de falsa nitidez.
  */
 function kenBurns(img, localT, dur, kb){
   if (!img || !img.complete || !img.naturalWidth) return;
   const p = easeInOut(clamp(localT / dur, 0, 1));
   const coverScale = Math.max(W / img.naturalWidth, H / img.naturalHeight);
   const zoom = lerp(kb.z0, kb.z1, p);
-  const scale = coverScale * zoom;
+  // gancho de apertura — un único asentamiento breve (nunca un zoom
+  // recurrente), sincronizado con el golpe grave de audio7.py en t=0,0
+  const snap = kb.snap ? lerp(1.035, 1.0, easeOutQuint(clamp(localT / 0.22, 0, 1))) : 1.0;
+  const scale = coverScale * zoom * snap;
   const iw = img.naturalWidth * scale, ih = img.naturalHeight * scale;
   const maxPanX = Math.max(0, (iw - W) / 2) * 0.82;
   const maxPanY = Math.max(0, (ih - H) / 2) * 0.82;
@@ -172,25 +168,16 @@ function kenBurns(img, localT, dur, kb){
   const dx = CX - iw/2 + panX, dy = CY - ih/2 + panY;
   g.imageSmoothingEnabled = true;
   g.imageSmoothingQuality = 'high';
-  // base — grano de la ampliación disimulado con un desenfoque mínimo
   g.save();
-  g.filter = 'grayscale(1) contrast(1.22) brightness(0.92) blur(0.65px)';
-  g.drawImage(img, dx, dy, iw, ih);
-  g.restore();
-  // segunda pasada en "overlay" — realza el contraste local (seudo-nitidez),
-  // nunca añade resolución real, solo evita que el conjunto se lea "blando"
-  g.save();
-  g.globalCompositeOperation = 'overlay';
-  g.globalAlpha = 0.38;
-  g.filter = 'grayscale(1) contrast(1.7) brightness(1.05) blur(0.3px)';
+  g.filter = 'grayscale(1) contrast(1.10) brightness(0.98)';
   g.drawImage(img, dx, dy, iw, ih);
   g.restore();
   // leve pátina de contacto — unifica el grado de color entre las 7 fotos
   g.save();
   const lg = g.createLinearGradient(0, 0, 0, H);
-  lg.addColorStop(0, 'rgba(10,10,9,.22)');
+  lg.addColorStop(0, 'rgba(10,10,9,.16)');
   lg.addColorStop(0.5, 'rgba(10,10,9,0)');
-  lg.addColorStop(1, 'rgba(10,10,9,.3)');
+  lg.addColorStop(1, 'rgba(10,10,9,.24)');
   g.fillStyle = lg; g.fillRect(0, 0, W, H);
   g.restore();
 }
@@ -202,7 +189,7 @@ function kenBurns(img, localT, dur, kb){
    Reels (usuario, pie de foto, iconos). */
 
 const CAPTIONS = [
-  { a: 0.30, b: 2.00, text: 'No te falta tiempo.' },
+  { a: 0.30, b: 2.00, text: 'No te falta tiempo.', hook: true },
   { a: 2.10, b: 6.23, text: 'Te falta criterio para elegir en qué lo gastas.' },
 
   { a: 6.63, b: 8.46, text: 'Séneca ya lo decía:' },
@@ -225,8 +212,40 @@ const CAPTIONS = [
   { a: 45.07, b: 48.79, text: 'Es, por fin, trabajar en lo que importa.' }
 ];
 
+/**
+ * Gancho de apertura — solo la primera línea. Más grande, centrada,
+ * sin la píldora de fondo de los subtítulos normales: un golpe de
+ * atención limpio (fundido + un asentamiento de escala muy breve,
+ * nunca un rebote) sincronizado con el golpe grave de la música en
+ * audio7.py (t=0,0). Dura 1,7 s y luego la misma frase se retoma como
+ * subtítulo normal para la segunda mitad de la línea.
+ */
+function hookCaption(c, t){
+  const fadeIn = 0.22, fadeOut = 0.14;
+  const a = ramp(t, c.a, c.a + fadeIn, easeOutQuint) * (1 - ramp(t, c.b - fadeOut, c.b));
+  if (a <= 0.001) return;
+  const size = V ? 58 : 60;
+  font('sg', 700, size, -0.5);
+  const maxW = V ? W * 0.84 : W * 0.56;
+  const lines = wrap(c.text, maxW);
+  const lh = size * 1.16;
+  const totalH = lines.length * lh;
+  const cy = V ? H * 0.46 : CY;
+  const y0 = cy - totalH / 2;
+  const sp = clamp((t - c.a) / 0.30, 0, 1);
+  const scale = lerp(1.05, 1.0, easeOutQuint(sp));
+  g.save();
+  g.globalAlpha = a;
+  g.translate(CX, cy); g.scale(scale, scale); g.translate(-CX, -cy);
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = C.ink;
+  g.shadowColor = 'rgba(0,0,0,.8)'; g.shadowBlur = 30; g.shadowOffsetY = 6;
+  lines.forEach((ln, i) => g.fillText(ln, CX, y0 + (i + 1) * lh - lh * 0.24));
+  g.restore();
+}
+
 function captionsOverlay(t){
   for (const c of CAPTIONS){
+    if (c.hook){ hookCaption(c, t); continue; }
     const fade = 0.14;
     const a = ramp(t, c.a, c.a + fade) * (1 - ramp(t, c.b - fade, c.b));
     if (a <= 0.001) continue;
@@ -254,13 +273,13 @@ function captionsOverlay(t){
 /* ══════════════════════════ fotografías / escenas ══════════════════════════ */
 
 const IMG_FILES = [
-  '01-laptop-noche.jpg', '02-columnas.jpg', '03-ciudad.jpg', '04-artesano.jpg',
-  '05-papeleo.jpg', '06-escritorio.jpg', '07-puente.jpg'
+  '01-laptop-noche.png', '02-columnas.png', '03-ciudad.png', '04-artesano.png',
+  '05-papeleo.png', '06-escritorio.png', '07-puente.png'
 ];
 const IMAGES = [];
 
 const SCENES = [
-  { a: 0.00,  b: 6.63,  img: 0, kb: { z0: 1.00, z1: 1.07, px: 0.10, py: 0.30 } },
+  { a: 0.00,  b: 6.63,  img: 0, kb: { z0: 1.00, z1: 1.07, px: 0.10, py: 0.30, snap: true } },
   { a: 6.63,  b: 14.03, img: 1, kb: { z0: 1.00, z1: 1.05, px: 0.35, py: 0.08 } },
   { a: 14.03, b: 19.81, img: 2, kb: { z0: 1.00, z1: 1.06, px: 0.55, py: 0.10 } },
   { a: 19.81, b: 24.67, img: 3, kb: { z0: 1.02, z1: 1.09, px: 0.12, py: 0.10 } },
