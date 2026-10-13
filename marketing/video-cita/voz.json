@@ -1,0 +1,245 @@
+{
+ "duracion_voz": 48.642,
+ "frases": [
+  {
+   "t0": 0.25,
+   "t1": 4.13,
+   "escena": "gancho",
+   "texto": "Escribir una sola frase casi triplicó cuántas personas hacían deporte."
+  },
+  {
+   "t0": 4.58,
+   "t1": 8.786,
+   "escena": "personas",
+   "texto": "En el Reino Unido, Doscientas cuarenta y ocho personas quieren empezar a entrenar."
+  },
+  {
+   "t0": 8.936,
+   "t1": 10.492,
+   "escena": "grupos",
+   "texto": "Las dividen en tres grupos."
+  },
+  {
+   "t0": 10.742,
+   "t1": 12.633,
+   "escena": "g1",
+   "texto": "El primero solo apunta lo que hace."
+  },
+  {
+   "t0": 12.783,
+   "t1": 15.819,
+   "escena": "g2",
+   "texto": "El segundo lee por qué el ejercicio protege su corazón."
+  },
+  {
+   "t0": 15.969,
+   "t1": 18.461,
+   "escena": "g3",
+   "texto": "El tercero lee lo mismo, y escribe una frase:"
+  },
+  {
+   "t0": 18.661,
+   "t1": 22.099,
+   "escena": "frase",
+   "texto": "La semana que viene entrenaré el día tal, a tal hora, en tal sitio."
+  },
+  {
+   "t0": 22.599,
+   "t1": 26.967,
+   "escena": "resultado",
+   "texto": "Resultado: en los dos primeros grupos, solo uno de cada tres entrenaba cada semana."
+  },
+  {
+   "t0": 27.217,
+   "t1": 29.23,
+   "escena": "resultado",
+   "texto": "La motivación, sola, no cambió nada."
+  },
+  {
+   "t0": 29.68,
+   "t1": 30.581,
+   "escena": "noventa",
+   "texto": "En el tercero,"
+  },
+  {
+   "t0": 30.781,
+   "t1": 32.444,
+   "escena": "noventa",
+   "texto": "el noventa y uno por ciento."
+  },
+  {
+   "t0": 32.994,
+   "t1": 34.369,
+   "escena": "ganas",
+   "texto": "No tenían más ganas."
+  },
+  {
+   "t0": 34.569,
+   "t1": 36.183,
+   "escena": "ganas",
+   "texto": "Tenían un cuándo, y un dónde."
+  },
+  {
+   "t0": 36.633,
+   "t1": 38.624,
+   "escena": "estudios",
+   "texto": "Se ha repetido en casi cien estudios."
+  },
+  {
+   "t0": 39.074,
+   "t1": 41.611,
+   "escena": "tu",
+   "texto": "Así que elige eso que llevas tiempo aplazando,"
+  },
+  {
+   "t0": 41.711,
+   "t1": 43.983,
+   "escena": "tu",
+   "texto": "y escribe ahora el día, la hora, y el lugar."
+  },
+  {
+   "t0": 44.532,
+   "t1": 46.348,
+   "escena": "final",
+   "texto": "No necesitas más motivación."
+  },
+  {
+   "t0": 46.598,
+   "t1": 48.342,
+   "escena": "final",
+   "texto": "Necesitas una cita contigo."
+  }
+ ],
+ "subs": [
+  {
+   "t0": 0.25,
+   "t1": 1.705,
+   "texto": "Escribir una sola frase"
+  },
+  {
+   "t0": 1.705,
+   "t1": 4.13,
+   "texto": "casi triplicó cuántas personas hacían deporte."
+  },
+  {
+   "t0": 4.58,
+   "t1": 5.671,
+   "texto": "En el Reino Unido,"
+  },
+  {
+   "t0": 5.671,
+   "t1": 8.786,
+   "texto": "248 personas quieren empezar a entrenar."
+  },
+  {
+   "t0": 8.936,
+   "t1": 10.492,
+   "texto": "Las dividen en tres grupos."
+  },
+  {
+   "t0": 10.742,
+   "t1": 12.633,
+   "texto": "El primero solo apunta lo que hace."
+  },
+  {
+   "t0": 12.783,
+   "t1": 14.7,
+   "texto": "El segundo lee por qué el ejercicio"
+  },
+  {
+   "t0": 14.7,
+   "t1": 15.819,
+   "texto": "protege su corazón."
+  },
+  {
+   "t0": 15.969,
+   "t1": 17.298,
+   "texto": "El tercero lee lo mismo…"
+  },
+  {
+   "t0": 17.298,
+   "t1": 18.461,
+   "texto": "y escribe una frase:"
+  },
+  {
+   "t0": 18.661,
+   "t1": 20.38,
+   "texto": "«La semana que viene entrenaré"
+  },
+  {
+   "t0": 20.38,
+   "t1": 22.099,
+   "texto": "el día tal, a tal hora, en tal sitio.»"
+  },
+  {
+   "t0": 22.599,
+   "t1": 24.406,
+   "texto": "Resultado: en los dos primeros grupos,"
+  },
+  {
+   "t0": 24.406,
+   "t1": 26.967,
+   "texto": "solo uno de cada tres entrenaba cada semana."
+  },
+  {
+   "t0": 27.217,
+   "t1": 29.23,
+   "texto": "La motivación, sola, no cambió nada."
+  },
+  {
+   "t0": 29.68,
+   "t1": 30.581,
+   "texto": "En el tercero…"
+  },
+  {
+   "t0": 30.781,
+   "t1": 32.444,
+   "texto": "el 91 %."
+  },
+  {
+   "t0": 32.994,
+   "t1": 34.369,
+   "texto": "No tenían más ganas."
+  },
+  {
+   "t0": 34.569,
+   "t1": 36.183,
+   "texto": "Tenían un cuándo y un dónde."
+  },
+  {
+   "t0": 36.633,
+   "t1": 38.624,
+   "texto": "Se ha repetido en casi cien estudios."
+  },
+  {
+   "t0": 39.074,
+   "t1": 40.715,
+   "texto": "Así que elige eso que llevas"
+  },
+  {
+   "t0": 40.715,
+   "t1": 41.611,
+   "texto": "tiempo aplazando…"
+  },
+  {
+   "t0": 41.711,
+   "t1": 43.496,
+   "texto": "y escribe ahora el día, la hora"
+  },
+  {
+   "t0": 43.496,
+   "t1": 43.982,
+   "texto": "y el lugar."
+  },
+  {
+   "t0": 44.532,
+   "t1": 46.348,
+   "texto": "No necesitas más motivación."
+  },
+  {
+   "t0": 46.598,
+   "t1": 48.342,
+   "texto": "Necesitas una cita contigo."
+  }
+ ]
+}
