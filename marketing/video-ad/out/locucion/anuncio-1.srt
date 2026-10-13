@@ -1,0 +1,32 @@
+1
+00:00:00,600 --> 00:00:04,400
+¿Cuánto tiempo pierde tu empresa haciendo cosas que una máquina podría hacer?
+
+2
+00:00:05,000 --> 00:00:10,200
+Correos. Citas. Seguimientos. Datos. Tareas que se repiten una y otra vez.
+
+3
+00:00:10,800 --> 00:00:15,300
+Por separado parecen pequeñas. Juntas pueden convertirse en cientos de horas perdidas.
+
+4
+00:00:16,400 --> 00:00:18,400
+Pero quizá el problema no sea tu equipo.
+
+5
+00:00:19,000 --> 00:00:20,500
+Quizá sea el proceso.
+
+6
+00:00:21,200 --> 00:00:28,400
+Analizamos cómo funciona tu empresa, detectamos dónde se pierde tiempo y diseñamos sistemas de IA y automatización para solucionarlo.
+
+7
+00:00:29,000 --> 00:00:34,200
+Menos tareas manuales. Más organización. Más tiempo para hacer crecer tu negocio.
+
+8
+00:00:35,400 --> 00:00:38,400
+La tecnología debe trabajar para tu negocio.
+
