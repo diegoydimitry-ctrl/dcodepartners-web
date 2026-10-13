@@ -81,13 +81,25 @@ sienta cine, no dashboard de producto.
 
 ## 5. Producción real — lo que falta
 
-Esta pieza está construida íntegramente con mockups de interfaz
-deterministas (mismo motor `render(t)` que el resto de anuncios) y voz
-sintética — no hay actores, localizaciones ni cámara real, porque no
-existe en este entorno una herramienta de generación de vídeo
-fotorrealista, y aunque existiera, el criterio pedido prioriza grabación
-real sobre imagen artificial. Para elevar esta pieza de concepto a
-grabación con presencia real, haría falta:
+Esta pieza está construida con mockups de interfaz deterministas (mismo
+motor `render(t)` que el resto de anuncios) y voz sintética — no hay
+actores, localizaciones ni cámara real, porque no existe en este entorno
+una herramienta de generación de vídeo fotorrealista, y aunque existiera,
+el criterio pedido prioriza grabación real sobre imagen artificial.
+
+**Fotos del grid "después" (`assets/stock-ad6/`).** Generadas con Canva
+(`generate-image`), blanco y negro, genéricas de peluquería — no
+representan ningún negocio real ni cliente de D-Code. El grid "antes" se
+deja sin fotos a propósito: un perfil abandonado no solo está mal
+compuesto, tiene poco contenido real que mostrar; meterle fotos ahí
+rompería la lectura del problema. Son miniaturas de 200×200 (lo único que
+devolvió el generador sin pasar por un diseño de Canva completo) — se leen
+bien al tamaño de celda del grid, pero no sirven para ampliar; si se
+necesita más resolución, re-generarlas insertándolas primero en un diseño
+de Canva y exportando desde ahí.
+
+Para elevar esta pieza de concepto a grabación con presencia real, haría
+falta:
 
 1. **Plano de apertura real** — una mano sosteniendo un móvil, el pulgar
    deslizando de verdad sobre una pantalla (se podría componer el mockup

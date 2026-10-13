@@ -208,7 +208,10 @@ function browserFrame(x, y, w, h, url, alpha = 1){
 }
 
 /** Grid de publicaciones estilo Instagram. messy=1 desordenado, 0 limpio;
-    prog controla cuántas celdas han "llegado". */
+    prog controla cuántas celdas han "llegado". En el estado limpio dibuja
+    fotos reales (STOCK) si ya están cargadas — en el desordenado se queda
+    abstracto a propósito: un perfil sin cuidar no solo tiene mal gusto,
+    tiene poco contenido real que mostrar. */
 function igGrid(x, y, w, cols, rows, messy, prog, seed = 1){
   const gap = 4;
   const cell = (w - gap * (cols - 1)) / cols;
@@ -226,9 +229,20 @@ function igGrid(x, y, w, cols, rows, messy, prog, seed = 1){
     g.save();
     g.globalAlpha = easeOutQuint(p);
     g.translate(cx, cy); g.rotate(rot); g.scale(scaleVar, scaleVar); g.translate(-cx, -cy);
-    roundRect(bx + jx, by + jy, cell, cell, messy > 0.5 ? 3 : 7);
-    g.fillStyle = tones[(i + (messy > 0.5 ? Math.floor(rng()*6) : 0)) % tones.length];
-    g.fill();
+    const r = messy > 0.5 ? 3 : 7;
+    roundRect(bx + jx, by + jy, cell, cell, r);
+    const photo = messy < 0.5 && STOCK.length ? STOCK[i % STOCK.length] : null;
+    if (photo && photo.complete && photo.naturalWidth){
+      g.save(); g.clip();
+      const s = Math.max(cell / photo.naturalWidth, cell / photo.naturalHeight);
+      const pw = photo.naturalWidth * s, ph = photo.naturalHeight * s;
+      g.drawImage(photo, bx + jx + (cell - pw)/2, by + jy + (cell - ph)/2, pw, ph);
+      g.fillStyle = 'rgba(10,10,9,.08)'; g.fill();
+      g.restore();
+    } else {
+      g.fillStyle = tones[(i + (messy > 0.5 ? Math.floor(rng()*6) : 0)) % tones.length];
+      g.fill();
+    }
     if (messy < 0.5){
       // limpio: una línea de luz sutil, coherente en todas las celdas
       const lg = g.createLinearGradient(bx, by, bx + cell, by + cell);
@@ -756,6 +770,22 @@ function loadLogo(){
   });
 }
 
+/* Fotos de stock genéricas (B/N, generadas, no un negocio real) para el
+   grid "después" — ver GUION-6.md § 1 sobre por qué el grid "antes" se
+   queda sin fotos a propósito. */
+const STOCK = [];
+function loadStock(){
+  const files = [
+    '01-corte.jpg', '02-interior.jpg', '03-cepillado.jpg', '04-productos.jpg'
+  ];
+  return Promise.all(files.map((f, i) => new Promise(res => {
+    const img = new Image();
+    img.onload = () => { STOCK[i] = img; res(); };
+    img.onerror = () => res();
+    img.src = './assets/stock-ad6/' + f;
+  })));
+}
+
 async function boot(){
   await Promise.all([
     document.fonts.load('700 100px "Space Grotesk"'),
@@ -768,6 +798,7 @@ async function boot(){
   ]);
   await document.fonts.ready;
   await loadLogo();
+  await loadStock();
 
   if (FRAME !== null){
     render(FRAME);
