@@ -148,6 +148,9 @@ def render_arrangement():
     # antes de que entre la voz (0,30 s) — ver thud()/crack() arriba
     add(0.0, thud(0.55, 0.15))
     add(0.0, crack(0.06, 0.07))
+    # tics bajo los tres cortes duros del flash de apertura (ad7.html)
+    add(0.10, crack(0.03, 0.05))
+    add(0.20, crack(0.03, 0.05))
 
     # 0,00–6,63 · el gancho — una nota, el aire casi vacío
     add(0.0, air(6.63, 0.010))

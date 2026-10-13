@@ -158,29 +158,34 @@ haría falta:
 
 ## 4bis. El gancho de apertura
 
-Petición explícita del usuario: "que haga que la gente se quede a ver
-el vídeo". Tres elementos trabajan juntos en el primer segundo, sin
-caer en plantilla genérica ni en teatralidad:
+Primera versión del gancho (texto grande + golpe + micro-zoom, todo
+sobre la escena 1 fija) se consideró insuficiente: 0,3 s de plano fijo
+en silencio antes de la voz no da ninguna razón para quedarse en los
+primeros fotogramas, que es donde se decide si alguien sigue viendo un
+Reel. Segunda vuelta, con el mismo presupuesto de tiempo de montaje:
 
-1. **Tipografía de impacto** — solo la primera frase ("No te falta
-   tiempo.") se muestra grande y centrada (58 px, Space Grotesk), no
-   como el subtítulo discreto del resto del vídeo. Es un único
-   asentamiento de escala (1,05 → 1,00, `easeOutQuint`, sin rebote), no
-   una animación recurrente — a partir de la segunda frase el texto
+1. **Flash de apertura (0,00–0,30 s)** — tres cortes duros (sin
+   disolución, los únicos de todo el vídeo) sobre imágenes que
+   aparecerán más adelante: puente, ciudad, papeleo. No cuentan nada
+   todavía — son pura variedad cinética, una promesa visual de lo que
+   viene, para que algo se mueva en pantalla desde el fotograma cero en
+   vez de abrir con un plano fijo.
+2. **Tipografía de impacto** — al aterrizar en la escena 1 (t=0,30 s),
+   la primera frase ("No te falta tiempo.") se muestra grande y
+   centrada (58 px, Space Grotesk), no como el subtítulo discreto del
+   resto del vídeo. Un único asentamiento de escala (1,05 → 1,00,
+   `easeOutQuint`, sin rebote) — a partir de la segunda frase el texto
    vuelve al estilo de subtítulo normal, en el tercio inferior.
-2. **Golpe de audio** — un único impacto grave (`thud()` + `crack()` en
-   audio7.py), en t=0,0, antes incluso de que entre la voz (0,30 s).
-   Sube y baja de tono en 0,5 s, discreto en volumen (no compite con la
-   mezcla general) pero perceptible al sonar en silencio casi total.
-3. **Asentamiento de cámara** — un único micro-zoom de entrada
-   (`kb.snap` en `kenBurns()`, 1,035 → 1,00 en 0,22 s) en la primera
-   escena, sincronizado con el golpe de audio. No es un zoom recurrente
-   ni "constante" (prohibido en el encargo original) — ocurre una sola
-   vez, en el primer fotograma, y después el Ken Burns sigue su curso
-   lento y continuo habitual.
+3. **Golpe de audio** — un único impacto grave (`thud()` + `crack()` en
+   audio7.py) en t=0,0, bajo los tres cortes del flash, con un tic
+   seco marcando cada corte (0,00 / 0,10 / 0,20 s) y antes de que entre
+   la voz (0,30 s). Sube y baja de tono en 0,5 s, discreto en volumen
+   (no compite con la mezcla general) pero perceptible al sonar en
+   silencio casi total.
 
-Los tres elementos caen en la misma décima de segundo: imagen + golpe +
-texto grande, con la voz entrando justo después. El resto del vídeo
+Los tres cortes del flash, sus tics y el golpe grave caen juntos en el
+mismo tercio de segundo; la frase grande y la voz aterrizan un instante
+después, en t=0,30. El resto del vídeo
 sigue el lenguaje sereno y sin adornos del resto de la pieza — el gancho
 es exclusivamente de apertura, no se repite en ningún otro corte.
 

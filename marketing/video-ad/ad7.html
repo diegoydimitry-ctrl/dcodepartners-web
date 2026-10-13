@@ -362,6 +362,27 @@ function closingCard(t){
 
 /* ══════════════════════════ línea de tiempo general ══════════════════════════ */
 
+/**
+ * Flash de apertura — 0,30 s, tres cortes duros (sin disolución) sobre
+ * imágenes que aparecerán más tarde en la pieza: una muestra kinética de
+ * lo que viene, antes de aterrizar en la escena 1 con la frase grande y
+ * la voz. Es el único momento de corte duro de todo el vídeo — a partir
+ * de t=0,30 el lenguaje vuelve a ser el de disolución lenta habitual.
+ * Pensado para que algo se mueva en la pantalla desde el primer
+ * fotograma, en vez de abrir con 0,3 s de plano fijo y silencio.
+ */
+const FLASH = [6, 2, 4]; // puente, ciudad, papeleo — variedad visual inmediata
+function drawFlashFrame(imgIdx){
+  const img = IMAGES[imgIdx];
+  if (!img || !img.complete || !img.naturalWidth) return;
+  const s = Math.max(W / img.naturalWidth, H / img.naturalHeight) * 1.03;
+  const iw = img.naturalWidth * s, ih = img.naturalHeight * s;
+  g.save();
+  g.filter = 'grayscale(1) contrast(1.14) brightness(0.95)';
+  g.drawImage(img, CX - iw/2, CY - ih/2, iw, ih);
+  g.restore();
+}
+
 function render(t){
   t = clamp(t, 0, DUR);
   g.save();
@@ -369,7 +390,10 @@ function render(t){
 
   background();
 
-  if (t < 50.30){
+  if (t < 0.30){
+    const i = t < 0.10 ? 0 : t < 0.20 ? 1 : 2;
+    drawFlashFrame(FLASH[i]);
+  } else if (t < 50.30){
     renderPhotography(t);
   } else {
     drawScene(SCENES.length - 1, SCENES[SCENES.length - 1].b - 0.001);
@@ -381,8 +405,6 @@ function render(t){
   if (t < 50.30 && CC) captionsOverlay(t);
   if (t >= 48.79) closingCard(t - 50.30);
 
-  const intro = 1 - ramp(t, 0, 0.22, easeInOut);
-  if (intro > 0){ g.fillStyle = rgba('#000000', intro); g.fillRect(0, 0, W, H); }
   const outro = ramp(t, DUR - 0.5, DUR, easeInOut);
   if (outro > 0){ g.fillStyle = rgba('#000000', outro); g.fillRect(0, 0, W, H); }
 
