@@ -1,14 +1,16 @@
 # Anuncios en vídeo — D-Code Partners
 
-Cinco piezas para LinkedIn, reutilizables en Instagram Reels, TikTok y Shorts.
-Se renderizan desde este repositorio, con la identidad real de la marca: mismas
-tipografías, misma paleta y mismo logotipo que la web.
+Seis piezas para LinkedIn e Instagram, reutilizables en Reels, TikTok y
+Shorts. Se renderizan desde este repositorio, con la identidad real de la
+marca: mismas tipografías, misma paleta y mismo logotipo que la web (el
+anuncio 6 usa una paleta propia — ver su guion).
 
-El guion completo de cada anuncio, con sus entradas y notas de dirección, está
-en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)** (anuncio
-2), **[GUION-3.md](GUION-3.md)** (teaser DCode OS), **[GUION-4.md](GUION-4.md)**
-(D-Code Finance, corporativo) y **[GUION-5.md](GUION-5.md)** (D-Code Finance,
-recorte social).
+El guion completo de cada anuncio, con sus entradas y notas de dirección,
+está en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)**
+(anuncio 2), **[GUION-3.md](GUION-3.md)** (teaser DCode OS),
+**[GUION-4.md](GUION-4.md)** (D-Code Finance, corporativo),
+**[GUION-5.md](GUION-5.md)** (D-Code Finance, recorte social) y
+**[GUION-6.md](GUION-6.md)** (redes sociales + páginas web para negocios).
 
 ## Resultado
 
@@ -22,16 +24,23 @@ recorte social).
 | `out/dcode-ad4-16x9-vo.mp4` | 1920×1080 · 30 fps · 56,4 s | D-Code Finance corporativo, con locución — LinkedIn escritorio, web |
 | `out/dcode-ad5-9x16.mp4` | 1080×1920 · 30 fps · 22 s | D-Code Finance, recorte social — Reels, Stories, TikTok |
 | `out/dcode-ad5-16x9.mp4` | 1920×1080 · 30 fps · 22 s | D-Code Finance, recorte social — web |
-| `out/banda-sonora.wav` … `-5.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
+| `out/dcode-ad6-9x16-vo.mp4` | 1080×1920 · 30 fps · 27 s | Redes sociales + web — Reel, con locución |
+| `out/dcode-ad6-16x9-vo.mp4` | 1920×1080 · 30 fps · 27 s | Redes sociales + web — horizontal |
+| `out/dcode-ad6-9x16-cc-vo.mp4` | 1080×1920 · 30 fps · 27 s | Igual, con subtítulos incrustados |
+| `out/dcode-ad6-16x9-cc-vo.mp4` | 1920×1080 · 30 fps · 27 s | Igual, horizontal, con subtítulos |
+| `out/dcode-ad6b-9x16-vo.mp4` | 1080×1920 · 30 fps · 27 s | Variante B del gancho, para probar A/B |
+| `out/dcode-ad6-portada-9x16.png` | 1080×1920 | Portada del Reel |
+| `out/banda-sonora.wav` … `-6.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
 
 H.264 High + AAC 192 kbps, `+faststart`. Con música y efectos. Los anuncios 1
 y 2 salen **sin locución** (ver GUION.md § 7 para añadirla — la mezcla ya
 deja los huecos hechos); el teaser DCode OS y el recorte social de D-Code
 Finance se apoyan solo en rótulos y música, sin voz en off (ver GUION-3.md y
-GUION-5.md). El anuncio 4 (D-Code Finance corporativo) sí lleva locución
-masculina en español, generada con Kokoro local (ver GUION-4.md).
+GUION-5.md). Los anuncios 4 y 6 sí llevan locución en español, generada con
+Kokoro local (ver GUION-4.md y GUION-6.md).
 
 ## Cómo se genera
+
 
 ```bash
 # 1. ffmpeg con libx264 y aac (el que trae Playwright solo hace VP8/WebM)
@@ -76,9 +85,9 @@ segundo exacto, que es lo cómodo para ajustar una escena.
 
 | Archivo | Qué hace |
 |---------|----------|
-| `ad.html` … `ad5.html` | Las cinco animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
-| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las cinco piezas (`--src`). |
-| `audio.py` … `audio5.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
+| `ad.html` … `ad6.html` | Las seis animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
+| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las seis piezas (`--src`); `--query "cc=1"` pasa parámetros extra de la URL (subtítulos, variantes) a cada proceso. |
+| `audio.py` … `audio6.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
 | `tools/clean-logo.py` | Recupera el logotipo sobre transparencia real. |
 | `assets/dcode-mark.png` | Logotipo limpio que usa el cierre. |
 | `montar-voz.py` | Coloca los clips de locución en su segundo y los mezcla con la música. |

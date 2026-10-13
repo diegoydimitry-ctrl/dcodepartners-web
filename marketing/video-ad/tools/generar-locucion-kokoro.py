@@ -29,6 +29,7 @@ ANUNCIOS = {
     '1': ('GUION.md', '| Entrada | Salida | Texto |'),
     '2': ('GUION-2.md', '| Entra | Sale | Texto | Cómo |'),
     '4': ('GUION-4.md', '| Entrada | Salida | Texto |'),
+    '6': ('GUION-6.md', '| Entrada | Salida | Texto |'),
 }
 
 
@@ -71,7 +72,7 @@ def ffmpeg_bin():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--anuncio', choices=('1', '2', '4'), required=True)
+    ap.add_argument('--anuncio', choices=('1', '2', '4', '6'), required=True)
     ap.add_argument('--voz', default='em_alex', help='ID de voz Kokoro (por defecto em_alex, hombre)')
     ap.add_argument('--speed', type=float, default=1.0)
     ap.add_argument('--out', required=True, help='carpeta donde dejar 01.wav, 02.wav…')

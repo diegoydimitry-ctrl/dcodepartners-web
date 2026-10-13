@@ -36,6 +36,7 @@ const DUR  = parseFloat(flag('dur', '40'));
 const DIR  = __dirname;
 const SEG  = flag('seg', null);                      // "i/N" → modo trabajador
 const SRC  = flag('src', 'ad.html');                 // animación a renderizar
+const QUERY = flag('query', null);                    // parámetros extra, ej. "cc=1"
 const SLUG = path.basename(SRC, '.html');
 const OUT  = path.resolve(DIR, flag('out',
   SLUG === 'ad' ? `out/dcode-anuncio-${FMT}.mp4` : `out/dcode-${SLUG}-${FMT}.mp4`));
@@ -88,7 +89,7 @@ async function renderRange(from, to, outFile, label) {
     args: ['--force-color-profile=srgb', '--disable-lcd-text', '--hide-scrollbars']
   });
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
-  await page.goto('file://' + path.join(DIR, SRC) + `?fmt=${FMT}&t=0`, { waitUntil: 'load' });
+  await page.goto('file://' + path.join(DIR, SRC) + `?fmt=${FMT}&t=0${QUERY ? '&' + QUERY : ''}`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__ready === true, null, { timeout: 30000 });
 
   const canvas = page.locator('#stage');
@@ -158,7 +159,8 @@ function run(cmd, args) {
         segs.push(out);
         return run(process.execPath, [
           __filename, '--fmt', FMT, '--fps', String(FPS), '--dur', String(DUR),
-          '--src', SRC, '--seg', `${i}/${WORKERS}`, '--out', out
+          '--src', SRC, '--seg', `${i}/${WORKERS}`, '--out', out,
+          ...(QUERY ? ['--query', QUERY] : [])
         ]);
       }));
       console.log(`  ${WORKERS} segmentos listos en ${((Date.now() - t0) / 1000).toFixed(0)}s`);

@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>D-Code Partners — Anuncio 6 · Redes Sociales + Web</title>
+<!--
+  Anuncio 6 — 27 s. Reel para el nuevo servicio de D-Code Partners: gestión
+  de redes sociales + creación de páginas web para negocios locales
+  (restaurantes, peluquerías, gimnasios, clínicas, comercio).
+
+  Concepto: "El scroll que no para en ti". Un pulgar busca un negocio,
+  entra en un perfil descuidado, se va al siguiente sin pensarlo. El mismo
+  perfil se transforma. Al final, el mismo gesto de apertura — pero esta
+  vez el pulgar se queda. La marca solo aparece al cierre.
+
+  Estética nueva, deliberadamente distinta del resto del sistema: blanco,
+  negro y grises, con el azul de marca reservado a un único acento discreto
+  (el enlace que funciona, el punto final del logotipo). Nada de dashboards
+  azules — aquí la pieza es cine, no producto.
+
+  No hay actores ni localizaciones reales: todo son mockups de interfaz
+  (teléfono, grid de Instagram, navegador) dibujados con el mismo motor
+  determinista que el resto de anuncios. Ningún negocio mostrado es un
+  cliente real de D-Code — es una demostración conceptual, igual que las
+  cuentas DEMO de los anuncios anteriores.
+
+  Render determinista, mismo motor que ad.html — ad5.html: todo se deriva
+  de render(t). Mismos parámetros de URL (?fmt=9x16|16x9, ?t=segundos).
+-->
+<style>
+  @font-face{ font-family:'Inter'; font-weight:400 800; font-display:block;
+    src:url('../../assets/fonts/inter-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'Space Grotesk'; font-weight:500 700; font-display:block;
+    src:url('../../assets/fonts/spacegrotesk-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'JetBrains Mono'; font-weight:400 700; font-display:block;
+    src:url('../../assets/fonts/jetbrainsmono-variable.woff2') format('woff2'); }
+  html,body{ margin:0; padding:0; background:#000; overflow:hidden; }
+  #stage{ display:block; }
+  body.preview{ display:flex; align-items:center; justify-content:center; height:100vh; }
+  body.preview #stage{ max-width:100vw; max-height:100vh; width:auto; height:auto; object-fit:contain; }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<script>
+(() => {
+'use strict';
+
+const Q     = new URLSearchParams(location.search);
+const CC    = Q.get('cc') === '1';
+const VARIANT_B = Q.get('variant') === 'b';
+const FMT   = Q.get('fmt') === '16x9' ? '16x9' : '9x16';
+const FRAME = Q.has('t') ? parseFloat(Q.get('t')) : null;
+const DUR   = 27.0;
+
+const cv = document.getElementById('stage');
+const W  = FMT === '9x16' ? 1080 : 1920;
+const H  = FMT === '9x16' ? 1920 : 1080;
+cv.width = W; cv.height = H;
+cv.style.width = W + 'px'; cv.style.height = H + 'px';
+const g = cv.getContext('2d', { alpha:false });
+
+const V  = H > W;
+const CX = W / 2, CY = H / 2;
+
+/* Paleta nueva: blanco / negro / grises, con el azul de marca como único
+   acento, muy restringido (nunca un fondo, nunca decorativo). */
+const C = {
+  bg:'#0a0a09', s0:'#0a0a09', s1:'#141412', s2:'#1c1c19', s3:'#242420',
+  borderSubtle:'#1c1c19', border:'#2c2c27', borderStrong:'#3a3a33',
+  ink:'#f4f3ef', stone:'#9c9b94', stoneSoft:'#67665f',
+  accent:'#5b8cff', accentSoft:'rgba(91,140,255,.16)'
+};
+
+/* ─────────────────────────── utilidades ─────────────────────────── */
+
+const clamp = (v,a=0,b=1) => v < a ? a : v > b ? b : v;
+const lerp  = (a,b,t) => a + (b - a) * t;
+const easeOut      = t => 1 - Math.pow(1 - t, 3);
+const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
+const easeInOut    = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+const easeOutBack  = t => { const c=1.70158, s=c+1; return 1 + s*Math.pow(t-1,3) + c*Math.pow(t-1,2); };
+const easeInPower4  = t => t*t*t*t;
+const easeOutPower4 = t => 1 - Math.pow(1 - t, 4);
+const ramp = (t,a,b,fn=easeOut) => fn(clamp((t - a) / (b - a)));
+
+const CUT_TRAVEL = 0.11;
+const CUT_DUR    = 0.22;
+function cutOffsetX(localT, sceneDur, isFirst, isLast){
+  const travel = CUT_TRAVEL * W;
+  if (!isLast && sceneDur - localT < CUT_DUR){
+    const p = easeInPower4(clamp((localT - (sceneDur - CUT_DUR)) / CUT_DUR));
+    return -travel * p;
+  }
+  if (!isFirst && localT < CUT_DUR){
+    const p = easeOutPower4(clamp(localT / CUT_DUR));
+    return travel * (1 - p);
+  }
+  return 0;
+}
+
+function rgba(hex, a){
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+const FAM = { sg:'"Space Grotesk"', in:'Inter', mo:'"JetBrains Mono"' };
+function font(fam, weight, size, letter=0){
+  g.font = `${weight} ${size}px ${FAM[fam]}`;
+  g.letterSpacing = `${letter}px`;
+}
+function roundRect(x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); }
+function wrap(text, maxW){
+  const words = text.split(' '), lines = []; let line = '';
+  for (const w of words){
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line){ lines.push(line); line = w; }
+    else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+function centeredLines(lines, cx, top, lh, prog, rise = 26){
+  for (let i = 0; i < lines.length; i++){
+    const p = clamp((prog - i * 0.10) / (1 - Math.min(0.5, lines.length * 0.10)));
+    const e = easeOutQuint(p);
+    g.save(); g.globalAlpha = e;
+    g.fillText(lines[i], cx, top + i * lh + (1 - e) * rise);
+    g.restore();
+  }
+}
+function makeRng(seed){
+  let s = seed >>> 0;
+  return () => { s = (1103515245 * s + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+}
+
+/* ─────────────────────────── fondo cine ─────────────────────────── */
+
+function background(t){
+  g.fillStyle = C.s0; g.fillRect(0, 0, W, H);
+  const rg = g.createRadialGradient(CX, CY * 0.78, 0, CX, CY * 0.78, Math.max(W,H) * 0.75);
+  rg.addColorStop(0, 'rgba(255,255,255,.035)');
+  rg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+  // grano fino — textura de película, determinista por fotograma
+  const grain = makeRng(Math.floor(t * 30) * 7919 + 101);
+  g.save(); g.globalAlpha = 0.025;
+  for (let i = 0; i < 90; i++){
+    const gx = grain() * W, gy = grain() * H, s = 1 + grain() * 1.6;
+    g.fillStyle = grain() > 0.5 ? '#fff' : '#000';
+    g.fillRect(gx, gy, s, s);
+  }
+  g.restore();
+}
+function vignette(){
+  const rg = g.createRadialGradient(CX, CY, Math.min(W,H)*0.3, CX, CY, Math.max(W,H)*0.8);
+  rg.addColorStop(0, 'rgba(0,0,0,0)');
+  rg.addColorStop(1, 'rgba(0,0,0,0.78)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+}
+
+/* ─────────────────────────── mockups UI ─────────────────────────── */
+
+/** Marco de móvil minimal — devuelve el rect interior de pantalla. */
+function phoneFrame(x, y, w, h, alpha = 1){
+  g.save(); g.globalAlpha = alpha;
+  const r = 44;
+  g.shadowColor = 'rgba(0,0,0,.6)'; g.shadowBlur = 60; g.shadowOffsetY = 30;
+  roundRect(x - 10, y - 10, w + 20, h + 20, r + 10);
+  g.fillStyle = '#060605'; g.fill();
+  g.shadowColor = 'transparent'; g.shadowBlur = 0; g.shadowOffsetY = 0;
+  g.strokeStyle = C.border; g.lineWidth = 1.5;
+  roundRect(x - 10, y - 10, w + 20, h + 20, r + 10); g.stroke();
+  roundRect(x, y, w, h, r);
+  g.fillStyle = C.bg; g.fill();
+  g.save(); g.clip();
+  g.restore();
+  // muesca
+  const nw = w * 0.32, nh = 22;
+  roundRect(x + (w - nw)/2, y, nw, nh, 11);
+  g.fillStyle = '#060605'; g.fill();
+  g.restore();
+  return { x: x + 14, y: y + 40, w: w - 28, h: h - 70 };
+}
+
+/** Ventana de navegador minimal — devuelve el rect interior de contenido. */
+function browserFrame(x, y, w, h, url, alpha = 1){
+  g.save(); g.globalAlpha = alpha;
+  roundRect(x, y, w, h, 16);
+  g.fillStyle = C.s1; g.fill();
+  g.strokeStyle = C.border; g.lineWidth = 1; g.stroke();
+  const barH = 44;
+  g.save();
+  roundRect(x, y, w, barH, 16);
+  g.clip();
+  g.fillStyle = C.s2; g.fillRect(x, y, w, barH);
+  g.restore();
+  ['#3a3a33','#3a3a33','#3a3a33'].forEach((c, i) => {
+    g.beginPath(); g.arc(x + 20 + i * 18, y + barH/2, 4.5, 0, Math.PI*2);
+    g.fillStyle = c; g.fill();
+  });
+  roundRect(x + 86, y + 11, Math.min(220, w - 110), barH - 22, 10);
+  g.fillStyle = C.s3; g.fill();
+  font('mo', 400, 14, 0.3);
+  g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText(url, x + 98, y + barH/2 + 1);
+  g.restore();
+  return { x: x + 20, y: y + barH + 18, w: w - 40, h: h - barH - 38 };
+}
+
+/** Grid de publicaciones estilo Instagram. messy=1 desordenado, 0 limpio;
+    prog controla cuántas celdas han "llegado". */
+function igGrid(x, y, w, cols, rows, messy, prog, seed = 1){
+  const gap = 4;
+  const cell = (w - gap * (cols - 1)) / cols;
+  const rng = makeRng(seed);
+  const tones = ['#2a2a26','#333330','#242420','#3a3a34','#2e2e29','#282824'];
+  for (let i = 0; i < cols * rows; i++){
+    const col = i % cols, row = (i / cols) | 0;
+    const p = clamp((prog - row * 0.12 - col * 0.04) / 0.5);
+    if (p <= 0) continue;
+    const bx = x + col * (cell + gap), by = y + row * (cell + gap);
+    const jx = messy * (rng() - 0.5) * 14, jy = messy * (rng() - 0.5) * 10;
+    const rot = messy * (rng() - 0.5) * 0.14;
+    const scaleVar = 1 - messy * rng() * 0.12;
+    const cx = bx + cell/2 + jx, cy = by + cell/2 + jy;
+    g.save();
+    g.globalAlpha = easeOutQuint(p);
+    g.translate(cx, cy); g.rotate(rot); g.scale(scaleVar, scaleVar); g.translate(-cx, -cy);
+    roundRect(bx + jx, by + jy, cell, cell, messy > 0.5 ? 3 : 7);
+    g.fillStyle = tones[(i + (messy > 0.5 ? Math.floor(rng()*6) : 0)) % tones.length];
+    g.fill();
+    if (messy < 0.5){
+      // limpio: una línea de luz sutil, coherente en todas las celdas
+      const lg = g.createLinearGradient(bx, by, bx + cell, by + cell);
+      lg.addColorStop(0, 'rgba(255,255,255,.05)'); lg.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = lg; g.fill();
+    }
+    g.restore();
+  }
+}
+
+/** Ping de toque — confirma una interacción sin necesitar un cursor dibujado. */
+function tapRipple(x, y, t, dur = 0.5, color = C.ink){
+  const p = clamp(t / dur);
+  if (p <= 0 || p >= 1) return;
+  g.save();
+  g.globalAlpha = (1 - p) * 0.8;
+  g.beginPath(); g.arc(x, y, lerp(4, 34, easeOut(p)), 0, Math.PI*2);
+  g.strokeStyle = color; g.lineWidth = 2; g.stroke();
+  g.restore();
+}
+
+let LOGO = null;
+
+/* ══════════════════ ESCENA 1 — el scroll (0.0 – 3.6) ══════════════════ */
+
+const RESULTS = ['Peluquería Nortal', 'Estudio Marés', 'Salón Elvira'];
+
+function s1(t){
+  const dur = 3.6;
+  const out = 1 - ramp(t, dur - 0.24, dur, easeInOut);
+
+  const pw = V ? W * 0.62 : H * 0.42, ph = pw * 2.02;
+  const px = CX - pw/2, py = CY - ph/2;
+  const scr = phoneFrame(px, py, pw, ph, out);
+
+  const listP = ramp(t, 0.0, 0.5, easeOutQuint) * (1 - ramp(t, 0.85, 1.0, easeInOut));
+  const profP = ramp(t, 0.95, 1.25, easeOutQuint) * (1 - ramp(t, 3.0, 3.3, easeInOut));
+
+  g.save();
+  roundRect(scr.x, scr.y, scr.w, scr.h, 18); g.clip();
+
+  if (listP > 0.001){
+    g.save(); g.globalAlpha = listP * out;
+    font('mo', 700, 15, 0.4);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText('PELUQUERÍA CERCA DE TI', scr.x + 18, scr.y + 24);
+    RESULTS.forEach((name, i) => {
+      const ry = scr.y + 62 + i * 70;
+      roundRect(scr.x + 10, ry, scr.w - 20, 56, 12);
+      g.fillStyle = C.s1; g.fill();
+      font('in', 600, 20, 0);
+      g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'middle';
+      g.fillText(name, scr.x + 28, ry + 28);
+    });
+    if (t > 0.9) tapRipple(scr.x + scr.w/2, scr.y + 62 + 28, t - 0.9, 0.45);
+    g.restore();
+  }
+
+  if (profP > 0.001){
+    g.save(); g.globalAlpha = profP;
+    font('mo', 700, 15, 0.5);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText(RESULTS[0].toUpperCase(), scr.x + 18, scr.y + 24);
+    igGrid(scr.x + 12, scr.y + 54, scr.w - 24, 3, 2, 1, 1, 7);
+    const bioY = scr.y + 54 + ((scr.w - 24)/3) * 2 + 14 + 20;
+    const shake = ramp(t, 3.0, 3.12) * (1 - ramp(t, 3.12, 3.3));
+    g.save(); g.translate(Math.sin(t * 40) * shake * 3, 0);
+    font('mo', 500, 15, 0.2);
+    g.fillStyle = C.stoneSoft;
+    g.fillText('Última publicación · hace 4 meses', scr.x + 14, bioY);
+    g.fillStyle = '#5a4040';
+    g.fillText('Sin enlace', scr.x + 14, bioY + 26);
+    g.restore();
+    g.restore();
+  }
+  g.restore();
+}
+
+/* ═══════ ESCENA 1-B — hook alternativo, "El enlace que no lleva a
+   ningún sitio" (0.0 – 3.6), para probar dos versiones del gancho ═══════ */
+
+function s1b(t){
+  const dur = 3.6;
+  const out = 1 - ramp(t, dur - 0.24, dur, easeInOut);
+
+  // plano macro directo sobre la bio — sin el teléfono completo, más
+  // íntimo y más rápido de leer que la variante A.
+  const bioCX = CX, bioCY = CY - (V ? 40 : 0);
+  const inP = ramp(t, 0.0, 0.3, easeOutQuint);
+
+  g.save(); g.globalAlpha = out * clamp(inP);
+  font('sg', 700, V ? 44 : 42, -0.3);
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.fillStyle = C.ink;
+  g.fillText('Peluquería Nortal', bioCX, bioCY - 70);
+  font('in', 500, V ? 22 : 23, 0);
+  g.fillStyle = C.stoneSoft;
+  g.fillText('Última publicación · hace 4 meses', bioCX, bioCY - 30);
+
+  // el enlace, subrayado como si fuera pulsable
+  font('mo', 600, V ? 30 : 32, 0.3);
+  const linkText = 'bio.link/peluqueria-nortal';
+  const lw = g.measureText(linkText).width;
+  g.fillStyle = C.accent;
+  g.fillText(linkText, bioCX, bioCY + 24);
+  g.save(); g.globalAlpha = out * clamp(inP) * 0.6;
+  g.strokeStyle = C.accent; g.lineWidth = 1.5;
+  g.beginPath(); g.moveTo(bioCX - lw/2, bioCY + 34); g.lineTo(bioCX + lw/2, bioCY + 34); g.stroke();
+  g.restore();
+  g.restore();
+
+  // toque sobre el enlace — nada ocurre
+  const tapAt = 1.1;
+  if (t > tapAt) tapRipple(bioCX, bioCY + 15, t - tapAt, 0.5);
+
+  const errP = ramp(t, 1.5, 1.9, easeOutQuint) * (1 - ramp(t, 3.0, 3.3, easeInOut));
+  if (errP > 0.001){
+    font('mo', 500, V ? 19 : 20, 0.2);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.save(); g.globalAlpha = out * clamp(errP);
+    g.fillStyle = '#6a4848';
+    g.fillText('Este enlace ya no funciona', bioCX, bioCY + 70);
+    g.restore();
+  }
+}
+
+/* ══════════════════ ESCENA 2 — el detalle (3.6 – 9.0) ══════════════════ */
+
+function s2(t){
+  const dur = 5.4;
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, dur - 0.24, dur, easeInOut);
+  const a = inn * out;
+
+  // plano 1: detalle de grid desordenado, en gran formato
+  const p1 = ramp(t, 0.0, 0.4, easeOut) * (1 - ramp(t, 1.7, 2.0, easeInOut));
+  if (p1 > 0.001){
+    const gw = V ? W * 0.78 : H * 0.5;
+    g.save(); g.globalAlpha = a * p1;
+    igGrid(CX - gw/2, CY - gw/2, gw, 3, 3, 1, 1, 31);
+    g.restore();
+  }
+
+  // plano 2: enlace roto
+  const p2 = ramp(t, 1.9, 2.2, easeOut) * (1 - ramp(t, 3.3, 3.6, easeInOut));
+  if (p2 > 0.001){
+    g.save(); g.globalAlpha = a * p2;
+    font('sg', 700, V ? 46 : 44, -0.3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = C.stone;
+    g.fillText('negocio-viejo.com', CX, CY - 24);
+    font('mo', 500, 20, 0.3);
+    g.fillStyle = '#6a4848';
+    g.fillText('Esta página no está disponible', CX, CY + 30);
+    g.restore();
+  }
+
+  // plano 3: web cargando, atascada
+  const p3 = ramp(t, 3.5, 3.9, easeOut);
+  if (p3 > 0.001){
+    const bw = V ? W * 0.82 : H * 0.52, bh = bw * 0.72;
+    const bx = CX - bw/2, by = CY - bh/2;
+    g.save(); g.globalAlpha = a * p3;
+    const inner = browserFrame(bx, by, bw, bh, 'negocio-viejo.com', 1);
+    const spin = (t * 4) % (Math.PI * 2);
+    g.save();
+    g.translate(inner.x + inner.w/2, inner.y + inner.h/2 - 10);
+    g.rotate(spin);
+    g.beginPath(); g.arc(0, 0, 18, 0, Math.PI * 1.4);
+    g.strokeStyle = C.stoneSoft; g.lineWidth = 3; g.lineCap = 'round'; g.stroke();
+    g.restore();
+    g.restore();
+  }
+}
+
+/* ══════════════════ ESCENA 3 — el giro (9.0 – 15.0) ══════════════════ */
+
+function s3(t){
+  const dur = 6.0;
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, dur - 0.3, dur, easeInOut);
+  const a = inn * out;
+
+  const p1 = 1 - ramp(t, 3.3, 3.7, easeInOut);
+  if (p1 > 0.001){
+    const gw = V ? W * 0.78 : H * 0.5;
+    const messy = clamp(1 - ramp(t, 0.0, 2.6, easeInOut));
+    g.save(); g.globalAlpha = a * p1;
+    igGrid(CX - gw/2, CY - gw/2, gw, 3, 3, messy, 1, 31);
+    const linkP = ramp(t, 2.2, 2.7, easeOutBack);
+    if (linkP > 0.001){
+      font('mo', 600, 20, 0.3);
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.save(); g.globalAlpha = a * p1 * clamp(linkP);
+      g.fillStyle = C.accent;
+      g.fillText('dcodepartners.com/reservas', CX, CY + gw/2 + 42);
+      g.restore();
+    }
+    g.restore();
+  }
+
+  const p2 = ramp(t, 3.5, 3.9, easeOut);
+  if (p2 > 0.001){
+    const bw = V ? W * 0.82 : H * 0.52, bh = bw * 0.72;
+    const bx = CX - bw/2, by = CY - bh/2;
+    g.save(); g.globalAlpha = a * p2;
+    const inner = browserFrame(bx, by, bw, bh, 'salonelvira.com', 1);
+    const revealP = ramp(t, 4.0, 4.5, easeOutQuint);
+    g.save(); g.globalAlpha = clamp(revealP);
+    roundRect(inner.x, inner.y, inner.w, inner.h * 0.44, 10);
+    g.fillStyle = C.s2; g.fill();
+    font('sg', 700, 26, -0.2);
+    g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    g.fillText('Salón Elvira', inner.x + 20, inner.y + 40);
+    font('in', 500, 15, 0);
+    g.fillStyle = C.stone;
+    g.fillText('Color · Corte · Tratamientos', inner.x + 20, inner.y + 64);
+    roundRect(inner.x + 20, inner.y + inner.h * 0.44 + 16, 150, 38, 19);
+    g.fillStyle = C.accent; g.fill();
+    font('in', 700, 16, 0);
+    g.fillStyle = '#04060a'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('Reservar', inner.x + 95, inner.y + inner.h * 0.44 + 35);
+    for (let i = 0; i < 3; i++){
+      roundRect(inner.x + 20 + i * 4, inner.y + inner.h * 0.44 + 74 + i * 20, inner.w - 40 - i * 60, 8, 4);
+      g.fillStyle = rgba(C.stone, 0.4); g.fill();
+    }
+    g.restore();
+    g.restore();
+  }
+
+  const cap = ['La misma empresa.', 'Mejor contada.'];
+  const cp1 = ramp(t, 4.3, 4.7, easeOutQuint) * (1 - ramp(t, 5.2, 5.5, easeInOut));
+  const cp2 = ramp(t, 5.3, 5.7, easeOutQuint);
+  const size = V ? 54 : 52;
+  font('sg', 700, size, -0.4);
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (cp1 > 0){ g.save(); g.globalAlpha = a * cp1; g.fillStyle = C.ink; g.fillText(cap[0], CX, V ? H * 0.86 : H * 0.88); g.restore(); }
+  if (cp2 > 0){ g.save(); g.globalAlpha = a * cp2; g.fillStyle = C.ink; g.fillText(cap[1], CX, V ? H * 0.86 : H * 0.88); g.restore(); }
+}
+
+/* ══════════════════ ESCENA 4 — el servicio (15.0 – 21.0) ══════════════════ */
+
+const DAYS = ['L','M','X','J','V','S','D'];
+const POSTS = [1, 3, 4];
+const SECTIONS = ['Salón Elvira', 'Servicios', 'Contacto'];
+
+function s4(t){
+  const dur = 6.0;
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, dur - 0.3, dur, easeInOut);
+  const a = inn * out;
+
+  // calendario de publicaciones
+  const p1 = ramp(t, 0.0, 0.4, easeOut) * (1 - ramp(t, 2.1, 2.4, easeInOut));
+  if (p1 > 0.001){
+    const w = V ? W * 0.74 : H * 0.46;
+    const cell = w / 7;
+    const x0 = CX - w/2, y0 = CY - 30;
+    g.save(); g.globalAlpha = a * p1;
+    font('mo', 700, 16, 1);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('PLANIFICACIÓN DE PUBLICACIONES', CX, y0 - 50);
+    DAYS.forEach((d, i) => {
+      const cx = x0 + cell * i + cell/2;
+      g.fillText(d, cx, y0);
+      if (POSTS.includes(i)){
+        const dp = ramp(t, 0.5 + i * 0.1, 0.8 + i * 0.1, easeOutBack);
+        if (dp > 0.001){
+          g.save(); g.globalAlpha = a * p1 * clamp(dp);
+          g.beginPath(); g.arc(cx, y0 + 40, 7, 0, Math.PI*2);
+          g.fillStyle = C.accent; g.fill();
+          g.restore();
+        }
+      }
+    });
+    g.restore();
+  }
+
+  // scroll por la web nueva
+  const p2 = ramp(t, 2.2, 2.6, easeOut) * (1 - ramp(t, 4.5, 4.8, easeInOut));
+  if (p2 > 0.001){
+    const bw = V ? W * 0.84 : H * 0.54, bh = bw * 1.0;
+    const bx = CX - bw/2, by = CY - bh/2 - (V ? 20 : 0);
+    g.save(); g.globalAlpha = a * p2;
+    const inner = browserFrame(bx, by, bw, bh * 0.6, 'salonelvira.com', 1);
+    g.save(); roundRect(inner.x, inner.y, inner.w, inner.h, 10); g.clip();
+    const scroll = ramp(t, 2.6, 4.3, easeInOut) * (SECTIONS.length - 1) * 180;
+    g.translate(0, -scroll);
+    SECTIONS.forEach((s, i) => {
+      const sy = inner.y + i * 180;
+      font('sg', 700, 24, -0.2);
+      g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+      g.fillText(s, inner.x + 16, sy + 30);
+      for (let j = 0; j < 2; j++){
+        roundRect(inner.x + 16, sy + 50 + j * 18, inner.w - 60 - j * 40, 7, 3);
+        g.fillStyle = rgba(C.stone, 0.35); g.fill();
+      }
+    });
+    g.restore();
+    g.restore();
+  }
+
+  // coherencia visual: paleta del grid = paleta de la web
+  const p3 = ramp(t, 4.6, 5.0, easeOutQuint);
+  if (p3 > 0.001){
+    const dotsY = V ? H * 0.80 : H * 0.84;
+    const tones = ['#2e2e29', '#3a3a34', C.accent];
+    g.save(); g.globalAlpha = a * clamp(p3);
+    tones.forEach((c, i) => {
+      [-1, 1].forEach(side => {
+        const dx = CX + side * (90 + i * 44);
+        g.beginPath(); g.arc(dx, dotsY, 13, 0, Math.PI*2);
+        g.fillStyle = c; g.fill();
+        g.strokeStyle = C.border; g.lineWidth = 1; g.stroke();
+      });
+    });
+    font('mo', 700, V ? 24 : 26, 3);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = C.stone;
+    g.fillText('COHERENCIA VISUAL', CX, dotsY + 48);
+    g.restore();
+  }
+}
+
+/* ══════════════════ ESCENA 5 — el bucle (21.0 – 24.0) ══════════════════ */
+
+function s5(t){
+  const dur = 3.0;
+  const inn = ramp(t, 0, 0.10, easeInOut);
+  const out = 1 - ramp(t, dur - 0.22, dur, easeInOut);
+  const a = inn * out;
+
+  const pw = V ? W * 0.62 : H * 0.42, ph = pw * 2.02;
+  const px = CX - pw/2, py = CY - ph/2;
+  const scr = phoneFrame(px, py, pw, ph, a);
+
+  g.save();
+  roundRect(scr.x, scr.y, scr.w, scr.h, 18); g.clip();
+
+  const listP = (1 - ramp(t, 0.55, 0.8, easeInOut));
+  if (listP > 0.001){
+    g.save(); g.globalAlpha = a * listP;
+    font('mo', 700, 15, 0.4);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText('PELUQUERÍA CERCA DE TI', scr.x + 18, scr.y + 24);
+    RESULTS.forEach((name, i) => {
+      const ry = scr.y + 62 + i * 70;
+      roundRect(scr.x + 10, ry, scr.w - 20, 56, 12);
+      g.fillStyle = i === 2 ? C.s2 : C.s1; g.fill();
+      if (i === 2){ g.strokeStyle = rgba(C.accent, .5); g.lineWidth = 1.5; g.stroke(); }
+      font('in', 600, 20, 0);
+      g.fillStyle = C.ink; g.textAlign = 'left'; g.textBaseline = 'middle';
+      g.fillText(name, scr.x + 28, ry + 28);
+    });
+    if (t > 0.45) tapRipple(scr.x + scr.w/2, scr.y + 62 + 140 + 28, t - 0.45, 0.4);
+    g.restore();
+  }
+
+  const siteP = ramp(t, 0.75, 1.1, easeOutQuint);
+  if (siteP > 0.001){
+    g.save();
+    g.globalAlpha = a * clamp(siteP);
+    const s = lerp(0.92, 1, clamp(siteP));
+    g.translate(scr.x + scr.w/2, scr.y + scr.h/2);
+    g.scale(s, s);
+    g.translate(-(scr.x + scr.w/2), -(scr.y + scr.h/2));
+    font('mo', 700, 15, 0.5);
+    g.fillStyle = C.stoneSoft; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillText('SALÓN ELVIRA', scr.x + 18, scr.y + 24);
+    igGrid(scr.x + 12, scr.y + 54, scr.w - 24, 3, 2, 0, 1, 31);
+    const bioY = scr.y + 54 + ((scr.w - 24)/3) * 2 + 14 + 20;
+    font('mo', 500, 15, 0.2);
+    g.fillStyle = C.stoneSoft;
+    g.fillText('Color · Corte · Tratamientos', scr.x + 14, bioY);
+    g.fillStyle = C.accent;
+    g.fillText('salonelvira.com/reservas', scr.x + 14, bioY + 26);
+    g.restore();
+  }
+  g.restore();
+}
+
+/* ══════════════════ ESCENA 6 — marca (24.0 – 27.0) ══════════════════ */
+
+function s6(t){
+  const cover = ramp(t, 0, 0.32, easeInOut);
+  g.save(); g.globalAlpha = cover;
+  g.fillStyle = '#050504'; g.fillRect(0, 0, W, H);
+  g.restore();
+
+  const lp = ramp(t, 0.28, 0.85, easeOutQuint);
+  if (lp > 0){
+    const logoY = V ? H * 0.40 : CY - 60;
+    const iconH = V ? 86 : 82;
+    const iconW = LOGO ? iconH * (LOGO.naturalWidth / LOGO.naturalHeight) : iconH * 1.19;
+    font('sg', 700, V ? 78 : 82, 0.5);
+    const wordW = g.measureText('D-Code').width;
+    const x0 = CX - (iconW + 26 + wordW) / 2;
+    g.save(); g.globalAlpha = lp; g.translate(0, (1 - lp) * 16);
+    if (LOGO){
+      g.save(); g.filter = 'grayscale(1) brightness(1.3)';
+      g.drawImage(LOGO, x0, logoY - iconH/2, iconW, iconH); g.restore();
+    }
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.fillStyle = C.ink;
+    font('sg', 700, V ? 78 : 82, 0.5);
+    g.fillText('D-Code', x0 + iconW + 26, logoY + 11);
+    g.restore();
+  }
+
+  const qp = ramp(t, 1.05, 1.5, easeOutQuint);
+  if (qp > 0){
+    const size = V ? 38 : 40;
+    font('sg', 500, size, -0.2);
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    const lines = wrap('Redes sociales y páginas web para negocios.', V ? W * 0.8 : W * 0.5);
+    const lh = size * 1.3;
+    const top = V ? H * 0.52 : CY + 6;
+    g.fillStyle = C.stone;
+    centeredLines(lines, CX, top, lh, qp, 18);
+  }
+
+  const cp = ramp(t, 1.85, 2.3, easeOutQuint);
+  if (cp > 0){
+    font('mo', 700, V ? 22 : 24, 2);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.save(); g.globalAlpha = cp;
+    g.fillStyle = C.accent;
+    g.fillText('DESCUBRE LO QUE PODEMOS HACER POR TU NEGOCIO', CX, V ? H * 0.615 : CY + 86);
+    g.restore();
+  }
+
+  const dp = ramp(t, 2.4, 2.75, easeOutQuint);
+  if (dp > 0){
+    const y = V ? H * 0.70 : CY + 160;
+    g.save(); g.globalAlpha = dp;
+    const lw = 160 * easeOut(dp);
+    const grd = g.createLinearGradient(CX - lw/2, 0, CX + lw/2, 0);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(.5, rgba(C.stone, .8));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grd; g.fillRect(CX - lw/2, y - 1, lw, 2);
+    font('mo', 700, V ? 30 : 32, 2);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = C.ink;
+    g.fillText('dcodepartners.com', CX, y + (V ? 48 : 46));
+    g.restore();
+  }
+}
+
+/* ─────────────────── subtítulos (opcional, ?cc=1) ─────────────────── */
+
+const CAPTIONS = [
+  { a: 4.70, b: 8.50, text: 'Tu negocio puede ser excelente. Pero por fuera, no siempre se nota.' },
+  { a: 9.30, b: 12.90, text: 'A veces el problema no es el negocio. Es cómo se ve desde fuera.' }
+];
+
+function captionsOverlay(t){
+  for (const c of CAPTIONS){
+    const fade = 0.18;
+    const a = ramp(t, c.a, c.a + fade) * (1 - ramp(t, c.b - fade, c.b));
+    if (a <= 0.001) continue;
+    const size = V ? 30 : 32;
+    font('in', 700, size, 0);
+    const maxW = V ? W * 0.84 : W * 0.56;
+    const lines = wrap(c.text, maxW);
+    const lh = size * 1.32;
+    const padY = 16, padX = 22;
+    const blockH = lines.length * lh + padY * 2;
+    const y0 = (V ? H * 0.91 : H * 0.90) - blockH;
+    let maxLineW = 0;
+    lines.forEach(ln => { maxLineW = Math.max(maxLineW, g.measureText(ln).width); });
+    const bw = maxLineW + padX * 2;
+    g.save(); g.globalAlpha = a;
+    roundRect(CX - bw/2, y0, bw, blockH, 10);
+    g.fillStyle = 'rgba(6,6,5,.72)'; g.fill();
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = C.ink;
+    lines.forEach((ln, i) => g.fillText(ln, CX, y0 + padY + (i + 1) * lh - lh * 0.28));
+    g.restore();
+  }
+}
+
+/* ══════════════════════════ línea de tiempo ══════════════════════════ */
+
+const SCENES = [
+  { a: 0.0,  b: 3.6,  fn: VARIANT_B ? s1b : s1 },
+  { a: 3.6,  b: 9.0,  fn: s2 },
+  { a: 9.0,  b: 15.0, fn: s3 },
+  { a: 15.0, b: 21.0, fn: s4 },
+  { a: 21.0, b: 24.0, fn: s5 },
+  { a: 24.0, b: 27.0, fn: s6 }
+];
+
+function render(t){
+  t = clamp(t, 0, DUR);
+  g.save();
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.letterSpacing = '0px';
+
+  background(t);
+
+  for (let i = 0; i < SCENES.length; i++){
+    const sc = SCENES[i];
+    if (t >= sc.a && t < sc.b){
+      const localT = t - sc.a;
+      const dx = cutOffsetX(localT, sc.b - sc.a, i === 0, i === SCENES.length - 1);
+      g.save(); g.translate(dx, 0); sc.fn(localT); g.restore();
+    }
+  }
+  if (t >= DUR - 0.001){ g.save(); s6(DUR - 24.0); g.restore(); }
+
+  vignette();
+  if (CC) captionsOverlay(t);
+
+  const intro = 1 - ramp(t, 0, 0.26, easeInOut);
+  if (intro > 0){ g.fillStyle = rgba('#000000', intro); g.fillRect(0, 0, W, H); }
+  g.restore();
+}
+
+/* ═══════════════════════════ arranque ═══════════════════════════ */
+
+function loadLogo(){
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => { LOGO = img; res(); };
+    img.onerror = () => res();
+    img.src = './assets/dcode-mark.png';
+  });
+}
+
+async function boot(){
+  await Promise.all([
+    document.fonts.load('700 100px "Space Grotesk"'),
+    document.fonts.load('500 100px "Space Grotesk"'),
+    document.fonts.load('700 100px "JetBrains Mono"'),
+    document.fonts.load('400 100px "JetBrains Mono"'),
+    document.fonts.load('500 100px Inter'),
+    document.fonts.load('600 100px Inter'),
+    document.fonts.load('700 100px Inter')
+  ]);
+  await document.fonts.ready;
+  await loadLogo();
+
+  if (FRAME !== null){
+    render(FRAME);
+    window.__ready = true;
+  } else {
+    document.body.classList.add('preview');
+    const t0 = performance.now();
+    const loop = () => { render(((performance.now() - t0) / 1000) % (DUR + 1.0)); requestAnimationFrame(loop); };
+    loop();
+  }
+}
+
+window.__render = render;
+boot();
+})();
+</script>
+</body>
+</html>
