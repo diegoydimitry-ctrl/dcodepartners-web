@@ -32,7 +32,7 @@ conecta con D-Code solo al cierre).
 | `out/dcode-ad6-16x9-cc-vo.mp4` | 1920×1080 · 30 fps · 27 s | Igual, horizontal, con subtítulos |
 | `out/dcode-ad6b-9x16-vo.mp4` | 1080×1920 · 30 fps · 27 s | Variante B del gancho, para probar A/B |
 | `out/dcode-ad6-portada-9x16.png` | 1080×1920 | Portada del Reel |
-| `out/dcode-ad7-9x16-vo.mp4` | 1080×1920 · 30 fps · 40,6 s | Reel editorial (Séneca), con locución, música y subtítulos |
+| `out/dcode-ad7-9x16-vo.mp4` | 1080×1920 · 30 fps · 51,8 s | Reel editorial (Séneca), con locución, música y subtítulos |
 | `out/dcode-ad7-portada-9x16.png` | 1080×1920 | Portada del Reel |
 | `out/banda-sonora.wav` … `-7.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
 
@@ -42,8 +42,8 @@ deja los huecos hechos); el teaser DCode OS y el recorte social de D-Code
 Finance se apoyan solo en rótulos y música, sin voz en off (ver GUION-3.md y
 GUION-5.md). Los anuncios 4 y 6 sí llevan locución en español, generada con
 Kokoro local (ver GUION-4.md y GUION-6.md). El anuncio 7 también lleva
-locución en español, pero generada con ElevenLabs (voz "Rodrigo — Spanish
-Documentary Narrator"), no con Kokoro — ver GUION-7.md.
+locución en español, pero generada con ElevenLabs (voz "Arconte —
+Evocative & Magnetic"), no con Kokoro — ver GUION-7.md.
 
 ## Cómo se genera
 
@@ -84,7 +84,7 @@ python3 audio6.py out/banda-sonora-6.wav
 node render.js --src ad6.html --fmt 9x16 --dur 27 --audio out/banda-sonora-6.wav --workers 4
 
 python3 audio7.py out/banda-sonora-7.wav
-node render.js --src ad7.html --fmt 9x16 --dur 40.6 --audio out/banda-sonora-7.wav --workers 4
+node render.js --src ad7.html --fmt 9x16 --dur 51.8 --audio out/banda-sonora-7.wav --workers 4
 # anuncio 7: la locución no se monta con montar-voz.py (esa herramienta lee
 # Kokoro) sino con una mezcla ffmpeg directa — comando completo en GUION-7.md § 8
 ```

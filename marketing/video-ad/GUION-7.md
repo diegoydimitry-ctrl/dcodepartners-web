@@ -1,6 +1,6 @@
 # Reel D-Code Partners — «No te falta tiempo» (Séneca)
 
-Duración **40,6 s** · Formato **9:16 (1080×1920)**, vertical nativo para
+Duración **51,8 s** · Formato **9:16 (1080×1920)**, vertical nativo para
 Instagram Reels · 30 fps
 Pieza editorial / documental. **No es un anuncio convencional**: una
 lección filosófica real, contada con fotografía e imagen, que conecta con
@@ -45,26 +45,33 @@ texto — no es una atribución inventada.
 
 ## 2. Guion completo y tiempos (locución)
 
-Voz: **Rodrigo — Spanish Documentary Narrator** (ElevenLabs,
-`v2UIb6nJm38uahTHNpTv`), modelo `eleven_multilingual_v2`. Se buscó
-específicamente la voz "David Martin — Confident and Balanced" pedida,
-pero las únicas variantes disponibles con ese nombre (`David Martin.
-Character`, `David Martin 2`, `David Martin. 1`) son de registro juvenil
-o neutro, no el narrador grave y documental que pide el encargo —
-"Rodrigo" encaja mejor con el criterio pedido ("comprueba si encaja...
-antes de elegirla") y es la que se ha usado.
+Voz: **Arconte — Evocative & Magnetic** (ElevenLabs,
+`QtPMrakdgePQIUwOX7Ut`), modelo `eleven_multilingual_v2`. Español
+peninsular, grave, confiada e intensa, con un punto rasposo que le da
+fuerza sin caer en la teatralidad de personaje — elegida tras feedback
+explícito: la primera voz usada ("Rodrigo — Spanish Documentary
+Narrator") resultó demasiado suave y se pidió una voz "grave, de hombre
+masculino y fuerte". Antes se había probado también "Rodrigo" (sereno) y
+se descartó "Juanjo Relatos" (barítono dramático de fantasía/audiolibro,
+demasiado "personaje" para el tono documental sereno-pero-fuerte
+pedido).
+
+Arconte habla con un ritmo más pausado y rotundo que Rodrigo — cada
+línea dura entre un 25 % y un 45 % más que en la primera versión — así
+que toda la escaleta de imagen y música se recalculó sobre sus tiempos
+reales (medidos, no estimados).
 
 | Entrada | Salida | Texto | Tipo |
 |---------|--------|-------|------|
-| 0,30 | 4,71 | No te falta tiempo. Te falta criterio para elegir en qué lo gastas. | Gancho original |
-| 5,26 | 10,09 | Séneca ya lo decía: no es que tengamos poco tiempo, es que perdemos mucho. | Cita (paráfrasis fiel) |
-| 10,54 | 14,62 | Vivimos ocupados en lo que no importa, aplazando vivir de verdad. | Reflexión propia |
-| 15,17 | 18,17 | Trabajar mucho y trabajar bien no son lo mismo. | Puente propio |
-| 18,82 | 24,91 | En una empresa pasa igual: el tiempo se va en tareas repetitivas, no en decisiones que importan. | Puente propio |
-| 25,56 | 30,24 | En D-Code Partners diseñamos sistemas para que el tiempo vuelva a ir donde importa. | Puente propio — primera mención de marca |
-| 30,99 | 36,92 | Construir mejores sistemas no es trabajar menos. Es, por fin, trabajar en lo que importa. | Cierre, puente propio |
+| 0,30 | 6,23 | No te falta tiempo. Te falta criterio para elegir en qué lo gastas. | Gancho original |
+| 6,63 | 13,68 | Séneca ya lo decía: no es que tengamos poco tiempo, es que perdemos mucho. | Cita (paráfrasis fiel) |
+| 14,03 | 19,41 | Vivimos ocupados en lo que no importa, aplazando vivir de verdad. | Reflexión propia |
+| 19,81 | 24,22 | Trabajar mucho y trabajar bien no son lo mismo. | Puente propio |
+| 24,67 | 33,34 | En una empresa pasa igual: el tiempo se va en tareas repetitivas, no en decisiones que importan. | Puente propio |
+| 33,79 | 39,90 | En D-Code Partners diseñamos sistemas para que el tiempo vuelva a ir donde importa. | Puente propio — primera mención de marca |
+| 40,40 | 48,79 | Construir mejores sistemas no es trabajar menos. Es, por fin, trabajar en lo que importa. | Cierre, puente propio |
 
-Los huecos entre líneas (0,4–0,8 s) son silencio deliberado — la música
+Los huecos entre líneas (0,3–0,55 s) son silencio deliberado — la música
 y la imagen respiran antes de la siguiente frase, nada se encadena sin
 pausa.
 
@@ -74,14 +81,18 @@ pausa.
 
 | # | Entrada | Salida | Imagen | Ken Burns |
 |---|---------|--------|--------|-----------|
-| 1 | 0,00 | 5,26 | Manos escribiendo en portátil, de noche, luz de flexo | Zoom lento 1,00→1,10, paneo hacia abajo |
-| 2 | 5,26 | 10,54 | Columnas clásicas de piedra, arquitectura | Zoom 1,00→1,07, paneo lateral amplio |
-| 3 | 10,54 | 15,17 | Calle de ciudad, gente caminando rápido | Zoom 1,00→1,09, paneo lateral marcado |
-| 4 | 15,17 | 18,82 | Manos de artesano, trabajo manual de precisión | Zoom cercano 1,03→1,14, paneo mínimo |
-| 5 | 18,82 | 25,56 | Manos ordenando una pila grande de papeles | Zoom hacia atrás 1,09→1,00, paneo leve |
-| 6 | 25,56 | 30,99 | Escritorio minimalista, portátil abierto, orden | Zoom 1,00→1,08, paneo hacia arriba |
-| 7 | 30,99 | 38,90 | Puente en construcción, grúas, cielo dramático | Zoom más largo 1,00→1,15, paneo diagonal hacia el cielo |
-| — | 38,90 | 40,60 | Tarjeta de cierre — solo marca | — |
+| 1 | 0,00 | 6,63 | Manos escribiendo en portátil, de noche, luz de flexo | Zoom lento 1,00→1,07, paneo hacia abajo |
+| 2 | 6,63 | 14,03 | Columnas clásicas de piedra, arquitectura | Zoom 1,00→1,05, paneo lateral amplio |
+| 3 | 14,03 | 19,81 | Calle de ciudad, gente caminando rápido | Zoom 1,00→1,06, paneo lateral marcado |
+| 4 | 19,81 | 24,67 | Manos de artesano, trabajo manual de precisión | Zoom cercano 1,02→1,09, paneo mínimo |
+| 5 | 24,67 | 33,79 | Manos ordenando una pila grande de papeles | Zoom hacia atrás 1,06→1,00, paneo leve |
+| 6 | 33,79 | 40,40 | Escritorio minimalista, portátil abierto, orden | Zoom 1,00→1,06, paneo hacia arriba |
+| 7 | 40,40 | 50,30 | Puente en construcción, grúas, cielo dramático | Zoom más largo 1,00→1,09, paneo diagonal hacia el cielo |
+| — | 50,30 | 51,80 | Tarjeta de cierre — solo marca | — |
+
+(El zoom máximo de cada escena se redujo frente a la primera versión —
+ver § 4 — para no añadir ampliación encima de la ya necesaria por el
+tamaño de origen de las fotos.)
 
 Transición entre fotografías: disolución simple de 0,6 s (nunca un
 zoom, flash o glitch) — la imagen saliente se congela en su último
@@ -108,13 +119,25 @@ en vez de cualquier alternativa que simulara vídeo real.
 real ni representan ningún hecho, cliente o lugar concreto de D-Code.
 Limitación técnica real y no disimulada: el generador solo devuelve
 miniaturas de **112×199 px** sin pasar por un diseño completo de Canva
-(mismo límite ya documentado en GUION-6.md § 5). Para que la ampliación
-de casi 10× necesaria para cubrir 1080×1920 no se leyera como una imagen
-pixelada, se aplicó un tratamiento de postproducción explícito: B/N,
-contraste alto, un desenfoque mínimo (0,9 px) y grano de película — una
-decisión de estética documental, verificada visualmente antes de
-renderizar la pieza completa, no un intento de esconder el origen de las
-imágenes (que queda declarado aquí).
+(mismo límite ya documentado en GUION-6.md § 5). El usuario marcó esta
+calidad como insuficiente tras ver el primer corte. Se intentó
+sustituirlas por imágenes generadas con Figma (`generate_image`, hasta
+2048 px — 768×1376 reales, ~48× más píxeles que las de Canva; ya
+generadas y pagadas en este proyecto de Figma: `G45xPgLkidOCGkmLSEYb9g`),
+pero la descarga está bloqueada por la política de red del entorno
+(`www.figma.com` denegado) y el cambio de "Allowed domains" que hizo el
+usuario no se propagó dentro de esta sesión. **Pendiente**: reintentar
+la descarga (puede bastar con reabrir la sesión) y sustituir las 7
+imágenes sin tocar el resto del montaje — los nodos ya existen en Figma,
+no hace falta volver a generarlos ni gastar más crédito.
+
+Mientras tanto se reforzó el tratamiento de postproducción sobre las
+imágenes actuales: doble pasada de contraste (base + una capa en modo
+`overlay` que simula nitidez sin añadir resolución real), grano de 35 mm
+en dos capas (fino + grueso, no ruido uniforme) y menos zoom Ken Burns
+que en la primera versión (para no sumar ampliación encima de la ya
+necesaria). Mejora el acabado, pero no sustituye a tener más píxeles de
+origen — ver "pendiente" arriba.
 
 **Música (`audio7.py`)** — sintetizada desde cero en Python puro (sin
 muestras, sin librerías externas), igual que el resto de la serie: pista
@@ -123,17 +146,16 @@ piano minimalista, empieza casi en silencio y solo crece de verdad en el
 último tercio (escena 7), dejando siempre la voz en primer plano
 (`duck_gain`, atenuación del 50 % bajo cada línea).
 
-**Locución** — ElevenLabs, voz "Rodrigo — Spanish Documentary Narrator"
-(ver § 2 sobre por qué no la voz "David Martin" pedida inicialmente).
+**Locución** — ElevenLabs, voz "Arconte — Evocative & Magnetic" (ver § 2
+sobre el porqué del cambio desde "Rodrigo").
 
 Para elevar esta pieza de concepto a grabación con presencia 100% real,
 haría falta:
 
 1. **Banco de vídeo con licencia verificable** (o grabación propia) para
    sustituir las 7 fotografías por vídeo real de las mismas escenas.
-2. **Exportar las imágenes desde un diseño completo de Canva** (o
-   sustituirlas por fotografía con derechos propios) si se necesita más
-   resolución real, no solo más disimulo de postproducción.
+2. **Resolver el acceso a Figma** (arriba) para al menos multiplicar por
+   ~48 la resolución real de las 7 fotos sin cambiar nada más del montaje.
 3. **Locución grabada por una voz humana real**, si se prefiere a la
    síntesis — el guion y los tiempos de § 2 ya están listos para
    doblarse tal cual.
@@ -175,7 +197,7 @@ de Séneca.
 |---------|--------|
 | `out/dcode-ad7-9x16-vo.mp4` | Máster vertical final — locución, música y subtítulos incrustados |
 | `out/dcode-ad7-portada-9x16.png` | Portada vertical del Reel |
-| `voces/ad7/01.mp3` … `07.mp3` | Clips de locución sin editar (ElevenLabs, voz Rodrigo) |
+| `voces/ad7/01.mp3` … `07.mp3` | Clips de locución sin editar (ElevenLabs, voz Arconte) |
 | `out/banda-sonora-7.wav` | Música y efectos por separado, sin voz |
 | `assets/stock-ad7/*.jpg` | Las 7 fotografías generadas (Canva, B/N) |
 
@@ -185,14 +207,14 @@ de Séneca.
 
 ```bash
 python3 audio7.py out/banda-sonora-7.wav
-node render.js --src ad7.html --fmt 9x16 --dur 40.6 --audio out/banda-sonora-7.wav --workers 4
+node render.js --src ad7.html --fmt 9x16 --dur 51.8 --audio out/banda-sonora-7.wav --workers 4
 
 # mezcla de las 7 locuciones sobre el máster + música
 # (offsets de adelay en ms = entradas de § 2 × 1000)
 ffmpeg -i out/dcode-ad7-9x16.mp4 \
   -i voces/ad7/01.mp3 -i voces/ad7/02.mp3 -i voces/ad7/03.mp3 -i voces/ad7/04.mp3 \
   -i voces/ad7/05.mp3 -i voces/ad7/06.mp3 -i voces/ad7/07.mp3 \
-  -filter_complex "...adelay por clip...,amix=inputs=7:normalize=0,volume=1.5[voall];[0:a][voall]amix=inputs=2:normalize=0,alimiter=limit=0.891[aout]" \
+  -filter_complex "[1]adelay=300|300[v1];[2]adelay=6630|6630[v2];[3]adelay=14030|14030[v3];[4]adelay=19810|19810[v4];[5]adelay=24670|24670[v5];[6]adelay=33790|33790[v6];[7]adelay=40400|40400[v7];[v1][v2][v3][v4][v5][v6][v7]amix=inputs=7:normalize=0,volume=1.5[voall];[0:a][voall]amix=inputs=2:normalize=0,alimiter=limit=0.891[aout]" \
   -map 0:v:0 -map "[aout]" -c:v copy -c:a aac -b:a 192k out/dcode-ad7-9x16-vo.mp4
 ```
 

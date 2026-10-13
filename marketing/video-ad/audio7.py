@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Banda sonora del anuncio 7 de D-Code Partners (Reel cinematográfico sobre
-Séneca y el tiempo), 40,6 s.
+Séneca y el tiempo), 51,8 s.
 
 Mismo motor de síntesis que el resto de la serie — sin samples ni
 librerías externas, pista original y libre de derechos por construcción.
@@ -11,14 +11,14 @@ silencio, crece muy poco a poco a lo largo de las siete escenas y deja
 el primer plano siempre a la voz.
 
 Arco, alineado con el guion (GUION-7.md):
-    0,00 –  5,26  el gancho — una sola nota de piano, aire casi vacío
-    5,26 – 10,54  Séneca — el mismo piano, un acorde grave y quieto debajo
-   10,54 – 15,17  la ciudad — un pulso suave, más presente, nunca percusión
-   15,17 – 18,82  el artesano — vuelve el silencio, una nota, muy íntima
-   18,82 – 25,56  la empresa — tensión leve (intervalo menor), sin resolver
-   25,56 – 30,99  D-Code — el acorde se abre (resolución, mayor)
-   30,99 – 38,90  el cierre — el único crecimiento real de la pieza, breve
-   38,90 – 40,60  marca — una nota final que se apaga, sin campana de venta
+    0,00 –  6,63  el gancho — una sola nota de piano, aire casi vacío
+    6,63 – 14,03  Séneca — el mismo piano, un acorde grave y quieto debajo
+   14,03 – 19,81  la ciudad — un pulso suave, más presente, nunca percusión
+   19,81 – 24,67  el artesano — vuelve el silencio, una nota, muy íntima
+   24,67 – 33,79  la empresa — tensión leve (intervalo menor), sin resolver
+   33,79 – 40,40  D-Code — el acorde se abre (resolución, mayor)
+   40,40 – 50,30  el cierre — el único crecimiento real de la pieza, breve
+   50,30 – 51,80  marca — una nota final que se apaga, sin campana de venta
 
 La mezcla deja las siete ventanas de voz (GUION-7.md § 3) atenuadas
 (ducking), igual que el resto de la serie.
@@ -32,7 +32,7 @@ import wave
 from array import array
 
 SR = 44100
-DUR = 40.6
+DUR = 51.8
 N = int(SR * DUR)
 TWO_PI = 2.0 * math.pi
 
@@ -116,63 +116,63 @@ def air(dur, amp=0.012):
 # ──────────────────────────── arreglo ────────────────────────────
 
 def render_arrangement():
-    # 0,00–5,26 · el gancho — una nota, el aire casi vacío
-    add(0.0, air(5.26, 0.010))
-    add(0.55, piano(note(-12), 4.2, 0.15))
+    # 0,00–6,63 · el gancho — una nota, el aire casi vacío
+    add(0.0, air(6.63, 0.010))
+    add(0.55, piano(note(-12), 5.4, 0.15))
 
-    # 5,26–10,54 · Séneca — el mismo piano, un acorde grave y quieto debajo
-    add(5.26, air(5.28, 0.011))
-    add(5.55, piano(note(-12), 3.6, 0.13))
-    add(5.60, pad(note(-24), 4.6, 0.045))
-    add(9.20, piano(note(-5), 1.6, 0.10))
+    # 6,63–14,03 · Séneca — el mismo piano, un acorde grave y quieto debajo
+    add(6.63, air(7.40, 0.011))
+    add(6.90, piano(note(-12), 4.6, 0.13))
+    add(6.95, pad(note(-24), 6.0, 0.045))
+    add(11.60, piano(note(-5), 2.0, 0.10))
 
-    # 10,54–15,17 · la ciudad — un pulso suave, más presente, nunca percusión
-    add(10.54, air(4.63, 0.013))
-    add(10.54, pad(note(-24), 4.6, 0.05))
-    pulse_at = [11.1, 11.95, 12.8, 13.65, 14.5]
+    # 14,03–19,81 · la ciudad — un pulso suave, más presente, nunca percusión
+    add(14.03, air(5.78, 0.013))
+    add(14.03, pad(note(-24), 5.7, 0.05))
+    pulse_at = [14.7, 15.75, 16.8, 17.85, 18.9]
     for i, at in enumerate(pulse_at):
-        add(at, piano(note([-12, -5, -8, -5, -12][i]), 0.9, 0.065), pan=(rnd()*2-1)*0.35)
+        add(at, piano(note([-12, -5, -8, -5, -12][i]), 1.0, 0.065), pan=(rnd()*2-1)*0.35)
 
-    # 15,17–18,82 · el artesano — vuelve el silencio, una nota íntima
-    add(15.17, air(3.65, 0.009))
-    add(15.35, piano(note(0), 3.1, 0.12))
+    # 19,81–24,67 · el artesano — vuelve el silencio, una nota íntima
+    add(19.81, air(4.86, 0.009))
+    add(20.00, piano(note(0), 4.0, 0.12))
 
-    # 18,82–25,56 · la empresa — tensión leve, sin resolver (intervalo menor)
-    add(18.82, air(6.74, 0.012))
-    add(18.95, pad(note(-12), 6.4, 0.05))
-    add(18.95, pad(note(-9), 6.4, 0.04))
-    tick_at = [20.9, 22.1, 23.2, 24.3]
+    # 24,67–33,79 · la empresa — tensión leve, sin resolver (intervalo menor)
+    add(24.67, air(9.12, 0.012))
+    add(24.85, pad(note(-12), 8.6, 0.05))
+    add(24.85, pad(note(-9), 8.6, 0.04))
+    tick_at = [27.3, 28.9, 30.4, 31.9]
     for i, at in enumerate(tick_at):
-        add(at, piano(note([-5, -9, -5, -12][i]), 1.1, 0.07), pan=(rnd()*2-1)*0.3)
+        add(at, piano(note([-5, -9, -5, -12][i]), 1.3, 0.07), pan=(rnd()*2-1)*0.3)
 
-    # 25,56–30,99 · D-Code — el acorde se abre, resolución mayor
-    add(25.56, air(5.43, 0.012))
-    add(25.75, pad(note(-12), 5.1, 0.055))
-    add(25.75, pad(note(0), 5.1, 0.045))
-    add(25.75, pad(note(7), 5.1, 0.035))
-    add(26.0, piano(note(0), 2.4, 0.11))
-    add(28.6, piano(note(7), 1.8, 0.09))
+    # 33,79–40,40 · D-Code — el acorde se abre, resolución mayor
+    add(33.79, air(6.61, 0.012))
+    add(34.00, pad(note(-12), 6.2, 0.055))
+    add(34.00, pad(note(0), 6.2, 0.045))
+    add(34.00, pad(note(7), 6.2, 0.035))
+    add(34.25, piano(note(0), 2.8, 0.11))
+    add(37.20, piano(note(7), 2.1, 0.09))
 
-    # 30,99–38,90 · el cierre — el único crecimiento real, breve y contenido
-    add(30.99, air(7.91, 0.015))
-    add(31.1, pad(note(-12), 7.6, 0.07))
-    add(31.1, pad(note(0), 7.6, 0.06))
-    add(31.1, pad(note(7), 7.6, 0.05))
-    add(31.1, pad(note(12), 7.6, 0.035))
+    # 40,40–50,30 · el cierre — el único crecimiento real, breve y contenido
+    add(40.40, air(9.90, 0.015))
+    add(40.55, pad(note(-12), 9.6, 0.07))
+    add(40.55, pad(note(0), 9.6, 0.06))
+    add(40.55, pad(note(7), 9.6, 0.05))
+    add(40.55, pad(note(12), 9.6, 0.035))
     swell_notes = [0, 7, 12, 15]
-    for i, at in enumerate([31.3, 33.1, 35.0, 36.8]):
-        add(at, piano(note(swell_notes[i]), 2.0, 0.10 + i * 0.012), pan=-0.2 + i * 0.13)
+    for i, at in enumerate([40.8, 43.1, 45.6, 48.1]):
+        add(at, piano(note(swell_notes[i]), 2.3, 0.10 + i * 0.012), pan=-0.2 + i * 0.13)
 
-    # 38,90–40,60 · marca — una nota final que se apaga, sin campana de venta
-    add(38.95, piano(note(12), 1.7, 0.09))
-    add(38.95, pad(note(0), 1.65, 0.03))
+    # 50,30–51,80 · marca — una nota final que se apaga, sin campana de venta
+    add(50.35, piano(note(12), 1.7, 0.09))
+    add(50.35, pad(note(0), 1.65, 0.03))
 
 
 # ───────────────── mezcla: ducking de voz, límite y fundidos ─────────────────
 
 VO = [
-    (0.30, 4.71), (5.26, 10.09), (10.54, 14.62), (15.17, 18.17),
-    (18.82, 24.91), (25.56, 30.24), (30.99, 36.92)
+    (0.30, 6.23), (6.63, 13.68), (14.03, 19.41), (19.81, 24.22),
+    (24.67, 33.34), (33.79, 39.90), (40.40, 48.79)
 ]
 DUCK = 0.50
 FADE = 0.12

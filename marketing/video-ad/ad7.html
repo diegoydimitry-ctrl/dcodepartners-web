@@ -49,7 +49,7 @@ const Q     = new URLSearchParams(location.search);
 const CC    = Q.get('cc') !== '0';           // subtítulos activos por defecto
 const FMT   = Q.get('fmt') === '16x9' ? '16x9' : '9x16';
 const FRAME = Q.has('t') ? parseFloat(Q.get('t')) : null;
-const DUR   = 40.6;
+const DUR   = 51.8;
 
 const cv = document.getElementById('stage');
 const W  = FMT === '9x16' ? 1080 : 1920;
@@ -117,13 +117,22 @@ function background(){
   g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
 }
 function grain(t){
-  // grano fino determinista — textura de película, no artefacto de compresión
-  const rng = makeRng(Math.floor(t * 24) * 7919 + 101);
-  g.save(); g.globalAlpha = 0.05;
-  for (let i = 0; i < 160; i++){
-    const gx = rng() * W, gy = rng() * H, s = 1 + rng() * 1.8;
-    g.fillStyle = rng() > 0.5 ? '#fff' : '#000';
+  // grano de 35 mm determinista, dos capas — fino y grueso — para que se
+  // lea como textura de película real, no como ruido digital uniforme
+  const rngFine = makeRng(Math.floor(t * 24) * 7919 + 101);
+  g.save(); g.globalAlpha = 0.07; g.globalCompositeOperation = 'overlay';
+  for (let i = 0; i < 260; i++){
+    const gx = rngFine() * W, gy = rngFine() * H, s = 1 + rngFine() * 1.6;
+    g.fillStyle = rngFine() > 0.5 ? '#fff' : '#000';
     g.fillRect(gx, gy, s, s);
+  }
+  g.restore();
+  const rngCoarse = makeRng(Math.floor(t * 24) * 4397 + 503);
+  g.save(); g.globalAlpha = 0.045; g.globalCompositeOperation = 'overlay';
+  for (let i = 0; i < 40; i++){
+    const gx = rngCoarse() * W, gy = rngCoarse() * H, s = 2.5 + rngCoarse() * 4;
+    g.fillStyle = rngCoarse() > 0.5 ? '#fff' : '#000';
+    g.beginPath(); g.arc(gx, gy, s, 0, Math.PI * 2); g.fill();
   }
   g.restore();
 }
@@ -160,11 +169,21 @@ function kenBurns(img, localT, dur, kb){
   const maxPanY = Math.max(0, (ih - H) / 2) * 0.82;
   const panX = lerp(-kb.px, kb.px, p) * maxPanX;
   const panY = lerp(-kb.py, kb.py, p) * maxPanY;
-  g.save();
-  g.filter = 'grayscale(1) contrast(1.18) brightness(0.93) blur(0.9px)';
+  const dx = CX - iw/2 + panX, dy = CY - ih/2 + panY;
   g.imageSmoothingEnabled = true;
   g.imageSmoothingQuality = 'high';
-  g.drawImage(img, CX - iw/2 + panX, CY - ih/2 + panY, iw, ih);
+  // base — grano de la ampliación disimulado con un desenfoque mínimo
+  g.save();
+  g.filter = 'grayscale(1) contrast(1.22) brightness(0.92) blur(0.65px)';
+  g.drawImage(img, dx, dy, iw, ih);
+  g.restore();
+  // segunda pasada en "overlay" — realza el contraste local (seudo-nitidez),
+  // nunca añade resolución real, solo evita que el conjunto se lea "blando"
+  g.save();
+  g.globalCompositeOperation = 'overlay';
+  g.globalAlpha = 0.38;
+  g.filter = 'grayscale(1) contrast(1.7) brightness(1.05) blur(0.3px)';
+  g.drawImage(img, dx, dy, iw, ih);
   g.restore();
   // leve pátina de contacto — unifica el grado de color entre las 7 fotos
   g.save();
@@ -183,27 +202,27 @@ function kenBurns(img, localT, dur, kb){
    Reels (usuario, pie de foto, iconos). */
 
 const CAPTIONS = [
-  { a: 0.30, b: 1.60, text: 'No te falta tiempo.' },
-  { a: 1.70, b: 4.71, text: 'Te falta criterio para elegir en qué lo gastas.' },
+  { a: 0.30, b: 2.00, text: 'No te falta tiempo.' },
+  { a: 2.10, b: 6.23, text: 'Te falta criterio para elegir en qué lo gastas.' },
 
-  { a: 5.26, b: 6.52, text: 'Séneca ya lo decía:' },
-  { a: 6.62, b: 10.09, text: 'no es que tengamos poco tiempo, es que perdemos mucho.' },
+  { a: 6.63, b: 8.46, text: 'Séneca ya lo decía:' },
+  { a: 8.56, b: 13.68, text: 'no es que tengamos poco tiempo, es que perdemos mucho.' },
 
-  { a: 10.54, b: 12.99, text: 'Vivimos ocupados en lo que no importa,' },
-  { a: 13.09, b: 14.62, text: 'aplazando vivir de verdad.' },
+  { a: 14.03, b: 17.16, text: 'Vivimos ocupados en lo que no importa,' },
+  { a: 17.26, b: 19.41, text: 'aplazando vivir de verdad.' },
 
-  { a: 15.17, b: 17.15, text: 'Trabajar mucho y trabajar bien' },
-  { a: 17.25, b: 18.17, text: 'no son lo mismo.' },
+  { a: 19.81, b: 22.62, text: 'Trabajar mucho y trabajar bien' },
+  { a: 22.72, b: 24.22, text: 'no son lo mismo.' },
 
-  { a: 18.82, b: 20.49, text: 'En una empresa pasa igual:' },
-  { a: 20.59, b: 23.03, text: 'el tiempo se va en tareas repetitivas,' },
-  { a: 23.13, b: 24.91, text: 'no en decisiones que importan.' },
+  { a: 24.67, b: 27.04, text: 'En una empresa pasa igual:' },
+  { a: 27.14, b: 30.51, text: 'el tiempo se va en tareas repetitivas,' },
+  { a: 30.61, b: 33.34, text: 'no en decisiones que importan.' },
 
-  { a: 25.56, b: 27.68, text: 'En D-Code Partners diseñamos sistemas' },
-  { a: 27.78, b: 30.24, text: 'para que el tiempo vuelva a ir donde importa.' },
+  { a: 33.79, b: 36.56, text: 'En D-Code Partners diseñamos sistemas' },
+  { a: 36.66, b: 39.90, text: 'para que el tiempo vuelva a ir donde importa.' },
 
-  { a: 30.99, b: 34.22, text: 'Construir mejores sistemas no es trabajar menos.' },
-  { a: 34.32, b: 36.92, text: 'Es, por fin, trabajar en lo que importa.' }
+  { a: 40.40, b: 44.97, text: 'Construir mejores sistemas no es trabajar menos.' },
+  { a: 45.07, b: 48.79, text: 'Es, por fin, trabajar en lo que importa.' }
 ];
 
 function captionsOverlay(t){
@@ -241,13 +260,13 @@ const IMG_FILES = [
 const IMAGES = [];
 
 const SCENES = [
-  { a: 0.00,  b: 5.26,  img: 0, kb: { z0: 1.00, z1: 1.10, px: 0.10, py: 0.30 } },
-  { a: 5.26,  b: 10.54, img: 1, kb: { z0: 1.00, z1: 1.07, px: 0.35, py: 0.08 } },
-  { a: 10.54, b: 15.17, img: 2, kb: { z0: 1.00, z1: 1.09, px: 0.55, py: 0.10 } },
-  { a: 15.17, b: 18.82, img: 3, kb: { z0: 1.03, z1: 1.14, px: 0.12, py: 0.10 } },
-  { a: 18.82, b: 25.56, img: 4, kb: { z0: 1.09, z1: 1.00, px: 0.22, py: 0.08 } },
-  { a: 25.56, b: 30.99, img: 5, kb: { z0: 1.00, z1: 1.08, px: 0.10, py: 0.28 } },
-  { a: 30.99, b: 38.90, img: 6, kb: { z0: 1.00, z1: 1.15, px: 0.18, py: 0.38 } }
+  { a: 0.00,  b: 6.63,  img: 0, kb: { z0: 1.00, z1: 1.07, px: 0.10, py: 0.30 } },
+  { a: 6.63,  b: 14.03, img: 1, kb: { z0: 1.00, z1: 1.05, px: 0.35, py: 0.08 } },
+  { a: 14.03, b: 19.81, img: 2, kb: { z0: 1.00, z1: 1.06, px: 0.55, py: 0.10 } },
+  { a: 19.81, b: 24.67, img: 3, kb: { z0: 1.02, z1: 1.09, px: 0.12, py: 0.10 } },
+  { a: 24.67, b: 33.79, img: 4, kb: { z0: 1.06, z1: 1.00, px: 0.22, py: 0.08 } },
+  { a: 33.79, b: 40.40, img: 5, kb: { z0: 1.00, z1: 1.06, px: 0.10, py: 0.28 } },
+  { a: 40.40, b: 50.30, img: 6, kb: { z0: 1.00, z1: 1.09, px: 0.18, py: 0.38 } }
 ];
 const XFADE = 0.6;
 
@@ -331,7 +350,7 @@ function render(t){
 
   background();
 
-  if (t < 38.9){
+  if (t < 50.30){
     renderPhotography(t);
   } else {
     drawScene(SCENES.length - 1, SCENES[SCENES.length - 1].b - 0.001);
@@ -340,8 +359,8 @@ function render(t){
   vignette();
   grain(t);
 
-  if (t < 38.9 && CC) captionsOverlay(t);
-  if (t >= 36.9) closingCard(t - 38.9);
+  if (t < 50.30 && CC) captionsOverlay(t);
+  if (t >= 48.79) closingCard(t - 50.30);
 
   const intro = 1 - ramp(t, 0, 0.22, easeInOut);
   if (intro > 0){ g.fillStyle = rgba('#000000', intro); g.fillRect(0, 0, W, H); }
