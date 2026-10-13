@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vuelo · demo jugable</title>
+<style>
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  @font-face { font-family: "Archivo"; src: url("../lib/archivo.woff2") format("woff2"); font-weight: 100 900; }
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  .hud { position: fixed; inset: 0; pointer-events: none; color: #fff; font-family: "Martian Mono", monospace; text-shadow: 0 1px 6px rgba(0,0,0,.35); }
+  .arriba { position: absolute; top: 6.5vh; left: 6vw; right: 6vw; display: flex; justify-content: space-between; font-size: 2.1vw; letter-spacing: .14em; }
+  .arriba b { display: block; font-size: 4.6vw; font-weight: 500; letter-spacing: .02em; margin-top: .6vh; }
+  .der { text-align: right; }
+  .mira { position: absolute; left: 50%; top: 50%; width: 9vw; height: 9vw; transform: translate(-50%, -50%); }
+  .mira::before, .mira::after { content: ""; position: absolute; background: rgba(255,255,255,.85); }
+  .mira::before { left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; clip-path: polygon(0 0, 38% 0, 38% 100%, 0 100%, 0 0, 62% 0, 100% 0, 100% 100%, 62% 100%); }
+  .mira::after { top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; clip-path: polygon(0 0, 100% 0, 100% 38%, 0 38%, 0 62%, 100% 62%, 100% 100%, 0 100%); }
+  .anillos { position: absolute; top: 15vh; left: 0; right: 0; text-align: center; font-size: 2.1vw; letter-spacing: .2em; }
+  .anillos b { display: block; font-size: 6vw; font-weight: 500; letter-spacing: .05em; margin-top: .6vh; transition: transform .2s; }
+  .teclas { position: absolute; bottom: 9vh; left: 50%; transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, 8.6vw); grid-template-rows: repeat(2, 8.6vw); gap: 1.4vw; }
+  .tecla { border: 2px solid rgba(255,255,255,.75); border-radius: 1.6vw; display: grid; place-items: center; font-size: 3.4vw; font-weight: 600; background: rgba(0,0,0,.18); backdrop-filter: blur(6px); transition: background .08s, color .08s; }
+  .tecla.on { background: #fff; color: #111; text-shadow: none; }
+  .tecla.w { grid-column: 2; grid-row: 1; } .tecla.a { grid-column: 1; grid-row: 2; } .tecla.s { grid-column: 2; grid-row: 2; } .tecla.d { grid-column: 3; grid-row: 2; }
+  .ayuda { position: absolute; bottom: 4vh; left: 0; right: 0; text-align: center; font-size: 1.7vw; letter-spacing: .18em; opacity: .8; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud" id="hud">
+  <div class="arriba"><div>ALTITUD<b id="alt">0 m</b></div><div class="der">VELOCIDAD<b id="vel">0 km/h</b></div></div>
+  <div class="anillos">ANILLOS<b id="ani">0 / 0</b></div>
+  <div class="mira"></div>
+  <div class="teclas"><div class="tecla w">W</div><div class="tecla a">A</div><div class="tecla s">S</div><div class="tecla d">D</div></div>
+  <div class="ayuda">W/S · MORRO &nbsp;&nbsp; A/D · GIRAR</div>
+</div>
+<script type="module">
+import { CAPTURA, params, entrada, escucharEntradaReal, arrancar, programa, dibujarQuad, mezcla } from './comun.js'
+
+/* ------------------------------------------------------------------ terreno
+   Mapa de alturas generado aquí mismo (ruido con derivadas, el truco de las
+   montañas «erosionadas»). Lo usan la GPU para dibujar y la CPU para el vuelo
+   y el piloto automático: es el mismo terreno para las dos. */
+const N = 1024, MITAD = 4200, ALTO = 980
+function hash(x, y) { let h = (x * 374761393 + y * 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967295 }
+function ruidoD(x, y) {
+  const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy
+  const ux = fx * fx * fx * (fx * (fx * 6 - 15) + 10), uy = fy * fy * fy * (fy * (fy * 6 - 15) + 10)
+  const dux = 30 * fx * fx * (fx * (fx - 2) + 1), duy = 30 * fy * fy * (fy * (fy - 2) + 1)
+  const a = hash(ix, iy), b = hash(ix + 1, iy), c = hash(ix, iy + 1), d = hash(ix + 1, iy + 1)
+  const k1 = b - a, k2 = c - a, k4 = a - b - c + d
+  return [-1 + 2 * (a + k1 * ux + k2 * uy + k4 * ux * uy), 2 * dux * (k1 + k4 * uy), 2 * duy * (k2 + k4 * ux)]
+}
+function altura(x, z, oct = 8) {
+  let px = x * 0.00105 + 3.1, py = z * 0.00105 - 1.7, a = 0, b = 1, dx = 0, dy = 0
+  for (let i = 0; i < oct; i++) {
+    const [v, nx, ny] = ruidoD(px, py)
+    dx += nx; dy += ny
+    a += b * v / (1 + dx * dx + dy * dy)
+    b *= 0.5
+    const qx = 0.8 * px - 0.6 * py, qy = 0.6 * px + 0.8 * py
+    px = qx * 2; py = qy * 2
+  }
+  return a
+}
+const hm = new Float32Array(N * N)
+let hmin = 1e9, hmax = -1e9
+for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+  const x = (i / (N - 1) * 2 - 1) * MITAD, z = (j / (N - 1) * 2 - 1) * MITAD
+  const h = altura(x, z); hm[j * N + i] = h; if (h < hmin) hmin = h; if (h > hmax) hmax = h
+}
+export const cauce = (z) => 520 * Math.sin(z * 0.00062) + 180 * Math.sin(z * 0.0017 + 1.3)
+for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+  const k = j * N + i
+  const x = (i / (N - 1) * 2 - 1) * MITAD, z = (j / (N - 1) * 2 - 1) * MITAD
+  let u = (hm[k] - hmin) / (hmax - hmin)
+  u = Math.pow(u, 1.35) * 1.1
+  const d = Math.abs(x - cauce(z))
+  const valle = Math.exp(-Math.pow(d / 520, 2))
+  const ladera = 1 + 0.9 * Math.exp(-Math.pow((d - 1100) / 700, 2))
+  hm[k] = (u * ALTO * ladera) * (1 - valle) - 10 * valle
+}
+const NIVEL_AGUA = 40
+function alturaCPU(x, z) {
+  const fx = (x / MITAD * 0.5 + 0.5) * (N - 1), fz = (z / MITAD * 0.5 + 0.5) * (N - 1)
+  const i = Math.max(0, Math.min(N - 2, Math.floor(fx))), j = Math.max(0, Math.min(N - 2, Math.floor(fz)))
+  const u = Math.min(1, Math.max(0, fx - i)), v = Math.min(1, Math.max(0, fz - j))
+  const h00 = hm[j * N + i], h10 = hm[j * N + i + 1], h01 = hm[(j + 1) * N + i], h11 = hm[(j + 1) * N + i + 1]
+  return mezcla(mezcla(h00, h10, u), mezcla(h01, h11, u), v)
+}
+const suelo = (x, z) => Math.max(alturaCPU(x, z), NIVEL_AGUA)
+
+/* --------------------------------------------------------------- WebGL */
+const lienzo = document.getElementById('c')
+const escala = parseFloat(params.get('escala') || '1')
+const W = Math.round((parseInt(params.get('w')) || innerWidth) * escala), H = Math.round((parseInt(params.get('h')) || innerHeight) * escala)
+lienzo.width = W; lienzo.height = H
+const gl = lienzo.getContext('webgl2', { antialias: false, preserveDrawingBuffer: true })
+const tex = gl.createTexture()
+gl.bindTexture(gl.TEXTURE_2D, tex)
+// alturas en coma flotante de 32 bits (con 16 se ven escalones en las laderas)
+const lineal32 = gl.getExtension('OES_texture_float_linear')
+gl.texImage2D(gl.TEXTURE_2D, 0, lineal32 ? gl.R32F : gl.R16F, N, N, 0, gl.RED, gl.FLOAT, hm)
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+
+const NA = 8
+const frag = `#version 300 es
+precision highp float;
+in vec2 uv; out vec4 col;
+uniform sampler2D uHM; uniform vec2 uRes; uniform float uT;
+uniform vec3 uPos, uDer, uArr, uFre; uniform float uFov;
+uniform vec4 uAni[${NA}]; uniform vec3 uAniN[${NA}]; uniform float uAniE[${NA}];
+const float MITAD = ${MITAD.toFixed(1)}; const float AGUA = ${NIVEL_AGUA.toFixed(1)};
+const vec3 SOL = normalize(vec3(-0.86, 0.17, -0.12));
+
+float th(vec2 xz){ return texture(uHM, xz/(2.0*MITAD)+0.5).r; }
+float hash2(vec2 p){ p = fract(p*vec2(123.34, 456.21)); p += dot(p, p+45.32); return fract(p.x*p.y); }
+float vn(vec2 p){ vec2 i=floor(p), f=fract(p); vec2 u=f*f*(3.0-2.0*f);
+  return mix(mix(hash2(i),hash2(i+vec2(1,0)),u.x), mix(hash2(i+vec2(0,1)),hash2(i+vec2(1,1)),u.x), u.y); }
+float detalle(vec2 p){ return (vn(p*0.05)*7.0 + vn(p*0.15)*3.0 + vn(p*0.43)*1.1 + vn(p*1.3)*0.35) - 5.7; }
+float alt(vec2 p){ return th(p) + detalle(p); }
+
+float marcha(vec3 ro, vec3 rd, float tmax){
+  float t = 2.0;
+  for(int i=0;i<180;i++){
+    vec3 p = ro + rd*t; float h = p.y - th(p.xz);
+    if(h < 0.0015*t || t > tmax) break;
+    t += max(0.45*h, 0.6 + 0.004*t);
+  }
+  return t;
+}
+vec3 normalT(vec3 p, float t){
+  float e = max(1.0, 0.0012*t);
+  return normalize(vec3(alt(p.xz-vec2(e,0))-alt(p.xz+vec2(e,0)), 2.0*e, alt(p.xz-vec2(0,e))-alt(p.xz+vec2(0,e))));
+}
+float sombra(vec3 p){
+  float r = 1.0, t = 6.0;
+  for(int i=0;i<34;i++){ vec3 q = p + SOL*t; float h = q.y - th(q.xz); r = min(r, 9.0*h/t); if(r<0.0) break; t += clamp(h*0.8, 8.0, 160.0); }
+  return clamp(r, 0.0, 1.0);
+}
+float nubes(vec2 p){ float f = vn(p)*0.5 + vn(p*2.03)*0.25 + vn(p*4.1)*0.125 + vn(p*8.3)*0.0625; return smoothstep(0.48, 0.86, f); }
+vec3 cielo(vec3 rd){
+  float s = max(dot(rd, SOL), 0.0);
+  vec3 c = mix(vec3(0.55,0.60,0.68), vec3(0.10,0.22,0.46), pow(max(rd.y,0.0), 0.45));
+  c = mix(c, vec3(1.25,0.70,0.38), pow(1.0-max(rd.y,0.0), 9.0)*0.85);
+  c += vec3(1.3,0.62,0.26)*pow(s, 6.0)*0.75 + vec3(1.4,0.85,0.5)*pow(s, 60.0)*1.3 + vec3(9.0,7.0,4.6)*smoothstep(0.9990,0.99965,s);
+  if(rd.y > 0.0){
+    vec2 q = rd.xz/(rd.y+0.06)*900.0;
+    float n = nubes(q*0.0016 + vec2(uT*0.004, 0.0));
+    vec3 cn = mix(vec3(0.62,0.48,0.46), vec3(1.9,1.15,0.62), pow(s,3.0)) * (0.8+0.2*rd.y);
+    c = mix(c, cn, n*smoothstep(0.0, 0.18, rd.y)*0.85);
+  }
+  return c;
+}
+vec3 niebla(vec3 c, vec3 ro, vec3 rd, float t){
+  float s = max(dot(rd, SOL), 0.0);
+  float k = max(abs(rd.y), 0.015)*0.0028;
+  float d = 1.0 - exp(-t*0.000075*exp(-max(ro.y,0.0)*0.0012) * (1.0-exp(-t*k))/(t*k));
+  vec3 fc = mix(vec3(0.36,0.47,0.62), vec3(1.30,0.80,0.46), pow(s, 8.0));
+  return mix(c, fc, clamp(d, 0.0, 1.0));
+}
+vec3 material(vec3 p, vec3 n, float t){
+  float h = p.y;
+  float r = vn(p.xz*0.013)*0.55 + vn(p.xz*0.07)*0.3 + vn(p.xz*0.31)*0.15;
+  float estrato = vn(vec2(h*0.03 + vn(p.xz*0.004)*6.0, p.x*0.002))*0.5 + 0.5;
+  vec3 roca = mix(vec3(0.15,0.13,0.115), vec3(0.31,0.27,0.23), r) * mix(0.93, 1.06, estrato);
+  vec3 bosque = mix(vec3(0.035,0.055,0.03), vec3(0.075,0.09,0.045), r);
+  vec3 prado = mix(vec3(0.13,0.15,0.06), vec3(0.22,0.21,0.10), r);
+  float verde = smoothstep(0.70, 0.86, n.y) * smoothstep(620.0, 420.0, h + r*90.0);
+  vec3 c = mix(roca, bosque, verde);
+  c = mix(c, prado, verde * smoothstep(110.0, 60.0, h) * smoothstep(0.9, 0.97, n.y));
+  float nieve = smoothstep(540.0, 640.0, h + r*120.0) * smoothstep(0.5, 0.75, n.y);
+  c = mix(c, vec3(0.80,0.83,0.88), nieve);
+  c = mix(c, vec3(0.30,0.27,0.21), smoothstep(AGUA+4.0, AGUA+0.5, h));
+  return c;
+}
+vec3 luz(vec3 p, vec3 n, vec3 rd, vec3 alb){
+  float dif = max(dot(n, SOL), 0.0);
+  float sh = dif > 0.001 ? sombra(p + n*2.0) : 0.0;
+  vec3 c = alb * vec3(3.4,2.15,1.25) * dif * sh;
+  c += alb * vec3(0.27,0.34,0.48) * (0.5 + 0.5*n.y);
+  c += alb * vec3(0.45,0.28,0.16) * max(dot(n, normalize(vec3(-SOL.x,0.0,-SOL.z))), 0.0) * 0.25;
+
+  return c;
+}
+float sdToro(vec3 p, vec2 t){ vec2 q = vec2(length(p.xz)-t.x, p.y); return length(q)-t.y; }
+float anillos(vec3 p, out int id){
+  float d = 1e9; id = -1;
+  for(int i=0;i<${NA};i++){
+    vec3 n = uAniN[i]; vec3 q = p - uAni[i].xyz;
+    vec3 a = normalize(cross(abs(n.y)<0.9?vec3(0,1,0):vec3(1,0,0), n)); vec3 b = cross(n, a);
+    vec3 l = vec3(dot(q,a), dot(q,n), dot(q,b));
+    float di = sdToro(l, vec2(uAni[i].w, uAni[i].w*0.075));
+    if(di < d){ d = di; id = i; }
+  }
+  return d;
+}
+void main(){
+  vec2 fc = uv*2.0-1.0; fc.x *= uRes.x/uRes.y;
+  vec3 rd = normalize(uFre + fc.x*uDer*uFov + fc.y*uArr*uFov);
+  vec3 ro = uPos;
+  float tT = marcha(ro, rd, 9000.0);
+  float tA = rd.y < 0.0 ? (AGUA - ro.y)/rd.y : 1e9;
+  vec3 c;
+  bool agua = tA < tT;
+  float t = agua ? tA : tT;
+  if(t > 8990.0 && !agua){ c = cielo(rd); }
+  else if(agua){
+    vec3 p = ro + rd*tA;
+    vec2 w = p.xz*0.045 + vec2(uT*0.25, uT*0.13);
+    vec2 w2 = p.xz*0.11 + vec2(-uT*0.31, uT*0.22);
+    vec3 n = normalize(vec3((vn(w)-0.5)*0.02 + (vn(w2)-0.5)*0.016, 1.0, (vn(w+7.0)-0.5)*0.02 + (vn(w2+3.1)-0.5)*0.016));
+    vec3 rr = reflect(rd, n);
+    float tr = marcha(p + vec3(0,0.5,0), rr, 3000.0);
+    vec3 refl;
+    if(tr < 2990.0){ vec3 q = p + rr*tr; vec3 nq = normalT(q, tr); refl = niebla(luz(q, nq, rr, material(q, nq, tr)), p, rr, tr); }
+    else refl = cielo(rr);
+    float fr = 0.03 + 0.97*pow(1.0 - max(dot(-rd, n), 0.0), 5.0);
+    float prof = clamp((AGUA - th(p.xz))*0.04, 0.0, 1.0);
+    vec3 fondo = mix(vec3(0.10,0.12,0.08), vec3(0.02,0.05,0.07), prof);
+    c = mix(fondo, refl, 0.25 + 0.75*fr);
+    c += vec3(1.6,1.1,0.7)*pow(max(dot(rr, SOL),0.0), 220.0)*2.0;
+    c = niebla(c, ro, rd, tA);
+  } else {
+    vec3 p = ro + rd*tT; vec3 n = normalT(p, tT);
+    c = niebla(luz(p, n, rd, material(p, n, tT)), ro, rd, tT);
+  }
+  // anillos del circuito (objetos del juego)
+  float ta = 3.0; int id = -1; bool hit = false;
+  for(int i=0;i<90;i++){ vec3 p = ro + rd*ta; float d = anillos(p, id); if(d < 0.02*ta*0.01+0.05){ hit = true; break; } ta += d; if(ta > min(t, 3500.0)) break; }
+  if(hit){
+    vec3 p = ro + rd*ta; int j; float e = 0.03;
+    vec3 n = normalize(vec3(anillos(p+vec3(e,0,0),j)-anillos(p-vec3(e,0,0),j), anillos(p+vec3(0,e,0),j)-anillos(p-vec3(0,e,0),j), anillos(p+vec3(0,0,e),j)-anillos(p-vec3(0,0,e),j)));
+    vec3 h = normalize(SOL - rd);
+    vec3 base = vec3(0.95,0.93,0.90);
+    vec3 cr = base*(0.25 + 1.6*max(dot(n,SOL),0.0)) + vec3(1.0,0.85,0.6)*pow(max(dot(n,h),0.0), 60.0)*2.5;
+    cr += cielo(reflect(rd,n))*0.35;
+    float en = 0.0; for(int i=0;i<${NA};i++) if(i==id) en = uAniE[i];
+    cr += vec3(1.0,0.9,0.7)*en*1.6;
+    c = niebla(cr, ro, rd, ta*0.6);
+  }
+  // cámara: exposición, curva de película, viñeta y grano
+  c *= 1.0;
+  c = (c*(2.51*c+0.03))/(c*(2.43*c+0.59)+0.14);
+  c = pow(clamp(c,0.0,1.0), vec3(1.0/2.2));
+  vec2 q = uv; c *= 0.55 + 0.45*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y), 0.22);
+  c += (hash2(uv*uRes + fract(uT*7.13)*91.0) - 0.5)*0.022;
+  col = vec4(c, 1.0);
+}`
+const { pr, u } = programa(gl, frag)
+
+/* ------------------------------------------------------------ el juego */
+// Circuito: anillos en el valle, a la altura justa sobre el terreno.
+const ruta = [-2700, -2280, -1860, -1440, -1020, -600, -180, 240].map((z, i) => [cauce(z) + (i % 2 ? 105 : -105), z])
+const ani = ruta.map(([x, z], i) => {
+  const r = 46
+  let maxH = 0
+  for (let a = 0; a < 12; a++) maxH = Math.max(maxH, suelo(x + Math.cos(a) * r * 1.4, z + Math.sin(a) * r * 1.4))
+  const sig = ruta[Math.min(i + 1, ruta.length - 1)], ant = ruta[Math.max(i - 1, 0)]
+  const dx = sig[0] - ant[0], dz = sig[1] - ant[1], l = Math.hypot(dx, dz)
+  return { c: [x, Math.max(maxH, NIVEL_AGUA) + r + 8 + (i % 3) * 14, z], n: [dx / l, 0, dz / l], r, pasado: false, destello: 0 }
+})
+
+const avion = { p: [cauce(-3450), 0, -3450], rumbo: 0, cabeceo: 0, alabeo: 0, v: 125 }
+avion.p[1] = NIVEL_AGUA + 52
+{ const a = ani[0].c; avion.rumbo = Math.atan2(a[0] - avion.p[0], a[2] - avion.p[2]) }
+
+let siguiente = 0
+function piloto() {
+  // En la grabación las teclas las pulsa un piloto automático; en vivo, tú.
+  const teclas = new Set()
+  const obj = ani[Math.min(siguiente, ani.length - 1)].c
+  const dx = obj[0] - avion.p[0], dz = obj[2] - avion.p[2]
+  let err = Math.atan2(dx, dz) - avion.rumbo
+  while (err > Math.PI) err -= 2 * Math.PI
+  while (err < -Math.PI) err += 2 * Math.PI
+  if (err > 0.025) teclas.add('d'); else if (err < -0.025) teclas.add('a')
+  const dist = Math.hypot(dx, dz)
+  const deseo = Math.atan2(obj[1] - avion.p[1], dist)
+  const delante = suelo(avion.p[0] + Math.sin(avion.rumbo) * 260, avion.p[2] + Math.cos(avion.rumbo) * 260)
+  if (avion.p[1] - delante < 55 || deseo > avion.cabeceo + 0.04) teclas.add('s')
+  else if (deseo < avion.cabeceo - 0.04) teclas.add('w')
+  return teclas
+}
+
+function simular(dt, teclas) {
+  const giro = (teclas.has('d') || teclas.has('arrowright') ? 1 : 0) - (teclas.has('a') || teclas.has('arrowleft') ? 1 : 0)
+  const morro = (teclas.has('s') || teclas.has('arrowdown') ? 1 : 0) - (teclas.has('w') || teclas.has('arrowup') ? 1 : 0)
+  avion.alabeo += ((giro * 0.78) - avion.alabeo) * Math.min(1, dt * 3.2)
+  avion.cabeceo += ((morro * 0.32) - avion.cabeceo) * Math.min(1, dt * 1.8)
+  avion.rumbo += avion.alabeo * dt * 1.25
+  avion.v += (-Math.sin(avion.cabeceo) * 22 + (128 - avion.v) * 0.4) * dt
+  const cp = Math.cos(avion.cabeceo)
+  avion.p[0] += Math.sin(avion.rumbo) * cp * avion.v * dt
+  avion.p[2] += Math.cos(avion.rumbo) * cp * avion.v * dt
+  avion.p[1] += Math.sin(avion.cabeceo) * avion.v * dt
+  const s = suelo(avion.p[0], avion.p[2]) + 12
+  if (avion.p[1] < s) { avion.p[1] = s; avion.cabeceo = Math.max(avion.cabeceo, 0.1) }
+  // ¿ha cruzado el anillo?
+  const a = ani[siguiente]
+  if (a) {
+    const q = [avion.p[0] - a.c[0], avion.p[1] - a.c[1], avion.p[2] - a.c[2]]
+    const lado = q[0] * a.n[0] + q[2] * a.n[2]
+    const dentro = Math.hypot(q[0] - lado * a.n[0], q[1], q[2] - lado * a.n[2]) < a.r
+    if (lado > 0 && dentro) { a.pasado = true; a.destello = 1; siguiente++ }
+    else if (lado > 60) siguiente++
+  }
+  for (const b of ani) b.destello = Math.max(0, b.destello - dt * 1.4)
+}
+
+const hud = { alt: document.getElementById('alt'), vel: document.getElementById('vel'), ani: document.getElementById('ani'), t: [...document.querySelectorAll('.tecla')] }
+if (params.get('hud') === '0') document.getElementById('hud').style.display = 'none'
+if (!CAPTURA) escucharEntradaReal(lienzo)
+
+let teclasActuales = new Set()
+arrancar((t, dt, dibujar) => {
+  if (dt > 0) { teclasActuales = CAPTURA || params.get('auto') === '1' ? piloto() : entrada.teclas; simular(dt, teclasActuales) }
+  if (!dibujar) return
+  // cámara: mira hacia delante con el alabeo del avión
+  const cy = Math.cos(avion.rumbo), sy = Math.sin(avion.rumbo), cp = Math.cos(avion.cabeceo), sp = Math.sin(avion.cabeceo)
+  const fre = [sy * cp, sp, cy * cp]
+  let der = [cy, 0, -sy]
+  let arr = [fre[1] * der[2] - fre[2] * der[1], fre[2] * der[0] - fre[0] * der[2], fre[0] * der[1] - fre[1] * der[0]]
+  const ca = Math.cos(-avion.alabeo), sa = Math.sin(-avion.alabeo)
+  const der2 = der.map((v, k) => v * ca + arr[k] * sa), arr2 = arr.map((v, k) => arr[k] * ca - der[k] * sa)
+  gl.viewport(0, 0, W, H)
+  gl.useProgram(pr)
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex); gl.uniform1i(u.uHM, 0)
+  gl.uniform2f(u.uRes, W, H); gl.uniform1f(u.uT, t)
+  gl.uniform3fv(u.uPos, avion.p); gl.uniform3fv(u.uFre, fre); gl.uniform3fv(u.uDer, der2); gl.uniform3fv(u.uArr, arr2)
+  gl.uniform1f(u.uFov, 0.62)
+  gl.uniform4fv(u.uAni, ani.flatMap((a) => [...a.c, a.r]))
+  gl.uniform3fv(u.uAniN, ani.flatMap((a) => a.n))
+  gl.uniform1fv(u.uAniE, ani.map((a) => a.destello))
+  dibujarQuad(gl)
+  hud.alt.textContent = Math.round(avion.p[1]) + ' m'
+  hud.vel.textContent = Math.round(avion.v * 3.6) + ' km/h'
+  hud.ani.textContent = ani.filter((a) => a.pasado).length + ' / ' + ani.length
+  for (const el of hud.t) el.classList.toggle('on', teclasActuales.has(el.textContent.toLowerCase()))
+})
+</script>
+</body>
+</html>

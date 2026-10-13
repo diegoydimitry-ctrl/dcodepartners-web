@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>D-Code Partners | Cómo se hizo cada escena</title>
+<style>
+  @font-face { font-family: "Archivo"; src: url("../lib/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  @page { size: 1080px 1350px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #f2f0eb; color: #111214; font-family: "Archivo", sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .p { width: 1080px; height: 1350px; padding: 96px 90px; position: relative; break-after: page; display: flex; flex-direction: column; gap: 34px; overflow: hidden; }
+  .p:last-child { break-after: auto; }
+  .num { font-family: "Martian Mono", monospace; font-size: 22px; letter-spacing: .2em; text-transform: uppercase; color: #2447c2; }
+  h1 { font-size: 92px; line-height: .98; letter-spacing: -.035em; margin: 0; font-weight: 720; font-stretch: 92%; }
+  h2 { font-size: 64px; line-height: 1.02; letter-spacing: -.03em; margin: 0; font-weight: 700; }
+  p { font-size: 30px; line-height: 1.42; margin: 0; color: #3a3c41; max-width: 32ch; }
+  .prompt { background: #fff; border: 1px solid #dddad3; border-radius: 34px; padding: 40px 44px; font-size: 29px; line-height: 1.45; }
+  .prompt small { display: block; font-family: "Martian Mono", monospace; font-size: 19px; letter-spacing: .2em; text-transform: uppercase; color: #6b6d72; margin-bottom: 18px; }
+  .hecho { font-size: 25px; line-height: 1.5; color: #3a3c41; }
+  .hecho b { color: #111214; }
+  .pie { position: absolute; left: 90px; right: 90px; bottom: 70px; display: flex; justify-content: space-between; font-family: "Martian Mono", monospace; font-size: 18px; letter-spacing: .16em; text-transform: uppercase; color: #6b6d72; }
+  .fila { display: flex; gap: 44px; align-items: flex-start; margin-top: 14px; }
+  .col { flex: 1; display: flex; flex-direction: column; gap: 30px; }
+  .col .prompt { font-size: 27px; padding: 34px 34px; }
+  .col .hecho { font-size: 24px; }
+  .captura { flex: none; width: 430px; height: 764px; border-radius: 30px; overflow: hidden; background: #dcd9d2; box-shadow: 0 20px 50px rgba(17,18,20,.12); }
+  .captura img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .portada { background: #111214; color: #fff; justify-content: center; }
+  .portada p { color: #c9cbd1; }
+  .portada .num { color: #8fb0ff; }
+  .marca { display: flex; align-items: center; gap: 18px; font-weight: 700; font-size: 34px; }
+  .marca svg { width: 64px; height: 54px; }
+</style>
+</head>
+<body>
+<section class="p portada">
+  <div class="marca"><svg viewBox="0 0 120 100"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="#5b8cff"/></svg>D-Code Partners</div>
+  <div class="num">Esto no es un vídeo</div>
+  <h1>Cómo se hizo cada escena.</h1>
+  <p>La instrucción de partida que le dimos a la IA (Claude) y lo que construyó a partir de ella. Todo es código que funciona en el navegador.</p>
+  <p>Ninguna salió a la primera: después vinieron muchas rondas de revisión (cámara, luz, ritmo, detalles) dirigidas por nuestro equipo.</p>
+  <div class="pie"><span>dcodepartners.com</span><span>@d_codepartners</span></div>
+</section>
+
+<section class="p">
+  <div class="num">Escena 1 · Videojuego</div>
+  <h2>Vuelo entre montañas, jugable.</h2>
+  <div class="fila">
+    <div class="col">
+    <div class="prompt"><small>Instrucción de partida</small>Videojuego fotorrealista: un entorno visual impresionante, con iluminación, materiales, profundidad y movimiento. Si es viable, añade interacción real con el usuario.</div>
+    <div class="hecho"><b>Lo que construyó:</b> un juego en WebGL2. El terreno se genera con ruido y se dibuja trazando rayos en la GPU, con lago con reflejos, nieve, niebla y luz de tarde. Se pilota con W, A, S y D y hay que pasar por 8 anillos. Para grabar el anuncio, las teclas las pulsó un piloto automático.</div>
+    </div>
+    <div class="captura"><img src="img/escena-vuelo.jpg" alt="" style="object-position: 50% 50%"></div>
+  </div>
+  <div class="pie"><span>D-Code Partners</span><span>1 / 5</span></div>
+</section>
+
+<section class="p">
+  <div class="num">Escena 2 · Web 3D</div>
+  <h2>Un reloj que se abre al hacer scroll.</h2>
+  <div class="fila">
+    <div class="col">
+    <div class="prompt"><small>Instrucción de partida</small>Web 3D cinematográfica: una web con navegación, cámara, movimiento y una experiencia visual que parezca de otro nivel.</div>
+    <div class="hecho"><b>Lo que construyó:</b> la web de un reloj inventado («Calibre 01») con Three.js. Todas las piezas se construyen en el código, sin modelos descargados: la caja torneada, el cristal de zafiro, la esfera, las agujas y los engranajes con sus dientes. Al bajar, la cámara se mueve y el reloj se abre capa a capa.</div>
+    </div>
+    <div class="captura"><img src="img/escena-web3d.jpg" alt="" style="object-position: 50% 55%"></div>
+  </div>
+  <div class="pie"><span>D-Code Partners</span><span>2 / 5</span></div>
+</section>
+
+<section class="p">
+  <div class="num">Escena 3 · Experiencia interactiva</div>
+  <h2>Tinta en agua que se pinta con el dedo.</h2>
+  <div class="fila">
+    <div class="col">
+    <div class="prompt"><small>Instrucción de partida</small>Experiencia interactiva: una simulación o entorno con el que el usuario pueda interactuar.</div>
+    <div class="hecho"><b>Lo que construyó:</b> una simulación de fluidos que resuelve en la GPU las ecuaciones del agua: advección, presión y vorticidad. Lo que arrastras empuja el agua y deja tinta, que se enrosca sola.</div>
+    </div>
+    <div class="captura"><img src="img/escena-fluido.jpg" alt="" style="object-position: 50% 50%"></div>
+  </div>
+  <div class="pie"><span>D-Code Partners</span><span>3 / 5</span></div>
+</section>
+
+<section class="p">
+  <div class="num">Escena 4 · Animación</div>
+  <h2>Una ciudad que se construye sola.</h2>
+  <div class="fila">
+    <div class="col">
+    <div class="prompt"><small>Instrucción de partida</small>Animación y visualización: una escena o animación técnicamente interesante, con un resultado visual espectacular.</div>
+    <div class="hecho"><b>Lo que construyó:</b> una ciudad en estilo maqueta de arquitectura, generada por reglas: manzanas, parcelas, alturas, torres y parques. Los edificios se levantan en oleada desde el centro, con luz de tarde, sombras y oclusión ambiental.</div>
+    </div>
+    <div class="captura"><img src="img/escena-ciudad.jpg" alt="" style="object-position: 50% 50%"></div>
+  </div>
+  <div class="pie"><span>D-Code Partners</span><span>4 / 5</span></div>
+</section>
+
+<section class="p">
+  <div class="num">Escena 5 · Aplicación</div>
+  <h2>D-Code Finance, nuestra app de facturación.</h2>
+  <div class="fila">
+    <div class="col">
+    <div class="prompt"><small>Esta no se hizo para el anuncio</small>Es D-Code Finance, un producto real que usamos y vendemos: facturas, cobros, tesorería a 30, 60 y 90 días y avisos.</div>
+    <div class="hecho"><b>Lo que se ve:</b> la aplicación de verdad en su modo demostración, grabada en tamaño de móvil y con datos inventados. La hemos desarrollado nosotros con la misma forma de trabajar: la IA escribe, nosotros dirigimos y revisamos. Si quieres verla funcionando, escríbenos.</div>
+    </div>
+    <div class="captura"><img src="img/escena-finance.jpg" alt="" style="object-position: 50% 30%"></div>
+  </div>
+  <div class="pie"><span>D-Code Partners</span><span>5 / 5</span></div>
+</section>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calibre 01 · web 3D de demostración</title>
+<script type="importmap">{ "imports": { "three": "../lib/three.module.js", "three/addons/": "../lib/jsm/" } }</script>
+<style>
+  @font-face { font-family: "Archivo"; src: url("../lib/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  :root { --tinta: #111214; --gris: #6b6d72; --fondo: #e8e7e3; }
+  html, body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: "Archivo", system-ui, sans-serif; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  nav { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 3.2vh 6vw; z-index: 3; font-size: 2.5vw; letter-spacing: .02em; }
+  nav b { font-size: 3.4vw; letter-spacing: .32em; font-weight: 700; }
+  nav span { font-family: "Martian Mono", monospace; font-size: 1.9vw; letter-spacing: .16em; opacity: .7; }
+  .barra { position: fixed; right: 2.2vw; top: 22vh; bottom: 22vh; width: 3px; background: rgba(0,0,0,.08); border-radius: 3px; z-index: 3; }
+  .barra i { position: absolute; left: 0; right: 0; top: 0; height: 0; background: var(--tinta); border-radius: 3px; }
+  .capa { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+  .bloque { position: absolute; left: 7vw; right: 7vw; opacity: 0; }
+  .eti { font-family: "Martian Mono", monospace; font-size: 2.1vw; letter-spacing: .24em; text-transform: uppercase; color: var(--gris); }
+  h1 { font-size: 15vw; line-height: .9; letter-spacing: -.045em; margin: 1.6vh 0 0; font-weight: 640; font-stretch: 88%; }
+  h2 { font-size: 8.6vw; line-height: .98; letter-spacing: -.035em; margin: 1.2vh 0 0; font-weight: 620; }
+  p { font-size: 3.6vw; line-height: 1.4; color: #3c3e43; max-width: 34ch; margin: 2vh 0 0; }
+  .nota { position: absolute; font-family: "Martian Mono", monospace; font-size: 2vw; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; opacity: 0; display: flex; align-items: center; gap: 1.4vw; }
+  .nota::before { content: ""; width: 7vw; height: 1.5px; background: var(--tinta); }
+  .largo { height: 900vh; }
+</style>
+</head>
+<body>
+<nav><b>ESTUDIO D</b><span>CALIBRE 01 · RESERVAR</span></nav>
+<div class="barra"><i id="progreso"></i></div>
+<div class="capa">
+  <div class="bloque" id="b1" style="top: 13vh"><div class="eti">Relojería · Edición 01</div><h1>Calibre 01</h1><p>Un reloj mecánico pensado pieza a pieza.</p></div>
+  <div class="bloque" id="b2" style="bottom: 13vh"><div class="eti">Caja · 41 mm</div><h2>Acero pulido a mano.</h2></div>
+  <div class="bloque" id="b3" style="top: 11vh"><div class="eti">Por dentro</div><h2>Ábrelo.<br>Capa a capa.</h2></div>
+  <div class="bloque" id="b4" style="bottom: 12vh"><div class="eti">Movimiento</div><h2>Cada pieza,<br>a la vista.</h2></div>
+  <div class="nota" id="n1">Cristal de zafiro</div>
+  <div class="nota" id="n2">Esfera</div>
+  <div class="nota izq" id="n3">Agujas</div>
+  <div class="nota izq" id="n4">Movimiento</div>
+</div>
+<div class="largo"></div>
+<script type="module">
+import * as THREE from 'three'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+import { CAPTURA, params, arrancar, claves, suave } from './comun.js'
+
+const W = parseInt(params.get('w')) || innerWidth, H = parseInt(params.get('h')) || innerHeight
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: false })
+renderer.setPixelRatio(1); renderer.setSize(W, H, false)
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap
+document.body.prepend(renderer.domElement)
+
+const escena = new THREE.Scene()
+escena.background = new THREE.Color('#e8e7e3')
+const pmrem = new THREE.PMREMGenerator(renderer)
+escena.environment = pmrem.fromScene(new RoomEnvironment(), 0.035).texture
+const cam = new THREE.PerspectiveCamera(30, W / H, 0.1, 100)
+
+const luz = new THREE.DirectionalLight(0xffffff, 2.2)
+luz.position.set(-3, 6, 4); luz.castShadow = true
+luz.shadow.mapSize.set(2048, 2048); luz.shadow.radius = 6
+Object.assign(luz.shadow.camera, { left: -3, right: 3, top: 3, bottom: -3, near: 1, far: 20 })
+escena.add(luz)
+const suelo = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.ShadowMaterial({ opacity: 0.16 }))
+suelo.rotation.x = -Math.PI / 2; suelo.position.y = -0.62; suelo.receiveShadow = true
+escena.add(suelo)
+
+/* ----------------------------------------------------------- materiales */
+const acero = new THREE.MeshPhysicalMaterial({ color: 0xdcdcdc, metalness: 1, roughness: 0.18, clearcoat: 0.3 })
+const aceroCepillado = new THREE.MeshPhysicalMaterial({ color: 0xc9c9c9, metalness: 1, roughness: 0.36, anisotropy: 0.8 })
+const esferaMat = new THREE.MeshPhysicalMaterial({ color: 0x0c0d10, metalness: 0.4, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.08 })
+const blanco = new THREE.MeshPhysicalMaterial({ color: 0xf2f0ea, metalness: 0.6, roughness: 0.2 })
+const laton = new THREE.MeshPhysicalMaterial({ color: 0xcaa266, metalness: 1, roughness: 0.28 })
+const rubi = new THREE.MeshPhysicalMaterial({ color: 0x6e0a18, metalness: 0, roughness: 0.08, clearcoat: 1, ior: 1.76 })
+const zafiro = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: 0.02, transmission: 1, thickness: 0.06, ior: 1.77, transparent: true, opacity: 1, specularIntensity: 1 })
+const piel = new THREE.MeshPhysicalMaterial({ color: 0x1b1b1d, roughness: 0.75, sheen: 0.6, sheenRoughness: 0.6, sheenColor: 0x444444 })
+
+/* --------------------------------------------------------------- piezas
+   Todo se construye con geometría en el propio código: perfiles torneados,
+   extrusiones y engranajes con sus dientes. No hay modelos descargados. */
+const reloj = new THREE.Group(); escena.add(reloj)
+const capas = []   // cada capa se separa por el eje del reloj al hacer scroll
+function capa(obj, despl) { obj.userData.despl = despl; obj.userData.y0 = obj.position.y; reloj.add(obj); capas.push(obj); return obj }
+
+const sombra = (m) => { m.castShadow = true; m.receiveShadow = true; return m }
+// caja (perfil torneado)
+const perfil = [[0, -0.16], [0.86, -0.16], [0.95, -0.12], [1.0, -0.04], [1.0, 0.07], [0.96, 0.12], [0.9, 0.14], [0.86, 0.14]].map(([x, y]) => new THREE.Vector2(x, y))
+const caja = sombra(new THREE.Mesh(new THREE.LatheGeometry(perfil, 128), acero))
+capa(caja, 0)
+// asas
+for (const s of [-1, 1]) for (const lado of [-1, 1]) {
+  const asa = sombra(new THREE.Mesh(new RoundedBoxGeometry(0.17, 0.2, 0.42, 4, 0.05), acero))
+  asa.position.set(0.52 * s, -0.02, lado * 0.98); asa.rotation.y = s * 0.08
+  caja.add(asa)
+}
+// correa
+for (const lado of [-1, 1]) {
+  const c = sombra(new THREE.Mesh(new RoundedBoxGeometry(1.0, 0.1, 2.2, 6, 0.045), piel))
+  c.position.set(0, -0.06, lado * 2.1); caja.add(c)
+}
+// corona estriada
+const corona = sombra(new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.14, 48), aceroCepillado))
+corona.rotation.z = Math.PI / 2; corona.position.set(1.07, 0, 0); caja.add(corona)
+for (let i = 0; i < 24; i++) {
+  const e = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.02, 0.02), acero)
+  const a = i / 24 * Math.PI * 2; e.position.set(0, Math.cos(a) * 0.11, Math.sin(a) * 0.11); corona.add(e)
+}
+// bisel
+const bisel = sombra(new THREE.Mesh(new THREE.TorusGeometry(0.885, 0.045, 24, 160), acero))
+bisel.rotation.x = Math.PI / 2; bisel.position.y = 0.15
+capa(bisel, 1.55)
+// cristal
+const cristal = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.86, 0.035, 128), zafiro)
+cristal.position.y = 0.175
+capa(cristal, 1.9)
+// esfera con índices
+const esfera = new THREE.Group(); esfera.position.y = 0.06
+const disco = sombra(new THREE.Mesh(new THREE.CylinderGeometry(0.84, 0.84, 0.03, 128), esferaMat)); esfera.add(disco)
+for (let i = 0; i < 60; i++) {
+  const largo = i % 5 === 0
+  const m = new THREE.Mesh(new THREE.BoxGeometry(largo ? 0.022 : 0.008, 0.012, largo ? 0.13 : 0.05), blanco)
+  const a = i / 60 * Math.PI * 2, r = largo ? 0.68 : 0.735
+  m.position.set(Math.sin(a) * r, 0.02, Math.cos(a) * r); m.rotation.y = a
+  esfera.add(m)
+}
+capa(esfera, 1.05)
+// agujas (formas extruidas)
+function aguja(largo, ancho, mat) {
+  const s = new THREE.Shape()
+  s.moveTo(-ancho * 0.5, -0.12); s.lineTo(ancho * 0.5, -0.12); s.lineTo(ancho * 0.32, largo); s.lineTo(0, largo + ancho * 0.6); s.lineTo(-ancho * 0.32, largo); s.closePath()
+  const g = new THREE.ExtrudeGeometry(s, { depth: 0.012, bevelEnabled: true, bevelSize: 0.004, bevelThickness: 0.004, bevelSegments: 2 })
+  g.rotateX(-Math.PI / 2)
+  return sombra(new THREE.Mesh(g, mat))
+}
+const agujas = new THREE.Group(); agujas.position.y = 0.105
+const hora = aguja(0.42, 0.07, blanco), minuto = aguja(0.64, 0.05, blanco), segundo = aguja(0.72, 0.012, new THREE.MeshPhysicalMaterial({ color: 0xc23a2b, roughness: 0.3 }))
+hora.position.y = 0; minuto.position.y = 0.02; segundo.position.y = 0.04
+const eje = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.07, 32), acero)
+agujas.add(hora, minuto, segundo, eje)
+capa(agujas, 1.3)
+// movimiento: platina, engranajes con dientes y rubíes
+function engranaje(r, dientes, grosor, mat, agujeros = 5) {
+  const s = new THREE.Shape()
+  for (let i = 0; i < dientes; i++) {
+    const a0 = i / dientes * Math.PI * 2, paso = Math.PI * 2 / dientes
+    const p = [[a0, r], [a0 + paso * 0.18, r + 0.035], [a0 + paso * 0.5, r + 0.035], [a0 + paso * 0.68, r], [a0 + paso, r]]
+    p.forEach(([a, rr], k) => { const x = Math.cos(a) * rr, y = Math.sin(a) * rr; if (i === 0 && k === 0) s.moveTo(x, y); else s.lineTo(x, y) })
+  }
+  for (let k = 0; k < agujeros; k++) {
+    const a = k / agujeros * Math.PI * 2 + 0.3, h = new THREE.Path()
+    h.absarc(Math.cos(a) * r * 0.55, Math.sin(a) * r * 0.55, r * 0.22, 0, Math.PI * 2, true)
+    s.holes.push(h)
+  }
+  const g = new THREE.ExtrudeGeometry(s, { depth: grosor, bevelEnabled: true, bevelSize: 0.006, bevelThickness: 0.006, bevelSegments: 2, curveSegments: 6 })
+  g.rotateX(-Math.PI / 2)
+  return sombra(new THREE.Mesh(g, mat))
+}
+const movimiento = new THREE.Group(); movimiento.position.y = -0.04
+const platina = sombra(new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 0.05, 96), aceroCepillado)); platina.position.y = -0.04
+movimiento.add(platina)
+const ruedas = []
+const defs = [[0, 0, 0.36, 60, laton, 1], [0.48, 0.18, 0.2, 36, laton, -1.8], [-0.42, 0.32, 0.18, 30, aceroCepillado, 2.1], [-0.18, -0.5, 0.26, 44, laton, -1.4], [0.36, -0.42, 0.14, 24, aceroCepillado, 2.6], [0.62, -0.08, 0.1, 18, laton, -3.4]]
+defs.forEach(([x, z, r, d, m, vel], i) => {
+  const g = engranaje(r, d, 0.025, m)
+  g.position.set(x, 0.0 + (i % 2) * 0.03, z); g.userData.vel = vel
+  movimiento.add(g); ruedas.push(g)
+  const j = new THREE.Mesh(new THREE.SphereGeometry(0.019, 24, 16), rubi); j.position.set(x, 0.06 + (i % 2) * 0.03, z); movimiento.add(j)
+})
+// volante (el corazón del reloj)
+const volante = sombra(new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.012, 12, 96), laton))
+volante.rotation.x = Math.PI / 2; volante.position.set(-0.46, 0.07, -0.18); movimiento.add(volante)
+capa(movimiento, 0.45)
+
+reloj.rotation.x = 0
+reloj.position.y = 0
+
+/* --------------------------------------------------------- textos */
+const bloques = ['b1', 'b2', 'b3', 'b4'].map((id) => document.getElementById(id))
+const notas = [['n1', cristal, 1, 0.0], ['n2', esfera, 1, 0.0], ['n3', agujas, -1, 0.0], ['n4', movimiento, -1, 0.0]].map(([id, obj, lado]) => ({ el: document.getElementById(id), obj, lado }))
+const progreso = document.getElementById('progreso')
+
+/* ------------------------------------------------------------ scroll
+   La página es larga de verdad: la posición del reloj, la cámara y los textos
+   dependen de cuánto se ha bajado. En la grabación se baja con un guion. */
+const alturaScroll = () => document.documentElement.scrollHeight - innerHeight
+let scrollActual = 0
+function guionScroll(t) { return claves([[0, 0], [0.6, 0], [3.2, 0.36], [4.0, 0.44], [6.6, 0.82], [7.4, 0.88], [9.5, 1.0]], t) }
+
+const v3 = new THREE.Vector3()
+arrancar((t, dt, dibujar) => {
+  if (!dibujar) return
+  let u
+  if (CAPTURA || params.get('auto') === '1') { u = guionScroll(t); window.scrollTo(0, u * alturaScroll()) }
+  else { scrollActual += (scrollY / Math.max(1, alturaScroll()) - scrollActual) * Math.min(1, dt * 6); u = scrollActual }
+  progreso.style.height = (u * 100) + '%'
+
+  // la apertura capa a capa
+  const abrir = suave(0.40, 0.72, u)
+  for (const c of capas) c.position.y = c.userData.y0 + c.userData.despl * abrir
+  // el reloj gira despacio y se inclina hacia la cámara
+  reloj.rotation.y = claves([[0, -0.5], [0.35, 0.65], [0.7, 1.2], [1, 1.6]], u) + t * 0.05
+  reloj.rotation.z = claves([[0, 0.0], [0.35, 0.15], [0.7, 0.0], [1, 0.0]], u)
+  // cámara: de frente, a tres cuartos, de lado para ver las capas, y macro del movimiento
+  const pos = claves([[0, [0, 7.4, 6.4]], [0.2, [0, 7.0, 6.6]], [0.38, [3.8, 2.6, 6.0]], [0.62, [6.0, 2.8, 6.4]], [0.8, [2.5, 1.0, 2.5]], [0.92, [1.55, 0.78, 1.55]], [1, [1.35, 0.72, 1.35]]], u)
+  const mira = claves([[0, [0, 1.05, -0.9]], [0.2, [0, 0.6, -0.5]], [0.38, [0, 0.1, 0]], [0.62, [0, 0.95, 0]], [0.8, [0, 0.5, 0]], [1, [0, 0.42, 0]]], u)
+  cam.position.set(...pos); cam.lookAt(...mira)
+  // la maquinaria funciona
+  for (const r of ruedas) r.rotation.y = t * r.userData.vel * 0.6
+  volante.rotation.z = Math.sin(t * 9) * 0.9
+  const seg = t * 0.6
+  segundo.rotation.y = -seg; minuto.rotation.y = -1.9 - seg / 60; hora.rotation.y = -0.6 - seg / 720
+
+  // textos por tramos de scroll
+  const tramos = [[0.0, 0.0, 0.12, 0.2], [0.2, 0.26, 0.34, 0.4], [0.42, 0.48, 0.6, 0.66], [0.72, 0.78, 0.94, 1.2]]
+  bloques.forEach((b, i) => {
+    const [a, b1, c, d] = tramos[i]
+    const o = i === 0 ? 1 - suave(c, d, u) : suave(a, b1, u) * (1 - suave(c, d, u))
+    b.style.opacity = o; b.style.transform = `translateY(${(1 - o) * 3}vh)`
+  })
+  // etiquetas pegadas a las piezas abiertas
+  cam.updateMatrixWorld()
+  const oN = suave(0.55, 0.66, u) * (1 - suave(0.74, 0.8, u))
+  notas.forEach(({ el, obj }) => {
+    obj.getWorldPosition(v3); v3.project(cam)
+    const y = (-v3.y * 0.5 + 0.5) * innerHeight
+    el.style.opacity = oN
+    el.style.left = (innerWidth * 0.64) + 'px'; el.style.top = (y - el.offsetHeight / 2) + 'px'
+  })
+  renderer.render(escena, cam)
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+1
+00:00:00,180 --> 00:00:02,420
+Esto no es
+un vídeo.
+
+2
+00:00:02,650 --> 00:00:04,900
+Es un juego.
+Y se juega.
+
+3
+00:00:05,040 --> 00:00:05,980
+Una web 3D.
+
+4
+00:00:06,040 --> 00:00:06,980
+Una simulación
+de fluidos.
+
+5
+00:00:07,040 --> 00:00:07,980
+Una ciudad que
+se construye sola.
+
+6
+00:00:08,040 --> 00:00:08,980
+Una app
+de verdad.
+
+7
+00:00:09,100 --> 00:00:10,200
+No son imágenes.
+
+8
+00:00:10,250 --> 00:00:10,950
+Se navega.
+
+9
+00:00:11,050 --> 00:00:12,950
+Se toca.
+
+10
+00:00:13,050 --> 00:00:15,450
+Se usa.
+
+11
+00:00:15,600 --> 00:00:17,450
+Le explicamos
+lo que queremos.
+
+12
+00:00:17,550 --> 00:00:18,450
+La IA escribe
+el código.
+
+13
+00:00:19,550 --> 00:00:21,450
+Nosotros lo dirigimos
+y lo revisamos.
+
+14
+00:00:23,100 --> 00:00:25,400
+Esto ya se puede
+construir.
+
+15
+00:00:25,650 --> 00:00:27,400
+Juegos. Webs.
+Apps. Simulaciones.
+
+16
+00:00:27,650 --> 00:00:30,400
+No se trata de
+imaginar el futuro.
+Se trata de construirlo.
+
+17
+00:00:30,600 --> 00:00:33,500
+¿Quieres saber cómo se hizo?
+Comenta IA
+y te mandamos las instrucciones.

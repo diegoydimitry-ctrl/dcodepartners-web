@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Montaje del anuncio · 9:16</title>
+<style>
+  @font-face { font-family: "Archivo"; src: url("../lib/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  canvas { position: absolute; inset: 0; }
+  .txt { position: absolute; left: 90px; right: 90px; text-align: center; font-family: "Archivo", sans-serif; font-weight: 720; font-stretch: 92%; letter-spacing: -0.03em; line-height: 1.02; opacity: 0; will-change: transform, opacity; }
+  .txt { line-height: 1.36; }
+  .txt .caja { background: #111214; color: #fff; padding: .06em .3em .14em; border-radius: .2em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .txt small { display: block; font-family: "Martian Mono", monospace; font-weight: 500; font-size: 26px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 26px; opacity: .85; }
+  .etiqueta { position: absolute; top: 132px; left: 50%; transform: translateX(-50%); font-family: "Martian Mono", monospace; font-size: 25px; letter-spacing: .18em; text-transform: uppercase; padding: 14px 26px; border-radius: 99px; white-space: nowrap; opacity: 0; display: flex; gap: 14px; align-items: center; }
+  .etiqueta::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+  .etiqueta.blanco { color: #fff; background: rgba(10,10,12,.42); backdrop-filter: blur(10px); }
+  .etiqueta.negro { color: #111214; background: rgba(255,255,255,.72); backdrop-filter: blur(10px); }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  #cierre { position: absolute; inset: 0; background: #f2f0eb; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #111214; font-family: "Archivo", sans-serif; }
+  #cierre svg { width: 170px; height: 142px; color: #111214; }
+  #cierre .l { font-weight: 720; font-stretch: 92%; letter-spacing: -0.03em; line-height: 1.04; font-size: 84px; max-width: 900px; }
+  #cierre .marca { margin-top: 34px; font-weight: 700; font-size: 46px; letter-spacing: -0.01em; }
+  #cierre .marca small { display: block; font-family: "Martian Mono", monospace; font-size: 22px; letter-spacing: .32em; color: #6b6d72; margin-top: 6px; font-weight: 500; }
+  #cierre .cta { margin-top: 70px; font-size: 54px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.15; }
+  #cierre .cta b { font-size: 1.3em; display: inline-block; background: #111214; color: #fff; padding: 6px 30px 10px; border-radius: 18px; margin: 10px 0; font-weight: 760; letter-spacing: .02em; }
+  #cierre .pie { position: absolute; bottom: 470px; left: 60px; right: 60px; font-family: "Martian Mono", monospace; font-size: 26px; line-height: 1.6; letter-spacing: .16em; color: #6b6d72; text-transform: uppercase; }
+  .bloqueC { opacity: 0; position: absolute; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div id="capaTextos"></div>
+<div class="etiqueta" id="eti"></div>
+<div id="flash"></div>
+<div id="cierre">
+  <div class="bloqueC" id="c1" style="top: 640px"><div class="l">No se trata de<br>imaginar el futuro.</div></div>
+  <div class="bloqueC" id="c2" style="top: 860px"><div class="l">Se trata de construirlo.</div></div>
+  <div class="bloqueC" id="c3" style="top: 520px">
+    <svg viewBox="0 0 120 100"><g fill="currentColor"><rect x="26" y="1" width="16" height="16" rx="2"/><rect x="1" y="27" width="13" height="13" rx="2"/><rect x="35" y="26" width="13" height="13" rx="2"/><rect x="2" y="64" width="12" height="12" rx="2"/><rect x="35" y="64" width="13" height="13" rx="2"/><rect x="26" y="83" width="16" height="16" rx="2"/><path d="M48 1H86A32 32 0 0 1 118 33V38H102V33A16 16 0 0 0 86 17H48Z"/><rect x="102" y="43" width="16" height="16" rx="2"/><path d="M48 99H86A32 32 0 0 0 118 67V63H102V67A16 16 0 0 1 86 83H48Z"/></g><rect x="16" y="45" width="15" height="15" rx="2" fill="#5b8cff"/></svg>
+    <div class="marca">D-Code<small>PARTNERS</small></div>
+    <div class="cta" id="cta">¿Quieres saber cómo se hizo?<br><b>Comenta IA</b><br>y te mandamos las instrucciones.</div>
+  </div>
+  <div class="pie" id="pieC">Todo lo que has visto es software real<br>hecho con Claude y dirigido por D-Code Partners</div>
+</div>
+<script type="module">
+import { params, arrancar, suave } from '../demos/comun.js'
+
+const FPS = 30
+const version = params.get('version') || 'A'          // A · B (gancho alternativo) · limpia
+const conTextos = version !== 'limpia'
+
+/* ------------------------------------------------------------ fuentes
+   Grabaciones fotograma a fotograma de las demos (carpeta cap/). */
+const BASE = '/cap/'
+const FUENTES = {
+  vuelo: [{ dir: 'vuelo', t0: 0, n: 241 }],
+  vlimpio: [{ dir: 'vuelo-limpio', t0: 0, n: 121 }, { dir: 'vuelo-limpio2', t0: 4, n: 46 }],
+  web3d: [{ dir: 'web3d', t0: 0, n: 286 }],
+  fluido: [{ dir: 'fluido', t0: 0, n: 241 }],
+  ciudad: [{ dir: 'ciudad', t0: 0, n: 211 }],
+  finance: [{ dir: 'finance', t0: 0, n: 236 }],
+  pvuelo: [{ dir: 'proceso-vuelo', t0: 0, n: 109 }],
+  pweb: [{ dir: 'proceso-web3d', t0: 0, n: 109 }],
+}
+function ruta(src, s) {
+  const tramos = FUENTES[src]
+  let tr = tramos[0]
+  for (const x of tramos) if (s >= x.t0 - 1e-6) tr = x
+  const i = Math.max(0, Math.min(tr.n - 1, Math.round((s - tr.t0) * FPS)))
+  return `${BASE}${tr.dir}/f${String(i).padStart(5, '0')}.jpg`
+}
+
+/* ------------------------------------------------------------ guion
+   de/a: segundos del vídeo · s0: segundo de la grabación · z: zoom inicial y final */
+const G = []
+const clip = (de, a, src, s0, extra = {}) => G.push({ de, a, src, s0, vel: 1, z: [1, 1], ...extra })
+const textos = []
+const texto = (de, a, html, extra = {}) => textos.push({ de, a, html, y: 1120, tam: 104, color: 'blanco', ...extra })
+const etiquetas = []
+const etiqueta = (de, a, txt, color = 'blanco') => etiquetas.push({ de, a, txt, color })
+
+let T = 0
+if (version === 'B') {
+  // Gancho alternativo: primero lo que se le pidió, después el resultado
+  clip(0, 1.5, 'pvuelo', 0.2, { z: [1.0, 1.05] })
+  clip(1.5, 2.5, 'vlimpio', 4.4, { z: [1.06, 1.12], flash: true })
+  texto(0.1, 1.45, 'Le pedimos esto<br>a una IA:', { y: 205, tam: 76, color: 'negro' })
+  texto(1.55, 2.45, '…y construyó esto.', { y: 1080 })
+} else {
+  clip(0, 2.5, 'vlimpio', 2.9, { z: [1.03, 1.12] })
+  texto(0.18, 2.42, 'Esto no es<br>un vídeo.', { y: 1040, tam: 126 })
+}
+// el juego aparece: el HUD, las teclas y el anillo
+clip(2.5, 5.0, 'vuelo', 5.4, { z: [1.0, 1.04], flash: true })
+texto(2.65, 4.9, 'Es un juego.<br>Y se juega.', { y: 1060 })
+// variedad: cuatro creaciones en cuatro golpes
+clip(5.0, 6.0, 'web3d', 4.6, { z: [1.08, 1.0] })
+clip(6.0, 7.0, 'fluido', 2.0, { z: [1.0, 1.08] })
+clip(7.0, 8.0, 'ciudad', 1.4, { z: [1.12, 1.0] })
+clip(8.0, 9.0, 'finance', 84 / FPS, { z: [1.0, 1.06] })
+texto(5.04, 5.98, 'Una web 3D.', { y: 1240, tam: 92 })
+texto(6.04, 6.98, 'Una simulación<br>de fluidos.', { y: 1240, tam: 92 })
+texto(7.04, 7.98, 'Una ciudad que<br>se construye sola.', { y: 1240, tam: 92 })
+texto(8.04, 8.98, 'Una app<br>de verdad.', { y: 1240, tam: 92 })
+// funciona: se navega, se toca, se usa
+clip(9.0, 11.0, 'web3d', 2.2, { z: [1.0, 1.03], flash: true })
+clip(11.0, 13.0, 'fluido', 3.4, { z: [1.0, 1.04] })
+clip(13.0, 15.5, 'finance', 128 / FPS, { z: [1.0, 1.0] })
+texto(9.1, 10.2, 'No son imágenes.', { y: 1240, color: 'negro', tam: 96 })
+texto(10.25, 10.95, 'Se navega.', { y: 1240, color: 'negro', tam: 96 })
+texto(11.05, 12.95, 'Se toca.', { y: 1380, color: 'negro', tam: 96 })
+texto(13.05, 15.45, 'Se usa.', { y: 900, color: 'negro', tam: 96 })
+// el proceso: la instrucción, el código, el resultado
+clip(15.5, 17.5, 'pvuelo', 0.05)
+clip(17.5, 18.5, 'pvuelo', 2.05)
+clip(18.5, 19.5, 'vuelo', 6.4, { z: [1.0, 1.05], flash: true })
+clip(19.5, 20.5, 'pweb', 0.75)
+clip(20.5, 21.5, 'pweb', 2.1)
+clip(21.5, 23.0, 'web3d', 7.6, { z: [1.0, 1.04], flash: true })
+texto(15.6, 17.45, 'Le explicamos<br>lo que queremos.', { y: 1300, color: 'negro', tam: 92 })
+texto(17.55, 18.45, 'La IA escribe<br>el código.', { y: 1300, tam: 92 })
+texto(19.55, 21.45, 'Nosotros lo dirigimos<br>y lo revisamos.', { y: 1360, color: 'negro', tam: 88 })
+// escala: la ciudad se levanta y luego todo a la vez
+clip(23.0, 25.5, 'ciudad', 3.5, { z: [1.0, 1.06] })
+texto(23.1, 25.4, 'Esto ya se puede<br>construir.', { y: 1240, color: 'negro', tam: 100 })
+G.push({ de: 25.5, a: 27.5, mosaico: [['vuelo', 6.0], ['web3d', 5.4], ['fluido', 4.6], ['ciudad', 5.2], ['finance', 140 / FPS], ['pvuelo', 2.3]], z: [1.06, 1.0] })
+texto(25.65, 27.4, 'Juegos. Webs.<br>Apps. Simulaciones.', { y: 835, tam: 92 })
+// cierre
+const CIERRE = 27.5, FIN = 33.5
+
+/* ------------------------------------------------------------ dibujo */
+const lienzo = document.getElementById('c'), ctx = lienzo.getContext('2d')
+const cache = new Map()
+function imagen(url) {
+  if (cache.has(url)) return cache.get(url)
+  const im = new Image(); im.src = url
+  const p = im.decode().then(() => im).catch(() => null)
+  cache.set(url, p)
+  if (cache.size > 60) cache.delete(cache.keys().next().value)
+  return p
+}
+async function dibujaFuente(src, s, z, x = 0, y = 0, w = 1080, h = 1920, alpha = 1) {
+  const im = await imagen(ruta(src, s)); if (!im) return
+  ctx.save(); ctx.globalAlpha = alpha
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip()
+  // la imagen (1080×1920) cubre la celda, centrada, con zoom
+  const esc = Math.max(w / 1080, h / 1920) * z
+  const iw = 1080 * esc, ih = 1920 * esc
+  ctx.drawImage(im, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih)
+  ctx.restore()
+}
+const capa = document.getElementById('capaTextos')
+const elsTexto = textos.map((t) => { const d = document.createElement('div'); d.className = 'txt ' + t.color; d.innerHTML = '<span class="caja">' + t.html + '</span>'; d.style.top = t.y + 'px'; if (t.tam) d.style.fontSize = t.tam + 'px'; capa.appendChild(d); return d })
+const eti = document.getElementById('eti'), flash = document.getElementById('flash'), cierre = document.getElementById('cierre')
+const c1 = document.getElementById('c1'), c2 = document.getElementById('c2'), c3 = document.getElementById('c3'), pieC = document.getElementById('pieC')
+if (!conTextos) { document.getElementById('cta').style.display = 'none'; pieC.style.display = 'none' }
+
+function aparicion(t, de, a, ent = 0.16, sal = 0.14) { return suave(de, de + ent, t) * (1 - suave(a - sal, a, t)) }
+
+arrancar(async (t, dt, dibujar) => {
+  if (!dibujar) return
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920)
+  const c = G.find((g) => t >= g.de && t < g.a)
+  if (c && t < CIERRE) {
+    const u = (t - c.de) / (c.a - c.de)
+    const z = c.z[0] + (c.z[1] - c.z[0]) * (u * u * (3 - 2 * u))
+    if (c.mosaico) {
+      // las seis creaciones entran una tras otra y se quedan a la vez
+      const cw = 540, ch = 640, ORDEN = [0, 3, 4, 1, 2, 5]
+      ctx.fillStyle = '#f2f0eb'; ctx.fillRect(0, 0, 1080, 1920)
+      ctx.save(); ctx.translate(540, 960); ctx.scale(z, z); ctx.translate(-540, -960)
+      await Promise.all(c.mosaico.map(([src, s0], i) => {
+        const k = suave(c.de + ORDEN.indexOf(i) * 0.085, c.de + ORDEN.indexOf(i) * 0.085 + 0.2, t)
+        if (k <= 0) return null
+        return dibujaFuente(src, s0 + (t - c.de), 1.14 - 0.14 * k, (i % 2) * cw, Math.floor(i / 2) * ch, cw, ch, k)
+      }))
+      ctx.restore()
+      ctx.strokeStyle = '#f2f0eb'
+      ctx.save(); ctx.translate(540, 960); ctx.scale(z, z); ctx.translate(-540, -960)
+      ctx.lineWidth = 10 / z; ctx.beginPath(); ctx.moveTo(540, 0); ctx.lineTo(540, 1920); ctx.moveTo(0, 640); ctx.lineTo(1080, 640); ctx.moveTo(0, 1280); ctx.lineTo(1080, 1280); ctx.stroke()
+      ctx.restore()
+    } else {
+      await dibujaFuente(c.src, c.s0 + (t - c.de) * c.vel, z)
+    }
+    // destello corto en los cortes marcados
+    flash.style.opacity = c.flash ? Math.max(0, 0.55 * (1 - (t - c.de) / 0.13)) : 0
+  } else flash.style.opacity = 0
+  // textos
+  textos.forEach((x, i) => {
+    const o = conTextos ? aparicion(t, x.de, x.a) : 0
+    elsTexto[i].style.opacity = o
+    elsTexto[i].style.transform = `translateY(${(1 - suave(x.de, x.de + 0.22, t)) * 34}px)`
+  })
+  const e = etiquetas.find((x) => t >= x.de && t < x.a)
+  if (e && conTextos) { eti.textContent = e.txt; eti.className = 'etiqueta ' + e.color; eti.style.opacity = aparicion(t, e.de, e.a, 0.1, 0.08) } else eti.style.opacity = 0
+  // cierre
+  const oc = suave(CIERRE, CIERRE + 0.25, t)
+  cierre.style.opacity = oc
+  const k1 = aparicion(t, CIERRE + 0.15, CIERRE + 2.9, 0.3, 0.25)
+  const k2 = aparicion(t, CIERRE + 0.95, CIERRE + 2.9, 0.3, 0.25)
+  c1.style.opacity = conTextos ? k1 : 0; c2.style.opacity = conTextos ? k2 : 0
+  c1.style.transform = `translateY(${(1 - suave(CIERRE + 0.15, CIERRE + 0.5, t)) * 24}px)`
+  c2.style.transform = `translateY(${(1 - suave(CIERRE + 0.95, CIERRE + 1.3, t)) * 24}px)`
+  const k3 = suave(CIERRE + 3.0, CIERRE + 3.35, t)
+  c3.style.opacity = k3; c3.style.transform = `translateY(${(1 - k3) * 24}px) scale(${0.97 + 0.03 * k3})`
+  pieC.style.opacity = suave(CIERRE + 3.4, CIERRE + 3.8, t) * 0.9
+}, { fpsCaptura: 30, subpasos: 1 })
+window.DURACION = FIN
+</script>
+</body>
+</html>

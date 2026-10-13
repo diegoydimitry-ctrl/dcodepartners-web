@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proceso · de la instrucción al código</title>
+<style>
+  @font-face { font-family: "Archivo"; src: url("../lib/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  html, body { margin: 0; height: 100%; background: #f1efea; overflow: hidden; color: #121316; font-family: "Archivo", sans-serif; }
+  .eti { font-family: "Martian Mono", monospace; font-size: 2.1vw; letter-spacing: .22em; text-transform: uppercase; color: #6b6d72; }
+  #instruccion { position: absolute; left: 7vw; right: 7vw; top: 22vh; }
+  .burbuja { margin-top: 2.2vh; background: #fff; border: 1px solid #dddad3; border-radius: 4vw; padding: 5vw 5.5vw; font-size: 5.3vw; line-height: 1.32; letter-spacing: -.012em; box-shadow: 0 2vw 6vw rgba(0,0,0,.06); min-height: 22vh; }
+  .caret { display: inline-block; width: .5ch; height: 1.05em; background: #2f5fe8; vertical-align: -0.16em; margin-left: .1ch; }
+  .fuente { margin-top: 2.2vh; font-family: "Martian Mono", monospace; font-size: 1.8vw; letter-spacing: .12em; color: #8a8c91; text-transform: uppercase; }
+  #codigo { position: absolute; inset: 0; background: #0f1012; color: #d9dbe0; opacity: 0; }
+  #codigo .cab { position: absolute; top: 6vh; left: 7vw; right: 7vw; display: flex; justify-content: space-between; color: #7d8088; }
+  #codigo pre { position: absolute; left: 7vw; right: 4vw; top: 12vh; bottom: 6vh; margin: 0; overflow: hidden; font-family: "Martian Mono", monospace; font-size: 2.35vw; line-height: 1.62; white-space: pre; }
+  #codigo .ln { display: inline-block; width: 4.5ch; color: #4d5058; }
+  .k { color: #8fb0ff; } .n { color: #f0c38a; } .c { color: #6e727b; } .f { color: #ffffff; font-weight: 600; }
+  #codigo .linea.nueva { background: rgba(143,176,255,.10); }
+  .contador { position: absolute; bottom: 5vh; left: 7vw; right: 7vw; display: flex; justify-content: space-between; font-family: "Martian Mono", monospace; font-size: 2vw; letter-spacing: .14em; color: #7d8088; text-transform: uppercase; }
+  .contador b { color: #fff; font-weight: 500; }
+</style>
+</head>
+<body>
+<div id="instruccion">
+  <div class="eti">La instrucción</div>
+  <div class="burbuja"><span id="texto"></span><span class="caret" id="caret"></span></div>
+  <div class="fuente" id="fuente"></div>
+</div>
+<div id="codigo">
+  <div class="cab eti"><span id="archivo"></span><span>El código</span></div>
+  <pre id="pre"></pre>
+  <div class="contador"><span>Línea</span><b id="lineas">0</b></div>
+</div>
+<script type="module">
+import { params, arrancar, suave } from './comun.js'
+
+/* Dos escenas reales: la instrucción tal como se escribió en el encargo y el
+   código que se escribió a partir de ella (el archivo de la demo, sin tocar). */
+const ESCENAS = {
+  vuelo: {
+    texto: 'Videojuego fotorrealista: un entorno visual impresionante, con iluminación, materiales, profundidad y movimiento. Si es viable, añade interacción real con el usuario.',
+    archivo: 'demos/vuelo.html', desde: 'void main(){',
+  },
+  web3d: {
+    texto: 'Web 3D cinematográfica: una web con navegación, cámara, movimiento y una experiencia visual que parezca de otro nivel.',
+    archivo: 'demos/web3d.html', desde: 'function engranaje(',
+  },
+  fluido: {
+    texto: 'Experiencia interactiva: una simulación o entorno con el que el usuario pueda interactuar.',
+    archivo: 'demos/fluido.html', desde: 'const P = {',
+  },
+}
+const e = ESCENAS[params.get('escena') || 'vuelo']
+const DUR_TEXTO = parseFloat(params.get('dt') || '1.6'), INICIO_CODIGO = parseFloat(params.get('ic') || '2.0')
+document.getElementById('fuente').textContent = 'Del encargo, tal cual'
+document.getElementById('archivo').textContent = e.archivo
+
+const fuente = await (await fetch('../' + e.archivo)).text()
+const todas = fuente.split('\n')
+const ini = todas.findIndex((l) => l.includes(e.desde))
+const lineas = todas.slice(ini, ini + 220)
+const total = todas.length
+const resaltar = (s) => s
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  .replace(/(\/\/.*$)/, '<span class="c">$1</span>')
+  .replace(/\b(const|let|function|return|for|if|else|float|vec2|vec3|vec4|void|uniform|new|import|from|export)\b/g, '<span class="k">$1</span>')
+  .replace(/\b(\d+\.?\d*)\b/g, '<span class="n">$1</span>')
+
+const texto = document.getElementById('texto'), caret = document.getElementById('caret')
+const codigo = document.getElementById('codigo'), pre = document.getElementById('pre'), contador = document.getElementById('lineas')
+const POR_PANTALLA = 34
+arrancar((t, dt, dibujar) => {
+  if (!dibujar) return
+  // 1 · se escribe la instrucción
+  const n = Math.round(e.texto.length * suave(0.05, DUR_TEXTO, t))
+  texto.textContent = e.texto.slice(0, n)
+  caret.style.opacity = (Math.floor(t * 2.4) % 2 === 0 || n < e.texto.length) ? 1 : 0
+  // 2 · aparece el código, escribiéndose a toda velocidad
+  const oc = suave(INICIO_CODIGO, INICIO_CODIGO + 0.18, t)
+  codigo.style.opacity = oc
+  if (oc > 0) {
+    const escritas = Math.floor(Math.max(0, t - INICIO_CODIGO) * 95)
+    const fin = Math.min(lineas.length, escritas)
+    const desde = Math.max(0, fin - POR_PANTALLA)
+    let html = ''
+    for (let i = desde; i < fin; i++) {
+      const nueva = i >= fin - 3
+      html += `<div class="linea${nueva ? ' nueva' : ''}"><span class="ln">${ini + i + 1}</span>${resaltar(lineas[i])}</div>`
+    }
+    pre.innerHTML = html
+    contador.textContent = Math.min(total, ini + fin).toLocaleString('es-ES') + ' de ' + total.toLocaleString('es-ES')
+  }
+})
+</script>
+</body>
+</html>

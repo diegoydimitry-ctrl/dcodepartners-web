@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ciudad · se construye con código</title>
+<script type="importmap">{ "imports": { "three": "../lib/three.module.js", "three/addons/": "../lib/jsm/" } }</script>
+<style>
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #e7e4dd; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  .ui { position: fixed; left: 6vw; bottom: 6vh; font-family: "Martian Mono", monospace; font-size: 2vw; letter-spacing: .18em; color: #1a1a1a; text-transform: uppercase; opacity: .8; }
+  .ui b { font-size: 4.4vw; display: block; letter-spacing: .02em; font-weight: 500; margin-top: .6vh; }
+</style>
+</head>
+<body>
+<div class="ui">Edificios levantados<b id="cuenta">0</b></div>
+<script type="module">
+import * as THREE from 'three'
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js'
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { CAPTURA, params, arrancar, claves, suave, aleatorio } from './comun.js'
+
+/* Una ciudad que se genera y se levanta sola: manzanas, parcelas, alturas,
+   parques y árboles salen de reglas y números aleatorios con semilla. Estilo
+   maqueta de arquitectura: todo blanco, luz de tarde y sombras largas. */
+const W = parseInt(params.get('w')) || innerWidth, H = parseInt(params.get('h')) || innerHeight
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true })
+renderer.setPixelRatio(1); renderer.setSize(W, H, false)
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.78
+document.body.prepend(renderer.domElement)
+
+const escena = new THREE.Scene()
+escena.background = new THREE.Color('#e7e4dd')
+escena.fog = new THREE.Fog('#e7e4dd', 140, 320)
+escena.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture
+escena.environmentIntensity = 0.35
+const cam = new THREE.PerspectiveCamera(34, W / H, 0.5, 400)
+
+escena.add(new THREE.HemisphereLight(0xf2eee6, 0x7d7870, 0.55))
+const sol = new THREE.DirectionalLight(0xffe9d2, 4.8)
+sol.position.set(48, 26, -20); sol.castShadow = true
+sol.shadow.mapSize.set(4096, 4096); sol.shadow.bias = -0.0004; sol.shadow.normalBias = 0.02
+Object.assign(sol.shadow.camera, { left: -60, right: 60, top: 60, bottom: -60, near: 1, far: 160 })
+escena.add(sol)
+
+const suelo = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0xdedad2, roughness: 1 }))
+suelo.rotation.x = -Math.PI / 2; suelo.receiveShadow = true; escena.add(suelo)
+
+const rnd = aleatorio(20261013)
+const blanco = new THREE.MeshStandardMaterial({ color: 0xe9e6df, roughness: 0.82 })
+const cristal = new THREE.MeshStandardMaterial({ color: 0x3a3e46, roughness: 0.16, metalness: 0.9, envMapIntensity: 5 })
+const acera = new THREE.MeshStandardMaterial({ color: 0xece9e2, roughness: 0.95 })
+
+const edificios = []   // { mesh, h, retraso }
+const MANZ = 9, PASO = 9.5, CALLE = 2.4
+const geoCaja = new THREE.BoxGeometry(1, 1, 1); geoCaja.translate(0, 0.5, 0)
+for (let i = -MANZ; i <= MANZ; i++) for (let j = -MANZ; j <= MANZ; j++) {
+  const cx = i * PASO, cz = j * PASO, lado = PASO - CALLE
+  const dist = Math.hypot(cx, cz)
+  const base = new THREE.Mesh(new THREE.BoxGeometry(lado, 0.18, lado), acera)
+  base.position.set(cx, 0.09, cz); base.receiveShadow = true; escena.add(base)
+  const parque = rnd() < 0.09 && dist > 12
+  if (parque) {
+    // parque: árboles de maqueta
+    for (let k = 0; k < 14; k++) {
+      const a = new THREE.Mesh(new THREE.SphereGeometry(0.45 + rnd() * 0.35, 16, 12), blanco)
+      a.position.set(cx + (rnd() - 0.5) * (lado - 1.4), 0.9, cz + (rnd() - 0.5) * (lado - 1.4)); a.castShadow = true
+      a.scale.setScalar(0.001); escena.add(a)
+      edificios.push({ mesh: a, h: 1, retraso: dist * 0.03 + 0.4 + rnd() * 0.4, arbol: true })
+    }
+    continue
+  }
+  // parcelas: 1, 2 o 4 edificios por manzana
+  const div = rnd() < 0.3 ? 1 : rnd() < 0.6 ? 2 : 4
+  const piezas = div === 1 ? [[0, 0, lado, lado]] : div === 2 ? [[-lado / 4, 0, lado / 2, lado], [lado / 4, 0, lado / 2, lado]] : [[-lado / 4, -lado / 4, lado / 2, lado / 2], [lado / 4, -lado / 4, lado / 2, lado / 2], [-lado / 4, lado / 4, lado / 2, lado / 2], [lado / 4, lado / 4, lado / 2, lado / 2]]
+  for (const [px, pz, sx, sz] of piezas) {
+    const centro = Math.exp(-dist * dist / 900)
+    let h = 1.4 + rnd() * 2.6 + centro * (3 + rnd() * 9)
+    const torre = centro > 0.45 && rnd() < 0.22
+    if (torre) h += 6 + rnd() * 9
+    const m = new THREE.Mesh(geoCaja, torre && rnd() < 0.5 ? cristal : blanco)
+    const margen = 0.5 + rnd() * 0.4
+    m.position.set(cx + px, 0.18, cz + pz)
+    m.userData.escala = [sx - margen, h, sz - margen]
+    m.scale.set(m.userData.escala[0], 0.001, m.userData.escala[2])
+    m.castShadow = true; m.receiveShadow = true
+    escena.add(m)
+    edificios.push({ mesh: m, h, retraso: dist * 0.035 + rnd() * 0.5 })
+    // retranqueo en lo alto de los más altos
+    if (h > 8 && rnd() < 0.7) {
+      const t = new THREE.Mesh(geoCaja, blanco)
+      t.position.set(cx + px, 0.18, cz + pz)
+      t.userData.escala = [(sx - margen) * 0.62, h + 1.5 + rnd() * 3, (sz - margen) * 0.62]
+      t.scale.set(t.userData.escala[0], 0.001, t.userData.escala[2]); t.castShadow = true; t.receiveShadow = true
+      escena.add(t)
+      edificios.push({ mesh: t, h: t.userData.escala[1], retraso: dist * 0.035 + 0.5 + rnd() * 0.4 })
+    }
+  }
+}
+
+const composer = new EffectComposer(renderer)
+composer.addPass(new RenderPass(escena, cam))
+const ao = new GTAOPass(escena, cam, W, H)
+ao.updateGtaoMaterial({ radius: 2.2, distanceExponent: 1.2, thickness: 2.0, scale: 1.2, samples: 12 })
+ao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 12 })
+composer.addPass(ao)
+composer.addPass(new OutputPass())
+
+const cuenta = document.getElementById('cuenta')
+const DUR = parseFloat(params.get('dur') || '7')
+arrancar((t, dt, dibujar) => {
+  if (!dibujar) return
+  const tt = CAPTURA ? t : t % (DUR + 3)
+  let levantados = 0
+  for (const e of edificios) {
+    const u = Math.min(1, Math.max(0, (tt - e.retraso) / 0.9))
+    // sube con un pequeño rebote al final
+    const s = u <= 0 ? 0.001 : 1 - Math.pow(1 - u, 3) + Math.sin(u * Math.PI) * 0.06 * (1 - u)
+    if (e.arbol) e.mesh.scale.setScalar(Math.max(0.001, s))
+    else e.mesh.scale.y = Math.max(0.001, s) * e.mesh.userData.escala[1]
+    if (u >= 1 && !e.arbol) levantados++
+  }
+  cuenta.textContent = levantados.toLocaleString('es-ES')
+  // grúa de cámara: de cenital a ras de calle
+  const p = claves([[0, [6, 150, 34]], [2.6, [52, 70, 78]], [5.0, [48, 30, 56]], [7.0, [38, 15, 44]]], tt)
+  const m = claves([[0, [0, 0, 0]], [2.6, [0, 0, 0]], [5.0, [0, 4, 0]], [7.0, [0, 7, 0]]], tt)
+  cam.position.set(...p); cam.lookAt(...m)
+  composer.render()
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tinta · simulación de fluidos interactiva</title>
+<style>
+  @font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+  html, body { margin: 0; height: 100%; background: #f4f2ee; overflow: hidden; cursor: none; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  .ui { position: fixed; left: 6vw; top: 6vh; font-family: "Martian Mono", monospace; font-size: 2vw; letter-spacing: .18em; color: #1a1a1a; opacity: .75; text-transform: uppercase; }
+  .ui b { display: block; font-size: 1.6vw; opacity: .7; margin-top: 1vh; font-weight: 400; }
+  #cursor { position: fixed; width: 5.6vw; height: 5.6vw; margin: -2.8vw 0 0 -2.8vw; border-radius: 50%; border: 2px solid rgba(20,20,20,.85); background: rgba(255,255,255,.25); backdrop-filter: blur(2px); pointer-events: none; transition: transform .12s, background .12s; }
+  #cursor.abajo { transform: scale(.72); background: rgba(20,20,20,.85); }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="ui">Tinta en agua<b>Simulación de fluidos · arrastra para pintar</b></div>
+<div id="cursor"></div>
+<script type="module">
+import { CAPTURA, params, entrada, escucharEntradaReal, arrancar, programa, dibujarQuad, claves } from './comun.js'
+
+/* Ecuaciones de un fluido (advección, presión y vorticidad) resueltas en la
+   GPU en cada fotograma. Lo que arrastras empuja el agua y deja tinta. */
+const lienzo = document.getElementById('c')
+const W = parseInt(params.get('w')) || innerWidth, H = parseInt(params.get('h')) || innerHeight
+lienzo.width = W; lienzo.height = H
+const gl = lienzo.getContext('webgl2', { antialias: false, preserveDrawingBuffer: true, alpha: false })
+gl.getExtension('EXT_color_buffer_float'); gl.getExtension('OES_texture_float_linear')
+
+const SIM = 256, simW = SIM, simH = Math.round(SIM * H / W)
+const DYE = 900, dyeW = DYE, dyeH = Math.round(DYE * H / W)
+
+function fbo(w, h, filtro = gl.LINEAR) {
+  const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex)
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filtro); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filtro)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+  const f = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, f)
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0)
+  gl.viewport(0, 0, w, h); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT)
+  return { tex, f, w, h }
+}
+const doble = (w, h, f) => { let a = fbo(w, h, f), b = fbo(w, h, f); return { get l() { return a }, get e() { return b }, cambia() { [a, b] = [b, a] } } }
+const vel = doble(simW, simH), tinta = doble(dyeW, dyeH), pres = doble(simW, simH, gl.NEAREST)
+const div = fbo(simW, simH, gl.NEAREST), curl = fbo(simW, simH, gl.NEAREST)
+
+const cab = '#version 300 es\nprecision highp float; in vec2 uv; out vec4 o;\n'
+const P = {
+  advec: programa(gl, cab + `uniform sampler2D uV, uS; uniform vec2 uTx; uniform float dt, dis;
+    void main(){ vec2 p = uv - dt*texture(uV, uv).xy*uTx; o = texture(uS, p)/(1.0+dis*dt); }`),
+  div: programa(gl, cab + `uniform sampler2D uV; uniform vec2 uTx;
+    void main(){ float l=texture(uV,uv-vec2(uTx.x,0)).x, r=texture(uV,uv+vec2(uTx.x,0)).x, b=texture(uV,uv-vec2(0,uTx.y)).y, t=texture(uV,uv+vec2(0,uTx.y)).y; o=vec4(0.5*(r-l+t-b),0,0,1); }`),
+  curl: programa(gl, cab + `uniform sampler2D uV; uniform vec2 uTx;
+    void main(){ float l=texture(uV,uv-vec2(uTx.x,0)).y, r=texture(uV,uv+vec2(uTx.x,0)).y, b=texture(uV,uv-vec2(0,uTx.y)).x, t=texture(uV,uv+vec2(0,uTx.y)).x; o=vec4(0.5*(r-l-t+b),0,0,1); }`),
+  vort: programa(gl, cab + `uniform sampler2D uV, uC; uniform vec2 uTx; uniform float dt, k;
+    void main(){ float l=texture(uC,uv-vec2(uTx.x,0)).x, r=texture(uC,uv+vec2(uTx.x,0)).x, b=texture(uC,uv-vec2(0,uTx.y)).x, t=texture(uC,uv+vec2(0,uTx.y)).x, c=texture(uC,uv).x;
+      vec2 f = 0.5*vec2(abs(t)-abs(b), abs(r)-abs(l)); f /= length(f)+1e-4; f *= k*c; f.y *= -1.0;
+      o = vec4(texture(uV,uv).xy + f*dt, 0, 1); }`),
+  pres: programa(gl, cab + `uniform sampler2D uP, uD; uniform vec2 uTx;
+    void main(){ float l=texture(uP,uv-vec2(uTx.x,0)).x, r=texture(uP,uv+vec2(uTx.x,0)).x, b=texture(uP,uv-vec2(0,uTx.y)).x, t=texture(uP,uv+vec2(0,uTx.y)).x; o=vec4((l+r+b+t-texture(uD,uv).x)*0.25,0,0,1); }`),
+  grad: programa(gl, cab + `uniform sampler2D uP, uV; uniform vec2 uTx;
+    void main(){ float l=texture(uP,uv-vec2(uTx.x,0)).x, r=texture(uP,uv+vec2(uTx.x,0)).x, b=texture(uP,uv-vec2(0,uTx.y)).x, t=texture(uP,uv+vec2(0,uTx.y)).x; o=vec4(texture(uV,uv).xy-vec2(r-l,t-b)*0.5,0,1); }`),
+  splat: programa(gl, cab + `uniform sampler2D uS; uniform vec2 pt; uniform vec3 col; uniform float rad, asp;
+    void main(){ vec2 d = uv-pt; d.x *= asp; o = vec4(texture(uS,uv).xyz + col*exp(-dot(d,d)/rad), 1); }`),
+  escala: programa(gl, cab + `uniform sampler2D uS; uniform float k; void main(){ o = texture(uS,uv)*k; }`),
+  ver: programa(gl, cab + `uniform sampler2D uS; uniform vec2 uTx, uRes; uniform float uT;
+    float h(vec2 p){ p=fract(p*vec2(443.8975,397.2973)); p+=dot(p,p+19.19); return fract(p.x*p.y); }
+    void main(){
+      vec3 d = texture(uS, uv).rgb;
+      float dx = length(texture(uS, uv+vec2(uTx.x,0)).rgb) - length(texture(uS, uv-vec2(uTx.x,0)).rgb);
+      float dy = length(texture(uS, uv+vec2(0,uTx.y)).rgb) - length(texture(uS, uv-vec2(0,uTx.y)).rgb);
+      vec3 n = normalize(vec3(-dx*3.0, -dy*3.0, 1.0));
+      float luz = clamp(dot(n, normalize(vec3(-0.4,0.6,0.7))), 0.0, 1.0);
+      vec3 papel = vec3(0.957,0.949,0.933);
+      // la tinta absorbe la luz: negro azulado y un poco de azul de la marca
+      vec3 ab = vec3(0.92,0.86,0.70)*d.r + vec3(0.88,0.62,0.06)*d.g;
+      vec3 c = papel*exp(-ab*1.7);
+      c *= 0.86 + 0.18*luz;
+      c += (h(uv*uRes+fract(uT)*37.0)-0.5)*0.018;
+      vec2 q = uv; c *= 0.86 + 0.14*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y), 0.25);
+      o = vec4(c, 1); }`),
+}
+function usar(p, destino, w, h) { gl.useProgram(p.pr); gl.bindFramebuffer(gl.FRAMEBUFFER, destino); gl.viewport(0, 0, w, h); return p.u }
+function tex(unidad, t, u) { gl.activeTexture(gl.TEXTURE0 + unidad); gl.bindTexture(gl.TEXTURE_2D, t); gl.uniform1i(u, unidad) }
+
+function salpicar(x, y, dx, dy, color, radio) {
+  let u = usar(P.splat, vel.e.f, simW, simH)
+  tex(0, vel.l.tex, u.uS); gl.uniform2f(u.pt, x, y); gl.uniform3f(u.col, dx, dy, 0); gl.uniform1f(u.rad, radio); gl.uniform1f(u.asp, W / H)
+  dibujarQuad(gl); vel.cambia()
+  u = usar(P.splat, tinta.e.f, dyeW, dyeH)
+  tex(0, tinta.l.tex, u.uS); gl.uniform2f(u.pt, x, y); gl.uniform3f(u.col, ...color); gl.uniform1f(u.rad, radio * 0.55); gl.uniform1f(u.asp, W / H)
+  dibujarQuad(gl); tinta.cambia()
+}
+
+function paso(dt) {
+  const tx = [1 / simW, 1 / simH]
+  let u = usar(P.curl, curl.f, simW, simH); tex(0, vel.l.tex, u.uV); gl.uniform2fv(u.uTx, tx); dibujarQuad(gl)
+  u = usar(P.vort, vel.e.f, simW, simH); tex(0, vel.l.tex, u.uV); tex(1, curl.tex, u.uC); gl.uniform2fv(u.uTx, tx); gl.uniform1f(u.dt, dt); gl.uniform1f(u.k, 11); dibujarQuad(gl); vel.cambia()
+  u = usar(P.div, div.f, simW, simH); tex(0, vel.l.tex, u.uV); gl.uniform2fv(u.uTx, tx); dibujarQuad(gl)
+  u = usar(P.escala, pres.e.f, simW, simH); tex(0, pres.l.tex, u.uS); gl.uniform1f(u.k, 0.8); dibujarQuad(gl); pres.cambia()
+  for (let i = 0; i < 24; i++) { u = usar(P.pres, pres.e.f, simW, simH); tex(0, pres.l.tex, u.uP); tex(1, div.tex, u.uD); gl.uniform2fv(u.uTx, tx); dibujarQuad(gl); pres.cambia() }
+  u = usar(P.grad, vel.e.f, simW, simH); tex(0, pres.l.tex, u.uP); tex(1, vel.l.tex, u.uV); gl.uniform2fv(u.uTx, tx); dibujarQuad(gl); vel.cambia()
+  u = usar(P.advec, vel.e.f, simW, simH); tex(0, vel.l.tex, u.uV); tex(1, vel.l.tex, u.uS); gl.uniform2fv(u.uTx, tx); gl.uniform1f(u.dt, dt); gl.uniform1f(u.dis, 0.9); dibujarQuad(gl); vel.cambia()
+  u = usar(P.advec, tinta.e.f, dyeW, dyeH); tex(0, vel.l.tex, u.uV); tex(1, tinta.l.tex, u.uS); gl.uniform2fv(u.uTx, tx); gl.uniform1f(u.dt, dt); gl.uniform1f(u.dis, 0.0); dibujarQuad(gl); tinta.cambia()
+}
+
+/* Guion de la grabación: una mano que dibuja con el puntero (posición en 0–1). */
+const trazo = [[0, [0.12, 0.26]], [0.55, [0.42, 0.34]], [1.1, [0.78, 0.24]], [1.65, [0.84, 0.46]], [2.2, [0.46, 0.52]], [2.75, [0.16, 0.58]], [3.3, [0.28, 0.76]], [3.85, [0.66, 0.82]], [4.4, [0.86, 0.66]], [4.95, [0.58, 0.44]], [5.5, [0.30, 0.40]], [6.05, [0.50, 0.62]], [6.6, [0.72, 0.56]], [7.2, [0.55, 0.40]], [8.0, [0.48, 0.48]]]
+function curva(t) {
+  // Catmull-Rom: el puntero se mueve de forma continua, como una mano
+  const n = trazo.length
+  let i = 0; while (i < n - 2 && t > trazo[i + 1][0]) i++
+  const p0 = trazo[Math.max(0, i - 1)][1], p1 = trazo[i][1], p2 = trazo[i + 1][1], p3 = trazo[Math.min(n - 1, i + 2)][1]
+  const u = Math.min(1, Math.max(0, (t - trazo[i][0]) / (trazo[i + 1][0] - trazo[i][0])))
+  const cr = (a, b, c, d) => 0.5 * ((2 * b) + (-a + c) * u + (2 * a - 5 * b + 4 * c - d) * u * u + (-a + 3 * b - 3 * c + d) * u * u * u)
+  return [cr(p0[0], p1[0], p2[0], p3[0]), cr(p0[1], p1[1], p2[1], p3[1])]
+}
+function guion(t) {
+  const [x, y] = curva(t)
+  return { x, y, abajo: t > 0.15 && t < 7.4, tinta: t > 3.3 && t < 5.0 ? 1 : 0 }
+}
+
+const cursor = document.getElementById('cursor')
+if (!CAPTURA) escucharEntradaReal(lienzo)
+let antes = null
+arrancar((t, dt, dibujar) => {
+  let r
+  if (CAPTURA || params.get('auto') === '1') r = guion(t)
+  else r = { x: entrada.raton.x, y: entrada.raton.y, abajo: entrada.raton.abajo, tinta: 0 }
+  if (dt > 0) {
+    if (r.abajo && antes) {
+      const dx = (r.x - antes.x) / dt, dy = (r.y - antes.y) / dt
+      if (Math.abs(dx) + Math.abs(dy) > 0.001) {
+        const color = r.tinta ? [0.01, 0.13, 0] : [0.12, 0.0, 0]
+        // la velocidad del agua va en celdas por segundo
+        salpicar(r.x, 1 - r.y, dx * simW * 0.32, -dy * simH * 0.32, color, 0.0008)
+      }
+    }
+    antes = r
+    paso(dt)
+  }
+  if (!dibujar) return
+  const u = usar(P.ver, null, W, H)
+  tex(0, tinta.l.tex, u.uS); gl.uniform2f(u.uTx, 1 / dyeW, 1 / dyeH); gl.uniform2f(u.uRes, W, H); gl.uniform1f(u.uT, t)
+  dibujarQuad(gl)
+  cursor.style.left = (r.x * 100) + 'vw'; cursor.style.top = (r.y * 100) + 'vh'
+  cursor.classList.toggle('abajo', !!r.abajo)
+}, { fpsCaptura: 30, subpasos: 1 })
+</script>
+</body>
+</html>
