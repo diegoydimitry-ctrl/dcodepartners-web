@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Los errores que no avisan — D-Code Partners</title>
+<meta name="viewport" content="width=1080">
+<style>
+@font-face{font-family:"Geist";src:url(fuentes/geist.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:"GeistMono";src:url(fuentes/geist-mono.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:"Bricolage";src:url(fuentes/bricolage.woff2) format("woff2");font-weight:200 800}
+:root{--papel:#F4F4F1;--tinta:#141414;--gris:#8A8B86;--rojo:#E5484D}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--papel);color:var(--tinta);font-family:"Geist";-webkit-font-smoothing:antialiased}
+.capa{position:absolute;inset:0}
+#marco{position:absolute;left:-260px;top:-340px;width:1600px;height:2600px;perspective:1500px;perspective-origin:50% 50%}
+#hoja{position:absolute;inset:0;width:1600px;height:2600px;transform-origin:50% 50%}
+#negro{background:#0F0F10;opacity:0}
+#viñeta{background:radial-gradient(ellipse 80% 70% at 50% 50%,rgba(0,0,0,0) 55%,rgba(20,20,18,.22) 100%)}
+/* barra de fórmulas (recreación) */
+#fx{position:absolute;left:60px;right:60px;top:300px;height:104px;border-radius:26px;background:#fff;display:flex;align-items:center;gap:22px;padding:0 30px;
+  box-shadow:0 24px 60px -24px rgba(20,20,20,.35),0 0 0 2px rgba(20,20,20,.06);opacity:0}
+#fx .ref{font:600 34px "GeistMono";color:var(--gris);width:96px}
+#fx .sep{width:2px;height:52px;background:rgba(20,20,20,.12)}
+#fx i{font:italic 600 36px "Geist";color:var(--gris)}
+#fx b{font:500 46px "GeistMono";letter-spacing:-.5px}
+#fx .caret{display:inline-block;width:4px;height:48px;background:var(--tinta);vertical-align:-8px;margin-left:3px}
+.recre{position:absolute;left:62px;top:240px;font:600 24px "Geist";letter-spacing:.2px;color:var(--gris);opacity:0}
+/* menú de formato (recreación) */
+#menu{position:absolute;left:210px;top:600px;width:520px;border-radius:26px;background:#fff;box-shadow:0 30px 80px -20px rgba(20,20,20,.4),0 0 0 2px rgba(20,20,20,.05);padding:14px;opacity:0}
+#menu div{height:74px;border-radius:16px;display:flex;align-items:center;padding:0 24px;font:500 34px "Geist";color:#333}
+#menu div.on{background:var(--tinta);color:#fff}
+#menu small{margin-left:auto;font:500 26px "GeistMono";opacity:.6}
+/* rótulos */
+.rotulo{position:absolute;left:0;right:0;text-align:center;opacity:0}
+#cifra{top:250px;font:700 210px/1 "GeistMono";letter-spacing:-12px}
+#cifraSub{top:470px;font:500 40px "Geist";color:var(--gris)}
+#quinto{top:250px;font:700 150px/1 "Bricolage";letter-spacing:-5px;color:var(--rojo)}
+#fuente{position:absolute;left:50%;top:1478px;transform:translateX(-50%);padding:10px 20px;border-radius:14px;background:rgba(255,255,255,.92);font:500 25px "Geist";color:#5f605b;opacity:0;white-space:nowrap}
+#fuente b{color:var(--tinta);font-weight:600}
+#excel{top:690px;font:700 250px/1 "Bricolage";letter-spacing:-10px}
+#positivos{top:240px;font:700 170px/1 "GeistMono";letter-spacing:-10px;color:#fff}
+#positivosSub{top:425px;font:500 40px "Geist";color:rgba(255,255,255,.7)}
+#contador{position:absolute;right:70px;top:250px;text-align:right;font:600 34px "Geist";color:rgba(255,255,255,.65);opacity:0}
+#contador b{display:block;font:700 96px/1 "GeistMono";letter-spacing:-4px;color:#fff;margin-top:6px}
+.frase{position:absolute;left:50px;right:50px;text-align:center;color:#fff;font:700 124px/1.0 "Bricolage";letter-spacing:-4px;opacity:0}
+.frase em{font-style:normal;color:var(--rojo)}
+/* renombre */
+#renombre{position:absolute;left:0;right:0;top:600px;opacity:0}
+.par{display:flex;align-items:center;justify-content:center;gap:34px;height:190px}
+.par .viejo{font:600 88px "GeistMono";letter-spacing:-3px;position:relative;color:var(--tinta)}
+.par .viejo::after{content:"";position:absolute;left:-8px;right:-8px;top:52%;height:8px;border-radius:4px;background:var(--rojo);transform-origin:0 50%;transform:scaleX(var(--k,0))}
+.par .flecha{font:500 70px "Geist";color:var(--gris)}
+.par .nuevo{font:700 88px "GeistMono";letter-spacing:-3px;min-width:430px}
+.par .caret{display:inline-block;width:6px;height:84px;background:var(--tinta);vertical-align:-12px;margin-left:4px}
+/* subtítulos */
+#sub{position:absolute;left:70px;right:70px;top:1270px;text-align:center}
+#sub span{display:inline;padding:10px 22px;line-height:1.48;border-radius:18px;background:#fff;box-decoration-break:clone;-webkit-box-decoration-break:clone;font:650 58px "Geist";letter-spacing:-1px;box-shadow:0 18px 40px -22px rgba(0,0,0,.45)}
+#sub em{font-style:normal;color:var(--rojo)}
+#sub.oscuro span{background:#fff}
+/* marca */
+#marca{position:absolute;left:0;right:0;top:820px;text-align:center;opacity:0}
+#marca .ic{width:170px;height:170px;border-radius:46px;background:#0b0e16;margin:0 auto;display:grid;place-items:center;box-shadow:0 30px 60px -24px rgba(11,14,22,.6)}
+#marca .ic img{width:134px;height:134px}
+#marca p{margin-top:32px;font:700 54px "Bricolage";letter-spacing:-1.5px}
+#marca p span{font-weight:400;color:#6b6c68}
+</style></head>
+<body>
+<div id="marco"><canvas id="hoja" width="1600" height="2600"></canvas></div>
+<div id="viñeta" class="capa"></div>
+<div id="negro" class="capa"></div>
+<div id="sombraSup" class="capa" style="background:linear-gradient(#141414 0,#141414 260px,rgba(20,20,20,.85) 520px,rgba(20,20,20,0) 760px);opacity:0"></div>
+<div class="recre" id="recre">Recreación · Excel en inglés</div>
+<div id="fx"><span class="ref" id="fxref">A1</span><span class="sep"></span><i>fx</i><b id="fxtxt"></b><span class="caret" id="fxcaret"></span></div>
+<div id="menu"><div>Número</div><div>Fecha<small>3/1/2026</small></div><div>General</div><div class="on" id="mTexto">Texto<small>@</small></div></div>
+<div class="rotulo" id="excel">Excel.</div>
+<div class="rotulo" id="cifra">0</div>
+<div class="rotulo" id="cifraSub">artículos con listas de genes en Excel</div>
+<div class="rotulo" id="quinto">1 de cada 5</div>
+<div id="renombre">
+  <div class="par"><span class="viejo" id="v1">MARCH1</span><span class="flecha">→</span><span class="nuevo"><span id="n1"></span><span class="caret" id="c1"></span></span></div>
+  <div class="par"><span class="viejo" id="v2">SEPT1</span><span class="flecha">→</span><span class="nuevo"><span id="n2"></span><span class="caret" id="c2"></span></span></div>
+</div>
+<div class="rotulo" id="positivos">15.841</div>
+<div class="rotulo" id="positivosSub">positivos fuera del recuento · 25 sep – 2 oct 2020</div>
+<div id="contador">fila<b id="nfila">1</b></div>
+<div class="frase" id="fr1" style="top:640px">Los errores más caros<br><em>no dan error.</em></div>
+<div class="frase" id="fr2" style="top:1000px">Simplemente,<br>no avisan.</div>
+<div id="fuente"></div>
+<div id="sub"><span id="subtxt"></span></div>
+<div id="portada" style="display:none;position:absolute;left:60px;right:60px;top:1140px;text-align:center"><div style="display:inline;padding:6px 26px;line-height:1.32;background:#141414;color:#fff;box-decoration-break:clone;-webkit-box-decoration-break:clone;font:700 104px/1.32 Bricolage;letter-spacing:-4px;border-radius:24px">Renombraron 27 genes humanos.<br><span style="color:#FF6B6F">Por Excel.</span></div></div>
+<div id="marca"><div class="ic"><img src="assets/marca.png" alt=""></div><p>D-Code <span>Partners</span></p></div>
+<script type="module" src="video.js"></script>
+</body></html>

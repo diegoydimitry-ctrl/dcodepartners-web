@@ -1,0 +1,251 @@
+{
+ "duracion_voz": 52.023,
+ "frases": [
+  {
+   "t0": 0.3,
+   "t1": 4.342,
+   "escena": "gancho",
+   "texto": "En dos mil veinte, los científicos cambiaron el nombre de veintisiete genes humanos."
+  },
+  {
+   "t0": 4.592,
+   "t1": 5.919,
+   "escena": "gancho",
+   "texto": "No por un descubrimiento."
+  },
+  {
+   "t0": 6.019,
+   "t1": 6.683,
+   "escena": "excel",
+   "texto": "Por Excel."
+  },
+  {
+   "t0": 7.033,
+   "t1": 9.099,
+   "escena": "demo",
+   "texto": "Escribe march uno en un Excel en inglés,"
+  },
+  {
+   "t0": 9.149,
+   "t1": 10.717,
+   "escena": "demo",
+   "texto": "y lo convierte en una fecha."
+  },
+  {
+   "t0": 10.867,
+   "t1": 11.73,
+   "escena": "demo",
+   "texto": "Sin preguntar."
+  },
+  {
+   "t0": 12.13,
+   "t1": 17.484,
+   "escena": "estudio",
+   "texto": "En dos mil dieciséis, un estudio revisó casi tres mil seiscientos artículos con listas de genes en Excel."
+  },
+  {
+   "t0": 17.634,
+   "t1": 19.499,
+   "escena": "estudio",
+   "texto": "Uno de cada cinco tenía errores."
+  },
+  {
+   "t0": 19.849,
+   "t1": 23.183,
+   "escena": "renombre",
+   "texto": "Al final, fue más fácil renombrar los genes, que cambiar la costumbre."
+  },
+  {
+   "t0": 23.683,
+   "t1": 29.66,
+   "escena": "filas",
+   "texto": "Ese mismo año, en Inglaterra, casi dieciséis mil positivos de COVID se quedaron días fuera de las cifras oficiales."
+  },
+  {
+   "t0": 29.96,
+   "t1": 31.128,
+   "escena": "filas",
+   "texto": "El archivo de Excel,"
+  },
+  {
+   "t0": 31.178,
+   "t1": 32.644,
+   "escena": "vacio",
+   "texto": "se había quedado sin filas."
+  },
+  {
+   "t0": 33.344,
+   "t1": 35.406,
+   "escena": "calma",
+   "texto": "En ninguno de los dos casos falló Excel."
+  },
+  {
+   "t0": 35.606,
+   "t1": 37.323,
+   "escena": "calma",
+   "texto": "Hizo exactamente lo que debía."
+  },
+  {
+   "t0": 37.523,
+   "t1": 38.708,
+   "escena": "calma",
+   "texto": "Por eso nadie lo vio."
+  },
+  {
+   "t0": 39.308,
+   "t1": 41.362,
+   "escena": "leccion",
+   "texto": "Los errores más caros no dan error."
+  },
+  {
+   "t0": 41.662,
+   "t1": 43.103,
+   "escena": "leccion",
+   "texto": "Simplemente, no avisan."
+  },
+  {
+   "t0": 43.703,
+   "t1": 47.478,
+   "escena": "truco",
+   "texto": "Si trabajas con códigos, formatea la columna como texto antes de pegar."
+  },
+  {
+   "t0": 48.078,
+   "t1": 51.723,
+   "escena": "cierre",
+   "texto": "¿Qué parte de tu trabajo depende de que alguien note algo que nunca avisa?"
+  }
+ ],
+ "subs": [
+  {
+   "t0": 0.3,
+   "t1": 2.321,
+   "texto": "En 2020, los científicos cambiaron"
+  },
+  {
+   "t0": 2.321,
+   "t1": 4.342,
+   "texto": "el nombre de 27 genes humanos."
+  },
+  {
+   "t0": 4.592,
+   "t1": 5.919,
+   "texto": "No por un descubrimiento."
+  },
+  {
+   "t0": 6.019,
+   "t1": 6.683,
+   "texto": "Por Excel."
+  },
+  {
+   "t0": 7.033,
+   "t1": 9.099,
+   "texto": "Escribe MARCH1 en un Excel en inglés…"
+  },
+  {
+   "t0": 9.149,
+   "t1": 10.717,
+   "texto": "y lo convierte en una fecha."
+  },
+  {
+   "t0": 10.867,
+   "t1": 11.73,
+   "texto": "Sin preguntar."
+  },
+  {
+   "t0": 12.13,
+   "t1": 16.023,
+   "texto": "En 2016, un estudio revisó casi 3.600 artículos"
+  },
+  {
+   "t0": 16.023,
+   "t1": 17.484,
+   "texto": "con listas de genes en Excel."
+  },
+  {
+   "t0": 17.634,
+   "t1": 19.499,
+   "texto": "Uno de cada cinco tenía errores."
+  },
+  {
+   "t0": 19.849,
+   "t1": 22.016,
+   "texto": "Al final, fue más fácil renombrar los genes"
+  },
+  {
+   "t0": 22.016,
+   "t1": 23.183,
+   "texto": "que cambiar la costumbre."
+  },
+  {
+   "t0": 23.683,
+   "t1": 25.369,
+   "texto": "Ese mismo año, en Inglaterra,"
+  },
+  {
+   "t0": 25.369,
+   "t1": 27.361,
+   "texto": "casi 16.000 positivos de COVID"
+  },
+  {
+   "t0": 27.361,
+   "t1": 29.66,
+   "texto": "se quedaron días fuera de las cifras oficiales."
+  },
+  {
+   "t0": 29.96,
+   "t1": 31.128,
+   "texto": "El archivo de Excel…"
+  },
+  {
+   "t0": 31.178,
+   "t1": 32.644,
+   "texto": "se había quedado sin filas."
+  },
+  {
+   "t0": 33.344,
+   "t1": 35.406,
+   "texto": "En ninguno de los dos casos falló Excel."
+  },
+  {
+   "t0": 35.606,
+   "t1": 37.323,
+   "texto": "Hizo exactamente lo que debía."
+  },
+  {
+   "t0": 37.523,
+   "t1": 38.708,
+   "texto": "Por eso nadie lo vio."
+  },
+  {
+   "t0": 39.308,
+   "t1": 41.362,
+   "texto": "Los errores más caros no dan error."
+  },
+  {
+   "t0": 41.662,
+   "t1": 43.103,
+   "texto": "Simplemente, no avisan."
+  },
+  {
+   "t0": 43.703,
+   "t1": 44.961,
+   "texto": "Si trabajas con códigos,"
+  },
+  {
+   "t0": 44.961,
+   "t1": 47.478,
+   "texto": "formatea la columna como Texto antes de pegar."
+  },
+  {
+   "t0": 48.078,
+   "t1": 49.682,
+   "texto": "¿Qué parte de tu trabajo depende"
+  },
+  {
+   "t0": 49.682,
+   "t1": 51.723,
+   "texto": "de que alguien note algo que nunca avisa?"
+  }
+ ]
+}
