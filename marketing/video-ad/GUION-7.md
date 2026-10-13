@@ -135,12 +135,24 @@ nada de blur ni de "nitidez falsa" (la primera versión sí llevaba ambos,
 para esconder el origen de 112×199 px; ya no son necesarios y se
 retiraron).
 
-**Música (`audio7.py`)** — sintetizada desde cero en Python puro (sin
-muestras, sin librerías externas), igual que el resto de la serie: pista
-original y libre de derechos por construcción. Carácter ambiental /
-piano minimalista, empieza casi en silencio y solo crece de verdad en el
-último tercio (escena 7), dejando siempre la voz en primer plano
-(`duck_gain`, atenuación del 50 % bajo cada línea).
+**Música — `assets/music-ad7/do_i_clench_my_fists.mp3`.** Pista
+subida directamente por el usuario para sustituir la música sintetizada
+de `audio7.py` (que queda en el repo como `out/banda-sonora-7.wav`,
+usada solo para los tres efectos del flash de apertura — golpe grave y
+dos tics — mezclados encima). La pista dura 30,04 s; el máster final
+(51,8 s) la recorre con un bucle con cruce (`acrossfade`, 2 s) para que
+no se note la costura. La atenuación bajo cada línea de voz se hace
+cortando la pista en 15 tramos (`atrim` + `concat`, uno por entrada y
+salida de cada línea) con volumen fijo por tramo — más fiable que un
+`sidechaincompress` automático, que en la primera prueba no distinguía
+bien la voz del ruido de fondo de los propios clips de ElevenLabs.
+
+**Importante — verificar derechos.** A diferencia de la música de
+`audio7.py` (sintetizada, libre de derechos por construcción), esta
+pista es un archivo de audio real subido por el usuario — antes de
+publicar el Reel hay que confirmar que su uso está autorizado
+(composición propia, con licencia, o con los derechos necesarios para
+redes sociales).
 
 **Locución** — ElevenLabs, voz "Arconte — Evocative & Magnetic" (ver § 2
 sobre el porqué del cambio desde "Rodrigo").
