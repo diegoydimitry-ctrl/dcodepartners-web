@@ -1,0 +1,213 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Qué se ha construido</title><style>
+@font-face { font-family: "Archivo"; src: url("../lib/archivo.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+@font-face { font-family: "Martian Mono"; src: url("../lib/martian-mono.woff2") format("woff2"); font-weight: 100 800; }
+@page { size: A4; margin: 18mm 17mm; }
+body { font-family: "Archivo", sans-serif; color: #111214; font-size: 10.5pt; line-height: 1.5; }
+h1 { font-size: 24pt; letter-spacing: -.02em; line-height: 1.1; margin: 0 0 14pt; }
+h2 { font-size: 13pt; margin: 18pt 0 6pt; letter-spacing: -.01em; break-after: avoid; }
+table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 6pt 0; }
+th, td { border-bottom: 1px solid #dddad3; padding: 5pt 6pt; text-align: left; vertical-align: top; }
+th { font-family: "Martian Mono", monospace; font-size: 7.5pt; letter-spacing: .08em; text-transform: uppercase; color: #6b6d72; font-weight: 500; }
+code { font-family: "Martian Mono", monospace; font-size: 8.5pt; background: #f2f0eb; padding: 0 3pt; border-radius: 3pt; }
+pre { background: #f2f0eb; padding: 8pt; border-radius: 6pt; }
+li { margin: 2pt 0; } tr { break-inside: avoid; }
+</style></head><body><h1 id="esto-no-es-un-vídeo--qué-se-ha-construido-de-verdad">Esto no es
+un vídeo · qué se ha construido de verdad</h1>
+<p>Reel de 33,5 s, 1080×1920, 30 fps. Cada imagen sale de un programa
+que funciona en el navegador. No se ha usado ningún generador de
+imágenes ni de vídeo, ni imágenes de archivo.</p>
+<h2 id="qué-hace-claude-y-qué-no-lo-que-se-ha-tenido-en-cuenta">Qué hace
+Claude y qué no (lo que se ha tenido en cuenta)</h2>
+<ul>
+<li><p><strong>Claude escribe código.</strong> Las cinco escenas son
+código: GLSL, JavaScript, Three.js, HTML y CSS. La música también:
+Python que sintetiza cada sonido.</p></li>
+<li><p><strong>Claude no genera imágenes, vídeo ni audio por sí
+mismo.</strong> Todo lo que se ve lo dibuja el navegador al ejecutar ese
+código. Si un día se usa un generador (por ejemplo ElevenLabs para una
+voz), hay que decirlo en el vídeo o en el texto.</p></li>
+<li><p><strong>No sale a la primera.</strong> Cada escena necesitó
+varias rondas de corrección, por ejemplo:</p>
+<ul>
+<li>imagen al revés, terreno lavado y escalonado, vuelo lento;</li>
+<li>textos que se pisaban y etiquetas desfasadas en la web;</li>
+<li>tinta que no se movía y después se emborronaba;</li>
+<li>ciudad sobreexpuesta y con el sol al otro lado.</li>
+</ul>
+<p>Eso es lo que hace D-Code: dirigir, revisar y llevarlo a algo que
+funcione.</p></li>
+<li><p><strong>«Fotorrealista» es una aspiración, no una descripción
+literal.</strong> El paisaje es realista y con buena luz, pero sale de
+reglas matemáticas, sin fotos ni texturas. Se nota que es un
+render.</p></li>
+</ul>
+<h2 id="las-escenas">Las escenas</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Escena</th>
+<th>Archivo</th>
+<th>Qué es</th>
+<th>Interacción en directo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vuelo</td>
+<td><code>demos/vuelo.html</code> (345 líneas)</td>
+<td>Juego en WebGL2. Terreno generado con ruido, dibujado trazando rayos
+en la GPU. Lago con reflejos, nieve, niebla, sombras y 8 anillos con
+contador.</td>
+<td>Teclado W/A/S/D.</td>
+</tr>
+<tr class="even">
+<td>Reloj</td>
+<td><code>demos/web3d.html</code> (237)</td>
+<td>Web 3D con Three.js. El reloj se construye entero en código: caja,
+cristal de zafiro, esfera, agujas y engranajes con dientes.</td>
+<td>Scroll real de la página (ratón o dedo).</td>
+</tr>
+<tr class="odd">
+<td>Tinta</td>
+<td><code>demos/fluido.html</code> (153)</td>
+<td>Simulación de fluidos en la GPU (advección, presión y vorticidad)
+con tinta sobre papel.</td>
+<td>Ratón o dedo.</td>
+</tr>
+<tr class="even">
+<td>Ciudad</td>
+<td><code>demos/ciudad.html</code> (137)</td>
+<td>Ciudad de maqueta generada por reglas, con sombras suaves y oclusión
+ambiental.</td>
+<td>Es una animación; no se controla.</td>
+</tr>
+<tr class="odd">
+<td>Finance</td>
+<td>D-Code Finance (repositorio <code>dcode-finance-demo</code>)</td>
+<td>La aplicación de verdad en modo demostración, en local y con datos
+inventados. Se ve el aviso «DEMOSTRACIÓN · datos inventados».</td>
+<td>Clics reales: entrar, bajar por el panel, cambiar tesorería a 60 y
+90 días, abrir el radar.</td>
+</tr>
+<tr class="even">
+<td>Proceso</td>
+<td><code>demos/proceso.html</code></td>
+<td>Pantalla con la instrucción del encargo, copiada tal cual, y después
+el código real del archivo de la demo.</td>
+<td>No se controla.</td>
+</tr>
+</tbody>
+</table>
+<p>Código común: <code>demos/comun.js</code> (119 líneas). Montaje:
+<code>montaje/montaje.html</code> (207). Música:
+<code>montaje/audio.py</code> (345).</p>
+<h2 id="lo-que-conviene-saber-y-decir-si-alguien-pregunta">Lo que
+conviene saber (y decir si alguien pregunta)</h2>
+<ol type="1">
+<li><p><strong>La entrada de la grabación es un guion.</strong></p>
+<ul>
+<li>Las teclas del juego las pulsa un piloto automático; el panel
+inferior muestra cuáles.</li>
+<li>El scroll y el dedo de la tinta siguen una trayectoria escrita.</li>
+</ul>
+<p>Se hizo así para que la toma saliera limpia y se pudiera repetir. En
+directo, todo eso lo hace la persona.</p></li>
+<li><p><strong>Se grabó fotograma a fotograma, no en tiempo
+real.</strong></p>
+<ul>
+<li>Un navegador sin pantalla, con dibujo por software, calcula cada
+fotograma y lo guarda: 30 por segundo de vídeo.</li>
+<li>Cuánto rinde en tiempo real en un móvil o un portátil: <strong>NO
+MEDIDO</strong>.</li>
+</ul></li>
+<li><p><strong>La pantalla del proceso es una animación de texto
+real.</strong></p>
+<ul>
+<li>La instrucción y el código son los auténticos.</li>
+<li>Pero el código no se escribió a esa velocidad delante de la cámara:
+se muestra el archivo terminado línea a línea.</li>
+</ul></li>
+<li><p><strong>D-Code Finance no se hizo para el anuncio.</strong> Es
+nuestro producto y se ve en su modo demostración. No sale ningún dato
+real de clientes.</p></li>
+<li><p><strong>Piezas de terceros:</strong></p>
+<ul>
+<li>Three.js 0.186.1 (licencia MIT);</li>
+<li>las fuentes Archivo y Martian Mono (licencia OFL).</li>
+</ul>
+<p>El resto lo ha escrito Claude en esta sesión, bajo la dirección del
+equipo.</p></li>
+</ol>
+<h2 id="sonido">Sonido</h2>
+<ul>
+<li>Música a 120 BPM, en La menor, sintetizada en Python: bombo, caja,
+platos, impactos, subidas, golpes de aire, clics y tecleo.</li>
+<li>Cada golpe cae en un corte: el anillo, los cuatro cortes de las
+creaciones, los clics en Finance, el tecleo del proceso, la subida antes
+del mosaico y el logo.</li>
+<li>Sin muestras ni licencias de terceros. ElevenLabs Music no se ha
+usado porque el plan gratuito no permite descargar ni usar
+comercialmente.</li>
+<li>Volumen (MEDIDO con ffmpeg ebur128): −13,9 LUFS integrado y pico
+real de −2,4 dBFS.</li>
+<li>El vídeo se entiende sin sonido: los textos cuentan la
+historia.</li>
+<li>Lo que no se ha podido hacer: <strong>escucharlo</strong>. Se ha
+revisado con medidas y espectrograma. Antes de publicar conviene oírlo
+una vez con auriculares y otra con el altavoz del móvil.</li>
+</ul>
+<h2 id="estructura-del-reel">Estructura del reel</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Segundos</th>
+<th>Qué pasa</th>
+<th>Texto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0–2,5</td>
+<td>Vuelo sobre el lago, sin interfaz. En la B: la instrucción y después
+el resultado</td>
+<td>«Esto no es un vídeo.» · B: «Le pedimos esto a una IA:» → «…y
+construyó esto.»</td>
+</tr>
+<tr class="even">
+<td>2,5–5</td>
+<td>Aparecen el contador y las teclas; se cruza el primer anillo</td>
+<td>«Es un juego. Y se juega.»</td>
+</tr>
+<tr class="odd">
+<td>5–9</td>
+<td>Cuatro golpes: reloj, tinta, ciudad y app</td>
+<td>«Una web 3D.» · «Una simulación de fluidos.» · «Una ciudad que se
+construye sola.» · «Una app de verdad.»</td>
+</tr>
+<tr class="even">
+<td>9–15,5</td>
+<td>Se ve que responden: scroll, dedo y clics</td>
+<td>«No son imágenes.» · «Se navega.» · «Se toca.» · «Se usa.»</td>
+</tr>
+<tr class="odd">
+<td>15,5–23</td>
+<td>Instrucción → código → resultado, dos veces</td>
+<td>«Le explicamos lo que queremos.» · «La IA escribe el código.» ·
+«Nosotros lo dirigimos y lo revisamos.»</td>
+</tr>
+<tr class="even">
+<td>23–27,5</td>
+<td>La ciudad se levanta; mosaico con todo a la vez</td>
+<td>«Esto ya se puede construir.» · «Juegos. Webs. Apps.
+Simulaciones.»</td>
+</tr>
+<tr class="odd">
+<td>27,5–33,5</td>
+<td>Cierre</td>
+<td>«No se trata de imaginar el futuro. Se trata de construirlo.» → logo
+→ «¿Quieres saber cómo se hizo? Comenta IA y te mandamos las
+instrucciones.»</td>
+</tr>
+</tbody>
+</table>
+</body></html>
