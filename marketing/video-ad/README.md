@@ -9,8 +9,10 @@ El guion completo de cada anuncio, con sus entradas y notas de dirección,
 está en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)**
 (anuncio 2), **[GUION-3.md](GUION-3.md)** (teaser DCode OS),
 **[GUION-4.md](GUION-4.md)** (D-Code Finance, corporativo),
-**[GUION-5.md](GUION-5.md)** (D-Code Finance, recorte social) y
-**[GUION-6.md](GUION-6.md)** (redes sociales + páginas web para negocios).
+**[GUION-5.md](GUION-5.md)** (D-Code Finance, recorte social),
+**[GUION-6.md](GUION-6.md)** (redes sociales + páginas web para negocios)
+y **[GUION-7.md](GUION-7.md)** (Reel editorial/documental sobre Séneca,
+conecta con D-Code solo al cierre).
 
 ## Resultado
 
@@ -30,14 +32,18 @@ está en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)**
 | `out/dcode-ad6-16x9-cc-vo.mp4` | 1920×1080 · 30 fps · 27 s | Igual, horizontal, con subtítulos |
 | `out/dcode-ad6b-9x16-vo.mp4` | 1080×1920 · 30 fps · 27 s | Variante B del gancho, para probar A/B |
 | `out/dcode-ad6-portada-9x16.png` | 1080×1920 | Portada del Reel |
-| `out/banda-sonora.wav` … `-6.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
+| `out/dcode-ad7-9x16-vo.mp4` | 1080×1920 · 30 fps · 40,6 s | Reel editorial (Séneca), con locución, música y subtítulos |
+| `out/dcode-ad7-portada-9x16.png` | 1080×1920 | Portada del Reel |
+| `out/banda-sonora.wav` … `-7.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
 
 H.264 High + AAC 192 kbps, `+faststart`. Con música y efectos. Los anuncios 1
 y 2 salen **sin locución** (ver GUION.md § 7 para añadirla — la mezcla ya
 deja los huecos hechos); el teaser DCode OS y el recorte social de D-Code
 Finance se apoyan solo en rótulos y música, sin voz en off (ver GUION-3.md y
 GUION-5.md). Los anuncios 4 y 6 sí llevan locución en español, generada con
-Kokoro local (ver GUION-4.md y GUION-6.md).
+Kokoro local (ver GUION-4.md y GUION-6.md). El anuncio 7 también lleva
+locución en español, pero generada con ElevenLabs (voz "Rodrigo — Spanish
+Documentary Narrator"), no con Kokoro — ver GUION-7.md.
 
 ## Cómo se genera
 
@@ -73,6 +79,14 @@ python3 montar-voz.py --anuncio 4 --voces voces/anuncio-4 --fmt 9x16
 
 python3 audio5.py out/banda-sonora-5.wav
 node render.js --src ad5.html --fmt 9x16 --dur 22 --audio out/banda-sonora-5.wav --workers 4
+
+python3 audio6.py out/banda-sonora-6.wav
+node render.js --src ad6.html --fmt 9x16 --dur 27 --audio out/banda-sonora-6.wav --workers 4
+
+python3 audio7.py out/banda-sonora-7.wav
+node render.js --src ad7.html --fmt 9x16 --dur 40.6 --audio out/banda-sonora-7.wav --workers 4
+# anuncio 7: la locución no se monta con montar-voz.py (esa herramienta lee
+# Kokoro) sino con una mezcla ffmpeg directa — comando completo en GUION-7.md § 8
 ```
 
 ## Previsualizar sin renderizar
@@ -85,9 +99,9 @@ segundo exacto, que es lo cómodo para ajustar una escena.
 
 | Archivo | Qué hace |
 |---------|----------|
-| `ad.html` … `ad6.html` | Las seis animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. |
-| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las seis piezas (`--src`); `--query "cc=1"` pasa parámetros extra de la URL (subtítulos, variantes) a cada proceso. |
-| `audio.py` … `audio6.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
+| `ad.html` … `ad7.html` | Las siete animaciones. Todo se deriva de `render(t)`, sin estado entre fotogramas. `ad7.html` es Ken Burns sobre fotografía, no mockups de interfaz. |
+| `render.js` | Captura fotogramas en Chromium y los envía por tubería a ffmpeg. Sirve para las siete piezas (`--src`); `--query "cc=1"` pasa parámetros extra de la URL (subtítulos, variantes) a cada proceso. |
+| `audio.py` … `audio7.py` | Sintetizan música y efectos desde cero, uno por anuncio. Sin dependencias. |
 | `tools/clean-logo.py` | Recupera el logotipo sobre transparencia real. |
 | `assets/dcode-mark.png` | Logotipo limpio que usa el cierre. |
 | `montar-voz.py` | Coloca los clips de locución en su segundo y los mezcla con la música. |

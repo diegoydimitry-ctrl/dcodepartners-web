@@ -85,7 +85,9 @@ async function renderRange(from, to, outFile, label) {
   });
   ff.stdin.on('error', e => { if (e.code !== 'EPIPE') throw e; });
 
+  const PINNED_CHROMIUM = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
   const browser = await chromium.launch({
+    executablePath: fs.existsSync(PINNED_CHROMIUM) ? PINNED_CHROMIUM : undefined,
     args: ['--force-color-profile=srgb', '--disable-lcd-text', '--hide-scrollbars']
   });
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });

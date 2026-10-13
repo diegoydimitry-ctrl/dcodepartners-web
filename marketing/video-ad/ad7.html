@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>D-Code Partners — Anuncio 7 · Reel cinematográfico (Séneca)</title>
+<!--
+  Anuncio 7 — ~40,6 s. Reel editorial para Instagram, NO un anuncio
+  convencional: una lección filosófica real (Séneca, De Brevitate Vitae)
+  contada con fotografía fija y movimiento de cámara (Ken Burns), que
+  conecta con D-Code Partners solo al final, de forma breve y discreta.
+
+  Por qué fotografía fija y no vídeo real: este entorno no tiene acceso a
+  ningún banco de vídeo de stock con licencia verificable, y generar vídeo
+  fotorrealista por IA y presentarlo como si fuera real violaría el propio
+  criterio del encargo. Elegido junto al usuario: fotografía fija generada
+  (Canva, B/N, sin pretender ser archivo real) + Ken Burns, nunca al revés.
+  Ver GUION-7.md § 5 para el detalle y la limitación de resolución de origen
+  (las imágenes de Canva solo devuelven miniaturas de 112×199 px sin pasar
+  por un diseño completo) — se compensa con grano fílmico, un desenfoque
+  mínimo y una gradación B/N constante, no se disimula ni se oculta.
+
+  Estructura: GANCHO (0–5,3 s, sin logo) → LECCIÓN (5,3–38,9 s, Séneca +
+  reflexión propia) → MARCA (38,9–40,6 s, solo logotipo y dominio, sin
+  lista de servicios ni CTA). Subtítulos en pantalla por defecto.
+
+  Mismo motor determinista que el resto de la serie: todo se deriva de
+  render(t). Parámetros de URL: ?fmt=9x16|16x9, ?t=segundos.
+-->
+<style>
+  @font-face{ font-family:'Inter'; font-weight:400 800; font-display:block;
+    src:url('../../assets/fonts/inter-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'Space Grotesk'; font-weight:500 700; font-display:block;
+    src:url('../../assets/fonts/spacegrotesk-variable.woff2') format('woff2'); }
+  @font-face{ font-family:'JetBrains Mono'; font-weight:400 700; font-display:block;
+    src:url('../../assets/fonts/jetbrainsmono-variable.woff2') format('woff2'); }
+  html,body{ margin:0; padding:0; background:#000; overflow:hidden; }
+  #stage{ display:block; }
+  body.preview{ display:flex; align-items:center; justify-content:center; height:100vh; }
+  body.preview #stage{ max-width:100vw; max-height:100vh; width:auto; height:auto; object-fit:contain; }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<script>
+(() => {
+'use strict';
+
+const Q     = new URLSearchParams(location.search);
+const CC    = Q.get('cc') !== '0';           // subtítulos activos por defecto
+const FMT   = Q.get('fmt') === '16x9' ? '16x9' : '9x16';
+const FRAME = Q.has('t') ? parseFloat(Q.get('t')) : null;
+const DUR   = 40.6;
+
+const cv = document.getElementById('stage');
+const W  = FMT === '9x16' ? 1080 : 1920;
+const H  = FMT === '9x16' ? 1920 : 1080;
+cv.width = W; cv.height = H;
+cv.style.width = W + 'px'; cv.style.height = H + 'px';
+const g = cv.getContext('2d', { alpha:false });
+
+const V  = H > W;
+const CX = W / 2, CY = H / 2;
+
+/* Paleta B/N editorial — igual criterio que ad6.html: el azul de marca
+   reservado a un único acento mínimo en el cierre, nunca un fondo. */
+const C = {
+  bg:'#070706', ink:'#f4f3ef', stone:'#a6a59d', stoneSoft:'#6e6d66',
+  accent:'#5b8cff'
+};
+
+/* ─────────────────────────── utilidades ─────────────────────────── */
+
+const clamp = (v,a=0,b=1) => v < a ? a : v > b ? b : v;
+const lerp  = (a,b,t) => a + (b - a) * t;
+const easeOut      = t => 1 - Math.pow(1 - t, 3);
+const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
+const easeInOut    = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+const ramp = (t,a,b,fn=easeOut) => fn(clamp((t - a) / (b - a)));
+
+function rgba(hex, a){
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+const FAM = { sg:'"Space Grotesk"', in:'Inter', mo:'"JetBrains Mono"' };
+function font(fam, weight, size, letter=0){
+  g.font = `${weight} ${size}px ${FAM[fam]}`;
+  g.letterSpacing = `${letter}px`;
+}
+function roundRect(x,y,w,h,r){ g.beginPath(); g.roundRect(x,y,w,h,r); }
+function wrap(text, maxW){
+  const words = text.split(' '), lines = []; let line = '';
+  for (const w of words){
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line){ lines.push(line); line = w; }
+    else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+function centeredLines(lines, cx, top, lh, prog, rise = 26){
+  for (let i = 0; i < lines.length; i++){
+    const p = clamp((prog - i * 0.10) / (1 - Math.min(0.5, lines.length * 0.10)));
+    const e = easeOutQuint(p);
+    g.save(); g.globalAlpha = e;
+    g.fillText(lines[i], cx, top + i * lh + (1 - e) * rise);
+    g.restore();
+  }
+}
+function makeRng(seed){
+  let s = seed >>> 0;
+  return () => { s = (1103515245 * s + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+}
+
+/* ─────────────────────────── fondo cine ─────────────────────────── */
+
+function background(){
+  g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+}
+function grain(t){
+  // grano fino determinista — textura de película, no artefacto de compresión
+  const rng = makeRng(Math.floor(t * 24) * 7919 + 101);
+  g.save(); g.globalAlpha = 0.05;
+  for (let i = 0; i < 160; i++){
+    const gx = rng() * W, gy = rng() * H, s = 1 + rng() * 1.8;
+    g.fillStyle = rng() > 0.5 ? '#fff' : '#000';
+    g.fillRect(gx, gy, s, s);
+  }
+  g.restore();
+}
+function vignette(strength = 0.74){
+  const rg = g.createRadialGradient(CX, CY, Math.min(W,H)*0.32, CX, CY, Math.max(W,H)*0.78);
+  rg.addColorStop(0, 'rgba(0,0,0,0)');
+  rg.addColorStop(1, `rgba(0,0,0,${strength})`);
+  g.fillStyle = rg; g.fillRect(0, 0, W, H);
+}
+
+/* ───────────────────── fotografía — Ken Burns ───────────────────── */
+
+/**
+ * Dibuja una imagen a pantalla completa (cover-fit) con un zoom y un
+ * paneo lentos y constantes a lo largo de localT/dur — el único
+ * "movimiento de cámara" de la pieza, siempre sutil (zoom ≤ 15%, paneo
+ * ≤ 35% del margen disponible), nunca un zoom ni un corte brusco.
+ *
+ * Las imágenes de origen son miniaturas de 112×199 px (límite del
+ * generador — ver GUION-7.md § 5): se tratan con un desenfoque mínimo +
+ * grano + B/N + contraste para que la ampliación se lea como textura de
+ * archivo documental en vez de como una ampliación digital de baja
+ * resolución. Es una decisión de postproducción explícita, no un intento
+ * de disimular el origen (que queda documentado igualmente).
+ */
+function kenBurns(img, localT, dur, kb){
+  if (!img || !img.complete || !img.naturalWidth) return;
+  const p = easeInOut(clamp(localT / dur, 0, 1));
+  const coverScale = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+  const zoom = lerp(kb.z0, kb.z1, p);
+  const scale = coverScale * zoom;
+  const iw = img.naturalWidth * scale, ih = img.naturalHeight * scale;
+  const maxPanX = Math.max(0, (iw - W) / 2) * 0.82;
+  const maxPanY = Math.max(0, (ih - H) / 2) * 0.82;
+  const panX = lerp(-kb.px, kb.px, p) * maxPanX;
+  const panY = lerp(-kb.py, kb.py, p) * maxPanY;
+  g.save();
+  g.filter = 'grayscale(1) contrast(1.18) brightness(0.93) blur(0.9px)';
+  g.imageSmoothingEnabled = true;
+  g.imageSmoothingQuality = 'high';
+  g.drawImage(img, CX - iw/2 + panX, CY - ih/2 + panY, iw, ih);
+  g.restore();
+  // leve pátina de contacto — unifica el grado de color entre las 7 fotos
+  g.save();
+  const lg = g.createLinearGradient(0, 0, 0, H);
+  lg.addColorStop(0, 'rgba(10,10,9,.22)');
+  lg.addColorStop(0.5, 'rgba(10,10,9,0)');
+  lg.addColorStop(1, 'rgba(10,10,9,.3)');
+  g.fillStyle = lg; g.fillRect(0, 0, W, H);
+  g.restore();
+}
+
+/* ─────────────────────── subtítulos sincronizados ─────────────────────── */
+/* Pocas palabras por línea, partidos por su puntuación natural — nunca la
+   frase completa de golpe. Tipografía de marca, contraste alto, posición
+   constante en el tercio inferior, con margen de seguridad para la UI de
+   Reels (usuario, pie de foto, iconos). */
+
+const CAPTIONS = [
+  { a: 0.30, b: 1.60, text: 'No te falta tiempo.' },
+  { a: 1.70, b: 4.71, text: 'Te falta criterio para elegir en qué lo gastas.' },
+
+  { a: 5.26, b: 6.52, text: 'Séneca ya lo decía:' },
+  { a: 6.62, b: 10.09, text: 'no es que tengamos poco tiempo, es que perdemos mucho.' },
+
+  { a: 10.54, b: 12.99, text: 'Vivimos ocupados en lo que no importa,' },
+  { a: 13.09, b: 14.62, text: 'aplazando vivir de verdad.' },
+
+  { a: 15.17, b: 17.15, text: 'Trabajar mucho y trabajar bien' },
+  { a: 17.25, b: 18.17, text: 'no son lo mismo.' },
+
+  { a: 18.82, b: 20.49, text: 'En una empresa pasa igual:' },
+  { a: 20.59, b: 23.03, text: 'el tiempo se va en tareas repetitivas,' },
+  { a: 23.13, b: 24.91, text: 'no en decisiones que importan.' },
+
+  { a: 25.56, b: 27.68, text: 'En D-Code Partners diseñamos sistemas' },
+  { a: 27.78, b: 30.24, text: 'para que el tiempo vuelva a ir donde importa.' },
+
+  { a: 30.99, b: 34.22, text: 'Construir mejores sistemas no es trabajar menos.' },
+  { a: 34.32, b: 36.92, text: 'Es, por fin, trabajar en lo que importa.' }
+];
+
+function captionsOverlay(t){
+  for (const c of CAPTIONS){
+    const fade = 0.14;
+    const a = ramp(t, c.a, c.a + fade) * (1 - ramp(t, c.b - fade, c.b));
+    if (a <= 0.001) continue;
+    const size = V ? 32 : 34;
+    font('in', 700, size, 0);
+    const maxW = V ? W * 0.82 : W * 0.5;
+    const lines = wrap(c.text, maxW);
+    const lh = size * 1.3;
+    const padY = 15, padX = 22;
+    const blockH = lines.length * lh + padY * 2;
+    // tercio inferior, por encima de la zona reservada a la UI de Reels
+    const y0 = (V ? H * 0.80 : H * 0.84) - blockH;
+    let maxLineW = 0;
+    lines.forEach(ln => { maxLineW = Math.max(maxLineW, g.measureText(ln).width); });
+    const bw = maxLineW + padX * 2;
+    g.save(); g.globalAlpha = a;
+    roundRect(CX - bw/2, y0, bw, blockH, 10);
+    g.fillStyle = 'rgba(6,6,5,.68)'; g.fill();
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = C.ink;
+    lines.forEach((ln, i) => g.fillText(ln, CX, y0 + padY + (i + 1) * lh - lh * 0.28));
+    g.restore();
+  }
+}
+
+/* ══════════════════════════ fotografías / escenas ══════════════════════════ */
+
+const IMG_FILES = [
+  '01-laptop-noche.jpg', '02-columnas.jpg', '03-ciudad.jpg', '04-artesano.jpg',
+  '05-papeleo.jpg', '06-escritorio.jpg', '07-puente.jpg'
+];
+const IMAGES = [];
+
+const SCENES = [
+  { a: 0.00,  b: 5.26,  img: 0, kb: { z0: 1.00, z1: 1.10, px: 0.10, py: 0.30 } },
+  { a: 5.26,  b: 10.54, img: 1, kb: { z0: 1.00, z1: 1.07, px: 0.35, py: 0.08 } },
+  { a: 10.54, b: 15.17, img: 2, kb: { z0: 1.00, z1: 1.09, px: 0.55, py: 0.10 } },
+  { a: 15.17, b: 18.82, img: 3, kb: { z0: 1.03, z1: 1.14, px: 0.12, py: 0.10 } },
+  { a: 18.82, b: 25.56, img: 4, kb: { z0: 1.09, z1: 1.00, px: 0.22, py: 0.08 } },
+  { a: 25.56, b: 30.99, img: 5, kb: { z0: 1.00, z1: 1.08, px: 0.10, py: 0.28 } },
+  { a: 30.99, b: 38.90, img: 6, kb: { z0: 1.00, z1: 1.15, px: 0.18, py: 0.38 } }
+];
+const XFADE = 0.6;
+
+function drawScene(idx, t){
+  const sc = SCENES[idx];
+  const localT = clamp(t - sc.a, 0, sc.b - sc.a);
+  kenBurns(IMAGES[sc.img], localT, sc.b - sc.a, sc.kb);
+}
+
+function renderPhotography(t){
+  let idx = SCENES.findIndex(sc => t >= sc.a && t < sc.b);
+  if (idx === -1) idx = t < SCENES[0].a ? 0 : SCENES.length - 1;
+  const sc = SCENES[idx];
+  const localT = t - sc.a;
+  if (idx > 0 && localT < XFADE){
+    drawScene(idx - 1, SCENES[idx - 1].b - 0.001);
+    g.save(); g.globalAlpha = clamp(localT / XFADE);
+    drawScene(idx, t);
+    g.restore();
+  } else {
+    drawScene(idx, t);
+  }
+}
+
+/* ══════════════════════════ cierre — marca D-Code ══════════════════════════ */
+/* Breve y discreto a propósito: solo marca y dominio, sin lista de
+   servicios, sin eslogan de venta, sin llamada a la acción. */
+
+let LOGO = null;
+
+function closingCard(t){
+  const a = ramp(t, 0, 0.55, easeOutQuint);
+  if (a <= 0) return;
+  g.save(); g.globalAlpha = a * 0.92;
+  g.fillStyle = '#050504'; g.fillRect(0, 0, W, H);
+  g.restore();
+
+  const lp = ramp(t, 0.18, 0.75, easeOutQuint);
+  if (lp > 0){
+    const logoY = V ? H * 0.46 : CY - 30;
+    const iconH = V ? 72 : 70;
+    const iconW = LOGO ? iconH * (LOGO.naturalWidth / LOGO.naturalHeight) : iconH * 1.19;
+    font('sg', 700, V ? 60 : 64, 0.4);
+    const wordW = g.measureText('D-Code Partners').width;
+    const x0 = CX - (iconW + 22 + wordW) / 2;
+    g.save(); g.globalAlpha = lp; g.translate(0, (1 - lp) * 14);
+    if (LOGO){
+      g.save(); g.filter = 'grayscale(1) brightness(1.3)';
+      g.drawImage(LOGO, x0, logoY - iconH/2, iconW, iconH); g.restore();
+    }
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.fillStyle = C.ink;
+    font('sg', 700, V ? 60 : 64, 0.4);
+    g.fillText('D-Code Partners', x0 + iconW + 22, logoY + 9);
+    g.restore();
+  }
+
+  const dp = ramp(t, 0.95, 1.35, easeOutQuint);
+  if (dp > 0){
+    const y = V ? H * 0.565 : CY + 54;
+    g.save(); g.globalAlpha = dp;
+    const lw = 100 * easeOut(dp);
+    const grd = g.createLinearGradient(CX - lw/2, 0, CX + lw/2, 0);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(.5, rgba(C.accent, .7));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grd; g.fillRect(CX - lw/2, y - 1, lw, 1.5);
+    font('mo', 500, V ? 22 : 23, 1.4);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = C.stone;
+    g.fillText('dcodepartners.com', CX, y + (V ? 36 : 34));
+    g.restore();
+  }
+}
+
+/* ══════════════════════════ línea de tiempo general ══════════════════════════ */
+
+function render(t){
+  t = clamp(t, 0, DUR);
+  g.save();
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic'; g.letterSpacing = '0px';
+
+  background();
+
+  if (t < 38.9){
+    renderPhotography(t);
+  } else {
+    drawScene(SCENES.length - 1, SCENES[SCENES.length - 1].b - 0.001);
+  }
+
+  vignette();
+  grain(t);
+
+  if (t < 38.9 && CC) captionsOverlay(t);
+  if (t >= 36.9) closingCard(t - 38.9);
+
+  const intro = 1 - ramp(t, 0, 0.22, easeInOut);
+  if (intro > 0){ g.fillStyle = rgba('#000000', intro); g.fillRect(0, 0, W, H); }
+  const outro = ramp(t, DUR - 0.5, DUR, easeInOut);
+  if (outro > 0){ g.fillStyle = rgba('#000000', outro); g.fillRect(0, 0, W, H); }
+
+  g.restore();
+}
+
+/* ═══════════════════════════ arranque ═══════════════════════════ */
+
+function loadLogo(){
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => { LOGO = img; res(); };
+    img.onerror = () => res();
+    img.src = './assets/dcode-mark.png';
+  });
+}
+function loadImages(){
+  return Promise.all(IMG_FILES.map((f, i) => new Promise(res => {
+    const img = new Image();
+    img.onload = () => { IMAGES[i] = img; res(); };
+    img.onerror = () => res();
+    img.src = './assets/stock-ad7/' + f;
+  })));
+}
+
+async function boot(){
+  await Promise.all([
+    document.fonts.load('700 100px "Space Grotesk"'),
+    document.fonts.load('500 100px "Space Grotesk"'),
+    document.fonts.load('700 100px "JetBrains Mono"'),
+    document.fonts.load('500 100px "JetBrains Mono"'),
+    document.fonts.load('500 100px Inter'),
+    document.fonts.load('700 100px Inter')
+  ]);
+  await document.fonts.ready;
+  await loadLogo();
+  await loadImages();
+
+  if (FRAME !== null){
+    render(FRAME);
+    window.__ready = true;
+  } else {
+    document.body.classList.add('preview');
+    const t0 = performance.now();
+    const loop = () => { render(((performance.now() - t0) / 1000) % (DUR + 1.2)); requestAnimationFrame(loop); };
+    loop();
+  }
+}
+
+window.__render = render;
+boot();
+})();
+</script>
+</body>
+</html>
