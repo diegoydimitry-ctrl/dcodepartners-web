@@ -61,10 +61,8 @@ def mark(cls: str = "mark", label: str | None = None, anim: bool = False) -> str
 # ---------------------------------------------------------------- navegación
 
 NAV = {
-    "es": [("Método", "/metodo"), ("Capacidades", "/departamentos"), ("Finance", "/sistema-financiero"),
-           ("Casos", "/casos-exito"), ("Nosotros", "/conocenos")],
-    "en": [("Method", "/en/metodo"), ("Capabilities", "/en/departamentos"), ("Finance", "/en/sistema-financiero"),
-           ("Cases", "/en/casos-exito"), ("About", "/en/conocenos")],
+    "es": [("Qué automatizamos", "/departamentos"), ("Finance", "/sistema-financiero"), ("Nosotros", "/conocenos")],
+    "en": [("What we automate", "/en/departamentos"), ("Finance", "/en/sistema-financiero"), ("About", "/en/conocenos")],
 }
 CTA = {"es": ("Reservar una llamada", "/contacto"), "en": ("Book a call", "/en/contacto")}
 UI = {
@@ -112,72 +110,51 @@ def header(lang: str, path: str) -> str:
 
 FOOT = {
     "es": {
-        "cols": [
-            ("Capacidades", [("Comercial", "/departamentos/comercial"), ("Marketing", "/departamentos/marketing"),
-                             ("Clientes", "/departamentos/clientes"), ("Producción", "/departamentos/produccion"),
-                             ("Finanzas", "/departamentos/finanzas"), ("Soporte", "/departamentos/soporte"),
-                             ("Administración", "/departamentos/administracion"), ("Dirección", "/departamentos/direccion")]),
-            ("Empresa", [("Método", "/metodo"), ("Garantías y proceso", "/garantias"), ("Conócenos", "/conocenos"),
-                         ("Casos internos", "/casos-exito"), ("En curso", "/cambios-en-proceso"), ("Blog", "/blog")]),
-            ("Qué hacemos", [("Servicios", "/servicios"), ("Automatización", "/servicios/automatizacion-ia"),
-                             ("Agentes de IA", "/servicios/agentes-ia"), ("Integraciones", "/servicios/integraciones"),
-                             ("D-Code Finance", "/sistema-financiero"), ("Preguntas frecuentes", "/faq")]),
-            ("Legal", [("Privacidad", "/privacidad"), ("Aviso legal", "/aviso-legal"), ("Cookies", "/cookies"),
-                       ("Seguridad", "/seguridad"), ("Condiciones de contratación", "/condiciones-contratacion"),
-                       ("Encargado de tratamiento", "/acuerdo-encargado-tratamiento")]),
-        ],
-        "line": "Leemos cómo trabaja tu empresa y construimos el sistema que hace solo el trabajo repetido.",
-        "where": "Madrid, España",
-        "reply": "Respondemos en menos de 24 horas.",
+        "links": [("Qué automatizamos", "/departamentos"), ("Servicios", "/servicios"), ("D-Code Finance", "/sistema-financiero"),
+                  ("Método", "/metodo"), ("Garantías", "/garantias"), ("Casos", "/casos-exito"),
+                  ("Nosotros", "/conocenos"), ("En curso", "/cambios-en-proceso"), ("Blog", "/blog"),
+                  ("Preguntas frecuentes", "/faq"), ("Contacto", "/contacto")],
+        "legal": [("Privacidad", "/privacidad"), ("Aviso legal", "/aviso-legal"), ("Cookies", "/cookies"),
+                  ("Seguridad", "/seguridad"), ("Condiciones", "/condiciones-contratacion"),
+                  ("Encargado de tratamiento", "/acuerdo-encargado-tratamiento")],
+        "where": "Madrid. Respondemos en menos de 24 horas.",
         "rights": "© 2026 D-Code Partners",
-        "contact": "Contacto",
+        "nav": "Pie de página", "legal_l": "Legal",
     },
     "en": {
-        "cols": [
-            ("Capabilities", [("Sales", "/en/departamentos/comercial"), ("Marketing", "/en/departamentos/marketing"),
-                              ("Customers", "/en/departamentos/clientes"), ("Delivery", "/en/departamentos/produccion"),
-                              ("Finance", "/en/departamentos/finanzas"), ("Support", "/en/departamentos/soporte"),
-                              ("Operations", "/en/departamentos/administracion"), ("Leadership", "/en/departamentos/direccion")]),
-            ("Company", [("Method", "/en/metodo"), ("Guarantees", "/en/garantias"), ("About us", "/en/conocenos"),
-                         ("Internal cases", "/en/casos-exito"), ("In progress", "/en/cambios-en-proceso"), ("Blog", "/en/blog")]),
-            ("What we do", [("Services", "/en/servicios"), ("Automation", "/en/servicios/automatizacion-ia"),
-                            ("AI agents", "/en/servicios/agentes-ia"), ("Integrations", "/en/servicios/integraciones"),
-                            ("D-Code Finance", "/en/sistema-financiero"), ("FAQ", "/en/faq")]),
-            ("Legal", [("Privacy", "/en/privacidad"), ("Legal notice", "/en/aviso-legal"), ("Cookies", "/en/cookies"),
-                       ("Security", "/en/seguridad"), ("Terms of service", "/en/condiciones-contratacion"),
-                       ("Data processing", "/en/acuerdo-encargado-tratamiento")]),
-        ],
-        "line": "We read how your company works and build the system that does the repetitive work on its own.",
-        "where": "Madrid, Spain",
-        "reply": "We reply within 24 hours.",
+        "links": [("What we automate", "/en/departamentos"), ("Services", "/en/servicios"), ("D-Code Finance", "/en/sistema-financiero"),
+                  ("Method", "/en/metodo"), ("Guarantees", "/en/garantias"), ("Cases", "/en/casos-exito"),
+                  ("About", "/en/conocenos"), ("In progress", "/en/cambios-en-proceso"), ("Blog", "/en/blog"),
+                  ("FAQ", "/en/faq"), ("Contact", "/en/contacto")],
+        "legal": [("Privacy", "/en/privacidad"), ("Legal notice", "/en/aviso-legal"), ("Cookies", "/en/cookies"),
+                  ("Security", "/en/seguridad"), ("Terms", "/en/condiciones-contratacion"),
+                  ("Data processing", "/en/acuerdo-encargado-tratamiento")],
+        "where": "Madrid. We reply within 24 hours.",
         "rights": "© 2026 D-Code Partners",
-        "contact": "Contact",
+        "nav": "Footer", "legal_l": "Legal",
     },
 }
 
 
 def footer(lang: str) -> str:
     f = FOOT[lang]
-    cols = "".join(
-        f'<div class="foot-col"><h2>{title}</h2><ul>'
-        + "".join(f'<li><a href="{h}">{l}</a></li>' for l, h in items)
-        + "</ul></div>"
-        for title, items in f["cols"]
-    )
+    links = "".join(f'<li><a href="{h}">{l}</a></li>' for l, h in f["links"])
+    legal = "".join(f'<li><a href="{h}">{l}</a></li>' for l, h in f["legal"])
     return f"""<footer class="foot">
   <div class="foot-top">
-    <p class="foot-line">{f['line']}</p>
     <div class="foot-contact">
-      <h2 class="sr-only">{f['contact']}</h2>
       <a href="mailto:dcodedepartment@gmail.com">dcodedepartment@gmail.com</a>
       <a href="tel:+34680223439">Diego · 680 22 34 39</a>
       <a href="tel:+34614547570">Dimitry · 614 54 75 70</a>
-      <span>{f['where']}. {f['reply']}</span>
+      <span>{f['where']}</span>
     </div>
+    <nav class="foot-nav" aria-label="{f['nav']}"><ul>{links}</ul></nav>
   </div>
-  <div class="foot-cols">{cols}</div>
   <div class="foot-name" aria-hidden="true">{mark('foot-mark')}<span>D-Code</span></div>
-  <p class="foot-rights">{f['rights']}</p>
+  <div class="foot-base">
+    <p class="foot-rights">{f['rights']}</p>
+    <ul class="foot-legal" aria-label="{f['legal_l']}">{legal}</ul>
+  </div>
 </footer>"""
 
 
