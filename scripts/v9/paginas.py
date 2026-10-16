@@ -45,6 +45,10 @@ def _hero_parts(hero_p):
     return h1, ps, badges, eyebrow
 
 
+# Orden de «Con el sistema» para que cada fila responda a su «Hoy».
+EMPAREJAR = {"finanzas": [0, 2, 1, 3]}
+
+
 def departamento(slug: str, lang: str):
     """Área en versión mínima: nombre, la frase del menú y qué cambia, fila a fila."""
     from clave import areas
@@ -55,7 +59,10 @@ def departamento(slug: str, lang: str):
     nombre, _, linea, estado = next(a for a in areas(lang) if a[1].endswith("/" + slug))
     hub = ("Qué automatizamos" if es else "What we automate", _url(lang, "departamentos"))
     shift = next((sh for sh in (_shift(x) for x in secciones(path)) if len(sh) >= 2), None)
-    cuerpo_html = cambio(lang, "Qué cambia" if es else "What changes", shift[0][1], shift[1][1]) if shift else ""
+    despues = shift[1][1] if shift else []
+    if slug in EMPAREJAR:  # en producción eran dos columnas sueltas; aquí cada fila empareja problema y solución
+        despues = [despues[i] for i in EMPAREJAR[slug]]
+    cuerpo_html = cambio(lang, "Qué cambia" if es else "What changes", shift[0][1], despues) if shift else ""
     acciones = [CTA[lang]]
     if slug == "finanzas":
         acciones.append(("Ver la demo de D-Code Finance" if es else "See the D-Code Finance demo",
