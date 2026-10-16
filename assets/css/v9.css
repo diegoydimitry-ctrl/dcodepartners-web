@@ -223,6 +223,7 @@ main > section { padding: var(--sec) var(--pad) 0; }
 .ms-more { margin-top: 8px; }
 
 .mc { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); column-gap: var(--gap); row-gap: 32px; }
+.mc[style*="--n:4"] { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
 .mc li { padding-top: 22px; box-shadow: inset 0 3px 0 var(--ink); }
 .mc li:last-child { box-shadow: inset 0 3px 0 var(--blue); }
 .mc h3 { font-size: clamp(1.7rem, 2.6vw, 2.75rem); letter-spacing: -0.04em; margin-bottom: 12px; }
