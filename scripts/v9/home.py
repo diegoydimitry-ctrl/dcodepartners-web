@@ -5,6 +5,7 @@ Todas las frases salen de la web de producción (menú de capacidades, /garantia
 /contacto); aquí solo se acortan.
 """
 from common import e, mark, page
+from minima import cierre
 
 T = {
     "es": {
@@ -28,10 +29,6 @@ T = {
         "fin_p": "Facturas, cobros y gastos en un solo panel.",
         "fin_a": ("Ver la demo", "/sistema-financiero/demo"),
         "fin_alt": "Panel de D-Code Finance (demo con datos ficticios).",
-        "end_h": "¿Hablamos?",
-        "end_p": "En 30 minutos te decimos qué automatizaríamos y por dónde empezar.",
-        "gar": ["Alcance por escrito", "Sin permanencia", "El sistema es tuyo"],
-        "gar_href": "/garantias",
     },
     "en": {
         "h1": "We automate repetitive work.",
@@ -54,10 +51,6 @@ T = {
         "fin_p": "Invoices, collections and expenses in one dashboard.",
         "fin_a": ("See the demo", "/en/sistema-financiero/demo"),
         "fin_alt": "D-Code Finance dashboard (demo with fictitious data).",
-        "end_h": "Shall we talk?",
-        "end_p": "In 30 minutes we tell you what we would automate and where to start.",
-        "gar": ["Scope in writing", "No lock-in", "The system is yours"],
-        "gar_href": "/en/garantias",
     },
 }
 
@@ -70,7 +63,6 @@ def build(lang: str = "es"):
         for a, b, h in t["que"]
     )
     como = "".join(f'<li data-r><h3>{a}</h3><p>{b}</p></li>' for a, b in t["como"])
-    gar = "".join(f"<li>{g}</li>" for g in t["gar"])
     main = f"""<section class="mh">
   <div class="mh-text">
     <h1 data-r>{t['h1']}</h1>
@@ -104,12 +96,7 @@ def build(lang: str = "es"):
   </figure>
 </section>
 
-<section class="me" aria-labelledby="me-h">
-  <h2 id="me-h" data-r>{t['end_h']}</h2>
-  <p class="mh-sub" data-r>{t['end_p']}</p>
-  <p class="mh-act" data-r><a class="btn btn--big" href="{t['cta'][1]}">{t['cta'][0]}</a></p>
-  <ul class="mg" data-r>{gar}</ul>
-</section>"""
+{cierre(lang)}"""
     if lang == "es":
         page("index.html", "index.html", "es", "/", main, "p-home",
              title="D-Code Partners — Automatizamos el trabajo repetitivo de tu empresa",

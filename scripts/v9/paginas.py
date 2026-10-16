@@ -1,10 +1,9 @@
-"""Páginas interiores v9: departamentos, servicios, legales, blog, FAQ y 404."""
+"""Páginas interiores v9 (versión mínima): áreas, servicios, legales, blog, FAQ y 404."""
 import re
 
 from common import CTA, e, page
-from datos import COMO, ORGANIGRAMA
 from extraer import cuerpo, main_html, piezas, secciones, texto
-from plantillas import LABELS, crumbs, cta_band, generico, phero
+from plantillas import cta_band, phero
 
 DEPTS = ["comercial", "marketing", "clientes", "produccion", "finanzas", "soporte", "administracion", "direccion"]
 SERVICIOS = ["automatizacion-ia", "agentes-ia", "integraciones"]
@@ -46,78 +45,48 @@ def _hero_parts(hero_p):
     return h1, ps, badges, eyebrow
 
 
-def _como(slug: str, lang: str):
-    """Fragmento de interfaz de «Cómo funciona» para un Departamento."""
-    c = COMO[lang].get(slug)
-    if not c:
-        return None
-    aviso = COMO[lang]["aviso"]
-
-    def render(h2, ps):
-        intro = c.get("intro")
-        lead = next((p[1] for p in ps if p[0] == "p" and "lead" in (p[2] if len(p) > 2 else "")
-                     and "Representaci" not in p[1] and "simplified" not in p[1].lower()), None)
-        texto_intro = intro or lead or ""
-        t = c["tipo"]
-        if t == "flujo":
-            lis = "".join(f"<li data-r><h3>{a}</h3><p>{b}</p></li>" for a, b in c["pasos"])
-            fig = f'<ol class="flow" style="--n:{len(c["pasos"])}">{lis}</ol>'
-        elif t in ("ficha", "panel"):
-            cab = f'<p class="ui-cab"><span class="ui-sq"></span>{c.get("titulo", "")}</p>' if c.get("titulo") else ""
-            tiles = "".join(f'<li><h3>{a}</h3><p>{b}</p></li>' for a, b in c["pasos"])
-            fig = f'<div class="ui ui--{t}" data-ui data-r>{cab}<ul class="ui-tiles">{tiles}</ul></div>'
-        elif t == "tablero":
-            cols = "".join(
-                f'<div class="ui-col"><h3>{n}</h3><ul>' + "".join(f"<li>{x}</li>" for x in items) + "</ul></div>"
-                for n, items in c["cols"])
-            fig = f'<div class="ui ui--tablero" data-ui data-r>{cols}</div>'
-        elif t == "ticket":
-            pasos = "".join(f'<li><h3>{a}</h3><p>{b}</p></li>' for a, b in c["pasos"])
-            fig = (f'<div class="ui ui--ticket" data-ui data-r><p class="ui-cab"><span class="ui-sq"></span>{c["id"]}</p>'
-                   f'<p class="ui-msg">{c["msg"]}</p><ol class="ui-pasos">{pasos}</ol></div>')
-        elif t == "mando":
-            filas = "".join(
-                f'<li class="{"ok" if ok else "alerta"}"><span class="ui-dot"></span><b>{a}</b><span>{b}</span></li>'
-                for a, b, ok in c["filas"])
-            fig = (f'<div class="ui ui--mando" data-ui data-r><p class="ui-cab"><span class="ui-sq"></span>{c["titulo"]}</p>'
-                   f'<ul class="ui-filas">{filas}</ul><p class="ui-pie">{c["pie"]}</p></div>')
-        else:
-            fig = ""
-        intro_html = f'<p class="lead" data-r>{texto_intro}</p>' if texto_intro else ""
-        return f"""<section class="sec-como">
-  <div class="sec-head"><h2 data-r>{h2}</h2>{intro_html}</div>
-  {fig}
-  <p class="ui-aviso" data-r>{aviso}</p>
-</section>"""
-    return render
-
-
 def departamento(slug: str, lang: str):
+    """Área en versión mínima: nombre, la frase del menú y qué cambia, fila a fila."""
+    from clave import areas
+    from minima import cabecera, cambio, cierre
+    from plantillas import _shift
+    es = lang == "es"
     path = f"{_pre(lang)}departamentos/{slug}.html"
-    t = TXT[lang]
-    org = ORGANIGRAMA[lang]
-    nodos = [org["top"]] + org["areas"]
-    nombre = next(n[0] for n in nodos if n[1].endswith("/" + slug))
-    como = _como(slug, lang)
-    hero_p, cuerpo_html = generico(path, lang, reemplazar={2: como} if como else None)
-    h1, ps, badges, _ = _hero_parts(hero_p)
-    lead = "".join(f'<p class="lead phero-lead" data-r>{p}</p>' for p in ps)
-    chips = [(b, any(k in b.lower() for k in ("disponible", "operativo", "available", "operational", "validación", "validation", "revisión", "review"))) for b in badges]
-    hero = phero(lang, nombre, h1, [(t["cap"], _url(lang, "departamentos")), (nombre, None)],
-                 acciones=[CTA[lang], t["todas"]], chips=chips, extra=lead)
-    page(path, path, lang, _url(lang, f"departamentos/{slug}"), hero + "\n" + cuerpo_html, "p-dept")
+    nombre, _, linea, estado = next(a for a in areas(lang) if a[1].endswith("/" + slug))
+    hub = ("Qué automatizamos" if es else "What we automate", _url(lang, "departamentos"))
+    shift = next((sh for sh in (_shift(x) for x in secciones(path)) if len(sh) >= 2), None)
+    cuerpo_html = cambio(lang, "Qué cambia" if es else "What changes", shift[0][1], shift[1][1]) if shift else ""
+    acciones = [CTA[lang]]
+    if slug == "finanzas":
+        acciones.append(("Ver la demo de D-Code Finance" if es else "See the D-Code Finance demo",
+                         _url(lang, "sistema-financiero/demo")))
+    main = (cabecera(lang, nombre, linea, migas=[hub, (nombre, None)], acciones=acciones, chip=estado)
+            + cuerpo_html + cierre(lang, secundario=("Ver las 8 áreas" if es else "See all 8 areas", hub[1])))
+    page(path, path, lang, _url(lang, f"departamentos/{slug}"), main, "p-min")
 
 
 def servicio(slug: str, lang: str):
+    """Servicio en versión mínima: nombre, su frase y la lista de lo que cubre."""
+    from clave import servicio_nombre
+    from minima import cabecera, cierre, filas
+    from plantillas import es_ruido
+    es = lang == "es"
     path = f"{_pre(lang)}servicios/{slug}.html"
-    t = TXT[lang]
-    hero_p, cuerpo_html = generico(path, lang)
-    h1, ps, badges, eyebrow = _hero_parts(hero_p)
-    nombre = eyebrow.split("·")[-1].strip() if "·" in eyebrow else eyebrow
-    lead = "".join(f'<p class="lead phero-lead" data-r>{p}</p>' for p in ps)
-    hero = phero(lang, nombre, h1, [(t["serv"], _url(lang, "servicios")), (nombre, None)],
-                 acciones=[CTA[lang], t["serv_all"]], extra=lead)
-    page(path, path, lang, _url(lang, f"servicios/{slug}"), hero + "\n" + cuerpo_html, "p-serv")
+    secs = secciones(path)
+    h1 = next(p[1] for p in piezas(secs[0]) if p[0] == "h1")
+    nombre = servicio_nombre(path)
+    lit = next(x for x in secs[1:] if sum(1 for p in piezas(x) if p[0] == "h3") >= 3)
+    ps = [p for p in piezas(lit) if not (p[0] == "p" and es_ruido(texto(p[1])))]
+    label = next((p[1] for p in ps if p[0] == "eyebrow"), "")
+    rows = []
+    for i, p in enumerate(ps):
+        if p[0] == "h3":
+            d = next((q[1] for q in ps[i + 1:] if q[0] == "p"), "")
+            rows.append((p[1], d))
+    hub = ("Servicios" if es else "Services", _url(lang, "servicios"))
+    main = (cabecera(lang, nombre, h1, migas=[hub, (nombre, None)], acciones=[CTA[lang]])
+            + filas(label, rows, ident="serv", grande=False) + cierre(lang))
+    page(path, path, lang, _url(lang, f"servicios/{slug}"), main, "p-min")
 
 
 def _prosa_de(path):

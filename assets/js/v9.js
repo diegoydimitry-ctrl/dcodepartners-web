@@ -1,7 +1,6 @@
-/* D-Code Partners · v9
-   Barra, menú del teléfono, apariciones, el descifrador y el relleno del
-   formulario de contacto. Todo funciona sin este script: si falla, el
-   contenido se ve igual (las apariciones solo se activan con html.js). */
+/* D-Code Partners · v9 (versión mínima)
+   Barra, menú del teléfono y apariciones. Todo funciona sin este script:
+   si falla, el contenido se ve igual (las apariciones solo se activan con html.js). */
 (function () {
   'use strict';
   window.__v9 = true;
@@ -61,81 +60,5 @@
         });
       }, 1200);
     });
-  }
-
-  /* ---------- el descifrador ---------- */
-  var form = document.querySelector('[data-dec]');
-  var dataEl = document.getElementById('dec-data');
-  if (form && dataEl) {
-    var data = JSON.parse(dataEl.textContent);
-    var cfg = data.cfg, frases = data.frases;
-    var sec = form.closest('.dec');
-    var out = {
-      horas: sec.querySelector('[data-horas]'),
-      eq: sec.querySelector('[data-eq]'),
-      sis: sec.querySelector('[data-sis]'),
-      per: sec.querySelector('[data-per]'),
-      cta: sec.querySelector('[data-cta]'),
-      dep: sec.querySelector('[data-dep]')
-    };
-    var fmt = new Intl.NumberFormat(cfg.lang === 'en' ? 'en-GB' : 'es-ES');
-    var shown = parseInt(out.horas.textContent.replace(/\D/g, ''), 10) || 0;
-    var raf = null;
-
-    var animateTo = function (target) {
-      if (raf) cancelAnimationFrame(raf);
-      if (reduce) { shown = target; out.horas.textContent = fmt.format(target); return; }
-      var from = shown, t0 = performance.now(), dur = 520;
-      var step = function (now) {
-        var p = Math.min(1, (now - t0) / dur);
-        var eased = 1 - Math.pow(1 - p, 3);
-        shown = Math.round(from + (target - from) * eased);
-        out.horas.textContent = fmt.format(shown);
-        if (p < 1) raf = requestAnimationFrame(step);
-      };
-      raf = requestAnimationFrame(step);
-    };
-
-    var val = function (name) { return parseInt(form.elements[name].value, 10) || 0; };
-    var update = function (changedPhrase) {
-      var f = frases[form.elements.frase.value];
-      if (changedPhrase) {
-        form.elements.min.value = f.min;
-        form.elements.veces.value = f.veces;
-        out.sis.textContent = f.sistema;
-        out.per.textContent = f.persona;
-        [out.sis, out.per].forEach(function (el) { el.classList.remove('is-tick'); void el.offsetWidth; el.classList.add('is-tick'); });
-      }
-      ['min', 'veces', 'personas'].forEach(function (n) {
-        var o = form.querySelector('[data-v="' + n + '"]');
-        if (o) o.textContent = form.elements[n].value;
-      });
-      var horas = Math.round(val('min') * val('veces') * val('personas') * cfg.semanas / 60);
-      animateTo(horas);
-      out.eq.textContent = cfg.eq.replace('{j}', fmt.format(Math.round(horas / 8))).replace('{s}', cfg.semanas);
-      out.dep.textContent = cfg.dep.replace('{area}', f.area);
-      out.dep.setAttribute('href', f.href);
-      var q = new URLSearchParams({ tarea: f.frase, horas: String(horas) });
-      out.cta.setAttribute('href', cfg.contacto + '?' + q.toString());
-    };
-    form.elements.frase.addEventListener('change', function () { update(true); });
-    ['min', 'veces', 'personas'].forEach(function (n) {
-      form.elements[n].addEventListener('input', function () { update(false); });
-    });
-    form.addEventListener('submit', function (ev) { ev.preventDefault(); });
-    update(false);
-  }
-
-  /* ---------- contacto: la tarea que llega del descifrador ---------- */
-  var msg = document.getElementById('mensaje');
-  if (msg && !msg.value) {
-    var params = new URLSearchParams(window.location.search);
-    var tarea = params.get('tarea'), horas = params.get('horas');
-    if (tarea && tarea.length < 120 && /^\d{1,6}$/.test(horas || '')) {
-      var en = root.lang === 'en';
-      msg.value = en
-        ? '«' + tarea + '» Around ' + horas + ' hours a year by my numbers. I would like to look at it.'
-        : '«' + tarea + '» Según mis números son unas ' + horas + ' horas al año. Me gustaría verlo.';
-    }
   }
 })();
