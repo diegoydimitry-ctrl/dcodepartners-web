@@ -11,8 +11,9 @@ está en **[GUION.md](GUION.md)** (anuncio 1), **[GUION-2.md](GUION-2.md)**
 **[GUION-4.md](GUION-4.md)** (D-Code Finance, corporativo),
 **[GUION-5.md](GUION-5.md)** (D-Code Finance, recorte social),
 **[GUION-6.md](GUION-6.md)** (redes sociales + páginas web para negocios)
-y **[GUION-7.md](GUION-7.md)** (Reel editorial/documental sobre Séneca,
-conecta con D-Code solo al cierre).
+**[GUION-7.md](GUION-7.md)** (Reel editorial/documental sobre Séneca,
+conecta con D-Code solo al cierre) y **[GUION-8.md](GUION-8.md)** (Reel
+motivacional que presenta los servicios reales como premium).
 
 ## Resultado
 
@@ -33,6 +34,7 @@ conecta con D-Code solo al cierre).
 | `out/dcode-ad6b-9x16-vo.mp4` | 1080×1920 · 30 fps · 27 s | Variante B del gancho, para probar A/B |
 | `out/dcode-ad6-portada-9x16.png` | 1080×1920 | Portada del Reel |
 | `out/dcode-ad7-9x16-vo.mp4` | 1080×1920 · 30 fps · 51,8 s | Reel editorial (Séneca), con locución, música y subtítulos |
+| `out/dcode-ad8-9x16-vo.mp4` | 1080×1920 · 30 fps · 45,6 s | Reel motivacional, servicios premium, con locución, música y subtítulos |
 | `out/dcode-ad7-portada-9x16.png` | 1080×1920 | Portada del Reel |
 | `out/banda-sonora.wav` … `-7.wav` | 44,1 kHz estéreo | Música y efectos por separado, uno por anuncio |
 
