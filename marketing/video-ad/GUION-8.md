@@ -58,18 +58,27 @@ modo `enableBase64Response` para no depender de la red bloqueada hacia
 
 ## 3. Música y cierre
 
-Misma pista subida por el usuario para el anuncio 7
-(`assets/music-ad7/do_i_clench_my_fists.mp3`), en bucle con cruce de
-2 s, atenuada bajo cada línea de voz (tramos con volumen fijo,
-`atrim`+`concat` — el método fiable, no `sidechaincompress`).
+**Música propia, distinta de la del anuncio 7** (`audio8.py` →
+`out/banda-sonora-8.wav`) — el usuario pidió explícitamente no repetir
+la pista subida para el anuncio 7. Sintetizada desde cero en Python
+puro (sin muestras, sin librerías externas): pista original y libre de
+derechos por construcción, sin ninguna duda de licencia para publicar
+en Instagram, TikTok o YouTube. Carácter tech/corporativo moderno —
+pulso de bajo tipo synth (`saw_bass`), arpegios digitales brillantes
+(`arp`) y un "stinger" + barrido (`riser`/`stinger`) sincronizado en
+cada corte de escena del montaje (t = 0, 11,71, 18,11, 23,53, 29,18,
+33,99), con la energía creciendo escena a escena hasta el crescendo
+del cierre — nada de piano ambiental ni de los timbres del anuncio 7.
+
+Atenuación bajo cada línea de voz calculada directamente en Python
+(`duck_gain()`, multiplicando cada muestra), no vía expresión de
+ffmpeg — más fiable aún que el método de tramos usado en el anuncio 7,
+y verificado numéricamente antes de mezclar (0,38× bajo voz, 1,0× en
+los huecos).
 
 El cierre, a diferencia del anuncio 7, sí nombra los tres servicios
 (una sola línea, sin lista de bullets) porque esta pieza está pensada
 para presentar el catálogo, no para pasar desapercibida.
-
-**Pendiente de confirmar**: igual que en el anuncio 7, la pista de
-música es un archivo subido por el usuario, no sintetizada — verificar
-derechos de uso antes de publicar.
 
 ---
 
@@ -81,6 +90,7 @@ derechos de uso antes de publicar.
 | `out/dcode-ad8-portada-9x16.png` | Portada del Reel |
 | `voces/ad8/01.mp3` … `08.mp3` | Locución sin editar (ElevenLabs, voz Arconte) |
 | `assets/stock-ad8/*.png` | Las 6 fotografías generadas (Figma) |
+| `out/banda-sonora-8.wav` | Música sintetizada, sin voz, por separado |
 
 ---
 
