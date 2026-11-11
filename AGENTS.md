@@ -9,10 +9,13 @@
 ## Protocolo Director / Ejecutor / Auditor
 
 - El Director D-Code define el alcance, las prioridades y las aprobaciones. Codex o Claude ejecutan el encargo asignado; el otro agente puede actuar como Auditor independiente.
-- Usa la tarea existente del Director para coordinar el trabajo. Conserva su identificador, actualiza su estado y resultado, y no crees tareas duplicadas ni sustitutas.
+- Usa la tarea existente del Director para coordinar el trabajo. Conserva su identificador y consulta su estado y resultado; no crees tareas duplicadas ni sustitutas.
 - Una tarea creada o pendiente no equivale a trabajo recibido o completado. Respeta los estados y bloqueos del Director; nunca intentes eludir una aprobación humana.
 - El Auditor revisa el diff y la evidencia de CI de forma independiente. Debe señalar riesgos, regresiones y comprobaciones pendientes; no se considera aprobada una tarea solo porque el Ejecutor diga que terminó.
-- Entrega el resultado y los enlaces de rama/PR al Director. La tarea solo queda cerrada cuando el Director confirma el resultado.
+- Cada entrega de Claude debe incluir repositorio, rama o PR, commit, resumen, criterios cubiertos y comprobaciones realizadas. Codex recupera la tarea por su ID y contrasta el resultado con el encargo antes de cerrar el ciclo.
+- Si la tarea original queda COMPLETADA y la revisión detecta correcciones, crea una única tarea de seguimiento vinculada al ID original y enumera los hallazgos concretos. No dupliques una tarea PENDIENTE, RECIBIDA o EN_CURSO. Si queda ERROR o BLOQUEADA, detente y comunica el motivo; no la sustituyas ni rodees.
+- Una tarea BLOQUEADA requiere aprobación humana. No la canceles, sustituyas ni rodees para continuar el mismo trabajo.
+- Entrega al Director el resultado y los enlaces de rama/PR. El objetivo global solo se considera completo cuando Claude confirma la tarea como COMPLETADA y Codex/Auditor verifica los criterios y las correcciones pendientes.
 
 ## Git y colaboración
 
