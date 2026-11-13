@@ -233,11 +233,10 @@
           "Hasta 10 personas"
         ],
         "no_incluye": [
+          "Más de 100 facturas leídas al mes: se amplía con un pack aparte",
           "Conexiones con otras herramientas"
         ],
-        "precio": "690 €",
-        "precio_detalle": "de implantación",
-        "precio_mes": "79 €",
+        "precio_mes": "59 €",
         "precio_mes_detalle": "al mes · hasta 10 personas"
       },
       "en": {
@@ -251,15 +250,14 @@
           "Up to 10 people"
         ],
         "no_incluye": [
+          "More than 100 invoices read per month: extra packs available",
           "Connections with other tools"
         ],
-        "precio": "€690",
-        "precio_detalle": "setup",
-        "precio_mes": "€79",
+        "precio_mes": "€59",
         "precio_mes_detalle": "per month · up to 10 people"
       },
-      "setup": 690,
-      "mes": 79,
+      "setup": 0,
+      "mes": 59,
       "sectores": [
         "todos"
       ],
@@ -285,9 +283,7 @@
           "Conexiones con las herramientas que ya usas",
           "Sin límite de personas"
         ],
-        "precio": "Desde 1.500 €",
-        "precio_detalle": "según el alcance",
-        "precio_mes": "Desde 190 €",
+        "precio_mes": "190 €",
         "precio_mes_detalle": "al mes · sin límite de personas"
       },
       "en": {
@@ -300,12 +296,10 @@
           "Connections with the tools you already use",
           "No limit on people"
         ],
-        "precio": "From €1,500",
-        "precio_detalle": "depending on scope",
-        "precio_mes": "From €190",
-        "precio_mes_detalle": "per month · no limit on people"
+        "precio_mes": "€190",
+        "precio_mes_detalle": "per month · unlimited people"
       },
-      "setup": 1500,
+      "setup": 0,
       "mes": 190,
       "sectores": [
         "todos"
@@ -405,7 +399,7 @@
     {
       "id": "os",
       "cat": "os",
-      "estado": "a-medida",
+      "estado": "disponible",
       "destacado": true,
       "es": {
         "nombre": "D-Code OS",
@@ -415,15 +409,16 @@
           "El mapa de tus sistemas y por dónde pasa cada dato",
           "La actividad según ocurre, con su rastro",
           "Lo que la IA hace sola queda registrado; lo que importa espera a una persona",
-          "Implantación y formación de tu equipo"
+          "Implantación y formación de tu equipo",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
         "no_incluye": [
+          "Más de 3 sistemas conectados: se valora aparte",
           "Los sistemas que conecta, que se contratan aparte"
         ],
-        "precio": "Desde 2.900 €",
-        "precio_detalle": "de implantación, según cuántos sistemas",
-        "precio_mes": "Desde 190 €",
-        "precio_mes_detalle": "al mes de operación y soporte",
+        "precio_mes": "149 €",
+        "precio_mes_detalle": "al mes · hasta 3 sistemas conectados",
         "nota": "Hoy se implanta caso a caso. Contratarlo por planes cerrados llegará; cuando llegue, lo dirá aquí."
       },
       "en": {
@@ -434,19 +429,20 @@
           "The map of your systems and where each piece of data goes",
           "Activity as it happens, with its trail",
           "What the AI does alone is logged; what matters waits for a person",
-          "Rollout and training for your team"
+          "Rollout and training for your team",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
         "no_incluye": [
+          "More than 3 connected systems: quoted separately",
           "The systems it connects, contracted separately"
         ],
-        "precio": "From €2,900",
-        "precio_detalle": "setup, depending on how many systems",
-        "precio_mes": "From €190",
-        "precio_mes_detalle": "per month for operation and support",
+        "precio_mes": "€149",
+        "precio_mes_detalle": "per month · up to 3 connected systems",
         "nota": "Today it is rolled out case by case. Buying it as a closed plan is coming; when it does, it will say so here."
       },
-      "setup": 2900,
-      "mes": 190,
+      "setup": 0,
+      "mes": 149,
       "sectores": [
         "todos"
       ],
@@ -468,10 +464,15 @@
           "Análisis de la tarea y de sus excepciones",
           "El flujo montado y probado con datos reales",
           "Control de errores y aviso cuando algo no sale",
-          "Documentación y 30 días de soporte"
+          "Documentación y 30 días de soporte",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 390 €",
-        "precio_detalle": "pago único, sin permanencia"
+        "precio_mes": "29 €",
+        "precio_mes_detalle": "al mes · una automatización",
+        "no_incluye": [
+          "Más de dos herramientas conectadas en el mismo flujo"
+        ]
       },
       "en": {
         "nombre": "One automation",
@@ -481,13 +482,18 @@
           "Analysis of the task and its exceptions",
           "The flow built and tested with real data",
           "Error handling and an alert when something goes wrong",
-          "Documentation and 30 days of support"
+          "Documentation and 30 days of support",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €390",
-        "precio_detalle": "one-off, no lock-in"
+        "precio_mes": "€29",
+        "precio_mes_detalle": "per month · one automation",
+        "no_incluye": [
+          "More than two tools connected in the same flow"
+        ]
       },
-      "setup": 390,
-      "mes": 0,
+      "setup": 0,
+      "mes": 29,
       "sectores": [
         "todos"
       ],
@@ -509,10 +515,12 @@
           "Conexión con las herramientas que ya usas",
           "Control de errores y monitorización",
           "Formación de dos personas y documentación",
-          "30 días de soporte"
+          "30 días de soporte",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 1.200 €",
-        "precio_detalle": "pago único, según el alcance"
+        "precio_mes": "69 €",
+        "precio_mes_detalle": "al mes · de 3 a 5 flujos"
       },
       "en": {
         "nombre": "Automation pack",
@@ -523,13 +531,15 @@
           "Connection with the tools you already use",
           "Error handling and monitoring",
           "Training for two people and documentation",
-          "30 days of support"
+          "30 days of support",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €1,200",
-        "precio_detalle": "one-off, depending on scope"
+        "precio_mes": "€69",
+        "precio_mes_detalle": "per month · 3 to 5 flows"
       },
-      "setup": 1200,
-      "mes": 0,
+      "setup": 0,
+      "mes": 69,
       "sectores": [
         "todos"
       ],
@@ -551,11 +561,16 @@
           "Lectura de documentos (facturas, partes, correos)",
           "Clasificación y extracción de datos",
           "Lo que la IA decide queda registrado y es revisable",
-          "Puntos de aprobación donde tú digas"
+          "Puntos de aprobación donde tú digas",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 2.400 €",
-        "precio_detalle": "pago único, según el alcance",
-        "nota": "El consumo de IA se factura a coste, aparte y con su detalle."
+        "nota": "El consumo de IA se factura a coste, aparte y con su detalle.",
+        "precio_mes": "119 €",
+        "precio_mes_detalle": "al mes · una automatización con IA",
+        "no_incluye": [
+          "El consumo de IA, que se factura aparte y a coste"
+        ]
       },
       "en": {
         "nombre": "AI automation",
@@ -565,59 +580,25 @@
           "Document reading (invoices, work orders, emails)",
           "Classification and data extraction",
           "What the AI decides is logged and reviewable",
-          "Approval points wherever you say"
+          "Approval points wherever you say",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €2,400",
-        "precio_detalle": "one-off, depending on scope",
-        "nota": "AI usage is billed at cost, separately and itemised."
+        "nota": "AI usage is billed at cost, separately and itemised.",
+        "precio_mes": "€119",
+        "precio_mes_detalle": "per month · one AI automation",
+        "no_incluye": [
+          "AI usage, billed separately at cost"
+        ]
       },
-      "setup": 2400,
-      "mes": 0,
+      "setup": 0,
+      "mes": 119,
       "sectores": [
         "todos"
       ],
       "necesidad": [
         "automatizar",
         "ia"
-      ]
-    },
-    {
-      "id": "auto-mant",
-      "cat": "automatiza",
-      "estado": "disponible",
-      "destacado": false,
-      "extra": true,
-      "es": {
-        "nombre": "Mantenimiento",
-        "para": "Cuando lo montado tiene que seguir funcionando",
-        "que": "Vigilancia de lo que ya está en marcha, arreglos cuando una herramienta cambia y ajustes pequeños.",
-        "incluye": [
-          "Monitorización y aviso si algo se para",
-          "Arreglos cuando una herramienta cambia su API",
-          "Ajustes pequeños dentro del alcance"
-        ],
-        "precio": "Desde 150 €",
-        "precio_detalle": "al mes, opcional y sin permanencia"
-      },
-      "en": {
-        "nombre": "Maintenance",
-        "para": "When what is built has to keep working",
-        "que": "Watching over what is running, fixes when a tool changes and small adjustments.",
-        "incluye": [
-          "Monitoring and an alert if something stops",
-          "Fixes when a tool changes its API",
-          "Small adjustments within scope"
-        ],
-        "precio": "From €150",
-        "precio_detalle": "per month, optional, no lock-in"
-      },
-      "setup": 0,
-      "mes": 150,
-      "sectores": [
-        "todos"
-      ],
-      "necesidad": [
-        "automatizar"
       ]
     },
     {
@@ -633,13 +614,16 @@
           "Un canal: web, WhatsApp o teléfono",
           "Respuestas con tus datos, no inventadas",
           "Escalado a persona con el contexto entero",
-          "Registro de todo lo que responde"
+          "Registro de todo lo que responde",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 750 €",
-        "precio_detalle": "de implantación",
-        "precio_mes": "Desde 90 €",
-        "precio_mes_detalle": "al mes de operación",
-        "nota": "El consumo (mensajes, minutos, modelo) se factura a coste, aparte y con su detalle."
+        "precio_mes": "49 €",
+        "precio_mes_detalle": "al mes · un canal",
+        "nota": "El consumo (mensajes, minutos, modelo) se factura a coste, aparte y con su detalle.",
+        "no_incluye": [
+          "El consumo de IA, que se factura aparte y a coste"
+        ]
       },
       "en": {
         "nombre": "Single-channel agent",
@@ -649,16 +633,19 @@
           "One channel: web, WhatsApp or phone",
           "Answers from your data, not made up",
           "Escalation to a person with the whole context",
-          "A log of everything it answers"
+          "A log of everything it answers",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €750",
-        "precio_detalle": "setup",
-        "precio_mes": "From €90",
-        "precio_mes_detalle": "per month for operation",
-        "nota": "Usage (messages, minutes, model) is billed at cost, separately and itemised."
+        "precio_mes": "€49",
+        "precio_mes_detalle": "per month · one channel",
+        "nota": "Usage (messages, minutes, model) is billed at cost, separately and itemised.",
+        "no_incluye": [
+          "AI usage, billed separately at cost"
+        ]
       },
-      "setup": 750,
-      "mes": 90,
+      "setup": 0,
+      "mes": 49,
       "sectores": [
         "todos"
       ],
@@ -680,13 +667,16 @@
           "Varios canales a la vez",
           "Conectado a tus sistemas: crea, consulta y actualiza",
           "Cualificación y enrutado",
-          "Panel con lo que responde y lo que escala"
+          "Panel con lo que responde y lo que escala",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 1.500 €",
-        "precio_detalle": "de implantación",
-        "precio_mes": "Desde 190 €",
-        "precio_mes_detalle": "al mes de operación",
-        "nota": "El consumo (mensajes, minutos, modelo) se factura a coste, aparte y con su detalle."
+        "precio_mes": "99 €",
+        "precio_mes_detalle": "al mes · hasta 3 canales",
+        "nota": "El consumo (mensajes, minutos, modelo) se factura a coste, aparte y con su detalle.",
+        "no_incluye": [
+          "El consumo de IA, que se factura aparte y a coste"
+        ]
       },
       "en": {
         "nombre": "Multichannel agent",
@@ -696,16 +686,19 @@
           "Several channels at once",
           "Connected to your systems: it creates, reads and updates",
           "Qualification and routing",
-          "A panel with what it answers and what it escalates"
+          "A panel with what it answers and what it escalates",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €1,500",
-        "precio_detalle": "setup",
-        "precio_mes": "From €190",
-        "precio_mes_detalle": "per month for operation",
-        "nota": "Usage (messages, minutes, model) is billed at cost, separately and itemised."
+        "precio_mes": "€99",
+        "precio_mes_detalle": "per month · up to 3 channels",
+        "nota": "Usage (messages, minutes, model) is billed at cost, separately and itemised.",
+        "no_incluye": [
+          "AI usage, billed separately at cost"
+        ]
       },
-      "setup": 1500,
-      "mes": 190,
+      "setup": 0,
+      "mes": 99,
       "sectores": [
         "todos"
       ],
@@ -727,8 +720,8 @@
         "web",
         "conectar"
       ],
-      "setup": 1200,
-      "mes": 0,
+      "setup": 0,
+      "mes": 49,
       "es": {
         "nombre": "Web nueva",
         "para": "Quien no tiene web, o la que tiene no la enseña a nadie",
@@ -738,14 +731,17 @@
           "Textos escritos contigo, no rellenos",
           "Rápida de verdad y bien en el teléfono",
           "Analítica y aviso de cookies según la ley",
-          "Los accesos y el dominio, a tu nombre"
+          "Los accesos y el dominio, a tu nombre",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
         "no_incluye": [
+          "Más de 5 páginas: se valora aparte",
           "Contenido que tengas que escribir tú y no nos des",
           "Fotografía y vídeo de producción"
         ],
-        "precio": "Desde 1.200 €",
-        "precio_detalle": "pago único, según cuántas páginas"
+        "precio_mes": "49 €",
+        "precio_mes_detalle": "al mes · hasta 5 páginas"
       },
       "en": {
         "nombre": "A new website",
@@ -756,14 +752,17 @@
           "Copy written with you, not filler",
           "Genuinely fast and right on a phone",
           "Analytics and a cookie notice that follows the law",
-          "Access and the domain, in your name"
+          "Access and the domain, in your name",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
         "no_incluye": [
+          "More than 5 pages: quoted separately",
           "Content you would write yourself and never send us",
           "Photography and video production"
         ],
-        "precio": "From €1,200",
-        "precio_detalle": "one-off, depending on how many pages"
+        "precio_mes": "€49",
+        "precio_mes_detalle": "per month · up to 5 pages"
       }
     },
     {
@@ -777,8 +776,8 @@
       "necesidad": [
         "web"
       ],
-      "setup": 690,
-      "mes": 0,
+      "setup": 0,
+      "mes": 35,
       "es": {
         "nombre": "Arreglar la que tienes",
         "para": "Quien ya tiene web y no quiere empezar de cero",
@@ -787,10 +786,12 @@
           "Repaso de velocidad, móvil y accesibilidad",
           "Rediseño de las páginas que peor funcionan",
           "Textos revisados donde hagan falta",
-          "Lo que ya iba bien se queda"
+          "Lo que ya iba bien se queda",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 690 €",
-        "precio_detalle": "pago único, según lo que haya"
+        "precio_mes": "35 €",
+        "precio_mes_detalle": "al mes · una web"
       },
       "en": {
         "nombre": "Fix the one you have",
@@ -800,10 +801,12 @@
           "A review of speed, mobile and accessibility",
           "A redesign of the pages that work worst",
           "Copy revised where it needs it",
-          "Whatever already worked stays"
+          "Whatever already worked stays",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €690",
-        "precio_detalle": "one-off, depending on what is there"
+        "precio_mes": "€35",
+        "precio_mes_detalle": "per month · one site"
       }
     },
     {
@@ -819,8 +822,8 @@
         "conectar",
         "atender"
       ],
-      "setup": 890,
-      "mes": 0,
+      "setup": 0,
+      "mes": 39,
       "es": {
         "nombre": "Conectar tu web",
         "para": "Quien recibe por la web algo que luego alguien copia a mano",
@@ -829,13 +832,15 @@
           "El formulario entra donde tiene que entrar, ya clasificado",
           "Citas, reservas o pedidos contra tu sistema de verdad",
           "Chatbot que responde con tus datos, si lo quieres",
-          "Control de errores: si algo falla, lo sabes"
+          "Control de errores: si algo falla, lo sabes",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
         "no_incluye": [
           "La web en sí, si hay que hacerla"
         ],
-        "precio": "Desde 890 €",
-        "precio_detalle": "pago único, según con qué se conecte"
+        "precio_mes": "39 €",
+        "precio_mes_detalle": "al mes · una conexión"
       },
       "en": {
         "nombre": "Connect your site",
@@ -845,13 +850,15 @@
           "The form lands where it should, already sorted",
           "Appointments, bookings or orders against your real system",
           "A chatbot answering from your data, if you want one",
-          "Error handling: if something fails, you know"
+          "Error handling: if something fails, you know",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
         "no_incluye": [
           "The site itself, if it has to be built"
         ],
-        "precio": "From €890",
-        "precio_detalle": "one-off, depending on what it connects to"
+        "precio_mes": "€39",
+        "precio_mes_detalle": "per month · one connection"
       }
     },
     {
@@ -867,10 +874,12 @@
           "El dato entra una vez y aparece donde tiene que aparecer",
           "Permisos mínimos necesarios",
           "Control de errores y reintentos",
-          "Documentación"
+          "Documentación",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 490 €",
-        "precio_detalle": "pago único"
+        "precio_mes": "25 €",
+        "precio_mes_detalle": "al mes · dos herramientas"
       },
       "en": {
         "nombre": "Connect two tools",
@@ -880,13 +889,15 @@
           "Data is entered once and shows up where it should",
           "Minimum necessary permissions",
           "Error handling and retries",
-          "Documentation"
+          "Documentation",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €490",
-        "precio_detalle": "one-off"
+        "precio_mes": "€25",
+        "precio_mes_detalle": "per month · two tools"
       },
-      "setup": 490,
-      "mes": 0,
+      "setup": 0,
+      "mes": 25,
       "sectores": [
         "todos"
       ],
@@ -907,10 +918,12 @@
           "Lectura y escritura por la vía que admita tu sistema",
           "Sin modificar el sistema existente",
           "Control de errores, reintentos y trazabilidad",
-          "Documentación y traspaso"
+          "Documentación y traspaso",
+          "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
+          "Sin cuota de alta y sin permanencia"
         ],
-        "precio": "Desde 1.200 €",
-        "precio_detalle": "pago único, según el sistema"
+        "precio_mes": "59 €",
+        "precio_mes_detalle": "al mes · un ERP o sistema propio"
       },
       "en": {
         "nombre": "Connect your ERP or in-house system",
@@ -920,13 +933,15 @@
           "Read and write through whatever your system supports",
           "Without modifying the existing system",
           "Error handling, retries and traceability",
-          "Documentation and handover"
+          "Documentation and handover",
+          "Maintenance, monitoring and fixes included in the monthly fee",
+          "No setup fee and no minimum term"
         ],
-        "precio": "From €1,200",
-        "precio_detalle": "one-off, depending on the system"
+        "precio_mes": "€59",
+        "precio_mes_detalle": "per month · one ERP or in-house system"
       },
-      "setup": 1200,
-      "mes": 0,
+      "setup": 0,
+      "mes": 59,
       "sectores": [
         "todos"
       ],
@@ -950,10 +965,8 @@
           "Desarrollo por partes, dentro de las herramientas que ya usáis",
           "El sistema funcionando, con documentación y accesos a tu nombre"
         ],
-        "precio": "Desde 1.500 €",
-        "precio_detalle": "según el alcance",
-        "precio_mes": "Desde 190 €",
-        "precio_mes_detalle": "al mes de mantenimiento, opcional"
+        "precio_mes": "190 €",
+        "precio_mes_detalle": "al mes · según el alcance"
       },
       "en": {
         "nombre": "Custom system",
@@ -965,12 +978,10 @@
           "Development in parts, inside the tools you already use",
           "The system running, with documentation and access in your name"
         ],
-        "precio": "From €1,500",
-        "precio_detalle": "depending on scope",
-        "precio_mes": "From €190",
-        "precio_mes_detalle": "per month of maintenance, optional"
+        "precio_mes": "€190",
+        "precio_mes_detalle": "per month · depending on scope"
       },
-      "setup": 1500,
+      "setup": 0,
       "mes": 190,
       "sectores": [
         "todos"
@@ -1000,12 +1011,10 @@
           "Dos automatizaciones a elegir",
           "30 días de soporte"
         ],
-        "precio": "990 €",
-        "precio_detalle": "de implantación",
-        "precio_mes": "29 €",
-        "precio_mes_detalle": "al mes",
-        "suelto": "1.170 €",
-        "ahorro": "Ahorras 180 €"
+        "precio_mes": "69 €",
+        "precio_mes_detalle": "al mes, todo incluido",
+        "suelto": "87 €/mes",
+        "ahorro": "Ahorras 18 € al mes"
       },
       "en": {
         "nombre": "Finance + automations pack",
@@ -1017,17 +1026,15 @@
           "Two automations of your choice",
           "30 days of support"
         ],
-        "precio": "€990",
-        "precio_detalle": "setup",
-        "precio_mes": "€29",
-        "precio_mes_detalle": "per month",
-        "suelto": "€1,170",
-        "ahorro": "You save €180"
+        "precio_mes": "€69",
+        "precio_mes_detalle": "per month, everything included",
+        "suelto": "€87/mo",
+        "ahorro": "You save €18 a month"
       },
-      "setup": 990,
-      "mes": 29,
-      "setup_suelto": 1170,
-      "mes_suelto": 29
+      "setup": 0,
+      "mes": 69,
+      "setup_suelto": 0,
+      "mes_suelto": 87
     },
     {
       "id": "pack-operar",
@@ -1048,12 +1055,10 @@
           "Un agente de IA en un canal",
           "Formación y 30 días de soporte"
         ],
-        "precio": "2.290 €",
-        "precio_detalle": "de implantación",
-        "precio_mes": "149 €",
-        "precio_mes_detalle": "al mes",
-        "suelto": "2.640 € + 169 €/mes",
-        "ahorro": "Ahorras 350 € y 20 €/mes"
+        "precio_mes": "139 €",
+        "precio_mes_detalle": "al mes, todo incluido",
+        "suelto": "177 €/mes",
+        "ahorro": "Ahorras 38 € al mes"
       },
       "en": {
         "nombre": "Finance with intelligence + agent pack",
@@ -1065,21 +1070,19 @@
           "One single-channel AI agent",
           "Training and 30 days of support"
         ],
-        "precio": "€2,290",
-        "precio_detalle": "setup",
-        "precio_mes": "€149",
-        "precio_mes_detalle": "per month",
-        "suelto": "€2,640 + €169/month",
-        "ahorro": "You save €350 and €20/month"
+        "precio_mes": "€139",
+        "precio_mes_detalle": "per month, everything included",
+        "suelto": "€177/mo",
+        "ahorro": "You save €38 a month"
       },
-      "setup": 2290,
-      "mes": 149,
-      "setup_suelto": 2640,
-      "mes_suelto": 169
+      "setup": 0,
+      "mes": 139,
+      "setup_suelto": 0,
+      "mes_suelto": 177
     },
     {
       "id": "pack-sistema",
-      "estado": "a-medida",
+      "estado": "disponible",
       "destacado": false,
       "lleva": [
         "os",
@@ -1100,12 +1103,10 @@
           "Conexión con tu ERP o sistema propio",
           "Formación y traspaso"
         ],
-        "precio": "Desde 6.900 €",
-        "precio_detalle": "de implantación",
-        "precio_mes": "Desde 390 €",
-        "precio_mes_detalle": "al mes",
-        "suelto": "8.690 € + 459 €/mes",
-        "ahorro": "Ahorras 1.790 € y 69 €/mes"
+        "precio_mes": "390 €",
+        "precio_mes_detalle": "al mes, todo incluido",
+        "suelto": "485 €/mes",
+        "ahorro": "Ahorras 95 € al mes"
       },
       "en": {
         "nombre": "Complete D-Code OS pack",
@@ -1119,17 +1120,15 @@
           "Connection with your ERP or in-house system",
           "Training and handover"
         ],
-        "precio": "From €6,900",
-        "precio_detalle": "setup",
-        "precio_mes": "From €390",
-        "precio_mes_detalle": "per month",
-        "suelto": "€8,690 + €459/month",
-        "ahorro": "You save €1,790 and €69/month"
+        "precio_mes": "€390",
+        "precio_mes_detalle": "per month, everything included",
+        "suelto": "€485/mo",
+        "ahorro": "You save €95 a month"
       },
-      "setup": 6900,
+      "setup": 0,
       "mes": 390,
-      "setup_suelto": 8690,
-      "mes_suelto": 459
+      "setup_suelto": 0,
+      "mes_suelto": 485
     }
   ],
   "filtros": {

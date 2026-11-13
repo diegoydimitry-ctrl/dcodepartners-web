@@ -74,9 +74,9 @@ for (const f of paginas(RAIZ)) {
   const cifras = (t) => (String(t).match(/[\d][\d.,]*/g) || []).map((x) => x.replace(/[.,](?=\d{3}\b)/g, ''));
   const pares = [
     ['finance', 'finance-1', ['precio_mes', 'precio'], ['es', 'detalle_es']],
-    ['medida', 'medida-1', ['precio'], ['es']],
-    ['agentes', 'agente-1', ['precio'], ['es']],
-    ['os', 'os', ['precio'], ['es']],
+    ['medida', 'medida-1', ['precio_mes', 'precio'], ['es']],
+    ['agentes', 'agente-1', ['precio_mes', 'precio'], ['es']],
+    ['os', 'os', ['precio_mes', 'precio'], ['es']],
   ];
   for (const [clave, id, campos] of pares) {
     const prod = dePrecio(id);

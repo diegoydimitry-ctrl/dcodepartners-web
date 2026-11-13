@@ -15,8 +15,8 @@
   ],
   "revisado": "2026-11-13",
   "aviso": {
-    "es": "Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar.",
-    "en": "Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts."
+    "es": "Precios de referencia, sin cuota de alta y sin permanencia. El precio final depende del alcance; lo cerramos por escrito antes de empezar.",
+    "en": "Reference prices, no setup fee and no minimum term. The final price depends on scope; we agree it in writing before starting."
   },
   "desde": {
     "finance": {
@@ -26,23 +26,22 @@
       "detalle_en": "no setup fee"
     },
     "medida": {
-      "es": "Desde 1.500 €",
-      "en": "From €1,500",
-      "detalle_es": "según el alcance",
-      "detalle_en": "depending on scope"
+      "es": "Desde 190 €/mes",
+      "en": "From €190/month",
+      "detalle_es": "sin cuota de alta",
+      "detalle_en": "no setup fee"
     },
     "agentes": {
-      "es": "Desde 750 €",
-      "en": "From €750",
-      "detalle_es": "según el alcance",
-      "detalle_en": "depending on scope"
+      "es": "Desde 49 €/mes",
+      "en": "From €49/month",
+      "detalle_es": "sin cuota de alta",
+      "detalle_en": "no setup fee"
     },
     "os": {
-      "es": "Desde 2.900 €",
-      "en": "From €2,900",
-      "detalle_es": "de implantación, según cuántos sistemas",
-      "detalle_en": "setup, depending on how many systems",
-      "_fuente": "catalogo.json → productos[id=os].precio / precio_detalle"
+      "es": "Desde 149 €/mes",
+      "en": "From €149/month",
+      "detalle_es": "sin cuota de alta",
+      "detalle_en": "no setup fee"
     }
   },
   "planes": {
