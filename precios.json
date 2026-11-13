@@ -13,7 +13,7 @@
     "cuadrar con esto (`planes`), igual que la comparativa de mercado que los",
     "precede: el primer año va de 738 € (390 + 29×12) a 3.780 € (1.500 + 190×12)."
   ],
-  "revisado": "2026-09-23",
+  "revisado": "2026-11-13",
   "aviso": {
     "es": "Precios de referencia. El precio final depende del alcance y de lo que necesite tu empresa; lo cerramos por escrito antes de empezar.",
     "en": "Reference prices. The final price depends on the scope and on what your company needs; we agree it in writing before anything starts."
@@ -22,8 +22,8 @@
     "finance": {
       "es": "Desde 29 €/mes",
       "en": "From €29/month",
-      "detalle_es": "más 390 € de puesta en marcha",
-      "detalle_en": "plus €390 setup"
+      "detalle_es": "sin cuota de alta",
+      "detalle_en": "no setup fee"
     },
     "medida": {
       "es": "Desde 1.500 €",
