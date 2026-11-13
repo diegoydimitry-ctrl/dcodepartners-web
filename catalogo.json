@@ -18,7 +18,7 @@
     "La investigación que hay detrás de cada importe está en",
     "docs/PRECIOS-Y-OFERTA-COMERCIAL.md, con fuente, fecha y por qué ese número."
   ],
-  "revisado": "2026-09-24",
+  "revisado": "2026-11-13",
   "moneda": "EUR",
   "iva": {
     "es": "Precios sin IVA.",
@@ -169,46 +169,44 @@
       "es": {
         "nombre": "Finance",
         "para": "Empresas de hasta 3 personas en administración",
-        "que": "El sistema financiero sobre tus datos, con su configuración estándar.",
+        "que": "El sistema financiero sobre tus datos, con su configuración estándar. Empiezas con el sistema vacío y vas metiendo lo tuyo.",
         "incluye": [
           "El día a día: facturas, cobros, por facturar, gastos, pagos, duplicados y documentos",
           "El negocio: presupuestos, pedidos, albaranes, clientes, proveedores y proyectos",
           "Tesorería semana a semana y a 30, 60 y 90 días",
           "Radar: siete reglas con su umbral escrito",
           "Libros de IVA en CSV para tu gestoría",
-          "En marcha en 1 día, con tus datos anteriores dentro"
+          "Activado en 1 día, listo para que empieces a facturar"
         ],
         "no_incluye": [
+          "Traer tus datos anteriores: eso es la puesta en marcha y va aparte",
           "Campos ni flujos propios de tu negocio",
           "Conexiones con otras herramientas"
         ],
-        "precio": "390 €",
-        "precio_detalle": "de implantación",
         "precio_mes": "29 €",
         "precio_mes_detalle": "al mes · hasta 3 personas"
       },
       "en": {
         "nombre": "Finance",
         "para": "Companies with up to 3 people in admin",
-        "que": "The financial system on your own data, with its standard configuration.",
+        "que": "The financial system on your own data, with its standard configuration. You start with an empty system and fill it in as you go.",
         "incluye": [
           "Day to day: invoices, payments, to-invoice, expenses, duplicates and documents",
           "The business: quotes, orders, delivery notes, customers, suppliers and projects",
           "Cash flow week by week and at 30, 60 and 90 days",
           "Radar: seven rules with their written threshold",
           "VAT books in CSV for your accountant",
-          "Live in 1 day, with your previous data inside"
+          "Activated in 1 day, ready for you to start invoicing"
         ],
         "no_incluye": [
+          "Bringing your previous data across: that is the setup service, priced separately",
           "Fields or flows specific to your business",
           "Connections with other tools"
         ],
-        "precio": "€390",
-        "precio_detalle": "setup",
         "precio_mes": "€29",
         "precio_mes_detalle": "per month · up to 3 people"
       },
-      "setup": 390,
+      "setup": 0,
       "mes": 29,
       "sectores": [
         "todos"
@@ -317,6 +315,56 @@
         "cobrar",
         "impuestos",
         "medida"
+      ]
+    },
+    {
+      "id": "finance-puesta",
+      "cat": "finance",
+      "estado": "disponible",
+      "destacado": false,
+      "extra": true,
+      "es": {
+        "nombre": "Puesta en marcha",
+        "para": "Quien no quiere empezar con el sistema vacío",
+        "que": "Traemos lo que ya tienes y lo dejamos dentro, cuadrado y con tu gente sabiendo usarlo.",
+        "incluye": [
+          "Tus clientes, proveedores y productos cargados desde lo que uses hoy",
+          "Las facturas y los cobros del ejercicio en curso, cuadrados",
+          "Los siete avisos del Radar ajustados a tus umbrales",
+          "Una sesión de formación con quien vaya a usarlo"
+        ],
+        "no_incluye": [
+          "Campos ni flujos propios de tu negocio",
+          "Conexiones con otras herramientas"
+        ],
+        "precio": "390 €",
+        "precio_detalle": "pago único, opcional"
+      },
+      "en": {
+        "nombre": "Setup service",
+        "para": "For those who would rather not start from an empty system",
+        "que": "We bring across what you already have, reconciled, and leave your people knowing how to use it.",
+        "incluye": [
+          "Your customers, suppliers and products loaded from whatever you use today",
+          "This year's invoices and payments, reconciled",
+          "The seven Radar alerts tuned to your thresholds",
+          "One training session with whoever will be using it"
+        ],
+        "no_incluye": [
+          "Fields or flows specific to your business",
+          "Connections with other tools"
+        ],
+        "precio": "€390",
+        "precio_detalle": "one-off, optional"
+      },
+      "setup": 390,
+      "mes": 0,
+      "sectores": [
+        "todos"
+      ],
+      "necesidad": [
+        "facturar",
+        "empezar"
       ]
     },
     {
