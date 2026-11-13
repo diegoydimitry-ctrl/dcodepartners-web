@@ -16,7 +16,7 @@ material de marketing: es el papel al que hay que volver cuando alguien pregunte
 | | |
 |---|---|
 | **Dónde viven los precios** | `catalogo.json`. En ningún sitio más. |
-| **Qué los publica** | `npm run build:catalogo` → `precios.html`, `en/precios.html`, `assets/js/catalogo-datos.js` |
+| **Qué los publica** | `npm run build:v2` (usa `scripts/v2/paginas/precios.mjs`) y después `npm run build:precios` para los «desde» del resto de páginas. **NO uses `npm run build:catalogo`: ver el aviso de abajo.** |
 | **Qué los vigila** | `npm run check:precios` (cuadre catálogo ↔ web) y `npm run qa:precios` (catálogo, filtros, configurador y comparativa en 3 aparatos × 2 idiomas) |
 | **Qué NO se ha hecho, a propósito** | No hay pago online, ni Stripe, ni contratación automática. La web dice exactamente eso. |
 | **Decisiones que no son mías** | Están en el §8. Ninguna se ha inventado. |
@@ -460,7 +460,33 @@ generar. No he inventado ninguna de estas reglas:
   `mercado.consultado` y el texto de `mercado.sub`. Si una cifra ha cambiado y no se
   actualiza, la web estará publicando el precio equivocado **de otra empresa**, que es
   peor que equivocarse en el propio.
-- Cambiar precios **solo en `catalogo.json`** y ejecutar `npm run build:catalogo` y
-  `npm run generate-kb`.
-- Pasar `npm run check:precios` y `npm run qa:precios` antes de publicar.
+- Cambiar precios **solo en `catalogo.json`** y ejecutar `npm run build:v2`,
+  `npm run build:precios` y `npm run generate-kb`.
+- Pasar `npm run check:precios`, `npm run check:seo`, `npm run check:enlaces` y
+  `npm run check:kb` antes de publicar.
 - Revisar §8: cada punto que se decida sale de esta lista y entra en la web.
+
+---
+
+## AVISO — corregido el 13/11/2026
+
+**`npm run build:catalogo` NO debe ejecutarse.** Es el generador de la web v1 y hace
+reemplazos por expresión regular sobre una plantilla que ya no existe. Sobre la
+`precios.html` actual sustituye un documento de 531 líneas por un fragmento de 248 **sin
+`<head>`, sin metaetiquetas y sin JSON-LD**: deja la página de precios rota y sin indexar.
+Este documento mandaba ejecutarlo en §0 y §9; ambos sitios están corregidos.
+
+El generador real de `/precios` y `/en/precios` es `scripts/v2/paginas/precios.mjs`, que se
+invoca desde `npm run build:v2`. `npm run build:precios` es otra cosa y sí hay que
+ejecutarlo: escribe los «desde» (`data-precio=...`) en el resto de páginas.
+
+**Otros dos puntos que conviene saber antes de tocar precios:**
+
+- Reconstruir las páginas v2 **borra los `?v=` de `/assets/v2/*`**. `scripts/v2/build.mjs`
+  las escribe sin versión y el re-versionado de `textos.mjs` solo *actualiza* hashes que ya
+  existen, nunca los añade. `qa:seo` únicamente avisa. Hay que restaurarlos calculando el
+  sha256 del contenido (10 primeros caracteres), que es lo que el propio `qa:seo` valida.
+- **`npm run qa:precios` está roto** desde el rediseño v2: espera el selector `.pr-chip`,
+  que no existe ni en la página actual ni en el commit de producción. La única guarda de
+  precios que funciona hoy es `npm run check:precios` (devuelve código 1 y sí bloquea),
+  y **ninguna de las dos se ejecuta en CI**.
