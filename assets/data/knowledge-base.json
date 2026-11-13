@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T11:56:22.809Z",
+  "generatedAt": "2026-11-13T12:17:48.221Z",
   "pageCount": 74,
   "chunkCount": 671,
   "pages": [
@@ -2458,7 +2458,7 @@
         {
           "id": "/en/#c1",
           "heading": "Your company, in one system.",
-          "text": "Automation, AI and custom software. From €25 a month. Let's talk Try it 01Today, loose pieces.Sales, customers, invoices and operations. Each on its own, and someone copying from one to the next. 02We join them.We connect what you already use and automate what repeats. Data goes in once. 03And give it intelligence.AI agents that read, answer and suggest. What matters is decided by a person. Scroll"
+          "text": "Automation, AI and custom software. Let's talk Try it 01Today, loose pieces.Sales, customers, invoices and operations. Each on its own, and someone copying from one to the next. 02We join them.We connect what you already use and automate what repeats. Data goes in once. 03And give it intelligence.AI agents that read, answer and suggest. What matters is decided by a person. Scroll"
         },
         {
           "id": "/en/#c2",
@@ -2493,7 +2493,7 @@
         {
           "id": "/en/#c8",
           "heading": "Seven tools. Nobody sees the whole.",
-          "text": "Knowing what happened today means opening seven tabs and asking three people. Context Problem You The system Result Everything that happens, in one place and with its trail. And a daily report written by itself. Demo · fictional companies · no real system connected. Better on a computer."
+          "text": "Knowing what happened today means opening seven tabs and asking three people. Context Problem You The system Result Everything that happens, in one place and with its trail. And a daily report written by itself. Demo · fictional companies · no real system connected."
         },
         {
           "id": "/en/#c9",
@@ -3186,48 +3186,48 @@
         },
         {
           "id": "/#c1",
-          "heading": "Tu empresa, en un solo sistema.",
-          "text": "Automatización, IA y software a medida. Desde 25 € al mes. Hablemos Tócalo 01Hoy, piezas sueltas.Ventas, clientes, facturas y operaciones. Cada una por su lado, y alguien copiando de una a otra. 02Las unimos.Conectamos lo que ya usáis y automatizamos lo que se repite. El dato entra una vez. 03Y le damos inteligencia.Agentes de IA que leen, responden y proponen. Lo importante lo decide una persona. Desliza"
+          "heading": "Conectamos tu empresa en un solo sistema.",
+          "text": "Lo hacemos con automatización, inteligencia artificial y software a medida. Reservar una llamada Ver las demos 01Hoy cada herramienta de tu empresa va por su lado.Ventas, clientes, facturas y operaciones se llevan en sitios distintos, y alguien tiene que copiar los datos de uno a otro. 02Nosotros las conectamos.Unimos las herramientas que ya usas y automatizamos las tareas que se repiten. Así cada dato se escribe una sola vez. 03Después le añadimos inteligencia artificial.Los agentes de IA leen, responden y proponen. Las decisiones importantes las toma una persona. Desliza"
         },
         {
           "id": "/#c2",
-          "heading": "Lo que instalamos.",
-          "text": "D-Code FinanceFacturas, cobros, gastos y registro fiscal, en un sitio.Desde 29 €/messin cuota de alta D-Code OSLa capa que conecta tus sistemas.Desde 149 €/messin cuota de alta Sistemas a medidaLo que tu equipo repite cada semana, hecho solo.Desde 190 €/messin cuota de alta Agentes de IA e integracionesContestan con tus datos y conectan lo que ya usáis.Desde 49 €/messin cuota de alta Precios de referencia, sin cuota de alta y sin permanencia. El precio final depende del alcance; lo cerramos por escrito antes de empezar. Precios y packs"
+          "heading": "Esto es lo que instalamos en tu empresa.",
+          "text": "D-Code FinanceLleva facturas, cobros, gastos y registro fiscal en un solo sitio.Desde 29 €/messin cuota de alta D-Code OSEs la capa que conecta tus sistemas entre sí.Desde 149 €/messin cuota de alta Sistemas a medidaEl trabajo que tu equipo repite cada semana pasa a hacerse solo.Desde 190 €/messin cuota de alta Agentes de IA e integracionesResponden con los datos de tu empresa y conectan las herramientas que ya usas.Desde 49 €/messin cuota de alta Precios de referencia, sin cuota de alta y sin permanencia. El precio final depende del alcance; lo cerramos por escrito antes de empezar. Ver precios y packs"
         },
         {
           "id": "/#c3",
-          "heading": "No te lo contamos. Tócalo.",
-          "text": "Cinco sistemas, un minuto cada uno. Los datos son inventados; lo que hacen, no. BRTaller BríoTaller mecánico · Leganés · 9 personas · martes, 9:10"
+          "heading": "Pruébalo tú antes de hablar con nosotros.",
+          "text": "Aquí tienes cinco sistemas y cada uno se prueba en un minuto. Los datos son inventados, pero lo que hacen es real. BRTaller BríoTaller mecánico · Leganés · 9 personas · martes, 9:10"
         },
         {
           "id": "/#c4",
-          "heading": "Finance registra solas tus facturas de proveedor.",
-          "text": "El taller recibe 23 a la semana y hoy se teclean a mano: dos horas, y algún IVA mal puesto. Contexto Problema Tú El sistema Resultado 23 facturas registradas en 38 segundos. Tú solo miraste una. AIAlba InteriorismoEstudio de interiorismo · 3 comerciales · viernes, 18:40"
+          "heading": "Finance registra automáticamente las facturas de tus proveedores.",
+          "text": "El taller recibe 23 a la semana y hoy las teclea a mano, lo que le cuesta dos horas y algún IVA mal puesto. Contexto Problema Tú El sistema Resultado Las 23 facturas quedan registradas en 38 segundos y tú solo has tenido que revisar una. AIAlba InteriorismoEstudio de interiorismo · 3 comerciales · viernes, 18:40"
         },
         {
           "id": "/#c5",
-          "heading": "Entra un lead por la web un viernes por la tarde.",
-          "text": "Hoy lo vería alguien el lunes, cuando ya habrá pedido presupuesto a otros dos estudios. Contexto Problema Tú El sistema Resultado Primera respuesta en un minuto, no en dos días. El lead tiene dueña, respuesta y seguimiento en la agenda. CLClimatecInstalaciones de climatización · 8 técnicos · lunes, 8:00"
+          "heading": "Un cliente potencial escribe por la web un viernes por la tarde.",
+          "text": "Ahora mismo nadie lo vería hasta el lunes, y para entonces ya habrá pedido presupuesto a otros dos estudios. Contexto Problema Tú El sistema Resultado El contacto recibe respuesta en un minuto en lugar de dos días. Ya tiene una comercial asignada y su seguimiento está en la agenda. CLClimatecInstalaciones de climatización · 8 técnicos · lunes, 8:00"
         },
         {
           "id": "/#c6",
           "heading": "El cliente acaba de aceptar el presupuesto P-118.",
-          "text": "Planificarlo lleva dos días de hojas y llamadas, y los retrasos se ven el mismo día. Contexto Problema Tú El sistema Resultado Planificado en tres segundos. El retraso se vio dos días antes y el cliente ya tiene su nueva fecha. CSClínica SonrisaClínica dental · 2 recepcionistas · sábado, 22:15"
+          "text": "Planificarlo lleva dos días entre hojas y llamadas, y los retrasos no se descubren hasta el mismo día. Contexto Problema Tú El sistema Resultado El trabajo queda planificado en tres segundos. El retraso se detecta con dos días de margen y el cliente ya tiene su nueva fecha. CSClínica SonrisaClínica dental · 2 recepcionistas · sábado, 22:15"
         },
         {
           "id": "/#c7",
           "heading": "Alguien escribe fuera de horario.",
-          "text": "Hasta el lunes nadie contesta, y cuatro de cada diez no vuelven a escribir. Contexto Problema Tú El sistema Resultado Respondido en segundos, con la agenda real. Lo delicado lo decide una persona el lunes a primera hora. OSToda la empresaLa misma empresa, vista entera"
+          "text": "Hasta el lunes nadie contesta, y cuatro de cada diez no vuelven a escribir. Contexto Problema Tú El sistema Resultado El asistente responde en segundos con la agenda real. Los casos delicados los revisa una persona el lunes a primera hora. OSToda la empresaLa misma empresa, vista entera"
         },
         {
           "id": "/#c8",
-          "heading": "Siete herramientas. Nadie ve el conjunto.",
-          "text": "Saber qué ha pasado hoy obliga a abrir siete pestañas y preguntar a tres personas. Contexto Problema Tú El sistema Resultado Todo lo que pasa, en un solo sitio y con su rastro. Y un parte del día escrito solo. Demostración · empresas ficticias · ningún sistema real conectado. Mejor en un ordenador."
+          "heading": "Hay siete herramientas y nadie ve el conjunto.",
+          "text": "Saber qué ha pasado hoy obliga a abrir siete pestañas y preguntar a tres personas. Contexto Problema Tú El sistema Resultado Todo lo que pasa queda en un solo sitio y con su rastro. Además, el parte del día se escribe solo. Es una demostración: las empresas son ficticias y no hay ningún sistema real conectado."
         },
         {
           "id": "/#c9",
-          "heading": "Hablemos.",
-          "text": "Treinta minutos y sabrás qué se puede automatizar en tu empresa. Reservar una llamada Cómo trabajamos Todo lo que hacemos Garantías"
+          "heading": "Hablemos de tu empresa.",
+          "text": "En una llamada de treinta minutos te diremos qué se puede automatizar. Reservar una llamada Cómo trabajamos Todo lo que hacemos Garantías"
         }
       ]
     },

@@ -10,8 +10,8 @@ const C = {
       titulo: "D-Code Partners | Automatización e IA para empresas",
       descripcion: "Unimos las herramientas y áreas de tu empresa en un solo sistema: automatizaciones, agentes de IA, integraciones y software a medida sobre tus datos. Madrid.",
     },
-    h1: "Tu empresa, en un solo sistema.",
-    sub: "Automatización, IA y software a medida. Desde 25 € al mes.",
+    h1: "Conectamos tu empresa en un solo sistema.",
+    sub: "Lo hacemos con automatización, inteligencia artificial y software a medida.",
     reclamoPrecio: "Desde 25 €/mes", reclamoResto: "· sin cuota de alta · sin permanencia",
     cta: "Hablemos", cta2: "Tócalo",
     capitulos: [
@@ -47,7 +47,7 @@ const C = {
       descripcion: "We join your company's tools and teams into one system: automations, AI agents, integrations and custom software on your own data. Madrid.",
     },
     h1: "Your company, in one system.",
-    sub: "Automation, AI and custom software. From €25 a month.",
+    sub: "Automation, AI and custom software.",
     reclamoPrecio: "From €25/month", reclamoResto: "· no setup fee · no minimum term",
     cta: "Let's talk", cta2: "Try it",
     capitulos: [
