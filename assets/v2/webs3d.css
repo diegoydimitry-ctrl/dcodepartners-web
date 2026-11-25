@@ -97,6 +97,16 @@
   .w3-t-s { font-size: .62rem; }
   .w3-acc { display: none; }
 }
+/* En los teléfonos más estrechos las cuatro pestañas no caben en una fila:
+   la celda da 68 px a 320 y 78 a 360, y «INMOBILIARIA» ocupa 82. Como la
+   celda no recorta, el rótulo se metía encima del siguiente y se leía
+   «INMOBILIARIARESTAURANTETALLER». Se parten en dos filas de dos, que a
+   320 deja 137 px por celda. De 393 en adelante caben las cuatro y no
+   cambia nada. */
+@media (max-width: 380px) {
+  .w3-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 0; }
+  .w3-t { padding-right: 10px; }
+}
 @media (prefers-reduced-motion: reduce) { .w3-ventana, .w3-mundo, .w3-velo, .br-coche { transition: none; } }
 
 /* ====================================================================== BRÍO · taller mecánico */
