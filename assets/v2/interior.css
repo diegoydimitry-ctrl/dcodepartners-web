@@ -86,8 +86,16 @@
   .tabla--fichas table, .tabla--fichas tbody, .tabla--fichas tr, .tabla--fichas th, .tabla--fichas td { display: block; width: auto; }
   .tabla--fichas tr.t-cab { display: none; }
   .tabla--fichas tr { padding: 14px 0; border-bottom: 1px solid var(--linea); }
-  .tabla--fichas tr > :first-child { border: 0; padding: 0 0 8px; font-weight: 560; color: var(--tinta); }
-  .tabla--fichas td { border: 0; padding: 4px 0; display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 12px; align-items: start; }
+  /* La primera celda es el titular de la ficha, no un valor: no lleva
+     etiqueta y hasta hoy heredaba la rejilla de dos columnas, así que se
+     escribía en la columna de la derecha con medio ancho en blanco
+     delante. Ocupa la ficha entera. */
+  .tabla--fichas tr > :first-child { display: block; border: 0; padding: 0 0 8px; font-weight: 560; color: var(--tinta); }
+  /* La etiqueta vale 11 rem mientras le quepa al valor. En 320 px dejaba
+     92 px y «automáticamente» se salía de la pantalla: 3 px de scroll
+     horizontal en /cookies. Ahora la etiqueta cede lo justo para dejar
+     8,5 rem al valor; por encima de unos 352 px no cambia nada. */
+  .tabla--fichas td { border: 0; padding: 4px 0; display: grid; grid-template-columns: minmax(0, min(11rem, 100% - 8.5rem)) minmax(0, 1fr); gap: 12px; align-items: start; }
   .tabla--fichas td::before { content: attr(data-l); color: var(--tinta-3); font-size: .86rem; }
 }
 .dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; }
