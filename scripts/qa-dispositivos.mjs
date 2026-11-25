@@ -123,9 +123,25 @@ for(const [nom,op] of APARATOS){
       if(d.textos<4) malos.push(`${nom}/${tema}${ruta}: solo ${d.textos} textos visibles`);
       if(d.camposOcultos>0) malos.push(`${nom}/${tema}${ruta}: ${d.camposOcultos} campos de formulario ocultos`);
       if(d.rotas>0) malos.push(`${nom}/${tema}${ruta}: ${d.rotas} imágenes rotas`);
+      /*
+        EL «CIELO QUIETO» YA NO EXISTE (retirado el 25/11/2026).
+
+        Esta comprobación exigía que en táctil el <html> llevara la clase
+        `cielo-quieto`, que apagaba el campo de partículas de dcp6.js/dcp8.js.
+        El rediseño v2 se llevó por delante ese campo: ningún HTML del sitio
+        carga ya esos ficheros, y `.field[data-field]` no existe en ninguna
+        página. La comprobación seguía ahí, cantando 128 fallos de 160 cargas
+        por una animación que no se ejecuta.
+
+        No es un detalle: con 128 fallos fijos, los 4 que SÍ importaban
+        —/precios pasa del alto máximo en el teléfono— quedaban enterrados.
+        Una alarma que suena siempre es una alarma apagada.
+
+        Se retira en vez de remendarse, que es lo mismo que se hizo con el
+        configurador en qa-precios.mjs. Si algún día vuelve un campo animado,
+        vuelve con su comprobación.
+      */
       const esTactil = nom!=='pc';
-      if(esTactil && !d.quieto) malos.push(`${nom}/${tema}${ruta}: en táctil debería estar el cielo quieto`);
-      if(!esTactil && d.quieto) malos.push(`${nom}/${tema}${ruta}: en ratón NO debería estar el cielo quieto`);
       if(esTactil && d.lienzos>0) malos.push(`${nom}/${tema}${ruta}: ${d.lienzos} lienzos de campo en táctil`);
       const graves=errores.filter(e=>!/net::ERR|Failed to (load|fetch)|ERR_FAILED|turnstile|cal\.com/i.test(e));
       if(graves.length) malos.push(`${nom}/${tema}${ruta}: ${graves.length} error(es) JS — ${graves[0]}`);
