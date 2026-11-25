@@ -36,3 +36,7 @@
 .pasos-compra .dato { color: var(--tinta-3); }
 @media (max-width: 900px) { .cat-in { grid-template-columns: 1fr; } .cat-cab { position: static; } .pasos-compra { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
 @media (max-width: 560px) { .prod { grid-template-columns: 1fr; } .prod-precio { grid-column: 1; grid-row: auto; text-align: left; } }
+
+.prod-nivel { border-color: color-mix(in srgb, var(--aire) 55%, transparent); }
+.prod-nivel[data-nivel="avanzado"] { opacity: .75; }
+.prod-prueba { color: var(--aire); font-weight: 600; }

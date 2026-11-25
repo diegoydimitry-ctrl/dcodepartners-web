@@ -18,7 +18,7 @@
     "La investigación que hay detrás de cada importe está en",
     "docs/PRECIOS-Y-OFERTA-COMERCIAL.md, con fuente, fecha y por qué ese número."
   ],
-  "revisado": "2026-11-13",
+  "revisado": "2026-11-25",
   "moneda": "EUR",
   "iva": {
     "es": "Precios sin IVA.",
@@ -159,7 +159,8 @@
       ],
       "necesidad": [
         "empezar"
-      ]
+      ],
+      "prueba": false
     },
     {
       "id": "finance-1",
@@ -215,7 +216,9 @@
         "facturar",
         "cobrar",
         "impuestos"
-      ]
+      ],
+      "nivel": "basico",
+      "prueba": true
     },
     {
       "id": "finance-2",
@@ -236,7 +239,7 @@
           "Más de 100 facturas leídas al mes: se amplía con un pack aparte",
           "Conexiones con otras herramientas"
         ],
-        "precio_mes": "59 €",
+        "precio_mes": "49 €",
         "precio_mes_detalle": "al mes · hasta 10 personas"
       },
       "en": {
@@ -253,11 +256,11 @@
           "More than 100 invoices read per month: extra packs available",
           "Connections with other tools"
         ],
-        "precio_mes": "€59",
+        "precio_mes": "€49",
         "precio_mes_detalle": "per month · up to 10 people"
       },
       "setup": 0,
-      "mes": 59,
+      "mes": 49,
       "sectores": [
         "todos"
       ],
@@ -266,7 +269,9 @@
         "cobrar",
         "impuestos",
         "ia"
-      ]
+      ],
+      "nivel": "profesional",
+      "prueba": true
     },
     {
       "id": "finance-3",
@@ -309,7 +314,9 @@
         "cobrar",
         "impuestos",
         "medida"
-      ]
+      ],
+      "nivel": "avanzado",
+      "prueba": false
     },
     {
       "id": "finance-puesta",
@@ -359,7 +366,8 @@
       "necesidad": [
         "facturar",
         "empezar"
-      ]
+      ],
+      "prueba": false
     },
     {
       "id": "finance-persona",
@@ -394,7 +402,9 @@
       ],
       "necesidad": [
         "facturar"
-      ]
+      ],
+      "nivel": "basico",
+      "prueba": false
     },
     {
       "id": "os",
@@ -449,7 +459,9 @@
       "necesidad": [
         "conectar",
         "medida"
-      ]
+      ],
+      "nivel": "avanzado",
+      "prueba": false
     },
     {
       "id": "auto-1",
@@ -499,7 +511,9 @@
       ],
       "necesidad": [
         "automatizar"
-      ]
+      ],
+      "nivel": "basico",
+      "prueba": true
     },
     {
       "id": "auto-2",
@@ -519,7 +533,7 @@
           "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
           "Sin cuota de alta y sin permanencia"
         ],
-        "precio_mes": "69 €",
+        "precio_mes": "49 €",
         "precio_mes_detalle": "al mes · de 3 a 5 flujos"
       },
       "en": {
@@ -535,18 +549,20 @@
           "Maintenance, monitoring and fixes included in the monthly fee",
           "No setup fee and no minimum term"
         ],
-        "precio_mes": "€69",
+        "precio_mes": "€49",
         "precio_mes_detalle": "per month · 3 to 5 flows"
       },
       "setup": 0,
-      "mes": 69,
+      "mes": 49,
       "sectores": [
         "todos"
       ],
       "necesidad": [
         "automatizar",
         "conectar"
-      ]
+      ],
+      "nivel": "profesional",
+      "prueba": true
     },
     {
       "id": "auto-3",
@@ -599,7 +615,9 @@
       "necesidad": [
         "automatizar",
         "ia"
-      ]
+      ],
+      "nivel": "avanzado",
+      "prueba": false
     },
     {
       "id": "agente-1",
@@ -652,7 +670,9 @@
       "necesidad": [
         "atender",
         "ia"
-      ]
+      ],
+      "nivel": "profesional",
+      "prueba": true
     },
     {
       "id": "agente-2",
@@ -706,7 +726,9 @@
         "atender",
         "ia",
         "conectar"
-      ]
+      ],
+      "nivel": "avanzado",
+      "prueba": false
     },
     {
       "id": "web-1",
@@ -763,7 +785,9 @@
         ],
         "precio_mes": "€49",
         "precio_mes_detalle": "per month · up to 5 pages"
-      }
+      },
+      "nivel": "profesional",
+      "prueba": true
     },
     {
       "id": "web-2",
@@ -807,7 +831,9 @@
         ],
         "precio_mes": "€35",
         "precio_mes_detalle": "per month · one site"
-      }
+      },
+      "nivel": "basico",
+      "prueba": true
     },
     {
       "id": "web-3",
@@ -859,7 +885,9 @@
         ],
         "precio_mes": "€39",
         "precio_mes_detalle": "per month · one connection"
-      }
+      },
+      "nivel": "basico",
+      "prueba": true
     },
     {
       "id": "integra-1",
@@ -903,7 +931,9 @@
       ],
       "necesidad": [
         "conectar"
-      ]
+      ],
+      "nivel": "basico",
+      "prueba": true
     },
     {
       "id": "integra-2",
@@ -922,7 +952,7 @@
           "Mantenimiento, vigilancia y arreglos incluidos en la cuota",
           "Sin cuota de alta y sin permanencia"
         ],
-        "precio_mes": "59 €",
+        "precio_mes": "49 €",
         "precio_mes_detalle": "al mes · un ERP o sistema propio"
       },
       "en": {
@@ -937,18 +967,20 @@
           "Maintenance, monitoring and fixes included in the monthly fee",
           "No setup fee and no minimum term"
         ],
-        "precio_mes": "€59",
+        "precio_mes": "€49",
         "precio_mes_detalle": "per month · one ERP or in-house system"
       },
       "setup": 0,
-      "mes": 59,
+      "mes": 49,
       "sectores": [
         "todos"
       ],
       "necesidad": [
         "conectar",
         "medida"
-      ]
+      ],
+      "nivel": "profesional",
+      "prueba": true
     },
     {
       "id": "medida-1",
@@ -988,7 +1020,9 @@
       ],
       "necesidad": [
         "medida"
-      ]
+      ],
+      "nivel": "avanzado",
+      "prueba": false
     }
   ],
   "packs": [
@@ -1226,5 +1260,32 @@
         "en": "Something tailored to me"
       }
     ]
+  },
+  "prueba_gratuita": {
+    "dias": 30,
+    "es": {
+      "titulo": "Primer mes gratis",
+      "resumen": "Treinta días con el plan entero, sin tarjeta y sin compromiso.",
+      "puntos": [
+        "Qué incluye: el plan completo, con sus mismos límites. No es una versión recortada.",
+        "Cuánto dura: 30 días desde que lo activamos contigo.",
+        "Qué pasa al acabar: empieza la cuota mensual del plan. No cobramos nada hasta que lo aceptes por escrito.",
+        "Cuánto cuesta después: el precio del plan que aparece en esta página, sin IVA.",
+        "Cómo se cancela: nos escribes antes de que acabe el mes y ya está. No hay permanencia.",
+        "Qué queda fuera: el consumo de IA, que se factura aparte y a coste, y los planes avanzados y los trabajos a medida."
+      ]
+    },
+    "en": {
+      "titulo": "First month free",
+      "resumen": "Thirty days on the full plan, no card and no commitment.",
+      "puntos": [
+        "What you get: the complete plan, with its usual limits. Not a cut-down version.",
+        "How long: 30 days from the moment we switch it on with you.",
+        "What happens after: the plan's monthly fee begins. Nothing is charged until you agree to it in writing.",
+        "What it costs after: the plan price shown on this page, excluding VAT.",
+        "How to cancel: email us before the month ends. There is no minimum term.",
+        "What is excluded: AI usage, billed separately at cost, and the advanced plans and custom work."
+      ]
+    }
   }
 }
