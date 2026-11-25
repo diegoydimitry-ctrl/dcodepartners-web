@@ -23,7 +23,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { carga, RAIZ, VF, vfN, concN } from './estado/modelo.mjs';
-import { REGIONES, ENTEROS, rehaz, sinRegiones, lee } from './estado/regiones.mjs';
+import { REGIONES, ENTEROS, SIN_REGION, rehaz, sinRegiones, lee } from './estado/regiones.mjs';
 
 const fallos = [];
 const falla = (m) => fallos.push(m);
@@ -128,21 +128,106 @@ for (const rel of [...new Set(publicados)]) {
   barridos++;
 }
 
-/* ── 4. Fuera de las regiones, nada que el estado no sostenga ───────── */
-if (cfg && !errores.length) {
-  const ZONA = ['sistema-financiero.html', 'en/sistema-financiero.html', 'index.html', 'en/index.html', 'cambios-en-proceso.html', 'en/cambios-en-proceso.html'];
+/* ── 4. Las páginas sin región: se comprueba la AFIRMACIÓN ──────────── */
+/*
+  Seis páginas se salieron del sistema de regiones cuando se migraron al
+  diseño nuevo (el porqué está en scripts/estado/regiones.mjs · SIN_REGION).
+  Aquí ya no se puede comprobar que el markup lo escribió el generador, así
+  que se comprueba lo único que de verdad importa: que lo que la página
+  afirma se sostenga.
+
+  · VERI*FACTU. La ficha enseña la ruta de los cuatro estados. Nombrar uno
+    que todavía no se ha alcanzado es legítimo DENTRO de la ruta, donde va
+    rotulado como lo que es («Siguiente», «Después»). Fuera de la ruta no:
+    ahí el nombre de un estado es una afirmación. Y el paso marcado como
+    actual tiene que ser exactamente el que dice estado-producto.json: si
+    alguien mueve el aria-current un escalón, esto falla.
+
+  · Conciliación. Mientras no esté disponible se puede contar lo que hará;
+    no se puede contar como algo que ya hace. Se exige que cada mención
+    lleve cerca una marca de que todavía no es. La ventana se mide en
+    caracteres y no en frases porque el texto aplanado de una tabla no
+    tiene frases: la fila «Conciliación bancaria | — | Próximamente» es una
+    sola línea sin punto.
+*/
+const PENDIENTE = /pr[óo]ximamente|llegar[áa]|har[áa]|dejar[áa]|cruzar[áa]|ser[áa]|estar[áa]|podr[áa]|permitir[áa]|funcionar[áa]|estamos construyendo|en desarrollo|en pruebas|planificad|todav[íi]a no|a[úu]n no|cuando est[ée]|coming soon|will\b|in development|in testing|planned|not (?:in the system )?yet|we are building/i;
+const CONC = '(?:concilia(?:ci[óo]n|r)?|reconcil\\w*)';
+const YA_HACE = '(?:cruza|concilia|cuadra|empareja|casa|marca|señala|detecta|deja\\s+a\\s+la\\s+vista|incluye|funciona|est[áa]\\s+disponible|matches|reconciles|clears|flags|works|is\\s+available|included|incluida)';
+const EN_PRESENTE = [
+  ['sujeto y verbo', new RegExp(`${CONC}\\b[^.<>]{0,60}\\b${YA_HACE}\\b`, 'i')],
+  ['verbo y sujeto', new RegExp(`\\b${YA_HACE}\\b[^.<>]{0,60}${CONC}\\b`, 'i')],
+];
+const ETIQUETAS_VF = Object.values(VF).flatMap((s) => [s.es, s.en]);
+const RUTA = /<ol class="ruta">[\s\S]*?<\/ol>/g;
+
+/** Devuelve los fallos de una página que ya no tiene regiones. */
+export function revisaAfirmaciones(bruto, lang, cfg, rel = '(texto)') {
+  const out = [];
   const n = vfN(cfg);
-  for (const rel of ZONA) {
-    const t = texto(sinRegiones(lee(rel)));
-    for (const s of Object.values(VF)) {
-      if (s.n <= n) continue;
-      for (const etiqueta of [s.es, s.en]) if (t.toLowerCase().includes(etiqueta.toLowerCase())) falla(`${rel}: dice «${etiqueta}» fuera de las regiones generadas y el estado es «${cfg.verifactu.estado}»`);
+  const estado = VF[cfg.verifactu.estado];
+  const esperado = lang === 'en' ? estado.en : estado.es;
+
+  // 4a. El paso que la ruta presenta como actual es el estado declarado.
+  for (const ol of bruto.match(RUTA) || []) {
+    const pasos = [];
+    for (const m of ol.matchAll(/<li\s+([^>]*)>([\s\S]*?)<\/li>/g)) {
+      if (!/ruta-p/.test(m[1])) continue;
+      const t = texto((m[2].match(/<p class="ruta-t">([\s\S]*?)<\/p>/) || [, ''])[1]).trim();
+      pasos.push({ actual: /aria-current="step"|\bes-actual\b/.test(m[1]), t });
     }
-    if (concN(cfg) < 4) {
-      const m = t.match(/concili\w*|reconcil\w*/i);
-      if (m) falla(`${rel}: habla de «${m[0]}» fuera de las regiones generadas y la conciliación está «${cfg.conciliacion.estado}»`);
+    if (!pasos.some((x) => ETIQUETAS_VF.includes(x.t))) continue;   // otra ruta, no la de VERI*FACTU
+    const marcados = pasos.filter((x) => x.actual);
+    if (marcados.length !== 1) out.push(`${rel}: la ruta de VERI*FACTU marca ${marcados.length} pasos como actuales y tiene que marcar uno`);
+    else if (marcados[0].t !== esperado) out.push(`${rel}: la ruta presenta «${marcados[0].t}» como estado actual y estado-producto.json dice «${esperado}»`);
+  }
+
+  // 4b. Fuera de la ruta, ningún estado por encima del alcanzado.
+  const t = texto(sinRegiones(bruto).replace(RUTA, ' '));
+  for (const s of Object.values(VF)) {
+    if (s.n <= n) continue;
+    for (const etiqueta of [s.es, s.en]) if (t.toLowerCase().includes(etiqueta.toLowerCase())) out.push(`${rel}: dice «${etiqueta}» fuera de la ruta y el estado es «${cfg.verifactu.estado}»`);
+  }
+
+  // 4c. De la conciliación, solo en futuro mientras no esté. Dos redes,
+  //     porque una sola no basta: la ventana caza la mención suelta sin
+  //     contexto, y el detector caza el presente dicho en medio de un
+  //     párrafo lleno de futuros, que a la ventana se le cuela.
+  if (concN(cfg) < 4) {
+    for (const m of t.matchAll(/concili\w*|reconcil\w*/gi)) {
+      const ventana = t.slice(Math.max(0, m.index - 180), m.index + 280);
+      if (!PENDIENTE.test(ventana)) out.push(`${rel}: habla de «${m[0]}» sin decir que todavía no está, y la conciliación está «${cfg.conciliacion.estado}» — «${ventana.slice(140, 260).trim()}»`);
+    }
+    // Sobre el HTML, no sobre el texto plano: las etiquetas cortan la
+    // distancia entre el sujeto y el verbo, igual que en la regla 3.
+    for (const [id, rx] of EN_PRESENTE) {
+      const m = rx.exec(bruto);
+      if (m) out.push(`${rel}: cuenta la conciliación como algo que ya hace (${id}) «${m[0].slice(0, 90)}»`);
     }
   }
+  return out;
+}
+
+if (cfg && !errores.length) {
+  // Meta-prueba de estas reglas: lo que tienen que cazar y lo que no.
+  const RUTA_OK = (actual) => `<ol class="ruta">` + Object.values(VF).map((s, i) =>
+    `<li class="ruta-p${s.es === actual ? ' es-actual' : ''}"${s.es === actual ? ' aria-current="step"' : ''}><span class="ruta-n">0${i + 1}</span><span class="ruta-e">x</span><p class="ruta-t">${s.es}</p><p class="ruta-d">x</p></li>`).join('') + `</ol>`;
+  const META = [
+    [true,  `<p>Nuestro sistema es VERI*FACTU operativo desde hoy.</p>`,            'un estado no alcanzado fuera de la ruta'],
+    [true,  RUTA_OK('VERI*FACTU integrado'),                                        'la ruta marcando como actual un estado sin prueba'],
+    [true,  `<p>La conciliación bancaria cruza tu extracto con tus facturas.</p>`,  'la conciliación contada en presente'],
+    [false, RUTA_OK(VF[cfg.verifactu.estado].es),                                   'la ruta correcta'],
+    [false, `<p>La conciliación bancaria llegará próximamente.</p>`,                 'la conciliación contada en futuro'],
+    [false, `<p>Preparado para VERI*FACTU.</p>`,                                     'el estado actual, dicho fuera de la ruta'],
+    [true,  `<p>Lo que ya tienes. La conciliación bancaria cuadra tus movimientos. Llegará más, próximamente.</p>`, 'el presente escondido entre futuros'],
+    [true,  `<p>Conciliación bancaria incluida. Y lo demás llegará próximamente.</p>`, 'la conciliación dada por incluida'],
+    [false, `<p>La conciliación cruzará el extracto y dejará a la vista lo que no cuadre. Próximamente.</p>`, 'el futuro con los mismos verbos'],
+    [false, `<tr><td>Conciliación bancaria</td><td>—</td><td>Próximamente</td></tr>`,  'la fila de una tabla'],
+  ];
+  for (const [debeFallar, html, que] of META) {
+    const hay = revisaAfirmaciones(html, 'es', cfg).length > 0;
+    if (hay !== debeFallar) falla(`meta-prueba: la revisión de afirmaciones ${debeFallar ? 'NO caza' : 'caza por error'} ${que}`);
+  }
+  for (const [rel, lang] of Object.entries(SIN_REGION)) for (const f of revisaAfirmaciones(lee(rel), lang, cfg, rel)) falla(f);
 }
 
 if (fallos.length) {

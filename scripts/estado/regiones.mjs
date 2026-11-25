@@ -32,14 +32,44 @@ const FINANCE = {
 };
 
 export const REGIONES = {
-  'sistema-financiero.html':      { lang: 'es', r: FINANCE },
-  'en/sistema-financiero.html':   { lang: 'en', r: FINANCE },
-  'index.html':                   { lang: 'es', r: { 'home-estado': P.homeEstado } },
-  'en/index.html':                { lang: 'en', r: { 'home-estado': P.homeEstado } },
-  // El recuento va DESPUÉS de las filas: cuenta lo que las filas dejan.
-  'cambios-en-proceso.html':      { lang: 'es', r: { 'proceso-filas': P.procesoFilas, 'vf-frase': P.vfFrase, 'proceso-cuenta': cuentaFrentes('es') } },
-  'en/cambios-en-proceso.html':   { lang: 'en', r: { 'proceso-filas': P.procesoFilas, 'vf-frase': P.vfFrase, 'proceso-cuenta': cuentaFrentes('en') } },
   'assets/js/finance-demo.js':    { lang: 'es', js: true, r: { 'constante': P.demoConstante } },
+};
+
+/*
+  LAS SEIS PÁGINAS QUE SE SALIERON DE ESTE SISTEMA (25/11/2026).
+
+  Hasta la migración al diseño nuevo, estas seis páginas llevaban las
+  regiones de arriba —vf-bloque, conc-bloque, home-estado, proceso-filas…— y
+  su texto lo escribía build-estado.mjs desde estado-producto.json.
+
+  scripts/v2/migrar.mjs las volvió a componer y, al hacerlo, se quedó por el
+  camino el comentario que marca cada región. Y no se pueden devolver sin
+  más: la migración no lee la página de hoy, la lee de un commit congelado
+  (BASE = 8ff5f5b), y las plantillas de arriba escriben el markup viejo
+  (.vf-paso, .section-air), no el nuevo (.ruta-p).
+
+  Con las regiones fuera, el centinela llevaba dieciséis fallos fijos y
+  build:estado moría —y con él npm run sync-content entero—. Una guardia que
+  siempre está en rojo no guarda nada. Pero aflojarla sería peor: lo que hay
+  detrás es una afirmación fiscal.
+
+  Así que estas páginas pasan a una regla distinta, en check-estado.mjs: en
+  vez de comprobar que el MARKUP lo escribió el generador, comprueba que la
+  AFIRMACIÓN se sostiene —qué estado se presenta como actual, y que de la
+  conciliación solo se hable en futuro mientras no esté—. Es menos cobertura
+  que antes y hay que decirlo: el titular, la entradilla y las celdas de la
+  comparativa ya no los escribe nadie desde el dato.
+
+  Devolverlas al generador es trabajo de verdad (reescribir las plantillas
+  en el markup nuevo) y una decisión de quién manda en la web.
+*/
+export const SIN_REGION = {
+  'sistema-financiero.html':    'es',
+  'en/sistema-financiero.html': 'en',
+  'index.html':                 'es',
+  'en/index.html':              'en',
+  'cambios-en-proceso.html':    'es',
+  'en/cambios-en-proceso.html': 'en',
 };
 // Ficheros que se generan enteros.
 export const ENTEROS = {
