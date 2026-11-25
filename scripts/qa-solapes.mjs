@@ -70,7 +70,31 @@ function mide() {
   for (let i = 0; i < vis.length; i++) for (let j = i + 1; j < vis.length && vis[j].y1 < vis[i].y2; j++) {
     const a = vis[i], b = vis[j]; if (a.el === b.el) continue;
     const ox = Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1), oy = Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1);
-    if (ox > 3 && oy > 2) { const k = a.t + '|' + b.t; if (!vistos.has(k)) { vistos.add(k); out.solapes.push(`«${a.t}» / «${b.t}» (${Math.round(ox)}×${Math.round(oy)})`); } }
+    /*
+      EL SOLAPE SE MIDE EN PROPORCIÓN, NO EN PÍXELES (25/11/2026).
+
+      Con el umbral fijo de 2 px salían 47 solapes que no existen. Comprobados
+      dos al azar con una captura —el titular «Hablemos de tu empresa» de la
+      portada y la lista de /demos/atencion—: el texto está perfectamente
+      separado en los dos.
+
+      La causa es geométrica. Cada línea se mide como el centro ± 42 % del
+      tamaño de letra, y en un titular grande esa caja baja MUCHO más que las
+      letras. Un titular de 72 px tiene una caja de 60 px de alto para unas
+      letras de 50: los 10 px que sobran rozan el párrafo de debajo sin que se
+      toque nada.
+
+      En píxeles no se pueden distinguir: el solape que la meta-prueba PLANTA
+      a propósito mide ~9 px, igual que los falsos. En proporción sí. El
+      plantado ocupa la mitad de su línea; los falsos, una sexta parte de la
+      grande. Dos textos que de verdad se pisan comparten buena parte del
+      alto; dos que solo se rozan, no.
+
+      Si alguien afloja esto de más, la meta-prueba deja de cazar el solape
+      plantado y la prueba falla antes de recorrer una sola página.
+    */
+    const alto = Math.max(a.y2 - a.y1, b.y2 - b.y1);
+    if (ox > 3 && oy > 2 && oy > 0.35 * alto) { const k = a.t + '|' + b.t; if (!vistos.has(k)) { vistos.add(k); out.solapes.push(`«${a.t}» / «${b.t}» (${Math.round(ox)}×${Math.round(oy)})`); } }
   }
   const cort = new Set();
   for (const l of lineas) {
