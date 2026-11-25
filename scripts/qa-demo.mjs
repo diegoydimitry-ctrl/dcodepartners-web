@@ -58,17 +58,44 @@ for (const [url, w] of CASOS) {
   await pg.goto(`http://127.0.0.1:${PORT}${url}`, { waitUntil: 'networkidle' });
   // En la portada Finance es una pestaña de «Prueba los sistemas»: se abre antes.
   if (await pg.locator('#gal-t-finance').count()) { await pg.locator('#gal-t-finance').scrollIntoViewIfNeeded(); await pg.locator('#gal-t-finance').click(); await pg.waitForTimeout(600); }
-  await pg.locator('[data-fdemo-mount]').first().scrollIntoViewIfNeeded(); await pg.waitForTimeout(3000);
+
+  /*
+    DÓNDE VIVE LA DEMO (adaptado el 25/11/2026).
+
+    Antes se montaba dentro de la propia página: bastaba con buscar
+    `[data-fdemo-mount]` en el documento. Desde el rediseño v2 solo es así en
+    /sistema-financiero/app; en la portada y en /sistema-financiero la demo se
+    abre en un diálogo con un iframe, pulsando «abrir demo».
+
+    Esta prueba se quedó buscando el montaje antiguo, no lo encontraba, y
+    MORÍA con un timeout en vez de informar: `npm run qa:demo` parecía una
+    tarea rota y no una alarma. Ahora entra por donde entra una persona —pulsa
+    el botón— y con eso comprueba de paso que el botón abre algo.
+  */
+  let D = pg;
+  if (!(await pg.locator('[data-fdemo-mount]').count())) {
+    const abrir = pg.locator('[data-demo-abrir]').first();
+    if (!(await abrir.count())) { console.log(`✗ ${url} @${w}: no hay ni demo montada ni botón para abrirla`); fallos++; await ctx.close(); continue; }
+    await abrir.scrollIntoViewIfNeeded();
+    await abrir.click();
+    await pg.waitForTimeout(1200);
+    const marco = await pg.locator('[data-visor-marco]').first().elementHandle();
+    const dentro = marco && (await marco.contentFrame());
+    if (!dentro) { console.log(`✗ ${url} @${w}: el botón no abre el visor de la demo`); fallos++; await ctx.close(); continue; }
+    D = dentro;
+    await D.waitForSelector('[data-fdemo-mount]', { timeout: 30000 }).catch(() => {});
+  }
+  await D.locator('[data-fdemo-mount]').first().scrollIntoViewIfNeeded().catch(() => {}); await pg.waitForTimeout(3000);
   await pg.mouse.move(w / 2, 500); await pg.mouse.wheel(0, 1); await pg.waitForTimeout(300);   // quien toca, manda: se para el recorrido
-  const vistas = await pg.$$eval('[data-role="nav"][data-view]', (a) => [...new Set(a.map((x) => x.getAttribute('data-view')))]);
+  const vistas = await D.$$eval('[data-role="nav"][data-view]', (a) => [...new Set(a.map((x) => x.getAttribute('data-view')))]);
   const malas = [];
   for (const v of vistas) {
-    const item = pg.locator(`[data-role="nav"][data-view="${v}"]`).first();
+    const item = D.locator(`[data-role="nav"][data-view="${v}"]`).first();
     const bb = await item.boundingBox();
-    if (!bb || bb.x < 0) { await pg.locator('.fdemo-topbar-menu-btn').first().click().catch(() => {}); await pg.waitForTimeout(450); }
+    if (!bb || bb.x < 0) { await D.locator('.fdemo-topbar-menu-btn').first().click().catch(() => {}); await pg.waitForTimeout(450); }
     await item.click({ timeout: 5000 }).catch(() => errs.push('no se puede abrir ' + v));
     await pg.waitForTimeout(600);
-    const r = await pg.evaluate(inspecciona);
+    const r = await D.evaluate(inspecciona);
     if (r.len < 400 || r.sinDatos || r.otro.length || r.sol.length || r.cort) malas.push(`${v}: ${r.len < 400 ? 'casi vacía · ' : ''}${r.sinDatos ? 'sin datos · ' : ''}${r.otro.length ? 'otro idioma ' + r.otro.join(' | ') + ' · ' : ''}${r.sol.length ? 'solapes ' + r.sol.join(' ') + ' · ' : ''}${r.cort ? r.cort + ' recortes' : ''}`);
   }
   const mal = malas.length || errs.length || vistas.length < 25;
