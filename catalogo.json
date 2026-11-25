@@ -1089,10 +1089,10 @@
           "Un agente de IA en un canal",
           "Formación y 30 días de soporte"
         ],
-        "precio_mes": "139 €",
+        "precio_mes": "119 €",
         "precio_mes_detalle": "al mes, todo incluido",
-        "suelto": "177 €/mes",
-        "ahorro": "Ahorras 38 € al mes"
+        "suelto": "147 €/mes",
+        "ahorro": "Ahorras 28 € al mes"
       },
       "en": {
         "nombre": "Finance with intelligence + agent pack",
@@ -1104,15 +1104,15 @@
           "One single-channel AI agent",
           "Training and 30 days of support"
         ],
-        "precio_mes": "€139",
+        "precio_mes": "€119",
         "precio_mes_detalle": "per month, everything included",
-        "suelto": "€177/mo",
-        "ahorro": "You save €38 a month"
+        "suelto": "€147/mo",
+        "ahorro": "You save €28 a month"
       },
       "setup": 0,
-      "mes": 139,
+      "mes": 119,
       "setup_suelto": 0,
-      "mes_suelto": 177
+      "mes_suelto": 147
     },
     {
       "id": "pack-sistema",
@@ -1139,8 +1139,8 @@
         ],
         "precio_mes": "390 €",
         "precio_mes_detalle": "al mes, todo incluido",
-        "suelto": "485 €/mes",
-        "ahorro": "Ahorras 95 € al mes"
+        "suelto": "465 €/mes",
+        "ahorro": "Ahorras 75 € al mes"
       },
       "en": {
         "nombre": "Complete D-Code OS pack",
@@ -1156,13 +1156,13 @@
         ],
         "precio_mes": "€390",
         "precio_mes_detalle": "per month, everything included",
-        "suelto": "€485/mo",
-        "ahorro": "You save €95 a month"
+        "suelto": "€465/mo",
+        "ahorro": "You save €75 a month"
       },
       "setup": 0,
       "mes": 390,
       "setup_suelto": 0,
-      "mes_suelto": 485
+      "mes_suelto": 465
     }
   ],
   "filtros": {
