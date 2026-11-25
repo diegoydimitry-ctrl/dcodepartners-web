@@ -30,6 +30,8 @@ const ANCHOS = (process.env.ANCHOS || '320,360,390,393,430,768,834,1024,1280,144
 const META = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body><main>
 <section style="position:relative;height:300px"><p style="position:absolute;top:10px;left:10px;font-size:20px">Texto que se pisa con otro</p><p style="position:absolute;top:18px;left:40px;font-size:20px">Otro texto encima</p></section>
 <section><div style="width:120px;height:20px;overflow:hidden"><p style="width:400px;margin:0">Este texto no cabe en su caja y queda cortado</p></div></section>
+<section><div id="plegado-meta" style="width:120px;height:20px;overflow:hidden"><p style="width:400px;margin:0">Este texto tampoco cabe, pero esta plegado aposta</p></div><button type="button" aria-expanded="false" aria-controls="plegado-meta">Seguir leyendo</button></section>
+<section style="position:relative;height:200px"><p style="position:absolute;top:10px;left:10px;margin:0;font-size:20px">Texto que un panel opaco tapa</p><div style="position:absolute;top:0;left:0;width:320px;height:44px;z-index:5;background:rgba(12,15,26,.94)"><span style="position:absolute;top:12px;left:40px;font-size:20px;color:#fff">Panel opaco encima</span></div></section>
 <section><p style="margin:0">Un párrafo justo encima</p><a class="btn" href="#" style="display:inline-block">Botón pegado</a></section>
 <section><div style="display:flex;width:200px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Texto largo con elipsis que no es un solape</div><span>Etiqueta</span></div></section>
 <section style="height:400px"></section><script>throw new Error('error de prueba')</script></main></body></html>`;
@@ -43,6 +45,36 @@ function mide() {
     return true;
   };
   const conElipsis = (e) => { for (let x = e; x && x !== document.body; x = x.parentElement) if (getComputedStyle(x).textOverflow === 'ellipsis') return true; return false; };
+  /*
+    UN TEXTO TAPADO NO SE PISA CON NADA (25/11/2026).
+
+    Las demos llevan un narrador —.sd-narra, su propio CSS dice «no es parte
+    de la aplicacion: es quien la ensena»— que es un panel opaco encima del
+    producto. Geometricamente pisa lo de debajo; en pantalla lo esconde. Son
+    dos cosas distintas y la guardia solo medía la primera: 31 avisos de algo
+    que nadie ve. Lo mismo valdria para un modal, una cabecera pegajosa o
+    cualquier otra capa.
+
+    Se mira quien pinta de verdad en el punto donde se cruzan: si por encima
+    de uno de los dos hay un elemento opaco que no es ni su padre ni su hijo,
+    ese texto esta debajo de una capa y no hay solape visible.
+
+    Solo se puede preguntar por un punto que esté en pantalla. Si el cruce
+    cae fuera, no se filtra: mas vale un aviso de mas que una ceguera.
+  */
+  const opaco = (e) => {
+    const c = getComputedStyle(e);
+    const m = /rgba?\(([^)]+)\)/.exec(c.backgroundColor);
+    if (!m) return false;
+    const n = m[1].split(',').map(parseFloat);
+    return (n.length > 3 ? n[3] : 1) >= 0.85;
+  };
+  const tapado = (el, pila) => {
+    const i = pila.findIndex((p) => p === el || p.contains(el) || el.contains(p));
+    if (i < 0) return false;
+    for (let k = 0; k < i; k++) { const p = pila[k]; if (p.contains(el) || el.contains(p)) continue; if (opaco(p)) return true; }
+    return false;
+  };
   const lineas = []; const sy = scrollY;
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n;
   while ((n = tw.nextNode())) {
@@ -94,11 +126,40 @@ function mide() {
       plantado y la prueba falla antes de recorrer una sola página.
     */
     const alto = Math.max(a.y2 - a.y1, b.y2 - b.y1);
-    if (ox > 3 && oy > 2 && oy > 0.35 * alto) { const k = a.t + '|' + b.t; if (!vistos.has(k)) { vistos.add(k); out.solapes.push(`«${a.t}» / «${b.t}» (${Math.round(ox)}×${Math.round(oy)})`); } }
+    if (!(ox > 3 && oy > 2 && oy > 0.35 * alto)) continue;
+    const px = (Math.max(a.x1, b.x1) + Math.min(a.x2, b.x2)) / 2;
+    const py = (Math.max(a.y1, b.y1) + Math.min(a.y2, b.y2)) / 2 - sy;
+    if (py >= 0 && py < innerHeight && px >= 0 && px < innerWidth) {
+      const pila = document.elementsFromPoint(px, py);
+      if (tapado(a.el, pila) || tapado(b.el, pila)) continue;
+    }
+    const k = a.t + '|' + b.t; if (!vistos.has(k)) { vistos.add(k); out.solapes.push(`«${a.t}» / «${b.t}» (${Math.round(ox)}×${Math.round(oy)})`); }
   }
+  /*
+    UN PLEGADO A PROPOSITO NO ES UN CORTE (25/11/2026).
+
+    En el telefono, el cuerpo de un capitulo largo se enseña hasta algo menos
+    de una pantalla y lleva su boton «Seguir leyendo» (sitio.js). El texto
+    sigue entero en la pagina —buscadores y «buscar en la pagina» lo
+    encuentran— y el resto se recorta a posta. La guardia solo veia el
+    recorte: 16 avisos en /casos-exito y /conocenos de algo que el visitante
+    abre con un dedo.
+
+    Lo que distingue un plegado de un corte no es el CSS, es que haya un
+    mando que lo abra: aria-expanded="false" apuntando al contenedor con
+    aria-controls, o un <details> cerrado. Con ABIERTOS=1 se abren y lo de
+    dentro vuelve a medirse.
+  */
+  const plegado = (e) => {
+    for (let x = e; x && x !== document.body; x = x.parentElement) {
+      if (x.tagName === 'DETAILS' && !x.open) return true;
+      if (x.id && document.querySelector(`[aria-controls="${CSS.escape(x.id)}"][aria-expanded="false"]`)) return true;
+    }
+    return false;
+  };
   const cort = new Set();
   for (const l of lineas) {
-    if (conElipsis(l.el)) continue;
+    if (conElipsis(l.el) || plegado(l.el)) continue;
     for (let e = l.el; e && e !== document.body; e = e.parentElement) {
       const cs = getComputedStyle(e); const oxh = cs.overflowX !== 'visible', oyh = cs.overflowY !== 'visible';
       if (!oxh && !oyh) continue;
@@ -141,9 +202,29 @@ async function audita(ctx, url, w) {
     document.querySelectorAll('.rise,.rise-s,.rise-l').forEach((e) => e.classList.add('in'));
     document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.reveal-up,.reveal-blur').forEach((e) => e.classList.add('is-visible'));
     document.querySelectorAll('.motion-journey').forEach((e) => e.classList.add('is-settled'));
-    if (abiertos) { window.__dcpImprimiendo = true; document.querySelectorAll('details').forEach((d) => (d.open = true)); document.querySelectorAll('.accordion-item').forEach((i) => i.classList.add('open')); }
+    if (abiertos) { window.__dcpImprimiendo = true; document.querySelectorAll('details').forEach((d) => (d.open = true)); document.querySelectorAll('.accordion-item').forEach((i) => i.classList.add('open')); document.querySelectorAll('main .seguir-leyendo').forEach((b) => b.click()); }
   }, !!process.env.ABIERTOS);
   await pg.waitForTimeout(1300);
+  /*
+    MEDIR UNA PÁGINA QUIETA (25/11/2026).
+
+    En el recorrido completo salió un solape de 301×16 en la portada inglesa
+    que no se reproduce suelto: una vez de 860. Los capítulos de la portada
+    viven en la misma celda de la rejilla y se funden uno sobre otro
+    (.cap { grid-area: 1/1; opacity: 0; transition: 520ms }). A media
+    transición hay dos con opacidad suficiente para contarlos como visibles,
+    y entonces se pisan de verdad —durante medio segundo, a propósito—.
+
+    Esperar más tiempo no lo arregla: lo hace menos frecuente, que es peor,
+    porque el aviso aparece una vez cada muchas y nadie lo cree. Se lleva
+    cada transición y cada animación a su estado final, que es el estado que
+    hay que juzgar. Dos vueltas porque terminar una puede disparar otra; las
+    infinitas no se pueden terminar y se dejan como están.
+  */
+  for (let v = 0; v < 2; v++) {
+    await pg.evaluate(() => { for (const a of document.getAnimations()) { try { a.finish(); } catch {} } });
+    await pg.waitForTimeout(120);
+  }
   const r = await pg.evaluate(mide);
   r.errs = [...new Set(errs)].slice(0, 4);
   await pg.close();
@@ -158,8 +239,11 @@ const br = await chromium.launch(opcionesNavegador());
   const ctx = await br.newContext(); await soloLocal(ctx);
   const m = await audita(ctx, '/__meta-solapes', 390); await ctx.close();
   const bien = m.solapes.length === 1 && m.cortes.length === 1 && m.pegados.length === 1 && m.vacias.length === 1 && m.errs.some((e) => /error de prueba/.test(e));
+  /* `solapes === 1` lo exige en los dos sentidos: la página planta un solape
+     de verdad y otro que un panel opaco tapa. Si sale 0, el filtro de capas
+     se ha comido la detección; si sale 2, no filtra nada. */
   if (!bien) { console.error('✗ meta-prueba: el detector no distingue los defectos plantados', JSON.stringify(m)); await br.close(); server.close(); process.exit(1); }
-  console.log('✓ meta-prueba: caza el solape, el corte, el botón pegado, la sección vacía y el error, y deja pasar la elipsis');
+  console.log('✓ meta-prueba: caza el solape, el corte, el botón pegado, la sección vacía y el error, y deja pasar la elipsis, el texto tapado y el plegado');
 }
 
 // 2. Todas las páginas
