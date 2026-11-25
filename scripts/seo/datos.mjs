@@ -9,6 +9,35 @@
    Las claves son rutas en español; "en" es su versión bajo /en.
    ========================================================================== */
 
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+/*
+  EL PRECIO DE UNA DESCRIPCIÓN SALE DEL CATÁLOGO, NO DE AQUÍ.
+
+  La descripción de /servicios/automatizaciones decía «Desde 390 €» — el
+  precio de implantación de antes del cambio a cuotas bajas— mientras el
+  catálogo llevaba meses diciendo 29 €/mes. Lo leía Google, lo leía quien
+  compartía el enlace, y nadie lo veía porque una descripción no se mira
+  desde dentro de la web.
+
+  Escrito a mano, un precio en un texto caduca el día que cambia el catálogo.
+  Leído de catalogo.json, no puede.
+*/
+const CATALOGO = JSON.parse(
+  fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "catalogo.json"), "utf8"),
+);
+
+/** El precio mensual de un producto del catálogo, tal cual lo escribe él. */
+export function precioDe(id, lang = "es") {
+  const p = CATALOGO.productos.find((x) => x.id === id);
+  if (!p) throw new Error(`datos.mjs: no existe el producto «${id}» en catalogo.json`);
+  const v = p[lang]?.precio_mes || p[lang]?.precio;
+  if (!v) throw new Error(`datos.mjs: «${id}» no tiene precio en «${lang}»`);
+  return v;
+}
+
 export const SITIO = "https://dcodepartners.com";
 
 export const EMPRESA = {
@@ -58,12 +87,12 @@ export const PAGINAS = {
     es: {
       nombre: "Automatizaciones", servicio: "Automatización de procesos",
       h1: "Automatizamos los procesos que tu empresa repite cada semana.",
-      description: "Automatizamos los procesos y tareas que tu empresa repite cada semana: se ejecutan solos, con control de errores y aviso si algo falla. Desde 390 €.",
+      description: `Automatizamos los procesos y tareas que tu empresa repite cada semana: se ejecutan solos, con control de errores y aviso si algo falla. Desde ${precioDe("auto-1")} al mes, sin cuota de alta.`,
     },
     en: {
       nombre: "Automations", servicio: "Process automation",
       h1: "We automate the processes your company repeats every week.",
-      description: "We automate the processes and tasks your company repeats every week: they run on their own, with error handling and an alert when something fails. From €390.",
+      description: `We automate the processes and tasks your company repeats every week: they run on their own, with error handling and an alert when something fails. From ${precioDe("auto-1", "en")} a month, no setup fee.`,
     },
   },
   "/servicios/agentes-de-ia": {

@@ -93,7 +93,7 @@ export function inicio(lang) {
     <picture><source srcset="/assets/v2/img/piezas/700/072.webp" media="(max-width: 760px)"><img class="piezas-poster" data-piezas-poster src="/assets/v2/img/piezas/1100/072.webp" alt="" width="1100" height="1100" loading="lazy" decoding="async"></picture>
     <div class="marco piezas-texto">
       <div class="cap cap--0 is-activo" data-cap="0">
-        <p class="reclamo-precio" style="display:inline-block;margin:0 0 14px;padding:7px 15px;border:1px solid var(--aire);border-radius:999px;font-size:15px;line-height:1.35"><b style="color:var(--aire);font-weight:700">${c.reclamoPrecio}</b> ${c.reclamoResto}</p>
+        <p class="reclamo-precio" style="display:inline-block;margin:0 0 14px;padding:7px 15px;border:1px solid var(--aire);border-radius:999px;font-size:15px;line-height:1.35"><b style="color:var(--aire);font-weight:700" data-precio="entrada">${c.reclamoPrecio}</b> ${c.reclamoResto}</p>
         <h1 class="display" id="h-inicio">${c.h1}</h1>
         <p class="lead">${c.sub}</p>
         <div class="acc"><a class="boton boton--principal" href="${L("/contacto")}">${c.cta} ${FLECHA}</a><a class="boton" href="#tocalo">${c.cta2}</a></div>

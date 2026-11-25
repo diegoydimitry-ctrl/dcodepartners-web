@@ -67,7 +67,9 @@ for (const f of paginas(RAIZ)) {
    Si alguien toca uno y se olvida del otro, la web dice dos precios para lo
    mismo, que es exactamente lo que esta ronda vino a quitar. */
 {
-  const dePrecio = (id) => (CAT.productos.find((p) => p.id === id) || {});
+  /* Los packs también: el blog cita el precio de «pack-empezar», y sin esto
+     esa cifra se quedaría sin nadie que la vigile. */
+  const dePrecio = (id) => (CAT.productos.find((p) => p.id === id) || CAT.packs.find((p) => p.id === id) || {});
   /* Se comparan los NÚMEROS, no las frases: «Desde 29 €/mes» y «29 €» dicen
      lo mismo y se escriben distinto según dónde vayan. Lo que no puede pasar
      es que uno diga 29 y el otro 39. */
@@ -77,6 +79,15 @@ for (const f of paginas(RAIZ)) {
     ['medida', 'medida-1', ['precio_mes', 'precio'], ['es']],
     ['agentes', 'agente-1', ['precio_mes', 'precio'], ['es']],
     ['os', 'os', ['precio_mes', 'precio'], ['es']],
+    /* El reclamo de la portada: el precio MÁS BAJO de todo el catálogo. Si un
+       día deja de serlo, esto lo canta en vez de dejar la portada mintiendo. */
+    ['entrada', 'integra-1', ['precio_mes', 'precio'], ['es']],
+    /* Las cuatro cifras que cita el artículo del blog. Van con el valor
+       desnudo («29 €») porque se leen DENTRO de una frase, no como reclamo. */
+    ['auto1', 'auto-1', ['precio_mes', 'precio'], ['es']],
+    ['packEmpezar', 'pack-empezar', ['precio_mes', 'precio'], ['es']],
+    ['auto3', 'auto-3', ['precio_mes', 'precio'], ['es']],
+    ['agente1', 'agente-1', ['precio_mes', 'precio'], ['es']],
   ];
   for (const [clave, id, campos] of pares) {
     const prod = dePrecio(id);

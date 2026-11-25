@@ -42,6 +42,26 @@
       "en": "From €149/month",
       "detalle_es": "sin cuota de alta",
       "detalle_en": "no setup fee"
+    },
+    "entrada": {
+      "es": "Desde 25 €/mes",
+      "en": "From €25/month"
+    },
+    "auto1": {
+      "es": "29 €",
+      "en": "€29"
+    },
+    "packEmpezar": {
+      "es": "69 €",
+      "en": "€69"
+    },
+    "auto3": {
+      "es": "119 €",
+      "en": "€119"
+    },
+    "agente1": {
+      "es": "49 €",
+      "en": "€49"
     }
   },
   "planes": {
